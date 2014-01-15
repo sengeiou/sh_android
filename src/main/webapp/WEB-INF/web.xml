@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>data-services</display-name>
+
+	<!-- Debe definirse en primer lugar el logger, para que esté disponible en las inicializaciones y configuraciones de las líneas ulteriores. -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:log4j/log4j.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<!-- Application Context Config -->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>data-services</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/root-context.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- Servlet Dispatcher Config -->
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+	        <param-name>contextConfigLocation</param-name>
+	        <param-value>classpath:spring/mvc-dispatcher-servlet-context.xml</param-value>
+	    </init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<description>Filtro para la monitorización de las peticiones de datos</description>
+		<display-name>GenericMonitorFilter</display-name>
+		<filter-name>GenericMonitorFilter</filter-name>
+		<filter-class>com.fav24.dataservices.filter.GenericMonitorFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<description>Filtro para la monitorización de las peticiones de políticas de acceso</description>
+		<display-name>AccessPolicyMonitorFilter</display-name>
+		<filter-name>AccessPolicyMonitorFilter</filter-name>
+		<filter-class>com.fav24.dataservices.filter.AccessPolicyMonitorFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>GenericMonitorFilter</filter-name>
+		<url-pattern>/generic*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>AccessPolicyMonitorFilter</filter-name>
+		<url-pattern>/accesspolicy*</url-pattern>
+	</filter-mapping>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<page-encoding>UTF-8</page-encoding>
+		</jsp-property-group>
+	</jsp-config>
+
+	<welcome-file-list>
+		<welcome-file>policies.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
