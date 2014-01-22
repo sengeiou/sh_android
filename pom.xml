@@ -42,7 +42,7 @@
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<commons-lang.version>2.5</commons-lang.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
-		<commons-io.version>2.3</commons-io.version>
+		<commons-io.version>2.4</commons-io.version>
 		<commons-configuration.version>1.9</commons-configuration.version>
 
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
@@ -95,6 +95,12 @@
 			<version>${commons-lang.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+
 		<!-- Dependencias http y REST -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
