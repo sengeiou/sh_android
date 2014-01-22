@@ -2,7 +2,7 @@ package com.fav24.dataservices.domain;
 
 import java.util.AbstractList;
 
-import com.fav24.dataservices.domain.EntityAccessPolicy.OperationType;
+import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
 
 
 /**

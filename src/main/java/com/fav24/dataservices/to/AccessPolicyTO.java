@@ -1,6 +1,6 @@
 package com.fav24.dataservices.to;
 
-import com.fav24.dataservices.domain.AccessPolicy;
+import com.fav24.dataservices.security.AccessPolicy;
 
 
 /**

@@ -1,6 +1,5 @@
 package com.fav24.dataservices.services.impl;
 
-import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.domain.Filter;
@@ -35,25 +36,27 @@ import com.fav24.dataservices.exception.ServerException;
 @Scope("prototype")
 public class GenericServiceJDBC extends GenericServiceBasic {
 
-	private DataSource dataSource;
 	private TransactionTemplate transactionTemplate;
-	
+	private JdbcTemplate jdbcTemplate;
+
 	/**
-	 * Asigna la fuente de datos que usará este servicio.
+	 * Asigna la plantilla para la gestión de transacciones que usará este servicio.
 	 * 
-	 * @param dataSource La fuente de datos a asignar.
+	 * @param transactionTemplate La plantilla para la gestión de transacciones a asignar.
 	 */
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		
-		try {
-			this.dataSource.getConnection().setAutoCommit(false);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-//		this.transactionTemplate = new TransactionTemplate(dataSource);
+	public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
+		this.transactionTemplate = transactionTemplate;
+	}
+
+	/**
+	 * Asigna plantilla de acceso JDBC que usará este servicio.
+	 * 
+	 * @param jdbcTemplate La plantilla de acceso JDBC a asignar.
+	 */
+	@Autowired
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	/**
@@ -61,6 +64,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	@Override
 	protected boolean startTransaction() {
+		transactionTemplate.setIsolationLevel(isolationLevel);
 		return false;
 	}
 
@@ -256,13 +260,17 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		return operation;
 	}
 
+	private ResultSetExtractor<Item> getResultSetExtractor(Item item) {
+		return null;
+	}
+	 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 
-		StringBuilder query = new StringBuilder();
+		final StringBuilder query = new StringBuilder();
 
 		query.append("SELECT ");
 
@@ -309,6 +317,18 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Ejecución de la sentencia.
 		 */
+		//use TransactionCallback handler if some result is returned
+		transactionTemplate.execute(new TransactionCallback<Integer>() {
+
+			public Integer doInTransaction(TransactionStatus paramTransactionStatus) {
+
+				Object[] params = new Object[]{user.getUserName(), user.getPassword(), user.isEnabled(), user.getId()};
+				int[] types = new int[]{Types.VARCHAR,Types.VARCHAR,Types.BIT,Types.INTEGER};
+
+				return jdbcTemplate.query(sql, args, rowMapper)(query.toString(), params, types);
+			}
+		});
+
 		List<Map<String, Object>> resultSet = null; //jdbcTemplate.queryForList(query.toString());
 
 		/*

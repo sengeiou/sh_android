@@ -30,9 +30,9 @@ public abstract class GenericServiceBasic implements GenericService {
 
 		GenericResultTO resultTO = new GenericResultTO();
 
-		resultTO.setRequester(generic.getRequester());
+		resultTO.setRequestor(generic.getRequestor());
 		try {
-			resultTO.setGeneric(processGeneric(generic.getGeneric()));
+			resultTO.setGeneric(processGeneric(generic.getRequestor(), generic.getGeneric()));
 		} catch (ServerException e) {
 			resultTO.setGeneric(generic.getGeneric());
 			resultTO.setErrorCode(e.getErrorCode());
@@ -62,17 +62,18 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * Procesa en contenido de una estructura Generic.
 	 * 
+	 * @param requestor Solicitante de la operación.
 	 * @param generic Estructura generica de operaciones a procesar.
 	 * 
 	 * @return estructura generic de entrada, enriquecida con los resultados de la salida.
 	 */
-	protected Generic processGeneric(Generic generic) throws ServerException {
+	protected Generic processGeneric(Requestor requestor, Generic generic) throws ServerException {
 
 		if (startTransaction()) {
 
 			try {
 				for (Operation operation : generic.getOperations()) {
-					processOperation(generic.getRequestor(), operation);
+					processOperation(requestor, operation);
 				}
 			} catch (ServerException e) {
 				endTransaction(false);

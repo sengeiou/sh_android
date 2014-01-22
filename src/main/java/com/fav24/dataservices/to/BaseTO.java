@@ -2,6 +2,8 @@ package com.fav24.dataservices.to;
 
 import java.io.Serializable;
 
+import com.fav24.dataservices.domain.Requestor;
+
 /**
  * Clase base de todos los obejos de transferencia.
  *  
@@ -11,7 +13,7 @@ public class BaseTO implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
 
-	private Requester requester;
+	private Requestor requestor;
 
 	/**
 	 * Constructor por defecto.
@@ -23,10 +25,10 @@ public class BaseTO implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param requester Quien realiza la petición.
+	 * @param requestor Quien realiza la petición.
 	 */
-	public BaseTO(Requester requester) {
-		this.requester = requester;
+	public BaseTO(Requestor requestor) {
+		this.requestor = requestor;
 	}
 
 	/**
@@ -34,17 +36,17 @@ public class BaseTO implements Serializable {
 	 *  
 	 * @return quién realiza la petición.
 	 */
-	public Requester getRequester() {
-		return requester;
+	public Requestor getRequestor() {
+		return requestor;
 	}
 
 	/**
 	 * Asigna quien realiza la petición.
 	 * 
-	 * @param requester El solicitante.
+	 * @param requestor El solicitante.
 	 */
-	public void setRequester(Requester requester) {
-		this.requester = requester;
+	public void setRequestor(Requestor requestor) {
+		this.requestor = requestor;
 	}
 
 	/**
@@ -52,6 +54,6 @@ public class BaseTO implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "BaseTO [requester=" + requester + "]";
+		return "BaseTO [requestor=" + requestor + "]";
 	}
 }

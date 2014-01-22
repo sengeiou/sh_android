@@ -20,7 +20,7 @@ import com.fav24.dataservices.to.AccessPolicyTO;
  * @author Fav24
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/accesspolicy")
 public class AccessPolicyController extends BaseController {
 
 	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
@@ -36,10 +36,24 @@ public class AccessPolicyController extends BaseController {
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "/accesspolicy", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/retrieve", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
 	AccessPolicyResultTO getAccessPolicy(@RequestBody final AccessPolicyTO accessPolicy) {
 
-		return accessPolicyService.getAccessPolicy(accessPolicy);
+		return accessPolicyService.getCurrentAccessPolicy(accessPolicy);
+	}
+	
+	/**
+	 * Procesa una petición de información de las políficas de acceso de una cierta entidad, o de las entidades disponibles.
+	 * 
+	 * @param accessPolicy La entidad de la que se desea obtener las políticas, o a las entidades a las que se tiene acceso.
+	 * 
+	 * @return el resultado del procesado de la petición.
+	 */
+	@RequestMapping(value = "/loadconfiguration", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody
+	AccessPolicyResultTO getCurrentAccessPolicy(@RequestBody final AccessPolicyTO accessPolicy) {
+		
+		return accessPolicyService.loadAccessPolicy(accessPolicy);
 	}
 }
