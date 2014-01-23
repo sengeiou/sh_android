@@ -2,7 +2,6 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 
 	xmlns="http://www.springframework.org/schema/beans" 
-	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:util="http://www.springframework.org/schema/util"  
 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
@@ -11,15 +10,10 @@
 	<description>
         Fichero de configuración de la persistencia en Spring.
     </description>
-    
-	<!-- Configuración del gestor de transacciones. -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-		p:dataSource-ref="dataSource">
-		<description>Fuente de datos a publicar.</description>
-	</bean>
 
-	<util:properties id="props" location="classpath:/properties/datasource.properties"/>
+	<!-- Carga de los ficheros de propiedades -->    
+	<util:properties id="connection-pool-props" location="classpath:/properties/connection-pool.properties"/>
+	<util:properties id="datasource-props" location="classpath:/properties/datasource.properties"/>
 		
 	<!-- HikariCP configuration -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
@@ -44,14 +38,17 @@
 		<property name="useInstrumentation" value="${jdbc.pool.useInstrumentation}" />
 
 		<property name="dataSourceClassName" value="${jdbc.pool.dataSourceClassName}" />  
-		<property name="dataSourceProperties" ref="props" />  
+		<property name="dataSourceProperties" ref="datasource-props" />  
 	</bean> 
 	
-	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">  
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+		<description>Fuente de datos a publicar.</description>  
 		<constructor-arg ref="hikariConfig" />  
 	</bean>
 	
+	<!-- Configuración del gestor de transacciones. -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<description>Gestor de transacciones.</description>
   		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
