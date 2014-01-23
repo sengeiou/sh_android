@@ -1,10 +1,12 @@
-package com.fav24.dataservices.to;
+package com.fav24.dataservices.to.security;
 
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.to.ResultBaseTO;
 
 
 /**
- * 
+ * Clase que contiene la estructura de respuesta a una petición de consulta de
+ * políticas de acceso 
  * 
  * @author Fav24
  */
@@ -61,5 +63,14 @@ public class AccessPolicyResultTO extends ResultBaseTO {
 		} else if (!accessPolicy.equals(other.accessPolicy))
 			return false;
 		return true;
+	}
+	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "AccessPolicyResultTO [accessPolicy=" + accessPolicy + ", toString()=" + super.toString() + "]";
 	}
 }

@@ -8,8 +8,8 @@
 	WebApplicationContext context = WebApplicationContextUtils
 	.getWebApplicationContext(this.getServletContext());
 
-	AccessPolicyService accessPolicyService = context
-	.getBean(AccessPolicyService.class);
+	RetrieveAccessPolicyService accessPolicyService = context
+	.getBean(RetrieveAccessPolicyService.class);
 
 	StringBuilder output = new StringBuilder();
 
@@ -18,7 +18,7 @@
 
 		if ("*".equals(entity)) {
 	output.append("Listado de entidades públicas:")
-			.append('\n');
+	.append('\n');
 
 	for (String currentEntity : accessPolicyService.getPublicEntities()) {
 		output.append(currentEntity).append('\n');
@@ -26,14 +26,14 @@
 
 		} else {
 	EntityAccessPolicyDOM entityAccessPolicy = accessPolicyService
-			.getPublicEntityPolicies(entity);
+	.getPublicEntityPolicy(entity);
 
 	if (entityAccessPolicy != null) {
 		output.append("Detalle de las políticas de acceso\n");
 		output.append(entityAccessPolicy.toString());
 	} else {
 		output.append("La entidad ").append(entity)
-				.append(" no existe, o no es accesible.");
+		.append(" no existe, o no es accesible.");
 	}
 		}
 

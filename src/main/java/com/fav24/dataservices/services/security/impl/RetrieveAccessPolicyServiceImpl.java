@@ -1,9 +1,8 @@
-package com.fav24.dataservices.services.impl;
+package com.fav24.dataservices.services.security.impl;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,9 +10,9 @@ import org.springframework.stereotype.Component;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
-import com.fav24.dataservices.services.AccessPolicyService;
-import com.fav24.dataservices.to.AccessPolicyResultTO;
-import com.fav24.dataservices.to.AccessPolicyTO;
+import com.fav24.dataservices.services.security.RetrieveAccessPolicyService;
+import com.fav24.dataservices.to.security.AccessPolicyResultTO;
+import com.fav24.dataservices.to.security.AccessPolicyTO;
 
 
 /**
@@ -23,7 +22,7 @@ import com.fav24.dataservices.to.AccessPolicyTO;
  */
 @Component
 @Scope("prototype")
-public class AccessPolicyServiceImpl implements AccessPolicyService {
+public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyService {
 
 	/**
 	 * {@inheritDoc}
@@ -102,29 +101,8 @@ public class AccessPolicyServiceImpl implements AccessPolicyService {
 	/**
 	 * {@inheritDoc}
 	 */
-	public EntityAccessPolicy getPublicEntityPolicies(String entity) {
+	public EntityAccessPolicy getPublicEntityPolicy(String entity) {
 		
 		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entity) : null;
-	}
-
-	/**
-	 * {@inheritDocs}
-	 */
-	public AccessPolicyResultTO loadAccessPolicy(AccessPolicyTO accessPolicy) {
-		
-		AccessPolicyResultTO resultTO = new AccessPolicyResultTO();
-		
-		resultTO.setRequestor(accessPolicy.getRequestor());
-		resultTO.setAccessPolicy(accessPolicy.getAccessPolicy());
-		
-		Set<EntityAccessPolicy> accessPolicies = accessPolicy.getAccessPolicy().getAccessPolicies();
-		
-		if (accessPolicies == null || accessPolicies.size() == 0) {
-			resultTO.	
-		}
-		else {
-			resultTO.set
-		}
-
 	}
 }

@@ -64,6 +64,15 @@ public class AccessPolicy {
 			accessPolicies = null;
 		}
 	}
+	
+	/**
+	 * Retorna la URL del fichero que contiene estas políticas de acceso.
+	 * 
+	 * @return la URL del fichero que contiene estas políticas de acceso.
+	 */
+	public URL getURL() {
+		return accessPolicyURL;
+	}
 
 	/**
 	 * Retorna el conjunto de políticas solicitada.
@@ -165,17 +174,29 @@ public class AccessPolicy {
 	 */
 	public void mergeAccesPolicy(final AccessPolicy accessPolicy) {
 
+		mergeAccesPolicy(accessPolicy.accessPolicies);
+	}
+	
+	/**
+	 * Modifica las políticas de acceso, sustituyendo las existentes coincidentes por las indicadas por parámetro.
+	 * 
+	 * @param accessPolicy Políticas a añadir/sustituir.
+	 */
+	public void mergeAccesPolicy(final Set<EntityAccessPolicy> accessPolicies) {
+		
 		synchronized(this) {
-
-			if (accessPolicies == null) {
-				accessPolicies = accessPolicy.accessPolicies;
+			
+			if (this.accessPolicies == null) {
+				
+				this.accessPolicies = new HashSet<EntityAccessPolicy>();
+				this.accessPolicies.addAll(accessPolicies);
 			}
 			else {
-				for (EntityAccessPolicy entityAccessPolicy : accessPolicy.accessPolicies) {
-					if (!accessPolicies.add(entityAccessPolicy)) {
-
-						accessPolicies.remove(entityAccessPolicy);
-						accessPolicies.add(entityAccessPolicy);
+				for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
+					if (!this.accessPolicies.add(entityAccessPolicy)) {
+						
+						this.accessPolicies.remove(entityAccessPolicy);
+						this.accessPolicies.add(entityAccessPolicy);
 					}
 				}
 			}

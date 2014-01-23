@@ -1,10 +1,12 @@
-package com.fav24.dataservices.to;
+package com.fav24.dataservices.to.security;
 
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.to.BaseTO;
 
 
 /**
- * Clase que contiene la estructura de una petición genérica de acciones sobre entidades.
+ * Clase que contiene la estructura de una petición de consulta de
+ * políticas de acceso
  * 
  * @author Fav24
  */
@@ -38,6 +40,6 @@ public class AccessPolicyTO extends BaseTO {
 	 */
 	@Override
 	public String toString() {
-		return "GenericTO [accessPolicy=" + accessPolicy + ", toString()=" + super.toString() + "]";
+		return "AccessPolicyTO [accessPolicy=" + accessPolicy + ", toString()=" + super.toString() + "]";
 	}
 }

@@ -46,6 +46,8 @@ public class AccessPolicyDOM extends AccessPolicy
 	 */
 	public AccessPolicyDOM(URL accessPolicies) throws ServerException { 
 
+		super(accessPolicies);
+		
 		if (accessPolicies == null)
 			throw new ServerException("Se ha indicado una URL vacía como origen de políticas de acceso.");
 
@@ -60,21 +62,6 @@ public class AccessPolicyDOM extends AccessPolicy
 
 		//Información relativa al contenido del fichero de políticas.
 		Document document = accessPolicyDOM.generateDocument(accessPoliciesStream);
-
-		readPolicies(document);
-	}
-
-	/**
-	 * Constructor con parámetro.
-	 * 
-	 * @param accessPolicies Stream con contenido de políticas de acceso. 
-	 * 
-	 * @throws ServerException
-	 */
-	public AccessPolicyDOM(InputStream accessPolicies) throws ServerException { 
-
-		//Información relativa al contenido del fichero de políticas.
-		Document document = accessPolicyDOM.generateDocument(accessPolicies);
 
 		readPolicies(document);
 	}
@@ -104,7 +91,11 @@ public class AccessPolicyDOM extends AccessPolicy
 				String nodeName = node_i.getNodeName();
 
 				if ("Entities".equals(nodeName)) {
-					entityGroupsAccessPolicies.add(new EntityGroupAccessPolicyDOM(node_i));
+					
+					EntityGroupAccessPolicyDOM group = new EntityGroupAccessPolicyDOM(node_i);
+					entityGroupsAccessPolicies.add(group);
+					
+					mergeAccesPolicy(group.getEntitiesAccessPolicies());
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import com.fav24.dataservices.services.AccessPolicyService;
+import com.fav24.dataservices.services.security.RetrieveAccessPolicyService;
 
 
 /**
@@ -56,7 +56,7 @@ public class ResourceResolver implements LSResourceResolver {
 		public InputStream getByteStream()
 		{
 			if (systemId.endsWith("AccessPolicy.xsd"))
-				return AccessPolicyService.class.getResourceAsStream("AccessPolicy.xsd");
+				return RetrieveAccessPolicyService.class.getResourceAsStream("AccessPolicy.xsd");
 
 			return null;
 		}

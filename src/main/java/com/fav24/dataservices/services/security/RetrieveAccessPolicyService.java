@@ -1,10 +1,10 @@
-package com.fav24.dataservices.services;
+package com.fav24.dataservices.services.security;
 
 import java.util.AbstractList;
 
 import com.fav24.dataservices.security.EntityAccessPolicy;
-import com.fav24.dataservices.to.AccessPolicyResultTO;
-import com.fav24.dataservices.to.AccessPolicyTO;
+import com.fav24.dataservices.to.security.AccessPolicyResultTO;
+import com.fav24.dataservices.to.security.AccessPolicyTO;
 
 
 /**
@@ -12,7 +12,7 @@ import com.fav24.dataservices.to.AccessPolicyTO;
  * 
  * @author Fav24
  */
-public interface AccessPolicyService {
+public interface RetrieveAccessPolicyService {
 
 	/**
 	 * Retorna el detalle de las políticas de acceso de las entidades. 
@@ -22,15 +22,6 @@ public interface AccessPolicyService {
 	 * @return el detalle de las políticas de acceso de las entidades indicadas.
 	 */
 	public AccessPolicyResultTO getCurrentAccessPolicy(AccessPolicyTO accessPolicy);
-	
-	/**
-	 * Retorna el detalle de las políticas de acceso de las entidades. 
-	 * 
-	 * @param accessPolicy Políticas de acceso a cargar.
-	 *  
-	 * @return el detalle de las políticas de acceso de las entidades indicadas.
-	 */
-	public AccessPolicyResultTO loadAccessPolicy(AccessPolicyTO accessPolicy);
 	
 	/**
 	 * Retorna la lista de entidades accesible desde el exterior.
@@ -46,5 +37,5 @@ public interface AccessPolicyService {
 	 * 
 	 * @return el detalle de las políticas de acceso de la entidad indicada.
 	 */
-	public EntityAccessPolicy getPublicEntityPolicies(String entity);
+	public EntityAccessPolicy getPublicEntityPolicy(String entity);
 }
