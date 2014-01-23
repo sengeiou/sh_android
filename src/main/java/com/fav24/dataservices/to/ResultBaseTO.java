@@ -1,6 +1,6 @@
 package com.fav24.dataservices.to;
 
-import java.io.Serializable;
+import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Cualquier método de cualquier controlador que r
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 
  * @author Fav24
  */
-public class ResultBaseTO extends BaseTO implements Serializable {
+public class ResultBaseTO extends BaseTO {
 
 	private static final long serialVersionUID = -6849812750763267868L;
 
@@ -22,6 +22,13 @@ public class ResultBaseTO extends BaseTO implements Serializable {
 	 */
 	public ResultBaseTO() {
 		this(null, null);
+	}
+	
+	/**
+	 * Constructor por defecto.
+	 */
+	public ResultBaseTO(ServerException e) {
+		this(e.getErrorCode(), e.getMessage());
 	}
 
 	/**

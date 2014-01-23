@@ -1,6 +1,5 @@
 package com.fav24.dataservices.services.security;
 
-import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.to.security.AccessPolicyFileResultTO;
 import com.fav24.dataservices.to.security.AccessPolicyFileTO;
 
@@ -18,8 +17,6 @@ public interface LoadAccessPolicyService {
 	 * @param accessPolicyFile Políticas de acceso a cargar.
 	 *  
 	 * @return la URL cargada.
-	 * 
-	 * @throws ServerException 
 	 */
-	public AccessPolicyFileResultTO loadAccessPolicy(AccessPolicyFileTO accessPolicyFile) throws ServerException;
+	public AccessPolicyFileResultTO loadAccessPolicy(AccessPolicyFileTO accessPolicyFile);
 }

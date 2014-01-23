@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.BaseController;
-import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.services.security.LoadAccessPolicyService;
 import com.fav24.dataservices.services.security.RetrieveAccessPolicyService;
 import com.fav24.dataservices.to.security.AccessPolicyFileResultTO;
@@ -57,12 +56,10 @@ public class AccessPolicyController extends BaseController {
 	 * @param accessPolicyFile URL del fichero de definición de políticas a cargar.
 	 * 
 	 * @return el resultado del procesado de la petición.
-	 * 
-	 * @throws ServerException 
 	 */
 	@RequestMapping(value = "/load", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyFileResultTO getCurrentAccessPolicy(@RequestBody final AccessPolicyFileTO accessPolicyFile) throws ServerException {
+	AccessPolicyFileResultTO getCurrentAccessPolicy(@RequestBody final AccessPolicyFileTO accessPolicyFile) {
 
 		return loadAccessPolicyService.loadAccessPolicy(accessPolicyFile);
 	}

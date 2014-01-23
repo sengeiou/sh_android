@@ -2,6 +2,7 @@ package com.fav24.dataservices.to.security;
 
 import java.net.URL;
 
+import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.to.ResultBaseTO;
 
 
@@ -17,6 +18,22 @@ public class AccessPolicyFileResultTO extends ResultBaseTO {
 	
 	private URL url;
 
+	
+	/**
+	 * Constructor por defecto.
+	 */
+	public AccessPolicyFileResultTO() {
+	}
+	
+	/**
+	 * Constructor de excepción.
+	 * 
+	 * @param e Excepción a retornar.
+	 */
+	public AccessPolicyFileResultTO(ServerException e) {
+		super(e);
+	}
+	
 	/**
 	 * Retorna la url del fichero de definición de políticas de acceso.
 	 * 

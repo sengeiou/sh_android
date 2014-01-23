@@ -26,15 +26,24 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	/**
 	 * {@inheritDocs}
 	 */
-	public AccessPolicyFileResultTO loadAccessPolicy(AccessPolicyFileTO accessPolicyFile) throws ServerException {
+	public AccessPolicyFileResultTO loadAccessPolicy(AccessPolicyFileTO accessPolicyFile) {
 		
-		AccessPolicyFileResultTO resultTO = new AccessPolicyFileResultTO();
+		AccessPolicyFileResultTO resultTO = null;
 		
-		resultTO.setRequestor(accessPolicyFile.getRequestor());
-		
-		URL accessPolicyURL = accessPolicyFile.getURL();
-
-		AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(accessPolicyURL));
+		try {
+			URL accessPolicyFileURL = accessPolicyFile.getURL();
+			
+			AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(accessPolicyFileURL));
+			
+			resultTO = new AccessPolicyFileResultTO();
+			resultTO.setRequestor(accessPolicyFile.getRequestor());
+			resultTO.setURL(accessPolicyFileURL);
+			
+		} catch (ServerException e) {
+			e.printStackTrace();
+			
+			resultTO = new AccessPolicyFileResultTO(e);
+		}
 		
 		return resultTO;
 	}
