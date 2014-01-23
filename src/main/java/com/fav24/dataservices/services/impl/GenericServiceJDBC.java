@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.domain.Filter;
@@ -64,7 +62,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	@Override
 	protected boolean startTransaction() {
-		transactionTemplate.setIsolationLevel(isolationLevel);
+//		transactionTemplate.setIsolationLevel(isolationLevel);
 		return false;
 	}
 
@@ -318,6 +316,8 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		 * Ejecución de la sentencia.
 		 */
 		//use TransactionCallback handler if some result is returned
+		
+/*
 		transactionTemplate.execute(new TransactionCallback<Integer>() {
 
 			public Integer doInTransaction(TransactionStatus paramTransactionStatus) {
@@ -328,7 +328,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				return jdbcTemplate.query(sql, args, rowMapper)(query.toString(), params, types);
 			}
 		});
-
+*/
 		List<Map<String, Object>> resultSet = null; //jdbcTemplate.queryForList(query.toString());
 
 		/*
