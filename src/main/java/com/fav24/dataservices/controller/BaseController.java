@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import com.fav24.dataservices.dto.exception.ExceptionDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.to.exception.ExceptionTO;
 
 /**
  * Controlador base.
@@ -94,12 +94,12 @@ public class BaseController {
 	 */
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
 	@ResponseBody
-	public ExceptionTO handleExceptionContentType(HttpMediaTypeNotSupportedException exception, HttpServletRequest request, HttpServletResponse response)
+	public ExceptionDto handleExceptionContentType(HttpMediaTypeNotSupportedException exception, HttpServletRequest request, HttpServletResponse response)
 	{
 		// -----------------------------------------------
 		// Based on http://www.tuicool.com/articles/Vzea2y
 		// -----------------------------------------------
-		ExceptionTO exceptionTo = new ExceptionTO(ERROR_GLOBAL_001, null, exception.getMessage());
+		ExceptionDto exceptionTo = new ExceptionDto(ERROR_GLOBAL_001, null, exception.getMessage());
 
 		if (logger.isWarnEnabled()) {
 

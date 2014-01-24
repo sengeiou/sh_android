@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fav24.dataservices.services.GenericService;
-import com.fav24.dataservices.to.GenericResultTO;
-import com.fav24.dataservices.to.GenericTO;
+import com.fav24.dataservices.dto.GenericResultDto;
+import com.fav24.dataservices.dto.GenericDto;
+import com.fav24.dataservices.service.GenericService;
 
 /**
  * Controla las peticiones de entrada a un conjunto de entidades de datos.
@@ -38,7 +38,7 @@ public class GenericController extends BaseController {
 	 */
 	@RequestMapping(value = "/generic", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	GenericResultTO processGeneric(@RequestBody final GenericTO generic) {
+	GenericResultDto processGeneric(@RequestBody final GenericDto generic) {
 
 		return genericService.processGeneric(generic);
 	}

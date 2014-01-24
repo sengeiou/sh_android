@@ -1,7 +1,7 @@
 <%@ page import="org.springframework.web.context.support.*"%>
 <%@ page import="org.springframework.web.context.*"%>
 <%@ page import="com.fav24.dataservices.security.*"%>
-<%@ page import="com.fav24.dataservices.services.security.*"%>
+<%@ page import="com.fav24.dataservices.service.security.*"%>
 
 <%!String bodyContent;%>
 <%

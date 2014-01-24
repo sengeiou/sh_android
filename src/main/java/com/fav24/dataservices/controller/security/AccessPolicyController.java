@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.BaseController;
-import com.fav24.dataservices.services.security.LoadAccessPolicyService;
-import com.fav24.dataservices.services.security.RetrieveAccessPolicyService;
-import com.fav24.dataservices.to.security.AccessPolicyFileResultTO;
-import com.fav24.dataservices.to.security.AccessPolicyFileTO;
-import com.fav24.dataservices.to.security.AccessPolicyResultTO;
-import com.fav24.dataservices.to.security.AccessPolicyTO;
+import com.fav24.dataservices.dto.security.AccessPolicyFileResultDto;
+import com.fav24.dataservices.dto.security.AccessPolicyFileDto;
+import com.fav24.dataservices.dto.security.AccessPolicyResultDto;
+import com.fav24.dataservices.dto.security.AccessPolicyDto;
+import com.fav24.dataservices.service.security.LoadAccessPolicyService;
+import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
 /**
  * Controla las peticiones de entrada a los servicios de gestión de la seguridad.
@@ -45,7 +45,7 @@ public class AccessPolicyController extends BaseController {
 	 */
 	@RequestMapping(value = "/retrieve", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyResultTO getAccessPolicy(@RequestBody final AccessPolicyTO accessPolicy) {
+	AccessPolicyResultDto getAccessPolicy(@RequestBody final AccessPolicyDto accessPolicy) {
 
 		return retrieveAccessPolicyService.getCurrentAccessPolicy(accessPolicy);
 	}
@@ -59,7 +59,7 @@ public class AccessPolicyController extends BaseController {
 	 */
 	@RequestMapping(value = "/load", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyFileResultTO getCurrentAccessPolicy(@RequestBody final AccessPolicyFileTO accessPolicyFile) {
+	AccessPolicyFileResultDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFileDto accessPolicyFile) {
 
 		return loadAccessPolicyService.loadAccessPolicy(accessPolicyFile);
 	}
