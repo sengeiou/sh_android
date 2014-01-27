@@ -6,7 +6,7 @@ import com.fav24.dataservices.dto.GenericDto;
 
 /**
  * 
- * Clase encargada del mapeo entre el objeto de dominio Generic y el objeto de transferencia GenericDto.
+ * Clase encargada del mapeo entre el objeto de transferencia Generic y el objeto de dominio GenericDto.
  * 
  * @author Fav24
  *

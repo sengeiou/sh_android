@@ -46,7 +46,7 @@ public class FilterItem {
 	/**
 	 * Constructor.
 	 * 
-	 * @param ComparatorType comparator Tipo de comparador.
+	 * @param comparator Tipo de comparador.
 	 * @param name Nombre del atributo clave.
 	 * @param value Valor del atributo.
 	 */
