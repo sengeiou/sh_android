@@ -1,6 +1,5 @@
 package com.fav24.dataservices.security;
 
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +16,6 @@ public class AccessPolicy {
 	private static AccessPolicy currentAccesPolicy;
 
 	private Requestor requestor;
-	private URL accessPolicyURL;
 	private Set<EntityAccessPolicy> accessPolicies;
 
 
@@ -25,26 +23,17 @@ public class AccessPolicy {
 	 * Constructor por defecto.
 	 */
 	public AccessPolicy() {
-		this(null, null);
-	}
-
-	/**
-	 * Constructor por defecto.
-	 * 
-	 * @param accessPolicyURL URL de la que se obtuvieron las políticas de acceso.
-	 */
-	public AccessPolicy(URL accessPolicyURL) {
-		this(accessPolicyURL, null);
+		
+		this((Set<EntityAccessPolicy>)null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param accessPolicyURL URL de la que se obtuvieron las políticas de acceso.
 	 * @param accessPolicies Lista de políticas solicitadas.
 	 */
-	public AccessPolicy(URL accessPolicyURL, Set<EntityAccessPolicy> accessPolicies) {
-		this.accessPolicyURL = accessPolicyURL;
+	public AccessPolicy(Set<EntityAccessPolicy> accessPolicies) {
+		
 		this.accessPolicies = accessPolicies;
 	}
 
@@ -54,7 +43,6 @@ public class AccessPolicy {
 	 * @param accesPolicy Objeto referencia a copiar.
 	 */
 	public AccessPolicy(AccessPolicy accesPolicy) {
-		accessPolicyURL = accesPolicy.accessPolicyURL;
 
 		if (accesPolicy.requestor != null) {
 
@@ -93,15 +81,6 @@ public class AccessPolicy {
 	 */
 	public void setRequestor(Requestor requestor) {
 		this.requestor = requestor;
-	}
-
-	/**
-	 * Retorna la URL del fichero que contiene estas políticas de acceso.
-	 * 
-	 * @return la URL del fichero que contiene estas políticas de acceso.
-	 */
-	public URL getURL() {
-		return accessPolicyURL;
 	}
 
 	/**

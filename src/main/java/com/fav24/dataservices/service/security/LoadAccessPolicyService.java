@@ -1,7 +1,7 @@
 package com.fav24.dataservices.service.security;
 
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.security.AccessPolicyFile;
 
 
 /**
@@ -20,5 +20,5 @@ public interface LoadAccessPolicyService {
 	 * 
 	 * @throws ServerException 
 	 */
-	public AccessPolicy loadAccessPolicy(AccessPolicy accessPolicyFile) throws ServerException;
+	public AccessPolicyFile loadAccessPolicy(AccessPolicyFile accessPolicyFile) throws ServerException;
 }

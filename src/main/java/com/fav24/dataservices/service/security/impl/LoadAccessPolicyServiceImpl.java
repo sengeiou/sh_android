@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.security.AccessPolicyFile;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.xml.AccessPolicyDOM;
 
@@ -22,12 +23,12 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	/**
 	 * {@inheritDocs}
 	 */
-	public AccessPolicy loadAccessPolicy(AccessPolicy accessPolicy) throws ServerException {
+	public AccessPolicyFile loadAccessPolicy(AccessPolicyFile accessPolicyFile) throws ServerException {
 
-		AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(accessPolicy.getURL()));
+		AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(accessPolicyFile.getURL()));
 
-		accessPolicy.getRequestor().setTime(System.currentTimeMillis());
+		accessPolicyFile.getRequestor().setTime(System.currentTimeMillis());
 
-		return accessPolicy;
+		return accessPolicyFile;
 	}
 }

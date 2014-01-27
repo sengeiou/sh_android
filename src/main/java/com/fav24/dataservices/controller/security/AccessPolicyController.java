@@ -16,6 +16,7 @@ import com.fav24.dataservices.dto.security.AccessPolicyFileDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.security.AccessPolicyFile;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
@@ -79,7 +80,7 @@ public class AccessPolicyController extends BaseController {
 
 		try {
 
-			result = (AccessPolicyFileDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicy)Mapper.Map(accessPolicyFile)));
+			result = (AccessPolicyFileDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFile)Mapper.Map(accessPolicyFile)));
 
 		} catch (ServerException e) {
 			

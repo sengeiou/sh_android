@@ -46,8 +46,6 @@ public class AccessPolicyDOM extends AccessPolicy
 	 */
 	public AccessPolicyDOM(URL accessPolicies) throws ServerException { 
 
-		super(accessPolicies);
-		
 		if (accessPolicies == null)
 			throw new ServerException("Se ha indicado una URL vacía como origen de políticas de acceso.");
 
