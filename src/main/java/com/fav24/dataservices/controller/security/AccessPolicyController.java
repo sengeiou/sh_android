@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.BaseController;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
-import com.fav24.dataservices.dto.security.AccessPolicyFileDto;
+import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
 import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.AccessPolicyFile;
+import com.fav24.dataservices.security.AccessPolicyFiles;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
@@ -74,17 +74,17 @@ public class AccessPolicyController extends BaseController {
 	 */
 	@RequestMapping(value = "/load", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyFileDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFileDto accessPolicyFile) {
+	AccessPolicyFilesDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFilesDto accessPolicyFile) {
 
-		AccessPolicyFileDto result = null;
+		AccessPolicyFilesDto result = null;
 
 		try {
 
-			result = (AccessPolicyFileDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFile)Mapper.Map(accessPolicyFile)));
+			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFile)));
 
 		} catch (ServerException e) {
 			
-			result = new AccessPolicyFileDto(e);
+			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFile.getRequestor());
 			result.getRequestor().setSystemTime(System.currentTimeMillis());
 		}

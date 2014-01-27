@@ -1,11 +1,13 @@
 package com.fav24.dataservices.service.security.impl;
 
+import java.net.URL;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.AccessPolicyFile;
+import com.fav24.dataservices.security.AccessPolicyFiles;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.xml.AccessPolicyDOM;
 
@@ -19,16 +21,29 @@ import com.fav24.dataservices.xml.AccessPolicyDOM;
 @Scope("prototype")
 public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
+	public static final String ERROR_LOADING_POLICY_FILES = "PS000";
+
 
 	/**
 	 * {@inheritDocs}
 	 */
-	public AccessPolicyFile loadAccessPolicy(AccessPolicyFile accessPolicyFile) throws ServerException {
+	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFiles) throws ServerException {
 
-		AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(accessPolicyFile.getURL()));
+		if (accessPolicyFiles.getURLs() == null) {
 
-		accessPolicyFile.getRequestor().setTime(System.currentTimeMillis());
+			ServerException exception = new ServerException(ERROR_LOADING_POLICY_FILES, "No se indicó ninguna URL de ningún fichero de definición de políticas de acceso.");
 
-		return accessPolicyFile;
+			logger.error(exception.getMessage());
+
+			throw exception;
+		}
+
+		for(URL url : accessPolicyFiles.getURLs()) {
+			AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(url));
+		}
+
+		accessPolicyFiles.getRequestor().setTime(System.currentTimeMillis());
+
+		return accessPolicyFiles;
 	}
 }

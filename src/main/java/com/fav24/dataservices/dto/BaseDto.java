@@ -120,12 +120,4 @@ public class BaseDto implements Serializable {
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "BaseTO [requestor=" + requestor + "]";
-	}
 }

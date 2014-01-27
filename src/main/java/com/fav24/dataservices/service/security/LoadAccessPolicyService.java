@@ -1,7 +1,10 @@
 package com.fav24.dataservices.service.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicyFile;
+import com.fav24.dataservices.security.AccessPolicyFiles;
 
 
 /**
@@ -11,6 +14,8 @@ import com.fav24.dataservices.security.AccessPolicyFile;
  */
 public interface LoadAccessPolicyService {
 
+	final static Logger logger = LoggerFactory.getLogger(LoadAccessPolicyService.class);
+	
 	/**
 	 * Retorna la URL cargada. 
 	 * 
@@ -20,5 +25,5 @@ public interface LoadAccessPolicyService {
 	 * 
 	 * @throws ServerException 
 	 */
-	public AccessPolicyFile loadAccessPolicy(AccessPolicyFile accessPolicyFile) throws ServerException;
+	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFile) throws ServerException;
 }

@@ -44,12 +44,4 @@ public class AccessPolicyDto extends BaseDto {
 	public void setAccessPolicy(AccessPolicy accessPolicy) {
 		this.accessPolicy = accessPolicy;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "AccessPolicyTO [accessPolicy=" + accessPolicy + ", toString()=" + super.toString() + "]";
-	}
 }
