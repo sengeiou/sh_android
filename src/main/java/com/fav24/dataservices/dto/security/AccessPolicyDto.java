@@ -1,6 +1,7 @@
 package com.fav24.dataservices.dto.security;
 
 import com.fav24.dataservices.dto.BaseDto;
+import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 
 
@@ -17,6 +18,15 @@ public class AccessPolicyDto extends BaseDto {
 	private AccessPolicy accessPolicy;
 
 
+	/**
+	 * Constructor para el retorno de un error. 
+	 *  
+	 * @param e Excepción a notificar en la respuesta.
+	 */
+	public AccessPolicyDto(ServerException e) {
+		super(e);
+	}
+	
 	/**
 	 * Retorna la estructura de políticas de acceso de las entidades.
 	 * 

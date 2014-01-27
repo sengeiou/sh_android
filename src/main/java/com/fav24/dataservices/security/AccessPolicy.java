@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fav24.dataservices.domain.Requestor;
+
 
 /**
  * Clase que contiene la estructura genérica de políticas de acceso sobre entidades.
@@ -14,6 +16,7 @@ public class AccessPolicy {
 
 	private static AccessPolicy currentAccesPolicy;
 
+	private Requestor requestor;
 	private URL accessPolicyURL;
 	private Set<EntityAccessPolicy> accessPolicies;
 
@@ -53,6 +56,15 @@ public class AccessPolicy {
 	public AccessPolicy(AccessPolicy accesPolicy) {
 		accessPolicyURL = accesPolicy.accessPolicyURL;
 
+		if (accesPolicy.requestor != null) {
+
+			requestor = new Requestor(accesPolicy.requestor);
+		}
+		else {
+
+			requestor = null;
+		}
+
 		if (accesPolicy.accessPolicies != null) {
 
 			accessPolicies = new HashSet<EntityAccessPolicy>();
@@ -64,7 +76,25 @@ public class AccessPolicy {
 			accessPolicies = null;
 		}
 	}
-	
+
+	/**
+	 * Retorna el solicitante.
+	 * 
+	 * @return el solicitante.
+	 */
+	public Requestor getRequestor() {
+		return requestor;
+	}
+
+	/**
+	 * Asigna el solicitante.
+	 * 
+	 * @param requestor El solicitante a asignar.
+	 */
+	public void setRequestor(Requestor requestor) {
+		this.requestor = requestor;
+	}
+
 	/**
 	 * Retorna la URL del fichero que contiene estas políticas de acceso.
 	 * 
@@ -176,25 +206,25 @@ public class AccessPolicy {
 
 		mergeAccesPolicy(accessPolicy.accessPolicies);
 	}
-	
+
 	/**
 	 * Modifica las políticas de acceso, sustituyendo las existentes coincidentes por las indicadas por parámetro.
 	 * 
 	 * @param accessPolicy Políticas a añadir/sustituir.
 	 */
 	public void mergeAccesPolicy(final Set<EntityAccessPolicy> accessPolicies) {
-		
+
 		synchronized(this) {
-			
+
 			if (this.accessPolicies == null) {
-				
+
 				this.accessPolicies = new HashSet<EntityAccessPolicy>();
 				this.accessPolicies.addAll(accessPolicies);
 			}
 			else {
 				for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
 					if (!this.accessPolicies.add(entityAccessPolicy)) {
-						
+
 						this.accessPolicies.remove(entityAccessPolicy);
 						this.accessPolicies.add(entityAccessPolicy);
 					}

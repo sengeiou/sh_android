@@ -3,6 +3,7 @@ package com.fav24.dataservices.dto.security;
 import java.net.URL;
 
 import com.fav24.dataservices.dto.BaseDto;
+import com.fav24.dataservices.exception.ServerException;
 
 
 /**
@@ -18,6 +19,15 @@ public class AccessPolicyFileDto extends BaseDto {
 	private URL url;
 
 
+	/**
+	 * Constructor para el retorno de un error. 
+	 *  
+	 * @param e Excepción a notificar en la respuesta.
+	 */
+	public AccessPolicyFileDto(ServerException e) {
+		super(e);
+	}
+	
 	/**
 	 * Retorna la url del fichero de definición de políticas de acceso.
 	 * 

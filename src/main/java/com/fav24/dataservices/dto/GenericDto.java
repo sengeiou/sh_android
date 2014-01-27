@@ -1,6 +1,7 @@
 package com.fav24.dataservices.dto;
 
-import com.fav24.dataservices.domain.Generic;
+import com.fav24.dataservices.exception.ServerException;
+
 
 
 /**
@@ -12,32 +13,33 @@ public class GenericDto extends BaseDto {
 
 	private static final long serialVersionUID = 2649617444051699918L;
 
-	private Generic generic;
+	private OperationDto[] ops;
 
-
+	
 	/**
-	 * Retorna la estructura genérica de operaciones con entidades.
-	 * 
-	 * @return la estructura genérica de operaciones con entidades.
+	 * Constructor para el retorno de un error. 
+	 *  
+	 * @param e Excepción a notificar en la respuesta.
 	 */
-	public Generic getGeneric() {
-		return generic;
+	public GenericDto(ServerException e) {
+		super(e);
+	}
+	
+	/**
+	 * Retorna el array de operaciones.
+	 * 
+	 * @return el array de operaciones.
+	 */
+	public OperationDto[] getOps() {
+		return ops;
 	}
 
 	/**
-	 * Asigna la estructura genérica de operaciones con entidades.
+	 * Asigna el array de operaciones.
 	 * 
-	 * @param generic La estructura genérica de operaciones a asignar.
+	 * @param ops El array de operaciones a asignar.
 	 */
-	public void setGeneric(Generic generic) {
-		this.generic = generic;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "GenericTO [generic=" + generic + ", toString()=" + super.toString() + "]";
+	public void setOps(OperationDto[] ops) {
+		this.ops = ops;
 	}
 }

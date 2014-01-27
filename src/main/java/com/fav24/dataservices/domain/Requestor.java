@@ -2,6 +2,7 @@ package com.fav24.dataservices.domain;
 
 
 
+
 /**
  * Clase que contiene la estructura de un solicitate.
  * 
@@ -12,9 +13,23 @@ public class Requestor {
 	private	Long idDevice;
 	private	Long idUser; 
 	private Long idPlatform;
-	private String appVersion; 
+	private Long appVersion; 
 	private Long time;
 	
+
+	/**
+	 * Constructor de copia.
+	 * 
+	 * @param entityAccessPolicy Objeto referencia a copiar.
+	 */
+	public Requestor(Requestor requestor) {
+
+		idDevice = requestor.idDevice;
+		idUser = requestor.idUser; 
+		idPlatform = requestor.idPlatform;
+		appVersion = requestor.appVersion; 
+		time = requestor.time;
+	}
 	
 	/**
 	 * Retorna el identificador de dispositivo.
@@ -73,9 +88,12 @@ public class Requestor {
 	/**
 	 * Retorna la versión de la aplicación.
 	 * 
+	 * 000		000		000
+	 * Major	Minor	Fixing
+	 * 
 	 * @return la versión de la aplicación.
 	 */
-	public String getAppVersion() {
+	public Long getAppVersion() {
 		return appVersion;
 	}
 	
@@ -84,7 +102,7 @@ public class Requestor {
 	 * 
 	 * @param appVersion La versión a asignar.
 	 */
-	public void setAppVersion(String appVersion) {
+	public void setAppVersion(Long appVersion) {
 		this.appVersion = appVersion;
 	}
 	

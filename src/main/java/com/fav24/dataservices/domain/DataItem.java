@@ -8,8 +8,51 @@ import java.util.Map;
  * 
  * @author Fav24
  */
-public class Item {
+public class DataItem {
 
+	/**
+	 * Enumeración del conjunto de atributos interno y que debe tener toda entidad operable.
+	 */
+	public enum InternalAttribute {
+		REVISION("revision"),
+		BIRTH_DATE("birth_date"),
+		UPDATE_DATE("update_date"),
+		DELETE_DATE("delete_date");
+
+		private final String internalAttribute;
+
+		private InternalAttribute(String internalAttribute) {
+			this.internalAttribute = internalAttribute;
+		}
+
+		/**
+		 * Retorna el nombre con el que se identifica el atributo.
+		 * 
+		 * @return el nombre con el que se identifica el atributo.
+		 */
+		public String getInternalAttribute() {
+			return internalAttribute;
+		}
+
+		/**
+		 * Retorna true o false en función de si el atributo indicado tiene o no representación en esta enumeración.
+		 * 
+		 * @param attribute Atributo a comprobar.
+		 * 
+		 * @return true o false en función de si el atributo indicado tiene o no representación en esta enumeración.
+		 */
+		public static boolean contains(String attribute) {
+
+			for (InternalAttribute choice : InternalAttribute.values()) {
+				if (choice.name().equals(attribute)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+	
 	private Map<String, Object> attributes;
 	private Long revision; // Versión del item. 
 	private Long birthDate; // Milisegundos desde epoch correspondientes al momento de la creación del item.
@@ -138,7 +181,7 @@ public class Item {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Item other = (Item) obj;
+		DataItem other = (DataItem) obj;
 		if (attributes == null) {
 			if (other.attributes != null)
 				return false;

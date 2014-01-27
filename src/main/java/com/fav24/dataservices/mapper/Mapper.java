@@ -93,7 +93,7 @@ public abstract class Mapper<T, S> {
 		Mapper<U, V> mapper = (Mapper<U, V>) AvailableMappers.get(origin.getClass());
 
 		if (mapper == null) {
-			throw new ServerException(ERROR_MAPPER_NOT_FOUND, "No existe ningún mapeador definido para el tipo " + origin.getClass());
+			throw new ServerException(ERROR_MAPPER_NOT_FOUND, "No existe ningún mapeador definido para el tipo " + origin.getClass() + ".");
 		}
 
 		return mapper.map(origin);

@@ -11,7 +11,7 @@ import java.util.AbstractList;
 public class Operation {
 
 	private Metadata metadata;
-	private AbstractList<Item> data;
+	private AbstractList<DataItem> data;
 	
 	/**
 	 * Retorna el conjunto de metadatos de la operación. 
@@ -36,7 +36,7 @@ public class Operation {
 	 * 
 	 * @return el conjunto de elementos implicados en la operación.
 	 */
-	public AbstractList<Item> getData() {
+	public AbstractList<DataItem> getData() {
 		return data;
 	}
 	
@@ -45,7 +45,7 @@ public class Operation {
 	 * 
 	 * @param data Conjunto de elementos a asignar.
 	 */
-	public void setData(AbstractList<Item> data) {
+	public void setData(AbstractList<DataItem> data) {
 		this.data = data;
 	}
 	

@@ -1,113 +1,130 @@
 package com.fav24.dataservices.domain;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+
 
 /**
- * Clase que contiene la estructura de un filtro.
+ * Clase que contiene la estructura de un conjunto de filtros.
  * 
  * @author Fav24
  */
 public class Filter {
 
 	/**
-	 * Enumeración interna que de los tipos de comparadores que existen. 
+	 * Enumeración interna que de los tipos de nexos que existen. 
 	 */
-	public static enum ComparatorType {
-		EQ("eq"),
-		NE("ne"),
-		GT("gt"),
-		GE("ge"),
-		LT("lt"),
-		LE("le");
+	public enum NexusType {
+		AND("and"),
+		OR("or");
 
-		private final String comparatorType;
+		private final String nexusType;
 
-		ComparatorType(String comparatorType) {
-			this.comparatorType = comparatorType;
+		NexusType(String nexusType) {
+			this.nexusType = nexusType;
 		}
 
-		public String getComparatorType() {
-			return comparatorType;
+		public String getNexusType() {
+			return nexusType;
 		}
 	}
-	
-	
-	private ComparatorType comparator;
-	private String name;
-	private String value;
 
-	
+
+	private NexusType nexus;
+	private AbstractList<FilterItem> filterItems;
+	private AbstractList<Filter> filter;
+
+
 	/**
 	 * Constructor por defecto.
 	 */
 	public Filter() {
-		this(ComparatorType.EQ, null, null);
+		this(NexusType.AND, null, null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param ComparatorType comparator Tipo de comparador.
-	 * @param name Nombre del atributo clave.
-	 * @param value Valor del atributo.
+	 * @param nexus Tipo de nexo.
+	 * @param filterItems Array de filtros.
+	 * @param filters Array de conjuntos de filtros.
 	 */
-	public Filter(ComparatorType comparator, String name, String value) {
-		this.comparator = comparator;
-		this.name = name;
-		this.value = value;
+	public Filter(NexusType nexus, FilterItem[] filterItems, Filter[] filters) {
+		this.nexus = nexus;
+
+		if (filterItems != null) {
+			this.filterItems = new ArrayList<FilterItem>(filterItems.length);
+			for (FilterItem filter : filterItems) {
+				this.filterItems.add(filter);
+			}
+		}
+		else {
+			this.filterItems = null;
+		}
+		
+		if (filters != null) {
+			this.filter = new ArrayList<Filter>(filters.length);
+			for (Filter filterSet : filters) {
+				this.filter.add(filterSet);
+			}
+		}
+		else {
+			this.filter = null;
+		}
 	}
 
 	/**
-	 * Retorna el tipo de comparador.
+	 * Retorna el tipo de nexo.
 	 * 
-	 * @return el tipo de comparador.
+	 * @return el tipo de nexo.
 	 */
-	public ComparatorType getComparator() {
-		return comparator;
+	public NexusType getNexus() {
+		return nexus;
 	}
 
 	/**
-	 * Asigna el tipo de comparador.
+	 * Asigna el tipo de nexo.
 	 * 
-	 * @param comparator El comparado a asignar.
+	 * @param nexus El nexo a asignar.
 	 */
-	public void setComparator(ComparatorType comparator) {
-		this.comparator = comparator;
-	}
-	
-	/**
-	 * Retorna el nombre del atributo.
-	 * 
-	 * @return el nombre del atributo.
-	 */
-	public String getName() {
-		return name;
+	public void setNexus(NexusType nexus) {
+		this.nexus = nexus;
 	}
 
 	/**
-	 * Asigna el nombre del atributo.
+	 * Retorna la lista de filtros para este conjunto de filtrado.
 	 * 
-	 * @param name El nombre a asignar.
+	 * @return la lista de filtros para este conjunto de filtrado.
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public AbstractList<FilterItem> getFilterItems() {
+		return filterItems;
 	}
 
 	/**
-	 * Retorna el valor del atributo.
+	 * Asigna la lista de filtros para este conjunto de filtrado.
 	 * 
-	 * @return el valor del atributo.
+	 * @param filterItems La lista de filtros a asignar.
 	 */
-	public String getValue() {
-		return value;
+	public void setFilters(AbstractList<FilterItem> filterItems) {
+		this.filterItems = filterItems;
 	}
 
 	/**
-	 * Asigna el valor del atributo.
+	 * Retorna la lista de conjuntos de filtrado, para este conjunto de filtrado.
 	 * 
-	 * @param value El valor a asignar.
+	 * @return la lista de conjuntos de filtrado, para este conjunto de filtrado.
 	 */
-	public void setValue(String value) {
-		this.value = value;
+	public AbstractList<Filter> getFilterSets() {
+		return filter;
+	}
+
+	/**
+	 * Asigna la lista de conjuntos de filtrado, para este conjunto de filtrado.
+	 * 
+	 * @param filterSets La lista de conjuntos de filtrado a asignar.
+	 */
+	public void setFilterSets(AbstractList<Filter> filterSets) {
+		this.filter = filterSets;
 	}
 
 	/**
@@ -118,9 +135,9 @@ public class Filter {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((comparator == null) ? 0 : comparator.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
+				+ ((filter == null) ? 0 : filter.hashCode());
+		result = prime * result + ((filterItems == null) ? 0 : filterItems.hashCode());
+		result = prime * result + ((nexus == null) ? 0 : nexus.hashCode());
 		return result;
 	}
 
@@ -136,18 +153,27 @@ public class Filter {
 		if (getClass() != obj.getClass())
 			return false;
 		Filter other = (Filter) obj;
-		if (comparator != other.comparator)
-			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (filter == null) {
+			if (other.filter != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!filter.equals(other.filter))
 			return false;
-		if (value == null) {
-			if (other.value != null)
+		if (filterItems == null) {
+			if (other.filterItems != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!filterItems.equals(other.filterItems))
+			return false;
+		if (nexus != other.nexus)
 			return false;
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "FilterSet [nexus=" + nexus + ", filters=" + filterItems
+				+ ", filterSets=" + filter + "]";
 	}
 }

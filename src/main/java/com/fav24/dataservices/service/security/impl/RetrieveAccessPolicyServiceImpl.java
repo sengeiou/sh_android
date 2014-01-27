@@ -7,8 +7,6 @@ import java.util.Iterator;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fav24.dataservices.dto.security.AccessPolicyResultDto;
-import com.fav24.dataservices.dto.security.AccessPolicyDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
@@ -27,30 +25,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	/**
 	 * {@inheritDoc}
 	 */
-	public AccessPolicyResultDto getCurrentAccessPolicy(AccessPolicyDto accessPolicy) {
-
-		AccessPolicyResultDto resultTO = new AccessPolicyResultDto();
-
-		resultTO.setRequestor(accessPolicy.getRequestor());
-		try {
-			resultTO.setAccessPolicy(getCurrentAccessPolicy(accessPolicy.getAccessPolicy()));
-		} catch (ServerException e) {
-			resultTO.setAccessPolicy(accessPolicy.getAccessPolicy());
-			resultTO.setErrorCode(e.getErrorCode());
-			resultTO.setMessage(e.getMessage());
-		}
-
-		return resultTO;
-	}
-
-	/**
-	 * Completa la estrutura de políticas de acceso.
-	 * 
-	 * @param accessPolicy Estructura de políticas de acceso solicitadas.
-	 * 
-	 * @return estructura de políticas de acceso completa.
-	 */
-	private AccessPolicy getCurrentAccessPolicy(AccessPolicy accessPolicy) throws ServerException {
+	public AccessPolicy getCurrentAccessPolicy(AccessPolicy accessPolicy) throws ServerException {
 
 		if (accessPolicy.getAccessPolicies() == null || accessPolicy.getAccessPolicies().size() == 0) {
 			accessPolicy.setAccessPolicies(AccessPolicy.getCurrentAccesPolicy().getAccessPolicies());
@@ -78,6 +53,8 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 			}
 		}
 
+		accessPolicy.getRequestor().setTime(System.currentTimeMillis());
+
 		return accessPolicy;
 	}
 
@@ -102,7 +79,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	 * {@inheritDoc}
 	 */
 	public EntityAccessPolicy getPublicEntityPolicy(String entity) {
-		
+
 		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entity) : null;
 	}
 }

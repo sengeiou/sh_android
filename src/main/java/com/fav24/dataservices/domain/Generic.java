@@ -10,6 +10,7 @@ import java.util.AbstractList;
  */
 public class Generic {
 
+	private Requestor requestor;
 	private AbstractList<Operation> operations;
 
 
@@ -17,18 +18,38 @@ public class Generic {
 	 * Constructor por defecto.
 	 */
 	public Generic() {
-		this(null);
+		this(null, null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param operations Lista de operacione solicitadas.
+	 * @param requestor Solicitante.
+	 * @param operations Lista de operaciones solicitadas.
 	 */
-	public Generic(AbstractList<Operation> operations) {
+	public Generic(Requestor requestor, AbstractList<Operation> operations) {
+		this.requestor = requestor;
 		this.operations = operations;
 	}
 
+	/**
+	 * Retorna el solicitante.
+	 * 
+	 * @return el solicitante.
+	 */
+	public Requestor getRequestor() {
+		return requestor;
+	}
+
+	/**
+	 * Asigna el solicitante.
+	 * 
+	 * @param requestor El solicitante a asignar.
+	 */
+	public void setRequestor(Requestor requestor) {
+		this.requestor = requestor;
+	}
+	
 	/**
 	 * Retorna la lista de operaciones solicitada.
 	 * 

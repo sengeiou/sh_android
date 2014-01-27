@@ -15,11 +15,10 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.fav24.dataservices.domain.DataItem;
 import com.fav24.dataservices.domain.Filter;
-import com.fav24.dataservices.domain.FilterSet;
-import com.fav24.dataservices.domain.Item;
+import com.fav24.dataservices.domain.FilterItem;
 import com.fav24.dataservices.domain.Key;
-import com.fav24.dataservices.domain.Metadata;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
@@ -106,7 +105,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	private String getFilterString(String entity, Filter filter) throws ServerException {
+	private String getFilterString(String entity, FilterItem filter) throws ServerException {
 
 		StringBuilder resultingFilter = new StringBuilder();
 
@@ -147,9 +146,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	private String getFilterSetString(String entity, FilterSet filterSet) throws ServerException {
+	private String getFilterSetString(String entity, Filter filterSet) throws ServerException {
 
-		if ((filterSet.getFilters() == null || filterSet.getFilters().size() == 0) &&
+		if ((filterSet.getFilterItems() == null || filterSet.getFilterItems().size() == 0) &&
 				(filterSet.getFilterSets() == null || filterSet.getFilterSets().size() == 0)) {
 
 			return null;
@@ -162,13 +161,13 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Resolución de los filtros simples.
 		 */
-		if (filterSet.getFilters() != null && filterSet.getFilters().size() > 0) {
-			Filter currentFilter = filterSet.getFilters().get(0);
+		if (filterSet.getFilterItems() != null && filterSet.getFilterItems().size() > 0) {
+			FilterItem currentFilter = filterSet.getFilterItems().get(0);
 			resultingFilterSet.append(getFilterString(entity, currentFilter));
-			for (int i=1; i<filterSet.getFilters().size(); i++) {
+			for (int i=1; i<filterSet.getFilterItems().size(); i++) {
 
-				currentFilter = filterSet.getFilters().get(i);
-				resultingFilterSet.append(filterSet.getNexus() == FilterSet.NexusType.AND ? " AND " : " OR ");
+				currentFilter = filterSet.getFilterItems().get(i);
+				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 				resultingFilterSet.append(getFilterString(entity, currentFilter));
 
 			}
@@ -178,15 +177,15 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		 * Resolución de los conjuntos de filtros anidados.
 		 */
 		if (filterSet.getFilterSets() != null && filterSet.getFilterSets().size() > 0) {
-			if (filterSet.getFilters() != null && filterSet.getFilters().size() > 0) {
-				resultingFilterSet.append(filterSet.getNexus() == FilterSet.NexusType.AND ? " AND " : " OR ");
+			if (filterSet.getFilterItems() != null && filterSet.getFilterItems().size() > 0) {
+				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 			}
-			FilterSet currentFilterSet = filterSet.getFilterSets().get(0);
+			Filter currentFilterSet = filterSet.getFilterSets().get(0);
 			resultingFilterSet.append(getFilterSetString(entity, currentFilterSet));
-			for (int i=1; i<filterSet.getFilters().size(); i++) {
+			for (int i=1; i<filterSet.getFilterItems().size(); i++) {
 
 				currentFilterSet = filterSet.getFilterSets().get(i);
-				resultingFilterSet.append(filterSet.getNexus() == FilterSet.NexusType.AND ? " AND " : " OR ");
+				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 				resultingFilterSet.append(getFilterSetString(entity, currentFilterSet));
 
 			}
@@ -207,7 +206,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	private Operation populateResultSet(Operation operation, List<Map<String, Object>> resultSet) {
 
-		AbstractList<Item> data = operation.getData();
+		AbstractList<DataItem> data = operation.getData();
 
 		if (resultSet == null || resultSet.isEmpty()) {
 			operation.getMetadata().setItems(0L);
@@ -217,7 +216,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 
 		if (data == null) {
-			data = new ArrayList<Item>(resultSet.size());
+			data = new ArrayList<DataItem>(resultSet.size());
 			operation.setData(data);
 		}
 		else {
@@ -227,7 +226,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		for (Map<String, Object> row : resultSet) {
 
 			Map<String, Object> itemAtributes = new HashMap<String, Object>();
-			Item item = new Item();
+			DataItem item = new DataItem();
 			item.setAttributes(itemAtributes);
 
 			for (Entry<String, Object> attribute : row.entrySet()) {
@@ -258,7 +257,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		return operation;
 	}
 
-	private ResultSetExtractor<Item> getResultSetExtractor(Item item) {
+	private ResultSetExtractor<DataItem> getResultSetExtractor(DataItem item) {
 		return null;
 	}
 	 
@@ -277,7 +276,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		 */
 		if (operation.getData() != null && operation.getData().size() > 0) {
 
-			Item item = operation.getData().get(0);
+			DataItem item = operation.getData().get(0);
 			query.append("csys_birth,");
 			query.append("csys_modified,");
 			query.append("csys_deleted,");
@@ -285,7 +284,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 			for (String attribute : item.getAttributes().keySet()) {
 
-				if (!Metadata.InternalAttribute.contains(attribute)) {
+				if (!DataItem.InternalAttribute.contains(attribute)) {
 					query.append(',').append(attribute);
 				}
 			}

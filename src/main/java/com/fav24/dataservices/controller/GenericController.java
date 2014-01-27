@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fav24.dataservices.dto.GenericResultDto;
+import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.dto.GenericDto;
+import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.mapper.Mapper;
 import com.fav24.dataservices.service.GenericService;
 
 /**
@@ -38,8 +40,19 @@ public class GenericController extends BaseController {
 	 */
 	@RequestMapping(value = "/generic", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	GenericResultDto processGeneric(@RequestBody final GenericDto generic) {
+	GenericDto processGeneric(@RequestBody final GenericDto generic) {
 
-		return genericService.processGeneric(generic);
+		GenericDto result = null;
+
+		try {
+			result = Mapper.Map(genericService.processGeneric((Generic) Mapper.Map(generic)));
+		} catch (ServerException e) {
+
+			result = new GenericDto(e);
+			result.setRequestor(generic.getRequestor());
+			result.getRequestor().setSystemTime(System.currentTimeMillis());
+		}
+
+		return result;
 	}
 }

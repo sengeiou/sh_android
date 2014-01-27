@@ -1,8 +1,6 @@
-package com.fav24.dataservices.domain;
+package com.fav24.dataservices.dto;
 
-import java.util.AbstractList;
-
-import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
+import java.util.Map;
 
 
 /**
@@ -10,20 +8,20 @@ import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
  * 
  * @author Fav24
  */
-public class Metadata {
+public class MetadataDto {
 
-	private OperationType operation;
+	private String operation;
 	private String entity;
 	private Long entitySize;
 	private Long items;
-	private AbstractList<Key> key;
-	private Filter filter;
+	private Map<String, String> key;
+	private FilterDto filter;
 
 
 	/**
 	 * Constructor por defecto.
 	 */
-	public Metadata() {
+	public MetadataDto() {
 		this.operation = null;
 		this.entity = null;
 		this.entitySize = null;
@@ -41,7 +39,7 @@ public class Metadata {
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long items, AbstractList<Key> key) {
+	public MetadataDto(String operation, String entity, Long entitySize, Long items, Map<String, String> key) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
@@ -58,7 +56,7 @@ public class Metadata {
 	 * @param items Número de ítems afectados por la operación.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long items, Filter filter) {
+	public MetadataDto(String operation, String entity, Long entitySize, Long items, FilterDto filter) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
@@ -71,7 +69,7 @@ public class Metadata {
 	 * 
 	 * @return el tipo de operación a realizar.
 	 */
-	public OperationType getOperation() {
+	public String getOperation() {
 		return operation;
 	}
 
@@ -80,7 +78,7 @@ public class Metadata {
 	 * 
 	 * @param operation Tipo de operación a asignar.
 	 */
-	public void setOperation(OperationType operation) {
+	public void setOperation(String operation) {
 		this.operation = operation;
 	}
 
@@ -143,7 +141,7 @@ public class Metadata {
 	 * 
 	 * @return la lista de atributos y valores, que conforma la clave del elemento a localizar para la operación.
 	 */
-	public AbstractList<Key> getKey() {
+	public Map<String, String> getKey() {
 		return key;
 	}
 
@@ -152,7 +150,7 @@ public class Metadata {
 	 * 
 	 * @param key La lista a asignar.
 	 */
-	public void setKey(AbstractList<Key> key) {
+	public void setKey(Map<String, String> key) {
 		this.key = key;
 	}
 
@@ -161,7 +159,7 @@ public class Metadata {
 	 * 
 	 * @return la estructura de filtrado de los ítems a operar.
 	 */
-	public Filter getFilter() {
+	public FilterDto getFilter() {
 		return filter;
 	}
 
@@ -170,77 +168,7 @@ public class Metadata {
 	 * 
 	 * @param filter La estructura de filtrado a asignar.
 	 */
-	public void setFilter(Filter filter) {
+	public void setFilter(FilterDto filter) {
 		this.filter = filter;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
-		result = prime * result
-				+ ((entitySize == null) ? 0 : entitySize.hashCode());
-		result = prime * result + ((filter == null) ? 0 : filter.hashCode());
-		result = prime * result + ((items == null) ? 0 : items.hashCode());
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result
-				+ ((operation == null) ? 0 : operation.hashCode());
-		return result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Metadata other = (Metadata) obj;
-		if (entity == null) {
-			if (other.entity != null)
-				return false;
-		} else if (!entity.equals(other.entity))
-			return false;
-		if (entitySize == null) {
-			if (other.entitySize != null)
-				return false;
-		} else if (!entitySize.equals(other.entitySize))
-			return false;
-		if (filter == null) {
-			if (other.filter != null)
-				return false;
-		} else if (!filter.equals(other.filter))
-			return false;
-		if (items == null) {
-			if (other.items != null)
-				return false;
-		} else if (!items.equals(other.items))
-			return false;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
-			return false;
-		if (operation != other.operation)
-			return false;
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return "Metadata [operation=" + operation + ", entity=" + entity
-				+ ", entitySize=" + entitySize + ", items=" + items + ", key="
-				+ key + ", filter=" + filter + "]";
 	}
 }

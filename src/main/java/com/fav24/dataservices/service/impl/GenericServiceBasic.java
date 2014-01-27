@@ -3,8 +3,6 @@ package com.fav24.dataservices.service.impl;
 import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
-import com.fav24.dataservices.dto.GenericResultDto;
-import com.fav24.dataservices.dto.GenericDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.GenericService;
 
@@ -23,24 +21,6 @@ public abstract class GenericServiceBasic implements GenericService {
 	public static final String ERROR_END_TRANSACTION = "G002";
 	public static final String ERROR_UNCOMPLETE_REQUEST = "G003";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GenericResultDto processGeneric(GenericDto generic) {
-
-		GenericResultDto resultTO = new GenericResultDto();
-
-		resultTO.setRequestor(generic.getRequestor());
-		try {
-			resultTO.setGeneric(processGeneric(generic.getRequestor(), generic.getGeneric()));
-		} catch (ServerException e) {
-			resultTO.setGeneric(generic.getGeneric());
-			resultTO.setErrorCode(e.getErrorCode());
-			resultTO.setMessage(e.getMessage());
-		}
-
-		return resultTO;
-	}
 
 	/**
 	 * Establece el inicio de transtacción en la que se resolverán las distintas operaciones.
@@ -60,20 +40,15 @@ public abstract class GenericServiceBasic implements GenericService {
 	protected abstract boolean endTransaction(boolean commit);
 
 	/**
-	 * Procesa en contenido de una estructura Generic.
-	 * 
-	 * @param requestor Solicitante de la operación.
-	 * @param generic Estructura generica de operaciones a procesar.
-	 * 
-	 * @return estructura generic de entrada, enriquecida con los resultados de la salida.
+	 * {@inheritDoc}
 	 */
-	protected Generic processGeneric(Requestor requestor, Generic generic) throws ServerException {
+	public Generic processGeneric(Generic generic) throws ServerException {
 
 		if (startTransaction()) {
 
 			try {
 				for (Operation operation : generic.getOperations()) {
-					processOperation(requestor, operation);
+					processOperation(generic.getRequestor(), operation);
 				}
 			} catch (ServerException e) {
 				endTransaction(false);
@@ -89,7 +64,9 @@ public abstract class GenericServiceBasic implements GenericService {
 		else {
 			throw new ServerException(ERROR_START_TRANSACTION, "Error al iniciar la transacción.");
 		}
-
+		
+		generic.getRequestor().setTime(System.currentTimeMillis());
+		
 		return generic;
 	}
 

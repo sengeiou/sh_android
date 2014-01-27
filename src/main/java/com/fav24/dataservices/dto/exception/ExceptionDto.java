@@ -1,14 +1,16 @@
 package com.fav24.dataservices.dto.exception;
 
+import com.fav24.dataservices.dto.BaseDto;
+import com.fav24.dataservices.exception.ServerException;
 
-import com.fav24.dataservices.dto.ResultBaseDto;
+
 
 /**
  * Excepción en forma de objecto de transferencia, para ser retornado.
  * 
  * @author Fav24
  */
-public class ExceptionDto extends ResultBaseDto {
+public class ExceptionDto extends BaseDto {
 
 	private static final long serialVersionUID = -4141405994855019539L;
 
@@ -21,6 +23,15 @@ public class ExceptionDto extends ResultBaseDto {
 		this(null, null);
 	}
 
+	/**
+	 * Constructor para el retorno de un error. 
+	 *  
+	 * @param e Excepción a notificar en la respuesta.
+	 */
+	public ExceptionDto(ServerException e) {
+		super(e);
+	}
+	
 	/**
 	 * Constructor.
 	 * 

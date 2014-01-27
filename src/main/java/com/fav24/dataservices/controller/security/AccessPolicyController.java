@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.BaseController;
-import com.fav24.dataservices.dto.security.AccessPolicyFileResultDto;
-import com.fav24.dataservices.dto.security.AccessPolicyFileDto;
-import com.fav24.dataservices.dto.security.AccessPolicyResultDto;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
+import com.fav24.dataservices.dto.security.AccessPolicyFileDto;
+import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.mapper.Mapper;
+import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
@@ -45,9 +46,22 @@ public class AccessPolicyController extends BaseController {
 	 */
 	@RequestMapping(value = "/retrieve", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyResultDto getAccessPolicy(@RequestBody final AccessPolicyDto accessPolicy) {
+	AccessPolicyDto getAccessPolicy(@RequestBody final AccessPolicyDto accessPolicy) {
 
-		return retrieveAccessPolicyService.getCurrentAccessPolicy(accessPolicy);
+		AccessPolicyDto result = null;
+
+		try {
+
+			result = (AccessPolicyDto)Mapper.Map(retrieveAccessPolicyService.getCurrentAccessPolicy((AccessPolicy) Mapper.Map(accessPolicy)));
+
+		} catch (ServerException e) {
+
+			result = new AccessPolicyDto(e);
+			result.setRequestor(accessPolicy.getRequestor());
+			result.getRequestor().setSystemTime(System.currentTimeMillis());
+		}
+
+		return result;
 	}
 
 	/**
@@ -59,8 +73,21 @@ public class AccessPolicyController extends BaseController {
 	 */
 	@RequestMapping(value = "/load", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyFileResultDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFileDto accessPolicyFile) {
+	AccessPolicyFileDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFileDto accessPolicyFile) {
 
-		return loadAccessPolicyService.loadAccessPolicy(accessPolicyFile);
+		AccessPolicyFileDto result = null;
+
+		try {
+
+			result = (AccessPolicyFileDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicy)Mapper.Map(accessPolicyFile)));
+
+		} catch (ServerException e) {
+			
+			result = new AccessPolicyFileDto(e);
+			result.setRequestor(accessPolicyFile.getRequestor());
+			result.getRequestor().setSystemTime(System.currentTimeMillis());
+		}
+
+		return result;
 	}
 }
