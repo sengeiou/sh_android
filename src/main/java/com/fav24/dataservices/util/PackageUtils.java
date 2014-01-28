@@ -2,6 +2,8 @@ package com.fav24.dataservices.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.jar.JarEntry;
@@ -69,11 +71,15 @@ public class PackageUtils {
 		AbstractList<String> classes = new ArrayList<String>();
 		
 		// Get a File object for the package 
-		File directory = null; 
+		File directory = null;
+		String packageAsPath = '/' + packageName.replace('.', '/');
+		
+		URL resource = PackageUtils.class.getResource(packageAsPath);
+		
 		try { 
-			directory = new File(Thread.currentThread().getContextClassLoader().getResource('/' + packageName.replace('.', '/')).getFile()); 
+			directory = new File(resource.toURI()); 
 		} 
-		catch(NullPointerException x) { 
+		catch(NullPointerException | URISyntaxException x) { 
 			throw new ClassNotFoundException(packageName + " does not appear to be a valid package"); 
 		} 
 
@@ -87,7 +93,7 @@ public class PackageUtils {
 				// we are only interested in .class files 
 				if(files[i].endsWith(CLASS_POSTFIX)) { 
 					// removes the .class extension 
-					classes.add(packageName + '.' + files[i].substring(0, files[i].length()-CLASS_POSTFIX.length())); 
+					classes.add(packageName + '.' + files[i].substring(0, files[i].length() - CLASS_POSTFIX.length())); 
 				} 
 			} 
 		} 

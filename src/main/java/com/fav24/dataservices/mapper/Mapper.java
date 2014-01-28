@@ -1,6 +1,6 @@
 package com.fav24.dataservices.mapper;
 
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.ParameterizedType;
 import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,26 @@ public abstract class Mapper<T, S> {
 	public static final Map<Class<?>, Mapper<?, ?>> AvailableMappers;
 	static { 
 		//Prospección automática del conjunto de mappers.
-		AvailableMappers = new HashMap<Class<?>, Mapper<?, ?>>();
+		AvailableMappers = getMappers();
+	}
+
+	/**
+	 * Retorna una nueva instancia del tipo destino.
+	 * 
+	 * @param origin Instancia de tipo origen a mapear.
+	 * 
+	 * @return una nueva instancia del tipo destino.
+	 */
+	protected abstract S map(T origin);
+
+	/**
+	 * Retorna el conjunto de implementaciones de mapeadores disponible.
+	 * 
+	 * @return el conjunto de implementaciones de mapeadores disponible.
+	 */
+	public static Map<Class<?>, Mapper<?, ?>> getMappers() {
+		//Prospección automática del conjunto de mappers.
+		Map<Class<?>, Mapper<?, ?>> availableMappers = new HashMap<Class<?>, Mapper<?, ?>>();
 
 		AbstractList<String> mapperClassNames = null;
 		try {
@@ -45,20 +64,17 @@ public abstract class Mapper<T, S> {
 					Class<?> mapperClass = Class.forName(mapperClassName);
 
 					if (Mapper.class == mapperClass.getSuperclass()) {
-						TypeVariable<?>[] typeParameters = mapperClass.getTypeParameters();
 
-						for (TypeVariable<?> typeParameter : typeParameters) {
-							if (typeParameter.getName().equals("T")) {
-								try {
-									AvailableMappers.put(typeParameter.getClass(), (Mapper<?, ?>) mapperClass.newInstance());
-								} catch (InstantiationException e) {
-									logger.error("No ha sido posible instanciar la clase " + mapperClassName + " debido a: "+ e.getMessage());
-								} catch (IllegalAccessException e) {
-									logger.error("Acceso denegado a la clase " + mapperClassName + ".");
-								}
-								break;
-							}
+						Class<?> mapperOriginClass = (Class<?>)(((ParameterizedType) mapperClass.getGenericSuperclass()).getActualTypeArguments()[0]);
+
+						try {
+							availableMappers.put(mapperOriginClass, (Mapper<?, ?>) mapperClass.newInstance());
+						} catch (InstantiationException e) {
+							logger.error("No ha sido posible instanciar la clase " + mapperClassName + " debido a: "+ e.getMessage());
+						} catch (IllegalAccessException e) {
+							logger.error("Acceso denegado a la clase " + mapperClassName + ".");
 						}
+
 					}
 				} catch (ClassNotFoundException e) {
 
@@ -66,17 +82,9 @@ public abstract class Mapper<T, S> {
 				}
 			}
 		}
+
+		return availableMappers;
 	}
-
-	/**
-	 * Retorna una nueva instancia del tipo destino.
-	 * 
-	 * @param origin Instancia de tipo origen a mapear.
-	 * 
-	 * @return una nueva instancia del tipo destino.
-	 */
-	protected abstract S map(T origin);
-
 
 	/**
 	 * Retorna una nueva instancia del tipo destino.
