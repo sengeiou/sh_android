@@ -16,11 +16,6 @@ import com.fav24.dataservices.service.GenericService;
  */
 public abstract class GenericServiceBasic implements GenericService {
 
-	public static final String ERROR_OPERATION_NOT_AVAILABLE = "G000";
-	public static final String ERROR_START_TRANSACTION = "G001";
-	public static final String ERROR_END_TRANSACTION = "G002";
-	public static final String ERROR_UNCOMPLETE_REQUEST = "G003";
-
 
 	/**
 	 * Establece el inicio de transtacción en la que se resolverán las distintas operaciones.

@@ -21,7 +21,7 @@ public class AccessPolicyFilesDtoToAccessPolicyFiles extends Mapper<AccessPolicy
 	@Override
 	protected AccessPolicyFiles map(AccessPolicyFilesDto origin) throws ServerException {
 
-		AccessPolicyFiles accessPolicyFiles = new AccessPolicyFiles(origin.getURLs());
+		AccessPolicyFiles accessPolicyFiles = new AccessPolicyFiles(origin.getPolicyFilesURLs());
 		accessPolicyFiles.setRequestor((Requestor)Mapper.Map(origin.getRequestor()));
 
 		return accessPolicyFiles;

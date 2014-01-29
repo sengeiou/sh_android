@@ -14,7 +14,10 @@ import com.fav24.dataservices.security.AccessPolicyFiles;
  */
 public interface LoadAccessPolicyService {
 
-	final static Logger logger = LoggerFactory.getLogger(LoadAccessPolicyService.class);
+	public static final Logger logger = LoggerFactory.getLogger(LoadAccessPolicyService.class);
+	
+	public static final String ERROR_LOADING_POLICY_FILES = "PS000";
+	public static final String ERROR_INVALID_URL = "PS001";
 	
 	/**
 	 * Retorna la URL cargada. 

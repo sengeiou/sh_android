@@ -21,8 +21,6 @@ import com.fav24.dataservices.xml.AccessPolicyDOM;
 @Scope("prototype")
 public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
-	public static final String ERROR_LOADING_POLICY_FILES = "PS000";
-
 
 	/**
 	 * {@inheritDocs}

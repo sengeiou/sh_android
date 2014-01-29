@@ -46,6 +46,9 @@ public class GenericController extends BaseController {
 
 		try {
 			result = Mapper.Map(genericService.processGeneric((Generic) Mapper.Map(generic)));
+			
+			result.setStatusCode(BaseController.OK);
+			result.setStatusMessage("");
 		} catch (ServerException e) {
 
 			result = new GenericDto(e);

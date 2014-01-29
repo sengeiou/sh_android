@@ -1,10 +1,7 @@
 package com.fav24.dataservices.dto.security;
 
-import java.net.URL;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fav24.dataservices.dto.BaseDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -22,15 +19,14 @@ public class AccessPolicyFilesDto extends BaseDto {
 	private static final long serialVersionUID = 2649617444051699918L;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonUnwrapped(enabled=true)
-	private URL[] urls;
+	private String[] policyFiles;
 
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public AccessPolicyFilesDto() {
-		urls = null;
+		policyFiles = null;
 	}
 
 	/**
@@ -47,8 +43,8 @@ public class AccessPolicyFilesDto extends BaseDto {
 	 * 
 	 * @return las urls de los ficheros de definición de políticas de acceso.
 	 */
-	public URL[] getURLs() {
-		return urls;
+	public String[] getPolicyFilesURLs() {
+		return policyFiles;
 	}
 
 	/**
@@ -56,7 +52,7 @@ public class AccessPolicyFilesDto extends BaseDto {
 	 * 
 	 * @param urls Las urls a asignar.
 	 */
-	public void setURLs(URL[] urls) {
-		this.urls = urls;
+	public void setPolicyFilesURLs(String[] urls) {
+		this.policyFiles = urls;
 	}
 }

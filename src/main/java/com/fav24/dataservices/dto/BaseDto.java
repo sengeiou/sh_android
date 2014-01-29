@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -16,6 +17,11 @@ import com.fav24.dataservices.exception.ServerException;
  * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
+@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY,
+fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+getterVisibility = JsonAutoDetect.Visibility.NONE, 
+isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+setterVisibility = JsonAutoDetect.Visibility.ANY)
 public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
@@ -28,7 +34,7 @@ public class BaseDto implements Serializable {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonUnwrapped(enabled=true)
-	private RequestorDto requestor;
+	private RequestorDtoElement requestor;
 
 	/**
 	 * Constructor por defecto.
@@ -44,7 +50,7 @@ public class BaseDto implements Serializable {
 	 * 
 	 * @param requestor Quien realiza la petición.
 	 */
-	public BaseDto(RequestorDto requestor) {
+	public BaseDto(RequestorDtoElement requestor) {
 
 		this.status = new TreeMap<String, String>();
 		this.requestor = requestor;
@@ -85,7 +91,7 @@ public class BaseDto implements Serializable {
 	 *  
 	 * @return quién realiza la petición.
 	 */
-	public RequestorDto getRequestor() {
+	public RequestorDtoElement getRequestor() {
 		return requestor;
 	}
 
@@ -94,7 +100,7 @@ public class BaseDto implements Serializable {
 	 * 
 	 * @param requestor El solicitante.
 	 */
-	public void setRequestor(RequestorDto requestor) {
+	public void setRequestor(RequestorDtoElement requestor) {
 		this.requestor = requestor;
 	}
 

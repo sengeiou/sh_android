@@ -55,6 +55,8 @@ public class AccessPolicyController extends BaseController {
 
 			result = (AccessPolicyDto)Mapper.Map(retrieveAccessPolicyService.getCurrentAccessPolicy((AccessPolicy) Mapper.Map(accessPolicy)));
 
+			result.setStatusCode(BaseController.OK);
+			result.setStatusMessage("");
 		} catch (ServerException e) {
 
 			result = new AccessPolicyDto(e);
@@ -82,13 +84,15 @@ public class AccessPolicyController extends BaseController {
 
 			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFile)));
 
+			result.setStatusCode(BaseController.OK);
+			result.setStatusMessage("");
 		} catch (ServerException e) {
 			
 			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFile.getRequestor());
 			result.getRequestor().setSystemTime(System.currentTimeMillis());
 		}
-
+		
 		return result;
 	}
 }

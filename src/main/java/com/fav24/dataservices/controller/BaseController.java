@@ -27,6 +27,8 @@ import com.fav24.dataservices.exception.ServerException;
 public class BaseController {
 
 	protected final static Logger logger = LoggerFactory.getLogger(BaseController.class);
+
+	public final static String OK = "OK";
 	public final static String ERROR_GLOBAL_001 = "GLOBAL_001";
 
 	/**
@@ -57,7 +59,7 @@ public class BaseController {
 		Map<String, String> error = new HashMap<String, String>();
 
 		error.put("errorCode", exception.getErrorCode());
-		error.put("errorCode", exception.getMessage());
+		error.put("message", exception.getMessage());
 
 		return new ModelAndView(jsonErrorView, error);
 	}
@@ -125,12 +127,12 @@ public class BaseController {
 				logText.append("    ------- \n");
 
 				while (headerNames.hasMoreElements()) {
-					
+
 					String headerName = (String) headerNames.nextElement();
 					Enumeration<?> headers = request.getHeaders(headerName);
 					StringBuffer sb = new StringBuffer();
 					boolean first = true;
-					
+
 					while (headers.hasMoreElements()) {
 						String header = (String)headers.nextElement();
 						if (first) {
@@ -141,7 +143,7 @@ public class BaseController {
 						}
 						sb.append(header);
 					}
-					
+
 					logText.append("      ").append(headerName).append('[').append(sb).append("] \n");
 				}
 			}

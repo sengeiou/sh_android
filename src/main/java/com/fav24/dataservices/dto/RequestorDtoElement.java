@@ -3,11 +3,11 @@ package com.fav24.dataservices.dto;
 
 
 /**
- * Clase que contiene la estructura de un solicitate.
+ * Clase que contiene la estructura de un solicitante.
  * 
  * @author Fav24
  */
-public class RequestorDto {
+public class RequestorDtoElement {
 
 	public static final int POSITION_ID_DEVICE = 0;
 	public static final int POSITION_ID_USER = 1;
@@ -23,7 +23,7 @@ public class RequestorDto {
 	/**
 	 * Constructor por defecto.
 	 */
-	public RequestorDto() {
+	public RequestorDtoElement() {
 		req = new Long[REQUESTOR_ARRAY_LENGTH];
 	}
 
@@ -36,7 +36,7 @@ public class RequestorDto {
 	 * @param appVersion Versión de la aplicación.
 	 * @param systemTime Timestamp del sistema.
 	 */
-	public RequestorDto(Long idDevice, Long idUser, Long idPlatform, Long appVersion, Long systemTime) {
+	public RequestorDtoElement(Long idDevice, Long idUser, Long idPlatform, Long appVersion, Long systemTime) {
 
 		this();
 
