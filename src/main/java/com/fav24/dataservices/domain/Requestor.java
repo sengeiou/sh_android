@@ -15,7 +15,18 @@ public class Requestor {
 	private Long idPlatform;
 	private Long appVersion; 
 	private Long time;
-	
+
+	/**
+	 * Constructor por defecto.
+	 */
+	public Requestor() {
+		idDevice = null;
+		idUser = null; 
+		idPlatform = null;
+		appVersion = null; 
+		time = null;
+	}
+
 
 	/**
 	 * Constructor de copia.
@@ -30,7 +41,7 @@ public class Requestor {
 		appVersion = requestor.appVersion; 
 		time = requestor.time;
 	}
-	
+
 	/**
 	 * Retorna el identificador de dispositivo.
 	 * 
@@ -39,7 +50,7 @@ public class Requestor {
 	public Long getIdDevice() {
 		return idDevice;
 	}
-	
+
 	/**
 	 * Asigna el identificador de dispositivo.
 	 * 
@@ -48,7 +59,7 @@ public class Requestor {
 	public void setIdDevice(Long idDevice) {
 		this.idDevice = idDevice;
 	}
-	
+
 	/**
 	 * Retorna el identificador de usuario.
 	 * 
@@ -57,7 +68,7 @@ public class Requestor {
 	public Long getIdUser() {
 		return idUser;
 	}
-	
+
 	/**
 	 * Asigna el identificador de usuario.
 	 * 
@@ -66,7 +77,7 @@ public class Requestor {
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
 	}
-	
+
 	/**
 	 * Retorna el identificador de la plataforma. 
 	 * 
@@ -75,7 +86,7 @@ public class Requestor {
 	public Long getIdPlatform() {
 		return idPlatform;
 	}
-	
+
 	/**
 	 * Asigna el identificador de la plataforma.
 	 * 
@@ -84,7 +95,7 @@ public class Requestor {
 	public void setIdPlatform(Long idPlatform) {
 		this.idPlatform = idPlatform;
 	}
-	
+
 	/**
 	 * Retorna la versión de la aplicación.
 	 * 
@@ -96,7 +107,7 @@ public class Requestor {
 	public Long getAppVersion() {
 		return appVersion;
 	}
-	
+
 	/**
 	 * Asigna la versión de la aplicación.
 	 * 
@@ -105,7 +116,7 @@ public class Requestor {
 	public void setAppVersion(Long appVersion) {
 		this.appVersion = appVersion;
 	}
-	
+
 	/**
 	 * Retorna los milisegundos transcurridos desde epoch en el que se encuentra el dispositivo, en el momento de la petición.
 	 * 
@@ -114,7 +125,7 @@ public class Requestor {
 	public Long getTime() {
 		return time;
 	}
-	
+
 	/**
 	 * Asigna los milisegundos transcurridos desde epoch en el que se encuentra el dispositivo, en el momento de la petición.
 	 * 
@@ -123,7 +134,7 @@ public class Requestor {
 	public void setTime(Long time) {
 		this.time = time;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +151,7 @@ public class Requestor {
 		result = prime * result + ((idUser == null) ? 0 : idUser.hashCode());
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +186,7 @@ public class Requestor {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

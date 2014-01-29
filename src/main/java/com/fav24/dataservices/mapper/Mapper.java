@@ -36,8 +36,10 @@ public abstract class Mapper<T, S> {
 	 * @param origin Instancia de tipo origen a mapear.
 	 * 
 	 * @return una nueva instancia del tipo destino.
+	 * 
+	 * @throws ServerException 
 	 */
-	protected abstract S map(T origin);
+	protected abstract S map(T origin) throws ServerException;
 
 	/**
 	 * Retorna el conjunto de implementaciones de mapeadores disponible.
