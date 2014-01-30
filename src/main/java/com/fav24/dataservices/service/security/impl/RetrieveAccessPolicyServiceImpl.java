@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
+import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
 
@@ -27,6 +28,13 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	 */
 	public AccessPolicy getCurrentAccessPolicy(AccessPolicy accessPolicy) throws ServerException {
 
+		if (AccessPolicy.getCurrentAccesPolicy() == null || 
+				AccessPolicy.getCurrentAccesPolicy().getAccessPolicies() == null || 
+				AccessPolicy.getCurrentAccesPolicy().getAccessPolicies().isEmpty()) {
+			
+			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);
+		}
+		
 		if (accessPolicy.getAccessPolicies() == null || accessPolicy.getAccessPolicies().size() == 0) {
 			accessPolicy.setAccessPolicies(AccessPolicy.getCurrentAccesPolicy().getAccessPolicies());
 		}
@@ -40,7 +48,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 				if (currentEntityAccessPolicy != null) {
 					entityAccessPolicy.getName().setName(currentEntityAccessPolicy.getName().getName());
 					entityAccessPolicy.setAllowedOperations(currentEntityAccessPolicy.getAllowedOperations());
-					entityAccessPolicy.setOnlyByKey(currentEntityAccessPolicy.setOnlyByKey());
+					entityAccessPolicy.setOnlyByKey(currentEntityAccessPolicy.getOnlyByKey());
 					entityAccessPolicy.setOnlySpecifiedFilters(currentEntityAccessPolicy.getOnlySpecifiedFilters());
 					entityAccessPolicy.setMaxPageSize(currentEntityAccessPolicy.getMaxPageSize());
 					entityAccessPolicy.setData(currentEntityAccessPolicy.getData());
@@ -52,8 +60,6 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 				}
 			}
 		}
-
-		accessPolicy.getRequestor().setTime(System.currentTimeMillis());
 
 		return accessPolicy;
 	}

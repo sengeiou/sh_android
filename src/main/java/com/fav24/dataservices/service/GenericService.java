@@ -17,9 +17,13 @@ public interface GenericService {
 	public static final Logger logger = LoggerFactory.getLogger(GenericService.class);
 	
 	public static final String ERROR_OPERATION_NOT_AVAILABLE = "G000";
+	public static final String ERROR_OPERATION_NOT_AVAILABLE_MESSAGE = "La opreación %s no está disponible.";
 	public static final String ERROR_START_TRANSACTION = "G001";
+	public static final String ERROR_START_TRANSACTION_MESSAGE = "Error al iniciar la transacción.";
 	public static final String ERROR_END_TRANSACTION = "G002";
+	public static final String ERROR_END_TRANSACTION_MESSAGE = "Error al finalizar la transacción.";
 	public static final String ERROR_UNCOMPLETE_REQUEST = "G003";
+	public static final String ERROR_UNCOMPLETE_REQUEST_MESSAGE = "Es necesario indicar KEY o FILTER para la resolución de esta petición.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

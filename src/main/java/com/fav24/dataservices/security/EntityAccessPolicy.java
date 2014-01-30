@@ -1,8 +1,8 @@
 package com.fav24.dataservices.security;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -77,7 +77,7 @@ public class EntityAccessPolicy {
 	public EntityAccessPolicy() {
 
 		this.name = null;
-		this.allowedOperations = new HashSet<OperationType>();
+		this.allowedOperations = new TreeSet<OperationType>();
 		this.data = null;
 		this.keys = null;
 		this.filters = null;
@@ -94,7 +94,7 @@ public class EntityAccessPolicy {
 	public EntityAccessPolicy(EntityAccessPolicy entityAccessPolicy) {
 
 		name = entityAccessPolicy.name == null ? null : new EntityAttribute(entityAccessPolicy.name);
-		allowedOperations = entityAccessPolicy.allowedOperations == null ? null : new HashSet<OperationType>(entityAccessPolicy.allowedOperations);
+		allowedOperations = entityAccessPolicy.allowedOperations == null ? null : new TreeSet<OperationType>(entityAccessPolicy.allowedOperations);
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
 		filters = entityAccessPolicy.filters == null ? null : new EntityFilters(entityAccessPolicy.filters);
@@ -198,7 +198,7 @@ public class EntityAccessPolicy {
 	 * 
 	 * @return true o false en función de si la entidad permite únicamente ser operada usando anlguna de las claves definidas o no.
 	 */
-	public Boolean setOnlyByKey() {
+	public Boolean getOnlyByKey() {
 		return onlyByKey;
 	}
 

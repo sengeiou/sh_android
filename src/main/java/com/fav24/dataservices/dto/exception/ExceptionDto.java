@@ -1,5 +1,6 @@
 package com.fav24.dataservices.dto.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fav24.dataservices.dto.BaseDto;
 import com.fav24.dataservices.exception.ServerException;
 
@@ -14,6 +15,7 @@ public class ExceptionDto extends BaseDto {
 
 	private static final long serialVersionUID = -4141405994855019539L;
 
+	@JsonIgnore
 	private String exceptionMessage;
 
 	/**
@@ -30,6 +32,9 @@ public class ExceptionDto extends BaseDto {
 	 */
 	public ExceptionDto(ServerException e) {
 		super(e);
+		
+		setStatusCode(e.getErrorCode());
+		setStatusMessage(e.getMessage());
 	}
 	
 	/**
@@ -53,6 +58,9 @@ public class ExceptionDto extends BaseDto {
 		super(errorCode, message);
 
 		this.exceptionMessage = exceptionMessage;
+
+		setStatusCode(errorCode);
+		setStatusMessage(exceptionMessage);
 	}
 
 	/**
@@ -71,5 +79,7 @@ public class ExceptionDto extends BaseDto {
 	 */
 	public void setExceptionMessage(String exceptionMessage) {
 		this.exceptionMessage = exceptionMessage;
+
+		setStatusMessage(exceptionMessage);
 	} 
 }

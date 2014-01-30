@@ -2,7 +2,6 @@ package com.fav24.dataservices.dto.security;
 
 import com.fav24.dataservices.dto.BaseDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
 
 
 /**
@@ -15,9 +14,16 @@ public class AccessPolicyDto extends BaseDto {
 
 	private static final long serialVersionUID = 2649617444051699918L;
 
-	private AccessPolicy accessPolicy;
+	private EntityAccessPolicyDtoElement[] policies;
 
 
+	/**
+	 * Constructor por defecto.
+	 */
+	public AccessPolicyDto() {
+		policies = null;
+	}
+	
 	/**
 	 * Constructor para el retorno de un error. 
 	 *  
@@ -28,20 +34,20 @@ public class AccessPolicyDto extends BaseDto {
 	}
 	
 	/**
-	 * Retorna la estructura de políticas de acceso de las entidades.
+	 * Retorna el array de estructuras de políticas de acceso de las entidades.
 	 * 
-	 * @return la estructura de políticas de acceso de las entidades.
+	 * @return el array de estructuras de políticas de acceso de las entidades.
 	 */
-	public AccessPolicy getAccessPolicy() {
-		return accessPolicy;
+	public EntityAccessPolicyDtoElement[] getAccessPolicies() {
+		return policies;
 	}
 
 	/**
-	 * Asigna la estructura de políticas de acceso de las entidades.
+	 * Asigna el array de estructuras de políticas de acceso de las entidades.
 	 * 
-	 * @param generic La estructura de políticas de acceso de las entidades.
+	 * @param policies El array de estructuras de políticas de acceso de las entidades a asignar.
 	 */
-	public void setAccessPolicy(AccessPolicy accessPolicy) {
-		this.accessPolicy = accessPolicy;
+	public void setAccessPolicies(EntityAccessPolicyDtoElement[] policies) {
+		this.policies = policies;
 	}
 }

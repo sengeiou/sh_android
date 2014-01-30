@@ -5,7 +5,7 @@ import java.net.URL;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.security.LoadAccessPolicyService;
+import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
 /**
@@ -55,7 +55,7 @@ public class AccessPolicyFiles {
 				}
 			}
 		} catch (MalformedURLException e) {
-			throw new ServerException(LoadAccessPolicyService.ERROR_INVALID_URL, "La URL " + accessPolicyURLs[i] + " no es válida.");
+			throw new ServerException(AccessPolicyService.ERROR_INVALID_URL, String.format(AccessPolicyService.ERROR_INVALID_URL_MESSAGE, accessPolicyURLs[i]));
 		}
 	}
 

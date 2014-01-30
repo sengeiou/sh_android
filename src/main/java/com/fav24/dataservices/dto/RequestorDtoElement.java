@@ -5,6 +5,9 @@ package com.fav24.dataservices.dto;
 /**
  * Clase que contiene la estructura de un solicitante.
  * 
+ * Nota importante: La actualización del tiempo del sistema, debe delegarse a los controladores, 
+ * justo antes de enviar las repuestas con el fin de que sea lo más preciso posible, sin poder eliminar el retardo por comunicaciones.
+ *  
  * @author Fav24
  */
 public class RequestorDtoElement {

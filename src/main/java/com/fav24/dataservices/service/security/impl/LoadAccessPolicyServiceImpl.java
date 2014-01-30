@@ -29,7 +29,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 		if (accessPolicyFiles.getURLs() == null) {
 
-			ServerException exception = new ServerException(ERROR_LOADING_POLICY_FILES, "No se indicó ninguna URL de ningún fichero de definición de políticas de acceso.");
+			ServerException exception = new ServerException(ERROR_LOADING_POLICY_FILES, ERROR_LOADING_POLICY_FILES_MESSAGE);
 
 			logger.error(exception.getMessage());
 
@@ -39,8 +39,6 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 		for(URL url : accessPolicyFiles.getURLs()) {
 			AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(url));
 		}
-
-		accessPolicyFiles.getRequestor().setTime(System.currentTimeMillis());
 
 		return accessPolicyFiles;
 	}

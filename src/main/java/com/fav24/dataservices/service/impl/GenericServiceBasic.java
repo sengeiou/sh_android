@@ -53,11 +53,11 @@ public abstract class GenericServiceBasic implements GenericService {
 			if (!endTransaction(true)) {
 				endTransaction(false);
 
-				throw new ServerException(ERROR_END_TRANSACTION, "Error al finalizar la transacción.");
+				throw new ServerException(ERROR_END_TRANSACTION, ERROR_END_TRANSACTION_MESSAGE);
 			}
 		}
 		else {
-			throw new ServerException(ERROR_START_TRANSACTION, "Error al iniciar la transacción.");
+			throw new ServerException(ERROR_START_TRANSACTION, ERROR_START_TRANSACTION_MESSAGE);
 		}
 		
 		generic.getRequestor().setTime(System.currentTimeMillis());
@@ -101,7 +101,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, "La opreación CREATE no está disponible.");
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation update(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, "La opreación UPDATE no está disponible.");
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
 
 	/**
@@ -125,7 +125,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, "La opreación RETREAVE no está disponible.");
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
 	
 	/**
@@ -137,7 +137,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, "La opreación DELETE no está disponible.");
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
 	
 	/**
@@ -149,6 +149,6 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation updateCreate(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, "La opreación UPDATE no está disponible.");
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
 }

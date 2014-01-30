@@ -43,7 +43,7 @@ public class AccessPolicyController extends BaseController {
 	/**
 	 * Procesa una petición de información de las políficas de acceso de una cierta entidad, o de las entidades disponibles.
 	 * 
-	 * @param accessPolicy La entidad de la que se desea obtener las políticas, o a las entidades a las que se tiene acceso.
+	 * @param accessPolicy Las entidades de las que se desea obtener las políticas, o las entidades a las que se tiene acceso.
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
@@ -63,8 +63,9 @@ public class AccessPolicyController extends BaseController {
 
 			result = new AccessPolicyDto(e);
 			result.setRequestor(accessPolicy.getRequestor());
-			result.getRequestor().setSystemTime(System.currentTimeMillis());
 		}
+		
+		result.getRequestor().setSystemTime(System.currentTimeMillis());
 
 		return result;
 	}
@@ -92,8 +93,9 @@ public class AccessPolicyController extends BaseController {
 			
 			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFile.getRequestor());
-			result.getRequestor().setSystemTime(System.currentTimeMillis());
 		}
+		
+		result.getRequestor().setSystemTime(System.currentTimeMillis());
 		
 		return result;
 	}

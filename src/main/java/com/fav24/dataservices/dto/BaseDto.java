@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fav24.dataservices.exception.ServerException;
 
 /**
- * Clase base de todos los obejos de transferencia.
+ * Clase base de todos los objetos de transferencia.
  *  
  * @author Fav24
  */
@@ -48,7 +48,7 @@ public class BaseDto implements Serializable {
 	/**
 	 * Constructor.
 	 * 
-	 * @param requestor Quien realiza la petición.
+	 * @param requestor Quién realiza la petición.
 	 */
 	public BaseDto(RequestorDtoElement requestor) {
 

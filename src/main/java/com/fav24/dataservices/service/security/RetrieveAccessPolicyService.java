@@ -12,7 +12,7 @@ import com.fav24.dataservices.security.EntityAccessPolicy;
  * 
  * @author Fav24
  */
-public interface RetrieveAccessPolicyService {
+public interface RetrieveAccessPolicyService extends AccessPolicyService {
 
 	/**
 	 * Retorna el detalle de las políticas de acceso de las entidades. 

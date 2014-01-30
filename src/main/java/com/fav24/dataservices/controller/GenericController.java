@@ -27,7 +27,9 @@ public class GenericController extends BaseController {
 
 	final static Logger logger = LoggerFactory.getLogger(GenericController.class);
 
-
+	private static final String MESSAGE_GENERIC_CALL_OK = "Las operaciones se han realizado correctamente.";
+	
+	
 	@Autowired
 	protected GenericService genericService;
 
@@ -48,13 +50,14 @@ public class GenericController extends BaseController {
 			result = Mapper.Map(genericService.processGeneric((Generic) Mapper.Map(generic)));
 			
 			result.setStatusCode(BaseController.OK);
-			result.setStatusMessage("");
+			result.setStatusMessage(MESSAGE_GENERIC_CALL_OK);
 		} catch (ServerException e) {
 
 			result = new GenericDto(e);
 			result.setRequestor(generic.getRequestor());
-			result.getRequestor().setSystemTime(System.currentTimeMillis());
 		}
+		
+		result.getRequestor().setSystemTime(System.currentTimeMillis());
 
 		return result;
 	}

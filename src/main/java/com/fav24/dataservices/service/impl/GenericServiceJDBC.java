@@ -308,7 +308,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			query.append(" WHERE ").append(getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter()));
 		}
 		else {
-			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, "Es necesario indicar KEY o FILTER para la resolución de esta petición.");
+			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
 		}
 
 		/*
