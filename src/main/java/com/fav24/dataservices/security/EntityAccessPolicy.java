@@ -24,12 +24,40 @@ public class EntityAccessPolicy {
 
 		private final String operationType;
 
+		/**
+		 * Constructor privado del tipo de operación.
+		 * 
+		 * @param operationType Cadena de texto aue identifica el tipo de operación.
+		 */
 		OperationType(String operationType) {
 			this.operationType = operationType;
 		}
 
+		/**
+		 * Retorna la cadena de texto que identifica este tipo de operación.
+		 * 
+		 * @return la cadena de texto que identifica este tipo de operación.
+		 */
 		public String getOperationType() {
 			return operationType;
+		}
+
+		/**
+		 * Retorna el tipo de operación a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce el tipo de operación.
+		 * 
+		 * @return el tipo de operación a partir de la cadena de texto indicada.
+		 */
+		public static OperationType fromString(String text) {
+			if (text != null) {
+				for (OperationType operationType : OperationType.values()) {
+					if (text.equalsIgnoreCase(operationType.operationType)) {
+						return operationType;
+					}
+				}
+			}
+			return null;
 		}
 	}
 

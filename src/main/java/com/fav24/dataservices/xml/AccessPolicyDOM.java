@@ -71,12 +71,36 @@ public class AccessPolicyDOM extends AccessPolicy
 	 */
 	private void readPolicies(Document document) {
 
-		Element documentElement = document.getDocumentElement();
-		
-		this.version = documentElement.getAttribute("Version");
-		this.description = documentElement.getAttribute("Description");
-		
 		NodeList nodes_i = document.getChildNodes();
+		
+		for(int i=0; i < nodes_i.getLength(); i++) {
+
+			Node node_i = nodes_i.item(i);
+
+			if (node_i.getNodeType() == Node.ELEMENT_NODE) {
+
+				String nodeName = node_i.getNodeName();
+
+				if ("AccessPolicy".equals(nodeName)) {
+					readAcessPolicy(node_i);					
+				}
+			}
+		}
+	}
+
+	/**
+	 * Lee, interpreta y construye las estructuras de políticas de acceso contenidas en el nodo indicado.
+	 * 
+	 * @param node Nodo del que se obtienen las políticas de acceso.
+	 */
+	private void readAcessPolicy(Node node) {
+		
+		Element element = (Element)node;
+		
+		this.version = element.getAttribute("Version");
+		this.description = element.getAttribute("Description");
+		
+		NodeList nodes_i = node.getChildNodes();
 		
 		entityGroupsAccessPolicies = new ArrayList<EntityGroupAccessPolicyDOM>();
 		
@@ -90,15 +114,25 @@ public class AccessPolicyDOM extends AccessPolicy
 
 				if ("Entities".equals(nodeName)) {
 					
-					EntityGroupAccessPolicyDOM group = new EntityGroupAccessPolicyDOM(node_i);
-					entityGroupsAccessPolicies.add(group);
-					
-					mergeAccesPolicy(group.getEntitiesAccessPolicies());
+					readEntityGroups(node_i);
 				}
 			}
 		}
 	}
-
+	
+	/**
+	 * Lee, interpreta y construye las estructuras de las entidades contenidas en el nodo indicado.
+	 * 
+	 * @param node Nodo del que se obtienen las entidades y grupos de entidades.
+	 */
+	private void readEntityGroups(Node node) {
+		
+		EntityGroupAccessPolicyDOM group = new EntityGroupAccessPolicyDOM(node);
+		entityGroupsAccessPolicies.add(group);
+		
+		mergeAccesPolicy(group.getEntitiesAccessPolicies());
+	}
+	
 	/**
 	 * Retorna la versión de data-services para la que fué creado esta configuración de políticas de acceso.
 	 *  

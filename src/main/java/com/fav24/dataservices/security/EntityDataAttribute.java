@@ -1,6 +1,7 @@
 package com.fav24.dataservices.security;
 
 
+
 /**
  * Clase que define un atributo que hace referencia a un dato de una entidad. 
  * 
@@ -18,12 +19,41 @@ public class EntityDataAttribute extends EntityAttribute {
 
 		private final String direction;
 
+		
+		/**
+		 * Constructor privado de la dirección.
+		 * 
+		 * @param direction Cadena de texto aue identifica la dirección.
+		 */
 		Direction(String direction) {
 			this.direction = direction;
 		}
 
+		/**
+		 * Retorna la cadena de texto que identifica esta dirección.
+		 * 
+		 * @return la cadena de texto que identifica esta dirección.
+		 */
 		public String getDirection() {
 			return direction;
+		}
+		
+		/**
+		 * Retorna la dirección a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce la dirección.
+		 * 
+		 * @return la dirección a partir de la cadena de texto indicada.
+		 */
+		public static Direction fromString(String text) {
+			if (text != null) {
+				for (Direction direction : Direction.values()) {
+					if (text.equalsIgnoreCase(direction.direction)) {
+						return direction;
+					}
+				}
+			}
+			return null;
 		}
 	}
 

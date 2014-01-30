@@ -51,15 +51,15 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 	/**
 	 * Asigna el conjunto de operaciones permitidas sobre esta entidad.
 	 * 
-	 * allowedOperations El conjunto de operaciones permitidas a asignar en 
-	 * forma de literales de operaciones separados por espacios en blanco.
+	 * @param allowedOperations El conjunto de operaciones permitidas a asignar en 
+	 * 							forma de literales de operaciones separados por espacios en blanco.
 	 */
 	private void setAllowedOperations(String allowedOperations) {
 		
 		String[] splittedAllowedOperations = allowedOperations.toLowerCase().trim().split(" ");
 		
 		for (String operation : splittedAllowedOperations) {
-			getAllowedOperations().add(OperationType.valueOf(operation.trim()));
+			getAllowedOperations().add(OperationType.fromString(operation.trim()));
 		}
 	}
 }

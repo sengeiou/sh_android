@@ -32,8 +32,6 @@ public class EntityDataAttributeDOM extends EntityDataAttribute {
 	 */
 	private void setDirection(String direction) {
 		
-		direction = direction.toLowerCase();
-		
-		setDirection(Direction.valueOf(direction));
+		setDirection(Direction.fromString(direction));
 	}
 }
