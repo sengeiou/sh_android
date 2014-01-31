@@ -26,33 +26,33 @@ public class EntityAccessPolicyToEntityAccessPolicyDtoElement extends Mapper<Ent
 	 */
 	@Override
 	protected EntityAccessPolicyDtoElement map(EntityAccessPolicy origin) {
-		
+
 		//Entity
 		EntityAccessPolicyDtoElement entityAccessPolicy = new EntityAccessPolicyDtoElement(origin.getName().getAlias());
-		
+
 		//Operaciones permitidas
 		String[] allowedOperations = new String[origin.getAllowedOperations().size()];
-		
+
 		int i=0;
 		for (OperationType operationType : origin.getAllowedOperations()) {
 			allowedOperations[i++] = operationType.getOperationType();
 		}
 		entityAccessPolicy.setAllowedOperations(allowedOperations);
-		
+
 		//Attributos disponibles
 		Map<String, String> attributes = new TreeMap<String, String>();
-		
+
 		for (EntityDataAttribute attribute : origin.getData().getData()) {
 			attributes.put(attribute.getAlias(), attribute.getDirection().getDirection());
 		}
 		entityAccessPolicy.setAttributes(attributes);
-		
+
 		//Juego de claves disponibles
 		String[][] keys = new String[origin.getKeys().getKeys().size()][];
 		i=0;
 		int j=0;
 		for (EntityKey key : origin.getKeys().getKeys()) {
-			
+
 			keys[i] = new String[key.getKey().size()];
 			j=0;
 			for (EntityAttribute keyAttribute : key.getKey()) {
@@ -61,13 +61,13 @@ public class EntityAccessPolicyToEntityAccessPolicyDtoElement extends Mapper<Ent
 			i++;
 		}
 		entityAccessPolicy.setKeys(keys);
-		
+
 		//Juego de filtros disponibles
 		String[][] filters = new String[origin.getFilters().getFilters().size()][];
 		i=0;
 		j=0;
 		for (EntityFilter filter : origin.getFilters().getFilters()) {
-			
+
 			filters[i] = new String[filter.getFilter().size()];
 			j=0;
 			for (EntityAttribute filterAttribute : filter.getFilter()) {
@@ -76,17 +76,17 @@ public class EntityAccessPolicyToEntityAccessPolicyDtoElement extends Mapper<Ent
 			i++;
 		}
 		entityAccessPolicy.setFilters(filters);
-		
+
 		//Indica si el acceso es únicamente mediante claves o también filtros.
 		entityAccessPolicy.setOnlyByKey(origin.getOnlyByKey());
-		
+
 		//Indica si el acceso es únicamente mediante los filtros definidos o no.
 		entityAccessPolicy.setOnlySpecifiedFilters(origin.getOnlySpecifiedFilters());
 
 		//Indica el número máximo de elemento retornados por petición.
 		entityAccessPolicy.setMaxPageSize(origin.getMaxPageSize());
 
-		
+
 		return entityAccessPolicy;
 	}
 }
