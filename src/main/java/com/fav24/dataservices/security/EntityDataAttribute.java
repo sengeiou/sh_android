@@ -14,7 +14,7 @@ public class EntityDataAttribute extends EntityAttribute {
 	 */
 	public enum Direction {
 		INPUT("input"),
-		OUTPUT("ouput"),
+		OUTPUT("output"),
 		BOTH("both");
 
 		private final String direction;
