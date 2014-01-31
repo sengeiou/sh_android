@@ -35,46 +35,58 @@ public class EntityAccessPolicyDtoElementToEntityAccessPolicy extends Mapper<Ent
 		entityAccessPolicy.setName(new EntityAttribute(origin.getEntityAlias(), null));
 
 		//Operaciones permitidas
-		for (String operationType : origin.getAllowedOperations()) {
-			entityAccessPolicy.getAllowedOperations().add(OperationType.fromString(operationType));
+		if (origin.getAllowedOperations() != null) {
+
+			for (String operationType : origin.getAllowedOperations()) {
+				entityAccessPolicy.getAllowedOperations().add(OperationType.fromString(operationType));
+			}
 		}
 
 		//Attributos disponibles
-		EntityData entityData = new EntityData();
-		entityAccessPolicy.setData(entityData);
+		if (origin.getAttributes() != null) {
 
-		for (Entry<String, String> attribute : origin.getAttributes().entrySet()) {
+			EntityData entityData = new EntityData();
+			entityAccessPolicy.setData(entityData);
 
-			EntityDataAttribute entityDataAttribute = new EntityDataAttribute(attribute.getKey(), null, Direction.fromString(attribute.getValue()));
-			entityData.getData().add(entityDataAttribute);
+			for (Entry<String, String> attribute : origin.getAttributes().entrySet()) {
+
+				EntityDataAttribute entityDataAttribute = new EntityDataAttribute(attribute.getKey(), null, Direction.fromString(attribute.getValue()));
+				entityData.getData().add(entityDataAttribute);
+			}
 		}
 
 		//Juego de claves disponibles
-		EntityKeys keys = new EntityKeys();
-		entityAccessPolicy.setKeys(keys);
+		if (origin.getKeys() != null) {
 
-		for (String[] key : origin.getKeys()) {
-			EntityKey entityKey = new EntityKey();
+			EntityKeys keys = new EntityKeys();
+			entityAccessPolicy.setKeys(keys);
 
-			for (String attributeAlias : key) {
-				entityKey.getKey().add(new EntityAttribute(attributeAlias, null));
+			for (String[] key : origin.getKeys()) {
+				EntityKey entityKey = new EntityKey();
+
+				for (String attributeAlias : key) {
+					entityKey.getKey().add(new EntityAttribute(attributeAlias, null));
+				}
+
+				keys.getKeys().add(entityKey);
 			}
-
-			keys.getKeys().add(entityKey);
 		}
 
+
 		//Juego de filtros disponibles
-		EntityFilters filters = new EntityFilters();
-		entityAccessPolicy.setFilters(filters);
+		if (origin.getFilters() != null) {
+			EntityFilters filters = new EntityFilters();
+			entityAccessPolicy.setFilters(filters);
 
-		for (String[] filter : origin.getFilters()) {
-			EntityFilter entityFilter = new EntityFilter();
+			for (String[] filter : origin.getFilters()) {
+				EntityFilter entityFilter = new EntityFilter();
 
-			for (String attributeAlias : filter) {
-				entityFilter.getFilter().add(new EntityAttribute(attributeAlias, null));
+				for (String attributeAlias : filter) {
+					entityFilter.getFilter().add(new EntityAttribute(attributeAlias, null));
+				}
+
+				filters.getFilters().add(entityFilter);
 			}
-
-			filters.getFilters().add(entityFilter);
 		}
 
 		//Indica si el acceso es únicamente mediante claves o también filtros.

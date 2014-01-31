@@ -6,7 +6,7 @@ package com.fav24.dataservices.security;
  * 
  * @author Fav24
  */
-public class EntityAttribute {
+public class EntityAttribute implements Comparable<EntityAttribute> {
 
 	private String alias;
 	private String name;
@@ -18,7 +18,7 @@ public class EntityAttribute {
 	public EntityAttribute() {
 		this(null, null);
 	}
-	
+
 	/**
 	 * Constructor por defecto.
 	 * 
@@ -26,7 +26,7 @@ public class EntityAttribute {
 	 * @param name El nombre de este atributo.
 	 */
 	public EntityAttribute(String alias, String name) {
-		
+
 		this.alias = alias;
 		this.name = name;
 	}
@@ -37,12 +37,12 @@ public class EntityAttribute {
 	 * @param entityAttribute Objeto referencia a copiar.
 	 */
 	public EntityAttribute(EntityAttribute entityAttribute) {
-		
+
 		this.alias = entityAttribute.alias;
 		this.name = entityAttribute.name;
 	}
-	
-	
+
+
 	/**
 	 * Retorna el alias de este atributo.
 	 * 
@@ -89,7 +89,7 @@ public class EntityAttribute {
 		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -108,5 +108,27 @@ public class EntityAttribute {
 		} else if (!alias.equals(other.alias))
 			return false;
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(EntityAttribute o) {
+
+		if (o == null) {
+			return 1;	
+		}
+
+		if (alias == null) {
+			if (o.alias == null) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+
+		return alias.compareTo(o.alias);
 	}
 }

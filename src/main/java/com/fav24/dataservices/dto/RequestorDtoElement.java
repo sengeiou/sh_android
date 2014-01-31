@@ -1,5 +1,8 @@
 package com.fav24.dataservices.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -10,6 +13,12 @@ package com.fav24.dataservices.dto;
  *  
  * @author Fav24
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY,
+fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+getterVisibility = JsonAutoDetect.Visibility.NONE, 
+isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+setterVisibility = JsonAutoDetect.Visibility.ANY)
 public class RequestorDtoElement {
 
 	public static final int POSITION_ID_DEVICE = 0;

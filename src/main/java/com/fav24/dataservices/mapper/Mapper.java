@@ -4,6 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,12 +98,20 @@ public abstract class Mapper<T, S> {
 	 * 
 	 * @throws ServerException 
 	 */
-	public static final <V, U> V Map(U origin) throws ServerException {
+	@SuppressWarnings("unchecked")
+	public static final <T, S> S Map(T origin) throws ServerException {
 
-		@SuppressWarnings("unchecked")
-		Mapper<U, V> mapper = (Mapper<U, V>) AvailableMappers.get(origin.getClass());
+		Mapper<T, S> mapper = (Mapper<T, S>) AvailableMappers.get(origin.getClass());
 
 		if (mapper == null) {
+			for (Entry<Class<?>, Mapper<?, ?>> mapperEntry : AvailableMappers.entrySet()) {
+				
+				if (mapperEntry.getKey().isAssignableFrom(origin.getClass())) {
+					mapper = (Mapper<T, S>) mapperEntry.getValue();
+					return mapper.map(origin);
+				}
+			}
+			
 			throw new ServerException(ERROR_MAPPER_NOT_FOUND, "No existe ningún mapeador definido para el tipo " + origin.getClass() + ".");
 		}
 

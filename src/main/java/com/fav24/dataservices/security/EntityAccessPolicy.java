@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * 
  * @author Fav24
  */
-public class EntityAccessPolicy {
+public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 	/**
 	 * Enumeración de los tipos de operaciones que existen. 
@@ -248,15 +248,41 @@ public class EntityAccessPolicy {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Retorna los detalles de esta entidad en forma de cadena de texto.
+	 * 
+	 * @param inHtml True o false en función de si se desea o no que el texto esté formateado en XHTML.
+	 * 
+	 * @return los detalles de esta entidad en forma de cadena de texto.
 	 */
-	public String getDetails() {
+	public String getDetails(boolean inXhtml) {
 		StringBuilder policyDetails = new StringBuilder();
 
-		policyDetails.append("Entidad ").append(name).append(":\n");
+		if (inXhtml) {
+			policyDetails.append("<p>");	
+			policyDetails.append("<b>");	
+		}
+		policyDetails.append("Entidad ");
+		if (inXhtml) {
+			policyDetails.append("</b>");	
+		}
+		policyDetails.append(name.getAlias());
+		policyDetails.append(":");
+		if (inXhtml) {
+			policyDetails.append("</p>");	
+		}
+		else {
+			policyDetails.append('\n');
+		}
 
 		// Operaciones permitidas.
+		if (inXhtml) {
+			policyDetails.append("<p>");	
+			policyDetails.append("<b>");	
+		}
 		policyDetails.append("Operaciones permitidas: ");
+		if (inXhtml) {
+			policyDetails.append("</b>");	
+		}
 
 		Iterator<OperationType> operations = allowedOperations.iterator();
 
@@ -270,27 +296,58 @@ public class EntityAccessPolicy {
 		else {
 			policyDetails.append("ninguna");
 		}
+		if (inXhtml) {
+			policyDetails.append("</p>");	
+		}
+		else {
+			policyDetails.append('\n');
+		}
 
 		// Dirección de los atributos.
-		policyDetails.append('\n');
-		policyDetails.append("Atributos:");
+		if (inXhtml) {
+			policyDetails.append("<p>");	
+			policyDetails.append("<b>");	
+		}
+		policyDetails.append("Atributos: ");
+		if (inXhtml) {
+			policyDetails.append("</b>");	
+		}
 
 		Iterator<EntityDataAttribute> attributeIterator = data.getData().iterator();
 
 		if (attributeIterator.hasNext()) {
 
-			while (operations.hasNext()) {
+			while (attributeIterator.hasNext()) {
 				EntityDataAttribute  attribute = attributeIterator.next();
-				policyDetails.append('\n').append(attribute.getAlias()).append(": ").append(attribute.getDirection());
+				if (inXhtml) {
+					policyDetails.append("<br/>");	
+				}
+				else {
+					policyDetails.append('\n');
+				}
+				policyDetails.append(attribute.getAlias()).append(": ").append(attribute.getDirection());
 			}
 		}
 		else {
-			policyDetails.append(" ninguno");
+			policyDetails.append("ninguno.");
+		}
+
+		if (inXhtml) {
+			policyDetails.append("</p>");	
+		}
+		else {
+			policyDetails.append('\n');
 		}
 
 		// Keys disponibles.
-		policyDetails.append('\n');
-		policyDetails.append("Claves:");
+		if (inXhtml) {
+			policyDetails.append("<p>");	
+			policyDetails.append("<b>");	
+		}
+		policyDetails.append("Claves: ");
+		if (inXhtml) {
+			policyDetails.append("</b>");	
+		}
 
 		Iterator<EntityKey> keysIterator = keys.getKeys().iterator();
 
@@ -298,7 +355,12 @@ public class EntityAccessPolicy {
 
 			while (keysIterator.hasNext()) {
 				Iterator<EntityAttribute> keyIterator = keysIterator.next().getKey().iterator();
-				policyDetails.append('\n');
+				if (inXhtml) {
+					policyDetails.append("<br/>");	
+				}
+				else {
+					policyDetails.append('\n');
+				}
 
 				if (keyIterator.hasNext()) {
 					policyDetails.append(keyIterator.next().getAlias());
@@ -309,16 +371,40 @@ public class EntityAccessPolicy {
 			}
 		}
 		else {
-			policyDetails.append(" ninguna");
+			policyDetails.append("ninguna.");
 		}
 
 		if (onlyByKey) {
-			policyDetails.append('\n').append(" Nota: esta entidad únicamente es accesible mediate el uso de una clave.");	
+			if (inXhtml) {
+				policyDetails.append("<br/><b>");	
+			}
+			else {
+				policyDetails.append('\n');
+			}
+			policyDetails.append("Nota: ");
+			if (inXhtml) {
+				policyDetails.append("</b>");
+			}
+			policyDetails.append("esta entidad únicamente es accesible mediate el uso de una clave.");	
 		}
 
+		if (inXhtml) {
+			policyDetails.append("</p>");	
+		}
+		else {
+			policyDetails.append('\n');
+		}
+
+
 		// Filtros disponibles.
-		policyDetails.append('\n');
-		policyDetails.append("Filtros:");
+		if (inXhtml) {
+			policyDetails.append("<p>");	
+			policyDetails.append("<b>");	
+		}
+		policyDetails.append("Filtros: ");
+		if (inXhtml) {
+			policyDetails.append("</b>");	
+		}
 
 		Iterator<EntityFilter> filtersIterator = filters.getFilters().iterator();
 
@@ -326,7 +412,12 @@ public class EntityAccessPolicy {
 
 			while (filtersIterator.hasNext()) {
 				Iterator<EntityAttribute> filterIterator = filtersIterator.next().getFilter().iterator();
-				policyDetails.append('\n');
+				if (inXhtml) {
+					policyDetails.append("<br/>");	
+				}
+				else {
+					policyDetails.append('\n');
+				}
 
 				if (filterIterator.hasNext()) {
 					policyDetails.append(filterIterator.next().getAlias());
@@ -337,16 +428,53 @@ public class EntityAccessPolicy {
 			}
 		}
 		else {
-			policyDetails.append(" ninguno");
+			policyDetails.append("ninguno.");
 		}
 
 		if (onlySpecifiedFilters) {
-			policyDetails.append('\n').append(" Nota: esta entidad únicamente es accesible mediate el uso de alguno de los filtros especificados.");	
+			if (inXhtml) {
+				policyDetails.append("<br/><b>");
+			}
+			else {
+				policyDetails.append('\n');
+			}
+			policyDetails.append("Nota: ");
+			if (inXhtml) {
+				policyDetails.append("</b>");
+			}
+			policyDetails.append("esta entidad únicamente es accesible mediate el uso de alguno de los filtros especificados.");	
 		}
 
-		policyDetails.append('\n').append("Tamaño máximo de página: ").append(maxPageSize);
+		if (inXhtml) {
+			policyDetails.append("</p>");	
+		}
+		else {
+			policyDetails.append('\n');
+		}
 
-		return policyDetails.toString();
+		if (inXhtml) {
+			policyDetails.append("<br/><b>");
+		}
+		else {
+			policyDetails.append('\n');
+		}
+		policyDetails.append("Tamaño máximo de página: ");
+		if (inXhtml) {
+			policyDetails.append("</b>");
+		}
+		policyDetails.append(maxPageSize);
+
+		String result = policyDetails.toString();
+
+		if (inXhtml) {
+			result.replace("á", "&aacute;");
+			result.replace("é", "&eacute;");
+			result.replace("í", "&iacute;");
+			result.replace("ó", "&oacute;");
+			result.replace("ú", "&uacute;");
+		}
+
+		return result;
 	}
 
 	/**
@@ -378,5 +506,27 @@ public class EntityAccessPolicy {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(EntityAccessPolicy o) {
+
+		if (o == null) {
+			return 1;	
+		}
+
+		if (name == null) {
+			if (o.name == null) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+		
+		return name.compareTo(o.name);
 	}
 }
