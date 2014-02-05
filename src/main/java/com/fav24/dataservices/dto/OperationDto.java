@@ -12,6 +12,15 @@ public class OperationDto {
 	private MetadataDto metadata;
 	private DataItemDto[] data;
 	
+	
+	/**
+	 * Constructor por defecto.
+	 */
+	public OperationDto() {
+		metadata = null;
+		data = null;
+	}
+	
 	/**
 	 * Retorna el conjunto de metadatos de la operación. 
 	 * 

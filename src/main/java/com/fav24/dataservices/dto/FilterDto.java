@@ -15,6 +15,15 @@ public class FilterDto {
 
 
 	/**
+	 * Constructor por defecto.
+	 */
+	public FilterDto() {
+		nexus = null;
+		filterItems = null;
+		filters = null;
+	}
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param nexus Tipo de nexo.

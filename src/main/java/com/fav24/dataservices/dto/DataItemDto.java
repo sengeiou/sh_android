@@ -17,6 +17,13 @@ public class DataItemDto {
 
 
 	/**
+	 * Constructor por defecto.
+	 */
+	public DataItemDto() {
+		attributes = null;
+	}
+	
+	/**
 	 * Retorna los atributos del item en formato clave-valor.
 	 * 
 	 * @return los atributos del item en formato clave-valor.

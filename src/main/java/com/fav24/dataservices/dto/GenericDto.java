@@ -17,6 +17,13 @@ public class GenericDto extends BaseDto {
 
 	
 	/**
+	 * Constructor por defecto.
+	 */
+	public GenericDto() {
+		ops = null;
+	}
+	
+	/**
 	 * Constructor para el retorno de un error. 
 	 *  
 	 * @param e Excepción a notificar en la respuesta.

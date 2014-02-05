@@ -14,6 +14,15 @@ public class FilterItemDto {
 
 	
 	/**
+	 * Constructor por defecto.
+	 */
+	public FilterItemDto() {
+		comparator = null;
+		name = null;
+		value = null;
+	}
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param comparator Tipo de comparador.
