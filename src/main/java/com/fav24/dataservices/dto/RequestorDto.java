@@ -1,7 +1,5 @@
 package com.fav24.dataservices.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 
@@ -13,13 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  *  
  * @author Fav24
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY,
-fieldVisibility = JsonAutoDetect.Visibility.ANY, 
-getterVisibility = JsonAutoDetect.Visibility.NONE, 
-isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-setterVisibility = JsonAutoDetect.Visibility.ANY)
-public class RequestorDtoElement {
+public class RequestorDto {
 
 	public static final int POSITION_ID_DEVICE = 0;
 	public static final int POSITION_ID_USER = 1;
@@ -35,7 +27,7 @@ public class RequestorDtoElement {
 	/**
 	 * Constructor por defecto.
 	 */
-	public RequestorDtoElement() {
+	public RequestorDto() {
 		req = new Long[REQUESTOR_ARRAY_LENGTH];
 	}
 
@@ -48,7 +40,7 @@ public class RequestorDtoElement {
 	 * @param appVersion Versión de la aplicación.
 	 * @param systemTime Timestamp del sistema.
 	 */
-	public RequestorDtoElement(Long idDevice, Long idUser, Long idPlatform, Long appVersion, Long systemTime) {
+	public RequestorDto(Long idDevice, Long idUser, Long idPlatform, Long appVersion, Long systemTime) {
 
 		this();
 

@@ -6,8 +6,6 @@ import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fav24.dataservices.exception.ServerException;
 
@@ -17,11 +15,12 @@ import com.fav24.dataservices.exception.ServerException;
  * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY,
+@JsonAutoDetect(
+creatorVisibility = JsonAutoDetect.Visibility.ANY,
 fieldVisibility = JsonAutoDetect.Visibility.ANY, 
 getterVisibility = JsonAutoDetect.Visibility.NONE, 
 isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-setterVisibility = JsonAutoDetect.Visibility.ANY)
+setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
@@ -29,12 +28,9 @@ public class BaseDto implements Serializable {
 	private static final String STATUS_CODE = "code";
 	private static final String STATUS_MESSAGE = "message";
 
-	@JsonInclude(Include.NON_NULL)
 	private Map<String, String> status;
-
-	@JsonInclude(Include.NON_NULL)
 	@JsonUnwrapped(enabled=true)
-	private RequestorDtoElement requestor;
+	private RequestorDto requestor;
 
 	/**
 	 * Constructor por defecto.
@@ -50,7 +46,7 @@ public class BaseDto implements Serializable {
 	 * 
 	 * @param requestor Quién realiza la petición.
 	 */
-	public BaseDto(RequestorDtoElement requestor) {
+	public BaseDto(RequestorDto requestor) {
 
 		this.status = new TreeMap<String, String>();
 		this.requestor = requestor;
@@ -91,7 +87,7 @@ public class BaseDto implements Serializable {
 	 *  
 	 * @return quién realiza la petición.
 	 */
-	public RequestorDtoElement getRequestor() {
+	public RequestorDto getRequestor() {
 		return requestor;
 	}
 
@@ -100,7 +96,7 @@ public class BaseDto implements Serializable {
 	 * 
 	 * @param requestor El solicitante.
 	 */
-	public void setRequestor(RequestorDtoElement requestor) {
+	public void setRequestor(RequestorDto requestor) {
 		this.requestor = requestor;
 	}
 

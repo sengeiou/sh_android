@@ -4,7 +4,7 @@ import java.util.TreeSet;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
-import com.fav24.dataservices.dto.security.EntityAccessPolicyDtoElement;
+import com.fav24.dataservices.dto.security.EntityAccessPolicyDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
@@ -31,7 +31,7 @@ public class AccessPolicyDtoToAccessPolicy extends Mapper<AccessPolicyDto, Acces
 			
 			accessPolicy = new AccessPolicy(new TreeSet<EntityAccessPolicy>());
 			
-			for (EntityAccessPolicyDtoElement entityAccesPolicy : origin.getAccessPolicies()) {
+			for (EntityAccessPolicyDto entityAccesPolicy : origin.getAccessPolicies()) {
 
 				accessPolicy.getAccessPolicies().add((EntityAccessPolicy)Mapper.Map(entityAccesPolicy));
 			}

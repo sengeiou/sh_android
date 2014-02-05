@@ -2,6 +2,8 @@ package com.fav24.dataservices.dto;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 
 /**
  * Clase que contiene la estructura de un item de una entidad.
@@ -10,6 +12,7 @@ import java.util.Map;
  */
 public class DataItemDto {
 	
+	@JsonUnwrapped(enabled=true)
 	private Map<String, Object> attributes;
 
 

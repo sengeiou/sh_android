@@ -1,8 +1,5 @@
 package com.fav24.dataservices.dto.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fav24.dataservices.dto.BaseDto;
 import com.fav24.dataservices.exception.ServerException;
 
@@ -13,12 +10,10 @@ import com.fav24.dataservices.exception.ServerException;
  * 
  * @author Fav24
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
 public class AccessPolicyFilesDto extends BaseDto {
 
 	private static final long serialVersionUID = 2649617444051699918L;
 
-	@JsonInclude(Include.NON_NULL)
 	private String[] policyFiles;
 
 

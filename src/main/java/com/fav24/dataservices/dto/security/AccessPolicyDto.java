@@ -14,7 +14,7 @@ public class AccessPolicyDto extends BaseDto {
 
 	private static final long serialVersionUID = 2649617444051699918L;
 
-	private EntityAccessPolicyDtoElement[] policies;
+	private EntityAccessPolicyDto[] policies;
 
 
 	/**
@@ -38,7 +38,7 @@ public class AccessPolicyDto extends BaseDto {
 	 * 
 	 * @return el array de estructuras de políticas de acceso de las entidades.
 	 */
-	public EntityAccessPolicyDtoElement[] getAccessPolicies() {
+	public EntityAccessPolicyDto[] getAccessPolicies() {
 		return policies;
 	}
 
@@ -47,7 +47,7 @@ public class AccessPolicyDto extends BaseDto {
 	 * 
 	 * @param policies El array de estructuras de políticas de acceso de las entidades a asignar.
 	 */
-	public void setAccessPolicies(EntityAccessPolicyDtoElement[] policies) {
+	public void setAccessPolicies(EntityAccessPolicyDto[] policies) {
 		this.policies = policies;
 	}
 }

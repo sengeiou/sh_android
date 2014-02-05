@@ -2,7 +2,7 @@ package com.fav24.dataservices.mapper;
 
 import java.util.Map.Entry;
 
-import com.fav24.dataservices.dto.security.EntityAccessPolicyDtoElement;
+import com.fav24.dataservices.dto.security.EntityAccessPolicyDto;
 import com.fav24.dataservices.security.EntityAccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.security.EntityAttribute;
@@ -22,13 +22,13 @@ import com.fav24.dataservices.security.EntityKeys;
  * @author Fav24
  *
  */
-public class EntityAccessPolicyDtoElementToEntityAccessPolicy extends Mapper<EntityAccessPolicyDtoElement, EntityAccessPolicy> {
+public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAccessPolicyDto, EntityAccessPolicy> {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected EntityAccessPolicy map(EntityAccessPolicyDtoElement origin) {
+	protected EntityAccessPolicy map(EntityAccessPolicyDto origin) {
 
 		//Entity
 		EntityAccessPolicy entityAccessPolicy = new EntityAccessPolicy();

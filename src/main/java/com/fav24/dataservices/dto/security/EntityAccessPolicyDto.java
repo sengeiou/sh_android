@@ -2,9 +2,6 @@ package com.fav24.dataservices.dto.security;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 /**
  * Clase que contiene la estructura de una petición de consulta de
@@ -12,13 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * 
  * @author Fav24
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY,
-fieldVisibility = JsonAutoDetect.Visibility.ANY, 
-getterVisibility = JsonAutoDetect.Visibility.NONE, 
-isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-setterVisibility = JsonAutoDetect.Visibility.ANY)
-public class EntityAccessPolicyDtoElement {
+public class EntityAccessPolicyDto {
 
 	private String entity;
 	private String[] allowedOperations;
@@ -33,7 +24,7 @@ public class EntityAccessPolicyDtoElement {
 	/**
 	 * Constructor por defecto.
 	 */
-	public EntityAccessPolicyDtoElement() {
+	public EntityAccessPolicyDto() {
 		
 		entity = null;
 		allowedOperations = null;
@@ -50,7 +41,7 @@ public class EntityAccessPolicyDtoElement {
 	 *  
 	 * @param entity Entidad 
 	 */
-	public EntityAccessPolicyDtoElement(String entity) {
+	public EntityAccessPolicyDto(String entity) {
 		this.entity = entity;
 	}
 	

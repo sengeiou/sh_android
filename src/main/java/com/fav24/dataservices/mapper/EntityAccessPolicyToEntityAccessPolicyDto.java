@@ -3,7 +3,7 @@ package com.fav24.dataservices.mapper;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fav24.dataservices.dto.security.EntityAccessPolicyDtoElement;
+import com.fav24.dataservices.dto.security.EntityAccessPolicyDto;
 import com.fav24.dataservices.security.EntityAccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.security.EntityAttribute;
@@ -19,16 +19,16 @@ import com.fav24.dataservices.security.EntityKey;
  * @author Fav24
  *
  */
-public class EntityAccessPolicyToEntityAccessPolicyDtoElement extends Mapper<EntityAccessPolicy, EntityAccessPolicyDtoElement> {
+public class EntityAccessPolicyToEntityAccessPolicyDto extends Mapper<EntityAccessPolicy, EntityAccessPolicyDto> {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected EntityAccessPolicyDtoElement map(EntityAccessPolicy origin) {
+	protected EntityAccessPolicyDto map(EntityAccessPolicy origin) {
 
 		//Entity
-		EntityAccessPolicyDtoElement entityAccessPolicy = new EntityAccessPolicyDtoElement(origin.getName().getAlias());
+		EntityAccessPolicyDto entityAccessPolicy = new EntityAccessPolicyDto(origin.getName().getAlias());
 
 		//Operaciones permitidas
 		String[] allowedOperations = new String[origin.getAllowedOperations().size()];
