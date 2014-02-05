@@ -1,5 +1,8 @@
 package com.fav24.dataservices.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 /**
@@ -7,6 +10,13 @@ package com.fav24.dataservices.dto;
  * 
  * @author Fav24
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonAutoDetect(
+creatorVisibility = JsonAutoDetect.Visibility.ANY,
+fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+getterVisibility = JsonAutoDetect.Visibility.NONE, 
+isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class FilterDto {
 
 	private String nexus;

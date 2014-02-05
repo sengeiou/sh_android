@@ -36,8 +36,8 @@
 		<HikariCP.version>1.2.4</HikariCP.version>
 
 		<!-- Versiones por defecto de los pluggins de maven -->
-		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
-		<tomcat7-maven-plugin.version>2.1</tomcat7-maven-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
 	</properties>
 
 

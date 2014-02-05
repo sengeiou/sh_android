@@ -1,5 +1,7 @@
 package com.fav24.dataservices.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fav24.dataservices.exception.ServerException;
 
 
@@ -13,6 +15,7 @@ public class GenericDto extends BaseDto {
 
 	private static final long serialVersionUID = 2649617444051699918L;
 
+	@JsonInclude(Include.NON_NULL)
 	private OperationDto[] ops;
 
 	

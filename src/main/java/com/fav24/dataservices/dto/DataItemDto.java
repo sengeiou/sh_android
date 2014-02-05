@@ -2,6 +2,8 @@ package com.fav24.dataservices.dto;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 
@@ -10,6 +12,13 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  * 
  * @author Fav24
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonAutoDetect(
+creatorVisibility = JsonAutoDetect.Visibility.ANY,
+fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+getterVisibility = JsonAutoDetect.Visibility.NONE, 
+isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class DataItemDto {
 	
 	@JsonUnwrapped(enabled=true)
