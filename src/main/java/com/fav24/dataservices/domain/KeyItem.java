@@ -7,7 +7,7 @@ package com.fav24.dataservices.domain;
  * 
  * @author Fav24
  */
-public class Key {
+public class KeyItem {
 
 	private String name;
 	private String value;
@@ -16,7 +16,7 @@ public class Key {
 	/**
 	 * Constructor por defecto.
 	 */
-	public Key() {
+	public KeyItem() {
 		this(null, null);
 	}
 
@@ -26,7 +26,7 @@ public class Key {
 	 * @param name Nombre del atributo clave.
 	 * @param value Valor del atributo.
 	 */
-	public Key(String name, String value) {
+	public KeyItem(String name, String value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -90,7 +90,7 @@ public class Key {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Key other = (Key) obj;
+		KeyItem other = (KeyItem) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

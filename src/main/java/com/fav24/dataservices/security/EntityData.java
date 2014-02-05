@@ -2,6 +2,8 @@ package com.fav24.dataservices.security;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -12,12 +14,14 @@ import java.util.ArrayList;
 public class EntityData {
 
 	private AbstractList<EntityDataAttribute> data;
+	private Map<String, EntityDataAttribute> dataAttributeByAlias;
 
 	/**
 	 * Contructor por defecto.
 	 */
 	public EntityData() {
 		data = new ArrayList<EntityDataAttribute>();
+		dataAttributeByAlias = new HashMap<String, EntityDataAttribute>();
 	}
 	
 	/**
@@ -29,13 +33,17 @@ public class EntityData {
 
 		if (entityData.data != null) {
 			this.data = new ArrayList<EntityDataAttribute>();
-
+			this.dataAttributeByAlias = new HashMap<String, EntityDataAttribute>();
+					
 			for (EntityDataAttribute entityDataAttribute : entityData.data) {
-				this.data.add(new EntityDataAttribute(entityDataAttribute));	
+				EntityDataAttribute entityDataAttributeCopy = new EntityDataAttribute(entityDataAttribute);
+				this.data.add(entityDataAttributeCopy);
+				this.dataAttributeByAlias.put(entityDataAttributeCopy.getAlias(), entityDataAttributeCopy);
 			}
 		}
 		else {
 			this.data = null;
+			this.dataAttributeByAlias = null;
 		}
 	}
 
@@ -50,11 +58,7 @@ public class EntityData {
 
 		if (alias != null) {
 
-			for(EntityDataAttribute attribute : data) {
-				if (alias.equals(attribute.getAlias())) {
-					return attribute;
-				}
-			}
+			return dataAttributeByAlias.get(alias);
 		}
 
 		return null;

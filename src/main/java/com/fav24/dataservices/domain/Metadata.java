@@ -16,7 +16,7 @@ public class Metadata {
 	private String entity;
 	private Long entitySize;
 	private Long items;
-	private AbstractList<Key> key;
+	private AbstractList<KeyItem> key;
 	private Filter filter;
 
 
@@ -41,7 +41,7 @@ public class Metadata {
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long items, AbstractList<Key> key) {
+	public Metadata(OperationType operation, String entity, Long entitySize, Long items, AbstractList<KeyItem> key) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
@@ -143,7 +143,7 @@ public class Metadata {
 	 * 
 	 * @return la lista de atributos y valores, que conforma la clave del elemento a localizar para la operación.
 	 */
-	public AbstractList<Key> getKey() {
+	public AbstractList<KeyItem> getKey() {
 		return key;
 	}
 
@@ -152,7 +152,7 @@ public class Metadata {
 	 * 
 	 * @param key La lista a asignar.
 	 */
-	public void setKey(AbstractList<Key> key) {
+	public void setKey(AbstractList<KeyItem> key) {
 		this.key = key;
 	}
 

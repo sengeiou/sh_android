@@ -13,7 +13,7 @@ public class EntityKeys {
 
 	private AbstractList<EntityKey> entityKeys;
 
-	
+
 	/**
 	 * Contructor por defecto.
 	 */
@@ -27,21 +27,21 @@ public class EntityKeys {
 	 * @param entityKeys Objeto referencia a copiar.
 	 */
 	public EntityKeys(EntityKeys entityKeys) {
-		
+
 		if (entityKeys.entityKeys != null) {
-			
+
 			this.entityKeys = new ArrayList<EntityKey>();
-			
+
 			for (EntityKey entityKey : entityKeys.entityKeys) {
 				this.entityKeys.add(new EntityKey(entityKey));	
 			}
-			
+
 		}
 		else {
 			this.entityKeys = null;
 		}
 	}
-	
+
 	/**
 	 * Retorna true o false en función de si la lista de alias corresponde al 100% con alguna de las claves.
 	 * 
@@ -50,7 +50,7 @@ public class EntityKeys {
 	 * @return true o false en función de si la lista de alias corresponde al 100% con alguna de las claves.
 	 */
 	public boolean containsKey(String[] aliases) {
-		
+
 		if (aliases != null) {
 
 			for(EntityKey key : entityKeys) {
@@ -62,7 +62,7 @@ public class EntityKeys {
 
 		return false;
 	}
-	
+
 	/**
 	 * Retorna la estructura que contiene el conjunto de claves.
 	 * 
@@ -70,5 +70,29 @@ public class EntityKeys {
 	 */
 	public AbstractList<EntityKey> getKeys() {
 		return entityKeys;
+	}
+
+	/**
+	 * Retorna el primer elemento de una clave con el alias indicado.
+	 *  
+	 * @param alias El alias a usar.
+	 * 
+	 * @return el primer elemento de una clave con el alias indicado.
+	 */
+	public EntityAttribute getFirstKeyAttributeByAlias(String alias) {
+
+		if (entityKeys != null && alias != null) {
+
+			for(EntityKey key : entityKeys) {
+
+				EntityAttribute keyItem = key.getAttribute(alias);
+
+				if (keyItem != null) {
+					return keyItem;
+				}
+			}
+		}
+
+		return null;
 	}
 }

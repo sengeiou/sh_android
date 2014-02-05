@@ -2,6 +2,9 @@ package com.fav24.dataservices.security;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -12,12 +15,14 @@ import java.util.ArrayList;
 public class EntityFilter {
 
 	private AbstractList<EntityAttribute> filter;
+	private Map<String, EntityAttribute> entityFilterByAlias;
 
 	/**
 	 * Contructor por defecto.
 	 */
 	public EntityFilter() {
 		filter = new ArrayList<EntityAttribute>();
+		entityFilterByAlias = new HashMap<String, EntityAttribute>();
 	}
 
 	/**
@@ -28,17 +33,24 @@ public class EntityFilter {
 	public EntityFilter(EntityFilter entityFilter) {
 
 		if (entityFilter.filter != null) {
+
 			this.filter = new ArrayList<EntityAttribute>();
+			this.entityFilterByAlias = new HashMap<String, EntityAttribute>();
 
 			for (EntityAttribute attribute : entityFilter.filter) {
-				this.filter.add(new EntityAttribute(attribute));	
+
+				EntityAttribute attributeCopy = new EntityAttribute(attribute);
+
+				this.filter.add(attributeCopy);	
+				this.entityFilterByAlias.put(attributeCopy.getAlias(), attributeCopy);	
 			}
 		}
 		else {
 			this.filter = null;
+			this.entityFilterByAlias = null;
 		}
 	}
-	
+
 	/**
 	 * Retorna true o false en función de si la lista de alias corresponde al 100% con el filtro.
 	 * 
@@ -47,21 +59,21 @@ public class EntityFilter {
 	 * @return true o false en función de si la lista de alias corresponde al 100% con el filtro.
 	 */
 	public boolean corresponds(String [] aliases) {
-		
+
 		if (aliases == null || aliases.length != filter.size()) {
 			return false;
 		}
-		
+
 		for (String alias : aliases) {
-			
+
 			if (!hasAttribute(alias)) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Retorna true o false en función de si existe o no el atributo correspondiente al alias indicado.
 	 * 
@@ -73,16 +85,12 @@ public class EntityFilter {
 
 		if (alias != null) {
 
-			for(EntityAttribute attribute : filter) {
-				if (alias.equals(attribute.getAlias())) {
-					return true;
-				}
-			}
+			return entityFilterByAlias.containsKey(alias);
 		}
 
 		return false;
 	}
-	
+
 	/**
 	 * Retorna el atributo correspondiente al alias indicado.
 	 * 
@@ -91,16 +99,12 @@ public class EntityFilter {
 	 * @return el atributo correspondiente al alias indicado.
 	 */
 	public EntityAttribute getAttribute(String alias) {
-		
+
 		if (alias != null) {
-			
-			for(EntityAttribute attribute : filter) {
-				if (alias.equals(attribute.getAlias())) {
-					return attribute;
-				}
-			}
+
+			return entityFilterByAlias.get(alias);
 		}
-		
+
 		return null;
 	}
 
@@ -112,10 +116,11 @@ public class EntityFilter {
 	 * @return el atributo correspondiente al alias indicado.
 	 */
 	public EntityAttribute getAttributeByName(String name) {
-		
+
 		if (name != null) {
 
 			for(EntityAttribute attribute : filter) {
+
 				if (name.equals(attribute.getName())) {
 					return attribute;
 				}
@@ -124,7 +129,7 @@ public class EntityFilter {
 
 		return null;
 	}
-	
+
 	/**
 	 * Retorna la estructura que contiene el conjunto de attributos de una clave.
 	 * 
@@ -132,5 +137,29 @@ public class EntityFilter {
 	 */
 	public AbstractList<EntityAttribute> getFilter() {
 		return filter;
+	}
+
+	/**
+	 * Retorna la lista de nombre de campos que conforman el filtro.
+	 * 
+	 * @return la lista de nombre de campos que conforman el filtro.
+	 */
+	public String getFilterNamesString() {
+
+		StringBuilder filterNamesString = new StringBuilder();
+
+		Iterator<EntityAttribute> filterIterator = filter.iterator();
+
+		if (filterIterator.hasNext()) {
+
+			filterNamesString.append(filterIterator.next().getName());
+
+			while(filterIterator.hasNext()) {
+				filterNamesString.append(',');
+				filterNamesString.append(filterIterator.next().getName());
+			}
+		}
+
+		return filterNamesString.toString();
 	}
 }

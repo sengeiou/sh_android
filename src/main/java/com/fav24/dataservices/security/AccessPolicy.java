@@ -1,6 +1,8 @@
 package com.fav24.dataservices.security;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.fav24.dataservices.domain.Requestor;
@@ -17,13 +19,14 @@ public class AccessPolicy {
 
 	private Requestor requestor;
 	private Set<EntityAccessPolicy> accessPolicies;
+	private Map<String, EntityAccessPolicy> accessPoliciesByAlias;
 
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public AccessPolicy() {
-		
+
 		this((Set<EntityAccessPolicy>)null);
 	}
 
@@ -33,8 +36,16 @@ public class AccessPolicy {
 	 * @param accessPolicies Lista de políticas solicitadas.
 	 */
 	public AccessPolicy(Set<EntityAccessPolicy> accessPolicies) {
-		
+
 		this.accessPolicies = accessPolicies;
+
+		if (accessPolicies != null) {
+			this.accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
+
+			for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
+				this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
+			}
+		}
 	}
 
 	/**
@@ -56,12 +67,18 @@ public class AccessPolicy {
 		if (accesPolicy.accessPolicies != null) {
 
 			accessPolicies = new HashSet<EntityAccessPolicy>();
+			accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
 			for (EntityAccessPolicy entityAccessPolicy : accesPolicy.accessPolicies) {
-				accessPolicies.add(new EntityAccessPolicy(entityAccessPolicy));
+
+				EntityAccessPolicy entityAccessPolicyCopy = new EntityAccessPolicy(entityAccessPolicy);
+
+				accessPolicies.add(entityAccessPolicyCopy);
+				accessPoliciesByAlias.put(entityAccessPolicyCopy.getName().getAlias(), entityAccessPolicyCopy);
 			}
 		}
 		else {
 			accessPolicies = null;
+			accessPoliciesByAlias = null;
 		}
 	}
 
@@ -99,6 +116,17 @@ public class AccessPolicy {
 	 */
 	public void setAccessPolicies(Set<EntityAccessPolicy> accessPolicies) {
 		this.accessPolicies = accessPolicies;
+
+		if (accessPolicies != null) {
+			this.accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
+
+			for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
+				this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
+			}
+		}
+		else {
+			this.accessPoliciesByAlias = null;
+		}
 	}
 
 	/**
@@ -110,14 +138,9 @@ public class AccessPolicy {
 	 */
 	public EntityAccessPolicy getEntityPolicy(String alias) {
 
-		if (accessPolicies != null && alias != null) {
+		if (accessPoliciesByAlias != null && alias != null) {
 
-			for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
-
-				if (alias.equals(entityAccessPolicy.getName().getAlias())) {
-					return entityAccessPolicy;
-				}
-			}
+			accessPoliciesByAlias.get(alias);
 		}
 
 		return null;
@@ -195,17 +218,28 @@ public class AccessPolicy {
 
 		synchronized(this) {
 
-			if (this.accessPolicies == null) {
+			if (accessPolicies != null) {
 
-				this.accessPolicies = new HashSet<EntityAccessPolicy>();
-				this.accessPolicies.addAll(accessPolicies);
-			}
-			else {
-				for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
-					if (!this.accessPolicies.add(entityAccessPolicy)) {
+				if (this.accessPolicies == null) {
 
-						this.accessPolicies.remove(entityAccessPolicy);
-						this.accessPolicies.add(entityAccessPolicy);
+					this.accessPolicies = new HashSet<EntityAccessPolicy>();
+					this.accessPolicies.addAll(accessPolicies);
+
+					this.accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
+					for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
+						this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
+					}
+				}
+				else {
+
+					for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
+
+						if (!this.accessPolicies.add(entityAccessPolicy)) {
+
+							this.accessPolicies.remove(entityAccessPolicy);
+							this.accessPolicies.add(entityAccessPolicy);
+							this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
+						}
 					}
 				}
 			}
@@ -230,5 +264,44 @@ public class AccessPolicy {
 				currentAccesPolicy.mergeAccesPolicy(accessPolicy);
 			}
 		}
+	}
+
+	/**
+	 * Retorna el nombre del atributo indicado de la entidad indicada en la fuente de datos, a partir de los alias. 
+	 * 
+	 * @param entityAlias Alias de la entidad.
+	 * @param attributeAlias Alias del atributo.
+	 * 
+	 * @return el nombre del atributo indicado de la entidad indicada en la fuente de datos, a partir de los alias.
+	 */
+	public static final String getAttributeName(String entityAlias, String attributeAlias) {
+
+		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null && attributeAlias != null) {
+			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
+
+			if (entityAccessPolicy != null && entityAccessPolicy.getData() != null) {
+				EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+				
+				if (dataAttribute != null) {
+					return dataAttribute.getName();
+				}
+				else {
+					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByAlias(attributeAlias);
+					
+					if (keyAttribute != null) {
+						return keyAttribute.getName();
+					}
+					else {
+						EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByAlias(attributeAlias);
+						
+						if (filterAttribute != null) {
+							return filterAttribute.getName();
+						}
+					}
+				}
+			}
+		}
+		
+		return null;
 	}
 }

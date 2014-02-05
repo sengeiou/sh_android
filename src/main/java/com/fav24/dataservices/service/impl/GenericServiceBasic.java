@@ -4,6 +4,7 @@ import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.service.GenericService;
 
 
@@ -59,9 +60,9 @@ public abstract class GenericServiceBasic implements GenericService {
 		else {
 			throw new ServerException(ERROR_START_TRANSACTION, ERROR_START_TRANSACTION_MESSAGE);
 		}
-		
+
 		generic.getRequestor().setTime(System.currentTimeMillis());
-		
+
 		return generic;
 	}
 
@@ -103,7 +104,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
-	
+
 	/**
 	 * Operatión de modificación de ítems.
 	 * 
@@ -127,7 +128,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
-	
+
 	/**
 	 * Operatión de eliminación de ítems.
 	 * 
@@ -139,7 +140,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
 	}
-	
+
 	/**
 	 * Operatión de modificación o creación de un ítem.
 	 * 
@@ -150,5 +151,12 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	protected Operation updateCreate(Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
+		throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE);
 	}
 }

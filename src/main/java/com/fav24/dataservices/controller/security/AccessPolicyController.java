@@ -17,6 +17,7 @@ import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.AccessPolicyFiles;
+import com.fav24.dataservices.service.impl.GenericServiceJDBC;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
@@ -30,7 +31,7 @@ import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 public class AccessPolicyController extends BaseController {
 
 	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
-	
+
 	private static final String MESSAGE_ACCESS_POLICIES_RETRIEVED_OK = "La información de políticas de acceso, se retornó correctamente.";
 	private static final String MESSAGE_ACCESS_POLICY_FILES_LOADED_OK = "Los ficheros de políticas de acceso, se cargaron correctamente.";
 
@@ -39,6 +40,9 @@ public class AccessPolicyController extends BaseController {
 
 	@Autowired
 	protected LoadAccessPolicyService loadAccessPolicyService;
+
+	@Autowired
+	protected GenericServiceJDBC genericServiceJDBC;
 
 	/**
 	 * Procesa una petición de información de las políficas de acceso de una cierta entidad, o de las entidades disponibles.
@@ -64,7 +68,7 @@ public class AccessPolicyController extends BaseController {
 			result = new AccessPolicyDto(e);
 			result.setRequestor(accessPolicy.getRequestor());
 		}
-		
+
 		result.getRequestor().setSystemTime(System.currentTimeMillis());
 
 		return result;
@@ -87,16 +91,19 @@ public class AccessPolicyController extends BaseController {
 
 			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFile)));
 
+			genericServiceJDBC.checkAccessPoliciesAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+
 			result.setStatusCode(BaseController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICY_FILES_LOADED_OK);
 		} catch (ServerException e) {
-			
+
 			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFile.getRequestor());
 		}
-		
+
+
 		result.getRequestor().setSystemTime(System.currentTimeMillis());
-		
+
 		return result;
 	}
 }

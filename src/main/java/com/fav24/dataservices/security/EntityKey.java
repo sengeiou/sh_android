@@ -2,6 +2,10 @@ package com.fav24.dataservices.security;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 
 
 /**
@@ -12,12 +16,15 @@ import java.util.ArrayList;
 public class EntityKey {
 
 	private AbstractList<EntityAttribute> key;
+	private Map<String, EntityAttribute> entityKeyByAlias;
+
 
 	/**
 	 * Contructor por defecto.
 	 */
 	public EntityKey() {
 		key = new ArrayList<EntityAttribute>();
+		entityKeyByAlias = new HashMap<String, EntityAttribute>();
 	}
 
 	/**
@@ -28,14 +35,21 @@ public class EntityKey {
 	public EntityKey(EntityKey entityKey) {
 
 		if (entityKey.key != null) {
+
 			this.key = new ArrayList<EntityAttribute>();
+			this.entityKeyByAlias = new HashMap<String, EntityAttribute>();
 
 			for (EntityAttribute attribute : entityKey.key) {
-				this.key.add(new EntityAttribute(attribute));	
+				
+				EntityAttribute attributeCopy = new EntityAttribute(attribute);
+				
+				this.key.add(attributeCopy);	
+				this.entityKeyByAlias.put(attributeCopy.getAlias(), attributeCopy);	
 			}
 		}
 		else {
 			this.key = null;
+			this.entityKeyByAlias = null;
 		}
 	}
 
@@ -73,11 +87,7 @@ public class EntityKey {
 
 		if (alias != null) {
 
-			for(EntityAttribute attribute : key) {
-				if (alias.equals(attribute.getAlias())) {
-					return true;
-				}
-			}
+			return entityKeyByAlias.containsKey(alias);
 		}
 
 		return false;
@@ -94,11 +104,7 @@ public class EntityKey {
 
 		if (alias != null) {
 
-			for(EntityAttribute attribute : key) {
-				if (alias.equals(attribute.getAlias())) {
-					return attribute;
-				}
-			}
+			return entityKeyByAlias.get(alias);
 		}
 
 		return null;
@@ -132,5 +138,29 @@ public class EntityKey {
 	 */
 	public AbstractList<EntityAttribute> getKey() {
 		return key;
+	}
+
+	/**
+	 * Retorna la lista de nombre de campos que conforman la clave.
+	 * 
+	 * @return la lista de nombre de campos que conforman la clave.
+	 */
+	public String getKeyNamesString() {
+
+		StringBuilder keyNamesString = new StringBuilder();
+
+		Iterator<EntityAttribute> keyIterator = key.iterator();
+
+		if (keyIterator.hasNext()) {
+
+			keyNamesString.append(keyIterator.next().getName());
+
+			while(keyIterator.hasNext()) {
+				keyNamesString.append(',');
+				keyNamesString.append(keyIterator.next().getName());
+			}
+		}
+
+		return keyNamesString.toString();
 	}
 }

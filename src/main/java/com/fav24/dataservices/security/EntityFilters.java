@@ -13,7 +13,7 @@ public class EntityFilters {
 
 	private AbstractList<EntityFilter> entityFilters;
 
-	
+
 	/**
 	 * Contructor por defecto.
 	 */
@@ -39,7 +39,7 @@ public class EntityFilters {
 			this.entityFilters = null;
 		}
 	}
-	
+
 	/**
 	 * Retorna true o false en función de si la lista de alias corresponde al 100% con alguno de los filtros.
 	 * 
@@ -48,7 +48,7 @@ public class EntityFilters {
 	 * @return true o false en función de si la lista de alias corresponde al 100% con alguno de los filtros.
 	 */
 	public boolean containsFilter(String[] aliases) {
-		
+
 		if (aliases != null) {
 
 			for(EntityFilter filter : entityFilters) {
@@ -60,7 +60,7 @@ public class EntityFilters {
 
 		return false;
 	}
-	
+
 	/**
 	 * Retorna la estructura que contiene el conjunto de filtros.
 	 * 
@@ -68,5 +68,29 @@ public class EntityFilters {
 	 */
 	public AbstractList<EntityFilter> getFilters() {
 		return entityFilters;
+	}
+	
+	/**
+	 * Retorna el primer elemento de un filtro con el alias indicado.
+	 *  
+	 * @param alias El alias a usar.
+	 * 
+	 * @return el primer elemento de un filtro con el alias indicado.
+	 */
+	public EntityAttribute getFirstFilterAttributeByAlias(String alias) {
+
+		if (entityFilters != null && alias != null) {
+
+			for(EntityFilter filter : entityFilters) {
+
+				EntityAttribute keyItem = filter.getAttribute(alias);
+
+				if (keyItem != null) {
+					return keyItem;
+				}
+			}
+		}
+
+		return null;
 	}
 }
