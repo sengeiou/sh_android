@@ -164,7 +164,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 		throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE);
 	}
-	
+
 
 	/**
 	 * Retorna true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.

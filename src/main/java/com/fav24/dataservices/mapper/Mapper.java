@@ -22,7 +22,11 @@ import com.fav24.dataservices.util.PackageUtils;
 public abstract class Mapper<T, S> {
 
 	protected final static Logger logger = LoggerFactory.getLogger(Mapper.class);
+
 	public static final String ERROR_MAPPER_NOT_FOUND = "MAP000";
+	public static final String ERROR_MAPPER_NOT_FOUND_MESSAGE = "No existe ningún mapeador definido para el tipo %s.";
+	public static final String ERROR_MAPPER_UNSUPORTED_VALUE = "MAP001";
+	public static final String ERROR_MAPPER_UNSUPORTED_VALUE_MESSAGE = "El valor <%s> no se considera válido.";
 
 
 	public static final Map<Class<?>, Mapper<?, ?>> AvailableMappers;
@@ -112,7 +116,7 @@ public abstract class Mapper<T, S> {
 				}
 			}
 			
-			throw new ServerException(ERROR_MAPPER_NOT_FOUND, "No existe ningún mapeador definido para el tipo " + origin.getClass() + ".");
+			throw new ServerException(ERROR_MAPPER_NOT_FOUND, String.format(ERROR_MAPPER_NOT_FOUND_MESSAGE, origin.getClass().toString()));
 		}
 
 		return mapper.map(origin);

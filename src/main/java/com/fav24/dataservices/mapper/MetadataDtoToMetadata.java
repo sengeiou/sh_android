@@ -28,7 +28,13 @@ public class MetadataDtoToMetadata extends Mapper<MetadataDto, Metadata> {
 
 		Metadata metadata = new Metadata();
 
-		metadata.setOperation(OperationType.fromString(origin.getOperation()));
+		OperationType opperationType = OperationType.fromString(origin.getOperation());
+		
+		if (opperationType == null) {
+			throw new ServerException(ERROR_MAPPER_UNSUPORTED_VALUE, String.format(ERROR_MAPPER_UNSUPORTED_VALUE_MESSAGE, origin.getOperation()));	
+		}
+		
+		metadata.setOperation(opperationType);
 		metadata.setEntity(origin.getEntity());
 		metadata.setEntitySize(origin.getEntitySize());
 		metadata.setItems(origin.getItems());

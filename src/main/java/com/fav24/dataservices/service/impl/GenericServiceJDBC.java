@@ -36,6 +36,7 @@ import com.fav24.dataservices.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.security.EntityFilter;
 import com.fav24.dataservices.security.EntityKey;
 import com.fav24.dataservices.service.GenericService;
+import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
 /**
@@ -644,6 +645,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * {@inheritDoc}
 	 */
 	public Generic processGeneric(final Generic generic) throws ServerException {
+
+		if (entitiesInformation == null) {
+			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
+		}
 
 		GenericTransactionCallback genericTransactionCallback = new GenericTransactionCallback(generic);
 
