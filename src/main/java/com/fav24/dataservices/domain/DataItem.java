@@ -15,12 +15,17 @@ public class DataItem {
 	 */
 	public enum InternalAttribute {
 		REVISION("revision"),
-		BIRTH_DATE("birth_date"),
-		UPDATE_DATE("update_date"),
-		DELETE_DATE("delete_date");
+		BIRTH("birth"),
+		MODIFIED("modified"),
+		DELETE("delete");
 
 		private final String internalAttribute;
 
+		/**
+		 * Constructor privado del tipo de nexo.
+		 * 
+		 * @param internalAttribute Cadena de texto aue identifica el atributo interno.
+		 */
 		private InternalAttribute(String internalAttribute) {
 			this.internalAttribute = internalAttribute;
 		}
@@ -37,27 +42,46 @@ public class DataItem {
 		/**
 		 * Retorna true o false en función de si el atributo indicado tiene o no representación en esta enumeración.
 		 * 
-		 * @param attribute Atributo a comprobar.
+		 * @param internalAttribute Atributo a comprobar.
 		 * 
 		 * @return true o false en función de si el atributo indicado tiene o no representación en esta enumeración.
 		 */
-		public static boolean contains(String attribute) {
+		public static boolean contains(String internalAttribute) {
 
 			for (InternalAttribute choice : InternalAttribute.values()) {
-				if (choice.name().equals(attribute)) {
+				if (choice.name().equals(internalAttribute)) {
 					return true;
 				}
 			}
 
 			return false;
 		}
+
+		/**
+		 * Retorna el atributo interno a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce el atributo interno.
+		 * 
+		 * @return el tipo de nexo a partir de la cadena de texto indicada.
+		 */
+		public static InternalAttribute fromString(String text) {
+			if (text != null) {
+				for (InternalAttribute internalAttribute : InternalAttribute.values()) {
+					if (text.equalsIgnoreCase(internalAttribute.internalAttribute)) {
+						return internalAttribute;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
-	
+
 	private Map<String, Object> attributes;
 	private Long revision; // Versión del item. 
-	private Long birthDate; // Milisegundos desde epoch correspondientes al momento de la creación del item.
-	private Long updateDate; // Milisegundos desde epoch correspondientes al momento de la modificación del item.
-	private Long deleteDate; // Milisegundos desde epoch correspondientes al momento de la eliminación del item.
+	private Long birth; // Milisegundos desde epoch correspondientes al momento de la creación del item.
+	private Long modified; // Milisegundos desde epoch correspondientes al momento de la modificación del item.
+	private Long delete; // Milisegundos desde epoch correspondientes al momento de la eliminación del item.
 
 
 	/**
@@ -76,6 +100,14 @@ public class DataItem {
 	 */
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
+
+		if (attributes != null) {
+
+			setRevision((Long) attributes.get(InternalAttribute.REVISION.getInternalAttribute()));
+			setBirth((Long) attributes.get(InternalAttribute.BIRTH.getInternalAttribute()));
+			setModified((Long) attributes.get(InternalAttribute.MODIFIED.getInternalAttribute()));
+			setDelete((Long) attributes.get(InternalAttribute.DELETE.getInternalAttribute()));
+		}
 	}
 
 	/**
@@ -94,6 +126,8 @@ public class DataItem {
 	 */
 	public void setRevision(Long revision) {
 		this.revision = revision;
+
+		attributes.put(InternalAttribute.REVISION.getInternalAttribute(), revision);
 	}
 
 	/**
@@ -101,17 +135,19 @@ public class DataItem {
 	 * 
 	 * @return la fecha en milisegundos desde epoch, en la que fué creado el ítem.
 	 */
-	public Long getBirthDate() {
-		return birthDate;
+	public Long getBirth() {
+		return birth;
 	}
 
 	/**
 	 * Asigna la fecha en milisegundos desde epoch, en la que fué creado el ítem.
 	 * 
-	 * @param birthDate La fecha en milisegundos a asignar.
+	 * @param birth La fecha en milisegundos a asignar.
 	 */
-	public void setBirthDate(Long birthDate) {
-		this.birthDate = birthDate;
+	public void setBirth(Long birth) {
+		this.birth = birth;
+
+		attributes.put(InternalAttribute.BIRTH.getInternalAttribute(), birth);
 	}
 
 	/**
@@ -119,17 +155,19 @@ public class DataItem {
 	 * 
 	 * @return la fecha en milisegundos desde epoch, en la que fué modificado el ítem, por última vez.
 	 */
-	public Long getUpdateDate() {
-		return updateDate;
+	public Long getModified() {
+		return modified;
 	}
 
 	/**
 	 * Asigna la fecha en milisegundos desde epoch, en la que fué modificado el ítem, por última vez.
 	 * 
-	 * @param updateDate La fecha en milisegundos a asignar.
+	 * @param modified La fecha en milisegundos a asignar.
 	 */
-	public void setUpdateDate(Long updateDate) {
-		this.updateDate = updateDate;
+	public void setModified(Long modified) {
+		this.modified = modified;
+
+		attributes.put(InternalAttribute.MODIFIED.getInternalAttribute(), modified);
 	}
 
 	/**
@@ -137,19 +175,21 @@ public class DataItem {
 	 * 
 	 * @return la fecha en milisegundos desde epoch, en la que fué eliminado el ítem.
 	 */
-	public Long getDeleteDate() {
-		return deleteDate;
+	public Long getDelete() {
+		return delete;
 	}
 
 	/**
 	 * Asigna la fecha en milisegundos desde epoch, en la que fué eliminado el ítem.
 	 * 
-	 * @param deleteDate La fecha en milisegundos a asignar.
+	 * @param delete La fecha en milisegundos a asignar.
 	 */
-	public void setDeleteDate(Long deleteDate) {
-		this.deleteDate = deleteDate;
+	public void setDelete(Long delete) {
+		this.delete = delete;
+
+		attributes.put(InternalAttribute.DELETE.getInternalAttribute(), delete);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -160,16 +200,16 @@ public class DataItem {
 		result = prime * result
 				+ ((attributes == null) ? 0 : attributes.hashCode());
 		result = prime * result
-				+ ((birthDate == null) ? 0 : birthDate.hashCode());
+				+ ((birth == null) ? 0 : birth.hashCode());
 		result = prime * result
-				+ ((deleteDate == null) ? 0 : deleteDate.hashCode());
+				+ ((delete == null) ? 0 : delete.hashCode());
 		result = prime * result
 				+ ((revision == null) ? 0 : revision.hashCode());
 		result = prime * result
-				+ ((updateDate == null) ? 0 : updateDate.hashCode());
+				+ ((modified == null) ? 0 : modified.hashCode());
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,25 +227,25 @@ public class DataItem {
 				return false;
 		} else if (!attributes.equals(other.attributes))
 			return false;
-		if (birthDate == null) {
-			if (other.birthDate != null)
+		if (birth == null) {
+			if (other.birth != null)
 				return false;
-		} else if (!birthDate.equals(other.birthDate))
+		} else if (!birth.equals(other.birth))
 			return false;
-		if (deleteDate == null) {
-			if (other.deleteDate != null)
+		if (delete == null) {
+			if (other.delete != null)
 				return false;
-		} else if (!deleteDate.equals(other.deleteDate))
+		} else if (!delete.equals(other.delete))
 			return false;
 		if (revision == null) {
 			if (other.revision != null)
 				return false;
 		} else if (!revision.equals(other.revision))
 			return false;
-		if (updateDate == null) {
-			if (other.updateDate != null)
+		if (modified == null) {
+			if (other.modified != null)
 				return false;
-		} else if (!updateDate.equals(other.updateDate))
+		} else if (!modified.equals(other.modified))
 			return false;
 		return true;
 	}
