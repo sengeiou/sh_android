@@ -304,4 +304,24 @@ public class AccessPolicy {
 		
 		return null;
 	}
+
+	/**
+	 * Retorna el nombre de la entidad indicada en la fuente de datos, a partir de los alias. 
+	 * 
+	 * @param entityAlias Alias de la entidad.
+	 * 
+	 * @return el nombre de la entidad indicada en la fuente de datos, a partir de los alias.
+	 */
+	public static final String getEntityName(String entityAlias) {
+		
+		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null) {
+			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
+			
+			if (entityAccessPolicy != null) {
+				return entityAccessPolicy.getName().getName();
+			}
+		}
+		
+		return null;
+	}
 }

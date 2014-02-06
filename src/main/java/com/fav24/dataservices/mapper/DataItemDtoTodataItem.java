@@ -24,7 +24,9 @@ public class DataItemDtoTodataItem extends Mapper<DataItemDto, DataItem> {
 
 		DataItem dataItem = new DataItem();
 
-		dataItem.setAttributes(new TreeMap<String, Object>(origin.getAttributes()));
+		if (origin.getAttributes() != null) {
+			dataItem.setAttributes(new TreeMap<String, Object>(origin.getAttributes()));
+		}
 
 		return dataItem;
 	}

@@ -167,7 +167,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		String column = AccessPolicy.getAttributeName(entity, key.getName());
 
-		resultingKey.append(column).append('=').append(key.getValue());
+		resultingKey.append(column).append('=').append('?');
 
 		if (columns != null) {
 			columns.add(column);
@@ -184,7 +184,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			resultingKey.append(" AND ");
 
 			column = AccessPolicy.getAttributeName(entity, key.getName());
-			resultingKey.append(column).append('=').append(key.getValue());
+			resultingKey.append(column).append('=').append('?');
 
 			if (columns != null) {
 				columns.add(column);
@@ -240,7 +240,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			break;
 		}
 
-		resultingFilter.append(filter.getValue());
+		resultingFilter.append('?');
 
 		if (values != null) {
 			values.add(filter.getValue());
@@ -319,7 +319,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 
 		final StringBuilder query = new StringBuilder();
-		final EntityJDBCInformation entityInformation = entitiesInformation.get(operation.getMetadata().getEntity());
+		final EntityJDBCInformation entityInformation = entitiesInformation.get(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
 		query.append("SELECT ");
 
@@ -332,7 +332,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Especificación de la tabla.
 		 */
-		query.append(" FROM ").append(operation.getMetadata().getEntity());
+		query.append(" FROM ").append(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
 		/*
 		 * Especificación del filtro.
@@ -619,6 +619,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				for (Operation operation : generic.getOperations()) {
 
+					if (!entitiesInformation.containsKey(AccessPolicy.getEntityName(operation.getMetadata().getEntity()))) {
+						throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY, String.format(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE, operation.getMetadata().getEntity()));	
+					}
+					
 					processOperation(generic.getRequestor(), operation);
 				}
 

@@ -15,5 +15,7 @@ public interface AccessPolicyService {
 	public static final String ERROR_INVALID_URL_MESSAGE = "La URL %s no es válida.";
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED = "PS002";
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE = "No se han definido políticas de acceso.";
+	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY = "PS003";
+	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE = "No se han definido políticas de acceso para la entidad <%s>.";
 
 }

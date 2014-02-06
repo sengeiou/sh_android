@@ -1,6 +1,6 @@
 package com.fav24.dataservices.domain;
 
-import java.util.Map;
+import java.util.NavigableMap;
 
 
 /**
@@ -77,7 +77,7 @@ public class DataItem {
 		}
 	}
 
-	private Map<String, Object> attributes;
+	private NavigableMap<String, Object> attributes;
 	private Long revision; // Versión del item. 
 	private Long birth; // Milisegundos desde epoch correspondientes al momento de la creación del item.
 	private Long modified; // Milisegundos desde epoch correspondientes al momento de la modificación del item.
@@ -89,7 +89,8 @@ public class DataItem {
 	 * 
 	 * @return los atributos del item en formato clave-valor.
 	 */
-	public Map<String, Object> getAttributes() {
+	public NavigableMap<String, Object> getAttributes() {
+		
 		return attributes;
 	}
 
@@ -98,7 +99,7 @@ public class DataItem {
 	 * 
 	 * @param attributes Los atributos a asignar.
 	 */
-	public void setAttributes(Map<String, Object> attributes) {
+	public void setAttributes(NavigableMap<String, Object> attributes) {
 		this.attributes = attributes;
 
 		if (attributes != null) {
