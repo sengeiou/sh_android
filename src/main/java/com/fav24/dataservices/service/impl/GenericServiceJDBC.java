@@ -261,7 +261,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	private String getFilterSetString(String entity, Filter filterSet, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		if ((filterSet.getFilterItems() == null || filterSet.getFilterItems().size() == 0) &&
-				(filterSet.getFilterSets() == null || filterSet.getFilterSets().size() == 0)) {
+				(filterSet.getFilters() == null || filterSet.getFilters().size() == 0)) {
 
 			return null;
 		}
@@ -291,15 +291,15 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Resolución de los conjuntos de filtros anidados.
 		 */
-		if (filterSet.getFilterSets() != null && filterSet.getFilterSets().size() > 0) {
+		if (filterSet.getFilters() != null && filterSet.getFilters().size() > 0) {
 			if (filterSet.getFilterItems() != null && filterSet.getFilterItems().size() > 0) {
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 			}
-			Filter currentFilterSet = filterSet.getFilterSets().get(0);
+			Filter currentFilterSet = filterSet.getFilters().get(0);
 			resultingFilterSet.append(getFilterSetString(entity, currentFilterSet, columns, values));
 			for (int i=1; i<filterSet.getFilterItems().size(); i++) {
 
-				currentFilterSet = filterSet.getFilterSets().get(i);
+				currentFilterSet = filterSet.getFilters().get(i);
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 				resultingFilterSet.append(getFilterSetString(entity, currentFilterSet, columns, values));
 

@@ -20,12 +20,41 @@ public class Filter {
 
 		private final String nexusType;
 
+
+		/**
+		 * Constructor privado del tipo de nexo.
+		 * 
+		 * @param nexusType Cadena de texto aue identifica el tipo de nexo.
+		 */
 		NexusType(String nexusType) {
 			this.nexusType = nexusType;
 		}
 
+		/**
+		 * Retorna la cadena de texto que identifica este tipo de nexo.
+		 * 
+		 * @return la cadena de texto que identifica este tipo de nexo.
+		 */
 		public String getNexusType() {
 			return nexusType;
+		}
+
+		/**
+		 * Retorna el tipo de operación a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce el tipo de operación.
+		 * 
+		 * @return el tipo de operación a partir de la cadena de texto indicada.
+		 */
+		public static NexusType fromString(String text) {
+			if (text != null) {
+				for (NexusType nexusType : NexusType.values()) {
+					if (text.equalsIgnoreCase(nexusType.nexusType)) {
+						return nexusType;
+					}
+				}
+			}
+			return null;
 		}
 	}
 
@@ -61,7 +90,7 @@ public class Filter {
 		else {
 			this.filterItems = null;
 		}
-		
+
 		if (filters != null) {
 			this.filter = new ArrayList<Filter>(filters.length);
 			for (Filter filterSet : filters) {
@@ -105,7 +134,7 @@ public class Filter {
 	 * 
 	 * @param filterItems La lista de filtros a asignar.
 	 */
-	public void setFilters(AbstractList<FilterItem> filterItems) {
+	public void setFilterItems(AbstractList<FilterItem> filterItems) {
 		this.filterItems = filterItems;
 	}
 
@@ -114,7 +143,7 @@ public class Filter {
 	 * 
 	 * @return la lista de conjuntos de filtrado, para este conjunto de filtrado.
 	 */
-	public AbstractList<Filter> getFilterSets() {
+	public AbstractList<Filter> getFilters() {
 		return filter;
 	}
 
@@ -123,7 +152,7 @@ public class Filter {
 	 * 
 	 * @param filterSets La lista de conjuntos de filtrado a asignar.
 	 */
-	public void setFilterSets(AbstractList<Filter> filterSets) {
+	public void setFilters(AbstractList<Filter> filterSets) {
 		this.filter = filterSets;
 	}
 

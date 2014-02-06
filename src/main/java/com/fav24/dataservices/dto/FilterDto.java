@@ -92,7 +92,7 @@ public class FilterDto {
 	 * 
 	 * @param filterItems El array de elementos de filtrado a asignar.
 	 */
-	public void setFilters(FilterItemDto[] filterItems) {
+	public void setFilterItems(FilterItemDto[] filterItems) {
 		this.filterItems = filterItems;
 	}
 
