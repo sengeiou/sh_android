@@ -1,6 +1,7 @@
 package com.fav24.dataservices.domain;
 
 
+
 /**
  * Clase que contiene la estructura de un filtro.
  * 
@@ -21,12 +22,40 @@ public class FilterItem {
 
 		private final String comparatorType;
 
+		/**
+		 * Constructor privado del tipo de comparador.
+		 * 
+		 * @param comparatorType Cadena de texto aue identifica el tipo de comparador.
+		 */
 		ComparatorType(String comparatorType) {
 			this.comparatorType = comparatorType;
 		}
 
+		/**
+		 * Retorna la cadena de texto que identifica este tipo de comparador.
+		 * 
+		 * @return la cadena de texto que identifica este tipo de comparador.
+		 */
 		public String getComparatorType() {
 			return comparatorType;
+		}
+		
+		/**
+		 * Retorna el tipo de comparador a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce el tipo de comparador.
+		 * 
+		 * @return el tipo de comparador a partir de la cadena de texto indicada.
+		 */
+		public static ComparatorType fromString(String text) {
+			if (text != null) {
+				for (ComparatorType comparatorType : ComparatorType.values()) {
+					if (text.equalsIgnoreCase(comparatorType.comparatorType)) {
+						return comparatorType;
+					}
+				}
+			}
+			return null;
 		}
 	}
 	

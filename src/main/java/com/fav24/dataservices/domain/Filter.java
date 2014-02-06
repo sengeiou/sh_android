@@ -40,11 +40,11 @@ public class Filter {
 		}
 
 		/**
-		 * Retorna el tipo de operación a partir de la cadena de texto indicada.
+		 * Retorna el tipo de nexo a partir de la cadena de texto indicada.
 		 * 
-		 * @param text Cadena de texto a partir de la que se deduce el tipo de operación.
+		 * @param text Cadena de texto a partir de la que se deduce el tipo de nexo.
 		 * 
-		 * @return el tipo de operación a partir de la cadena de texto indicada.
+		 * @return el tipo de nexo a partir de la cadena de texto indicada.
 		 */
 		public static NexusType fromString(String text) {
 			if (text != null) {
