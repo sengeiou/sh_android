@@ -1,10 +1,15 @@
 package com.fav24.dataservices.service.impl;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.security.EntityAttribute;
 import com.fav24.dataservices.service.GenericService;
 
 
@@ -158,5 +163,53 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 		throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE);
+	}
+	
+
+	/**
+	 * Retorna true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
+	 * 
+	 * Nota: La comparación se realiza:
+	 * 	- Sin tener en cuenta mayúsculas o minúsculas.
+	 *  - Sin tener en cuenta el orden de los elementos.
+	 * 
+	 * @param collections Conjunto de colecciones a comparar. 
+	 * @param attributeCollection Colección a localizar.
+	 * 
+	 * @return true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
+	 */
+	protected boolean hasEquivalentAttributeCollection(Map<String, List<String>> collections, List<EntityAttribute> attributeCollection) {
+
+		for(Entry<String, List<String>> collectionEntry : collections.entrySet()) {
+
+			List<String> collection = collectionEntry.getValue();
+
+			if (attributeCollection.size() == collection.size()) {
+
+				boolean collectionFound = true;
+
+				for(EntityAttribute attributeElement : attributeCollection) {
+
+					boolean elementFound = false;
+					for(String element : collection) {
+						if (element.compareToIgnoreCase(attributeElement.getName()) == 0) {
+							elementFound = true;
+							break;
+						}
+					}
+
+					if (!elementFound) {
+						collectionFound = false;
+						break;
+					}
+				}
+
+				if (collectionFound) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

@@ -99,6 +99,4 @@ public class Generic {
 			return false;
 		return true;
 	}
-
-
 }

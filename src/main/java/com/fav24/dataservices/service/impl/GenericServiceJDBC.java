@@ -24,13 +24,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.domain.Filter;
 import com.fav24.dataservices.domain.FilterItem;
+import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.KeyItem;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
-import com.fav24.dataservices.security.EntityAttribute;
 import com.fav24.dataservices.security.EntityDataAttribute;
 import com.fav24.dataservices.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.security.EntityFilter;
@@ -90,8 +90,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	@Override
 	protected boolean startTransaction() {
-		//		transactionTemplate.setIsolationLevel(isolationLevel);
-		return false;
+		return true;
 	}
 
 	/**
@@ -99,7 +98,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	@Override
 	protected boolean endTransaction(boolean commit) {
-		return false;
+		return true;
 	}
 
 	/**
@@ -168,11 +167,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		String column = AccessPolicy.getAttributeName(entity, key.getName());
 
 		resultingKey.append(column).append('=').append(key.getValue());
-		
+
 		if (columns != null) {
 			columns.add(column);
 		}
-		
+
 		if (values != null) {
 			values.add(key.getValue());
 		}
@@ -189,7 +188,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			if (columns != null) {
 				columns.add(column);
 			}
-			
+
 			if (values != null) {
 				values.add(key.getValue());
 			}
@@ -217,7 +216,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		if (columns != null) {
 			columns.add(column);
 		}
-		
+
 		switch(filter.getComparator()) {
 
 		case EQ:
@@ -245,7 +244,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		if (values != null) {
 			values.add(filter.getValue());
 		}
-		
+
 		return resultingFilter.toString();
 	}
 
@@ -316,7 +315,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation retreave(Requestor requestor, final Operation operation) throws ServerException {
+	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 
 		final StringBuilder query = new StringBuilder();
 		final EntityJDBCInformation entityInformation = entitiesInformation.get(operation.getMetadata().getEntity());
@@ -360,87 +359,30 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
 		}
 
-		/*
-		 * Ejecución de la sentencia.
-		 */
-		// Para el tratamiento del resultado de la sentencia, se hará uso del handler TransactionCallback.
-		return transactionTemplate.execute(new TransactionCallback<Operation>() {
+		Object[] params = null;
+		int[] types = null;
 
-			public Operation doInTransaction(TransactionStatus paramTransactionStatus) {
+		if (keyColumns.size() > 0) {
 
-				Object[] params = null;
-				int[] types = null;
+			params = new Object[keyColumns.size()];
+			types = new int[params.length];
 
-				if (keyColumns.size() > 0) {
-
-					params = new Object[keyColumns.size()];
-					types = new int[params.length];
-
-					for (int i=0; i<keyColumns.size(); i++) {
-						params[i] = keyValues.get(i);
-						types[i] = entityInformation.keyFields.get(keyColumns.get(i));
-					}
-				}
-				else if (filterColumns.size() > 0) {
-					params = new Object[filterColumns.size()];
-					types = new int[params.length];
-
-					for (int i=0; i<filterColumns.size(); i++) {
-						params[i] = filterValues.get(i);
-						types[i] = entityInformation.filterFields.get(filterColumns.get(i));
-					}
-				}
-
-				return jdbcTemplate.query(query.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+			for (int i=0; i<keyColumns.size(); i++) {
+				params[i] = keyValues.get(i);
+				types[i] = entityInformation.keyFields.get(keyColumns.get(i));
 			}
-		});
-	}
+		}
+		else if (filterColumns.size() > 0) {
+			params = new Object[filterColumns.size()];
+			types = new int[params.length];
 
-	/**
-	 * Retorna true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 * 
-	 * Nota: La comparación se realiza:
-	 * 	- Sin tener en cuenta mayúsculas o minúsculas.
-	 *  - Sin tener en cuenta el orden de los elementos.
-	 * 
-	 * @param collections Conjunto de colecciones a comparar. 
-	 * @param attributeCollection Colección a localizar.
-	 * 
-	 * @return true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 */
-	private boolean hasEquivalentAttributeCollection(Map<String, List<String>> collections, List<EntityAttribute> attributeCollection) {
-
-		for(Entry<String, List<String>> collectionEntry : collections.entrySet()) {
-
-			List<String> collection = collectionEntry.getValue();
-
-			if (attributeCollection.size() == collection.size()) {
-
-				boolean collectionFound = true;
-
-				for(EntityAttribute attributeElement : attributeCollection) {
-
-					boolean elementFound = false;
-					for(String element : collection) {
-						if (element.compareToIgnoreCase(attributeElement.getName()) == 0) {
-							elementFound = true;
-							break;
-						}
-					}
-
-					if (!elementFound) {
-						collectionFound = false;
-						break;
-					}
-				}
-
-				if (collectionFound) {
-					return true;
-				}
+			for (int i=0; i<filterColumns.size(); i++) {
+				params[i] = filterValues.get(i);
+				types[i] = entityInformation.filterFields.get(filterColumns.get(i));
 			}
 		}
 
-		return false;
+		return jdbcTemplate.query(query.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
 	}
 
 	/**
@@ -645,5 +587,74 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		} catch (SQLException e) {
 			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos.");
 		}
+	}
+
+	/**
+	 * Clase interna para la gestión de la transacción del conjunto de operaciones.
+	 */
+	private class GenericTransactionCallback implements TransactionCallback<Generic> {
+
+		private Generic generic;
+		private ServerException inTransactionException;
+
+
+		/**
+		 * Constructor con parámetro.
+		 * 
+		 * @param generic Estructura de operaciones a resolver.
+		 */
+		public GenericTransactionCallback(Generic generic)	{
+
+			this.generic = generic;
+			this.inTransactionException = null;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public Generic doInTransaction(TransactionStatus paramTransactionStatus) {
+
+			try {
+
+				for (Operation operation : generic.getOperations()) {
+
+					processOperation(generic.getRequestor(), operation);
+				}
+
+			} catch (ServerException e) {
+
+				inTransactionException = e;
+				paramTransactionStatus.setRollbackOnly();
+			}
+
+			return generic;
+		}
+
+		/**
+		 * Retorna <code>null</code> o la excepción, en caso que se haya producido.
+		 * 
+		 * @return <code>null</code> o la excepción, en caso que se haya producido.
+		 */
+		public ServerException getInTransactionException() {
+			return inTransactionException;
+		}
+	}		
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Generic processGeneric(final Generic generic) throws ServerException {
+
+		GenericTransactionCallback genericTransactionCallback = new GenericTransactionCallback(generic);
+
+		transactionTemplate.execute(genericTransactionCallback);
+
+		generic.getRequestor().setTime(System.currentTimeMillis());
+
+		if (genericTransactionCallback.getInTransactionException() != null) {
+			throw genericTransactionCallback.getInTransactionException();
+		}
+
+		return generic;
 	}
 }
