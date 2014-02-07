@@ -28,7 +28,7 @@
 			<xsd:element name="Name" type="TAttribute"/>
 			<xsd:element name="Data" type="TData"/>
 			<xsd:element name="Keys" type="TKeys"/>
-			<xsd:element name="Filters" type="TFilters"/>
+			<xsd:element name="Filters" type="TFilters" minOccurs="0"/>
 		</xsd:sequence>
 		<xsd:attribute name="AllowedOperations" type="TOperationList" use="optional" default="Retrieve"/>
 		<xsd:attribute name="OnlyByKey" type="xsd:boolean" use="optional" default="true"/>
