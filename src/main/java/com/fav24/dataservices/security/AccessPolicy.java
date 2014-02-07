@@ -1,11 +1,14 @@
 package com.fav24.dataservices.security;
 
+import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
 /**
@@ -324,4 +327,38 @@ public class AccessPolicy {
 		
 		return null;
 	}
+	
+	/**
+	 * Comprueba que la lista de atributos indicada, esta disponible para la entidad.
+	 * 
+	 * @param entityAlias Entidad a la que pertenecen los atributos.
+	 * @param attributesAliases Lista de atributos a comprobar.
+	 * 
+	 * @throws ServerException En caso de que alguno de los atributos no esté accesible.
+	 */
+	public static void checkAttributesAccesibility(String entityAlias, AbstractList<String> attributesAliases) throws ServerException {
+
+		StringBuilder notAllowedAttibutes = null;
+
+		EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
+		
+		for (String attributeAlias : attributesAliases) {
+
+			if (entityAccessPolicy.getData().getAttribute(attributeAlias) == null) {
+
+				if (notAllowedAttibutes == null) {
+					notAllowedAttibutes = new StringBuilder(attributeAlias);
+				}
+				else{
+					notAllowedAttibutes.append(',').append(attributeAlias);
+				}
+			}
+		}
+
+		if (notAllowedAttibutes != null) {
+			throw new ServerException(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED, 
+					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, entityAlias, notAllowedAttibutes));
+		}
+	}
+
 }

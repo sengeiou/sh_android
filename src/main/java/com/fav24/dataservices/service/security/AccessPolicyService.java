@@ -17,5 +17,6 @@ public interface AccessPolicyService {
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE = "No se han definido políticas de acceso.";
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY = "PS003";
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE = "No se han definido políticas de acceso para la entidad <%s>.";
-
+	public static final String ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED = "PS004";
+	public static final String ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE = "La entidad <%s> no tiene definido(s) los atributo(s) <%s> como accesible(s).";
 }

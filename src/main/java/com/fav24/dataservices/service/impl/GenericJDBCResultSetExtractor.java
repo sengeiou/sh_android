@@ -43,9 +43,8 @@ public class GenericJDBCResultSetExtractor implements ResultSetExtractor<Operati
 				if (rs.first()) {
 					do
 					{
-						DataItem dataItem = new DataItem();
 						NavigableMap<String, Object> attributes = new TreeMap<String, Object>();
-						dataItem.setAttributes(attributes);
+						DataItem dataItem = new DataItem(attributes);
 						data.add(dataItem);
 
 						int i=0;

@@ -17,7 +17,7 @@ public class DataItem {
 		REVISION("revision"),
 		BIRTH("birth"),
 		MODIFIED("modified"),
-		DELETE("delete");
+		DELETED("deleted");
 
 		private final String internalAttribute;
 
@@ -81,9 +81,18 @@ public class DataItem {
 	private Long revision; // Versión del item. 
 	private Long birth; // Milisegundos desde epoch correspondientes al momento de la creación del item.
 	private Long modified; // Milisegundos desde epoch correspondientes al momento de la modificación del item.
-	private Long delete; // Milisegundos desde epoch correspondientes al momento de la eliminación del item.
+	private Long deleted; // Milisegundos desde epoch correspondientes al momento de la eliminación del item.
 
 
+	/**
+	 * Constructor con parámetros.
+	 * 
+	 * @param attributes Atributos que contendrá este elemento.
+	 */
+	public DataItem(NavigableMap<String, Object> attributes) {
+		setAttributes(attributes);
+	}
+	
 	/**
 	 * Retorna los atributos del item en formato clave-valor.
 	 * 
@@ -107,7 +116,7 @@ public class DataItem {
 			setRevision((Long) attributes.get(InternalAttribute.REVISION.getInternalAttribute()));
 			setBirth((Long) attributes.get(InternalAttribute.BIRTH.getInternalAttribute()));
 			setModified((Long) attributes.get(InternalAttribute.MODIFIED.getInternalAttribute()));
-			setDelete((Long) attributes.get(InternalAttribute.DELETE.getInternalAttribute()));
+			setDeleted((Long) attributes.get(InternalAttribute.DELETED.getInternalAttribute()));
 		}
 	}
 
@@ -176,19 +185,19 @@ public class DataItem {
 	 * 
 	 * @return la fecha en milisegundos desde epoch, en la que fué eliminado el ítem.
 	 */
-	public Long getDelete() {
-		return delete;
+	public Long getDeleted() {
+		return deleted;
 	}
 
 	/**
 	 * Asigna la fecha en milisegundos desde epoch, en la que fué eliminado el ítem.
 	 * 
-	 * @param delete La fecha en milisegundos a asignar.
+	 * @param deleted La fecha en milisegundos a asignar.
 	 */
-	public void setDelete(Long delete) {
-		this.delete = delete;
+	public void setDeleted(Long deleted) {
+		this.deleted = deleted;
 
-		attributes.put(InternalAttribute.DELETE.getInternalAttribute(), delete);
+		attributes.put(InternalAttribute.DELETED.getInternalAttribute(), deleted);
 	}
 
 	/**
@@ -203,7 +212,7 @@ public class DataItem {
 		result = prime * result
 				+ ((birth == null) ? 0 : birth.hashCode());
 		result = prime * result
-				+ ((delete == null) ? 0 : delete.hashCode());
+				+ ((deleted == null) ? 0 : deleted.hashCode());
 		result = prime * result
 				+ ((revision == null) ? 0 : revision.hashCode());
 		result = prime * result
@@ -233,10 +242,10 @@ public class DataItem {
 				return false;
 		} else if (!birth.equals(other.birth))
 			return false;
-		if (delete == null) {
-			if (other.delete != null)
+		if (deleted == null) {
+			if (other.deleted != null)
 				return false;
-		} else if (!delete.equals(other.delete))
+		} else if (!deleted.equals(other.deleted))
 			return false;
 		if (revision == null) {
 			if (other.revision != null)

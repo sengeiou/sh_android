@@ -1,7 +1,8 @@
 package com.fav24.dataservices.mapper;
 
+import java.util.HashMap;
+
 import com.fav24.dataservices.domain.Operation;
-import com.fav24.dataservices.dto.DataItemDto;
 import com.fav24.dataservices.dto.MetadataDto;
 import com.fav24.dataservices.dto.OperationDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -27,10 +28,14 @@ public class OperationToOperationDto extends Mapper<Operation, OperationDto> {
 		operation.setMetadata((MetadataDto) Mapper.Map(origin.getMetadata()));
 
 		if (origin.getData() != null) {
-			operation.setData(new DataItemDto[origin.getData().size()]);
+			
+			@SuppressWarnings("unchecked")
+			HashMap<String, Object>[] data = new HashMap[origin.getData().size()];
+			operation.setData(data);
 
 			for (int i=0; i<origin.getData().size(); i++) {
-				operation.getData()[i] = (DataItemDto) Mapper.Map(origin.getData().get(i));
+				
+				data[i].putAll(origin.getData().get(i).getAttributes());
 			}
 		}
 

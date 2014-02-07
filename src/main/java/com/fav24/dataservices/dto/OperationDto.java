@@ -1,5 +1,7 @@
 package com.fav24.dataservices.dto;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -20,7 +22,7 @@ setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class OperationDto {
 
 	private MetadataDto metadata;
-	private DataItemDto[] data;
+	private Map<String, Object>[] data;
 	
 	
 	/**
@@ -54,7 +56,7 @@ public class OperationDto {
 	 * 
 	 * @return el conjunto de elementos implicados en la operación.
 	 */
-	public DataItemDto[] getData() {
+	public Map<String, Object>[] getData() {
 		return data;
 	}
 	
@@ -63,7 +65,7 @@ public class OperationDto {
 	 * 
 	 * @param data Conjunto de elementos a asignar.
 	 */
-	public void setData(DataItemDto[] data) {
+	public void setData(Map<String, Object>[] data) {
 		this.data = data;
 	}
 }
