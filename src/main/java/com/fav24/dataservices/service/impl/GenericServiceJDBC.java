@@ -2,7 +2,6 @@ package com.fav24.dataservices.service.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,13 +130,19 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				while (attributeAliases.hasNext()) {
 
-					column = AccessPolicy.getAttributeName(entity, attributeAliases.next());
+					String attributeAlias = attributeAliases.next();
+					column = AccessPolicy.getAttributeName(entity, attributeAlias);
 
-					resultingData.append(',');
-					resultingData.append(column);
+					if (column == null) {
+						AccessPolicy.checkAttributesAccesibility(entity, new ArrayList<String>(attributes.keySet()));
+					}
+					else {
+						resultingData.append(',');
+						resultingData.append(column);
 
-					if (columns != null) {
-						columns.add(column);
+						if (columns != null) {
+							columns.add(column);
+						}
 					}
 				}
 			}
@@ -584,9 +589,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 				}
 			}
-
-		} catch (SQLException e) {
-			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos.");
+		} 
+		catch (ServerException e) {
+			entitiesInformation = null;
+			throw e;
+		}
+		catch (Exception e) {
+			entitiesInformation = null;
+			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debidi a: " + e.getMessage());
 		}
 	}
 
@@ -622,7 +632,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					if (!entitiesInformation.containsKey(AccessPolicy.getEntityName(operation.getMetadata().getEntity()))) {
 						throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY, String.format(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE, operation.getMetadata().getEntity()));	
 					}
-					
+
 					processOperation(generic.getRequestor(), operation);
 				}
 
