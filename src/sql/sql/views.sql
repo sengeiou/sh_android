@@ -15,7 +15,7 @@ CREATE OR REPLACE ALGORITHM = MERGE
     VIEW EventOfMatchView 
     (
 		idEventOfMatch, idMatch, idEvent, dateIn, MinuteOfMatch, Status, idPeriod, 				
-		IdTeamOfEvent, ScoreLocal, ScoreVisitor, ActorTransmitterName, ActorInTransmitterName, ActorReceptorName, Comments, urlGoalFilm, isOwnGoal, isPenaltyGoal, isPenaltyMissedAtStick, sPenaltyMissedOut, isPenaltyMissedStopped,
+		IdTeamOfEvent, ScoreLocal, ScoreVisitor, ActorTransmitterName, ActorInTransmitterName, ActorReceptorName, Comments, urlGoalFilm, isOwnGoal, isPenaltyGoal, isPenaltyMissedAtStick, isPenaltyMissedOut, isPenaltyMissedStopped,
 		csys_revision, csys_birth, csys_modified, csys_deleted
 	)
     AS SELECT em.idEventOfMatch, em.idMatch, em.idEvent, em.dateIn, em.MinuteOfMatch, em.Status, em.idPeriod, em.csys_revision, em.csys_birth, em.csys_modified, em.csys_deleted,

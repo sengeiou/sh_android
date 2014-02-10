@@ -14,16 +14,16 @@
 				<Attribute Alias="matchType" Direction="Output">matchType</Attribute>
 				
 				<!-- MatchExtension -->
-				<Attribute Alias="ScoreTeamLocalPenalties" Direction="Output">matchType</Attribute>
-				<Attribute Alias="ScoreTeamVisitorPenalties" Direction="Output">matchType</Attribute>
-				<Attribute Alias="DateFinal" Direction="Output">matchType</Attribute>
-				<Attribute Alias="matchState" Direction="Output">matchType</Attribute>
-				<Attribute Alias="idMatchOffer" Direction="Output">matchType</Attribute>
+				<Attribute Alias="ScoreTeamLocalPenalties" Direction="Output">ScoreTeamLocalPenalties</Attribute>
+				<Attribute Alias="ScoreTeamVisitorPenalties" Direction="Output">ScoreTeamVisitorPenalties</Attribute>
+				<Attribute Alias="DateFinal" Direction="Output">DateFinal</Attribute>
+				<Attribute Alias="matchState" Direction="Output">matchState</Attribute>
+				<Attribute Alias="idMatchOffer" Direction="Output">idMatchOffer</Attribute>
 				<Attribute Alias="idPreviousMatch" Direction="Output">idPreviousMatch</Attribute>
 				<!-- Para el cálculo de la hora de referencia -->
-				<Attribute Alias="DateStartOvertime" Direction="Output">matchType</Attribute>
-				<Attribute Alias="DateStart2Half" Direction="Output">matchType</Attribute>
-				<Attribute Alias="DateStart" Direction="Output">matchType</Attribute>
+				<Attribute Alias="DateStartOvertime" Direction="Output">DateStartOvertime</Attribute>
+				<Attribute Alias="DateStart2Half" Direction="Output">DateStart2Half</Attribute>
+				<Attribute Alias="DateStart" Direction="Output">DateStart</Attribute>
 				
 				<!-- Información de auditoría -->				
 				<Attribute Alias="revision" Direction="Output">csys_revision</Attribute>
