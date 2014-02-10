@@ -10,7 +10,7 @@ package com.fav24.dataservices.domain;
 public class KeyItem {
 
 	private String name;
-	private String value;
+	private Object value;
 
 	
 	/**
@@ -26,7 +26,7 @@ public class KeyItem {
 	 * @param name Nombre del atributo clave.
 	 * @param value Valor del atributo.
 	 */
-	public KeyItem(String name, String value) {
+	public KeyItem(String name, Object value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -54,7 +54,7 @@ public class KeyItem {
 	 * 
 	 * @return el valor del atributo.
 	 */
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -63,7 +63,7 @@ public class KeyItem {
 	 * 
 	 * @param value El valor a asignar.
 	 */
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 

@@ -33,7 +33,7 @@ public class MetadataToMetadataDto extends Mapper<Metadata, MetadataDto> {
 
 		if (origin.getKey() != null) {
 
-			metadata.setKey(new TreeMap<String, String>());
+			metadata.setKey(new TreeMap<String, Object>());
 
 			for (KeyItem keyItem : origin.getKey()) {
 

@@ -24,7 +24,7 @@ public class MetadataDto {
 	private String entity;
 	private Long entitySize;
 	private Long items;
-	private Map<String, String> key;
+	private Map<String, Object> key;
 	private FilterDto filter;
 
 
@@ -49,7 +49,7 @@ public class MetadataDto {
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public MetadataDto(String operation, String entity, Long entitySize, Long items, Map<String, String> key) {
+	public MetadataDto(String operation, String entity, Long entitySize, Long items, Map<String, Object> key) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
@@ -151,7 +151,7 @@ public class MetadataDto {
 	 * 
 	 * @return la lista de atributos y valores, que conforma la clave del elemento a localizar para la operación.
 	 */
-	public Map<String, String> getKey() {
+	public Map<String, Object> getKey() {
 		return key;
 	}
 
@@ -160,7 +160,7 @@ public class MetadataDto {
 	 * 
 	 * @param key La lista a asignar.
 	 */
-	public void setKey(Map<String, String> key) {
+	public void setKey(Map<String, Object> key) {
 		this.key = key;
 	}
 

@@ -43,7 +43,7 @@ public class MetadataDtoToMetadata extends Mapper<MetadataDto, Metadata> {
 
 			metadata.setKey(new ArrayList<KeyItem>(origin.getKey().size()));
 
-			for (Entry<String, String> keyItem : origin.getKey().entrySet()) {
+			for (Entry<String, Object> keyItem : origin.getKey().entrySet()) {
 
 				metadata.getKey().add(new KeyItem(keyItem.getKey(), keyItem.getValue()));
 			}

@@ -20,7 +20,7 @@ public class FilterItemDto {
 	
 	private String comparator;
 	private String name;
-	private String value;
+	private Object value;
 
 	
 	/**
@@ -39,7 +39,7 @@ public class FilterItemDto {
 	 * @param name Nombre del atributo clave.
 	 * @param value Valor del atributo.
 	 */
-	public FilterItemDto(String comparator, String name, String value) {
+	public FilterItemDto(String comparator, String name, Object value) {
 		this.comparator = comparator;
 		this.name = name;
 		this.value = value;
@@ -86,7 +86,7 @@ public class FilterItemDto {
 	 * 
 	 * @return el valor del atributo.
 	 */
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -95,7 +95,7 @@ public class FilterItemDto {
 	 * 
 	 * @param value El valor a asignar.
 	 */
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 }
