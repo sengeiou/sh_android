@@ -30,6 +30,7 @@ import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.EntityAccessPolicy;
+import com.fav24.dataservices.security.EntityAttribute;
 import com.fav24.dataservices.security.EntityDataAttribute;
 import com.fav24.dataservices.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.security.EntityFilter;
@@ -52,7 +53,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		private String name;
 		private String catalog;
 		private String schema;
-		private Boolean isReadonly;
+		private Boolean isView;
 		private Map<String, Integer> dataFields;
 		private Map<String, List<String>> keys;
 		private Map<String, List<String>> indexes;
@@ -423,7 +424,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						entityJDBCInformation.schema = null;
 					}
 					entityJDBCInformation.name = tables.getString("TABLE_NAME");
-					entityJDBCInformation.isReadonly = !tables.getString("TABLE_TYPE").equals("TABLE"); // si es distinto de "TABLE", los atributos de datos únicamente pueden ser de lectura.
+					entityJDBCInformation.isView = !tables.getString("TABLE_TYPE").equals("TABLE"); // si es distinto de "TABLE", los atributos de datos únicamente pueden ser de lectura.
 
 					entitiesInformation.put(entityJDBCInformation.name, entityJDBCInformation);
 				}
@@ -447,7 +448,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 								if (entityDataAttribute.getName().equalsIgnoreCase(columnName)) {
 									entityJDBCInformation.dataFields.put(columnName, columnType);
 
-									if (entityJDBCInformation.isReadonly && entityDataAttribute.getDirection() != Direction.OUTPUT) {
+									if (entityJDBCInformation.isView && entityDataAttribute.getDirection() != Direction.OUTPUT) {
 										throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa " + columnName +" de la tabla "  + table + " es de solo lectura.");
 									}
 									break;
@@ -494,35 +495,48 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				// Atributos de las claves de la entidad.
 				if (entityAccessPolicy.getKeys() != null && entityAccessPolicy.getKeys().getKeys() != null && entityAccessPolicy.getKeys().getKeys().size() > 0) {
 
-					entityJDBCInformation.keys = new HashMap<String, List<String>>();
 					entityJDBCInformation.keyFields = new TreeMap<String, Integer>();
 
-					//Índices únicos.
-					ResultSet uniqueIndexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, true, false);
-					if (uniqueIndexes.first()) {
-						do {
-							String columnName = uniqueIndexes.getString("COLUMN_NAME");
-							String indexName = uniqueIndexes.getString("INDEX_NAME");
-							if (uniqueIndexes.wasNull()) {
-								indexName = null;
+					if (entityJDBCInformation.isView) {
+
+						for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
+
+							for (EntityAttribute keyAttribute : entityKey.getKey()) {
+								entityJDBCInformation.keyFields.put(keyAttribute.getName(), null);
 							}
-
-							List<String> indexFields = entityJDBCInformation.keys.get(indexName);
-							if (indexFields == null) {
-								indexFields = new ArrayList<String>();
-								entityJDBCInformation.keys.put(indexName, indexFields);
-							}
-
-							indexFields.add(columnName);
-							entityJDBCInformation.keyFields.put(columnName, null);
-
-						} while(uniqueIndexes.next());
+						}
 					}
+					else {
 
-					for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
+						entityJDBCInformation.keys = new HashMap<String, List<String>>();
 
-						if (!hasEquivalentAttributeCollection(entityJDBCInformation.keys, entityKey.getKey())) {
-							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Clave no permitida: La tabla " + table + " no tiene definida la clave única o índice único para los campos " + entityKey.getKeyNamesString() + ".");
+						//Índices únicos.
+						ResultSet uniqueIndexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, true, false);
+						if (uniqueIndexes.first()) {
+							do {
+								String columnName = uniqueIndexes.getString("COLUMN_NAME");
+								String indexName = uniqueIndexes.getString("INDEX_NAME");
+								if (uniqueIndexes.wasNull()) {
+									indexName = null;
+								}
+
+								List<String> indexFields = entityJDBCInformation.keys.get(indexName);
+								if (indexFields == null) {
+									indexFields = new ArrayList<String>();
+									entityJDBCInformation.keys.put(indexName, indexFields);
+								}
+
+								indexFields.add(columnName);
+								entityJDBCInformation.keyFields.put(columnName, null);
+
+							} while(uniqueIndexes.next());
+						}
+
+						for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
+
+							if (!hasEquivalentAttributeCollection(entityJDBCInformation.keys, entityKey.getKey())) {
+								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Clave no permitida: La tabla " + table + " no tiene definida la clave única o índice único para los campos " + entityKey.getKeyNamesString() + ".");
+							}
 						}
 					}
 
@@ -538,40 +552,70 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 						} while(columns.next());
 					}
+
+					// Comprobación de que los campos clave están correctamente definidos en la base de datos.
+					StringBuilder lostKeyFields = null;
+					for (Entry<String, Integer> field : entityJDBCInformation.keyFields.entrySet()) {
+
+						if (field.getValue() == null) {
+							if (lostKeyFields != null) {
+								lostKeyFields.append(", ");	
+								lostKeyFields.append(field.getKey());
+							}
+							else {
+								lostKeyFields = new StringBuilder(field.getKey());
+							}
+						}
+					}
+
+					if (lostKeyFields != null) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave " + lostKeyFields + " para la tabla "  + table + ".");
+					}
 				}
 
 				// Atributos de los filtros de la entidad.
 				if (entityAccessPolicy.getFilters() != null && entityAccessPolicy.getFilters().getFilters() != null && entityAccessPolicy.getFilters().getFilters().size() > 0) {
 
-					entityJDBCInformation.indexes = new HashMap<String, List<String>>();
 					entityJDBCInformation.filterFields = new TreeMap<String, Integer>();
 
-					//Índices.
-					ResultSet indexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, false, false);
-					if (indexes.first()) {
-						do {
-							String columnName = indexes.getString("COLUMN_NAME");
-							String indexName = indexes.getString("INDEX_NAME");
-							if (indexes.wasNull()) {
-								indexName = null;
-							}
+					if (entityJDBCInformation.isView) {
 
-							List<String> indexFields = entityJDBCInformation.indexes.get(indexName);
-							if (indexFields == null) {
-								indexFields = new ArrayList<String>();
-								entityJDBCInformation.indexes.put(indexName, indexFields);
-							}
+						for (EntityAttribute filterAttribute : entityAccessPolicy.getFilters().getAllFiltersAttributes(null)) {
 
-							indexFields.add(columnName);
-							entityJDBCInformation.filterFields.put(columnName, null);
-
-						} while(indexes.next());
+							entityJDBCInformation.filterFields.put(filterAttribute.getName(), null);
+						}
 					}
+					else {
 
-					for (EntityFilter entityFilter : entityAccessPolicy.getFilters().getFilters()) {
+						entityJDBCInformation.indexes = new HashMap<String, List<String>>();
 
-						if (!hasEquivalentAttributeCollection(entityJDBCInformation.indexes, entityFilter.getFilter())) {
-							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Filtro no permitido: La tabla " + table + " no tiene definido un índice para los campos " + entityFilter.getFilterNamesString() + ".");
+						//Índices.
+						ResultSet indexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, false, false);
+						if (indexes.first()) {
+							do {
+								String columnName = indexes.getString("COLUMN_NAME");
+								String indexName = indexes.getString("INDEX_NAME");
+								if (indexes.wasNull()) {
+									indexName = null;
+								}
+
+								List<String> indexFields = entityJDBCInformation.indexes.get(indexName);
+								if (indexFields == null) {
+									indexFields = new ArrayList<String>();
+									entityJDBCInformation.indexes.put(indexName, indexFields);
+								}
+
+								indexFields.add(columnName);
+								entityJDBCInformation.filterFields.put(columnName, null);
+
+							} while(indexes.next());
+						}
+
+						for (EntityFilter entityFilter : entityAccessPolicy.getFilters().getFilters()) {
+
+							if (!hasEquivalentAttributeCollection(entityJDBCInformation.indexes, entityFilter.getFilter())) {
+								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Filtro no permitido: La tabla " + table + " no tiene definido un índice para los campos " + entityFilter.getFilterNamesString() + ".");
+							}
 						}
 					}
 
@@ -586,6 +630,25 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 							}
 
 						} while(columns.next());
+					}
+
+					// Comprobación de que los campos clave están correctamente definidos en la base de datos.
+					StringBuilder lostFilterFields = null;
+					for (Entry<String, Integer> field : entityJDBCInformation.filterFields.entrySet()) {
+
+						if (field.getValue() == null) {
+							if (lostFilterFields != null) {
+								lostFilterFields.append(", ");	
+								lostFilterFields.append(field.getKey());
+							}
+							else {
+								lostFilterFields = new StringBuilder(field.getKey());
+							}
+						}
+					}
+
+					if (lostFilterFields != null) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas de filtrado " + lostFilterFields + " para la tabla "  + table + ".");
 					}
 				}
 			}

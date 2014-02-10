@@ -2,6 +2,8 @@ package com.fav24.dataservices.security;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -69,7 +71,7 @@ public class EntityFilters {
 	public AbstractList<EntityFilter> getFilters() {
 		return entityFilters;
 	}
-	
+
 	/**
 	 * Retorna el primer elemento de un filtro con el alias indicado.
 	 *  
@@ -92,5 +94,29 @@ public class EntityFilters {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Retorna el conjunto de attributos implicados en los filtros.
+	 * 
+	 * @param attributes Set de attributos a poblar. (En caso de der <code>null</code>, se retorna un nuevo conjunto).
+	 * 
+	 * @return el conjunto de attributos implicados en los filtros.
+	 */
+	public Set<EntityAttribute> getAllFiltersAttributes(Set<EntityAttribute> attributes) {
+
+		if (attributes == null) {
+			attributes = new HashSet<EntityAttribute>();
+		}
+
+		for(EntityFilter entityFilter : entityFilters) {
+
+			if (entityFilter.getFilter() != null) {
+
+				attributes.addAll(entityFilter.getFilter());
+			}
+		}
+
+		return attributes;
 	}
 }

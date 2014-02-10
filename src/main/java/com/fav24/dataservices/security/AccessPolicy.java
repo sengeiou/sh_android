@@ -141,12 +141,14 @@ public class AccessPolicy {
 	 */
 	public EntityAccessPolicy getEntityPolicy(String alias) {
 
+		EntityAccessPolicy entityAccessPolicy = null;
+		
 		if (accessPoliciesByAlias != null && alias != null) {
 
-			accessPoliciesByAlias.get(alias);
+			entityAccessPolicy = accessPoliciesByAlias.get(alias);
 		}
 
-		return null;
+		return entityAccessPolicy;
 	}
 
 	/**

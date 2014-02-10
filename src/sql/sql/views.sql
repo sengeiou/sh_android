@@ -1,11 +1,11 @@
 CREATE OR REPLACE ALGORITHM = MERGE
     VIEW MatchView 
     (
-    	idTeamLocal, idTeamVisitor, idFixture, DateMatch, ScoreLocal, ScoreVisitor, matchType, 
+    	idMatch, idTeamLocal, idTeamVisitor, idFixture, DateMatch, ScoreLocal, ScoreVisitor, matchType, 
     	ScoreTeamLocalPenalties, ScoreTeamVisitorPenalties, DateFinal, matchState, idMatchOffer, idPreviousMatch, DateStartOvertime, DateStart2Half, DateStart, 
     	csys_revision, csys_birth, csys_modified, csys_deleted
     )
-    AS SELECT m.idTeamLocal, m.idTeamVisitor, m.idFixture, m.DateMatch, m.ScoreLocal, m.ScoreVisitor, m.matchType, m.csys_revision, m.csys_birth, m.csys_modified, m.csys_deleted,
+    AS SELECT m.idMatch, m.idTeamLocal, m.idTeamVisitor, m.idFixture, m.DateMatch, m.ScoreLocal, m.ScoreVisitor, m.matchType, m.csys_revision, m.csys_birth, m.csys_modified, m.csys_deleted,
     me.ScoreTeamLocalPenalties, me.ScoreTeamVisitorPenalties, me.DateFinal, me.matchState, me.idMatchOffer, me.idPreviousMatch, me.DateStartOvertime, me.DateStart2Half, me.DateStart
     FROM Matches m INNER JOIN MatchExtension me ON m.idMatch = me.idMatch  
     WITH CASCADED CHECK OPTION;

@@ -35,6 +35,7 @@ public class OperationToOperationDto extends Mapper<Operation, OperationDto> {
 
 			for (int i=0; i<origin.getData().size(); i++) {
 				
+				data[i] = new HashMap<String, Object>();
 				data[i].putAll(origin.getData().get(i).getAttributes());
 			}
 		}

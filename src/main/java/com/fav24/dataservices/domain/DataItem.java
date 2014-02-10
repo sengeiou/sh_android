@@ -1,6 +1,7 @@
 package com.fav24.dataservices.domain;
 
 import java.util.NavigableMap;
+import java.util.TreeMap;
 
 
 /**
@@ -84,6 +85,21 @@ public class DataItem {
 	private Long deleted; // Milisegundos desde epoch correspondientes al momento de la eliminación del item.
 
 
+	/**
+	 * Constructor de copia.
+	 * 
+	 * @param reference Instancia de referencia.
+	 */
+	public DataItem(DataItem reference) {
+		
+		this.attributes = new TreeMap<String, Object>();
+		this.attributes.putAll(reference.attributes);
+		this.revision = reference.revision; 
+		this.birth = reference.birth;
+		this.modified = reference.modified;
+		this.deleted = reference.deleted;
+	}
+	
 	/**
 	 * Constructor con parámetros.
 	 * 

@@ -63,19 +63,21 @@ public class EntityAccessPolicyToEntityAccessPolicyDto extends Mapper<EntityAcce
 		entityAccessPolicy.setKeys(keys);
 
 		//Juego de filtros disponibles
-		String[][] filters = new String[origin.getFilters().getFilters().size()][];
-		i=0;
-		j=0;
-		for (EntityFilter filter : origin.getFilters().getFilters()) {
-
-			filters[i] = new String[filter.getFilter().size()];
+		if (origin.getFilters() != null) {
+			String[][] filters = new String[origin.getFilters().getFilters().size()][];
+			i=0;
 			j=0;
-			for (EntityAttribute filterAttribute : filter.getFilter()) {
-				filters[i][j++] = filterAttribute.getAlias();
+			for (EntityFilter filter : origin.getFilters().getFilters()) {
+
+				filters[i] = new String[filter.getFilter().size()];
+				j=0;
+				for (EntityAttribute filterAttribute : filter.getFilter()) {
+					filters[i][j++] = filterAttribute.getAlias();
+				}
+				i++;
 			}
-			i++;
+			entityAccessPolicy.setFilters(filters);
 		}
-		entityAccessPolicy.setFilters(filters);
 
 		//Indica si el acceso es únicamente mediante claves o también filtros.
 		entityAccessPolicy.setOnlyByKey(origin.getOnlyByKey());
