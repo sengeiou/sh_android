@@ -4,6 +4,8 @@
 <%@ page import="com.fav24.dataservices.service.security.*"%>
 
 <%!String bodyContent;%>
+<%!String baseURL; %>
+<%!String contextPath; %>
 <%
 	WebApplicationContext context = WebApplicationContextUtils
 			.getWebApplicationContext(this.getServletContext());
@@ -12,7 +14,8 @@
 			.getBean(RetrieveAccessPolicyService.class);
 
 	StringBuilder output = new StringBuilder();
-
+	baseURL = request.getRequestURL().substring(0, request.getRequestURL().lastIndexOf(request.getContextPath())) + request.getContextPath();
+	
 	try {
 		String entity = request.getParameter("Entity");
 
@@ -21,7 +24,7 @@
 
 			for (String currentEntity : accessPolicyService
 					.getPublicEntities()) {
-				output.append("<a href=").append('"').append(request.getRequestURL()).append("?Entity=").append(currentEntity).append('"').append(">").append(currentEntity).append("</a><br/>");
+				output.append("<a href=").append('"').append(baseURL).append("/policies.jsp?Entity=").append(currentEntity).append('"').append(">").append(currentEntity).append("</a><br/>");
 			}
 			
 			output.append("</p>");
@@ -36,7 +39,7 @@
 			} else if (entity == null) {
 				output.append("No se indic&oacute; ninguna entidad a detallar.");
 				output.append("<p>Para obtener la lista de entidades publicadas hacer click <b>");
-				output.append("<a href=").append('"').append(request.getRequestURL()).append("policies.jsp?Entity=*").append('"').append(">aqu&iacute;.</a>");
+				output.append("<a href=").append('"').append(baseURL).append("/policies.jsp?Entity=*").append('"').append(">aqu&iacute;.</a>");
 				output.append("</b></p>");
 			} else {
 				output.append("La entidad <b>").append(entity)
@@ -61,7 +64,7 @@
 	</body>
 	<footer>
 	  <p><b><u>Servicios para el mantenimiento de las pol&iacute;ticas:</u></b></p>
-	  <p>End-point del servicio de carga: <b>${pageContext.request.requestURL}rest/accesspolicy/load</b></p>
+	  <p>End-point del servicio de carga: <b><%=baseURL%>/rest/accesspolicy/load</b></p>
 	  <p>Ejemplo: </p>
 	  <p>{<br/>
 		<span style='color:red'>&quot;status&quot;</span>: {<br/>
@@ -75,7 +78,7 @@
 	  </span><br/>
 	  ]<br/>
 	  }</p>
-	  <p>End-point del servicio de consulta de pol&iacute;ticas: <b>${pageContext.request.requestURL}rest/accesspolicy/retrieve</b></p>
+	  <p>End-point del servicio de consulta de pol&iacute;ticas: <b><%=baseURL%>/rest/accesspolicy/retrieve</b></p>
 	  <p>Ejemplo: </p>
 	  <p>{<br/>
 		<span style='color:red'>&quot;status&quot;</span>: {<br/>
