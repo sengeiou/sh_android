@@ -100,7 +100,7 @@
 				</Filter>
 			</Filters>
 		</Entity>
-		<Entity AllowedOperations="Retrieve" OnlyByKey="true" OnlySpecifiedFilters="true" MaxPageSize="1000">
+		<Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
 			<Name Alias="MatchBetType">MatchBetType</Name>
 			<Data>
 				<Attribute Alias="idMatchBetType" Direction="Output">idMatchBetType</Attribute>
@@ -156,7 +156,7 @@
 				</Key>
 			</Keys>
 		</Entity>
-		<Entity AllowedOperations="Retrieve" OnlyByKey="true" OnlySpecifiedFilters="true" MaxPageSize="1000">
+		<Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
 			<Name Alias="BetTypeOdd">BetTypeOdd</Name>
 			<Data>
 				<Attribute Alias="idBetTypeOdd" Direction="Output">idBetTypeOdd</Attribute>
