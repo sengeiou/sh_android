@@ -5,10 +5,11 @@ import java.sql.ResultSet;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.sql.DataSource;
@@ -55,8 +56,8 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		private String schema;
 		private Boolean isView;
 		private Map<String, Integer> dataFields;
-		private Map<String, List<String>> keys;
-		private Map<String, List<String>> indexes;
+		private Map<String, Set<String>> keys;
+		private Map<String, Set<String>> indexes;
 		private Map<String, Integer> keyFields;
 		private Map<String, Integer> filterFields;
 	}
@@ -397,6 +398,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 */
 	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 
+		if (accessPolicy == null) {
+			return;
+		}
+
 		entitiesInformation = new HashMap<String, EntityJDBCInformation>();
 
 		DataSource dataSource = jdbcTemplate.getDataSource();
@@ -508,7 +513,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 					else {
 
-						entityJDBCInformation.keys = new HashMap<String, List<String>>();
+						entityJDBCInformation.keys = new HashMap<String, Set<String>>();
 
 						//Índices únicos.
 						ResultSet uniqueIndexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, true, false);
@@ -520,9 +525,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 									indexName = null;
 								}
 
-								List<String> indexFields = entityJDBCInformation.keys.get(indexName);
+								Set<String> indexFields = entityJDBCInformation.keys.get(indexName);
 								if (indexFields == null) {
-									indexFields = new ArrayList<String>();
+									indexFields = new HashSet<String>();
 									entityJDBCInformation.keys.put(indexName, indexFields);
 								}
 
@@ -587,7 +592,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 					else {
 
-						entityJDBCInformation.indexes = new HashMap<String, List<String>>();
+						entityJDBCInformation.indexes = new HashMap<String, Set<String>>();
 
 						//Índices.
 						ResultSet indexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, false, false);
@@ -599,9 +604,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 									indexName = null;
 								}
 
-								List<String> indexFields = entityJDBCInformation.indexes.get(indexName);
+								Set<String> indexFields = entityJDBCInformation.indexes.get(indexName);
 								if (indexFields == null) {
-									indexFields = new ArrayList<String>();
+									indexFields = new HashSet<String>();
 									entityJDBCInformation.indexes.put(indexName, indexFields);
 								}
 
@@ -609,6 +614,28 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 								entityJDBCInformation.filterFields.put(columnName, null);
 
 							} while(indexes.next());
+						}
+						
+						//Foreing keys
+						ResultSet importedKeys = connection.getMetaData().getImportedKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
+						if (importedKeys.first()) {
+							do {
+								String columnName = importedKeys.getString("FKCOLUMN_NAME");
+								String foreingKeyName = importedKeys.getString("FK_NAME");
+								if (importedKeys.wasNull()) {
+									foreingKeyName = null;
+								}
+								
+								Set<String> indexFields = entityJDBCInformation.indexes.get(foreingKeyName);
+								if (indexFields == null) {
+									indexFields = new HashSet<String>();
+									entityJDBCInformation.indexes.put(foreingKeyName, indexFields);
+								}
+								
+								indexFields.add(columnName);
+								entityJDBCInformation.filterFields.put(columnName, null);
+								
+							} while(importedKeys.next());
 						}
 
 						for (EntityFilter entityFilter : entityAccessPolicy.getFilters().getFilters()) {
@@ -659,7 +686,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 		catch (Exception e) {
 			entitiesInformation = null;
-			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debidi a: " + e.getMessage());
+			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
 		}
 	}
 

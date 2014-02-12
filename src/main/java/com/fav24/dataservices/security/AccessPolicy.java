@@ -1,5 +1,8 @@
 package com.fav24.dataservices.security;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,7 +11,9 @@ import java.util.Set;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.xml.AccessPolicyDOM;
 
 
 /**
@@ -17,6 +22,8 @@ import com.fav24.dataservices.service.security.AccessPolicyService;
  * @author Fav24
  */
 public class AccessPolicy {
+
+	public static final String APPLICATION_POLICY_FILES_SUFIX = ".policy.xml";
 
 	private static AccessPolicy currentAccesPolicy;
 
@@ -142,7 +149,7 @@ public class AccessPolicy {
 	public EntityAccessPolicy getEntityPolicy(String alias) {
 
 		EntityAccessPolicy entityAccessPolicy = null;
-		
+
 		if (accessPoliciesByAlias != null && alias != null) {
 
 			entityAccessPolicy = accessPoliciesByAlias.get(alias);
@@ -272,6 +279,74 @@ public class AccessPolicy {
 	}
 
 	/**
+	 * Elimina todas las políticas de acceso disponibles hasta el momento.
+	 */
+	public static final void resetAccessPolicies() {
+
+		synchronized(AccessPolicy.class) {
+
+			currentAccesPolicy = null;
+		}
+	}
+
+	/**
+	 * Carga las políticas de acceso contenidas en el directorio base de la aplicación
+	 * definido en el parámetro: "dataservices.home".
+	 * 
+	 * @throws ServerException 
+	 */
+	public static final void loadDefaultAccessPolicies() throws ServerException {
+
+		String applicationHome = ContextRefreshedListener.getApplicationHome();
+
+		// Se cargan los archivos de políticas de seguridad existentes.
+		File applicationHomeDir = new File(applicationHome);
+
+		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
+
+			FilenameFilter fileNameFilter = new FilenameFilter() {
+
+				@Override
+				public boolean accept(File dir, String name) {
+
+					if (name.endsWith(APPLICATION_POLICY_FILES_SUFIX)) {
+						return true;
+					}
+
+					return false;
+				}
+			};
+
+			File[] policyFiles = applicationHomeDir.listFiles(fileNameFilter);
+
+			if (policyFiles == null || policyFiles.length == 0) {
+				
+				throw new ServerException(AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD, 
+						AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD_MESSAGE);
+			}
+			else {
+				
+				for(File policyFile : policyFiles) {
+					
+					try {
+
+						mergeCurrentAccesPolicy(new AccessPolicyDOM(policyFile.toURI().toURL()));
+					} 
+					catch (MalformedURLException e) {
+						throw new ServerException(AccessPolicyService.ERROR_INVALID_POLICY_FILE_URL, 
+								String.format(AccessPolicyService.ERROR_INVALID_POLICY_FILE_URL_MESSAGE, policyFile.toURI().toString()));
+					}
+				}
+			}
+		}
+		else {
+
+			throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+		}
+	}
+
+	/**
 	 * Retorna el nombre del atributo indicado de la entidad indicada en la fuente de datos, a partir de los alias. 
 	 * 
 	 * @param entityAlias Alias de la entidad.
@@ -286,19 +361,19 @@ public class AccessPolicy {
 
 			if (entityAccessPolicy != null && entityAccessPolicy.getData() != null) {
 				EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
-				
+
 				if (dataAttribute != null) {
 					return dataAttribute.getName();
 				}
 				else {
 					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByAlias(attributeAlias);
-					
+
 					if (keyAttribute != null) {
 						return keyAttribute.getName();
 					}
 					else {
 						EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByAlias(attributeAlias);
-						
+
 						if (filterAttribute != null) {
 							return filterAttribute.getName();
 						}
@@ -306,7 +381,7 @@ public class AccessPolicy {
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -318,18 +393,18 @@ public class AccessPolicy {
 	 * @return el nombre de la entidad indicada en la fuente de datos, a partir de los alias.
 	 */
 	public static final String getEntityName(String entityAlias) {
-		
+
 		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null) {
 			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
-			
+
 			if (entityAccessPolicy != null) {
 				return entityAccessPolicy.getName().getName();
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Comprueba que la lista de atributos indicada, esta disponible para la entidad.
 	 * 
@@ -343,7 +418,7 @@ public class AccessPolicy {
 		StringBuilder notAllowedAttibutes = null;
 
 		EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
-		
+
 		for (String attributeAlias : attributesAliases) {
 
 			if (entityAccessPolicy.getData().getAttribute(attributeAlias) == null) {
@@ -362,5 +437,4 @@ public class AccessPolicy {
 					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, entityAlias, notAllowedAttibutes));
 		}
 	}
-
 }

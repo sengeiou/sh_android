@@ -178,6 +178,7 @@
 					<port>8081</port>
 					<warFile>target/data-services.war</warFile>
 					<path>/data-services</path>
+					<contextFile>tomcat-context.xml</contextFile>
 				</configuration>
 			</plugin>
 		</plugins>

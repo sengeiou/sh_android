@@ -1,8 +1,10 @@
 package com.fav24.dataservices.service.impl;
 
-import java.util.List;
+import java.util.AbstractList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.Operation;
@@ -178,11 +180,11 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * 
 	 * @return true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
 	 */
-	protected boolean hasEquivalentAttributeCollection(Map<String, List<String>> collections, List<EntityAttribute> attributeCollection) {
+	protected boolean hasEquivalentAttributeCollection(Map<String, Set<String>> collections, AbstractList<EntityAttribute> attributeCollection) {
 
-		for(Entry<String, List<String>> collectionEntry : collections.entrySet()) {
+		for(Entry<String, Set<String>> collectionEntry : collections.entrySet()) {
 
-			List<String> collection = collectionEntry.getValue();
+			Collection<String> collection = collectionEntry.getValue();
 
 			if (attributeCollection.size() == collection.size()) {
 

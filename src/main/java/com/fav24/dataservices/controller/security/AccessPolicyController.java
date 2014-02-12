@@ -77,19 +77,19 @@ public class AccessPolicyController extends BaseController {
 	/**
 	 * Procesa una petición de carga de políficas de acceso.
 	 * 
-	 * @param accessPolicyFile URL del fichero de definición de políticas a cargar.
+	 * @param accessPolicyFiles URLs de los ficheros de definición de políticas a cargar.
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/load", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
-	AccessPolicyFilesDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFilesDto accessPolicyFile) {
+	AccessPolicyFilesDto getCurrentAccessPolicy(@RequestBody final AccessPolicyFilesDto accessPolicyFiles) {
 
 		AccessPolicyFilesDto result = null;
 
 		try {
 
-			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFile)));
+			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFiles)));
 
 			genericServiceJDBC.checkAccessPoliciesAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
 
@@ -98,7 +98,7 @@ public class AccessPolicyController extends BaseController {
 		} catch (ServerException e) {
 
 			result = new AccessPolicyFilesDto(e);
-			result.setRequestor(accessPolicyFile.getRequestor());
+			result.setRequestor(accessPolicyFiles.getRequestor());
 		}
 
 

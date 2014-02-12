@@ -27,17 +27,16 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	 */
 	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFiles) throws ServerException {
 
-		if (accessPolicyFiles.getURLs() == null) {
+		if (accessPolicyFiles.getURLs() == null || accessPolicyFiles.getURLs().length == 0) {
 
-			ServerException exception = new ServerException(ERROR_LOADING_POLICY_FILES, ERROR_LOADING_POLICY_FILES_MESSAGE);
-
-			logger.error(exception.getMessage());
-
-			throw exception;
+			AccessPolicy.loadDefaultAccessPolicies();
 		}
+		else {
 
-		for(URL url : accessPolicyFiles.getURLs()) {
-			AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(url));
+			for(URL url : accessPolicyFiles.getURLs()) {
+
+				AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(url));
+			}
 		}
 
 		return accessPolicyFiles;
