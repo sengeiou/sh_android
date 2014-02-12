@@ -20,7 +20,7 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 		
 		setAllowedOperations(element.getAttribute("AllowedOperations"));
 		setOnlyByKey(Boolean.parseBoolean(element.getAttribute("OnlyByKey")));
-		setOnlyByKey(Boolean.parseBoolean(element.getAttribute("OnlySpecifiedFilters")));
+		setOnlySpecifiedFilters(Boolean.parseBoolean(element.getAttribute("OnlySpecifiedFilters")));
 		setMaxPageSize(Long.parseLong(element.getAttribute("MaxPageSize")));
 		
 		NodeList nodes_i = node.getChildNodes();
