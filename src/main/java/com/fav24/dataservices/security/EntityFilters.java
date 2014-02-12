@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fav24.dataservices.domain.Filter;
+
 
 /**
  * Clase que define la sección Filters de la definición de las políticas de acceso de una entidad.
@@ -40,6 +42,38 @@ public class EntityFilters {
 		else {
 			this.entityFilters = null;
 		}
+	}
+
+	/**
+	 * Retorna true o false en función de si el filtro indicado corresponde al 100% con alguno de los filtros.
+	 * 
+	 * @param filter Filtero a comprobar.
+	 * 
+	 * @return true o false en función de si el filtro indicado corresponde al 100% con alguno de los filtros.
+	 */
+	public boolean containsFilter(Filter filter) {
+
+		return containsFilter(filter.getFilterAliases());
+	}
+
+	/**
+	 * Retorna true o false en función de si la lista de alias corresponde al 100% con alguno de los filtros.
+	 * 
+	 * @param filter Aliases a comprobar.
+	 * 
+	 * @return true o false en función de si la lista de alias corresponde al 100% con alguno de los filtros.
+	 */
+	public boolean containsFilter(AbstractList<String> filter) {
+
+		if (filter != null) {
+
+			String[] aliases = new String[filter.size()];
+			filter.toArray(aliases);
+
+			return containsFilter(aliases);
+		}
+
+		return false;
 	}
 
 	/**

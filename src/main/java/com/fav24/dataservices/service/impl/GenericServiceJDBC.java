@@ -370,7 +370,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		Object[] params = null;
 		int[] types = null;
 
-		if (keyColumns.size() > 0) {
+		if (keyColumns != null && keyColumns.size() > 0) {
 
 			params = new Object[keyColumns.size()];
 			types = new int[params.length];
@@ -380,7 +380,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				types[i] = entityInformation.keyFields.get(keyColumns.get(i));
 			}
 		}
-		else if (filterColumns.size() > 0) {
+		else if (filterColumns != null && filterColumns.size() > 0) {
 			params = new Object[filterColumns.size()];
 			types = new int[params.length];
 

@@ -3,6 +3,8 @@ package com.fav24.dataservices.security;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
+import com.fav24.dataservices.domain.KeyItem;
+
 
 /**
  * Clase que define la sección Keys de la definición de las políticas de acceso de una entidad.
@@ -40,6 +42,29 @@ public class EntityKeys {
 		else {
 			this.entityKeys = null;
 		}
+	}
+
+	/**
+	 * Retorna true o false en función de si los elementos que conforman la clave corresponden al 100% con alguna de las claves.
+	 * 
+	 * @param keyItems Elementos que conforman la clave a comprobar.
+	 * 
+	 * @return true o false en función de si los elementos que conforman la clave corresponden al 100% con alguna de las claves.
+	 */
+	public boolean containsKey(AbstractList<KeyItem> keyItems) {
+
+		if (keyItems != null) {
+
+			String[] aliases = new String[keyItems.size()];
+			int i=0;
+			for (KeyItem keyItem : keyItems) {
+				aliases[i++] = keyItem.getName();
+			}
+
+			return containsKey(aliases);
+		}
+
+		return false;
 	}
 
 	/**

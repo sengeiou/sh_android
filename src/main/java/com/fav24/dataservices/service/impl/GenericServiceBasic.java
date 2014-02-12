@@ -11,6 +11,7 @@ import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.security.EntityAccessPolicy;
 import com.fav24.dataservices.security.EntityAttribute;
 import com.fav24.dataservices.service.GenericService;
 
@@ -82,6 +83,31 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return estructura operation de entrada, enriquecida con los resultados de la salida.
 	 */
 	protected Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
+
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(operation.getMetadata().getEntity());
+
+		if (operation.getMetadata().hasKey()) {
+			
+			if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
+				throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
+			}
+		}
+		else {
+			
+			if (entityAccessPolicy.getOnlyByKey()) {
+				throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
+			}
+			
+			if (operation.getMetadata().hasFilter()) {
+				
+				if (!entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
+					throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+				}
+			}
+			else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
+				throw new ServerException(ERROR_INVALID_REQUEST_NO_FILTER, String.format(ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+			}
+		}
 
 		switch(operation.getMetadata().getOperation()) {
 

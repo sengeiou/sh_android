@@ -158,6 +158,59 @@ public class Filter {
 	}
 
 	/**
+	 * Retorna true o false en función de si se trata o no de una estructura de filtro válida.
+	 * 
+	 * @return true o false en función de si se trata o no de una estructura de filtro válida.
+	 */
+	public boolean isValidFilter() {
+
+		if (filter != null && filter.size() > 0) {
+
+			for (Filter currentFilter : filter) {
+				if (currentFilter != null && currentFilter.isValidFilter()) {
+					return true;
+				}
+			}
+		}
+
+		if (filterItems != null && filterItems.size() > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Retorna una lista con todos los alias de todos los atributos implicados en el filtro.
+	 * 
+	 * @return una lista con todos los alias de todos los atributos implicados en el filtro.
+	 */
+	public AbstractList<String> getFilterAliases() {
+
+		AbstractList<String> aliases = new ArrayList<String>();
+
+		if (filter != null && filter.size() > 0) {
+
+			for (Filter currentFilter : filter) {
+
+				if (currentFilter != null) {
+					aliases.addAll(currentFilter.getFilterAliases());
+				}
+			}
+		}
+
+		if (filterItems != null) {
+
+			for (FilterItem filterItem : filterItems) {
+
+				aliases.add(filterItem.getName());
+			}
+		}
+
+		return aliases;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

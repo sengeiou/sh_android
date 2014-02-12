@@ -1,8 +1,12 @@
 package com.fav24.dataservices.security;
 
+import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.fav24.dataservices.domain.Filter;
+import com.fav24.dataservices.domain.KeyItem;
 
 
 /**
@@ -176,6 +180,23 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	}
 
 	/**
+	 * Retorna true o false en función de si los elementos que conforman la clave corresponden al 100% con alguna de las claves.
+	 * 
+	 * @param keyItems Elementos que conforman la clave a comprobar.
+	 * 
+	 * @return true o false en función de si los elementos que conforman la clave corresponden al 100% con alguna de las claves.
+	 */
+	public boolean containsKey(AbstractList<KeyItem> keyItems) {
+
+		if (keys != null) {
+
+			return keys.containsKey(keyItems);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Retorna los posibles filtros definidos para esta entidad.
 	 * 
 	 * @return las posibles claves únicas definidas para esta entidad.
@@ -191,6 +212,23 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setFilters(EntityFilters filters) {
 		this.filters = filters;
+	}
+
+	/**
+	 * Retorna true o false en función de si el filtro indicado corresponde al 100% con alguno de los filtros.
+	 * 
+	 * @param filter Filtero a comprobar.
+	 * 
+	 * @return true o false en función de si el filtro indicado corresponde al 100% con alguno de los filtros.
+	 */
+	public boolean containsFilter(Filter filter) {
+
+		if (filters != null) {
+
+			return filters.containsFilter(filter);
+		}
+
+		return false;
 	}
 
 	/**

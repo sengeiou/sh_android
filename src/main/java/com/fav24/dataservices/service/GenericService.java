@@ -27,6 +27,14 @@ public interface GenericService {
 	public static final String ERROR_END_TRANSACTION_MESSAGE = "Error al finalizar la transacción.";
 	public static final String ERROR_UNCOMPLETE_REQUEST = "G004";
 	public static final String ERROR_UNCOMPLETE_REQUEST_MESSAGE = "Es necesario indicar KEY o FILTER para la resolución de esta petición.";
+	public static final String ERROR_INVALID_REQUEST_NO_KEY = "G005";
+	public static final String ERROR_INVALID_REQUEST_NO_KEY_MESSAGE = "La entidad <%s> únicamente es accesible mediante clave.";
+	public static final String ERROR_INVALID_REQUEST_KEY = "G006";
+	public static final String ERROR_INVALID_REQUEST_KEY_MESSAGE = "La entidad <%s> no es accesible mediante la clave indicada.";
+	public static final String ERROR_INVALID_REQUEST_NO_FILTER = "G007";
+	public static final String ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE = "La entidad <%s> debe ser accedida mediante uno de los filtros definidos.";
+	public static final String ERROR_INVALID_REQUEST_FILTER = "G008";
+	public static final String ERROR_INVALID_REQUEST_FILTER_MESSAGE = "La entidad <%s> no es accesible mediante el filtro indicado.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

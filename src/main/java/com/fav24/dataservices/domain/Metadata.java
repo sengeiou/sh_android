@@ -175,6 +175,25 @@ public class Metadata {
 	}
 
 	/**
+	 * Retorna true o false en función de si tiene o no una clave definida.
+	 * 
+	 * @return true o false en función de si tiene o no una clave definida.
+	 */
+	public boolean hasKey() {
+		return key != null && key.size() > 0;
+	}
+
+	/**
+	 * Retorna true o false en función de si tiene o no un filtro definido.
+	 * 
+	 * @return true o false en función de si tiene o no un filtro definido.
+	 */
+	public boolean hasFilter() {
+
+		return filter != null && filter.isValidFilter();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
