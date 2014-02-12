@@ -320,14 +320,14 @@ public class AccessPolicy {
 			File[] policyFiles = applicationHomeDir.listFiles(fileNameFilter);
 
 			if (policyFiles == null || policyFiles.length == 0) {
-				
+
 				throw new ServerException(AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD, 
 						AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD_MESSAGE);
 			}
 			else {
-				
+
 				for(File policyFile : policyFiles) {
-					
+
 					try {
 
 						mergeCurrentAccesPolicy(new AccessPolicyDOM(policyFile.toURI().toURL()));
@@ -359,24 +359,29 @@ public class AccessPolicy {
 		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null && attributeAlias != null) {
 			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
 
-			if (entityAccessPolicy != null && entityAccessPolicy.getData() != null) {
-				EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+			if (entityAccessPolicy != null) {
 
-				if (dataAttribute != null) {
-					return dataAttribute.getName();
+				if (entityAccessPolicy.getData() != null) {
+					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+
+					if (dataAttribute != null) {
+						return dataAttribute.getName();
+					}
 				}
-				else {
+
+				if (entityAccessPolicy.getKeys() != null) {
 					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByAlias(attributeAlias);
 
 					if (keyAttribute != null) {
 						return keyAttribute.getName();
 					}
-					else {
-						EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByAlias(attributeAlias);
+				}
 
-						if (filterAttribute != null) {
-							return filterAttribute.getName();
-						}
+				if (entityAccessPolicy.getFilters() != null) {
+					EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByAlias(attributeAlias);
+
+					if (filterAttribute != null) {
+						return filterAttribute.getName();
 					}
 				}
 			}

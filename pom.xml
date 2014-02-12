@@ -40,6 +40,36 @@
 		<tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+				<qualifier>DEV</qualifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>tst</id>
+			<properties>
+				<env>tst</env>
+				<qualifier>TST</qualifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>tst-backend</id>
+			<properties>
+				<env>tst-backend</env>
+				<qualifier>TST-BACKEND</qualifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<properties>
+				<env>pro</env>
+				<qualifier>PRO</qualifier>
+			</properties>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<!-- Dependencias de utilidades -->

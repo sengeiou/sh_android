@@ -349,9 +349,9 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 			policyDetails.append("</b>");	
 		}
 
-		Iterator<EntityKey> keysIterator = keys.getKeys().iterator();
+		if (keys != null && keys.getKeys().size() > 0) {
 
-		if (keysIterator.hasNext()) {
+			Iterator<EntityKey> keysIterator = keys.getKeys().iterator();
 
 			while (keysIterator.hasNext()) {
 				Iterator<EntityAttribute> keyIterator = keysIterator.next().getKey().iterator();
@@ -406,9 +406,9 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 			policyDetails.append("</b>");	
 		}
 
-		Iterator<EntityFilter> filtersIterator = filters.getFilters().iterator();
+		if (filters != null && filters.getFilters().size() > 0) {
 
-		if (filtersIterator.hasNext()) {
+			Iterator<EntityFilter> filtersIterator = filters.getFilters().iterator();
 
 			while (filtersIterator.hasNext()) {
 				Iterator<EntityAttribute> filterIterator = filtersIterator.next().getFilter().iterator();
@@ -526,7 +526,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 				return -1;
 			}
 		}
-		
+
 		return name.compareTo(o.name);
 	}
 }

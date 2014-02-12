@@ -21,7 +21,7 @@
 
 			for (String currentEntity : accessPolicyService
 					.getPublicEntities()) {
-				output.append(currentEntity).append("<br/>");
+				output.append("<a href=").append('"').append(request.getRequestURL()).append("?Entity=").append(currentEntity).append('"').append(">").append(currentEntity).append("</a><br/>");
 			}
 			
 			output.append("</p>");
@@ -33,6 +33,11 @@
 			if (entityAccessPolicy != null) {
 				output.append("Detalle de las pol&iacute;ticas de acceso<br/>");
 				output.append(entityAccessPolicy.getDetails(true));
+			} else if (entity == null) {
+				output.append("No se indic&oacute; ninguna entidad a detallar.");
+				output.append("<p>Para obtener la lista de entidades publicadas hacer click <b>");
+				output.append("<a href=").append('"').append(request.getRequestURL()).append("policies.jsp?Entity=*").append('"').append(">aqu&iacute;.</a>");
+				output.append("</b></p>");
 			} else {
 				output.append("La entidad <b>").append(entity)
 						.append("</b> no existe, o no es accesible.");
@@ -56,7 +61,7 @@
 	</body>
 	<footer>
 	  <p><b><u>Servicios para el mantenimiento de las pol&iacute;ticas:</u></b></p>
-	  <p>End-point del servicio de carga: <b>http://host:port/data-services/rest/accesspolicy/load</b></p>
+	  <p>End-point del servicio de carga: <b>${pageContext.request.requestURL}rest/accesspolicy/load</b></p>
 	  <p>Ejemplo: </p>
 	  <p>{<br/>
 		<span style='color:red'>&quot;status&quot;</span>: {<br/>
@@ -70,7 +75,7 @@
 	  </span><br/>
 	  ]<br/>
 	  }</p>
-	  <p>End-point del servicio de consulta de pol&iacute;ticas: <b>http://host:port/data-services/rest/accesspolicy/retrieve</b></p>
+	  <p>End-point del servicio de consulta de pol&iacute;ticas: <b>${pageContext.request.requestURL}rest/accesspolicy/retrieve</b></p>
 	  <p>Ejemplo: </p>
 	  <p>{<br/>
 		<span style='color:red'>&quot;status&quot;</span>: {<br/>
