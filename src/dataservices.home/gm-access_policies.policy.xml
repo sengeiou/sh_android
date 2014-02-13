@@ -163,7 +163,7 @@
 				<Attribute Alias="idMatchBetType" Direction="Output">idMatchBetType</Attribute>
 				<Attribute Alias="name" Direction="Output">name</Attribute>
 				<Attribute Alias="comment" Direction="Output">description</Attribute>
-				<Attribute Alias="oddValue" Direction="Output">oddValue</Attribute>
+				<Attribute Alias="value" Direction="Output">oddValue</Attribute>
 				<Attribute Alias="url" Direction="Output">url</Attribute>
 				<!-- Información de auditoría -->				
 				<Attribute Alias="revision" Direction="Output">csys_revision</Attribute>
