@@ -112,7 +112,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
 	 */
-	private String getDataString(String entity, Map<String, Object> attributes, AbstractList<String> columns) throws ServerException {
+	private StringBuilder getDataString(String entity, Map<String, Object> attributes, AbstractList<String> columns) throws ServerException {
 
 		StringBuilder resultingData = new StringBuilder();
 
@@ -153,7 +153,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			resultingData.append("count(*)");
 		}
 
-		return resultingData.toString();
+		return resultingData;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
 	 */
-	private String getKeyString(String entity, AbstractList<KeyItem> keys, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
+	private StringBuilder getKeyString(String entity, AbstractList<KeyItem> keys, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		StringBuilder resultingKey = new StringBuilder();
 
@@ -202,7 +202,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 		}
 
-		return resultingKey.toString();
+		return resultingKey;
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	private String getFilterString(String entity, FilterItem filter, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
+	private StringBuilder getFilterString(String entity, FilterItem filter, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		StringBuilder resultingFilter = new StringBuilder();
 
@@ -253,7 +253,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			values.add(filter.getValue());
 		}
 
-		return resultingFilter.toString();
+		return resultingFilter;
 	}
 
 	/**
@@ -266,7 +266,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	private String getFilterSetString(String entity, Filter filterSet, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
+	private StringBuilder getFilterSetString(String entity, Filter filterSet, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		if ((filterSet.getFilterItems() == null || filterSet.getFilterItems().size() == 0) &&
 				(filterSet.getFilters() == null || filterSet.getFilters().size() == 0)) {
@@ -316,7 +316,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		resultingFilterSet.append(')');
 
-		return resultingFilterSet.toString();
+		return resultingFilterSet;
 	}
 
 	/**
