@@ -157,7 +157,7 @@
 			</Keys>
 		</Entity>
 		<Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
-			<Name Alias="BetTypeOdd">BetTypeOdd</Name>
+			<Name Alias="BetTypeOdd">BetTypeOddView</Name>
 			<Data>
 				<Attribute Alias="idBetTypeOdd" Direction="Output">idBetTypeOdd</Attribute>
 				<Attribute Alias="idMatchBetType" Direction="Output">idMatchBetType</Attribute>
