@@ -16,11 +16,10 @@
 	
 	<!-- Activación de las anotaciones: @component, @service, @repository. -->
 	<context:annotation-config />
-	<context:component-scan base-package="com.fav24.dataservices" />
+	<context:component-scan base-package="com.fav24.dataservices">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
 	
-	<!-- Activación de la anotación: @controller -->
-	<mvc:annotation-driven />
-
 	<!-- Carga los ficheros de propiedades -->
 	<import resource="classpath*:spring/application-properties-context.xml"/>
 	

@@ -16,4 +16,10 @@
 		@Required and @Autowired, as well as JSR 250's @PostConstruct, @PreDestroy 
 		and @Resource (if available) and JPA's @PersistenceContext and @PersistenceUnit 
 		(if available). -->
+		
+	<!-- Activación de la anotación: @controller -->
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.fav24.dataservices.controller.rest">
+		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
 </beans>
