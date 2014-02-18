@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -441,5 +442,22 @@ public class AccessPolicy {
 			throw new ServerException(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED, 
 					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, entityAlias, notAllowedAttibutes));
 		}
+	}
+	
+	/**
+	 * Retorna una lista con los alias de las entidades disponibles.
+	 *  
+	 * @return una lista con los alias de las entidades disponibles.
+	 */
+	public AbstractList<String> getEnititiesAliases() {
+		
+		AbstractList<String> enititiesAliases = new ArrayList<String>(accessPolicies.size());
+
+		for (EntityAccessPolicy accessPolicy : accessPolicies) {
+			
+			enititiesAliases.add(accessPolicy.getName().getAlias());
+		}
+		
+		return enititiesAliases;
 	}
 }

@@ -1,4 +1,4 @@
-package com.fav24.dataservices.controller.security;
+package com.fav24.dataservices.controller.rest.security;
 
 
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fav24.dataservices.controller.BaseController;
+import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -28,7 +28,7 @@ import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
  */
 @Controller
 @RequestMapping("/accesspolicy")
-public class AccessPolicyController extends BaseController {
+public class AccessPolicyController extends BaseRestController {
 
 	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
 
@@ -61,7 +61,7 @@ public class AccessPolicyController extends BaseController {
 
 			result = (AccessPolicyDto)Mapper.Map(retrieveAccessPolicyService.getCurrentAccessPolicy((AccessPolicy) Mapper.Map(accessPolicy)));
 
-			result.setStatusCode(BaseController.OK);
+			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICIES_RETRIEVED_OK);
 		} catch (ServerException e) {
 
@@ -93,7 +93,7 @@ public class AccessPolicyController extends BaseController {
 
 			genericServiceJDBC.checkAccessPoliciesAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
 
-			result.setStatusCode(BaseController.OK);
+			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICY_FILES_LOADED_OK);
 		} catch (ServerException e) {
 

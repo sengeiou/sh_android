@@ -29,6 +29,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 		if (accessPolicyFiles.getURLs() == null || accessPolicyFiles.getURLs().length == 0) {
 
+			AccessPolicy.resetAccessPolicies();
 			AccessPolicy.loadDefaultAccessPolicies();
 		}
 		else {

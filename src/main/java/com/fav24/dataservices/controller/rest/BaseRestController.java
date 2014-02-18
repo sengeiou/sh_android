@@ -1,4 +1,4 @@
-package com.fav24.dataservices.controller;
+package com.fav24.dataservices.controller.rest;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -24,9 +24,9 @@ import com.fav24.dataservices.exception.ServerException;
  * 
  * @author Fav24
  */
-public class BaseController {
+public class BaseRestController {
 
-	protected final static Logger logger = LoggerFactory.getLogger(BaseController.class);
+	protected final static Logger logger = LoggerFactory.getLogger(BaseRestController.class);
 
 	public final static String OK = "OK";
 	public final static String ERROR_GLOBAL_001 = "GLOBAL_001";
@@ -40,7 +40,7 @@ public class BaseController {
 	/**
 	 * Constructor por defecto.
 	 */
-	public BaseController() {
+	public BaseRestController() {
 		jsonErrorView = new MappingJackson2JsonView();
 	}
 

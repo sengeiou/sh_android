@@ -1,4 +1,4 @@
-package com.fav24.dataservices.controller;
+package com.fav24.dataservices.controller.rest;
 
 
 import org.slf4j.Logger;
@@ -22,8 +22,8 @@ import com.fav24.dataservices.service.GenericService;
  * @author Fav24
  */
 @Controller
-@RequestMapping("/")
-public class GenericController extends BaseController {
+@RequestMapping("/generic")
+public class GenericController extends BaseRestController {
 
 	final static Logger logger = LoggerFactory.getLogger(GenericController.class);
 
@@ -40,7 +40,7 @@ public class GenericController extends BaseController {
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "/generic", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
 	GenericDto processGeneric(@RequestBody final GenericDto generic) {
 
@@ -49,7 +49,7 @@ public class GenericController extends BaseController {
 		try {
 			result = Mapper.Map(genericService.processGeneric((Generic) Mapper.Map(generic)));
 			
-			result.setStatusCode(BaseController.OK);
+			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_GENERIC_CALL_OK);
 		} catch (ServerException e) {
 

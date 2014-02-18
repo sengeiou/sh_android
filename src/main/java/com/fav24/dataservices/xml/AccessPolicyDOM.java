@@ -63,6 +63,21 @@ public class AccessPolicyDOM extends AccessPolicy
 
 		readPolicies(document);
 	}
+	
+	/**
+	 * Creación de la estructura de políticas de acceso, a partir de un stream de estrada.
+	 * 
+	 * @param accessPoliciesStream Stream de entrada con contenido de políticas de acceso.
+	 * 
+	 * @throws ServerException
+	 */
+	public AccessPolicyDOM(InputStream accessPoliciesStream) throws ServerException { 
+		
+		//Información relativa al contenido del fichero de políticas.
+		Document document = accessPolicyDOM.generateDocument(accessPoliciesStream);
+		
+		readPolicies(document);
+	}
 
 	/**
 	 * Lee, interpreta y construye las estructuras de políticas de acceso contenidas en el documento indicado.
