@@ -43,7 +43,7 @@ public class AccessPolicyController extends BaseRestController {
 
 		ModelAndView model = new ModelAndView("available_entities");
 
-		model.addObject("entities", AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases());
+		model.addObject("entities", AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases() : null);
 
 		return model;
 	}
