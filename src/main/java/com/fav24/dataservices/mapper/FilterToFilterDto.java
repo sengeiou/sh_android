@@ -23,7 +23,7 @@ public class FilterToFilterDto extends Mapper<Filter, FilterDto> {
 
 		FilterDto filter = new FilterDto();
 
-		filter.setNexus(origin.getNexus().getNexusType());
+		filter.setNexus(origin.getNexus() != null ? origin.getNexus().getNexusType() : null);
 
 		if (origin.getFilterItems() != null) {
 			filter.setFilterItems(new FilterItemDto[origin.getFilterItems().size()]);
