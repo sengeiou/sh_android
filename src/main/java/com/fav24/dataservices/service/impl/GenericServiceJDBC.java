@@ -344,24 +344,28 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Especificación del filtro.
 		 */
-		final AbstractList<String> keyColumns;
-		final AbstractList<Object> keyValues;
-		final AbstractList<String> filterColumns;
-		final AbstractList<Object> filterValues;
+		AbstractList<String> keyColumns = null, filterColumns = null;
+		AbstractList<Object> keyValues = null, filterValues = null;
 
 		if (operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0) {
 			keyColumns = new ArrayList<String>();
 			keyValues = new ArrayList<Object>();
-			filterColumns = null;
-			filterValues = null;
-			query.append(" WHERE ").append(getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), keyColumns, keyValues));
+
+			StringBuilder key = getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), keyColumns, keyValues);
+
+			if (key != null && key.length() > 0) {
+				query.append(" WHERE ").append(key);
+			}
 		}
 		else if (operation.getMetadata().getFilter() != null) {
-			keyColumns = null;
-			keyValues = null;
 			filterColumns = new ArrayList<String>();
 			filterValues = new ArrayList<Object>();
-			query.append(" WHERE ").append(getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), filterColumns, filterValues));
+
+			StringBuilder filter = getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), filterColumns, filterValues);
+
+			if (filter != null && filter.length() > 0) {
+				query.append(" WHERE ").append(filter);
+			}
 		}
 		else {
 			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
