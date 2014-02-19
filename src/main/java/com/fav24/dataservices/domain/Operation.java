@@ -86,4 +86,12 @@ public class Operation {
 			return false;
 		return true;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "Operation [metadata=" + metadata + ", data=" + data + "]";
+	}
 }

@@ -15,6 +15,7 @@ public class Metadata {
 	private OperationType operation;
 	private String entity;
 	private Long entitySize;
+	private Long offset;
 	private Long items;
 	private AbstractList<KeyItem> key;
 	private Filter filter;
@@ -27,6 +28,7 @@ public class Metadata {
 		this.operation = null;
 		this.entity = null;
 		this.entitySize = null;
+		this.offset = null;
 		this.items = null;
 		this.key = null;
 		this.setFilter(null);
@@ -38,13 +40,15 @@ public class Metadata {
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
 	 * @param entitySize Número de ítems de la entidad, una vez realizada la operación.
+	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long items, AbstractList<KeyItem> key) {
+	public Metadata(OperationType operation, String entity, Long entitySize, Long offset, Long items, AbstractList<KeyItem> key) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
+		this.offset = offset;
 		this.items = items;
 		this.key = key;
 	}
@@ -55,13 +59,15 @@ public class Metadata {
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
 	 * @param entitySize Número de ítems de la entidad, una vez realizada la operación.
+	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long items, Filter filter) {
+	public Metadata(OperationType operation, String entity, Long entitySize, Long offset, Long items, Filter filter) {
 		this.operation = operation;
 		this.entity = entity;
 		this.entitySize = entitySize;
+		this.offset = offset;
 		this.items = items;
 		this.setFilter(filter);
 	}
@@ -118,6 +124,24 @@ public class Metadata {
 	 */
 	public void setEntitySize(Long entitySize) {
 		this.entitySize = entitySize;
+	}
+
+	/**
+	 * Retorna el número del último ítem a partir del que se desea que esta operación aplique.
+	 * 
+	 * @return el número del último ítem a partir del que se desea que esta operación aplique.
+	 */
+	public Long getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Asigna el número del último ítem a partir del que se desea que esta operación aplique.
+	 * 
+	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
+	 */
+	public void setOffset(Long offset) {
+		this.offset = offset;
 	}
 
 	/**
@@ -201,11 +225,10 @@ public class Metadata {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
-		result = prime * result
-				+ ((entitySize == null) ? 0 : entitySize.hashCode());
 		result = prime * result + ((filter == null) ? 0 : filter.hashCode());
 		result = prime * result + ((items == null) ? 0 : items.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((offset == null) ? 0 : offset.hashCode());
 		result = prime * result
 				+ ((operation == null) ? 0 : operation.hashCode());
 		return result;
@@ -228,11 +251,6 @@ public class Metadata {
 				return false;
 		} else if (!entity.equals(other.entity))
 			return false;
-		if (entitySize == null) {
-			if (other.entitySize != null)
-				return false;
-		} else if (!entitySize.equals(other.entitySize))
-			return false;
 		if (filter == null) {
 			if (other.filter != null)
 				return false;
@@ -248,6 +266,11 @@ public class Metadata {
 				return false;
 		} else if (!key.equals(other.key))
 			return false;
+		if (offset == null) {
+			if (other.offset != null)
+				return false;
+		} else if (!offset.equals(other.offset))
+			return false;
 		if (operation != other.operation)
 			return false;
 		return true;
@@ -259,7 +282,8 @@ public class Metadata {
 	@Override
 	public String toString() {
 		return "Metadata [operation=" + operation + ", entity=" + entity
-				+ ", entitySize=" + entitySize + ", items=" + items + ", key="
-				+ key + ", filter=" + filter + "]";
+				+ ", entitySize=" + entitySize + ", offset=" + offset
+				+ ", items=" + items + ", key=" + key + ", filter=" + filter
+				+ "]";
 	}
 }

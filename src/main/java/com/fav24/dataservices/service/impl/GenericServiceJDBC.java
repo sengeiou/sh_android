@@ -367,6 +367,26 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
 		}
 
+		/* 
+		 *  Tratamiento del intervalo de datos a retornar.
+		 *  
+		 *  LIMIT items OFFSET offset
+		 *  
+		 *  Esta sintaxis es válida para: MySQL, MariaDB, PostgreSQL y hSQL.
+		 *  No és válida para: Oracle y SQLServer.
+		 */
+		Long items = operation.getMetadata().getItems() == null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(operation.getMetadata().getEntity()).getMaxPageSize() : operation.getMetadata().getItems();
+		Long offset = operation.getMetadata().getOffset();
+
+		if ((items != null && items != 0) || (offset != null && offset != 0)) {
+
+			query.append(" LIMIT ").append(items);
+
+			if (offset != null) {
+				query.append(" OFFSET ").append(offset);
+			}
+		}
+
 		Object[] params = null;
 		int[] types = null;
 
@@ -615,7 +635,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 							} while(indexes.next());
 						}
-						
+
 						//Foreing keys
 						ResultSet importedKeys = connection.getMetaData().getImportedKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
 						if (importedKeys.first()) {
@@ -625,16 +645,16 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 								if (importedKeys.wasNull()) {
 									foreingKeyName = null;
 								}
-								
+
 								Set<String> indexFields = entityJDBCInformation.indexes.get(foreingKeyName);
 								if (indexFields == null) {
 									indexFields = new HashSet<String>();
 									entityJDBCInformation.indexes.put(foreingKeyName, indexFields);
 								}
-								
+
 								indexFields.add(columnName);
 								entityJDBCInformation.filterFields.put(columnName, null);
-								
+
 							} while(importedKeys.next());
 						}
 

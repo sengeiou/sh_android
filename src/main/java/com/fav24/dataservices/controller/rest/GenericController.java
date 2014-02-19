@@ -40,7 +40,7 @@ public class GenericController extends BaseRestController {
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody
 	GenericDto processGeneric(@RequestBody final GenericDto generic) {
 

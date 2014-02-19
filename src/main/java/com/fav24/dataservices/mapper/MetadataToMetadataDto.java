@@ -29,6 +29,7 @@ public class MetadataToMetadataDto extends Mapper<Metadata, MetadataDto> {
 		metadata.setOperation(origin.getOperation().getOperationType());
 		metadata.setEntity(origin.getEntity());
 		metadata.setEntitySize(origin.getEntitySize());
+		metadata.setOffset(origin.getOffset());
 		metadata.setItems(origin.getItems());
 
 		if (origin.getKey() != null) {
