@@ -44,6 +44,21 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 
 		ApplicationContext applicationContext = event.getApplicationContext();
 
+		/*
+		 * La inicialización de cada componente, provoca un refresco del contexto.
+		 * 
+		 * Por ejemplo:
+		 * 		Root WebApplicationContext ------> WebApplicationContext for namespace 'mvc-rest-dispatcher-servlet'
+		 *                                     |-> WebApplicationContext for namespace 'mvc-jsp-dispatcher-servlet'
+		 * 
+		 * Para cargar la información únicamente en el inicio del contexto raiz, una buena
+		 * práctica para distinguir el contexto raiz del resto, es comprobar si su contexto
+		 * predecesor es nulo. 
+		 */
+		if (applicationContext.getParent() != null) {
+			return;	
+		}
+		
 		// Se obtiene el directorio base de la aplicación.
 		applicationHome = applicationContext.getEnvironment().getProperty(APPLICATION_HOME);
 

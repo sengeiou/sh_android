@@ -325,21 +325,25 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	@Override
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 
-		final StringBuilder query = new StringBuilder();
+		final StringBuilder querySelect = new StringBuilder();
+		final StringBuilder queryFrom = new StringBuilder();
+		final StringBuilder queryWhere = new StringBuilder();
+		final StringBuilder queryLimit = new StringBuilder();
+		
 		final EntityJDBCInformation entityInformation = entitiesInformation.get(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
-		query.append("SELECT ");
+		querySelect.append("SELECT ");
 
 		/*
 		 * Especificación del conjunto de campos de la query.
 		 */
 		final AbstractList<String> dataColumns = new ArrayList<String>();
-		query.append(getDataString(operation.getMetadata().getEntity(), operation.getData() != null && operation.getData().size() > 0 ? operation.getData().get(0).getAttributes() : null, dataColumns));
+		querySelect.append(getDataString(operation.getMetadata().getEntity(), operation.getData() != null && operation.getData().size() > 0 ? operation.getData().get(0).getAttributes() : null, dataColumns));
 
 		/*
 		 * Especificación de la tabla.
 		 */
-		query.append(" FROM ").append(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
+		queryFrom.append(" FROM ").append(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
 		/*
 		 * Especificación del filtro.
@@ -354,7 +358,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			StringBuilder key = getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), keyColumns, keyValues);
 
 			if (key != null && key.length() > 0) {
-				query.append(" WHERE ").append(key);
+				queryWhere.append(" WHERE ").append(key);
 			}
 		}
 		else if (operation.getMetadata().getFilter() != null) {
@@ -364,7 +368,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			StringBuilder filter = getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), filterColumns, filterValues);
 
 			if (filter != null && filter.length() > 0) {
-				query.append(" WHERE ").append(filter);
+				queryWhere.append(" WHERE ").append(filter);
 			}
 		}
 		else {
@@ -384,10 +388,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		if ((items != null && items != 0) || (offset != null && offset != 0)) {
 
-			query.append(" LIMIT ").append(items);
+			queryLimit.append(" LIMIT ").append(items);
 
 			if (offset != null) {
-				query.append(" OFFSET ").append(offset);
+				queryLimit.append(" OFFSET ").append(offset);
 			}
 		}
 
@@ -414,7 +418,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 		}
 
-		return jdbcTemplate.query(query.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+		querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
+		operation = jdbcTemplate.query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+
+		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
+		countQuery.append(queryFrom).append(queryWhere);
+		operation.getMetadata().setEntitySize(jdbcTemplate.queryForObject(countQuery.toString(), params, Long.class));
+		
+		return operation;
 	}
 
 	/**
