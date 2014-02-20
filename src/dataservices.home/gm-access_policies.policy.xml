@@ -191,6 +191,10 @@
 				<Attribute Alias="active" Direction="Output">active</Attribute>
 				<Attribute Alias="visible" Direction="Output">visible</Attribute>
 				<Attribute Alias="weight" Direction="Output">weight</Attribute>
+				<Attribute Alias="disclaimer" Direction="Output">disclaimer</Attribute>
+				<Attribute Alias="comment" Direction="Output">comment</Attribute>
+				<Attribute Alias="tracker" Direction="Output">tracker</Attribute>
+				<Attribute Alias="zone" Direction="Output">zone</Attribute>
 				<!-- Información de auditoría -->				
 				<Attribute Alias="revision" Direction="Output">csys_revision</Attribute>
 				<Attribute Alias="birth" Direction="Output">csys_birth</Attribute>
