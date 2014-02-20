@@ -194,7 +194,8 @@
 				<Attribute Alias="disclaimer" Direction="Output">disclaimer</Attribute>
 				<Attribute Alias="comment" Direction="Output">comment</Attribute>
 				<Attribute Alias="tracker" Direction="Output">tracker</Attribute>
-				<Attribute Alias="zone" Direction="Output">zone</Attribute>
+				<Attribute Alias="zoneID" Direction="Output">zone</Attribute>
+				<Attribute Alias="registryURL" Direction="Output">registryURL</Attribute>
 				<!-- Información de auditoría -->				
 				<Attribute Alias="revision" Direction="Output">csys_revision</Attribute>
 				<Attribute Alias="birth" Direction="Output">csys_birth</Attribute>
