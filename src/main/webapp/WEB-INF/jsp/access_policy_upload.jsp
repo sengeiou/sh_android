@@ -14,8 +14,8 @@
 		    $('#addFile').click(function() {
 		        var fileIndex = $('#fileTable tr').children().length - 1;
 		        $('#fileTable').append(
-		                '<tr><td>'+
-		                '   <input type="file" name="files['+ fileIndex +']" />'+
+		                '<tr style="width: 100%;"><td>'+
+		                '   <input style="width: 100%;" type="file" name="files['+ fileIndex +']" />'+
 		                '</td></tr>');
 		    });
 		     
@@ -33,12 +33,12 @@
 		 
 		    <p>Selecciona los ficheros de pol&iacute;ticas a cargar.</p>
 		 
-		    <table id="fileTable">
-		        <tr>
-		            <td><input name="files[0]" type="file" /></td>
+		    <table style="width: 100%;" id="fileTable">
+		        <tr style="width: 100%;">
+		            <td><input style="width: 100%;" name="files[0]" type="file" /></td>
 		        </tr>
-		        <tr>
-		            <td><input name="files[1]" type="file" /></td>
+		        <tr style="width: 100%;">
+		            <td><input style="width: 100%;" name="files[1]" type="file" /></td>
 		        </tr>
 		    </table>
 		    <br/>
