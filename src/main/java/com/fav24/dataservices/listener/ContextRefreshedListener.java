@@ -23,7 +23,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 	public static final String APPLICATION_HOME = APPLICATION_NAME + ".home";
 
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED = "AC000";
-	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE = "El parámetro " + APPLICATION_HOME + " no está definido en el contexto del servido de aplicaciones.";
+	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE = "El parámetro " + APPLICATION_HOME + " no está definido en el contexto del servidor de aplicaciones.";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS = "AC001";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS_MESSAGE = "La ruta indicada en el parámetro " + APPLICATION_HOME + " <%s> no existe.";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY = "AC002";
