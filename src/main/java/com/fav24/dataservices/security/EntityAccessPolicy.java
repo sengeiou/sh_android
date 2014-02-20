@@ -527,7 +527,10 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Este método compara estas políticas de acceso con las indicadas por parámtero,
+	 * únicamente por el alias de la entidad a la que hacen referencia.
+	 * 
+	 * @return true o false en función de si el alias de la entidad a la que hacen referencia es o no igual.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -535,19 +538,23 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof EntityAccessPolicy))
 			return false;
 		EntityAccessPolicy other = (EntityAccessPolicy) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (name.compareTo(other.name) != 0)
 			return false;
 		return true;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Compara el alias de esta entidad con el de la suministrada por parámetro.
+	 * 
+	 * Este método está pensado para permitir la ordenación de las políticas, por el alias de la entidad.
+	 * 
+	 * @return un entero negativo, cero, o un entero positivo si este objeto es menor, igual, o mayor que el indicado por parámetro.
 	 */
 	@Override
 	public int compareTo(EntityAccessPolicy o) {
