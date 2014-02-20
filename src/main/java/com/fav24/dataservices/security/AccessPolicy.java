@@ -251,8 +251,9 @@ public class AccessPolicy {
 
 							this.accessPolicies.remove(entityAccessPolicy);
 							this.accessPolicies.add(entityAccessPolicy);
-							this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
 						}
+
+						this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
 					}
 				}
 			}
@@ -443,21 +444,21 @@ public class AccessPolicy {
 					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, entityAlias, notAllowedAttibutes));
 		}
 	}
-	
+
 	/**
 	 * Retorna una lista con los alias de las entidades disponibles.
 	 *  
 	 * @return una lista con los alias de las entidades disponibles.
 	 */
 	public AbstractList<String> getEnititiesAliases() {
-		
+
 		AbstractList<String> enititiesAliases = new ArrayList<String>(accessPolicies.size());
 
 		for (EntityAccessPolicy accessPolicy : accessPolicies) {
-			
+
 			enititiesAliases.add(accessPolicy.getName().getAlias());
 		}
-		
+
 		return enititiesAliases;
 	}
 }
