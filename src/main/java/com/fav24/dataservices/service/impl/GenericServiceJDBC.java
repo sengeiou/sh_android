@@ -173,27 +173,17 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		StringBuilder resultingKey = new StringBuilder();
 
+		String column;
 		KeyItem key = keys.get(0);
 
-		String column = AccessPolicy.getAttributeName(entity, key.getName());
+		if (key.getValue() == null) {
 
-		resultingKey.append(column).append('=').append('?');
-
-		if (columns != null) {
-			columns.add(column);
+			resultingKey.append(AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
 		}
-
-		if (values != null) {
-			values.add(key.getValue());
-		}
-
-		for (int i=1; i<keys.size(); i++) {
-
-			key = keys.get(i);
-
-			resultingKey.append(" AND ");
+		else {
 
 			column = AccessPolicy.getAttributeName(entity, key.getName());
+
 			resultingKey.append(column).append('=').append('?');
 
 			if (columns != null) {
@@ -202,6 +192,32 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 			if (values != null) {
 				values.add(key.getValue());
+			}
+		}
+
+		for (int i=1; i<keys.size(); i++) {
+
+			key = keys.get(i);
+
+			resultingKey.append(" AND ");
+
+			if (key.getValue() == null) {
+
+				resultingKey.append(AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
+			}
+			else {
+
+				column = AccessPolicy.getAttributeName(entity, key.getName());
+
+				resultingKey.append(column).append('=').append('?');
+
+				if (columns != null) {
+					columns.add(column);
+				}
+
+				if (values != null) {
+					values.add(key.getValue());
+				}
 			}
 		}
 
@@ -224,36 +240,33 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		String column = AccessPolicy.getAttributeName(entity, filter.getName());
 		resultingFilter.append(column);
-		if (columns != null) {
-			columns.add(column);
-		}
 
 		if (filter.getValue() == null) {
-			
+
 			switch(filter.getComparator()) {
 
 			case EQ:
-				resultingFilter.append(" IS NULL ");
+				resultingFilter.append(" IS NULL");
 				break;
 			case NE:
-				resultingFilter.append(" IS NOT NULL ");
+				resultingFilter.append(" IS NOT NULL");
 				break;
 			case GT:
-				resultingFilter.append(" > NULL ");
+				resultingFilter.append(" > NULL");
 				break;
 			case GE:
-				resultingFilter.append(" >= NULL ");
+				resultingFilter.append(" >= NULL");
 				break;
 			case LT:
-				resultingFilter.append(" < NULL ");
+				resultingFilter.append(" < NULL");
 				break;
 			case LE:
-				resultingFilter.append(" <= NULL ");
+				resultingFilter.append(" <= NULL");
 				break;
 			}
 		}
 		else {
-			
+
 			switch(filter.getComparator()) {
 
 			case EQ:
@@ -277,6 +290,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 
 			resultingFilter.append('?');
+
+			if (columns != null) {
+				columns.add(column);
+			}
 
 			if (values != null) {
 				values.add(filter.getValue());
