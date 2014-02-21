@@ -41,6 +41,9 @@
 					<Attribute Alias="idFixture">idFixture</Attribute>
 				</Filter>
 				<Filter>
+					<Attribute Alias="modified">csys_modified</Attribute>
+				</Filter>
+				<Filter>
 					<Attribute Alias="idTeamLocal">idTeamLocal</Attribute>
 					<Attribute Alias="idTeamVisitor">idTeamVisitor</Attribute>
 				</Filter>

@@ -1,7 +1,10 @@
 package com.fav24.dataservices.service.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -320,6 +323,49 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	}
 
 	/**
+	 * Método para la conversión de tipos de datos.
+	 *  
+	 * @param destinationType Tipo de dato al que se desea convertir el valor.
+	 * @param value Valor a convertir.
+	 * 
+	 * @return valor convertido.
+	 */
+	private Object translateToType(int destinationType, Object value) {
+
+		if (value != null) {
+			
+			switch(destinationType) {
+			case java.sql.Types.DATE:
+				if (value instanceof Number) {
+					return new Date(((Number) value).longValue());
+				}
+				else if (value instanceof String) {
+					return Date.valueOf((String)value);
+				}
+				break;
+			case java.sql.Types.TIME:
+				if (value instanceof Number) {
+					return new Time(((Number) value).longValue());
+				}
+				else if (value instanceof String) {
+					return Time.valueOf((String)value);
+				}
+				break;
+			case java.sql.Types.TIMESTAMP:
+				if (value instanceof Number) {
+					return new Timestamp(((Number) value).longValue());
+				}
+				else if (value instanceof String) {
+					return Timestamp.valueOf((String)value);
+				}
+				break;
+			}
+		}
+
+		return value;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -329,7 +375,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		final StringBuilder queryFrom = new StringBuilder();
 		final StringBuilder queryWhere = new StringBuilder();
 		final StringBuilder queryLimit = new StringBuilder();
-		
+
 		final EntityJDBCInformation entityInformation = entitiesInformation.get(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
 		querySelect.append("SELECT ");
@@ -400,21 +446,21 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		if (keyColumns != null && keyColumns.size() > 0) {
 
-			params = new Object[keyColumns.size()];
-			types = new int[params.length];
+			types = new int[keyColumns.size()];
+			params = new Object[types.length];
 
 			for (int i=0; i<keyColumns.size(); i++) {
-				params[i] = keyValues.get(i);
 				types[i] = entityInformation.keyFields.get(keyColumns.get(i));
+				params[i] = translateToType(types[i], keyValues.get(i));
 			}
 		}
 		else if (filterColumns != null && filterColumns.size() > 0) {
-			params = new Object[filterColumns.size()];
-			types = new int[params.length];
+			types = new int[filterColumns.size()];
+			params = new Object[types.length];
 
 			for (int i=0; i<filterColumns.size(); i++) {
-				params[i] = filterValues.get(i);
 				types[i] = entityInformation.filterFields.get(filterColumns.get(i));
+				params[i] = translateToType(types[i], filterValues.get(i));
 			}
 		}
 
@@ -424,7 +470,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
 		countQuery.append(queryFrom).append(queryWhere);
 		operation.getMetadata().setEntitySize(jdbcTemplate.queryForObject(countQuery.toString(), params, Long.class));
-		
+
 		return operation;
 	}
 
@@ -725,7 +771,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -734,7 +780,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		entitiesInformation = null;
 	}
-	
+
 	/**
 	 * Clase interna para la gestión de la transacción del conjunto de operaciones.
 	 */
