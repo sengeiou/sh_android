@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,8 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.security.UploadPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.xml.AccessPolicyDOM;
+import com.fav24.dataservices.service.security.LoadAccessPolicyService;
+import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
 /**
  * Controla las peticiones de entrada a las páginas de gestión de la seguridad.
@@ -32,6 +33,12 @@ public class AccessPolicyController extends BaseRestController {
 
 	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
 
+	@Autowired
+	protected RetrieveAccessPolicyService retrieveAccessPolicyService;
+	
+	@Autowired
+	protected LoadAccessPolicyService loadAccessPolicyService;
+
 
 	/**
 	 * Muestra la lista de entidades disponibles para este servicio de datos.
@@ -43,7 +50,7 @@ public class AccessPolicyController extends BaseRestController {
 
 		ModelAndView model = new ModelAndView("available_entities");
 
-		model.addObject("entities", AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases() : null);
+		model.addObject("entities", retrieveAccessPolicyService.getPublicEntities());
 
 		return model;
 	}
@@ -59,7 +66,7 @@ public class AccessPolicyController extends BaseRestController {
 		ModelAndView model = new ModelAndView("entity_policy_details");
 
 		model.addObject("entity", entity);
-		model.addObject("entityPolicies", AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entity));
+		model.addObject("entityPolicies", retrieveAccessPolicyService.getPublicEntityPolicy(entity));
 
 		return model;
 	}
@@ -96,16 +103,13 @@ public class AccessPolicyController extends BaseRestController {
 			for (MultipartFile multipartFile : files) {
 
 				if (!multipartFile.isEmpty()) {
-					
+
 					String fileName = multipartFile.getOriginalFilename();
-					
-					
-					AccessPolicy accessPolicy;
+
 					try {
-						
-						accessPolicy = new AccessPolicyDOM(multipartFile.getInputStream());
-						AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
-						
+
+						loadAccessPolicyService.loadAccessPolicy(multipartFile.getInputStream());
+
 						filesOK.add(fileName);
 					} catch (ServerException e) {
 						filesKO.add(fileName);
@@ -133,21 +137,19 @@ public class AccessPolicyController extends BaseRestController {
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
 	public String loadDefault(Model map) {
 
-		AccessPolicy.resetAccessPolicies();
 		try {
-			
-			AccessPolicy.loadDefaultAccessPolicies();
+			loadAccessPolicyService.loadDefaultAccessPolicy();
 		} catch (ServerException e) {
-			
+
 			map.addAttribute("errorCode", e.getErrorCode());
 			map.addAttribute("message", e.getMessage());
-			
+
 			return "error_pages/server_error";
 		}
 
 		return "index";
 	}
-	
+
 	/**
 	 * Elimina cualquier acceso.
 	 *  
@@ -155,9 +157,9 @@ public class AccessPolicyController extends BaseRestController {
 	 */
 	@RequestMapping(value = "/denyAll", method = { RequestMethod.GET, RequestMethod.POST })
 	public String denyAll() {
-		
-		AccessPolicy.resetAccessPolicies();
-		
+
+		loadAccessPolicyService.resetAccessPolicies();
+
 		return "index";
 	}
 }

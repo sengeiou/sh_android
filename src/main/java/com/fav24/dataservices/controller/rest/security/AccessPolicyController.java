@@ -17,7 +17,6 @@ import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
 import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.AccessPolicyFiles;
-import com.fav24.dataservices.service.impl.GenericServiceJDBC;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
@@ -40,9 +39,6 @@ public class AccessPolicyController extends BaseRestController {
 
 	@Autowired
 	protected LoadAccessPolicyService loadAccessPolicyService;
-
-	@Autowired
-	protected GenericServiceJDBC genericServiceJDBC;
 
 	/**
 	 * Procesa una petición de información de las políficas de acceso de una cierta entidad, o de las entidades disponibles.
@@ -91,8 +87,6 @@ public class AccessPolicyController extends BaseRestController {
 
 			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFiles)));
 
-			genericServiceJDBC.checkAccessPoliciesAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
-
 			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICY_FILES_LOADED_OK);
 		} catch (ServerException e) {
@@ -100,7 +94,6 @@ public class AccessPolicyController extends BaseRestController {
 			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFiles.getRequestor());
 		}
-
 
 		result.getRequestor().setSystemTime(System.currentTimeMillis());
 

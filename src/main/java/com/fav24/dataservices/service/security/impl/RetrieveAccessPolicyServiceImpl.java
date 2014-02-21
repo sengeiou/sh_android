@@ -26,6 +26,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public AccessPolicy getCurrentAccessPolicy(AccessPolicy accessPolicy) throws ServerException {
 
 		if (AccessPolicy.getCurrentAccesPolicy() == null || 
@@ -67,6 +68,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public AbstractList<String> getPublicEntities() {
 
 		AbstractList<String> publicEntities = new ArrayList<String>();
@@ -84,6 +86,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public EntityAccessPolicy getPublicEntityPolicy(String entity) {
 
 		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entity) : null;

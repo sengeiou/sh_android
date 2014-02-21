@@ -1,9 +1,12 @@
 package com.fav24.dataservices.service.security;
 
+import java.io.InputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.AccessPolicyFiles;
 
 
@@ -15,15 +18,39 @@ import com.fav24.dataservices.security.AccessPolicyFiles;
 public interface LoadAccessPolicyService extends AccessPolicyService {
 
 	public static final Logger logger = LoggerFactory.getLogger(LoadAccessPolicyService.class);
-	
+
+
 	/**
-	 * Retorna la URL cargada. 
-	 * 
-	 * @param accessPolicyFile Políticas de acceso a cargar.
-	 *  
-	 * @return la URL cargada.
+	 * Elimina todas las políticas de acceso disponibles hasta el momento.
+	 */
+	public void resetAccessPolicies();
+
+	/**
+	 * Carga las políticas de acceso por defecto. 
 	 * 
 	 * @throws ServerException 
 	 */
-	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFile) throws ServerException;
+	public void loadDefaultAccessPolicy() throws ServerException;
+
+	/**
+	 * Retorna los ficheros cargados. 
+	 * 
+	 * @param accessPolicyFiles Políticas de acceso a cargar.
+	 *  
+	 * @return los ficheros cargados.
+	 * 
+	 * @throws ServerException 
+	 */
+	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFiles) throws ServerException;
+
+	/**
+	 * Retorna las políticas cargadas. 
+	 * 
+	 * @param accessPolicyStream Políticas de acceso a cargar.
+	 *  
+	 * @return las políticas cargadas.
+	 * 
+	 * @throws ServerException 
+	 */
+	public AccessPolicy loadAccessPolicy(InputStream accessPolicyStream) throws ServerException;
 }

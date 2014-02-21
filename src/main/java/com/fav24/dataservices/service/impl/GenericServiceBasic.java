@@ -189,7 +189,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
+	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 		throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE);
 	}
 

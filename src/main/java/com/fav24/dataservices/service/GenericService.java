@@ -49,6 +49,7 @@ public interface GenericService {
 
 	/**
 	 * Chequea las políticas de acceso definidas, contra la fuente de datos a la que ataca el servicio.
+	 * Obtiene toda la información necesaria de la fuente de datos, para resolver las peticiones.
 	 * 
 	 * Los chequeos que realiza son:
 	 * 	- Que las entidades existen en la fuente de datos.
@@ -62,5 +63,12 @@ public interface GenericService {
 	 * 
 	 * @throws ServerException
 	 */
-	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException;
+	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException;
+	
+	/**
+	 * Elimina toda la información de la fuente de datos, usada para resolver las peticiones.
+	 * 
+	 * @see #checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy)
+	 */
+	public void resetAccessPoliciesInformationAgainstDataSource();
 }

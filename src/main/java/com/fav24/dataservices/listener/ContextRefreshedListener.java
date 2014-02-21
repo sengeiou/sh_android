@@ -89,7 +89,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 					AccessPolicy.resetAccessPolicies();
 					AccessPolicy.loadDefaultAccessPolicies();
 
-					genericServiceJDBC.checkAccessPoliciesAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+					genericServiceJDBC.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
 				}
 			}
 		}

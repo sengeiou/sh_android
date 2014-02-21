@@ -431,7 +431,8 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void checkAccessPoliciesAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
+	@Override
+	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 
 		if (accessPolicy == null) {
 			return;
@@ -724,7 +725,16 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void resetAccessPoliciesInformationAgainstDataSource() {
 
+		entitiesInformation = null;
+	}
+	
 	/**
 	 * Clase interna para la gestión de la transacción del conjunto de operaciones.
 	 */
