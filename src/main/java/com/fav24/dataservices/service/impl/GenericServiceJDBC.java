@@ -228,32 +228,59 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			columns.add(column);
 		}
 
-		switch(filter.getComparator()) {
+		if (filter.getValue() == null) {
+			
+			switch(filter.getComparator()) {
 
-		case EQ:
-			resultingFilter.append(" = ");
-			break;
-		case NE:
-			resultingFilter.append(" <> ");
-			break;
-		case GT:
-			resultingFilter.append(" > ");
-			break;
-		case GE:
-			resultingFilter.append(" >= ");
-			break;
-		case LT:
-			resultingFilter.append(" < ");
-			break;
-		case LE:
-			resultingFilter.append(" <= ");
-			break;
+			case EQ:
+				resultingFilter.append(" IS NULL ");
+				break;
+			case NE:
+				resultingFilter.append(" IS NOT NULL ");
+				break;
+			case GT:
+				resultingFilter.append(" > NULL ");
+				break;
+			case GE:
+				resultingFilter.append(" >= NULL ");
+				break;
+			case LT:
+				resultingFilter.append(" < NULL ");
+				break;
+			case LE:
+				resultingFilter.append(" <= NULL ");
+				break;
+			}
 		}
+		else {
+			
+			switch(filter.getComparator()) {
 
-		resultingFilter.append('?');
+			case EQ:
+				resultingFilter.append(" = ");
+				break;
+			case NE:
+				resultingFilter.append(" <> ");
+				break;
+			case GT:
+				resultingFilter.append(" > ");
+				break;
+			case GE:
+				resultingFilter.append(" >= ");
+				break;
+			case LT:
+				resultingFilter.append(" < ");
+				break;
+			case LE:
+				resultingFilter.append(" <= ");
+				break;
+			}
 
-		if (values != null) {
-			values.add(filter.getValue());
+			resultingFilter.append('?');
+
+			if (values != null) {
+				values.add(filter.getValue());
+			}
 		}
 
 		return resultingFilter;
@@ -333,7 +360,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	private Object translateToType(int destinationType, Object value) {
 
 		if (value != null) {
-			
+
 			switch(destinationType) {
 			case java.sql.Types.DATE:
 				if (value instanceof Number) {

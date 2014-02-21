@@ -131,12 +131,26 @@ public class EntityFilter {
 	}
 
 	/**
-	 * Retorna la estructura que contiene el conjunto de attributos de una clave.
+	 * Retorna la estructura que contiene el conjunto de attributos de un filtro.
 	 * 
-	 * @return la estructura que contiene el conjunto de attributos de una clave.
+	 * Nota: no usar la lista de retorno para añadir atributos.
+	 * @see #addFilterAttribute(EntityAttribute)
+	 * 
+	 * @return la estructura que contiene el conjunto de attributos de un filtro.
 	 */
-	public AbstractList<EntityAttribute> getFilter() {
+	public final AbstractList<EntityAttribute> getFilter() {
 		return filter;
+	}
+	
+	/**
+	 * Añade el atributo al filtro.
+	 * 
+	 * @param filterAttribute Atributo de filtro a añadir.
+	 */
+	public void addFilterAttribute(EntityAttribute filterAttribute) {
+		
+		filter.add(filterAttribute);
+		entityFilterByAlias.put(filterAttribute.getAlias(), filterAttribute);
 	}
 
 	/**

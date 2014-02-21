@@ -31,7 +31,7 @@ public class EntityFilterDOM extends EntityFilter {
 				String nodeName = node_i.getNodeName();
 
 				if ("Attribute".equals(nodeName)) {
-					getFilter().add(new EntityAttributeDOM(node_i));
+					addFilterAttribute(new EntityAttributeDOM(node_i));
 				}
 			}
 		}

@@ -31,7 +31,7 @@ public class EntityKeyDOM extends EntityKey {
 				String nodeName = node_i.getNodeName();
 
 				if ("Attribute".equals(nodeName)) {
-					getKey().add(new EntityAttributeDOM(node_i));
+					addKeyAttribute(new EntityAttributeDOM(node_i));
 				}
 			}
 		}

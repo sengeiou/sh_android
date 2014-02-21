@@ -88,9 +88,23 @@ public class EntityData {
 	/**
 	 * Retorna la estructura que contiene el conjunto de attributos de datos.
 	 * 
+	 * Nota: no usar la lista de retorno para añadir atributos.
+	 * @see #addDataAttribute(EntityDataAttribute)
+	 * 
 	 * @return la estructura que contiene el conjunto de attributos de datos.
 	 */
-	public AbstractList<EntityDataAttribute> getData() {
+	public final AbstractList<EntityDataAttribute> getData() {
 		return data;
+	}
+	
+	/**
+	 * Añade el atributo al conjunto de datos.
+	 * 
+	 * @param dataAttribute Atributo a añadir.
+	 */
+	public void addDataAttribute(EntityDataAttribute dataAttribute) {
+		
+		data.add(dataAttribute);
+		dataAttributeByAlias.put(dataAttribute.getAlias(), dataAttribute);
 	}
 }

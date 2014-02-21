@@ -31,7 +31,7 @@ public class EntityDataDOM extends EntityData {
 				String nodeName = node_i.getNodeName();
 
 				if ("Attribute".equals(nodeName)) {
-					getData().add(new EntityDataAttributeDOM(node_i));
+					addDataAttribute(new EntityDataAttributeDOM(node_i));
 				}
 			}
 		}

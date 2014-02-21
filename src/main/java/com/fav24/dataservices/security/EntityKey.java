@@ -134,12 +134,26 @@ public class EntityKey {
 	/**
 	 * Retorna la estructura que contiene el conjunto de attributos de una clave.
 	 * 
+	 * Nota: no usar la lista de retorno para añadir atributos.
+	 * @see #addKeyAttribute(EntityAttribute)
+	 * 
 	 * @return la estructura que contiene el conjunto de attributos de una clave.
 	 */
-	public AbstractList<EntityAttribute> getKey() {
+	public final AbstractList<EntityAttribute> getKey() {
 		return key;
 	}
 
+	/**
+	 * Añade el atributo al conjunto de attributos de una clave.
+	 * 
+	 * @param keyAttribute Atributo clave a añadir.
+	 */
+	public void addKeyAttribute(EntityAttribute keyAttribute) {
+		
+		key.add(keyAttribute);
+		entityKeyByAlias.put(keyAttribute.getAlias(), keyAttribute);
+	}
+	
 	/**
 	 * Retorna la lista de nombre de campos que conforman la clave.
 	 * 

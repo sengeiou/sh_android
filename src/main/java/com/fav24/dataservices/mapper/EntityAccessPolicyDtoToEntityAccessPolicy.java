@@ -51,7 +51,7 @@ public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAcce
 			for (Entry<String, String> attribute : origin.getAttributes().entrySet()) {
 
 				EntityDataAttribute entityDataAttribute = new EntityDataAttribute(attribute.getKey(), null, Direction.fromString(attribute.getValue()));
-				entityData.getData().add(entityDataAttribute);
+				entityData.addDataAttribute(entityDataAttribute);
 			}
 		}
 
@@ -65,13 +65,12 @@ public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAcce
 				EntityKey entityKey = new EntityKey();
 
 				for (String attributeAlias : key) {
-					entityKey.getKey().add(new EntityAttribute(attributeAlias, null));
+					entityKey.addKeyAttribute(new EntityAttribute(attributeAlias, null));
 				}
 
 				keys.getKeys().add(entityKey);
 			}
 		}
-
 
 		//Juego de filtros disponibles
 		if (origin.getFilters() != null) {
@@ -82,7 +81,7 @@ public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAcce
 				EntityFilter entityFilter = new EntityFilter();
 
 				for (String attributeAlias : filter) {
-					entityFilter.getFilter().add(new EntityAttribute(attributeAlias, null));
+					entityFilter.addFilterAttribute(new EntityAttribute(attributeAlias, null));
 				}
 
 				filters.getFilters().add(entityFilter);
