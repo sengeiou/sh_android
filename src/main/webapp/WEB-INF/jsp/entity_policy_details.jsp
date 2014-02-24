@@ -1,4 +1,4 @@
-<%@page import="com.fav24.dataservices.security.EntityAccessPolicy"%>
+<%@page import="com.fav24.dataservices.domain.security.EntityAccessPolicy"%>
 <%@include file="includes/locations.jsp" %>
 
 <%!String bodyContent;%>

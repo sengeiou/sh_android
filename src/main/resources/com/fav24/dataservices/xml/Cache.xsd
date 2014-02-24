@@ -5,8 +5,6 @@
 			<xsd:sequence>
 				<!-- Configuración por defecto de un gestor de cachés. -->
 				<xsd:element name="DefaultCacheManager" type="TCacheManagerConfiguration" minOccurs="0" maxOccurs="1"/>
-				<!-- Configuración por defecto de una caché. -->
-				<xsd:element name="DefaultCache" type="TCacheConfiguration" minOccurs="0" maxOccurs="1"/>
 				<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
 				<xsd:element name="EntityCacheManager" type="TEntityCacheManager" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
@@ -23,6 +21,8 @@
 	<!-- -->
 	<xsd:complexType name="TCacheManagerConfiguration">
 		<xsd:sequence>
+			<!-- Configuración por defecto de una caché. -->
+			<xsd:element name="DefaultCache" type="TCacheConfiguration" minOccurs="0" maxOccurs="1"/>
 			<!-- Ubicación de los ficheros de persistencia de la caché. -->
 			<xsd:element name="DiskStore" type="TDiskStore" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
