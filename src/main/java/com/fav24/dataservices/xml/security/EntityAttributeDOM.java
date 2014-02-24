@@ -3,7 +3,7 @@ package com.fav24.dataservices.xml.security;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.fav24.dataservices.security.EntityAttribute;
+import com.fav24.dataservices.domain.security.EntityAttribute;
 
 
 /**

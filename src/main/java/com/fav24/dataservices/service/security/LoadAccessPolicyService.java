@@ -5,9 +5,9 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fav24.dataservices.domain.security.AccessPolicy;
+import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.AccessPolicyFiles;
 
 
 /**

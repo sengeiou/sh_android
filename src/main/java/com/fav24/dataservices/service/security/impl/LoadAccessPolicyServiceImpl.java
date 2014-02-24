@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.domain.security.AccessPolicy;
+import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.AccessPolicyFiles;
 import com.fav24.dataservices.service.impl.GenericServiceJDBC;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;

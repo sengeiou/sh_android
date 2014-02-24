@@ -1,9 +1,9 @@
 package com.fav24.dataservices.mapper;
 
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicyFiles;
 
 
 /**

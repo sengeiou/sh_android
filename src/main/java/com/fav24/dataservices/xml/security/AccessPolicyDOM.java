@@ -10,8 +10,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.xml.BasicDOM;
 
 

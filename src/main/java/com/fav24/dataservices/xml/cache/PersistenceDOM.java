@@ -3,12 +3,11 @@ package com.fav24.dataservices.xml.cache;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.fav24.dataservices.domain.cache.Persistence;
 
-public class PersistenceDOM
+
+public class PersistenceDOM extends Persistence
 {
-	private Boolean active;
-
-
 	/**
 	 * Constructor con parámetro.
 	 * 
@@ -16,15 +15,6 @@ public class PersistenceDOM
 	 */
 	public PersistenceDOM(Node node) {
 
-		active = Boolean.parseBoolean(((Element) node).getAttribute("Active"));
-	}
-
-	/**
-	 * Retorna true o false en función de si la persistencia a disco, está o no activada.
-	 * 
-	 * @return true o false en función de si la persistencia a disco, está o no activada.
-	 */
-	public Boolean isActive() {
-		return active;
+		super(Boolean.parseBoolean(((Element) node).getAttribute("Active")));
 	}
 }

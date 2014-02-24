@@ -3,14 +3,11 @@ package com.fav24.dataservices.xml.cache;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.fav24.dataservices.domain.cache.DiskStore;
 
-public class DiskStoreDOM
+
+public class DiskStoreDOM extends DiskStore
 {
-	public String DEFAULT_SYSTEM_TEMP_DIR = "java.io.tmpdir";
-	
-	private String path;
-
-	
 	/**
 	 * Constructor con parámetro.
 	 * 
@@ -18,15 +15,6 @@ public class DiskStoreDOM
 	 */
 	public DiskStoreDOM(Node node) {
 		
-		path = ((Element) node).getAttribute("Path");
+		super(((Element) node).getAttribute("Path"));
 	}
-	
-	/**
-	 * Retorna la ubicación para los ficheros de caché.
-	 * 
-	 * @return la ubicación para los ficheros de caché.
-	 */
-	public String getPath() {
-		return path;
 	}
-}

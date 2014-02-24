@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.rest.BaseRestController;
+import com.fav24.dataservices.domain.security.AccessPolicy;
+import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.AccessPolicyFiles;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 

@@ -4,7 +4,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.fav24.dataservices.security.EntityAccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 
 
 public class EntityAccessPolicyDOM extends EntityAccessPolicy

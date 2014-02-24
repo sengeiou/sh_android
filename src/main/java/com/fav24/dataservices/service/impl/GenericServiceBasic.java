@@ -9,10 +9,10 @@ import java.util.Set;
 import com.fav24.dataservices.domain.Generic;
 import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.security.AccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.EntityAccessPolicy;
-import com.fav24.dataservices.security.EntityAttribute;
 import com.fav24.dataservices.service.GenericService;
 
 

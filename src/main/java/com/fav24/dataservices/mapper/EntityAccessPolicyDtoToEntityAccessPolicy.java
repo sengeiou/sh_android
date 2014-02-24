@@ -2,17 +2,17 @@ package com.fav24.dataservices.mapper;
 
 import java.util.Map.Entry;
 
+import com.fav24.dataservices.domain.security.EntityAccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAttribute;
+import com.fav24.dataservices.domain.security.EntityData;
+import com.fav24.dataservices.domain.security.EntityDataAttribute;
+import com.fav24.dataservices.domain.security.EntityFilter;
+import com.fav24.dataservices.domain.security.EntityFilters;
+import com.fav24.dataservices.domain.security.EntityKey;
+import com.fav24.dataservices.domain.security.EntityKeys;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
+import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.dto.security.EntityAccessPolicyDto;
-import com.fav24.dataservices.security.EntityAccessPolicy;
-import com.fav24.dataservices.security.EntityAccessPolicy.OperationType;
-import com.fav24.dataservices.security.EntityAttribute;
-import com.fav24.dataservices.security.EntityData;
-import com.fav24.dataservices.security.EntityDataAttribute;
-import com.fav24.dataservices.security.EntityDataAttribute.Direction;
-import com.fav24.dataservices.security.EntityFilter;
-import com.fav24.dataservices.security.EntityFilters;
-import com.fav24.dataservices.security.EntityKey;
-import com.fav24.dataservices.security.EntityKeys;
 
 
 /**

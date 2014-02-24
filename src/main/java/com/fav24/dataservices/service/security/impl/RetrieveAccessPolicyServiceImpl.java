@@ -7,9 +7,9 @@ import java.util.Iterator;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.domain.security.AccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.security.AccessPolicy;
-import com.fav24.dataservices.security.EntityAccessPolicy;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
 
