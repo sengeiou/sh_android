@@ -3,12 +3,19 @@ package com.fav24.dataservices.domain.cache;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
+
 
 public class EntityCacheManager extends CacheManagerConfiguration
 {
 	private String name;
 	private CacheManagerConfiguration defaultCacheManagerConfiguration;
 	private Set<EntityCache> entitiesCacheConfigurations;
+
+	private CacheManager cacheManager;
+
 
 	/**
 	 * Gestor de caché para entidades.
@@ -86,5 +93,47 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 */
 	public boolean addEntityCacheConfiguration(EntityCache entityCache) {
 		return entitiesCacheConfigurations.add(entityCache);
+	}
+
+	/**
+	 * Retorna la configuración del gestor de caché construida.
+	 * 
+	 * @return la configuración del gestor de caché construida.
+	 */
+	public Configuration constructCacheManagerConfiguration() {
+
+		Configuration configuration;
+
+		configuration = new Configuration();
+		configuration.setDynamicConfig(true);
+
+		configuration.setMaxBytesLocalHeap(getMaxBytesLocalHeap());
+		configuration.setMaxBytesLocalDisk(getMaxBytesLocalDisk());
+
+		DiskStoreConfiguration diskStoreConfiguration = new DiskStoreConfiguration();
+		diskStoreConfiguration.setPath(getDiskStore().getPath());
+
+		configuration.addDiskStore(diskStoreConfiguration);
+
+		if (getDefaultCacheConfiguration() != null) {
+			configuration.setDefaultCacheConfiguration(getDefaultCacheConfiguration().constructCacheConfiguration());
+		}
+		
+		return configuration;
+	}
+
+	/**
+	 * Retorna el gestor de caché construido. 
+	 * 
+	 * @param configuration La estructura de configuración del gestor de caché.
+	 * 
+	 * @return el gestor de caché construido.
+	 */
+	public CacheManager constructCacheManager(Configuration configuration) {
+
+		cacheManager = CacheManager.create(configuration);
+		cacheManager.setName(getName());
+
+		return cacheManager;
 	}
 }

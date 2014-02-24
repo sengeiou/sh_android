@@ -1,7 +1,5 @@
 package com.fav24.dataservices.listener;
 
-import java.io.File;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +8,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.impl.GenericServiceJDBC;
+import com.fav24.dataservices.service.cache.LoadCacheService;
+import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 
 @Component
 public class ContextRefreshedListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -33,8 +31,19 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 	private static String applicationHome;
 
 	@Autowired
-	protected GenericServiceJDBC genericServiceJDBC;
+	protected LoadAccessPolicyService loadAccessPolicyService;
+	@Autowired
+	protected LoadCacheService loadCacheService;
 
+
+	/**
+	 * Retorna la ruta base de la aplicación.
+	 * 
+	 * @return la ruta base de la aplicación.
+	 */
+	public static String getApplicationHome() {
+		return applicationHome;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -58,56 +67,49 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		if (applicationContext.getParent() != null) {
 			return;	
 		}
-		
+
 		// Se obtiene el directorio base de la aplicación.
 		applicationHome = applicationContext.getEnvironment().getProperty(APPLICATION_HOME);
 
+		if (applicationHome == null) {
+			logger.error(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+		}
+		else {
+			loadAccessPolicy();
+			loadCache();
+		}
+	}
+
+	/**
+	 * Carga las políticas de acceso por defecto.
+	 */
+	public void loadAccessPolicy() {
+
 		try {
-
-			if (applicationHome == null) {
-
-				throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
-						ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
-			}
-			else {
-
-				// Se cargan los archivos de políticas de seguridad existentes.
-				File applicationHomeDir = new File(applicationHome);
-
-				if (!applicationHomeDir.exists()) {
-
-					throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS, 
-							String.format(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS_MESSAGE, applicationHomeDir.toPath().toString()));
-				}
-				else if (!applicationHomeDir.isDirectory()) {
-
-					throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY, 
-							String.format(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY_MESSAGE, applicationHomeDir.toPath().toString()));
-				}
-				else {
-
-					AccessPolicy.resetAccessPolicies();
-					AccessPolicy.loadDefaultAccessPolicies();
-
-					genericServiceJDBC.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
-				}
-			}
+			loadAccessPolicyService.loadDefaultAccessPolicy();
 		}
 		catch(ServerException e) {
 
-			AccessPolicy.resetAccessPolicies();
-			
+			loadAccessPolicyService.resetAccessPolicies();
+
 			logger.error(e.getMessage());
 		}
 	}
 
 	/**
-	 * Retorna la ruta base de la aplicación.
-	 * 
-	 * @return la ruta base de la aplicación.
+	 * Carga la configuración de la caché por defecto.
 	 */
-	public static String getApplicationHome() {
-		return applicationHome;
+	public void loadCache() {
+
+		try {
+			loadCacheService.loadDefaultCacheConfiguration();
+		}
+		catch(ServerException e) {
+
+			loadCacheService.resetCacheConfiguration();
+
+			logger.error(e.getMessage());
+		}
 	}
 }
 

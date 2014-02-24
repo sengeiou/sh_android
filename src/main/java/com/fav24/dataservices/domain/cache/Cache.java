@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Cache
 {
+	private static Cache systemCache;
+	
 	private String version;
 	private String description;
 	private CacheManagerConfiguration defaultCacheManagerConfiguration;

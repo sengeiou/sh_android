@@ -1,12 +1,26 @@
 package com.fav24.dataservices.domain.cache;
 
+import net.sf.ehcache.config.PersistenceConfiguration;
+
 
 /**
  * Configuración de una caché.
  */
 public class CacheConfiguration
 {
+	public static final Long DEFAULT_TIME_TO_IDLE_SECONDS = 120L;
+	public static final Long DEFAULT_TIME_TO_LIVE_SECONDS = 120L;
+	public static final Boolean DEFAULT_ETERNAL = false;
+	public static final Long DEFAULT_MAX_BYTES_LOCAL_HEAP = null;
+	public static final Long DEFAULT_MAX_ENTRIES_LOCAL_HEAP = 10000L;
+	public static final Long DEFAULT_MAX_BYTES_DISK = null;
+	public static final Long DEFAULT_MAX_ENTRIES_DISK = 10000000L;
+	public static final Long DEFAULT_DISK_EXPIRITY_THREAD_INTERVAL_SECONDS = 120L;
+	public static final MemoryStoreEvictionPolicy DEFAULT_MEMORY_EVICTION_POLICY = MemoryStoreEvictionPolicy.LRU;
+	public static final Persistence DEFAULT_PERSISTENCE = new Persistence(true);
+
 	private CacheConfiguration parentConfiguration;
+
 	private Long timeToIdleSeconds;
 	private Long timeToLiveSeconds;
 	private Boolean eternal;
@@ -44,6 +58,7 @@ public class CacheConfiguration
 		 * @return el nombre con el que se identifica el algoritmo de desalojo.
 		 */
 		public String getMemoryStoreEvictionPolicy() {
+
 			return memoryStoreEvictionPolicy;
 		}
 
@@ -110,7 +125,7 @@ public class CacheConfiguration
 	public CacheConfiguration getParentConfiguration() {
 		return parentConfiguration;
 	}
-	
+
 	/**
 	 * Asigna la configuración por defecto establecida por su antecesor.
 	 * 
@@ -119,14 +134,23 @@ public class CacheConfiguration
 	public void getParentConfiguration(CacheConfiguration parentConfiguration) {
 		this.parentConfiguration = parentConfiguration;
 	}
-	
+
 	/**
 	 * Retorna el tiempo máximo de vida en segundos de un elemento que no está siendo consultado.
 	 *   
 	 * @return el tiempo máximo de vida en segundos de un elemento que no está siendo consultado.
 	 */
 	public Long getTimeToIdleSeconds() {
-		return timeToIdleSeconds;
+
+		if (timeToIdleSeconds != null) {
+			return timeToIdleSeconds;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getTimeToIdleSeconds();
+		}
+
+		return DEFAULT_TIME_TO_IDLE_SECONDS; 
 	}
 
 	/**
@@ -144,7 +168,16 @@ public class CacheConfiguration
 	 * @return el tiempo máximo de vida en segundos de un elemento.
 	 */
 	public Long getTimeToLiveSeconds() {
-		return timeToLiveSeconds;
+
+		if (timeToLiveSeconds != null) {
+			return timeToLiveSeconds;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getTimeToLiveSeconds();
+		}
+
+		return DEFAULT_TIME_TO_LIVE_SECONDS; 
 	}
 
 	/**
@@ -166,7 +199,16 @@ public class CacheConfiguration
 	 * están o no afectados por el paso del tiempo.
 	 */
 	public Boolean getEternal() {
-		return eternal;
+
+		if (eternal != null) {
+			return eternal;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getEternal();
+		}
+
+		return DEFAULT_ETERNAL; 
 	}
 
 	/**
@@ -187,7 +229,16 @@ public class CacheConfiguration
 	 * @return el número máximo de elementos en memoria.
 	 */
 	public Long getMaxEntriesLocalHeap() {
-		return maxEntriesLocalHeap;
+
+		if (maxEntriesLocalHeap != null) {
+			return maxEntriesLocalHeap;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getMaxEntriesLocalHeap();
+		}
+
+		return DEFAULT_MAX_ENTRIES_LOCAL_HEAP; 
 	}
 
 	/**
@@ -205,7 +256,16 @@ public class CacheConfiguration
 	 * @return el número máximo de elementos en disco.
 	 */
 	public Long getMaxEntriesLocalDisk() {
-		return maxEntriesLocalDisk;
+
+		if (maxEntriesLocalDisk != null) {
+			return maxEntriesLocalDisk;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getMaxEntriesLocalDisk();
+		}
+
+		return DEFAULT_MAX_ENTRIES_DISK; 
 	}
 
 	/**
@@ -223,7 +283,16 @@ public class CacheConfiguration
 	 * @return el intervalo de tiempo entre chequeos, en busca de elementos caducados en disco.
 	 */
 	public Long getDiskExpiryThreadIntervalSeconds() {
-		return diskExpiryThreadIntervalSeconds;
+
+		if (diskExpiryThreadIntervalSeconds != null) {
+			return diskExpiryThreadIntervalSeconds;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getDiskExpiryThreadIntervalSeconds();
+		}
+
+		return DEFAULT_DISK_EXPIRITY_THREAD_INTERVAL_SECONDS; 
 	}
 
 	/**
@@ -231,8 +300,8 @@ public class CacheConfiguration
 	 * 
 	 * @param diskExpiryThreadIntervalSeconds Intervalo de tiempo en segundos
 	 */
-	public void setDiskExpiryThreadIntervalSeconds(
-			Long diskExpiryThreadIntervalSeconds) {
+	public void setDiskExpiryThreadIntervalSeconds(Long diskExpiryThreadIntervalSeconds) {
+
 		this.diskExpiryThreadIntervalSeconds = diskExpiryThreadIntervalSeconds;
 	}
 
@@ -242,7 +311,16 @@ public class CacheConfiguration
 	 * @return la política de desalojo de las entradas almacenadas en memoria.
 	 */
 	public MemoryStoreEvictionPolicy getMemoryStoreEvictionPolicy() {
-		return memoryStoreEvictionPolicy;
+
+		if (memoryStoreEvictionPolicy != null) {
+			return memoryStoreEvictionPolicy;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getMemoryStoreEvictionPolicy();
+		}
+
+		return DEFAULT_MEMORY_EVICTION_POLICY; 
 	}
 
 	/**
@@ -250,8 +328,8 @@ public class CacheConfiguration
 	 * 
 	 * @param memoryStoreEvictionPolicy La política de desalojo a usar.
 	 */
-	public void setMemoryStoreEvictionPolicy(
-			MemoryStoreEvictionPolicy memoryStoreEvictionPolicy) {
+	public void setMemoryStoreEvictionPolicy(MemoryStoreEvictionPolicy memoryStoreEvictionPolicy) {
+
 		this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
 	}
 
@@ -261,7 +339,16 @@ public class CacheConfiguration
 	 * @return la configuración de persistencia de la caché.
 	 */
 	public Persistence getPersistente() {
-		return persistence;
+		
+		if (persistence != null) {
+			return persistence;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getPersistente();
+		}
+		
+		return DEFAULT_PERSISTENCE; 
 	}
 
 	/**
@@ -279,7 +366,16 @@ public class CacheConfiguration
 	 * @return el número máximo de bytes en memoria.
 	 */
 	public Long getMaxBytesLocalHeap() {
-		return maxBytesLocalHeap;
+		
+		if (maxBytesLocalHeap != null) {
+			return maxBytesLocalHeap;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getMaxBytesLocalHeap();
+		}
+		
+		return DEFAULT_MAX_BYTES_LOCAL_HEAP; 
 	}
 
 	/**
@@ -297,7 +393,16 @@ public class CacheConfiguration
 	 * @return el número máximo de bytes en disco.
 	 */
 	public Long getMaxBytesLocalDisk() {
-		return maxBytesLocalDisk;
+		
+		if (maxBytesLocalDisk != null) {
+			return maxBytesLocalDisk;
+		}
+
+		if (parentConfiguration != null) {
+			return parentConfiguration.getMaxBytesLocalDisk();
+		}
+		
+		return DEFAULT_MAX_BYTES_DISK; 
 	}
 
 	/**
@@ -307,5 +412,33 @@ public class CacheConfiguration
 	 */
 	public void setMaxBytesLocalDisk(Long maxBytesLocalDisk) {
 		this.maxBytesLocalDisk = maxBytesLocalDisk;
+	}
+
+	/**
+	 * Retorna la configuración de caché construida.
+	 * 
+	 * @return la configuración caché construida.
+	 */
+	public net.sf.ehcache.config.CacheConfiguration constructCacheConfiguration() {
+
+		net.sf.ehcache.config.CacheConfiguration configuration;
+
+		configuration = new net.sf.ehcache.config.CacheConfiguration();
+		configuration.setDiskExpiryThreadIntervalSeconds(getDiskExpiryThreadIntervalSeconds());
+		configuration.setMemoryStoreEvictionPolicy(getMemoryStoreEvictionPolicy().getMemoryStoreEvictionPolicy());
+
+		configuration.setMaxBytesLocalHeap(getMaxBytesLocalHeap());
+		configuration.setMaxEntriesLocalHeap(getMaxEntriesLocalHeap());
+		configuration.setMaxBytesLocalDisk(getMaxBytesLocalDisk());
+		configuration.setMaxEntriesLocalDisk(getMaxEntriesLocalDisk());
+		configuration.setEternal(getEternal());
+		configuration.setTimeToIdleSeconds(getTimeToIdleSeconds());
+		configuration.setTimeToLiveSeconds(getTimeToLiveSeconds());
+
+		PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
+		persistenceConfiguration.setStrategy(getPersistente().isActive() ? "localTempSwap" : "none");
+		configuration.persistence(persistenceConfiguration);
+
+		return configuration;
 	}
 }

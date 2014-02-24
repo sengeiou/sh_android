@@ -128,8 +128,7 @@ public class CacheManagerConfiguration
 	 * 
 	 * @param defaultCacheConfiguration La nueva configuración por defecto. 
 	 */
-	public void setDefaultCacheConfiguration(
-			CacheConfiguration defaultCacheConfiguration) {
+	public void setDefaultCacheConfiguration(CacheConfiguration defaultCacheConfiguration) {
 		this.defaultCacheConfiguration = defaultCacheConfiguration;
 	}
 }
