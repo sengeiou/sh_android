@@ -1,4 +1,4 @@
-package com.fav24.dataservices.xml;
+package com.fav24.dataservices.xml.security;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

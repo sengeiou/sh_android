@@ -4,9 +4,9 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<!-- Configuración por defecto de un gestor de cachés. -->
-				<xsd:element name="DefaultCacheManager" type="TCacheManager" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="DefaultCacheManager" type="TCacheManagerConfiguration" minOccurs="0" maxOccurs="1"/>
 				<!-- Configuración por defecto de una caché. -->
-				<xsd:element name="DefaultCache" type="TCache" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="DefaultCache" type="TCacheConfiguration" minOccurs="0" maxOccurs="1"/>
 				<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
 				<xsd:element name="EntityCacheManager" type="TEntityCacheManager" minOccurs="1" maxOccurs="unbounded"/>
 			</xsd:sequence>
@@ -21,7 +21,7 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- -->
-	<xsd:complexType name="TCacheManager">
+	<xsd:complexType name="TCacheManagerConfiguration">
 		<xsd:sequence>
 			<!-- Ubicación de los ficheros de persistencia de la caché. -->
 			<xsd:element name="DiskStore" type="TDiskStore" minOccurs="0" maxOccurs="1"/>
@@ -32,7 +32,7 @@
 	<!-- -->
 	<xsd:complexType name="TEntityCacheManager">
 		<xsd:complexContent>
-			<xsd:extension base="TCacheManager">
+			<xsd:extension base="TCacheManagerConfiguration">
 				<xsd:sequence>
 					<xsd:element name="EntityCache" type="TEntityCache" minOccurs="1" maxOccurs="unbounded"/>
 				</xsd:sequence>
@@ -41,7 +41,7 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 	<!-- -->
-	<xsd:complexType name="TCache">
+	<xsd:complexType name="TCacheConfiguration">
 		<xsd:sequence>
 			<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
 			<xsd:element name="TimeToIdleSeconds" type="xsd:long"/>
@@ -73,7 +73,7 @@
 	<!-- -->
 	<xsd:complexType name="TEntityCache">
 		<xsd:complexContent>
-			<xsd:extension base="TCache">
+			<xsd:extension base="TCacheConfiguration">
 				<xsd:attribute name="Alias" type="xsd:string" use="required"/>
 			</xsd:extension>
 		</xsd:complexContent>

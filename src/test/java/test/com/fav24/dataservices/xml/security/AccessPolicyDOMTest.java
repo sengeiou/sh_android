@@ -1,11 +1,12 @@
-package test.com.fav24.dataservices.xml;
+package test.com.fav24.dataservices.xml.security;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.xml.AccessPolicyDOM;
+import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
 public class AccessPolicyDOMTest {

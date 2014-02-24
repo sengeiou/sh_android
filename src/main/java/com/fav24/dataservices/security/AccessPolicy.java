@@ -14,7 +14,7 @@ import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.service.security.AccessPolicyService;
-import com.fav24.dataservices.xml.AccessPolicyDOM;
+import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
 /**

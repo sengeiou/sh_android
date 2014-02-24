@@ -12,7 +12,7 @@ import com.fav24.dataservices.security.AccessPolicy;
 import com.fav24.dataservices.security.AccessPolicyFiles;
 import com.fav24.dataservices.service.impl.GenericServiceJDBC;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
-import com.fav24.dataservices.xml.AccessPolicyDOM;
+import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
 /**

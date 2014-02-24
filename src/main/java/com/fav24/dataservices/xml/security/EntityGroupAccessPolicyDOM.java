@@ -1,4 +1,4 @@
-package com.fav24.dataservices.xml;
+package com.fav24.dataservices.xml.security;
 
 import java.util.HashSet;
 import java.util.Set;

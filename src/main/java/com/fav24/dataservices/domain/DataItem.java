@@ -23,7 +23,7 @@ public class DataItem {
 		private final String internalAttribute;
 
 		/**
-		 * Constructor privado del tipo de nexo.
+		 * Constructor privado del atributo interno.
 		 * 
 		 * @param internalAttribute Cadena de texto aue identifica el atributo interno.
 		 */
@@ -63,7 +63,7 @@ public class DataItem {
 		 * 
 		 * @param text Cadena de texto a partir de la que se deduce el atributo interno.
 		 * 
-		 * @return el tipo de nexo a partir de la cadena de texto indicada.
+		 * @return el atributo interno a partir de la cadena de texto indicada.
 		 */
 		public static InternalAttribute fromString(String text) {
 			if (text != null) {

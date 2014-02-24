@@ -1,4 +1,4 @@
-package com.fav24.dataservices.xml;
+package com.fav24.dataservices.xml.security;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.security.AccessPolicy;
+import com.fav24.dataservices.xml.BasicDOM;
 
 
 public class AccessPolicyDOM extends AccessPolicy

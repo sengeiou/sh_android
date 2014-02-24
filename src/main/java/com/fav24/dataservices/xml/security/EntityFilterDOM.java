@@ -1,25 +1,25 @@
-package com.fav24.dataservices.xml;
+package com.fav24.dataservices.xml.security;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.fav24.dataservices.security.EntityKey;
+import com.fav24.dataservices.security.EntityFilter;
 
 
 /**
- * Clase que define una clave de la sección Keys de la definición de las políticas de acceso de una entidad.
+ * Clase que define un filtro de la sección Filters de la definición de las políticas de acceso de una entidad.
  * 
  * @author Fav24
  */
-public class EntityKeyDOM extends EntityKey {
+public class EntityFilterDOM extends EntityFilter {
 
-	
+
 	/**
-	 * Construye una clave para una cierta entidad.
+	 * Construye un filtro para una cierta entidad.
 	 * 
 	 * @param node Nodo de inicio de la clave.
 	 */
-	public EntityKeyDOM(Node node) {
+	public EntityFilterDOM(Node node) {
 
 		NodeList nodes_i = node.getChildNodes();
 
@@ -31,7 +31,7 @@ public class EntityKeyDOM extends EntityKey {
 				String nodeName = node_i.getNodeName();
 
 				if ("Attribute".equals(nodeName)) {
-					addKeyAttribute(new EntityAttributeDOM(node_i));
+					addFilterAttribute(new EntityAttributeDOM(node_i));
 				}
 			}
 		}
