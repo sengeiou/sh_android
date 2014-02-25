@@ -1,6 +1,7 @@
 package com.fav24.dataservices.domain.cache;
 
 
+
 /**
  * Configuración de caché para una determinada entidad.
  */
@@ -8,13 +9,12 @@ public class EntityCache extends CacheConfiguration
 {
 	private String alias;
 
-
 	/**
 	 * Constructor sin parámetros.
 	 */
 	public EntityCache() {
 	}
-	
+
 	/**
 	 * Constructor con parámetros.
 	 * 
@@ -24,7 +24,7 @@ public class EntityCache extends CacheConfiguration
 
 		super(parentConfiguration);
 	}
-	
+
 	/**
 	 * Constructor con parámetros.
 	 *  
@@ -34,6 +34,7 @@ public class EntityCache extends CacheConfiguration
 	public EntityCache(String alias, CacheConfiguration parentConfiguration) {
 
 		super(parentConfiguration);
+
 		this.alias = alias;
 	}
 
@@ -53,5 +54,21 @@ public class EntityCache extends CacheConfiguration
 	 */
 	public void setAlias(String alias) {
 		this.alias = alias;
+	}
+
+	/**
+	 * Retorna una nueva instancia idéntica a esta.
+	 * 
+	 * @return la nueva instancia.
+	 */
+	public EntityCache clone() {
+
+		EntityCache clone = new EntityCache();
+
+		super.clone(clone);
+
+		clone.alias = alias;
+
+		return clone;
 	}
 }

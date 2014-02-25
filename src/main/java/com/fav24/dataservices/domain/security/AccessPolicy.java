@@ -201,18 +201,6 @@ public class AccessPolicy {
 	}
 
 	/**
-	 * Asigna las políticas de acceso efectivas a partir de este momento.
-	 * 
-	 * @param accessPolicy Nuevas políticas a asignar.
-	 */
-	public static final void setCurrentAccesPolicy(final AccessPolicy accessPolicy) {
-
-		synchronized(AccessPolicy.class) {
-			currentAccesPolicy = accessPolicy;
-		}
-	}
-
-	/**
 	 * Modifica las políticas de acceso, sustituyendo las existentes coincidentes por las indicadas por parámetro.
 	 * 
 	 * @param accessPolicy Políticas a añadir/sustituir.

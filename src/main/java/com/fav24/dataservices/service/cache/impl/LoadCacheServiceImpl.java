@@ -25,8 +25,8 @@ public class LoadCacheServiceImpl implements LoadCacheService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void resetCacheConfiguration() {
-		Cache.resetCacheConfiguration();
+	public void destroySystemCache() {
+		Cache.destroy();
 	}
 
 	/**
@@ -35,8 +35,8 @@ public class LoadCacheServiceImpl implements LoadCacheService {
 	@Override
 	public void loadDefaultCacheConfiguration() throws ServerException {
 
-		Cache.resetCacheConfiguration();
-		Cache.loadDefaultCacheConfiguration();
+		Cache.destroy();
+		Cache.loadDefaultCacheConfigurations();
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class LoadCacheServiceImpl implements LoadCacheService {
 
 		Cache cache = new CacheDOM(cacheConfigurationStream);
 
-		Cache.mergeCacheConfiguration(cache);
+		Cache.mergeCurrentCacheConfiguration(cache);
 
 		return cache;
 	}

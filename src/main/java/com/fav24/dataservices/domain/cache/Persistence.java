@@ -39,4 +39,16 @@ public class Persistence
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
+	
+	/**
+	 * Retorna una nueva instancia idéntica a esta.
+	 * 
+	 * @return la nueva instancia.
+	 */
+	public Persistence clone() {
+		
+		Persistence clone = new Persistence(isActive());
+		
+		return clone;
+	}
 }

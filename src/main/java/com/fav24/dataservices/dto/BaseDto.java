@@ -27,7 +27,8 @@ public class BaseDto implements Serializable {
 
 	private static final String STATUS_CODE = "code";
 	private static final String STATUS_MESSAGE = "message";
-
+	
+	private String alias;
 	private Map<String, String> status;
 	@JsonUnwrapped(enabled=true)
 	private RequestorDto requestor;
@@ -37,6 +38,7 @@ public class BaseDto implements Serializable {
 	 */
 	public BaseDto() {
 
+		this.alias = null;
 		this.status = new TreeMap<String, String>();
 		this.requestor = null;
 	}
@@ -48,6 +50,7 @@ public class BaseDto implements Serializable {
 	 */
 	public BaseDto(RequestorDto requestor) {
 
+		this.alias = null;
 		this.status = new TreeMap<String, String>();
 		this.requestor = requestor;
 	}
@@ -73,6 +76,24 @@ public class BaseDto implements Serializable {
 		this.status.put(STATUS_MESSAGE, statusMessage);
 	}
 
+	/**
+	 * Retorna el alias de esta petición.
+	 *  
+	 * @return el alias de esta petición.
+	 */
+	public String getAlias() {
+		return alias;
+	}
+	
+	/**
+	 * Asigna el alias de esta petición.
+	 *  
+	 * @param alias El alias a asignar.
+	 */
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	
 	/**
 	 * Retorna el mapa que contiene el estado de la información contenida en el Dto.
 	 *  

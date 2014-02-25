@@ -4,13 +4,14 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.impl.GenericServiceJDBC;
+import com.fav24.dataservices.service.GenericService;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
@@ -25,17 +26,18 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 	@Autowired
-	protected GenericServiceJDBC genericServiceJDBC;
+	@Qualifier(value="GenericServiceJDBC")
+	protected GenericService genericService;
 
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void resetAccessPolicies() {
+	public void resetAccessPolicies() throws ServerException {
 		AccessPolicy.resetAccessPolicies();
-		
-		genericServiceJDBC.resetAccessPoliciesInformationAgainstDataSource();
+
+		applyCurrentAccessPolicy();
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 		AccessPolicy.resetAccessPolicies();
 		AccessPolicy.loadDefaultAccessPolicies();
 
-		genericServiceJDBC.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		applyCurrentAccessPolicy();
 	}
 
 	/**
@@ -69,7 +71,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 			}
 		}
 
-		genericServiceJDBC.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		applyCurrentAccessPolicy();
 
 		return accessPolicyFiles;
 	}
@@ -84,8 +86,25 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 		AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
 
-		genericServiceJDBC.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		applyCurrentAccessPolicy();
 
 		return accessPolicy;
+	}
+
+	/**
+	 * Comprueba y aplica la configuración actual de políticas de acceso. 
+	 * 
+	 * @throws ServerException
+	 */
+	private void applyCurrentAccessPolicy() throws ServerException {
+
+		if (AccessPolicy.getCurrentAccesPolicy() != null) {
+
+			genericService.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());		
+		}
+		else {
+
+			genericService.resetAccessPoliciesInformationAgainstDataSource();
+		}
 	}
 }

@@ -131,7 +131,7 @@ public class CacheConfiguration
 	 * 
 	 * @param parentConfiguration La configuración por defecto a asignar.
 	 */
-	public void getParentConfiguration(CacheConfiguration parentConfiguration) {
+	public void setParentConfiguration(CacheConfiguration parentConfiguration) {
 		this.parentConfiguration = parentConfiguration;
 	}
 
@@ -339,7 +339,7 @@ public class CacheConfiguration
 	 * @return la configuración de persistencia de la caché.
 	 */
 	public Persistence getPersistente() {
-		
+
 		if (persistence != null) {
 			return persistence;
 		}
@@ -347,7 +347,7 @@ public class CacheConfiguration
 		if (parentConfiguration != null) {
 			return parentConfiguration.getPersistente();
 		}
-		
+
 		return DEFAULT_PERSISTENCE; 
 	}
 
@@ -366,7 +366,7 @@ public class CacheConfiguration
 	 * @return el número máximo de bytes en memoria.
 	 */
 	public Long getMaxBytesLocalHeap() {
-		
+
 		if (maxBytesLocalHeap != null) {
 			return maxBytesLocalHeap;
 		}
@@ -374,7 +374,7 @@ public class CacheConfiguration
 		if (parentConfiguration != null) {
 			return parentConfiguration.getMaxBytesLocalHeap();
 		}
-		
+
 		return DEFAULT_MAX_BYTES_LOCAL_HEAP; 
 	}
 
@@ -393,7 +393,7 @@ public class CacheConfiguration
 	 * @return el número máximo de bytes en disco.
 	 */
 	public Long getMaxBytesLocalDisk() {
-		
+
 		if (maxBytesLocalDisk != null) {
 			return maxBytesLocalDisk;
 		}
@@ -401,7 +401,7 @@ public class CacheConfiguration
 		if (parentConfiguration != null) {
 			return parentConfiguration.getMaxBytesLocalDisk();
 		}
-		
+
 		return DEFAULT_MAX_BYTES_DISK; 
 	}
 
@@ -417,13 +417,16 @@ public class CacheConfiguration
 	/**
 	 * Retorna la configuración de caché construida.
 	 * 
+	 * @param name Nombre de la caché para la que se creará la configuración.
+	 * 
 	 * @return la configuración caché construida.
 	 */
-	public net.sf.ehcache.config.CacheConfiguration constructCacheConfiguration() {
+	public net.sf.ehcache.config.CacheConfiguration constructCacheConfiguration(String name) {
 
 		net.sf.ehcache.config.CacheConfiguration configuration;
 
 		configuration = new net.sf.ehcache.config.CacheConfiguration();
+		configuration.setName(name);
 		configuration.setDiskExpiryThreadIntervalSeconds(getDiskExpiryThreadIntervalSeconds());
 		configuration.setMemoryStoreEvictionPolicy(getMemoryStoreEvictionPolicy().getMemoryStoreEvictionPolicy());
 
@@ -440,5 +443,73 @@ public class CacheConfiguration
 		configuration.persistence(persistenceConfiguration);
 
 		return configuration;
+	}
+
+	/**
+	 * Retorna la configuración por defecto de una cache.
+	 * 
+	 * @return la configuración por defecto de una cache.
+	 */
+	public static net.sf.ehcache.config.CacheConfiguration DefaultCacheConfiguration() {
+
+		net.sf.ehcache.config.CacheConfiguration configuration;
+
+		configuration = new net.sf.ehcache.config.CacheConfiguration();
+		configuration.setDiskExpiryThreadIntervalSeconds(DEFAULT_DISK_EXPIRITY_THREAD_INTERVAL_SECONDS);
+		configuration.setMemoryStoreEvictionPolicy(DEFAULT_MEMORY_EVICTION_POLICY.getMemoryStoreEvictionPolicy());
+
+		configuration.setMaxBytesLocalHeap(DEFAULT_MAX_BYTES_LOCAL_HEAP);
+		configuration.setMaxEntriesLocalHeap(DEFAULT_MAX_ENTRIES_LOCAL_HEAP);
+		configuration.setMaxBytesLocalDisk(DEFAULT_MAX_BYTES_DISK);
+		configuration.setMaxEntriesLocalDisk(DEFAULT_MAX_ENTRIES_DISK);
+		configuration.setEternal(DEFAULT_ETERNAL);
+		configuration.setTimeToIdleSeconds(DEFAULT_TIME_TO_IDLE_SECONDS);
+		configuration.setTimeToLiveSeconds(DEFAULT_TIME_TO_LIVE_SECONDS);
+
+		PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
+		persistenceConfiguration.setStrategy(DEFAULT_PERSISTENCE.isActive() ? "localTempSwap" : "none");
+		configuration.persistence(persistenceConfiguration);
+
+		return configuration;
+	}
+
+	/**
+	 * Retorna una nueva instancia idéntica a esta.
+	 * 
+	 * @param clone Nueva instancia a poblar, o <code>null</code>.
+	 * 
+	 * @return la nueva instancia poblada.
+	 */
+	public CacheConfiguration clone(CacheConfiguration clone) {
+
+		if (clone == null) {
+			clone = new CacheConfiguration();
+		}
+
+		if (parentConfiguration == null) {
+			clone.parentConfiguration = null;
+		}
+		else {
+			clone.parentConfiguration = parentConfiguration.clone(null);
+		}
+
+		clone.timeToIdleSeconds = timeToIdleSeconds;
+		clone.timeToLiveSeconds = timeToLiveSeconds;
+		clone.eternal = eternal;
+		clone.maxBytesLocalHeap = maxBytesLocalHeap;
+		clone.maxEntriesLocalHeap = maxEntriesLocalHeap;
+		clone.maxBytesLocalDisk = maxBytesLocalDisk;
+		clone.maxEntriesLocalDisk = maxEntriesLocalDisk;
+		clone.diskExpiryThreadIntervalSeconds = diskExpiryThreadIntervalSeconds;
+		clone.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
+
+		if (persistence == null) {
+			clone.persistence = null;
+		}
+		else {
+			clone.persistence = persistence.clone();
+		}
+
+		return clone;
 	}
 }

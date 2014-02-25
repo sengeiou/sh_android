@@ -513,7 +513,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
 		countQuery.append(queryFrom).append(queryWhere);
-		operation.getMetadata().setEntitySize(jdbcTemplate.queryForObject(countQuery.toString(), params, Long.class));
+		operation.getMetadata().setTotalItems(jdbcTemplate.queryForObject(countQuery.toString(), params, Long.class));
 
 		return operation;
 	}

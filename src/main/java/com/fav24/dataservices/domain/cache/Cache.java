@@ -1,23 +1,42 @@
 package com.fav24.dataservices.domain.cache;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.listener.ContextRefreshedListener;
+import com.fav24.dataservices.service.cache.CacheService;
+import com.fav24.dataservices.xml.cache.CacheDOM;
 
 
 public class Cache
 {
+	public static final String APPLICATION_CACHE_FILES_SUFIX = ".cache.xml";
+
 	private static Cache systemCache;
-	
+
 	private String version;
 	private String description;
 	private CacheManagerConfiguration defaultCacheManagerConfiguration;
 	private AbstractList<EntityCacheManager> entityCacheManagers;
+	private Map<String, EntityCacheManager> cacheCacheManager;
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public Cache() { 
-		entityCacheManagers = new ArrayList<EntityCacheManager>();
+
+		this.version = null;
+		this.description = null;
+		this.defaultCacheManagerConfiguration = null;
+		this.entityCacheManagers = new ArrayList<EntityCacheManager>();
+		this.cacheCacheManager = new HashMap<String, EntityCacheManager>(); 
 	}
 
 	/**
@@ -25,10 +44,11 @@ public class Cache
 	 */
 	public Cache(String version, String description) {
 
-		this.entityCacheManagers = new ArrayList<EntityCacheManager>();
-
 		this.version = version;
 		this.description = description;
+		this.defaultCacheManagerConfiguration = null;
+		this.entityCacheManagers = new ArrayList<EntityCacheManager>();
+		this.cacheCacheManager = new HashMap<String, EntityCacheManager>(); 
 	}
 
 	/**
@@ -112,6 +132,226 @@ public class Cache
 	 * @return true (as specified by Collection.add)
 	 */
 	public boolean addEntityCacheManager(EntityCacheManager entityCacheManager) {
-		return entityCacheManagers.add(entityCacheManager);
+
+		boolean result = entityCacheManagers.add(entityCacheManager);
+
+		for (EntityCache entityCache : entityCacheManager.getEntitiesCacheConfigurations()) {
+			cacheCacheManager.put(entityCache.getAlias(), entityCacheManager);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Retorna el gestor de caché que contiene la caché de alias el indicado.
+	 * 
+	 * @param cacheAlias Alias de la caché de la que se desea obtener el gestor.
+	 * 
+	 * @return el gestor de caché que contiene la caché de alias el indicado.
+	 */
+	public EntityCacheManager getCacheManager(String cacheAlias) {
+		return cacheCacheManager.get(cacheAlias);
+	}
+
+	/**
+	 * Modifica las políticas de acceso efectivas a partir de este momento.
+	 * 
+	 * En el caso de coincidir entidades, sustituye las existentes por las indicadas por parámetro.
+	 * 
+	 * @param cacheConfiguration Configuración a añadir/sustituir.
+	 */
+	public static final void mergeCurrentCacheConfiguration(final Cache cacheConfiguration) {
+
+		synchronized(Cache.class) {
+
+			if (cacheConfiguration != null) {
+
+				if (systemCache == null) {
+					systemCache = cacheConfiguration.clone();
+				}
+				else {
+					systemCache.mergeCacheConfiguration(cacheConfiguration);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Modifica la configuración de la caché, sustituyendo las existentes coincidentes por las indicadas por parámetro.
+	 * 
+	 * Sustituye las cachés actuales coincidentes, por las nuevas.
+	 * Esto implica que se rompen las cachés coincidente existentes.
+	 * 
+	 * @param cacheConfiguration Configuración a añadir/sustituir.
+	 */
+	public void mergeCacheConfiguration(final Cache cacheConfiguration) {
+
+		if (cacheConfiguration != null) {
+
+			/*
+			 * Se crea la nueva lista de gestores de caché, con sus configuraciones de caché.
+			 */
+			AbstractList<EntityCacheManager> newEntityCacheManagers = new ArrayList<EntityCacheManager>(cacheConfiguration.entityCacheManagers.size());
+
+			for (EntityCacheManager entityCacheManager : cacheConfiguration.entityCacheManagers) {
+
+				newEntityCacheManagers.add(entityCacheManager.clone());
+			}
+
+			/*
+			 * Se eliminan las cachés existentes que serán sustituidas por las nuevas.
+			 */
+			for (EntityCacheManager newEntityCacheManager : newEntityCacheManagers) {
+
+				for (EntityCache newEntityCache : newEntityCacheManager.getEntitiesCacheConfigurations()) {
+
+					for (EntityCacheManager entityCacheManager : entityCacheManagers) {
+
+						if (entityCacheManager.removeEntityCache(newEntityCache.getAlias())) {
+							break;
+						}
+					}
+				}
+			}
+
+			/*
+			 * Se mueven las configuraciones de las cachés existentes a los nuevos gestores.
+			 */
+			for (EntityCacheManager newEntityCacheManager : newEntityCacheManagers) {
+
+				Iterator<EntityCacheManager> entityCacheManagerIterator = entityCacheManagers.iterator();
+				while (entityCacheManagerIterator.hasNext()) {
+
+					EntityCacheManager entityCacheManager = entityCacheManagerIterator.next();
+
+					if (entityCacheManager.getName() == newEntityCacheManager.getName() || 
+							(entityCacheManager.getName() != null && entityCacheManager.getName().equals(newEntityCacheManager.getName()))
+							) {
+
+						for (EntityCache entityCache : entityCacheManager.getEntitiesCacheConfigurations()) {
+							newEntityCacheManager.addEntityCacheConfiguration(entityCache.clone());
+						}
+
+						entityCacheManager.destroy();
+						entityCacheManagerIterator.remove();
+					}
+				}
+			}
+
+			/*
+			 * Se construyen y añaden las nuevas conifguraciones de caché.
+			 */
+			for (EntityCacheManager newEntityCacheManager : newEntityCacheManagers) {
+
+				newEntityCacheManager.constructCacheManager();
+
+				addEntityCacheManager(newEntityCacheManager);
+			}
+		}
+	}
+
+	/**
+	 * Rompe todas las cachés activas.
+	 * Elimina todas las configuraciones de caché establecidas hasta el momento.
+	 */
+	public static final void destroy() {
+
+		synchronized(Cache.class) {
+
+			if (systemCache != null) {
+
+				for (EntityCacheManager entityCacheManager : systemCache.entityCacheManagers) {
+
+					entityCacheManager.destroy();
+				}
+				systemCache = null;
+			}
+		}
+	}
+
+	/**
+	 * Carga las configuraciones de caché contenidas en el directorio base de la aplicación
+	 * definido en el parámetro: "dataservices.home".
+	 * 
+	 * @throws ServerException 
+	 */
+	public static final void loadDefaultCacheConfigurations() throws ServerException {
+
+		String applicationHome = ContextRefreshedListener.getApplicationHome();
+
+		// Se cargan los archivos de políticas de seguridad existentes.
+		File applicationHomeDir = new File(applicationHome);
+
+		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
+
+			FilenameFilter fileNameFilter = new FilenameFilter() {
+
+				@Override
+				public boolean accept(File dir, String name) {
+
+					if (name.endsWith(APPLICATION_CACHE_FILES_SUFIX)) {
+						return true;
+					}
+
+					return false;
+				}
+			};
+
+			File[] cacheConfigurationFiles = applicationHomeDir.listFiles(fileNameFilter);
+
+			if (cacheConfigurationFiles != null && cacheConfigurationFiles.length > 0) {
+
+				for(File cacheConfigurationFile : cacheConfigurationFiles) {
+
+					try {
+
+						mergeCurrentCacheConfiguration(new CacheDOM(cacheConfigurationFile.toURI().toURL()));
+					} 
+					catch (MalformedURLException e) {
+						throw new ServerException(CacheService.ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL, 
+								String.format(CacheService.ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL_MESSAGE, cacheConfigurationFile.toURI().toString()));
+					}
+				}
+			}
+		}
+		else {
+
+			throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+		}
+	}
+
+	/**
+	 * Retorna una nueva instancia idéntica a esta.
+	 * 
+	 * @return la nueva instancia.
+	 */
+	public Cache clone() {
+
+		Cache clone = new Cache();
+
+		clone.version = version;
+		clone.description = description;
+
+		if (defaultCacheManagerConfiguration == null) {
+			clone.defaultCacheManagerConfiguration = null;
+		}
+		else {
+			clone.defaultCacheManagerConfiguration = defaultCacheManagerConfiguration.clone(null);
+		}
+
+		if (entityCacheManagers == null) {
+			clone.entityCacheManagers = null;
+		}
+		else {
+			clone.entityCacheManagers = new ArrayList<EntityCacheManager>(entityCacheManagers.size());
+
+			for(EntityCacheManager entityCacheManager : entityCacheManagers) {
+
+				this.entityCacheManagers.add(entityCacheManager.clone());
+			}
+		}
+
+		return clone;
 	}
 }

@@ -13,6 +13,13 @@ public class DiskStore
 
 
 	/**
+	 * Constructor por defecto.
+	 */
+	public DiskStore() {
+		this.path = DEFAULT_SYSTEM_TEMP_DIR;
+	}
+
+	/**
 	 * Constructor con parámetro.
 	 * 
 	 * @param path Ubicación de los ficheros de persistencia de la caché. 
@@ -38,5 +45,17 @@ public class DiskStore
 	 */
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	/**
+	 * Retorna una nueva instancia idéntica a esta.
+	 * 
+	 * @return la nueva instancia.
+	 */
+	public DiskStore clone() {
+		
+		DiskStore clone = new DiskStore(path);
+		
+		return clone;
 	}
 }

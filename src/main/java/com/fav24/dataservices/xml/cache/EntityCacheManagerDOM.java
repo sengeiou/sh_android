@@ -18,8 +18,8 @@ public class EntityCacheManagerDOM extends EntityCacheManager
 	 */
 	public EntityCacheManagerDOM(Node node, CacheManagerConfiguration defaultCacheManagerConfiguration) {
 
-		super(defaultCacheManagerConfiguration);
-
+		setParentConfiguration(defaultCacheManagerConfiguration);
+		
 		Element element = (Element) node;
 
 		setName(element.getAttribute("Name"));
@@ -36,11 +36,9 @@ public class EntityCacheManagerDOM extends EntityCacheManager
 				String nodeName = node_i.getNodeName();
 
 				if ("DefaultCache".equals(nodeName)) {
-
 					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, defaultCacheManagerConfiguration.getDefaultCacheConfiguration()));
 				}
 				else if ("DiskStore".equals(nodeName)) {
-
 					setDiskStore(new DiskStoreDOM(node_i));
 				}
 				else if ("EntityCache".equals(nodeName)) {

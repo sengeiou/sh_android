@@ -90,7 +90,11 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		}
 		catch(ServerException e) {
 
-			loadAccessPolicyService.resetAccessPolicies();
+			try {
+				loadAccessPolicyService.resetAccessPolicies();
+			} catch (ServerException e1) {
+				logger.error(e1.getMessage());
+			}
 
 			logger.error(e.getMessage());
 		}
@@ -106,7 +110,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		}
 		catch(ServerException e) {
 
-			loadCacheService.resetCacheConfiguration();
+			loadCacheService.destroySystemCache();
 
 			logger.error(e.getMessage());
 		}

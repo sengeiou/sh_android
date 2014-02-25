@@ -14,7 +14,7 @@ public class Metadata {
 
 	private OperationType operation;
 	private String entity;
-	private Long entitySize;
+	private Long totalItems;
 	private Long offset;
 	private Long items;
 	private AbstractList<KeyItem> key;
@@ -27,7 +27,7 @@ public class Metadata {
 	public Metadata() {
 		this.operation = null;
 		this.entity = null;
-		this.entitySize = null;
+		this.totalItems = null;
 		this.offset = null;
 		this.items = null;
 		this.key = null;
@@ -39,15 +39,15 @@ public class Metadata {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
-	 * @param entitySize Número de ítems de la entidad, una vez realizada la operación.
+	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long offset, Long items, AbstractList<KeyItem> key) {
+	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, AbstractList<KeyItem> key) {
 		this.operation = operation;
 		this.entity = entity;
-		this.entitySize = entitySize;
+		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
 		this.key = key;
@@ -58,15 +58,15 @@ public class Metadata {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
-	 * @param entitySize Número de ítems de la entidad, una vez realizada la operación.
+	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long entitySize, Long offset, Long items, Filter filter) {
+	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, Filter filter) {
 		this.operation = operation;
 		this.entity = entity;
-		this.entitySize = entitySize;
+		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
 		this.setFilter(filter);
@@ -109,21 +109,21 @@ public class Metadata {
 	}
 
 	/**
-	 * Retorna el número de ítems de la entidad, después de la operación.
+	 * Retorna el número de ítems afectados por la operación.
 	 * 
-	 * @return el número de ítems de la entidad, después de la operación.
+	 * @return el número de ítems afectados por la operación.
 	 */
-	public Long getEntitySize() {
-		return entitySize;
+	public Long getTotalItems() {
+		return totalItems;
 	}
 
 	/**
-	 * Asigna el número de ítems de la entidad, después de la operación.
+	 * Asigna el número de ítems afectados por la operación.
 	 * 
-	 * @param entitySize Número de ítems a asignar.
+	 * @param totalItems Número de ítems a asignar.
 	 */
-	public void setEntitySize(Long entitySize) {
-		this.entitySize = entitySize;
+	public void setTotalItems(Long totalItems) {
+		this.totalItems = totalItems;
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class Metadata {
 	@Override
 	public String toString() {
 		return "Metadata [operation=" + operation + ", entity=" + entity
-				+ ", entitySize=" + entitySize + ", offset=" + offset
+				+ ", entitySize=" + totalItems + ", offset=" + offset
 				+ ", items=" + items + ", key=" + key + ", filter=" + filter
 				+ "]";
 	}

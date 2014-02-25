@@ -35,7 +35,7 @@ public class AccessPolicyController extends BaseRestController {
 
 	@Autowired
 	protected RetrieveAccessPolicyService retrieveAccessPolicyService;
-	
+
 	@Autowired
 	protected LoadAccessPolicyService loadAccessPolicyService;
 
@@ -57,6 +57,8 @@ public class AccessPolicyController extends BaseRestController {
 
 	/**
 	 * Muestra el conjunto de políticas de una entidad.
+	 * 
+	 * @param entity Entidad de la que se mostrarán as políticas de acceso.
 	 * 
 	 * @return el modelo y la vista, con el conjunto de políticas de una entidad.
 	 */
@@ -131,7 +133,9 @@ public class AccessPolicyController extends BaseRestController {
 
 	/**
 	 * Carga las políticas de acceso por defecto, contenidas en <dataservices.home>.
-	 *  
+	 * 
+	 * @param map Estructura con los atributos del estado de la operación.
+	 * 
 	 * @return la vista del índice general.
 	 */
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
@@ -153,12 +157,22 @@ public class AccessPolicyController extends BaseRestController {
 	/**
 	 * Elimina cualquier acceso.
 	 *  
+	 * @param map Estructura con los atributos del estado de la operación.
+	 *  
 	 * @return la vista del índice general.
 	 */
 	@RequestMapping(value = "/denyAll", method = { RequestMethod.GET, RequestMethod.POST })
-	public String denyAll() {
+	public String denyAll(Model map) {
 
-		loadAccessPolicyService.resetAccessPolicies();
+		try {
+			loadAccessPolicyService.resetAccessPolicies();
+		} catch (ServerException e) {
+
+			map.addAttribute("errorCode", e.getErrorCode());
+			map.addAttribute("message", e.getMessage());
+
+			return "error_pages/server_error";
+		}
 
 		return "index";
 	}

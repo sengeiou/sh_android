@@ -22,7 +22,7 @@ public interface LoadCacheService extends CacheService {
 	/**
 	 * Elimina la configuración actual de la caché, y vacía todas las cachés.
 	 */
-	public void resetCacheConfiguration();
+	public void destroySystemCache();
 
 	/**
 	 * Carga las configuraciones de caché por defecto. 
