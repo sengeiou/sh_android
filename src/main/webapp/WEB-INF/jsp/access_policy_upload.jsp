@@ -12,7 +12,7 @@
 		$(document).ready(function() {
 		    // Añade una nueva fila para cargar otro fichero.
 		    $('#addFile').click(function() {
-		        var fileIndex = $('#fileTable tr').children().length - 1;
+		        var fileIndex = $('#fileTable tr').children().length;
 		        $('#fileTable').append(
 		                '<tr style="width: 100%;"><td>'+
 		                '   <input style="width: 100%;" type="file" name="files['+ fileIndex +']" />'+
