@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +25,6 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 	@Autowired
-	@Qualifier(value="GenericServiceJDBC")
 	protected GenericService genericService;
 
 

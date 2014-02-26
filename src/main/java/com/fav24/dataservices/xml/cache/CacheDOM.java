@@ -17,7 +17,7 @@ public class CacheDOM extends Cache
 {
 	private static final BasicDOM cacheDOM = new BasicDOM();
 	static {
-		InputStream isAccessPolicyXSD = CacheDOM.class.getResourceAsStream("AccessPolicy.xsd");
+		InputStream isAccessPolicyXSD = CacheDOM.class.getResourceAsStream("Cache.xsd");
 
 		try {
 
