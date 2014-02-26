@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fav24.dataservices.domain.Filter;
+import com.fav24.dataservices.domain.generic.Filter;
 
 
 /**

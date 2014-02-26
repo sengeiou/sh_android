@@ -1,6 +1,9 @@
-package com.fav24.dataservices.domain;
+package com.fav24.dataservices.domain.generic;
 
 import java.util.AbstractList;
+
+import com.fav24.dataservices.domain.BaseDomain;
+import com.fav24.dataservices.domain.Requestor;
 
 
 /**
@@ -8,9 +11,8 @@ import java.util.AbstractList;
  * 
  * @author Fav24
  */
-public class Generic {
+public class Generic extends BaseDomain {
 
-	private Requestor requestor;
 	private AbstractList<Operation> operations;
 
 
@@ -18,38 +20,23 @@ public class Generic {
 	 * Constructor por defecto.
 	 */
 	public Generic() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
+	 * @param alias Alias de la petición.
 	 * @param requestor Solicitante.
 	 * @param operations Lista de operaciones solicitadas.
 	 */
-	public Generic(Requestor requestor, AbstractList<Operation> operations) {
-		this.requestor = requestor;
+	public Generic(String alias, Requestor requestor, AbstractList<Operation> operations) {
+
+		super(alias, requestor);
+		
 		this.operations = operations;
 	}
 
-	/**
-	 * Retorna el solicitante.
-	 * 
-	 * @return el solicitante.
-	 */
-	public Requestor getRequestor() {
-		return requestor;
-	}
-
-	/**
-	 * Asigna el solicitante.
-	 * 
-	 * @param requestor El solicitante a asignar.
-	 */
-	public void setRequestor(Requestor requestor) {
-		this.requestor = requestor;
-	}
-	
 	/**
 	 * Retorna la lista de operaciones solicitada.
 	 * 

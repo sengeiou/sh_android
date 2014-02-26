@@ -3,7 +3,7 @@ package com.fav24.dataservices.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fav24.dataservices.domain.Generic;
+import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
 

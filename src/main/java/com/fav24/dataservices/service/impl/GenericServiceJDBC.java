@@ -25,12 +25,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.fav24.dataservices.domain.Filter;
-import com.fav24.dataservices.domain.FilterItem;
-import com.fav24.dataservices.domain.Generic;
-import com.fav24.dataservices.domain.KeyItem;
-import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.generic.Filter;
+import com.fav24.dataservices.domain.generic.FilterItem;
+import com.fav24.dataservices.domain.generic.Generic;
+import com.fav24.dataservices.domain.generic.KeyItem;
+import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;

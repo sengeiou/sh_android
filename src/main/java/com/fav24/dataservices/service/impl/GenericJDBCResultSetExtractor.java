@@ -7,8 +7,8 @@ import java.util.AbstractList;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-import com.fav24.dataservices.domain.DataItem;
-import com.fav24.dataservices.domain.Operation;
+import com.fav24.dataservices.domain.generic.DataItem;
+import com.fav24.dataservices.domain.generic.Operation;
 
 public class GenericJDBCResultSetExtractor implements ResultSetExtractor<Operation> {
 

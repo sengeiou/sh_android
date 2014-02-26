@@ -1,4 +1,4 @@
-package com.fav24.dataservices.dto;
+package com.fav24.dataservices.dto.generic;
 
 import java.util.Map;
 

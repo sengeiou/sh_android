@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fav24.dataservices.domain.Filter;
-import com.fav24.dataservices.domain.KeyItem;
+import com.fav24.dataservices.domain.generic.Filter;
+import com.fav24.dataservices.domain.generic.KeyItem;
 
 
 /**

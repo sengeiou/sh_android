@@ -1,4 +1,4 @@
-package com.fav24.dataservices.dto;
+package com.fav24.dataservices.dto.generic;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

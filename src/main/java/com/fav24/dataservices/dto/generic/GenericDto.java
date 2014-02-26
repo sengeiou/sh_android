@@ -1,7 +1,8 @@
-package com.fav24.dataservices.dto;
+package com.fav24.dataservices.dto.generic;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fav24.dataservices.dto.BaseDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

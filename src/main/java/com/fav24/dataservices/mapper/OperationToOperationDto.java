@@ -2,9 +2,9 @@ package com.fav24.dataservices.mapper;
 
 import java.util.HashMap;
 
-import com.fav24.dataservices.domain.Operation;
-import com.fav24.dataservices.dto.MetadataDto;
-import com.fav24.dataservices.dto.OperationDto;
+import com.fav24.dataservices.domain.generic.Operation;
+import com.fav24.dataservices.dto.generic.MetadataDto;
+import com.fav24.dataservices.dto.generic.OperationDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

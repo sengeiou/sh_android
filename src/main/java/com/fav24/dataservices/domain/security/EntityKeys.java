@@ -3,7 +3,7 @@ package com.fav24.dataservices.domain.security;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
-import com.fav24.dataservices.domain.KeyItem;
+import com.fav24.dataservices.domain.generic.KeyItem;
 
 
 /**

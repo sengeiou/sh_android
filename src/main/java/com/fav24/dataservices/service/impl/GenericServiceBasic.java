@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.fav24.dataservices.domain.Generic;
-import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.generic.Generic;
+import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;

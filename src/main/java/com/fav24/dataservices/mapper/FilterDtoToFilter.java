@@ -2,11 +2,11 @@ package com.fav24.dataservices.mapper;
 
 import java.util.ArrayList;
 
-import com.fav24.dataservices.domain.Filter;
-import com.fav24.dataservices.domain.Filter.NexusType;
-import com.fav24.dataservices.domain.FilterItem;
-import com.fav24.dataservices.dto.FilterDto;
-import com.fav24.dataservices.dto.FilterItemDto;
+import com.fav24.dataservices.domain.generic.Filter;
+import com.fav24.dataservices.domain.generic.FilterItem;
+import com.fav24.dataservices.domain.generic.Filter.NexusType;
+import com.fav24.dataservices.dto.generic.FilterDto;
+import com.fav24.dataservices.dto.generic.FilterItemDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

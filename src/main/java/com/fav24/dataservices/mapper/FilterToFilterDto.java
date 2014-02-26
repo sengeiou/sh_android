@@ -1,8 +1,8 @@
 package com.fav24.dataservices.mapper;
 
-import com.fav24.dataservices.domain.Filter;
-import com.fav24.dataservices.dto.FilterDto;
-import com.fav24.dataservices.dto.FilterItemDto;
+import com.fav24.dataservices.domain.generic.Filter;
+import com.fav24.dataservices.dto.generic.FilterDto;
+import com.fav24.dataservices.dto.generic.FilterItemDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

@@ -2,11 +2,11 @@ package com.fav24.dataservices.mapper;
 
 import java.util.ArrayList;
 
-import com.fav24.dataservices.domain.Generic;
-import com.fav24.dataservices.domain.Operation;
 import com.fav24.dataservices.domain.Requestor;
-import com.fav24.dataservices.dto.GenericDto;
-import com.fav24.dataservices.dto.OperationDto;
+import com.fav24.dataservices.domain.generic.Generic;
+import com.fav24.dataservices.domain.generic.Operation;
+import com.fav24.dataservices.dto.generic.GenericDto;
+import com.fav24.dataservices.dto.generic.OperationDto;
 import com.fav24.dataservices.exception.ServerException;
 
 
@@ -27,6 +27,7 @@ public class GenericDtoToGeneric extends Mapper<GenericDto, Generic> {
 
 		Generic generic = new Generic();
 
+		generic.setAlias(origin.getAlias());
 		generic.setRequestor((Requestor) Mapper.Map(origin.getRequestor()));
 
 		if (origin.getOps() != null) {

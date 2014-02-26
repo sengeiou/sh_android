@@ -1,4 +1,4 @@
-package com.fav24.dataservices.domain;
+package com.fav24.dataservices.domain.generic;
 
 import java.util.AbstractList;
 

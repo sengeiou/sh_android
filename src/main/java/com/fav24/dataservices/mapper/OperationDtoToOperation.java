@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fav24.dataservices.domain.DataItem;
-import com.fav24.dataservices.domain.Metadata;
-import com.fav24.dataservices.domain.Operation;
-import com.fav24.dataservices.dto.OperationDto;
+import com.fav24.dataservices.domain.generic.DataItem;
+import com.fav24.dataservices.domain.generic.Metadata;
+import com.fav24.dataservices.domain.generic.Operation;
+import com.fav24.dataservices.dto.generic.OperationDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

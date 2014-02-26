@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fav24.dataservices.domain.BaseDomain;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.listener.ContextRefreshedListener;
@@ -22,13 +23,12 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
  * 
  * @author Fav24
  */
-public class AccessPolicy {
+public class AccessPolicy extends BaseDomain {
 
 	public static final String APPLICATION_POLICY_FILES_SUFIX = ".policy.xml";
 
 	private static AccessPolicy currentAccesPolicy;
 
-	private Requestor requestor;
 	private Set<EntityAccessPolicy> accessPolicies;
 	private Map<String, EntityAccessPolicy> accessPoliciesByAlias;
 
@@ -38,25 +38,20 @@ public class AccessPolicy {
 	 */
 	public AccessPolicy() {
 
-		this((Set<EntityAccessPolicy>)null);
+		this(null, null);
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param accessPolicies Lista de políticas solicitadas.
+	 * @param alias Alias de la petición.
+	 * @param requestor Solicitante.
 	 */
-	public AccessPolicy(Set<EntityAccessPolicy> accessPolicies) {
+	public AccessPolicy(String alias, Requestor requestor) {
 
-		this.accessPolicies = accessPolicies;
+		super(alias, requestor);
 
-		if (accessPolicies != null) {
-			this.accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
-
-			for (EntityAccessPolicy entityAccessPolicy : accessPolicies) {
-				this.accessPoliciesByAlias.put(entityAccessPolicy.getName().getAlias(), entityAccessPolicy);
-			}
-		}
+		this.accessPolicies = null;
 	}
 
 	/**
@@ -66,14 +61,7 @@ public class AccessPolicy {
 	 */
 	public AccessPolicy(AccessPolicy accesPolicy) {
 
-		if (accesPolicy.requestor != null) {
-
-			requestor = new Requestor(accesPolicy.requestor);
-		}
-		else {
-
-			requestor = null;
-		}
+		super(accesPolicy);
 
 		if (accesPolicy.accessPolicies != null) {
 
@@ -91,24 +79,6 @@ public class AccessPolicy {
 			accessPolicies = null;
 			accessPoliciesByAlias = null;
 		}
-	}
-
-	/**
-	 * Retorna el solicitante.
-	 * 
-	 * @return el solicitante.
-	 */
-	public Requestor getRequestor() {
-		return requestor;
-	}
-
-	/**
-	 * Asigna el solicitante.
-	 * 
-	 * @param requestor El solicitante a asignar.
-	 */
-	public void setRequestor(Requestor requestor) {
-		this.requestor = requestor;
 	}
 
 	/**

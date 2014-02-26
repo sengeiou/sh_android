@@ -25,6 +25,7 @@ public class AccessPolicyToAccessPolicyDto extends Mapper<AccessPolicy, AccessPo
 
 		AccessPolicyDto accessPolicy = new AccessPolicyDto();
 
+		accessPolicy.setAlias(origin.getAlias());
 		accessPolicy.setRequestor((RequestorDto)Mapper.Map(origin.getRequestor()));
 
 		EntityAccessPolicyDto[] policies = new EntityAccessPolicyDto[origin.getAccessPolicies().size()];

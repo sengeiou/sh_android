@@ -25,22 +25,19 @@ public class AccessPolicyDtoToAccessPolicy extends Mapper<AccessPolicyDto, Acces
 	@Override
 	protected AccessPolicy map(AccessPolicyDto origin) throws ServerException {
 
-		AccessPolicy accessPolicy = null;
+		AccessPolicy accessPolicy = new AccessPolicy(origin.getAlias(), (Requestor)Mapper.Map(origin.getRequestor()));
 
 		if (origin.getAccessPolicies() != null) {
 			
-			accessPolicy = new AccessPolicy(new TreeSet<EntityAccessPolicy>());
+			TreeSet<EntityAccessPolicy> entityAccessPolicies = new TreeSet<EntityAccessPolicy>();
 			
 			for (EntityAccessPolicyDto entityAccesPolicy : origin.getAccessPolicies()) {
 
-				accessPolicy.getAccessPolicies().add((EntityAccessPolicy)Mapper.Map(entityAccesPolicy));
+				entityAccessPolicies.add((EntityAccessPolicy)Mapper.Map(entityAccesPolicy));
 			}
+			
+			accessPolicy.setAccessPolicies(entityAccessPolicies);
 		}
-		else {
-			accessPolicy = new AccessPolicy();
-		}
-
-		accessPolicy.setRequestor((Requestor)Mapper.Map(origin.getRequestor()));
 		
 		return accessPolicy;
 	}
