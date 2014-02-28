@@ -1,4 +1,4 @@
-package com.fav24.dataservices.service;
+package com.fav24.dataservices.service.generic;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

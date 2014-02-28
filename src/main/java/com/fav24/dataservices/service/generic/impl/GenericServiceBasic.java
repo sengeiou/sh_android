@@ -1,4 +1,4 @@
-package com.fav24.dataservices.service.impl;
+package com.fav24.dataservices.service.generic.impl;
 
 import java.util.AbstractList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.GenericService;
+import com.fav24.dataservices.service.generic.GenericService;
 
 
 /**

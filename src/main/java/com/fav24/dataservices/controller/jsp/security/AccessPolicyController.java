@@ -151,7 +151,7 @@ public class AccessPolicyController extends BaseRestController {
 			return "error_pages/server_error";
 		}
 
-		return "index";
+		return "main";
 	}
 
 	/**
@@ -174,6 +174,6 @@ public class AccessPolicyController extends BaseRestController {
 			return "error_pages/server_error";
 		}
 
-		return "index";
+		return "main";
 	}
 }

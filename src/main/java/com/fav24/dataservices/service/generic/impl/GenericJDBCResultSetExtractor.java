@@ -1,4 +1,4 @@
-package com.fav24.dataservices.service.impl;
+package com.fav24.dataservices.service.generic.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

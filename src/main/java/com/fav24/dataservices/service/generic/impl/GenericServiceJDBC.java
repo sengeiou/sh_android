@@ -1,4 +1,4 @@
-package com.fav24.dataservices.service.impl;
+package com.fav24.dataservices.service.generic.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -39,7 +39,7 @@ import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.domain.security.EntityFilter;
 import com.fav24.dataservices.domain.security.EntityKey;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.GenericService;
+import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 
 

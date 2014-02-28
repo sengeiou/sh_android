@@ -1,4 +1,4 @@
-package com.fav24.dataservices.controller.rest;
+package com.fav24.dataservices.controller.rest.generic;
 
 
 import org.slf4j.Logger;
@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.dto.generic.GenericDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
-import com.fav24.dataservices.service.GenericService;
+import com.fav24.dataservices.service.generic.GenericService;
 
 /**
  * Controla las peticiones de entrada a un conjunto de entidades de datos.

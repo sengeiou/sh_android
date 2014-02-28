@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.AccessPolicyFiles;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.GenericService;
+import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 

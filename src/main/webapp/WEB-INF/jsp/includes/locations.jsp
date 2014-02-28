@@ -4,6 +4,7 @@
 <%!String baseURL; %>
 <%!String pagesURL; %>
 <%!String cssURL; %>
+<%!String jsURL; %>
 <%!String imagesURL; %>
 <%!String forwardRequestURI;%>
 <%
@@ -13,4 +14,5 @@
 	pagesURL = baseURL + "/jsp";
 	imagesURL = baseURL + "/resources/img";
 	cssURL = baseURL + "/resources/css";
+	jsURL = baseURL + "/resources/js";
 %>

@@ -36,7 +36,7 @@
 	</head>
 	<body>
 		<h1>Pol&iacute;ticas de acceso</h1>
-		<a href="<%=pagesURL%>/index.jsp">
+		<a href="<%=pagesURL%>/main.jsp">
 			<img src="<%=imagesURL%>/home.png" align="right" width="32" height="32" alt="Ir la men&uacute; principal" />
 		</a>
 		<h2>Entidad ${entity}</h2>
