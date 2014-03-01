@@ -56,11 +56,11 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Principal</a></li>
+            <li class="active"><a href="#" onclick="loadContent('dataSourceInformation');">Principal</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="<%=pagesURL%>/accesspolicy/availableEntities">Entidades publicadas</a></li>
+                <li><a href="#" onclick="loadContent('accesspolicy/availableEntities');">Entidades publicadas</a></li>
                 <li><a href="#">Carga de pol&iacute;ticas</a></li>
                 <li class="divider"></li>
                 <li class="danger">
@@ -110,10 +110,21 @@
 	<script	src="<%=jsURL%>/jquery.min.js"></script>
 	<script src="<%=jsURL%>/bootstrap.min.js"></script>
 
+	<!-- Función de carga de contenido -->
+	<script type="text/javascript">
+	
+		function loadContent(page) {
+			
+			var contentObject = $("#mainContent");
+			
+			contentObject.load("<%=pagesURL%>/" + page);
+		};
+	</script>
+	
 	<!-- Ejecución después de la carga del documento. -->
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$("#mainContent").load('<%=pagesURL%>/data_source_information');
+			loadContent('dataSourceInformation');
 		});
 	</script>
 </body>

@@ -1,5 +1,5 @@
+<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.List"%>
-<%@include file="includes/locations.jsp" %>
 
 <%!String bodyContent;%>
 <%
@@ -8,20 +8,25 @@
 	
 	try {
 		if (entities != null && entities.size() > 0) {
-			output.append("<p><b>Entidades p&uacute;blicas:</b>").append("<br/>");
-			output.append("<ul>");
+			
+			output.append("<div class=\"panel-body\">");
+			output.append("<p>Estas son la entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>");
+			output.append("</div>");
+		
+			output.append("<ul class=\"list-group\">");
 
 			for (String entity : entities) {
-				output.append("<li>");
+				output.append("<li class=\"list-group-item\">");
 				output.append("<a href=").append('"').append(pagesURL).append("/accesspolicy/entityPolicies?entity=").append(entity).append('"').append(">").append(entity).append("</a><br/>");
 				output.append("</li>");
 			}
 			
 			output.append("</ul>");
-			output.append("</p>");
 		} 
 		else {
+			output.append("<div class=\"panel-body\">");
 			output.append("<p>No hay entidades disponibles.</p>");
+			output.append("</div>");
 		}
 		
 	} catch (Exception e) {
@@ -30,18 +35,13 @@
 
 	bodyContent = output.toString();
 %>
-<html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="<%=cssURL%>/basics.css">
-		<title>Entidades disponibles</title>
-	</head>
-	<body class="body-box-shadow">
-		<h1>Entidades disponibles</h1>
-		<a href="<%=pagesURL%>/index.jsp">
-			<img src="<%=imagesURL%>/home.png" align="right" width="32" height="32" alt="Ir la men&uacute; principal" />
-		</a>
+<!-- Panel de información de las entidades publicadas. -->
+<div id="availableEntities">
+
+	<!-- Fuente de datos que se sirve -->
+	<div class="panel panel-info">
+		<div class="panel-heading">Entidades disponibles</div>
+		<!-- Lista de entidades -->
 		<%=bodyContent%>
-	</body>
-	<footer>
-	</footer>
-</html>
+	</div>
+</div>
