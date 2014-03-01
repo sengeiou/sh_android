@@ -61,9 +61,9 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="#" onclick="loadContent('accesspolicy/availableEntities');">Entidades publicadas</a></li>
-                <li><a href="#">Carga de pol&iacute;ticas</a></li>
+                <li><a href="#" onclick="loadContent('accesspolicy/accessPolicyUpload.show');">Carga de pol&iacute;ticas</a></li>
                 <li class="divider"></li>
-                <li class="danger">
+                <li>
                 	<a href="#" onclick="
 	                modalAcceptance(
 	                	'&iquest;Desea recargar las pol&iacute;ticas de acceso por defecto?', 
@@ -90,7 +90,6 @@
                 <li><a href="#">Informaci&oacute;n de la cach&eacute;</a></li>
                 <li><a href="#">Carga de configuraciones de cach&eacute;</a></li>
                 <li class="divider"></li>
-                <li class="dropdown-header">Acciones peligrosas</li>
                 <li><a href="#">Recarga de configuraciones de cach&eacute; por defecto</a></li>
                 <li><a href="#">Eliminar configuraciones de cach&eacute; activas</a></li>
               </ul>
