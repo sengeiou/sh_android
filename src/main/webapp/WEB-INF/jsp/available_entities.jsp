@@ -17,7 +17,7 @@
 
 			for (String entity : entities) {
 				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=").append('"').append(pagesURL).append("/accesspolicy/entityPolicies?entity=").append(entity).append('"').append(">").append(entity).append("</a><br/>");
+				output.append("<a href=\"#\" onclick=\"loadContent('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a><br/>");
 				output.append("</li>");
 			}
 			
@@ -38,7 +38,7 @@
 <!-- Panel de información de las entidades publicadas. -->
 <div id="availableEntities">
 
-	<!-- Fuente de datos que se sirve -->
+	<!-- Entidades disponibles -->
 	<div class="panel panel-info">
 		<div class="panel-heading">Entidades disponibles</div>
 		<!-- Lista de entidades -->
