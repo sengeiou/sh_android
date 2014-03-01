@@ -44,7 +44,7 @@ public class MainController extends BaseRestController {
 	 *  
 	 * @return la vista de información de las fuentes de datos.
 	 */
-	@RequestMapping(value = "/data_source_information", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/dataSourceInformation", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView dataSourceInformation() {
 
 		ModelAndView model;
