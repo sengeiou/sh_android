@@ -90,7 +90,7 @@
 
 			output.append("<div class=\"panel-body\">");
 			
-			if (!entityPolicies.getOnlyByKey()) {
+			if (entityPolicies.getOnlyByKey()) {
 				output.append("<p><b>Importante: </b>");
 				output.append("esta entidad &uacute;nicamente es accesible mediate el uso de una de las claves especificadas a continuaci&oacute;n.");	
 			}
@@ -129,7 +129,7 @@
 
 			output.append("<div class=\"panel-body\">");
 			
-			if (!entityPolicies.getOnlyByKey()) {
+			if (entityPolicies.getOnlySpecifiedFilters()) {
 				output.append("<p><b>Importante: </b>");
 				output.append("esta entidad &uacute;nicamente es accesible mediate el uso de alguno de los filtros especificados a continuaci&oacute;n.");	
 			}
