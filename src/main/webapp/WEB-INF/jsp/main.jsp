@@ -155,16 +155,18 @@
 		
 		// Solicita el recurso indicado, pasando los parámetros en la misma URL del recurso. 
 		function sendGetRequest(resource) {
-
+			
+			onLoadStartHandler(null);
+			
 			var xhr = new XMLHttpRequest();
-
+			
 			// Asignación de las funciones asociadas a cada envento.
 			xhr.onprogress = onProgressHandler;
 			xhr.onloadend = onLoadEndHandler;
 			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
 
 			// Preparación de la request.
-			xhr.open('GET', '<%=pagesURL%>/' + resource, true);
+			xhr.open('GET', '<%=pagesURL%>/' + resource, false);
 
 			// Envío.
 			xhr.send();
@@ -173,8 +175,10 @@
 		// Envía los datos de formulario indicados, al recurso indicado. 
 		function sendPostRequest(formData, resource) {
 
+			onLoadStartHandler(null);
+			
 			var xhr = new XMLHttpRequest();
-
+			
 			// Asignación de las funciones asociadas a cada envento.
 			xhr.upload.addEventListener('loadstart', onLoadStartHandler, false);
 			xhr.upload.addEventListener('progress', onProgressHandler, false);
@@ -183,7 +187,7 @@
 			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
 
 			// Preparación de la request.
-			xhr.open('POST', '<%=pagesURL%>/' + resource, true);
+			xhr.open('POST', '<%=pagesURL%>/' + resource, false);
 
 			// Envío.
 			xhr.send(formData);
@@ -210,13 +214,13 @@
 		function resetToDefaultPolicies() {
 			modalAcceptanceShow('&iquest;Desea recargar las pol&iacute;ticas de acceso por defecto?', 
                 	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la p&eacute;rdida de todos los cambios aplicados manualmente, mediante la carga de ficheros de pol&iacute;ticas de acceso.',
-                	function(){ sendGetRequest('accesspolicy/loadDefault'); modalAcceptanceHide(); });
+                	function(){ sendGetRequest('accesspolicy/loadDefault'); });
 		}
 		
 		function deleteActivePolicies() {
 			modalAcceptanceShow('&iquest;Desea eliminar pol&iacute;ticas activas?', 
             	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
-            		function(){ sendGetRequest('accesspolicy/denyAll'); modalAcceptanceHide(); });
+            		function(){ sendGetRequest('accesspolicy/denyAll'); });
 		}
 	</script>
 </body>
