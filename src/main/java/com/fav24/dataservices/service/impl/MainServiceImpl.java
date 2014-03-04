@@ -21,6 +21,8 @@ import com.fav24.dataservices.util.JDBCUtils;
 @Scope("prototype")
 public class MainServiceImpl implements MainService {
 
+	private static Map<String, String> DataSourceInformation;
+	private static Map<String, String> StatsDataSourceInformation;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -34,7 +36,11 @@ public class MainServiceImpl implements MainService {
 
 		try {
 
-			return JDBCUtils.getConnectionInformation(jdbcTemplate.getDataSource().getConnection());
+			if (DataSourceInformation == null) {
+				DataSourceInformation = JDBCUtils.getConnectionInformation(jdbcTemplate.getDataSource().getConnection());
+			}
+
+			return DataSourceInformation;
 
 		} catch (MalformedURLException | SQLException e) {
 
@@ -50,7 +56,11 @@ public class MainServiceImpl implements MainService {
 
 		try {
 
-			return JDBCUtils.getConnectionInformation(jdbcTemplate.getDataSource().getConnection());
+			if (StatsDataSourceInformation == null) {
+				StatsDataSourceInformation = JDBCUtils.getConnectionInformation(jdbcTemplate.getDataSource().getConnection());
+			}
+
+			return StatsDataSourceInformation; 
 
 		} catch (MalformedURLException | SQLException e) {
 

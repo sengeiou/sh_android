@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fav24.dataservices.controller.rest.BaseRestController;
+import com.fav24.dataservices.controller.jsp.BaseJspController;
 import com.fav24.dataservices.dto.security.UploadPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
@@ -29,7 +29,7 @@ import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
  */
 @Controller
 @RequestMapping("/accesspolicy")
-public class AccessPolicyController extends BaseRestController {
+public class AccessPolicyController extends BaseJspController {
 
 	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
 
@@ -78,7 +78,7 @@ public class AccessPolicyController extends BaseRestController {
 	 * 
 	 * @return el nombre del formulario de carga de ficheros de políticas de acceso.
 	 */
-	@RequestMapping(value = "/accessPolicyUpload.show", method = { RequestMethod.GET })
+	@RequestMapping(value = "/accessPolicyUpload.show", method = { RequestMethod.GET, RequestMethod.POST })
 	public String displayForm() {
 		return "access_policy_upload";
 	}
@@ -128,7 +128,7 @@ public class AccessPolicyController extends BaseRestController {
 		map.addAttribute("filesKO", filesKO);
 		map.addAttribute("filesErrors", filesErrors);
 
-		return "access_policy_upload_success";
+		return "access_policy_uploaded";
 	}
 
 	/**
@@ -137,21 +137,18 @@ public class AccessPolicyController extends BaseRestController {
 	 * @param map Estructura con los atributos del estado de la operación.
 	 * 
 	 * @return la vista del índice general.
+	 * 
+	 * @throws ServerException 
 	 */
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
-	public String loadDefault(Model map) {
+	public String loadDefault(Model map) throws ServerException {
 
-		try {
-			loadAccessPolicyService.loadDefaultAccessPolicy();
-		} catch (ServerException e) {
+		loadAccessPolicyService.loadDefaultAccessPolicy();
 
-			map.addAttribute("errorCode", e.getErrorCode());
-			map.addAttribute("message", e.getMessage());
+		map.addAttribute("title", "Carga de políticas de acceso por defecto.");
+		map.addAttribute("message", "Las políticas de acceso han sido cargadas con éxito.");
 
-			return "error_pages/server_error";
-		}
-
-		return "main";
+		return "error_pages/server_success";
 	}
 
 	/**
@@ -160,20 +157,16 @@ public class AccessPolicyController extends BaseRestController {
 	 * @param map Estructura con los atributos del estado de la operación.
 	 *  
 	 * @return la vista del índice general.
+	 * @throws ServerException 
 	 */
 	@RequestMapping(value = "/denyAll", method = { RequestMethod.GET, RequestMethod.POST })
-	public String denyAll(Model map) {
+	public String denyAll(Model map) throws ServerException {
 
-		try {
-			loadAccessPolicyService.resetAccessPolicies();
-		} catch (ServerException e) {
+		loadAccessPolicyService.resetAccessPolicies();
 
-			map.addAttribute("errorCode", e.getErrorCode());
-			map.addAttribute("message", e.getMessage());
+		map.addAttribute("title", "Denegación de acceso.");
+		map.addAttribute("message", "Todas las políticas de acceso han sido revocadas.");
 
-			return "error_pages/server_error";
-		}
-
-		return "main";
+		return "error_pages/server_success";
 	}
 }

@@ -41,64 +41,55 @@
 </head>
 
 <body role="document">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Servicios de datos</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#" onclick="sendGetRequest('dataSourceInformation');">Principal</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#"	onclick="showAvailableEntities();">Entidades publicadas</a></li>
+							<li><a href="#"	onclick="uploadEntityPolicies();">Carga	de pol&iacute;ticas</a></li>
+							<li class="divider"></li>
+							<li><a href="#"	onclick="resetToDefaultPolicies();">Recarga de pol&iacute;ticas por defecto</a></li>
+							<li><a href="#"	onclick="deleteActivePolicies();">Eliminar pol&iacute;ticas activas</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Informaci&oacute;n de recursos del sistema</a></li>
+							<li><a href="#">Informaci&oacute;n de la cach&eacute;</a></li>
+							<li><a href="#">Carga de configuraciones de cach&eacute;</a></li>
+							<li class="divider"></li>
+							<li><a href="#">Recarga de configuraciones de cach&eacute; por defecto</a></li>
+							<li><a href="#">Eliminar configuraciones de cach&eacute; activas</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+		<!-- Barra del progreso. -->
+		<div id="mainProgressBar" class="progress progress-striped active"
+			style="height: 5px;">
+			<div id="mainProgressBar-bar" class="progress-bar" role="progressbar"
+				aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+				style="width: 0%">
+				<span class="sr-only"></span>
+			</div>
+		</div>
+	</div>
 
-   <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Servicios de datos</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#" onclick="loadContent('dataSourceInformation');">Principal</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#" onclick="loadContent('accesspolicy/availableEntities');">Entidades publicadas</a></li>
-                <li><a href="#" onclick="loadContent('accesspolicy/accessPolicyUpload.show');">Carga de pol&iacute;ticas</a></li>
-                <li class="divider"></li>
-                <li>
-                	<a href="#" onclick="
-	                modalAcceptance(
-	                	'&iquest;Desea recargar las pol&iacute;ticas de acceso por defecto?', 
-	                	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la p&eacute;rdida de todos los cambios aplicados manualmente, mediante la carga de ficheros de pol&iacute;ticas de acceso.',
-	                	function(){ window.location = '<%=pagesURL%>/accesspolicy/loadDefault'}
-	                ); 
-	                return false;">Recarga de pol&iacute;ticas por defecto</a>
-	            </li>
-                <li>
-	                <a href="#" onclick="
-	                modalAcceptance(
-	                	'&iquest;Desea eliminar pol&iacute;ticas activas?', 
-	                	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
-	                	function(){ window.location = '<%=pagesURL%>/accesspolicy/denyAll'}
-	                ); 
-	                return false;">Eliminar pol&iacute;ticas activas</a>
-                </li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Informaci&oacute;n de recursos del sistema</a></li>
-                <li><a href="#">Informaci&oacute;n de la cach&eacute;</a></li>
-                <li><a href="#">Carga de configuraciones de cach&eacute;</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Recarga de configuraciones de cach&eacute; por defecto</a></li>
-                <li><a href="#">Eliminar configuraciones de cach&eacute; activas</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-	
 	<!-- Contenedor principal. -->
 	<div id="mainContent" class="container" style="padding-top: 70px;">
 	</div>
@@ -109,22 +100,124 @@
 	<script	src="<%=jsURL%>/jquery.min.js"></script>
 	<script src="<%=jsURL%>/bootstrap.min.js"></script>
 
-	<!-- Función de carga de contenido -->
 	<script type="text/javascript">
-	
-		function loadContent(page) {
-			
+
+		// Gestiona la respuesta del servidor, y la muestra en el contenedor principal.
+		function onReadystatechangeHandler(event) {
+
 			var contentObject = $("#mainContent");
-			
-			contentObject.load("<%=pagesURL%>/" + page);
-		};
-	</script>
+			var status = null;
 	
-	<!-- Ejecución después de la carga del documento. -->
-	<script type="text/javascript">
+			try {
+				status = event.target.status;
+			}
+			catch(e) {
+				return;
+			}
+	
+			if (status == '200' && event.target.responseText) {
+
+				contentObject.html(event.target.responseText);
+			}
+		}
+		
+		// Gestiona el inicio de la cargade datos.
+		function onLoadStartHandler(event) {
+			
+			$('#mainProgressBar-bar').css('width', '0%');
+		}
+		
+		// Gestiona el fin de la carga de datos.
+		function onLoadEndHandler(event) {
+			
+			$('#mainProgressBar').hide();
+		}
+		
+		// Gestiona el progreso.
+		function onProgressHandler(event) {
+			
+			if (event.lengthComputable) {
+				
+				var percent = (event.loaded/event.total)*100;
+				$('#mainProgressBar-bar').css('width', percent + '%');
+				
+				if (event.loaded == event.total) {
+					$('#mainProgressBar').hide();	
+				}
+				else {
+					$('#mainProgressBar').show();
+				}
+			}
+			else {
+				$('#mainProgressBar').show();
+			}
+		}
+		
+		// Solicita el recurso indicado, pasando los parámetros en la misma URL del recurso. 
+		function sendGetRequest(resource) {
+
+			var xhr = new XMLHttpRequest();
+
+			// Asignación de las funciones asociadas a cada envento.
+			xhr.onprogress = onProgressHandler;
+			xhr.onloadend = onLoadEndHandler;
+			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
+
+			// Preparación de la request.
+			xhr.open('GET', '<%=pagesURL%>/' + resource, true);
+
+			// Envío.
+			xhr.send();
+		}
+		
+		// Envía los datos de formulario indicados, al recurso indicado. 
+		function sendPostRequest(formData, resource) {
+
+			var xhr = new XMLHttpRequest();
+
+			// Asignación de las funciones asociadas a cada envento.
+			xhr.upload.addEventListener('loadstart', onLoadStartHandler, false);
+			xhr.upload.addEventListener('progress', onProgressHandler, false);
+			xhr.upload.addEventListener('load', onLoadEndHandler, false);
+			xhr.onprogress = onProgressHandler;
+			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
+
+			// Preparación de la request.
+			xhr.open('POST', '<%=pagesURL%>/' + resource, true);
+
+			// Envío.
+			xhr.send(formData);
+		}
+	
+		// Ejecución después de la carga del documento.
 		$(document).ready(function(){
-			loadContent('dataSourceInformation');
+			sendGetRequest('dataSourceInformation');
 		});
+		
+		
+		// ====================================
+		// operaciones de los menús.
+		// ====================================
+			
+		function showAvailableEntities() {
+			sendGetRequest('accesspolicy/availableEntities');
+		}
+		
+		function uploadEntityPolicies() {
+			sendGetRequest('accesspolicy/accessPolicyUpload.show');
+		}
+							
+		function resetToDefaultPolicies() {
+			modalAcceptanceShow('&iquest;Desea recargar las pol&iacute;ticas de acceso por defecto?', 
+                	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la p&eacute;rdida de todos los cambios aplicados manualmente, mediante la carga de ficheros de pol&iacute;ticas de acceso.',
+                	function(){ sendGetRequest('accesspolicy/loadDefault'); modalAcceptanceHide(); });
+		}
+		
+		function deleteActivePolicies() {
+			modalAcceptanceShow('&iquest;Desea eliminar pol&iacute;ticas activas?', 
+            	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
+            		function(){ sendGetRequest('accesspolicy/denyAll'); modalAcceptanceHide(); });
+		}
 	</script>
 </body>
 <footer> 

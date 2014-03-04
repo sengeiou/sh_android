@@ -2,7 +2,7 @@
 <div id="modalAcceptance" class="modal fade">
 	<script type="text/javascript">
 	
-		function modalAcceptance(title, message, acceptFunction) {
+		function modalAcceptanceShow(title, message, acceptFunction) {
 			
 			var modalObject = $("#modalAcceptance");
 			
@@ -10,6 +10,12 @@
 			modalObject.find("#modal-implication").html('<small>' + message +'</small>');
 			modalObject.find("#modal-accept").on('click', acceptFunction);
 			modalObject.modal('show');
+		};
+		
+		function modalAcceptanceHide() {
+
+			var modalObject = $("#modalAcceptance");
+			modalObject.modal('hide');
 		};
 	</script>
     <div class="modal-dialog">

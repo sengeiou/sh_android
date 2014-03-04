@@ -17,7 +17,7 @@
 
 			for (String entity : entities) {
 				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=\"#\" onclick=\"loadContent('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a><br/>");
+				output.append("<a href=\"#\" onclick=\"sendGetRequest('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a><br/>");
 				output.append("</li>");
 			}
 			

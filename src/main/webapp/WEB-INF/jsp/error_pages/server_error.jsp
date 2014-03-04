@@ -1,5 +1,4 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="javax.servlet.RequestDispatcher"%>
 <%@include file="/WEB-INF/jsp/includes/locations.jsp" %>
 
 <div class="panel panel-danger">
@@ -11,8 +10,8 @@
 		<p><%=forwardRequestURI%></p>
 		<p>
 			<ul>
-				<li><strong>errorCode:</strong> <c:out value="${errorCode}"/></li>
-				<li><strong>message:</strong> <c:out value="${message}"/></li>
+				<li><strong>errorCode:</strong><c:out value="${errorCode}"/></li>
+				<li><strong>message:</strong><c:out value="${message}"/></li>
 			</ul>
 		</p>
 	</div>
