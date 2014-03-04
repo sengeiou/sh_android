@@ -23,28 +23,39 @@ function setFileName (fileIndex) {
 // Elimina el fichero indicado, y renumera los que había después.
 function removeFile(fileIndex) {
 	
+	console.log("removing" + fileIndex);
+	
 	var fileList = $('#fileList');
 	var fileToRemove = $('#file-' + fileIndex);
 	
 	fileToRemove.remove();
 	
 	var numFiles = fileList.children().length;
-	
-	for(;fileIndex < numFiles; fileIndex++) {
+
+	for (; fileIndex < numFiles; fileIndex++) {
+		
+		console.log(fileIndex);
+		
 		var file = $('#file-' + (fileIndex + 1));
 		file.attr("id", "file-" + fileIndex);
+		
 		var fileInput = $('#file-input-' + (fileIndex + 1));
 		fileInput.attr("id", "file-input-" + fileIndex);
 		fileInput.attr("name", "files[" + fileIndex + "]");
-		fileInput.on("change", "setFileName(" + fileIndex + ");");
+		fileInput.off("change");
+		fileInput.on("change", new Function("setFileName("+fileIndex+");"));
+		
 		var fileInfo = $('#file-info-' + (fileIndex + 1));
 		fileInfo.attr("id", "file-info-" + fileIndex);
+		
 		var fileChooser = $('#file-chooser-' + (fileIndex + 1));
 		fileChooser.attr("id", "file-chooser-" + fileIndex);
 		fileChooser.attr("for", "file-input-" + fileIndex);
+		
 		var fileRemover = $('#file-remover-' + (fileIndex + 1));
 		fileRemover.attr("id", "file-remover-" + fileIndex);
-		fileRemover.on("click", "removeFile(" + fileIndex + ");");
+		fileRemover.off("click");
+		fileRemover.on("click", new Function("removeFile("+fileIndex+");"));
 	}
 }
 
@@ -63,15 +74,18 @@ function addFile() {
 	}
     
     var newFileSelectionLine = "<li id='file-" + fileIndex + "' class='list-group-item'>";
-    newFileSelectionLine += "<input id='file-input-" + fileIndex + "' type='file' name='files[" + fileIndex + "]' tabindex='-1' style='position: absolute; z-index:-1;' onchange='setFileName(" + fileIndex + ");'/>";
+    newFileSelectionLine += "<input id='file-input-" + fileIndex + "' type='file' name='files[" + fileIndex + "]' tabindex='-1' style='position: absolute; z-index:-1;'/>";
     newFileSelectionLine += "<div>";
     newFileSelectionLine += "<label id='file-info-" + fileIndex + "' class='label label-default vcenter'></label>";
     newFileSelectionLine += "<label id='file-chooser-" + fileIndex + "' for='file-input-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-folder-open'><span style='padding-left: 12px;'>Seleccionar</span></label>";
-    newFileSelectionLine += "<label id='file-remover-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-trash vcenter' onclick='removeFile(" + fileIndex + ");'><span></span></label>";
+    newFileSelectionLine += "<label id='file-remover-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-trash vcenter'><span></span></label>";
     newFileSelectionLine += "</div>";
     newFileSelectionLine += "</li>";
     
     $('#fileList').append(newFileSelectionLine);
+    
+    $('#file-input-' + fileIndex).on("change", function() {setFileName(fileIndex);});
+    $('#file-remover-' + fileIndex).on("click", function() {removeFile(fileIndex);});
 }
 
 // Ejecuciones al final de la carga del documento.

@@ -8,6 +8,7 @@
 			
 			modalObject.find("#modal-question").html(title);
 			modalObject.find("#modal-implication").html('<small>' + message +'</small>');
+			modalObject.find("#modal-accept").off('click');
 			modalObject.find("#modal-accept").on('click', acceptFunction);
 			modalObject.modal('show');
 		};
