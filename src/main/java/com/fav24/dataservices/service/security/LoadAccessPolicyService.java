@@ -25,7 +25,7 @@ public interface LoadAccessPolicyService extends AccessPolicyService {
 	 * 
 	 * @throws ServerException
 	 */
-	public void resetAccessPolicies() throws ServerException;
+	public void dropAccessPolicies() throws ServerException;
 
 	/**
 	 * Carga las políticas de acceso por defecto. 

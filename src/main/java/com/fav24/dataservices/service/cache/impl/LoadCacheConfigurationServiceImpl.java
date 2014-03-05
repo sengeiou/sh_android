@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.cache.LoadCacheService;
+import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
 import com.fav24.dataservices.xml.cache.CacheDOM;
 
 
@@ -18,14 +18,14 @@ import com.fav24.dataservices.xml.cache.CacheDOM;
  */
 @Component
 @Scope("prototype")
-public class LoadCacheServiceImpl implements LoadCacheService {
+public class LoadCacheConfigurationServiceImpl implements LoadCacheConfigurationService {
 
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void destroySystemCache() {
+	public void dropSystemCache() {
 		Cache.destroy();
 	}
 

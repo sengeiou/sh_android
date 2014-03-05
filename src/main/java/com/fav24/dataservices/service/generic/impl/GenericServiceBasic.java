@@ -100,7 +100,7 @@ public abstract class GenericServiceBasic implements GenericService {
 			
 			if (operation.getMetadata().hasFilter()) {
 				
-				if (!entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
+				if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
 					throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
 				}
 			}

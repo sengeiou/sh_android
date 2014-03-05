@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.controller.jsp.BaseJspController;
-import com.fav24.dataservices.dto.security.UploadPolicyFilesDto;
+import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
@@ -92,7 +92,7 @@ public class AccessPolicyController extends BaseJspController {
 	 * @return el nombre del formulario que mostrará los ficheros cargados con éxito.
 	 */
 	@RequestMapping(value = "/accessPolicyUpload.save", method = { RequestMethod.POST })
-	public String accessPolicyUpload(@ModelAttribute("uploadPolicyFiles") UploadPolicyFilesDto uploadPolicyFiles, Model map) {
+	public String accessPolicyUpload(@ModelAttribute("uploadPolicyFiles") UploadFilesDto uploadPolicyFiles, Model map) {
 
 		List<MultipartFile> files = uploadPolicyFiles.getFiles();
 
@@ -136,9 +136,9 @@ public class AccessPolicyController extends BaseJspController {
 	 * 
 	 * @param map Estructura con los atributos del estado de la operación.
 	 * 
-	 * @return la vista del índice general.
+	 * @return la vista del resultado de la carga.
 	 * 
-	 * @throws ServerException 
+	 * @throws ServerException
 	 */
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
 	public String loadDefault(Model map) throws ServerException {
@@ -157,12 +157,13 @@ public class AccessPolicyController extends BaseJspController {
 	 * @param map Estructura con los atributos del estado de la operación.
 	 *  
 	 * @return la vista del índice general.
-	 * @throws ServerException 
+	 * 
+	 * @throws ServerException
 	 */
 	@RequestMapping(value = "/denyAll", method = { RequestMethod.GET, RequestMethod.POST })
 	public String denyAll(Model map) throws ServerException {
 
-		loadAccessPolicyService.resetAccessPolicies();
+		loadAccessPolicyService.dropAccessPolicies();
 
 		map.addAttribute("title", "Denegación de acceso.");
 		map.addAttribute("message", "Todas las políticas de acceso han sido revocadas.");

@@ -32,7 +32,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void resetAccessPolicies() throws ServerException {
+	public void dropAccessPolicies() throws ServerException {
 		AccessPolicy.resetAccessPolicies();
 
 		applyCurrentAccessPolicy();

@@ -14,15 +14,15 @@ import com.fav24.dataservices.exception.ServerException;
  * 
  * @author Fav24
  */
-public interface LoadCacheService extends CacheService {
+public interface LoadCacheConfigurationService extends CacheService {
 
-	public static final Logger logger = LoggerFactory.getLogger(LoadCacheService.class);
+	public static final Logger logger = LoggerFactory.getLogger(LoadCacheConfigurationService.class);
 
 
 	/**
 	 * Elimina la configuración actual de la caché, y vacía todas las cachés.
 	 */
-	public void destroySystemCache();
+	public void dropSystemCache();
 
 	/**
 	 * Carga las configuraciones de caché por defecto. 

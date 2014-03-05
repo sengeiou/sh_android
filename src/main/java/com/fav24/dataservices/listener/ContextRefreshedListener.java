@@ -9,7 +9,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.cache.LoadCacheService;
+import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 
 @Component
@@ -33,7 +33,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 	@Autowired
 	protected LoadAccessPolicyService loadAccessPolicyService;
 	@Autowired
-	protected LoadCacheService loadCacheService;
+	protected LoadCacheConfigurationService loadCacheService;
 
 
 	/**
@@ -91,7 +91,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		catch(ServerException e) {
 
 			try {
-				loadAccessPolicyService.resetAccessPolicies();
+				loadAccessPolicyService.dropAccessPolicies();
 			} catch (ServerException e1) {
 				logger.error(e1.getMessage());
 			}
@@ -110,7 +110,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		}
 		catch(ServerException e) {
 
-			loadCacheService.destroySystemCache();
+			loadCacheService.dropSystemCache();
 
 			logger.error(e.getMessage());
 		}
