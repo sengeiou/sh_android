@@ -62,17 +62,17 @@
 							<li><a onclick="uploadEntityPolicies();">Carga	de pol&iacute;ticas</a></li>
 							<li class="divider"></li>
 							<li><a onclick="resetToDefaultPolicies();">Recarga de pol&iacute;ticas por defecto</a></li>
-							<li><a onclick="deleteActivePolicies();">Eliminar pol&iacute;ticas activas</a></li>
+							<li><a onclick="dropAccessPolicies();">Eliminar pol&iacute;ticas activas</a></li>
 						</ul>
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a>Informaci&oacute;n de recursos del sistema</a></li>
-							<li><a>Informaci&oacute;n de la cach&eacute;</a></li>
-							<li><a>Carga de configuraciones de cach&eacute;</a></li>
+							<li><a onclick="showAvailableCacheManagers();">Informaci&oacute;n de la cach&eacute;</a></li>
+							<li><a onclick="uploadCacheConfigutarions();">Carga de configuraciones de cach&eacute;</a></li>
 							<li class="divider"></li>
-							<li><a>Recarga de configuraciones de cach&eacute; por defecto</a></li>
-							<li><a>Eliminar configuraciones de cach&eacute; activas</a></li>
+							<li><a onclick="loadDefaultCacheConfiguration();">Recarga de configuraciones de cach&eacute; por defecto</a></li>
+							<li><a onclick="dropSystemCache();">Eliminar configuraciones de cach&eacute; activas</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -217,10 +217,31 @@
                 	function(){ sendGetRequest('accesspolicy/loadDefault'); });
 		}
 		
-		function deleteActivePolicies() {
+		function dropAccessPolicies() {
 			modalAcceptanceShow('&iquest;Desea eliminar pol&iacute;ticas activas?', 
             	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
             		function(){ sendGetRequest('accesspolicy/denyAll'); });
+		}
+
+		function showAvailableCacheManagers() {
+			sendGetRequest('cache/availableCacheManagers');
+		}
+
+		function uploadCacheConfigutarions() {
+			sendGetRequest('cache/cacheConfigurationUpload.show');
+		}
+
+		function loadDefaultCacheConfiguration() {
+			modalAcceptanceShow('&iquest;Desea recargar la configuraci&oacute;n de cach&eacute; del sistema por defecto?', 
+                	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la p&eacute;rdida de todos los cambios aplicados manualmente, mediante la carga de ficheros de configuraci&oacute;n de cach&eacute;. <br/>' +
+                	+ 'Del mismo modo, se roper&aacute;n todas las cach&eacute;s.',
+                	function(){ sendGetRequest('cache/loadDefault'); });
+		}
+		
+		function dropSystemCache() {
+			modalAcceptanceShow('&iquest;Desea eliminar por completo la cach&eacute; del sistema?', 
+            	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>destrucci&oacute;n total</strong> de la configuración de la cach&eacute, as&iacute; como las cach&eacutes activas.',
+            		function(){ sendGetRequest('cache/dropSystemCache'); });
 		}
 	</script>
 </body>

@@ -23,7 +23,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 
 		this.name = null;
 		this.entitiesCacheConfigurations = new HashSet<EntityCache>();
-		
+
 		this.cacheManager = null;
 	}
 
@@ -83,21 +83,21 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * @return la caché para la entidad indicada por parámetro.
 	 */
 	public synchronized EntityCache getEntityCache(String alias) {
-		
+
 		if (entitiesCacheConfigurations == null || alias == null) {
 			return null;
 		}
-		
+
 		for (EntityCache currentEntityCache : entitiesCacheConfigurations) {
-			
+
 			if (alias.equals(currentEntityCache.getAlias())) {
 				return currentEntityCache; 
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Retorna true o false si encontró la caché a eliminar, para la entidad indicada por parámetro.
 	 * 
@@ -106,31 +106,31 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * @return true o false si encontró la caché a eliminar, para la entidad indicada por parámetro.
 	 */
 	public synchronized boolean removeEntityCache(String alias) {
-		
+
 		if (entitiesCacheConfigurations == null || alias == null) {
 			return false;
 		}
-		
+
 		Iterator<EntityCache> entityCacheConfigurationIterator = entitiesCacheConfigurations.iterator();
-		
+
 		while(entityCacheConfigurationIterator.hasNext()) {
 
 			EntityCache currentEntityCache = entityCacheConfigurationIterator.next();
-			
+
 			if (alias.equals(currentEntityCache.getAlias())) {
 				entityCacheConfigurationIterator.remove();
-				
+
 				if (cacheManager != null) {
 					cacheManager.removeCache(currentEntityCache.getAlias());
 				}
-				
+
 				return true; 
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Construye el gestor de caché con las cachés incluidas.
 	 */
@@ -139,13 +139,13 @@ public class EntityCacheManager extends CacheManagerConfiguration
 		constructCacheManager(constructCacheManagerConfiguration());
 
 		for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
-			
+
 			net.sf.ehcache.Cache entityCache = new net.sf.ehcache.Cache(entityCacheConfiguration.constructCacheConfiguration(entityCacheConfiguration.getAlias()));
-			
+
 			cacheManager.addCache(entityCache);
 		}
 	}
-	
+
 	/**
 	 * Retorna el gestor de caché construido. 
 	 * 
@@ -154,10 +154,10 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * @return el gestor de caché construido.
 	 */
 	public synchronized CacheManager constructCacheManager(Configuration configuration) {
-		
+
 		cacheManager = CacheManager.create(configuration);
 		cacheManager.setName(getName());
-		
+
 		return cacheManager;
 	}
 
@@ -190,27 +190,27 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	public EntityCacheManager clone() {
 
 		EntityCacheManager clone = new EntityCacheManager();
-		
+
 		super.clone(clone);
 
 		clone.name = name;
-		
+
 		if (entitiesCacheConfigurations == null) {
-			
+
 			clone.entitiesCacheConfigurations = null;
 		}
 		else {
-			
+
 			clone.entitiesCacheConfigurations = new HashSet<EntityCache>(entitiesCacheConfigurations.size());
-			
+
 			for(EntityCache entityCache : entitiesCacheConfigurations) {
-				
+
 				clone.entitiesCacheConfigurations.add(entityCache.clone());	
 			}
 		}
-		
+
 		clone.cacheManager = null;
-		
+
 		return clone;
 	}
 }

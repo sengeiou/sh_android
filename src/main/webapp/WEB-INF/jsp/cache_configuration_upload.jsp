@@ -98,21 +98,21 @@ $(document).ready(function() {
     $('#addFile').click(function() {addFile();});
     
 	//Se asocia el click del botón de enviar datos del formulario.
-	$('#uploadButton').on('click', function(){
+	$('#uploadButton').on('click', function() {
 		var dataToServer = new FormData(document.getElementById('uploadForm'));
 		
-		sendPostRequest(dataToServer, 'accesspolicy/accessPolicyUpload.save');
+		sendPostRequest(dataToServer, 'cache/cacheConfigurationUpload.save');
 
 		return false;
 	});
 });
 </script>
 
-<form:form id="uploadForm" class="form-inline" method="post" modelAttribute="uploadPolicyFiles" enctype="multipart/form-data">
+<form:form id="uploadForm" class="form-inline" method="post" modelAttribute="uploadCacheConfigurationFiles" enctype="multipart/form-data">
 <div class="panel panel-default">
-	<div class="panel-heading">Carga de pol&iacute;ticas de acceso</div>
+	<div class="panel-heading">Carga de configuraciones de cach&eacute;</div>
 	<div class="panel-body">
-		<p>Selecciona los ficheros de pol&iacute;ticas a cargar.</p>
+		<p>Selecciona los ficheros de configuraci&oacute;n de cach&eacute; a cargar.</p>
 		<!-- List group -->
 			<ul id="fileList" class="list-group">
 			</ul>
@@ -120,6 +120,6 @@ $(document).ready(function() {
 	</div>
 </div>
 <div>
-	<button id="uploadButton" type="button" class="center-block btn btn-warning btn-lg">Cargar ficheros de pol&iacute;ticas</button>
+	<button id="uploadButton" type="button" class="center-block btn btn-warning btn-lg">Cargar ficheros de configuraci&oacute;n de cach&eacute;</button>
 </div>
 </form:form>

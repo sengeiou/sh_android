@@ -348,7 +348,7 @@ public class Cache
 
 			for(EntityCacheManager entityCacheManager : entityCacheManagers) {
 
-				this.entityCacheManagers.add(entityCacheManager.clone());
+				clone.entityCacheManagers.add(entityCacheManager.clone());
 			}
 		}
 

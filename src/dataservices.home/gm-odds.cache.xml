@@ -5,13 +5,12 @@
 	<DefaultCacheManager MaxBytesLocalHeap="500000000" MaxBytesLocalDisk="10000000000">
 		<!-- Configuración por defecto de una caché. -->
 		<DefaultCache>
-			<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
-			<TimeToIdleSeconds>120</TimeToIdleSeconds>
-			<!-- Tiempo máximo de vida en segundos de un elemento. -->
-			<TimeToLiveSeconds>120</TimeToLiveSeconds>
-			<!-- Indica si los elementos de la caché están o no afectados por el paso del tiempo. 
-			Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
-			<Eternal>false</Eternal>
+			<Expiry Eternal="false"> <!-- Eternal indica si los elementos de la caché están o no afectados por el paso del tiempo. Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
+				<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<!-- Tiempo máximo de vida en segundos de un elemento. -->
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
 			<!-- Número máximo de elementos en memoria. -->
 			<MaxEntriesLocalHeap>10000</MaxEntriesLocalHeap>
 			<!-- Número máximo de elementos en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
@@ -27,24 +26,26 @@
 			-->
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<!-- Persistencia en disco. Si esta no está activa, los elementos se limitan al espacio en memoria. -->
-			<Persistence active="true"/>
+			<Persistence Active="true"/>
 		</DefaultCache>
 		<!-- Ubicación de los ficheros de persistencia de la caché. -->
 		<DiskStore Path="java.io.tmpdir"/>
 	</DefaultCacheManager>
 
 	<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
-	<CacheManager Name="Entidades Base" MaxBytesLocalHeap="200000000" MaxBytesLocalDisk="5000000000">
+	<EntityCacheManager Name="Entidades Base" MaxBytesLocalHeap="200000000" MaxBytesLocalDisk="5000000000">
 		<DiskStore Path="java.io.tmpdir"/>
 		
 		<EntityCache Alias="Match">
-			<TimeToIdleSeconds>120</TimeToIdleSeconds>
-			<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			<Expiry Eternal="false">
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
 			<MaxEntriesLocalHeap>500</MaxEntriesLocalHeap>
 			<MaxEntriesLocalDisk>10000</MaxEntriesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
 		</EntityCache>
-	</CacheManager>
+	</EntityCacheManager>
 </Cache>

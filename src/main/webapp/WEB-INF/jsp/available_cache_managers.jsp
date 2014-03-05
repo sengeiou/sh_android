@@ -3,21 +3,21 @@
 
 <%!String bodyContent;%>
 <%
-	List<String> entities = (List<String>)request.getAttribute("entities");
+	List<String> cacheManagers = (List<String>)request.getAttribute("cacheManagers");
 	StringBuilder output = new StringBuilder();
 	
 	try {
-		if (entities != null && entities.size() > 0) {
+		if (cacheManagers != null && cacheManagers.size() > 0) {
 			
 			output.append("<div class=\"panel-body\">");
-			output.append("<p>Estas son las entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>");
+			output.append("<p>Estas son la entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>");
 			output.append("</div>");
 		
 			output.append("<ul class=\"list-group\">");
 
-			for (String entity : entities) {
+			for (String cacheManager : cacheManagers) {
 				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=\"#\" onclick=\"sendGetRequest('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a><br/>");
+				output.append("<a href=\"#\" onclick=\"sendGetRequest('/cache/entityPolicies?cacheManager=").append(cacheManager).append("');\">").append(cacheManager).append("</a><br/>");
 				output.append("</li>");
 			}
 			

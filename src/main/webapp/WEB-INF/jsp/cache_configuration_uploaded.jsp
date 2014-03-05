@@ -8,7 +8,7 @@
 		<h2 class="panel-title">Resultado de la carga</h2>
 	</div>
 	<div class="panel-body">
-		<h3>Carga de ficheros de pol&iacute;ticas de acceso</h3>
+		<h3>Carga de ficheros de configuraci&oacute;n de cach&eacute;</h3>
 		<c:choose>
 			<c:when test="${filesOK.size() > 0}">
 		    <p>Los siguientes archivos han sido cargados satisfactoriamente.</p>

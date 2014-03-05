@@ -126,7 +126,7 @@ public class CacheDOM extends Cache
 				}
 				else if ("EntityCacheManager".equals(nodeName)) {
 
-					addEntityCacheManager(new EntityCacheManagerDOM(node, getDefaultCacheManagerConfiguration()));
+					addEntityCacheManager(new EntityCacheManagerDOM(node_i, getDefaultCacheManagerConfiguration()));
 				}
 			}
 		}

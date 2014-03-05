@@ -30,17 +30,9 @@ public class EntityCacheDOM extends EntityCache
 
 				String nodeName = node_i.getNodeName();
 
-				if ("TimeToIdleSeconds".equals(nodeName)) {
+				if ("Expiry".equals(nodeName)) {
 
-					setTimeToIdleSeconds(Long.parseLong(node_i.getTextContent()));
-				}
-				else if ("TimeToLiveSeconds".equals(nodeName)) {
-
-					setTimeToLiveSeconds(Long.parseLong(node_i.getTextContent()));
-				}
-				else if ("Eternal".equals(nodeName)) {
-
-					setEternal(Boolean.parseBoolean(node_i.getTextContent()));
+					setExpiry(new ExpiryDOM(node_i));
 				}
 				else if ("MaxBytesLocalHeap".equals(nodeName)) {
 

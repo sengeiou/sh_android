@@ -35,7 +35,7 @@ public class CacheManagerConfigurationDOM extends CacheManagerConfiguration
 
 				if ("DefaultCache".equals(nodeName)) {
 					
-					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, parentConfiguration.getDefaultCacheConfiguration()));
+					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, parentConfiguration == null ? null : parentConfiguration.getDefaultCacheConfiguration()));
 				}
 				else if ("DiskStore".equals(nodeName)) {
 

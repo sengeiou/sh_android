@@ -8,9 +8,7 @@ import net.sf.ehcache.config.PersistenceConfiguration;
  */
 public class CacheConfiguration
 {
-	public static final Long DEFAULT_TIME_TO_IDLE_SECONDS = 120L;
-	public static final Long DEFAULT_TIME_TO_LIVE_SECONDS = 120L;
-	public static final Boolean DEFAULT_ETERNAL = false;
+	public static final Expiry DEFAULT_EXPIRY = new Expiry(true);
 	public static final Long DEFAULT_MAX_BYTES_LOCAL_HEAP = null;
 	public static final Long DEFAULT_MAX_ENTRIES_LOCAL_HEAP = 10000L;
 	public static final Long DEFAULT_MAX_BYTES_DISK = null;
@@ -21,9 +19,7 @@ public class CacheConfiguration
 
 	private CacheConfiguration parentConfiguration;
 
-	private Long timeToIdleSeconds;
-	private Long timeToLiveSeconds;
-	private Boolean eternal;
+	private Expiry expiry;
 	private Long maxBytesLocalHeap;
 	private Long maxEntriesLocalHeap;
 	private Long maxBytesLocalDisk;
@@ -136,91 +132,30 @@ public class CacheConfiguration
 	}
 
 	/**
-	 * Retorna el tiempo máximo de vida en segundos de un elemento que no está siendo consultado.
-	 *   
-	 * @return el tiempo máximo de vida en segundos de un elemento que no está siendo consultado.
+	 * Retorna la configuración de los tiempos de vida de un elemento.
+	 *  
+	 * @return la configuración de los tiempos de vida de un elemento.
 	 */
-	public Long getTimeToIdleSeconds() {
+	public Expiry getExpiry() {
 
-		if (timeToIdleSeconds != null) {
-			return timeToIdleSeconds;
+		if (expiry != null) {
+			return expiry;
 		}
 
 		if (parentConfiguration != null) {
-			return parentConfiguration.getTimeToIdleSeconds();
+			return parentConfiguration.getExpiry();
 		}
 
-		return DEFAULT_TIME_TO_IDLE_SECONDS; 
+		return DEFAULT_EXPIRY; 
 	}
 
 	/**
-	 * Asigna el tiempo máximo de vida en segundos de un elemento que no está siendo consultado.
+	 * Asigna la configuración de los tiempos de vida de un elemento.
 	 * 
-	 * @param timeToIdleSeconds El tiempo máximo de vida en segundos a asignar.
+	 * @param expiry Configuración de los tiempos de vida de un elemento a asignar. 
 	 */
-	public void setTimeToIdleSeconds(Long timeToIdleSeconds) {
-		this.timeToIdleSeconds = timeToIdleSeconds;
-	}
-
-	/**
-	 * Retorna el tiempo máximo de vida en segundos de un elemento.
-	 * 
-	 * @return el tiempo máximo de vida en segundos de un elemento.
-	 */
-	public Long getTimeToLiveSeconds() {
-
-		if (timeToLiveSeconds != null) {
-			return timeToLiveSeconds;
-		}
-
-		if (parentConfiguration != null) {
-			return parentConfiguration.getTimeToLiveSeconds();
-		}
-
-		return DEFAULT_TIME_TO_LIVE_SECONDS; 
-	}
-
-	/**
-	 * Asigna el tiempo máximo de vida en segundos de un elemento.
-	 * 
-	 * @param timeToLiveSeconds El tiempo máximo de vida en segundos a asignar.
-	 */
-	public void setTimeToLiveSeconds(Long timeToLiveSeconds) {
-		this.timeToLiveSeconds = timeToLiveSeconds;
-	}
-
-	/**
-	 * Retorna true o false en función de si los elementos de la caché 
-	 * están o no afectados por el paso del tiempo.
-	 * 
-	 * Nota: Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds.
-	 * 
-	 * @return true o false en función de si los elementos de la caché 
-	 * están o no afectados por el paso del tiempo.
-	 */
-	public Boolean getEternal() {
-
-		if (eternal != null) {
-			return eternal;
-		}
-
-		if (parentConfiguration != null) {
-			return parentConfiguration.getEternal();
-		}
-
-		return DEFAULT_ETERNAL; 
-	}
-
-	/**
-	 * Asigna true o false en función de si los elementos de la caché 
-	 * están o no afectados por el paso del tiempo.
-	 * 
-	 * Nota: Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds.
-	 * 
-	 * @param eternal True o false en función de si los elementos de la caché se consideran o no eternos. 
-	 */
-	public void setEternal(Boolean eternal) {
-		this.eternal = eternal;
+	public void setExpiry(Expiry expiry) {
+		this.expiry = expiry;
 	}
 
 	/**
@@ -434,9 +369,9 @@ public class CacheConfiguration
 		configuration.setMaxEntriesLocalHeap(getMaxEntriesLocalHeap());
 		configuration.setMaxBytesLocalDisk(getMaxBytesLocalDisk());
 		configuration.setMaxEntriesLocalDisk(getMaxEntriesLocalDisk());
-		configuration.setEternal(getEternal());
-		configuration.setTimeToIdleSeconds(getTimeToIdleSeconds());
-		configuration.setTimeToLiveSeconds(getTimeToLiveSeconds());
+		configuration.setEternal(getExpiry().isEternal());
+		configuration.setTimeToIdleSeconds(getExpiry().getTimeToIdleSeconds());
+		configuration.setTimeToLiveSeconds(getExpiry().getTimeToLiveSeconds());
 
 		PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
 		persistenceConfiguration.setStrategy(getPersistente().isActive() ? "localTempSwap" : "none");
@@ -462,9 +397,9 @@ public class CacheConfiguration
 		configuration.setMaxEntriesLocalHeap(DEFAULT_MAX_ENTRIES_LOCAL_HEAP);
 		configuration.setMaxBytesLocalDisk(DEFAULT_MAX_BYTES_DISK);
 		configuration.setMaxEntriesLocalDisk(DEFAULT_MAX_ENTRIES_DISK);
-		configuration.setEternal(DEFAULT_ETERNAL);
-		configuration.setTimeToIdleSeconds(DEFAULT_TIME_TO_IDLE_SECONDS);
-		configuration.setTimeToLiveSeconds(DEFAULT_TIME_TO_LIVE_SECONDS);
+		configuration.setEternal(Expiry.DEFAULT_ETERNAL);
+		configuration.setTimeToIdleSeconds(Expiry.DEFAULT_TIME_TO_IDLE_SECONDS);
+		configuration.setTimeToLiveSeconds(Expiry.DEFAULT_TIME_TO_LIVE_SECONDS);
 
 		PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
 		persistenceConfiguration.setStrategy(DEFAULT_PERSISTENCE.isActive() ? "localTempSwap" : "none");
@@ -493,9 +428,7 @@ public class CacheConfiguration
 			clone.parentConfiguration = parentConfiguration.clone(null);
 		}
 
-		clone.timeToIdleSeconds = timeToIdleSeconds;
-		clone.timeToLiveSeconds = timeToLiveSeconds;
-		clone.eternal = eternal;
+		clone.expiry = expiry.clone();
 		clone.maxBytesLocalHeap = maxBytesLocalHeap;
 		clone.maxEntriesLocalHeap = maxEntriesLocalHeap;
 		clone.maxBytesLocalDisk = maxBytesLocalDisk;

@@ -19,12 +19,23 @@ public class EntityCacheManagerDOM extends EntityCacheManager
 	public EntityCacheManagerDOM(Node node, CacheManagerConfiguration defaultCacheManagerConfiguration) {
 
 		setParentConfiguration(defaultCacheManagerConfiguration);
-		
+
 		Element element = (Element) node;
 
 		setName(element.getAttribute("Name"));
-		setMaxBytesLocalHeap(Long.parseLong(element.getAttribute("MaxBytesLocalHeap")));
-		setMaxBytesLocalDisk(Long.parseLong(element.getAttribute("MaxBytesLocalDisk")));
+		if (element.hasAttribute("MaxBytesLocalHeap")) {
+			setMaxBytesLocalHeap(Long.parseLong(element.getAttribute("MaxBytesLocalHeap")));
+		}
+		else {
+			setMaxBytesLocalHeap(DEFAULT_MAX_BYTES_LOCAL_HEAP);
+		}
+
+		if (element.hasAttribute("MaxBytesLocalDisk")) {
+			setMaxBytesLocalDisk(Long.parseLong(element.getAttribute("MaxBytesLocalDisk")));
+		}
+		else {
+			setMaxBytesLocalDisk(DEFAULT_MAX_BYTES_LOCAL_DISK);
+		}
 
 		NodeList nodes_i = node.getChildNodes();
 
@@ -36,7 +47,7 @@ public class EntityCacheManagerDOM extends EntityCacheManager
 				String nodeName = node_i.getNodeName();
 
 				if ("DefaultCache".equals(nodeName)) {
-					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, defaultCacheManagerConfiguration.getDefaultCacheConfiguration()));
+					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, defaultCacheManagerConfiguration == null ? null : defaultCacheManagerConfiguration.getDefaultCacheConfiguration()));
 				}
 				else if ("DiskStore".equals(nodeName)) {
 					setDiskStore(new DiskStoreDOM(node_i));

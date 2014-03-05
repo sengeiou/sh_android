@@ -26,8 +26,8 @@
 			<!-- Ubicación de los ficheros de persistencia de la caché. -->
 			<xsd:element name="DiskStore" type="TDiskStore" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
-		<xsd:attribute name="MaxBytesLocalHeap" type="xsd:long" use="required"/>
-		<xsd:attribute name="MaxBytesLocalDisk" type="xsd:long" use="required"/>
+		<xsd:attribute name="MaxBytesLocalHeap" type="xsd:long" use="optional"/>
+		<xsd:attribute name="MaxBytesLocalDisk" type="xsd:long" use="optional"/>
 	</xsd:complexType>
 	<!-- -->
 	<xsd:complexType name="TEntityCacheManager">
@@ -43,31 +43,26 @@
 	<!-- -->
 	<xsd:complexType name="TCacheConfiguration">
 		<xsd:sequence>
-			<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
-			<xsd:element name="TimeToIdleSeconds" type="xsd:long"/>
-			<!-- Tiempo máximo de vida en segundos de un elemento. -->
-			<xsd:element name="TimeToLiveSeconds" type="xsd:long"/>
-			<!-- Indica si los elementos de la caché están o no afectados por el paso del tiempo. 
-			Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
-			<xsd:element name="Eternal" type="xsd:boolean"/>
-			<xsd:choice>
+			<!-- Tiempos de vida de un elemento. -->
+			<xsd:element name="Expiry" type="TExpiry" minOccurs="0" maxOccurs="1"/>
+			<xsd:choice minOccurs="0" maxOccurs="1">
 				<!-- Número máximo de bytes en memoria. -->
 				<xsd:element name="MaxBytesLocalHeap" type="xsd:long"/>
 				<!-- Número máximo de elementos en memoria. -->
 				<xsd:element name="MaxEntriesLocalHeap" type="xsd:long"/>
 			</xsd:choice>
-			<xsd:choice>
+			<xsd:choice minOccurs="0" maxOccurs="1">
 				<!-- Número máximo de bytes en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
 				<xsd:element name="MaxBytesLocalDisk" type="xsd:long"/>
 				<!-- Número máximo de elementos en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
 				<xsd:element name="MaxEntriesLocalDisk" type="xsd:long"/>
 			</xsd:choice>
 			<!-- Intervalo de tiempo entre chequeos, en busca de elementos caducados en disco. -->
-			<xsd:element name="DiskExpiryThreadIntervalSeconds" type="xsd:long"/>
+			<xsd:element name="DiskExpiryThreadIntervalSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
 			<!-- Políticas de desalojo de las entradas almacenadas en memoria. -->
-			<xsd:element name="MemoryStoreEvictionPolicy" type="TMemoryStoreEvictionPolicy"/>
+			<xsd:element name="MemoryStoreEvictionPolicy" type="TMemoryStoreEvictionPolicy" minOccurs="0" maxOccurs="1"/>
 			<!-- Persistencia en disco. Si esta no está activa, los elementos se limitan al espacio en memoria. -->
-			<xsd:element name="Persistence" type="TPersistence"/>
+			<xsd:element name="Persistence" type="TPersistence" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- -->
@@ -77,6 +72,18 @@
 				<xsd:attribute name="Alias" type="xsd:string" use="required"/>
 			</xsd:extension>
 		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TExpiry">
+		<xsd:sequence>
+			<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
+			<xsd:element name="TimeToIdleSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+			<!-- Tiempo máximo de vida en segundos de un elemento. -->
+			<xsd:element name="TimeToLiveSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+			<!-- Indica si los elementos de la caché están o no afectados por el paso del tiempo. 
+			Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
+		<xsd:attribute name="Eternal" type="xsd:boolean" use="optional" default="true"/>
 	</xsd:complexType>
 	<!-- -->
 	<xsd:complexType name="TPersistence">

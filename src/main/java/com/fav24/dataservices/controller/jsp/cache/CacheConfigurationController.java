@@ -54,6 +54,22 @@ public class CacheConfigurationController extends BaseJspController {
 
 		return model;
 	}
+	
+	
+	/**
+	 * Muestra la lista de gestores de caché disponibles para este servicio de datos.
+	 *  
+	 * @return el modelo y la vista, con la lista de gestores de caché disponibles para este servicio de datos.
+	 */
+	@RequestMapping(value = "/availableCaches", method = { RequestMethod.GET })
+	public ModelAndView availableCaches(@ModelAttribute(value="cacheManager") String cacheManager) {
+		
+		ModelAndView model = new ModelAndView("available_caches");
+		
+		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
+		
+		return model;
+	}
 
 	/**
 	 * Muestra la configuración de caché de una entidad.
