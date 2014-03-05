@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.Configuration;
 
 
 public class EntityCacheManager extends CacheManagerConfiguration
@@ -41,7 +40,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @param name El nuevo nombre para este gestor;
 	 */
-	public void setName(String name) {
+	public synchronized void setName(String name) {
 		this.name = name;
 	}
 
@@ -50,7 +49,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @return el conjunto de configuraciones de caché de entidades, para este gestor.
 	 */
-	public synchronized Set<EntityCache> getEntitiesCacheConfigurations() {
+	public final Set<EntityCache> getEntitiesCacheConfigurations() {
 		return entitiesCacheConfigurations;
 	}
 
@@ -62,6 +61,29 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	public synchronized void setEntitiesCacheConfigurations(
 			Set<EntityCache> entitiesCacheConfigurations) {
 		this.entitiesCacheConfigurations = entitiesCacheConfigurations;
+	}
+
+	/**
+	 * Retorna true o false en función de si existe una caché para la entidad indicada, en este gestor.
+	 * 
+	 * @param alias Alias de la entidad de la que se desea consultar si tiene o no caché en este gestor.
+	 *  
+	 * @return true o false en función de si existe una caché para la entidad indicada, en este gestor.
+	 */
+	public boolean containsEntityCacheConfiguration(String alias) {
+
+		if (entitiesCacheConfigurations == null || alias == null) {
+			return false;
+		}
+
+		for (EntityCache currentEntityCache : entitiesCacheConfigurations) {
+
+			if (alias.equals(currentEntityCache.getAlias())) {
+				return true; 
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -82,7 +104,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @return la caché para la entidad indicada por parámetro.
 	 */
-	public synchronized EntityCache getEntityCache(String alias) {
+	public final EntityCache getEntityCache(String alias) {
 
 		if (entitiesCacheConfigurations == null || alias == null) {
 			return null;
@@ -136,7 +158,8 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 */
 	public synchronized void constructCacheManager() {
 
-		constructCacheManager(constructCacheManagerConfiguration());
+		cacheManager = CacheManager.create(constructCacheManagerConfiguration());
+		cacheManager.setName(getName());
 
 		for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
 
@@ -147,21 +170,6 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	}
 
 	/**
-	 * Retorna el gestor de caché construido. 
-	 * 
-	 * @param configuration La estructura de configuración del gestor de caché.
-	 * 
-	 * @return el gestor de caché construido.
-	 */
-	public synchronized CacheManager constructCacheManager(Configuration configuration) {
-
-		cacheManager = CacheManager.create(configuration);
-		cacheManager.setName(getName());
-
-		return cacheManager;
-	}
-
-	/**
 	 * Rompe todas las cachés activas en este gestor.
 	 * Elimina todas las configuraciones de caché establecidas hasta el momento en este gestor.
 	 */
@@ -169,16 +177,19 @@ public class EntityCacheManager extends CacheManagerConfiguration
 
 		if (entitiesCacheConfigurations != null) {
 
-			for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
+			if (cacheManager != null) {
 
-				cacheManager.removeCache(entityCacheConfiguration.getAlias());
+				for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
+
+					cacheManager.removeCache(entityCacheConfiguration.getAlias());
+				}
+
+				cacheManager.shutdown();
+				cacheManager = null;
 			}
 
 			entitiesCacheConfigurations.clear();
 			entitiesCacheConfigurations = null;
-
-			cacheManager.shutdown();
-			cacheManager = null;
 		}
 	}
 
@@ -187,7 +198,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @return la nueva instancia.
 	 */
-	public EntityCacheManager clone() {
+	public synchronized EntityCacheManager clone() {
 
 		EntityCacheManager clone = new EntityCacheManager();
 

@@ -361,7 +361,9 @@ public class CacheConfiguration
 		net.sf.ehcache.config.CacheConfiguration configuration;
 
 		configuration = new net.sf.ehcache.config.CacheConfiguration();
-		configuration.setName(name);
+		if (name != null) {
+			configuration.setName(name);
+		}
 		configuration.setDiskExpiryThreadIntervalSeconds(getDiskExpiryThreadIntervalSeconds());
 		configuration.setMemoryStoreEvictionPolicy(getMemoryStoreEvictionPolicy().getMemoryStoreEvictionPolicy());
 

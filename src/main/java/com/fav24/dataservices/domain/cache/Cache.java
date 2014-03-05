@@ -168,6 +168,11 @@ public class Cache
 
 				if (systemCache == null) {
 					systemCache = cacheConfiguration.clone();
+
+					for (EntityCacheManager entityCacheManager : systemCache.getEntityCacheManagers()) {
+
+						entityCacheManager.constructCacheManager();
+					}
 				}
 				else {
 					systemCache.mergeCacheConfiguration(cacheConfiguration);
@@ -229,7 +234,10 @@ public class Cache
 							) {
 
 						for (EntityCache entityCache : entityCacheManager.getEntitiesCacheConfigurations()) {
-							newEntityCacheManager.addEntityCacheConfiguration(entityCache.clone());
+
+							if (!newEntityCacheManager.containsEntityCacheConfiguration(entityCache.getAlias())) {
+								newEntityCacheManager.addEntityCacheConfiguration(entityCache.clone());
+							}
 						}
 
 						entityCacheManager.destroy();
