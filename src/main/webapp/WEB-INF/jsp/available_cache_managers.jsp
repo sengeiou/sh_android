@@ -1,6 +1,8 @@
 <%@include file="includes/locations.jsp"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Iterator"%>
 <%@page import="com.fav24.dataservices.domain.cache.EntityCacheManager"%>
+<%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
 <%!String bodyContent;%>
 <%
@@ -11,18 +13,35 @@
 		if (cacheManagers != null && cacheManagers.size() > 0) {
 			
 			output.append("<div class=\"panel-body\">");
-			output.append("<p>A continuaci&oacute; se muestra el conjunto de gestores de cach&eacute; confurados en esta instancia de servicio de datos.</p>");
+			output.append("<p>A continuaci&oacute;n se muestra el conjunto de gestores de cach&eacute; configurados en esta instancia de servicio de datos.</p>");
 			output.append("</div>");
-		
-			output.append("<ul class=\"list-group\">");
-
-			for (EntityCacheManager cacheManager : cacheManagers) {
-				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=\"#\" onclick=\"sendGetRequest('/cache/cacheManagerConfiguration?cacheManager=").append(cacheManager.getName()).append("');\">").append(cacheManager.getName()).append("</a><br/>");
-				output.append("</li>");
-			}
 			
-			output.append("</ul>");
+			Iterator<EntityCacheManager> cacheManagerIterator = cacheManagers.iterator();
+
+			if (cacheManagerIterator.hasNext()) {
+				output.append("<table class=\"table\">");
+				output.append("<thead><tr>");
+				output.append("<th></th>").append("<th>Heap</th>").append("<th>Disco</th>").append("<th>Ubicaci&oacute;n de los ficheros</th>");
+				output.append("</tr></thead>");
+				output.append("<tbody>");
+				while (cacheManagerIterator.hasNext()) {
+					EntityCacheManager  entityCacheManager = cacheManagerIterator.next();
+					
+					output.append("<tr>");
+					output.append("<td>");
+					output.append("<a href=\"#\" onclick=\"sendGetRequest('/cache/cacheManagerConfiguration?cacheManager=").append(entityCacheManager.getName()).append("');\">").append(entityCacheManager.getName()).append("</a><br/>");
+					output.append("</td>");
+					output.append("<td>").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalHeap())).append("</td>");
+					output.append("<td>").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalDisk())).append("</td>");
+					output.append("<td>").append(entityCacheManager.getDiskStore().getPath()).append("</td>");
+					output.append("</tr>");
+				}
+				output.append("</tbody>");
+				output.append("</table>");
+			}
+			else {
+				output.append("ninguno.");
+			}
 		} 
 		else {
 			output.append("<div class=\"panel-body\">");
