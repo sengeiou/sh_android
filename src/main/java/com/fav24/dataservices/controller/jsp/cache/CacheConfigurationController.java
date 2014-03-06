@@ -48,7 +48,7 @@ public class CacheConfigurationController extends BaseJspController {
 	@RequestMapping(value = "/availableCacheManagers", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView availableCacheManagers() {
 
-		ModelAndView model = new ModelAndView("available_cache_managers");
+		ModelAndView model = new ModelAndView("available_entity_cache_managers");
 
 		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
 
@@ -81,7 +81,7 @@ public class CacheConfigurationController extends BaseJspController {
 	@RequestMapping(value = "/availableCaches", method = { RequestMethod.GET })
 	public ModelAndView availableCaches(@ModelAttribute(value="cacheManager") String cacheManager) {
 		
-		ModelAndView model = new ModelAndView("available_caches");
+		ModelAndView model = new ModelAndView("available_entity_caches");
 		
 		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
 		

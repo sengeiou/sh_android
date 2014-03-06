@@ -13,8 +13,8 @@
 		if (cacheManagers != null && cacheManagers.size() > 0) {
 			
 			output.append("<div class=\"panel-body\">");
-			output.append("<p>A continuaci&oacute;n se muestra el conjunto de gestores de cach&eacute; configurados en esta instancia de servicio de datos.</p>");
-			output.append("</div>");
+			output.append("<p>Conjunto de gestores de cach&eacute; configurados en esta instancia de servicio de datos.</p>");
+			
 			
 			Iterator<EntityCacheManager> cacheManagerIterator = cacheManagers.iterator();
 
@@ -42,6 +42,7 @@
 			else {
 				output.append("ninguno.");
 			}
+			output.append("</div>");
 		} 
 		else {
 			output.append("<div class=\"panel-body\">");
