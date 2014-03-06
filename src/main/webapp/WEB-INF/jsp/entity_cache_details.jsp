@@ -58,6 +58,25 @@
 			output.append("</ul>");
 			
 			// Respecto al manager que contiene esta caché.
+			output.append("<canvas id='managerRelativeCanvasHeap' height='150' width='150'></canvas>");
+			output.append("<canvas id='managerRelativeCanvasDisk' height='150' width='150'></canvas>");
+			
+			long heapPercent = (entityCache.getMaxBytesLocalHeap() * 100) / entityCacheManager.getMaxBytesLocalHeap();
+			output.append("<script type='text/javascript'>");
+			output.append('\n');
+			output.append("var managerRelativeDataHeap = [");
+			output.append("{ value: ").append(heapPercent).append(", color: \"#F38630\"}");
+			output.append(",{ value: ").append(100-heapPercent).append(", color: \"#69D2E7\"}");
+			output.append("];");
+
+			long diskPercent = (entityCache.getMaxBytesLocalDisk() * 100) / entityCacheManager.getMaxBytesLocalDisk();
+			output.append('\n');
+			output.append("var managerRelativeDataDisk = [");
+			output.append("{ value: ").append(diskPercent).append(", color: \"#F38630\"}");
+			output.append(",{ value: ").append(100-diskPercent).append(", color: \"#69D2E7\"}");
+			output.append("];");
+
+			output.append("</script>");
 			
 			output.append("</div>");
 			output.append("</div>");
@@ -103,3 +122,15 @@
 		</div>
 	</div>
 </div>
+
+<script	src="<%=jsURL%>/Chart.min.js"></script>
+<script type="text/javascript">
+
+	var canvasContext = $("#managerRelativeCanvasHeap").get(0).getContext("2d");
+	var managerRelativePieHeap = new Chart(canvasContext);
+	new Chart(canvasContext).Pie(managerRelativeDataHeap);
+	
+	canvasContext = $("#managerRelativeCanvasDisk").get(0).getContext("2d");
+	var managerRelativePieDisk = new Chart(canvasContext);
+	new Chart(canvasContext).Pie(managerRelativeDataDisk);
+</script>
