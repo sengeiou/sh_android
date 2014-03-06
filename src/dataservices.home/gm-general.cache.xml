@@ -39,16 +39,16 @@
 	</DefaultCacheManager>
 
 	<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
-	<EntityCacheManager Name="Cuotas" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
+	<EntityCacheManager Name="Entidades Base" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
 		<DiskStore Path="java.io.tmpdir"/>
 		
-		<EntityCache Alias="Provider">
+		<EntityCache Alias="Match">
 			<Expiry Eternal="false">
 				<TimeToIdleSeconds>120</TimeToIdleSeconds>
 				<TimeToLiveSeconds>120</TimeToLiveSeconds>
 			</Expiry>
-			<MaxBytesLocalHeap>1M</MaxBytesLocalHeap>
-			<MaxBytesLocalDisk>5M</MaxBytesLocalDisk>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>

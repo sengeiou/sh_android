@@ -1,6 +1,7 @@
 package com.fav24.dataservices.service.cache;
 
 import java.util.AbstractList;
+import java.util.Set;
 
 import com.fav24.dataservices.domain.cache.EntityCache;
 import com.fav24.dataservices.domain.cache.EntityCacheManager;
@@ -18,7 +19,7 @@ public interface RetrieveCacheConfigurationService extends CacheService {
 	 * 
 	 * @return la lista de gestores de caché de entidades configurados.
 	 */
-	public AbstractList<String> getCacheManagers();
+	public AbstractList<EntityCacheManager> getCacheManagers();
 	
 	/**
 	 * Retorna el detalle de la configuración del gestor de caché de entidades indicado.
@@ -36,7 +37,7 @@ public interface RetrieveCacheConfigurationService extends CacheService {
 	 * 
 	 * @return la lista de cachés pertenecientes al gestor de caché de entidades indicado.
 	 */
-	public AbstractList<String> getCacheManagerCaches(String cacheManager);
+	public Set<EntityCache> getCacheManagerCaches(String cacheManager);
 
 	/**
 	 * Retorna el detalle de la configuración de la caché de la entidad indicada.

@@ -143,6 +143,31 @@ public class Cache
 	}
 
 	/**
+	 * Retorna el gestor de caché solicitado por nombre.
+	 * 
+	 * @param cacheManager Alias de la caché de la que se desea obtener el gestor.
+	 * 
+	 * @return el gestor de caché solicitado por nombre.
+	 */
+	public EntityCacheManager getEntityCacheManager(String cacheManager) {
+		
+		if (cacheManager == null) {
+			
+			return null;
+		}
+		
+		for (EntityCacheManager entityCacheManager : entityCacheManagers) {
+			
+			if (cacheManager.equals(entityCacheManager.getName())) {
+				
+				return entityCacheManager;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Retorna el gestor de caché que contiene la caché de alias el indicado.
 	 * 
 	 * @param cacheAlias Alias de la caché de la que se desea obtener el gestor.
@@ -327,6 +352,17 @@ public class Cache
 			throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
 					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
+	}
+	
+	/**
+	 * Retorna la referencia a la caché actual del sistema.
+	 * 
+	 * Esta estructura, contiene tanto la información de configuración, como la de actividad.
+	 * 
+	 * @return la referencia a la caché actual del sistema.
+	 */
+	public static final Cache getSystemCache() {
+		return systemCache;
 	}
 
 	/**
