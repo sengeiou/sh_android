@@ -1,5 +1,4 @@
 <%@include file="includes/locations.jsp" %>
-<%@page import="java.util.Iterator"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="com.fav24.dataservices.domain.cache.EntityCacheManager"%>
@@ -7,17 +6,15 @@
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
 <%!String bodyContent;%>
-<%!String cacheManager;%>
 <%
 	StringBuilder output = new StringBuilder();
 	
 	try {
-		cacheManager = (String)request.getAttribute("cacheManager");
 		EntityCacheManager entityCacheManager = (EntityCacheManager)request.getAttribute("cacheManagerConfiguration");
 
 		if (entityCacheManager == null) {
 			
-			output.append("El gestor de cach&eacute; <strong>").append(cacheManager).append("</strong> no existe.");
+			output.append("El gestor de cach&eacute; <strong>").append((String)request.getAttribute("cacheManager")).append("</strong> no existe.");
 		} 
 		else {
 			output.append("<p>Detalle de la configuraci&oacute;n<p/>");
@@ -27,7 +24,7 @@
 			output.append("<div class='panel-heading'>L&iacute;mites de alacenamiento</div>");
 			output.append("<div class='panel-body'>");
 			output.append("<ul class='list-group'>");
-			output.append("<li class='list-group-item'>").append("<strong>Heap:</strong> ").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalHeap())).append("</li>");
+			output.append("<li class='list-group-item'>").append("<strong>Memoria:</strong> ").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalHeap())).append("</li>");
 			output.append("<li class='list-group-item'>").append("<strong>Disco:</strong> ").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalDisk())).append("</li>");
 			output.append("</ul>");
 			output.append("</div>");
@@ -53,7 +50,7 @@
 				if (entityCacheConfigurationsIterator.hasNext()) {
 					output.append("<table class=\"table\">");
 					output.append("<thead><tr>");
-					output.append("<th></th>").append("<th>Heap</th>").append("<th>%</th>").append("<th>Disco</th>").append("<th>%</th>");
+					output.append("<th></th>").append("<th>Memoria</th>").append("<th>%</th>").append("<th>Disco</th>").append("<th>%</th>");
 					output.append("</tr></thead>");
 					output.append("<tbody>");
 					while (entityCacheConfigurationsIterator.hasNext()) {
@@ -101,7 +98,7 @@
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
-		<div class="panel-heading"><h3>${entity}</h3></div>
+		<div class="panel-heading"><h3>${cacheManager}</h3></div>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<%=bodyContent%>

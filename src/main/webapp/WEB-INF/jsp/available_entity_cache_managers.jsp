@@ -21,7 +21,7 @@
 			if (cacheManagerIterator.hasNext()) {
 				output.append("<table class=\"table\">");
 				output.append("<thead><tr>");
-				output.append("<th></th>").append("<th>Heap</th>").append("<th>Disco</th>").append("<th>Ubicaci&oacute;n de los ficheros</th>");
+				output.append("<th></th>").append("<th>Memoria</th>").append("<th>Disco</th>").append("<th>Ubicaci&oacute;n de los ficheros</th>");
 				output.append("</tr></thead>");
 				output.append("<tbody>");
 				while (cacheManagerIterator.hasNext()) {

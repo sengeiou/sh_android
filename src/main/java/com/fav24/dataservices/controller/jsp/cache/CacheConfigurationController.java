@@ -67,7 +67,6 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("entity_cache_manager_details");
 
-		model.addObject("cacheManager", cacheManager);
 		model.addObject("cacheManagerConfiguration", retrieveCacheConfigurationService.getCacheManagerConfiguration(cacheManager));
 
 		return model;
@@ -101,7 +100,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("entity_cache_details");
 
-		model.addObject("entity", entity);
+		model.addObject("cacheManagerConfiguration", retrieveCacheConfigurationService.getCacheManagerConfiguration(cacheManager));
 		model.addObject("cacheConfiguration", retrieveCacheConfigurationService.getCacheConfiguration(cacheManager, entity));
 
 		return model;

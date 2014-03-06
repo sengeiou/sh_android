@@ -100,7 +100,7 @@
 	<!-- Políticas de desalojo de las entradas almacenadas en memoria.
 			El desalojo de una entrada en memoria, implica la entrada del element en la zona de disco.
 
-			LRU: Least Recently Used - Se elimina el 
+			LRU: Least Recently Used - Se elimina el que hace más tiempo que no se usa.
 			LFU: Least Frequently Used - Se elimina el de uso menos frecuente. 
 			FIFO: First In First Out - Se elimina en el mismo orden de entrada de los elementos.
 	-->
