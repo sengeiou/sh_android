@@ -55,6 +55,23 @@ public class CacheConfigurationController extends BaseJspController {
 		return model;
 	}
 	
+	/**
+	 * Muestra la configuración del gestor de caché indicado.
+	 * 
+	 * @param cacheManager Gestor de caché a obtener.
+	 * 
+	 * @return el modelo y la vista, con la configuración del gestor de caché indicado.
+	 */
+	@RequestMapping(value = "/cacheManagerConfiguration", method = { RequestMethod.GET })
+	public ModelAndView cacheManagerConfiguration(@ModelAttribute(value="cacheManager") String cacheManager) {
+
+		ModelAndView model = new ModelAndView("entity_cache_manager_details");
+
+		model.addObject("cacheManager", cacheManager);
+		model.addObject("cacheManagerConfiguration", retrieveCacheConfigurationService.getCacheManagerConfiguration(cacheManager));
+
+		return model;
+	}
 	
 	/**
 	 * Muestra la lista de gestores de caché disponibles para este servicio de datos.
@@ -80,7 +97,7 @@ public class CacheConfigurationController extends BaseJspController {
 	 * @return el modelo y la vista, con la configuración de caché de una entidad.
 	 */
 	@RequestMapping(value = "/cacheConfiguration", method = { RequestMethod.GET })
-	public ModelAndView entityPolicies(@ModelAttribute(value="cacheManager") String cacheManager, @ModelAttribute(value="entity") String entity) {
+	public ModelAndView cacheConfiguration(@ModelAttribute(value="cacheManager") String cacheManager, @ModelAttribute(value="entity") String entity) {
 
 		ModelAndView model = new ModelAndView("entity_cache_details");
 
