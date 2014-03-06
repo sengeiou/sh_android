@@ -19,6 +19,18 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!-- -->
+	<!-- Bytes nomenclature:
+	# -> bytes. # bytes
+	#K -> Kilobytes. (# x 1024) bytes
+	#M -> Megabytes. (# x 1000 x 1024) bytes
+	#G -> Gigabytes. (# x 1000000 x 1024) bytes
+	 -->
+	<xsd:simpleType name="TStorageSize">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([0-9]{1,19})((G|M|K)|)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- -->
 	<xsd:complexType name="TCacheManagerConfiguration">
 		<xsd:sequence>
 			<!-- Configuración por defecto de una caché. -->
@@ -26,8 +38,8 @@
 			<!-- Ubicación de los ficheros de persistencia de la caché. -->
 			<xsd:element name="DiskStore" type="TDiskStore" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
-		<xsd:attribute name="MaxBytesLocalHeap" type="xsd:long" use="optional"/>
-		<xsd:attribute name="MaxBytesLocalDisk" type="xsd:long" use="optional"/>
+		<xsd:attribute name="MaxBytesLocalHeap" type="TStorageSize" use="optional"/>
+		<xsd:attribute name="MaxBytesLocalDisk" type="TStorageSize" use="optional"/>
 	</xsd:complexType>
 	<!-- -->
 	<xsd:complexType name="TEntityCacheManager">
@@ -45,18 +57,10 @@
 		<xsd:sequence>
 			<!-- Tiempos de vida de un elemento. -->
 			<xsd:element name="Expiry" type="TExpiry" minOccurs="0" maxOccurs="1"/>
-			<xsd:choice minOccurs="0" maxOccurs="1">
-				<!-- Número máximo de bytes en memoria. -->
-				<xsd:element name="MaxBytesLocalHeap" type="xsd:long"/>
-				<!-- Número máximo de elementos en memoria. -->
-				<xsd:element name="MaxEntriesLocalHeap" type="xsd:long"/>
-			</xsd:choice>
-			<xsd:choice minOccurs="0" maxOccurs="1">
-				<!-- Número máximo de bytes en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
-				<xsd:element name="MaxBytesLocalDisk" type="xsd:long"/>
-				<!-- Número máximo de elementos en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
-				<xsd:element name="MaxEntriesLocalDisk" type="xsd:long"/>
-			</xsd:choice>
+			<!-- Número máximo de bytes en memoria. -->
+			<xsd:element name="MaxBytesLocalHeap" type="TStorageSize"/>
+			<!-- Número máximo de bytes en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
+			<xsd:element name="MaxBytesLocalDisk" type="TStorageSize"/>
 			<!-- Intervalo de tiempo entre chequeos, en busca de elementos caducados en disco. -->
 			<xsd:element name="DiskExpiryThreadIntervalSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
 			<!-- Políticas de desalojo de las entradas almacenadas en memoria. -->

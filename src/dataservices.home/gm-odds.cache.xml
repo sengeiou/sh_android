@@ -2,7 +2,13 @@
 <Cache Version="1.0.0" Description="Configuración de la caché asociada a las entidades en lectura para la aplicación Golesmessenger">
 
 	<!-- Configuración por defecto de un gestor de cachés. -->
-	<DefaultCacheManager MaxBytesLocalHeap="500000000" MaxBytesLocalDisk="10000000000">
+	<!-- Bytes nomenclature:
+	# -> bytes. # bytes
+	#K -> Kilobytes. (# x 1024) bytes
+	#M -> Megabytes. (# x 1000 x 1024) bytes
+	#G -> Gigabytes. (# x 1000000 x 1024) bytes
+	 -->
+	<DefaultCacheManager MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
 		<!-- Configuración por defecto de una caché. -->
 		<DefaultCache>
 			<Expiry Eternal="false"> <!-- Eternal indica si los elementos de la caché están o no afectados por el paso del tiempo. Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
@@ -12,9 +18,9 @@
 				<TimeToLiveSeconds>120</TimeToLiveSeconds>
 			</Expiry>
 			<!-- Número máximo de elementos en memoria. -->
-			<MaxEntriesLocalHeap>10000</MaxEntriesLocalHeap>
+			<MaxBytesLocalHeap>25M</MaxBytesLocalHeap>
 			<!-- Número máximo de elementos en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
-			<MaxBytesLocalDisk>10000000</MaxBytesLocalDisk>
+			<MaxBytesLocalDisk>250M</MaxBytesLocalDisk>
 			<!-- Intervalo de tiempo entre chequeos, en busca de elementos caducados en disco. -->
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<!-- Políticas de desalojo de las entradas almacenadas en memoria.
@@ -33,7 +39,7 @@
 	</DefaultCacheManager>
 
 	<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
-	<EntityCacheManager Name="Entidades Base" MaxBytesLocalHeap="200000000" MaxBytesLocalDisk="5000000000">
+	<EntityCacheManager Name="Entidades Base" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
 		<DiskStore Path="java.io.tmpdir"/>
 		
 		<EntityCache Alias="Match">
@@ -41,8 +47,8 @@
 				<TimeToIdleSeconds>120</TimeToIdleSeconds>
 				<TimeToLiveSeconds>120</TimeToLiveSeconds>
 			</Expiry>
-			<MaxEntriesLocalHeap>500</MaxEntriesLocalHeap>
-			<MaxEntriesLocalDisk>10000</MaxEntriesLocalDisk>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>

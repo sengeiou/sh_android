@@ -21,8 +21,8 @@ public class CacheManagerConfigurationDOM extends CacheManagerConfiguration
 		
 		Element element = (Element) node;
 
-		setMaxBytesLocalHeap(Long.parseLong(element.getAttribute("MaxBytesLocalHeap")));
-		setMaxBytesLocalDisk(Long.parseLong(element.getAttribute("MaxBytesLocalDisk")));
+		setMaxBytesLocalHeap(StorageSize.fromStringToBytes(element.getAttribute("MaxBytesLocalHeap")));
+		setMaxBytesLocalDisk(StorageSize.fromStringToBytes(element.getAttribute("MaxBytesLocalDisk")));
 
 		NodeList nodes_i = node.getChildNodes();
 

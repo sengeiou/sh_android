@@ -24,14 +24,14 @@ public class EntityCacheManagerDOM extends EntityCacheManager
 
 		setName(element.getAttribute("Name"));
 		if (element.hasAttribute("MaxBytesLocalHeap")) {
-			setMaxBytesLocalHeap(Long.parseLong(element.getAttribute("MaxBytesLocalHeap")));
+			setMaxBytesLocalHeap(StorageSize.fromStringToBytes(element.getAttribute("MaxBytesLocalHeap")));
 		}
 		else {
 			setMaxBytesLocalHeap(DEFAULT_MAX_BYTES_LOCAL_HEAP);
 		}
 
 		if (element.hasAttribute("MaxBytesLocalDisk")) {
-			setMaxBytesLocalDisk(Long.parseLong(element.getAttribute("MaxBytesLocalDisk")));
+			setMaxBytesLocalDisk(StorageSize.fromStringToBytes(element.getAttribute("MaxBytesLocalDisk")));
 		}
 		else {
 			setMaxBytesLocalDisk(DEFAULT_MAX_BYTES_LOCAL_DISK);

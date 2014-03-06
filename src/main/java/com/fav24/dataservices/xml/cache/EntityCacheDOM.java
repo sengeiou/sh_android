@@ -36,19 +36,11 @@ public class EntityCacheDOM extends EntityCache
 				}
 				else if ("MaxBytesLocalHeap".equals(nodeName)) {
 
-					setMaxBytesLocalHeap(Long.parseLong(node_i.getTextContent()));
-				}
-				else if ("MaxEntriesLocalHeap".equals(nodeName)) {
-
-					setMaxEntriesLocalHeap(Long.parseLong(node_i.getTextContent()));
+					setMaxBytesLocalHeap(StorageSize.fromStringToBytes(node_i.getTextContent()));
 				}
 				else if ("MaxBytesLocalDisk".equals(nodeName)) {
 
-					setMaxBytesLocalDisk(Long.parseLong(node_i.getTextContent()));
-				}
-				else if ("MaxEntriesLocalDisk".equals(nodeName)) {
-
-					setMaxEntriesLocalDisk(Long.parseLong(node_i.getTextContent()));
+					setMaxBytesLocalDisk(StorageSize.fromStringToBytes(node_i.getTextContent()));
 				}
 				else if ("DiskExpiryThreadIntervalSeconds".equals(nodeName)) {
 

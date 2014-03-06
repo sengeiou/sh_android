@@ -10,9 +10,7 @@ public class CacheConfiguration
 {
 	public static final Expiry DEFAULT_EXPIRY = new Expiry(true);
 	public static final Long DEFAULT_MAX_BYTES_LOCAL_HEAP = null;
-	public static final Long DEFAULT_MAX_ENTRIES_LOCAL_HEAP = 10000L;
 	public static final Long DEFAULT_MAX_BYTES_DISK = null;
-	public static final Long DEFAULT_MAX_ENTRIES_DISK = 10000000L;
 	public static final Long DEFAULT_DISK_EXPIRITY_THREAD_INTERVAL_SECONDS = 120L;
 	public static final MemoryStoreEvictionPolicy DEFAULT_MEMORY_EVICTION_POLICY = MemoryStoreEvictionPolicy.LRU;
 	public static final Persistence DEFAULT_PERSISTENCE = new Persistence(true);
@@ -21,9 +19,7 @@ public class CacheConfiguration
 
 	private Expiry expiry;
 	private Long maxBytesLocalHeap;
-	private Long maxEntriesLocalHeap;
 	private Long maxBytesLocalDisk;
-	private Long maxEntriesLocalDisk;
 	private Long diskExpiryThreadIntervalSeconds;
 	private MemoryStoreEvictionPolicy memoryStoreEvictionPolicy;
 	private Persistence persistence;
@@ -156,60 +152,6 @@ public class CacheConfiguration
 	 */
 	public void setExpiry(Expiry expiry) {
 		this.expiry = expiry;
-	}
-
-	/**
-	 * Retorna el número máximo de elementos en memoria.
-	 *  
-	 * @return el número máximo de elementos en memoria.
-	 */
-	public Long getMaxEntriesLocalHeap() {
-
-		if (maxEntriesLocalHeap != null) {
-			return maxEntriesLocalHeap;
-		}
-
-		if (parentConfiguration != null) {
-			return parentConfiguration.getMaxEntriesLocalHeap();
-		}
-
-		return DEFAULT_MAX_ENTRIES_LOCAL_HEAP; 
-	}
-
-	/**
-	 * Asigna el número máximo de elementos en memoria.
-	 * 
-	 * @param maxEntriesLocalHeap Número máximo de elementos en memoria.
-	 */
-	public void setMaxEntriesLocalHeap(Long maxEntriesLocalHeap) {
-		this.maxEntriesLocalHeap = maxEntriesLocalHeap;
-	}
-
-	/**
-	 * Retorna el número máximo de elementos en disco.
-	 *  
-	 * @return el número máximo de elementos en disco.
-	 */
-	public Long getMaxEntriesLocalDisk() {
-
-		if (maxEntriesLocalDisk != null) {
-			return maxEntriesLocalDisk;
-		}
-
-		if (parentConfiguration != null) {
-			return parentConfiguration.getMaxEntriesLocalDisk();
-		}
-
-		return DEFAULT_MAX_ENTRIES_DISK; 
-	}
-
-	/**
-	 * Asigna el número máximo de elementos en disco.
-	 * 
-	 * @param maxEntriesLocalDisk Número máximo de elementos en disco.
-	 */
-	public void setMaxEntriesLocalDisk(Long maxEntriesLocalDisk) {
-		this.maxEntriesLocalDisk = maxEntriesLocalDisk;
 	}
 
 	/**
@@ -368,9 +310,7 @@ public class CacheConfiguration
 		configuration.setMemoryStoreEvictionPolicy(getMemoryStoreEvictionPolicy().getMemoryStoreEvictionPolicy());
 
 		configuration.setMaxBytesLocalHeap(getMaxBytesLocalHeap());
-		configuration.setMaxEntriesLocalHeap(getMaxEntriesLocalHeap());
 		configuration.setMaxBytesLocalDisk(getMaxBytesLocalDisk());
-		configuration.setMaxEntriesLocalDisk(getMaxEntriesLocalDisk());
 		configuration.setEternal(getExpiry().isEternal());
 		configuration.setTimeToIdleSeconds(getExpiry().getTimeToIdleSeconds());
 		configuration.setTimeToLiveSeconds(getExpiry().getTimeToLiveSeconds());
@@ -396,9 +336,7 @@ public class CacheConfiguration
 		configuration.setMemoryStoreEvictionPolicy(DEFAULT_MEMORY_EVICTION_POLICY.getMemoryStoreEvictionPolicy());
 
 		configuration.setMaxBytesLocalHeap(DEFAULT_MAX_BYTES_LOCAL_HEAP);
-		configuration.setMaxEntriesLocalHeap(DEFAULT_MAX_ENTRIES_LOCAL_HEAP);
 		configuration.setMaxBytesLocalDisk(DEFAULT_MAX_BYTES_DISK);
-		configuration.setMaxEntriesLocalDisk(DEFAULT_MAX_ENTRIES_DISK);
 		configuration.setEternal(Expiry.DEFAULT_ETERNAL);
 		configuration.setTimeToIdleSeconds(Expiry.DEFAULT_TIME_TO_IDLE_SECONDS);
 		configuration.setTimeToLiveSeconds(Expiry.DEFAULT_TIME_TO_LIVE_SECONDS);
@@ -432,9 +370,7 @@ public class CacheConfiguration
 
 		clone.expiry = expiry.clone();
 		clone.maxBytesLocalHeap = maxBytesLocalHeap;
-		clone.maxEntriesLocalHeap = maxEntriesLocalHeap;
 		clone.maxBytesLocalDisk = maxBytesLocalDisk;
-		clone.maxEntriesLocalDisk = maxEntriesLocalDisk;
 		clone.diskExpiryThreadIntervalSeconds = diskExpiryThreadIntervalSeconds;
 		clone.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
 
