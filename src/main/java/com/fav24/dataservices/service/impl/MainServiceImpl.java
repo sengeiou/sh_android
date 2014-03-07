@@ -1,13 +1,8 @@
 package com.fav24.dataservices.service.impl;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.AbstractList;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.SystemMonitoring;
+import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSampleData;
 import com.fav24.dataservices.service.MainService;
 import com.fav24.dataservices.util.JDBCUtils;
 
@@ -30,6 +27,12 @@ public class MainServiceImpl implements MainService {
 	private static Map<String, String> DataSourceInformation;
 	private static Map<String, String> StatsDataSourceInformation;
 
+	private static SystemMonitoring SystemActivityMonitoring;
+	
+	static {
+		SystemActivityMonitoring = new SystemMonitoring();
+	}
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -78,48 +81,21 @@ public class MainServiceImpl implements MainService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, Long> getSystemMemoryStatus() {
+	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange) {
 
-		Map<String, Long> systemMemoryStatus = new HashMap<String, Long>();
-
-		long maxMemory = Runtime.getRuntime().maxMemory(); 
-		long totalMemory = Runtime.getRuntime().totalMemory();
-		long usedMemory = totalMemory - Runtime.getRuntime().freeMemory(); 
-		long freeMemory = maxMemory - usedMemory;
-
-		systemMemoryStatus.put(MAX_MEMORY, maxMemory);
-		systemMemoryStatus.put(TOTAL_MEMORY, totalMemory);
-		systemMemoryStatus.put(USED_MEMORY, usedMemory);
-		systemMemoryStatus.put(FREE_MEMORY, freeMemory);
-
-		return systemMemoryStatus;
+//		SystemActivityMonitoring;
+		
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, Map<String, Long>> getSystemStorageStatus() {
-
-		Map<String, Map<String, Long>> systemStorageStatus = new HashMap<String, Map<String, Long>>();
-
-		for (Path root : FileSystems.getDefault().getRootDirectories())
-		{
-			Map<String, Long> storageStatus = new HashMap<String, Long>();
-
-			try	{
-
-				FileStore store = Files.getFileStore(root);
-
-				storageStatus.put(TOTAL_STORAGE_SPACE, store.getTotalSpace());
-				storageStatus.put(TOTAL_USABLE_STORAGE_SPACE, store.getUsableSpace());
-
-				systemStorageStatus.put(root.toString(), storageStatus);
-			}
-			catch (IOException e) {
-			}
-		}
-
-		return systemStorageStatus;
+	public Map<String, AbstractList<MonitorSampleData>> getSystemStorageStatus(Long period, Long timeRange) {
+		
+//		SystemActivityMonitoring;
+		
+		return null;
 	}
 }

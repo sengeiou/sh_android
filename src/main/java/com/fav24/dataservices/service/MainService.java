@@ -1,11 +1,13 @@
 package com.fav24.dataservices.service;
 
+import java.util.AbstractList;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSampleData;
 
 
 /**
@@ -22,13 +24,6 @@ public interface MainService {
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED = "G001";
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos de uso.";
 
-	public static final String MAX_MEMORY = "MaxMemory"; //Memória máxima a usar. Se configura mediante el parámetro - Xmx
-	public static final String TOTAL_MEMORY = "TotalMemory"; //Hasta donde se puede expandir el heap. Se configura mediante el parámetro -Xms
-	public static final String FREE_MEMORY = "FreeMemory"; //Memoria disponible en el sistema. 
-	public static final String USED_MEMORY = "UsedMemory"; //Memoria en uso. 
-
-	public static final String TOTAL_STORAGE_SPACE = "TotalStorageSpace"; //Capacidad total de almacenamiento.
-	public static final String TOTAL_USABLE_STORAGE_SPACE = "TotalUsableStorageSpace"; //Espacio disponible de almacenamiento.
 
 	/**
 	 * Retorna un mapa de atributos con la información de la fuente de datos a publicar.
@@ -50,18 +45,21 @@ public interface MainService {
 	
 	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
+	 * 
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
-	public Map<String, Long> getSystemMemoryStatus();
+	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange);
 	
 	/**
 	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada en cuanto a:
 	 * 
-	 * {@linkplain #TOTAL_STORAGE_SPACE}
-	 * {@linkplain #TOTAL_USABLE_STORAGE_SPACE}
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
 	 * 
 	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
 	 */
-	public Map<String, Map<String, Long>> getSystemStorageStatus();
+	public Map<String, AbstractList<MonitorSampleData>> getSystemStorageStatus(Long period, Long timeRange);
 }
