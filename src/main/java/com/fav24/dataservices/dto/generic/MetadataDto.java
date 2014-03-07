@@ -49,7 +49,7 @@ public class MetadataDto {
 	 * @param entity Entidad contra la que se realiza la operación.
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
-	 * @param items Número de ítems afectados por la operación.
+	 * @param items Número de ítems incluidos en la respuesta.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
 	public MetadataDto(String operation, String entity, Long totalItems, Long offset, Long items, Map<String, Object> key) {
@@ -68,7 +68,7 @@ public class MetadataDto {
 	 * @param entity Entidad contra la que se realiza la operación.
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
-	 * @param items Número de ítems afectados por la operación.
+	 * @param items Número de ítems incluidos en la respuesta.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
 	public MetadataDto(String operation, String entity, Long totalItems, Long offset, Long items, FilterDto filter) {
@@ -153,18 +153,18 @@ public class MetadataDto {
 	}
 	
 	/**
-	 * Retorna el número de ítems operados.
+	 * Retorna el número de ítems incluidos en la respuesta.
 	 * 
-	 * @return el número de ítems operados.
+	 * @return el número de ítems incluidos en la respuesta.
 	 */
 	public Long getItems() {
 		return items;
 	}
 	
 	/**
-	 * Asigna el número de ítems operados.
+	 * Asigna el número de ítems incluidos en la respuesta.
 	 * 
-	 * @param items Número de ítems operados a asignar.
+	 * @param items Número de ítems incluidos en la respuesta asignar.
 	 */
 	public void setItems(Long items) {
 		this.items = items;
