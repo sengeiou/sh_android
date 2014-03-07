@@ -43,7 +43,7 @@
 			output.append("</div>");
 			output.append("</div>");
 
-			// Límites de almacenamiento.
+			// LÃ­mites de almacenamiento.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>L&iacute;mites de alacenamiento</div>");
 			output.append("<div class='panel-body'>");
@@ -57,23 +57,46 @@
 			output.append("<li class='list-group-item'>").append("<strong>Persistencia:</strong> ").append(entityCache.getPersistente().isActive() ? "S&iacute;" : "No").append("</li>");
 			output.append("</ul>");
 			
-			// Respecto al manager que contiene esta caché.
-			output.append("<canvas id='managerRelativeCanvasHeap' height='150' width='150'></canvas>");
-			output.append("<canvas id='managerRelativeCanvasDisk' height='150' width='150'></canvas>");
+			// Respecto al manager que contiene esta cachÃ©.
+			String cacheColor = "#F38630";
+			String cacheManagerColor = "#69D2E7";
+			output.append("<div class='row'>");
+			
+			output.append("<div class='col-sm-6'>");
+			output.append("<div class='panel panel-info'>");
+			output.append("<div class='panel-heading'>Memoria respecto al gestor</div>");
+			output.append("<div class='panel-body'>");
+			output.append("<canvas id='managerRelativeCanvasHeap' height='150' width='250'></canvas>");
+			
+			output.append("</div>");
+			output.append("</div>");
+			output.append("</div>");
+
+			output.append("<div class='col-sm-6'>");
+			output.append("<div class='panel panel-info'>");
+			output.append("<div class='panel-heading'>Disco respecto al gestor</div>");
+			output.append("<div class='panel-body'>");
+			output.append("<canvas id='managerRelativeCanvasDisk' height='150' width='250'></canvas>");
+			
+			output.append("</div>");
+			output.append("</div>");
+			output.append("</div>");
+			
+			output.append("</div>");
 			
 			long heapPercent = (entityCache.getMaxBytesLocalHeap() * 100) / entityCacheManager.getMaxBytesLocalHeap();
 			output.append("<script type='text/javascript'>");
 			output.append('\n');
 			output.append("var managerRelativeDataHeap = [");
-			output.append("{ value: ").append(heapPercent).append(", color: \"#F38630\"}");
-			output.append(",{ value: ").append(100-heapPercent).append(", color: \"#69D2E7\"}");
+			output.append("{ value: ").append(heapPercent).append(", color: '").append(cacheColor).append("'}");
+			output.append(",{ value: ").append(100-heapPercent).append(", color: '").append(cacheManagerColor).append("'}");
 			output.append("];");
 
 			long diskPercent = (entityCache.getMaxBytesLocalDisk() * 100) / entityCacheManager.getMaxBytesLocalDisk();
 			output.append('\n');
 			output.append("var managerRelativeDataDisk = [");
-			output.append("{ value: ").append(diskPercent).append(", color: \"#F38630\"}");
-			output.append(",{ value: ").append(100-diskPercent).append(", color: \"#69D2E7\"}");
+			output.append("{ value: ").append(diskPercent).append(", color: '").append(cacheColor).append("', label: 'HELLO',labelColor: 'black',labelFontSize: '16', labelAlign : 'left'}");
+			output.append(",{ value: ").append(100-diskPercent).append(", color: '").append(cacheManagerColor).append("', label: 'HELLO',labelColor: 'black',labelFontSize: '16', labelAlign : 'right'}");
 			output.append("];");
 
 			output.append("</script>");
@@ -81,7 +104,7 @@
 			output.append("</div>");
 			output.append("</div>");
 			
-			// Política de desalojo del heap.
+			// PolÃ­tica de desalojo del heap.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Pol&iacute;ca de desalojo de la memoria</div>");
 			output.append("<div class='panel-body'>");
@@ -132,5 +155,10 @@
 	
 	canvasContext = $("#managerRelativeCanvasDisk").get(0).getContext("2d");
 	var managerRelativePieDisk = new Chart(canvasContext);
-	new Chart(canvasContext).Pie(managerRelativeDataDisk);
+	new Chart(canvasContext).Pie(managerRelativeDataDisk, {
+		animationSteps: 100,
+		animationEasing: 'easeOutBounce',
+        labelAlign: 'center'
+    });
+    
 </script>
