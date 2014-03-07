@@ -6,8 +6,12 @@
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
 <%!String bodyContent;%>
+<%!String entity;%>
+<%!String cacheManagerName;%>
 <%
 	StringBuilder output = new StringBuilder();
+	entity = (String)request.getAttribute("entity");
+	cacheManagerName = (String)request.getAttribute("cacheManager");
 	
 	try {
 		EntityCacheManager entityCacheManager = (EntityCacheManager)request.getAttribute("cacheManagerConfiguration");
@@ -15,8 +19,8 @@
 
 		if (entityCache == null || entityCacheManager == null) {
 			
-			output.append("No ha sido posible localizar la cach&eacute; <strong>").append((String)request.getAttribute("entity")).append("</strong> en el gestor <strong>").
-			append((String)request.getAttribute("cacheManager")).append("</strong>.");
+			output.append("No ha sido posible localizar la cach&eacute; <strong>").append(entity).append("</strong> en el gestor <strong>").
+			append(cacheManagerName).append("</strong>.");
 		} 
 		else {
 			output.append("<p>Detalle de la configuraci&oacute;n<p/>");
@@ -66,8 +70,7 @@
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Memoria respecto al gestor</div>");
 			output.append("<div class='panel-body'>");
-			output.append("<canvas id='managerRelativeCanvasHeap' height='150' width='250'></canvas>");
-			
+			output.append("<div id='managerRelativeHeap' style='width:500px; height:250px;'></div>");
 			output.append("</div>");
 			output.append("</div>");
 			output.append("</div>");
@@ -76,8 +79,7 @@
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Disco respecto al gestor</div>");
 			output.append("<div class='panel-body'>");
-			output.append("<canvas id='managerRelativeCanvasDisk' height='150' width='250'></canvas>");
-			
+			output.append("<div id='managerRelativeDisk' style='width:500px; height:250px;'></div>");
 			output.append("</div>");
 			output.append("</div>");
 			output.append("</div>");
@@ -88,15 +90,15 @@
 			output.append("<script type='text/javascript'>");
 			output.append('\n');
 			output.append("var managerRelativeDataHeap = [");
-			output.append("{ value: ").append(heapPercent).append(", color: '").append(cacheColor).append("'}");
-			output.append(",{ value: ").append(100-heapPercent).append(", color: '").append(cacheManagerColor).append("'}");
+			output.append(heapPercent);
+			output.append(",").append(100-heapPercent);
 			output.append("];");
 
 			long diskPercent = (entityCache.getMaxBytesLocalDisk() * 100) / entityCacheManager.getMaxBytesLocalDisk();
 			output.append('\n');
 			output.append("var managerRelativeDataDisk = [");
-			output.append("{ value: ").append(diskPercent).append(", color: '").append(cacheColor).append("', label: 'HELLO',labelColor: 'black',labelFontSize: '16', labelAlign : 'left'}");
-			output.append(",{ value: ").append(100-diskPercent).append(", color: '").append(cacheManagerColor).append("', label: 'HELLO',labelColor: 'black',labelFontSize: '16', labelAlign : 'right'}");
+			output.append(diskPercent);
+			output.append(",").append(100-diskPercent);
 			output.append("];");
 
 			output.append("</script>");
@@ -133,6 +135,11 @@
 	bodyContent = output.toString();
 %>
 
+<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jplot/jquery.jqplot.min.css"></link>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/jquery.jqplot.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
 
@@ -146,19 +153,110 @@
 	</div>
 </div>
 
-<script	src="<%=jsURL%>/Chart.min.js"></script>
 <script type="text/javascript">
 
-	var canvasContext = $("#managerRelativeCanvasHeap").get(0).getContext("2d");
-	var managerRelativePieHeap = new Chart(canvasContext);
-	new Chart(canvasContext).Pie(managerRelativeDataHeap);
+	var managerRelativeHeap = jQuery.jqplot ('managerRelativeHeap', [managerRelativeDataHeap], 
+	    { 
+		grid: {
+			drawBorder: false,
+			drawGridlines: false,
+			background: '#ffffff',
+			shadow: false
+		},
+		axesDefaults: {
+             
+        },
+        animate: true,
+        // Will animate plot on calls to plot1.replot({resetAxes:true})
+        animateReplot: true,
+        cursor: {
+            show: true,
+            zoom: true,
+            looseZoom: true,
+            showTooltip: false
+        },
+        seriesDefaults: {
+				trendline: {
+					show: true
+					},
+				shadow: false,
+				// Make this a pie chart.
+				renderer: jQuery.jqplot.PieRenderer,
+				rendererOptions: {
+					// Put data labels on the pie slices.
+					// Turn off filling of slices.
+					fill: true,
+					showDataLabels: true,
+					// Add a margin to seperate the slices.
+					sliceMargin: 4,
+					// stroke the slices with a little thicker line.
+					lineWidth: 5
+				}
+			},
+		legend: {
+				renderer: jQuery.jqplot.EnhancedLegendRenderer,
+	            labels: ['<%=entity%>', '<%=cacheManagerName%>'],
+				show: true,
+				showLabels: true,
+				showSwatches: false,
+				rowSpacing: '10px',
+				marginLeft: '-150px',
+				placement: 'outsideGrid',
+				location: 'e',
+				border: 'none'
+			}
+	});
+
 	
-	canvasContext = $("#managerRelativeCanvasDisk").get(0).getContext("2d");
-	var managerRelativePieDisk = new Chart(canvasContext);
-	new Chart(canvasContext).Pie(managerRelativeDataDisk, {
-		animationSteps: 100,
-		animationEasing: 'easeOutBounce',
-        labelAlign: 'center'
-    });
-    
+	var managerRelativeDisk = jQuery.jqplot ('managerRelativeDisk', [managerRelativeDataDisk], 
+	    { 
+		grid: {
+			drawBorder: false,
+			drawGridlines: false,
+			background: '#ffffff',
+			shadow: false
+		},
+		axesDefaults: {
+             
+        },
+        animate: true,
+        // Will animate plot on calls to plot1.replot({resetAxes:true})
+        animateReplot: true,
+        cursor: {
+            show: true,
+            zoom: true,
+            looseZoom: true,
+            showTooltip: false
+        },
+        seriesDefaults: {
+				trendline: {
+					show: true
+					},
+				shadow: false,
+				// Make this a pie chart.
+				renderer: jQuery.jqplot.PieRenderer,
+				rendererOptions: {
+					// Put data labels on the pie slices.
+					// Turn off filling of slices.
+					fill: true,
+					showDataLabels: true,
+					// Add a margin to seperate the slices.
+					sliceMargin: 4,
+					// stroke the slices with a little thicker line.
+					lineWidth: 5
+				}
+			},
+		legend: {
+				renderer: jQuery.jqplot.EnhancedLegendRenderer,
+	            labels: ['<%=entity%>', '<%=cacheManagerName%>'],
+				show: true,
+				showLabels: true,
+				showSwatches: false,
+				rowSpacing: '10px',
+				marginLeft: '-150px',
+				placement: 'outsideGrid',
+				location: 'e',
+				border: 'none'
+			}
+		});
 </script>

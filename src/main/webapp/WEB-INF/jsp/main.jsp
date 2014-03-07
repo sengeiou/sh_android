@@ -29,9 +29,9 @@
 	<title>Servicios de acceso a datos</title>
 	
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="<%=cssURL%>/bootstrap.min.css">
+	<link  class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/bootstrap.min.css">
 	<!-- Optional theme -->
-	<link rel="stylesheet" href="<%=cssURL%>/bootstrap-theme.min.css">
+	<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/bootstrap-theme.min.css">
 	
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
