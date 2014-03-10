@@ -1,14 +1,13 @@
 package com.fav24.dataservices.monitoring;
 
-import java.io.IOException;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -16,19 +15,16 @@ import java.util.Map;
  */
 public class SystemMonitoring {
 
-	public static final String MAX_MEMORY = "MaxMemory"; //Memória máxima a usar. Se configura mediante el parámetro - Xmx
-	public static final String TOTAL_MEMORY = "TotalMemory"; //Hasta donde se puede expandir el heap. Se configura mediante el parámetro -Xms
-	public static final String FREE_MEMORY = "FreeMemory"; //Memoria disponible en el sistema. 
-	public static final String USED_MEMORY = "UsedMemory"; //Memoria en uso. 
+	public static final long SECOND_CADENCE = 1000L;
+	public static final long MINUTE_CADENCE = 60 * SECOND_CADENCE;
 
-	public static final String TOTAL_STORAGE_SPACE = "TotalStorageSpace"; //Capacidad total de almacenamiento.
-	public static final String TOTAL_USABLE_STORAGE_SPACE = "TotalUsableStorageSpace"; //Espacio disponible de almacenamiento.
+	public static final long MONITORING_TIME_WINDOW = 24 * 60 * 60 * 1000; // Se guardará hasta 24 horas de información.
 
 
 	public static class MonitorSampleData implements Comparable<MonitorSampleData> {
 
 		private Long time;
-		private Map<String, Long> data;
+		private Map<String, Double> data;
 
 
 		public MonitorSampleData() {
@@ -36,7 +32,7 @@ public class SystemMonitoring {
 			data = null;
 		}
 
-		public MonitorSampleData(Map<String, Long> data) {
+		public MonitorSampleData(Map<String, Double> data) {
 
 			this.time = System.currentTimeMillis();
 			this.data = data;
@@ -50,18 +46,18 @@ public class SystemMonitoring {
 			this.time = time;
 		}
 
-		public Long getData(String aspect) {
+		public Double getData(String aspect) {
 			return data != null ? data.get(aspect) : null;
 		}
 
-		public void setData(Map<String, Long> data) {
+		public void setData(Map<String, Double> data) {
 			this.data = data;
 		}
 
-		public void setData(String aspect, Long value) {
+		public void setData(String aspect, Double value) {
 
 			if (data == null) {
-				data = new HashMap<String, Long>();
+				data = new HashMap<String, Double>();
 			}
 
 			this.data.put(aspect, value);
@@ -92,95 +88,197 @@ public class SystemMonitoring {
 		}
 	}
 
+	MemoryMeter memoryMeter;
+	/* Almacenamiento de la actividad de memoria durante (como máximo) las últimas 24 horas.*/
+	private AbstractList<MonitorSampleData> systemMemoryActivityTrace;
 
-	private AbstractList<MonitorSampleData> systemMemoryActivity;
-	private Map<String, AbstractList<MonitorSampleData>> systemStorageActivity;
+	CpuMeter cpuMeter;
+	/* Almacenamiento de la actividad de la CPU durante (como máximo) las últimas 24 horas.*/
+	private AbstractList<MonitorSampleData> systemCpuActivityTrace;
+
+	StorageMeter storageMeter;
+	/* Almacenamiento de la actividad de los dispositivos de almacemaniento durante (como máximo) las últimas 24 horas.*/
+	private Map<String, AbstractList<MonitorSampleData>> systemStorageActivityTrace;
+
+	private Timer secondResolutionTimer;
+	private Timer minuteResolutionTimer;
 
 
 	public SystemMonitoring() {
 
-		systemMemoryActivity = new ArrayList<MonitorSampleData>();
-		systemStorageActivity = new HashMap<String, AbstractList<MonitorSampleData>>();
+		memoryMeter = new MemoryMeter();
+		cpuMeter = new CpuMeter();
+		storageMeter = new StorageMeter();
+
+		systemMemoryActivityTrace = new ArrayList<MonitorSampleData>();
+		systemCpuActivityTrace = new ArrayList<MonitorSampleData>();
+		systemStorageActivityTrace = new HashMap<String, AbstractList<MonitorSampleData>>();
+
+		secondResolutionTimer = new Timer("System Second Monitor");
+		minuteResolutionTimer = new Timer("System Minute Monitor");
+
+		secondResolutionTimer.schedule(new TimerTask() {
+
+			public void run() {
+
+				// Memory information.
+				putMemoryData(memoryMeter.getSystemMemoryStatus());
+
+				// CPU information.
+				putCpuData(cpuMeter.getSystemCpuActivity());
+
+				monitorHistoryPurge(systemMemoryActivityTrace);
+				monitorHistoryPurge(systemCpuActivityTrace);
+			}
+		}, 0L, SECOND_CADENCE);
+
+		minuteResolutionTimer.schedule(new TimerTask() {
+
+			public void run() {
+
+				// Storage information.
+				Map<String, Map<String, Double>> systemStorageStatus = storageMeter.getSystemStorageStatus();
+
+				for(Entry<String, Map<String, Double>> storageElementStatus : systemStorageStatus.entrySet()) {
+
+					putStorageData(storageElementStatus.getKey(), storageElementStatus.getValue());
+				}
+
+				for(AbstractList<MonitorSampleData> storageElement : systemStorageActivityTrace.values()) {
+					monitorHistoryPurge(storageElement);
+				}
+			}
+		}, 0L, MINUTE_CADENCE);
 	}
 
-	public void putMemorySample(MonitorSampleData sample) {
+	/**
+	 * Añade una muestra del estado de la memoria del sistema.
+	 * 
+	 * @param sample Muestra a añadir.
+	 */
+	private void putMemorySample(MonitorSampleData sample) {
 
-		systemMemoryActivity.add(sample);
+		systemMemoryActivityTrace.add(sample);
 	}
 
-	public void putStorageSample(String storageLocation, MonitorSampleData sample) {
+	/**
+	 * Añade una muestra del estado de la carga de proceso del sistema.
+	 * 
+	 * @param sample Muestra a añadir.
+	 */
+	private void putCpuSample(MonitorSampleData sample) {
 
-		AbstractList<MonitorSampleData> storageElement = systemStorageActivity.get(storageLocation);
+		systemCpuActivityTrace.add(sample);
+	}
+
+	/**
+	 * Añade una muestra del estado de los diferentes dispositivos de almacenamiento del sistema.
+	 * 
+	 * @param sample Muestra a añadir.
+	 */
+	private void putStorageSample(String storageLocation, MonitorSampleData sample) {
+
+		AbstractList<MonitorSampleData> storageElement = systemStorageActivityTrace.get(storageLocation);
 		if (storageElement == null) {
 			storageElement = new ArrayList<MonitorSampleData>();
 
-			systemStorageActivity.put(storageLocation, storageElement);
+			systemStorageActivityTrace.put(storageLocation, storageElement);
 		}
 
 		storageElement.add(sample);
 	}
 
-	public void putMemoryData(Map<String, Long> data) {
+	/**
+	 * Añade información del estado de la memoria del sistema.
+	 * 
+	 * @param data Información a añadir.
+	 */
+	private void putMemoryData(Map<String, Double> data) {
 
 		putMemorySample(new MonitorSampleData(data));
 	}
 
-	public void putStorageData(String storageLocation, Map<String, Long> data) {
+	/**
+	 * Añade información del estado de la carga de proceso del sistema.
+	 * 
+	 * @param data Información a añadir.
+	 */
+	private void putCpuData(Map<String, Double> data) {
+
+		putCpuSample(new MonitorSampleData(data));
+	}
+
+	/**
+	 * Añade información del estado de los diferentes dispositivos de almacenamiento del sistema.
+	 * 
+	 * @param data Información a añadir.
+	 */
+	private void putStorageData(String storageLocation, Map<String, Double> data) {
 
 		putStorageSample(storageLocation, new MonitorSampleData(data));
+	}
+
+	/**
+	 * Elimina del histórico, aquella información anterior a la ventana de tiempo definida.
+	 * 
+	 * @see {@linkplain #MONITORING_TIME_WINDOW}
+	 */
+	private void monitorHistoryPurge(AbstractList<MonitorSampleData> monitorSampleData) {
+
+		long timeEdge = monitorSampleData.get(monitorSampleData.size() - 1).time - MONITORING_TIME_WINDOW;
+
+		Iterator<MonitorSampleData> monitorSampleDataIterator = monitorSampleData.iterator();
+		while(monitorSampleDataIterator.hasNext()) {
+
+			MonitorSampleData monitorSample = monitorSampleDataIterator.next();
+
+			if (monitorSample.time >= timeEdge) {
+				return;
+			}
+			else {
+				monitorSampleDataIterator.remove();
+			}
+		}
 	}
 	
 	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
+	 * 
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
-	public Map<String, Long> getSystemMemoryStatus() {
+	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange) {
 
-		Map<String, Long> systemMemoryStatus = new HashMap<String, Long>();
 
-		long maxMemory = Runtime.getRuntime().maxMemory(); 
-		long totalMemory = Runtime.getRuntime().totalMemory();
-		long usedMemory = totalMemory - Runtime.getRuntime().freeMemory(); 
-		long freeMemory = maxMemory - usedMemory;
+		return null;
+	}
 
-		systemMemoryStatus.put(MAX_MEMORY, maxMemory);
-		systemMemoryStatus.put(TOTAL_MEMORY, totalMemory);
-		systemMemoryStatus.put(USED_MEMORY, usedMemory);
-		systemMemoryStatus.put(FREE_MEMORY, freeMemory);
+	/**
+	 * Retorna la información del estado de la carga de proceso del sistema.
+	 * 
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
+	 *  
+	 * @return la información del estado de la carga de proceso del sistema.
+	 */
+	public AbstractList<MonitorSampleData> getSystemCpuActivity(Long period, Long timeRange) {
 
-		return systemMemoryStatus;
+
+		return null;
 	}
 
 	/**
 	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada en cuanto a:
 	 * 
-	 * {@linkplain #TOTAL_STORAGE_SPACE}
-	 * {@linkplain #TOTAL_USABLE_STORAGE_SPACE}
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
 	 * 
 	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
 	 */
-	public Map<String, Map<String, Long>> getSystemStorageStatus() {
-
-		Map<String, Map<String, Long>> systemStorageStatus = new HashMap<String, Map<String, Long>>();
-
-		for (Path root : FileSystems.getDefault().getRootDirectories())
-		{
-			Map<String, Long> storageStatus = new HashMap<String, Long>();
-
-			try	{
-
-				FileStore store = Files.getFileStore(root);
-
-				storageStatus.put(TOTAL_STORAGE_SPACE, store.getTotalSpace());
-				storageStatus.put(TOTAL_USABLE_STORAGE_SPACE, store.getUsableSpace());
-
-				systemStorageStatus.put(root.toString(), storageStatus);
-			}
-			catch (IOException e) {
-			}
-		}
-
-		return systemStorageStatus;
+	public Map<String, AbstractList<MonitorSampleData>> getSystemStorageStatus(Long period, Long timeRange) {
+		
+		return null;
 	}
 }

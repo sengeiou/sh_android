@@ -47,11 +47,21 @@ public interface MainService {
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
 	 * 
 	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
 	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange);
+	
+	/**
+	 * Retorna la información del estado de la carga de proceso del sistema.
+	 * 
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
+	 *  
+	 * @return la información del estado de la carga de proceso del sistema.
+	 */
+	public AbstractList<MonitorSampleData> getSystemCpuActivity(Long period, Long timeRange);
 	
 	/**
 	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada en cuanto a:

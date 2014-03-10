@@ -241,7 +241,7 @@
 		
 		function dropSystemCache() {
 			modalAcceptanceShow('&iquest;Desea eliminar por completo la cach&eacute; del sistema?', 
-            	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>destrucci&oacute;n total</strong> de la configuración de la cach&eacute, as&iacute; como las cach&eacutes activas.',
+            	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>destrucci&oacute;n total</strong> de la configuraci&oacute;n de la cach&eacute, as&iacute; como las cach&eacutes activas.',
             		function(){ sendGetRequest('cache/dropSystemCache'); });
 		}
 	</script>

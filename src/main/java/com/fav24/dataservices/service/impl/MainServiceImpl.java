@@ -28,11 +28,11 @@ public class MainServiceImpl implements MainService {
 	private static Map<String, String> StatsDataSourceInformation;
 
 	private static SystemMonitoring SystemActivityMonitoring;
-	
+
 	static {
 		SystemActivityMonitoring = new SystemMonitoring();
 	}
-	
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -83,9 +83,16 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange) {
 
-//		SystemActivityMonitoring;
-		
-		return null;
+		return SystemActivityMonitoring.getSystemMemoryStatus(period, timeRange);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AbstractList<MonitorSampleData> getSystemCpuActivity(Long period, Long timeRange) {
+
+		return SystemActivityMonitoring.getSystemCpuActivity(period, timeRange);
 	}
 
 	/**
@@ -93,9 +100,7 @@ public class MainServiceImpl implements MainService {
 	 */
 	@Override
 	public Map<String, AbstractList<MonitorSampleData>> getSystemStorageStatus(Long period, Long timeRange) {
-		
-//		SystemActivityMonitoring;
-		
-		return null;
+
+		return SystemActivityMonitoring.getSystemStorageStatus(period, timeRange);
 	}
 }
