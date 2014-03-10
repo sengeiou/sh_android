@@ -2,12 +2,12 @@ package com.fav24.dataservices.monitoring;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 
 /**
@@ -21,18 +21,18 @@ public class SystemMonitoring {
 	public static final long MONITORING_TIME_WINDOW = 24 * 60 * 60 * 1000; // Se guardará hasta 24 horas de información.
 
 
-	public static class MonitorSampleData implements Comparable<MonitorSampleData> {
+	public static class MonitorSample implements Comparable<MonitorSample> {
 
 		private Long time;
-		private Map<String, Double> data;
+		private NavigableMap<String, Double> data;
 
 
-		public MonitorSampleData() {
+		public MonitorSample() {
 			time = null;
 			data = null;
 		}
 
-		public MonitorSampleData(Map<String, Double> data) {
+		public MonitorSample(NavigableMap<String, Double> data) {
 
 			this.time = System.currentTimeMillis();
 			this.data = data;
@@ -50,14 +50,10 @@ public class SystemMonitoring {
 			return data != null ? data.get(aspect) : null;
 		}
 
-		public void setData(Map<String, Double> data) {
-			this.data = data;
-		}
-
 		public void setData(String aspect, Double value) {
 
 			if (data == null) {
-				data = new HashMap<String, Double>();
+				data = new TreeMap<String, Double>();
 			}
 
 			this.data.put(aspect, value);
@@ -66,7 +62,7 @@ public class SystemMonitoring {
 		/**
 		 *  negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
 		 */
-		public int compareTo(MonitorSampleData other) {
+		public int compareTo(MonitorSample other) {
 
 			if (time == other.time) {
 				return 0;
@@ -90,15 +86,15 @@ public class SystemMonitoring {
 
 	MemoryMeter memoryMeter;
 	/* Almacenamiento de la actividad de memoria durante (como máximo) las últimas 24 horas.*/
-	private AbstractList<MonitorSampleData> systemMemoryActivityTrace;
+	private AbstractList<MonitorSample> systemMemoryActivityTrace;
 
 	CpuMeter cpuMeter;
 	/* Almacenamiento de la actividad de la CPU durante (como máximo) las últimas 24 horas.*/
-	private AbstractList<MonitorSampleData> systemCpuActivityTrace;
+	private AbstractList<MonitorSample> systemCpuActivityTrace;
 
 	StorageMeter storageMeter;
 	/* Almacenamiento de la actividad de los dispositivos de almacemaniento durante (como máximo) las últimas 24 horas.*/
-	private Map<String, AbstractList<MonitorSampleData>> systemStorageActivityTrace;
+	private NavigableMap<String, AbstractList<MonitorSample>> systemStorageActivityTrace;
 
 	private Timer secondResolutionTimer;
 	private Timer minuteResolutionTimer;
@@ -110,9 +106,9 @@ public class SystemMonitoring {
 		cpuMeter = new CpuMeter();
 		storageMeter = new StorageMeter();
 
-		systemMemoryActivityTrace = new ArrayList<MonitorSampleData>();
-		systemCpuActivityTrace = new ArrayList<MonitorSampleData>();
-		systemStorageActivityTrace = new HashMap<String, AbstractList<MonitorSampleData>>();
+		systemMemoryActivityTrace = new ArrayList<MonitorSample>();
+		systemCpuActivityTrace = new ArrayList<MonitorSample>();
+		systemStorageActivityTrace = new TreeMap<String, AbstractList<MonitorSample>>();
 
 		secondResolutionTimer = new Timer("System Second Monitor");
 		minuteResolutionTimer = new Timer("System Minute Monitor");
@@ -137,14 +133,14 @@ public class SystemMonitoring {
 			public void run() {
 
 				// Storage information.
-				Map<String, Map<String, Double>> systemStorageStatus = storageMeter.getSystemStorageStatus();
+				NavigableMap<String, NavigableMap<String, Double>> systemStorageStatus = storageMeter.getSystemStorageStatus();
 
-				for(Entry<String, Map<String, Double>> storageElementStatus : systemStorageStatus.entrySet()) {
+				for(Entry<String, NavigableMap<String, Double>> storageElementStatus : systemStorageStatus.entrySet()) {
 
 					putStorageData(storageElementStatus.getKey(), storageElementStatus.getValue());
 				}
 
-				for(AbstractList<MonitorSampleData> storageElement : systemStorageActivityTrace.values()) {
+				for(AbstractList<MonitorSample> storageElement : systemStorageActivityTrace.values()) {
 					monitorHistoryPurge(storageElement);
 				}
 			}
@@ -156,7 +152,7 @@ public class SystemMonitoring {
 	 * 
 	 * @param sample Muestra a añadir.
 	 */
-	private void putMemorySample(MonitorSampleData sample) {
+	private void putMemorySample(MonitorSample sample) {
 
 		systemMemoryActivityTrace.add(sample);
 	}
@@ -166,7 +162,7 @@ public class SystemMonitoring {
 	 * 
 	 * @param sample Muestra a añadir.
 	 */
-	private void putCpuSample(MonitorSampleData sample) {
+	private void putCpuSample(MonitorSample sample) {
 
 		systemCpuActivityTrace.add(sample);
 	}
@@ -176,11 +172,11 @@ public class SystemMonitoring {
 	 * 
 	 * @param sample Muestra a añadir.
 	 */
-	private void putStorageSample(String storageLocation, MonitorSampleData sample) {
+	private void putStorageSample(String storageLocation, MonitorSample sample) {
 
-		AbstractList<MonitorSampleData> storageElement = systemStorageActivityTrace.get(storageLocation);
+		AbstractList<MonitorSample> storageElement = systemStorageActivityTrace.get(storageLocation);
 		if (storageElement == null) {
-			storageElement = new ArrayList<MonitorSampleData>();
+			storageElement = new ArrayList<MonitorSample>();
 
 			systemStorageActivityTrace.put(storageLocation, storageElement);
 		}
@@ -193,9 +189,9 @@ public class SystemMonitoring {
 	 * 
 	 * @param data Información a añadir.
 	 */
-	private void putMemoryData(Map<String, Double> data) {
+	private void putMemoryData(NavigableMap<String, Double> data) {
 
-		putMemorySample(new MonitorSampleData(data));
+		putMemorySample(new MonitorSample(data));
 	}
 
 	/**
@@ -203,9 +199,9 @@ public class SystemMonitoring {
 	 * 
 	 * @param data Información a añadir.
 	 */
-	private void putCpuData(Map<String, Double> data) {
+	private void putCpuData(NavigableMap<String, Double> data) {
 
-		putCpuSample(new MonitorSampleData(data));
+		putCpuSample(new MonitorSample(data));
 	}
 
 	/**
@@ -213,9 +209,9 @@ public class SystemMonitoring {
 	 * 
 	 * @param data Información a añadir.
 	 */
-	private void putStorageData(String storageLocation, Map<String, Double> data) {
+	private void putStorageData(String storageLocation, NavigableMap<String, Double> data) {
 
-		putStorageSample(storageLocation, new MonitorSampleData(data));
+		putStorageSample(storageLocation, new MonitorSample(data));
 	}
 
 	/**
@@ -223,14 +219,14 @@ public class SystemMonitoring {
 	 * 
 	 * @see {@linkplain #MONITORING_TIME_WINDOW}
 	 */
-	private void monitorHistoryPurge(AbstractList<MonitorSampleData> monitorSampleData) {
+	private void monitorHistoryPurge(AbstractList<MonitorSample> monitorSampleData) {
 
 		long timeEdge = monitorSampleData.get(monitorSampleData.size() - 1).time - MONITORING_TIME_WINDOW;
 
-		Iterator<MonitorSampleData> monitorSampleDataIterator = monitorSampleData.iterator();
+		Iterator<MonitorSample> monitorSampleDataIterator = monitorSampleData.iterator();
 		while(monitorSampleDataIterator.hasNext()) {
 
-			MonitorSampleData monitorSample = monitorSampleDataIterator.next();
+			MonitorSample monitorSample = monitorSampleDataIterator.next();
 
 			if (monitorSample.time >= timeEdge) {
 				return;
@@ -240,7 +236,37 @@ public class SystemMonitoring {
 			}
 		}
 	}
-	
+
+	/**
+	 * Retorna el segmento definido por parámetro de la lista de muestras indicada.
+	 * 
+	 * @param monitorSampleData Conjunto de muestras monitorizadas.
+	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
+	 *  
+	 * @return el segmento definido por parámetro de la lista de muestras indicada.
+	 */
+	public AbstractList<MonitorSample> getSampleTimeSegment(AbstractList<MonitorSample> monitorSampleData, Long period, Long timeRange) {
+
+		AbstractList<MonitorSample> timeSegment = new ArrayList<MonitorSample>();
+		long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
+		long timeEdge = lastCapturedSample - timeRange;
+
+		long lastSelectedSampleTime = Long.MAX_VALUE;
+		for(MonitorSample monitorSample : monitorSampleData) {
+
+			if (monitorSample.time > timeEdge) {
+
+				if (monitorSample.time >= lastSelectedSampleTime + period) {
+					lastSelectedSampleTime = monitorSample.time;
+					timeSegment.add(monitorSample);
+				}
+			}
+		}
+
+		return timeSegment;
+	}
+
 	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
 	 * 
@@ -249,10 +275,9 @@ public class SystemMonitoring {
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
-	public AbstractList<MonitorSampleData> getSystemMemoryStatus(Long period, Long timeRange) {
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long period, Long timeRange) {
 
-
-		return null;
+		return getSampleTimeSegment(systemMemoryActivityTrace, period, timeRange);
 	}
 
 	/**
@@ -263,10 +288,9 @@ public class SystemMonitoring {
 	 *  
 	 * @return la información del estado de la carga de proceso del sistema.
 	 */
-	public AbstractList<MonitorSampleData> getSystemCpuActivity(Long period, Long timeRange) {
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long period, Long timeRange) {
 
-
-		return null;
+		return getSampleTimeSegment(systemCpuActivityTrace, period, timeRange);
 	}
 
 	/**
@@ -277,8 +301,15 @@ public class SystemMonitoring {
 	 * 
 	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
 	 */
-	public Map<String, AbstractList<MonitorSampleData>> getSystemStorageStatus(Long period, Long timeRange) {
-		
-		return null;
+	public NavigableMap<String, AbstractList<MonitorSample>> getSystemStorageStatus(Long period, Long timeRange) {
+
+		NavigableMap<String, AbstractList<MonitorSample>> timeSegment = new TreeMap<String, AbstractList<MonitorSample>>();
+
+		for (Entry<String, AbstractList<MonitorSample>> monitorSampleData : systemStorageActivityTrace.entrySet()) {
+			
+			timeSegment.put(monitorSampleData.getKey(), getSampleTimeSegment(monitorSampleData.getValue(), period, timeRange));
+		}
+
+		return timeSegment;
 	}
 }

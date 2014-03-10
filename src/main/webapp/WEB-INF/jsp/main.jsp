@@ -67,7 +67,7 @@
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a>Informaci&oacute;n de recursos del sistema</a></li>
+							<li><a onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
 							<li><a onclick="">Estado de la cach&eacute;</a></li>
 							<li><a onclick="showAvailableCacheManagers();">Configuraci&oacute;n de la cach&eacute;</a></li>
 							<li class="divider"></li>
@@ -222,6 +222,10 @@
 			modalAcceptanceShow('&iquest;Desea eliminar pol&iacute;ticas activas?', 
             	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
             		function(){ sendGetRequest('accesspolicy/denyAll'); });
+		}
+
+		function showSystemMonitor() {
+			sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los úlitmos 5 minutos con resolución de un segundo.
 		}
 
 		function showAvailableCacheManagers() {

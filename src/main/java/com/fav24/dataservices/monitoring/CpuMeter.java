@@ -4,7 +4,8 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 /**
  * Clase para trazar tiempos de uso de CPU de los hilos
@@ -203,9 +204,9 @@ public final class CpuMeter extends Thread
 	 *  
 	 * @return la información de la actividad de la CPU.
 	 */
-	public Map<String, Double> getSystemCpuActivity() {
+	public NavigableMap<String, Double> getSystemCpuActivity() {
 
-		Map<String, Double> systemCpuActivity = new HashMap<String, Double>();
+		NavigableMap<String, Double> systemCpuActivity = new TreeMap<String, Double>();
 
 		double totalCpuTime = getTotalCpuTime();
 		double totalApplicationTime = getTotalApplicationTime();

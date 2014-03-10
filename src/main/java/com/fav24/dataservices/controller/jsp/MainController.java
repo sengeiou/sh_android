@@ -5,12 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.MainService;
 
@@ -21,7 +19,7 @@ import com.fav24.dataservices.service.MainService;
  */
 @Controller
 @RequestMapping("/")
-public class MainController extends BaseRestController {
+public class MainController extends BaseJspController {
 
 	final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -49,7 +47,7 @@ public class MainController extends BaseRestController {
 	public ModelAndView dataSourceInformation() {
 
 		ModelAndView model;
-		
+
 		try {
 			model = new ModelAndView("data_source_information");
 
@@ -64,36 +62,6 @@ public class MainController extends BaseRestController {
 			model.getModel().put("message", e.getMessage());
 		}
 
-		return model;
-	}
-	
-	/**
-	 * Muestra la información del estado de los recursos del sistema.
-	 * 
-	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
-	 * 
-	 * @return la vista de monitorización del sistema.
-	 */
-	@RequestMapping(value = "/systemInformation", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView systemInformation(@ModelAttribute(value="period") Long period, @ModelAttribute(value="timeRange") String timeRange) {
-		
-		ModelAndView model;
-		
-		try {
-			model = new ModelAndView("system_monitor");
-			
-			model.addObject("dataSource", mainService.getDataSourceInformation());
-			model.addObject("statsDataSource", mainService.getStatsDataSourceInformation());
-			
-		} catch (ServerException e) {
-			
-			model = new ModelAndView("error_pages/server_error");
-			
-			model.getModel().put("errorCode", e.getErrorCode());
-			model.getModel().put("message", e.getMessage());
-		}
-		
 		return model;
 	}
 }

@@ -62,8 +62,6 @@
 			output.append("</ul>");
 			
 			// Respecto al manager que contiene esta caché.
-			String cacheColor = "#F38630";
-			String cacheManagerColor = "#69D2E7";
 			output.append("<div class='row'>");
 			
 			output.append("<div class='col-sm-6'>");
@@ -175,6 +173,7 @@
             looseZoom: true,
             showTooltip: false
         },
+        seriesColors:['#F38630', '#69D2E7'],
         seriesDefaults: {
 				trendline: {
 					show: true
@@ -228,6 +227,7 @@
             looseZoom: true,
             showTooltip: false
         },
+        seriesColors:['#F38630', '#69D2E7'],
         seriesDefaults: {
 				trendline: {
 					show: true

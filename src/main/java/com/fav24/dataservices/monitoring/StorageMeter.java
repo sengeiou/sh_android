@@ -5,8 +5,8 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 /**
  * Clase para obtener el estado de los espacios en los dispositivos de almacemamiento.
@@ -33,13 +33,13 @@ public final class StorageMeter
 	 * 
 	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
 	 */
-	public Map<String, Map<String, Double>> getSystemStorageStatus() {
+	public NavigableMap<String, NavigableMap<String, Double>> getSystemStorageStatus() {
 
-		Map<String, Map<String, Double>> systemStorageStatus = new HashMap<String, Map<String, Double>>();
+		NavigableMap<String, NavigableMap<String, Double>> systemStorageStatus = new TreeMap<String, NavigableMap<String, Double>>();
 
 		for (Path root : FileSystems.getDefault().getRootDirectories())
 		{
-			Map<String, Double> storageStatus = new HashMap<String, Double>();
+			NavigableMap<String, Double> storageStatus = new TreeMap<String, Double>();
 
 			try	{
 
