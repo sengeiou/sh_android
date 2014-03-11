@@ -2,7 +2,6 @@ package com.fav24.dataservices.mapper;
 
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.dto.generic.FilterItemDto;
-import com.fav24.dataservices.exception.ServerException;
 
 
 /**
@@ -18,7 +17,7 @@ public class FilterItemToFilterItemDto extends Mapper<FilterItem, FilterItemDto>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected FilterItemDto map(FilterItem origin) throws ServerException {
+	protected FilterItemDto map(FilterItem origin) {
 
 		FilterItemDto filterItem = new FilterItemDto();
 
