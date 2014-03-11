@@ -105,17 +105,22 @@ public abstract class Mapper<T, S> {
 	@SuppressWarnings("unchecked")
 	public static final <T, S> S Map(T origin) throws ServerException {
 
+		if (origin == null) {
+
+			return null;
+		}
+
 		Mapper<T, S> mapper = (Mapper<T, S>) AvailableMappers.get(origin.getClass());
 
 		if (mapper == null) {
 			for (Entry<Class<?>, Mapper<?, ?>> mapperEntry : AvailableMappers.entrySet()) {
-				
+
 				if (mapperEntry.getKey().isAssignableFrom(origin.getClass())) {
 					mapper = (Mapper<T, S>) mapperEntry.getValue();
 					return mapper.map(origin);
 				}
 			}
-			
+
 			throw new ServerException(ERROR_MAPPER_NOT_FOUND, String.format(ERROR_MAPPER_NOT_FOUND_MESSAGE, origin.getClass().toString()));
 		}
 

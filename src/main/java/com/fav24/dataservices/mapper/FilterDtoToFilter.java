@@ -36,12 +36,15 @@ public class FilterDtoToFilter extends Mapper<FilterDto, Filter> {
 				filter.getFilterItems().add((FilterItem)Mapper.Map(filterItem));
 			}
 		}
-		
+
 		if (origin.getFilters() != null) {
 			filter.setFilters(new ArrayList<Filter>(origin.getFilters().length));
-			
+
 			for (FilterDto filterDto : origin.getFilters()) {
-				filter.getFilters().add((Filter)Mapper.Map(filterDto));
+
+				if (filterDto != null) {
+					filter.getFilters().add((Filter)Mapper.Map(filterDto));
+				}
 			}
 		}
 
