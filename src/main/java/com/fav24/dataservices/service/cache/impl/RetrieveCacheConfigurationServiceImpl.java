@@ -27,6 +27,11 @@ public class RetrieveCacheConfigurationServiceImpl implements RetrieveCacheConfi
 	@Override
 	public AbstractList<EntityCacheManager> getCacheManagers() {
 
+		if (Cache.getSystemCache() == null) {
+			
+			return null;
+		}
+		
 		return Cache.getSystemCache().getEntityCacheManagers();
 	}
 
@@ -36,6 +41,11 @@ public class RetrieveCacheConfigurationServiceImpl implements RetrieveCacheConfi
 	@Override
 	public EntityCacheManager getCacheManagerConfiguration(String cacheManager) {
 		
+		if (Cache.getSystemCache() == null) {
+			
+			return null;
+		}
+		
 		return Cache.getSystemCache().getEntityCacheManager(cacheManager);
 	}
 
@@ -44,6 +54,11 @@ public class RetrieveCacheConfigurationServiceImpl implements RetrieveCacheConfi
 	 */
 	@Override
 	public Set<EntityCache> getCacheManagerCaches(String cacheManager) {
+		
+		if (Cache.getSystemCache() == null) {
+			
+			return null;
+		}
 		
 		EntityCacheManager entityCacheManager = Cache.getSystemCache().getEntityCacheManager(cacheManager);
 		
@@ -59,6 +74,11 @@ public class RetrieveCacheConfigurationServiceImpl implements RetrieveCacheConfi
 	 */
 	@Override
 	public EntityCache getCacheConfiguration(String cacheManager, String entity) {
+		
+		if (Cache.getSystemCache() == null) {
+			
+			return null;
+		}
 		
 		EntityCacheManager entityCacheManager = Cache.getSystemCache().getEntityCacheManager(cacheManager);
 		

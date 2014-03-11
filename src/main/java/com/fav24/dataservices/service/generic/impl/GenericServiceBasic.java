@@ -125,7 +125,7 @@ public abstract class GenericServiceBasic implements GenericService {
 			if (cache == null) {
 				return retreave(requestor, operation);
 			}
-			
+			 
 			Element cachedElement = cache.get(operation.hashCode());
 			if (cachedElement == null) {
 				

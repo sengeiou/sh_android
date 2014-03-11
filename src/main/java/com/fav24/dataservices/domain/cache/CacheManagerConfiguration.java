@@ -180,14 +180,17 @@ public class CacheManagerConfiguration
 	/**
 	 * Retorna la configuración del gestor de caché construida.
 	 * 
+	 * @param name Nombre del gestor que usará esta configuración. 
+	 * 
 	 * @return la configuración del gestor de caché construida.
 	 */
-	public Configuration constructCacheManagerConfiguration() {
+	public Configuration constructCacheManagerConfiguration(String name) {
 
 		Configuration configuration;
 
 		configuration = new Configuration();
 		configuration.setDynamicConfig(true);
+		configuration.setName(name);
 
 		configuration.setMaxBytesLocalHeap(getMaxBytesLocalHeap());
 		configuration.setMaxBytesLocalDisk(getMaxBytesLocalDisk());

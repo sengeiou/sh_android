@@ -91,4 +91,12 @@ public class DataItem {
 			return false;
 		return true;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return "DataItem [attributes=" + attributes + "]";
+	}
 }

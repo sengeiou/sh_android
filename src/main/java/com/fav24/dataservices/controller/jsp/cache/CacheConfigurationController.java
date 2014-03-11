@@ -198,8 +198,8 @@ public class CacheConfigurationController extends BaseJspController {
 
 		loadCacheConfigurationService.dropSystemCache();
 
-		map.addAttribute("title", "Denegación de acceso.");
-		map.addAttribute("message", "Todas las políticas de acceso han sido revocadas.");
+		map.addAttribute("title", "Caché desactivada.");
+		map.addAttribute("message", "Todas las cachés asociadas a entidades, han sido eliminadas.");
 
 		return "error_pages/server_success";
 	}

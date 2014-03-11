@@ -666,7 +666,27 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
 
 							if (!hasEquivalentAttributeCollection(entityJDBCInformation.keys, entityKey.getKey())) {
-								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Clave no permitida: La tabla " + table + " no tiene definida la clave única o índice único para los campos " + entityKey.getKeyNamesString() + ".");
+								
+								StringBuilder specificMessage = new StringBuilder(" Clave no permitida: La tabla ").append(table).
+										append(" no tiene definida la clave única o índice único para los campos ").append(entityKey.getKeyNamesString()).append(".");
+								specificMessage.append("\nLas claves disponibles son: ");
+								
+								for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
+									specificMessage.append("\n");
+									
+									boolean firstField = true;
+									for(String keyField : keyFields) {
+										
+										if (!firstField) {
+											specificMessage.append(", ");
+										}
+										
+										specificMessage.append(keyField);
+										firstField = false;
+									}
+								}
+								
+								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + specificMessage);
 							}
 						}
 					}
@@ -700,6 +720,25 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 
 					if (lostKeyFields != null) {
+						
+						StringBuilder specificMessage = new StringBuilder(" No se han encontrado las columnas clave ").append(lostKeyFields).append(" para la tabla ").append(table);
+						specificMessage.append("\nLas claves disponibles son: ");
+						
+						for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
+							specificMessage.append("\n");
+							
+							boolean firstField = true;
+							for(String keyField : keyFields) {
+								
+								if (!firstField) {
+									specificMessage.append(", ");
+								}
+								
+								specificMessage.append(keyField);
+								firstField = false;
+							}
+						}
+						
 						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave " + lostKeyFields + " para la tabla "  + table + ".");
 					}
 				}

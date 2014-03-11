@@ -179,8 +179,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 */
 	public synchronized void constructCacheManager() {
 
-		cacheManager = CacheManager.create(constructCacheManagerConfiguration());
-		cacheManager.setName(getName());
+		cacheManager = new CacheManager(constructCacheManagerConfiguration(getName()));
 
 		for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
 
