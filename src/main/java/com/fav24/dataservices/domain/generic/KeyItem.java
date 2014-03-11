@@ -2,6 +2,8 @@ package com.fav24.dataservices.domain.generic;
 
 import java.io.Serializable;
 
+import com.fav24.dataservices.domain.cache.Organizable;
+
 
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * 
  * @author Fav24
  */
-public class KeyItem implements Serializable {
+public class KeyItem implements Organizable, Comparable<KeyItem>, Serializable {
 
 	private static final long serialVersionUID = 7534571398179647141L;
 
@@ -69,6 +71,42 @@ public class KeyItem implements Serializable {
 	 */
 	public void setValue(Object value) {
 		this.value = value;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+
+		contentKey.append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
+				append("value[").append(value).append("]");
+		
+		return contentKey;
+	}
+		
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(KeyItem o) {
+		
+		if (name == o.name) {
+			return 0;
+		}
+		
+		if (name != null && o.name == null) {
+			return 1;
+		}
+		
+		if (name == null && o.name != null) {
+			return -1;
+		}
+		
+		return name.compareTo(o.name);
 	}
 
 	/**

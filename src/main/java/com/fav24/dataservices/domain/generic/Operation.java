@@ -2,14 +2,15 @@ package com.fav24.dataservices.domain.generic;
 
 import java.io.Serializable;
 import java.util.AbstractList;
+import java.util.Collections;
+
+import com.fav24.dataservices.domain.cache.Organizable;
 
 
 /**
  * Estructura de una acción sobre una entidad.
- * 
- * @author Fav24
  */
-public class Operation implements Serializable {
+public class Operation implements Organizable, Serializable {
 
 	private static final long serialVersionUID = 3810130918460183774L;
 
@@ -50,6 +51,46 @@ public class Operation implements Serializable {
 	 */
 	public void setData(AbstractList<DataItem> data) {
 		this.data = data;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+		
+		contentKey.append("metadata[");
+		if (metadata != null) {
+			contentKey = metadata.organizeContent(contentKey);
+		}
+		contentKey.append("]");
+
+		contentKey.append(ELEMENT_SEPARATOR);
+
+		contentKey.append("data[");
+		if (data != null && data.size() > 0) {
+
+			Collections.sort(data);
+
+			boolean firstItem = true;
+			for(DataItem dataItem : data) {
+
+				if (firstItem) {
+					dataItem.organizeContent(contentKey);
+				}
+				else {
+					contentKey.append(ELEMENT_SEPARATOR);
+					dataItem.organizeContent(contentKey);
+				}
+				firstItem = false;
+			}
+		}
+		contentKey.append("]");
+
+		return contentKey;
 	}
 
 	/**

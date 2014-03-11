@@ -125,13 +125,16 @@ public abstract class GenericServiceBasic implements GenericService {
 			if (cache == null) {
 				return retreave(requestor, operation);
 			}
-			 
-			Element cachedElement = cache.get(operation.hashCode());
+			
+			//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
+			String contentKey = operation.organizeContent(new StringBuilder()).toString();
+			
+			Element cachedElement = cache.get(contentKey);
 			if (cachedElement == null) {
 				
 				operation = retreave(requestor, operation);
 				
-				cachedElement = new Element(operation.hashCode(), operation);
+				cachedElement = new Element(contentKey, operation);
 				cache.put(cachedElement);
 				
 				return operation;

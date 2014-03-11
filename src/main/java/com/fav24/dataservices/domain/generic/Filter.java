@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
+import com.fav24.dataservices.domain.cache.Organizable;
+
 
 /**
  * Clase que contiene la estructura de un conjunto de filtros.
  * 
  * @author Fav24
  */
-public class Filter implements Serializable {
+public class Filter implements Organizable, Serializable {
 
 	private static final long serialVersionUID = 9148049633943226676L;
 
@@ -211,6 +213,53 @@ public class Filter implements Serializable {
 		}
 
 		return aliases;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+
+		contentKey.append("filterItems[");
+		if (filterItems != null && filterItems.size() > 0) {
+			boolean firstItem = true;
+			for (FilterItem filterItem : filterItems) {
+
+				if (!firstItem) {
+					contentKey.append(ELEMENT_SEPARATOR);
+				}
+
+				filterItem.organizeContent(contentKey);
+
+				firstItem = false;
+			}
+		}
+		contentKey.append("]");
+
+		contentKey.append(ELEMENT_SEPARATOR);
+
+		contentKey.append("filter[");
+		if (filter != null && filter.size() > 0) {
+			boolean firstItem = true;
+			for (Filter currentFilter : filter) {
+
+				if (!firstItem) {
+					contentKey.append(ELEMENT_SEPARATOR);
+				}
+
+				currentFilter.organizeContent(contentKey);
+
+				firstItem = false;
+			}
+		}
+		contentKey.append("]");
+
+		return contentKey;
 	}
 
 	/**

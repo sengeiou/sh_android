@@ -1,7 +1,11 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+
+import com.fav24.dataservices.domain.cache.Organizable;
 
 
 /**
@@ -9,7 +13,9 @@ import java.util.TreeMap;
  * 
  * @author Fav24
  */
-public class DataItem {
+public class DataItem implements Organizable, Comparable<DataItem>, Serializable {
+
+	private static final long serialVersionUID = 7424979410388955842L;
 
 	private NavigableMap<String, Object> attributes;
 
@@ -21,7 +27,7 @@ public class DataItem {
 	 */
 	public DataItem(DataItem reference) {
 
-		if (reference.attributes != null) {
+		if (reference.attributes.comparator() != null) {
 
 			this.attributes = new TreeMap<String, Object>();
 			this.attributes.putAll(reference.attributes);
@@ -58,6 +64,93 @@ public class DataItem {
 	public void setAttributes(NavigableMap<String, Object> attributes) {
 
 		this.attributes = attributes;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(DataItem o) {
+
+		if (attributes == o.attributes) {
+			return 0;
+		}
+
+		if (attributes == null && o.attributes != null) {
+			return -1;
+		}
+
+		if (attributes != null && o.attributes == null) {
+			return 1;
+		}
+
+		if (attributes.size() < o.attributes.size()) {
+			return -1;
+		}
+
+		if (attributes.size() > o.attributes.size()) {
+			return 1;
+		}
+
+		for (Entry<String, Object> entry : attributes.entrySet()) {
+
+			Object local = entry.getValue();
+			Object other = o.attributes.get(entry.getKey());
+
+			if (local == other) {
+				continue;
+			}
+
+			if (local == null && other != null) {
+				return -1;
+			}
+
+			if (local != null && other == null) {
+				return 1;
+			}
+
+			int comparison = String.valueOf(local).compareTo(String.valueOf(other));
+
+			if (comparison != 0) {
+				return comparison;
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+
+		contentKey.append("attributes[");
+
+		if (attributes != null && attributes.size() > 0) {
+			boolean firstItem = true;
+			for (Entry<String, Object> attribute : attributes.entrySet()) {
+
+				if (!firstItem) {
+					contentKey.append(ELEMENT_SEPARATOR);
+				}
+
+				contentKey.append("[");
+				contentKey.append(attribute.getKey());
+				contentKey.append(",");
+				contentKey.append(attribute.getValue());
+				contentKey.append("]");
+
+				firstItem = false;
+			}
+		}
+
+		contentKey.append("]");
+
+		return contentKey;
 	}
 
 	/**

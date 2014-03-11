@@ -2,7 +2,9 @@ package com.fav24.dataservices.domain.generic;
 
 import java.io.Serializable;
 import java.util.AbstractList;
+import java.util.Collections;
 
+import com.fav24.dataservices.domain.cache.Organizable;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 
 
@@ -11,7 +13,7 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
  * 
  * @author Fav24
  */
-public class Metadata implements Serializable {
+public class Metadata implements Organizable, Serializable {
 
 	private static final long serialVersionUID = -8445866091695050501L;
 
@@ -221,6 +223,46 @@ public class Metadata implements Serializable {
 	public boolean hasFilter() {
 
 		return filter != null && filter.isValidFilter();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+
+		contentKey.append("key[");
+		if (key != null && key.size() > 0) {
+			Collections.sort(key);
+
+			boolean firstItem = true;
+			for(KeyItem keyItem : key) {
+
+				if (firstItem) {
+					keyItem.organizeContent(contentKey);
+				}
+				else {
+					contentKey.append(ELEMENT_SEPARATOR);
+					keyItem.organizeContent(contentKey);
+				}
+				
+				firstItem = false;
+			}
+		}
+		contentKey.append("]");
+		
+		contentKey.append(ELEMENT_SEPARATOR);
+		
+		contentKey.append("filter[");
+		if (filter != null) {
+			filter.organizeContent(contentKey);
+		}
+		contentKey.append("]");
+
+		return contentKey;
 	}
 
 	/**

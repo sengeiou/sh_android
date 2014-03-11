@@ -2,6 +2,8 @@ package com.fav24.dataservices.domain.generic;
 
 import java.io.Serializable;
 
+import com.fav24.dataservices.domain.cache.Organizable;
+
 
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * 
  * @author Fav24
  */
-public class FilterItem implements Serializable {
+public class FilterItem implements Organizable, Comparable<FilterItem>, Serializable {
 
 	private static final long serialVersionUID = 6861658494009450768L;
 
@@ -143,6 +145,43 @@ public class FilterItem implements Serializable {
 		this.value = value;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public StringBuilder organizeContent(StringBuilder contentKey) {
+
+		if (contentKey == null) {
+			contentKey = new StringBuilder();
+		}
+
+		contentKey.append("comparator[").append(comparator.getComparatorType()).append("]").append(ELEMENT_SEPARATOR).
+				append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
+				append("value[").append(value).append("]");
+		
+		return contentKey;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(FilterItem o) {
+		
+		if (name == o.name) {
+			return 0;
+		}
+		
+		if (name != null && o.name == null) {
+			return 1;
+		}
+		
+		if (name == null && o.name != null) {
+			return -1;
+		}
+		
+		return name.compareTo(o.name);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
