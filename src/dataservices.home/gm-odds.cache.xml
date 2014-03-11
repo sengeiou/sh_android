@@ -44,23 +44,23 @@
 		
 		<EntityCache Alias="Provider">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>120</TimeToIdleSeconds>
-				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+				<TimeToIdleSeconds>300</TimeToIdleSeconds>
+				<TimeToLiveSeconds>300</TimeToLiveSeconds>
 			</Expiry>
-			<MaxBytesLocalHeap>1M</MaxBytesLocalHeap>
-			<MaxBytesLocalDisk>5M</MaxBytesLocalDisk>
-			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
+			<MaxBytesLocalHeap>2M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>10M</MaxBytesLocalDisk>
+			<DiskExpiryThreadIntervalSeconds>300</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
 		</EntityCache>
 
 		<EntityCache Alias="MatchBetType">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>120</TimeToIdleSeconds>
-				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+				<TimeToIdleSeconds>30</TimeToIdleSeconds>
+				<TimeToLiveSeconds>30</TimeToLiveSeconds>
 			</Expiry>
-			<MaxBytesLocalHeap>1M</MaxBytesLocalHeap>
-			<MaxBytesLocalDisk>5M</MaxBytesLocalDisk>
+			<MaxBytesLocalHeap>5M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>20M</MaxBytesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
@@ -68,11 +68,11 @@
 
 		<EntityCache Alias="BetType">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>120</TimeToIdleSeconds>
-				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+				<TimeToIdleSeconds>30</TimeToIdleSeconds>
+				<TimeToLiveSeconds>30</TimeToLiveSeconds>
 			</Expiry>
-			<MaxBytesLocalHeap>1M</MaxBytesLocalHeap>
-			<MaxBytesLocalDisk>5M</MaxBytesLocalDisk>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>50M</MaxBytesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
@@ -80,11 +80,11 @@
 
 		<EntityCache Alias="BetTypeOdd">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>120</TimeToIdleSeconds>
-				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+				<TimeToIdleSeconds>30</TimeToIdleSeconds>
+				<TimeToLiveSeconds>30</TimeToLiveSeconds>
 			</Expiry>
-			<MaxBytesLocalHeap>1M</MaxBytesLocalHeap>
-			<MaxBytesLocalDisk>5M</MaxBytesLocalDisk>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
 			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
