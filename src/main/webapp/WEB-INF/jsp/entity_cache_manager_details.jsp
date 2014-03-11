@@ -42,7 +42,7 @@
 			if (entityCacheConfigurations != null && entityCacheConfigurations.size() > 0) {
 				
 				output.append("<div class=\"panel-body\">");
-				output.append("<p>Conjunto de cach&eacute;s asociados a una entidad.</p>");
+				output.append("<p>Conjunto de cach&eacute;s de entidades.</p>");
 				output.append("</div>");
 				
 				Iterator<EntityCache> entityCacheConfigurationsIterator = entityCacheConfigurations.iterator();

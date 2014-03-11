@@ -27,16 +27,17 @@ public class OperationDtoToOperation extends Mapper<OperationDto, Operation> {
 	protected Operation map(OperationDto origin) throws ServerException {
 
 		Operation operation = new Operation();
-		
+
 		operation.setMetadata((Metadata) Mapper.Map(origin.getMetadata()));
 
 		if (origin.getData() != null) {
+
 			operation.setData(new ArrayList<DataItem>(origin.getData().length));
 
 			for (Map<String, Object> dataItemMap : origin.getData()) {
-				
+
 				DataItem dataItem = new DataItem(new TreeMap<String, Object>(dataItemMap));
-				
+
 				operation.getData().add(dataItem);
 			}
 		}

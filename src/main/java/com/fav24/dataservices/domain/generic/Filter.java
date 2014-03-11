@@ -1,5 +1,6 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
@@ -9,7 +10,9 @@ import java.util.ArrayList;
  * 
  * @author Fav24
  */
-public class Filter {
+public class Filter implements Serializable {
+
+	private static final long serialVersionUID = 9148049633943226676L;
 
 	/**
 	 * Enumeración interna que de los tipos de nexos que existen. 
@@ -251,6 +254,42 @@ public class Filter {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Filter clone() {
+
+		Filter clone = new Filter();
+
+		clone.nexus = nexus;
+
+		if (filterItems != null) {
+			clone.filterItems = new ArrayList<FilterItem>(filterItems.size());
+
+			for (FilterItem filterItem : filterItems) {
+
+				clone.filterItems.add(filterItem.clone());
+			}
+		}
+		else {
+			clone.filterItems = null;
+		}
+
+		if (filter != null) {
+
+			clone.filter = new ArrayList<Filter>(filter.size());
+
+			for (Filter filter : this.filter) {
+
+				clone.filter.add(filter.clone());
+			}
+		}
+		else {
+			clone.filter = null;
+		}
+
+		return clone;
+	}
 	/**
 	 * {@inheritDoc}
 	 */

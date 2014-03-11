@@ -150,23 +150,23 @@ public class Cache
 	 * @return el gestor de caché solicitado por nombre.
 	 */
 	public EntityCacheManager getEntityCacheManager(String cacheManager) {
-		
+
 		if (cacheManager == null) {
-			
+
 			return null;
 		}
-		
+
 		for (EntityCacheManager entityCacheManager : entityCacheManagers) {
-			
+
 			if (cacheManager.equals(entityCacheManager.getName())) {
-				
+
 				return entityCacheManager;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Retorna el gestor de caché que contiene la caché de alias el indicado.
 	 * 
@@ -176,6 +176,24 @@ public class Cache
 	 */
 	public EntityCacheManager getCacheManager(String cacheAlias) {
 		return cacheCacheManager.get(cacheAlias);
+	}
+
+	/**
+	 * Retorna la instancia de la caché para la entidad del alias indicado.
+	 * 
+	 * @param alias Alias de la entidad de la que se desea obtener la instancia de caché.
+	 *  
+	 * @return la instancia de la caché para la entidad del alias indicado.
+	 */
+	public net.sf.ehcache.Cache getCache(String cacheAlias) {
+
+		EntityCacheManager entityCacheManager = cacheCacheManager.get(cacheAlias);
+		
+		if (entityCacheManager != null) {
+			return entityCacheManager.getCache(cacheAlias);
+		}
+		
+		return null;
 	}
 
 	/**
@@ -353,7 +371,7 @@ public class Cache
 					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 	}
-	
+
 	/**
 	 * Retorna la referencia a la caché actual del sistema.
 	 * 

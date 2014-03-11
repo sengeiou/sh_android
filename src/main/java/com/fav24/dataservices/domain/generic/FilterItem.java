@@ -1,5 +1,7 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
+
 
 
 /**
@@ -7,7 +9,9 @@ package com.fav24.dataservices.domain.generic;
  * 
  * @author Fav24
  */
-public class FilterItem {
+public class FilterItem implements Serializable {
+
+	private static final long serialVersionUID = 6861658494009450768L;
 
 	/**
 	 * Enumeración interna que de los tipos de comparadores que existen. 
@@ -39,7 +43,7 @@ public class FilterItem {
 		public String getComparatorType() {
 			return comparatorType;
 		}
-		
+
 		/**
 		 * Retorna el tipo de comparador a partir de la cadena de texto indicada.
 		 * 
@@ -58,13 +62,13 @@ public class FilterItem {
 			return null;
 		}
 	}
-	
-	
+
+
 	private ComparatorType comparator;
 	private String name;
 	private Object value;
 
-	
+
 	/**
 	 * Constructor por defecto.
 	 */
@@ -102,7 +106,7 @@ public class FilterItem {
 	public void setComparator(ComparatorType comparator) {
 		this.comparator = comparator;
 	}
-	
+
 	/**
 	 * Retorna el nombre del atributo.
 	 * 
@@ -178,5 +182,19 @@ public class FilterItem {
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public FilterItem clone() {
+
+		FilterItem clone = new FilterItem();
+
+		clone.comparator = comparator;
+		clone.name = name;
+		clone.value = value;
+
+		return clone;
 	}
 }

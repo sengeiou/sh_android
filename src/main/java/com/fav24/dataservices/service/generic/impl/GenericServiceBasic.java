@@ -6,7 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.sf.ehcache.Element;
+
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
@@ -87,19 +90,19 @@ public abstract class GenericServiceBasic implements GenericService {
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(operation.getMetadata().getEntity());
 
 		if (operation.getMetadata().hasKey()) {
-			
+
 			if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
 				throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
 			}
 		}
 		else {
-			
+
 			if (entityAccessPolicy.getOnlyByKey()) {
 				throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
 			}
-			
+
 			if (operation.getMetadata().hasFilter()) {
-				
+
 				if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
 					throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
 				}
@@ -116,7 +119,28 @@ public abstract class GenericServiceBasic implements GenericService {
 		case UPDATE:
 			return update(requestor, operation);
 		case RETRIEVE:
-			return retreave(requestor, operation);
+			
+			net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+			
+			if (cache == null) {
+				return retreave(requestor, operation);
+			}
+			
+			Element cachedElement = cache.get(operation.hashCode());
+			if (cachedElement == null) {
+				
+				operation = retreave(requestor, operation);
+				
+				cachedElement = new Element(operation.hashCode(), operation);
+				cache.put(cachedElement);
+				
+				return operation;
+			}
+			else {
+				
+				return (Operation) cachedElement.getObjectValue();
+			}
+			
 		case DELETE:
 			return delete(requestor, operation);
 		case UPDATE_CREATE:

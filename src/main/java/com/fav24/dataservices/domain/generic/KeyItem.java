@@ -1,5 +1,7 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
+
 
 
 /**
@@ -7,12 +9,14 @@ package com.fav24.dataservices.domain.generic;
  * 
  * @author Fav24
  */
-public class KeyItem {
+public class KeyItem implements Serializable {
+
+	private static final long serialVersionUID = 7534571398179647141L;
 
 	private String name;
 	private Object value;
 
-	
+
 	/**
 	 * Constructor por defecto.
 	 */
@@ -102,6 +106,19 @@ public class KeyItem {
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public KeyItem clone() {
+
+		KeyItem clone = new KeyItem();
+
+		clone.name = name;
+		clone.value = value;
+
+		return clone;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
 import java.util.AbstractList;
 
 
@@ -8,11 +9,13 @@ import java.util.AbstractList;
  * 
  * @author Fav24
  */
-public class Operation {
+public class Operation implements Serializable {
+
+	private static final long serialVersionUID = 3810130918460183774L;
 
 	private Metadata metadata;
 	private AbstractList<DataItem> data;
-	
+
 	/**
 	 * Retorna el conjunto de metadatos de la operación. 
 	 * 
@@ -21,7 +24,7 @@ public class Operation {
 	public Metadata getMetadata() {
 		return metadata;
 	}
-	
+
 	/**
 	 * Asigna el conjunto de metadatos de la operación.
 	 * 
@@ -30,7 +33,7 @@ public class Operation {
 	public void setMetadata(Metadata metadata) {
 		this.metadata = metadata;
 	}
-	
+
 	/**
 	 * Retorna el conjunto de elementos implicados en la operación.
 	 * 
@@ -39,7 +42,7 @@ public class Operation {
 	public AbstractList<DataItem> getData() {
 		return data;
 	}
-	
+
 	/**
 	 * Asigna el conjunto de elementos implicados en la operación.
 	 * 
@@ -48,7 +51,7 @@ public class Operation {
 	public void setData(AbstractList<DataItem> data) {
 		this.data = data;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -61,7 +64,7 @@ public class Operation {
 				+ ((metadata == null) ? 0 : metadata.hashCode());
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

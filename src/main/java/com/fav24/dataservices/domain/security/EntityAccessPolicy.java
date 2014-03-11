@@ -20,6 +20,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 * Enumeración de los tipos de operaciones que existen. 
 	 */
 	public enum OperationType {
+
 		CREATE("create"),
 		UPDATE("update"),
 		RETRIEVE("retrieve"),

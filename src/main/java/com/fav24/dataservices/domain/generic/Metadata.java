@@ -1,5 +1,6 @@
 package com.fav24.dataservices.domain.generic;
 
+import java.io.Serializable;
 import java.util.AbstractList;
 
 import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
@@ -10,7 +11,9 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
  * 
  * @author Fav24
  */
-public class Metadata {
+public class Metadata implements Serializable {
+
+	private static final long serialVersionUID = -8445866091695050501L;
 
 	private OperationType operation;
 	private String entity;
@@ -25,13 +28,14 @@ public class Metadata {
 	 * Constructor por defecto.
 	 */
 	public Metadata() {
+
 		this.operation = null;
 		this.entity = null;
 		this.totalItems = null;
 		this.offset = null;
 		this.items = null;
 		this.key = null;
-		this.setFilter(null);
+		this.filter = null;
 	}
 
 	/**
@@ -45,6 +49,7 @@ public class Metadata {
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
 	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, AbstractList<KeyItem> key) {
+
 		this.operation = operation;
 		this.entity = entity;
 		this.totalItems = totalItems;
@@ -64,6 +69,7 @@ public class Metadata {
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
 	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, Filter filter) {
+
 		this.operation = operation;
 		this.entity = entity;
 		this.totalItems = totalItems;

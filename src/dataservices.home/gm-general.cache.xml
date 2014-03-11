@@ -53,5 +53,17 @@
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
 		</EntityCache>
+
+		<EntityCache Alias="EventOfMatch">
+			<Expiry Eternal="false">
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
+			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
+			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
+			<Persistence Active="true"/>
+		</EntityCache>
 	</EntityCacheManager>
 </Cache>

@@ -40,8 +40,29 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @param name El nuevo nombre para este gestor;
 	 */
-	public synchronized void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Retorna la instancia del gestor de caché.
+	 *  
+	 * @return la instancia del gestor de caché.
+	 */
+	public CacheManager getCacheManager() {
+		return cacheManager;
+	}
+
+	/**
+	 * Retorna la instancia de la caché para la entidad del alias indicado.
+	 * 
+	 * @param alias Alias de la entidad de la que se desea obtener la instancia de caché. 
+	 * 
+	 * @return la instancia de la caché para la entidad del alias indicado.
+	 */
+	public net.sf.ehcache.Cache getCache(String alias) {
+
+		return cacheManager.getCache(alias);
 	}
 
 	/**
