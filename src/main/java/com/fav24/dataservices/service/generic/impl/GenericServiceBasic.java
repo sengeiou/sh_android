@@ -119,31 +119,40 @@ public abstract class GenericServiceBasic implements GenericService {
 		case UPDATE:
 			return update(requestor, operation);
 		case RETRIEVE:
-			
-			net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
-			
-			if (cache == null) {
-				return retreave(requestor, operation);
+
+			if (Cache.getSystemCache() != null) {
+
+				net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+
+				if (cache != null) {
+
+					//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
+					String contentKey = operation.organizeContent(new StringBuilder()).toString();
+
+					Element cachedElement = cache.get(contentKey);
+					if (cachedElement == null) {
+
+						operation = retreave(requestor, operation);
+
+						cachedElement = new Element(contentKey, operation);
+						cache.put(cachedElement);
+
+						return operation;
+					}
+					else {
+
+						Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
+						
+						operation.setMetadata(recycledOperation.getMetadata());
+						operation.setData(recycledOperation.getData());
+						
+						return operation;
+					}
+				}
 			}
-			
-			//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
-			String contentKey = operation.organizeContent(new StringBuilder()).toString();
-			
-			Element cachedElement = cache.get(contentKey);
-			if (cachedElement == null) {
-				
-				operation = retreave(requestor, operation);
-				
-				cachedElement = new Element(contentKey, operation);
-				cache.put(cachedElement);
-				
-				return operation;
-			}
-			else {
-				
-				return (Operation) cachedElement.getObjectValue();
-			}
-			
+
+			return retreave(requestor, operation);
+
 		case DELETE:
 			return delete(requestor, operation);
 		case UPDATE_CREATE:

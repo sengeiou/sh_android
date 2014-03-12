@@ -27,7 +27,7 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	 */
 	public DataItem(DataItem reference) {
 
-		if (reference.attributes.comparator() != null) {
+		if (reference.attributes != null) {
 
 			this.attributes = new TreeMap<String, Object>();
 			this.attributes.putAll(reference.attributes);
