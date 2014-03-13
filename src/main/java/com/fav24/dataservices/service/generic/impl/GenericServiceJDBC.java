@@ -3,6 +3,7 @@ package com.fav24.dataservices.service.generic.impl;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.AbstractList;
@@ -41,6 +42,7 @@ import com.fav24.dataservices.domain.security.EntityKey;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.util.JDBCUtils;
 
 
 /**
@@ -539,57 +541,78 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			for (EntityAccessPolicy entityAccessPolicy : accessPolicy.getAccessPolicies()) {
 
 				// Entidad.
-				String table = entityAccessPolicy.getName().getName();
 				EntityJDBCInformation entityJDBCInformation = new EntityJDBCInformation();
+				String table = entityAccessPolicy.getName().getName();
+				ResultSet tables = null;
+				try {
 
-				ResultSet tables = connection.getMetaData().getTables(null, null, table, null);
+					tables = connection.getMetaData().getTables(null, null, table, null);
 
-				if (tables.first()) {
+					if (tables.first()) {
 
-					entityJDBCInformation.catalog = tables.getString("TABLE_CAT");
-					if (tables.wasNull()) {
-						entityJDBCInformation.catalog = null;
+						entityJDBCInformation.catalog = tables.getString("TABLE_CAT");
+						if (tables.wasNull()) {
+							entityJDBCInformation.catalog = null;
+						}
+						entityJDBCInformation.schema = tables.getString("TABLE_SCHEM");
+						if (tables.wasNull()) {
+							entityJDBCInformation.schema = null;
+						}
+						entityJDBCInformation.name = tables.getString("TABLE_NAME");
+						entityJDBCInformation.isView = !tables.getString("TABLE_TYPE").equals("TABLE"); // si es distinto de "TABLE", los atributos de datos únicamente pueden ser de lectura.
+
+						entitiesInformation.put(entityJDBCInformation.name, entityJDBCInformation);
 					}
-					entityJDBCInformation.schema = tables.getString("TABLE_SCHEM");
-					if (tables.wasNull()) {
-						entityJDBCInformation.schema = null;
+					else {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla " + table + " no existe en la fuente de datos.");
 					}
-					entityJDBCInformation.name = tables.getString("TABLE_NAME");
-					entityJDBCInformation.isView = !tables.getString("TABLE_TYPE").equals("TABLE"); // si es distinto de "TABLE", los atributos de datos únicamente pueden ser de lectura.
-
-					entitiesInformation.put(entityJDBCInformation.name, entityJDBCInformation);
 				}
-				else {
-					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla " + table + " no existe en la fuente de datos.");
+				catch(Exception e) {
+					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de la tabla "  + table + ", debido a: " + e.getMessage());
+				}
+				finally {
+					JDBCUtils.CloseQuietly(tables);
 				}
 
 				// Atributos de datos de la entidad.
 				if (entityAccessPolicy.getData() != null && entityAccessPolicy.getData().getData() != null && entityAccessPolicy.getData().getData().size() > 0) {
 
 					entityJDBCInformation.dataFields = new TreeMap<String, Integer>();
-					ResultSet columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
+					ResultSet columns = null;
 
-					if (columns.first()) {
-						do {
-							String columnName = columns.getString("COLUMN_NAME");
-							int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
+					try {
+						columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
 
-							for (EntityDataAttribute entityDataAttribute : entityAccessPolicy.getData().getData()) {
+						if (columns.first()) {
+							do {
+								String columnName = columns.getString("COLUMN_NAME");
+								int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
 
-								if (entityDataAttribute.getName().equalsIgnoreCase(columnName)) {
-									entityJDBCInformation.dataFields.put(columnName, columnType);
+								for (EntityDataAttribute entityDataAttribute : entityAccessPolicy.getData().getData()) {
 
-									if (entityJDBCInformation.isView && entityDataAttribute.getDirection() != Direction.OUTPUT) {
-										throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa " + columnName +" de la tabla "  + table + " es de solo lectura.");
+									if (entityDataAttribute.getName().equalsIgnoreCase(columnName)) {
+										entityJDBCInformation.dataFields.put(columnName, columnType);
+
+										if (entityJDBCInformation.isView && entityDataAttribute.getDirection() != Direction.OUTPUT) {
+											throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa " + columnName +" de la tabla "  + table + " es de solo lectura.");
+										}
+										break;
 									}
-									break;
 								}
-							}
 
-						} while(columns.next());
+							} while(columns.next());
+						}
+						else {
+							JDBCUtils.CloseQuietly(columns);
+
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado columnas para la tabla "  + table + ".");
+						}
 					}
-					else {
-						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado columnas para la tabla "  + table + ".");
+					catch(Exception e) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de la tabla "  + table + ", debido a: " + e.getMessage());
+					}
+					finally {
+						JDBCUtils.CloseQuietly(columns);
 					}
 
 					// Error, hay campos que no se han podido encontrar el la tabla.
@@ -642,66 +665,86 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						entityJDBCInformation.keys = new HashMap<String, Set<String>>();
 
 						//Índices únicos.
-						ResultSet uniqueIndexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, true, false);
-						if (uniqueIndexes.first()) {
-							do {
-								String columnName = uniqueIndexes.getString("COLUMN_NAME");
-								String indexName = uniqueIndexes.getString("INDEX_NAME");
-								if (uniqueIndexes.wasNull()) {
-									indexName = null;
-								}
+						ResultSet uniqueIndexes = null;
 
-								Set<String> indexFields = entityJDBCInformation.keys.get(indexName);
-								if (indexFields == null) {
-									indexFields = new HashSet<String>();
-									entityJDBCInformation.keys.put(indexName, indexFields);
-								}
+						try {
+							uniqueIndexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, true, false);
 
-								indexFields.add(columnName);
-								entityJDBCInformation.keyFields.put(columnName, null);
+							if (uniqueIndexes.first()) {
+								do {
+									String columnName = uniqueIndexes.getString("COLUMN_NAME");
+									String indexName = uniqueIndexes.getString("INDEX_NAME");
+									if (uniqueIndexes.wasNull()) {
+										indexName = null;
+									}
 
-							} while(uniqueIndexes.next());
+									Set<String> indexFields = entityJDBCInformation.keys.get(indexName);
+									if (indexFields == null) {
+										indexFields = new HashSet<String>();
+										entityJDBCInformation.keys.put(indexName, indexFields);
+									}
+
+									indexFields.add(columnName);
+									entityJDBCInformation.keyFields.put(columnName, null);
+
+								} while(uniqueIndexes.next());
+							}
+						}
+						catch(Exception e) {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves de la tabla "  + table + ", debido a: " + e.getMessage());
+						}
+						finally {
+							JDBCUtils.CloseQuietly(uniqueIndexes);
 						}
 
 						for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
 
 							if (!hasEquivalentAttributeCollection(entityJDBCInformation.keys, entityKey.getKey())) {
-								
+
 								StringBuilder specificMessage = new StringBuilder(" Clave no permitida: La tabla ").append(table).
 										append(" no tiene definida la clave única o índice único para los campos ").append(entityKey.getKeyNamesString()).append(".");
 								specificMessage.append("\nLas claves disponibles son: ");
-								
+
 								for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
 									specificMessage.append("\n");
-									
+
 									boolean firstField = true;
 									for(String keyField : keyFields) {
-										
+
 										if (!firstField) {
 											specificMessage.append(", ");
 										}
-										
+
 										specificMessage.append(keyField);
 										firstField = false;
 									}
 								}
-								
+
 								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + specificMessage);
 							}
 						}
 					}
 
-					ResultSet columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
-					if (columns.first()) {
-						do {
-							String columnName = columns.getString("COLUMN_NAME");
-							int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
+					ResultSet columns = null;
+					try {
+						columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
+						if (columns.first()) {
+							do {
+								String columnName = columns.getString("COLUMN_NAME");
+								int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
 
-							if (entityJDBCInformation.keyFields.containsKey(columnName)) {
-								entityJDBCInformation.keyFields.put(columnName, columnType);
-							}
+								if (entityJDBCInformation.keyFields.containsKey(columnName)) {
+									entityJDBCInformation.keyFields.put(columnName, columnType);
+								}
 
-						} while(columns.next());
+							} while(columns.next());
+						}
+					}
+					catch(Exception e) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de las claves de la tabla "  + table + ", debido a: " + e.getMessage());
+					}
+					finally {
+						JDBCUtils.CloseQuietly(columns);
 					}
 
 					// Comprobación de que los campos clave están correctamente definidos en la base de datos.
@@ -720,25 +763,25 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 
 					if (lostKeyFields != null) {
-						
+
 						StringBuilder specificMessage = new StringBuilder(" No se han encontrado las columnas clave ").append(lostKeyFields).append(" para la tabla ").append(table);
 						specificMessage.append("\nLas claves disponibles son: ");
-						
+
 						for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
 							specificMessage.append("\n");
-							
+
 							boolean firstField = true;
 							for(String keyField : keyFields) {
-								
+
 								if (!firstField) {
 									specificMessage.append(", ");
 								}
-								
+
 								specificMessage.append(keyField);
 								firstField = false;
 							}
 						}
-						
+
 						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave " + lostKeyFields + " para la tabla "  + table + ".");
 					}
 				}
@@ -760,47 +803,67 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						entityJDBCInformation.indexes = new HashMap<String, Set<String>>();
 
 						//Índices.
-						ResultSet indexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, false, false);
-						if (indexes.first()) {
-							do {
-								String columnName = indexes.getString("COLUMN_NAME");
-								String indexName = indexes.getString("INDEX_NAME");
-								if (indexes.wasNull()) {
-									indexName = null;
-								}
+						ResultSet indexes = null;
 
-								Set<String> indexFields = entityJDBCInformation.indexes.get(indexName);
-								if (indexFields == null) {
-									indexFields = new HashSet<String>();
-									entityJDBCInformation.indexes.put(indexName, indexFields);
-								}
+						try {
+							indexes = connection.getMetaData().getIndexInfo(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, false, false);
+							if (indexes.first()) {
+								do {
+									String columnName = indexes.getString("COLUMN_NAME");
+									String indexName = indexes.getString("INDEX_NAME");
+									if (indexes.wasNull()) {
+										indexName = null;
+									}
 
-								indexFields.add(columnName);
-								entityJDBCInformation.filterFields.put(columnName, null);
+									Set<String> indexFields = entityJDBCInformation.indexes.get(indexName);
+									if (indexFields == null) {
+										indexFields = new HashSet<String>();
+										entityJDBCInformation.indexes.put(indexName, indexFields);
+									}
 
-							} while(indexes.next());
+									indexFields.add(columnName);
+									entityJDBCInformation.filterFields.put(columnName, null);
+
+								} while(indexes.next());
+							}
+						}
+						catch(Exception e) {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de los índices de la tabla "  + table + ", debido a: " + e.getMessage());
+						}
+						finally {
+							JDBCUtils.CloseQuietly(indexes);
 						}
 
 						//Foreing keys
-						ResultSet importedKeys = connection.getMetaData().getImportedKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
-						if (importedKeys.first()) {
-							do {
-								String columnName = importedKeys.getString("FKCOLUMN_NAME");
-								String foreingKeyName = importedKeys.getString("FK_NAME");
-								if (importedKeys.wasNull()) {
-									foreingKeyName = null;
-								}
+						ResultSet importedKeys = null;
 
-								Set<String> indexFields = entityJDBCInformation.indexes.get(foreingKeyName);
-								if (indexFields == null) {
-									indexFields = new HashSet<String>();
-									entityJDBCInformation.indexes.put(foreingKeyName, indexFields);
-								}
+						try {
+							importedKeys = connection.getMetaData().getImportedKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
+							if (importedKeys.first()) {
+								do {
+									String columnName = importedKeys.getString("FKCOLUMN_NAME");
+									String foreingKeyName = importedKeys.getString("FK_NAME");
+									if (importedKeys.wasNull()) {
+										foreingKeyName = null;
+									}
 
-								indexFields.add(columnName);
-								entityJDBCInformation.filterFields.put(columnName, null);
+									Set<String> indexFields = entityJDBCInformation.indexes.get(foreingKeyName);
+									if (indexFields == null) {
+										indexFields = new HashSet<String>();
+										entityJDBCInformation.indexes.put(foreingKeyName, indexFields);
+									}
 
-							} while(importedKeys.next());
+									indexFields.add(columnName);
+									entityJDBCInformation.filterFields.put(columnName, null);
+
+								} while(importedKeys.next());
+							}
+						}
+						catch(Exception e) {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves foraneas importadas de la tabla "  + table + ", debido a: " + e.getMessage());
+						}
+						finally {
+							JDBCUtils.CloseQuietly(importedKeys);
 						}
 
 						for (EntityFilter entityFilter : entityAccessPolicy.getFilters().getFilters()) {
@@ -811,17 +874,27 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						}
 					}
 
-					ResultSet columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
-					if (columns.first()) {
-						do {
-							String columnName = columns.getString("COLUMN_NAME");
-							int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
+					ResultSet columns = null;
 
-							if (entityJDBCInformation.filterFields.containsKey(columnName)) {
-								entityJDBCInformation.filterFields.put(columnName, columnType);
-							}
+					try {
+						columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
+						if (columns.first()) {
+							do {
+								String columnName = columns.getString("COLUMN_NAME");
+								int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
 
-						} while(columns.next());
+								if (entityJDBCInformation.filterFields.containsKey(columnName)) {
+									entityJDBCInformation.filterFields.put(columnName, columnType);
+								}
+
+							} while(columns.next());
+						}
+					}
+					catch(SQLException e) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de los filtros definidos para la tabla "  + table + ".");
+					}
+					finally {
+						JDBCUtils.CloseQuietly(columns);
 					}
 
 					// Comprobación de que los campos clave están correctamente definidos en la base de datos.

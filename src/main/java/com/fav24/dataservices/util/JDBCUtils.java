@@ -121,4 +121,24 @@ public class JDBCUtils {
 
 		return urlAttributes;
 	}
+
+	/**
+	 * Cierra el set de resultados indicado, de forma silenciosa.
+	 * 
+	 * Nota: en caso de ser <code>null</code>, no hace nada.
+	 * 
+	 * @param resultSet Set de resultados a cerrar.
+	 */
+	public static void CloseQuietly(ResultSet resultSet) {
+		
+		try {
+			
+			if (resultSet != null) {
+				resultSet.close();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
