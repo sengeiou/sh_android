@@ -248,6 +248,10 @@ public class SystemMonitoring {
 	 */
 	public AbstractList<MonitorSample> getSampleTimeSegment(AbstractList<MonitorSample> monitorSampleData, Long period, Long timeRange) {
 
+		//Paso a milisegundos;
+		period *= 1000;
+		timeRange *= 1000;
+		
 		AbstractList<MonitorSample> timeSegment = new ArrayList<MonitorSample>();
 		long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
 		long timeEdge = lastCapturedSample - timeRange;

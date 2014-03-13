@@ -47,7 +47,7 @@ public class SystemMonitorController extends BaseRestController {
 	 * 
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "/memory", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/memory", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getMemory(@RequestBody final JqPlotDto jqPlot) {
 
 		Long period = jqPlot.getPeriod() == null ? DEFAULT_PERIOD : jqPlot.getPeriod();

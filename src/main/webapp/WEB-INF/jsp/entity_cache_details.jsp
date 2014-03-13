@@ -133,10 +133,10 @@
 	bodyContent = output.toString();
 %>
 
-<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jplot/jquery.jqplot.min.css"></link>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/jquery.jqplot.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/plugins/jqplot.pieRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">

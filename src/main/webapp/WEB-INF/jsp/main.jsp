@@ -225,7 +225,7 @@
 		}
 
 		function showSystemMonitor() {
-			sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los úlitmos 5 minutos con resolución de un segundo.
+			sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los últimos 5 minutos con resolución de un segundo.
 		}
 
 		function showAvailableCacheManagers() {
