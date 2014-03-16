@@ -25,7 +25,7 @@
 		output.append("<div class='row'>");
 		
 		output.append("<div class='col-sm-8'>");
-		output.append("<div id='memoryHistory' style='width:500px; height:250px;'></div>");
+		output.append("<div id='memoryHistory' style='width:700px; height:250px;'></div>");
 		output.append("</div>");
 
 		output.append("<div class='col-sm-4'>");
@@ -68,7 +68,7 @@
 
 <script type="text/javascript">
 
-	var memoryHistoryRenderer = function(url, plot, options)
+	var memoryHistoryDataRenderer = function(url, plot, options)
 	{
 		var ret = null;
 		
@@ -99,13 +99,12 @@
 	var memoryHistory = $.jqplot('memoryHistory', memoryHistoryURL, 
 	    {
 		grid: {
-			drawBorder: false,
-			drawGridlines: false,
+			drawBorder: true,
+			drawGridlines: true,
 			background: '#ffffff',
-			shadow: false
+			shadow: true
 		},
 		axesDefaults: {
-             
         },
         animate: true,
         animateReplot: false,
@@ -115,20 +114,66 @@
             looseZoom: true,
             showTooltip: true
         },
-        series:[{showMarker:false}],
+        series:[
+                {
+                	showMarker:false
+                	},
+                {
+                	showMarker:false
+                	},
+                {
+                	showMarker:false
+                	},
+                {
+                	showMarker:false
+                	},
+                {
+                	showMarker:false
+                	},
+                {
+                	showMarker:false
+                	}
+                ],
         axes:{
-          xaxis:{
-            label:'Tiempo (segundos)',
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          },
-          yaxis:{
-            label:'Espacio (bytes)',
-            labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-          }
+			xaxis:{
+/*
+				renderer:$.jqplot.DateAxisRenderer,
+				tickOptions:{formatString:'%d/%m/%Y %H:%M:%S'},
+				tickInterval:'1 minutes',
+				*/
+				tickInterval:60000,
+				label:'Tiempo',
+				labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+				},
+			yaxis:{
+				min: 0,
+				//showTicks: false,
+				//showTickMarks: false,
+				label:'Espacio (bytes)',
+				labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+			}
         },
-		dataRenderer: memoryHistoryRenderer,
+		dataRenderer: memoryHistoryDataRenderer,
 		dataRendererOptions: {
 			unusedOptionalUrl: memoryHistoryURL
+		},
+        legend: {
+			renderer: jQuery.jqplot.EnhancedLegendRenderer,
+            labels: ['TotalInitMemory', 
+                     'TotalMaxMemory',
+                     'TotalCommitted',
+                     'TotalUsedMemory',
+                     'UsedHeapMemory',
+                     'UsedNonHeapMemory'
+                     ],
+			show: true,
+			showLabels: true,
+			showSwatches: true,
+			rowSpacing: '10px',
+			marginLeft: '10px',
+			placement: 'outsideGrid',
+			location: 'e',
+			border: 'none'
 		}
     });
 
@@ -188,7 +233,11 @@
 
 	function chartReplots()
 	{
-		memoryHistory.replot( { resetAxes:true } );
+		var series = memoryHistory.memoryHistoryDataRenderer(memoryHistoryURL, null, null);
+		var options = { data: series };
+
+
+		memoryHistory.replot( options );
 	}
 	
 	var dummyVar = setInterval(function() { chartReplots(); }, 1000);

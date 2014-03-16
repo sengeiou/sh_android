@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
@@ -75,15 +76,34 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 			logger.error(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 		else {
-			loadAccessPolicy();
-			loadCache();
+			try {
+				loadDataSourcesConfiguration();
+				loadAccessPolicy();
+				loadCache();
+			}
+			catch(ServerException e) {
+
+				logger.error(e.getMessage());
+				
+				System.exit(1);
+			}
 		}
 	}
 
 	/**
-	 * Carga las políticas de acceso por defecto.
+	 * Carga la configuración de las fuentes de datos.
 	 */
-	public void loadAccessPolicy() {
+	public void loadDataSourcesConfiguration() throws ServerException {
+
+		DataSources.loadDefaultDataSources();
+	}
+
+	/**
+	 * Carga las políticas de acceso por defecto.
+	 * 
+	 * @throws ServerException 
+	 */
+	public void loadAccessPolicy() throws ServerException {
 
 		try {
 			loadAccessPolicyService.loadDefaultAccessPolicy();
@@ -96,14 +116,16 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 				logger.error(e1.getMessage());
 			}
 
-			logger.error(e.getMessage());
+			throw e;
 		}
 	}
 
 	/**
 	 * Carga la configuración de la caché por defecto.
+	 * 
+	 * @throws ServerException 
 	 */
-	public void loadCache() {
+	public void loadCache() throws ServerException {
 
 		try {
 			loadCacheService.loadDefaultCacheConfiguration();
@@ -112,7 +134,7 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 
 			loadCacheService.dropSystemCache();
 
-			logger.error(e.getMessage());
+			throw e;
 		}
 	}
 }

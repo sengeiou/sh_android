@@ -17,14 +17,14 @@ public class CacheDOM extends Cache
 {
 	private static final BasicDOM cacheDOM = new BasicDOM();
 	static {
-		InputStream isAccessPolicyXSD = CacheDOM.class.getResourceAsStream("Cache.xsd");
+		InputStream isCacheXSD = CacheDOM.class.getResourceAsStream("Cache.xsd");
 
 		try {
 
-			if (isAccessPolicyXSD == null)
+			if (isCacheXSD == null)
 				throw new ServerException("No se ha podido localizar el esquema para la interpretación de configuraciones de caché.");
 
-			cacheDOM.setInputSchemaStream(isAccessPolicyXSD);
+			cacheDOM.setInputSchemaStream(isCacheXSD);
 			cacheDOM.configureDOM();
 
 		} catch (ServerException e) {
@@ -60,7 +60,7 @@ public class CacheDOM extends Cache
 	}
 
 	/**
-	 * Creación de la estructura de configuraciones de caché, a partir de un stream de estrada.
+	 * Creación de la estructura de configuraciones de caché, a partir de un stream de entrada.
 	 * 
 	 * @param cacheConfigurationStream Stream de entrada con contenido de configuración de caché.
 	 * 

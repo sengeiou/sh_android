@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.MainService;
+import com.fav24.dataservices.service.datasources.DataSourcesService;
 
 /**
  * Controla las peticiones de entrada al índice de la consola de administración.
@@ -24,7 +24,7 @@ public class MainController extends BaseJspController {
 	final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	protected MainService mainService;
+	protected DataSourcesService dataSourcesService;
 
 
 	/**
@@ -43,16 +43,16 @@ public class MainController extends BaseJspController {
 	 *  
 	 * @return la vista de información de las fuentes de datos.
 	 */
-	@RequestMapping(value = "/dataSourceInformation", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView dataSourceInformation() {
+	@RequestMapping(value = "/dataSourcesInformation", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView dataSourcesInformation() {
 
 		ModelAndView model;
 
 		try {
 			model = new ModelAndView("data_source_information");
 
-			model.addObject("dataSource", mainService.getDataSourceInformation());
-			model.addObject("statsDataSource", mainService.getStatsDataSourceInformation());
+			model.addObject("dataSource", dataSourcesService.getDataServiceDataSourceInformation());
+			model.addObject("statsDataSource", dataSourcesService.getStatisticsDataSourceInformation());
 
 		} catch (ServerException e) {
 

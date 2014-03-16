@@ -141,4 +141,24 @@ public class JDBCUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Cierra la conexión indicada, de forma silenciosa.
+	 * 
+	 * Nota: en caso de ser <code>null</code>, no hace nada.
+	 * 
+	 * @param connection Conexión a cerrar.
+	 */
+	public static void CloseQuietly(Connection connection) {
+		
+		try {
+			
+			if (connection != null) {
+				connection.close();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

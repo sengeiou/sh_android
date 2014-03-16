@@ -55,7 +55,7 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#" onclick="sendGetRequest('dataSourceInformation');">Principal</a></li>
+					<li class="active"><a href="#" onclick="sendGetRequest('dataSourcesInformation');">Principal</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a onclick="showAvailableEntities();">Entidades publicadas</a></li>
@@ -196,7 +196,7 @@
 	
 		// Ejecución después de la carga del documento.
 		$(document).ready(function(){
-			sendGetRequest('dataSourceInformation');
+			sendGetRequest('dataSourcesInformation');
 		});
 		
 		

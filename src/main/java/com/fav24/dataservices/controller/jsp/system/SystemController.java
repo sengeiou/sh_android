@@ -3,7 +3,6 @@ package com.fav24.dataservices.controller.jsp.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.controller.jsp.BaseJspController;
-import com.fav24.dataservices.service.MainService;
 
 /**
  * Controla las peticiones de entrada a la consola de monitorización.
@@ -24,8 +22,6 @@ public class SystemController extends BaseJspController {
 
 	final static Logger logger = LoggerFactory.getLogger(SystemController.class);
 
-	@Autowired
-	protected MainService mainService;
 
 	/**
 	 * Muestra la consola de información del estado de los recursos del sistema.
@@ -42,7 +38,7 @@ public class SystemController extends BaseJspController {
 
 		model.addObject("period", period);
 		model.addObject("timeRange", timeRange);
-		
+
 		return model;
 	}
 }

@@ -16,17 +16,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.domain.Requestor;
+import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.Generic;
@@ -69,27 +65,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 	private static Map<String, EntityJDBCInformation> entitiesInformation;
 
-	private TransactionTemplate transactionTemplate;
-	private JdbcTemplate jdbcTemplate;
 
-	/**
-	 * Asigna la plantilla para la gestión de transacciones que usará este servicio.
-	 * 
-	 * @param transactionTemplate La plantilla para la gestión de transacciones a asignar.
-	 */
-	@Autowired
-	public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-		this.transactionTemplate = transactionTemplate;
-	}
+	public GenericServiceJDBC() {
 
-	/**
-	 * Asigna plantilla de acceso JDBC que usará este servicio.
-	 * 
-	 * @param jdbcTemplate La plantilla de acceso JDBC a asignar.
-	 */
-	@Autowired
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	/**
@@ -511,11 +489,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 
 		querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
-		operation = jdbcTemplate.query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+		operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
 
 		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
 		countQuery.append(queryFrom).append(queryWhere);
-		operation.getMetadata().setTotalItems(jdbcTemplate.queryForObject(countQuery.toString(), params, Long.class));
+		operation.getMetadata().setTotalItems(DataSources.getJdbcTemplateDataService().queryForObject(countQuery.toString(), params, Long.class));
 
 		return operation;
 	}
@@ -532,10 +510,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		entitiesInformation = new HashMap<String, EntityJDBCInformation>();
 
-		DataSource dataSource = jdbcTemplate.getDataSource();
+		javax.sql.DataSource dataSource = DataSources.getJdbcTemplateDataService().getDataSource();
+		Connection connection = null;
 
 		try {
-			Connection connection = dataSource.getConnection();
+			connection = dataSource.getConnection();
 
 			// Se recorren las entidades.
 			for (EntityAccessPolicy entityAccessPolicy : accessPolicy.getAccessPolicies()) {
@@ -926,6 +905,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			entitiesInformation = null;
 			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
 		}
+		finally {
+			JDBCUtils.CloseQuietly(connection);
+		}
 	}
 
 	/**
@@ -1003,7 +985,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		GenericTransactionCallback genericTransactionCallback = new GenericTransactionCallback(generic);
 
-		transactionTemplate.execute(genericTransactionCallback);
+		DataSources.getTransactionTemplateDataService().execute(genericTransactionCallback);
 
 		generic.getRequestor().setTime(System.currentTimeMillis());
 
