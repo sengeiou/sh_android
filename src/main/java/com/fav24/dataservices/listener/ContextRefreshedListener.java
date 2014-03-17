@@ -78,14 +78,21 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		else {
 			try {
 				loadDataSourcesConfiguration();
+			}
+			catch(ServerException e) {
+
+				logger.error(e.getMessage());
+
+				System.exit(1);
+			}
+
+			try {
 				loadAccessPolicy();
 				loadCache();
 			}
 			catch(ServerException e) {
 
 				logger.error(e.getMessage());
-				
-				System.exit(1);
 			}
 		}
 	}
