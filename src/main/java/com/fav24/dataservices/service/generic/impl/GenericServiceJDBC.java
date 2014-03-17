@@ -682,11 +682,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 								StringBuilder specificMessage = new StringBuilder(" Clave no permitida: La tabla ").append(table).
 										append(" no tiene definida la clave única o índice único para los campos ").append(entityKey.getKeyNamesString()).append(".");
-								specificMessage.append("\nLas claves disponibles son: ");
+								specificMessage.append("\nLas claves disponibles son:\n");
 
 								for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
-									specificMessage.append("\n");
 
+									specificMessage.append('<');
 									boolean firstField = true;
 									for(String keyField : keyFields) {
 
@@ -697,6 +697,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 										specificMessage.append(keyField);
 										firstField = false;
 									}
+									specificMessage.append('>');
 								}
 
 								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + specificMessage);
@@ -744,11 +745,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					if (lostKeyFields != null) {
 
 						StringBuilder specificMessage = new StringBuilder(" No se han encontrado las columnas clave ").append(lostKeyFields).append(" para la tabla ").append(table);
-						specificMessage.append("\nLas claves disponibles son: ");
+						specificMessage.append("\nLas claves disponibles son:\n");
 
 						for(Set<String> keyFields : entityJDBCInformation.keys.values()) {
-							specificMessage.append("\n");
 
+							specificMessage.append('<');
 							boolean firstField = true;
 							for(String keyField : keyFields) {
 
@@ -759,6 +760,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 								specificMessage.append(keyField);
 								firstField = false;
 							}
+							specificMessage.append('>');
 						}
 
 						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave " + lostKeyFields + " para la tabla "  + table + ".");
