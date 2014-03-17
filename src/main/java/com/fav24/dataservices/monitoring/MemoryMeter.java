@@ -44,8 +44,8 @@ import java.util.TreeMap;
  */
 public final class MemoryMeter {
 
-	public static final String TOTAL_INIT_MEMORY = "TotalInitMemory"; 
 	public static final String TOTAL_MAX_MEMORY = "TotalMaxMemory";
+	public static final String TOTAL_INIT_MEMORY = "TotalInitMemory"; 
 	public static final String TOTAL_COMMITTED_MEMORY = "TotalCommitted";
 	public static final String TOTAL_USED_MEMORY = "TotalUsedMemory";
 	public static final String USED_HEAP_MEMORY = "UsedHeapMemory";

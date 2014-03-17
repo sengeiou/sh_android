@@ -25,7 +25,7 @@
 		output.append("<div class='row'>");
 		
 		output.append("<div class='col-sm-8'>");
-		output.append("<div id='memoryHistory' style='width:700px; height:250px;'></div>");
+		output.append("<div id='memoryHistory' style='width:700px; height:300px;'></div>");
 		output.append("</div>");
 
 		output.append("<div class='col-sm-4'>");
@@ -49,6 +49,9 @@
 <link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/custom/jqplot.BytesTickFormatter.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
@@ -67,6 +70,8 @@
 </div>
 
 <script type="text/javascript">
+	
+	$.jqplot.config.enablePlugins = true;
 
 	var memoryHistoryDataRenderer = function(url, plot, options)
 	{
@@ -82,8 +87,8 @@
 		var jsonResponse = JSON.parse(xhr.responseText);
 		
 		ret = [
-		       jsonResponse["data"]["TotalInitMemory"],
 		       jsonResponse["data"]["TotalMaxMemory"],
+		       jsonResponse["data"]["TotalInitMemory"],
 		       jsonResponse["data"]["TotalCommitted"],
 		       jsonResponse["data"]["TotalUsedMemory"],
 		       jsonResponse["data"]["UsedHeapMemory"],
@@ -109,7 +114,6 @@
         animate: true,
         animateReplot: false,
         cursor: {
-            show: true,
             zoom: true,
             looseZoom: true,
             showTooltip: true
@@ -136,16 +140,23 @@
                 ],
         axes:{
 			xaxis:{
-/*
-				renderer:$.jqplot.DateAxisRenderer,
-				tickOptions:{formatString:'%d/%m/%Y %H:%M:%S'},
+				renderer: $.jqplot.DateAxisRenderer,
+				tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+		        tickOptions: {
+					formatString:'%b %e\n%H:%M',
+					angle: -30,
+					fontSize: '10pt'
+		        },
 				tickInterval:'1 minutes',
-				*/
-				tickInterval:60000,
 				label:'Tiempo',
 				labelRenderer: $.jqplot.CanvasAxisLabelRenderer
 				},
 			yaxis:{
+				tickOptions: {
+					formatter: $.jqplot.BytesTickFormatter,
+					formatString:'%d',
+					fontSize: '10pt'
+		        },
 				min: 0,
 				//showTicks: false,
 				//showTickMarks: false,
@@ -159,8 +170,9 @@
 		},
         legend: {
 			renderer: jQuery.jqplot.EnhancedLegendRenderer,
-            labels: ['TotalInitMemory', 
+            labels: [
                      'TotalMaxMemory',
+                     'TotalInitMemory', 
                      'TotalCommitted',
                      'TotalUsedMemory',
                      'UsedHeapMemory',
@@ -233,7 +245,7 @@
 
 	function chartReplots()
 	{
-		var series = memoryHistory.memoryHistoryDataRenderer(memoryHistoryURL, null, null);
+		var series = memoryHistoryDataRenderer(memoryHistoryURL, null, null);
 		var options = { data: series };
 
 

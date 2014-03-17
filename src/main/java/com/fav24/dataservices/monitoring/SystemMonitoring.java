@@ -148,40 +148,17 @@ public class SystemMonitoring {
 	}
 
 	/**
-	 * Añade una muestra del estado de la memoria del sistema.
+	 * Añade una muestra al conjunto de datos indicado.
 	 * 
+	 * @param monitorSampleData Lista de muestras del monitor al que se añadirá la nueva muestra.
 	 * @param sample Muestra a añadir.
 	 */
-	private void putMemorySample(MonitorSample sample) {
+	private void putMonitorSample(AbstractList<MonitorSample> monitorSampleData, MonitorSample sample) {
 
-		systemMemoryActivityTrace.add(sample);
-	}
+		synchronized (monitorSampleData) {
 
-	/**
-	 * Añade una muestra del estado de la carga de proceso del sistema.
-	 * 
-	 * @param sample Muestra a añadir.
-	 */
-	private void putCpuSample(MonitorSample sample) {
-
-		systemCpuActivityTrace.add(sample);
-	}
-
-	/**
-	 * Añade una muestra del estado de los diferentes dispositivos de almacenamiento del sistema.
-	 * 
-	 * @param sample Muestra a añadir.
-	 */
-	private void putStorageSample(String storageLocation, MonitorSample sample) {
-
-		AbstractList<MonitorSample> storageElement = systemStorageActivityTrace.get(storageLocation);
-		if (storageElement == null) {
-			storageElement = new ArrayList<MonitorSample>();
-
-			systemStorageActivityTrace.put(storageLocation, storageElement);
+			monitorSampleData.add(sample);
 		}
-
-		storageElement.add(sample);
 	}
 
 	/**
@@ -191,7 +168,7 @@ public class SystemMonitoring {
 	 */
 	private void putMemoryData(NavigableMap<String, Double> data) {
 
-		putMemorySample(new MonitorSample(data));
+		putMonitorSample(systemMemoryActivityTrace, new MonitorSample(data));
 	}
 
 	/**
@@ -201,7 +178,7 @@ public class SystemMonitoring {
 	 */
 	private void putCpuData(NavigableMap<String, Double> data) {
 
-		putCpuSample(new MonitorSample(data));
+		putMonitorSample(systemCpuActivityTrace, new MonitorSample(data));
 	}
 
 	/**
@@ -211,7 +188,19 @@ public class SystemMonitoring {
 	 */
 	private void putStorageData(String storageLocation, NavigableMap<String, Double> data) {
 
-		putStorageSample(storageLocation, new MonitorSample(data));
+		synchronized(systemStorageActivityTrace) {
+
+			AbstractList<MonitorSample> storageElement = systemStorageActivityTrace.get(storageLocation);
+
+			if (storageElement == null) {
+
+				storageElement = new ArrayList<MonitorSample>();
+
+				systemStorageActivityTrace.put(storageLocation, storageElement);
+			}
+
+			putMonitorSample(storageElement, new MonitorSample(data));
+		}
 	}
 
 	/**
@@ -221,18 +210,21 @@ public class SystemMonitoring {
 	 */
 	private void monitorHistoryPurge(AbstractList<MonitorSample> monitorSampleData) {
 
-		long timeEdge = monitorSampleData.get(monitorSampleData.size() - 1).time - MONITORING_TIME_WINDOW;
+		synchronized(monitorSampleData) {
 
-		Iterator<MonitorSample> monitorSampleDataIterator = monitorSampleData.iterator();
-		while(monitorSampleDataIterator.hasNext()) {
+			long timeEdge = monitorSampleData.get(monitorSampleData.size() - 1).time - MONITORING_TIME_WINDOW;
 
-			MonitorSample monitorSample = monitorSampleDataIterator.next();
+			Iterator<MonitorSample> monitorSampleDataIterator = monitorSampleData.iterator();
+			while(monitorSampleDataIterator.hasNext()) {
 
-			if (monitorSample.time >= timeEdge) {
-				return;
-			}
-			else {
-				monitorSampleDataIterator.remove();
+				MonitorSample monitorSample = monitorSampleDataIterator.next();
+
+				if (monitorSample.time >= timeEdge) {
+					return;
+				}
+				else {
+					monitorSampleDataIterator.remove();
+				}
 			}
 		}
 	}
@@ -251,19 +243,23 @@ public class SystemMonitoring {
 		//Paso a milisegundos;
 		period *= 1000;
 		timeRange *= 1000;
-		
+
 		AbstractList<MonitorSample> timeSegment = new ArrayList<MonitorSample>();
-		long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
-		long timeEdge = lastCapturedSample - timeRange;
 
-		long lastSelectedSampleTime = Long.MAX_VALUE;
-		for(MonitorSample monitorSample : monitorSampleData) {
+		synchronized(monitorSampleData) {
 
-			if (monitorSample.time > timeEdge) {
+			long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
+			long timeEdge = lastCapturedSample - timeRange;
 
-				if (monitorSample.time >= lastSelectedSampleTime + period) {
-					lastSelectedSampleTime = monitorSample.time;
-					timeSegment.add(monitorSample);
+			long lastSelectedSampleTime = Long.MAX_VALUE;
+			for(MonitorSample monitorSample : monitorSampleData) {
+
+				if (monitorSample.time > timeEdge) {
+
+					if (monitorSample.time >= lastSelectedSampleTime + period) {
+						lastSelectedSampleTime = monitorSample.time;
+						timeSegment.add(monitorSample);
+					}
 				}
 			}
 		}
@@ -309,9 +305,12 @@ public class SystemMonitoring {
 
 		NavigableMap<String, AbstractList<MonitorSample>> timeSegment = new TreeMap<String, AbstractList<MonitorSample>>();
 
-		for (Entry<String, AbstractList<MonitorSample>> monitorSampleData : systemStorageActivityTrace.entrySet()) {
-			
-			timeSegment.put(monitorSampleData.getKey(), getSampleTimeSegment(monitorSampleData.getValue(), period, timeRange));
+		synchronized(systemStorageActivityTrace) {
+
+			for (Entry<String, AbstractList<MonitorSample>> monitorSampleData : systemStorageActivityTrace.entrySet()) {
+
+				timeSegment.put(monitorSampleData.getKey(), getSampleTimeSegment(monitorSampleData.getValue(), period, timeRange));
+			}
 		}
 
 		return timeSegment;
