@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.domain.generic.Generic;
+import com.fav24.dataservices.dto.RequestorDto;
 import com.fav24.dataservices.dto.generic.GenericDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
@@ -48,6 +49,9 @@ public class GenericController extends BaseRestController {
 		GenericDto result = null;
 
 		try {
+			
+			generic.checkHeader();
+			
 			result = Mapper.Map(genericService.processGeneric((Generic) Mapper.Map(generic)));
 			
 			result.setStatusCode(BaseRestController.OK);
@@ -55,7 +59,7 @@ public class GenericController extends BaseRestController {
 		} catch (ServerException e) {
 
 			result = new GenericDto(e);
-			result.setRequestor(generic.getRequestor());
+			result.setRequestor(new RequestorDto(generic.getRequestor()));
 		}
 		
 		result.getRequestor().setSystemTime(System.currentTimeMillis());

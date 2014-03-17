@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonAutoDetect(
-creatorVisibility = JsonAutoDetect.Visibility.ANY,
-fieldVisibility = JsonAutoDetect.Visibility.ANY, 
-getterVisibility = JsonAutoDetect.Visibility.NONE, 
-isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
-setterVisibility = JsonAutoDetect.Visibility.NONE)
+		creatorVisibility = JsonAutoDetect.Visibility.ANY,
+		fieldVisibility = JsonAutoDetect.Visibility.ANY, 
+		getterVisibility = JsonAutoDetect.Visibility.NONE, 
+		isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
+		setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class RequestorDto {
 
 	public static final int POSITION_ID_DEVICE = 0;
@@ -62,6 +62,18 @@ public class RequestorDto {
 	}
 
 	/**
+	 * Constructor de copia.
+	 * 
+	 * @param requestor Objeto de referencia.
+	 */
+	public RequestorDto(RequestorDto requestor) {
+		
+		this();
+		
+		copy(requestor);
+	}
+	
+	/**
 	 * Retorna el array de valores del solicitante.
 	 * 
 	 * @return el array de valores del solicitante.
@@ -78,7 +90,7 @@ public class RequestorDto {
 	public void setReq(Long[] req) {
 		this.req = req;
 	}
-	
+
 	/**
 	 * Asigna la hora de sistema en milisegundos.
 	 * 
@@ -86,5 +98,23 @@ public class RequestorDto {
 	 */
 	public void setSystemTime(Long milliseconds) {
 		req[POSITION_SYSTEM_TIME] = milliseconds;
+	}
+
+	/**
+	 * Copia quién realiza la petición.
+	 * 
+	 * @param requestor El solicitante a copiar.
+	 */
+	public void copy(RequestorDto requestor) {
+
+		if (req != null && requestor != null && requestor.req != null) {
+
+			int length = requestor.req.length < req.length ? requestor.req.length : req.length;
+			
+			for(int i=0; i<length; i++) {
+
+				req[i] = requestor.req[i];
+			}
+		}
 	}
 }
