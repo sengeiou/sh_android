@@ -4,54 +4,16 @@
 <%@page import="com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample"%>
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
-<%!String bodyContent;%>
 <%!Long period;%>
 <%!Long timeRange;%>
 	
 <%
-	StringBuilder output = new StringBuilder();
 	period = (Long)request.getAttribute("period");
 	timeRange = (Long)request.getAttribute("timeRange");
-	
-	try {
-		
-		output.append("<p>Informaci&oacute;n y estado de la instancia<p/>");
-
-		// Memoria.
-		output.append("<div class='panel panel-info'>");
-		output.append("<div class='panel-heading'>Distribuci&oacute;n y consumo de memoria</div>");
-		output.append("<div class='panel-body'>");
-
-		output.append("<div class='row'>");
-		
-		output.append("<div class='col-sm-8'>");
-		output.append("<div id='memoryHistory' style='width:700px; height:300px;'></div>");
-		output.append("</div>");
-
-		output.append("<div class='col-sm-2'>");
-		output.append("<div id='committedMemoryInstant' style='width:120px; height:300px;'></div>");
-		output.append("</div>");
-
-		output.append("<div class='col-sm-2'>");
-		output.append("<div id='usedMemoryInstant' style='width:120px; height:300px;'></div>");
-		output.append("</div>");
-		
-		output.append("</div>");
-
-		output.append("</div>");
-		output.append("</div>");
-
-		output.append("</script>");
-		
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
-	bodyContent = output.toString();
 %>
-
 <link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.cursor.min.js"></script>
 
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.barRenderer.min.js"></script>
 
@@ -64,22 +26,8 @@
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
 
-<!-- Panel de detalle de una cierta entidad publicada. -->
-<div id="entityDetails">
-
-	<!-- Detalles de la entidad -->
-	<div class="panel panel-info">
-		<div class="panel-heading"><h3>Monitor de sistema</h3></div>
-		<!-- Lista de entidades -->
-		<div class="panel-body">
-			<%=bodyContent%>
-		</div>
-	</div>
-</div>
-
 <script type="text/javascript">
 	
-	$.jqplot.config.enablePlugins = true;
 
 	function printObject(o) {
 		  var out = '';
@@ -88,6 +36,60 @@
 		  }
 		  return out;
 		}
+</script>
+
+<!-- Panel de detalle de una cierta entidad publicada. -->
+<div id="entityDetails">
+
+	<!-- Detalles de la entidad -->
+	<div class="panel panel-info">
+		<div class="panel-heading"><h3>Monitor de sistema</h3></div>
+		<!-- Lista de entidades -->
+		<div class="panel-body">
+			<p>Informaci&oacute;n y estado de la instancia<p/>
+			<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryMonitor();" checked> Freeze</input>
+			<!-- Memoria -->
+			<div class='panel panel-info'>
+				<div class='panel-heading'>Distribuci&oacute;n y consumo de memoria</div>
+				<div class='panel-body'>
+					<div class='row'>
+						<div class='col-sm-8'>
+							<div id='memoryHistory' style='width:700px; height:300px;'></div>
+						</div>
+						<div class='col-sm-2'>
+							<div id='committedMemoryInstant' style='width:120px; height:300px;'></div>
+						</div>
+						<div class='col-sm-2'>
+							<div id='usedMemoryInstant' style='width:120px; height:300px;'></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input id="cpuFreeze" type="checkbox" onClick="freezeCPUMonitor();" checked> Freeze</input>
+			<!-- Procesador -->
+			<div class='panel panel-info'>
+				<div class='panel-heading'>Uso del procesador</div>
+				<div class='panel-body'>
+					<div class='row'>
+						<div class='col-sm-8'>
+							<div id='cpuHistory' style='width:700px; height:300px;'></div>
+						</div>
+						<div class='col-sm-2'>
+							<div id='cpuInstant' style='width:120px; height:300px;'></div>
+						</div>
+						<div class='col-sm-2'>
+							<div id='usedMemoryInstant' style='width:120px; height:300px;'></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+	$.jqplot.config.enablePlugins = true;
 	
 	// Alimentador de información de la gráfica de distribución de memoria en el tiempo.
 	var memoryHistoryDataRenderer = function(url, plot, options)
@@ -129,8 +131,8 @@
         animateReplot: false,
         cursor: {
             zoom: true,
-            looseZoom: false,
-            showTooltip: false
+            looseZoom: true,
+            showTooltip: true
         },
         series:[
                 { color: '#ff1111', showMarker: false },
@@ -330,18 +332,162 @@
 			}
 		});
 
-	// Refresco de la información de las gráficas.
-	function chartReplots()
+	// Alimentador de información de la gráfica de actividad del procesador en el tiempo.
+	var cpuHistoryDataRenderer = function(url, plot, options)
 	{
-		// Historial de memoria.
-		memoryHistory.replot({ data: [] });
-
-		// Instante de memoria disponible.
-		committedMemoryInstant.replot({ data: [] });
+		var ret = null;
+		var xhr = new XMLHttpRequest();
 		
-		// Instante de memoria usada.
-		usedMemoryInstant.replot({ data: [] });
+		xhr.open("POST", options["url"], false);
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		// Envío.
+		xhr.send(JSON.stringify({period:${period}, timeRange:${timeRange}}));
+		
+		var jsonResponse = JSON.parse(xhr.responseText);
+		
+		ret = [
+		       /*
+		       jsonResponse["data"]["PeakThreadCount"],
+		       jsonResponse["data"]["DaemonThreadCount"],
+		       jsonResponse["data"]["NumberOfThreads"],
+*/
+		       jsonResponse["data"]["SystemCPULoad"],
+		       jsonResponse["data"]["ApplicationCPULoad"],
+		       jsonResponse["data"]["CPULoad"]
+		       ];
+	
+	    return ret;
+	};
+	
+	// La gráfica de actividad del procesador en el tiempo.
+	var cpuHistory = $.jqplot('cpuHistory', [], 
+	    {
+		grid: {
+			drawBorder: true,
+			drawGridlines: true,
+			background: '#ffffff',
+			shadow: true
+		},
+		axesDefaults: {
+        },
+        animate: true,
+        animateReplot: false,
+        cursor: {
+            zoom: true,
+            looseZoom: false,
+            showTooltip: true
+        },
+        series:[
+                /*
+                { color: '#ff1111', showMarker: false },
+                { color: '#00b3ff', showMarker: false },
+                { color: '#90d91d', showMarker: false },
+                */
+                { color: '#fcc226', showMarker: false },
+                { color: '#cffe2e', showMarker: false },
+                { color: '#9ab66e', showMarker: false }
+                ],
+        axes:{
+			xaxis:{
+				renderer: $.jqplot.DateAxisRenderer,
+				tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+		        tickOptions: {
+					formatString:'%b %e\n%H:%M',
+					angle: -30,
+					fontSize: '10pt'
+		        },
+				tickInterval:'1 minutes'
+			},
+			yaxis:{
+				tickOptions: {
+					/*
+					formatter: $.jqplot.BytesTickFormatter,
+					formatString:'%d',
+					*/
+					fontSize: '10pt'
+		        },
+				min: 0
+			}
+        },
+		dataRenderer: cpuHistoryDataRenderer,
+		dataRendererOptions: {
+			url: '<%=servicesURL%>/system/cpu'
+		},
+        legend: {
+			renderer: jQuery.jqplot.EnhancedLegendRenderer,
+            labels: [
+                     /*
+                     'Pico m&aacute;ximo',
+                     'Demonios', 
+                     'Hilos',
+                     */
+                     'Sistema',
+                     'Aplicaci&oacute;n',
+                     'Carga total'
+                     ],
+			show: true,
+			showLabels: true,
+			showSwatches: true,
+			rowSpacing: '10px',
+			marginLeft: '10px',
+			placement: 'outsideGrid',
+			location: 'e',
+			border: 'none'
+		}
+    });
+	
+	function freezeMemoryMonitor() {
+        if (document.getElementById('memoryFreeze').checked) {
+        	stopMemoryMonitor();
+        } else {
+        	startMemoryMonitor();
+        }
+    }
+
+	function stopMemoryMonitor() {
+		if (this.memoryMonitorInterval) {
+			clearInterval(this.memoryMonitorInterval);
+			this.memoryMonitorInterval = null;
+		}
 	}
 
-	var dummyVar = setInterval(function() { chartReplots(); }, 1000);
+	function startMemoryMonitor() {
+		stopMemoryMonitor();
+		this.memoryMonitorInterval = setInterval(function() { 		
+			// Historial de memoria.
+			memoryHistory.replot({ data: [] });
+	
+			// Instante de memoria disponible.
+			committedMemoryInstant.replot({ data: [] });
+			
+			// Instante de memoria usada.
+			usedMemoryInstant.replot({ data: [] }); 
+		}, 1000);
+	}
+	
+	function freezeCPUMonitor() {
+        if (document.getElementById('cpuFreeze').checked) {
+        	stopCPUMonitor();
+        } else {
+        	startCPUMonitor();
+        }
+    }
+	
+	function stopCPUMonitor() {
+		if (this.cpuMonitorInterval) {
+			clearInterval(this.cpuMonitorInterval);
+			this.cpuMonitorInterval = null;
+		}
+	}
+
+	function startCPUMonitor() {
+		stopCPUMonitor();
+		this.cpuMonitorInterval = setInterval(function() { 		
+			// Historial de actividad de la CPU.
+			cpuHistory.replot({ data: [] });
+		}, 1000);
+	}
+	
+	stopMemoryMonitor();
+	stopCPUMonitor();
 </script>

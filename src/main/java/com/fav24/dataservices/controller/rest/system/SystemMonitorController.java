@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.system.JqPlotDto;
+import com.fav24.dataservices.monitoring.CpuMeter;
 import com.fav24.dataservices.monitoring.MemoryMeter;
 import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample;
 import com.fav24.dataservices.service.system.SystemService;
@@ -64,7 +65,7 @@ public class SystemMonitorController extends BaseRestController {
 			Object[][] totalUsedMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY)}};
 			Object[][] UsedHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_HEAP_MEMORY)}};
 			Object[][] UsedNonHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY)}};
-			
+
 			jqPlot.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemoryData);
 			jqPlot.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemoryData);
 			jqPlot.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemoryData);
@@ -108,6 +109,85 @@ public class SystemMonitorController extends BaseRestController {
 			jqPlot.getData().put(MemoryMeter.TOTAL_USED_MEMORY, totalUsedMemoryData);
 			jqPlot.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemoryData);
 			jqPlot.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemoryData);
+		}
+
+		return jqPlot;
+	}
+
+	/**
+	 * Procesa una petición de información de la actividad de la CPU del sistema.
+	 * 
+	 * @param jqPlot Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
+	 * 
+	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
+	 *  
+	 * @return el resultado del procesado de la petición.
+	 */
+	@RequestMapping(value = "cpu", method = { RequestMethod.POST })
+	public @ResponseBody JqPlotDto getCPU(@RequestBody final JqPlotDto jqPlot) {
+
+		jqPlot.setName(CPU_MONITOR);
+
+		if (jqPlot.getPeriod() == null || jqPlot.getTimeRange() == null) {
+
+			MonitorSample cpuMonitorSample = systemService.getSystemCpuActivity();
+
+			Object[][] peakThreadCountData = {{cpuMonitorSample.getData(CpuMeter.PEAK_THREAD_COUNT)}};
+			Object[][] totalStartedThreadCountData = {{cpuMonitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT)}};
+			Object[][] daemonThreadCountData = {{cpuMonitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT)}};
+			Object[][] numberOfThreadsData = {{cpuMonitorSample.getData(CpuMeter.NUMBER_OF_THREADS)}};
+			Object[][] totalCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.CPU_LOAD)}};
+			Object[][] applicationCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD)}};
+			Object[][] systemCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD)}};
+
+			jqPlot.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
+			jqPlot.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
+			jqPlot.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
+			jqPlot.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
+			jqPlot.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
+			jqPlot.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
+			jqPlot.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
+		}
+		else {
+
+			AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(jqPlot.getPeriod(), jqPlot.getTimeRange());
+
+			Object[][] peakThreadCountData = new Object[systemCPUActivity.size()][2];
+			Object[][] totalStartedThreadCountData = new Object[systemCPUActivity.size()][2];
+			Object[][] daemonThreadCountData = new Object[systemCPUActivity.size()][2];
+			Object[][] numberOfThreadsData = new Object[systemCPUActivity.size()][2];
+			Object[][] totalCpuLoadData = new Object[systemCPUActivity.size()][2];
+			Object[][] applicationCpuLoadData = new Object[systemCPUActivity.size()][2];
+			Object[][] systemCpuLoadData = new Object[systemCPUActivity.size()][2];
+
+			int i = 0;
+			for (MonitorSample monitorSample : systemCPUActivity) {
+
+				peakThreadCountData[i][0] = monitorSample.getTime();
+				peakThreadCountData[i][1] = monitorSample.getData(CpuMeter.PEAK_THREAD_COUNT);
+				totalStartedThreadCountData[i][0] = monitorSample.getTime();
+				totalStartedThreadCountData[i][1] = monitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT);
+				daemonThreadCountData[i][0] = monitorSample.getTime();
+				daemonThreadCountData[i][1] = monitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT);
+				numberOfThreadsData[i][0] = monitorSample.getTime();
+				numberOfThreadsData[i][1] = monitorSample.getData(CpuMeter.NUMBER_OF_THREADS);
+				totalCpuLoadData[i][0] = monitorSample.getTime();
+				totalCpuLoadData[i][1] = monitorSample.getData(CpuMeter.CPU_LOAD);
+				applicationCpuLoadData[i][0] = monitorSample.getTime();
+				applicationCpuLoadData[i][1] = monitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD);
+				systemCpuLoadData[i][0] = monitorSample.getTime();
+				systemCpuLoadData[i][1] = monitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD);
+
+				i++;
+			}
+
+			jqPlot.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
+			jqPlot.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
+			jqPlot.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
+			jqPlot.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
+			jqPlot.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
+			jqPlot.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
+			jqPlot.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
 		}
 
 		return jqPlot;

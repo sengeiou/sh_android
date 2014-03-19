@@ -29,7 +29,7 @@
 	<title>Servicios de acceso a datos</title>
 	
 	<!-- Latest compiled and minified CSS -->
-	<link  class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/bootstrap.min.css">
+	<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/bootstrap.min.css">
 	<!-- Optional theme -->
 	<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/bootstrap-theme.min.css">
 	

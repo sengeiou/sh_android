@@ -13,6 +13,9 @@ import java.util.TreeMap;
  */
 public final class CpuMeter extends Thread
 {
+	public static final String PEAK_THREAD_COUNT = "PeakThreadCount"; //Pico máximo de threads activos.
+	public static final String TOTAL_STARTED_THREAD_COUNT = "TotalStartedThreadCount"; //Número de threads inciados desde el arranque de la aplicación.
+	public static final String TOTAL_DEAMON_THREAD_COUNT = "DaemonThreadCount"; //Número de threads de tipo demonio activos.
 	public static final String NUMBER_OF_THREADS = "NumberOfThreads"; //Número de threads activos.
 	public static final String SYSTEM_CPU_LOAD = "SystemCPULoad"; //Carga de la CPU por procesos del sistema.
 	public static final String APPLICATION_CPU_LOAD = "ApplicationCPULoad"; //Carga de la CPU por procesos de la aplicación.
@@ -211,6 +214,10 @@ public final class CpuMeter extends Thread
 		double totalCpuTime = getTotalCpuTime();
 		double totalApplicationTime = getTotalApplicationTime();
 		double totalSystemTime = totalCpuTime - totalApplicationTime;
+
+		systemCpuActivity.put(PEAK_THREAD_COUNT, Double.valueOf(threadMXBean.getPeakThreadCount()));
+		systemCpuActivity.put(TOTAL_STARTED_THREAD_COUNT, Double.valueOf(threadMXBean.getTotalStartedThreadCount()));
+		systemCpuActivity.put(TOTAL_DEAMON_THREAD_COUNT, Double.valueOf(threadMXBean.getDaemonThreadCount()));
 
 		systemCpuActivity.put(NUMBER_OF_THREADS, Double.valueOf(history.size()));
 		systemCpuActivity.put(SYSTEM_CPU_LOAD, (totalSystemTime/totalCpuTime) * 100);
