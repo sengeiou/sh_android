@@ -45,55 +45,71 @@ public class SystemMonitorController extends BaseRestController {
 	 * 
 	 * @param jqPlot Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
 	 * 
+	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
+	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/memory", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getMemory(@RequestBody final JqPlotDto jqPlot) {
 
-		Long period = jqPlot.getPeriod() == null ? DEFAULT_PERIOD : jqPlot.getPeriod();
-		Long timeRange = jqPlot.getTimeRange() == null ? DEFAULT_TIME_RANGE : jqPlot.getTimeRange();
+		jqPlot.setName(MEMORY_MONITOR);
 
-		AbstractList<MonitorSample> systemMemoryStatus = systemService.getSystemMemoryStatus(period, timeRange);
+		if (jqPlot.getPeriod() == null || jqPlot.getTimeRange() == null) {
 
-		JqPlotDto result = new JqPlotDto();
+			MonitorSample memoryMonitorSample = systemService.getSystemMemoryStatus();
 
-		result.setPeriod(period);
-		result.setTimeRange(timeRange);
-		result.setName(MEMORY_MONITOR);
+			Object[][] totalInitMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY)}};
+			Object[][] totalMaxMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY)}};
+			Object[][] totalCommittedMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY)}};
+			Object[][] totalUsedMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY)}};
+			Object[][] UsedHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_HEAP_MEMORY)}};
+			Object[][] UsedNonHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY)}};
+			
+			jqPlot.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_USED_MEMORY, totalUsedMemoryData);
+			jqPlot.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemoryData);
+			jqPlot.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemoryData);
+		}
+		else {
 
-		Object[][] totalInitMemorydata = new Object[systemMemoryStatus.size()][2];
-		Object[][] totalMaxMemorydata = new Object[systemMemoryStatus.size()][2];
-		Object[][] totalCommittedMemorydata = new Object[systemMemoryStatus.size()][2];
-		Object[][] totalUsedMemorydata = new Object[systemMemoryStatus.size()][2];
-		Object[][] UsedHeapMemorydata = new Object[systemMemoryStatus.size()][2];
-		Object[][] UsedNonHeapMemorydata = new Object[systemMemoryStatus.size()][2];
+			AbstractList<MonitorSample> systemMemoryStatus = systemService.getSystemMemoryStatus(jqPlot.getPeriod(), jqPlot.getTimeRange());
 
-		result.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemorydata);
-		result.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemorydata);
-		result.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemorydata);
-		result.getData().put(MemoryMeter.TOTAL_USED_MEMORY, totalUsedMemorydata);
-		result.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemorydata);
-		result.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemorydata);
+			Object[][] totalInitMemoryData = new Object[systemMemoryStatus.size()][2];
+			Object[][] totalMaxMemoryData = new Object[systemMemoryStatus.size()][2];
+			Object[][] totalCommittedMemoryData = new Object[systemMemoryStatus.size()][2];
+			Object[][] totalUsedMemoryData = new Object[systemMemoryStatus.size()][2];
+			Object[][] UsedHeapMemoryData = new Object[systemMemoryStatus.size()][2];
+			Object[][] UsedNonHeapMemoryData = new Object[systemMemoryStatus.size()][2];
 
-		int i = 0;
-		for (MonitorSample monitorSample : systemMemoryStatus) {
+			int i = 0;
+			for (MonitorSample monitorSample : systemMemoryStatus) {
 
-			totalInitMemorydata[i][0] = monitorSample.getTime();
-			totalInitMemorydata[i][1] = monitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY);
-			totalMaxMemorydata[i][0] = monitorSample.getTime();
-			totalMaxMemorydata[i][1] = monitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY);
-			totalCommittedMemorydata[i][0] = monitorSample.getTime();
-			totalCommittedMemorydata[i][1] = monitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY);
-			totalUsedMemorydata[i][0] = monitorSample.getTime();
-			totalUsedMemorydata[i][1] = monitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY);
-			UsedHeapMemorydata[i][0] = monitorSample.getTime();
-			UsedHeapMemorydata[i][1] = monitorSample.getData(MemoryMeter.USED_HEAP_MEMORY);
-			UsedNonHeapMemorydata[i][0] = monitorSample.getTime();
-			UsedNonHeapMemorydata[i][1] = monitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY);
+				totalInitMemoryData[i][0] = monitorSample.getTime();
+				totalInitMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY);
+				totalMaxMemoryData[i][0] = monitorSample.getTime();
+				totalMaxMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY);
+				totalCommittedMemoryData[i][0] = monitorSample.getTime();
+				totalCommittedMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY);
+				totalUsedMemoryData[i][0] = monitorSample.getTime();
+				totalUsedMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY);
+				UsedHeapMemoryData[i][0] = monitorSample.getTime();
+				UsedHeapMemoryData[i][1] = monitorSample.getData(MemoryMeter.USED_HEAP_MEMORY);
+				UsedNonHeapMemoryData[i][0] = monitorSample.getTime();
+				UsedNonHeapMemoryData[i][1] = monitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY);
 
-			i++;
+				i++;
+			}
+
+			jqPlot.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemoryData);
+			jqPlot.getData().put(MemoryMeter.TOTAL_USED_MEMORY, totalUsedMemoryData);
+			jqPlot.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemoryData);
+			jqPlot.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemoryData);
 		}
 
-		return result;
+		return jqPlot;
 	}
 }

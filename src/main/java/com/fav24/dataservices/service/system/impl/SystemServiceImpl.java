@@ -28,9 +28,27 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public MonitorSample getSystemMemoryStatus() {
+
+		return SystemActivityMonitoring.getSystemMemoryStatus();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public AbstractList<MonitorSample> getSystemMemoryStatus(Long period, Long timeRange) {
 
 		return SystemActivityMonitoring.getSystemMemoryStatus(period, timeRange);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public MonitorSample getSystemCpuActivity() {
+
+		return SystemActivityMonitoring.getSystemCpuActivity();
 	}
 
 	/**
@@ -46,9 +64,17 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Map<String, MonitorSample> getSystemStorageStatus() {
+
+		return SystemActivityMonitoring.getSystemStorageStatus();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Map<String, AbstractList<MonitorSample>> getSystemStorageStatus(Long period, Long timeRange) {
 
 		return SystemActivityMonitoring.getSystemStorageStatus(period, timeRange);
 	}
-
 }

@@ -40,7 +40,7 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 		} catch (MalformedURLException | SQLException e) {
 
-			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE);
+			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE + " (" + e.getMessage() + ")");
 		}
 	}
 

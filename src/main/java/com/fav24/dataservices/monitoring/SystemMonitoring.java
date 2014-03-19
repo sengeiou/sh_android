@@ -228,6 +228,24 @@ public class SystemMonitoring {
 			}
 		}
 	}
+	/**
+	 * Retorna la última muestra de la lista de muestras indicada.
+	 * 
+	 * @param monitorSampleData Conjunto de muestras monitorizadas.
+	 *  
+	 * @return la última muestra de la lista de muestras indicada.
+	 */
+	public MonitorSample getLastSample(AbstractList<MonitorSample> monitorSampleData) {
+
+		synchronized(monitorSampleData) {
+
+			if (monitorSampleData.size() > 0) {
+				return monitorSampleData.get(monitorSampleData.size()-1);
+			}
+		}
+
+		return null;
+	}
 
 	/**
 	 * Retorna el segmento definido por parámetro de la lista de muestras indicada.
@@ -268,10 +286,21 @@ public class SystemMonitoring {
 	}
 
 	/**
+	 * Retorna la información de estado de la memoria, en la máquina virtual
+	 * en este mismo instante.
+	 * 
+	 * @return la información de estado de la memoria, en la máquina virtual.
+	 */
+	public MonitorSample getSystemMemoryStatus() {
+
+		return getLastSample(systemMemoryActivityTrace);
+	}
+
+	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
 	 * 
 	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 segundo a 24 horas.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
@@ -281,10 +310,21 @@ public class SystemMonitoring {
 	}
 
 	/**
+	 * Retorna la información del estado de la carga de proceso del sistema
+	 * en este mismo instante.
+	 * 
+	 * @return la información del estado de la carga de proceso del sistema.
+	 */
+	public MonitorSample getSystemCpuActivity() {
+
+		return getLastSample(systemCpuActivityTrace);
+	}
+
+	/**
 	 * Retorna la información del estado de la carga de proceso del sistema.
 	 * 
 	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 a 24 horas.
+	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 segundo a 24 horas.
 	 *  
 	 * @return la información del estado de la carga de proceso del sistema.
 	 */
@@ -294,10 +334,31 @@ public class SystemMonitoring {
 	}
 
 	/**
+	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada
+	 * en este mismos instante.
+	 * 
+	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
+	 */
+	public NavigableMap<String, MonitorSample> getSystemStorageStatus() {
+
+		NavigableMap<String, MonitorSample> timeSegment = new TreeMap<String, MonitorSample>();
+
+		synchronized(systemStorageActivityTrace) {
+
+			for (Entry<String, AbstractList<MonitorSample>> monitorSampleData : systemStorageActivityTrace.entrySet()) {
+
+				timeSegment.put(monitorSampleData.getKey(), getLastSample(monitorSampleData.getValue()));
+			}
+		}
+
+		return timeSegment;
+	}
+
+	/**
 	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada en cuanto a:
 	 * 
 	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
+	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 segundo y 24 horas.
 	 * 
 	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
 	 */

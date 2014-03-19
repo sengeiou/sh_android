@@ -28,8 +28,12 @@
 		output.append("<div id='memoryHistory' style='width:700px; height:300px;'></div>");
 		output.append("</div>");
 
-		output.append("<div class='col-sm-4'>");
-		output.append("<div id='memoryInstant' style='width:250px; height:250px;'></div>");
+		output.append("<div class='col-sm-2'>");
+		output.append("<div id='committedMemoryInstant' style='width:120px; height:300px;'></div>");
+		output.append("</div>");
+
+		output.append("<div class='col-sm-2'>");
+		output.append("<div id='usedMemoryInstant' style='width:120px; height:300px;'></div>");
 		output.append("</div>");
 		
 		output.append("</div>");
@@ -48,20 +52,24 @@
 
 <link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/custom/jqplot.BytesTickFormatter.js"></script>
+
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/custom/jqplot.bytesTickFormatter.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
-		<div class="panel-heading"><h3>Informaci&oacute;n de los &uacute;ltimos ${timeRange} segundos</h3></div>
+		<div class="panel-heading"><h3>Monitor de sistema</h3></div>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<%=bodyContent%>
@@ -73,13 +81,21 @@
 	
 	$.jqplot.config.enablePlugins = true;
 
+	function printObject(o) {
+		  var out = '';
+		  for (var p in o) {
+		    out += p + ': ' + o[p] + '\n';
+		  }
+		  return out;
+		}
+	
+	// Alimentador de información de la gráfica de distribución de memoria en el tiempo.
 	var memoryHistoryDataRenderer = function(url, plot, options)
 	{
 		var ret = null;
-		
 		var xhr = new XMLHttpRequest();
 		
-		xhr.open("POST", "<%=servicesURL%>/system/memory", false);
+		xhr.open("POST", options["url"], false);
 		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 		// Envío.
 		xhr.send(JSON.stringify({period:${period}, timeRange:${timeRange}}));
@@ -94,14 +110,12 @@
 		       jsonResponse["data"]["UsedHeapMemory"],
 		       jsonResponse["data"]["UsedNonHeapMemory"]
 		       ];
-
+	
 	    return ret;
 	};
-
-	// The url for our json data
-	var memoryHistoryURL = '<%=servicesURL%>/system/memory';
 	
-	var memoryHistory = $.jqplot('memoryHistory', memoryHistoryURL, 
+	// La gráfica de distribución de memoria en el tiempo.
+	var memoryHistory = $.jqplot('memoryHistory', [], 
 	    {
 		grid: {
 			drawBorder: true,
@@ -115,28 +129,16 @@
         animateReplot: false,
         cursor: {
             zoom: true,
-            looseZoom: true,
-            showTooltip: true
+            looseZoom: false,
+            showTooltip: false
         },
         series:[
-                {
-                	showMarker:false
-                	},
-                {
-                	showMarker:false
-                	},
-                {
-                	showMarker:false
-                	},
-                {
-                	showMarker:false
-                	},
-                {
-                	showMarker:false
-                	},
-                {
-                	showMarker:false
-                	}
+                { color: '#ff1111', showMarker: false },
+                { color: '#00b3ff', showMarker: false },
+                { color: '#90d91d', showMarker: false },
+                { color: '#fcc226', showMarker: false },
+                { color: '#cffe2e', showMarker: false },
+                { color: '#9ab66e', showMarker: false }
                 ],
         axes:{
 			xaxis:{
@@ -147,36 +149,30 @@
 					angle: -30,
 					fontSize: '10pt'
 		        },
-				tickInterval:'1 minutes',
-				label:'Tiempo',
-				labelRenderer: $.jqplot.CanvasAxisLabelRenderer
-				},
+				tickInterval:'1 minutes'
+			},
 			yaxis:{
 				tickOptions: {
 					formatter: $.jqplot.BytesTickFormatter,
 					formatString:'%d',
 					fontSize: '10pt'
 		        },
-				min: 0,
-				//showTicks: false,
-				//showTickMarks: false,
-				label:'Espacio (bytes)',
-				labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+				min: 0
 			}
         },
 		dataRenderer: memoryHistoryDataRenderer,
 		dataRendererOptions: {
-			unusedOptionalUrl: memoryHistoryURL
+			url: '<%=servicesURL%>/system/memory'
 		},
         legend: {
 			renderer: jQuery.jqplot.EnhancedLegendRenderer,
             labels: [
-                     'TotalMaxMemory',
-                     'TotalInitMemory', 
-                     'TotalCommitted',
-                     'TotalUsedMemory',
-                     'UsedHeapMemory',
-                     'UsedNonHeapMemory'
+                     'M&aacute;xima',
+                     'Inicial', 
+                     'Reservada',
+                     'Total Usada',
+                     'Heap',
+                     'NonHeap'
                      ],
 			show: true,
 			showLabels: true,
@@ -188,69 +184,164 @@
 			border: 'none'
 		}
     });
+	
+	// Alimentador de información de la gráfica de distribución de memoria dipsonible instantanea.
+	var committedMemoryInstantDataRenderer = function(url, plot, options)
+	{
+		var ret = null;
+		var xhr = new XMLHttpRequest();
 
-	/*
-	var memoryInstant = jQuery.jqplot ('memoryInstant', [], 
-	    { 
+		xhr.open("POST", options["url"], false);
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		// Envío.
+		xhr.send(JSON.stringify({period:null, timeRange:null}));
+		
+		var jsonResponse = JSON.parse(xhr.responseText);
+		
+		var committedMemory = parseInt(jsonResponse["data"]["TotalCommitted"], 10); 
+		var freeMemory = parseInt(jsonResponse["data"]["TotalMaxMemory"], 10)-committedMemory;
+		
+		ret = [[committedMemory], [freeMemory]];
+		
+	    return ret;
+	};
+
+	var committedMemoryInstant = jQuery.jqplot ('committedMemoryInstant', [], {
 		grid: {
-			drawBorder: false,
-			drawGridlines: false,
+			drawBorder: true,
+			drawGridlines: true,
 			background: '#ffffff',
-			shadow: false
+			shadow: true
 		},
-		axesDefaults: {
-             
-        },
-        animate: true,
-        // Will animate plot on calls to plot1.replot({resetAxes:true})
-        animateReplot: true,
-        cursor: {
-            show: true,
-            zoom: true,
-            looseZoom: true,
-            showTooltip: false
-        },
-        seriesDefaults: {
-				trendline: {
-					show: true
-					},
-				shadow: false,
-				// Make this a pie chart.
-				renderer: jQuery.jqplot.PieRenderer,
-				rendererOptions: {
-					// Put data labels on the pie slices.
-					// Turn off filling of slices.
-					fill: true,
-					showDataLabels: true,
-					// Add a margin to seperate the slices.
-					sliceMargin: 4,
-					// stroke the slices with a little thicker line.
-					lineWidth: 5
+		stackSeries: true,
+	    captureRightClick: true,
+	    seriesDefaults:{
+	      renderer:$.jqplot.BarRenderer,
+	      rendererOptions: {
+	          barMargin: 30,
+	          highlightMouseDown: true   
+	      },
+	      pointLabels: {show: true}
+	    },
+	    animate: true,
+        animateReplot: false,
+        series:[
+                { color: '#90d91d', showMarker: false },
+                { color: '#c5e3f3', showMarker: false }
+                ],
+	    axes: {
+	    	xaxis: {
+				renderer: $.jqplot.CategoryAxisRenderer,
+				ticks: ["Disponible"],
+				tickOptions: {
+					fontSize: '10pt'
 				}
 			},
-		legend: {
-				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['heap', 'non-heap'],
-				show: true,
-				showLabels: true,
-				showSwatches: false,
-				rowSpacing: '10px',
-				marginLeft: '-150px',
-				placement: 'outsideGrid',
-				location: 'e',
-				border: 'none'
+  			yaxis: {
+				tickOptions: {
+					formatter: $.jqplot.BytesTickFormatter,
+					formatString:'%d',
+					fontSize: '10pt'
+				},
+				padMin: 0,
+				min: 0
+			}
+	    },
+	    legend: {
+	      show: false,
+	    },
+	    dataRenderer: committedMemoryInstantDataRenderer,
+		dataRendererOptions: {
+			url: '<%=servicesURL%>/system/memory'
 			}
 		});
-	*/
+	
+	// Alimentador de información de la gráfica de distribución de memoria usada instantanea.
+	var usedMemoryInstantDataRenderer = function(url, plot, options)
+	{
+		var ret = null;
+		var xhr = new XMLHttpRequest();
 
+		xhr.open("POST", options["url"], false);
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		// Envío.
+		xhr.send(JSON.stringify({period:null, timeRange:null}));
+		
+		var jsonResponse = JSON.parse(xhr.responseText);
+		
+		var committedMemory = parseInt(jsonResponse["data"]["TotalCommitted"], 10); 
+		var usedHeapMemory = parseInt(jsonResponse["data"]["UsedHeapMemory"], 10); 
+		var usedNonHeapMemory = parseInt(jsonResponse["data"]["UsedNonHeapMemory"], 10); 
+		var freeMemory = committedMemory - usedHeapMemory - usedNonHeapMemory;
+		
+		ret = [[usedNonHeapMemory], [usedHeapMemory], [freeMemory]];
+		
+	    return ret;
+	};
+
+	var usedMemoryInstant = jQuery.jqplot ('usedMemoryInstant', [], {
+		grid: {
+			drawBorder: true,
+			drawGridlines: true,
+			background: '#ffffff',
+			shadow: true
+		},
+		stackSeries: true,
+	    captureRightClick: true,
+	    seriesDefaults:{
+	      renderer:$.jqplot.BarRenderer,
+	      rendererOptions: {
+	          barMargin: 30,
+	          highlightMouseDown: true   
+	      },
+	      pointLabels: {show: true}
+	    },
+	    animate: true,
+        animateReplot: false,
+        series:[
+                { color: '#cffe2e', showMarker: false },
+                { color: '#9ab66e', showMarker: false },
+                { color: '#c5e3f3', showMarker: false }
+                ],
+	    axes: {
+	    	xaxis: {
+				renderer: $.jqplot.CategoryAxisRenderer,
+				ticks: ["Usada"],
+				tickOptions: {
+					fontSize: '10pt'
+				}
+			},
+  			yaxis: {
+				tickOptions: {
+					formatter: $.jqplot.BytesTickFormatter,
+					formatString:'%d',
+					fontSize: '10pt'
+				},
+				padMin: 0,
+				min: 0
+			}
+	    },
+	    legend: {
+	      show: false,
+	    },
+	    dataRenderer: usedMemoryInstantDataRenderer,
+		dataRendererOptions: {
+			url: '<%=servicesURL%>/system/memory'
+			}
+		});
+
+	// Refresco de la información de las gráficas.
 	function chartReplots()
 	{
-		var series = memoryHistoryDataRenderer(memoryHistoryURL, null, null);
-		var options = { data: series };
+		// Historial de memoria.
+		memoryHistory.replot({ data: [] });
 
-
-		memoryHistory.replot( options );
+		// Instante de memoria disponible.
+		committedMemoryInstant.replot({ data: [] });
+		
+		// Instante de memoria usada.
+		usedMemoryInstant.replot({ data: [] });
 	}
-	
+
 	var dummyVar = setInterval(function() { chartReplots(); }, 1000);
 </script>
