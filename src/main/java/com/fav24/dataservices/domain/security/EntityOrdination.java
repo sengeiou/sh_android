@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Clase que define la sección Ordination de la definición de las políticas de acceso de una entidad.
  */
-public class Ordination {
+public class EntityOrdination {
 
 	private AbstractList<EntityOrderAttribute> order;
 	private Map<String, EntityOrderAttribute> entityOrderByAlias;
@@ -19,7 +19,7 @@ public class Ordination {
 	/**
 	 * Contructor por defecto.
 	 */
-	public Ordination() {
+	public EntityOrdination() {
 		order = new ArrayList<EntityOrderAttribute>();
 		entityOrderByAlias = new HashMap<String, EntityOrderAttribute>();
 	}
@@ -29,7 +29,7 @@ public class Ordination {
 	 * 
 	 * @param ordination Objeto referencia a copiar.
 	 */
-	public Ordination(Ordination ordination) {
+	public EntityOrdination(EntityOrdination ordination) {
 
 		if (ordination.order != null) {
 

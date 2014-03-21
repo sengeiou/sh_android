@@ -37,7 +37,7 @@ import com.fav24.dataservices.domain.security.EntityFilter;
 import com.fav24.dataservices.domain.security.EntityKey;
 import com.fav24.dataservices.domain.security.EntityOrderAttribute;
 import com.fav24.dataservices.domain.security.EntityOrderAttribute.Order;
-import com.fav24.dataservices.domain.security.Ordination;
+import com.fav24.dataservices.domain.security.EntityOrdination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
@@ -359,7 +359,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	private StringBuilder getDefaultOrdinationString(Ordination ordination) throws ServerException {
+	private StringBuilder getDefaultOrdinationString(EntityOrdination ordination) throws ServerException {
 
 		StringBuilder resultingOrdination = null;
 

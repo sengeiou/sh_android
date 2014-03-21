@@ -4,13 +4,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.fav24.dataservices.domain.security.EntityData;
-import com.fav24.dataservices.domain.security.Ordination;
+import com.fav24.dataservices.domain.security.EntityOrdination;
 
 
 /**
  * Clase que define la sección Ordination de la definición de las políticas de acceso de una entidad.
  */
-public class OrdinationDOM extends Ordination {
+public class EntityOrdinationDOM extends EntityOrdination {
 
 
 	/**
@@ -19,7 +19,7 @@ public class OrdinationDOM extends Ordination {
 	 * @param node Nodo de inicio de la ordenación.
 	 * @param data Sección data de la definición de polícitas. 
 	 */
-	public OrdinationDOM(Node node, EntityData data) {
+	public EntityOrdinationDOM(Node node, EntityData data) {
 
 		NodeList nodes_i = node.getChildNodes();
 

@@ -52,7 +52,7 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 					setFilters(new EntityFiltersDOM(node_i));
 				}
 				else if ("Ordination".equals(nodeName)) {
-					setOrdination(new OrdinationDOM(node_i, getData()));
+					setOrdination(new EntityOrdinationDOM(node_i, getData()));
 				}
 			}
 		}

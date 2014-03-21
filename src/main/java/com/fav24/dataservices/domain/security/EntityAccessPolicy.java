@@ -74,7 +74,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	private EntityData data;
 	private EntityKeys keys;
 	private EntityFilters filters;
-	private Ordination ordination;
+	private EntityOrdination ordination;
 	private Boolean onlyByKey;
 	private Boolean onlySpecifiedFilters;
 	private Long maxPageSize;
@@ -108,7 +108,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
 		filters = entityAccessPolicy.filters == null ? null : new EntityFilters(entityAccessPolicy.filters);
-		ordination = entityAccessPolicy.ordination == null ? null : new Ordination(entityAccessPolicy.ordination);
+		ordination = entityAccessPolicy.ordination == null ? null : new EntityOrdination(entityAccessPolicy.ordination);
 		onlyByKey = entityAccessPolicy.onlyByKey == null ? null : entityAccessPolicy.onlyByKey;
 		onlySpecifiedFilters = entityAccessPolicy.onlySpecifiedFilters == null ? null : entityAccessPolicy.onlySpecifiedFilters;
 		maxPageSize = entityAccessPolicy.maxPageSize == null ? null : entityAccessPolicy.maxPageSize;
@@ -226,7 +226,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 * 
 	 * @return la ordenación definida para esta entidad.
 	 */
-	public Ordination getOrdination() {
+	public EntityOrdination getOrdination() {
 		return ordination;
 	}
 	
@@ -235,7 +235,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 * 
 	 * @param ordination La ordenación a asignar.
 	 */
-	public void setOrdination(Ordination ordination) {
+	public void setOrdination(EntityOrdination ordination) {
 		this.ordination = ordination;
 	}
 
