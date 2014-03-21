@@ -8,6 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
+import com.fav24.dataservices.exception.ServerException;
 
 
 public class EntityGroupAccessPolicyDOM
@@ -20,8 +21,10 @@ public class EntityGroupAccessPolicyDOM
 	 * Construye las políticas de acceso para el grupo de entidades.
 	 * 
 	 * @param node Nodo de inicio del grupo de entidades.
+	 * 
+	 * @throws ServerException 
 	 */
-	public EntityGroupAccessPolicyDOM(Node node) {
+	public EntityGroupAccessPolicyDOM(Node node) throws ServerException {
 
 		entitiesAccessPolicies = new HashSet<EntityAccessPolicy>();
 		

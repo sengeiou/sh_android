@@ -16,6 +16,9 @@ import com.fav24.dataservices.domain.generic.KeyItem;
  */
 public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
+	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED = "AP000";
+	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE = "Fallo en el chequeo de la definición de las políticas de acceso.";
+
 	/**
 	 * Enumeración de los tipos de operaciones que existen. 
 	 */
@@ -71,6 +74,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	private EntityData data;
 	private EntityKeys keys;
 	private EntityFilters filters;
+	private Ordination ordination;
 	private Boolean onlyByKey;
 	private Boolean onlySpecifiedFilters;
 	private Long maxPageSize;
@@ -86,6 +90,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		this.data = null;
 		this.keys = null;
 		this.filters = null;
+		this.ordination = null;
 		this.onlyByKey = true;
 		this.onlySpecifiedFilters = true;
 		this.maxPageSize = 0L;
@@ -103,6 +108,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
 		filters = entityAccessPolicy.filters == null ? null : new EntityFilters(entityAccessPolicy.filters);
+		ordination = entityAccessPolicy.ordination == null ? null : new Ordination(entityAccessPolicy.ordination);
 		onlyByKey = entityAccessPolicy.onlyByKey == null ? null : entityAccessPolicy.onlyByKey;
 		onlySpecifiedFilters = entityAccessPolicy.onlySpecifiedFilters == null ? null : entityAccessPolicy.onlySpecifiedFilters;
 		maxPageSize = entityAccessPolicy.maxPageSize == null ? null : entityAccessPolicy.maxPageSize;
@@ -213,6 +219,24 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setFilters(EntityFilters filters) {
 		this.filters = filters;
+	}
+	
+	/**
+	 * Retorna la ordenación definida para esta entidad.
+	 * 
+	 * @return la ordenación definida para esta entidad.
+	 */
+	public Ordination getOrdination() {
+		return ordination;
+	}
+	
+	/**
+	 * Asigna la ordenación definida para esta entidad.
+	 * 
+	 * @param ordination La ordenación a asignar.
+	 */
+	public void setOrdination(Ordination ordination) {
+		this.ordination = ordination;
 	}
 
 	/**

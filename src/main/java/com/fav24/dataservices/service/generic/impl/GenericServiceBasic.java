@@ -87,7 +87,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	protected Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
 
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(operation.getMetadata().getEntity());
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		if (operation.getMetadata().hasKey()) {
 

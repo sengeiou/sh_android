@@ -1,6 +1,7 @@
 package com.fav24.dataservices.monitoring;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,7 +44,9 @@ public final class CpuMeter extends Thread
 	}
 
 	private static final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-
+	private static final RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+	
+	
 	private final long interval;
 	private final long threadId;
 	private final HashMap<Long, Times> history = new HashMap<Long, Times>();
@@ -53,6 +56,7 @@ public final class CpuMeter extends Thread
 	private long totalCpuTime;
 	private long totalApplicationTime;
 	private long totalSystemTime;
+	private long upTime;
 
 
 	/**
@@ -88,7 +92,9 @@ public final class CpuMeter extends Thread
 		while (!isInterrupted()) {
 
 			if (this.numSamples >= maxSamples) {
+				calculateTimes();
 				history.clear();	
+				numSamples = 0;
 			}
 
 			update();
@@ -146,24 +152,37 @@ public final class CpuMeter extends Thread
 		}
 	}
 
+
+	/**
+	 * Calcula los tiempos de CPU.
+	 */
+	private void calculateTimes() {
+
+		final Collection<Times> hist = history.values();
+
+		if (hist.size() > 0) {
+
+			long totalCpuTime = 0L;
+			long totalApplicationTime = 0L;
+
+			for (Times times : hist) {
+				totalCpuTime += times.endCpuTime - times.startCpuTime;
+				totalApplicationTime += times.endApplicationTime - times.startApplicationTime;
+			}
+
+			this.totalCpuTime = totalCpuTime;
+			this.totalApplicationTime = totalApplicationTime;
+			this.totalSystemTime = totalCpuTime - totalApplicationTime;
+			this.upTime = runtimeMXBean.getUptime() * 1000000L;
+		}
+	}
+
 	/**
 	 * Retorna el tiempo total de CPU en nanosegundos.
 	 * 
 	 * @return el tiempo total de CPU en nanosegundos.
 	 */
 	public long getTotalCpuTime() {
-
-		final Collection<Times> hist = history.values();
-		long time = 0L;
-
-		if (hist.size() > 0) {
-
-			for (Times times : hist) {
-				time += times.endCpuTime - times.startCpuTime;
-			}
-
-			totalCpuTime = time;
-		}
 
 		return totalCpuTime;
 	}
@@ -175,18 +194,6 @@ public final class CpuMeter extends Thread
 	 */
 	public long getTotalApplicationTime() {
 
-		final Collection<Times> hist = history.values();
-		long time = 0L;
-
-		if (hist.size() > 0) {
-
-			for (Times times : hist) {
-				time += times.endApplicationTime - times.startApplicationTime;
-			}
-
-			totalApplicationTime = time;
-		}
-
 		return totalApplicationTime;
 	}
 
@@ -197,11 +204,9 @@ public final class CpuMeter extends Thread
 	 */
 	public long getTotalSystemTime() {
 
-		totalSystemTime = getTotalCpuTime() - getTotalApplicationTime();
-
 		return totalSystemTime;
 	}
-
+	
 	/**
 	 * Retorna la información de la actividad de la CPU.
 	 *  
@@ -211,18 +216,18 @@ public final class CpuMeter extends Thread
 
 		NavigableMap<String, Double> systemCpuActivity = new TreeMap<String, Double>();
 
-		double totalCpuTime = getTotalCpuTime();
-		double totalApplicationTime = getTotalApplicationTime();
-		double totalSystemTime = totalCpuTime - totalApplicationTime;
-
 		systemCpuActivity.put(PEAK_THREAD_COUNT, Double.valueOf(threadMXBean.getPeakThreadCount()));
 		systemCpuActivity.put(TOTAL_STARTED_THREAD_COUNT, Double.valueOf(threadMXBean.getTotalStartedThreadCount()));
 		systemCpuActivity.put(TOTAL_DEAMON_THREAD_COUNT, Double.valueOf(threadMXBean.getDaemonThreadCount()));
-
 		systemCpuActivity.put(NUMBER_OF_THREADS, Double.valueOf(history.size()));
-		systemCpuActivity.put(SYSTEM_CPU_LOAD, (totalSystemTime/totalCpuTime) * 100);
-		systemCpuActivity.put(APPLICATION_CPU_LOAD, (totalApplicationTime/totalCpuTime) * 100);
-		systemCpuActivity.put(CPU_LOAD, 100D);
+
+		double systemCpuLoad = upTime == 0 ? 0 : (totalSystemTime/upTime) * 100;
+		double applicationCpuLoad = upTime == 0 ? 0 : (totalApplicationTime/upTime) * 100;
+		double totalCpuLoad = upTime == 0 ? 0 : (totalCpuTime/upTime) * 100;
+
+		systemCpuActivity.put(SYSTEM_CPU_LOAD, systemCpuLoad);
+		systemCpuActivity.put(APPLICATION_CPU_LOAD, applicationCpuLoad);
+		systemCpuActivity.put(CPU_LOAD, totalCpuLoad);
 
 		return systemCpuActivity;
 	}

@@ -63,6 +63,23 @@ public class EntityData {
 
 		return null;
 	}
+	
+	/**
+	 * Retorna true o false en función de si el atributo correspondiente al alias indicado existe o no.
+	 * 
+	 * @param alias Alias del atributo a comprobar.
+	 * 
+	 * @return true o false en función de si el atributo correspondiente al alias indicado existe o no.
+	 */
+	public boolean hasAttribute(String alias) {
+		
+		if (alias != null) {
+			
+			return dataAttributeByAlias.containsKey(alias);
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Retorna el atributo correspondiente al nombre indicado.

@@ -29,6 +29,7 @@
 			<xsd:element name="Data" type="TData"/>
 			<xsd:element name="Keys" type="TKeys"/>
 			<xsd:element name="Filters" type="TFilters" minOccurs="0"/>
+			<xsd:element name="Ordination" type="TOrdination" minOccurs="0"/>
 		</xsd:sequence>
 		<xsd:attribute name="AllowedOperations" type="TOperationList" use="optional" default="Retrieve"/>
 		<xsd:attribute name="OnlyByKey" type="xsd:boolean" use="optional" default="true"/>
@@ -82,6 +83,20 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- -->
+	<xsd:complexType name="TOrdination">
+		<xsd:sequence>
+			<xsd:element name="Attribute" type="TOrdinationAttribute" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TOrdinationAttribute">
+		<xsd:simpleContent>
+			<xsd:extension base="TAttribute">
+				<xsd:attribute name="Order" type="TOrder" use="optional" default="Ascending"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- -->
 	<xsd:simpleType name="TDirection">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Input"/>
@@ -101,6 +116,13 @@
 			<xsd:enumeration value="Update"/>
 			<xsd:enumeration value="Delete"/>
 			<xsd:enumeration value="UpdateCreate"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- -->
+	<xsd:simpleType name="TOrder">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Ascending"/>
+			<xsd:enumeration value="Descending"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>

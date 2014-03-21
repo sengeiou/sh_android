@@ -44,7 +44,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 			while (entityAccessPolicies.hasNext()) {
 
 				EntityAccessPolicy entityAccessPolicy = entityAccessPolicies.next();
-				EntityAccessPolicy currentEntityAccessPolicy = AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entityAccessPolicy.getName().getAlias());
+				EntityAccessPolicy currentEntityAccessPolicy = AccessPolicy.getEntityPolicy(entityAccessPolicy.getName().getAlias());
 
 				if (currentEntityAccessPolicy != null) {
 					entityAccessPolicy.getName().setName(currentEntityAccessPolicy.getName().getName());
@@ -89,6 +89,6 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	@Override
 	public EntityAccessPolicy getPublicEntityPolicy(String entity) {
 
-		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(entity) : null;
+		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getEntityPolicy(entity) : null;
 	}
 }

@@ -22,13 +22,13 @@ public class AccessPolicyDOM extends AccessPolicy
 		InputStream isAccessPolicyXSD = AccessPolicyDOM.class.getResourceAsStream("AccessPolicy.xsd");
 
 		try {
-			
+
 			if (isAccessPolicyXSD == null)
 				throw new ServerException("No se ha podido localizar el esquema para la interpretación de políticas de acceso.");
 
 			accessPolicyDOM.setInputSchemaStream(isAccessPolicyXSD);
 			accessPolicyDOM.configureDOM();
-			
+
 		} catch (ServerException e) {
 			throw new RuntimeException(e);
 		}
@@ -64,7 +64,7 @@ public class AccessPolicyDOM extends AccessPolicy
 
 		readPolicies(document);
 	}
-	
+
 	/**
 	 * Creación de la estructura de políticas de acceso, a partir de un stream de estrada.
 	 * 
@@ -73,10 +73,10 @@ public class AccessPolicyDOM extends AccessPolicy
 	 * @throws ServerException
 	 */
 	public AccessPolicyDOM(InputStream accessPoliciesStream) throws ServerException { 
-		
+
 		//Información relativa al contenido del fichero de políticas.
 		Document document = accessPolicyDOM.generateDocument(accessPoliciesStream);
-		
+
 		readPolicies(document);
 	}
 
@@ -84,11 +84,13 @@ public class AccessPolicyDOM extends AccessPolicy
 	 * Lee, interpreta y construye las estructuras de políticas de acceso contenidas en el documento indicado.
 	 * 
 	 * @param document Documento del que se obtienen las políticas de acceso.
+	 * 
+	 * @throws ServerException 
 	 */
-	private void readPolicies(Document document) {
+	private void readPolicies(Document document) throws ServerException {
 
 		NodeList nodes_i = document.getChildNodes();
-		
+
 		for(int i=0; i < nodes_i.getLength(); i++) {
 
 			Node node_i = nodes_i.item(i);
@@ -108,18 +110,20 @@ public class AccessPolicyDOM extends AccessPolicy
 	 * Lee, interpreta y construye las estructuras de políticas de acceso contenidas en el nodo indicado.
 	 * 
 	 * @param node Nodo del que se obtienen las políticas de acceso.
+	 * 
+	 * @throws ServerException 
 	 */
-	private void readAcessPolicy(Node node) {
-		
+	private void readAcessPolicy(Node node) throws ServerException {
+
 		Element element = (Element)node;
-		
+
 		this.version = element.getAttribute("Version");
 		this.description = element.getAttribute("Description");
-		
+
 		NodeList nodes_i = node.getChildNodes();
-		
+
 		entityGroupsAccessPolicies = new ArrayList<EntityGroupAccessPolicyDOM>();
-		
+
 		for(int i=0; i < nodes_i.getLength(); i++) {
 
 			Node node_i = nodes_i.item(i);
@@ -129,26 +133,28 @@ public class AccessPolicyDOM extends AccessPolicy
 				String nodeName = node_i.getNodeName();
 
 				if ("Entities".equals(nodeName)) {
-					
+
 					readEntityGroups(node_i);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Lee, interpreta y construye las estructuras de las entidades contenidas en el nodo indicado.
 	 * 
 	 * @param node Nodo del que se obtienen las entidades y grupos de entidades.
+	 * 
+	 * @throws ServerException 
 	 */
-	private void readEntityGroups(Node node) {
-		
+	private void readEntityGroups(Node node) throws ServerException {
+
 		EntityGroupAccessPolicyDOM group = new EntityGroupAccessPolicyDOM(node);
 		entityGroupsAccessPolicies.add(group);
-		
+
 		mergeAccesPolicy(group.getEntitiesAccessPolicies());
 	}
-	
+
 	/**
 	 * Retorna la versión de data-services para la que fué creado esta configuración de políticas de acceso.
 	 *  

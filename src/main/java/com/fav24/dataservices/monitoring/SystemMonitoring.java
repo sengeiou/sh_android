@@ -84,11 +84,11 @@ public class SystemMonitoring {
 		}
 	}
 
-	MemoryMeter memoryMeter;
+	private MemoryMeter memoryMeter;
 	/* Almacenamiento de la actividad de memoria durante (como máximo) las últimas 24 horas.*/
 	private AbstractList<MonitorSample> systemMemoryActivityTrace;
 
-	CpuMeter cpuMeter;
+	private CpuMeter cpuMeter;
 	/* Almacenamiento de la actividad de la CPU durante (como máximo) las últimas 24 horas.*/
 	private AbstractList<MonitorSample> systemCpuActivityTrace;
 
@@ -113,6 +113,8 @@ public class SystemMonitoring {
 		secondResolutionTimer = new Timer("System Second Monitor");
 		minuteResolutionTimer = new Timer("System Minute Monitor");
 
+		cpuMeter.start();
+		
 		secondResolutionTimer.schedule(new TimerTask() {
 
 			public void run() {

@@ -111,25 +111,6 @@ public class AccessPolicy extends BaseDomain {
 	}
 
 	/**
-	 * Retorna las políticas de la entidad con el alias indicado.
-	 * 
-	 * @param alias Alias de la entidad de la que se desea obtener sus políticas.
-	 * 
-	 * @return las políticas de la entidad con el alias indicado.
-	 */
-	public EntityAccessPolicy getEntityPolicy(String alias) {
-
-		EntityAccessPolicy entityAccessPolicy = null;
-
-		if (accessPoliciesByAlias != null && alias != null) {
-
-			entityAccessPolicy = accessPoliciesByAlias.get(alias);
-		}
-
-		return entityAccessPolicy;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -365,6 +346,22 @@ public class AccessPolicy extends BaseDomain {
 			if (entityAccessPolicy != null) {
 				return entityAccessPolicy.getName().getName();
 			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retorna las políticas activas de la entidad con el alias indicado.
+	 * 
+	 * @param alias Alias de la entidad de la que se desea obtener sus políticas.
+	 * 
+	 * @return las políticas activas de la entidad con el alias indicado.
+	 */
+	public static final EntityAccessPolicy getEntityPolicy(String entityAlias) {
+
+		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null) {
+			return currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
 		}
 
 		return null;

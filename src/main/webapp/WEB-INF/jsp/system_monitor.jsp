@@ -47,7 +47,7 @@
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<p>Informaci&oacute;n y estado de la instancia<p/>
-			<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryMonitor();" checked> Freeze</input>
+			<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryMonitor();" checked> Congelar</input>
 			<!-- Memoria -->
 			<div class='panel panel-info'>
 				<div class='panel-heading'>Distribuci&oacute;n y consumo de memoria</div>
@@ -65,7 +65,7 @@
 					</div>
 				</div>
 			</div>
-			<input id="cpuFreeze" type="checkbox" onClick="freezeCPUMonitor();" checked> Freeze</input>
+			<input id="cpuFreeze" type="checkbox" onClick="freezeCPUMonitor();" checked> Congelar</input>
 			<!-- Procesador -->
 			<div class='panel panel-info'>
 				<div class='panel-heading'>Uso del procesador</div>
@@ -200,8 +200,8 @@
 		
 		var jsonResponse = JSON.parse(xhr.responseText);
 		
-		var committedMemory = parseInt(jsonResponse["data"]["TotalCommitted"], 10); 
-		var freeMemory = parseInt(jsonResponse["data"]["TotalMaxMemory"], 10)-committedMemory;
+		var committedMemory = parseFloat(jsonResponse["data"]["TotalCommitted"], 10); 
+		var freeMemory = parseFloat(jsonResponse["data"]["TotalMaxMemory"], 10)-committedMemory;
 		
 		ret = [[committedMemory], [freeMemory]];
 		
@@ -271,9 +271,9 @@
 		
 		var jsonResponse = JSON.parse(xhr.responseText);
 		
-		var committedMemory = parseInt(jsonResponse["data"]["TotalCommitted"], 10); 
-		var usedHeapMemory = parseInt(jsonResponse["data"]["UsedHeapMemory"], 10); 
-		var usedNonHeapMemory = parseInt(jsonResponse["data"]["UsedNonHeapMemory"], 10); 
+		var committedMemory = parseFloat(jsonResponse["data"]["TotalCommitted"], 10); 
+		var usedHeapMemory = parseFloat(jsonResponse["data"]["UsedHeapMemory"], 10); 
+		var usedNonHeapMemory = parseFloat(jsonResponse["data"]["UsedNonHeapMemory"], 10); 
 		var freeMemory = committedMemory - usedHeapMemory - usedNonHeapMemory;
 		
 		ret = [[usedNonHeapMemory], [usedHeapMemory], [freeMemory]];
@@ -356,6 +356,8 @@
 		       jsonResponse["data"]["CPULoad"]
 		       ];
 	
+		//alert(printObject(jsonResponse["data"]["SystemCPULoad"]));
+		
 	    return ret;
 	};
 	
@@ -400,10 +402,6 @@
 			},
 			yaxis:{
 				tickOptions: {
-					/*
-					formatter: $.jqplot.BytesTickFormatter,
-					formatString:'%d',
-					*/
 					fontSize: '10pt'
 		        },
 				min: 0

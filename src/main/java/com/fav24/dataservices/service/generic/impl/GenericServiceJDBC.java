@@ -35,6 +35,9 @@ import com.fav24.dataservices.domain.security.EntityDataAttribute;
 import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.domain.security.EntityFilter;
 import com.fav24.dataservices.domain.security.EntityKey;
+import com.fav24.dataservices.domain.security.EntityOrderAttribute;
+import com.fav24.dataservices.domain.security.EntityOrderAttribute.Order;
+import com.fav24.dataservices.domain.security.Ordination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
@@ -332,7 +335,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 			Filter currentFilterSet = filterSet.getFilters().get(0);
 			resultingFilterSet.append(getFilterSetString(entity, currentFilterSet, columns, values));
-			for (int i=1; i<filterSet.getFilterItems().size(); i++) {
+			for (int i=1; i<filterSet.getFilters().size(); i++) {
 
 				currentFilterSet = filterSet.getFilters().get(i);
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
@@ -345,6 +348,45 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		return resultingFilterSet;
 	}
+
+	/**
+	 * Retorna una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
+	 * 
+	 * @param entity Nombre de la entidad a la que pertenece la lista de campos filtrado.
+	 * @param filterSet Conjunto de filtros a resolver.
+	 * @param columns Lista en donde se retornará el conjunto de columnas de filtrado en el mismo orden de resolución.
+	 * @param values Lista en donde se retornará el conjunto de valores de las columnas clave en el mismo orden de resolución.
+	 * 
+	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
+	 */
+	private StringBuilder getDefaultOrdinationString(Ordination ordination) throws ServerException {
+
+		StringBuilder resultingOrdination = null;
+
+		for(EntityOrderAttribute orderAttribute : ordination.getOrder()) {
+
+			if (resultingOrdination == null) {
+				resultingOrdination = new StringBuilder();
+			}
+			else {
+				resultingOrdination.append(", ");
+			}
+
+			resultingOrdination.append(orderAttribute.getName());
+
+			if (orderAttribute.getOrder() == Order.ASCENDING) {
+
+				resultingOrdination.append(" ASC");
+			}
+			else if (orderAttribute.getOrder() == Order.DESCENDING) {
+
+				resultingOrdination.append(" DESC");
+			}
+		}
+
+		return resultingOrdination;
+	}
+
 
 	/**
 	 * Método para la conversión de tipos de datos.
@@ -400,7 +442,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		final StringBuilder queryWhere = new StringBuilder();
 		final StringBuilder queryLimit = new StringBuilder();
 
-		final EntityJDBCInformation entityInformation = entitiesInformation.get(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
 
 		querySelect.append("SELECT ");
 
@@ -445,6 +489,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
 		}
 
+		if (entityAccessPolicy.getOrdination() != null) {
+
+			queryWhere.append(" ORDER BY ").append(getDefaultOrdinationString(entityAccessPolicy.getOrdination()));
+		}
+
 		/* 
 		 *  Tratamiento del intervalo de datos a retornar.
 		 *  
@@ -453,7 +502,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		 *  Esta sintaxis es válida para: MySQL, MariaDB, PostgreSQL y hSQL.
 		 *  No és válida para: Oracle y SQLServer.
 		 */
-		Long items = operation.getMetadata().getItems() == null ? AccessPolicy.getCurrentAccesPolicy().getEntityPolicy(operation.getMetadata().getEntity()).getMaxPageSize() : operation.getMetadata().getItems();
+		Long items = operation.getMetadata().getItems() == null ? entityAccessPolicy.getMaxPageSize() : operation.getMetadata().getItems();
 		Long offset = operation.getMetadata().getOffset();
 
 		if ((items != null && items != 0) || (offset != null && offset != 0)) {
@@ -595,7 +644,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					}
 
 					// Error, hay campos que no se han podido encontrar el la tabla.
-					if (entityJDBCInformation.dataFields.size() != entityAccessPolicy.getData().getData().size()) {
+					if (entityJDBCInformation.dataFields.size() < entityAccessPolicy.getData().getData().size()) {
 
 						StringBuilder lostFields = new StringBuilder();
 
@@ -895,6 +944,31 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 					if (lostFilterFields != null) {
 						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas de filtrado " + lostFilterFields + " para la tabla "  + table + ".");
+					}
+				}
+
+				// Atributos de las ordenaciones de la entidad.
+				if (entityAccessPolicy.getOrdination() != null && entityAccessPolicy.getOrdination().getOrder().size() > 0) {
+
+					AbstractList<EntityOrderAttribute> order = entityAccessPolicy.getOrdination().getOrder();
+
+					StringBuilder illegalAttributes = null;
+
+					for(EntityOrderAttribute orderAttribute : order) {
+
+						if (!entityAccessPolicy.getData().hasAttribute(orderAttribute.getAlias())) {
+
+							if (illegalAttributes == null) {
+								illegalAttributes = new StringBuilder(orderAttribute.getAlias());
+							}
+							else {
+								illegalAttributes.append(", ").append(orderAttribute.getAlias());	
+							}
+						}
+					}
+
+					if (illegalAttributes != null) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han definido los atributos correspondientes en la sección de datos, para los atributos de ordenación <" + illegalAttributes + "> de la entidad "  + entityAccessPolicy.getName().getAlias() + ".");
 					}
 				}
 			}
