@@ -402,9 +402,11 @@
 			},
 			yaxis:{
 				tickOptions: {
+					formatString:'%.2f\%',
 					fontSize: '10pt'
 		        },
 				min: 0
+				//max: 100
 			}
         },
 		dataRenderer: cpuHistoryDataRenderer,

@@ -114,7 +114,7 @@ public class SystemMonitoring {
 		minuteResolutionTimer = new Timer("System Minute Monitor");
 
 		cpuMeter.start();
-		
+
 		secondResolutionTimer.schedule(new TimerTask() {
 
 			public void run() {
@@ -268,17 +268,20 @@ public class SystemMonitoring {
 
 		synchronized(monitorSampleData) {
 
-			long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
-			long timeEdge = lastCapturedSample - timeRange;
+			if (monitorSampleData.size() > 0) {
 
-			long lastSelectedSampleTime = Long.MAX_VALUE;
-			for(MonitorSample monitorSample : monitorSampleData) {
+				long lastCapturedSample = monitorSampleData.get(monitorSampleData.size() - 1).time;
+				long timeEdge = lastCapturedSample - timeRange;
 
-				if (monitorSample.time > timeEdge) {
+				long lastSelectedSampleTime = Long.MAX_VALUE;
+				for(MonitorSample monitorSample : monitorSampleData) {
 
-					if (monitorSample.time >= lastSelectedSampleTime + period) {
-						lastSelectedSampleTime = monitorSample.time;
-						timeSegment.add(monitorSample);
+					if (monitorSample.time > timeEdge) {
+
+						if (monitorSample.time >= lastSelectedSampleTime + period) {
+							lastSelectedSampleTime = monitorSample.time;
+							timeSegment.add(monitorSample);
+						}
 					}
 				}
 			}

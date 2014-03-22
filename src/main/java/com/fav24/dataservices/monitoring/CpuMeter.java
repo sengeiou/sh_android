@@ -1,7 +1,6 @@
 package com.fav24.dataservices.monitoring;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,10 +24,12 @@ public final class CpuMeter extends Thread
 	public class Times {
 
 		public long id;
-		public long startCpuTime;
-		public long startApplicationTime;
-		public long endCpuTime;
-		public long endApplicationTime;
+		public long startSampleTime;
+		public long endSampleTime;
+		public long previousCpuTime;
+		public long previousApplicationTime;
+		public long currentCpuTime;
+		public long currentApplicationTime;
 
 		public long getTotalUserTime() {
 
@@ -36,7 +37,7 @@ public final class CpuMeter extends Thread
 			long time = 0L;
 
 			for (Times times : hist) {
-				time += times.endApplicationTime - times.startApplicationTime;
+				time += times.currentApplicationTime - times.previousApplicationTime;
 			}
 
 			return time;
@@ -44,19 +45,15 @@ public final class CpuMeter extends Thread
 	}
 
 	private static final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-	private static final RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-	
-	
+
 	private final long interval;
 	private final long threadId;
 	private final HashMap<Long, Times> history = new HashMap<Long, Times>();
 
-	private long numSamples;
-	private final long maxSamples;
 	private long totalCpuTime;
 	private long totalApplicationTime;
 	private long totalSystemTime;
-	private long upTime;
+	private long measureTime;
 
 
 	/**
@@ -64,7 +61,7 @@ public final class CpuMeter extends Thread
 	 */
 	public CpuMeter() {
 
-		this(100L);
+		this(300L);
 	}
 
 	/** 
@@ -77,7 +74,6 @@ public final class CpuMeter extends Thread
 		super("Thread time monitor");
 
 		this.interval = interval;
-		this.maxSamples = 1000L / interval; // Para saber el número de medidas a tener en cuenta en 1 segundo.
 
 		threadId = getId();
 
@@ -91,15 +87,7 @@ public final class CpuMeter extends Thread
 
 		while (!isInterrupted()) {
 
-			if (this.numSamples >= maxSamples) {
-				calculateTimes();
-				history.clear();	
-				numSamples = 0;
-			}
-
 			update();
-
-			this.numSamples++;
 
 			try {
 				sleep(interval); 
@@ -116,6 +104,31 @@ public final class CpuMeter extends Thread
 	private void update() {
 
 		final long[] ids = threadMXBean.getAllThreadIds();
+
+		// Se eliminan del histórico los threads desaparecidos.
+		Long []threadIds = new Long[history.size()]; 
+		history.keySet().toArray(threadIds);
+		
+		for (long threadId : threadIds) {
+			
+			boolean found = false;
+			for (long id : ids) {
+				if (threadId == id) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				history.remove(threadId);
+			}
+		}
+		
+		long totalCpuTime = 0L;
+		long totalApplicationTime = 0L;
+
+		long measureStartTime = Long.MAX_VALUE;
+		long measureEndTime = 0;
 
 		for (long id : ids) {
 
@@ -138,43 +151,40 @@ public final class CpuMeter extends Thread
 
 				times = new Times();
 				times.id = id;
-				times.startCpuTime = cpu;
-				times.startApplicationTime = application;
-				times.endCpuTime = cpu;
-				times.endApplicationTime = application;
+				times.startSampleTime = System.nanoTime();
+				times.endSampleTime = System.nanoTime();
+				times.previousCpuTime = cpu;
+				times.previousApplicationTime = application;
+				times.currentCpuTime = cpu;
+				times.currentApplicationTime = application;
 				history.put(id, times);
 			}
 			else {
 
-				times.endCpuTime = cpu;
-				times.endApplicationTime = application;
-			}
-		}
-	}
-
-
-	/**
-	 * Calcula los tiempos de CPU.
-	 */
-	private void calculateTimes() {
-
-		final Collection<Times> hist = history.values();
-
-		if (hist.size() > 0) {
-
-			long totalCpuTime = 0L;
-			long totalApplicationTime = 0L;
-
-			for (Times times : hist) {
-				totalCpuTime += times.endCpuTime - times.startCpuTime;
-				totalApplicationTime += times.endApplicationTime - times.startApplicationTime;
+				times.startSampleTime = times.endSampleTime;
+				times.endSampleTime = System.nanoTime();
+				times.previousCpuTime = times.currentCpuTime;
+				times.previousApplicationTime = times.currentApplicationTime;
+				times.currentCpuTime = cpu;
+				times.currentApplicationTime = application;
 			}
 
-			this.totalCpuTime = totalCpuTime;
-			this.totalApplicationTime = totalApplicationTime;
-			this.totalSystemTime = totalCpuTime - totalApplicationTime;
-			this.upTime = runtimeMXBean.getUptime() * 1000000L;
+			if (measureStartTime > times.startSampleTime) {
+				measureStartTime = times.startSampleTime;
+			}
+
+			if (measureEndTime < times.endSampleTime) {
+				measureEndTime = times.endSampleTime;
+			}
+
+			totalCpuTime += times.currentCpuTime - times.previousCpuTime;
+			totalApplicationTime += times.currentApplicationTime - times.previousApplicationTime;
 		}
+
+		this.totalCpuTime = totalCpuTime;
+		this.totalApplicationTime = totalApplicationTime;
+		this.totalSystemTime = totalCpuTime - totalApplicationTime;
+		this.measureTime = measureEndTime - measureStartTime;
 	}
 
 	/**
@@ -206,7 +216,7 @@ public final class CpuMeter extends Thread
 
 		return totalSystemTime;
 	}
-	
+
 	/**
 	 * Retorna la información de la actividad de la CPU.
 	 *  
@@ -221,9 +231,9 @@ public final class CpuMeter extends Thread
 		systemCpuActivity.put(TOTAL_DEAMON_THREAD_COUNT, Double.valueOf(threadMXBean.getDaemonThreadCount()));
 		systemCpuActivity.put(NUMBER_OF_THREADS, Double.valueOf(history.size()));
 
-		double systemCpuLoad = upTime == 0 ? 0 : (totalSystemTime/upTime) * 100;
-		double applicationCpuLoad = upTime == 0 ? 0 : (totalApplicationTime/upTime) * 100;
-		double totalCpuLoad = upTime == 0 ? 0 : (totalCpuTime/upTime) * 100;
+		double systemCpuLoad = measureTime == 0 ? 0 : ((double)(totalSystemTime*100))/measureTime ;
+		double applicationCpuLoad = measureTime == 0 ? 0 : ((double)(totalApplicationTime*100))/measureTime;
+		double totalCpuLoad = measureTime == 0 ? 0 : ((double)(totalCpuTime*100))/measureTime;
 
 		systemCpuActivity.put(SYSTEM_CPU_LOAD, systemCpuLoad);
 		systemCpuActivity.put(APPLICATION_CPU_LOAD, applicationCpuLoad);
