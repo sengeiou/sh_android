@@ -19,7 +19,7 @@
 		else {
 			output.append("<p>Detalle de la configuraci&oacute;n<p/>");
 
-			// Límites de almacenamiento del gestor de caché.
+			// LÃ­mites de almacenamiento del gestor de cachÃ©.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>L&iacute;mites de alacenamiento</div>");
 			output.append("<div class='panel-body'>");
@@ -30,7 +30,7 @@
 			output.append("</div>");
 			output.append("</div>");
 			
-			// Ubicación de los ficheros de caché en disco.
+			// UbicaciÃ³n de los ficheros de cachÃ© en disco.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Ubicaci&oacute;n de los ficheros de cach&eacute; en disco</div>");
 			output.append("<div class='panel-body'>");

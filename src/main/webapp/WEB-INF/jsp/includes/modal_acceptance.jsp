@@ -1,4 +1,4 @@
-<!-- Modal de confirmación -->
+<!-- Modal de confirmaciÃ³n -->
 <div id="modalAcceptance" class="modal fade">
 	<script type="text/javascript">
 	

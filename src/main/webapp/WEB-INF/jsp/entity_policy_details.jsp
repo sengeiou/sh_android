@@ -41,7 +41,7 @@
 			output.append("</div>");
 			output.append("</div>");
 
-			// Dirección de los atributos.
+			// DirecciÃ³n de los atributos.
 			output.append("<div class=\"panel panel-info\">");
 			output.append("<div class=\"panel-heading\">Atributos</div>");
 			output.append("<div class=\"panel-body\">");

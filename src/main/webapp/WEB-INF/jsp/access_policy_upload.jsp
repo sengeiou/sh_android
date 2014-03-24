@@ -20,7 +20,7 @@ function setFileName (fileIndex) {
 	}
 }
 
-// Elimina el fichero indicado, y renumera los que había después.
+// Elimina el fichero indicado, y renumera los que habÃ­a despuÃ©s.
 function removeFile(fileIndex) {
 	
 	console.log("removing" + fileIndex);
@@ -59,7 +59,7 @@ function removeFile(fileIndex) {
 	}
 }
 
-// Añade una nueva fila para cargar otro fichero.
+// AÃ±ade una nueva fila para cargar otro fichero.
 function addFile() {
 	var fileIndex;
 	var numFiles = $('#fileList').children().length;
@@ -91,13 +91,13 @@ function addFile() {
 // Ejecuciones al final de la carga del documento.
 $(document).ready(function() {
 
-	//Se añade el primer fichero a cargar.
+	//Se AÃ±ade el primer fichero a cargar.
 	addFile();
 
-	//Se asocia el click del botón de añadir fichero, a la función de añadir.
+	//Se asocia el click del botÃ³n de aÃ±adir fichero, a la funciÃ³n de aÃ±adir.
     $('#addFile').click(function() {addFile();});
     
-	//Se asocia el click del botón de enviar datos del formulario.
+	//Se asocia el click del botÃ³n de enviar datos del formulario.
 	$('#uploadButton').on('click', function(){
 		var dataToServer = new FormData(document.getElementById('uploadForm'));
 		

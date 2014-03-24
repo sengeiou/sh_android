@@ -8,7 +8,7 @@
 	statsDataSourceAttributes = (Map<String, String>)request.getAttribute("statsDataSource");
 %>
 
-<!-- Panel de información de las fuentes de datos implicadas. -->
+<!-- Panel de informaciÃ³n de las fuentes de datos implicadas. -->
 <div id="dataSources">
 
 	<!-- Fuente de datos que se sirve -->
@@ -29,7 +29,7 @@
 		</ul>
 	</div>
 
-	<!-- Fuente de datos estadísticos -->
+	<!-- Fuente de datos estadÃ­sticos -->
 	<div class="panel panel-info">
 		<div class="panel-heading">Ubicaci&oacute;n de la informaci&oacute;n de uso</div>
 		<div class="panel-body">
