@@ -67,8 +67,9 @@ public class EntityFilters {
 
 		if (filter != null) {
 
-			String[] aliases = new String[filter.size()];
-			filter.toArray(aliases);
+			Set<String> filterAliases = new HashSet<String>(filter);
+			String[] aliases = new String[filterAliases.size()];
+			filterAliases.toArray(aliases);
 
 			return containsFilter(aliases);
 		}
