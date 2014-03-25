@@ -91,7 +91,9 @@
 				<Attribute Alias="name" Direction="Output">name</Attribute>
 				<Attribute Alias="uniqueKey" Direction="Output">uniqueKey</Attribute>
 				<Attribute Alias="active" Direction="Output">active</Attribute>
-				<Attribute Alias="visible" Direction="Output">visible</Attribute>
+				<Attribute Alias="visibleIOS" Direction="Output">visibleIOS</Attribute>
+				<Attribute Alias="visibleAndroid" Direction="Output">visibleAndroid</Attribute>
+				<Attribute Alias="visibleWPhone" Direction="Output">visibleWPhone</Attribute>
 				<Attribute Alias="weight" Direction="Output">weight</Attribute>
 				<Attribute Alias="disclaimer" Direction="Output">disclaimer</Attribute>
 				<Attribute Alias="comment" Direction="Output">comment</Attribute>
