@@ -45,19 +45,19 @@ public class StorageSize {
 		if (matcher.find()) {
 
 			String digit = matcher.group(1);
-			String sufix = matcher.group(2);
+			String suffix = matcher.group(2);
 
 			Long bytes = Long.parseLong(digit);
 
-			if (TAG_GIGA.equals(sufix)) {
+			if (TAG_GIGA.equals(suffix)) {
 
 				bytes *= GIGA;
 			}
-			else if (TAG_MEGA.equals(sufix)) {
+			else if (TAG_MEGA.equals(suffix)) {
 
 				bytes *= MEGA;
 			}
-			else if (TAG_KILO.equals(sufix)) {
+			else if (TAG_KILO.equals(suffix)) {
 
 				bytes *= KILO;
 			}

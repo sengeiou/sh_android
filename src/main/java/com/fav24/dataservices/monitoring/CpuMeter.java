@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * Clase para trazar tiempos de uso de CPU de los hilos
  * de la aplicación a cada segundo.
  */
-public final class CpuMeter extends Thread
+public final class CpuMeter extends Thread implements Meter
 {
 	public static final String PEAK_THREAD_COUNT = "PeakThreadCount"; //Pico máximo de threads activos.
 	public static final String TOTAL_STARTED_THREAD_COUNT = "TotalStartedThreadCount"; //Número de threads inciados desde el arranque de la aplicación.
@@ -240,5 +240,13 @@ public final class CpuMeter extends Thread
 		systemCpuActivity.put(CPU_LOAD, totalCpuLoad);
 
 		return systemCpuActivity;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getMeterName() {
+		return "cpu-meter";
 	}
 }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.service.cache.CacheService;
@@ -17,7 +18,7 @@ import com.fav24.dataservices.xml.cache.CacheDOM;
 
 public class Cache
 {
-	public static final String APPLICATION_CACHE_FILES_SUFIX = ".cache.xml";
+	public static final String APPLICATION_CACHE_FILES_SUFFIX = ".cache.xml";
 
 	private static Cache systemCache;
 
@@ -328,7 +329,7 @@ public class Cache
 	 */
 	public static final void loadDefaultCacheConfigurations() throws ServerException {
 
-		String applicationHome = ContextRefreshedListener.getApplicationHome();
+		String applicationHome = DataServicesContext.getApplicationHome();
 
 		// Se cargan los archivos de políticas de seguridad existentes.
 		File applicationHomeDir = new File(applicationHome);
@@ -340,7 +341,7 @@ public class Cache
 				@Override
 				public boolean accept(File dir, String name) {
 
-					if (name.endsWith(APPLICATION_CACHE_FILES_SUFIX)) {
+					if (name.endsWith(APPLICATION_CACHE_FILES_SUFFIX)) {
 						return true;
 					}
 

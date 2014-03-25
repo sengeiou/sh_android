@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
@@ -18,33 +19,19 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 
 	public static final Logger logger = LoggerFactory.getLogger(ContextRefreshedListener.class);
 
-	public static final String APPLICATION_NAME = "dataservices";
-	public static final String APPLICATION_HOME = APPLICATION_NAME + ".home";
-
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED = "AC000";
-	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE = "El parámetro " + APPLICATION_HOME + " no está definido en el contexto del servidor de aplicaciones.";
+	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE = "El parámetro " + DataServicesContext.APPLICATION_HOME + " no está definido en el contexto del servidor de aplicaciones.";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS = "AC001";
-	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS_MESSAGE = "La ruta indicada en el parámetro " + APPLICATION_HOME + " <%s> no existe.";
+	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_DOESNT_EXISTS_MESSAGE = "La ruta indicada en el parámetro " + DataServicesContext.APPLICATION_HOME + " <%s> no existe.";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY = "AC002";
-	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY_MESSAGE = "La ruta indicada en el parámetro " + APPLICATION_HOME + " <%s> no hace referencia a un directorio.";
+	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY_MESSAGE = "La ruta indicada en el parámetro " + DataServicesContext.APPLICATION_HOME + " <%s> no hace referencia a un directorio.";
 
-
-	private static String applicationHome;
 
 	@Autowired
 	protected LoadAccessPolicyService loadAccessPolicyService;
 	@Autowired
 	protected LoadCacheConfigurationService loadCacheService;
 
-
-	/**
-	 * Retorna la ruta base de la aplicación.
-	 * 
-	 * @return la ruta base de la aplicación.
-	 */
-	public static String getApplicationHome() {
-		return applicationHome;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -70,9 +57,9 @@ public class ContextRefreshedListener implements ApplicationListener<ContextRefr
 		}
 
 		// Se obtiene el directorio base de la aplicación.
-		applicationHome = applicationContext.getEnvironment().getProperty(APPLICATION_HOME);
+		DataServicesContext.setApplicationHome(applicationContext.getEnvironment().getProperty(DataServicesContext.APPLICATION_HOME));
 
-		if (applicationHome == null) {
+		if (DataServicesContext.getApplicationHome() == null) {
 			logger.error(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 		else {

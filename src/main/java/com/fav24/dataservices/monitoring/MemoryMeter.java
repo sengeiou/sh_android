@@ -42,7 +42,7 @@ import java.util.TreeMap;
  *                                committed
  * </pre>
  */
-public final class MemoryMeter {
+public final class MemoryMeter implements Meter {
 
 	public static final String TOTAL_MAX_MEMORY = "TotalMaxMemory";
 	public static final String TOTAL_INIT_MEMORY = "TotalInitMemory"; 
@@ -105,5 +105,13 @@ public final class MemoryMeter {
 		systemMemoryStatus.put(TOTAL_USED_MEMORY, totaUsed);
 
 		return systemMemoryStatus;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getMeterName() {
+		return "memory-meter";
 	}
 }

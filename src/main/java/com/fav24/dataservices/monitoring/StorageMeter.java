@@ -11,7 +11,7 @@ import java.util.TreeMap;
 /**
  * Clase para obtener el estado de los espacios en los dispositivos de almacemamiento.
  */
-public final class StorageMeter
+public final class StorageMeter implements Meter
 {
 
 	public static final String TOTAL_STORAGE_SPACE = "TotalStorageSpace"; //Capacidad total de almacenamiento.
@@ -55,5 +55,13 @@ public final class StorageMeter
 		}
 
 		return systemStorageStatus;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getMeterName() {
+		return "storage-meter";
 	}
 }

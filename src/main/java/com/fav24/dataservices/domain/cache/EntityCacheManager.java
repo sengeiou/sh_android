@@ -184,7 +184,6 @@ public class EntityCacheManager extends CacheManagerConfiguration
 		for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
 
 			net.sf.ehcache.Cache entityCache = new net.sf.ehcache.Cache(entityCacheConfiguration.constructCacheConfiguration(entityCacheConfiguration.getAlias()));
-
 			cacheManager.addCache(entityCache);
 		}
 	}

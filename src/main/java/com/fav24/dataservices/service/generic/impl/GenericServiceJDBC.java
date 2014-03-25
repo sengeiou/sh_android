@@ -646,7 +646,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					// Error, hay campos que no se han podido encontrar el la tabla.
 					if (entityJDBCInformation.dataFields.size() < entityAccessPolicy.getData().getData().size()) {
 
-						StringBuilder lostFields = new StringBuilder();
+						StringBuilder lostFields = null;
 
 						for (EntityDataAttribute entityDataAttribute : entityAccessPolicy.getData().getData()) {
 
@@ -662,7 +662,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 							}
 
 							if (!found) {
-								if (lostFields.length() > 0) {
+								if (lostFields == null) {
+									lostFields = new StringBuilder();
+								}
+								else {
 									lostFields.append(", ");	
 								}
 
@@ -670,7 +673,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 							}
 						}
 
-						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas " + lostFields + " para la tabla "  + table + ".");
+						if (lostFields != null) {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas " + lostFields + " para la tabla "  + table + ".");
+						}
 					}
 				}
 

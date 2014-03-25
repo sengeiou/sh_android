@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.BaseDomain;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
@@ -25,7 +26,7 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
  */
 public class AccessPolicy extends BaseDomain {
 
-	public static final String APPLICATION_POLICY_FILES_SUFIX = ".policy.xml";
+	public static final String APPLICATION_POLICY_FILES_SUFFIX = ".policy.xml";
 
 	private static AccessPolicy currentAccesPolicy;
 
@@ -238,7 +239,7 @@ public class AccessPolicy extends BaseDomain {
 	 */
 	public static final void loadDefaultAccessPolicies() throws ServerException {
 
-		String applicationHome = ContextRefreshedListener.getApplicationHome();
+		String applicationHome = DataServicesContext.getApplicationHome();
 
 		// Se cargan los archivos de políticas de seguridad existentes.
 		File applicationHomeDir = new File(applicationHome);
@@ -250,7 +251,7 @@ public class AccessPolicy extends BaseDomain {
 				@Override
 				public boolean accept(File dir, String name) {
 
-					if (name.endsWith(APPLICATION_POLICY_FILES_SUFIX)) {
+					if (name.endsWith(APPLICATION_POLICY_FILES_SUFFIX)) {
 						return true;
 					}
 

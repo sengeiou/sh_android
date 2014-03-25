@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.xml.datasource.DataSourcesDOM;
@@ -20,7 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DataSources
 {
-	public static final String APPLICATION_DATASOURCES_FILES_SUFIX = ".datasources.xml";
+	public static final String APPLICATION_DATASOURCES_FILES_SUFFIX = ".datasources.xml";
 
 	public static final String ERROR_LOADING_DATASOURCES_FILE = "DS000";
 	public static final String ERROR_LOADING_DATASOURCES_FILE_MESSAGE = "No se encontró ningún fichero de definición de fuentes de datos.";
@@ -262,7 +263,7 @@ public class DataSources
 	 */
 	public static final void loadDefaultDataSources() throws ServerException {
 
-		String applicationHome = ContextRefreshedListener.getApplicationHome();
+		String applicationHome = DataServicesContext.getApplicationHome();
 
 		// Se cargan los archivos de configuración de fuentes datos existentes.
 		File applicationHomeDir = new File(applicationHome);
@@ -274,7 +275,7 @@ public class DataSources
 				@Override
 				public boolean accept(File dir, String name) {
 
-					if (name.endsWith(APPLICATION_DATASOURCES_FILES_SUFIX)) {
+					if (name.endsWith(APPLICATION_DATASOURCES_FILES_SUFFIX)) {
 						return true;
 					}
 
