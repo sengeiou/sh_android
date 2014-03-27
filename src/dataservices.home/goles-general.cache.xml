@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Cache Version="1.0.0" Description="Configuración de la caché asociada a las entidades en lectura para la aplicación Golesmessenger">
+
+	<!-- Configuración por defecto de un gestor de cachés. -->
+	<!-- Bytes nomenclature:
+	# -> bytes. # bytes
+	#K -> Kilobytes. (# x 1024) bytes
+	#M -> Megabytes. (# x 1000 x 1024) bytes
+	#G -> Gigabytes. (# x 1000000 x 1024) bytes
+	 -->
+	<DefaultCacheManager MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
+		<!-- Configuración por defecto de una caché. -->
+		<DefaultCache>
+			<Expiry Eternal="false"> <!-- Eternal indica si los elementos de la caché están o no afectados por el paso del tiempo. Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
+				<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<!-- Tiempo máximo de vida en segundos de un elemento. -->
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
+			<!-- Número máximo de elementos en memoria. -->
+			<MaxBytesLocalHeap>25M</MaxBytesLocalHeap>
+			<!-- Número máximo de elementos en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
+			<MaxBytesLocalDisk>250M</MaxBytesLocalDisk>
+			<!-- Intervalo de tiempo entre chequeos, en busca de elementos caducados en disco. -->
+			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
+			<!-- Políticas de desalojo de las entradas almacenadas en memoria.
+				El desalojo de una entrada en memoria, implica la entrada del element en la zona de disco.
+	
+				LRU: Least Recently Used - Se elimina el que hace más tiempo que no se usa.
+				LFU: Least Frequently Used - Se elimina el de uso menos frecuente. 
+				FIFO: First In First Out - Se elimina en el mismo orden de entrada de los elementos.
+			-->
+			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
+			<!-- Persistencia en disco. Si esta no está activa, los elementos se limitan al espacio en memoria. -->
+			<Persistence Active="true"/>
+		</DefaultCache>
+		<!-- Ubicación de los ficheros de persistencia de la caché. -->
+		<DiskStore Path="java.io.tmpdir"/>
+	</DefaultCacheManager>
+
+	<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
+	<EntityCacheManager Name="Entidades Base" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
+		<DiskStore Path="java.io.tmpdir"/>
+		
+		<EntityCache Alias="Match">
+			<Expiry Eternal="false">
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
+			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
+			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
+			<Persistence Active="true"/>
+		</EntityCache>
+
+		<EntityCache Alias="EventOfMatch">
+			<Expiry Eternal="false">
+				<TimeToIdleSeconds>120</TimeToIdleSeconds>
+				<TimeToLiveSeconds>120</TimeToLiveSeconds>
+			</Expiry>
+			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
+			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
+			<DiskExpiryThreadIntervalSeconds>120</DiskExpiryThreadIntervalSeconds>
+			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
+			<Persistence Active="true"/>
+		</EntityCache>
+	</EntityCacheManager>
+</Cache>
