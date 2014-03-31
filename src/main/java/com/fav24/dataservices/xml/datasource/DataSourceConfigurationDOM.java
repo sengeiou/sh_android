@@ -31,9 +31,17 @@ public class DataSourceConfigurationDOM extends DataSourceConfiguration
 
 					setConnectionPoolConfiguration(new ConnectionPoolConfigurationDOM(node_i));
 				}
-				else if ("URL".equals(nodeName)) {
+				else if ("Host".equals(nodeName)) {
 					
-					setUrl(node_i.getTextContent());
+					setHost(node_i.getTextContent());
+				}
+				else if ("Port".equals(nodeName)) {
+					
+					setPort(Integer.parseInt(node_i.getTextContent()));
+				}
+				else if ("DatabaseName".equals(nodeName)) {
+					
+					setDatabaseName(node_i.getTextContent());
 				}
 				else if ("UserName".equals(nodeName)) {
 

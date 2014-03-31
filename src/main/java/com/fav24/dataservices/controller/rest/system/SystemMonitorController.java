@@ -16,7 +16,7 @@ import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.system.JqPlotDto;
 import com.fav24.dataservices.monitoring.CpuMeter;
 import com.fav24.dataservices.monitoring.MemoryMeter;
-import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.service.system.SystemService;
 
 /**
@@ -75,7 +75,7 @@ public class SystemMonitorController extends BaseRestController {
 		}
 		else {
 
-			AbstractList<MonitorSample> systemMemoryStatus = systemService.getSystemMemoryStatus(jqPlot.getPeriod(), jqPlot.getTimeRange());
+			AbstractList<MonitorSample> systemMemoryStatus = systemService.getSystemMemoryStatus(jqPlot.getOffset(), jqPlot.getTimeRange(), jqPlot.getPeriod());
 
 			Object[][] totalInitMemoryData = new Object[systemMemoryStatus.size()][2];
 			Object[][] totalMaxMemoryData = new Object[systemMemoryStatus.size()][2];
@@ -150,7 +150,7 @@ public class SystemMonitorController extends BaseRestController {
 		}
 		else {
 
-			AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(jqPlot.getPeriod(), jqPlot.getTimeRange());
+			AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(jqPlot.getOffset(), jqPlot.getTimeRange(), jqPlot.getPeriod());
 
 			Object[][] peakThreadCountData = new Object[systemCPUActivity.size()][2];
 			Object[][] totalStartedThreadCountData = new Object[systemCPUActivity.size()][2];

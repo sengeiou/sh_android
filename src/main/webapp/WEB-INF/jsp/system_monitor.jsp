@@ -1,7 +1,7 @@
 <%@include file="includes/locations.jsp" %>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.AbstractList"%>
-<%@page import="com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample"%>
+<%@page import="com.fav24.dataservices.monitoring.MonitorSample"%>
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
 <%!Long period;%>

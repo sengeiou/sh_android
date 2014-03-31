@@ -12,7 +12,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.xml.datasource.DataSourcesDOM;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -139,14 +138,7 @@ public class DataSources
 		// Configuración del pool.
 		ConnectionPoolConfiguration connectionPoolConfiguration = dataSourceConfiguration.getConnectionPoolConfiguration();
 		configuration.setPoolName(dataSourceConfiguration.getName());
-		configuration.setInitializationFailFast(true);
-
-		// Modo de adquisión de las conexiones.
-		ConnectionAcquire connectionAcquire = connectionPoolConfiguration.getConnectionAcquire();
-
-		configuration.setAcquireIncrement(connectionAcquire.getIncrement());
-		configuration.setAcquireRetries(connectionAcquire.getRetries());
-		configuration.setAcquireRetryDelay(connectionAcquire.getRetryDelay());
+		configuration.setInitializationFailFast(false);
 
 		// Configuración de las conexiones gestionadas.
 		ConnectionConfiguration connectionConfiguration = connectionPoolConfiguration.getConnectionConfiguration();
@@ -155,20 +147,26 @@ public class DataSources
 		configuration.setConnectionTimeout(connectionConfiguration.getTimeout());
 		configuration.setTransactionIsolation(connectionConfiguration.getTransactionIsolation().getTransactionIsolationTypeISOName());
 		configuration.setJdbc4ConnectionTest(connectionConfiguration.getJdbc4ConnectionTest());
-		configuration.setConnectionInitSql(connectionConfiguration.getInitSql());
-		configuration.setConnectionTestQuery(connectionConfiguration.getTestQuery());
+		if (connectionConfiguration.getInitSql() != null && !connectionConfiguration.getInitSql().isEmpty()) {
+			configuration.setConnectionInitSql(connectionConfiguration.getInitSql());
+		}
+		if (connectionConfiguration.getTestQuery() != null && !connectionConfiguration.getTestQuery().isEmpty()) {
+			configuration.setConnectionTestQuery(connectionConfiguration.getTestQuery());
+		}
 
 		// Resto de configuraciones del pool.
 		configuration.setDataSourceClassName(connectionPoolConfiguration.getDataSourceClassName());
 		configuration.setIdleTimeout(connectionPoolConfiguration.getIdleTimeout());
 		configuration.setMaxLifetime(connectionPoolConfiguration.getMaxLifetime());
-		configuration.setMinimumPoolSize(connectionPoolConfiguration.getMinimumPoolSize());
+		configuration.setMinimumIdle(connectionPoolConfiguration.getMinimumPoolSize());
 		configuration.setMaximumPoolSize(connectionPoolConfiguration.getMaximumPoolSize());
 
 		// Configuración del acceso a la fuente.
-		configuration.addDataSourceProperty("url", dataSourceConfiguration.getUrl());
-		configuration.addDataSourceProperty("user", dataSourceConfiguration.getUserName());
-		configuration.addDataSourceProperty("password", dataSourceConfiguration.getPassword());
+		configuration.setUsername(dataSourceConfiguration.getUserName());
+		configuration.setPassword(dataSourceConfiguration.getPassword());
+		configuration.addDataSourceProperty("serverName", dataSourceConfiguration.getHost());
+		configuration.addDataSourceProperty("portNumber", dataSourceConfiguration.getPort());
+		configuration.addDataSourceProperty("databaseName", dataSourceConfiguration.getDatabaseName());
 
 		HikariDataSource dataSource = new HikariDataSource(configuration);
 
@@ -218,7 +216,7 @@ public class DataSources
 	public static final DataSource getDataSourceDataService() {
 		return dataSourceDataService;
 	}
-	
+
 	/**
 	 * Retorna la plantilla para operaciones JDBC en los servicios de datos.
 	 * 
@@ -245,7 +243,7 @@ public class DataSources
 	public static final DataSource getDataSourceStatistics() {
 		return dataSourceStatistics;
 	}
-	
+
 	/**
 	 * Retorna la plantilla para operaciones JDBC en la gestión de estadísticas de uso.
 	 * 
@@ -263,7 +261,7 @@ public class DataSources
 	 */
 	public static final void loadDefaultDataSources() throws ServerException {
 
-		String applicationHome = DataServicesContext.getApplicationHome();
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 
 		// Se cargan los archivos de configuración de fuentes datos existentes.
 		File applicationHomeDir = new File(applicationHome);
@@ -326,8 +324,8 @@ public class DataSources
 		}
 		else {
 
-			throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
-					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 	}
 

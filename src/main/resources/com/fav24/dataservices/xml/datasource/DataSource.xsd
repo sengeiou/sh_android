@@ -23,7 +23,9 @@
 		<xsd:sequence>
 			<!-- Configuración de la fuente de datos a servir. -->
 			<xsd:element name="ConnectionPool" type="TConnectionPoolConfiguration" minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="URL" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="Host" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="Port" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="DatabaseName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
 			<xsd:element name="UserName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
 			<xsd:element name="Password" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
@@ -33,8 +35,6 @@
 	<!-- -->
 	<xsd:complexType name="TConnectionPoolConfiguration">
 		<xsd:sequence>
-			<!-- Configuración del modo de adquisición de las conexiones. -->
-			<xsd:element name="ConnectionAcquire" type="TConnectionAcquire" minOccurs="1" maxOccurs="1"/>
 			<!-- Configuración de los distintos aspectos de una conexión. -->
 			<xsd:element name="Connection" type="TConnectionConfiguration" minOccurs="1" maxOccurs="1"/>
 			<!-- Este es el nombre de la clase DataSource proporcionada por el controlador JDBC.
@@ -61,18 +61,6 @@
 		Cuando el pool alcanza este valor, y no hay conexiones inactivas disponibles, la llamada a getConnection() se bloqueará durante un máximo de milisegundos 
 		definido por el <Connection/TimeOut> antes de tiempo de espera. -->
 		<xsd:attribute name="MaximumPoolSize" type="xsd:integer" use="optional" default="30"/>
-	</xsd:complexType>
-	<!-- -->
-	<xsd:complexType name="TConnectionAcquire">
-		<!-- Esta propiedad controla el número máximo de conexiones que se adquieren a la vez, con la excepción de inicialización del pool. -->
-		<xsd:attribute name="Increment" type="xsd:integer" use="optional" default="1"/> 
-		<!-- Este es un contador de reintentos utilizado durante la creación de nuevas conexiones (adquisición). 
-		Si un intento de creación de conexión falla, habrá una espera de <RetryDelay> milisegundos seguido de otro intento, 
-		hasta el número de reintentos configurados por esta propiedad -->
-		<xsd:attribute name="Retries" type="xsd:integer" use="optional" default="3"/>
-		<!-- Esta propiedad controla el número de milisegundos de retraso entre intentos de adquirir una conexión a la base de datos. 
-		Si <Retries> es 0, esta propiedad no tiene ningún efecto. -->
-		<xsd:attribute name="RetryDelay" type="xsd:long" use="optional" default="750"/>
 	</xsd:complexType>
 	<!-- -->
 	<xsd:complexType name="TConnectionConfiguration">

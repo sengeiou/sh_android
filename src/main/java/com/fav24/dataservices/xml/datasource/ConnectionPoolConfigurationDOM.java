@@ -32,11 +32,7 @@ public class ConnectionPoolConfigurationDOM extends ConnectionPoolConfiguration
 
 				String nodeName = node_i.getNodeName();
 
-				if ("ConnectionAcquire".equals(nodeName)) {
-
-					setConnectionAcquire(new ConnectionAcquireDOM(node_i));
-				}
-				else if ("Connection".equals(nodeName)) {
+				if ("Connection".equals(nodeName)) {
 
 					setConnectionConfiguration(new ConnectionConfigurationDOM(node_i));
 				}

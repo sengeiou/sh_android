@@ -2,14 +2,25 @@ package com.fav24.dataservices.monitoring;
 
 
 /**
- * Interface que debe implementar cualquier medidor.
+ * Clase abstracta que debe extender cualquier medidor.
  */
-public interface Meter
+public abstract class Meter
 {
 	/**
 	 * Retorna el nombre del medidor.
 	 *  
 	 * @return el nombre del medidor.
 	 */
-	public String getMeterName();
+	public abstract String getMeterName();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getMeterName() == null) ? 0 : getMeterName().hashCode());
+		return result;
+	}
 }

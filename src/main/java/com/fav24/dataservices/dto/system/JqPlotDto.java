@@ -23,8 +23,9 @@ public class JqPlotDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
 
-	private Long period;
+	private Long offset;
 	private Long timeRange;
+	private Long period;
 	private String name;
 	private NavigableMap <String, Object[][]> data;
 
@@ -34,10 +35,47 @@ public class JqPlotDto implements Serializable {
 	 */
 	public JqPlotDto() {
 
-		this.period = null;
+		this.offset = null;
 		this.timeRange = null;
+		this.period = null;
 		this.name = null;
 		this.data = new TreeMap<String, Object[][]>();
+	}
+
+	/**
+	 * Retorna el punto de inicio del rango de tiempo de la información.
+	 * 
+	 * @return el punto de inicio del rango de tiempo de la información.
+	 */
+	public Long getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Asigna el punto de inicio del rango de tiempo de la información.
+	 * 
+	 * @param timeRange El punto de inicio de la información.
+	 */
+	public void setOffset(Long offset) {
+		this.offset = offset;
+	}
+	
+	/**
+	 * Retorna el rango de tiempo de la información.
+	 * 
+	 * @return el rango de tiempo de la información.
+	 */
+	public Long getTimeRange() {
+		return timeRange;
+	}
+	
+	/**
+	 * Asigna el rango de tiempo de la información.
+	 * 
+	 * @param timeRange El rango de tiempo de la información.
+	 */
+	public void setTimeRange(Long timeRange) {
+		this.timeRange = timeRange;
 	}
 
 	/**
@@ -56,24 +94,6 @@ public class JqPlotDto implements Serializable {
 	 */
 	public void setPeriod(Long period) {
 		this.period = period;
-	}
-
-	/**
-	 * Retorna el rango de tiempo de la información.
-	 * 
-	 * @return el rango de tiempo de la información.
-	 */
-	public Long getTimeRange() {
-		return timeRange;
-	}
-
-	/**
-	 * Asigna el rango de tiempo de la información.
-	 * 
-	 * @param timeRange El rango de tiempo de la información.
-	 */
-	public void setTimeRange(Long timeRange) {
-		this.timeRange = timeRange;
 	}
 
 	/**

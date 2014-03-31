@@ -6,7 +6,9 @@ public class DataSourceConfiguration
 {
 	private String name;
 	private ConnectionPoolConfiguration connectionPoolConfiguration;
-	private String url;
+	private String host;
+	private Integer port;
+	private String databaseName;
 	private String userName;
 	private String password;
 
@@ -17,7 +19,9 @@ public class DataSourceConfiguration
 	public DataSourceConfiguration() {
 
 		this.connectionPoolConfiguration = null;
-		this.url = null;
+		this.host = null;
+		this.port = null;
+		this.databaseName = null;
 		this.userName = null;
 		this.password = null;
 	}
@@ -57,23 +61,63 @@ public class DataSourceConfiguration
 	public void setConnectionPoolConfiguration(ConnectionPoolConfiguration connectionPoolConfiguration) {
 		this.connectionPoolConfiguration = connectionPoolConfiguration;
 	}
+	/*
 
+	<xsd:element name="DatabaseName" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+
+	*/
 	/**
-	 * Retorna la casdena de conexión a la base de datos.
+	 * Retorna el servidor donde está ubicada la base de datos.
 	 * 
-	 * @return la casdena de conexión a la base de datos.
+	 * @return el servidor donde está ubicada la base de datos.
 	 */
-	public String getUrl() {
-		return url;
+	public String getHost() {
+		return host;
 	}
 
 	/**
-	 * Asigna la casdena de conexión a la base de datos.
+	 * Asigna el servidor donde está ubicada la base de datos.
 	 * 
-	 * @param url La cadena de conexión a la base de datos.
+	 * @param host El servidor a asignar.
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setHost(String host) {
+		this.host = host;
+	}
+	
+	/**
+	 * Retorna el puerto del servidor donde está ubicado el listener de la base de datos.
+	 * 
+	 * @return el puerto del servidor donde está ubicado el listener de la base de datos.
+	 */
+	public Integer getPort() {
+		return port;
+	}
+	
+	/**
+	 * Asigna puerto del servidor donde está ubicado el listener de la base de datos.
+	 * 
+	 * @param port El puerto del servidor a asignar.
+	 */
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+	
+	/**
+	 * Retorna el nombre de la base de datos.
+	 * 
+	 * @return el nombre de la base de datos.
+	 */
+	public String getDatabaseName() {
+		return databaseName;
+	}
+	
+	/**
+	 * Asigna el nombre de la base de datos.
+	 * 
+	 * @param databaseName El nombre de la base de datos a asignar.
+	 */
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
 	}
 
 	/**

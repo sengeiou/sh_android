@@ -1,13 +1,12 @@
 package com.fav24.dataservices.service.system.impl;
 
 import java.util.AbstractList;
-import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.monitoring.SystemMonitoring;
-import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample;
 import com.fav24.dataservices.service.system.SystemService;
 
 
@@ -37,9 +36,9 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<MonitorSample> getSystemMemoryStatus(Long period, Long timeRange) {
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) {
 
-		return SystemActivityMonitoring.getSystemMemoryStatus(period, timeRange);
+		return SystemActivityMonitoring.getSystemMemoryStatus(offset, timeRange, period);
 	}
 
 	/**
@@ -55,26 +54,26 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<MonitorSample> getSystemCpuActivity(Long period, Long timeRange) {
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) {
 
-		return SystemActivityMonitoring.getSystemCpuActivity(period, timeRange);
+		return SystemActivityMonitoring.getSystemCpuActivity(offset, timeRange, period);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, MonitorSample> getSystemStorageStatus() {
+	public MonitorSample getSystemStorageStatus(String storeName) {
 
-		return SystemActivityMonitoring.getSystemStorageStatus();
+		return SystemActivityMonitoring.getSystemStorageStatus(storeName);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, AbstractList<MonitorSample>> getSystemStorageStatus(Long period, Long timeRange) {
+	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) {
 
-		return SystemActivityMonitoring.getSystemStorageStatus(period, timeRange);
+		return SystemActivityMonitoring.getSystemStorageStatus(storeName, offset, timeRange, period);
 	}
 }

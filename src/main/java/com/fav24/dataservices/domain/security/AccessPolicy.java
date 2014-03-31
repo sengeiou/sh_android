@@ -14,7 +14,6 @@ import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.BaseDomain;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.listener.ContextRefreshedListener;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
@@ -239,7 +238,7 @@ public class AccessPolicy extends BaseDomain {
 	 */
 	public static final void loadDefaultAccessPolicies() throws ServerException {
 
-		String applicationHome = DataServicesContext.getApplicationHome();
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 
 		// Se cargan los archivos de políticas de seguridad existentes.
 		File applicationHomeDir = new File(applicationHome);
@@ -283,8 +282,8 @@ public class AccessPolicy extends BaseDomain {
 		}
 		else {
 
-			throw new ServerException(ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
-					ContextRefreshedListener.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 	}
 

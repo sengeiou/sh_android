@@ -6,7 +6,6 @@ package com.fav24.dataservices.domain.datasource;
  */
 public class ConnectionPoolConfiguration
 {
-	private ConnectionAcquire connectionAcquire;
 	private ConnectionConfiguration connectionConfiguration;
 	private String dataSourceClassName;
 	private Long idleTimeout;
@@ -20,27 +19,8 @@ public class ConnectionPoolConfiguration
 	 */
 	public ConnectionPoolConfiguration() {
 
-		this.connectionAcquire = null;
 		this.connectionConfiguration = null;
 		this.dataSourceClassName = null;
-	}
-
-	/**
-	 * Retorna las políticas de adquisición de nuevas conexiones del pool.
-	 * 
-	 * @return las políticas de adquisición de nuevas conexiones del pool.
-	 */
-	public ConnectionAcquire getConnectionAcquire() {
-		return connectionAcquire;
-	}
-
-	/**
-	 * Asigna las políticas de adquisición de nuevas conexiones del pool.
-	 * 
-	 * @param connectionAcquire Las políticas de adquisición a asignar.
-	 */
-	public void setConnectionAcquire(ConnectionAcquire connectionAcquire) {
-		this.connectionAcquire = connectionAcquire;
 	}
 
 	/**

@@ -1,12 +1,11 @@
 package com.fav24.dataservices.service.system;
 
 import java.util.AbstractList;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fav24.dataservices.monitoring.SystemMonitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.MonitorSample;
 
 
 /**
@@ -30,12 +29,13 @@ public interface SystemService {
 	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
 	 * 
-	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 segundo a 24 horas.
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
-	public AbstractList<MonitorSample> getSystemMemoryStatus(Long period, Long timeRange);
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period);
 	
 	/**
 	 * Retorna la información del estado de la carga de proceso del sistema
@@ -48,28 +48,32 @@ public interface SystemService {
 	/**
 	 * Retorna la información del estado de la carga de proceso del sistema.
 	 * 
-	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. De 1 segundo a 24 horas.
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
 	 *  
 	 * @return la información del estado de la carga de proceso del sistema.
 	 */
-	public AbstractList<MonitorSample> getSystemCpuActivity(Long period, Long timeRange);
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period);
 	
 	/**
-	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada
-	 * en este mismo instante.
+	 * Retorna la información asociada al elemento de almacenamiento en este mismo instante.
 	 * 
-	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
+	 * @return la información asociada al elemento de almacenamiento en este mismo instante.
 	 */
-	public Map<String, MonitorSample> getSystemStorageStatus();
+	public MonitorSample getSystemStorageStatus(String storeName);
 	
 	/**
-	 * Retorna un mapa con el conjunto de elementos de almacenamiento, y su información asociada en cuanto a:
+	 * Retorna la información asociada al elemento de almacenamiento en cuanto a:
 	 * 
-	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 segundo y 24 horas.
+	 * 	{@linkplain #StorageMeter.TOTAL_STORAGE_SPACE}: Capacidad total de almacenamiento.
+	 * 	{@linkplain #StorageMeter.TOTAL_USABLE_STORAGE_SPACE}: Espacio disponible de almacenamiento.
 	 * 
-	 * @return un mapa con el conjunto de elementos de almacenamiento, y su información asociada.
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
+	 * 
+	 * @return la información asociada al elemento de almacenamiento.
 	 */
-	public Map<String, AbstractList<MonitorSample>> getSystemStorageStatus(Long period, Long timeRange);
+	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period);
 }
