@@ -26,7 +26,7 @@ function initCPUMonitor(servicesURL, period, timeRange, cpuHistoryPlotElement, c
 	if (cpuHistoryPlotElement) {
 		CPUMonitor.cpuHistoryPlot = createCPUHistoryPlot(servicesURL, cpuHistoryPlotElement);
 	}
-	
+
 	if (cpuLoadInstantPlotElement) {
 		CPUMonitor.cpuLoadInstantPlot = createCPULoadInstantPlot(servicesURL, cpuLoadInstantPlotElement);
 	}
@@ -84,10 +84,19 @@ function createCPUHistoryPlot(servicesURL, plotElement) {
 			looseZoom: false,
 			showTooltip: true
 		},
+		seriesDefaults:{
+			rendererOptions: {
+				smooth: true
+			},
+			linePattern: 'solid',
+			lineWidth: 1,
+			showMarker: false,
+			shadow: false
+		},
 		series:[
-		        { color: '#fcc226', showMarker: false },
-		        { color: '#cffe2e', showMarker: false },
-		        { color: '#9ab66e', showMarker: false }
+		        { color: '#fcc226' },
+		        { color: '#cffe2e' },
+		        { color: '#9ab66e', linePattern: 'dashed' }
 		        ],
 		        axes:{
 		        	xaxis:{
@@ -136,17 +145,17 @@ function createCPUHistoryPlot(servicesURL, plotElement) {
  * Alimentador de información de la gráfica de la carga instantanea del procesador.
  */
 function cpuLoadInstantDataRenderer(url, plot, options) {
-	
+
 	var ret = null;
 	var xhr = new XMLHttpRequest();
-	
+
 	xhr.open("POST", options["url"], false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	// Envío.
 	xhr.send(JSON.stringify({period: null, timeRange: null}));
-	
+
 	var jsonResponse = JSON.parse(xhr.responseText);
-	
+
 	var systemCPULoad = parseFloat(jsonResponse["data"]["SystemCPULoad"], 10); 
 	var applicationCPULoad = parseFloat(jsonResponse["data"]["ApplicationCPULoad"], 10); 
 
@@ -154,7 +163,7 @@ function cpuLoadInstantDataRenderer(url, plot, options) {
 	       [systemCPULoad],
 	       [applicationCPULoad]
 	       ];
-	
+
 	return ret;
 }
 
@@ -167,7 +176,7 @@ function cpuLoadInstantDataRenderer(url, plot, options) {
  * @returns una referencia a la gráfica de actividad de la carga instantanea de la cpu.
  */
 function createCPULoadInstantPlot(servicesURL, plotElement) {
-	
+
 	return jQuery.jqplot (plotElement, [], {
 		grid: {
 			drawBorder: true,
@@ -250,12 +259,12 @@ function startCPUMonitor() {
 
 	stopCPUMonitor();
 	this.cpuMonitorInterval = setInterval(function() { 		
-		
+
 		// Historial de actividad de la CPU.
 		CPUMonitor.cpuHistoryPlot.replot({ data: [] });
-		
+
 		// Carga instantanea de la CPU.
 		CPUMonitor.cpuLoadInstantPlot.replot({ data: [] });
-		
+
 	}, 1000);
 }

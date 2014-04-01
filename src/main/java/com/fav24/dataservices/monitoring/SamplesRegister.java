@@ -30,8 +30,8 @@ public class SamplesRegister {
 	private static final String SAMPLE_FILES_SUFFIX = ".samples";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
-	private static final int WRITE_BUFFER_CAPACITY = 4096;
-	private static final int READ_BUFFER_CAPACITY = 4096;
+	private static final int WRITE_BUFFER_CAPACITY = 1024;
+	private static final int READ_BUFFER_CAPACITY = 4096*4;
 
 	private static final long SECOND_IN_MILLISECONDS = 1000L;
 	private static final long MINUTE_IN_MILLISECONDS = SECOND_IN_MILLISECONDS * 60;
@@ -49,18 +49,29 @@ public class SamplesRegister {
 
 	private static class SampleIndex {
 		private long position;
-		private long time;
+		private MonitorSample sample;
 
+		private SampleIndex(MonitorSample sample, long position) {
 
-		private SampleIndex(long time, long position) {
-
-			this.time = time;
 			this.position = position;
+			this.sample = sample;
+		}
+	}
+
+	private static class ReadenSamples {
+
+		private File sampleFile;
+		private AbstractList<SampleIndex> readenSamples;
+
+		private ReadenSamples(File sampleFile) {
+
+			this.sampleFile = sampleFile;
+			this.readenSamples = new ArrayList<SampleIndex>();
 		}
 	}
 
 	private static Map<Meter, MeterOutput> meterOutputs = new HashMap<Meter, MeterOutput>();
-	private static Map<String, AbstractList<SampleIndex>> readenSamples = new HashMap<String, AbstractList<SampleIndex>>();
+	private static Map<String, ReadenSamples> readenSamples = new HashMap<String, ReadenSamples>();
 
 	/**
 	 * Inicializa el contexto necesario para el registro de muestras de los monitores del sistema.
@@ -144,6 +155,7 @@ public class SamplesRegister {
 
 			try {
 
+				meterOutput.today = today;
 				meterOutput.writeChannel.write(meterOutput.writeBuffer);
 				meterOutput.writeChannel.close();
 				meterOutput.writeBuffer.clear();
@@ -303,22 +315,37 @@ public class SamplesRegister {
 	}
 
 	/**
-	 * Retorna la lista de posiciones y tiempos de las muestras del fichero de muestras indicado.
+	 * Retorna una estructura con información ya leida de las muestras del fichero de muestras indicado.
 	 * 
-	 * @param fileName Ficbero de muestras del que se desea obtener la lista de posiciones.
+	 * @param fileName Fichero de muestras del que se desea obtener la lista de posiciones.
 	 * 
-	 * @return la lista de posiciones y tiempos de las muestras del fichero de muestras indicado.
+	 * @return una estructura con información ya leida de las muestras del fichero de muestras indicado.
 	 */
-	private static AbstractList<SampleIndex> getReadenSamples(String fileName) {
+	private static ReadenSamples getReadenSamples(String fileName) {
 
-		AbstractList<SampleIndex> readenSamples;
+		synchronized(SamplesRegister.readenSamples) {
+
+			return SamplesRegister.readenSamples.get(fileName);
+		}
+	}
+
+	/**
+	 * Retorna una estructura con información ya leida de las muestras del fichero de muestras indicado.
+	 * 
+	 * @param fileName Fichero de muestras del que se desea obtener la lista de posiciones.
+	 * 
+	 * @return una estructura con información ya leida de las muestras del fichero de muestras indicado.
+	 */
+	private static ReadenSamples createReadenSamples(String fileName, File file) {
+
+		ReadenSamples readenSamples;
 
 		synchronized(SamplesRegister.readenSamples) {
 
 			readenSamples = SamplesRegister.readenSamples.get(fileName);
 
 			if (readenSamples == null) {
-				readenSamples = new ArrayList<SampleIndex>();
+				readenSamples = new ReadenSamples(file);
 
 				SamplesRegister.readenSamples.put(fileName, readenSamples);
 			}
@@ -330,66 +357,130 @@ public class SamplesRegister {
 	/**
 	 * Almacena la posición correspondiente a al valor temporal de la muestra en el fichero de muestras indicado.
 	 * 
-	 * @param readenSamples Lista de índices a actualizar.
-	 * @param sampleTime Tiempo en milisegundos desde epoch a guaradar.
+	 * @param readenSamples Estructura de muetras leídas a actualizar.
+	 * @param offset Posición dentro de la lista de muestras leídas, a partir de la que se inicia la búsqueda.
+	 * @param sample Muestra a almacenar como leída.
 	 * @param samplePosition Posición dentro del fichero de muestras.
+	 * 
+	 * @return la última posición modificada de la lista de muestras leídas.
 	 */
-	private static void updateNearestPreviousPosition(AbstractList<SampleIndex> readenSamples, long sampleTime, long samplePosition) {
+	private static long updateNearestPreviousPosition(ReadenSamples readenSamples, long offset, MonitorSample sample, long samplePosition) {
 
 		synchronized(readenSamples) {
 
-			for (int i=0; i<readenSamples.size(); i++) {
+			for (long i=offset; i<readenSamples.readenSamples.size(); i++) {
 
-				SampleIndex readenSample = readenSamples.get(i);
+				SampleIndex readenSample = readenSamples.readenSamples.get((int)i);
 
-				if (readenSample.time == sampleTime) {
+				if (readenSample.sample.getTime() == sample.getTime()) {
+					readenSample.sample = sample;
 					readenSample.position = samplePosition;
-					return;
+					return i;
 				}
-				else if (readenSample.time > sampleTime) {
-					readenSamples.add(i, new SampleIndex(sampleTime, samplePosition));
-					return;
+				else if (readenSample.sample.getTime() > sample.getTime()) {
+					readenSamples.readenSamples.add((int)i, new SampleIndex(sample, samplePosition));
+					return i;
 				}
 			}
 
-			readenSamples.add(new SampleIndex(sampleTime, samplePosition));
+			readenSamples.readenSamples.add(new SampleIndex(sample, samplePosition));
+
+			return readenSamples.readenSamples.size() - 1;
 		}
 	}
 
-	/**
-	 * Retorna la primera posición más cercana, y sin pasarse, al valor temporal de la muestra.
-	 * 
-	 * @param readenSamples Lista de tiempos de muestras del que se desea obtener la posición.
-	 * @param sampleTime Tiempo en milisegundos desde epoch a localizar.
-	 * 
-	 * @return la primera posición más cercana, y sin pasarse, al valor temporal de la muestra.
-	 */
-	private static long getNearestPreviousPosition(AbstractList<SampleIndex> readenSamples, long sampleTime) {
+	private static SampleIndex getSampleTimeSegment(ReadenSamples readenSamples, 
+			AbstractList<MonitorSample> timeSegment, 
+			long timeStartEdge,
+			long timeEndEdge, 
+			long period) throws IOException {
+
+		long lastSelectedSampleTime = Long.MAX_VALUE;
+		SampleIndex lastSampleIndex = null;
 
 		synchronized(readenSamples) {
 
-			int position = 0;					
-			while(position < readenSamples.size()) {
+			for(SampleIndex sampleIndex : readenSamples.readenSamples) {
 
-				SampleIndex readenSample = readenSamples.get(position);
+				MonitorSample readenSample = sampleIndex.sample;
 
-				if (readenSample.time == sampleTime) {
-					return readenSample.position;
-				}
-				else if (readenSample.time > sampleTime) {
+				if (readenSample.getTime() > timeStartEdge) {
 
-					if (position == 0) {
-						return 0;
+					if (readenSample.getTime() > timeEndEdge) {
+						break;
 					}
 
-					return readenSamples.get(position - 1).position;
+					if (readenSample.getTime() >= lastSelectedSampleTime + period) {
+						lastSelectedSampleTime = readenSample.getTime();
+						timeSegment.add(readenSample);
+						lastSampleIndex = sampleIndex;
+					}
 				}
-
-				position++;
-			}	
+			}
 		}
 
-		return 0;
+		return lastSampleIndex;
+	}
+
+	private static AbstractList<MonitorSample> getSampleTimeSegment(SeekableByteChannel channel, 
+			ReadenSamples readenSamples, 
+			AbstractList<MonitorSample> timeSegment, 
+			long timeStartEdge,
+			long timeEndEdge, 
+			long period) throws IOException {
+
+		ByteBuffer buffer = ByteBuffer.allocate(READ_BUFFER_CAPACITY);
+		ObjectMapper mapper = new ObjectMapper();
+		long lastSelectedSampleTime = Long.MAX_VALUE;
+		long samplePosition = channel.position();					
+		long lastUpdatedPosition = 0;
+		byte[] jsonBytes;
+
+		// Rellenado del buffer a cada iteración.
+		while(channel.read(buffer) > 0) {
+
+			// Se transforma el buffer de escritura, en lectura.
+			buffer.flip();
+
+			// Se obtiene el array de bytes del siguiente json
+			while((jsonBytes = readJsonLine(buffer)) != null) {
+
+				MonitorSample readenSample = mapper.readValue(jsonBytes, 0, jsonBytes.length, MonitorSample.class);
+
+				lastUpdatedPosition = updateNearestPreviousPosition(readenSamples, lastUpdatedPosition, readenSample, samplePosition);
+
+				if (readenSample.getTime() > timeStartEdge) {
+
+					if (readenSample.getTime() > timeEndEdge) {
+						return timeSegment;
+					}
+
+					if (readenSample.getTime() >= lastSelectedSampleTime + period) {
+						lastSelectedSampleTime = readenSample.getTime();
+						timeSegment.add(readenSample);
+					}
+				}
+
+				samplePosition += jsonBytes.length + 1;
+			}
+
+			if (buffer.hasRemaining()) {
+				/*
+				 * 1.- Se compacta el contenido pendiente de leer.
+				 * 2.- Deja el buffer listo para nuevas escrituras.
+				 */
+				buffer.compact();
+			}
+			else {
+				/*
+				 * 1.- Vacía el buffer.
+				 * 2.- Deja el buffer listo para nuevas escrituras.
+				 */
+				buffer.clear();
+			}
+		}
+
+		return timeSegment;
 	}
 
 	/**
@@ -410,7 +501,11 @@ public class SamplesRegister {
 
 		//Paso a milisegundos;
 		if (timeRange == null) {
-			timeSegment.add(getLastSample(meter));
+
+			MonitorSample lastSample = getLastSample(meter);
+			if (lastSample != null) {
+				timeSegment.add(lastSample);
+			}
 
 			return timeSegment;
 		}
@@ -424,7 +519,15 @@ public class SamplesRegister {
 		}
 
 		if (timeOffset == null) {
-			timeOffset = getLastSample(meter).getTime() - timeRange;
+
+			MonitorSample lastSample = getLastSample(meter);
+			if (lastSample != null) {
+				timeOffset = lastSample.getTime() - timeRange;
+			}
+			else {
+				timeOffset = System.currentTimeMillis() - timeRange;
+			}
+
 		}
 		else {
 			timeOffset *= 1000;
@@ -434,7 +537,6 @@ public class SamplesRegister {
 
 		long fileDate = timeOffset;
 		fileDate = fileDate - (fileDate % DAY_IN_MILLISECONDS);
-		ByteBuffer buffer = ByteBuffer.allocate(READ_BUFFER_CAPACITY);
 
 		MeterOutput meterOutput = meterOutputs.get(meter);
 
@@ -442,81 +544,54 @@ public class SamplesRegister {
 
 			long timeStartEdge = timeOffset;
 			long timeEndEdge = timeOffset + timeRange;
-			long lastSelectedSampleTime = Long.MAX_VALUE;
-			ObjectMapper mapper = new ObjectMapper();
 
 			try {
 				do {
 					String fileName = getFileName(meter, fileDate);
 
-					File file = new File(fileName);
+					// Obtención del la lista de muestras ya leídas del fichero de muestras.
+					ReadenSamples readenSamples = getReadenSamples(fileName);
 
-					if (!file.exists()) {
+					if (readenSamples == null) {
 
-						fileDate += DAY_IN_MILLISECONDS;
+						File file = new File(fileName);
 
-						if (fileDate > timeEndEdge) {
-							break;
-						}
+						if (!file.exists()) {
 
-						continue;
-					}
+							fileDate += DAY_IN_MILLISECONDS;
 
-					// Obtención del canal de lectura.
-					SeekableByteChannel channel = Files.newByteChannel(file.toPath(), StandardOpenOption.READ);
-
-					// Obtención del la lista de posiciones y tiempos del fichero de muestras.
-					AbstractList<SampleIndex> readenSamples = getReadenSamples(fileName);
-
-					// Avance hasta la posición más cercana, y sin pasarse.
-					Long samplePosition = getNearestPreviousPosition(readenSamples, timeStartEdge);					
-					channel.position(samplePosition);
-
-					// Rellenado del buffer a cada iteración.
-					while(channel.read(buffer) > 0) {
-
-						byte[] jsonBytes;
-
-						// Se transforma el buffer de escritura, en lectura.
-						buffer.flip();
-
-						// Se obtiene el array de bytes del siguiente json
-						while((jsonBytes = readJsonLine(buffer)) != null) {
-
-							MonitorSample readenSample = mapper.readValue(jsonBytes, 0, jsonBytes.length, MonitorSample.class);
-
-							updateNearestPreviousPosition(readenSamples, readenSample.getTime(), samplePosition);
-
-							if (readenSample.getTime() > timeStartEdge) {
-
-								if (readenSample.getTime() >= lastSelectedSampleTime + period) {
-									lastSelectedSampleTime = readenSample.getTime();
-									timeSegment.add(readenSample);
-								}
+							if (fileDate > timeEndEdge) {
+								break;
 							}
 
-							samplePosition += jsonBytes.length + 1;
+							continue;
 						}
 
-						if (buffer.hasRemaining()) {
-							/*
-							 * 1.- Se compacta el contenido pendiente de leer.
-							 * 2.- Deja el buffer listo para nuevas escrituras.
-							 */
-							buffer.compact();
-						}
-						else {
-							/*
-							 * 1.- Vacía el buffer.
-							 * 2.- Deja el buffer listo para nuevas escrituras.
-							 */
-							buffer.clear();
+						readenSamples = createReadenSamples(fileName, file);
+					}
+
+					// ===== Lectura de los elementos ya leídos =====
+					// Avance hasta la posición más cercana, y sin pasarse.
+					SampleIndex lastSampleIndex = getSampleTimeSegment(readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);					
+
+					if (lastSampleIndex != null) {
+
+						if (lastSampleIndex.sample.getTime() > timeEndEdge) {
+							break;
 						}
 					}
 
+					// ===== Lectura des del fichero =====
+					// Obtención del canal de lectura.
+					SeekableByteChannel channel = Files.newByteChannel(readenSamples.sampleFile.toPath(), StandardOpenOption.READ);
+					// Obtención del resto de muestras del fichero.
+					channel.position(lastSampleIndex != null ? lastSampleIndex.position : 0);
+					getSampleTimeSegment(channel, readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);
+
+					// Cierre del canal.
 					channel.close();
 
-				} while(true);
+				} while(timeSegment.size() > 0 && timeSegment.get(timeSegment.size()-1).getTime() > timeEndEdge);
 			}
 			catch (JsonMappingException e) {
 			}

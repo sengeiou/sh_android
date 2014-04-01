@@ -29,7 +29,7 @@ public class SystemMonitoring {
 	private AbstractList<StorageMeter> storageMeters;
 
 	private Timer secondResolutionTimer;
-	private Timer minuteResolutionTimer;
+	private Timer tenSecondsResolutionTimer;
 
 
 	public SystemMonitoring() {
@@ -62,7 +62,7 @@ public class SystemMonitoring {
 		}, 0L, SECOND_CADENCE);
 
 		storageMeters = new ArrayList<StorageMeter>();
-		minuteResolutionTimer = new Timer("System Minute Monitor");
+		tenSecondsResolutionTimer = new Timer("System Minute Monitor");
 
 		for (Path root : FileSystems.getDefault().getRootDirectories())
 		{
@@ -73,7 +73,7 @@ public class SystemMonitoring {
 			}
 		}
 
-		minuteResolutionTimer.schedule(new TimerTask() {
+		tenSecondsResolutionTimer.schedule(new TimerTask() {
 
 			public void run() {
 
@@ -88,7 +88,7 @@ public class SystemMonitoring {
 					}
 				}
 			}
-		}, 0L, MINUTE_CADENCE);
+		}, 0L, SECOND_CADENCE * 10);
 	}
 
 	/**

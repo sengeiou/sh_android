@@ -95,13 +95,22 @@ function createMemoryHistoryPlot(servicesURL, plotElement) {
 			looseZoom: true,
 			showTooltip: true
 		},
+		seriesDefaults:{
+			rendererOptions: {
+				smooth: true
+			},
+			linePattern: 'solid',
+			lineWidth: 1,
+			showMarker: false,
+			shadow: false
+		},
 		series:[
-		        { color: '#ff1111', showMarker: false },
-		        { color: '#00b3ff', showMarker: false },
-		        { color: '#90d91d', showMarker: false },
-		        { color: '#fcc226', showMarker: false },
-		        { color: '#cffe2e', showMarker: false },
-		        { color: '#9ab66e', showMarker: false }
+		        { color: '#ff1111', linePattern: 'dashed' },
+		        { color: '#00b3ff', linePattern: 'dashed' },
+		        { color: '#90d91d' },
+		        { color: '#fcc226' },
+		        { color: '#cffe2e' },
+		        { color: '#9ab66e' }
 		        ],
 		        axes:{
 		        	xaxis:{
