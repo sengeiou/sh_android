@@ -35,7 +35,7 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	public void dropAccessPolicies() throws ServerException {
 		AccessPolicy.resetAccessPolicies();
 
-		applyCurrentAccessPolicy();
+		genericService.resetAccessPoliciesInformationAgainstDataSource();
 	}
 
 	/**
@@ -45,9 +45,19 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	public void loadDefaultAccessPolicy() throws ServerException {
 
 		AccessPolicy.resetAccessPolicies();
-		AccessPolicy.loadDefaultAccessPolicies();
 
-		applyCurrentAccessPolicy();
+		try {
+
+			AccessPolicy.loadDefaultAccessPolicies();
+			genericService.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		}
+		catch(ServerException e) {
+
+			AccessPolicy.resetAccessPolicies();
+			genericService.resetAccessPoliciesInformationAgainstDataSource();
+
+			throw e;
+		}
 	}
 
 	/**
@@ -58,18 +68,19 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 		if (accessPolicyFiles == null || accessPolicyFiles.getURLs() == null || accessPolicyFiles.getURLs().length == 0) {
 
-			AccessPolicy.resetAccessPolicies();
-			AccessPolicy.loadDefaultAccessPolicies();
+			loadDefaultAccessPolicy();
 		}
 		else {
 
 			for(URL url : accessPolicyFiles.getURLs()) {
 
-				AccessPolicy.mergeCurrentAccesPolicy(new AccessPolicyDOM(url));
+				AccessPolicy accessPolicy = new AccessPolicyDOM(url);
+				
+				genericService.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
+				
+				AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
 			}
 		}
-
-		applyCurrentAccessPolicy();
 
 		return accessPolicyFiles;
 	}
@@ -82,27 +93,10 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 
 		AccessPolicy accessPolicy = new AccessPolicyDOM(accessPolicyStream);
 
+		genericService.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
+
 		AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
 
-		applyCurrentAccessPolicy();
-
 		return accessPolicy;
-	}
-
-	/**
-	 * Comprueba y aplica la configuración actual de políticas de acceso. 
-	 * 
-	 * @throws ServerException
-	 */
-	private void applyCurrentAccessPolicy() throws ServerException {
-
-		if (AccessPolicy.getCurrentAccesPolicy() != null) {
-
-			genericService.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());		
-		}
-		else {
-
-			genericService.resetAccessPoliciesInformationAgainstDataSource();
-		}
 	}
 }

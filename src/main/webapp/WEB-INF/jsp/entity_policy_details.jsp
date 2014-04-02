@@ -3,6 +3,7 @@
 <%@page import="com.fav24.dataservices.domain.security.EntityAttribute"%>
 <%@page import="com.fav24.dataservices.domain.security.EntityDataAttribute"%>
 <%@page import="com.fav24.dataservices.domain.security.EntityDataAttribute.Direction"%>
+<%@page import="com.fav24.dataservices.domain.security.EntityOrderAttribute"%>
 <%@page import="com.fav24.dataservices.domain.security.EntityKey"%>
 <%@page import="com.fav24.dataservices.domain.security.EntityFilter"%>
 <%@page import="java.util.Iterator"%>
@@ -157,6 +158,43 @@
 			}
 			else {
 				output.append("ninguno.");
+			}
+
+			output.append("</div>");
+			output.append("</div>");
+			
+			// Ordenación por defecto.
+			output.append("<div class=\"panel panel-info\">");
+			output.append("<div class=\"panel-heading\">Ordenación</div>");
+
+			output.append("<div class=\"panel-body\">");
+			
+			if (entityPolicies.getOrdination() != null && entityPolicies.getOrdination().getOrder().size() > 0) {
+
+				output.append("<ul class=\"list-group\">");
+				
+				output.append("<li class=\"list-group-item\">");
+				Iterator<EntityOrderAttribute> orderIterator = entityPolicies.getOrdination().getOrder().iterator();
+
+				if (orderIterator.hasNext()) {
+					EntityOrderAttribute  orderAttribute = orderIterator.next();
+					output.append(orderAttribute.getAlias());
+					output.append(' ');
+					output.append(orderAttribute.getOrder().getOrder());
+					while (orderIterator.hasNext()) {
+						orderAttribute = orderIterator.next();
+						output.append(", ");
+						output.append(orderAttribute.getAlias());
+						output.append(' ');
+						output.append(orderAttribute.getOrder().getOrder());
+					}
+				}
+				output.append("</li>");
+					
+				output.append("</ul>");
+			}
+			else {
+				output.append("aleatoria.");
 			}
 
 			output.append("</div>");
