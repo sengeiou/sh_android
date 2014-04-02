@@ -112,8 +112,10 @@ public class SystemMonitoring {
 	 * Nota: timeRange debe ser superior a period.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SamplesRegister.getSampleTimeSegment(memoryMeter, offset, timeRange, period);
 	}
@@ -137,8 +139,10 @@ public class SystemMonitoring {
 	 * @param period Granularidad de la información en segundos.
 	 *  
 	 * @return la información del estado de la carga de proceso del sistema.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SamplesRegister.getSampleTimeSegment(cpuMeter, offset, timeRange, period);
 	}
@@ -171,13 +175,15 @@ public class SystemMonitoring {
 	 * @param period Granularidad de la información en segundos.
 	 * 
 	 * @return la información asociada al elemento de almacenamiento indicado, para el periodo especificado.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) throws ServerException {
 
 		for (StorageMeter storageMeter : storageMeters) {
 
 			if (storageMeter.getStoreName().equals(storeName)) {
-				SamplesRegister.getSampleTimeSegment(storageMeter, offset, timeRange, period);
+				return SamplesRegister.getSampleTimeSegment(storageMeter, offset, timeRange, period);
 			}
 		}
 

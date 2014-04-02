@@ -67,7 +67,7 @@ function cpuHistoryDataRenderer(url, plot, options) {
  */
 function createCPUHistoryPlot(servicesURL, plotElement) {
 
-	return $.jqplot(plotElement, [], 
+	return $.jqplot(plotElement, [[0], [0], [0]], 
 			{
 		grid: {
 			drawBorder: true,
@@ -261,10 +261,14 @@ function startCPUMonitor() {
 	this.cpuMonitorInterval = setInterval(function() { 		
 
 		// Historial de actividad de la CPU.
-		CPUMonitor.cpuHistoryPlot.replot({ data: [] });
+		if (CPUMonitor.cpuHistoryPlot) {
+			CPUMonitor.cpuHistoryPlot.replot({ data: [] });
+		}
 
 		// Carga instantanea de la CPU.
-		CPUMonitor.cpuLoadInstantPlot.replot({ data: [] });
+		if (CPUMonitor.cpuLoadInstantPlot) {
+			CPUMonitor.cpuLoadInstantPlot.replot({ data: [] });
+		}
 
 	}, 1000);
 }

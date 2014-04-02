@@ -1,5 +1,7 @@
 package com.fav24.dataservices.exception;
 
+import org.slf4j.Logger;
+
 /**
  * Excepción general de servidor.
  * 
@@ -8,7 +10,7 @@ package com.fav24.dataservices.exception;
 public class ServerException extends Exception {
 
 	private static final long serialVersionUID = 7715129933110523169L;
-	
+
 	private String errorCode;
 	private String message;
 
@@ -18,7 +20,7 @@ public class ServerException extends Exception {
 	public ServerException() {
 		this(null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -27,7 +29,7 @@ public class ServerException extends Exception {
 	public ServerException(String errorCode) {
 		this(errorCode, null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -37,7 +39,7 @@ public class ServerException extends Exception {
 		this.errorCode = errorCode;
 		this.setMessage(message);
 	}
-	
+
 	/**
 	 * Retorna el código de error asociado a la excepción.
 	 * 
@@ -72,5 +74,25 @@ public class ServerException extends Exception {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	/**
+	 * Escribe el código de error y el mensaje de esta excepción, como error, 
+	 * en la logger indicado por parámetro. 
+	 * 
+	 * @param logger Logger en el que se escribe la inforamción de esta excepción.
+	 * @param stackTrace True o false en función de si se desea o no que se escriba la pila de ejecución en el logger.
+	 */
+	public void log(Logger logger, boolean stackTrace) {
+
+		logger.error(errorCode + ":" + message);
+
+		if (stackTrace) {
+			logger.error("=================== Stack Begins ===================");
+			for (StackTraceElement element : getStackTrace()) {
+				logger.error(element.toString());
+			}
+			logger.error("==================== Stack Ends ====================");
+		}
 	}
 }

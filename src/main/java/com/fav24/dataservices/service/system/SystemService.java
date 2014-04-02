@@ -5,6 +5,7 @@ import java.util.AbstractList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
 
 
@@ -25,7 +26,7 @@ public interface SystemService {
 	 * @return la información de estado de la memoria, en la máquina virtual.
 	 */
 	public MonitorSample getSystemMemoryStatus();
-	
+
 	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual.
 	 * 
@@ -34,9 +35,11 @@ public interface SystemService {
 	 * @param period Granularidad de la información en segundos.
 	 *  
 	 * @return la información de estado de la memoria, en la máquina virtual.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period);
-	
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException;
+
 	/**
 	 * Retorna la información del estado de la carga de proceso del sistema
 	 * en este mismo instante.
@@ -44,7 +47,7 @@ public interface SystemService {
 	 * @return la información del estado de la carga de proceso del sistema.
 	 */
 	public MonitorSample getSystemCpuActivity();
-	
+
 	/**
 	 * Retorna la información del estado de la carga de proceso del sistema.
 	 * 
@@ -53,16 +56,18 @@ public interface SystemService {
 	 * @param period Granularidad de la información en segundos.
 	 *  
 	 * @return la información del estado de la carga de proceso del sistema.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period);
-	
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException;
+
 	/**
 	 * Retorna la información asociada al elemento de almacenamiento en este mismo instante.
 	 * 
 	 * @return la información asociada al elemento de almacenamiento en este mismo instante.
 	 */
 	public MonitorSample getSystemStorageStatus(String storeName);
-	
+
 	/**
 	 * Retorna la información asociada al elemento de almacenamiento en cuanto a:
 	 * 
@@ -74,6 +79,8 @@ public interface SystemService {
 	 * @param period Granularidad de la información en segundos.
 	 * 
 	 * @return la información asociada al elemento de almacenamiento.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period);
+	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) throws ServerException;
 }

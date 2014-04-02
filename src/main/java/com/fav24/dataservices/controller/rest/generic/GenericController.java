@@ -60,6 +60,8 @@ public class GenericController extends BaseRestController {
 
 			result = new GenericDto(e);
 			result.setRequestor(new RequestorDto(generic.getRequestor()));
+			
+			e.log(logger, false);
 		}
 		
 		result.getRequestor().setSystemTime(System.currentTimeMillis());

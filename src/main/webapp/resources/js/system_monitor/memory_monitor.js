@@ -6,7 +6,7 @@ var MemoryMonitor = {
 		timeRange : null,
 		memoryHistoryPlot : null,
 		committedMemoryInstantPlot : null,
-		usedMemoryInstantPlot : null,
+		usedMemoryInstantPlot : null
 }
 
 
@@ -78,7 +78,7 @@ function memoryHistoryDataRenderer(url, plot, options) {
  */
 function createMemoryHistoryPlot(servicesURL, plotElement) {
 
-	return $.jqplot(plotElement, [], 
+	return $.jqplot(plotElement, [[0], [0], [0], [0], [0], [0]], 
 			{
 		grid: {
 			drawBorder: true,
@@ -357,14 +357,22 @@ function stopMemoryMonitor() {
  */
 function startMemoryMonitor() {
 	stopMemoryMonitor();
-	this.memoryMonitorInterval = setInterval(function() { 		
+	this.memoryMonitorInterval = setInterval(function() {
+
 		// Historial de memoria.
-		MemoryMonitor.memoryHistoryPlot.replot({ data: [] });
+		if (MemoryMonitor.memoryHistoryPlot) {
+			MemoryMonitor.memoryHistoryPlot.replot({ data: [] });
+		}
 
 		// Instante de memoria disponible.
-		MemoryMonitor.committedMemoryInstantPlot.replot({ data: [] });
+		if (MemoryMonitor.committedMemoryInstantPlot) {
+			MemoryMonitor.committedMemoryInstantPlot.replot({ data: [] });
+		}
 
 		// Instante de memoria usada.
-		MemoryMonitor.usedMemoryInstantPlot.replot({ data: [] }); 
+		if (MemoryMonitor.usedMemoryInstantPlot) {
+			MemoryMonitor.usedMemoryInstantPlot.replot({ data: [] });
+		}
+
 	}, 1000);
 }

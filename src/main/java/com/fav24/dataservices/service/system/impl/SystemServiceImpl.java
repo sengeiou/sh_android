@@ -5,6 +5,7 @@ import java.util.AbstractList;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.monitoring.SystemMonitoring;
 import com.fav24.dataservices.service.system.SystemService;
@@ -36,7 +37,7 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SystemActivityMonitoring.getSystemMemoryStatus(offset, timeRange, period);
 	}
@@ -54,7 +55,7 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SystemActivityMonitoring.getSystemCpuActivity(offset, timeRange, period);
 	}
@@ -72,7 +73,7 @@ public class SystemServiceImpl implements SystemService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) {
+	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SystemActivityMonitoring.getSystemStorageStatus(storeName, offset, timeRange, period);
 	}

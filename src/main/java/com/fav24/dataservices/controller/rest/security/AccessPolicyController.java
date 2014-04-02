@@ -63,6 +63,8 @@ public class AccessPolicyController extends BaseRestController {
 
 			result = new AccessPolicyDto(e);
 			result.setRequestor(accessPolicy.getRequestor());
+			
+			e.log(logger, false);
 		}
 
 		result.getRequestor().setSystemTime(System.currentTimeMillis());
@@ -93,6 +95,8 @@ public class AccessPolicyController extends BaseRestController {
 
 			result = new AccessPolicyFilesDto(e);
 			result.setRequestor(accessPolicyFiles.getRequestor());
+			
+			e.log(logger, false);
 		}
 
 		result.getRequestor().setSystemTime(System.currentTimeMillis());

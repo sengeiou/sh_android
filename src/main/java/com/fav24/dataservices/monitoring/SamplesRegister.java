@@ -12,16 +12,30 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 
 
+/**
+ * Clase para la gestión del registro de muestras de medidores. 
+ */
 public class SamplesRegister {
+
+	public static final String ERROR_WRITING_SAMPLE_FILES = "SR000";
+	public static final String ERROR_WRITING_SAMPLE_FILES_MESSAGE = "No ha sido posible escribir en el fichero de muestras, para el medidor <%s>, debido a: %s";
+	public static final String ERROR_READING_SAMPLE_FILES = "SR001";
+	public static final String ERROR_READING_SAMPLE_FILES_MESSAGE = "No ha sido posible recuperar la información de monitoraje, para el medidor <%s>, debido a: %s";
+	public static final String ERROR_OPENING_SAMPLE_FILES = "SR002";
+	public static final String ERROR_OPENING_SAMPLE_FILES_MESSAGE = "No ha sido posible abrir el fichero de muestras, para el medidor <%s>, debido a: %s";
+	public static final String ERROR_CLOSING_SAMPLE_FILES = "SR003";
+	public static final String ERROR_CLOSING_SAMPLE_FILES_MESSAGE = "No ha sido posible cerrar el fichero de muestras, para el medidor <%s>, debido a: %s";
 
 	public static final String SAMPLE_FILES_RELATIVE_LOCATION = "monitoring";
 
@@ -31,14 +45,18 @@ public class SamplesRegister {
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	private static final int WRITE_BUFFER_CAPACITY = 1024;
-	private static final int READ_BUFFER_CAPACITY = 4096*4;
+	private static final int READ_BUFFER_CAPACITY = 1024*8;
 
 	private static final long SECOND_IN_MILLISECONDS = 1000L;
 	private static final long MINUTE_IN_MILLISECONDS = SECOND_IN_MILLISECONDS * 60;
 	private static final long HOUR_IN_MILLISECONDS = MINUTE_IN_MILLISECONDS * 60;
 	private static final long DAY_IN_MILLISECONDS = HOUR_IN_MILLISECONDS * 24;
 
+	/**
+	 * Salida de escritura de registro asociada a un cierto medidor.
+	 */
 	private static class MeterOutput {
+
 		private Meter meter;
 		private long today;
 		private ByteBuffer writeBuffer;
@@ -47,7 +65,12 @@ public class SamplesRegister {
 		private MonitorSample lastRegisteredSample;
 	}
 
+	/**
+	 * Muestra asociada a su posición correspondiente 
+	 * dentro del fichero de registro de muestras.
+	 */
 	private static class SampleIndex {
+
 		private long position;
 		private MonitorSample sample;
 
@@ -58,20 +81,70 @@ public class SamplesRegister {
 		}
 	}
 
-	private static class ReadenSamples {
+	/**
+	 * Almacena las muestras ya leídas de un determinado fichero.
+	 */
+	private static class FileReadenSamples {
+
+		private static final long MAX_IDLE_TIME = 30 * MINUTE_IN_MILLISECONDS; 
 
 		private File sampleFile;
 		private AbstractList<SampleIndex> readenSamples;
+		private long lessUsedSamples;
+		private long lastUsedTime;
 
-		private ReadenSamples(File sampleFile) {
+
+		private FileReadenSamples(File sampleFile) {
 
 			this.sampleFile = sampleFile;
 			this.readenSamples = new ArrayList<SampleIndex>();
+
+			this.lessUsedSamples = 0;
+			this.lastUsedTime = System.currentTimeMillis();
+		}
+
+		/**
+		 * Actualiza el momento de último uso de esta estructura.
+		 * 
+		 * @param lessUsedSamples Tiempo de muestras
+		 */
+		public void updateLastUsedTime(long lessUsedSamples) {
+
+			synchronized(readenSamples) {
+
+				if (this.lessUsedSamples < lessUsedSamples) {
+
+					this.lessUsedSamples = lessUsedSamples;	
+					this.lastUsedTime = System.currentTimeMillis();
+				}
+			}
+		}
+
+		/**
+		 * Purga las muestras leídas no usadas durante un periodo de tiempo #MAX_IDLE_TIME.
+		 */
+		public void purgeOutOfDateSamples() {
+
+			if ((lastUsedTime + MAX_IDLE_TIME) < System.currentTimeMillis()) {
+
+				synchronized(readenSamples) {
+
+					Iterator<SampleIndex> sampleIndexIterator = readenSamples.iterator();
+
+					while(sampleIndexIterator.hasNext() && sampleIndexIterator.next().sample.getTime() > lessUsedSamples) {
+
+						sampleIndexIterator.remove();
+					}
+				}
+				
+				this.lessUsedSamples = 0;
+				this.lastUsedTime = System.currentTimeMillis();
+			}
 		}
 	}
 
 	private static Map<Meter, MeterOutput> meterOutputs = new HashMap<Meter, MeterOutput>();
-	private static Map<String, ReadenSamples> readenSamples = new HashMap<String, ReadenSamples>();
+	private static Map<String, FileReadenSamples> readenSamples = new HashMap<String, FileReadenSamples>();
 
 	/**
 	 * Inicializa el contexto necesario para el registro de muestras de los monitores del sistema.
@@ -153,18 +226,28 @@ public class SamplesRegister {
 		}
 		else if (meterOutput.today < today) {
 
+			meterOutput.today = today;
+
 			try {
 
-				meterOutput.today = today;
 				meterOutput.writeChannel.write(meterOutput.writeBuffer);
-				meterOutput.writeChannel.close();
-				meterOutput.writeBuffer.clear();
-				meterOutput.writeChannel = null;
 
 			} catch (IOException e) {
 
-				throw new ServerException(e.getMessage());
+				throw new ServerException(ERROR_WRITING_SAMPLE_FILES, String.format(ERROR_WRITING_SAMPLE_FILES_MESSAGE, meterOutput.meter.getMeterName(), e.getMessage()));
 			}
+
+			try {
+
+				meterOutput.writeChannel.close();
+
+			} catch (IOException e) {
+
+				throw new ServerException(ERROR_CLOSING_SAMPLE_FILES, String.format(ERROR_CLOSING_SAMPLE_FILES_MESSAGE, meterOutput.meter.getMeterName(), e.getMessage()));
+			}
+
+			meterOutput.writeBuffer.clear();
+			meterOutput.writeChannel = null;
 		}
 
 		File file = new File(getFileName(meter, meterOutput.today));
@@ -175,7 +258,7 @@ public class SamplesRegister {
 				meterOutput.writeChannel = Files.newByteChannel(file.toPath(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 			} catch (IOException e) {
 
-				throw new ServerException(e.getMessage());
+				throw new ServerException(ERROR_OPENING_SAMPLE_FILES, String.format(ERROR_WRITING_SAMPLE_FILES_MESSAGE, meterOutput.meter.getMeterName(), e.getMessage()));
 			}
 		}
 
@@ -258,7 +341,7 @@ public class SamplesRegister {
 
 				} catch (IOException e) {
 
-					throw new ServerException(e.getMessage());
+					throw new ServerException(ERROR_WRITING_SAMPLE_FILES, String.format(ERROR_WRITING_SAMPLE_FILES_MESSAGE, meterOutput.meter.getMeterName(), e.getMessage()));
 				}
 			}
 
@@ -294,7 +377,7 @@ public class SamplesRegister {
 
 				} catch (IOException e) {
 
-					throw new ServerException(e.getMessage());
+					throw new ServerException(ERROR_CLOSING_SAMPLE_FILES, String.format(ERROR_CLOSING_SAMPLE_FILES_MESSAGE, meterOutput.meter.getMeterName(), e.getMessage()));
 				}
 			}
 		}
@@ -321,7 +404,7 @@ public class SamplesRegister {
 	 * 
 	 * @return una estructura con información ya leida de las muestras del fichero de muestras indicado.
 	 */
-	private static ReadenSamples getReadenSamples(String fileName) {
+	private static FileReadenSamples getReadenSamples(String fileName) {
 
 		synchronized(SamplesRegister.readenSamples) {
 
@@ -336,16 +419,16 @@ public class SamplesRegister {
 	 * 
 	 * @return una estructura con información ya leida de las muestras del fichero de muestras indicado.
 	 */
-	private static ReadenSamples createReadenSamples(String fileName, File file) {
+	private static FileReadenSamples createReadenSamples(String fileName, File file) {
 
-		ReadenSamples readenSamples;
+		FileReadenSamples readenSamples;
 
 		synchronized(SamplesRegister.readenSamples) {
 
 			readenSamples = SamplesRegister.readenSamples.get(fileName);
 
 			if (readenSamples == null) {
-				readenSamples = new ReadenSamples(file);
+				readenSamples = new FileReadenSamples(file);
 
 				SamplesRegister.readenSamples.put(fileName, readenSamples);
 			}
@@ -364,7 +447,7 @@ public class SamplesRegister {
 	 * 
 	 * @return la última posición modificada de la lista de muestras leídas.
 	 */
-	private static long updateNearestPreviousPosition(ReadenSamples readenSamples, long offset, MonitorSample sample, long samplePosition) {
+	private static long updateNearestPreviousPosition(FileReadenSamples readenSamples, long offset, MonitorSample sample, long samplePosition) {
 
 		synchronized(readenSamples) {
 
@@ -389,11 +472,26 @@ public class SamplesRegister {
 		}
 	}
 
-	private static SampleIndex getSampleTimeSegment(ReadenSamples readenSamples, 
+	
+	/**
+	 * Retorna la última muestra indexada de la estructura de muestras leídas, que entra dentro del segmento temporal indicado.
+	 * Completa la lista de muestras suministradas por parámetro.
+	 * 
+	 * @param readenSamples Estructura de donde se obtienen las muestras leídas, para ser reutilizadas.
+	 * @param timeSegment Lista de muestras en donde se añadirán las leídas que entran dentro del segmento temporal.
+	 * @param timeStart Inicio del segmento temporal a leer. 
+	 * @param timeEnd Fin del segmento temporal a leer.
+	 * @param period Granularidad del periodo temporal.
+	 * 
+	 * @return la última muestra indexada de la estructura de muestras leídas, que entra dentro del segmento temporal indicado.
+	 * 
+	 * @throws IOException
+	 */
+	private static SampleIndex getSampleTimeSegment(FileReadenSamples readenSamples, 
 			AbstractList<MonitorSample> timeSegment, 
 			long timeStartEdge,
 			long timeEndEdge, 
-			long period) throws IOException {
+			long period) {
 
 		long lastSelectedSampleTime = Long.MAX_VALUE;
 		SampleIndex lastSampleIndex = null;
@@ -422,11 +520,25 @@ public class SamplesRegister {
 		return lastSampleIndex;
 	}
 
+	/**
+	 * Retorna una lista de muestras del canal de entrada suministrado, de segmento temporal y periodo indicados por parámetro.
+	 * 
+	 * @param channel Canal del que se obtienen las muestras.
+	 * @param readenSamples Estructura donde se almacenan las muestras leídas, para ser reutilizadas.
+	 * @param timeSegment Lista de muestras en donde se añadirán las leídas.
+	 * @param timeStart Inicio del segmento temporal a leer. 
+	 * @param timeEnd Fin del segmento temporal a leer.
+	 * @param period Granularidad del periodo temporal.
+	 * 
+	 * @return una lista de muestras del canal de entrada suministrado, de segmento temporal y periodo indicados por parámetro.
+	 * 
+	 * @throws IOException
+	 */
 	private static AbstractList<MonitorSample> getSampleTimeSegment(SeekableByteChannel channel, 
-			ReadenSamples readenSamples, 
+			FileReadenSamples readenSamples, 
 			AbstractList<MonitorSample> timeSegment, 
-			long timeStartEdge,
-			long timeEndEdge, 
+			long timeStart,
+			long timeEnd, 
 			long period) throws IOException {
 
 		ByteBuffer buffer = ByteBuffer.allocate(READ_BUFFER_CAPACITY);
@@ -449,9 +561,9 @@ public class SamplesRegister {
 
 				lastUpdatedPosition = updateNearestPreviousPosition(readenSamples, lastUpdatedPosition, readenSample, samplePosition);
 
-				if (readenSample.getTime() > timeStartEdge) {
+				if (readenSample.getTime() > timeStart) {
 
-					if (readenSample.getTime() > timeEndEdge) {
+					if (readenSample.getTime() > timeEnd) {
 						return timeSegment;
 					}
 
@@ -494,8 +606,10 @@ public class SamplesRegister {
 	 * Nota: timeRange debe ser superior a period.
 	 *  
 	 * @return el segmento definido por parámetro de la lista de muestras indicada.
+	 * 
+	 * @throws ServerException 
 	 */
-	public static AbstractList<MonitorSample> getSampleTimeSegment(Meter meter, Long timeOffset, Long timeRange, Long period) {
+	public static AbstractList<MonitorSample> getSampleTimeSegment(Meter meter, Long timeOffset, Long timeRange, Long period) throws ServerException {
 
 		AbstractList<MonitorSample> timeSegment = new ArrayList<MonitorSample>();
 
@@ -545,58 +659,64 @@ public class SamplesRegister {
 			long timeStartEdge = timeOffset;
 			long timeEndEdge = timeOffset + timeRange;
 
-			try {
-				do {
-					String fileName = getFileName(meter, fileDate);
+			do {
+				String fileName = getFileName(meter, fileDate);
 
-					// Obtención del la lista de muestras ya leídas del fichero de muestras.
-					ReadenSamples readenSamples = getReadenSamples(fileName);
+				// Obtención del la lista de muestras ya leídas del fichero de muestras.
+				FileReadenSamples readenSamples = getReadenSamples(fileName);
 
-					if (readenSamples == null) {
+				if (readenSamples == null) {
 
-						File file = new File(fileName);
+					File file = new File(fileName);
 
-						if (!file.exists()) {
+					if (!file.exists()) {
 
-							fileDate += DAY_IN_MILLISECONDS;
+						fileDate += DAY_IN_MILLISECONDS;
 
-							if (fileDate > timeEndEdge) {
-								break;
-							}
-
-							continue;
-						}
-
-						readenSamples = createReadenSamples(fileName, file);
-					}
-
-					// ===== Lectura de los elementos ya leídos =====
-					// Avance hasta la posición más cercana, y sin pasarse.
-					SampleIndex lastSampleIndex = getSampleTimeSegment(readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);					
-
-					if (lastSampleIndex != null) {
-
-						if (lastSampleIndex.sample.getTime() > timeEndEdge) {
+						if (fileDate > timeEndEdge) {
 							break;
 						}
+
+						continue;
 					}
 
-					// ===== Lectura des del fichero =====
+					readenSamples = createReadenSamples(fileName, file);
+				}
+
+				// Se actualiza el último uso que se ha realizado, de las muestras ya leídas.
+				readenSamples.updateLastUsedTime(timeStartEdge);
+				// Se purgan las muestras leídas no reutilizadas durante un cierto periodo de tiempo.
+				readenSamples.purgeOutOfDateSamples();
+
+				// ===== Lectura de los elementos ya leídos =====
+				// Avance hasta la posición más cercana, y sin pasarse.
+				SampleIndex lastSampleIndex = getSampleTimeSegment(readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);					
+
+				if (lastSampleIndex != null) {
+
+					if (lastSampleIndex.sample.getTime() > timeEndEdge) {
+						break;
+					}
+				}
+
+				// ===== Lectura des del fichero =====
+				SeekableByteChannel channel = null;
+				try {
 					// Obtención del canal de lectura.
-					SeekableByteChannel channel = Files.newByteChannel(readenSamples.sampleFile.toPath(), StandardOpenOption.READ);
+					channel = Files.newByteChannel(readenSamples.sampleFile.toPath(), StandardOpenOption.READ);
 					// Obtención del resto de muestras del fichero.
 					channel.position(lastSampleIndex != null ? lastSampleIndex.position : 0);
 					getSampleTimeSegment(channel, readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);
-
+				}
+				catch (IOException e) {
+					throw new ServerException(ERROR_READING_SAMPLE_FILES, String.format(ERROR_READING_SAMPLE_FILES_MESSAGE, meter.getMeterName(), e.getMessage()));
+				}
+				finally {
 					// Cierre del canal.
-					channel.close();
+					IOUtils.closeQuietly(channel);
+				}
 
-				} while(timeSegment.size() > 0 && timeSegment.get(timeSegment.size()-1).getTime() > timeEndEdge);
-			}
-			catch (JsonMappingException e) {
-			}
-			catch (IOException e) {
-			}
+			} while(timeSegment.size() > 0 && timeSegment.get(timeSegment.size()-1).getTime() > timeEndEdge);
 		}
 
 		return timeSegment;
