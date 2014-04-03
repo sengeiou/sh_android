@@ -1,10 +1,12 @@
-package com.fav24.dataservices.monitoring;
+package com.fav24.dataservices.monitoring.meter;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+
+import com.fav24.dataservices.monitoring.Meter;
 
 /**
  * Clase para trazar el uso de la memoria

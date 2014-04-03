@@ -36,8 +36,14 @@ function initCPUMonitor(servicesURL, period, timeRange, cpuHistoryPlotElement, c
 
 /**
  * Alimentador de información de la gráfica de actividad del procesador en el tiempo.
+ * 
+ * @param data Conjunto de datos actual representado en la gráfica.
+ * @param plot Gràfica a la que está asociada esta función de renderizado de datos.
+ * @param options Opciones indicadas en la gráfica para ser usadas desde esta función de renderizado.
  */
-function cpuHistoryDataRenderer(url, plot, options) {
+function cpuHistoryDataRenderer(data, plot, options) {
+
+	delete data;
 
 	var ret = null;
 	var xhr = new XMLHttpRequest();
@@ -143,8 +149,14 @@ function createCPUHistoryPlot(servicesURL, plotElement) {
 
 /**
  * Alimentador de información de la gráfica de la carga instantanea del procesador.
+ * 
+ * @param data Conjunto de datos actual representado en la gráfica.
+ * @param plot Gràfica a la que está asociada esta función de renderizado de datos.
+ * @param options Opciones indicadas en la gráfica para ser usadas desde esta función de renderizado.
  */
-function cpuLoadInstantDataRenderer(url, plot, options) {
+function cpuLoadInstantDataRenderer(data, plot, options) {
+
+	delete data;
 
 	var ret = null;
 	var xhr = new XMLHttpRequest();
@@ -262,7 +274,7 @@ function startCPUMonitor() {
 
 		// Historial de actividad de la CPU.
 		if (CPUMonitor.cpuHistoryPlot) {
-			CPUMonitor.cpuHistoryPlot.replot({ data: [] });
+			CPUMonitor.cpuHistoryPlot.replot({ data: [[0], [0], [0]] });
 		}
 
 		// Carga instantanea de la CPU.

@@ -1,4 +1,4 @@
-package com.fav24.dataservices.monitoring;
+package com.fav24.dataservices.monitoring.meter;
 
 import java.io.IOException;
 import java.nio.file.FileStore;
@@ -6,6 +6,8 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.ArrayUtils;
+
+import com.fav24.dataservices.monitoring.Meter;
 
 /**
  * Clase para obtener el estado de los espacios en los dispositivos de almacemamiento.

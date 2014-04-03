@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
-	<!-- Definici髇 de los iconos -->
+	<!-- Definici贸n de los iconos -->
 	<link rel="apple-touch-icon" sizes="57x57" href="<%=imagesURL%>/favicons/apple-touch-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="<%=imagesURL%>/favicons/apple-touch-icon-114x114.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="<%=imagesURL%>/favicons/apple-touch-icon-72x72.png">
@@ -45,17 +45,22 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> 
+					<span class="icon-bar"></span> <span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Servicios de datos</a>
+				<a class="navbar-brand" href="#" onclick="showWorkload();">Servicios de datos</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#" onclick="sendGetRequest('dataSourcesInformation');">Principal</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Principal <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
+							<li class="divider"></li>
+							<li><a onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
+						</ul>
+					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a onclick="showAvailableEntities();">Entidades publicadas</a></li>
@@ -67,7 +72,6 @@
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
 							<li><a onclick="">Estado de la cach&eacute;</a></li>
 							<li><a onclick="showAvailableCacheManagers();">Configuraci&oacute;n de la cach&eacute;</a></li>
 							<li class="divider"></li>
@@ -154,55 +158,67 @@
 			}
 		}
 		
-		// Solicita el recurso indicado, pasando los par醡etros en la misma URL del recurso. 
+		// Solicita el recurso indicado, pasando los par谩metros en la misma URL del recurso. 
 		function sendGetRequest(resource) {
 			
 			onLoadStartHandler(null);
 			
 			var xhr = new XMLHttpRequest();
 			
-			// Asignaci髇 de las funciones asociadas a cada envento.
+			// Asignaci贸n de las funciones asociadas a cada envento.
 			xhr.onprogress = onProgressHandler;
 			xhr.onloadend = onLoadEndHandler;
 			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
 
-			// Preparaci髇 de la request.
+			// Preparaci贸n de la request.
 			xhr.open('GET', '<%=pagesURL%>/' + resource, false);
 
-			// Env韔.
+			// Env铆o.
 			xhr.send();
 		}
 		
-		// Env韆 los datos de formulario indicados, al recurso indicado. 
+		// Env铆a los datos de formulario indicados, al recurso indicado. 
 		function sendPostRequest(formData, resource) {
 
 			onLoadStartHandler(null);
 			
 			var xhr = new XMLHttpRequest();
 			
-			// Asignaci髇 de las funciones asociadas a cada envento.
+			// Asignaci贸n de las funciones asociadas a cada envento.
 			xhr.upload.addEventListener('loadstart', onLoadStartHandler, false);
 			xhr.upload.addEventListener('progress', onProgressHandler, false);
 			xhr.upload.addEventListener('load', onLoadEndHandler, false);
 			xhr.onprogress = onProgressHandler;
 			xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
 
-			// Preparaci髇 de la request.
+			// Preparaci贸n de la request.
 			xhr.open('POST', '<%=pagesURL%>/' + resource, false);
 
-			// Env韔.
+			// Env铆o.
 			xhr.send(formData);
 		}
 	
-		// Ejecuci髇 despu閟 de la carga del documento.
+		// Ejecuci贸n despu茅s de la carga del documento.
 		$(document).ready(function(){
-			sendGetRequest('dataSourcesInformation');
+			showWorkload();
 		});
 		
 		
 		// ====================================
-		// operaciones de los men鷖.
+		// operaciones de los men煤s.
 		// ====================================
+
+		function showWorkload() {
+			sendGetRequest('system/workload');
+		}
+		
+		function showDataSourcesInformation() {
+			sendGetRequest('dataSourcesInformation');
+		}
+		
+		function showSystemMonitor() {
+			sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los 煤ltimos 5 minutos con resoluci贸n de un segundo.
+		}
 			
 		function showAvailableEntities() {
 			sendGetRequest('accesspolicy/availableEntities');
@@ -222,10 +238,6 @@
 			modalAcceptanceShow('&iquest;Desea eliminar pol&iacute;ticas activas?', 
             	'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>bloqueo total</strong> del acceso a los servicios de datos.',
             		function(){ sendGetRequest('accesspolicy/denyAll'); });
-		}
-
-		function showSystemMonitor() {
-			sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los 鷏timos 5 minutos con resoluci髇 de un segundo.
 		}
 
 		function showAvailableCacheManagers() {

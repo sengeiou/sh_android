@@ -41,4 +41,17 @@ public class SystemController extends BaseJspController {
 
 		return model;
 	}
+	
+	/**
+	 * Muestra el diagrama de carga de trabajo del servidor.
+	 * 
+	 * @return el diagrama de carga de trabajo del servidor.
+	 */
+	@RequestMapping(value = "/workload", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView systemWorkload() {
+		
+		ModelAndView model = new ModelAndView("system_workload");
+		
+		return model;
+	}
 }

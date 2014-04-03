@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.system.JqPlotDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.monitoring.CpuMeter;
-import com.fav24.dataservices.monitoring.MemoryMeter;
 import com.fav24.dataservices.monitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.meter.CpuMeter;
+import com.fav24.dataservices.monitoring.meter.MemoryMeter;
 import com.fav24.dataservices.service.system.SystemService;
 
 /**

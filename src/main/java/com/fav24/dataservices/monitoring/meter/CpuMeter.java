@@ -1,4 +1,4 @@
-package com.fav24.dataservices.monitoring;
+package com.fav24.dataservices.monitoring.meter;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+
+import com.fav24.dataservices.monitoring.Meter;
 
 /**
  * Clase para trazar tiempos de uso de CPU de los hilos
@@ -73,7 +75,7 @@ public final class CpuMeter extends Meter implements Runnable
 	public CpuMeter(final long interval) {
 
 		this.interval = interval;
-		this.measureThread = new Thread(this, "Thread time monitor");
+		this.measureThread = new Thread(this, "Thread cpu time meter");
 		this.threadId = this.measureThread.getId();
 		this.measureThread.setDaemon(true);
 		

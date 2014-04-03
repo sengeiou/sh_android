@@ -43,9 +43,15 @@ function initMemoryMonitor(servicesURL, period, timeRange, memoryHistoryPlotElem
 
 /**
  * Alimentador de información de la gráfica de distribución de memoria en el tiempo.
+ * 
+ * @param data Conjunto de datos actual representado en la gráfica.
+ * @param plot Gràfica a la que está asociada esta función de renderizado de datos.
+ * @param options Opciones indicadas en la gráfica para ser usadas desde esta función de renderizado.
  */
-function memoryHistoryDataRenderer(url, plot, options) {
+function memoryHistoryDataRenderer(data, plot, options) {
 
+	delete data;
+	
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
@@ -160,8 +166,14 @@ function createMemoryHistoryPlot(servicesURL, plotElement) {
 
 /**
  * Alimentador de información de la gráfica de distribución de memoria dipsonible instantanea.
+ * 
+ * @param data Conjunto de datos actual representado en la gráfica.
+ * @param plot Gràfica a la que está asociada esta función de renderizado de datos.
+ * @param options Opciones indicadas en la gráfica para ser usadas desde esta función de renderizado.
  */
-function committedMemoryInstantDataRenderer(url, plot, options) {
+function committedMemoryInstantDataRenderer(data, plot, options) {
+
+	delete data;
 
 	var ret = null;
 	var xhr = new XMLHttpRequest();
@@ -244,9 +256,15 @@ function createCommittedMemoryInstantPlot(servicesURL, plotElement) {
 
 /**
  * Alimentador de información de la gráfica de distribución de memoria usada instantanea.
+ * 
+ * @param data Conjunto de datos actual representado en la gráfica.
+ * @param plot Gràfica a la que está asociada esta función de renderizado de datos.
+ * @param options Opciones indicadas en la gráfica para ser usadas desde esta función de renderizado.
  */
-function usedMemoryInstantDataRenderer(url, plot, options) {
+function usedMemoryInstantDataRenderer(data, plot, options) {
 
+	delete data;
+	
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
@@ -361,7 +379,7 @@ function startMemoryMonitor() {
 
 		// Historial de memoria.
 		if (MemoryMonitor.memoryHistoryPlot) {
-			MemoryMonitor.memoryHistoryPlot.replot({ data: [] });
+			MemoryMonitor.memoryHistoryPlot.replot({ data: [[0], [0], [0], [0], [0], [0]] });
 		}
 
 		// Instante de memoria disponible.
