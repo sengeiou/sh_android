@@ -1,4 +1,4 @@
-<%@include file="includes/locations.jsp" %>
+<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.AbstractList"%>
 <%@page import="com.fav24.dataservices.monitoring.MonitorSample"%>

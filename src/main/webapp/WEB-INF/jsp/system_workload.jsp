@@ -1,5 +1,7 @@
 <%@include file="includes/locations.jsp"%>
 
+<script class="include" type="text/javascript" src="<%=jsURL%>/system_workload.js"></script>
+
 <!-- Panel de información del trabajo realizado y en curso. -->
 <div id="workload" class="container-fluid ">
 	<div class="page-header">
@@ -61,3 +63,22 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+
+	initWorkloadMonitor('<%=servicesURL%>',
+			document.getElementById("RequestsRate"),
+			document.getElementById("RequestsRatePeak"),
+			document.getElementById("TotalRequests"),
+			document.getElementById("OperationRate"),
+			document.getElementById("OperationRatePeak"),
+			document.getElementById("TotalOperations"),
+			document.getElementById("TotalOperationsKo"),
+			document.getElementById("SubsystemOperationRate"),
+			document.getElementById("SubsystemOperationRatePeak"),
+			document.getElementById("TotalSubsystemOperations"),
+			document.getElementById("TotalSubsystemOpertionsKo")
+	);
+		
+	startWorkloadMonitor();
+</script>
