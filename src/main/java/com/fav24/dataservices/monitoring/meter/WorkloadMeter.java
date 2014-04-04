@@ -10,87 +10,155 @@ import com.fav24.dataservices.monitoring.Meter;
  */
 public final class WorkloadMeter extends Meter
 {
-	public static final String THROUGHPUT_PEAK = "ThroughputPeak"; //Pico máximo de peticiones entrantes por segundo.
-	public static final String THROUGHPUT = "Throughput"; //Peticiones entrantes por segundo.
-	public static final String TOTAL_ACCEPTED = "TotalAccepted"; //Número total de peticiones servidas con éxito.
-	public static final String TOTAL_REVOQUED = "TotalRevoqued"; //Número total de peticiones rechazadas.
-	public static final String SUBSYSTEM_THROUGHPUT_PEAK = "PeakSubsystemThroughput"; //Pico máximo de peticiones realizadas al subsistema por segundo.
-	public static final String SUBSYSTEM_THROUGHPUT = "SubsystemThroughput"; //Número de threads inciados desde el arranque de la aplicación.
-	public static final String TOTAL_SUBSYSTEM_REQUESTS_OK = "TotalSubsystemRequestOk"; //Número total de peticiones realizadas al subsistema con éxito.
-	public static final String TOTAL_SUBSYSTEM_REQUESTS_KO = "TotalSubsystemRequestKo"; //Número total de peticiones rechazadas por el subsistema.
+	public static final String INCOMING_REQUESTS_RATE = "RequestsRate"; //Tasa de peticiones entrantes.
+	public static final String INCOMING_REQUESTS_RATE_PEAK = "RequestsRatePeak"; //Pico máximo de tasa de peticiones entrantes.
+	public static final String TOTAL_INCOMING_REQUESTS = "TotalRequests"; //Número total de peticiones entrantes.
+	public static final String OPERATION_RATE = "OperationRate"; //Tasa de operaciones procesadas.
+	public static final String OPERATION_RATE_PEAK = "OperationRatePeak"; //Pico máximo de tasa de operaciones procesadas.
+	public static final String TOTAL_OPERATIONS = "TotalOperations"; //Operaciones procesadas.
+	public static final String TOTAL_OPERATIONS_KO = "TotalOperationsKo"; //Operaciones rechazadas.
+	public static final String SUBSYSTEM_OPERATION_RATE = "SubsystemOperationRate"; //Tasa de operaciones enviadas al subsistema.
+	public static final String SUBSYSTEM_OPERATION_RATE_PEAK = "SubsystemOperationRatePeak"; //Pico máximo de tasa de operaciones enviadas al subsistema.
+	public static final String TOTAL_SUBSYSTEM_OPERATIONS = "TotalSubsystemOperations"; //Número total de operaciones enviadas al subsistema.
+	public static final String TOTAL_SUBSYSTEM_OPERATIONS_KO = "TotalSubsystemOpertionsKo"; //Número total de operaciones fallidas en el subsistema.
 
 
+	/**
+	 * Hilo de ejecución, para el cálculo del caudal de peticiones entrantes,
+	 * y redirigidas al subsistema.
+	 */
 	public class Throughputs implements Runnable {
 
 		public long startSampleTime;
-		public long endSampleTime;
 
 		public double previousIncoming;
+		public double previousOperationIncoming;
 		public double previousSubsystemOutcoming;
 
 		public double incomingThroughput;
 		public double incomingThroughputPeak;
-		public double subsystemoutcomingThroughput;
-		public double subsystemoutcomingThroughputPeak;
+		public double incomingOperationThroughput;
+		public double incomingOperationThroughputPeak;
+		public double subsystemOutcomingThroughput;
+		public double subsystemOutcomingThroughputPeak;
 
 
+		/**
+		 * Constructor por defecto.
+		 */
 		public Throughputs() {
 
 			startSampleTime = Long.MIN_VALUE;
-			endSampleTime = Long.MIN_VALUE;
 
 			previousIncoming = 0;
+			previousOperationIncoming = 0;
 			previousSubsystemOutcoming = 0;
 
 			incomingThroughput = 0;
 			incomingThroughputPeak = 0;
-			subsystemoutcomingThroughput = 0;
-			subsystemoutcomingThroughputPeak = 0;
+			incomingOperationThroughput = 0;
+			incomingOperationThroughputPeak = 0;
+			subsystemOutcomingThroughput = 0;
+			subsystemOutcomingThroughputPeak = 0;
 		}
 
+		/**
+		 * Marca el inicio de una muestra.
+		 */
 		public void startSampling() {
 			startSampleTime = System.currentTimeMillis();
 		}
 
-		public void endSampling() {
-			endSampleTime = System.currentTimeMillis();
-		}
+		/**
+		 * Recalcula y actualiza los valores del caudal de peticiones y operaciones entrantes y redirigidas.
+		 * 
+		 * @param currentIncoming Número total de peticiones realizadas al servidor.
+		 * @param currentOperationIncoming Número total de operaciones a resolver por el servidor.
+		 * @param currentSubsystemOutcoming Número total de operaciones enviadas al subsistema.
+		 */
+		public void updateThroughputs(long currentIncoming, long currentOperationIncoming, long currentSubsystemOutcoming) {
 
-		public void updateThroughputs(long currentIncoming, long currentSubsystemOutcoming) {
+			long endSampleTime = System.currentTimeMillis();
 
 			incomingThroughput = (currentIncoming - previousIncoming) / (endSampleTime - startSampleTime);
-			subsystemoutcomingThroughput = (currentSubsystemOutcoming - previousSubsystemOutcoming) / (endSampleTime - startSampleTime);
+			incomingOperationThroughput = (currentOperationIncoming - previousOperationIncoming) / (endSampleTime - startSampleTime);
+			subsystemOutcomingThroughput = (currentSubsystemOutcoming - previousSubsystemOutcoming) / (endSampleTime - startSampleTime);
 
 			previousIncoming = currentIncoming;
+			previousOperationIncoming = currentOperationIncoming;
 			previousSubsystemOutcoming = currentSubsystemOutcoming;
 
 			if (incomingThroughputPeak < incomingThroughput) {
 				incomingThroughputPeak = incomingThroughput;
 			}
 
-			if (subsystemoutcomingThroughputPeak < subsystemoutcomingThroughput) {
-				subsystemoutcomingThroughputPeak = subsystemoutcomingThroughput;
+			if (incomingOperationThroughputPeak < incomingOperationThroughput) {
+				incomingOperationThroughputPeak = incomingOperationThroughput;
+			}
+
+			if (subsystemOutcomingThroughputPeak < subsystemOutcomingThroughput) {
+				subsystemOutcomingThroughputPeak = subsystemOutcomingThroughput;
 			}
 		}
 
-		public double getIncomingThroughput() {
+		/**
+		 * Retorna el caudal de peticiones entrantes.
+		 * 
+		 * @return el caudal de peticiones entrantes.
+		 */
+		public double getIncomingRequestsRate() {
 
 			return incomingThroughput;
 		}
 
-		public double getIncomingThroughputPeak() {
+		/**
+		 * Retorna el pico máximo de caudal de peticiones entrantes.
+		 * 
+		 * @return el pico máximo de caudal de peticiones entrantes.
+		 */
+		public double getIncomingRequestsRatePeak() {
 
 			return incomingThroughputPeak;
 		}
 
-		public double getSubsystemoutcomingThroughput() {
+		/**
+		 * Retorna el caudal de operaciones entrantes.
+		 * 
+		 * @return el caudal de operaciones entrantes.
+		 */
+		public double getIncomingOperationRate() {
 
-			return subsystemoutcomingThroughput;
+			return incomingOperationThroughput;
 		}
 
-		public double getSubsystemoutcomingThroughputPeak() {
+		/**
+		 * Retorna el pico máximo de caudal de operaciones entrantes.
+		 * 
+		 * @return el pico máximo de caudal de operaciones entrantes.
+		 */
+		public double getIncomingOperationRatePeak() {
 
-			return subsystemoutcomingThroughputPeak;
+			return incomingOperationThroughputPeak;
+		}
+
+		/**
+		 * Retorna el caudal de peticiones enviadas al subsistema.
+		 * 
+		 * @return el caudal de peticiones enviadas al subsistema.
+		 */
+		public double getSubsystemOutcomingRate() {
+
+			return subsystemOutcomingThroughput;
+		}
+
+		/**
+		 * Retorna el pico máximo de caudal de peticiones enviadas al subsistema.
+		 * 
+		 * @return el pico máximo de caudal de peticiones enviadas al subsistema.
+		 */
+		public double getSubsystemOutcomingRatePeak() {
+
+			return subsystemOutcomingThroughputPeak;
 		}
 
 		/**
@@ -102,26 +170,26 @@ public final class WorkloadMeter extends Meter
 
 			while (!measureThread.isInterrupted()) {
 
-				endSampling();
-				updateThroughputs(totalIncomming, totalSubsystemOutcomming);
-				startSampling();
-
 				try {
 					Thread.sleep(1000); 
 				}
 				catch (InterruptedException e) {
 					break; 
 				}
+
+				updateThroughputs(totalIncommingRequests, totalIncommingOperations, totalSubsystemOutcommingOperations);
+				startSampling();
 			}
 		}
 	}
 
 	private final Throughputs throughputs;
 
-	private long totalIncomming;
-	private long totalIncommingRevoqued;
-	private long totalSubsystemOutcomming;
-	private long totalSubsystemOutcommingErrors;
+	private long totalIncommingRequests;
+	private long totalIncommingOperations;
+	private long totalIncommingOperationsErrors;
+	private long totalSubsystemOutcommingOperations;
+	private long totalSubsystemOutcommingOperationsErrors;
 	private Thread measureThread;
 
 
@@ -129,6 +197,12 @@ public final class WorkloadMeter extends Meter
 	 * Constructor por defecto.
 	 */
 	public WorkloadMeter() {
+
+		totalIncommingRequests = 0;
+		totalIncommingOperations = 0;
+		totalIncommingOperationsErrors = 0;
+		totalSubsystemOutcommingOperations = 0;
+		totalSubsystemOutcommingOperationsErrors = 0;
 
 		this.throughputs = new Throughputs();
 		this.measureThread = new Thread(this.throughputs, "Thread workload meter");
@@ -141,79 +215,89 @@ public final class WorkloadMeter extends Meter
 	 * 
 	 * @return el número total de peticiones recibidas.
 	 */
-	public long getTotalIncomming() {
+	public long getTotalIncommingRequests() {
 
-		return totalIncomming;
-	}
-	
-	/**
-	 * Asigna el número total de peticiones recibidas.
-	 * 
-	 * @param totalIncomming Número total de peticiones recibidas a asignar.
-	 */
-	public void setTotalIncomming(long totalIncomming) {
-		
-		this.totalIncomming = totalIncomming;
+		return totalIncommingRequests;
 	}
 
 	/**
-	 * Retorna el número total de peticiones recibidas rechazadas.
-	 * 
-	 * @return el número total de peticiones recibidas rechazadas.
+	 * Incrementa en 1 el número total de peticiones recibidas.
 	 */
-	public long getTotalIncommingRevoqued() {
+	public void incTotalIncommingRequests() {
 
-		return totalIncommingRevoqued;
+		this.totalIncommingRequests++;
 	}
 
 	/**
-	 * Asigna el número total de peticiones rechazadas.
+	 * Retorna el número total de operaciones recibidas.
 	 * 
-	 * @param totalIncommingRevoqued Número total de peticiones rechazadas a asignar.
+	 * @return el número total de operaciones recibidas.
 	 */
-	public void setTotalIncommingRevoqued(long totalIncommingRevoqued) {
-		
-		this.totalIncommingRevoqued = totalIncommingRevoqued;
+	public long getTotalIncommingOperations() {
+
+		return totalIncommingOperations;
 	}
-	
+
+	/**
+	 * Incrementa en 1 el número total de operaciones recibidas.
+	 */
+	public void incTotalIncommingOperations() {
+
+		this.totalIncommingOperations++;
+	}
+
+	/**
+	 * Retorna el número total de operaciones recibidas con errores.
+	 * 
+	 * @return el número total de operaciones recibidas con errores.
+	 */
+	public long getTotalIncommingOperationsKo() {
+
+		return totalIncommingOperationsErrors;
+	}
+
+	/**
+	 * Incrementa en 1 el número total de operaciones con errores.
+	 */
+	public void incTotalIncommingOperationsErrors() {
+
+		this.totalIncommingOperationsErrors++;
+	}
+
 	/**
 	 * Retorna el número total de peticiones enviadas al subsistema.
 	 * 
 	 * @return el número total de peticiones enviadas al subsistema.
 	 */
-	public long getTotalSubsystemOutcomming() {
+	public long getTotalSubsystemOutcommingOperations() {
 
-		return totalSubsystemOutcomming;
-	}
-	
-	/**
-	 * Asigna el número total de peticiones enviadas al subsistema.
-	 * 
-	 * @param totalSubsystemOutcomming El número total de peticiones enviadas al subsistema a asginar.
-	 */
-	public void setTotalSubsystemOutcomming(long totalSubsystemOutcomming) {
-		
-		this.totalSubsystemOutcomming = totalSubsystemOutcomming;
+		return totalSubsystemOutcommingOperations;
 	}
 
 	/**
-	 * Retorna el número total de peticiones erroneas al subsistema.
-	 * 
-	 * @return el número total de peticiones erroneas al subsistema.
+	 * Incrementa en 1 el número total de operaciones enviadas al subsistema.
 	 */
-	public long getTotalSubsystemOutcommingErrors() {
+	public void incTotalSubsystemOutcommingOperations() {
 
-		return totalSubsystemOutcommingErrors;
+		this.totalSubsystemOutcommingOperations++;
 	}
-	
+
 	/**
-	 * Asigna el número total de peticiones erroneas al subsistema.
+	 * Retorna el número total de operaciones erroneas enviadas al subsistema.
 	 * 
-	 * @param totalSubsystemOutcommingErrors El número total de peticiones erroneas al subsistema a asignar.
+	 * @return el número total de operaciones erroneas enviadas al subsistema.
 	 */
-	public void setTotalSubsystemOutcommingErrors(long totalSubsystemOutcommingErrors) {
-		
-		this.totalSubsystemOutcommingErrors = totalSubsystemOutcommingErrors;
+	public long getTotalSubsystemOutcommingOperationsKo() {
+
+		return totalSubsystemOutcommingOperationsErrors;
+	}
+
+	/**
+	 * Incrementa en 1 el número total de operaciones erroneas enviadas al subsistema.
+	 */
+	public void incTotalSubsystemOutcommingOpertionsErrors() {
+
+		this.totalSubsystemOutcommingOperationsErrors ++;
 	}
 
 	/**
@@ -225,17 +309,21 @@ public final class WorkloadMeter extends Meter
 
 		NavigableMap<String, Double> systemWorkload = new TreeMap<String, Double>();
 
-		systemWorkload.put(THROUGHPUT_PEAK, throughputs.getIncomingThroughputPeak());
-		systemWorkload.put(THROUGHPUT, throughputs.getIncomingThroughput());
-		long totalIncommingRevoqued = getTotalIncommingRevoqued();
-		systemWorkload.put(TOTAL_ACCEPTED, Double.valueOf(getTotalIncomming() - totalIncommingRevoqued));
-		systemWorkload.put(TOTAL_REVOQUED, Double.valueOf(totalIncommingRevoqued));
+		systemWorkload.put(INCOMING_REQUESTS_RATE, throughputs.getIncomingRequestsRate());
+		systemWorkload.put(INCOMING_REQUESTS_RATE_PEAK, throughputs.getIncomingRequestsRatePeak());
+		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests()));
 
-		systemWorkload.put(SUBSYSTEM_THROUGHPUT_PEAK, throughputs.getSubsystemoutcomingThroughputPeak());
-		systemWorkload.put(SUBSYSTEM_THROUGHPUT, throughputs.getSubsystemoutcomingThroughput());
-		long totalSubsystemOutcommingErrors = getTotalSubsystemOutcommingErrors();
-		systemWorkload.put(TOTAL_SUBSYSTEM_REQUESTS_OK, Double.valueOf(getTotalSubsystemOutcomming() - totalSubsystemOutcommingErrors));
-		systemWorkload.put(TOTAL_SUBSYSTEM_REQUESTS_KO, Double.valueOf(totalSubsystemOutcommingErrors));
+		systemWorkload.put(OPERATION_RATE, throughputs.getIncomingOperationRate());
+		systemWorkload.put(OPERATION_RATE_PEAK, throughputs.getIncomingOperationRatePeak());
+		long totalIncommingOperationsKo = getTotalIncommingOperationsKo();
+		systemWorkload.put(TOTAL_OPERATIONS, Double.valueOf(getTotalIncommingOperations() - totalIncommingOperationsKo));
+		systemWorkload.put(TOTAL_OPERATIONS_KO, Double.valueOf(totalIncommingOperationsKo));
+
+		systemWorkload.put(SUBSYSTEM_OPERATION_RATE, throughputs.getSubsystemOutcomingRate());
+		systemWorkload.put(SUBSYSTEM_OPERATION_RATE_PEAK, throughputs.getSubsystemOutcomingRatePeak());
+		long totalSubsystemOutcommingOperationsKo = getTotalSubsystemOutcommingOperationsKo();
+		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS, Double.valueOf(getTotalSubsystemOutcommingOperations() - totalSubsystemOutcommingOperationsKo));
+		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS_KO, Double.valueOf(totalSubsystemOutcommingOperationsKo));
 
 		return systemWorkload;
 	}

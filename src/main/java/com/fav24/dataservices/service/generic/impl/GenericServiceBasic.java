@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import net.sf.ehcache.Element;
 
 import com.fav24.dataservices.domain.Requestor;
@@ -17,16 +19,19 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
+import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.service.system.SystemService;
 
 
 /**
  * Implementación base de la interfaz de servicio Generic. 
  * 
  * Nota: Esta clase es thread safe, pero no sus instancias.
- * 
- * @author Fav24
  */
 public abstract class GenericServiceBasic implements GenericService {
+
+	@Autowired
+	protected SystemService systemService;
 
 
 	/**
@@ -51,24 +56,36 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	public Generic processGeneric(Generic generic) throws ServerException {
 
+		systemService.getWorkloadMeter().incTotalIncommingRequests();
+		
+		if (AccessPolicy.getCurrentAccesPolicy() == null) {
+			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
+		}
+
 		if (startTransaction()) {
 
 			try {
+
 				for (Operation operation : generic.getOperations()) {
 					processOperation(generic.getRequestor(), operation);
 				}
+
 			} catch (ServerException e) {
+
 				endTransaction(false);
+
 				throw e;
 			}
 
 			if (!endTransaction(true)) {
+
 				endTransaction(false);
 
 				throw new ServerException(ERROR_END_TRANSACTION, ERROR_END_TRANSACTION_MESSAGE);
 			}
 		}
 		else {
+
 			throw new ServerException(ERROR_START_TRANSACTION, ERROR_START_TRANSACTION_MESSAGE);
 		}
 
@@ -89,74 +106,96 @@ public abstract class GenericServiceBasic implements GenericService {
 
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
-		if (operation.getMetadata().hasKey()) {
+		try {
+			systemService.getWorkloadMeter().incTotalIncommingOperations();
 
-			if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
-				throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
-			}
-		}
-		else {
+			if (operation.getMetadata().hasKey()) {
 
-			if (entityAccessPolicy.getOnlyByKey()) {
-				throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
-			}
+				if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
 
-			if (operation.getMetadata().hasFilter()) {
-
-				if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
-					throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+					throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
 				}
 			}
-			else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
-				throw new ServerException(ERROR_INVALID_REQUEST_NO_FILTER, String.format(ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE, operation.getMetadata().getEntity()));
-			}
-		}
+			else {
 
-		switch(operation.getMetadata().getOperation()) {
+				if (entityAccessPolicy.getOnlyByKey()) {
 
-		case CREATE:
-			return create(requestor, operation);
-		case UPDATE:
-			return update(requestor, operation);
-		case RETRIEVE:
+					throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
+				}
 
-			if (Cache.getSystemCache() != null) {
+				if (operation.getMetadata().hasFilter()) {
 
-				net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+					if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
 
-				if (cache != null) {
-
-					//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
-					String contentKey = operation.organizeContent(new StringBuilder()).toString();
-
-					Element cachedElement = cache.get(contentKey);
-					if (cachedElement == null) {
-
-						operation = retreave(requestor, operation);
-
-						cachedElement = new Element(contentKey, operation);
-						cache.put(cachedElement);
-
-						return operation;
-					}
-					else {
-
-						Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
-						
-						operation.setMetadata(recycledOperation.getMetadata());
-						operation.setData(recycledOperation.getData());
-						
-						return operation;
+						throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
 					}
 				}
+				else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
+
+					throw new ServerException(ERROR_INVALID_REQUEST_NO_FILTER, String.format(ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+				}
 			}
+		}
+		catch (ServerException e) {
+			systemService.getWorkloadMeter().incTotalIncommingOperationsErrors();
 
-			return retreave(requestor, operation);
+			throw e;
+		}
 
-		case DELETE:
-			return delete(requestor, operation);
-		case UPDATE_CREATE:
-			return updateCreate(requestor, operation);
+		try {
+			systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
+
+			switch(operation.getMetadata().getOperation()) {
+
+			case CREATE:
+				return create(requestor, operation);
+			case UPDATE:
+				return update(requestor, operation);
+			case RETRIEVE:
+
+				if (Cache.getSystemCache() != null) {
+
+					net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+
+					if (cache != null) {
+
+						//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
+						String contentKey = operation.organizeContent(new StringBuilder()).toString();
+
+						Element cachedElement = cache.get(contentKey);
+						if (cachedElement == null) {
+
+							operation = retreave(requestor, operation);
+
+							cachedElement = new Element(contentKey, operation);
+							cache.put(cachedElement);
+
+							return operation;
+						}
+						else {
+
+							Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
+
+							operation.setMetadata(recycledOperation.getMetadata());
+							operation.setData(recycledOperation.getData());
+
+							return operation;
+						}
+					}
+				}
+
+				return retreave(requestor, operation);
+
+			case DELETE:
+				return delete(requestor, operation);
+			case UPDATE_CREATE:
+				return updateCreate(requestor, operation);
+			}
+		}
+		catch (ServerException e) {
+			systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
+
+			throw e;
 		}
 
 		return operation;

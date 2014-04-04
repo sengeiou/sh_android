@@ -13,6 +13,7 @@ import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.MemoryMeter;
 import com.fav24.dataservices.monitoring.meter.StorageMeter;
+import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 
 
 /**
@@ -30,6 +31,7 @@ public class SystemMonitoring {
 	private MemoryMeter memoryMeter;
 	private CpuMeter cpuMeter;
 	private AbstractList<StorageMeter> storageMeters;
+	private WorkloadMeter workloadMeter;
 
 	private Timer secondResolutionTimer;
 	private Timer tenSecondsResolutionTimer;
@@ -39,6 +41,7 @@ public class SystemMonitoring {
 
 		memoryMeter = new MemoryMeter();
 		cpuMeter = new CpuMeter();
+		workloadMeter = new WorkloadMeter();
 
 		secondResolutionTimer = new Timer("System Second Monitor");
 
@@ -57,6 +60,14 @@ public class SystemMonitoring {
 				// CPU information.
 				try {
 					SamplesRegister.registerSample(cpuMeter, new MonitorSample(cpuMeter.getSystemCpuActivity()));
+				} catch (ServerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				// Workload information.
+				try {
+					SamplesRegister.registerSample(workloadMeter, new MonitorSample(workloadMeter.getSystemWorkload()));
 				} catch (ServerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -148,6 +159,42 @@ public class SystemMonitoring {
 	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SamplesRegister.getSampleTimeSegment(cpuMeter, offset, timeRange, period);
+	}
+
+	/**
+	 * Retorna el medidor de trabajo realizado por el sistema.
+	 * 
+	 * @return el medidor de trabajo realizado por el sistema.
+	 */
+	public WorkloadMeter getWorkloadMeter() {
+		return workloadMeter;
+	}
+	
+	/**
+	 * Retorna la información del trabajo realizado por el sistema
+	 * en este mismo instante.
+	 * 
+	 * @return la información del trabajo realizado por el sistema.
+	 */
+	public MonitorSample getSystemWorkload() {
+		
+		return SamplesRegister.getLastSample(workloadMeter);
+	}
+	
+	/**
+	 * Retorna la información del trabajo realizado por el sistema
+	 * 
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
+	 *  
+	 * @return la información del trabajo realizado por el sistema
+	 * 
+	 * @throws ServerException 
+	 */
+	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException {
+		
+		return SamplesRegister.getSampleTimeSegment(workloadMeter, offset, timeRange, period);
 	}
 
 	/**

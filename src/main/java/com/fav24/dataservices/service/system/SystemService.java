@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 
 
 /**
@@ -61,6 +62,34 @@ public interface SystemService {
 	 */
 	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException;
 
+	/**
+	 * Retorna el medidor de trabajo realizado por el sistema.
+	 * 
+	 * @return el medidor de trabajo realizado por el sistema.
+	 */
+	public WorkloadMeter getWorkloadMeter();
+
+	/**
+	 * Retorna la información del trabajo realizado por el sistema
+	 * en este mismo instante.
+	 * 
+	 * @return la información del trabajo realizado por el sistema.
+	 */
+	public MonitorSample getSystemWorkload();
+
+	/**
+	 * Retorna la información del trabajo realizado por el sistema
+	 * 
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
+	 *  
+	 * @return la información del trabajo realizado por el sistema
+	 * 
+	 * @throws ServerException 
+	 */
+	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException;
+	
 	/**
 	 * Retorna la información asociada al elemento de almacenamiento en este mismo instante.
 	 * 
