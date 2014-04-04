@@ -76,7 +76,7 @@
 
 <script type="text/javascript">
 
-	initMemoryMonitor('<%=servicesURL%>', ${period}, ${timeRange}, 'memoryHistory', 'committedMemoryInstant', 'usedMemoryInstant');
-	initCPUMonitor('<%=servicesURL%>', ${period}, ${timeRange}, 'cpuHistory', 'cpuInstant');
-	
+	initMemoryMonitor(${period}, ${timeRange}, 'memoryHistory', 'committedMemoryInstant', 'usedMemoryInstant');
+	initCPUMonitor(${period}, ${timeRange}, 'cpuHistory', 'cpuInstant');
+
 </script>

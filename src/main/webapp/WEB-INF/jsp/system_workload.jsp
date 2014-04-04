@@ -66,7 +66,7 @@
 
 <script type="text/javascript">
 
-	initWorkloadMonitor('<%=servicesURL%>',
+	initWorkloadMonitor(
 			document.getElementById("RequestsRate"),
 			document.getElementById("RequestsRatePeak"),
 			document.getElementById("TotalRequests"),

@@ -2,8 +2,6 @@
  * Estructura global del monitor.
  */
 var WorkloadMonitor = {
-		servicesURL: null,
-		
 		RequestsRate : null,
 		RequestsRatePeak : null,
 		TotalRequests : null,
@@ -20,8 +18,6 @@ var WorkloadMonitor = {
 /**
  * Inicializa el monitor de trabajo realizado.
  * 
- * @param servicesURL Dirección base de las llamadas a los servicios de monitoreo.
- * 
  * @param RequestsRate Etiqueta que contiene la tasa de peticiones entrantes.
  * @param RequestsRatePeak Etiqueta que contiene el pico máximo de tasa de peticiones entrantes.
  * @param TotalRequests Etiqueta que contiene el número total de peticiones entrantes.
@@ -34,13 +30,11 @@ var WorkloadMonitor = {
  * @param TotalSubsystemOperations Etiqueta que contiene el número total de operaciones enviadas al subsistema.
  * @param TotalSubsystemOpertionsKo Etiqueta que contiene el número total de operaciones fallidas en el subsistema.
  */
-function initWorkloadMonitor(servicesURL, 
+function initWorkloadMonitor(
 		RequestsRate, RequestsRatePeak, TotalRequests,
 		OperationRate, OperationRatePeak, TotalOperations,TotalOperationsKo,
 		SubsystemOperationRate, SubsystemOperationRatePeak, TotalSubsystemOperations, TotalSubsystemOpertionsKo) {
 
-	WorkloadMonitor.servicesURL = servicesURL;
-	
 	WorkloadMonitor.RequestsRate = RequestsRate;
 	WorkloadMonitor.RequestsRatePeak = RequestsRatePeak;
 	WorkloadMonitor.TotalRequests = TotalRequests;
@@ -65,7 +59,7 @@ function workloadMonitorDataRenderer() {
 
 	var xhr = new XMLHttpRequest();
 
-	xhr.open("POST", WorkloadMonitor.servicesURL + '/system/workload', false);
+	xhr.open("POST", App.servicesURL + '/system/workload', false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	// Envío.
 	xhr.send(JSON.stringify({offset: null, period: null, timeRange: null}));
@@ -73,17 +67,17 @@ function workloadMonitorDataRenderer() {
 	var jsonResponse = JSON.parse(xhr.responseText);
 
 	// Asignación de la información a las etiquetas.
-	WorkloadMonitor.RequestsRate.innerHTML = jsonResponse["data"]["RequestsRate"] + " req/s";
-	WorkloadMonitor.RequestsRatePeak.innerHTML = jsonResponse["data"]["RequestsRatePeak"] + " req/s";
-	WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"] + " req";
-	WorkloadMonitor.OperationRate.innerHTML = jsonResponse["data"]["OperationRate"] + " op/s";
-	WorkloadMonitor.OperationRatePeak.innerHTML = jsonResponse["data"]["OperationRatePeak"] + " op/s";
-	WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"] + " op";
-	WorkloadMonitor.TotalOperationsKo.innerHTML = jsonResponse["data"]["TotalOperationsKo"] + " op";
-	WorkloadMonitor.SubsystemOperationRate.innerHTML = jsonResponse["data"]["SubsystemOperationRate"] + " op/s";
-	WorkloadMonitor.SubsystemOperationRatePeak.innerHTML = jsonResponse["data"]["SubsystemOperationRatePeak"] + " op/s";
-	WorkloadMonitor.TotalSubsystemOperations.innerHTML = jsonResponse["data"]["TotalSubsystemOperations"] + " op";
-	WorkloadMonitor.TotalSubsystemOpertionsKo.innerHTML = jsonResponse["data"]["TotalSubsystemOpertionsKo"] + " op";
+	WorkloadMonitor.RequestsRate.innerHTML = Math.floor(jsonResponse["data"]["RequestsRate"]).toPrecision(2).toLocaleString() + " req/s";
+	WorkloadMonitor.RequestsRatePeak.innerHTML = Math.floor(jsonResponse["data"]["RequestsRatePeak"]).toPrecision(2).toLocaleString() + " req/s";
+	WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"].toLocaleString() + " req";
+	WorkloadMonitor.OperationRate.innerHTML = Math.floor(jsonResponse["data"]["OperationRate"]).toPrecision(2).toLocaleString() + " op/s";
+	WorkloadMonitor.OperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["OperationRatePeak"]).toPrecision(2).toLocaleString() + " op/s";
+	WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"].toLocaleString() + " op";
+	WorkloadMonitor.TotalOperationsKo.innerHTML = jsonResponse["data"]["TotalOperationsKo"].toLocaleString() + " op";
+	WorkloadMonitor.SubsystemOperationRate.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRate"]).toPrecision(2).toLocaleString() + " op/s";
+	WorkloadMonitor.SubsystemOperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRatePeak"]).toPrecision(2).toLocaleString() + " op/s";
+	WorkloadMonitor.TotalSubsystemOperations.innerHTML = jsonResponse["data"]["TotalSubsystemOperations"].toLocaleString() + " op";
+	WorkloadMonitor.TotalSubsystemOpertionsKo.innerHTML = jsonResponse["data"]["TotalSubsystemOpertionsKo"].toLocaleString() + " op";
 }
 
 /**
@@ -105,9 +99,9 @@ function freezeWorkloadMonitor(freeze) {
  */
 function stopWorkloadMonitor() {
 
-	if (this.WorkloadMonitorInterval) {
-		clearInterval(this.WorkloadMonitorInterval);
-		this.WorkloadMonitorInterval = null;
+	if (App.workloadMonitorInterval) {
+		clearInterval(App.workloadMonitorInterval);
+		App.workloadMonitorInterval = null;
 	}
 }
 
@@ -117,7 +111,7 @@ function stopWorkloadMonitor() {
 function startWorkloadMonitor() {
 
 	stopWorkloadMonitor();
-	this.WorkloadMonitorInterval = setInterval(function() { 		
+	App.workloadMonitorInterval = setInterval(function() { 		
 
 		// Petición y repintado de la información de trabajo realizado por el sistema.
 		workloadMonitorDataRenderer();

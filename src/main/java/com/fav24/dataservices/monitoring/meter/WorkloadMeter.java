@@ -80,9 +80,9 @@ public final class WorkloadMeter extends Meter
 
 			long endSampleTime = System.currentTimeMillis();
 
-			incomingThroughput = (currentIncoming - previousIncoming) / (endSampleTime - startSampleTime);
-			incomingOperationThroughput = (currentOperationIncoming - previousOperationIncoming) / (endSampleTime - startSampleTime);
-			subsystemOutcomingThroughput = (currentSubsystemOutcoming - previousSubsystemOutcoming) / (endSampleTime - startSampleTime);
+			incomingThroughput = ((currentIncoming - previousIncoming) * 1000) / (endSampleTime - startSampleTime);
+			incomingOperationThroughput = ((currentOperationIncoming - previousOperationIncoming) * 1000) / (endSampleTime - startSampleTime);
+			subsystemOutcomingThroughput = ((currentSubsystemOutcoming - previousSubsystemOutcoming) * 1000) / (endSampleTime - startSampleTime);
 
 			previousIncoming = currentIncoming;
 			previousOperationIncoming = currentOperationIncoming;

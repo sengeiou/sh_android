@@ -13,29 +13,28 @@ var MemoryMonitor = {
 /**
  * Inicializa el monitor de Memoria.
  * 
- * @param servicesURL Dirección base de las llamadas a los servicios de monitoreo.
  * @param period Periodo de refresco en segundos. 
  * @param timeRange Rango temporal a mostrar.
  * @param memoryHistoryPlotElement Nombre del elemento en el que se renderiza el histórico de distribución de la memoria.
  * @param committedMemoryInstantPlotElement Nombre del elemento en el que se renderiza la memoria reservada instantanea.
  * @param usedMemoryInstantPlotElement Nombre del elemento en el que se renderiza la memoria usada instantanea.
  */
-function initMemoryMonitor(servicesURL, period, timeRange, memoryHistoryPlotElement, committedMemoryInstantPlotElement, usedMemoryInstantPlotElement) {
+function initMemoryMonitor(period, timeRange, memoryHistoryPlotElement, committedMemoryInstantPlotElement, usedMemoryInstantPlotElement) {
 
 	$.jqplot.config.enablePlugins = true;
 	MemoryMonitor.period = period;
 	MemoryMonitor.timeRange = timeRange;
 
 	if (memoryHistoryPlotElement) {
-		MemoryMonitor.memoryHistoryPlot = createMemoryHistoryPlot(servicesURL, memoryHistoryPlotElement);
+		MemoryMonitor.memoryHistoryPlot = createMemoryHistoryPlot(memoryHistoryPlotElement);
 	}
 
 	if (committedMemoryInstantPlotElement) {
-		MemoryMonitor.committedMemoryInstantPlot = createCommittedMemoryInstantPlot(servicesURL, committedMemoryInstantPlotElement);
+		MemoryMonitor.committedMemoryInstantPlot = createCommittedMemoryInstantPlot(committedMemoryInstantPlotElement);
 	}
 
 	if (usedMemoryInstantPlotElement) {
-		MemoryMonitor.usedMemoryInstantPlot = createUsedMemoryInstantPlot(servicesURL, usedMemoryInstantPlotElement);
+		MemoryMonitor.usedMemoryInstantPlot = createUsedMemoryInstantPlot(usedMemoryInstantPlotElement);
 	}
 
 	stopMemoryMonitor();
@@ -54,6 +53,11 @@ function memoryHistoryDataRenderer(data, plot, options) {
 	
 	var ret = null;
 	var xhr = new XMLHttpRequest();
+
+	if (options && options.noDataIndicator) {
+		
+		options.noDataIndicator.show = false;
+	}
 
 	xhr.open("POST", options["url"], false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -77,14 +81,13 @@ function memoryHistoryDataRenderer(data, plot, options) {
 /**
  * Crea la gráfica de distribución de memoria en el tiempo.
  * 
- * @param servicesURL Dirección base de las llamadas a los servicios de monitoreo.
  * @param plotElement Nombre del elemento en el que se renderiza el histórico de distribución de la memoria.
  * 
  * @returns una referencia a la gráfica de distribución de memoria en el tiempo.
  */
-function createMemoryHistoryPlot(servicesURL, plotElement) {
+function createMemoryHistoryPlot(plotElement) {
 
-	return $.jqplot(plotElement, [[0], [0], [0], [0], [0], [0]], 
+	return $.jqplot(plotElement, [], 
 			{
 		grid: {
 			drawBorder: true,
@@ -118,6 +121,10 @@ function createMemoryHistoryPlot(servicesURL, plotElement) {
 		        { color: '#cffe2e' },
 		        { color: '#9ab66e' }
 		        ],
+		        noDataIndicator: {
+		        	show: true,
+		        	indicator: '<img src="' + App.imagesURL + '/ajax-loader.gif" /><br />Esperando datos...'
+		        },
 		        axes:{
 		        	xaxis:{
 		        		renderer: $.jqplot.DateAxisRenderer,
@@ -140,7 +147,7 @@ function createMemoryHistoryPlot(servicesURL, plotElement) {
 		        },
 		        dataRenderer: memoryHistoryDataRenderer,
 		        dataRendererOptions: {
-		        	url: servicesURL + '/system/memory'
+		        	url: App.servicesURL + '/system/memory'
 		        },
 		        legend: {
 		        	renderer: jQuery.jqplot.EnhancedLegendRenderer,
@@ -178,6 +185,11 @@ function committedMemoryInstantDataRenderer(data, plot, options) {
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
+	if (options && options.noDataIndicator) {
+		
+		options.noDataIndicator.show = false;
+	}
+
 	xhr.open("POST", options["url"], false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	// Envío.
@@ -196,12 +208,11 @@ function committedMemoryInstantDataRenderer(data, plot, options) {
 /**
  * Crea la gráfica de memoria reservada.
  * 
- * @param servicesURL Dirección base de las llamadas a los servicios de monitoreo.
  * @param plotElement Nombre del elemento en el que se renderiza la memoria reservada instantanea.
  * 
  * @returns una referencia a la gráfica de memoria reservada.
  */
-function createCommittedMemoryInstantPlot(servicesURL, plotElement) {
+function createCommittedMemoryInstantPlot(plotElement) {
 
 	return jQuery.jqplot (plotElement, [], {
 		grid: {
@@ -226,6 +237,11 @@ function createCommittedMemoryInstantPlot(servicesURL, plotElement) {
 		        { color: '#90d91d', showMarker: false },
 		        { color: '#c5e3f3', showMarker: false }
 		        ],
+		        noDataIndicator: {
+		        	show: true,
+		        	// Here, an animated gif image is rendered with some loading text.
+		        	indicator: '<img src="' + App.imagesURL + '/ajax-loader.gif" /><br />Esperando datos...'
+		        },
 		        axes: {
 		        	xaxis: {
 		        		renderer: $.jqplot.CategoryAxisRenderer,
@@ -249,7 +265,7 @@ function createCommittedMemoryInstantPlot(servicesURL, plotElement) {
 		        },
 		        dataRenderer: committedMemoryInstantDataRenderer,
 		        dataRendererOptions: {
-		        	url: servicesURL + '/system/memory'
+		        	url: App.servicesURL + '/system/memory'
 		        }
 	});
 }
@@ -267,6 +283,11 @@ function usedMemoryInstantDataRenderer(data, plot, options) {
 	
 	var ret = null;
 	var xhr = new XMLHttpRequest();
+
+	if (options && options.noDataIndicator) {
+		
+		options.noDataIndicator.show = false;
+	}
 
 	xhr.open("POST", options["url"], false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -288,12 +309,11 @@ function usedMemoryInstantDataRenderer(data, plot, options) {
 /**
  * Crea la gráfica de memoria usada.
  * 
- * @param servicesURL Dirección base de las llamadas a los servicios de monitoreo.
  * @param plotElement Nombre del elemento en el que se renderiza la memoria usada instantanea.
  * 
  * @returns una referencia a la gráfica de memoria usada.
  */
-function createUsedMemoryInstantPlot(servicesURL, plotElement) {
+function createUsedMemoryInstantPlot(plotElement) {
 
 	return jQuery.jqplot (plotElement, [], {
 		grid: {
@@ -319,6 +339,11 @@ function createUsedMemoryInstantPlot(servicesURL, plotElement) {
 		        { color: '#9ab66e', showMarker: false },
 		        { color: '#c5e3f3', showMarker: false }
 		        ],
+		        noDataIndicator: {
+		        	show: true,
+		        	// Here, an animated gif image is rendered with some loading text.
+		        	indicator: '<img src="' + App.imagesURL + '/ajax-loader.gif" /><br />Esperando datos...'
+		        },
 		        axes: {
 		        	xaxis: {
 		        		renderer: $.jqplot.CategoryAxisRenderer,
@@ -342,7 +367,7 @@ function createUsedMemoryInstantPlot(servicesURL, plotElement) {
 		        },
 		        dataRenderer: usedMemoryInstantDataRenderer,
 		        dataRendererOptions: {
-		        	url: servicesURL + '/system/memory'
+		        	url: App.servicesURL + '/system/memory'
 		        }
 	});
 }
@@ -364,9 +389,9 @@ function freezeMemoryMonitor(freeze) {
  * Detiene el monitor de memoria.
  */
 function stopMemoryMonitor() {
-	if (this.memoryMonitorInterval) {
-		clearInterval(this.memoryMonitorInterval);
-		this.memoryMonitorInterval = null;
+	if (App.memoryMonitorInterval) {
+		clearInterval(App.memoryMonitorInterval);
+		App.memoryMonitorInterval = null;
 	}
 }
 
@@ -375,11 +400,11 @@ function stopMemoryMonitor() {
  */
 function startMemoryMonitor() {
 	stopMemoryMonitor();
-	this.memoryMonitorInterval = setInterval(function() {
+	App.memoryMonitorInterval = setInterval(function() {
 
 		// Historial de memoria.
 		if (MemoryMonitor.memoryHistoryPlot) {
-			MemoryMonitor.memoryHistoryPlot.replot({ data: [[0], [0], [0], [0], [0], [0]] });
+			MemoryMonitor.memoryHistoryPlot.replot({ data: [] });
 		}
 
 		// Instante de memoria disponible.
