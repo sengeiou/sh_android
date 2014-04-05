@@ -66,7 +66,7 @@
 
 <script type="text/javascript">
 
-	initWorkloadMonitor(
+	initSystemWorkload(
 			document.getElementById("RequestsRate"),
 			document.getElementById("RequestsRatePeak"),
 			document.getElementById("TotalRequests"),
@@ -79,6 +79,5 @@
 			document.getElementById("TotalSubsystemOperations"),
 			document.getElementById("TotalSubsystemOpertionsKo")
 	);
-		
-	startWorkloadMonitor();
+
 </script>

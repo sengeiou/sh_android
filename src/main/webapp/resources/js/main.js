@@ -13,6 +13,13 @@ function onReadystatechangeHandler(event) {
 
 	if (status == '200' && event.target.responseText) {
 
+		if (App.destructionFunction) {
+			
+			App.destructionFunction();
+			
+			App.destructionFunction = null;
+		}
+		
 		contentObject.html(event.target.responseText);
 	}
 }

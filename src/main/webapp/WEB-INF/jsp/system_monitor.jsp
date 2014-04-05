@@ -27,6 +27,7 @@
 
 <script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor/memory_monitor.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor/cpu_monitor.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor.js"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
@@ -76,7 +77,8 @@
 
 <script type="text/javascript">
 
-	initMemoryMonitor(${period}, ${timeRange}, 'memoryHistory', 'committedMemoryInstant', 'usedMemoryInstant');
-	initCPUMonitor(${period}, ${timeRange}, 'cpuHistory', 'cpuInstant');
+	initSystemMonitor(${period}, ${timeRange}, 
+			'memoryHistory', 'committedMemoryInstant', 'usedMemoryInstant',
+			'cpuHistory', 'cpuInstant');
 
 </script>

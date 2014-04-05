@@ -30,7 +30,7 @@ var WorkloadMonitor = {
  * @param TotalSubsystemOperations Etiqueta que contiene el número total de operaciones enviadas al subsistema.
  * @param TotalSubsystemOpertionsKo Etiqueta que contiene el número total de operaciones fallidas en el subsistema.
  */
-function initWorkloadMonitor(
+function initSystemWorkload(
 		RequestsRate, RequestsRatePeak, TotalRequests,
 		OperationRate, OperationRatePeak, TotalOperations,TotalOperationsKo,
 		SubsystemOperationRate, SubsystemOperationRatePeak, TotalSubsystemOperations, TotalSubsystemOpertionsKo) {
@@ -47,7 +47,20 @@ function initWorkloadMonitor(
 	WorkloadMonitor.TotalSubsystemOperations = TotalSubsystemOperations;
 	WorkloadMonitor.TotalSubsystemOpertionsKo = TotalSubsystemOpertionsKo;
 
+	startWorkloadMonitor();
+	
+	// Asignación de la función de destrución de los procesos activos.
+	App.destructionFunction = destroySystemWorkload;
+}
+
+/**
+ * Función instanciada al cerrar la ventana de monitorización del trabajo realizado por el sistema.
+ */
+function destroySystemWorkload() {
+
 	stopWorkloadMonitor();
+
+	delete WorkloadMonitor;
 }
 
 /**

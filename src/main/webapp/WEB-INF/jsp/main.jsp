@@ -115,7 +115,9 @@
 		App.imagesURL = "<%=imagesURL%>";
 		App.cssURL = "<%=cssURL%>";
 		App.jsURL = "<%=jsURL%>";
-		
+		// Asignación de la función de destrución de los procesos activos de una determinada página.
+		App.destructionFunction = null;
+
 		// Ejecución después de la carga del documento.
 		$(document).ready(function(){
 			showWorkload();
