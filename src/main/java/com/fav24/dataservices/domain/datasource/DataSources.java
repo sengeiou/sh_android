@@ -1,8 +1,8 @@
 package com.fav24.dataservices.domain.datasource;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.MalformedURLException;
+import java.util.AbstractList;
 
 import javax.sql.DataSource;
 
@@ -12,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.datasource.DataSourcesDOM;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -268,26 +269,13 @@ public class DataSources
 
 		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
 
-			FilenameFilter fileNameFilter = new FilenameFilter() {
+			AbstractList<File> datasourcesFiles = FileUtils.getFilesWithSuffix(applicationHome, APPLICATION_DATASOURCES_FILES_SUFFIX, null);
 
-				@Override
-				public boolean accept(File dir, String name) {
-
-					if (name.endsWith(APPLICATION_DATASOURCES_FILES_SUFFIX)) {
-						return true;
-					}
-
-					return false;
-				}
-			};
-
-			File[] datasourcesFiles = applicationHomeDir.listFiles(fileNameFilter);
-
-			if (datasourcesFiles == null || datasourcesFiles.length == 0) {
+			if (datasourcesFiles.size() == 0) {
 
 				throw new ServerException(ERROR_LOADING_DATASOURCES_FILE, ERROR_LOADING_DATASOURCES_FILE_MESSAGE);
 			}
-			else if (datasourcesFiles.length > 1) {
+			else if (datasourcesFiles.size() > 1) {
 
 				StringBuilder dataSourcesConfigurationFilesFound = null;
 				for (File datasourcesFile : datasourcesFiles) {

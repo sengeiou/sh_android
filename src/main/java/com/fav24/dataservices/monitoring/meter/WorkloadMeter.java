@@ -332,21 +332,18 @@ public final class WorkloadMeter extends Meter
 
 		systemWorkload.put(INCOMING_REQUESTS_RATE, throughputs.getIncomingRequestsRate());
 		systemWorkload.put(INCOMING_REQUESTS_RATE_PEAK, throughputs.getIncomingRequestsRatePeak());
-		long totalIncommingRquestsKo = getTotalIncommingRequestsKo();
-		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests() - totalIncommingRquestsKo));
-		systemWorkload.put(TOTAL_INCOMING_REQUESTS_KO, Double.valueOf(totalIncommingRquestsKo));
+		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests()));
+		systemWorkload.put(TOTAL_INCOMING_REQUESTS_KO, Double.valueOf(getTotalIncommingRequestsKo()));
 
 		systemWorkload.put(OPERATION_RATE, throughputs.getIncomingOperationRate());
 		systemWorkload.put(OPERATION_RATE_PEAK, throughputs.getIncomingOperationRatePeak());
-		long totalIncommingOperationsKo = getTotalIncommingOperationsKo();
-		systemWorkload.put(TOTAL_OPERATIONS, Double.valueOf(getTotalIncommingOperations() - totalIncommingOperationsKo));
-		systemWorkload.put(TOTAL_OPERATIONS_KO, Double.valueOf(totalIncommingOperationsKo));
+		systemWorkload.put(TOTAL_OPERATIONS, Double.valueOf(getTotalIncommingOperations()));
+		systemWorkload.put(TOTAL_OPERATIONS_KO, Double.valueOf(getTotalIncommingOperationsKo()));
 
 		systemWorkload.put(SUBSYSTEM_OPERATION_RATE, throughputs.getSubsystemOutcomingRate());
 		systemWorkload.put(SUBSYSTEM_OPERATION_RATE_PEAK, throughputs.getSubsystemOutcomingRatePeak());
-		long totalSubsystemOutcommingOperationsKo = getTotalSubsystemOutcommingOperationsKo();
-		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS, Double.valueOf(getTotalSubsystemOutcommingOperations() - totalSubsystemOutcommingOperationsKo));
-		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS_KO, Double.valueOf(totalSubsystemOutcommingOperationsKo));
+		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS, Double.valueOf(getTotalSubsystemOutcommingOperations()));
+		systemWorkload.put(TOTAL_SUBSYSTEM_OPERATIONS_KO, Double.valueOf(getTotalSubsystemOutcommingOperationsKo()));
 
 		return systemWorkload;
 	}

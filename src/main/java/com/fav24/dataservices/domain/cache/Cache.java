@@ -1,7 +1,6 @@
 package com.fav24.dataservices.domain.cache;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.Map;
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.CacheService;
+import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.cache.CacheDOM;
 
 
@@ -335,22 +335,9 @@ public class Cache
 
 		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
 
-			FilenameFilter fileNameFilter = new FilenameFilter() {
+			AbstractList<File> cacheConfigurationFiles = FileUtils.getFilesWithSuffix(applicationHome, APPLICATION_CACHE_FILES_SUFFIX, null);
 
-				@Override
-				public boolean accept(File dir, String name) {
-
-					if (name.endsWith(APPLICATION_CACHE_FILES_SUFFIX)) {
-						return true;
-					}
-
-					return false;
-				}
-			};
-
-			File[] cacheConfigurationFiles = applicationHomeDir.listFiles(fileNameFilter);
-
-			if (cacheConfigurationFiles != null && cacheConfigurationFiles.length > 0) {
+			if (cacheConfigurationFiles.size() > 0) {
 
 				for(File cacheConfigurationFile : cacheConfigurationFiles) {
 

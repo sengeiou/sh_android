@@ -20,7 +20,7 @@ function setFileName (fileIndex) {
 	}
 }
 
-// Elimina el fichero indicado, y renumera los que había después.
+// Elimina el fichero indicado, y renumera los que habÃ­a despuÃ©s.
 function removeFile(fileIndex) {
 	
 	console.log("removing" + fileIndex);
@@ -59,7 +59,7 @@ function removeFile(fileIndex) {
 	}
 }
 
-// Añade una nueva fila para cargar otro fichero.
+// AÃ±ade una nueva fila para cargar otro fichero.
 function addFile() {
 	var fileIndex;
 	var numFiles = $('#fileList').children().length;
@@ -75,10 +75,15 @@ function addFile() {
     
     var newFileSelectionLine = "<li id='file-" + fileIndex + "' class='list-group-item'>";
     newFileSelectionLine += "<input id='file-input-" + fileIndex + "' type='file' name='files[" + fileIndex + "]' tabindex='-1' style='position: absolute; z-index:-1;'/>";
-    newFileSelectionLine += "<div>";
+    newFileSelectionLine += "<div style='height: 30px'>";
+
     newFileSelectionLine += "<label id='file-info-" + fileIndex + "' class='label label-default vcenter'></label>";
     newFileSelectionLine += "<label id='file-chooser-" + fileIndex + "' for='file-input-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-folder-open'><span style='padding-left: 12px;'>Seleccionar</span></label>";
     newFileSelectionLine += "<label id='file-remover-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-trash vcenter'><span></span></label>";
+    
+    newFileSelectionLine += "<button id='file-as-default-" + fileIndex + "' type='button' class='btn btn-default btn-sm pull-right'>";
+    newFileSelectionLine += "<span class='glyphicon glyphicon-star icon-red'></span> Establecer por defecto</button>";
+
     newFileSelectionLine += "</div>";
     newFileSelectionLine += "</li>";
     
@@ -91,13 +96,13 @@ function addFile() {
 // Ejecuciones al final de la carga del documento.
 $(document).ready(function() {
 
-	//Se añade el primer fichero a cargar.
+	//Se AÃ±ade el primer fichero a cargar.
 	addFile();
 
-	//Se asocia el click del botón de añadir fichero, a la función de añadir.
+	//Se asocia el click del botÃ³n de AÃ±adir fichero, a la funciÃ³n de AÃ±adir.
     $('#addFile').click(function() {addFile();});
     
-	//Se asocia el click del botón de enviar datos del formulario.
+	//Se asocia el click del botÃ³n de enviar datos del formulario.
 	$('#uploadButton').on('click', function() {
 		var dataToServer = new FormData(document.getElementById('uploadForm'));
 		

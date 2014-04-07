@@ -1,7 +1,6 @@
 package com.fav24.dataservices.domain.security;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import com.fav24.dataservices.domain.BaseDomain;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
@@ -245,22 +245,9 @@ public class AccessPolicy extends BaseDomain {
 
 		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
 
-			FilenameFilter fileNameFilter = new FilenameFilter() {
+			AbstractList<File> policyFiles = FileUtils.getFilesWithSuffix(applicationHome, APPLICATION_POLICY_FILES_SUFFIX, null);
 
-				@Override
-				public boolean accept(File dir, String name) {
-
-					if (name.endsWith(APPLICATION_POLICY_FILES_SUFFIX)) {
-						return true;
-					}
-
-					return false;
-				}
-			};
-
-			File[] policyFiles = applicationHomeDir.listFiles(fileNameFilter);
-
-			if (policyFiles == null || policyFiles.length == 0) {
+			if (policyFiles.size() == 0) {
 
 				throw new ServerException(AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD, 
 						AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD_MESSAGE);
