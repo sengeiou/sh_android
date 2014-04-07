@@ -47,11 +47,11 @@ function cpuHistoryDataRenderer(data, plot, options) {
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	if (options && options.noDataIndicator) {
-		
-		options.noDataIndicator.show = false;
+	if (plot && plot.noDataIndicator) {
+
+		plot.noDataIndicator.show = false;
 	}
-		
+
 	xhr.open("POST", options["url"], false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 	// Envío.
@@ -169,9 +169,9 @@ function cpuLoadInstantDataRenderer(data, plot, options) {
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	if (options && options.noDataIndicator) {
-		
-		options.noDataIndicator.show = false;
+	if (plot && plot.noDataIndicator) {
+
+		plot.noDataIndicator.show = false;
 	}
 
 	xhr.open("POST", options["url"], false);

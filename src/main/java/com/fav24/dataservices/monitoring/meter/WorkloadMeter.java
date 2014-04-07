@@ -13,6 +13,7 @@ public final class WorkloadMeter extends Meter
 	public static final String INCOMING_REQUESTS_RATE = "RequestsRate"; //Tasa de peticiones entrantes.
 	public static final String INCOMING_REQUESTS_RATE_PEAK = "RequestsRatePeak"; //Pico máximo de tasa de peticiones entrantes.
 	public static final String TOTAL_INCOMING_REQUESTS = "TotalRequests"; //Número total de peticiones entrantes.
+	public static final String TOTAL_INCOMING_REQUESTS_KO = "TotalRequestsKo"; //Número total de peticiones entrantes rechazadas.
 	public static final String OPERATION_RATE = "OperationRate"; //Tasa de operaciones procesadas.
 	public static final String OPERATION_RATE_PEAK = "OperationRatePeak"; //Pico máximo de tasa de operaciones procesadas.
 	public static final String TOTAL_OPERATIONS = "TotalOperations"; //Operaciones procesadas.
@@ -186,6 +187,7 @@ public final class WorkloadMeter extends Meter
 	private final Throughputs throughputs;
 
 	private long totalIncommingRequests;
+	private long totalIncommingRequestsErrors;
 	private long totalIncommingOperations;
 	private long totalIncommingOperationsErrors;
 	private long totalSubsystemOutcommingOperations;
@@ -199,6 +201,7 @@ public final class WorkloadMeter extends Meter
 	public WorkloadMeter() {
 
 		totalIncommingRequests = 0;
+		totalIncommingRequestsErrors = 0;
 		totalIncommingOperations = 0;
 		totalIncommingOperationsErrors = 0;
 		totalSubsystemOutcommingOperations = 0;
@@ -228,6 +231,24 @@ public final class WorkloadMeter extends Meter
 		this.totalIncommingRequests++;
 	}
 
+	/**
+	 * Retorna el número total de peticiones recibidas con errores.
+	 * 
+	 * @return el número total de peticiones recibidas con errores.
+	 */
+	public long getTotalIncommingRequestsKo() {
+
+		return totalIncommingRequestsErrors;
+	}
+
+	/**
+	 * Incrementa en 1 el número total de peticiones con errores.
+	 */
+	public void incTotalIncommingRequestsErrors() {
+
+		this.totalIncommingRequestsErrors++;
+	}
+	
 	/**
 	 * Retorna el número total de operaciones recibidas.
 	 * 
@@ -311,7 +332,9 @@ public final class WorkloadMeter extends Meter
 
 		systemWorkload.put(INCOMING_REQUESTS_RATE, throughputs.getIncomingRequestsRate());
 		systemWorkload.put(INCOMING_REQUESTS_RATE_PEAK, throughputs.getIncomingRequestsRatePeak());
-		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests()));
+		long totalIncommingRquestsKo = getTotalIncommingRequestsKo();
+		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests() - totalIncommingRquestsKo));
+		systemWorkload.put(TOTAL_INCOMING_REQUESTS_KO, Double.valueOf(totalIncommingRquestsKo));
 
 		systemWorkload.put(OPERATION_RATE, throughputs.getIncomingOperationRate());
 		systemWorkload.put(OPERATION_RATE_PEAK, throughputs.getIncomingOperationRatePeak());

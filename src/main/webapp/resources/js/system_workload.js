@@ -5,6 +5,7 @@ var WorkloadMonitor = {
 		RequestsRate : null,
 		RequestsRatePeak : null,
 		TotalRequests : null,
+		TotalRequestsKo : null,
 		OperationRate : null,
 		OperationRatePeak : null,
 		TotalOperations : null,
@@ -21,6 +22,7 @@ var WorkloadMonitor = {
  * @param RequestsRate Etiqueta que contiene la tasa de peticiones entrantes.
  * @param RequestsRatePeak Etiqueta que contiene el pico máximo de tasa de peticiones entrantes.
  * @param TotalRequests Etiqueta que contiene el número total de peticiones entrantes.
+ * @param TotalRequestsKo Etiqueta que contiene el número total de peticiones entrantes rechazadas.
  * @param OperationRate Etiqueta que contiene la tasa de operaciones procesadas.
  * @param OperationRatePeak Etiqueta que contiene el pico máximo de tasa de operaciones procesadas.
  * @param TotalOperations Etiqueta que contiene las operaciones procesadas.
@@ -31,13 +33,14 @@ var WorkloadMonitor = {
  * @param TotalSubsystemOpertionsKo Etiqueta que contiene el número total de operaciones fallidas en el subsistema.
  */
 function initSystemWorkload(
-		RequestsRate, RequestsRatePeak, TotalRequests,
+		RequestsRate, RequestsRatePeak, TotalRequests, TotalRequestsKo,
 		OperationRate, OperationRatePeak, TotalOperations,TotalOperationsKo,
 		SubsystemOperationRate, SubsystemOperationRatePeak, TotalSubsystemOperations, TotalSubsystemOpertionsKo) {
 
 	WorkloadMonitor.RequestsRate = RequestsRate;
 	WorkloadMonitor.RequestsRatePeak = RequestsRatePeak;
 	WorkloadMonitor.TotalRequests = TotalRequests;
+	WorkloadMonitor.TotalRequestsKo = TotalRequestsKo;
 	WorkloadMonitor.OperationRate = OperationRate;
 	WorkloadMonitor.OperationRatePeak = OperationRatePeak;
 	WorkloadMonitor.TotalOperations = TotalOperations;
@@ -83,6 +86,7 @@ function workloadMonitorDataRenderer() {
 	WorkloadMonitor.RequestsRate.innerHTML = Math.floor(jsonResponse["data"]["RequestsRate"]).toPrecision(2).toLocaleString() + " req/s";
 	WorkloadMonitor.RequestsRatePeak.innerHTML = Math.floor(jsonResponse["data"]["RequestsRatePeak"]).toPrecision(2).toLocaleString() + " req/s";
 	WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"].toLocaleString() + " req";
+	WorkloadMonitor.TotalRequestsKo.innerHTML = jsonResponse["data"]["TotalRequestsKo"].toLocaleString() + " req";
 	WorkloadMonitor.OperationRate.innerHTML = Math.floor(jsonResponse["data"]["OperationRate"]).toPrecision(2).toLocaleString() + " op/s";
 	WorkloadMonitor.OperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["OperationRatePeak"]).toPrecision(2).toLocaleString() + " op/s";
 	WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"].toLocaleString() + " op";

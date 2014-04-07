@@ -17,6 +17,7 @@
 				<strong>Tasa:</strong> <a id="RequestsRate">- req/s</a><br/>
 				<strong>Tasa m&aacute;xima:</strong> <a id="RequestsRatePeak">- req/s</a><br/>
 				<strong>Total:</strong> <a id="TotalRequests">- req</a><br/>
+				<strong>Errores:</strong> <a id="TotalRequestsKo">- req</a><br/>
 			</p>
 		</div>
 	</div>
@@ -70,6 +71,7 @@
 			document.getElementById("RequestsRate"),
 			document.getElementById("RequestsRatePeak"),
 			document.getElementById("TotalRequests"),
+			document.getElementById("TotalRequestsKo"),
 			document.getElementById("OperationRate"),
 			document.getElementById("OperationRatePeak"),
 			document.getElementById("TotalOperations"),

@@ -50,13 +50,13 @@ function initMemoryMonitor(period, timeRange, memoryHistoryPlotElement, committe
 function memoryHistoryDataRenderer(data, plot, options) {
 
 	delete data;
-	
+
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	if (options && options.noDataIndicator) {
-		
-		options.noDataIndicator.show = false;
+	if (plot && plot.noDataIndicator) {
+
+		plot.noDataIndicator.show = false;
 	}
 
 	xhr.open("POST", options["url"], false);
@@ -185,9 +185,9 @@ function committedMemoryInstantDataRenderer(data, plot, options) {
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	if (options && options.noDataIndicator) {
-		
-		options.noDataIndicator.show = false;
+	if (plot && plot.noDataIndicator) {
+
+		plot.noDataIndicator.show = false;
 	}
 
 	xhr.open("POST", options["url"], false);
@@ -280,13 +280,13 @@ function createCommittedMemoryInstantPlot(plotElement) {
 function usedMemoryInstantDataRenderer(data, plot, options) {
 
 	delete data;
-	
+
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	if (options && options.noDataIndicator) {
-		
-		options.noDataIndicator.show = false;
+	if (plot && plot.noDataIndicator) {
+
+		plot.noDataIndicator.show = false;
 	}
 
 	xhr.open("POST", options["url"], false);

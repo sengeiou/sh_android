@@ -230,6 +230,7 @@ public class SystemMonitorController extends BaseRestController {
 			Object[][] requestsRateData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE)}};
 			Object[][] requestsRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK)}};
 			Object[][] totalRequestsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS)}};
+			Object[][] totalRequestsKoData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO)}};
 			Object[][] operationRateData = {{workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE)}};
 			Object[][] operationRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE_PEAK)}};
 			Object[][] totalOperationsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS)}};
@@ -242,6 +243,7 @@ public class SystemMonitorController extends BaseRestController {
 			jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 			jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
 			jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS, totalRequestsData);
+			jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO, totalRequestsKoData);
 			jqPlot.getData().put(WorkloadMeter.OPERATION_RATE, operationRateData);
 			jqPlot.getData().put(WorkloadMeter.OPERATION_RATE_PEAK, operationRatePeakData);
 			jqPlot.getData().put(WorkloadMeter.TOTAL_OPERATIONS, totalOperationsData);
@@ -260,6 +262,7 @@ public class SystemMonitorController extends BaseRestController {
 				Object[][] requestsRateData = new Object[systemWorkload.size()][2];
 				Object[][] requestsRatePeakData = new Object[systemWorkload.size()][2];
 				Object[][] totalRequestsData = new Object[systemWorkload.size()][2];
+				Object[][] totalRequestsKoData = new Object[systemWorkload.size()][2];
 				Object[][] operationRateData = new Object[systemWorkload.size()][2];
 				Object[][] operationRatePeakData = new Object[systemWorkload.size()][2];
 				Object[][] totalOperationsData = new Object[systemWorkload.size()][2];
@@ -280,6 +283,9 @@ public class SystemMonitorController extends BaseRestController {
 
 					totalRequestsData[i][0] = monitorSample.getTime();
 					totalRequestsData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS);
+					
+					totalRequestsKoData[i][0] = monitorSample.getTime();
+					totalRequestsKoData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO);
 
 					operationRateData[i][0] = monitorSample.getTime();
 					operationRateData[i][1] = monitorSample.getData(WorkloadMeter.OPERATION_RATE);
@@ -311,6 +317,7 @@ public class SystemMonitorController extends BaseRestController {
 				jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 				jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
 				jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS, totalRequestsData);
+				jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO, totalRequestsKoData);
 				jqPlot.getData().put(WorkloadMeter.OPERATION_RATE, operationRateData);
 				jqPlot.getData().put(WorkloadMeter.OPERATION_RATE_PEAK, operationRatePeakData);
 				jqPlot.getData().put(WorkloadMeter.TOTAL_OPERATIONS, totalOperationsData);

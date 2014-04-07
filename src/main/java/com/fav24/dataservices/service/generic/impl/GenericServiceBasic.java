@@ -57,8 +57,11 @@ public abstract class GenericServiceBasic implements GenericService {
 	public Generic processGeneric(Generic generic) throws ServerException {
 
 		systemService.getWorkloadMeter().incTotalIncommingRequests();
-		
+
 		if (AccessPolicy.getCurrentAccesPolicy() == null) {
+
+			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
+
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
@@ -102,7 +105,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * 
 	 * @return estructura operation de entrada, enriquecida con los resultados de la salida.
 	 */
-	protected Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
+	protected final Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
 
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
@@ -142,60 +145,71 @@ public abstract class GenericServiceBasic implements GenericService {
 			throw e;
 		}
 
-		try {
-			systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
+		switch(operation.getMetadata().getOperation()) {
 
-			switch(operation.getMetadata().getOperation()) {
+		case CREATE:
+			return create(requestor, operation);
+		case UPDATE:
+			return update(requestor, operation);
+		case RETRIEVE:
 
-			case CREATE:
-				return create(requestor, operation);
-			case UPDATE:
-				return update(requestor, operation);
-			case RETRIEVE:
+			if (Cache.getSystemCache() != null) {
 
-				if (Cache.getSystemCache() != null) {
+				net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
 
-					net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+				if (cache != null) {
 
-					if (cache != null) {
+					//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
+					String contentKey = operation.organizeContent(new StringBuilder()).toString();
 
-						//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
-						String contentKey = operation.organizeContent(new StringBuilder()).toString();
+					Element cachedElement = cache.get(contentKey);
+					if (cachedElement == null) {
 
-						Element cachedElement = cache.get(contentKey);
-						if (cachedElement == null) {
+						systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
+
+						try {
 
 							operation = retreave(requestor, operation);
-
-							cachedElement = new Element(contentKey, operation);
-							cache.put(cachedElement);
-
-							return operation;
 						}
-						else {
+						catch (ServerException e) {
+							systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
 
-							Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
-
-							operation.setMetadata(recycledOperation.getMetadata());
-							operation.setData(recycledOperation.getData());
-
-							return operation;
+							throw e;
 						}
+
+						cachedElement = new Element(contentKey, operation);
+						cache.put(cachedElement);
+
+						return operation;
+					}
+					else {
+
+						Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
+
+						operation.setMetadata(recycledOperation.getMetadata());
+						operation.setData(recycledOperation.getData());
+
+						return operation;
 					}
 				}
+			}
+
+			try {
+
+				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
 
 				return retreave(requestor, operation);
-
-			case DELETE:
-				return delete(requestor, operation);
-			case UPDATE_CREATE:
-				return updateCreate(requestor, operation);
 			}
-		}
-		catch (ServerException e) {
-			systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
+			catch (ServerException e) {
+				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
 
-			throw e;
+				throw e;
+			}
+
+		case DELETE:
+			return delete(requestor, operation);
+		case UPDATE_CREATE:
+			return updateCreate(requestor, operation);
 		}
 
 		return operation;

@@ -1063,6 +1063,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		systemService.getWorkloadMeter().incTotalIncommingRequests();
 		
 		if (AccessPolicy.getCurrentAccesPolicy() == null) {
+			
+			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
+			
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
