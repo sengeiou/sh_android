@@ -1,14 +1,25 @@
 package com.fav24.dataservices.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fav24.dataservices.DataServicesContext;
 
 /**
  * Clase de utilidades de ficheros.
  */
 public class FileUtils {
+
+	public static final String REPLACED_FILES_SUFFIX = ".bak";
 
 	/**
 	 * Retorna un conjunto de referencias a ficheros terminados con el sufijo indicado.
@@ -57,6 +68,68 @@ public class FileUtils {
 			}
 		}
 
+		Collections.sort(files, new Comparator<File>() {
+
+			@Override
+			public int compare(File o1, File o2) {
+
+				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+			}});
+
 		return files;
+	}
+
+	/**
+	 * Retorna el stream del fichero procedente de un envío, y sustituye el primero existente encontrado en la lista procedente
+	 * de la ubicación base de la aplicación.
+	 * 
+	 * @param multipartFile Fichero procendete del envío web.
+	 * 
+	 * @return el stream del fichero procedente de un envío, y sustituye el primero existente encontrado en la lista procedente
+	 * de la ubicación base de la aplicación.
+	 * 
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
+	public static InputStream createOrReplaceExistingFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
+
+		String fileName = multipartFile.getOriginalFilename();
+
+		AbstractList<File> defaultFiles = FileUtils.getFilesWithSuffix(DataServicesContext.getCurrentDataServicesContext().getApplicationHome(), 
+				fileName, null);
+
+		for(File file : defaultFiles) {
+
+			if (fileName.equals(file.getName())) {
+
+				File newName = new File(file.getAbsolutePath() + REPLACED_FILES_SUFFIX);
+
+				if (newName.exists()) {
+					newName.delete();
+				}
+
+				File newFile = new File(file.getAbsolutePath());
+
+				file.renameTo(newName); 
+
+				try {
+					multipartFile.transferTo(newFile);
+
+					return new FileInputStream(newFile);
+				}
+				catch (IllegalStateException | IOException e) {
+
+					// En caso de error, se garantiza que el fichero preexistente, queda como estaba.
+					newName.renameTo(newFile);
+
+					throw e;
+				}
+			}
+		}
+
+		File newFile = new File(DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + "/" + fileName);
+		multipartFile.transferTo(newFile);
+
+		return new FileInputStream(newFile);
 	}
 }

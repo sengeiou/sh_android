@@ -23,10 +23,10 @@ function setFileName (fileIndex) {
 // Elimina el fichero indicado, y renumera los que había después.
 function removeFile(fileIndex) {
 	
-	console.log("removing" + fileIndex);
+	console.log("removing " + fileIndex);
 	
-	var fileList = $('#fileList');
-	var fileToRemove = $('#file-' + fileIndex);
+	var fileList = $("#fileList");
+	var fileToRemove = $("#file-" + fileIndex);
 	
 	fileToRemove.remove();
 	
@@ -36,39 +36,72 @@ function removeFile(fileIndex) {
 		
 		console.log(fileIndex);
 		
-		var file = $('#file-' + (fileIndex + 1));
-		file.attr("id", "file-" + fileIndex);
+		var file = $("#file-" + (fileIndex + 1));
+		file.prop("id", "file-" + fileIndex);
 		
-		var fileInput = $('#file-input-' + (fileIndex + 1));
-		fileInput.attr("id", "file-input-" + fileIndex);
-		fileInput.attr("name", "files[" + fileIndex + "]");
+		var fileInput = $("#file-input-" + (fileIndex + 1));
+		fileInput.prop("id", "file-input-" + fileIndex);
+		fileInput.prop("name", "files[" + fileIndex + "]");
 		fileInput.off("change");
 		fileInput.on("change", new Function("setFileName("+fileIndex+");"));
 		
-		var fileInfo = $('#file-info-' + (fileIndex + 1));
-		fileInfo.attr("id", "file-info-" + fileIndex);
+		var fileInfo = $("#file-info-" + (fileIndex + 1));
+		fileInfo.prop("id", "file-info-" + fileIndex);
 		
-		var fileChooser = $('#file-chooser-' + (fileIndex + 1));
-		fileChooser.attr("id", "file-chooser-" + fileIndex);
-		fileChooser.attr("for", "file-input-" + fileIndex);
+		var fileChooser = $("#file-chooser-" + (fileIndex + 1));
+		fileChooser.prop("id", "file-chooser-" + fileIndex);
+		fileChooser.prop("for", "file-input-" + fileIndex);
 		
-		var fileRemover = $('#file-remover-' + (fileIndex + 1));
-		fileRemover.attr("id", "file-remover-" + fileIndex);
+		var fileRemover = $("#file-remover-" + (fileIndex + 1));
+		fileRemover.prop("id", "file-remover-" + fileIndex);
 		fileRemover.off("click");
 		fileRemover.on("click", new Function("removeFile("+fileIndex+");"));
+
+		var fileToSetAsDefault = $("#file-as-default-" + (fileIndex + 1));
+		fileToSetAsDefault.prop("id", "file-as-default-" + fileIndex);
+		fileToSetAsDefault.off("click");
+		fileToSetAsDefault.on("click", new Function("toggleFileAsDefault("+fileIndex+");"));
+		
+		var fileInputToSetAsDefault = $("#file-input-as-default-" + (fileIndex + 1));
+		fileInputToSetAsDefault.prop("id", "file-input-as-default-" + fileIndex);
+		fileInputToSetAsDefault.prop("name", "filesAsDefault[" + fileIndex + "]");
+	}
+}
+
+//Marca/Desmarca el fichero indicado, como fichero para establecer por defecto.
+function toggleFileAsDefault(fileIndex) {
+	
+	console.log("toggle file as default " + fileIndex);
+	
+	var fileToSetAsDefault = $("#file-as-default-" + fileIndex);
+	var fileInputToSetAsDefault = $("#file-input-as-default-" + fileIndex);
+	
+	//Si no es por defecto, contiene la clase: btn-default
+	//Si es por defecto, contiene la clase: btn-primary
+	if (fileToSetAsDefault.hasClass("btn-default")) {
+		
+		fileToSetAsDefault.addClass("btn-primary");
+		fileToSetAsDefault.removeClass("btn-default");
+		fileInputToSetAsDefault.prop("checked", true);
+	}
+	else if (fileToSetAsDefault.hasClass("btn-primary")) {
+		
+		fileToSetAsDefault.addClass("btn-default");
+		fileToSetAsDefault.removeClass("btn-primary");
+		fileInputToSetAsDefault.prop("checked", false);
 	}
 }
 
 // Añade una nueva fila para cargar otro fichero.
 function addFile() {
 	var fileIndex;
-	var numFiles = $('#fileList').children().length;
+	var numFiles = $("#fileList").children().length;
 	
 	if (numFiles == 0) {
 		fileIndex = 0;
 	}
 	else {
-     var lastId = $('#fileList').children().last().attr("id");
+     var lastId = $("#fileList").children().last().prop("id");
      var fileIndex = lastId.replace("file-", "");
      fileIndex ++;
 	}
@@ -82,15 +115,19 @@ function addFile() {
     newFileSelectionLine += "<label id='file-remover-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-trash vcenter'><span></span></label>";
     
     newFileSelectionLine += "<button id='file-as-default-" + fileIndex + "' type='button' class='btn btn-default btn-sm pull-right'>";
-    newFileSelectionLine += "<span class='glyphicon glyphicon-star icon-red'></span> Establecer por defecto</button>";
+    newFileSelectionLine += "<span class='glyphicon glyphicon-star icon-red'></span>";
+    newFileSelectionLine += "Establecer por defecto";
+    newFileSelectionLine += "<input id='file-input-as-default-" + fileIndex + "' type='checkbox' name='filesAsDefault[" + fileIndex + "]' style='position: absolute; z-index:-1;'/>"; 
+    newFileSelectionLine += "</button>";
 
     newFileSelectionLine += "</div>";
     newFileSelectionLine += "</li>";
     
-    $('#fileList').append(newFileSelectionLine);
+    $("#fileList").append(newFileSelectionLine);
     
-    $('#file-input-' + fileIndex).on("change", function() {setFileName(fileIndex);});
-    $('#file-remover-' + fileIndex).on("click", function() {removeFile(fileIndex);});
+    $("#file-input-" + fileIndex).on("change", function() {setFileName(fileIndex);});
+    $("#file-remover-" + fileIndex).on("click", function() {removeFile(fileIndex);});
+    $("#file-as-default-" + fileIndex).on("click", function() {toggleFileAsDefault(fileIndex);});
 }
 
 // Ejecuciones al final de la carga del documento.
@@ -100,13 +137,13 @@ $(document).ready(function() {
 	addFile();
 
 	//Se asocia el click del botón de Añadir fichero, a la función de Añadir.
-    $('#addFile').click(function() {addFile();});
+    $("#addFile").click(function() {addFile();});
     
 	//Se asocia el click del botón de enviar datos del formulario.
-	$('#uploadButton').on('click', function() {
-		var dataToServer = new FormData(document.getElementById('uploadForm'));
+	$("#uploadButton").on("click", function() {
+		var dataToServer = new FormData(document.getElementById("uploadForm"));
 		
-		sendPostRequest(dataToServer, 'cache/cacheConfigurationUpload.save');
+		sendPostRequest(dataToServer, "cache/cacheConfigurationUpload.save");
 
 		return false;
 	});

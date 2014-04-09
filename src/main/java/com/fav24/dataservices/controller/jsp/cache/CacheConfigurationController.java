@@ -21,6 +21,7 @@ import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
 import com.fav24.dataservices.service.cache.RetrieveCacheConfigurationService;
+import com.fav24.dataservices.util.FileUtils;
 
 /**
  * Controla las peticiones de entrada a las páginas de gestión de la caché.
@@ -54,7 +55,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		return model;
 	}
-	
+
 	/**
 	 * Muestra la configuración del gestor de caché indicado.
 	 * 
@@ -71,7 +72,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		return model;
 	}
-	
+
 	/**
 	 * Muestra la lista de gestores de caché disponibles para este servicio de datos.
 	 *  
@@ -79,11 +80,11 @@ public class CacheConfigurationController extends BaseJspController {
 	 */
 	@RequestMapping(value = "/availableCaches", method = { RequestMethod.GET })
 	public ModelAndView availableCaches(@ModelAttribute(value="cacheManager") String cacheManager) {
-		
+
 		ModelAndView model = new ModelAndView("available_entity_caches");
-		
+
 		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
-		
+
 		return model;
 	}
 
@@ -128,6 +129,7 @@ public class CacheConfigurationController extends BaseJspController {
 	public String accessPolicyUpload(@ModelAttribute("uploadCacheConfigurationFiles") UploadFilesDto uploadCacheConfiguration, Model map) {
 
 		List<MultipartFile> files = uploadCacheConfiguration.getFiles();
+		List<Boolean> filesAsDefault = uploadCacheConfiguration.getFilesAsDefault();
 
 		List<String> filesOK = new ArrayList<String>();
 		List<String> filesKO = new ArrayList<String>();
@@ -135,15 +137,24 @@ public class CacheConfigurationController extends BaseJspController {
 
 		if (null != files && files.size() > 0) {
 
+			int i = 0;
 			for (MultipartFile multipartFile : files) {
 
 				if (!multipartFile.isEmpty()) {
 
 					String fileName = multipartFile.getOriginalFilename();
+					Boolean fileAsDefault = filesAsDefault.get(i++);
 
 					try {
 
-						loadCacheConfigurationService.loadCacheConfiguration(multipartFile.getInputStream());
+						if (fileAsDefault != null && fileAsDefault) {
+
+							loadCacheConfigurationService.loadCacheConfiguration(FileUtils.createOrReplaceExistingFile(multipartFile));
+						}
+						else {
+
+							loadCacheConfigurationService.loadCacheConfiguration(multipartFile.getInputStream());
+						}
 
 						filesOK.add(fileName);
 					} catch (ServerException e) {

@@ -21,6 +21,7 @@ import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.security.LoadAccessPolicyService;
 import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
+import com.fav24.dataservices.util.FileUtils;
 
 /**
  * Controla las peticiones de entrada a las páginas de gestión de la seguridad.
@@ -95,6 +96,7 @@ public class AccessPolicyController extends BaseJspController {
 	public String accessPolicyUpload(@ModelAttribute("uploadPolicyFiles") UploadFilesDto uploadPolicyFiles, Model map) {
 
 		List<MultipartFile> files = uploadPolicyFiles.getFiles();
+		List<Boolean> filesAsDefault = uploadPolicyFiles.getFilesAsDefault();
 
 		List<String> filesOK = new ArrayList<String>();
 		List<String> filesKO = new ArrayList<String>();
@@ -102,15 +104,24 @@ public class AccessPolicyController extends BaseJspController {
 
 		if (null != files && files.size() > 0) {
 
+			int i = 0;
 			for (MultipartFile multipartFile : files) {
 
 				if (!multipartFile.isEmpty()) {
 
 					String fileName = multipartFile.getOriginalFilename();
+					Boolean fileAsDefault = filesAsDefault.get(i++);
 
 					try {
 
-						loadAccessPolicyService.loadAccessPolicy(multipartFile.getInputStream());
+						if (fileAsDefault != null && fileAsDefault) {
+
+							loadAccessPolicyService.loadAccessPolicy(FileUtils.createOrReplaceExistingFile(multipartFile));
+						}
+						else {
+
+							loadAccessPolicyService.loadAccessPolicy(multipartFile.getInputStream());
+						}
 
 						filesOK.add(fileName);
 					} catch (ServerException e) {
