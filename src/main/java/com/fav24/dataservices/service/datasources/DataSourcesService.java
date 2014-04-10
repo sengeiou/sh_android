@@ -21,6 +21,10 @@ public interface DataSourcesService {
 	public static final String ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos.";
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED = "G001";
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos de uso.";
+	public static final String ERROR_DATASOURCE_GET_TIMESTAMP_FAILED = "G002";
+	public static final String ERROR_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE = "Error al obtener la fecha y hora de la fuente de datos.";
+	public static final String ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED = "G003";
+	public static final String ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE = "Error al obtener la fecha y hora de la fuente de datos de uso.";
 
 
 	/**
@@ -31,6 +35,15 @@ public interface DataSourcesService {
 	 * @throws ServerException 
 	 */
 	public Map<String, String> getDataServiceDataSourceInformation() throws ServerException;
+	
+	/**
+	 * Retorna la fecha y hora del subsistema en milisegundos desde epoch.
+	 * 
+	 * @return la fecha y hora del subsistema en milisegundos desde epoch.
+	 * 
+	 * @throws ServerException 
+	 */
+	public Long getDataServiceDataSourceTime() throws ServerException;
 
 	/**
 	 * Retorna un mapa de atributos con la información de la fuente de datos de uso.
@@ -40,4 +53,13 @@ public interface DataSourcesService {
 	 * @throws ServerException 
 	 */
 	public Map<String, String> getStatisticsDataSourceInformation() throws ServerException;
+	
+	/**
+	 * Retorna la fecha y hora del subsistema estadístico en milisegundos desde epoch.
+	 * 
+	 * @return la fecha y hora del subsistema estadístico en milisegundos desde epoch.
+	 * 
+	 * @throws ServerException 
+	 */
+	public Long getStatisticsDataSourceTime() throws ServerException;
 }

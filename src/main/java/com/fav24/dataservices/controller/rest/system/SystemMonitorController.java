@@ -22,9 +22,7 @@ import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 import com.fav24.dataservices.service.system.SystemService;
 
 /**
- * Controla las peticiones de entrada a los servicios de gestión de la seguridad.
- * 
- * @author Fav24
+ * Controla las peticiones de entrada a los servicios de gestión del sistema.
  */
 @Controller
 @RequestMapping("/system")
@@ -43,7 +41,17 @@ public class SystemMonitorController extends BaseRestController {
 	@Autowired
 	protected SystemService systemService;
 
+	/**
+	 * Procesa una petición de la fecha y hora del sistema en milisegundos desde epoch.
+	 * 
+	 * @return la fecha y hora del sistema en milisegundos desde epoch.
+	 */
+	@RequestMapping(value = "/time", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody Long getTime() {
 
+		return System.currentTimeMillis();
+	}
+	
 	/**
 	 * Procesa una petición de información del estado de la memoria del sistema.
 	 * 
@@ -132,7 +140,7 @@ public class SystemMonitorController extends BaseRestController {
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "cpu", method = { RequestMethod.POST })
+	@RequestMapping(value = "/cpu", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getCPU(@RequestBody final JqPlotDto jqPlot) {
 
 		jqPlot.setName(CPU_MONITOR);
@@ -218,7 +226,7 @@ public class SystemMonitorController extends BaseRestController {
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
-	@RequestMapping(value = "workload", method = { RequestMethod.POST })
+	@RequestMapping(value = "/workload", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getWorkload(@RequestBody final JqPlotDto jqPlot) {
 
 		jqPlot.setName(WORKLOAD_MONITOR);
@@ -227,6 +235,7 @@ public class SystemMonitorController extends BaseRestController {
 
 			MonitorSample workloadMonitorSample = systemService.getSystemWorkload();
 
+			Object[][] startTimeData = {{workloadMonitorSample.getData(WorkloadMeter.MEASURE_START_TIME)}};
 			Object[][] requestsRateData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE)}};
 			Object[][] requestsRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK)}};
 			Object[][] totalRequestsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS)}};
@@ -240,6 +249,7 @@ public class SystemMonitorController extends BaseRestController {
 			Object[][] totalSubsystemOperationsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS)}};
 			Object[][] totalSubsystemOpertionsKoData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO)}};
 
+			jqPlot.getData().put(WorkloadMeter.MEASURE_START_TIME, startTimeData);
 			jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 			jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
 			jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS, totalRequestsData);
@@ -259,6 +269,7 @@ public class SystemMonitorController extends BaseRestController {
 
 				AbstractList<MonitorSample> systemWorkload = systemService.getSystemWorkload(jqPlot.getOffset(), jqPlot.getTimeRange(), jqPlot.getPeriod());
 
+				Object[][] startTimeData = new Object[systemWorkload.size()][2];
 				Object[][] requestsRateData = new Object[systemWorkload.size()][2];
 				Object[][] requestsRatePeakData = new Object[systemWorkload.size()][2];
 				Object[][] totalRequestsData = new Object[systemWorkload.size()][2];
@@ -275,9 +286,12 @@ public class SystemMonitorController extends BaseRestController {
 				int i = 0;
 				for (MonitorSample monitorSample : systemWorkload) {
 
+					startTimeData[i][0] = monitorSample.getTime();
+					startTimeData[i][1] = monitorSample.getData(WorkloadMeter.MEASURE_START_TIME);
+
 					requestsRateData[i][0] = monitorSample.getTime();
 					requestsRateData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE);
-
+					
 					requestsRatePeakData[i][0] = monitorSample.getTime();
 					requestsRatePeakData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK);
 
@@ -314,6 +328,7 @@ public class SystemMonitorController extends BaseRestController {
 					i++;
 				}
 
+				jqPlot.getData().put(WorkloadMeter.MEASURE_START_TIME, startTimeData);
 				jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 				jqPlot.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
 				jqPlot.getData().put(WorkloadMeter.TOTAL_INCOMING_REQUESTS, totalRequestsData);
@@ -334,5 +349,16 @@ public class SystemMonitorController extends BaseRestController {
 		}
 
 		return jqPlot;
+	}
+
+	/**
+	 * Procesa una petición de creción de un nuevo periodo de medidas para el medidor de trabajo realizado.
+	 * 
+	 * @return el momento de inicio del nuevo periodo en milisegundos desde epoch.
+	 */
+	@RequestMapping(value = "/workload/newMeasurePeriod", method = { RequestMethod.GET, RequestMethod.POST })
+	public Long newWorkloadMeasurePeriod() {
+		
+		return systemService.getWorkloadMeter().newMeasurePeriod();
 	}
 }

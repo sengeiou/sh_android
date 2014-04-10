@@ -27,16 +27,17 @@ public class EntityGroupAccessPolicyDOM
 	public EntityGroupAccessPolicyDOM(Node node) throws ServerException {
 
 		entitiesAccessPolicies = new HashSet<EntityAccessPolicy>();
-		
+
 		groupName = ((Element) node).getAttribute("Name");
 
 		NodeList nodes_i = node.getChildNodes();
-		
+
 		for(int i=0; i < nodes_i.getLength(); i++) {
+
 			Node node_i = nodes_i.item(i);
 
 			if (node_i.getNodeType() == Node.ELEMENT_NODE) {
-				
+
 				String nodeName = node_i.getNodeName();
 
 				if ("Entity".equals(nodeName)) {
@@ -52,6 +53,7 @@ public class EntityGroupAccessPolicyDOM
 	 * @return el nombre de este grupo de políticas de acceso a entidades.
 	 */
 	public String getGroupName() {
+
 		return groupName;
 	}
 

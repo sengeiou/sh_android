@@ -5,7 +5,7 @@ package com.fav24.dataservices.domain.cache;
 /**
  * Configuración de caché para una determinada entidad.
  */
-public class EntityCache extends CacheConfiguration
+public class EntityCache extends CacheConfiguration implements Comparable<EntityCache>
 {
 	private String alias;
 
@@ -70,5 +70,31 @@ public class EntityCache extends CacheConfiguration
 		clone.alias = alias;
 
 		return clone;
+	}
+
+	/**
+	 * Compara el alias de esta caché de entidad con el de la suministrada por parámetro.
+	 * 
+	 * Este método está pensado para permitir la ordenación de las cachés de entidades, por el alias de la entidad.
+	 * 
+	 * @return un entero negativo, cero, o un entero positivo si este objeto es menor, igual, o mayor que el indicado por parámetro.
+	 */
+	@Override
+	public int compareTo(EntityCache o) {
+
+		if (o == null) {
+			return 1;	
+		}
+
+		if (alias == null) {
+			if (o.alias == null) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+
+		return alias.compareTo(o.alias);
 	}
 }

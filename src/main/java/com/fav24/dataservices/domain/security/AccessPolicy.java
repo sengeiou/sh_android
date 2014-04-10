@@ -4,10 +4,11 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.BaseDomain;
@@ -29,7 +30,7 @@ public class AccessPolicy extends BaseDomain {
 
 	private static AccessPolicy currentAccesPolicy;
 
-	private Set<EntityAccessPolicy> accessPolicies;
+	private TreeSet<EntityAccessPolicy> accessPolicies;
 	private Map<String, EntityAccessPolicy> accessPoliciesByAlias;
 
 
@@ -65,7 +66,7 @@ public class AccessPolicy extends BaseDomain {
 
 		if (accesPolicy.accessPolicies != null) {
 
-			accessPolicies = new HashSet<EntityAccessPolicy>();
+			accessPolicies = new TreeSet<EntityAccessPolicy>();
 			accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
 			for (EntityAccessPolicy entityAccessPolicy : accesPolicy.accessPolicies) {
 
@@ -86,7 +87,7 @@ public class AccessPolicy extends BaseDomain {
 	 * 
 	 * @return el conjunto de políticas solicitada.
 	 */
-	public Set<EntityAccessPolicy> getAccessPolicies() {
+	public TreeSet<EntityAccessPolicy> getAccessPolicies() {
 		return accessPolicies;
 	}
 
@@ -95,7 +96,7 @@ public class AccessPolicy extends BaseDomain {
 	 * 
 	 * @param accessPolicies El conjunto de políticas solicitadas.
 	 */
-	public void setAccessPolicies(Set<EntityAccessPolicy> accessPolicies) {
+	public void setAccessPolicies(TreeSet<EntityAccessPolicy> accessPolicies) {
 		this.accessPolicies = accessPolicies;
 
 		if (accessPolicies != null) {
@@ -174,7 +175,7 @@ public class AccessPolicy extends BaseDomain {
 
 				if (this.accessPolicies == null) {
 
-					this.accessPolicies = new HashSet<EntityAccessPolicy>();
+					this.accessPolicies = new TreeSet<EntityAccessPolicy>();
 					this.accessPolicies.addAll(accessPolicies);
 
 					this.accessPoliciesByAlias = new HashMap<String, EntityAccessPolicy>();
@@ -216,6 +217,8 @@ public class AccessPolicy extends BaseDomain {
 			else {
 				currentAccesPolicy.mergeAccesPolicy(accessPolicy);
 			}
+			
+			Collections.sort(currentAccesPolicy.getEnititiesAliases());
 		}
 	}
 

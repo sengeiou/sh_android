@@ -1,16 +1,15 @@
 package com.fav24.dataservices.domain.cache;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.TreeSet;
 
 import net.sf.ehcache.CacheManager;
 
 
-public class EntityCacheManager extends CacheManagerConfiguration
-{
+public class EntityCacheManager extends CacheManagerConfiguration implements Comparable<EntityCacheManager> {
+
 	private String name;
-	private Set<EntityCache> entitiesCacheConfigurations;
+	private TreeSet<EntityCache> entitiesCacheConfigurations;
 
 	private CacheManager cacheManager;
 
@@ -21,7 +20,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	public EntityCacheManager() {
 
 		this.name = null;
-		this.entitiesCacheConfigurations = new HashSet<EntityCache>();
+		this.entitiesCacheConfigurations = new TreeSet<EntityCache>();
 
 		this.cacheManager = null;
 	}
@@ -70,7 +69,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * 
 	 * @return el conjunto de configuraciones de caché de entidades, para este gestor.
 	 */
-	public final Set<EntityCache> getEntitiesCacheConfigurations() {
+	public final TreeSet<EntityCache> getEntitiesCacheConfigurations() {
 		return entitiesCacheConfigurations;
 	}
 
@@ -80,7 +79,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 	 * @param entitiesCacheConfigurations El set de cachés de entidades a asignar.
 	 */
 	public synchronized void setEntitiesCacheConfigurations(
-			Set<EntityCache> entitiesCacheConfigurations) {
+			TreeSet<EntityCache> entitiesCacheConfigurations) {
 		this.entitiesCacheConfigurations = entitiesCacheConfigurations;
 	}
 
@@ -231,7 +230,7 @@ public class EntityCacheManager extends CacheManagerConfiguration
 		}
 		else {
 
-			clone.entitiesCacheConfigurations = new HashSet<EntityCache>(entitiesCacheConfigurations.size());
+			clone.entitiesCacheConfigurations = new TreeSet<EntityCache>();
 
 			for(EntityCache entityCache : entitiesCacheConfigurations) {
 
@@ -242,5 +241,31 @@ public class EntityCacheManager extends CacheManagerConfiguration
 		clone.cacheManager = null;
 
 		return clone;
+	}
+
+	/**
+	 * Compara el nombre de este gestor de cachés de entidades con el del suministrado por parámetro.
+	 * 
+	 * Este método está pensado para permitir la ordenación de los gestores de cachés de entidades, por el nombre del gestor
+	 * 
+	 * @return un entero negativo, cero, o un entero positivo si este objeto es menor, igual, o mayor que el indicado por parámetro.
+	 */
+	@Override
+	public int compareTo(EntityCacheManager o) {
+
+		if (o == null) {
+			return 1;	
+		}
+
+		if (name == null) {
+			if (o.name == null) {
+				return 0;
+			}
+			else {
+				return -1;
+			}
+		}
+
+		return name.compareTo(o.name);
 	}
 }

@@ -10,6 +10,7 @@ import com.fav24.dataservices.monitoring.Meter;
  */
 public final class WorkloadMeter extends Meter
 {
+	public static final String MEASURE_START_TIME = "MeasureStartTime"; //Momento de inicio de la medida.
 	public static final String INCOMING_REQUESTS_RATE = "RequestsRate"; //Tasa de peticiones entrantes.
 	public static final String INCOMING_REQUESTS_RATE_PEAK = "RequestsRatePeak"; //Pico máximo de tasa de peticiones entrantes.
 	public static final String TOTAL_INCOMING_REQUESTS = "TotalRequests"; //Número total de peticiones entrantes.
@@ -70,6 +71,25 @@ public final class WorkloadMeter extends Meter
 			startSampleTime = System.currentTimeMillis();
 		}
 
+		/**
+		 * Inicializa todos los indicadores.
+		 */
+		public void resetSampling() {
+			
+			startSampleTime = System.currentTimeMillis();
+
+			previousIncoming = 0;
+			previousOperationIncoming = 0;
+			previousSubsystemOutcoming = 0;
+
+			incomingThroughput = 0;
+			incomingThroughputPeak = 0;
+			incomingOperationThroughput = 0;
+			incomingOperationThroughputPeak = 0;
+			subsystemOutcomingThroughput = 0;
+			subsystemOutcomingThroughputPeak = 0;
+		}
+		
 		/**
 		 * Recalcula y actualiza los valores del caudal de peticiones y operaciones entrantes y redirigidas.
 		 * 
@@ -186,6 +206,7 @@ public final class WorkloadMeter extends Meter
 
 	private final Throughputs throughputs;
 
+	private long measureStartTime;
 	private long totalIncommingRequests;
 	private long totalIncommingRequestsErrors;
 	private long totalIncommingOperations;
@@ -200,17 +221,46 @@ public final class WorkloadMeter extends Meter
 	 */
 	public WorkloadMeter() {
 
+		this.throughputs = new Throughputs();
+		this.measureThread = new Thread(this.throughputs, "Thread workload meter");
+		this.measureThread.setDaemon(true);
+		
+		newMeasurePeriod();
+		
+		this.measureThread.start();
+	}
+
+	/**
+	 * Retorna el momento de inicio de las medidas para el periodo actual.
+	 * 
+	 * Nota: este valor está expresado en milisegundos desde epoch.
+	 * 
+	 * @return el momento de inicio de las medidas para el periodo actual.
+	 */
+	public long getMeasureStartTime() {
+
+		return measureStartTime;	
+	}
+
+	/**
+	 * Establece un nuevo periodo de medidas.
+	 * 
+	 * @return el momento de inicio del nuevo periodo en milisegundos desde epoch.
+	 */
+	public long newMeasurePeriod() {
+
+		measureStartTime = System.currentTimeMillis();
+		
 		totalIncommingRequests = 0;
 		totalIncommingRequestsErrors = 0;
 		totalIncommingOperations = 0;
 		totalIncommingOperationsErrors = 0;
 		totalSubsystemOutcommingOperations = 0;
 		totalSubsystemOutcommingOperationsErrors = 0;
-
-		this.throughputs = new Throughputs();
-		this.measureThread = new Thread(this.throughputs, "Thread workload meter");
-		this.measureThread.setDaemon(true);
-		this.measureThread.start();
+		
+		throughputs.resetSampling();
+		
+		return measureStartTime;
 	}
 
 	/**
@@ -248,7 +298,7 @@ public final class WorkloadMeter extends Meter
 
 		this.totalIncommingRequestsErrors++;
 	}
-	
+
 	/**
 	 * Retorna el número total de operaciones recibidas.
 	 * 
@@ -330,6 +380,7 @@ public final class WorkloadMeter extends Meter
 
 		NavigableMap<String, Double> systemWorkload = new TreeMap<String, Double>();
 
+		systemWorkload.put(MEASURE_START_TIME, Double.valueOf(getMeasureStartTime()));
 		systemWorkload.put(INCOMING_REQUESTS_RATE, throughputs.getIncomingRequestsRate());
 		systemWorkload.put(INCOMING_REQUESTS_RATE_PEAK, throughputs.getIncomingRequestsRatePeak());
 		systemWorkload.put(TOTAL_INCOMING_REQUESTS, Double.valueOf(getTotalIncommingRequests()));

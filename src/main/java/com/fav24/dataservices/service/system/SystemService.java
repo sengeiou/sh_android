@@ -12,8 +12,6 @@ import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 
 /**
  * Interfaz de servicio System. 
- * 
- * @author Fav24
  */
 public interface SystemService {
 

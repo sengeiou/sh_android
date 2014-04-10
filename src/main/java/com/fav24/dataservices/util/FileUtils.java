@@ -73,7 +73,24 @@ public class FileUtils {
 			@Override
 			public int compare(File o1, File o2) {
 
-				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+				if (o1 == o2) {
+					return 0;
+				}
+
+				if (o1 != null && o2 != null) {
+
+					return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+				}
+
+				if (o1 != null) {
+					return 1;
+				}
+
+				if (o2 != null) {
+					return -1;
+				}
+
+				return 0;
 			}});
 
 		return files;

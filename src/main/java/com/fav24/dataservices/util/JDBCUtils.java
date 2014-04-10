@@ -4,16 +4,26 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.fav24.dataservices.DataServicesContext;
 
 
 /**
  * Conjunto de utilidades JDBC.
  */
 public class JDBCUtils {
+
+	public static final int DB_PRODUCT_POSTGRESQL = 0;
+	public static final int DB_PRODUCT_MYSQL = 1;
+	public static final int DB_PRODUCT_MARIADB = DB_PRODUCT_MYSQL;
+	public static final int DB_PRODUCT_HSQL = 2;
+	public static final int DB_PRODUCT_ORACLE = 3;
 
 	public static final String HOST = "host";
 	public static final String PORT = "port";
@@ -95,6 +105,96 @@ public class JDBCUtils {
 	}
 
 	/**
+	 * Retorna el tipo de base de datos a partir de la metainformación de la conexión indicada.
+	 * 
+	 * @param connection Conexión de la que se obtendrá la metainformación.
+	 * 
+	 * @return el tipo de base de datos.
+	 * 
+	 * @throws SQLException
+	 */
+	public static int getProduct(Connection connection) throws SQLException {
+
+		String databaseProductName = connection.getMetaData().getDatabaseProductName().toLowerCase();
+
+		if (databaseProductName.indexOf("mysql") != -1)
+			return DB_PRODUCT_MYSQL;
+
+		if (databaseProductName.indexOf("postgres") != -1)
+			return DB_PRODUCT_POSTGRESQL;
+
+		if (databaseProductName.indexOf("hsql") != -1)
+			return DB_PRODUCT_HSQL;
+
+		if (databaseProductName.indexOf("oracle") != -1)
+			return DB_PRODUCT_ORACLE;
+
+		return DB_PRODUCT_MYSQL;
+	}
+
+	/**
+	 * Retorna la fecha y hora actual de la fuente de datos a la que hace referencia la conexión indicada.
+	 * 
+	 * @param connection Conexión de la que se desea obtener la información.
+	 * 
+	 * @return la fecha y hora actual de la fuente de datos a la que hace referencia la conexión indicada.
+	 * 
+	 * @throws SQLException En caso de no poder obtener la información de la conexión.
+	 *  
+	 *  Esta función es válida para: MySQL, MariaDB, PostgreSQL, Oracle y hSQL.
+	 *  No és válida para: SQLServer.
+	 */
+	public static Long getConnectionDateTime(Connection connection) throws SQLException {
+
+		String currentTimestampStatement = null;
+		Date currentTimestamp;
+
+		switch(getProduct(connection)) {
+
+		case DB_PRODUCT_HSQL:
+			currentTimestampStatement = "CALL CURRENT_TIMESTAMP AT TIME ZONE INTERVAL '00:00' HOUR TO MINUTE;";
+			break;
+
+		case DB_PRODUCT_MYSQL:
+			currentTimestampStatement = "SELECT CURRENT_TIMESTAMP;";
+			break;
+
+		case DB_PRODUCT_ORACLE:
+			currentTimestampStatement = "SELECT CURRENT_TIMESTAMP FROM DUAL;";
+			break;
+
+		case DB_PRODUCT_POSTGRESQL:
+			currentTimestampStatement = "SELECT CURRENT_TIMESTAMP;";
+			break;
+
+		default:
+			return null;
+		}
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery(currentTimestampStatement);
+
+			if (resultSet.next())
+				currentTimestamp = resultSet.getTimestamp(1, DataServicesContext.MAIN_CALENDAR);
+			else
+				currentTimestamp = null;
+
+		} catch (SQLException e) {
+			throw e;
+		}
+		finally {
+			CloseQuietly(resultSet);
+			CloseQuietly(statement);
+		}
+
+		return currentTimestamp == null ? null : currentTimestamp.getTime();
+	}
+
+	/**
 	 * Retorna un mapa con los atributos contenidos en la URL.
 	 * 
 	 * @param url URL de la que se obtendrán los atributos.
@@ -123,6 +223,26 @@ public class JDBCUtils {
 	}
 
 	/**
+	 * Cierra la sentencia indicada, de forma silenciosa.
+	 * 
+	 * Nota: en caso de ser <code>null</code>, no hace nada.
+	 * 
+	 * @param statement sentencia a cerrar.
+	 */
+	public static void CloseQuietly(Statement statement) {
+
+		try {
+
+			if (statement != null) {
+				statement.close();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Cierra el set de resultados indicado, de forma silenciosa.
 	 * 
 	 * Nota: en caso de ser <code>null</code>, no hace nada.
@@ -141,7 +261,7 @@ public class JDBCUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Cierra la conexión indicada, de forma silenciosa.
 	 * 
@@ -150,13 +270,13 @@ public class JDBCUtils {
 	 * @param connection Conexión a cerrar.
 	 */
 	public static void CloseQuietly(Connection connection) {
-		
+
 		try {
-			
+
 			if (connection != null) {
 				connection.close();
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

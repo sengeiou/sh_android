@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -221,6 +222,8 @@ public class Cache
 					systemCache.mergeCacheConfiguration(cacheConfiguration);
 				}
 			}
+			
+			Collections.sort(systemCache.entityCacheManagers);
 		}
 	}
 

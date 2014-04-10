@@ -54,7 +54,7 @@ public class DataSources
 		this.version = null;
 		this.description = null;
 		this.dataServices = null;
-		this.dataServices = null;
+		this.statistics = null;
 	}
 
 	/**

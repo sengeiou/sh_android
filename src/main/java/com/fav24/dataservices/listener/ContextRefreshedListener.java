@@ -1,6 +1,5 @@
 package com.fav24.dataservices.listener;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -11,8 +10,6 @@ import com.fav24.dataservices.DataServicesContext;
 @Component
 public class ContextRefreshedListener implements ApplicationListener<ContextRefreshedEvent> {
 
-	@Autowired
-	private DataServicesContext dataServicesContext;
 
 	/**
 	 * {@inheritDoc}

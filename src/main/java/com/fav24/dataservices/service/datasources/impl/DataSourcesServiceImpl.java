@@ -1,6 +1,7 @@
 package com.fav24.dataservices.service.datasources.impl;
 
 import java.net.MalformedURLException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.fav24.dataservices.util.JDBCUtils;
 
 
 /**
- * Implementación de servicio Main. 
+ * Implementación de servicio para la gestión de orígenes de datos. 
  */
 @Component
 @Scope("prototype")
@@ -48,6 +49,34 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Long getDataServiceDataSourceTime() throws ServerException {
+
+		if (dataServicesDataSourceInformation == null && DataSources.getDataSourceDataService() != null) {
+
+			Connection connection = null;
+			
+			try {
+
+				connection = DataSources.getDataSourceDataService().getConnection();
+				
+				return JDBCUtils.getConnectionDateTime(connection);
+
+			} catch (SQLException e) {
+
+				throw new ServerException(ERROR_DATASOURCE_GET_TIMESTAMP_FAILED, ERROR_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE);
+			}
+			finally {
+				JDBCUtils.CloseQuietly(connection);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Map<String, String> getStatisticsDataSourceInformation() throws ServerException {
 
 		try {
@@ -62,5 +91,26 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 			throw new ServerException(ERROR_STATS_DATASOURCE_GET_INFO_FAILED, ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE);
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Long getStatisticsDataSourceTime() throws ServerException {
+
+		if (statisticsDataSourceInformation == null && DataSources.getDataSourceStatistics() != null) {
+
+			try {
+
+				return JDBCUtils.getConnectionDateTime(DataSources.getDataSourceStatistics().getConnection());
+
+			} catch (SQLException e) {
+
+				throw new ServerException(ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED, ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE);
+			}
+		}
+
+		return null;
 	}
 }

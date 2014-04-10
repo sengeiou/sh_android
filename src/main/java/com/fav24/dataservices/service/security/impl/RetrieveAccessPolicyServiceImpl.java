@@ -1,7 +1,6 @@
 package com.fav24.dataservices.service.security.impl;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.springframework.context.annotation.Scope;
@@ -71,16 +70,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	@Override
 	public AbstractList<String> getPublicEntities() {
 
-		AbstractList<String> publicEntities = new ArrayList<String>();
-
-		if (AccessPolicy.getCurrentAccesPolicy() != null) {
-			for (EntityAccessPolicy entityAccessPolicy : AccessPolicy.getCurrentAccesPolicy().getAccessPolicies()) {
-
-				publicEntities.add(entityAccessPolicy.getName().getAlias());
-			}
-		}
-
-		return publicEntities;
+		return AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases();
 	}
 
 	/**
