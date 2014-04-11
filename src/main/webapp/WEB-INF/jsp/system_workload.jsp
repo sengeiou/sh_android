@@ -13,7 +13,7 @@
 		</div>
 		<div class="col-md-2 col-md-offset-0">
     		<button onClick='newWorkloadMeasurePeriod();' type='button' class='btn btn-default btn-sm pull-right'>
-    			<span class='glyphicon glyphicon-eye-open icon-red'></span>
+    			<span class='glyphicon glyphicon-time'></span>
     			Nuevo periodo de medidas
     		</button>
 		</div>

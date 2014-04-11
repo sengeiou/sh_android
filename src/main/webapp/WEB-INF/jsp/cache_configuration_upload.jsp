@@ -75,7 +75,8 @@ function toggleFileAsDefault(fileIndex) {
 	
 	var fileToSetAsDefault = $("#file-as-default-" + fileIndex);
 	var fileInputToSetAsDefault = $("#file-input-as-default-" + fileIndex);
-	
+	var spanIcon = fileToSetAsDefault.children("span");
+		
 	//Si no es por defecto, contiene la clase: btn-default
 	//Si es por defecto, contiene la clase: btn-primary
 	if (fileToSetAsDefault.hasClass("btn-default")) {
@@ -83,12 +84,16 @@ function toggleFileAsDefault(fileIndex) {
 		fileToSetAsDefault.addClass("btn-primary");
 		fileToSetAsDefault.removeClass("btn-default");
 		fileInputToSetAsDefault.prop("checked", true);
+		spanIcon.removeClass("glyphicon-star-empty");
+		spanIcon.addClass("glyphicon-star");
 	}
 	else if (fileToSetAsDefault.hasClass("btn-primary")) {
 		
 		fileToSetAsDefault.addClass("btn-default");
 		fileToSetAsDefault.removeClass("btn-primary");
 		fileInputToSetAsDefault.prop("checked", false);
+		spanIcon.removeClass("glyphicon-star");
+		spanIcon.addClass("glyphicon-star-empty");
 	}
 }
 
@@ -115,7 +120,7 @@ function addFile() {
     newFileSelectionLine += "<label id='file-remover-" + fileIndex + "' class='btn btn-sm glyphicon glyphicon-trash vcenter'><span></span></label>";
     
     newFileSelectionLine += "<button id='file-as-default-" + fileIndex + "' type='button' class='btn btn-default btn-sm pull-right'>";
-    newFileSelectionLine += "<span class='glyphicon glyphicon-star icon-red'></span>";
+    newFileSelectionLine += "<span class='glyphicon glyphicon-star-empty'></span>";
     newFileSelectionLine += "Establecer por defecto";
     newFileSelectionLine += "<input id='file-input-as-default-" + fileIndex + "' type='checkbox' name='filesAsDefault[" + fileIndex + "]' style='position: absolute; z-index:-1;'/>"; 
     newFileSelectionLine += "</button>";
