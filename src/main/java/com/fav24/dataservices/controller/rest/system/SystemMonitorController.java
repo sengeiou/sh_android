@@ -357,7 +357,8 @@ public class SystemMonitorController extends BaseRestController {
 	 * @return el momento de inicio del nuevo periodo en milisegundos desde epoch.
 	 */
 	@RequestMapping(value = "/workload/newMeasurePeriod", method = { RequestMethod.GET, RequestMethod.POST })
-	public Long newWorkloadMeasurePeriod() {
+	public @ResponseBody Long newWorkloadMeasurePeriod() {
+		
 		
 		return systemService.getWorkloadMeter().newMeasurePeriod();
 	}

@@ -8,7 +8,16 @@
 		<p class="lead">Diagrama de carga de trabajo del sistema</p>
 	</div>
 	<div class="row">
-		<div class="col-md-2 col-md-offset-6">
+		<div class="col-md-2 col-md-offset-0">
+			<p class="text-left"><strong>Información desde el: <a id="MeasureStartTime"></a></strong></p>
+		</div>
+		<div class="col-md-2 col-md-offset-0">
+    		<button onClick='newWorkloadMeasurePeriod();' type='button' class='btn btn-default btn-sm pull-right'>
+    			<span class='glyphicon glyphicon-eye-open icon-red'></span>
+    			Nuevo periodo de medidas
+    		</button>
+		</div>
+		<div class="col-md-2 col-md-offset-2">
 			<img style="height:120px;" src="<%=imagesURL%>/workload/cloud.png" class="img-responsive" alt="Internet">
 		</div>
 		<div class="col-md-4 col-md-offset-0">
@@ -68,6 +77,7 @@
 <script type="text/javascript">
 
 	initSystemWorkload(
+			document.getElementById("MeasureStartTime"),
 			document.getElementById("RequestsRate"),
 			document.getElementById("RequestsRatePeak"),
 			document.getElementById("TotalRequests"),
