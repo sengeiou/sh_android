@@ -70,7 +70,7 @@ public class RetrieveAccessPolicyServiceImpl implements RetrieveAccessPolicyServ
 	@Override
 	public AbstractList<String> getPublicEntities() {
 
-		return AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases();
+		return AccessPolicy.getCurrentAccesPolicy() != null ? AccessPolicy.getCurrentAccesPolicy().getEnititiesAliases() : null;
 	}
 
 	/**
