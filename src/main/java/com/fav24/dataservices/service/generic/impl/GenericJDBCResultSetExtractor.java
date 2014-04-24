@@ -39,12 +39,12 @@ public class GenericJDBCResultSetExtractor implements ResultSetExtractor<Operati
 			if (referenceDataItem != null && referenceDataItem.getAttributes() != null && referenceDataItem.getAttributes().size() > 0) {
 
 				int itemIndex = 0;
-				
+
 				if (rs.first()) {
 					do
 					{
 						DataItem dataItem;
-						
+
 						if (data.size() <= itemIndex) {
 							data.add(dataItem = new DataItem(referenceDataItem));
 						}
@@ -52,12 +52,12 @@ public class GenericJDBCResultSetExtractor implements ResultSetExtractor<Operati
 							dataItem = data.get(itemIndex);
 						}
 						itemIndex++;
-						
+
 						int i=1;
 						for (String attributeAlias : dataItem.getAttributes().keySet()) {
-							
+
 							Object value = rs.getObject(i++);
-							
+
 							dataItem.getAttributes().put(attributeAlias, rs.wasNull() ? null : value);
 						}
 

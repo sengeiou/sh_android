@@ -10,8 +10,6 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 
 /**
  * Clase que contiene la estructura de una acción sobre una entidad.
- * 
- * @author Fav24
  */
 public class Metadata implements Organizable, Serializable {
 
@@ -19,6 +17,7 @@ public class Metadata implements Organizable, Serializable {
 
 	private OperationType operation;
 	private String entity;
+	private Boolean includeDeleted;
 	private Long totalItems;
 	private Long offset;
 	private Long items;
@@ -33,6 +32,7 @@ public class Metadata implements Organizable, Serializable {
 
 		this.operation = null;
 		this.entity = null;
+		this.includeDeleted = null;
 		this.totalItems = null;
 		this.offset = null;
 		this.items = null;
@@ -45,15 +45,17 @@ public class Metadata implements Organizable, Serializable {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
+	 * @param includeDeleted Flag donde se indica si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, AbstractList<KeyItem> key) {
+	public Metadata(OperationType operation, String entity, Boolean includeDeleted, Long totalItems, Long offset, Long items, AbstractList<KeyItem> key) {
 
 		this.operation = operation;
 		this.entity = entity;
+		this.includeDeleted = includeDeleted;
 		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
@@ -65,15 +67,17 @@ public class Metadata implements Organizable, Serializable {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
+	 * @param includeDeleted Flag donde se indica si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems afectados por la operación.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
-	public Metadata(OperationType operation, String entity, Long totalItems, Long offset, Long items, Filter filter) {
+	public Metadata(OperationType operation, String entity, Boolean includeDeleted, Long totalItems, Long offset, Long items, Filter filter) {
 
 		this.operation = operation;
 		this.entity = entity;
+		this.includeDeleted = includeDeleted;
 		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
@@ -114,6 +118,24 @@ public class Metadata implements Organizable, Serializable {
 	 */
 	public void setEntity(String entity) {
 		this.entity = entity;
+	}
+
+	/**
+	 * Retorna true o false en función de si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 *  
+	 * @return true o false en función de si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 */
+	public Boolean getIncludeDeleted() {
+		return includeDeleted;
+	}
+
+	/**
+	 * Asigna si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 * 
+	 * @param includeDeleted True o false en función de si se deben o no incluir registros con el atributo "deleted".
+	 */
+	public void setIncludeDeleted(Boolean includeDeleted) {
+		this.includeDeleted = includeDeleted;
 	}
 
 	/**
@@ -262,6 +284,17 @@ public class Metadata implements Organizable, Serializable {
 		}
 		contentKey.append("]");
 
+		contentKey.append(ELEMENT_SEPARATOR);
+		
+		contentKey.append("includeDeleted[");
+		if (includeDeleted != null) {
+			contentKey.append(includeDeleted);
+		}
+		else {
+			contentKey.append(Boolean.FALSE);
+		}
+		contentKey.append("]");
+		
 		return contentKey;
 	}
 
@@ -273,12 +306,12 @@ public class Metadata implements Organizable, Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((entity == null) ? 0 : entity.hashCode());
+		result = prime * result + ((includeDeleted == null) ? 0 : includeDeleted.hashCode());
 		result = prime * result + ((filter == null) ? 0 : filter.hashCode());
 		result = prime * result + ((items == null) ? 0 : items.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result + ((offset == null) ? 0 : offset.hashCode());
-		result = prime * result
-				+ ((operation == null) ? 0 : operation.hashCode());
+		result = prime * result + ((operation == null) ? 0 : operation.hashCode());
 		return result;
 	}
 
@@ -298,6 +331,11 @@ public class Metadata implements Organizable, Serializable {
 			if (other.entity != null)
 				return false;
 		} else if (!entity.equals(other.entity))
+			return false;
+		if (includeDeleted == null) {
+			if (other.includeDeleted != null)
+				return false;
+		} else if (!includeDeleted.equals(other.includeDeleted))
 			return false;
 		if (filter == null) {
 			if (other.filter != null)
@@ -329,7 +367,9 @@ public class Metadata implements Organizable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Metadata [operation=" + operation + ", entity=" + entity
+		return "Metadata [operation=" + operation 
+				+ ", entity=" + entity
+				+ ", includeDeleted=" + includeDeleted
 				+ ", entitySize=" + totalItems + ", offset=" + offset
 				+ ", items=" + items + ", key=" + key + ", filter=" + filter
 				+ "]";

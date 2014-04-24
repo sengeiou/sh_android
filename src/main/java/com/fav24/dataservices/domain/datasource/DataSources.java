@@ -13,6 +13,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.util.FileUtils;
+import com.fav24.dataservices.util.JDBCUtils;
 import com.fav24.dataservices.xml.datasource.DataSourcesDOM;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -130,6 +131,30 @@ public class DataSources
 	}
 
 	/**
+	 * Añade propiedades y configuraciones específicas a la configuracion de la conexión, según el motor de bases de datos.
+	 * 
+	 * @param configuration Estructura de configuracion de la conexión sobre la que se añaden las propiedades.
+	 */
+	public static void addSpecificProperties(HikariConfig configuration) {
+
+		switch(JDBCUtils.getProduct(configuration.getDataSourceClassName())) {
+
+		case JDBCUtils.DB_PRODUCT_HSQL:
+			break;
+
+		case JDBCUtils.DB_PRODUCT_MYSQL:
+			configuration.addDataSourceProperty("zeroDateTimeBehavior", "convertToNull");
+			break;
+
+		case JDBCUtils.DB_PRODUCT_ORACLE:
+			break;
+
+		case JDBCUtils.DB_PRODUCT_POSTGRESQL:
+			break;
+		}
+	}
+
+	/**
 	 * Construye los singletons de acceso a datos para los servicios de datos.
 	 */
 	public static javax.sql.DataSource constructDataSource(DataSourceConfiguration dataSourceConfiguration) {
@@ -168,6 +193,9 @@ public class DataSources
 		configuration.addDataSourceProperty("serverName", dataSourceConfiguration.getHost());
 		configuration.addDataSourceProperty("portNumber", dataSourceConfiguration.getPort());
 		configuration.addDataSourceProperty("databaseName", dataSourceConfiguration.getDatabaseName());
+
+		// Configuraciones específicas.
+		addSpecificProperties(configuration);
 
 		HikariDataSource dataSource = new HikariDataSource(configuration);
 

@@ -4,11 +4,58 @@ package com.fav24.dataservices.domain.security;
 
 /**
  * Clase que define un atributo que hace referencia a un dato de una entidad. 
- * 
- * @author Fav24
  */
 public class EntityDataAttribute extends EntityAttribute {
 
+	/**
+	 * Enumeración de los campos de sincronización de una entidad. 
+	 */
+	public enum SynchronizationField {
+		REVISION("revision"),
+		BIRTH("birth"),
+		MODIFIED("modified"),
+		DELETED("deleted");
+
+		private final String synchronizationField;
+
+		
+		/**
+		 * Constructor privado del campo de sincronización.
+		 * 
+		 * @param synchronizationField Cadena de texto aue identifica el campo.
+		 */
+		SynchronizationField(String synchronizationField) {
+			this.synchronizationField = synchronizationField;
+		}
+
+		/**
+		 * Retorna la cadena de texto que identifica este campo de sincronización.
+		 * 
+		 * @return la cadena de texto que identifica este campo de sincronización.
+		 */
+		public String getSynchronizationField() {
+			return synchronizationField;
+		}
+		
+		/**
+		 * Retorna el campo de sincronización a partir de la cadena de texto indicada.
+		 * 
+		 * @param text Cadena de texto a partir de la que se deduce el campo de sincronización.
+		 * 
+		 * @return el campo de sincronización a partir de la cadena de texto indicada.
+		 */
+		public static SynchronizationField fromString(String text) {
+			if (text != null) {
+				for (SynchronizationField synchronizationField : SynchronizationField.values()) {
+					if (text.equalsIgnoreCase(synchronizationField.synchronizationField)) {
+						return synchronizationField;
+					}
+				}
+			}
+			return null;
+		}
+	}
+	
 	/**
 	 * Enumeración de las direcciones permitidas para un determinado atributo. 
 	 */

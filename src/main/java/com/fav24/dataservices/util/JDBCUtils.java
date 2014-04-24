@@ -117,18 +117,52 @@ public class JDBCUtils {
 
 		String databaseProductName = connection.getMetaData().getDatabaseProductName().toLowerCase();
 
-		if (databaseProductName.indexOf("mysql") != -1)
+		if (databaseProductName.indexOf("mysql") != -1) {
 			return DB_PRODUCT_MYSQL;
+		}
 
-		if (databaseProductName.indexOf("postgres") != -1)
+		if (databaseProductName.indexOf("postgres") != -1) {
 			return DB_PRODUCT_POSTGRESQL;
+		}
 
-		if (databaseProductName.indexOf("hsql") != -1)
+		if (databaseProductName.indexOf("hsql") != -1) {
 			return DB_PRODUCT_HSQL;
+		}
 
-		if (databaseProductName.indexOf("oracle") != -1)
+		if (databaseProductName.indexOf("oracle") != -1) {
 			return DB_PRODUCT_ORACLE;
+		}
 
+		return DB_PRODUCT_MYSQL;
+	}
+	
+	/**
+	 * Retorna el tipo de base de datos a partir del nombre completo de la clase específica que implementa la intarfaz #javax.sql.DataSource.
+	 * 
+	 * @param dataSourceClassName Nombdre completo de la clase específica que implementa la intarfaz #javax.sql.DataSource.
+	 * 
+	 * @return el tipo de base de datos.
+	 */
+	public static int getProduct(String dataSourceClassName) {
+		
+		dataSourceClassName = dataSourceClassName.toLowerCase();
+		
+		if (dataSourceClassName.indexOf("mysql") != -1) {
+			return DB_PRODUCT_MYSQL;
+		}
+		
+		if (dataSourceClassName.indexOf("postgres") != -1) {
+			return DB_PRODUCT_POSTGRESQL;
+		}
+		
+		if (dataSourceClassName.indexOf("hsql") != -1) {
+			return DB_PRODUCT_HSQL;
+		}
+		
+		if (dataSourceClassName.indexOf("oracle") != -1) {
+			return DB_PRODUCT_ORACLE;
+		}
+		
 		return DB_PRODUCT_MYSQL;
 	}
 
@@ -193,7 +227,7 @@ public class JDBCUtils {
 
 		return currentTimestamp == null ? null : currentTimestamp.getTime();
 	}
-
+	
 	/**
 	 * Retorna un mapa con los atributos contenidos en la URL.
 	 * 

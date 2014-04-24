@@ -27,12 +27,14 @@ import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.KeyItem;
+import com.fav24.dataservices.domain.generic.Metadata;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.domain.security.EntityDataAttribute;
 import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
+import com.fav24.dataservices.domain.security.EntityDataAttribute.SynchronizationField;
 import com.fav24.dataservices.domain.security.EntityFilter;
 import com.fav24.dataservices.domain.security.EntityKey;
 import com.fav24.dataservices.domain.security.EntityOrderAttribute;
@@ -350,6 +352,33 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	}
 
 	/**
+	 * Retorna una cadena de texto con el filtro (o <code>null</code>) de los registros eliminados.
+	 * 
+	 * @param metadata Metadata de la operación de la que se desea obtener el filtro.
+	 * 
+	 * @return una cadena de texto con el filtro (o <code>null</code>) de los registros eliminados.
+	 * 
+	 * @throws ServerException
+	 */
+	private StringBuilder getExcludeDeletedString(Metadata metadata) throws ServerException {
+
+		if (metadata.getIncludeDeleted() == null || !metadata.getIncludeDeleted()) {
+
+			StringBuilder includeDeletedString = new StringBuilder();
+
+			EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(metadata.getEntity());
+
+			String deletedFieldName = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
+
+			includeDeletedString.append(deletedFieldName).append(" IS NULL");
+
+			return includeDeletedString;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Retorna una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 * 
 	 * @param entity Nombre de la entidad a la que pertenece la lista de campos filtrado.
@@ -460,6 +489,15 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		queryFrom.append(" FROM ").append(AccessPolicy.getEntityName(operation.getMetadata().getEntity()));
 
 		/*
+		 * Exclusión de los registros eliminados.
+		 */
+		if (operation.getMetadata().getIncludeDeleted() == null || !operation.getMetadata().getIncludeDeleted()) {
+
+			queryWhere.append(" WHERE (");
+			queryWhere.append(getExcludeDeletedString(operation.getMetadata())).append(')');
+		}
+
+		/*
 		 * Especificación del filtro.
 		 */
 		AbstractList<String> keyColumns = null, filterColumns = null;
@@ -472,7 +510,13 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			StringBuilder key = getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), keyColumns, keyValues);
 
 			if (key != null && key.length() > 0) {
-				queryWhere.append(" WHERE ").append(key);
+
+				if (queryWhere.length() == 0) {
+					queryWhere.append(" WHERE ").append(key);
+				}
+				else {
+					queryWhere.append(" AND (").append(key).append(')');
+				}
 			}
 		}
 		else if (operation.getMetadata().getFilter() != null) {
@@ -482,7 +526,13 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			StringBuilder filter = getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), filterColumns, filterValues);
 
 			if (filter != null && filter.length() > 0) {
-				queryWhere.append(" WHERE ").append(filter);
+
+				if (queryWhere.length() == 0) {
+					queryWhere.append(" WHERE ").append(filter);
+				}
+				else {
+					queryWhere.append(" AND (").append(filter).append(')');
+				}
 			}
 		}
 		else {
@@ -494,7 +544,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			queryWhere.append(" ORDER BY ").append(getDefaultOrdinationString(entityAccessPolicy.getOrdination()));
 		}
 
-		/* 
+		/*
 		 *  Tratamiento del intervalo de datos a retornar.
 		 *  
 		 *  LIMIT items OFFSET offset
@@ -538,7 +588,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 
 		querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
-		operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+		if (params == null) {
+
+			operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), new GenericJDBCResultSetExtractor(operation));
+		}
+		else {
+
+			operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+		}
 
 		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
 		countQuery.append(queryFrom).append(queryWhere);
@@ -1061,11 +1118,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	public Generic processGeneric(final Generic generic) throws ServerException {
 
 		systemService.getWorkloadMeter().incTotalIncommingRequests();
-		
+
 		if (AccessPolicy.getCurrentAccesPolicy() == null) {
-			
+
 			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
-			
+
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
