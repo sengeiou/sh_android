@@ -56,28 +56,28 @@
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Principal <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
+							<li><a href="#" onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
 							<li class="divider"></li>
-							<li><a onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
+							<li><a href="#" onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
 						</ul>
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Entidades <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a onclick="showAvailableEntities();">Entidades publicadas</a></li>
+							<li><a href="#" onclick="showAvailableEntities();">Entidades publicadas</a></li>
 							<li class="divider"></li>
-							<li><a onclick="uploadEntityPolicies();">Carga	de pol&iacute;ticas</a></li>
-							<li><a onclick="resetToDefaultPolicies();">Recarga de pol&iacute;ticas por defecto</a></li>
-							<li><a onclick="dropAccessPolicies();">Eliminar pol&iacute;ticas activas</a></li>
+							<li><a href="#" onclick="uploadEntityPolicies();">Carga	de pol&iacute;ticas</a></li>
+							<li><a href="#" onclick="resetToDefaultPolicies();">Recarga de pol&iacute;ticas por defecto</a></li>
+							<li><a href="#" onclick="dropAccessPolicies();">Eliminar pol&iacute;ticas activas</a></li>
 						</ul>
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a onclick="">Estado de la cach&eacute;</a></li>
-							<li><a onclick="showAvailableCacheManagers();">Configuraci&oacute;n de la cach&eacute;</a></li>
+							<li><a href="#" onclick="">Estado de la cach&eacute;</a></li>
+							<li><a href="#" onclick="showAvailableCacheManagers();">Configuraci&oacute;n de la cach&eacute;</a></li>
 							<li class="divider"></li>
-							<li><a onclick="uploadCacheConfigutarions();">Carga de configuraciones de cach&eacute;</a></li>
-							<li><a onclick="loadDefaultCacheConfiguration();">Recarga de configuraciones de cach&eacute; por defecto</a></li>
-							<li><a onclick="dropSystemCache();">Eliminar configuraciones de cach&eacute; activas</a></li>
+							<li><a href="#" onclick="uploadCacheConfigutarions();">Carga de configuraciones de cach&eacute;</a></li>
+							<li><a href="#" onclick="loadDefaultCacheConfiguration();">Recarga de configuraciones de cach&eacute; por defecto</a></li>
+							<li><a href="#" onclick="dropSystemCache();">Eliminar configuraciones de cach&eacute; activas</a></li>
 						</ul>
 					</li>
 				</ul>
