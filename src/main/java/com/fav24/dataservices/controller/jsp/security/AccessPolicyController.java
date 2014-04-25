@@ -110,7 +110,7 @@ public class AccessPolicyController extends BaseJspController {
 				if (!multipartFile.isEmpty()) {
 
 					String fileName = multipartFile.getOriginalFilename();
-					Boolean fileAsDefault = filesAsDefault.get(i++);
+					Boolean fileAsDefault = filesAsDefault == null ? false : filesAsDefault.get(i++);
 
 					try {
 
