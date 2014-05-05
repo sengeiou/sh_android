@@ -2,6 +2,7 @@ package com.fav24.dataservices.service.generic.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -23,6 +25,7 @@ import org.springframework.transaction.support.TransactionCallback;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.domain.datasource.DataSources;
+import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.Generic;
@@ -48,8 +51,6 @@ import com.fav24.dataservices.util.JDBCUtils;
 
 /**
  * Versión JDBC de la interfaz de servicio Generic. 
- * 
- * @author Fav24
  */
 @Component
 @Scope("prototype")
@@ -66,6 +67,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		private Map<String, Set<String>> indexes;
 		private Map<String, Integer> keyFields;
 		private Map<String, Integer> filterFields;
+		private Set<String> generatedData;
 	}
 
 	private static Map<String, EntityJDBCInformation> entitiesInformation;
@@ -96,11 +98,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * 
 	 * @param entity Nombre de la entidad a la que pertenece la lista de datos.
 	 * @param attributes Mapa de datos a resolver.
-	 * @param columns Lista en donde se retornará el conjunto de columnas de datos en el mismo orden de resolución.
 	 * 
 	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
 	 */
-	private StringBuilder getDataString(String entity, Map<String, Object> attributes, AbstractList<String> columns) throws ServerException {
+	private StringBuilder getDataString(String entity, Map<String, Object> attributes) throws ServerException {
 
 		StringBuilder resultingData = new StringBuilder();
 
@@ -114,10 +115,6 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				resultingData.append(column);
 
-				if (columns != null) {
-					columns.add(column);
-				}
-
 				while (attributeAliases.hasNext()) {
 
 					String attributeAlias = attributeAliases.next();
@@ -129,16 +126,75 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					else {
 						resultingData.append(',');
 						resultingData.append(column);
-
-						if (columns != null) {
-							columns.add(column);
-						}
 					}
 				}
 			}
 		}
 		else {
 			resultingData.append("count(*)");
+		}
+
+		return resultingData;
+	}
+
+	/**
+	 * Retorna una cadena de texto con el conjunto de campos de datos.
+	 * 
+	 * @param entity Nombre de la entidad a la que pertenece la lista de datos.
+	 * @param attributes Mapa de datos a resolver.
+	 * @param entityInformation Información extraida de la fuente de datos, acerca de la entidad.
+	 * @param inColumns Lista en donde se retornará el conjunto de columnas de datos a insertar en el mismo orden de resolución.
+	 * @param inAliases Lista en donde se retornará el conjunto de alias de datos a insertar en el mismo orden de resolución.
+	 * @param outColumns Lista en donde se retornará el conjunto de columnas de datos a retornar en el mismo orden de resolución.
+	 * @param outAliases Lista en donde se retornará el conjunto de alias de datos a retornar en el mismo orden de resolución.
+	 * 
+	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
+	 */
+	private StringBuilder getInsertDataString(String entity, Map<String, Object> attributes, EntityJDBCInformation entityInformation, 
+			AbstractList<String> inColumns, AbstractList<String> inAliases,
+			AbstractList<String> outColumns, AbstractList<String> outAliases
+			) throws ServerException {
+
+		StringBuilder resultingData = new StringBuilder();
+
+		Iterator<String> attributeAliases = attributes.keySet().iterator();
+
+		if (attributeAliases.hasNext()) {
+
+			String alias = attributeAliases.next();
+			String column = AccessPolicy.getAttributeName(entity, alias);
+
+			if (entityInformation.generatedData.contains(column)) {
+				outColumns.add(column);
+				outAliases.add(alias);
+			}
+			else {
+				inColumns.add(column);
+				inAliases.add(alias);
+				resultingData.append(column);
+			}
+
+			while (attributeAliases.hasNext()) {
+
+				alias = attributeAliases.next();
+				column = AccessPolicy.getAttributeName(entity, alias);
+
+				if (column == null) {
+					AccessPolicy.checkAttributesAccesibility(entity, new ArrayList<String>(attributes.keySet()));
+				}
+				else {
+					if (entityInformation.generatedData.contains(column)) {
+						outColumns.add(column);
+						outAliases.add(alias);
+					}
+					else {
+						inColumns.add(column);
+						inAliases.add(alias);
+						resultingData.append(',');
+						resultingData.append(column);
+					}
+				}
+			}
 		}
 
 		return resultingData;
@@ -480,8 +536,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Especificación del conjunto de campos de la query.
 		 */
-		final AbstractList<String> dataColumns = new ArrayList<String>();
-		querySelect.append(getDataString(operation.getMetadata().getEntity(), operation.getData() != null && operation.getData().size() > 0 ? operation.getData().get(0).getAttributes() : null, dataColumns));
+		querySelect.append(getDataString(operation.getMetadata().getEntity(), operation.getData() != null && operation.getData().size() > 0 ? operation.getData().get(0).getAttributes() : null));
 
 		/*
 		 * Especificación de la tabla.
@@ -606,6 +661,126 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * INSERT INTO table (column a, column b, column c) VALUES (value a, value b, value c), (value a, value b, value c);
+	 */
+	@Override
+	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
+
+		if (operation.getData() == null || operation.getData().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_CREATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		DataItem firsItem = operation.getData().get(0);
+		if (firsItem.getAttributes() == null || firsItem.getAttributes().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_CREATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		final StringBuilder queryInsert = new StringBuilder();
+
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+
+		/*
+		 * Construcción de la sentencia de inserción.
+		 */
+		queryInsert.append("INSERT INTO ").append(entityAccessPolicy.getName().getName());
+
+		queryInsert.append('(');
+
+		queryInsert.append(entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName()); // REVISION
+		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName()); // BIRTH
+		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName()); // MODIFIED
+		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName()); // DELETED
+
+		int initSize = firsItem.getAttributes().size();
+		AbstractList<String> inColumns = new ArrayList<String>(initSize);
+		AbstractList<String> inAliases = new ArrayList<String>(initSize);
+		AbstractList<String> outColumns = new ArrayList<String>(initSize);
+		AbstractList<String> outAliases = new ArrayList<String>(initSize);
+
+		queryInsert.append(',').append(getInsertDataString(operation.getMetadata().getEntity(), firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+
+		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
+
+		for (int i=0; i<inColumns.size(); i++) {
+
+			queryInsert.append(",?");
+		}
+		queryInsert.append(')');
+
+		/*
+		 * Inserción de los registros.
+		 */
+		javax.sql.DataSource dataSource = DataSources.getDataSourceDataService();
+		Connection connection = null;
+
+		try {
+			connection = dataSource.getConnection();
+
+			String[] generatedKeyColumns = outColumns.toArray(new String[outColumns.size()]);
+
+			PreparedStatement ps = connection.prepareStatement(queryInsert.toString(), generatedKeyColumns);
+
+			Long millisecondsSinceEpoch = dataSourcesService.getDataServiceDataSourceTime();
+			Timestamp now = new Timestamp(millisecondsSinceEpoch);
+			int i;
+			NavigableMap<String, Object> itemAttributes;
+			for (DataItem item :  operation.getData()) {
+
+				item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), 0L);
+				item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
+				item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
+				item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
+				
+				ps.setObject(1, 0L);
+				ps.setObject(2, now);
+				ps.setObject(3, now);
+				ps.setObject(4, null);
+				
+				i=5;
+				itemAttributes = item.getAttributes();
+
+				for (String inAlias : inAliases) {
+
+					ps.setObject(i++, itemAttributes.get(inAlias));
+				}
+				ps.addBatch();
+			}
+			ps.executeBatch();
+
+			// Recogida de los datos generados.
+			ResultSet rs = ps.getGeneratedKeys();
+			
+			if (rs.first()) {
+				
+				for (DataItem item :  operation.getData()) {
+
+					int GeneratedkeyIndex = 1;
+					for(String outAlias : outAliases) {
+						
+						item.getAttributes().put(outAlias, rs.getObject(GeneratedkeyIndex++));
+					}
+					
+					rs.next();
+				}
+			}
+			
+			ps.close();
+		} 
+		catch (Exception e) {
+			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
+		}
+		finally {
+			JDBCUtils.CloseQuietly(connection);
+		}
+
+		return operation;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
@@ -616,7 +791,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		entitiesInformation = new HashMap<String, EntityJDBCInformation>();
 
-		javax.sql.DataSource dataSource = DataSources.getJdbcTemplateDataService().getDataSource();
+		javax.sql.DataSource dataSource = DataSources.getDataSourceDataService();
 		Connection connection = null;
 
 		try {
@@ -663,6 +838,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				if (entityAccessPolicy.getData() != null && entityAccessPolicy.getData().getData() != null && entityAccessPolicy.getData().getData().size() > 0) {
 
 					entityJDBCInformation.dataFields = new TreeMap<String, Integer>();
+					entityJDBCInformation.generatedData = new HashSet<String>();
 					ResultSet columns = null;
 
 					try {
@@ -672,6 +848,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 							do {
 								String columnName = columns.getString("COLUMN_NAME");
 								int columnType = columns.getInt("DATA_TYPE"); // => SQL type from java.sql.Types
+								if (columns.getBoolean("IS_AUTOINCREMENT") || columns.getBoolean("IS_GENERATEDCOLUMN")) {
+									entityJDBCInformation.generatedData.add(columnName);
+								}
 
 								for (EntityDataAttribute entityDataAttribute : entityAccessPolicy.getData().getData()) {
 
@@ -681,6 +860,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 										if (entityJDBCInformation.isView && entityDataAttribute.getDirection() != Direction.OUTPUT) {
 											throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa " + columnName +" de la tabla "  + table + " es de solo lectura.");
 										}
+
 										break;
 									}
 								}
@@ -1056,6 +1236,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		entitiesInformation = null;
 	}
+
 
 	/**
 	 * Clase interna para la gestión de la transacción del conjunto de operaciones.

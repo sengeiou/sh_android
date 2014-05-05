@@ -35,6 +35,8 @@ public interface GenericService {
 	public static final String ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE = "La entidad <%s> debe ser accedida mediante uno de los filtros definidos.";
 	public static final String ERROR_INVALID_REQUEST_FILTER = "G008";
 	public static final String ERROR_INVALID_REQUEST_FILTER_MESSAGE = "La entidad <%s> no es accesible mediante el filtro indicado.";
+	public static final String ERROR_INVALID_CREATE_REQUEST = "G009";
+	public static final String ERROR_INVALID_CREATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a crear para la entidad <%>.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

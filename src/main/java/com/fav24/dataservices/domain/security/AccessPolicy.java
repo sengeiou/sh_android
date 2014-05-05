@@ -318,6 +318,50 @@ public class AccessPolicy extends BaseDomain {
 
 		return null;
 	}
+	
+	/**
+	 * Retorna el alias del atributo indicado de la entidad indicada en la fuente de datos, a partir de los nombres. 
+	 * 
+	 * @param entityAlias Alias de la entidad.
+	 * @param attributeName Nombre del atributo.
+	 * 
+	 * @return el alias del atributo indicado de la entidad indicada en la fuente de datos, a partir de los nombres.
+	 */
+	public static final String getAttributeAlias(String entityAlias, String attributeName) {
+		
+		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null && attributeName != null) {
+			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
+			
+			if (entityAccessPolicy != null) {
+				
+				if (entityAccessPolicy.getData() != null) {
+					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttributeByName(attributeName);
+					
+					if (dataAttribute != null) {
+						return dataAttribute.getAlias();
+					}
+				}
+				
+				if (entityAccessPolicy.getKeys() != null) {
+					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByName(attributeName);
+					
+					if (keyAttribute != null) {
+						return keyAttribute.getAlias();
+					}
+				}
+				
+				if (entityAccessPolicy.getFilters() != null) {
+					EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByName(attributeName);
+					
+					if (filterAttribute != null) {
+						return filterAttribute.getAlias();
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Retorna el nombre de la entidad indicada en la fuente de datos, a partir de los alias. 

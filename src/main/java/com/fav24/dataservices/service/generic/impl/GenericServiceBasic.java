@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import net.sf.ehcache.Element;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.domain.cache.Cache;
@@ -18,6 +18,7 @@ import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.datasources.DataSourcesService;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.system.SystemService;
@@ -32,6 +33,8 @@ public abstract class GenericServiceBasic implements GenericService {
 
 	@Autowired
 	protected SystemService systemService;
+	@Autowired
+	protected DataSourcesService dataSourcesService;
 
 
 	/**

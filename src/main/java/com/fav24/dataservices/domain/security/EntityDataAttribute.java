@@ -54,6 +54,36 @@ public class EntityDataAttribute extends EntityAttribute {
 			}
 			return null;
 		}
+		
+		/**
+		 * Retorna true o false en función de si el nombre suministrado se corresponde o no 
+		 * con un campo de auditoría para la sincronización.
+		 * 
+		 * @param field Nombre a comparar.
+		 * 
+		 * @return true o false en función de si el nombre suministrado se corresponde o no 
+		 * con un campo de auditoría para la sincronización.
+		 */
+		public static boolean isSynchronizationField(String field) {
+			
+			if (REVISION.getSynchronizationField().equals(field)) {
+				return true;
+			}
+			
+			if (BIRTH.getSynchronizationField().equals(field)) {
+				return true;
+			}
+			
+			if (MODIFIED.getSynchronizationField().equals(field)) {
+				return true;
+			}
+			
+			if (DELETED.getSynchronizationField().equals(field)) {
+				return true;
+			}
+			
+			return false;
+		}
 	}
 	
 	/**

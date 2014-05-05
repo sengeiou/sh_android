@@ -120,4 +120,28 @@ public class EntityKeys {
 
 		return null;
 	}
+
+	/**
+	 * Retorna el primer elemento de una clave con el nombre indicado.
+	 *  
+	 * @param name El name a usar.
+	 * 
+	 * @return el primer elemento de una clave con el nombre indicado.
+	 */
+	public EntityAttribute getFirstKeyAttributeByName(String name) {
+		
+		if (name != null) {
+
+			for(EntityKey key : entityKeys) {
+				
+				EntityAttribute attribute = key.getAttributeByName(name);
+				
+				if (attribute != null) {
+					return attribute;
+				}
+			}
+		}
+
+		return null;
+	}
 }

@@ -120,14 +120,38 @@ public class EntityFilters {
 
 			for(EntityFilter filter : entityFilters) {
 
-				EntityAttribute keyItem = filter.getAttribute(alias);
+				EntityAttribute filterItem = filter.getAttribute(alias);
 
-				if (keyItem != null) {
-					return keyItem;
+				if (filterItem != null) {
+					return filterItem;
 				}
 			}
 		}
 
+		return null;
+	}
+	
+	/**
+	 * Retorna el primer elemento de un filtro con el alias indicado.
+	 *  
+	 * @param name El alias a usar.
+	 * 
+	 * @return el primer elemento de un filtro con el alias indicado.
+	 */
+	public EntityAttribute getFirstFilterAttributeByName(String name) {
+		
+		if (entityFilters != null && name != null) {
+			
+			for(EntityFilter filter : entityFilters) {
+				
+				EntityAttribute filterItem = filter.getAttributeByName(name);
+				
+				if (filterItem != null) {
+					return filterItem;
+				}
+			}
+		}
+		
 		return null;
 	}
 

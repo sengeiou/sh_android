@@ -6,6 +6,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import com.fav24.dataservices.domain.cache.Organizable;
+import com.fav24.dataservices.domain.security.EntityDataAttribute.SynchronizationField;
 
 
 /**
@@ -54,6 +55,29 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	public NavigableMap<String, Object> getAttributes() {
 
 		return attributes;
+	}
+
+	/**
+	 * Retorna los atributos del item, eliminando préviamente los de sistema, en formato clave-valor.
+	 * 
+	 * @return los atributos del item, eliminando préviamente los de sistema, en formato clave-valor.
+	 */
+	public NavigableMap<String, Object> getNonSystemAttributes() {
+
+		if (attributes == null) {
+			return null;
+		}
+
+		NavigableMap<String, Object> nonSystemAttributes = new TreeMap<String, Object>();
+
+		for (Entry<String, Object> attribute : attributes.entrySet()) {
+
+			if (!SynchronizationField.isSynchronizationField(attribute.getKey())) {
+				nonSystemAttributes.put(attribute.getKey(), attribute.getValue());
+			}
+		}
+
+		return nonSystemAttributes;
 	}
 
 	/**
