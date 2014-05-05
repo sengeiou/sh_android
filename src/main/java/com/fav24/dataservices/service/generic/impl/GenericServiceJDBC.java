@@ -723,7 +723,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 			PreparedStatement ps = connection.prepareStatement(queryInsert.toString(), generatedKeyColumns);
 
-			Long millisecondsSinceEpoch = dataSourcesService.getDataServiceDataSourceTime();
+			Long millisecondsSinceEpoch = System.currentTimeMillis();
 			Timestamp now = new Timestamp(millisecondsSinceEpoch);
 			int i;
 			NavigableMap<String, Object> itemAttributes;
