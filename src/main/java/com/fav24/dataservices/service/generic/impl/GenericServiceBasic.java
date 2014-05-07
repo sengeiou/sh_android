@@ -16,6 +16,7 @@ import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
@@ -37,9 +38,9 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * Establece el inicio de transtacción en la que se resolverán las distintas operaciones.
 	 * 
-	 * @return true o false en función de si fué o no posible establecer un inicio de transacción.
+	 * @throws ServerException 
 	 */
-	protected abstract boolean startTransaction();
+	protected abstract void startTransaction() throws ServerException;
 
 	/**
 	 * Establece el fin de transtacción en la que se han resuelto las distintas operaciones.
@@ -47,9 +48,9 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @param commit True o false en función de si el fin de transacción implica una confirmación de las operaciones realizadas
 	 * 					dentro de la transacción, o estas deben ser revocadas.
 	 * 
-	 * @return true o false en función de si fué o no posible establecer un fin de transacción.
+	 * @throws ServerException 
 	 */
-	protected abstract boolean endTransaction(boolean commit);
+	protected abstract void endTransaction(boolean commit) throws ServerException;
 
 	/**
 	 * {@inheritDoc}
@@ -65,32 +66,22 @@ public abstract class GenericServiceBasic implements GenericService {
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
-		if (startTransaction()) {
+		startTransaction();
 
-			try {
+		try {
 
-				for (Operation operation : generic.getOperations()) {
-					processOperation(generic.getRequestor(), operation);
-				}
-
-			} catch (ServerException e) {
-
-				endTransaction(false);
-
-				throw e;
+			for (Operation operation : generic.getOperations()) {
+				processOperation(generic.getRequestor(), operation);
 			}
 
-			if (!endTransaction(true)) {
+		} catch (ServerException e) {
 
-				endTransaction(false);
+			endTransaction(false);
 
-				throw new ServerException(ERROR_END_TRANSACTION, ERROR_END_TRANSACTION_MESSAGE);
-			}
+			throw e;
 		}
-		else {
 
-			throw new ServerException(ERROR_START_TRANSACTION, ERROR_START_TRANSACTION_MESSAGE);
-		}
+		endTransaction(true);
 
 		generic.getRequestor().setTime(System.currentTimeMillis());
 
@@ -107,35 +98,52 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	protected final Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
 
+		if (operation.getMetadata() == null) {
+			
+			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "metadata"));
+		}
+		
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
+		if (entityAccessPolicy == null) {
+			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "entity"));
+		}
+		
+		if (!entityAccessPolicy.getAllowedOperations().contains(operation.getMetadata().getOperation())) {
+			throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), 
+					operation.getMetadata().getEntity()));
+		}
+		
 		try {
 			systemService.getWorkloadMeter().incTotalIncommingOperations();
 
-			if (operation.getMetadata().hasKey()) {
+			if (operation.getMetadata().getOperation() != OperationType.CREATE) {
 
-				if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
+				if (operation.getMetadata().hasKey()) {
 
-					throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
-				}
-			}
-			else {
+					if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
 
-				if (entityAccessPolicy.getOnlyByKey()) {
-
-					throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
-				}
-
-				if (operation.getMetadata().hasFilter()) {
-
-					if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
-
-						throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+						throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
 					}
 				}
-				else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
+				else {
 
-					throw new ServerException(ERROR_INVALID_REQUEST_NO_FILTER, String.format(ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+					if (entityAccessPolicy.getOnlyByKey()) {
+
+						throw new ServerException(ERROR_INVALID_REQUEST_NO_KEY, String.format(ERROR_INVALID_REQUEST_NO_KEY_MESSAGE, operation.getMetadata().getEntity()));
+					}
+
+					if (operation.getMetadata().hasFilter()) {
+
+						if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
+
+							throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+						}
+					}
+					else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
+
+						throw new ServerException(ERROR_INVALID_REQUEST_NO_FILTER, String.format(ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+					}
 				}
 			}
 		}
@@ -224,7 +232,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
@@ -236,7 +244,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation update(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
@@ -248,7 +256,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
@@ -260,7 +268,7 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
@@ -272,9 +280,9 @@ public abstract class GenericServiceBasic implements GenericService {
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation updateCreate(Requestor requestor, Operation operation) throws ServerException {
-		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType().toUpperCase()));
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
+		
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */

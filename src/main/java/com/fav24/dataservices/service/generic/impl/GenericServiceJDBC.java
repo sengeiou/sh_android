@@ -19,16 +19,14 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
-import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.domain.generic.Metadata;
 import com.fav24.dataservices.domain.generic.Operation;
@@ -45,7 +43,6 @@ import com.fav24.dataservices.domain.security.EntityOrderAttribute.Order;
 import com.fav24.dataservices.domain.security.EntityOrdination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
-import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.util.JDBCUtils;
 
 
@@ -71,6 +68,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	}
 
 	private static Map<String, EntityJDBCInformation> entitiesInformation;
+	private Connection connection;
 
 
 	public GenericServiceJDBC() {
@@ -81,16 +79,48 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean startTransaction() {
-		return true;
+	protected void startTransaction() throws ServerException {
+
+		javax.sql.DataSource dataSource = DataSources.getDataSourceDataService();
+
+		try {
+			this.connection = dataSource.getConnection();
+		}		
+		catch (Exception e) {
+			throw new ServerException(GenericService.ERROR_START_TRANSACTION, String.format(GenericService.ERROR_START_TRANSACTION_MESSAGE, e.getMessage()));
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean endTransaction(boolean commit) {
-		return true;
+	protected void endTransaction(boolean commit) throws ServerException {
+
+		if (this.connection != null) {
+
+			try {
+
+				if (!connection.getAutoCommit()) {
+
+					if (commit) {
+
+						this.connection.commit();
+					}
+					else {
+
+						this.connection.rollback();
+					}
+				}
+			}
+			catch(Exception e) {
+				throw new ServerException(GenericService.ERROR_END_TRANSACTION, String.format(GenericService.ERROR_END_TRANSACTION_MESSAGE, e.getMessage()));	
+			}
+			finally {
+				JDBCUtils.CloseQuietly(this.connection);
+				this.connection = null;
+			}
+		}
 	}
 
 	/**
@@ -517,6 +547,63 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	}
 
 	/**
+	 * Extrae el conjunto de datos del set de resultados y lo añade a la estructura de datos de la operación.   
+	 * 
+	 * @param resultSet Set de resultados del que se extrae la información.
+	 * @param operation Operación en la que se añade el conjunto de datos extraido.
+	 * 
+	 * @return la operación poblada. 
+	 * 
+	 * @throws SQLException
+	 * @throws DataAccessException
+	 */
+	private Operation extractData(ResultSet resultSet, Operation operation) throws SQLException, DataAccessException {
+
+		long numItems = 0;
+		AbstractList<DataItem> data = operation.getData();
+
+		if (data != null && data.size() > 0) {
+
+			DataItem referenceDataItem = new DataItem(data.get(0));
+
+			if (referenceDataItem != null && referenceDataItem.getAttributes() != null && referenceDataItem.getAttributes().size() > 0) {
+
+				int itemIndex = 0;
+
+				if (resultSet.first()) {
+
+					do
+					{
+						DataItem dataItem;
+
+						if (data.size() <= itemIndex) {
+							data.add(dataItem = new DataItem(referenceDataItem));
+						}
+						else {
+							dataItem = data.get(itemIndex);
+						}
+						itemIndex++;
+
+						int i=1;
+						for (String attributeAlias : dataItem.getAttributes().keySet()) {
+
+							Object value = resultSet.getObject(i++);
+
+							dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+						}
+
+						numItems++;
+					}while(resultSet.next());
+				}
+			}
+		}
+
+		operation.getMetadata().setItems(numItems);
+
+		return operation;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -591,7 +678,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 		}
 		else {
-			throw new ServerException(ERROR_UNCOMPLETE_REQUEST, ERROR_UNCOMPLETE_REQUEST_MESSAGE);
+			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
 		}
 
 		if (entityAccessPolicy.getOrdination() != null) {
@@ -643,26 +730,65 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 
 		querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
-		if (params == null) {
 
-			operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), new GenericJDBCResultSetExtractor(operation));
+		/*
+		 * Selección de los registros.
+		 */
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(querySelect.toString());
+
+			if (params != null) {
+
+				for (int i=0; i<params.length; i++) {
+					preparedStatement.setObject(i+1, params[i], types[i]);
+				}
+			}
+
+			resultSet = preparedStatement.executeQuery();
+
+			extractData(resultSet, operation);
+
+			resultSet.close();
+			preparedStatement.close();
+
+			// Obtención del número total de registros que satisfacen la consulta.
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			if (params != null) {
+
+				for (int i=0; i<params.length; i++) {
+					preparedStatement.setObject(i+1, params[i], types[i]);
+				}
+			}
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
 		}
-		else {
-
-			operation = DataSources.getJdbcTemplateDataService().query(querySelect.toString(), params, types, new GenericJDBCResultSetExtractor(operation));
+		catch (Exception e) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
 		}
-
-		StringBuilder countQuery = new StringBuilder("SELECT count(*) ");
-		countQuery.append(queryFrom).append(queryWhere);
-		operation.getMetadata().setTotalItems(DataSources.getJdbcTemplateDataService().queryForObject(countQuery.toString(), params, Long.class));
+		finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
 
 		return operation;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * INSERT INTO table (column a, column b, column c) VALUES (value a, value b, value c), (value a, value b, value c);
 	 */
 	@Override
 	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
@@ -685,14 +811,19 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Construcción de la sentencia de inserción.
 		 */
+		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
+		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
+		String modifiedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName(); // MODIFIED
+		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName(); // DELETED
+		
 		queryInsert.append("INSERT INTO ").append(entityAccessPolicy.getName().getName());
 
 		queryInsert.append('(');
 
-		queryInsert.append(entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName()); // REVISION
-		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName()); // BIRTH
-		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName()); // MODIFIED
-		queryInsert.append(',').append(entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName()); // DELETED
+		queryInsert.append(revisionColumn);
+		queryInsert.append(',').append(birthColumn);
+		queryInsert.append(',').append(modifiedColumn);
+		queryInsert.append(',').append(deletedColumn);
 
 		int initSize = firsItem.getAttributes().size();
 		AbstractList<String> inColumns = new ArrayList<String>(initSize);
@@ -713,15 +844,19 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		/*
 		 * Inserción de los registros.
 		 */
-		javax.sql.DataSource dataSource = DataSources.getDataSourceDataService();
-		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 
 		try {
-			connection = dataSource.getConnection();
 
+			int revisionColumnType = entityInformation.dataFields.get(revisionColumn);
+			int birthColumnType = entityInformation.dataFields.get(birthColumn);
+			int modifiedColumnType = entityInformation.dataFields.get(modifiedColumn);
+			int deletedColumnType = entityInformation.dataFields.get(deletedColumn);
+			
 			String[] generatedKeyColumns = outColumns.toArray(new String[outColumns.size()]);
 
-			PreparedStatement ps = connection.prepareStatement(queryInsert.toString(), generatedKeyColumns);
+			preparedStatement = connection.prepareStatement(queryInsert.toString(), generatedKeyColumns);
 
 			Long millisecondsSinceEpoch = System.currentTimeMillis();
 			Timestamp now = new Timestamp(millisecondsSinceEpoch);
@@ -733,47 +868,229 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
 				item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
 				item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
-				
-				ps.setObject(1, 0L);
-				ps.setObject(2, now);
-				ps.setObject(3, now);
-				ps.setObject(4, null);
-				
+
+				preparedStatement.setObject(1, 0L, revisionColumnType);
+				preparedStatement.setObject(2, now, birthColumnType);
+				preparedStatement.setObject(3, now, modifiedColumnType);
+				preparedStatement.setObject(4, null, deletedColumnType);
+
 				i=5;
 				itemAttributes = item.getAttributes();
 
 				for (String inAlias : inAliases) {
 
-					ps.setObject(i++, itemAttributes.get(inAlias));
+					preparedStatement.setObject(i++, itemAttributes.get(inAlias));
 				}
-				ps.addBatch();
+				preparedStatement.addBatch();
 			}
-			ps.executeBatch();
+			preparedStatement.executeBatch();
 
 			// Recogida de los datos generados.
-			ResultSet rs = ps.getGeneratedKeys();
-			
-			if (rs.first()) {
-				
+			resultSet = preparedStatement.getGeneratedKeys();
+
+			if (resultSet.first()) {
+
 				for (DataItem item :  operation.getData()) {
 
 					int GeneratedkeyIndex = 1;
 					for(String outAlias : outAliases) {
-						
-						item.getAttributes().put(outAlias, rs.getObject(GeneratedkeyIndex++));
+
+						item.getAttributes().put(outAlias, resultSet.getObject(GeneratedkeyIndex++));
 					}
-					
-					rs.next();
+
+					resultSet.next();
 				}
 			}
-			
-			ps.close();
+
+			resultSet.close();
+			preparedStatement.close();
+
+			// Información de totales.
+			operation.getMetadata().setItems(Long.valueOf(operation.getData().size()));
+
+			// Obtención del número total de registros que satisfacen la consulta.
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityAccessPolicy.getName().getName());
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
 		} 
 		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
 		}
 		finally {
-			JDBCUtils.CloseQuietly(connection);
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
+
+		return operation;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
+
+		final StringBuilder queryDelete = new StringBuilder();
+		final StringBuilder queryFrom = new StringBuilder();
+		final StringBuilder queryWhere = new StringBuilder();
+
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+
+		Long millisecondsSinceEpoch = System.currentTimeMillis();
+		Timestamp now = new Timestamp(millisecondsSinceEpoch);
+		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
+
+		/*
+		 * Delete.
+		 */
+		queryDelete.append("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ").append(deletedColumn).append("=?"); // DELETED;
+
+		/*
+		 * Especificación de la tabla.
+		 */
+		queryFrom.append(" FROM ").append(entityAccessPolicy.getName().getName());
+
+		/*
+		 * Especificación del filtro.
+		 */
+		queryWhere.append(" WHERE (").append(deletedColumn).append(" IS NULL)");
+
+		AbstractList<String> filterColumns = new ArrayList<String>();
+		AbstractList<Object> filterValues = new ArrayList<Object>();
+		Map<String, Integer> filterTypes = new HashMap<String, Integer>();
+
+		StringBuilder filter = null;
+
+		if (operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0) {
+
+			filterTypes = entityInformation.keyFields;
+			filter = getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), filterColumns, filterValues);
+		}
+		else if (operation.getMetadata().getFilter() != null) {
+
+			filterTypes = entityInformation.filterFields;
+			filter = getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), filterColumns, filterValues);
+		}
+		else {
+			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
+		}
+
+		if (filter != null && filter.length() > 0) {
+
+			queryWhere.append(" AND (").append(filter).append(')');
+		}
+
+		int[] types = new int[filterColumns.size()];
+		Object[] params = new Object[types.length];
+
+		for (int i=0; i<filterColumns.size(); i++) {
+
+			types[i] = filterTypes.get(filterColumns.get(i));
+			params[i] = translateToType(types[i], filterValues.get(i));
+		}
+
+		queryDelete.append(queryWhere);
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			/*
+			 * Modificación de los registros.
+			 */
+			preparedStatement = connection.prepareStatement(queryDelete.toString());
+
+			int deletedType = entityInformation.dataFields.get(deletedColumn);
+			preparedStatement.setObject(1, translateToType(deletedType, now), deletedType);
+
+			if (params != null) {
+
+				for (int i=0; i<params.length; i++) {
+					preparedStatement.setObject(i+2, params[i], types[i]);
+				}
+			}
+
+			operation.getMetadata().setItems(Long.valueOf(preparedStatement.executeUpdate()));
+
+			preparedStatement.close();
+
+			/*
+			 * Obtiene los registros marcados como eliminados
+			 */
+			if (operation.getData() != null && !operation.getData().isEmpty()) {
+
+				StringBuilder querySelect = new StringBuilder();
+
+				querySelect.append("SELECT ");
+
+				/*
+				 * Especificación del conjunto de campos de la query.
+				 */
+				querySelect.append(getDataString(operation.getMetadata().getEntity(), operation.getData().get(0).getAttributes()));
+
+				/*
+				 * Especificación de la tabla.
+				 */
+				querySelect.append(queryFrom);
+
+				/*
+				 * Especificación de los filtros.
+				 */
+				querySelect.append(" WHERE ").append(deletedColumn).append("=? AND (").append(filter).append(')');
+
+				preparedStatement = connection.prepareStatement(querySelect.toString());
+
+				preparedStatement.setObject(1, translateToType(deletedType, now), deletedType);
+
+				if (params != null) {
+
+					for (int i=0; i<params.length; i++) {
+						preparedStatement.setObject(i+2, params[i], types[i]);
+					}
+				}
+
+				resultSet = preparedStatement.executeQuery();
+
+				extractData(resultSet, operation);
+
+				resultSet.close();
+				preparedStatement.close();
+			}
+
+			/*
+			 *  Obtención del número total de registros sin marca de eliminación.
+			 */
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ").append(deletedColumn).append(" IS NULL");
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
+		}
+		catch (Exception e) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		}
+		finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
 		}
 
 		return operation;
@@ -1235,88 +1552,5 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	public void resetAccessPoliciesInformationAgainstDataSource() {
 
 		entitiesInformation = null;
-	}
-
-
-	/**
-	 * Clase interna para la gestión de la transacción del conjunto de operaciones.
-	 */
-	private class GenericTransactionCallback implements TransactionCallback<Generic> {
-
-		private Generic generic;
-		private ServerException inTransactionException;
-
-
-		/**
-		 * Constructor con parámetro.
-		 * 
-		 * @param generic Estructura de operaciones a resolver.
-		 */
-		public GenericTransactionCallback(Generic generic)	{
-
-			this.generic = generic;
-			this.inTransactionException = null;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public Generic doInTransaction(TransactionStatus paramTransactionStatus) {
-
-			try {
-
-				for (Operation operation : generic.getOperations()) {
-
-					if (!entitiesInformation.containsKey(AccessPolicy.getEntityName(operation.getMetadata().getEntity()))) {
-						throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY, String.format(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE, operation.getMetadata().getEntity()));	
-					}
-
-					processOperation(generic.getRequestor(), operation);
-				}
-
-			} catch (ServerException e) {
-
-				inTransactionException = e;
-				paramTransactionStatus.setRollbackOnly();
-			}
-
-			return generic;
-		}
-
-		/**
-		 * Retorna <code>null</code> o la excepción, en caso que se haya producido.
-		 * 
-		 * @return <code>null</code> o la excepción, en caso que se haya producido.
-		 */
-		public ServerException getInTransactionException() {
-			return inTransactionException;
-		}
-	}		
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Generic processGeneric(final Generic generic) throws ServerException {
-
-		systemService.getWorkloadMeter().incTotalIncommingRequests();
-
-		if (AccessPolicy.getCurrentAccesPolicy() == null) {
-
-			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
-
-			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
-		}
-
-		GenericTransactionCallback genericTransactionCallback = new GenericTransactionCallback(generic);
-
-		DataSources.getTransactionTemplateDataService().execute(genericTransactionCallback);
-
-		generic.getRequestor().setTime(System.currentTimeMillis());
-
-		if (genericTransactionCallback.getInTransactionException() != null) {
-			throw genericTransactionCallback.getInTransactionException();
-		}
-
-		return generic;
 	}
 }

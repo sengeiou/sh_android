@@ -6,10 +6,6 @@ import java.util.AbstractList;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.util.FileUtils;
@@ -31,14 +27,8 @@ public class DataSources
 	public static final String ERROR_INVALID_DATASOURCES_FILE_URL = "DS002";
 	public static final String ERROR_INVALID_DATASOURCES_FILE_URL_MESSAGE = "La URL <%s> no se corresponde con ningún fichero de definición de fuentes de datos.";
 
-	private static TransactionTemplate transactionTemplateDataService;
 	private static DataSource dataSourceDataService;
-	private static JdbcTemplate jdbcTemplateDataService;
-
-	private static TransactionTemplate transactionTemplateStatistics;
 	private static DataSource dataSourceStatistics;
-	private static JdbcTemplate jdbcTemplateStatistics;
-
 	private static DataSources dataSources;
 
 	private String version;
@@ -208,11 +198,6 @@ public class DataSources
 	public void constructDataServicesDataSource() {
 
 		dataSourceDataService = constructDataSource(dataServices);
-
-		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceDataService);
-
-		transactionTemplateDataService = new TransactionTemplate(transactionManager);
-		jdbcTemplateDataService = new JdbcTemplate(dataSourceDataService);
 	}
 
 	/**
@@ -221,20 +206,6 @@ public class DataSources
 	public void constructStatisticsDataSource() {
 
 		dataSourceStatistics = constructDataSource(statistics);
-
-		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceStatistics);
-
-		transactionTemplateStatistics = new TransactionTemplate(transactionManager);
-		jdbcTemplateStatistics = new JdbcTemplate(dataSourceStatistics);
-	}
-
-	/**
-	 * Retorna la plantilla para transacciones en los servicios de datos.
-	 * 
-	 * @return la plantilla para transacciones en los servicios de datos.
-	 */
-	public static final TransactionTemplate getTransactionTemplateDataService() {
-		return transactionTemplateDataService;
 	}
 
 	/**
@@ -247,39 +218,12 @@ public class DataSources
 	}
 
 	/**
-	 * Retorna la plantilla para operaciones JDBC en los servicios de datos.
-	 * 
-	 * @return la plantilla para operaciones JDBC en los servicios de datos.
-	 */
-	public static final JdbcTemplate getJdbcTemplateDataService() {
-		return jdbcTemplateDataService;
-	}
-
-	/**
-	 * Retorna la plantilla para transacciones en la gestión de estadísticas de uso.
-	 * 
-	 * @return la plantilla para transacciones en la gestión de estadísticas de uso.
-	 */
-	public static final TransactionTemplate getTransactionTemplateStatistics() {
-		return transactionTemplateStatistics;
-	}
-
-	/**
 	 * Retorna la fuente de datos de la insformación estadística.
 	 * 
 	 * @return la fuente de datos de la insformación estadística.
 	 */
 	public static final DataSource getDataSourceStatistics() {
 		return dataSourceStatistics;
-	}
-
-	/**
-	 * Retorna la plantilla para operaciones JDBC en la gestión de estadísticas de uso.
-	 * 
-	 * @return la plantilla para operaciones JDBC en v
-	 */
-	public static final JdbcTemplate getJdbcTemplateStatistics() {
-		return jdbcTemplateStatistics;
 	}
 
 	/**

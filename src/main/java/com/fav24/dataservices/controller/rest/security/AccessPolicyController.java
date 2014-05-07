@@ -62,6 +62,7 @@ public class AccessPolicyController extends BaseRestController {
 		} catch (ServerException e) {
 
 			result = new AccessPolicyDto(e);
+			result.setAlias(accessPolicy.getAlias());
 			result.setRequestor(accessPolicy.getRequestor());
 			
 			e.log(logger, false);
@@ -94,6 +95,7 @@ public class AccessPolicyController extends BaseRestController {
 		} catch (ServerException e) {
 
 			result = new AccessPolicyFilesDto(e);
+			result.setAlias(accessPolicyFiles.getAlias());
 			result.setRequestor(accessPolicyFiles.getRequestor());
 			
 			e.log(logger, false);

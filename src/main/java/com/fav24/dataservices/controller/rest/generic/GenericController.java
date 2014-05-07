@@ -59,6 +59,7 @@ public class GenericController extends BaseRestController {
 		} catch (ServerException e) {
 
 			result = new GenericDto(e);
+			result.setAlias(generic.getAlias());
 			result.setRequestor(new RequestorDto(generic.getRequestor()));
 			
 			e.log(logger, false);

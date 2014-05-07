@@ -20,23 +20,30 @@ public interface GenericService {
 	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED = "G000";
 	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE = "Fallo en el chequeo de las políticas de acceso contra la fuente de datos.";
 	public static final String ERROR_OPERATION_NOT_AVAILABLE = "G001";
-	public static final String ERROR_OPERATION_NOT_AVAILABLE_MESSAGE = "La operación %s no está disponible.";
+	public static final String ERROR_OPERATION_NOT_AVAILABLE_MESSAGE = "La operación <%s> no está disponible para la entidad <%s>.";
 	public static final String ERROR_START_TRANSACTION = "G002";
-	public static final String ERROR_START_TRANSACTION_MESSAGE = "Error al iniciar la transacción.";
+	public static final String ERROR_START_TRANSACTION_MESSAGE = "Error al iniciar la transacción. %s";
 	public static final String ERROR_END_TRANSACTION = "G003";
-	public static final String ERROR_END_TRANSACTION_MESSAGE = "Error al finalizar la transacción.";
-	public static final String ERROR_UNCOMPLETE_REQUEST = "G004";
-	public static final String ERROR_UNCOMPLETE_REQUEST_MESSAGE = "Es necesario indicar KEY o FILTER para la resolución de esta petición.";
-	public static final String ERROR_INVALID_REQUEST_NO_KEY = "G005";
+	public static final String ERROR_END_TRANSACTION_MESSAGE = "Error al finalizar la transacción. %s";
+
+	public static final String ERROR_MALFORMED_REQUEST = "G004";
+	public static final String ERROR_MALFORMED_REQUEST_MESSAGE = "Petición mal formada. El atributo <%s> es incorrecto, está desubicado o no existe.";
+
+	public static final String ERROR_UNCOMPLETE_KEY_FILTER_REQUEST = "G005";
+	public static final String ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE = "Es necesario indicar KEY o FILTER para la resolución de esta petición.";
+	public static final String ERROR_INVALID_REQUEST_NO_KEY = "G006";
 	public static final String ERROR_INVALID_REQUEST_NO_KEY_MESSAGE = "La entidad <%s> únicamente es accesible mediante clave.";
-	public static final String ERROR_INVALID_REQUEST_KEY = "G006";
+	public static final String ERROR_INVALID_REQUEST_KEY = "G007";
 	public static final String ERROR_INVALID_REQUEST_KEY_MESSAGE = "La entidad <%s> no es accesible mediante la clave indicada.";
-	public static final String ERROR_INVALID_REQUEST_NO_FILTER = "G007";
+	public static final String ERROR_INVALID_REQUEST_NO_FILTER = "G008";
 	public static final String ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE = "La entidad <%s> debe ser accedida mediante uno de los filtros definidos.";
-	public static final String ERROR_INVALID_REQUEST_FILTER = "G008";
+	public static final String ERROR_INVALID_REQUEST_FILTER = "G009";
 	public static final String ERROR_INVALID_REQUEST_FILTER_MESSAGE = "La entidad <%s> no es accesible mediante el filtro indicado.";
-	public static final String ERROR_INVALID_CREATE_REQUEST = "G009";
-	public static final String ERROR_INVALID_CREATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a crear para la entidad <%>.";
+
+	public static final String ERROR_OPERATION = "G010";
+	public static final String ERROR_OPERATION_MESSAGE = "No ha sido posible realizar la operación <%s> sobre la entidad <%s> debido a: %s";
+	public static final String ERROR_INVALID_CREATE_REQUEST = "G011";
+	public static final String ERROR_INVALID_CREATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a crear para la entidad <%s>.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

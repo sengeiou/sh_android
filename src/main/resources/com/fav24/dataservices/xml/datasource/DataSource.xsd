@@ -75,7 +75,7 @@
 			<xsd:element name="TestQuery" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 		<!-- Esta propiedad controla el comportamiento del auto-commit de las conexiones al devolverlas al pool. -->
-		<xsd:attribute name="AutoCommit" type="xsd:boolean" use="optional" default="true"/>
+		<xsd:attribute name="AutoCommit" type="xsd:boolean" use="optional" default="false"/>
 		<!-- Esta propiedad controla el tiempo máximo en milisegundos que un cliente esperará una conexión del pool.
 		Si este tiempo se excede sin que haya una conexión disponible, se producirá una excepción de SQL. -->
 		<xsd:attribute name="Timeout" type="xsd:long" use="optional" default="5000"/>
