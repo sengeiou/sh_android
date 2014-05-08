@@ -1013,7 +1013,8 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			preparedStatement = connection.prepareStatement(queryDelete.toString());
 
 			int deletedType = entityInformation.dataFields.get(deletedColumn);
-			preparedStatement.setObject(1, translateToType(deletedType, now), deletedType);
+			now.setNanos(0); // Para evitar problemas de compatibilidad entre la escritura en DB y la lectura o selección.
+			preparedStatement.setObject(1, now, deletedType);
 
 			if (params != null) {
 
@@ -1052,7 +1053,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				preparedStatement = connection.prepareStatement(querySelect.toString());
 
-				preparedStatement.setObject(1, translateToType(deletedType, now), deletedType);
+				preparedStatement.setObject(1, now, deletedType);
 
 				if (params != null) {
 
