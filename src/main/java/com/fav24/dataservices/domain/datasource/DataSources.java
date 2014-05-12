@@ -174,8 +174,8 @@ public class DataSources
 		configuration.setDataSourceClassName(connectionPoolConfiguration.getDataSourceClassName());
 		configuration.setIdleTimeout(connectionPoolConfiguration.getIdleTimeout());
 		configuration.setMaxLifetime(connectionPoolConfiguration.getMaxLifetime());
-		configuration.setMinimumIdle(connectionPoolConfiguration.getMinimumPoolSize());
 		configuration.setMaximumPoolSize(connectionPoolConfiguration.getMaximumPoolSize());
+		configuration.setMinimumIdle(connectionPoolConfiguration.getMinimumPoolSize());
 
 		// Configuración del acceso a la fuente.
 		configuration.setUsername(dataSourceConfiguration.getUserName());
