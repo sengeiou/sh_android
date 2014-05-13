@@ -95,18 +95,26 @@ public class EntityAttribute implements Comparable<EntityAttribute> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EntityAttribute other = (EntityAttribute) obj;
-		if (alias == null) {
-			if (other.alias != null)
+
+		try {
+			EntityAttribute other = (EntityAttribute) obj;
+
+			if (alias == null) {
+				if (other.alias != null)
+					return false;
+			} else if (!alias.equals(other.alias))
 				return false;
-		} else if (!alias.equals(other.alias))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 

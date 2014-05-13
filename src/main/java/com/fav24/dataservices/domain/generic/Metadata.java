@@ -270,14 +270,14 @@ public class Metadata implements Organizable, Serializable {
 					contentKey.append(ELEMENT_SEPARATOR);
 					keyItem.organizeContent(contentKey);
 				}
-				
+
 				firstItem = false;
 			}
 		}
 		contentKey.append("]");
-		
+
 		contentKey.append(ELEMENT_SEPARATOR);
-		
+
 		contentKey.append("filter[");
 		if (filter != null) {
 			filter.organizeContent(contentKey);
@@ -285,7 +285,7 @@ public class Metadata implements Organizable, Serializable {
 		contentKey.append("]");
 
 		contentKey.append(ELEMENT_SEPARATOR);
-		
+
 		contentKey.append("includeDeleted[");
 		if (includeDeleted != null) {
 			contentKey.append(includeDeleted);
@@ -294,7 +294,7 @@ public class Metadata implements Organizable, Serializable {
 			contentKey.append(Boolean.FALSE);
 		}
 		contentKey.append("]");
-		
+
 		return contentKey;
 	}
 
@@ -320,45 +320,60 @@ public class Metadata implements Organizable, Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Metadata other = (Metadata) obj;
-		if (entity == null) {
-			if (other.entity != null)
+
+		try {
+
+			Metadata other = (Metadata) obj;
+
+			if (entity == null) {
+				if (other.entity != null)
+					return false;
+			} else if (!entity.equals(other.entity))
 				return false;
-		} else if (!entity.equals(other.entity))
-			return false;
-		if (includeDeleted == null) {
-			if (other.includeDeleted != null)
+
+			if (includeDeleted == null) {
+				if (other.includeDeleted != null)
+					return false;
+			} else if (!includeDeleted.equals(other.includeDeleted))
 				return false;
-		} else if (!includeDeleted.equals(other.includeDeleted))
-			return false;
-		if (filter == null) {
-			if (other.filter != null)
+
+			if (filter == null) {
+				if (other.filter != null)
+					return false;
+			} else if (!filter.equals(other.filter))
 				return false;
-		} else if (!filter.equals(other.filter))
-			return false;
-		if (items == null) {
-			if (other.items != null)
+
+			if (items == null) {
+				if (other.items != null)
+					return false;
+			} else if (!items.equals(other.items))
 				return false;
-		} else if (!items.equals(other.items))
-			return false;
-		if (key == null) {
-			if (other.key != null)
+
+			if (key == null) {
+				if (other.key != null)
+					return false;
+			} else if (!key.equals(other.key))
 				return false;
-		} else if (!key.equals(other.key))
-			return false;
-		if (offset == null) {
-			if (other.offset != null)
+
+			if (offset == null) {
+				if (other.offset != null)
+					return false;
+			} else if (!offset.equals(other.offset))
 				return false;
-		} else if (!offset.equals(other.offset))
+
+			if (operation != other.operation)
+				return false;
+		}
+		catch(ClassCastException e) {
 			return false;
-		if (operation != other.operation)
-			return false;
+		}
+
 		return true;
 	}
 

@@ -44,6 +44,10 @@ public interface GenericService {
 	public static final String ERROR_OPERATION_MESSAGE = "No ha sido posible realizar la operación <%s> sobre la entidad <%s> debido a: %s";
 	public static final String ERROR_INVALID_CREATE_REQUEST = "G011";
 	public static final String ERROR_INVALID_CREATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a crear para la entidad <%s>.";
+	public static final String ERROR_CREATE_DUPLICATE_ROW = "G012";
+	public static final String ERROR_CREATE_DUPLICATE_ROW_MESSAGE = "Existe al menos un registro con al menos un una de las claves indicadas. <%s>.";
+	public static final String ERROR_CREATE_REFURBISHED_ROW_LOST = "G013";
+	public static final String ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE = "No ha sido posible localizar el registro recuperado. <%s>.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

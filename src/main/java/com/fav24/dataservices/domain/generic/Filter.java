@@ -285,21 +285,26 @@ public class Filter implements Organizable, Serializable {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Filter other = (Filter) obj;
-		if (filter == null) {
-			if (other.filter != null)
+
+		try {
+			Filter other = (Filter) obj;
+			if (filter == null) {
+				if (other.filter != null)
+					return false;
+			} else if (!filter.equals(other.filter))
 				return false;
-		} else if (!filter.equals(other.filter))
-			return false;
-		if (filterItems == null) {
-			if (other.filterItems != null)
+			if (filterItems == null) {
+				if (other.filterItems != null)
+					return false;
+			} else if (!filterItems.equals(other.filterItems))
 				return false;
-		} else if (!filterItems.equals(other.filterItems))
+			if (nexus != other.nexus)
+				return false;
+		}
+		catch(ClassCastException e) {
 			return false;
-		if (nexus != other.nexus)
-			return false;
+		}
+
 		return true;
 	}
 

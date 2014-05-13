@@ -11,8 +11,6 @@ import com.fav24.dataservices.domain.generic.KeyItem;
 
 /**
  * Clase que contiene las políticas de acceso estructura de una entidad.
- * 
- * @author Fav24
  */
 public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 

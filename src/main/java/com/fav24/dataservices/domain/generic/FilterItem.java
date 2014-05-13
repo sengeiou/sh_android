@@ -155,33 +155,33 @@ public class FilterItem implements Organizable, Comparable<FilterItem>, Serializ
 		}
 
 		contentKey.append("comparator[").append(comparator.getComparatorType()).append("]").append(ELEMENT_SEPARATOR).
-				append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
-				append("value[").append(value).append("]");
-		
+		append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
+		append("value[").append(value).append("]");
+
 		return contentKey;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int compareTo(FilterItem o) {
-		
+
 		if (name == o.name) {
 			return 0;
 		}
-		
+
 		if (name != null && o.name == null) {
 			return 1;
 		}
-		
+
 		if (name == null && o.name != null) {
 			return -1;
 		}
-		
+
 		return name.compareTo(o.name);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -201,25 +201,36 @@ public class FilterItem implements Organizable, Comparable<FilterItem>, Serializ
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FilterItem other = (FilterItem) obj;
-		if (comparator != other.comparator)
-			return false;
-		if (name == null) {
-			if (other.name != null)
+
+		try {		
+
+			FilterItem other = (FilterItem) obj;
+
+			if (comparator != other.comparator)
 				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (value == null) {
-			if (other.value != null)
+
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
 				return false;
-		} else if (!value.equals(other.value))
+
+			if (value == null) {
+				if (other.value != null)
+					return false;
+			} else if (!value.equals(other.value))
+				return false;
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 

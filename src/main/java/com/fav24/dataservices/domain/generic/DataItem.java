@@ -194,18 +194,25 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DataItem other = (DataItem) obj;
-		if (attributes == null) {
-			if (other.attributes != null)
+
+		try {
+			DataItem other = (DataItem) obj;
+			if (attributes == null) {
+				if (other.attributes != null)
+					return false;
+			} else if (!attributes.equals(other.attributes))
 				return false;
-		} else if (!attributes.equals(other.attributes))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 

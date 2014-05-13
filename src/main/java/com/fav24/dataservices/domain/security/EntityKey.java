@@ -10,11 +10,10 @@ import java.util.Map;
 
 /**
  * Clase que define una clave de la sección Keys de la definición de las políticas de acceso de una entidad.
- * 
- * @author Fav24
  */
 public class EntityKey {
 
+	private boolean isPrimary;
 	private AbstractList<EntityAttribute> key;
 	private Map<String, EntityAttribute> entityKeyByAlias;
 
@@ -23,6 +22,7 @@ public class EntityKey {
 	 * Contructor por defecto.
 	 */
 	public EntityKey() {
+		isPrimary = false;
 		key = new ArrayList<EntityAttribute>();
 		entityKeyByAlias = new HashMap<String, EntityAttribute>();
 	}
@@ -36,6 +36,7 @@ public class EntityKey {
 
 		if (entityKey.key != null) {
 
+			this.isPrimary = entityKey.isPrimary;
 			this.key = new ArrayList<EntityAttribute>();
 			this.entityKeyByAlias = new HashMap<String, EntityAttribute>();
 
@@ -48,6 +49,7 @@ public class EntityKey {
 			}
 		}
 		else {
+			this.isPrimary = false;
 			this.key = null;
 			this.entityKeyByAlias = null;
 		}
@@ -131,6 +133,24 @@ public class EntityKey {
 		return null;
 	}
 
+	/**
+	 * Retorna true o false en función de si se trata o no de una clave primaria.
+	 * 
+	 * @return true o false en función de si se trata o no de una clave primaria.
+	 */
+	public boolean isPrimary() {
+		return isPrimary;
+	}
+
+	/**
+	 * Indica true o false en función de si se trata o no de una clave primaria.
+	 * 
+	 * @param isPrimary Valor a asignar.
+	 */
+	public void setPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
+	}
+	
 	/**
 	 * Retorna la estructura que contiene el conjunto de attributos de una clave.
 	 * 

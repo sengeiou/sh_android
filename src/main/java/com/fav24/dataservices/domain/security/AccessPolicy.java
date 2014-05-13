@@ -126,18 +126,27 @@ public class AccessPolicy extends BaseDomain {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AccessPolicy other = (AccessPolicy) obj;
-		if (accessPolicies == null) {
-			if (other.accessPolicies != null)
+
+		try {
+
+			AccessPolicy other = (AccessPolicy) obj;
+
+			if (accessPolicies == null) {
+				if (other.accessPolicies != null)
+					return false;
+			} else if (!accessPolicies.equals(other.accessPolicies))
 				return false;
-		} else if (!accessPolicies.equals(other.accessPolicies))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 
@@ -215,7 +224,7 @@ public class AccessPolicy extends BaseDomain {
 			else {
 				currentAccesPolicy.mergeAccesPolicy(accessPolicy);
 			}
-			
+
 			Collections.sort(currentAccesPolicy.getEnititiesAliases());
 		}
 	}
@@ -318,7 +327,7 @@ public class AccessPolicy extends BaseDomain {
 
 		return null;
 	}
-	
+
 	/**
 	 * Retorna el alias del atributo indicado de la entidad indicada en la fuente de datos, a partir de los nombres. 
 	 * 
@@ -328,38 +337,38 @@ public class AccessPolicy extends BaseDomain {
 	 * @return el alias del atributo indicado de la entidad indicada en la fuente de datos, a partir de los nombres.
 	 */
 	public static final String getAttributeAlias(String entityAlias, String attributeName) {
-		
+
 		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null && attributeName != null) {
 			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
-			
+
 			if (entityAccessPolicy != null) {
-				
+
 				if (entityAccessPolicy.getData() != null) {
 					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttributeByName(attributeName);
-					
+
 					if (dataAttribute != null) {
 						return dataAttribute.getAlias();
 					}
 				}
-				
+
 				if (entityAccessPolicy.getKeys() != null) {
 					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByName(attributeName);
-					
+
 					if (keyAttribute != null) {
 						return keyAttribute.getAlias();
 					}
 				}
-				
+
 				if (entityAccessPolicy.getFilters() != null) {
 					EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByName(attributeName);
-					
+
 					if (filterAttribute != null) {
 						return filterAttribute.getAlias();
 					}
 				}
 			}
 		}
-		
+
 		return null;
 	}
 

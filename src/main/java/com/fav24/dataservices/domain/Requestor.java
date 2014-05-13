@@ -160,33 +160,44 @@ public class Requestor {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Requestor other = (Requestor) obj;
-		if (appVersion == null) {
-			if (other.appVersion != null)
+
+		try {
+			Requestor other = (Requestor) obj;
+
+			if (appVersion == null) {
+				if (other.appVersion != null)
+					return false;
+			} else if (!appVersion.equals(other.appVersion))
 				return false;
-		} else if (!appVersion.equals(other.appVersion))
-			return false;
-		if (idDevice == null) {
-			if (other.idDevice != null)
+
+			if (idDevice == null) {
+				if (other.idDevice != null)
+					return false;
+			} else if (!idDevice.equals(other.idDevice))
 				return false;
-		} else if (!idDevice.equals(other.idDevice))
-			return false;
-		if (idPlatform == null) {
-			if (other.idPlatform != null)
+
+			if (idPlatform == null) {
+				if (other.idPlatform != null)
+					return false;
+			} else if (!idPlatform.equals(other.idPlatform))
 				return false;
-		} else if (!idPlatform.equals(other.idPlatform))
-			return false;
-		if (idUser == null) {
-			if (other.idUser != null)
+
+			if (idUser == null) {
+				if (other.idUser != null)
+					return false;
+			} else if (!idUser.equals(other.idUser))
 				return false;
-		} else if (!idUser.equals(other.idUser))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 

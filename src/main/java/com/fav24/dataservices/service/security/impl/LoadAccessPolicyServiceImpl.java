@@ -17,8 +17,6 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 /**
  * Implementación del servicio de carga de las políticas de acceso. 
- * 
- * @author Fav24
  */
 @Component
 @Scope("prototype")
@@ -33,8 +31,8 @@ public class LoadAccessPolicyServiceImpl implements LoadAccessPolicyService {
 	 */
 	@Override
 	public void dropAccessPolicies() throws ServerException {
+		
 		AccessPolicy.resetAccessPolicies();
-
 		genericService.resetAccessPoliciesInformationAgainstDataSource();
 	}
 

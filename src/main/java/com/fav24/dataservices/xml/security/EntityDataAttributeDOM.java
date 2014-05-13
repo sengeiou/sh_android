@@ -20,18 +20,20 @@ public class EntityDataAttributeDOM extends EntityDataAttribute {
 	 */
 	public EntityDataAttributeDOM(Node node) {
 
-		setAlias(((Element) node).getAttribute("Alias"));
-		setDirection(((Element) node).getAttribute("Direction"));
+		Element element = (Element) node;
+
+		setAlias(element.getAttribute("Alias"));
+		setDirection(element.getAttribute("Direction"));
 		setName(node.getTextContent());
 	}
-	
+
 	/**
 	 * Asigna el sentido en el que pueden viajar los datos para este atributo.
 	 *  
 	 * @param direction El sentido a asignar.
 	 */
 	private void setDirection(String direction) {
-		
+
 		setDirection(Direction.fromString(direction));
 	}
 }

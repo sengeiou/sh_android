@@ -33,7 +33,7 @@ public class Generic extends BaseDomain {
 	public Generic(String alias, Requestor requestor, AbstractList<Operation> operations) {
 
 		super(alias, requestor);
-		
+
 		this.operations = operations;
 	}
 
@@ -72,18 +72,25 @@ public class Generic extends BaseDomain {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Generic other = (Generic) obj;
-		if (operations == null) {
-			if (other.operations != null)
+
+		try {
+			Generic other = (Generic) obj;
+			if (operations == null) {
+				if (other.operations != null)
+					return false;
+			} else if (!operations.equals(other.operations))
 				return false;
-		} else if (!operations.equals(other.operations))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 }

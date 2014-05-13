@@ -61,7 +61,7 @@ public class Operation implements Organizable, Serializable {
 		if (contentKey == null) {
 			contentKey = new StringBuilder();
 		}
-		
+
 		contentKey.append("metadata[");
 		if (metadata != null) {
 			contentKey = metadata.organizeContent(contentKey);
@@ -111,23 +111,31 @@ public class Operation implements Organizable, Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Operation other = (Operation) obj;
-		if (data == null) {
-			if (other.data != null)
+
+		try {
+			Operation other = (Operation) obj;
+			if (data == null) {
+				if (other.data != null)
+					return false;
+			} else if (!data.equals(other.data))
 				return false;
-		} else if (!data.equals(other.data))
-			return false;
-		if (metadata == null) {
-			if (other.metadata != null)
+
+			if (metadata == null) {
+				if (other.metadata != null)
+					return false;
+			} else if (!metadata.equals(other.metadata))
 				return false;
-		} else if (!metadata.equals(other.metadata))
+		}
+		catch(ClassCastException e) {
 			return false;
+		}
+
 		return true;
 	}
 

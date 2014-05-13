@@ -7,6 +7,8 @@ package com.fav24.dataservices.domain.security;
  */
 public class EntityDataAttribute extends EntityAttribute {
 
+	public static final long DEFAFULT_REVISION = 0;
+
 	/**
 	 * Enumeración de los campos de sincronización de una entidad. 
 	 */
@@ -18,7 +20,7 @@ public class EntityDataAttribute extends EntityAttribute {
 
 		private final String synchronizationField;
 
-		
+
 		/**
 		 * Constructor privado del campo de sincronización.
 		 * 
@@ -36,7 +38,7 @@ public class EntityDataAttribute extends EntityAttribute {
 		public String getSynchronizationField() {
 			return synchronizationField;
 		}
-		
+
 		/**
 		 * Retorna el campo de sincronización a partir de la cadena de texto indicada.
 		 * 
@@ -54,7 +56,7 @@ public class EntityDataAttribute extends EntityAttribute {
 			}
 			return null;
 		}
-		
+
 		/**
 		 * Retorna true o false en función de si el nombre suministrado se corresponde o no 
 		 * con un campo de auditoría para la sincronización.
@@ -65,27 +67,27 @@ public class EntityDataAttribute extends EntityAttribute {
 		 * con un campo de auditoría para la sincronización.
 		 */
 		public static boolean isSynchronizationField(String field) {
-			
+
 			if (REVISION.getSynchronizationField().equals(field)) {
 				return true;
 			}
-			
+
 			if (BIRTH.getSynchronizationField().equals(field)) {
 				return true;
 			}
-			
+
 			if (MODIFIED.getSynchronizationField().equals(field)) {
 				return true;
 			}
-			
+
 			if (DELETED.getSynchronizationField().equals(field)) {
 				return true;
 			}
-			
+
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Enumeración de las direcciones permitidas para un determinado atributo. 
 	 */
@@ -96,7 +98,7 @@ public class EntityDataAttribute extends EntityAttribute {
 
 		private final String direction;
 
-		
+
 		/**
 		 * Constructor privado de la dirección.
 		 * 
@@ -114,7 +116,7 @@ public class EntityDataAttribute extends EntityAttribute {
 		public String getDirection() {
 			return direction;
 		}
-		
+
 		/**
 		 * Retorna la dirección a partir de la cadena de texto indicada.
 		 * 
@@ -134,17 +136,17 @@ public class EntityDataAttribute extends EntityAttribute {
 		}
 	}
 
-	
+
 	private Direction direction;
-	
-	
+
+
 	/**
 	 * Constructor por defecto.
 	 */
 	public EntityDataAttribute() {
 		this(null, null, null);
 	}
-	
+
 	/**
 	 * Constructor por defecto.
 	 * 
@@ -153,7 +155,7 @@ public class EntityDataAttribute extends EntityAttribute {
 	 * @param direction Dirección del flujo de información.
 	 */
 	public EntityDataAttribute(String alias, String name, Direction direction) {
-		
+
 		super(alias, name);
 
 		this.direction = direction;
@@ -165,10 +167,10 @@ public class EntityDataAttribute extends EntityAttribute {
 	 * @param entityDataAttribute Objeto referencia a copiar.
 	 */
 	public EntityDataAttribute(EntityDataAttribute entityDataAttribute) {
-		
+
 		this(entityDataAttribute.getAlias(), entityDataAttribute.getName(), entityDataAttribute.direction);
 	}
-	
+
 	/**
 	 * Retorna el sentido en el que pueden viajar los datos para este atributo.
 	 *  

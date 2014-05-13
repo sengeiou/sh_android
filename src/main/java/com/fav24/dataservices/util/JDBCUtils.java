@@ -315,4 +315,18 @@ public class JDBCUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Retorna true o false en función de si la excepción indicada hace o no referencia a 
+	 * una violación de una clave primária o un índice único.
+	 * 
+	 * @param e Excepción a verificar.
+	 * 
+	 * @return true o false en función de si la excepción indicada hace o no referencia a 
+	 * una violación de una clave primária o un índice único.
+	 */
+	public static boolean IsIntegrityConstraintViolation(SQLException e) {
+		
+		return e.getSQLState().startsWith("23");
+	}
 }
