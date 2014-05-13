@@ -418,27 +418,14 @@ public class AccessPolicy extends BaseDomain {
 	 */
 	public static void checkAttributesAccesibility(String entityAlias, AbstractList<String> attributesAliases) throws ServerException {
 
-		StringBuilder notAllowedAttibutes = null;
-
 		EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
 
-		for (String attributeAlias : attributesAliases) {
-
-			if (entityAccessPolicy.getData().getAttribute(attributeAlias) == null) {
-
-				if (notAllowedAttibutes == null) {
-					notAllowedAttibutes = new StringBuilder(attributeAlias);
-				}
-				else{
-					notAllowedAttibutes.append(',').append(attributeAlias);
-				}
-			}
+		if (entityAccessPolicy == null) {
+			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY, 
+					String.format(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE, entityAlias));
 		}
-
-		if (notAllowedAttibutes != null) {
-			throw new ServerException(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED, 
-					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, entityAlias, notAllowedAttibutes));
-		}
+		
+		entityAccessPolicy.checkAttributesAccesibility(attributesAliases);
 	}
 
 	/**

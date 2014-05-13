@@ -19,11 +19,12 @@ import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.domain.generic.Metadata;
-import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
+import com.fav24.dataservices.domain.security.EntityData;
 import com.fav24.dataservices.domain.security.EntityDataAttribute;
+import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
 import com.fav24.dataservices.domain.security.EntityDataAttribute.SynchronizationField;
 import com.fav24.dataservices.domain.security.EntityKey;
 import com.fav24.dataservices.domain.security.EntityOrderAttribute;
@@ -43,42 +44,39 @@ public class GenericServiceJDBCHelper {
 	/**
 	 * Retorna una cadena de texto con el conjunto de campos de datos.
 	 * 
-	 * @param entity Nombre de la entidad a la que pertenece la lista de datos.
+	 * @param entityAccessPolicy Política de la entidad a la que pertenece la lista de datos.
 	 * @param attributes Mapa de datos a resolver.
+	 * 
+	 * Nota: Este método se usa conjuntamente con el {@link #extractData(ResultSet, EntityAccessPolicy, AbstractList)}
 	 * 
 	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
 	 */
-	public static StringBuilder getDataString(String entity, Map<String, Object> attributes) throws ServerException {
+	public static StringBuilder getDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes) throws ServerException {
 
-		StringBuilder resultingData = new StringBuilder();
+		StringBuilder resultingData = null;
 
 		if (attributes != null) {
 
 			Iterator<String> attributeAliases = attributes.keySet().iterator();
 
-			if (attributeAliases.hasNext()) {
+			while (attributeAliases.hasNext()) {
 
-				String column = AccessPolicy.getAttributeName(entity, attributeAliases.next());
+				EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAliases.next());
 
-				resultingData.append(column);
+				if (dataAttribute == null) {
+					entityAccessPolicy.checkAttributesAccesibility(new ArrayList<String>(attributes.keySet()));
+				}
+				else if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
 
-				while (attributeAliases.hasNext()) {
-
-					String attributeAlias = attributeAliases.next();
-					column = AccessPolicy.getAttributeName(entity, attributeAlias);
-
-					if (column == null) {
-						AccessPolicy.checkAttributesAccesibility(entity, new ArrayList<String>(attributes.keySet()));
+					if (resultingData == null) {
+						resultingData = new StringBuilder(dataAttribute.getName());
 					}
 					else {
-						resultingData.append(',');
-						resultingData.append(column);
+						resultingData.append(',').append(dataAttribute.getName());
 					}
 				}
 			}
-		}
-		else {
-			resultingData.append("count(*)");
+
 		}
 
 		return resultingData;
@@ -87,7 +85,7 @@ public class GenericServiceJDBCHelper {
 	/**
 	 * Retorna una cadena de texto con el conjunto de campos de datos.
 	 * 
-	 * @param entity Nombre de la entidad a la que pertenece la lista de datos.
+	 * @param entityAccessPolicy Políticas de acceso de la entidad a la que pertenece la lista de datos.
 	 * @param attributes Mapa de datos a resolver.
 	 * @param entityInformation Información extraida de la fuente de datos, acerca de la entidad.
 	 * @param inColumns Lista en donde se retornará el conjunto de columnas de datos a insertar en el mismo orden de resolución.
@@ -95,50 +93,43 @@ public class GenericServiceJDBCHelper {
 	 * @param outColumns Lista en donde se retornará el conjunto de columnas de datos a retornar en el mismo orden de resolución.
 	 * @param outAliases Lista en donde se retornará el conjunto de alias de datos a retornar en el mismo orden de resolución.
 	 * 
-	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
+	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FND.
 	 */
-	public static StringBuilder getInsertDataString(String entity, Map<String, Object> attributes, EntityJDBCInformation entityInformation, 
+	public static StringBuilder getInsertDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes, EntityJDBCInformation entityInformation, 
 			AbstractList<String> inColumns, AbstractList<String> inAliases,
 			AbstractList<String> outColumns, AbstractList<String> outAliases
 			) throws ServerException {
 
-		StringBuilder resultingData = new StringBuilder();
+		StringBuilder resultingData = null;
 
 		Iterator<String> attributeAliases = attributes.keySet().iterator();
 
-		if (attributeAliases.hasNext()) {
+		while (attributeAliases.hasNext()) {
 
-			String alias = attributeAliases.next();
-			String column = AccessPolicy.getAttributeName(entity, alias);
+			EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAliases.next());
 
-			if (entityInformation.generatedData.contains(column)) {
-				outColumns.add(column);
-				outAliases.add(alias);
+			if (dataAttribute == null) {
+				entityAccessPolicy.checkAttributesAccesibility(new ArrayList<String>(attributes.keySet()));
 			}
 			else {
-				inColumns.add(column);
-				inAliases.add(alias);
-				resultingData.append(column);
-			}
+				
+				if (entityInformation.generatedData.contains(dataAttribute.getAlias())) {
 
-			while (attributeAliases.hasNext()) {
-
-				alias = attributeAliases.next();
-				column = AccessPolicy.getAttributeName(entity, alias);
-
-				if (column == null) {
-					AccessPolicy.checkAttributesAccesibility(entity, new ArrayList<String>(attributes.keySet()));
+					if (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.OUTPUT) {
+						outColumns.add(dataAttribute.getName());
+						outAliases.add(dataAttribute.getAlias());
+					}
 				}
-				else {
-					if (entityInformation.generatedData.contains(column)) {
-						outColumns.add(column);
-						outAliases.add(alias);
+				else if (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.INPUT) {
+					
+					inColumns.add(dataAttribute.getName());
+					inAliases.add(dataAttribute.getAlias());
+					
+					if (resultingData == null) {
+						resultingData = new StringBuilder(dataAttribute.getName());
 					}
 					else {
-						inColumns.add(column);
-						inAliases.add(alias);
-						resultingData.append(',');
-						resultingData.append(column);
+						resultingData.append(',').append(dataAttribute.getName());
 					}
 				}
 			}
@@ -148,7 +139,7 @@ public class GenericServiceJDBCHelper {
 	}
 
 	/**
-	 * Retorna una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
+	 * Retorna una cadena de texto con el conjunto de campos clave de la entidad indicada en FND.
 	 * 
 	 * @param entity Nombre de la entidad a la que pertenece la lista de claves.
 	 * @param keys Lista de claves a resolver.
@@ -468,15 +459,16 @@ public class GenericServiceJDBCHelper {
 	 * @param resultSet Set de resultados del que se extrae la información.
 	 * @param operation Operación en la que se añade el conjunto de datos extraido.
 	 * 
-	 * @return la operación poblada. 
+	 * Nota: Este método se usa conjuntamente con el {@link #getDataString(EntityAccessPolicy, Map)}
+	 * 
+	 * @return el número de elementos extraidos.  
 	 * 
 	 * @throws SQLException
 	 * @throws DataAccessException
 	 */
-	public static Operation extractData(ResultSet resultSet, Operation operation) throws SQLException, DataAccessException {
+	public static long extractData(ResultSet resultSet, EntityAccessPolicy entityAccessPolicy, AbstractList<DataItem> data) throws SQLException, DataAccessException {
 
 		long numItems = 0;
-		AbstractList<DataItem> data = operation.getData();
 
 		if (data != null && data.size() > 0) {
 
@@ -487,6 +479,8 @@ public class GenericServiceJDBCHelper {
 				int itemIndex = 0;
 
 				if (resultSet.first()) {
+
+					EntityData entityData = entityAccessPolicy.getData();
 
 					do
 					{
@@ -503,9 +497,13 @@ public class GenericServiceJDBCHelper {
 						int i=1;
 						for (String attributeAlias : dataItem.getAttributes().keySet()) {
 
-							Object value = resultSet.getObject(i++);
+							EntityDataAttribute dataAttribute = entityData.getAttribute(attributeAlias);
 
-							dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+							if (dataAttribute != null && (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.OUTPUT)) {
+
+								Object value = resultSet.getObject(i++);
+								dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+							}
 						}
 
 						numItems++;
@@ -514,9 +512,7 @@ public class GenericServiceJDBCHelper {
 			}
 		}
 
-		operation.getMetadata().setItems(numItems);
-
-		return operation;
+		return numItems;
 	}
 
 	/**
@@ -656,7 +652,7 @@ public class GenericServiceJDBCHelper {
 			for (int i=0; i<types.size(); i++, j++) {
 				preparedStatement.setObject(j, params.get(i), types.get(i));
 			}
-			
+
 			for (int i=0; i<fndTypes.size(); i++, j++) {
 				preparedStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
 			}
@@ -693,7 +689,7 @@ public class GenericServiceJDBCHelper {
 					else {
 						recoveredQuery.append(',').append(entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
 					}
-					
+
 					attributes.add(key.getAlias());
 				}
 			}
@@ -704,7 +700,7 @@ public class GenericServiceJDBCHelper {
 		recoveredQuery.append(" WHERE ").append(fndQuery);
 
 		ResultSet resultSet = null;
-		
+
 		try {
 			preparedStatement = connection.prepareStatement(recoveredQuery.toString());
 

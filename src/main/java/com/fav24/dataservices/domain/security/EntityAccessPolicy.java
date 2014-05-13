@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.KeyItem;
+import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
 /**
@@ -218,7 +220,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	public void setFilters(EntityFilters filters) {
 		this.filters = filters;
 	}
-	
+
 	/**
 	 * Retorna la ordenación definida para esta entidad.
 	 * 
@@ -227,7 +229,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	public EntityOrdination getOrdination() {
 		return ordination;
 	}
-	
+
 	/**
 	 * Asigna la ordenación definida para esta entidad.
 	 * 
@@ -252,6 +254,36 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Comprueba que la lista de atributos indicada, esta disponible para la entidad.
+	 * 
+	 * @param attributesAliases Lista de atributos a comprobar.
+	 * 
+	 * @throws ServerException En caso de que alguno de los atributos no esté accesible.
+	 */
+	public void checkAttributesAccesibility(AbstractList<String> attributesAliases) throws ServerException {
+
+		StringBuilder notAllowedAttibutes = null;
+
+		for (String attributeAlias : attributesAliases) {
+
+			if (getData().getAttribute(attributeAlias) == null) {
+
+				if (notAllowedAttibutes == null) {
+					notAllowedAttibutes = new StringBuilder(attributeAlias);
+				}
+				else{
+					notAllowedAttibutes.append(',').append(attributeAlias);
+				}
+			}
+		}
+
+		if (notAllowedAttibutes != null) {
+			throw new ServerException(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED, 
+					String.format(AccessPolicyService.ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE, getName().getAlias(), notAllowedAttibutes));
+		}
 	}
 
 	/**

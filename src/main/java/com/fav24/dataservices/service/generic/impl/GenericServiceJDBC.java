@@ -129,12 +129,18 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
 
-		querySelect.append("SELECT ");
-
 		/*
 		 * Especificación del conjunto de campos de la query.
 		 */
-		querySelect.append(GenericServiceJDBCHelper.getDataString(operation.getMetadata().getEntity(), operation.getData() != null && operation.getData().size() > 0 ? operation.getData().get(0).getAttributes() : null));
+		StringBuilder dataString = null;
+
+		if (operation.getData() != null && operation.getData().size() > 0) {
+			dataString = GenericServiceJDBCHelper.getDataString(entityAccessPolicy, operation.getData().get(0).getAttributes());
+		}
+
+		if (dataString != null) {
+			querySelect.append("SELECT ").append(dataString);
+		}
 
 		/*
 		 * Especificación de la tabla.
@@ -197,24 +203,30 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			queryWhere.append(" ORDER BY ").append(GenericServiceJDBCHelper.getDefaultOrdinationString(entityAccessPolicy.getOrdination()));
 		}
 
-		/*
-		 *  Tratamiento del intervalo de datos a retornar.
-		 *  
-		 *  LIMIT items OFFSET offset
-		 *  
-		 *  Esta sintaxis es válida para: MySQL, MariaDB, PostgreSQL y hSQL.
-		 *  No és válida para: Oracle y SQLServer.
-		 */
-		Long items = operation.getMetadata().getItems() == null ? entityAccessPolicy.getMaxPageSize() : operation.getMetadata().getItems();
-		Long offset = operation.getMetadata().getOffset();
+		if (dataString != null) {
+			/*
+			 *  Tratamiento del intervalo de datos a retornar.
+			 *  
+			 *  LIMIT items OFFSET offset
+			 *  
+			 *  Esta sintaxis es válida para: MySQL, MariaDB, PostgreSQL y hSQL.
+			 *  No és válida para: Oracle y SQLServer.
+			 */
+			Long items = operation.getMetadata().getItems() == null ? entityAccessPolicy.getMaxPageSize() : operation.getMetadata().getItems();
+			Long offset = operation.getMetadata().getOffset();
 
-		if ((items != null && items != 0) || (offset != null && offset != 0)) {
+			if ((items != null && items != 0) || (offset != null && offset != 0)) {
 
-			queryLimit.append(" LIMIT ").append(items);
+				queryLimit.append(" LIMIT ").append(items);
 
-			if (offset != null) {
-				queryLimit.append(" OFFSET ").append(offset);
+				if (offset != null) {
+					queryLimit.append(" OFFSET ").append(offset);
+				}
 			}
+		}
+		else {
+			operation.getMetadata().setItems(0L);
+			operation.getMetadata().setOffset(0L);
 		}
 
 		Object[] params = null;
@@ -240,8 +252,6 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			}
 		}
 
-		querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
-
 		/*
 		 * Selección de los registros.
 		 */
@@ -250,21 +260,25 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		try {
 
-			preparedStatement = connection.prepareStatement(querySelect.toString());
+			if (dataString != null) {
+				
+				querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
+				preparedStatement = connection.prepareStatement(querySelect.toString());
 
-			if (params != null) {
+				if (params != null) {
 
-				for (int i=0; i<params.length; i++) {
-					preparedStatement.setObject(i+1, params[i], types[i]);
+					for (int i=0; i<params.length; i++) {
+						preparedStatement.setObject(i+1, params[i], types[i]);
+					}
 				}
+
+				resultSet = preparedStatement.executeQuery();
+
+				operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, operation.getData()));
+
+				resultSet.close();
+				preparedStatement.close();
 			}
-
-			resultSet = preparedStatement.executeQuery();
-
-			GenericServiceJDBCHelper.extractData(resultSet, operation);
-
-			resultSet.close();
-			preparedStatement.close();
 
 			// Obtención del número total de registros que satisfacen la consulta.
 			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
@@ -313,11 +327,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
 
-		final StringBuilder queryInsert = new StringBuilder();
+		StringBuilder queryInsert = new StringBuilder();
 
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
-		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+		EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
 
 		/*
 		 * Construcción de la sentencia de inserción.
@@ -342,7 +356,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		AbstractList<String> outColumns = new ArrayList<String>(initSize);
 		AbstractList<String> outAliases = new ArrayList<String>(initSize);
 
-		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(operation.getMetadata().getEntity(), firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
 
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 
@@ -573,42 +587,64 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			 */
 			if (operation.getData() != null && !operation.getData().isEmpty()) {
 
-				StringBuilder querySelect = new StringBuilder();
+				DataItem referenceDataItem = operation.getData().get(0);
 
-				querySelect.append("SELECT ");
+				StringBuilder dataString = GenericServiceJDBCHelper.getDataString(entityAccessPolicy, referenceDataItem.getAttributes());
 
-				/*
-				 * Especificación del conjunto de campos de la query.
-				 */
-				querySelect.append(GenericServiceJDBCHelper.getDataString(operation.getMetadata().getEntity(), operation.getData().get(0).getAttributes()));
+				if (dataString == null) {
 
-				/*
-				 * Especificación de la tabla.
-				 */
-				querySelect.append(queryFrom);
+					StringBuilder querySelect = new StringBuilder();
 
-				/*
-				 * Especificación de los filtros.
-				 */
-				querySelect.append(" WHERE ").append(deletedColumn).append("=? AND (").append(filter).append(')');
+					querySelect.append("SELECT ");
 
-				preparedStatement = connection.prepareStatement(querySelect.toString());
+					/*
+					 * Especificación del conjunto de campos de la query.
+					 */
+					querySelect.append(dataString);
 
-				preparedStatement.setObject(1, now, deletedType);
+					/*
+					 * Especificación de la tabla.
+					 */
+					querySelect.append(queryFrom);
 
-				if (params != null) {
+					/*
+					 * Especificación de los filtros.
+					 */
+					querySelect.append(" WHERE ").append(deletedColumn).append("=? AND (").append(filter).append(')');
 
-					for (int i=0; i<params.length; i++) {
-						preparedStatement.setObject(i+2, params[i], types[i]);
+					preparedStatement = connection.prepareStatement(querySelect.toString());
+
+					preparedStatement.setObject(1, now, deletedType);
+
+					if (params != null) {
+
+						for (int i=0; i<params.length; i++) {
+							preparedStatement.setObject(i+2, params[i], types[i]);
+						}
+					}
+
+					resultSet = preparedStatement.executeQuery();
+
+					operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, operation.getData()));
+
+					resultSet.close();
+					preparedStatement.close();
+				}
+				else {
+					while(operation.getData().size() < operation.getMetadata().getItems()) {
+						operation.getData().add(new DataItem(referenceDataItem));
 					}
 				}
+			}
+			else {
 
-				resultSet = preparedStatement.executeQuery();
+				if (operation.getData() == null) {
+					operation.setData(new ArrayList<DataItem>(operation.getMetadata().getItems().intValue()));
+				}
 
-				GenericServiceJDBCHelper.extractData(resultSet, operation);
-
-				resultSet.close();
-				preparedStatement.close();
+				while(operation.getData().size() < operation.getMetadata().getItems()) {
+					operation.getData().add(new DataItem());
+				}
 			}
 
 			/*

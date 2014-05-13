@@ -11,8 +11,6 @@ import com.fav24.dataservices.domain.security.EntityDataAttribute.Synchronizatio
 
 /**
  * Clase que contiene la estructura de un item de una entidad.
- * 
- * @author Fav24
  */
 public class DataItem implements Organizable, Comparable<DataItem>, Serializable {
 
@@ -22,14 +20,22 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 
 
 	/**
+	 * Constructor por defecto.
+	 */
+	public DataItem() {
+
+		this.attributes = null;
+	}
+	
+	/**
 	 * Constructor de copia.
 	 * 
 	 * @param reference Instancia de referencia.
 	 */
 	public DataItem(DataItem reference) {
-
+		
 		if (reference.attributes != null) {
-
+			
 			this.attributes = new TreeMap<String, Object>();
 			this.attributes.putAll(reference.attributes);
 		}
