@@ -69,7 +69,6 @@
 		<xsd:sequence>
 			<xsd:element name="Attribute" type="TAttribute" minOccurs="1" maxOccurs="unbounded"/>
 		</xsd:sequence>
-		<xsd:attribute name="Primary" type="xsd:boolean" use="optional" default="true"/>
 	</xsd:complexType>
 	<!-- -->
 	<xsd:complexType name="TFilters">

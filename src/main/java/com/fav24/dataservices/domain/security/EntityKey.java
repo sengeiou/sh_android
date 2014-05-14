@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public class EntityKey {
 
-	private boolean isPrimary;
 	private AbstractList<EntityAttribute> key;
 	private Map<String, EntityAttribute> entityKeyByAlias;
 
@@ -22,7 +21,6 @@ public class EntityKey {
 	 * Contructor por defecto.
 	 */
 	public EntityKey() {
-		isPrimary = false;
 		key = new ArrayList<EntityAttribute>();
 		entityKeyByAlias = new HashMap<String, EntityAttribute>();
 	}
@@ -36,20 +34,18 @@ public class EntityKey {
 
 		if (entityKey.key != null) {
 
-			this.isPrimary = entityKey.isPrimary;
 			this.key = new ArrayList<EntityAttribute>();
 			this.entityKeyByAlias = new HashMap<String, EntityAttribute>();
 
 			for (EntityAttribute attribute : entityKey.key) {
-				
+
 				EntityAttribute attributeCopy = new EntityAttribute(attribute);
-				
+
 				this.key.add(attributeCopy);	
 				this.entityKeyByAlias.put(attributeCopy.getAlias(), attributeCopy);	
 			}
 		}
 		else {
-			this.isPrimary = false;
 			this.key = null;
 			this.entityKeyByAlias = null;
 		}
@@ -134,24 +130,6 @@ public class EntityKey {
 	}
 
 	/**
-	 * Retorna true o false en función de si se trata o no de una clave primaria.
-	 * 
-	 * @return true o false en función de si se trata o no de una clave primaria.
-	 */
-	public boolean isPrimary() {
-		return isPrimary;
-	}
-
-	/**
-	 * Indica true o false en función de si se trata o no de una clave primaria.
-	 * 
-	 * @param isPrimary Valor a asignar.
-	 */
-	public void setPrimary(boolean isPrimary) {
-		this.isPrimary = isPrimary;
-	}
-	
-	/**
 	 * Retorna la estructura que contiene el conjunto de attributos de una clave.
 	 * 
 	 * Nota: no usar la lista de retorno para añadir atributos.
@@ -169,11 +147,11 @@ public class EntityKey {
 	 * @param keyAttribute Atributo clave a añadir.
 	 */
 	public void addKeyAttribute(EntityAttribute keyAttribute) {
-		
+
 		key.add(keyAttribute);
 		entityKeyByAlias.put(keyAttribute.getAlias(), keyAttribute);
 	}
-	
+
 	/**
 	 * Retorna la lista de nombre de campos que conforman la clave.
 	 * 

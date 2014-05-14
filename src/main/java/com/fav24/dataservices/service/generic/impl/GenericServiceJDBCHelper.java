@@ -49,7 +49,7 @@ public class GenericServiceJDBCHelper {
 	 * 
 	 * Nota: Este método se usa conjuntamente con el {@link #extractData(ResultSet, EntityAccessPolicy, AbstractList)}
 	 * 
-	 * @return una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
+	 * @return una cadena de texto con el conjunto de campos de datos.
 	 */
 	public static StringBuilder getDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes) throws ServerException {
 
@@ -139,7 +139,7 @@ public class GenericServiceJDBCHelper {
 	}
 
 	/**
-	 * Retorna una cadena de texto con el conjunto de campos clave de la entidad indicada en FND.
+	 * Retorna una cadena de texto con el conjunto de campos clave de la entidad indicada en FNC.
 	 * 
 	 * @param entity Nombre de la entidad a la que pertenece la lista de claves.
 	 * @param keys Lista de claves a resolver.
@@ -594,11 +594,15 @@ public class GenericServiceJDBCHelper {
 		StringBuilder fndQuery = null;
 		AbstractList<Integer> fndTypes = new ArrayList<Integer>();
 		AbstractList<Object> fndParams = new ArrayList<Object>();
-
+		
 		for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
 
 			StringBuilder keyQuery = null;
 
+			Integer[] keyTypes = null;
+			Object[] keyParams = null;
+			int i = 0;
+			
 			for (EntityAttribute key : entityKey.getKey()) {
 
 				Object value = dataItem.getAttributes().get(key.getAlias());
@@ -610,14 +614,23 @@ public class GenericServiceJDBCHelper {
 					if (keyQuery == null) {
 
 						keyQuery = new StringBuilder("(").append(columnName).append("=?");
+						keyTypes = new Integer[entityKey.getKey().size()];
+						keyParams = new Object[keyTypes.length];
 					}
 					else {
 
 						keyQuery.append(" AND ").append(columnName).append("=?");
 					}
 
-					fndTypes.add(entityInformation.dataFields.get(columnName));
-					fndParams.add(value);
+					keyTypes[i] = entityInformation.dataFields.get(columnName);
+					keyParams[i] = value;
+					i++;
+				}
+				else {
+					keyTypes = null;
+					keyParams = null;
+					keyQuery = null;
+					break;
 				}
 			}
 
@@ -630,6 +643,12 @@ public class GenericServiceJDBCHelper {
 				}
 				else {
 					fndQuery.append(" OR ").append(keyQuery);
+				}
+				
+				for (i=0; i < keyTypes.length; i++) {
+					
+					fndTypes.add(keyTypes[i]);
+					fndParams.add(keyParams[i]);
 				}
 			}
 		}
