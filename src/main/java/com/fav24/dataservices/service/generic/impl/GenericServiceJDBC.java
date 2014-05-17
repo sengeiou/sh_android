@@ -64,6 +64,9 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	private Connection connection;
 
 
+	/**
+	 * Constructor por defecto.
+	 */
 	public GenericServiceJDBC() {
 
 	}
@@ -686,8 +689,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		}
 
 		DataItem referenceItem = new DataItem(operation.getData().get(0));
-		referenceItem.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), System.currentTimeMillis());
-		
+
 		if (referenceItem.getAttributes() == null || referenceItem.getAttributes().size() == 0) {
 			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
@@ -727,7 +729,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		while (primaryKeyColumns.hasNext()) {
 
-			querySelect.append(',').append(primaryKeyColumns);
+			querySelect.append(',').append(primaryKeyColumns.next());
 		}
 
 		// - Atributos con #Direction.OUTPUT. (Para poder informar los atributos de solo salida en la operación de vuelta)
@@ -741,9 +743,17 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			if (dataAttribute == null) {
 				entityAccessPolicy.checkAttributesAccesibility(new ArrayList<String>(attributes.keySet()));
 			}
-			else if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
+			else {
 
-				querySelect.append(',').append(dataAttribute.getName());
+				if (!SynchronizationField.isSynchronizationField(dataAttribute.getAlias())) {
+
+					if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
+
+						if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
+							querySelect.append(',').append(dataAttribute.getName());
+						}
+					}
+				}
 			}
 		}
 
@@ -818,14 +828,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			 */
 			Timestamp now = new Timestamp(System.currentTimeMillis());
 			now.setNanos(0);
-			
+
 			resultSet = preparedStatement.executeQuery();
 
 			long numItemns = 0;
 			if (resultSet.first()) {
 
 				operation.getData().clear();
-				
+
 				do {
 
 					/*
@@ -833,9 +843,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 					 */
 					DataItem dataItem = update(connection, resultSet, now, referenceItem, entityAccessPolicy, entityInformation);
 
-					operation.getData().add(dataItem);
-					
-					numItemns++;
+					if (dataItem != null) {
+
+						operation.getData().add(dataItem);
+						numItemns++;
+					}
 
 				} while (resultSet.next());
 			}
@@ -906,12 +918,12 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 		Timestamp localModified = resultSet.getTimestamp(modifiedColumn);
 		localModified.setNanos(0);
-		
+
 		Timestamp remoteModified = new Timestamp((Long)referenceItem.getAttributes().get(SynchronizationField.MODIFIED.getSynchronizationField()));
 		remoteModified.setNanos(0);
-		
+
 		Long localRevision = resultSet.getLong(revisionColumn);
-		Long remoteRevision = (Long)referenceItem.getAttributes().get(SynchronizationField.REVISION.getSynchronizationField());
+		Long remoteRevision = ((Number)referenceItem.getAttributes().get(SynchronizationField.REVISION.getSynchronizationField())).longValue();
 
 		// Comprobación de si gana el registro local, o el remoto.
 		if (incommingItemWins(localModified, remoteModified, 
@@ -931,7 +943,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			AbstractList<Integer> types = new ArrayList<Integer>();
 			AbstractList<Object> params = new ArrayList<Object>();
 
-			StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append("SET ");
+			StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ");
 			queryUpdate.append(revisionColumn).append("=?,").append(modifiedColumn).append("=?");
 
 			types.add(revisionColumnType);
@@ -954,7 +966,8 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 							updatedAttributes.put(attributeAlias, resultSet.wasNull() ? null : value);
 						}
-						else {
+						else if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
+
 							types.add(entityInformation.dataFields.get(dataAttribute.getName()));
 							params.add(updatedAttributes.get(attributeAlias));
 
@@ -971,7 +984,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			Iterator<Entry<String, Integer>> primaryKeyColumns = entityInformation.primaryKey.entrySet().iterator();
 
 			Entry<String, Integer> primaryKeyColumn = primaryKeyColumns.next();
-			queryUpdate.append(primaryKeyColumn).append("=?");
+			queryUpdate.append(primaryKeyColumn.getKey()).append("=?");
 
 			types.add(primaryKeyColumn.getValue());
 			params.add(resultSet.getObject(primaryKeyColumn.getKey()));
@@ -980,7 +993,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				primaryKeyColumn = primaryKeyColumns.next();
 
-				queryUpdate.append(" AND ").append(primaryKeyColumn).append("=?");
+				queryUpdate.append(" AND ").append(primaryKeyColumn.getKey()).append("=?");
 
 				types.add(primaryKeyColumn.getValue());
 				params.add(resultSet.getObject(primaryKeyColumn.getKey()));
@@ -993,6 +1006,10 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 
 				for (int i=0; i<params.size(); i++) {
 					preparedStatement.setObject(i+1, params.get(i), types.get(i));
+				}
+
+				if (preparedStatement.executeUpdate() != 1) {
+					updatedItem = null;
 				}
 			}
 			catch (SQLException e) {
