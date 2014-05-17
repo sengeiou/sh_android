@@ -282,7 +282,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				preparedStatement.close();
 			}
 
-			// Obtención del número total de registros que satisfacen la consulta.
+			// Obtención del número total de registros total sin contar la paginación.
 			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
 			preparedStatement = connection.prepareStatement(countQuery.toString());
 
@@ -463,7 +463,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			// Información de totales.
 			operation.getMetadata().setItems(Long.valueOf(operation.getData().size()));
 
-			// Obtención del número total de registros que satisfacen la consulta.
+			// Obtención del número total de registros total de la entidad.
 			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityAccessPolicy.getName().getName());
 			preparedStatement = connection.prepareStatement(countQuery.toString());
 
@@ -845,7 +845,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			resultSet.close();
 			preparedStatement.close();
 
-			// Obtención del número total de registros que satisfacen la consulta.
+			// Obtención del número total de registros que satisfacen el filtrado por el que se realiza la operación de modificación.
 			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
 			preparedStatement = connection.prepareStatement(countQuery.toString());
 
