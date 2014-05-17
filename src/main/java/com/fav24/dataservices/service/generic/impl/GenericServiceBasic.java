@@ -1,5 +1,6 @@
 package com.fav24.dataservices.service.generic.impl;
 
+import java.sql.Timestamp;
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Map;
@@ -99,21 +100,21 @@ public abstract class GenericServiceBasic implements GenericService {
 	protected final Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
 
 		if (operation.getMetadata() == null) {
-			
+
 			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "metadata"));
 		}
-		
+
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		if (entityAccessPolicy == null) {
 			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "entity"));
 		}
-		
+
 		if (!entityAccessPolicy.getAllowedOperations().contains(operation.getMetadata().getOperation())) {
 			throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), 
 					operation.getMetadata().getEntity()));
 		}
-		
+
 		try {
 			systemService.getWorkloadMeter().incTotalIncommingOperations();
 
@@ -281,8 +282,38 @@ public abstract class GenericServiceBasic implements GenericService {
 	 */
 	protected Operation updateCreate(Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
-		
+
 	}
+
+	/**
+	 * Retorna true o false en función de si el registro entrante prevalece o no sobre el existente.
+	 * 
+	 * @param localModified Fecha de última modificación del registro existente.
+	 * @param remoteModified Fecha de última modificación del registro entrante.
+	 * @param localRevision Número de revisión del registro existente.
+	 * @param remoteRevision Número de revisión del registro entrante.
+	 * @param positiveRevisionThreshold Margen a sumar a la revisión de un elemento entrante antes de su comparación con el existente, 
+	 * 									en caso de que el elemento entrante tenga una fecha de modificación posterior al existente.
+	 * @param negativeRevisionThreshold Margen a restar a la revisión de un elemento entrante antes de su comparación con el existente, 
+	 * 									en caso de que el elemento entrante tenga una fecha de modificación anterior al existente.
+	 * 
+	 * @return true o false en función de si el registro entrante prevalece o no sobre el existente.
+	 */
+	protected boolean incommingItemWins(Timestamp localModified, Timestamp remoteModified, Long localRevision, Long remoteRevision, 
+			Long positiveRevisionThreshold, Long negativeRevisionThreshold) {
+
+		if (remoteModified.after(localModified)) {
+
+			return ((remoteRevision + positiveRevisionThreshold) >= localRevision);
+		}
+		else if (remoteModified.before(localModified)) {
+
+			return ((remoteRevision - negativeRevisionThreshold) >= localRevision);
+		}
+
+		return (remoteRevision > localRevision);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

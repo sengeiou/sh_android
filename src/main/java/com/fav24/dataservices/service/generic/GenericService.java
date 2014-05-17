@@ -48,6 +48,10 @@ public interface GenericService {
 	public static final String ERROR_CREATE_DUPLICATE_ROW_MESSAGE = "Existe al menos un registro con al menos un una de las claves indicadas. <%s>.";
 	public static final String ERROR_CREATE_REFURBISHED_ROW_LOST = "G013";
 	public static final String ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE = "No ha sido posible localizar el registro recuperado. <%s>.";
+	public static final String ERROR_INVALID_UPDATE_REQUEST = "G014";
+	public static final String ERROR_INVALID_UPDATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a modificar para la entidad <%s>.";
+	public static final String ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY = "G015";
+	public static final String ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY_MESSAGE = "No es posible modificar datos de la entidad <%s>, debido a que no tiene definida ninguna clave primaria.";
 	
 	/**
 	 * Procesa en contenido de una estructura Generic.

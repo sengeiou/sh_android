@@ -9,6 +9,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
@@ -52,6 +53,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		protected Map<String, Integer> dataFields;
 		protected Map<String, Object> dataFieldsDefaults;
 		protected Map<String, Set<String>> keys;
+		protected Map<String, Integer> primaryKey;
 		protected Map<String, Set<String>> indexes;
 		protected Map<String, Integer> keyFields;
 		protected Map<String, Integer> filterFields;
@@ -120,14 +122,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	@Override
 	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
 
-		final StringBuilder querySelect = new StringBuilder();
-		final StringBuilder queryFrom = new StringBuilder();
-		final StringBuilder queryWhere = new StringBuilder();
-		final StringBuilder queryLimit = new StringBuilder();
+		StringBuilder querySelect = new StringBuilder();
+		StringBuilder queryFrom = new StringBuilder();
+		StringBuilder queryWhere = new StringBuilder();
+		StringBuilder queryLimit = new StringBuilder();
 
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
-		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+		EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
 
 		/*
 		 * Especificación del conjunto de campos de la query.
@@ -261,7 +263,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 		try {
 
 			if (dataString != null) {
-				
+
 				querySelect.append(queryFrom).append(queryWhere).append(queryLimit);
 				preparedStatement = connection.prepareStatement(querySelect.toString());
 
@@ -492,16 +494,14 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	@Override
 	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
 
-		final StringBuilder queryDelete = new StringBuilder();
-		final StringBuilder queryFrom = new StringBuilder();
-		final StringBuilder queryWhere = new StringBuilder();
+		StringBuilder queryDelete = new StringBuilder();
+		StringBuilder queryFrom = new StringBuilder();
+		StringBuilder queryWhere = new StringBuilder();
 
 		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
-		final EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+		EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
 
-		Long millisecondsSinceEpoch = System.currentTimeMillis();
-		Timestamp now = new Timestamp(millisecondsSinceEpoch);
 		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
 
 		/*
@@ -568,6 +568,7 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			preparedStatement = connection.prepareStatement(queryDelete.toString());
 
 			int deletedType = entityInformation.dataFields.get(deletedColumn);
+			Timestamp now = new Timestamp(System.currentTimeMillis());
 			now.setNanos(0); // Para evitar problemas de compatibilidad entre la escritura en DB y la lectura o selección.
 			preparedStatement.setObject(1, now, deletedType);
 
@@ -678,6 +679,361 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 	 * {@inheritDoc}
 	 */
 	@Override
+	protected Operation update(Requestor requestor, Operation operation) throws ServerException {
+
+		if (operation.getData() == null || operation.getData().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		DataItem referenceItem = new DataItem(operation.getData().get(0));
+		referenceItem.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), System.currentTimeMillis());
+		
+		if (referenceItem.getAttributes() == null || referenceItem.getAttributes().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+		EntityJDBCInformation entityInformation = entitiesInformation.get(entityAccessPolicy.getName().getName());
+
+		if (entityInformation.primaryKey == null || entityInformation.primaryKey.size() == 0) {
+			throw new ServerException(GenericService.ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY, String.format(GenericService.ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		/*
+		 * Realizar una selección de los registros a modificar.
+		 * 
+		 * Columnas a incluir: 
+		 * - Conjunto completo de atributos de auditoría: #SynchronizationField.REVISION, #SynchronizationField.BIRTH, #SynchronizationField.MODIFIED, #SynchronizationField.DELETED.
+		 * - Conjunto de attributos que conforman la clave primaria.
+		 * - Atributos con #Direction.OUTPUT. (Para poder informar los atributos de solo salida en la operación de vuelta)
+		 * 
+		 * Filtrado:
+		 * - Campo csys_deleted a IS NULL, para garantizar que únicamente se permiten modificar elementos eliminados.
+		 * - Criterios indicados en la petición, para cumplir con lo solicitado.
+		 */
+
+		StringBuilder querySelect = new StringBuilder("SELECT ");
+
+		// - Conjunto completo de atributos de auditoría: #SynchronizationField.REVISION, #SynchronizationField.BIRTH, #SynchronizationField.MODIFIED, #SynchronizationField.DELETED.
+		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
+		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
+		String modifiedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName(); // MODIFIED
+		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName(); // DELETED
+
+		querySelect.append(revisionColumn).append(',').append(birthColumn).append(',').append(modifiedColumn).append(',').append(deletedColumn);
+
+		// - Conjunto de attributos que conforman la clave primaria.
+		Iterator<String> primaryKeyColumns = entityInformation.primaryKey.keySet().iterator();
+
+		while (primaryKeyColumns.hasNext()) {
+
+			querySelect.append(',').append(primaryKeyColumns);
+		}
+
+		// - Atributos con #Direction.OUTPUT. (Para poder informar los atributos de solo salida en la operación de vuelta)
+		NavigableMap<String, Object> attributes = referenceItem.getAttributes();
+		Iterator<String> attributeAliases = attributes.keySet().iterator();
+
+		while (attributeAliases.hasNext()) {
+
+			EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAliases.next());
+
+			if (dataAttribute == null) {
+				entityAccessPolicy.checkAttributesAccesibility(new ArrayList<String>(attributes.keySet()));
+			}
+			else if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
+
+				querySelect.append(',').append(dataAttribute.getName());
+			}
+		}
+
+		StringBuilder queryFrom = new StringBuilder(" FROM ").append(entityAccessPolicy.getName().getName());
+
+		StringBuilder queryWhere = new StringBuilder(" WHERE ").append(deletedColumn).append(" IS NULL");
+
+		/*
+		 * Especificación del filtro.
+		 */
+		queryWhere.append(" AND (");
+
+		AbstractList<String> columns = new ArrayList<String>();
+		AbstractList<Object> values = new ArrayList<Object>();
+
+		boolean useKeys = operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0;
+
+		if (useKeys) {
+
+			StringBuilder key = GenericServiceJDBCHelper.getKeyString(operation.getMetadata().getEntity(), operation.getMetadata().getKey(), columns, values);
+
+			queryWhere.append(key);
+		}
+		else if (operation.getMetadata().getFilter() != null) {
+
+			StringBuilder filter = GenericServiceJDBCHelper.getFilterSetString(operation.getMetadata().getEntity(), operation.getMetadata().getFilter(), columns, values);
+
+			queryWhere.append(filter);
+		}
+		else {
+			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
+		}
+
+		queryWhere.append(')');
+
+		int[] types = new int[columns.size()];
+		Object[] params = new Object[types.length];
+
+		if (useKeys) {
+
+			for (int i=0; i<columns.size(); i++) {
+				types[i] = entityInformation.keyFields.get(columns.get(i));
+				params[i] = GenericServiceJDBCHelper.translateToType(types[i], values.get(i));
+			}
+		}
+		else {
+
+			for (int i=0; i<columns.size(); i++) {
+				types[i] = entityInformation.filterFields.get(columns.get(i));
+				params[i] = GenericServiceJDBCHelper.translateToType(types[i], values.get(i));
+			}
+		}
+
+		/*
+		 * Selección de los registros.
+		 */
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			querySelect.append(queryFrom).append(queryWhere);
+
+			preparedStatement = connection.prepareStatement(querySelect.toString());
+
+			for (int i=0; i<params.length; i++) {
+				preparedStatement.setObject(i+1, params[i], types[i]);
+			}
+
+			/*
+			 *  Sello temporal que se usará para la actualización de todos los registros entrantes que "ganen". 
+			 */
+			Timestamp now = new Timestamp(System.currentTimeMillis());
+			now.setNanos(0);
+			
+			resultSet = preparedStatement.executeQuery();
+
+			long numItemns = 0;
+			if (resultSet.first()) {
+
+				operation.getData().clear();
+				
+				do {
+
+					/*
+					 * Modificación registro a registro.
+					 */
+					DataItem dataItem = update(connection, resultSet, now, referenceItem, entityAccessPolicy, entityInformation);
+
+					operation.getData().add(dataItem);
+					
+					numItemns++;
+
+				} while (resultSet.next());
+			}
+
+			operation.getMetadata().setItems(numItemns);
+
+			resultSet.close();
+			preparedStatement.close();
+
+			// Obtención del número total de registros que satisfacen la consulta.
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			if (params != null) {
+
+				for (int i=0; i<params.length; i++) {
+					preparedStatement.setObject(i+1, params[i], types[i]);
+				}
+			}
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
+		}
+		catch (Exception e) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		}
+		finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
+
+		return operation;
+	}
+
+	/**
+	 * Modifica los datos del registro en curso, en caso de ser necesario, y añade el cambio a la estructura de la operación, manteniendo el valor del número de elementos modificados.
+	 *   
+	 * @param connection Conexión a la base de datos, con la transacción abierta para que el posible update, entre dentro.
+	 * @param resultSet Registro de base de datos sobre el que se evalua su posible actualización.
+	 * @param referenceItem Elemento de referencia que contiene la información a actualizar.
+	 * @param entityAccessPolicy Políticas de acceso de la entidad sobre la que se realiza el update.
+	 * @param entityInformation Información extraida de la fuente de datos, acerca de la entidad sobre la que se realiza el update.
+	 * 
+	 * @return un nuevo registro resultado del mecanismo de modificación. Este registro contiene, en la mayoría de los casos, información tanto del lado entrante como el existente.
+	 * @throws SQLException 
+	 */
+	private DataItem update(Connection connection, ResultSet resultSet, Timestamp now, DataItem referenceItem, EntityAccessPolicy entityAccessPolicy, EntityJDBCInformation entityInformation) throws SQLException {
+
+		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
+		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
+		String modifiedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName(); // MODIFIED
+
+		int revisionColumnType = entityInformation.dataFields.get(revisionColumn);
+		int modifiedColumnType = entityInformation.dataFields.get(modifiedColumn);
+
+		DataItem updatedItem = new DataItem(referenceItem);
+		NavigableMap<String, Object> updatedAttributes = updatedItem.getAttributes();
+
+		Timestamp localBirth = resultSet.getTimestamp(birthColumn);
+		localBirth.setNanos(0);
+
+		Timestamp localModified = resultSet.getTimestamp(modifiedColumn);
+		localModified.setNanos(0);
+		
+		Timestamp remoteModified = new Timestamp((Long)referenceItem.getAttributes().get(SynchronizationField.MODIFIED.getSynchronizationField()));
+		remoteModified.setNanos(0);
+		
+		Long localRevision = resultSet.getLong(revisionColumn);
+		Long remoteRevision = (Long)referenceItem.getAttributes().get(SynchronizationField.REVISION.getSynchronizationField());
+
+		// Comprobación de si gana el registro local, o el remoto.
+		if (incommingItemWins(localModified, remoteModified, 
+				localRevision, remoteRevision, 
+				entityAccessPolicy.getPositiveRevisionThreshold(), entityAccessPolicy.getNegativeRevisionThreshold())) {
+
+			// Gana el registro entrante.
+			Long finalRevision = localRevision == remoteRevision ? remoteRevision + 1 : remoteRevision;
+
+			// Propagación de la información de auditoría.
+			updatedAttributes.put(SynchronizationField.REVISION.getSynchronizationField(), finalRevision);
+			updatedAttributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
+			updatedAttributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), now.getTime());
+			updatedAttributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
+
+			// Propagación de la información de solo salida.
+			AbstractList<Integer> types = new ArrayList<Integer>();
+			AbstractList<Object> params = new ArrayList<Object>();
+
+			StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append("SET ");
+			queryUpdate.append(revisionColumn).append("=?,").append(modifiedColumn).append("=?");
+
+			types.add(revisionColumnType);
+			params.add(finalRevision);
+
+			types.add(modifiedColumnType);
+			params.add(now);
+
+			for (String attributeAlias : updatedAttributes.keySet()) {
+
+				if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
+
+					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+
+					if (dataAttribute != null) {
+
+						if (dataAttribute.getDirection() == Direction.OUTPUT) {
+
+							Object value = resultSet.getObject(dataAttribute.getName());
+
+							updatedAttributes.put(attributeAlias, resultSet.wasNull() ? null : value);
+						}
+						else {
+							types.add(entityInformation.dataFields.get(dataAttribute.getName()));
+							params.add(updatedAttributes.get(attributeAlias));
+
+							queryUpdate.append(',').append(dataAttribute.getName()).append("=?");
+						}
+					}
+				}
+			}
+
+			// Concatenación del filtro por clave primaira.
+			queryUpdate.append(" WHERE ");
+
+			// - Conjunto de attributos que conforman la clave primaria.
+			Iterator<Entry<String, Integer>> primaryKeyColumns = entityInformation.primaryKey.entrySet().iterator();
+
+			Entry<String, Integer> primaryKeyColumn = primaryKeyColumns.next();
+			queryUpdate.append(primaryKeyColumn).append("=?");
+
+			types.add(primaryKeyColumn.getValue());
+			params.add(resultSet.getObject(primaryKeyColumn.getKey()));
+
+			while (primaryKeyColumns.hasNext()) {
+
+				primaryKeyColumn = primaryKeyColumns.next();
+
+				queryUpdate.append(" AND ").append(primaryKeyColumn).append("=?");
+
+				types.add(primaryKeyColumn.getValue());
+				params.add(resultSet.getObject(primaryKeyColumn.getKey()));
+			}
+
+			PreparedStatement preparedStatement = null;
+
+			try {
+				preparedStatement = connection.prepareStatement(queryUpdate.toString());
+
+				for (int i=0; i<params.size(); i++) {
+					preparedStatement.setObject(i+1, params.get(i), types.get(i));
+				}
+			}
+			catch (SQLException e) {
+				throw e;
+			}
+			finally {
+				JDBCUtils.CloseQuietly(preparedStatement);
+			}
+		}
+		else { // Gana el registro existente.
+
+			// Propagación de la información de auditoría.
+			updatedAttributes.put(SynchronizationField.REVISION.getSynchronizationField(), localRevision);
+			updatedAttributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
+			updatedAttributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), localModified.getTime());
+			updatedAttributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
+
+			// Propagación de la información de salida.
+			for (String attributeAlias : updatedAttributes.keySet()) {
+
+				if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
+
+					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+
+					if (dataAttribute != null && (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH)) {
+
+						Object value = resultSet.getObject(dataAttribute.getName());
+
+						updatedAttributes.put(attributeAlias, resultSet.wasNull() ? null : value);
+					}
+				}
+			}
+		}
+
+		return updatedItem;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 
 		if (accessPolicy == null) {
@@ -719,14 +1075,73 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 						entitiesInformation.put(entityJDBCInformation.name, entityJDBCInformation);
 					}
 					else {
-						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla " + table + " no existe en la fuente de datos.");
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla <" + table + "> no existe en la fuente de datos.");
 					}
 				}
 				catch(Exception e) {
-					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de la tabla "  + table + ", debido a: " + e.getMessage());
+					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de la tabla <"  + table + ">, debido a: " + e.getMessage());
 				}
 				finally {
 					JDBCUtils.CloseQuietly(tables);
+				}
+
+				// Claves primárias de la entidad.
+				ResultSet primaryKeys = null;
+
+				try {
+
+					// Obtención de las columnas que conforman la clave primaria.
+					primaryKeys = connection.getMetaData().getPrimaryKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
+
+					if (primaryKeys.first()) {
+						entityJDBCInformation.primaryKey = new TreeMap<String, Integer>();
+
+						do {
+							entityJDBCInformation.primaryKey.put(primaryKeys.getString("COLUMN_NAME"), null);
+						} while(primaryKeys.next());
+					}
+					else {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+					}
+				}
+				catch(Exception e) {
+					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+				}
+				finally {
+					JDBCUtils.CloseQuietly(primaryKeys);
+				}
+
+				// Obtención de los tipos de datos de las columnas que conforman la clave primaria.
+				if (entityJDBCInformation.primaryKey != null) {
+
+					ResultSet columns = null;
+
+					try {
+						columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
+
+						if (columns.first()) {
+
+							do {
+
+								String columnName = columns.getString("COLUMN_NAME");
+
+								if (entityJDBCInformation.primaryKey.containsKey(columnName)) {
+
+									entityJDBCInformation.primaryKey.put(columnName, columns.getInt("DATA_TYPE"));
+								}
+
+							} while(columns.next());
+						}
+						else {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+						}
+					}
+					catch(Exception e) {
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+					}
+					finally {
+						JDBCUtils.CloseQuietly(columns);
+					}
 				}
 
 				// Atributos de datos de la entidad.

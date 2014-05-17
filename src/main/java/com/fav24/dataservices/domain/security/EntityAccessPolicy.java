@@ -78,6 +78,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	private Boolean onlyByKey;
 	private Boolean onlySpecifiedFilters;
 	private Long maxPageSize;
+	private Long positiveRevisionThreshold;
+	private Long negativeRevisionThreshold;
 
 
 	/**
@@ -94,6 +96,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		this.onlyByKey = true;
 		this.onlySpecifiedFilters = true;
 		this.maxPageSize = 0L;
+		this.positiveRevisionThreshold = 0L;
+		this.negativeRevisionThreshold = 0L;
 	}
 
 	/**
@@ -338,6 +342,54 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setMaxPageSize(Long pageSize) {
 		this.maxPageSize = pageSize;
+	}
+
+	/**
+	 * Retorna el margen a sumar a la revisión de un elemento remoto antes de su comparación con el local, 
+	 * en caso de que el elemento remoto tenga una fecha de modificación posterior al local.
+	 * 
+	 * Este margen asociado a la comparación entre revisiones, hace recaer un mayor peso a la comparación por fecha. 
+	 *  
+	 * @return margen a sumar a la revisión remota antes de su comparación con la local.
+	 */
+	public Long getPositiveRevisionThreshold() {
+		return positiveRevisionThreshold;
+	}
+
+	/**
+	 * Asigna el margen a sumar a la revisión de un elemento remoto antes de su comparación con el local, 
+	 * en caso de que el elemento remoto tenga una fecha de modificación posterior al local.
+	 * 
+	 * Este margen asociado a la comparación entre revisiones, hace recaer un mayor peso a la comparación por fecha.
+	 * 
+	 * @param positiveRevisionThreshold Margen a asignar.
+	 */
+	public void setPositiveRevisionThreshold(Long positiveRevisionThreshold) {
+		this.positiveRevisionThreshold = positiveRevisionThreshold;
+	}
+
+	/**
+	 * Retorna el margen a restar a la revisión de un elemento remoto antes de su comparación con el local, 
+	 * en caso de que el elemento remoto tenga una fecha de modificación anterior al local.
+	 * 
+	 * Este margen asociado a la comparación entre revisiones, hace recaer un mayor peso a la comparación por revisión. 
+	 *  
+	 * @return margen a restar a la revisión remota antes de su comparación con la local.
+	 */
+	public Long getNegativeRevisionThreshold() {
+		return negativeRevisionThreshold;
+	}
+
+	/**
+	 * Asigna el margen a restar a la revisión de un elemento remoto antes de su comparación con el local, 
+	 * en caso de que el elemento remoto tenga una fecha de modificación anterior al local.
+	 * 
+	 * Este margen asociado a la comparación entre revisiones, hace recaer un mayor peso a la comparación por revisión.
+	 * 
+	 * @param negativeRevisionThreshold Margen a asignar.
+	 */
+	public void setNegativeRevisionThreshold(Long negativeRevisionThreshold) {
+		this.negativeRevisionThreshold = negativeRevisionThreshold;
 	}
 
 	/**
