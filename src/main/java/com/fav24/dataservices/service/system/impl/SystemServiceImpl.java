@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.monitoring.SystemMonitoring;
+import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 import com.fav24.dataservices.service.system.SystemService;
 
@@ -41,6 +42,14 @@ public class SystemServiceImpl implements SystemService {
 	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SystemActivityMonitoring.getSystemMemoryStatus(offset, timeRange, period);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CpuMeter getCpuMeter() {
+		return SystemActivityMonitoring.getCpuMeter();
 	}
 
 	/**

@@ -4,7 +4,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.fav24.dataservices.monitoring.Meter;
@@ -49,7 +51,6 @@ public final class CpuMeter extends Meter implements Runnable
 	private static final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
 	private final long interval;
-	private final long threadId;
 	private final HashMap<Long, Times> history = new HashMap<Long, Times>();
 
 	private long totalCpuTime;
@@ -57,7 +58,7 @@ public final class CpuMeter extends Meter implements Runnable
 	private long totalSystemTime;
 	private long measureTime;
 	private Thread measureThread;
-
+	private Set<Long> excludedThreads;
 
 	/**
 	 * Constructor por defecto.
@@ -74,14 +75,35 @@ public final class CpuMeter extends Meter implements Runnable
 	 */
 	public CpuMeter(final long interval) {
 
+		this.excludedThreads = new HashSet<Long>();
+		
 		this.interval = interval;
 		this.measureThread = new Thread(this, "Thread cpu time meter");
-		this.threadId = this.measureThread.getId();
 		this.measureThread.setDaemon(true);
+		
+		this.excludeThread(this.measureThread.getId());
 		
 		this.measureThread.start();
 	}
 
+	/**
+	 * Añade el id indicado al conjunto de threads a ignorar en la medida.
+	 * 
+	 * @param id Identificador del thread a ignorar.
+	 */
+	public void excludeThread(long id) {
+		excludedThreads.add(id);
+	}
+	
+	/**
+	 * Elimina el id indicado al conjunto de threads a ignorar en la medida.
+	 * 
+	 * @param id Identificador del thread a ignorar.
+	 */
+	public void includeThread(long id) {
+		excludedThreads.remove(id);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,7 +156,7 @@ public final class CpuMeter extends Meter implements Runnable
 
 		for (long id : ids) {
 
-			if (id == threadId) {
+			if (excludedThreads.contains(id)) {
 				continue;   // Se excluye este hilo.
 			}
 

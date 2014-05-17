@@ -30,7 +30,8 @@ function initCPUMonitor(period, timeRange, cpuHistoryPlotElement, cpuLoadInstant
 		CPUMonitor.cpuLoadInstantPlot = createCPULoadInstantPlot(cpuLoadInstantPlotElement);
 	}
 
-	stopCPUMonitor();
+	stopCPUHistoryMonitor();
+	stopCPUInstantMonitor();
 }
 
 /**
@@ -257,47 +258,84 @@ function createCPULoadInstantPlot(plotElement) {
 }
 
 /**
+ * Detiene/Reanuda el monitor del histórico de CPU en función del parámetro de entrada.
+ *  
+ * @param freeze True o false para detener/reanudar el monitor del histórico de CPU.
+ */
+function freezeCPUHistoryMonitor(freeze) {
+
+	if (freeze) {
+		stopCPUHistoryMonitor();
+	} else {
+		startCPUHistoryMonitor();
+	}
+}
+
+/**
  * Detiene/Reanuda el monitor de CPU en función del parámetro de entrada.
  *  
  * @param freeze True o false para detener/reanudar el monitor de CPU.
  */
-function freezeCPUMonitor(freeze) {
-
+function freezeCPUInstantMonitor(freeze) {
+	
 	if (freeze) {
-		stopCPUMonitor();
+		stopCPUInstantMonitor();
 	} else {
-		startCPUMonitor();
+		startCPUInstantMonitor();
+	}
+}
+
+/**
+ * Detiene el monitor del histórico de CPU.
+ */
+function stopCPUHistoryMonitor() {
+
+	if (App.cpuHistoryMonitorInterval) {
+		clearInterval(App.cpuHistoryMonitorInterval);
+		App.cpuHistoryMonitorInterval = null;
 	}
 }
 
 /**
  * Detiene el monitor de CPU.
  */
-function stopCPUMonitor() {
-
-	if (App.cpuMonitorInterval) {
-		clearInterval(App.cpuMonitorInterval);
-		App.cpuMonitorInterval = null;
+function stopCPUInstantMonitor() {
+	
+	if (App.cpuInstantMonitorInterval) {
+		clearInterval(App.cpuInstantMonitorInterval);
+		App.cpuInstantMonitorInterval = null;
 	}
+}
+
+/**
+ * Reanuda el monitor del histórico de CPU.
+ */
+function startCPUHistoryMonitor() {
+	
+	stopCPUHistoryMonitor();
+	App.cpuHistoryMonitorInterval = setInterval(function() { 		
+		
+		// Historial de actividad de la CPU.
+		if (CPUMonitor.cpuHistoryPlot) {
+			CPUMonitor.cpuHistoryPlot.replot({ data: [] });
+		}
+		
+	}, 1000);
 }
 
 /**
  * Reanuda el monitor de CPU.
  */
-function startCPUMonitor() {
-
-	stopCPUMonitor();
-	App.cpuMonitorInterval = setInterval(function() { 		
-
-		// Historial de actividad de la CPU.
-		if (CPUMonitor.cpuHistoryPlot) {
-			CPUMonitor.cpuHistoryPlot.replot({ data: [] });
-		}
-
+function startCPUInstantMonitor() {
+	
+	stopCPUInstantMonitor();
+	App.cpuInstantMonitorInterval = setInterval(function() { 		
+		
 		// Carga instantanea de la CPU.
 		if (CPUMonitor.cpuLoadInstantPlot) {
 			CPUMonitor.cpuLoadInstantPlot.replot({ data: [] });
 		}
-
+		
 	}, 1000);
 }
+

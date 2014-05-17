@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 
 
@@ -67,6 +68,13 @@ public interface SystemService {
 	 */
 	public WorkloadMeter getWorkloadMeter();
 
+	/**
+	 * Retorna el medidor de consumo de la CPU.
+	 * 
+	 * @return el medidor de consumo de la CPU.
+	 */
+	public CpuMeter getCpuMeter();
+	
 	/**
 	 * Retorna la información del trabajo realizado por el sistema
 	 * en este mismo instante.

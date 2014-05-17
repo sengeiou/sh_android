@@ -49,6 +49,10 @@ public class SystemMonitoring {
 
 			public void run() {
 
+				long threadId = Thread.currentThread().getId();
+				
+				cpuMeter.excludeThread(threadId);
+
 				// Memory information.
 				try {
 					SamplesRegister.registerSample(memoryMeter, new MonitorSample(memoryMeter.getSystemMemoryStatus()));
@@ -64,7 +68,7 @@ public class SystemMonitoring {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				// Workload information.
 				try {
 					SamplesRegister.registerSample(workloadMeter, new MonitorSample(workloadMeter.getSystemWorkload()));
@@ -72,6 +76,8 @@ public class SystemMonitoring {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				cpuMeter.includeThread(threadId);
 			}
 		}, 0L, SECOND_CADENCE);
 
@@ -90,7 +96,11 @@ public class SystemMonitoring {
 		tenSecondsResolutionTimer.schedule(new TimerTask() {
 
 			public void run() {
-
+				
+				long threadId = Thread.currentThread().getId();
+				
+				cpuMeter.excludeThread(threadId);
+				
 				// Storage information.
 				for(StorageMeter storageMeter : storageMeters) {
 
@@ -101,6 +111,8 @@ public class SystemMonitoring {
 						e.printStackTrace();
 					}
 				}
+				
+				cpuMeter.includeThread(threadId);
 			}
 		}, 0L, SECOND_CADENCE * 10);
 	}
@@ -132,6 +144,16 @@ public class SystemMonitoring {
 	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SamplesRegister.getSampleTimeSegment(memoryMeter, offset, timeRange, period);
+	}
+
+	/**
+	 * Retorna el medidor de CPU del sistema.
+	 * 
+	 * @return el medidor de CPU del sistema.
+	 */	
+	public CpuMeter getCpuMeter() {
+
+		return cpuMeter;
 	}
 
 	/**
@@ -169,7 +191,7 @@ public class SystemMonitoring {
 	public WorkloadMeter getWorkloadMeter() {
 		return workloadMeter;
 	}
-	
+
 	/**
 	 * Retorna la información del trabajo realizado por el sistema
 	 * en este mismo instante.
@@ -177,10 +199,10 @@ public class SystemMonitoring {
 	 * @return la información del trabajo realizado por el sistema.
 	 */
 	public MonitorSample getSystemWorkload() {
-		
+
 		return SamplesRegister.getLastSample(workloadMeter);
 	}
-	
+
 	/**
 	 * Retorna la información del trabajo realizado por el sistema
 	 * 
@@ -193,7 +215,7 @@ public class SystemMonitoring {
 	 * @throws ServerException 
 	 */
 	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException {
-		
+
 		return SamplesRegister.getSampleTimeSegment(workloadMeter, offset, timeRange, period);
 	}
 

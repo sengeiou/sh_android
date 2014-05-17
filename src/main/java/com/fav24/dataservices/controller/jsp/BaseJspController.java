@@ -9,8 +9,6 @@ import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Controlador base.
- * 
- * @author Fav24
  */
 public class BaseJspController {
 

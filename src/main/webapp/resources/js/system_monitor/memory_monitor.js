@@ -37,7 +37,8 @@ function initMemoryMonitor(period, timeRange, memoryHistoryPlotElement, committe
 		MemoryMonitor.usedMemoryInstantPlot = createUsedMemoryInstantPlot(usedMemoryInstantPlotElement);
 	}
 
-	stopMemoryMonitor();
+	stopMemoryHistoryMonitor();
+	stopMemoryInstantMonitor();
 }
 
 /**
@@ -373,49 +374,82 @@ function createUsedMemoryInstantPlot(plotElement) {
 }
 
 /**
+ * Detiene/Reanuda el monitor del histórico de memoria en función del parámetro de entrada.
+ *  
+ * @param freeze True o false para detener/reanudar el monitor del histórico de memoria.
+ */
+function freezeMemoryHistoryMonitor(freeze) {
+	if (freeze) {
+		stopMemoryHistoryMonitor();
+	} else {
+		startMemoryHistoryMonitor();
+	}
+}
+
+/**
  * Detiene/Reanuda el monitor de memoria en función del parámetro de entrada.
  *  
  * @param freeze True o false para detener/reanudar el monitor de memoria.
  */
-function freezeMemoryMonitor(freeze) {
+function freezeMemoryInstantMonitor(freeze) {
 	if (freeze) {
-		stopMemoryMonitor();
+		stopMemoryInstantMonitor();
 	} else {
-		startMemoryMonitor();
+		startMemoryInstantMonitor();
+	}
+}
+
+/**
+ * Detiene el monitor del histórico de memoria.
+ */
+function stopMemoryHistoryMonitor() {
+	if (App.memoryHistoryMonitorInterval) {
+		clearInterval(App.memoryHistoryMonitorInterval);
+		App.memoryHistoryMonitorInterval = null;
 	}
 }
 
 /**
  * Detiene el monitor de memoria.
  */
-function stopMemoryMonitor() {
-	if (App.memoryMonitorInterval) {
-		clearInterval(App.memoryMonitorInterval);
-		App.memoryMonitorInterval = null;
+function stopMemoryInstantMonitor() {
+	if (App.memoryInstantMonitorInterval) {
+		clearInterval(App.memoryInstantMonitorInterval);
+		App.memoryInstantMonitorInterval = null;
 	}
 }
 
 /**
- * Reanuda el monitor de memoria.
+ * Reanuda el monitor del histórico de memoria.
  */
-function startMemoryMonitor() {
-	stopMemoryMonitor();
-	App.memoryMonitorInterval = setInterval(function() {
+function startMemoryHistoryMonitor() {
+	stopMemoryHistoryMonitor();
+	App.memoryHistoryMonitorInterval = setInterval(function() {
 
 		// Historial de memoria.
 		if (MemoryMonitor.memoryHistoryPlot) {
 			MemoryMonitor.memoryHistoryPlot.replot({ data: [] });
 		}
 
+	}, 1000);
+}
+
+/**
+ * Reanuda el monitor de memoria.
+ */
+function startMemoryInstantMonitor() {
+	stopMemoryInstantMonitor();
+	App.memoryInstantMonitorInterval = setInterval(function() {
+		
 		// Instante de memoria disponible.
 		if (MemoryMonitor.committedMemoryInstantPlot) {
 			MemoryMonitor.committedMemoryInstantPlot.replot({ data: [] });
 		}
-
+		
 		// Instante de memoria usada.
 		if (MemoryMonitor.usedMemoryInstantPlot) {
 			MemoryMonitor.usedMemoryInstantPlot.replot({ data: [] });
 		}
-
+		
 	}, 1000);
 }

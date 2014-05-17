@@ -38,9 +38,28 @@ public class SystemMonitorController extends BaseRestController {
 	public static final String WORKLOAD_MONITOR = "WorkloadMonitor";
 	public static final String STORAGE_MONITOR = "StorageMonitor";
 
-	@Autowired
-	protected SystemService systemService;
+	private SystemService systemService;
+	private CpuMeter cpuMeter;
 
+
+	/**
+	 * Constructor por defecto.
+	 */
+	public SystemMonitorController() {
+		
+	}
+
+	/**
+	 * Asigna la instancia del servicio de sistema.
+	 * 
+	 * @param systemService Instancia a asignar.
+	 */
+	@Autowired  
+    public void setSystemService(SystemService systemService) {  
+        this.systemService = systemService;
+        this.cpuMeter = systemService.getCpuMeter();
+    } 
+	
 	/**
 	 * Procesa una petición de la fecha y hora del sistema en milisegundos desde epoch.
 	 * 
@@ -51,7 +70,7 @@ public class SystemMonitorController extends BaseRestController {
 
 		return System.currentTimeMillis();
 	}
-	
+
 	/**
 	 * Procesa una petición de información del estado de la memoria del sistema.
 	 * 
@@ -63,6 +82,10 @@ public class SystemMonitorController extends BaseRestController {
 	 */
 	@RequestMapping(value = "/memory", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getMemory(@RequestBody final JqPlotDto jqPlot) {
+
+		long threadId = Thread.currentThread().getId();
+		
+		cpuMeter.excludeThread(threadId);
 
 		jqPlot.setName(MEMORY_MONITOR);
 
@@ -128,6 +151,8 @@ public class SystemMonitorController extends BaseRestController {
 			}
 		}
 
+		cpuMeter.includeThread(threadId);
+		
 		return jqPlot;
 	}
 
@@ -143,6 +168,10 @@ public class SystemMonitorController extends BaseRestController {
 	@RequestMapping(value = "/cpu", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getCPU(@RequestBody final JqPlotDto jqPlot) {
 
+		long threadId = Thread.currentThread().getId();
+		
+		cpuMeter.excludeThread(threadId);
+		
 		jqPlot.setName(CPU_MONITOR);
 
 		if (jqPlot.getPeriod() == null || jqPlot.getTimeRange() == null) {
@@ -213,6 +242,8 @@ public class SystemMonitorController extends BaseRestController {
 				e.log(logger, false);
 			}
 		}
+		
+		cpuMeter.includeThread(threadId);
 
 		return jqPlot;
 	}
@@ -229,6 +260,10 @@ public class SystemMonitorController extends BaseRestController {
 	@RequestMapping(value = "/workload", method = { RequestMethod.POST })
 	public @ResponseBody JqPlotDto getWorkload(@RequestBody final JqPlotDto jqPlot) {
 
+		long threadId = Thread.currentThread().getId();
+		
+		cpuMeter.excludeThread(threadId);
+		
 		jqPlot.setName(WORKLOAD_MONITOR);
 
 		if (jqPlot.getPeriod() == null || jqPlot.getTimeRange() == null) {
@@ -291,13 +326,13 @@ public class SystemMonitorController extends BaseRestController {
 
 					requestsRateData[i][0] = monitorSample.getTime();
 					requestsRateData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE);
-					
+
 					requestsRatePeakData[i][0] = monitorSample.getTime();
 					requestsRatePeakData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK);
 
 					totalRequestsData[i][0] = monitorSample.getTime();
 					totalRequestsData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS);
-					
+
 					totalRequestsKoData[i][0] = monitorSample.getTime();
 					totalRequestsKoData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO);
 
@@ -348,6 +383,8 @@ public class SystemMonitorController extends BaseRestController {
 			}
 		}
 
+		cpuMeter.includeThread(threadId);
+		
 		return jqPlot;
 	}
 
@@ -358,8 +395,7 @@ public class SystemMonitorController extends BaseRestController {
 	 */
 	@RequestMapping(value = "/workload/newMeasurePeriod", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody Long newWorkloadMeasurePeriod() {
-		
-		
+
 		return systemService.getWorkloadMeter().newMeasurePeriod();
 	}
 }

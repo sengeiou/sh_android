@@ -13,8 +13,6 @@ import com.fav24.dataservices.controller.jsp.BaseJspController;
 
 /**
  * Controla las peticiones de entrada a la consola de monitorización.
- * 
- * @author Fav24
  */
 @Controller
 @RequestMapping("/system")

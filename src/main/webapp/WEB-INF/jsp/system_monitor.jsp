@@ -38,35 +38,41 @@
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<p>Informaci&oacute;n y estado de la instancia<p/>
-			<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryMonitor(this.checked);" checked> Congelar</input>
 			<!-- Memoria -->
 			<div class='panel panel-info'>
 				<div class='panel-heading'>Distribuci&oacute;n y consumo de memoria</div>
 				<div class='panel-body'>
-					<div class='row'>
-						<div class='col-sm-8'>
-							<div id='memoryHistory' style='width:700px; height:300px;'></div>
+					<div class='row-fluid'>
+						<div class='col-sx-6 col-md-8'>
+							<input id="memoryHistoryFreeze" type="checkbox" onClick="freezeMemoryHistoryMonitor(this.checked);" checked> Congelar</input>
+							<div id='memoryHistory' style='width:100%; height:300px;'></div>
 						</div>
-						<div class='col-sm-2'>
-							<div id='committedMemoryInstant' style='width:120px; height:300px;'></div>
-						</div>
-						<div class='col-sm-2'>
-							<div id='usedMemoryInstant' style='width:120px; height:300px;'></div>
+						<div class='col-sx-6 col-md-4'>
+							<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryInstantMonitor(this.checked);" checked> Congelar</input>
+							<div class='container-fluid'>
+								<div class='col-sx-6 col-md-6'>
+									<div id='committedMemoryInstant' style='width:100%; height:300px%;'></div>
+								</div>
+								<div class='col-sx-6 col-md-6'>
+									<div id='usedMemoryInstant' style='width:100%; height:300px;'></div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<input id="cpuFreeze" type="checkbox" onClick="freezeCPUMonitor(this.checked);" checked> Congelar</input>
 			<!-- Procesador -->
 			<div class='panel panel-info'>
 				<div class='panel-heading'>Uso del procesador</div>
 				<div class='panel-body'>
-					<div class='row'>
+					<div class='row-fluid'>
 						<div class='col-sm-9'>
-							<div id='cpuHistory' style='width:700px; height:300px;'></div>
+							<input id="cpuHistoryFreeze" type="checkbox" onClick="freezeCPUHistoryMonitor(this.checked);" checked> Congelar</input>
+							<div id='cpuHistory' style='width:100%; height:300px;'></div>
 						</div>
 						<div class='col-sm-3'>
-							<div id='cpuInstant' style='width:150px; height:300px;'></div>
+							<input id="cpuFreeze" type="checkbox" onClick="freezeCPUInstantMonitor(this.checked);" checked> Congelar</input>
+							<div id='cpuInstant' style='width:100%; height:300px;'></div>
 						</div>
 					</div>
 				</div>
