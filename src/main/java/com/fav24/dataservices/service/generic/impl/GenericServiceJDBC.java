@@ -857,16 +857,11 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 			resultSet.close();
 			preparedStatement.close();
 
-			// Obtención del número total de registros que satisfacen el filtrado por el que se realiza la operación de modificación.
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(queryWhere);
+			/*
+			 *  Obtención del número total de registros sin marca de eliminación.
+			 */
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ").append(deletedColumn).append(" IS NULL");
 			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			if (params != null) {
-
-				for (int i=0; i<params.length; i++) {
-					preparedStatement.setObject(i+1, params[i], types[i]);
-				}
-			}
 
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.first()) {
