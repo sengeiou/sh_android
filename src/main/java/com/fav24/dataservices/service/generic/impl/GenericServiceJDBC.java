@@ -1098,61 +1098,63 @@ public class GenericServiceJDBC extends GenericServiceBasic {
 				}
 
 				// Claves primárias de la entidad.
-				ResultSet primaryKeys = null;
-
-				try {
-
-					// Obtención de las columnas que conforman la clave primaria.
-					primaryKeys = connection.getMetaData().getPrimaryKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
-
-					if (primaryKeys.first()) {
-						entityJDBCInformation.primaryKey = new TreeMap<String, Integer>();
-
-						do {
-							entityJDBCInformation.primaryKey.put(primaryKeys.getString("COLUMN_NAME"), null);
-						} while(primaryKeys.next());
-					}
-					else {
-						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
-					}
-				}
-				catch(Exception e) {
-					throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
-				}
-				finally {
-					JDBCUtils.CloseQuietly(primaryKeys);
-				}
-
-				// Obtención de los tipos de datos de las columnas que conforman la clave primaria.
-				if (entityJDBCInformation.primaryKey != null) {
-
-					ResultSet columns = null;
+				if (!entityJDBCInformation.isView) {
+					ResultSet primaryKeys = null;
 
 					try {
-						columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
 
-						if (columns.first()) {
+						// Obtención de las columnas que conforman la clave primaria.
+						primaryKeys = connection.getMetaData().getPrimaryKeys(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name);
+
+						if (primaryKeys.first()) {
+							entityJDBCInformation.primaryKey = new TreeMap<String, Integer>();
 
 							do {
-
-								String columnName = columns.getString("COLUMN_NAME");
-
-								if (entityJDBCInformation.primaryKey.containsKey(columnName)) {
-
-									entityJDBCInformation.primaryKey.put(columnName, columns.getInt("DATA_TYPE"));
-								}
-
-							} while(columns.next());
+								entityJDBCInformation.primaryKey.put(primaryKeys.getString("COLUMN_NAME"), null);
+							} while(primaryKeys.next());
 						}
 						else {
-							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
 						}
 					}
 					catch(Exception e) {
-						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+						throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
 					}
 					finally {
-						JDBCUtils.CloseQuietly(columns);
+						JDBCUtils.CloseQuietly(primaryKeys);
+					}
+
+					// Obtención de los tipos de datos de las columnas que conforman la clave primaria.
+					if (entityJDBCInformation.primaryKey != null) {
+
+						ResultSet columns = null;
+
+						try {
+							columns = connection.getMetaData().getColumns(entityJDBCInformation.catalog, entityJDBCInformation.schema, entityJDBCInformation.name, null);
+
+							if (columns.first()) {
+
+								do {
+
+									String columnName = columns.getString("COLUMN_NAME");
+
+									if (entityJDBCInformation.primaryKey.containsKey(columnName)) {
+
+										entityJDBCInformation.primaryKey.put(columnName, columns.getInt("DATA_TYPE"));
+									}
+
+								} while(columns.next());
+							}
+							else {
+								throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+							}
+						}
+						catch(Exception e) {
+							throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+						}
+						finally {
+							JDBCUtils.CloseQuietly(columns);
+						}
 					}
 				}
 
