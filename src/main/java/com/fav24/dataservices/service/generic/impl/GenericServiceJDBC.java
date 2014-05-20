@@ -61,8 +61,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		try {
 			return dataSource.getConnection();
 		}		
-		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_START_TRANSACTION, String.format(GenericService.ERROR_START_TRANSACTION_MESSAGE, e.getMessage()));
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_START_TRANSACTION, String.format(GenericService.ERROR_START_TRANSACTION_MESSAGE, t.getMessage()));
 		}
 	}
 
@@ -88,8 +88,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					}
 				}
 			}
-			catch(Exception e) {
-				throw new ServerException(GenericService.ERROR_END_TRANSACTION, String.format(GenericService.ERROR_END_TRANSACTION_MESSAGE, e.getMessage()));	
+			catch(Throwable t) {
+				throw new ServerException(GenericService.ERROR_END_TRANSACTION, String.format(GenericService.ERROR_END_TRANSACTION_MESSAGE, t.getMessage()));	
 			}
 			finally {
 				JDBCUtils.CloseQuietly(connection);
@@ -284,8 +284,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				operation.getMetadata().setTotalItems(null);
 			}
 		}
-		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(resultSet);
@@ -458,8 +458,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				operation.getMetadata().setTotalItems(null);
 			}
 		} 
-		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(resultSet);
@@ -645,8 +645,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				operation.getMetadata().setTotalItems(null);
 			}
 		}
-		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(resultSet);
@@ -851,8 +851,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				operation.getMetadata().setTotalItems(null);
 			}
 		}
-		catch (Exception e) {
-			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), e.getMessage()));
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(resultSet);

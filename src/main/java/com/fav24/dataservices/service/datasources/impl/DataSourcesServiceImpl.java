@@ -1,8 +1,6 @@
 package com.fav24.dataservices.service.datasources.impl;
 
-import java.net.MalformedURLException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -46,9 +44,9 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 			return dataServicesDataSourceInformation;
 
-		} catch (MalformedURLException | SQLException e) {
+		} catch (Throwable t) {
 
-			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE + " (" + e.getMessage() + ")");
+			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE + " (" + t.getMessage() + ")");
 		}
 	}
 
@@ -70,7 +68,7 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 				return JDBCUtils.getConnectionDateTime(connection);
 
-			} catch (SQLException e) {
+			} catch (Throwable t) {
 
 				throw new ServerException(ERROR_DATASOURCE_GET_TIMESTAMP_FAILED, ERROR_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE);
 			}
@@ -90,7 +88,6 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 		try {
 
-
 			if (statisticsDataSourceInformation == null) {
 
 				DataSource dataSourceStatistics = DataSources.getDataSourceStatistics();
@@ -102,7 +99,7 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 			return statisticsDataSourceInformation; 
 
-		} catch (MalformedURLException | SQLException e) {
+		} catch (Throwable t) {
 
 			throw new ServerException(ERROR_STATS_DATASOURCE_GET_INFO_FAILED, ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE);
 		}
@@ -122,7 +119,7 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 				return JDBCUtils.getConnectionDateTime(dataSourceStatistics.getConnection());
 
-			} catch (SQLException e) {
+			} catch (Throwable t) {
 
 				throw new ServerException(ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED, ERROR_STATS_DATASOURCE_GET_TIMESTAMP_FAILED_MESSAGE);
 			}

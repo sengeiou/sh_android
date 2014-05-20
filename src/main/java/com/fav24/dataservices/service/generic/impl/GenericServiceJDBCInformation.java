@@ -656,7 +656,7 @@ public class GenericServiceJDBCInformation {
 
 			throw e;
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 
 			if (entitiesInformation != null && accessPolicy != null) {
 
