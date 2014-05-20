@@ -16,8 +16,8 @@ import com.fav24.dataservices.service.system.SystemService;
 /**
  * Implementación de servicio System. 
  */
+@Scope("singleton")
 @Component
-@Scope("prototype")
 public class SystemServiceImpl implements SystemService {
 
 	private static final SystemMonitoring SystemActivityMonitoring;

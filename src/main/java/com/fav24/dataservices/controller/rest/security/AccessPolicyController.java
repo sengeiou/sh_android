@@ -4,6 +4,7 @@ package com.fav24.dataservices.controller.rest.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,28 +18,23 @@ import com.fav24.dataservices.dto.security.AccessPolicyDto;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.mapper.Mapper;
-import com.fav24.dataservices.service.security.LoadAccessPolicyService;
-import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
+import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 
 /**
  * Controla las peticiones de entrada a los servicios de gestión de la seguridad.
- * 
- * @author Fav24
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/accesspolicy")
 public class AccessPolicyController extends BaseRestController {
 
-	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
 
 	private static final String MESSAGE_ACCESS_POLICIES_RETRIEVED_OK = "La información de políticas de acceso, se retornó correctamente.";
 	private static final String MESSAGE_ACCESS_POLICY_FILES_LOADED_OK = "Los ficheros de políticas de acceso, se cargaron correctamente.";
 
 	@Autowired
-	protected RetrieveAccessPolicyService retrieveAccessPolicyService;
-
-	@Autowired
-	protected LoadAccessPolicyService loadAccessPolicyService;
+	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
 
 	/**
 	 * Procesa una petición de información de las políficas de acceso de una cierta entidad, o de las entidades disponibles.
@@ -55,7 +51,7 @@ public class AccessPolicyController extends BaseRestController {
 
 		try {
 
-			result = (AccessPolicyDto)Mapper.Map(retrieveAccessPolicyService.getCurrentAccessPolicy((AccessPolicy) Mapper.Map(accessPolicy)));
+			result = (AccessPolicyDto)Mapper.Map(accessPolicyConfigurationService.getCurrentAccessPolicy((AccessPolicy) Mapper.Map(accessPolicy)));
 
 			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICIES_RETRIEVED_OK);
@@ -88,7 +84,7 @@ public class AccessPolicyController extends BaseRestController {
 
 		try {
 
-			result = (AccessPolicyFilesDto)Mapper.Map(loadAccessPolicyService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFiles)));
+			result = (AccessPolicyFilesDto)Mapper.Map(accessPolicyConfigurationService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFiles)));
 
 			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICY_FILES_LOADED_OK);

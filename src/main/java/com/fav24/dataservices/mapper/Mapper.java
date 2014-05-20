@@ -16,12 +16,10 @@ import com.fav24.dataservices.util.PackageUtils;
 /**
  * 
  * Clase encargada del mapeo entre un objeto de dominio y el objeto de transferencia correspondiente.
- * 
- * @author Fav24
  */
 public abstract class Mapper<T, S> {
 
-	protected final static Logger logger = LoggerFactory.getLogger(Mapper.class);
+	private static final Logger logger = LoggerFactory.getLogger(Mapper.class);
 
 	public static final String ERROR_MAPPER_NOT_FOUND = "MAP000";
 	public static final String ERROR_MAPPER_NOT_FOUND_MESSAGE = "No existe ningún mapeador definido para el tipo %s.";

@@ -1,9 +1,8 @@
 package com.fav24.dataservices.controller.jsp;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,14 +13,11 @@ import com.fav24.dataservices.service.datasources.DataSourcesService;
 
 /**
  * Controla las peticiones de entrada al índice de la consola de administración.
- * 
- * @author Fav24
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/")
 public class MainController extends BaseJspController {
-
-	final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
 	protected DataSourcesService dataSourcesService;

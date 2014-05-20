@@ -13,10 +13,13 @@ import org.springframework.stereotype.Component;
 import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.SamplesRegister;
-import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
-import com.fav24.dataservices.service.security.LoadAccessPolicyService;
+import com.fav24.dataservices.service.cache.CacheConfigurationService;
+import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 
 
+/**
+ * Clase en la que se centralizan los distintos componentes que conforman el contexto de la aplicación.
+ */
 @Component
 public class DataServicesContext {
 
@@ -60,9 +63,9 @@ public class DataServicesContext {
 	private ApplicationContext applicationContext;
 
 	@Autowired
-	protected LoadAccessPolicyService loadAccessPolicyService;
+	protected AccessPolicyConfigurationService loadAccessPolicyService;
 	@Autowired
-	protected LoadCacheConfigurationService loadCacheService;
+	protected CacheConfigurationService loadCacheService;
 
 	
 	/**

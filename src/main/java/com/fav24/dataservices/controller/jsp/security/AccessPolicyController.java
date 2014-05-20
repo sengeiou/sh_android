@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,26 +18,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fav24.dataservices.controller.jsp.BaseJspController;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.security.LoadAccessPolicyService;
-import com.fav24.dataservices.service.security.RetrieveAccessPolicyService;
+import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 import com.fav24.dataservices.util.FileUtils;
 
 /**
  * Controla las peticiones de entrada a las páginas de gestión de la seguridad.
- * 
- * @author Fav24
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/accesspolicy")
 public class AccessPolicyController extends BaseJspController {
 
-	final static Logger logger = LoggerFactory.getLogger(AccessPolicyController.class);
-
 	@Autowired
-	protected RetrieveAccessPolicyService retrieveAccessPolicyService;
-
-	@Autowired
-	protected LoadAccessPolicyService loadAccessPolicyService;
+	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
 
 
 	/**
@@ -51,7 +43,7 @@ public class AccessPolicyController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("available_entities");
 
-		model.addObject("entities", retrieveAccessPolicyService.getPublicEntities());
+		model.addObject("entities", accessPolicyConfigurationService.getPublicEntities());
 
 		return model;
 	}
@@ -69,7 +61,7 @@ public class AccessPolicyController extends BaseJspController {
 		ModelAndView model = new ModelAndView("entity_policy_details");
 
 		model.addObject("entity", entity);
-		model.addObject("entityPolicies", retrieveAccessPolicyService.getPublicEntityPolicy(entity));
+		model.addObject("entityPolicies", accessPolicyConfigurationService.getPublicEntityPolicy(entity));
 
 		return model;
 	}
@@ -116,11 +108,11 @@ public class AccessPolicyController extends BaseJspController {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							loadAccessPolicyService.loadAccessPolicy(FileUtils.createOrReplaceExistingFile(multipartFile));
+							accessPolicyConfigurationService.loadAccessPolicy(FileUtils.createOrReplaceExistingFile(multipartFile));
 						}
 						else {
 
-							loadAccessPolicyService.loadAccessPolicy(multipartFile.getInputStream());
+							accessPolicyConfigurationService.loadAccessPolicy(multipartFile.getInputStream());
 						}
 
 						filesOK.add(fileName);
@@ -154,7 +146,7 @@ public class AccessPolicyController extends BaseJspController {
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
 	public String loadDefault(Model map) throws ServerException {
 
-		loadAccessPolicyService.loadDefaultAccessPolicy();
+		accessPolicyConfigurationService.loadDefaultAccessPolicy();
 
 		map.addAttribute("title", "Carga de políticas de acceso por defecto.");
 		map.addAttribute("message", "Las políticas de acceso han sido cargadas con éxito.");
@@ -174,7 +166,7 @@ public class AccessPolicyController extends BaseJspController {
 	@RequestMapping(value = "/denyAll", method = { RequestMethod.GET, RequestMethod.POST })
 	public String denyAll(Model map) throws ServerException {
 
-		loadAccessPolicyService.dropAccessPolicies();
+		accessPolicyConfigurationService.dropAccessPolicies();
 
 		map.addAttribute("title", "Denegación de acceso.");
 		map.addAttribute("message", "Todas las políticas de acceso han sido revocadas.");

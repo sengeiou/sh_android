@@ -6,6 +6,7 @@ import java.util.AbstractList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +25,12 @@ import com.fav24.dataservices.service.system.SystemService;
 /**
  * Controla las peticiones de entrada a los servicios de gestión del sistema.
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/system")
 public class SystemMonitorController extends BaseRestController {
 
-	final static Logger logger = LoggerFactory.getLogger(SystemMonitorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SystemMonitorController.class);
 
 	public static final Long DEFAULT_PERIOD = 1L; // Resolución por defecto de la información en segundos.
 	public static final Long DEFAULT_TIME_RANGE = 300L; // Rango de la información en segundos. ( los últimos 5 minutos.)

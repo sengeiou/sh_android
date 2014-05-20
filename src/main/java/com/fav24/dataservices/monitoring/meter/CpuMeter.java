@@ -156,10 +156,6 @@ public final class CpuMeter extends Meter implements Runnable
 
 		for (long id : ids) {
 
-			if (excludedThreads.contains(id)) {
-				continue;   // Se excluye este hilo.
-			}
-
 			final long cpu = threadMXBean.getThreadCpuTime(id);
 			final long application = threadMXBean.getThreadUserTime(id);
 
@@ -202,7 +198,10 @@ public final class CpuMeter extends Meter implements Runnable
 			}
 
 			totalCpuTime += times.currentCpuTime - times.previousCpuTime;
-			totalApplicationTime += times.currentApplicationTime - times.previousApplicationTime;
+			// Los threads excluidos contibuyen al tiempo total, pero no al tiempo de aplicación.
+			if (!excludedThreads.contains(id)) {
+				totalApplicationTime += times.currentApplicationTime - times.previousApplicationTime;
+			}
 		}
 
 		this.totalCpuTime = totalCpuTime;

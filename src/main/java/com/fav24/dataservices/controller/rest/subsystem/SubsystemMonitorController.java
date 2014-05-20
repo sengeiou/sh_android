@@ -21,7 +21,7 @@ import com.fav24.dataservices.service.datasources.DataSourcesService;
 @RequestMapping("/subsystem")
 public class SubsystemMonitorController extends BaseRestController {
 
-	final static Logger logger = LoggerFactory.getLogger(SubsystemMonitorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SubsystemMonitorController.class);
 
 	@Autowired
 	private DataSourcesService dataSourcesService;

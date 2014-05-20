@@ -10,8 +10,6 @@ import com.fav24.dataservices.service.security.AccessPolicyService;
 
 /**
  * Clase que contiene la estructura genérica de políticas de acceso sobre entidades.
- * 
- * @author Fav24
  */
 public class AccessPolicyFiles {
 

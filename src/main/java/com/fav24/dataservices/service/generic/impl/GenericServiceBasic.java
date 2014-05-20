@@ -1,11 +1,6 @@
 package com.fav24.dataservices.service.generic.impl;
 
 import java.sql.Timestamp;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import net.sf.ehcache.Element;
 
@@ -18,7 +13,6 @@ import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
-import com.fav24.dataservices.domain.security.EntityAttribute;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
@@ -28,9 +22,11 @@ import com.fav24.dataservices.service.system.SystemService;
 /**
  * Implementación base de la interfaz de servicio Generic. 
  * 
- * Nota: Esta clase es thread safe, pero no sus instancias.
+ * @param T Tipo de conexión. 
+ * 
+ * Nota: Esta clase es thread safe, pero no garantiza sus descendientes.
  */
-public abstract class GenericServiceBasic implements GenericService {
+public abstract class GenericServiceBasic<T> implements GenericService {
 
 	@Autowired
 	protected SystemService systemService;
@@ -39,19 +35,22 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * Establece el inicio de transtacción en la que se resolverán las distintas operaciones.
 	 * 
+	 * @return la conexión con la que se abrió la transacción.
+	 * 
 	 * @throws ServerException 
 	 */
-	protected abstract void startTransaction() throws ServerException;
+	protected abstract T startTransaction() throws ServerException;
 
 	/**
 	 * Establece el fin de transtacción en la que se han resuelto las distintas operaciones.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param commit True o false en función de si el fin de transacción implica una confirmación de las operaciones realizadas
 	 * 					dentro de la transacción, o estas deben ser revocadas.
 	 * 
 	 * @throws ServerException 
 	 */
-	protected abstract void endTransaction(boolean commit) throws ServerException;
+	protected abstract void endTransaction(T connection, boolean commit) throws ServerException;
 
 	/**
 	 * {@inheritDoc}
@@ -67,22 +66,22 @@ public abstract class GenericServiceBasic implements GenericService {
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
-		startTransaction();
+		T connecion = startTransaction();
 
 		try {
 
 			for (Operation operation : generic.getOperations()) {
-				processOperation(generic.getRequestor(), operation);
+				processOperation(connecion, generic.getRequestor(), operation);
 			}
 
 		} catch (ServerException e) {
 
-			endTransaction(false);
+			endTransaction(connecion, false);
 
 			throw e;
 		}
 
-		endTransaction(true);
+		endTransaction(connecion, true);
 
 		generic.getRequestor().setTime(System.currentTimeMillis());
 
@@ -92,12 +91,13 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * Procesa en contenido de una estructura Operation.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Estructura de la operación a procesar.
 	 * 
 	 * @return estructura operation de entrada, enriquecida con los resultados de la salida.
 	 */
-	protected final Operation processOperation(Requestor requestor, Operation operation) throws ServerException {
+	protected final Operation processOperation(T connection, Requestor requestor, Operation operation) throws ServerException {
 
 		if (operation.getMetadata() == null) {
 
@@ -157,9 +157,9 @@ public abstract class GenericServiceBasic implements GenericService {
 		switch(operation.getMetadata().getOperation()) {
 
 		case CREATE:
-			return create(requestor, operation);
+			return create(connection, requestor, operation);
 		case UPDATE:
-			return update(requestor, operation);
+			return update(connection, requestor, operation);
 		case RETRIEVE:
 
 			if (Cache.getSystemCache() != null) {
@@ -178,7 +178,7 @@ public abstract class GenericServiceBasic implements GenericService {
 
 						try {
 
-							operation = retreave(requestor, operation);
+							operation = retreave(connection, requestor, operation);
 						}
 						catch (ServerException e) {
 							systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
@@ -207,7 +207,7 @@ public abstract class GenericServiceBasic implements GenericService {
 
 				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
 
-				return retreave(requestor, operation);
+				return retreave(connection, requestor, operation);
 			}
 			catch (ServerException e) {
 				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
@@ -216,9 +216,9 @@ public abstract class GenericServiceBasic implements GenericService {
 			}
 
 		case DELETE:
-			return delete(requestor, operation);
+			return delete(connection, requestor, operation);
 		case UPDATE_CREATE:
-			return updateCreate(requestor, operation);
+			return updateCreate(connection, requestor, operation);
 		}
 
 		return operation;
@@ -227,60 +227,65 @@ public abstract class GenericServiceBasic implements GenericService {
 	/**
 	 * Operatión de creación de ítems.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation create(Requestor requestor, Operation operation) throws ServerException {
+	protected Operation create(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
 	 * Operatión de modificación de ítems.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation update(Requestor requestor, Operation operation) throws ServerException {
+	protected Operation update(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
 	 * Operatión de retorno de ítems.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation retreave(Requestor requestor, Operation operation) throws ServerException {
+	protected Operation retreave(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
 	 * Operatión de eliminación de ítems.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation delete(Requestor requestor, Operation operation) throws ServerException {
+	protected Operation delete(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**
 	 * Operatión de modificación o creación de un ítem.
 	 * 
+	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation updateCreate(Requestor requestor, Operation operation) throws ServerException {
+	protected Operation updateCreate(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 
 	}
@@ -312,60 +317,5 @@ public abstract class GenericServiceBasic implements GenericService {
 		}
 
 		return (remoteRevision > localRevision);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
-		throw new ServerException(GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED, GenericService.ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE);
-	}
-
-
-	/**
-	 * Retorna true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 * 
-	 * Nota: La comparación se realiza:
-	 * 	- Sin tener en cuenta mayúsculas o minúsculas.
-	 *  - Sin tener en cuenta el orden de los elementos.
-	 * 
-	 * @param collections Conjunto de colecciones a comparar. 
-	 * @param attributeCollection Colección a localizar.
-	 * 
-	 * @return true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 */
-	protected boolean hasEquivalentAttributeCollection(Map<String, Set<String>> collections, AbstractList<EntityAttribute> attributeCollection) {
-
-		for(Entry<String, Set<String>> collectionEntry : collections.entrySet()) {
-
-			Collection<String> collection = collectionEntry.getValue();
-
-			if (attributeCollection.size() == collection.size()) {
-
-				boolean collectionFound = true;
-
-				for(EntityAttribute attributeElement : attributeCollection) {
-
-					boolean elementFound = false;
-					for(String element : collection) {
-						if (element.compareToIgnoreCase(attributeElement.getName()) == 0) {
-							elementFound = true;
-							break;
-						}
-					}
-
-					if (!elementFound) {
-						collectionFound = false;
-						break;
-					}
-				}
-
-				if (collectionFound) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 }

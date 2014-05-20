@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,26 +18,19 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fav24.dataservices.controller.jsp.BaseJspController;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.cache.LoadCacheConfigurationService;
-import com.fav24.dataservices.service.cache.RetrieveCacheConfigurationService;
+import com.fav24.dataservices.service.cache.CacheConfigurationService;
 import com.fav24.dataservices.util.FileUtils;
 
 /**
  * Controla las peticiones de entrada a las páginas de gestión de la caché.
- * 
- * @author Fav24
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/cache")
 public class CacheConfigurationController extends BaseJspController {
 
-	final static Logger logger = LoggerFactory.getLogger(CacheConfigurationController.class);
-
 	@Autowired
-	protected RetrieveCacheConfigurationService retrieveCacheConfigurationService;
-
-	@Autowired
-	protected LoadCacheConfigurationService loadCacheConfigurationService;
+	protected CacheConfigurationService cacheConfigurationService;
 
 
 	/**
@@ -51,7 +43,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("available_entity_cache_managers");
 
-		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
+		model.addObject("cacheManagers", cacheConfigurationService.getCacheManagers());
 
 		return model;
 	}
@@ -68,7 +60,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("entity_cache_manager_details");
 
-		model.addObject("cacheManagerConfiguration", retrieveCacheConfigurationService.getCacheManagerConfiguration(cacheManager));
+		model.addObject("cacheManagerConfiguration", cacheConfigurationService.getCacheManagerConfiguration(cacheManager));
 
 		return model;
 	}
@@ -83,7 +75,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("available_entity_caches");
 
-		model.addObject("cacheManagers", retrieveCacheConfigurationService.getCacheManagers());
+		model.addObject("cacheManagers", cacheConfigurationService.getCacheManagers());
 
 		return model;
 	}
@@ -101,8 +93,8 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("entity_cache_details");
 
-		model.addObject("cacheManagerConfiguration", retrieveCacheConfigurationService.getCacheManagerConfiguration(cacheManager));
-		model.addObject("cacheConfiguration", retrieveCacheConfigurationService.getCacheConfiguration(cacheManager, entity));
+		model.addObject("cacheManagerConfiguration", cacheConfigurationService.getCacheManagerConfiguration(cacheManager));
+		model.addObject("cacheConfiguration", cacheConfigurationService.getCacheConfiguration(cacheManager, entity));
 
 		return model;
 	}
@@ -149,11 +141,11 @@ public class CacheConfigurationController extends BaseJspController {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							loadCacheConfigurationService.loadCacheConfiguration(FileUtils.createOrReplaceExistingFile(multipartFile));
+							cacheConfigurationService.loadCacheConfiguration(FileUtils.createOrReplaceExistingFile(multipartFile));
 						}
 						else {
 
-							loadCacheConfigurationService.loadCacheConfiguration(multipartFile.getInputStream());
+							cacheConfigurationService.loadCacheConfiguration(multipartFile.getInputStream());
 						}
 
 						filesOK.add(fileName);
@@ -187,7 +179,7 @@ public class CacheConfigurationController extends BaseJspController {
 	@RequestMapping(value = "/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
 	public String loadDefault(Model map) throws ServerException {
 
-		loadCacheConfigurationService.loadDefaultCacheConfiguration();
+		cacheConfigurationService.loadDefaultCacheConfiguration();
 
 		map.addAttribute("title", "Carga de las configuraciones de caché por defecto.");
 		map.addAttribute("message", "Las configuraciones de caché han sido cargadas con éxito.");
@@ -207,7 +199,7 @@ public class CacheConfigurationController extends BaseJspController {
 	@RequestMapping(value = "/dropSystemCache", method = { RequestMethod.GET, RequestMethod.POST })
 	public String denyAll(Model map) throws ServerException {
 
-		loadCacheConfigurationService.dropSystemCache();
+		cacheConfigurationService.dropSystemCache();
 
 		map.addAttribute("title", "Caché desactivada.");
 		map.addAttribute("message", "Todas las cachés asociadas a entidades, han sido eliminadas.");

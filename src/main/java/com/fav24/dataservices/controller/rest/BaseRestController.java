@@ -21,12 +21,10 @@ import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Controlador base.
- * 
- * @author Fav24
  */
 public class BaseRestController {
 
-	protected final static Logger logger = LoggerFactory.getLogger(BaseRestController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BaseRestController.class);
 
 	public final static String OK = "OK";
 	public final static String ERROR_GLOBAL_001 = "GLOBAL_001";

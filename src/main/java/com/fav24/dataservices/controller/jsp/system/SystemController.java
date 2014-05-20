@@ -1,8 +1,7 @@
 package com.fav24.dataservices.controller.jsp.system;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +13,10 @@ import com.fav24.dataservices.controller.jsp.BaseJspController;
 /**
  * Controla las peticiones de entrada a la consola de monitorización.
  */
+@Scope("singleton")
 @Controller
 @RequestMapping("/system")
 public class SystemController extends BaseJspController {
-
-	final static Logger logger = LoggerFactory.getLogger(SystemController.class);
 
 
 	/**

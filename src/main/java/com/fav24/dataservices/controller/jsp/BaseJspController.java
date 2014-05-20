@@ -1,7 +1,5 @@
 package com.fav24.dataservices.controller.jsp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,8 +9,6 @@ import com.fav24.dataservices.exception.ServerException;
  * Controlador base.
  */
 public class BaseJspController {
-
-	protected final static Logger logger = LoggerFactory.getLogger(BaseJspController.class);
 
 	private ModelAndView errorView;
 

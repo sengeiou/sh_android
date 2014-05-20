@@ -117,15 +117,6 @@ public class Cache
 	}
 
 	/**
-	 * Asigna la lista de gestores de caché de entidades.
-	 * 
-	 * @param entityCacheManagers La nueva lista de gestores de caché de entidades a asignar.
-	 */
-	public void setEntityCacheManagers(AbstractList<EntityCacheManager> entityCacheManagers) {
-		this.entityCacheManagers = entityCacheManagers;
-	}
-
-	/**
 	 * Añade a la lista de gestores de caché de entidades, el especificado por parámetro.
 	 * 
 	 * @param entityCacheManager Gestor de caché a añadir.

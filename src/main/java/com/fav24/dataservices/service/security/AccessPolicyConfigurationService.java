@@ -1,23 +1,23 @@
 package com.fav24.dataservices.service.security;
 
 import java.io.InputStream;
+import java.util.AbstractList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.AccessPolicyFiles;
+import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * Interfaz de servicio de carga de las políticas de acceso. 
- * 
- * @author Fav24
+ * Interfaz de servicio de carga y consulta de las políticas de acceso. 
  */
-public interface LoadAccessPolicyService extends AccessPolicyService {
+public interface AccessPolicyConfigurationService extends AccessPolicyService {
 
-	public static final Logger logger = LoggerFactory.getLogger(LoadAccessPolicyService.class);
+	public static final Logger logger = LoggerFactory.getLogger(AccessPolicyConfigurationService.class);
 
 
 	/**
@@ -55,4 +55,31 @@ public interface LoadAccessPolicyService extends AccessPolicyService {
 	 * @throws ServerException 
 	 */
 	public AccessPolicy loadAccessPolicy(InputStream accessPolicyStream) throws ServerException;
+
+	/**
+	 * Retorna el detalle de las políticas de acceso de las entidades. 
+	 * 
+	 * @param accessPolicy Políticas de acceso solicitadas.
+	 *  
+	 * @return el detalle de las políticas de acceso de las entidades indicadas.
+	 * 
+	 * @throws ServerException 
+	 */
+	public AccessPolicy getCurrentAccessPolicy(AccessPolicy accessPolicy) throws ServerException;
+
+	/**
+	 * Retorna la lista de entidades accesible desde el exterior.
+	 * 
+	 * @return la lista de entidades accesible desde el exterior.
+	 */
+	public AbstractList<String> getPublicEntities();
+
+	/**
+	 * Retorna el detalle de las políticas de acceso de la entidad indicada.
+	 * 
+	 * @param entity Nombre de la entidad a consultar.
+	 * 
+	 * @return el detalle de las políticas de acceso de la entidad indicada.
+	 */
+	public EntityAccessPolicy getPublicEntityPolicy(String entity);
 }

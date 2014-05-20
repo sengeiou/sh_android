@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,24 +19,29 @@ import com.fav24.dataservices.util.JDBCUtils;
 /**
  * Implementación de servicio para la gestión de orígenes de datos. 
  */
+@Scope("singleton")
 @Component
-@Scope("prototype")
 public class DataSourcesServiceImpl implements DataSourcesService {
 
-	private static Map<String, String> dataServicesDataSourceInformation;
-	private static Map<String, String> statisticsDataSourceInformation;
+	private Map<String, String> dataServicesDataSourceInformation;
+	private Map<String, String> statisticsDataSourceInformation;
 
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, String> getDataServiceDataSourceInformation() throws ServerException {
+	public synchronized Map<String, String> getDataServiceDataSourceInformation() throws ServerException {
 
 		try {
 
-			if (dataServicesDataSourceInformation == null && DataSources.getDataSourceDataService() != null) {
-				dataServicesDataSourceInformation = JDBCUtils.getConnectionInformation(DataSources.getDataSourceDataService().getConnection());
+			if (dataServicesDataSourceInformation == null) {
+
+				DataSource dataSourceDataService = DataSources.getDataSourceDataService();
+
+				if (dataSourceDataService != null) {
+					dataServicesDataSourceInformation = JDBCUtils.getConnectionInformation(dataSourceDataService.getConnection());
+				}
 			}
 
 			return dataServicesDataSourceInformation;
@@ -51,14 +58,16 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 	@Override
 	public Long getDataServiceDataSourceTime() throws ServerException {
 
-		if (dataServicesDataSourceInformation == null && DataSources.getDataSourceDataService() != null) {
+		DataSource dataSourceDataService = DataSources.getDataSourceDataService();
+
+		if (dataSourceDataService != null) {
 
 			Connection connection = null;
-			
+
 			try {
 
-				connection = DataSources.getDataSourceDataService().getConnection();
-				
+				connection = dataSourceDataService.getConnection();
+
 				return JDBCUtils.getConnectionDateTime(connection);
 
 			} catch (SQLException e) {
@@ -77,12 +86,18 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, String> getStatisticsDataSourceInformation() throws ServerException {
+	public synchronized Map<String, String> getStatisticsDataSourceInformation() throws ServerException {
 
 		try {
 
-			if (statisticsDataSourceInformation == null && DataSources.getDataSourceStatistics() != null) {
-				statisticsDataSourceInformation = JDBCUtils.getConnectionInformation(DataSources.getDataSourceStatistics().getConnection());
+
+			if (statisticsDataSourceInformation == null) {
+
+				DataSource dataSourceStatistics = DataSources.getDataSourceStatistics();
+
+				if (dataSourceStatistics != null) {
+					statisticsDataSourceInformation = JDBCUtils.getConnectionInformation(dataSourceStatistics.getConnection());
+				}
 			}
 
 			return statisticsDataSourceInformation; 
@@ -92,18 +107,20 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 			throw new ServerException(ERROR_STATS_DATASOURCE_GET_INFO_FAILED, ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Long getStatisticsDataSourceTime() throws ServerException {
 
-		if (statisticsDataSourceInformation == null && DataSources.getDataSourceStatistics() != null) {
+		DataSource dataSourceStatistics = DataSources.getDataSourceStatistics();
+
+		if (dataSourceStatistics != null) {
 
 			try {
 
-				return JDBCUtils.getConnectionDateTime(DataSources.getDataSourceStatistics().getConnection());
+				return JDBCUtils.getConnectionDateTime(dataSourceStatistics.getConnection());
 
 			} catch (SQLException e) {
 

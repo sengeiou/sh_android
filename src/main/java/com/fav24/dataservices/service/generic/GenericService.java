@@ -4,21 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.domain.generic.Generic;
-import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
 
 
 /**
  * Interfaz de servicio Generic. 
- * 
- * @author Fav24
  */
 public interface GenericService {
 
 	public static final Logger logger = LoggerFactory.getLogger(GenericService.class);
-	
-	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED = "G000";
-	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE = "Fallo en el chequeo de las políticas de acceso contra la fuente de datos.";
+
 	public static final String ERROR_OPERATION_NOT_AVAILABLE = "G001";
 	public static final String ERROR_OPERATION_NOT_AVAILABLE_MESSAGE = "La operación <%s> no está disponible para la entidad <%s>.";
 	public static final String ERROR_START_TRANSACTION = "G002";
@@ -52,7 +47,7 @@ public interface GenericService {
 	public static final String ERROR_INVALID_UPDATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a modificar para la entidad <%s>.";
 	public static final String ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY = "G015";
 	public static final String ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY_MESSAGE = "No es posible modificar datos de la entidad <%s>, debido a que no tiene definida ninguna clave primaria.";
-	
+
 	/**
 	 * Procesa en contenido de una estructura Generic.
 	 * 
@@ -63,29 +58,4 @@ public interface GenericService {
 	 * @throws ServerException 
 	 */
 	public Generic processGeneric(Generic generic) throws ServerException;
-
-	/**
-	 * Chequea las políticas de acceso definidas, contra la fuente de datos a la que ataca el servicio.
-	 * Obtiene toda la información necesaria de la fuente de datos, para resolver las peticiones.
-	 * 
-	 * Los chequeos que realiza son:
-	 * 	- Que las entidades existen en la fuente de datos.
-	 *  - Que los attributos de cada una de las entidades, están disponibles en la fuente de datos.
-	 *  - Que el conjunto de claves especificado en las políticas de acceso, existe en la fuente de datos.
-	 *  - Que el conjunto de filtros especificado en las políticas de acceso, se corresponde con su correspondiente conjunto de índices en la fuente de datos.
-	 *  
-	 * Nota: En este punto, es posible aprovechar el acceso a los metadatos de las entidades de la fuente de datos, para obtener el tipo de dato asociado a cada atributo de dato, clave o filtro.
-	 * 
-	 * @param accessPolicy Política de acceso a chequear.
-	 * 
-	 * @throws ServerException
-	 */
-	public void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException;
-	
-	/**
-	 * Elimina toda la información de la fuente de datos, usada para resolver las peticiones.
-	 * 
-	 * @see #checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy)
-	 */
-	public void resetAccessPoliciesInformationAgainstDataSource();
 }

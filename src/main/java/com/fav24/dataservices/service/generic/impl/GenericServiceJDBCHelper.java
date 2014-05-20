@@ -32,7 +32,7 @@ import com.fav24.dataservices.domain.security.EntityOrderAttribute.Order;
 import com.fav24.dataservices.domain.security.EntityOrdination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
-import com.fav24.dataservices.service.generic.impl.GenericServiceJDBC.EntityJDBCInformation;
+import com.fav24.dataservices.service.generic.impl.GenericServiceJDBCInformation.EntityJDBCInformation;
 import com.fav24.dataservices.util.JDBCUtils;
 
 

@@ -10,8 +10,6 @@ import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Interfaz de servicio Datasources. 
- * 
- * @author Fav24
  */
 public interface DataSourcesService {
 

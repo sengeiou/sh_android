@@ -4,8 +4,6 @@ package com.fav24.dataservices.service.cache;
 
 /**
  * Interfaz para servicios relacionados con la caché y los gestores de caché. 
- * 
- * @author Fav24
  */
 public interface CacheService {
 

@@ -1,19 +1,49 @@
 package com.fav24.dataservices.service.cache;
 
+import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.domain.cache.EntityCache;
 import com.fav24.dataservices.domain.cache.EntityCacheManager;
+import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * Interfaz de servicio de consulta de las configuraciones de la caché. 
- * 
- * @author Fav24
+ * Interfaz de servicio de carga y consulta de la configuración de la caché. 
  */
-public interface RetrieveCacheConfigurationService extends CacheService {
+public interface CacheConfigurationService extends CacheService {
 
+	public static final Logger logger = LoggerFactory.getLogger(CacheConfigurationService.class);
+
+
+	/**
+	 * Elimina la configuración actual de la caché, y vacía todas las cachés.
+	 */
+	public void dropSystemCache();
+
+	/**
+	 * Carga las configuraciones de caché por defecto. 
+	 * 
+	 * @throws ServerException
+	 */
+	public void loadDefaultCacheConfiguration() throws ServerException;
+
+	/**
+	 * Retorna la configuración de caché cargada. 
+	 * 
+	 * @param cacheConfigurationStream Configuración de caché a cargar.
+	 *  
+	 * @return la configuración de caché cargada.
+	 * 
+	 * @throws ServerException 
+	 */
+	public Cache loadCacheConfiguration(InputStream cacheConfigurationStream) throws ServerException;
+	
 	/**
 	 * Retorna la lista de gestores de caché de entidades configurados.
 	 * 
