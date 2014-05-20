@@ -52,8 +52,26 @@ public class GenericServiceJDBCInformation {
 	}
 
 	private Map<String, EntityJDBCInformation> entitiesInformation;
+	private int product;
 
-	
+	/**
+	 * Retorna el identificador de producto.
+	 * 
+	 * @return el identificador de producto.
+	 */
+	public int getProduct() {
+		return product;
+	}
+
+	/**
+	 * Asigna el identificador de producto.
+	 * 
+	 * @param product Identificador de producto a asignar.
+	 */
+	private void setProduct(int product) {
+		this.product = product;
+	}
+
 	/**
 	 * Retorna la información de la entidad en la fuente de datos.
 	 * 
@@ -141,6 +159,8 @@ public class GenericServiceJDBCInformation {
 
 		try {
 			connection = dataSource.getConnection();
+			
+			setProduct(JDBCUtils.getProduct(connection));
 
 			// Se recorren las entidades.
 			for (EntityAccessPolicy entityAccessPolicy : accessPolicy.getAccessPolicies()) {

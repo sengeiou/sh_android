@@ -135,7 +135,7 @@ public class JDBCUtils {
 
 		return DB_PRODUCT_MYSQL;
 	}
-	
+
 	/**
 	 * Retorna el tipo de base de datos a partir del nombre completo de la clase específica que implementa la intarfaz #javax.sql.DataSource.
 	 * 
@@ -144,25 +144,25 @@ public class JDBCUtils {
 	 * @return el tipo de base de datos.
 	 */
 	public static int getProduct(String dataSourceClassName) {
-		
+
 		dataSourceClassName = dataSourceClassName.toLowerCase();
-		
+
 		if (dataSourceClassName.indexOf("mysql") != -1) {
 			return DB_PRODUCT_MYSQL;
 		}
-		
+
 		if (dataSourceClassName.indexOf("postgres") != -1) {
 			return DB_PRODUCT_POSTGRESQL;
 		}
-		
+
 		if (dataSourceClassName.indexOf("hsql") != -1) {
 			return DB_PRODUCT_HSQL;
 		}
-		
+
 		if (dataSourceClassName.indexOf("oracle") != -1) {
 			return DB_PRODUCT_ORACLE;
 		}
-		
+
 		return DB_PRODUCT_MYSQL;
 	}
 
@@ -227,7 +227,7 @@ public class JDBCUtils {
 
 		return currentTimestamp == null ? null : currentTimestamp.getTime();
 	}
-	
+
 	/**
 	 * Retorna un mapa con los atributos contenidos en la URL.
 	 * 
@@ -275,7 +275,7 @@ public class JDBCUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Cierra el set de resultados indicado, de forma silenciosa.
 	 * 
@@ -284,13 +284,13 @@ public class JDBCUtils {
 	 * @param resultSet Set de resultados a cerrar.
 	 */
 	public static void CloseQuietly(ResultSet resultSet) {
-		
+
 		try {
-			
+
 			if (resultSet != null) {
 				resultSet.close();
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -315,18 +315,39 @@ public class JDBCUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Retorna true o false en función de si la excepción indicada hace o no referencia a 
 	 * una violación de una clave primária o un índice único.
 	 * 
+	 * @param product Identificador del producto.
 	 * @param e Excepción a verificar.
 	 * 
 	 * @return true o false en función de si la excepción indicada hace o no referencia a 
 	 * una violación de una clave primária o un índice único.
 	 */
-	public static boolean IsIntegrityConstraintViolation(SQLException e) {
-		
-		return e.getSQLState().startsWith("23");
+	public static boolean IsIntegrityConstraintViolation(int product, SQLException e) {
+
+		if (e.getSQLState().startsWith("23")) {
+
+			switch(product) {
+
+			case DB_PRODUCT_MYSQL:
+
+				switch(e.getErrorCode()) {
+
+				case 1062: // Registro duplicado.
+					return true;
+				case 1452: // Foreing key. Aun no existe en registro referenciado.
+					return true;
+				default:
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 }

@@ -403,7 +403,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					 *  Si se trata de una constrain violada, se considera que el registro ya existe y se intenta recuperar en caso de estar marcadao como eliminado.
 					 *  En cualquier otro caso, se relanzará la excepción.
 					 */
-					if (JDBCUtils.IsIntegrityConstraintViolation(e)) {
+					if (JDBCUtils.IsIntegrityConstraintViolation(entitiesInformation.getProduct(), e)) {
 
 						isRefurbishedRow = true;
 
@@ -421,7 +421,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				}
 
 				// Recogida de los datos generados.
-				if (!isRefurbishedRow) {
+				if (!isRefurbishedRow && generatedKeyColumns.length > 0) {
 
 					resultSet = preparedStatement.getGeneratedKeys();
 
