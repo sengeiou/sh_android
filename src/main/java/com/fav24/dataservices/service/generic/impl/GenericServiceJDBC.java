@@ -136,7 +136,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		if (operation.getMetadata().getIncludeDeleted() == null || !operation.getMetadata().getIncludeDeleted()) {
 
 			queryWhere.append(" WHERE (");
-			queryWhere.append(GenericServiceJDBCHelper.getExcludeDeletedString(operation.getMetadata())).append(')');
+			queryWhere.append(GenericServiceJDBCHelper.getExcludeDeletedString(entityAccessPolicy)).append(')');
 		}
 
 		/*
@@ -326,12 +326,12 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 		queryInsert.append("INSERT INTO ").append(entityAccessPolicy.getName().getName());
 
-		queryInsert.append('(');
+		queryInsert.append(" (");
 
-		queryInsert.append(revisionColumn);
-		queryInsert.append(',').append(birthColumn);
-		queryInsert.append(',').append(modifiedColumn);
-		queryInsert.append(',').append(deletedColumn);
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, revisionColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, birthColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, modifiedColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, deletedColumn);
 
 		int initSize = firsItem.getAttributes().size();
 		AbstractList<String> inColumns = new ArrayList<String>(initSize);
@@ -490,7 +490,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		 */
 		queryDelete.append("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ");
 		// Se asigna la marca de eliminación.
-		queryDelete.append(deletedColumn).append("=?"); // DELETED;
+		GenericServiceJDBCHelper.scapeColumn(queryDelete, deletedColumn).append("=?"); // DELETED;
 
 		/*
 		 * Especificación de la tabla.
@@ -500,7 +500,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		/*
 		 * Especificación del filtro.
 		 */
-		queryWhere.append(" WHERE (").append(deletedColumn).append(" IS NULL)");
+		queryWhere.append(" WHERE (");
+		GenericServiceJDBCHelper.scapeColumn(queryWhere, deletedColumn).append(" IS NULL)"); // DELETED;
 
 		AbstractList<String> filterColumns = new ArrayList<String>();
 		AbstractList<Object> filterValues = new ArrayList<Object>();
@@ -592,7 +593,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					/*
 					 * Especificación de los filtros.
 					 */
-					querySelect.append(" WHERE ").append(deletedColumn).append("=? AND (").append(filter).append(')');
+					querySelect.append(" WHERE ");
+					GenericServiceJDBCHelper.scapeColumn(querySelect, deletedColumn).append("=? AND (").append(filter).append(')');
 
 					preparedStatement = connection.prepareStatement(querySelect.toString());
 
@@ -632,7 +634,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			/*
 			 *  Obtención del número total de registros sin marca de eliminación.
 			 */
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ").append(deletedColumn).append(" IS NULL");
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ");
+			GenericServiceJDBCHelper.scapeColumn(countQuery, deletedColumn).append(" IS NULL");
 			preparedStatement = connection.prepareStatement(countQuery.toString());
 
 			resultSet = preparedStatement.executeQuery();
@@ -700,14 +703,18 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		String modifiedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName(); // MODIFIED
 		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName(); // DELETED
 
-		querySelect.append(revisionColumn).append(',').append(birthColumn).append(',').append(modifiedColumn).append(',').append(deletedColumn);
+		GenericServiceJDBCHelper.scapeColumn(querySelect, revisionColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(querySelect, birthColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(querySelect, modifiedColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(querySelect, deletedColumn);
 
 		// - Conjunto de attributos que conforman la clave primaria.
 		Iterator<String> primaryKeyColumns = entityInformation.primaryKey.keySet().iterator();
 
 		while (primaryKeyColumns.hasNext()) {
 
-			querySelect.append(',').append(primaryKeyColumns.next());
+			querySelect.append(',');
+			GenericServiceJDBCHelper.scapeColumn(querySelect, primaryKeyColumns.next());	
 		}
 
 		// - Atributos con #Direction.OUTPUT. (Para poder informar los atributos de solo salida en la operación de vuelta)
@@ -728,7 +735,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
 
 						if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
-							querySelect.append(',').append(dataAttribute.getName());
+							querySelect.append(',');
+							GenericServiceJDBCHelper.scapeColumn(querySelect, dataAttribute.getName());
 						}
 					}
 				}
@@ -737,7 +745,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 		StringBuilder queryFrom = new StringBuilder(" FROM ").append(entityAccessPolicy.getName().getName());
 
-		StringBuilder queryWhere = new StringBuilder(" WHERE ").append(deletedColumn).append(" IS NULL");
+		StringBuilder queryWhere = GenericServiceJDBCHelper.scapeColumn(new StringBuilder(" WHERE "), deletedColumn).append(" IS NULL");
 
 		/*
 		 * Especificación del filtro.
@@ -838,7 +846,10 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			/*
 			 *  Obtención del número total de registros sin marca de eliminación.
 			 */
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ").append(deletedColumn).append(" IS NULL");
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ");
+			
+			GenericServiceJDBCHelper.scapeColumn(countQuery, deletedColumn).append(" IS NULL");
+
 			preparedStatement = connection.prepareStatement(countQuery.toString());
 
 			resultSet = preparedStatement.executeQuery();
@@ -917,7 +928,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			AbstractList<Object> params = new ArrayList<Object>();
 
 			StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ");
-			queryUpdate.append(revisionColumn).append("=?,").append(modifiedColumn).append("=?");
+			GenericServiceJDBCHelper.scapeColumn(queryUpdate, revisionColumn).append("=?,");
+			GenericServiceJDBCHelper.scapeColumn(queryUpdate, modifiedColumn).append("=?");
 
 			types.add(revisionColumnType);
 			params.add(finalRevision);
@@ -944,7 +956,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 							types.add(entityInformation.dataFields.get(dataAttribute.getName()));
 							params.add(updatedAttributes.get(attributeAlias));
 
-							queryUpdate.append(',').append(dataAttribute.getName()).append("=?");
+							queryUpdate.append(',');
+							GenericServiceJDBCHelper.scapeColumn(queryUpdate, dataAttribute.getName()).append("=?");
 						}
 					}
 				}
@@ -957,7 +970,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			Iterator<Entry<String, Integer>> primaryKeyColumns = entityInformation.primaryKey.entrySet().iterator();
 
 			Entry<String, Integer> primaryKeyColumn = primaryKeyColumns.next();
-			queryUpdate.append(primaryKeyColumn.getKey()).append("=?");
+			GenericServiceJDBCHelper.scapeColumn(queryUpdate, primaryKeyColumn.getKey()).append("=?");
 
 			types.add(primaryKeyColumn.getValue());
 			params.add(resultSet.getObject(primaryKeyColumn.getKey()));
@@ -966,7 +979,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 				primaryKeyColumn = primaryKeyColumns.next();
 
-				queryUpdate.append(" AND ").append(primaryKeyColumn.getKey()).append("=?");
+				queryUpdate.append(" AND ");
+				GenericServiceJDBCHelper.scapeColumn(queryUpdate, primaryKeyColumn.getKey()).append("=?");
 
 				types.add(primaryKeyColumn.getValue());
 				params.add(resultSet.getObject(primaryKeyColumn.getKey()));
@@ -1018,5 +1032,15 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		}
 
 		return updatedItem;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Operation createUpdate(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	
+		
+		return operation;
 	}
 }

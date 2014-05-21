@@ -18,7 +18,6 @@ import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.KeyItem;
-import com.fav24.dataservices.domain.generic.Metadata;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAttribute;
@@ -40,6 +39,22 @@ import com.fav24.dataservices.util.JDBCUtils;
  * Conjunto de funciones de ayuda para la implementación JDBC del GenericService. 
  */
 public class GenericServiceJDBCHelper {
+
+	public static final char COLUMN_SCAPE_CHAR = '`';
+
+
+	/**
+	 * Retorna la columna envuelta entre caracteres de escape, para evitar colisiones con palabras reservadas de la sintaxis del RDBS.
+	 * 
+	 * @param stringBuilder Constructor de cadenas en donde se concatena la columna.
+	 * @param column Nombre de la columna a concatenar.
+	 * 
+	 * @return el constructor de cadenas.
+	 */
+	public static StringBuilder scapeColumn(StringBuilder stringBuilder, String column) {
+
+		return stringBuilder.append(COLUMN_SCAPE_CHAR).append(column).append(COLUMN_SCAPE_CHAR);
+	}
 
 	/**
 	 * Retorna una cadena de texto con el conjunto de campos de datos.
@@ -69,14 +84,14 @@ public class GenericServiceJDBCHelper {
 				else if (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH) {
 
 					if (resultingData == null) {
-						resultingData = new StringBuilder(dataAttribute.getName());
+						resultingData = scapeColumn(new StringBuilder(), dataAttribute.getName());
 					}
 					else {
-						resultingData.append(',').append(dataAttribute.getName());
+						resultingData.append(',');
+						scapeColumn(resultingData, dataAttribute.getName());
 					}
 				}
 			}
-
 		}
 
 		return resultingData;
@@ -112,7 +127,7 @@ public class GenericServiceJDBCHelper {
 				entityAccessPolicy.checkAttributesAccesibility(new ArrayList<String>(attributes.keySet()));
 			}
 			else {
-				
+
 				if (entityInformation.generatedData.contains(dataAttribute.getAlias())) {
 
 					if (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.OUTPUT) {
@@ -121,15 +136,16 @@ public class GenericServiceJDBCHelper {
 					}
 				}
 				else if (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.INPUT) {
-					
+
 					inColumns.add(dataAttribute.getName());
 					inAliases.add(dataAttribute.getAlias());
-					
+
 					if (resultingData == null) {
-						resultingData = new StringBuilder(dataAttribute.getName());
+						resultingData = scapeColumn(new StringBuilder(), dataAttribute.getName());
 					}
 					else {
-						resultingData.append(',').append(dataAttribute.getName());
+						resultingData.append(',');
+						scapeColumn(resultingData, dataAttribute.getName());
 					}
 				}
 			}
@@ -150,20 +166,20 @@ public class GenericServiceJDBCHelper {
 	 */
 	public static StringBuilder getKeyString(String entity, AbstractList<KeyItem> keys, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
-		StringBuilder resultingKey = new StringBuilder();
+		StringBuilder resultingKey = null;
 
 		String column;
 		KeyItem key = keys.get(0);
 
 		if (key.getValue() == null) {
 
-			resultingKey.append(AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
+			resultingKey = scapeColumn(new StringBuilder(), AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
 		}
 		else {
 
 			column = AccessPolicy.getAttributeName(entity, key.getName());
 
-			resultingKey.append(column).append('=').append('?');
+			resultingKey = scapeColumn(new StringBuilder(), column).append('=').append('?');
 
 			if (columns != null) {
 				columns.add(column);
@@ -182,13 +198,13 @@ public class GenericServiceJDBCHelper {
 
 			if (key.getValue() == null) {
 
-				resultingKey.append(AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
+				scapeColumn(resultingKey, AccessPolicy.getAttributeName(entity, key.getName())).append(" IS NULL");
 			}
 			else {
 
 				column = AccessPolicy.getAttributeName(entity, key.getName());
 
-				resultingKey.append(column).append('=').append('?');
+				scapeColumn(resultingKey, column).append('=').append('?');
 
 				if (columns != null) {
 					columns.add(column);
@@ -215,10 +231,8 @@ public class GenericServiceJDBCHelper {
 	 */
 	public static StringBuilder getFilterString(String entity, FilterItem filter, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
-		StringBuilder resultingFilter = new StringBuilder();
-
 		String column = AccessPolicy.getAttributeName(entity, filter.getName());
-		resultingFilter.append(column);
+		StringBuilder resultingFilter = scapeColumn(new StringBuilder(), column);
 
 		if (filter.getValue() == null) {
 
@@ -348,28 +362,17 @@ public class GenericServiceJDBCHelper {
 	/**
 	 * Retorna una cadena de texto con el filtro (o <code>null</code>) de los registros eliminados.
 	 * 
-	 * @param metadata Metadata de la operación de la que se desea obtener el filtro.
+	 * @param entityAccessPolicy Definición de las políticas de acceso de una determinada entidad.
 	 * 
 	 * @return una cadena de texto con el filtro (o <code>null</code>) de los registros eliminados.
 	 * 
 	 * @throws ServerException
 	 */
-	public static StringBuilder getExcludeDeletedString(Metadata metadata) throws ServerException {
+	public static StringBuilder getExcludeDeletedString(EntityAccessPolicy entityAccessPolicy) throws ServerException {
 
-		if (metadata.getIncludeDeleted() == null || !metadata.getIncludeDeleted()) {
+		String deletedFieldName = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
 
-			StringBuilder includeDeletedString = new StringBuilder();
-
-			EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(metadata.getEntity());
-
-			String deletedFieldName = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
-
-			includeDeletedString.append(deletedFieldName).append(" IS NULL");
-
-			return includeDeletedString;
-		}
-
-		return null;
+		return scapeColumn(new StringBuilder(), deletedFieldName).append(" IS NULL");
 	}
 
 	/**
@@ -389,13 +392,12 @@ public class GenericServiceJDBCHelper {
 		for(EntityOrderAttribute orderAttribute : ordination.getOrder()) {
 
 			if (resultingOrdination == null) {
-				resultingOrdination = new StringBuilder();
+				resultingOrdination = scapeColumn(new StringBuilder(), orderAttribute.getName());
 			}
 			else {
 				resultingOrdination.append(", ");
+				scapeColumn(resultingOrdination, orderAttribute.getName());
 			}
-
-			resultingOrdination.append(orderAttribute.getName());
 
 			if (orderAttribute.getOrder() == Order.ASCENDING) {
 
@@ -546,7 +548,11 @@ public class GenericServiceJDBCHelper {
 		AbstractList<Integer> types = new ArrayList<Integer>();
 		AbstractList<Object> params = new ArrayList<Object>();
 
-		recoverQuery.append(" SET ").append(revisionColumn).append("=?,").append(birthColumn).append("=?,").append(modifiedColumn).append("=?,").append(deletedColumn).append("=?");
+		recoverQuery.append(" SET ");
+		scapeColumn(recoverQuery, revisionColumn).append("=?,");
+		scapeColumn(recoverQuery, birthColumn).append("=?,");
+		scapeColumn(recoverQuery, modifiedColumn).append("=?,");
+		scapeColumn(recoverQuery, deletedColumn).append("=?");
 
 		types.add(revisionColumnType);
 		types.add(birthColumnType);
@@ -564,7 +570,8 @@ public class GenericServiceJDBCHelper {
 
 				if (!entityInformation.generatedData.contains(attribute.getName())) {
 
-					recoverQuery.append(',').append(attribute.getName()).append("=?");
+					recoverQuery.append(',');
+					scapeColumn(recoverQuery, attribute.getName()).append("=?");
 
 					types.add(entityInformation.dataFields.get(attribute.getName()));
 
@@ -578,7 +585,8 @@ public class GenericServiceJDBCHelper {
 			}
 		}
 
-		recoverQuery.append(" WHERE ").append(deletedColumn).append(" IS NOT NULL");
+		recoverQuery.append(" WHERE ");
+		scapeColumn(recoverQuery, deletedColumn).append(" IS NOT NULL");
 
 		/*
 		 * Montaje del filtro:
@@ -594,7 +602,7 @@ public class GenericServiceJDBCHelper {
 		StringBuilder fndQuery = null;
 		AbstractList<Integer> fndTypes = new ArrayList<Integer>();
 		AbstractList<Object> fndParams = new ArrayList<Object>();
-		
+
 		for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
 
 			StringBuilder keyQuery = null;
@@ -602,7 +610,7 @@ public class GenericServiceJDBCHelper {
 			Integer[] keyTypes = null;
 			Object[] keyParams = null;
 			int i = 0;
-			
+
 			for (EntityAttribute key : entityKey.getKey()) {
 
 				Object value = dataItem.getAttributes().get(key.getAlias());
@@ -613,14 +621,17 @@ public class GenericServiceJDBCHelper {
 
 					if (keyQuery == null) {
 
-						keyQuery = new StringBuilder("(").append(columnName).append("=?");
+						keyQuery = new StringBuilder("(");
+
 						keyTypes = new Integer[entityKey.getKey().size()];
 						keyParams = new Object[keyTypes.length];
 					}
 					else {
 
-						keyQuery.append(" AND ").append(columnName).append("=?");
+						keyQuery.append(" AND ");
 					}
+
+					scapeColumn(keyQuery, columnName).append("=?");
 
 					keyTypes[i] = entityInformation.dataFields.get(columnName);
 					keyParams[i] = value;
@@ -644,9 +655,9 @@ public class GenericServiceJDBCHelper {
 				else {
 					fndQuery.append(" OR ").append(keyQuery);
 				}
-				
+
 				for (i=0; i < keyTypes.length; i++) {
-					
+
 					fndTypes.add(keyTypes[i]);
 					fndParams.add(keyParams[i]);
 				}
@@ -702,12 +713,13 @@ public class GenericServiceJDBCHelper {
 				if (value == null) {
 
 					if (firstField) {
-						recoveredQuery.append(entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
 						firstField = false;
 					}
 					else {
-						recoveredQuery.append(',').append(entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
+						recoveredQuery.append(',');
 					}
+
+					scapeColumn(recoveredQuery, entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
 
 					attributes.add(key.getAlias());
 				}

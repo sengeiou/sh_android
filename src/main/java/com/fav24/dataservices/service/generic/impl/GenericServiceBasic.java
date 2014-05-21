@@ -218,7 +218,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 		case DELETE:
 			return delete(connection, requestor, operation);
 		case UPDATE_CREATE:
-			return updateCreate(connection, requestor, operation);
+			return createUpdate(connection, requestor, operation);
 		}
 
 		return operation;
@@ -285,7 +285,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation updateCreate(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation createUpdate(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 
 	}
