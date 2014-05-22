@@ -927,12 +927,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			NavigableMap<String, Object> itemAttributes;
 			for (DataItem item :  operation.getData()) {
 
-				// Se actualiza el contenido del item.
-				item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
-				item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
-				item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
-				item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
-
 				// Se asignan los valores a la sentencia.
 				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
 				preparedStatement.setObject(2, now, birthColumnType);
@@ -951,6 +945,12 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 				try {
 					preparedStatement.executeUpdate();
+					
+					// Se actualiza el contenido del item en caso de no haber ningún problema.
+					item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
+					item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
+					item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
+					item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
 				}
 				catch (SQLException e) {
 
