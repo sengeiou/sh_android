@@ -12,11 +12,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de transferencia MetadataDto y el objeto de dominio Metadata.
- * 
- * @author Fav24
- *
  */
 public class MetadataDtoToMetadata extends Mapper<MetadataDto, Metadata> {
 
@@ -36,6 +32,7 @@ public class MetadataDtoToMetadata extends Mapper<MetadataDto, Metadata> {
 		
 		metadata.setOperation(opperationType);
 		metadata.setEntity(origin.getEntity());
+		metadata.setIncludeDeleted(origin.getIncludeDeleted());
 		metadata.setTotalItems(origin.getTotalItems());
 		metadata.setOffset(origin.getOffset());
 		metadata.setItems(origin.getItems());

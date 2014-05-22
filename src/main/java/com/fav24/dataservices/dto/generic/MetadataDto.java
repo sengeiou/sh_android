@@ -22,6 +22,7 @@ public class MetadataDto {
 
 	private String operation;
 	private String entity;
+	private Boolean includeDeleted;
 	private Long totalItems;
 	private Long offset;
 	private Long items;
@@ -35,6 +36,7 @@ public class MetadataDto {
 	public MetadataDto() {
 		this.operation = null;
 		this.entity = null;
+		this.includeDeleted = null;
 		this.totalItems = null;
 		this.offset = null;
 		this.items = null;
@@ -47,14 +49,16 @@ public class MetadataDto {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
+	 * @param includeDeleted Flag donde se indica si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems incluidos en la respuesta.
 	 * @param key Lista de atributos y valores que identifican el ítem a operar.
 	 */
-	public MetadataDto(String operation, String entity, Long totalItems, Long offset, Long items, Map<String, Object> key) {
+	public MetadataDto(String operation, String entity, Boolean includeDeleted, Long totalItems, Long offset, Long items, Map<String, Object> key) {
 		this.operation = operation;
 		this.entity = entity;
+		this.includeDeleted = includeDeleted;
 		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
@@ -66,14 +70,16 @@ public class MetadataDto {
 	 * 
 	 * @param operation Tipo de operación a realizar.
 	 * @param entity Entidad contra la que se realiza la operación.
+	 * @param includeDeleted Flag donde se indica si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
 	 * @param totalItems Número de ítems afectados por la operación.
 	 * @param offset Número del último ítem a partir del que se desea que esta operación aplique.
 	 * @param items Número de ítems incluidos en la respuesta.
 	 * @param filter Estructura de filtrado de los ítems a operar.
 	 */
-	public MetadataDto(String operation, String entity, Long totalItems, Long offset, Long items, FilterDto filter) {
+	public MetadataDto(String operation, String entity, Boolean includeDeleted, Long totalItems, Long offset, Long items, FilterDto filter) {
 		this.operation = operation;
 		this.entity = entity;
+		this.includeDeleted = includeDeleted;
 		this.totalItems = totalItems;
 		this.offset = offset;
 		this.items = items;
@@ -117,6 +123,24 @@ public class MetadataDto {
 	}
 
 	/**
+	 * Retorna true o false en función de si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 * 
+	 * @return true o false en función de si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 */
+	public Boolean getIncludeDeleted() {
+		return includeDeleted;
+	}
+
+	/**
+	 * Asigna el flag donde se indica si se deben o no incluir registros que satisfacen las condiciones de criba, con el atributo "deleted".
+	 * 
+	 * @param includeDeleted Flag a asignar.
+	 */
+	public void setIncludeDeleted(Boolean includeDeleted) {
+		this.includeDeleted = includeDeleted;
+	}
+	
+	/**
 	 * Retorna el número de ítems afectados por la operación.
 	 * 
 	 * @return el número de ítems afectados por la operación.
@@ -124,7 +148,7 @@ public class MetadataDto {
 	public Long getTotalItems() {
 		return totalItems;
 	}
-
+	
 	/**
 	 * Asigna el número de ítems afectados por la operación.
 	 * 
