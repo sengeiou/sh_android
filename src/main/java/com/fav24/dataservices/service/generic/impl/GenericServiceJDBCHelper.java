@@ -1209,6 +1209,7 @@ public class GenericServiceJDBCHelper {
 			GenericServiceJDBCHelper.scapeColumn(querySelect, deletedColumn).append(" IS NULL");
 			querySelect.append(" AND (").append(fndQuery).append(')');
 
+			ResultSet resultSet = null;
 			try {
 				preparedStatement = connection.prepareStatement(querySelect.toString());
 
@@ -1221,19 +1222,27 @@ public class GenericServiceJDBCHelper {
 					preparedStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
 				}
 
-				modifiedRows = preparedStatement.executeUpdate();
+				resultSet = preparedStatement.executeQuery();
 
-				if (modifiedRows > 1) {
+				if (resultSet.first()) {
+
+					// Sólo puede haber una row.
+					if (!resultSet.isLast()) {
+						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+					}
+
+					if (!update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation)) {
+						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+					}
+				}
+				else {
 					throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 				}
 			}
 			finally {
+				JDBCUtils.CloseQuietly(resultSet);
 				JDBCUtils.CloseQuietly(preparedStatement);
 			}
-
-			ResultSet resultSet;
-
-			//			DataItem item = update(connection, resultSet, now, dataItem, entityAccessPolicy, entityInformation);
 		}
 		else { //if (modifiedRows == 1)
 			/*
