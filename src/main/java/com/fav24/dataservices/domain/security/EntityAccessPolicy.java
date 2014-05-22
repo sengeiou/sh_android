@@ -23,11 +23,11 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public enum OperationType {
 
-		CREATE("create"),
-		UPDATE("update"),
-		RETRIEVE("retrieve"),
-		DELETE("delete"),
-		UPDATE_CREATE("updateCreate");
+		CREATE("Create"),
+		UPDATE("Update"),
+		RETRIEVE("Retrieve"),
+		DELETE("Delete"),
+		CREATE_UPDATE("CreateUpdate");
 
 		private final String operationType;
 

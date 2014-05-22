@@ -1173,29 +1173,29 @@ public class GenericServiceJDBCHelper {
 		/*
 		 * Recuperación del registro.
 		 */
-		PreparedStatement preparedStatement = null;
+		PreparedStatement recoverQueryStatement = null;
 		int modifiedRows = 0;
 
 		try {
-			preparedStatement = connection.prepareStatement(recoverQuery.toString());
+			recoverQueryStatement = connection.prepareStatement(recoverQuery.toString());
 
 			int j=1;
 			for (int i=0; i<types.size(); i++, j++) {
-				preparedStatement.setObject(j, params.get(i), types.get(i));
+				recoverQueryStatement.setObject(j, params.get(i), types.get(i));
 			}
 
 			for (int i=0; i<fndTypes.size(); i++, j++) {
-				preparedStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
+				recoverQueryStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
 			}
 
-			modifiedRows = preparedStatement.executeUpdate();
+			modifiedRows = recoverQueryStatement.executeUpdate();
 
 			if (modifiedRows > 1) {
 				throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 			}
 		}
 		finally {
-			JDBCUtils.CloseQuietly(preparedStatement);
+			JDBCUtils.CloseQuietly(recoverQueryStatement);
 		}
 
 		if (modifiedRows == 0) {
@@ -1209,20 +1209,17 @@ public class GenericServiceJDBCHelper {
 			GenericServiceJDBCHelper.scapeColumn(querySelect, deletedColumn).append(" IS NULL");
 			querySelect.append(" AND (").append(fndQuery).append(')');
 
+			PreparedStatement selectQueryStatement = null;
 			ResultSet resultSet = null;
 			try {
-				preparedStatement = connection.prepareStatement(querySelect.toString());
+				selectQueryStatement = connection.prepareStatement(querySelect.toString());
 
 				int j=1;
-				for (int i=0; i<types.size(); i++, j++) {
-					preparedStatement.setObject(j, params.get(i), types.get(i));
-				}
-
 				for (int i=0; i<fndTypes.size(); i++, j++) {
-					preparedStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
+					selectQueryStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
 				}
 
-				resultSet = preparedStatement.executeQuery();
+				resultSet = selectQueryStatement.executeQuery();
 
 				if (resultSet.first()) {
 
@@ -1241,7 +1238,7 @@ public class GenericServiceJDBCHelper {
 			}
 			finally {
 				JDBCUtils.CloseQuietly(resultSet);
-				JDBCUtils.CloseQuietly(preparedStatement);
+				JDBCUtils.CloseQuietly(selectQueryStatement);
 			}
 		}
 		else { //if (modifiedRows == 1)
@@ -1278,16 +1275,17 @@ public class GenericServiceJDBCHelper {
 
 			recoveredQuery.append(" WHERE ").append(fndQuery);
 
+			PreparedStatement recoveredQueryStatement = null;
 			ResultSet resultSet = null;
 
 			try {
-				preparedStatement = connection.prepareStatement(recoveredQuery.toString());
+				recoveredQueryStatement = connection.prepareStatement(recoveredQuery.toString());
 
 				for (int i=0; i<fndTypes.size(); i++) {
-					preparedStatement.setObject(i+1, fndParams.get(i), fndTypes.get(i));
+					recoveredQueryStatement.setObject(i+1, fndParams.get(i), fndTypes.get(i));
 				}
 
-				resultSet = preparedStatement.executeQuery();
+				resultSet = recoveredQueryStatement.executeQuery();
 
 				if (resultSet.first()) {
 
@@ -1309,7 +1307,7 @@ public class GenericServiceJDBCHelper {
 			}
 			finally {
 				JDBCUtils.CloseQuietly(resultSet);
-				JDBCUtils.CloseQuietly(preparedStatement);
+				JDBCUtils.CloseQuietly(recoveredQueryStatement);
 			}
 		}
 	}

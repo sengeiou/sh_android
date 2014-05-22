@@ -217,7 +217,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 		case DELETE:
 			return delete(connection, requestor, operation);
-		case UPDATE_CREATE:
+		case CREATE_UPDATE:
 			return createUpdate(connection, requestor, operation);
 		}
 

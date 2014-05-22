@@ -31,9 +31,9 @@
 			output.append("<div class=\"panel-body\">");
 			Iterator<OperationType> operations = entityPolicies.getAllowedOperations().iterator();
 			if (operations.hasNext()) {
-				output.append(operations.next());
+				output.append(operations.next().getOperationType());
 				while (operations.hasNext()) {
-					output.append(',').append(operations.next());
+					output.append(", ").append(operations.next().getOperationType());
 				}
 			}
 			else {
