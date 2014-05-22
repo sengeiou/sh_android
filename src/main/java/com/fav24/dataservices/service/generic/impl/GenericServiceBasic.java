@@ -304,7 +304,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * 
 	 * @return true o false en función de si el registro entrante prevalece o no sobre el existente.
 	 */
-	protected boolean incommingItemWins(Timestamp localModified, Timestamp remoteModified, Long localRevision, Long remoteRevision, 
+	public static boolean incommingItemWins(Timestamp localModified, Timestamp remoteModified, Long localRevision, Long remoteRevision, 
 			Long positiveRevisionThreshold, Long negativeRevisionThreshold) {
 
 		if (remoteModified.after(localModified)) {

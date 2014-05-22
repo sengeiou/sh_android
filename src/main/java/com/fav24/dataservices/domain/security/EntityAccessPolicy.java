@@ -1,7 +1,6 @@
 package com.fav24.dataservices.domain.security;
 
 import java.util.AbstractList;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -261,6 +260,84 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	}
 
 	/**
+	 * Retorna el nombre del atributo indicado en la fuente de datos, a partir del alias. 
+	 * 
+	 * @param attributeAlias Alias del atributo.
+	 * 
+	 * @return el nombre del atributo indicado en la fuente de datos, a partir del alias.
+	 */
+	public String getAttributeName(String attributeAlias) {
+
+		if (attributeAlias != null) {
+
+			if (getData() != null) {
+				EntityDataAttribute dataAttribute = getData().getAttribute(attributeAlias);
+
+				if (dataAttribute != null) {
+					return dataAttribute.getName();
+				}
+			}
+
+			if (getKeys() != null) {
+				EntityAttribute keyAttribute = getKeys().getFirstKeyAttributeByAlias(attributeAlias);
+
+				if (keyAttribute != null) {
+					return keyAttribute.getName();
+				}
+			}
+
+			if (getFilters() != null) {
+				EntityAttribute filterAttribute = getFilters().getFirstFilterAttributeByAlias(attributeAlias);
+
+				if (filterAttribute != null) {
+					return filterAttribute.getName();
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retorna el alias del atributo indicado en la fuente de datos, a partir de los nombres. 
+	 * 
+	 * @param attributeName Nombre del atributo.
+	 * 
+	 * @return el alias del atributo indicado en la fuente de datos, a partir de los nombres.
+	 */
+	public String getAttributeAlias(String attributeName) {
+
+		if (attributeName != null) {
+
+			if (getData() != null) {
+				EntityDataAttribute dataAttribute = getData().getAttributeByName(attributeName);
+
+				if (dataAttribute != null) {
+					return dataAttribute.getAlias();
+				}
+			}
+
+			if (getKeys() != null) {
+				EntityAttribute keyAttribute = getKeys().getFirstKeyAttributeByName(attributeName);
+
+				if (keyAttribute != null) {
+					return keyAttribute.getAlias();
+				}
+			}
+
+			if (getFilters() != null) {
+				EntityAttribute filterAttribute = getFilters().getFirstFilterAttributeByName(attributeName);
+
+				if (filterAttribute != null) {
+					return filterAttribute.getAlias();
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Comprueba que la lista de atributos indicada, esta disponible para la entidad.
 	 * 
 	 * @param attributesAliases Lista de atributos a comprobar.
@@ -390,236 +467,6 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setNegativeRevisionThreshold(Long negativeRevisionThreshold) {
 		this.negativeRevisionThreshold = negativeRevisionThreshold;
-	}
-
-	/**
-	 * Retorna los detalles de esta entidad en forma de cadena de texto.
-	 * 
-	 * @param inHtml True o false en función de si se desea o no que el texto esté formateado en XHTML.
-	 * 
-	 * @return los detalles de esta entidad en forma de cadena de texto.
-	 */
-	public String getDetails(boolean inXhtml) {
-		StringBuilder policyDetails = new StringBuilder();
-
-		if (inXhtml) {
-			policyDetails.append("<p>");	
-			policyDetails.append("<b>");	
-		}
-		policyDetails.append("Entidad ");
-		if (inXhtml) {
-			policyDetails.append("</b>");	
-		}
-		policyDetails.append(name.getAlias());
-		policyDetails.append(":");
-		if (inXhtml) {
-			policyDetails.append("</p>");	
-		}
-		else {
-			policyDetails.append('\n');
-		}
-
-		// Operaciones permitidas.
-		if (inXhtml) {
-			policyDetails.append("<p>");	
-			policyDetails.append("<b>");	
-		}
-		policyDetails.append("Operaciones permitidas: ");
-		if (inXhtml) {
-			policyDetails.append("</b>");	
-		}
-
-		Iterator<OperationType> operations = allowedOperations.iterator();
-
-		if (operations.hasNext()) {
-			policyDetails.append(operations.next());
-			while (operations.hasNext()) {
-				policyDetails.append(',');
-				policyDetails.append(operations.next());
-			}
-		}
-		else {
-			policyDetails.append("ninguna");
-		}
-		if (inXhtml) {
-			policyDetails.append("</p>");	
-		}
-		else {
-			policyDetails.append('\n');
-		}
-
-		// Dirección de los atributos.
-		if (inXhtml) {
-			policyDetails.append("<p>");	
-			policyDetails.append("<b>");	
-		}
-		policyDetails.append("Atributos: ");
-		if (inXhtml) {
-			policyDetails.append("</b>");	
-		}
-
-		Iterator<EntityDataAttribute> attributeIterator = data.getData().iterator();
-
-		if (attributeIterator.hasNext()) {
-
-			while (attributeIterator.hasNext()) {
-				EntityDataAttribute  attribute = attributeIterator.next();
-				if (inXhtml) {
-					policyDetails.append("<br/>");	
-				}
-				else {
-					policyDetails.append('\n');
-				}
-				policyDetails.append(attribute.getAlias()).append(": ").append(attribute.getDirection());
-			}
-		}
-		else {
-			policyDetails.append("ninguno.");
-		}
-
-		if (inXhtml) {
-			policyDetails.append("</p>");	
-		}
-		else {
-			policyDetails.append('\n');
-		}
-
-		// Keys disponibles.
-		if (inXhtml) {
-			policyDetails.append("<p>");	
-			policyDetails.append("<b>");	
-		}
-		policyDetails.append("Claves: ");
-		if (inXhtml) {
-			policyDetails.append("</b>");	
-		}
-
-		if (keys != null && keys.getKeys().size() > 0) {
-
-			Iterator<EntityKey> keysIterator = keys.getKeys().iterator();
-
-			while (keysIterator.hasNext()) {
-				Iterator<EntityAttribute> keyIterator = keysIterator.next().getKey().iterator();
-				if (inXhtml) {
-					policyDetails.append("<br/>");	
-				}
-				else {
-					policyDetails.append('\n');
-				}
-
-				if (keyIterator.hasNext()) {
-					policyDetails.append(keyIterator.next().getAlias());
-					while (keyIterator.hasNext()) {
-						policyDetails.append(',').append(keyIterator.next().getAlias());
-					}
-				}
-			}
-		}
-		else {
-			policyDetails.append("ninguna.");
-		}
-
-		if (onlyByKey) {
-			if (inXhtml) {
-				policyDetails.append("<br/><b>");	
-			}
-			else {
-				policyDetails.append('\n');
-			}
-			policyDetails.append("Nota: ");
-			if (inXhtml) {
-				policyDetails.append("</b>");
-			}
-			policyDetails.append("esta entidad únicamente es accesible mediate el uso de una clave.");	
-		}
-
-		if (inXhtml) {
-			policyDetails.append("</p>");	
-		}
-		else {
-			policyDetails.append('\n');
-		}
-
-
-		// Filtros disponibles.
-		if (inXhtml) {
-			policyDetails.append("<p>");	
-			policyDetails.append("<b>");	
-		}
-		policyDetails.append("Filtros: ");
-		if (inXhtml) {
-			policyDetails.append("</b>");	
-		}
-
-		if (filters != null && filters.getFilters().size() > 0) {
-
-			Iterator<EntityFilter> filtersIterator = filters.getFilters().iterator();
-
-			while (filtersIterator.hasNext()) {
-				Iterator<EntityAttribute> filterIterator = filtersIterator.next().getFilter().iterator();
-				if (inXhtml) {
-					policyDetails.append("<br/>");	
-				}
-				else {
-					policyDetails.append('\n');
-				}
-
-				if (filterIterator.hasNext()) {
-					policyDetails.append(filterIterator.next().getAlias());
-					while (filterIterator.hasNext()) {
-						policyDetails.append(',').append(filterIterator.next().getAlias());
-					}
-				}
-			}
-		}
-		else {
-			policyDetails.append("ninguno.");
-		}
-
-		if (onlySpecifiedFilters) {
-			if (inXhtml) {
-				policyDetails.append("<br/><b>");
-			}
-			else {
-				policyDetails.append('\n');
-			}
-			policyDetails.append("Nota: ");
-			if (inXhtml) {
-				policyDetails.append("</b>");
-			}
-			policyDetails.append("esta entidad únicamente es accesible mediate el uso de alguno de los filtros especificados.");	
-		}
-
-		if (inXhtml) {
-			policyDetails.append("</p>");	
-		}
-		else {
-			policyDetails.append('\n');
-		}
-
-		if (inXhtml) {
-			policyDetails.append("<br/><b>");
-		}
-		else {
-			policyDetails.append('\n');
-		}
-		policyDetails.append("Tamaño máximo de página: ");
-		if (inXhtml) {
-			policyDetails.append("</b>");
-		}
-		policyDetails.append(maxPageSize);
-
-		String result = policyDetails.toString();
-
-		if (inXhtml) {
-			result.replace("á", "&aacute;");
-			result.replace("é", "&eacute;");
-			result.replace("í", "&iacute;");
-			result.replace("ó", "&oacute;");
-			result.replace("ú", "&uacute;");
-		}
-
-		return result;
 	}
 
 	/**

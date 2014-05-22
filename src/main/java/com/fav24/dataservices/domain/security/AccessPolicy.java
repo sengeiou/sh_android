@@ -295,33 +295,12 @@ public class AccessPolicy extends BaseDomain {
 	public static final String getAttributeName(String entityAlias, String attributeAlias) {
 
 		if (currentAccesPolicy.accessPoliciesByAlias != null && entityAlias != null && attributeAlias != null) {
+
 			EntityAccessPolicy entityAccessPolicy = currentAccesPolicy.accessPoliciesByAlias.get(entityAlias);
 
 			if (entityAccessPolicy != null) {
 
-				if (entityAccessPolicy.getData() != null) {
-					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
-
-					if (dataAttribute != null) {
-						return dataAttribute.getName();
-					}
-				}
-
-				if (entityAccessPolicy.getKeys() != null) {
-					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByAlias(attributeAlias);
-
-					if (keyAttribute != null) {
-						return keyAttribute.getName();
-					}
-				}
-
-				if (entityAccessPolicy.getFilters() != null) {
-					EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByAlias(attributeAlias);
-
-					if (filterAttribute != null) {
-						return filterAttribute.getName();
-					}
-				}
+				return entityAccessPolicy.getAttributeName(attributeAlias);
 			}
 		}
 
@@ -343,29 +322,7 @@ public class AccessPolicy extends BaseDomain {
 
 			if (entityAccessPolicy != null) {
 
-				if (entityAccessPolicy.getData() != null) {
-					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttributeByName(attributeName);
-
-					if (dataAttribute != null) {
-						return dataAttribute.getAlias();
-					}
-				}
-
-				if (entityAccessPolicy.getKeys() != null) {
-					EntityAttribute keyAttribute = entityAccessPolicy.getKeys().getFirstKeyAttributeByName(attributeName);
-
-					if (keyAttribute != null) {
-						return keyAttribute.getAlias();
-					}
-				}
-
-				if (entityAccessPolicy.getFilters() != null) {
-					EntityAttribute filterAttribute = entityAccessPolicy.getFilters().getFirstFilterAttributeByName(attributeName);
-
-					if (filterAttribute != null) {
-						return filterAttribute.getAlias();
-					}
-				}
+				return entityAccessPolicy.getAttributeAlias(attributeName);
 			}
 		}
 
@@ -424,7 +381,7 @@ public class AccessPolicy extends BaseDomain {
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY, 
 					String.format(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE, entityAlias));
 		}
-		
+
 		entityAccessPolicy.checkAttributesAccesibility(attributesAliases);
 	}
 
