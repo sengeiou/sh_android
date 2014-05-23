@@ -27,7 +27,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		UPDATE("Update"),
 		RETRIEVE("Retrieve"),
 		DELETE("Delete"),
-		CREATE_UPDATE("CreateUpdate");
+		CREATE_UPDATE("CreateUpdate"),
+		UPDATE_CREATE("UpdateCreate");
 
 		private final String operationType;
 

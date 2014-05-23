@@ -219,6 +219,8 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 			return delete(connection, requestor, operation);
 		case CREATE_UPDATE:
 			return createUpdate(connection, requestor, operation);
+		case UPDATE_CREATE:
+			return updateCreate(connection, requestor, operation);
 		}
 
 		return operation;
@@ -277,7 +279,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	}
 
 	/**
-	 * Operatión de modificación o creación de un ítem.
+	 * Operatión de creación o modificaciónde un ítem.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
 	 * @param requestor Solicitante de la operación.
@@ -288,6 +290,19 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	protected Operation createUpdate(T connection, Requestor requestor, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 
+	}
+
+	/**
+	 * Operatión de modificación o creación de un ítem.
+	 * 
+	 * @param connection Conexión con la que se inició la transacción.
+	 * @param requestor Solicitante de la operación.
+	 * @param operation Operación a procesar.
+	 * 
+	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
+	 */
+	protected Operation updateCreate(T connection, Requestor requestor, Operation operation) throws ServerException {
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
 	/**

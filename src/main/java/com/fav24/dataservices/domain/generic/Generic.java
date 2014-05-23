@@ -8,8 +8,6 @@ import com.fav24.dataservices.domain.Requestor;
 
 /**
  * Clase que contiene la estructura genérica de operaciones sobre entidades.
- * 
- * @author Fav24
  */
 public class Generic extends BaseDomain {
 

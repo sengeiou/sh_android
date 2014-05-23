@@ -232,7 +232,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			params = new Object[types.length];
 
 			for (int i=0; i<filterColumns.size(); i++) {
-				
+
 				Integer type = entityInformation.filterFields.get(filterColumns.get(i));
 				if (type == null) {
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
@@ -379,11 +379,13 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			NavigableMap<String, Object> itemAttributes;
 			for (DataItem item :  operation.getData()) {
 
+				itemAttributes = item.getAttributes();
+
 				// Se actualiza el contenido del item.
-				item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
-				item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
-				item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
-				item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
+				itemAttributes.put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
+				itemAttributes.put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
+				itemAttributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
+				itemAttributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
 
 				// Se asignan los valores a la sentencia.
 				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
@@ -392,7 +394,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				preparedStatement.setObject(4, null, deletedColumnType);
 
 				i=5;
-				itemAttributes = item.getAttributes();
 
 				for (String inAlias : inAliases) {
 
@@ -438,7 +439,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 						for(String outAlias : outAliases) {
 
-							item.getAttributes().put(outAlias, resultSet.getObject(GeneratedkeyIndex++));
+							itemAttributes.put(outAlias, resultSet.getObject(GeneratedkeyIndex++));
 						}
 
 						resultSet.close();
@@ -542,13 +543,13 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 			Integer type = filterTypes.get(filterColumns.get(i));
 			if (type == null) {
-				
+
 				if (operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0) {
-					
+
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
 				}
 				else {
-					
+
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
 				}
 			}
@@ -805,7 +806,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					 * Modificación registro a registro.
 					 */
 					DataItem dataItem = new DataItem(referenceItem);
-					
+
 					if (GenericServiceJDBCHelper.update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation)) {
 
 						operation.getData().add(dataItem);
@@ -824,7 +825,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			 *  Obtención del número total de registros sin marca de eliminación.
 			 */
 			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ");
-			
+
 			GenericServiceJDBCHelper.scapeColumn(countQuery, deletedColumn).append(" IS NULL");
 
 			preparedStatement = connection.prepareStatement(countQuery.toString());
@@ -945,7 +946,196 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 				try {
 					preparedStatement.executeUpdate();
-					
+
+					// Se actualiza el contenido del item en caso de no haber ningún problema.
+					item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
+					item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);
+					item.getAttributes().put(SynchronizationField.MODIFIED.getSynchronizationField(), millisecondsSinceEpoch);
+					item.getAttributes().put(SynchronizationField.DELETED.getSynchronizationField(), null);
+				}
+				catch (SQLException e) {
+
+					/*
+					 *  Si se trata de una constrain violada, se considera que el registro ya existe y se intenta recuperar en caso de estar marcadao como eliminado.
+					 *  En caso de no estar eliminado, se modifica el registro localizado si sólo es 1. En caso de localizarse varios, se relanzará la excepción.
+					 */
+					if (JDBCUtils.IsIntegrityConstraintViolation(entitiesInformation.getProduct(), e)) {
+
+						isRefurbishedOrExistingRow = true;
+
+						/*
+						 * En caso de no estar marcado como eliminado o no ser posible su recuperación por colisión entre claves, se lanzará una excepción.
+						 */
+						GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation);
+					}
+					else {
+						if (preparedStatement != null) {
+							preparedStatement.close();
+						}
+						throw e;
+					}
+				}
+
+				// Recogida de los datos generados.
+				if (!isRefurbishedOrExistingRow && generatedKeyColumns.length > 0) {
+
+					resultSet = preparedStatement.getGeneratedKeys();
+
+					if (resultSet.first()) {
+
+						int GeneratedkeyIndex = 1;
+
+						for(String outAlias : outAliases) {
+
+							item.getAttributes().put(outAlias, resultSet.getObject(GeneratedkeyIndex++));
+						}
+
+						resultSet.close();
+					}
+				}
+
+				preparedStatement.clearParameters();
+			}
+
+			// Información de totales.
+			operation.getMetadata().setItems(Long.valueOf(operation.getData().size()));
+
+			// Obtención del número total de registros total de la entidad.
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityAccessPolicy.getName().getName());
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
+		} 
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
+		}
+		finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
+
+		return operation;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Operation updateCreate(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+
+		if (operation.getData() == null || operation.getData().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		DataItem firsItem = operation.getData().get(0);
+		if (firsItem.getAttributes() == null || firsItem.getAttributes().size() == 0) {
+			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
+		}
+
+		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		Long millisecondsSinceEpoch = System.currentTimeMillis();
+		Timestamp now = new Timestamp(millisecondsSinceEpoch);
+
+		NavigableMap<String, Object> itemAttributes;
+
+		try {
+			for (DataItem item :  operation.getData()) {
+				/*
+				 * En caso de no estar marcado como eliminado o no ser posible su recuperación por colisión entre claves, se lanzará una excepción.
+				 */
+				GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation);
+			}
+		}
+		catch(SQLException e) {
+
+		}
+		finally {
+
+		}
+
+		StringBuilder queryInsert = new StringBuilder();
+
+		/*
+		 * Construcción de la sentencia de inserción.
+		 */
+		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
+		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
+		String modifiedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.MODIFIED.getSynchronizationField()).getName(); // MODIFIED
+		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName(); // DELETED
+
+		queryInsert.append("INSERT INTO ").append(entityAccessPolicy.getName().getName());
+
+		queryInsert.append(" (");
+
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, revisionColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, birthColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, modifiedColumn).append(',');
+		GenericServiceJDBCHelper.scapeColumn(queryInsert, deletedColumn);
+
+		int initSize = firsItem.getAttributes().size();
+		AbstractList<String> inColumns = new ArrayList<String>(initSize);
+		AbstractList<String> inAliases = new ArrayList<String>(initSize);
+		AbstractList<String> outColumns = new ArrayList<String>(initSize);
+		AbstractList<String> outAliases = new ArrayList<String>(initSize);
+
+		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+
+		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
+
+		for (int i=0; i<inColumns.size(); i++) {
+
+			queryInsert.append(",?");
+		}
+		queryInsert.append(')');
+
+		/*
+		 * Inserción de los registros.
+		 */
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			int revisionColumnType = entityInformation.dataFields.get(revisionColumn);
+			int birthColumnType = entityInformation.dataFields.get(birthColumn);
+			int modifiedColumnType = entityInformation.dataFields.get(modifiedColumn);
+			int deletedColumnType = entityInformation.dataFields.get(deletedColumn);
+
+			String[] generatedKeyColumns = outColumns.toArray(new String[outColumns.size()]);
+
+			preparedStatement = connection.prepareStatement(queryInsert.toString(), generatedKeyColumns);
+
+			int i;
+			for (DataItem item :  operation.getData()) {
+
+				// Se asignan los valores a la sentencia.
+				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
+				preparedStatement.setObject(2, now, birthColumnType);
+				preparedStatement.setObject(3, now, modifiedColumnType);
+				preparedStatement.setObject(4, null, deletedColumnType);
+
+				i=5;
+				itemAttributes = item.getAttributes();
+
+				for (String inAlias : inAliases) {
+
+					preparedStatement.setObject(i++, itemAttributes.get(inAlias));
+				}
+
+				boolean isRefurbishedOrExistingRow = false;
+
+				try {
+					preparedStatement.executeUpdate();
+
 					// Se actualiza el contenido del item en caso de no haber ningún problema.
 					item.getAttributes().put(SynchronizationField.REVISION.getSynchronizationField(), EntityDataAttribute.DEFAFULT_REVISION);
 					item.getAttributes().put(SynchronizationField.BIRTH.getSynchronizationField(), millisecondsSinceEpoch);

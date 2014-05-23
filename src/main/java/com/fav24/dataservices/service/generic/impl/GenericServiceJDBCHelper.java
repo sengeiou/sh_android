@@ -979,7 +979,13 @@ public class GenericServiceJDBCHelper {
 					preparedStatement.setObject(i+1, params.get(i), types.get(i));
 				}
 
-				if (preparedStatement.executeUpdate() != 1) {
+				int updatedRegisters = preparedStatement.executeUpdate();
+				
+				if (updatedRegisters == 0) {
+					return false;
+				}
+				
+				if (updatedRegisters > 1) {
 					return false;
 				}
 			}

@@ -4,8 +4,6 @@ package com.fav24.dataservices.domain;
 
 /**
  * Clase base de todos los objetos de transferencia.
- *  
- * @author Fav24
  */
 public class BaseDomain {
 
