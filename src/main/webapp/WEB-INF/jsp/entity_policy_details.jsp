@@ -199,6 +199,23 @@
 
 			output.append("</div>");
 			output.append("</div>");
+
+			// Puntos de inserción (Hooks).
+			output.append("<div class=\"panel panel-info\">");
+			output.append("<div class=\"panel-heading\">Puntos de inserci&oacute;n (Hooks)</div>");
+			output.append("<div class=\"panel-body\">");
+			Iterator<String> hooks = entityPolicies.getHooks().keySet().iterator();
+			if (hooks.hasNext()) {
+				output.append(hooks.next());
+				while (hooks.hasNext()) {
+					output.append(", ").append(hooks.next());
+				}
+			}
+			else {
+				output.append("ninguno");
+			}
+			output.append("</div>");
+			output.append("</div>");
 			
 			output.append("<br/><b>Tama&ntilde;o m&aacute;ximo de p&aacute;gina: </b>");
 			output.append(entityPolicies.getMaxPageSize());
