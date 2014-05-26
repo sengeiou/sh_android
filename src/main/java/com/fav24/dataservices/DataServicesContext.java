@@ -1,5 +1,6 @@
 package com.fav24.dataservices;
 
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -32,7 +33,8 @@ public class DataServicesContext {
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY = "AC002";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY_MESSAGE = "La ruta indicada en el parámetro " + DataServicesContext.APPLICATION_HOME + " <%s> no hace referencia a un directorio.";
 
-	public static final String ENCODING = "UTF-8";
+	public static final String DEFAULT_ENCODING = "UTF-8";
+	public static final Charset DEFAULT_CHARSET = Charset.forName(DataServicesContext.DEFAULT_ENCODING);
 	public static final Locale MAIN_LOCALE;
 	public static final TimeZone MAIN_TIME_ZONE;
 	public static final Calendar MAIN_CALENDAR;
@@ -157,6 +159,7 @@ public class DataServicesContext {
 			}
 
 			try {
+				loadGenericServiceHooks();
 				loadAccessPolicy();
 				loadCache();
 			}
@@ -176,23 +179,45 @@ public class DataServicesContext {
 	}
 
 	/**
+	 * Carga los hooks para el servicio Generic que habrá disponibles durante la ejecución.
+	 * 
+	 * @throws ServerException 
+	 */
+	public void loadGenericServiceHooks() throws ServerException {
+
+		try {
+			loadAccessPolicyService.loadDefaultHooks();
+		}
+		catch(ServerException e) {
+
+			try {
+				loadAccessPolicyService.dropHooks();
+			} catch (ServerException e1) {
+				logger.error(e1.getMessage());
+			}
+
+			throw e;
+		}
+	}
+	
+	/**
 	 * Carga las políticas de acceso por defecto.
 	 * 
 	 * @throws ServerException 
 	 */
 	public void loadAccessPolicy() throws ServerException {
-
+		
 		try {
 			loadAccessPolicyService.loadDefaultAccessPolicy();
 		}
 		catch(ServerException e) {
-
+			
 			try {
 				loadAccessPolicyService.dropAccessPolicies();
 			} catch (ServerException e1) {
 				logger.error(e1.getMessage());
 			}
-
+			
 			throw e;
 		}
 	}

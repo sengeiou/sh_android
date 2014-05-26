@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Operation;
@@ -98,14 +97,12 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation retreave(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation retreave(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		StringBuilder querySelect = new StringBuilder();
 		StringBuilder queryFrom = new StringBuilder();
 		StringBuilder queryWhere = new StringBuilder();
 		StringBuilder queryLimit = new StringBuilder();
-
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
@@ -306,7 +303,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation create(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation create(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getData() == null || operation.getData().size() == 0) {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
@@ -318,8 +315,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		}
 
 		StringBuilder queryInsert = new StringBuilder();
-
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
@@ -481,13 +476,11 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation delete(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation delete(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		StringBuilder queryDelete = new StringBuilder();
 		StringBuilder queryFrom = new StringBuilder();
 		StringBuilder queryWhere = new StringBuilder();
-
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
@@ -684,7 +677,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation update(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation update(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getData() == null || operation.getData().size() == 0) {
 			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
@@ -696,7 +689,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
 
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		if (entityInformation.primaryKey == null || entityInformation.primaryKey.size() == 0) {
@@ -855,7 +847,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation createUpdate(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation createUpdate(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getData() == null || operation.getData().size() == 0) {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
@@ -867,8 +859,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		}
 
 		StringBuilder queryInsert = new StringBuilder();
-
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
@@ -1029,7 +1019,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Operation updateCreate(Connection connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation updateCreate(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getData() == null || operation.getData().size() == 0) {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
@@ -1040,7 +1030,6 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
 
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
 		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 		Long millisecondsSinceEpoch = System.currentTimeMillis();
 		Timestamp now = new Timestamp(millisecondsSinceEpoch);

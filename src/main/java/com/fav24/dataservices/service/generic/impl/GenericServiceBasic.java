@@ -1,12 +1,12 @@
 package com.fav24.dataservices.service.generic.impl;
 
 import java.sql.Timestamp;
+import java.util.Map.Entry;
 
 import net.sf.ehcache.Element;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
@@ -15,6 +15,9 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
+import com.fav24.dataservices.service.generic.hook.GenericServiceHook;
+import com.fav24.dataservices.service.generic.hook.GenericServiceHook.HookMethodOutput;
+import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.system.SystemService;
 
@@ -30,6 +33,8 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 	@Autowired
 	protected SystemService systemService;
+	@Autowired
+	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
 
 
 	/**
@@ -66,22 +71,133 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);	
 		}
 
-		T connecion = startTransaction();
+		if (generic.getOperations() == null) {
+
+			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "ops"));
+		}
+
+		T connection = startTransaction();
+
+		HookMethodOutput hookOutput = HookMethodOutput.CONTINUE;
 
 		try {
 
+			// Ejecución de los hooks de inició de petición.
 			for (Operation operation : generic.getOperations()) {
-				processOperation(connecion, generic.getRequestor(), operation);
+
+				EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+				if (entityAccessPolicy == null) {
+					throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "entity"));
+				}
+
+				for (Entry<String, GenericServiceHook> hookEntry : entityAccessPolicy.getHooks().entrySet()){
+
+					GenericServiceHook hook;
+
+					if (hookEntry.getValue() == null) {
+						hook = accessPolicyConfigurationService.getHook(hookEntry.getKey());
+
+						if (hook == null) {
+							throw new ServerException(ERROR_HOOK_NOT_LOADED, String.format(ERROR_HOOK_NOT_LOADED_MESSAGE, hookEntry.getKey(), operation.getMetadata().getEntity(), generic.getAlias()));
+						}
+
+						hookEntry.setValue(hook);
+					}
+					else {
+						hook= hookEntry.getValue();
+					}
+
+					hookOutput = hook.requestBegin(connection, AccessPolicy.getCurrentAccesPolicy(), generic); 
+
+					if (hookOutput == HookMethodOutput.STOP_KO) {
+						throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hookEntry.getKey(), operation.getMetadata().getEntity(), generic.getAlias()));
+					}
+
+					if (hookOutput == HookMethodOutput.STOP_OK) {
+						break;
+					}
+				}
+
+				if (hookOutput == HookMethodOutput.STOP_OK) {
+					break;
+				}
 			}
 
+			if (hookOutput == HookMethodOutput.CONTINUE) {
+
+				for (Operation operation : generic.getOperations()) {
+
+					EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+					// Ejecución de los hooks de inicio de operación.
+					for (GenericServiceHook hook : entityAccessPolicy.getHooks().values()) {
+
+						hookOutput = hook.operationBegin(connection, entityAccessPolicy, operation); 
+
+						if (hookOutput == HookMethodOutput.STOP_KO) {
+							throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+						}
+
+						if (hookOutput == HookMethodOutput.STOP_OK) {
+							break;
+						}
+					}
+
+					if (hookOutput == HookMethodOutput.CONTINUE) {
+
+						processOperation(connection, entityAccessPolicy, operation);
+
+						// Ejecución de los hooks de fin de operación.
+						for (GenericServiceHook hook : entityAccessPolicy.getHooks().values()) {
+
+							hookOutput = hook.operationEnd(connection, entityAccessPolicy, operation); 
+
+							if (hookOutput == HookMethodOutput.STOP_KO) {
+								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+							}
+
+							if (hookOutput == HookMethodOutput.STOP_OK) {
+								break;
+							}
+						}
+					}
+				}
+
+				if (hookOutput == HookMethodOutput.CONTINUE) {
+
+					// Ejecución de los hooks de fin de petición.
+					for (Operation operation : generic.getOperations()) {
+
+						EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
+
+						for (GenericServiceHook hook : entityAccessPolicy.getHooks().values()) {
+
+							hookOutput = hook.requestEnd(connection, AccessPolicy.getCurrentAccesPolicy(), generic); 
+
+							if (hookOutput == HookMethodOutput.STOP_KO) {
+								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+							}
+
+							if (hookOutput == HookMethodOutput.STOP_OK) {
+								break;
+							}
+						}
+
+						if (hookOutput == HookMethodOutput.STOP_OK) {
+							break;
+						}
+					}
+				}
+			}
 		} catch (ServerException e) {
 
-			endTransaction(connecion, false);
+			endTransaction(connection, false);
 
 			throw e;
 		}
 
-		endTransaction(connecion, true);
+		endTransaction(connection, true);
 
 		generic.getRequestor().setTime(System.currentTimeMillis());
 
@@ -92,22 +208,16 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Procesa en contenido de una estructura Operation.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación
 	 * @param operation Estructura de la operación a procesar.
 	 * 
 	 * @return estructura operation de entrada, enriquecida con los resultados de la salida.
 	 */
-	protected final Operation processOperation(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected final Operation processOperation(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getMetadata() == null) {
 
 			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "metadata"));
-		}
-
-		EntityAccessPolicy entityAccessPolicy = AccessPolicy.getEntityPolicy(operation.getMetadata().getEntity());
-
-		if (entityAccessPolicy == null) {
-			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "entity"));
 		}
 
 		if (!entityAccessPolicy.getAllowedOperations().contains(operation.getMetadata().getOperation())) {
@@ -157,9 +267,9 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 		switch(operation.getMetadata().getOperation()) {
 
 		case CREATE:
-			return create(connection, requestor, operation);
+			return create(connection, entityAccessPolicy, operation);
 		case UPDATE:
-			return update(connection, requestor, operation);
+			return update(connection, entityAccessPolicy, operation);
 		case RETRIEVE:
 
 			if (Cache.getSystemCache() != null) {
@@ -178,7 +288,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 						try {
 
-							operation = retreave(connection, requestor, operation);
+							operation = retreave(connection, entityAccessPolicy, operation);
 						}
 						catch (ServerException e) {
 							systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
@@ -207,7 +317,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
 
-				return retreave(connection, requestor, operation);
+				return retreave(connection, entityAccessPolicy, operation);
 			}
 			catch (ServerException e) {
 				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
@@ -216,11 +326,11 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 			}
 
 		case DELETE:
-			return delete(connection, requestor, operation);
+			return delete(connection, entityAccessPolicy, operation);
 		case CREATE_UPDATE:
-			return createUpdate(connection, requestor, operation);
+			return createUpdate(connection, entityAccessPolicy, operation);
 		case UPDATE_CREATE:
-			return updateCreate(connection, requestor, operation);
+			return updateCreate(connection, entityAccessPolicy, operation);
 		}
 
 		return operation;
@@ -230,12 +340,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de creación de ítems.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation create(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation create(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
@@ -243,12 +353,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de modificación de ítems.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation update(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation update(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
@@ -256,12 +366,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de retorno de ítems.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation retreave(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation retreave(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
@@ -269,12 +379,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de eliminación de ítems.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation delete(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation delete(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
@@ -282,12 +392,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de creación o modificaciónde un ítem.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation createUpdate(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation createUpdate(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 
 	}
@@ -296,12 +406,12 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * Operatión de modificación o creación de un ítem.
 	 * 
 	 * @param connection Conexión con la que se inició la transacción.
-	 * @param requestor Solicitante de la operación.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
-	protected Operation updateCreate(T connection, Requestor requestor, Operation operation) throws ServerException {
+	protected Operation updateCreate(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 

@@ -82,7 +82,6 @@ public class BaseRestController {
 		return new ModelAndView(jsonErrorView, error);
 	}
 
-
 	/**
 	 * Handler específica para la excepción de tipo de medio no soportado.
 	 *   

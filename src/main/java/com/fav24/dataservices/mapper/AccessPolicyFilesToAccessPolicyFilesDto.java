@@ -1,6 +1,6 @@
 package com.fav24.dataservices.mapper;
 
-import com.fav24.dataservices.domain.security.AccessPolicyFiles;
+import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.dto.RequestorDto;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -13,13 +13,13 @@ import com.fav24.dataservices.exception.ServerException;
  * @author Fav24
  *
  */
-public class AccessPolicyFilesToAccessPolicyFilesDto extends Mapper<AccessPolicyFiles, AccessPolicyFilesDto> {
+public class AccessPolicyFilesToAccessPolicyFilesDto extends Mapper<RemoteFiles, AccessPolicyFilesDto> {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected AccessPolicyFilesDto map(AccessPolicyFiles origin) throws ServerException {
+	protected AccessPolicyFilesDto map(RemoteFiles origin) throws ServerException {
 		
 		AccessPolicyFilesDto accessPolicyFilesDto = new AccessPolicyFilesDto();
 		

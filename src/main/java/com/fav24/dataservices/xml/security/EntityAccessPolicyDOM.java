@@ -26,6 +26,11 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 		Element element = (Element) node;
 
 		setAllowedOperations(element.getAttribute("AllowedOperations"));
+
+		if (element.hasAttribute("Hooks")) {
+			setHooks(element.getAttribute("Hooks"));
+		}
+
 		setOnlyByKey(Boolean.parseBoolean(element.getAttribute("OnlyByKey")));
 		setOnlySpecifiedFilters(Boolean.parseBoolean(element.getAttribute("OnlySpecifiedFilters")));
 		setMaxPageSize(Long.parseLong(element.getAttribute("MaxPageSize")));
@@ -56,7 +61,7 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 				}
 			}
 		}
-		
+
 		checkEntityAccessPolicy();
 	}
 
@@ -72,6 +77,29 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 
 		for (String operation : splittedAllowedOperations) {
 			getAllowedOperations().add(OperationType.fromString(operation.trim()));
+		}
+	}
+
+	/**
+	 * Asigna el conjunto de puntos de incorporación.
+	 * 
+	 * @param hooks El conjunto de puntos de incorporación en 
+	 * 							forma de literales de hooks separados por espacios en blanco.
+	 */
+	private void setHooks(String hooks) {
+
+		String[] splittedHooks = hooks.trim().split(" ");
+
+		for (String hook : splittedHooks) {
+
+			if (hook != null) {
+
+				hook = hook.trim();
+				if (hook.length() > 0) {
+
+					getHooks().put(hook, null);
+				}
+			}
 		}
 	}
 

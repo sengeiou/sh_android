@@ -2,14 +2,16 @@ package com.fav24.dataservices.service.security;
 
 import java.io.InputStream;
 import java.util.AbstractList;
+import java.util.NavigableMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.AccessPolicyFiles;
+import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.generic.hook.GenericServiceHook;
 
 
 /**
@@ -43,7 +45,7 @@ public interface AccessPolicyConfigurationService extends AccessPolicyService {
 	 * 
 	 * @throws ServerException 
 	 */
-	public AccessPolicyFiles loadAccessPolicy(AccessPolicyFiles accessPolicyFiles) throws ServerException;
+	public RemoteFiles loadAccessPolicy(RemoteFiles accessPolicyFiles) throws ServerException;
 
 	/**
 	 * Retorna las políticas cargadas. 
@@ -82,4 +84,41 @@ public interface AccessPolicyConfigurationService extends AccessPolicyService {
 	 * @return el detalle de las políticas de acceso de la entidad indicada.
 	 */
 	public EntityAccessPolicy getPublicEntityPolicy(String entity);
+
+	/**
+	 * Carga los hooks que serán asignables desde las políticas de acceso.
+	 */
+	public void loadDefaultHooks() throws ServerException;
+
+	/**
+	 * Descarga el conjunto de hooks.
+	 */
+	public void dropHooks() throws ServerException;
+
+	/**
+	 * Retorna el conjunto de hooksdisponible.
+	 * 
+	 * @return el conjunto de hooksdisponible.
+	 */
+	public NavigableMap<String, GenericServiceHook> getAvailableHooks();
+
+	/**
+	 * Retorna el hook solicidato, o <code>null</code> en caso de no estar disponible.
+	 * 
+	 * @param alias Alias del hook a localizar.
+	 * 
+	 * @return el hook solicidato, o <code>null</code> en caso de no estar disponible.
+	 */
+	public GenericServiceHook getHook(String alias);
+
+	/**
+	 * Carga el conjunto de hooks especificados en la estructura suministrada.
+	 * 
+	 * @param hookFiles Conjunto de hooks a cargar.
+	 * 
+	 * @return los archivos de hooks cargados.
+	 * 
+	 * @throws ServerException
+	 */
+	public RemoteFiles loadHooks(RemoteFiles hookFiles) throws ServerException;
 }

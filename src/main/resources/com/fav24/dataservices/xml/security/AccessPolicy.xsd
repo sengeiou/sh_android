@@ -32,6 +32,7 @@
 			<xsd:element name="Ordination" type="TOrdination" minOccurs="0"/>
 		</xsd:sequence>
 		<xsd:attribute name="AllowedOperations" type="TOperationList" use="optional" default="Retrieve"/>
+		<xsd:attribute name="Hooks" type="xsd:string" use="optional"/> <!-- Lista de alias de hooks separados por espacios. -->
 		<xsd:attribute name="OnlyByKey" type="xsd:boolean" use="optional" default="true"/>
 		<xsd:attribute name="OnlySpecifiedFilters" type="xsd:boolean" use="optional" default="true"/>
 		<xsd:attribute name="MaxPageSize" type="xsd:integer" use="optional"/>

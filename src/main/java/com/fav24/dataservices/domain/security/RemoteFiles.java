@@ -11,7 +11,7 @@ import com.fav24.dataservices.service.security.AccessPolicyService;
 /**
  * Clase que contiene la estructura genérica de políticas de acceso sobre entidades.
  */
-public class AccessPolicyFiles {
+public class RemoteFiles {
 
 	private Requestor requestor;
 	private URL[] accessPolicyURLs;
@@ -20,7 +20,7 @@ public class AccessPolicyFiles {
 	/**
 	 * Constructor por defecto.
 	 */
-	public AccessPolicyFiles() {
+	public RemoteFiles() {
 		this((URL[])null);
 	}
 
@@ -29,7 +29,7 @@ public class AccessPolicyFiles {
 	 * 
 	 * @param accessPolicyURLs URLs de las que se obtuvieron las políticas de acceso.
 	 */
-	public AccessPolicyFiles(URL[] accessPolicyURLs) {
+	public RemoteFiles(URL[] accessPolicyURLs) {
 		this.accessPolicyURLs = accessPolicyURLs;
 	}
 
@@ -40,7 +40,7 @@ public class AccessPolicyFiles {
 	 * 
 	 * @throws ServerException 
 	 */
-	public AccessPolicyFiles(String[] accessPolicyURLs) throws ServerException {
+	public RemoteFiles(String[] accessPolicyURLs) throws ServerException {
 
 		int i=0;
 
@@ -62,7 +62,7 @@ public class AccessPolicyFiles {
 	 * 
 	 * @param accesPolicy Objeto referencia a copiar.
 	 */
-	public AccessPolicyFiles(AccessPolicyFiles accesPolicy) {
+	public RemoteFiles(RemoteFiles accesPolicy) {
 
 		if (accesPolicy.accessPolicyURLs != null) {
 

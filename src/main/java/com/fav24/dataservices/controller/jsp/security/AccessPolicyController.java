@@ -173,4 +173,44 @@ public class AccessPolicyController extends BaseJspController {
 
 		return "error_pages/server_success";
 	}
+	
+	/**
+	 * Carga los hooks por defecto, contenidas en <dataservices.home>.
+	 * 
+	 * @param map Estructura con los atributos del estado de la operación.
+	 * 
+	 * @return la vista del resultado de la carga.
+	 * 
+	 * @throws ServerException
+	 */
+	@RequestMapping(value = "/hook/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
+	public String loadDefaultHooks(Model map) throws ServerException {
+		
+		accessPolicyConfigurationService.loadDefaultHooks();
+		
+		map.addAttribute("title", "Carga de hooks defecto.");
+		map.addAttribute("message", "Los hooks han sido cargados con éxito.");
+		
+		return "error_pages/server_success";
+	}
+	
+	/**
+	 * Elimina todos los hooks disponibles.
+	 *  
+	 * @param map Estructura con los atributos del estado de la operación.
+	 *  
+	 * @return la vista del índice general.
+	 * 
+	 * @throws ServerException
+	 */
+	@RequestMapping(value = "/hook/dropAll", method = { RequestMethod.GET, RequestMethod.POST })
+	public String dropHooks(Model map) throws ServerException {
+		
+		accessPolicyConfigurationService.dropHooks();
+		
+		map.addAttribute("title", "Descarte de hooks.");
+		map.addAttribute("message", "Todas los hooks han sido descartados.");
+		
+		return "error_pages/server_success";
+	}
 }

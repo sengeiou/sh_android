@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.AccessPolicyFiles;
+import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.dto.security.AccessPolicyDto;
 import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -84,7 +84,7 @@ public class AccessPolicyController extends BaseRestController {
 
 		try {
 
-			result = (AccessPolicyFilesDto)Mapper.Map(accessPolicyConfigurationService.loadAccessPolicy((AccessPolicyFiles)Mapper.Map(accessPolicyFiles)));
+			result = (AccessPolicyFilesDto)Mapper.Map(accessPolicyConfigurationService.loadAccessPolicy((RemoteFiles)Mapper.Map(accessPolicyFiles)));
 
 			result.setStatusCode(BaseRestController.OK);
 			result.setStatusMessage(MESSAGE_ACCESS_POLICY_FILES_LOADED_OK);

@@ -1,12 +1,15 @@
 package com.fav24.dataservices.domain.security;
 
 import java.util.AbstractList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.generic.hook.GenericServiceHook;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
@@ -71,6 +74,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 	private EntityAttribute name;
 	private Set<OperationType> allowedOperations; 
+	private Map<String, GenericServiceHook> hooks; 
 	private EntityData data;
 	private EntityKeys keys;
 	private EntityFilters filters;
@@ -89,6 +93,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 		this.name = null;
 		this.allowedOperations = new TreeSet<OperationType>();
+		this.hooks = new LinkedHashMap<String, GenericServiceHook>();
 		this.data = null;
 		this.keys = null;
 		this.filters = null;
@@ -109,6 +114,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 		name = entityAccessPolicy.name == null ? null : new EntityAttribute(entityAccessPolicy.name);
 		allowedOperations = entityAccessPolicy.allowedOperations == null ? null : new TreeSet<OperationType>(entityAccessPolicy.allowedOperations);
+		hooks = entityAccessPolicy.hooks == null ? null : new LinkedHashMap<String, GenericServiceHook>(entityAccessPolicy.hooks);
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
 		filters = entityAccessPolicy.filters == null ? null : new EntityFilters(entityAccessPolicy.filters);
@@ -148,10 +154,28 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	/**
 	 * Asigna el conjunto de operaciones permitidas sobre esta entidad.
 	 * 
-	 * allowedOperations El conjunto de operaciones permitidas a asignar.
+	 * @param allowedOperations El conjunto de operaciones permitidas a asignar.
 	 */
 	public void setAllowedOperations(Set<OperationType> allowedOperations) {
 		this.allowedOperations = allowedOperations;
+	}
+
+	/**
+	 * Retorna el conjunto de puntos de incorporación sobre esta entidad.
+	 * 
+	 * @return el conjunto de puntos de incorporación sobre esta entidad.
+	 */
+	public Map<String, GenericServiceHook> getHooks() {
+		return hooks;
+	}
+
+	/**
+	 * Asigna el conjunto de puntos de incorporación sobre esta entidad.
+	 * 
+	 * @param hooks El conjunto de puntos de incorporación sobre esta entidad.
+	 */
+	public void setHooks(Map<String, GenericServiceHook> hooks) {
+		this.hooks = hooks;
 	}
 
 	/**
