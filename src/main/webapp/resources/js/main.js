@@ -152,3 +152,23 @@ function dropSystemCache() {
 			'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>destrucci&oacute;n total</strong> de la configuraci&oacute;n de la cach&eacute, as&iacute; como las cach&eacutes activas.',
 			function(){ sendGetRequest('cache/dropSystemCache'); });
 }
+
+function showAvailableHooks() {
+	sendGetRequest('hook/availableHooks');
+}
+
+function uploadHooks() {
+	sendGetRequest('hook/hookUpload.show');
+}
+
+function resetToDefaultHooks() {
+	modalAcceptanceShow('&iquest;Desea recargar los puntos de inserci&oacute;n (hooks) por defecto?', 
+			'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la p&eacute;rdida de todos los cambios aplicados manualmente, mediante la carga de fuentes de hooks.',
+			function(){ sendGetRequest('hook/loadDefault'); });
+}
+
+function dropAvailableHooks() {
+	modalAcceptanceShow('&iquest;Desea todos los puntos de inserci&oacute; (hooks) del sistema?', 
+			'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>descarga</strong> de todos los puntos de inserci&oacute;n, y en consecuencia, puede provocar errores en algunos accesos a entidades que hagan referencia a agluno de los hooks cargados.',
+			function(){ sendGetRequest('hook/dropAll'); });
+}

@@ -65,7 +65,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="showAvailableEntities();">Entidades publicadas</a></li>
 							<li class="divider"></li>
-							<li><a href="#" onclick="uploadEntityPolicies();">Carga	de pol&iacute;ticas</a></li>
+							<li><a href="#" onclick="uploadEntityPolicies();">Carga de pol&iacute;ticas</a></li>
 							<li><a href="#" onclick="resetToDefaultPolicies();">Recarga de pol&iacute;ticas por defecto</a></li>
 							<li><a href="#" onclick="dropAccessPolicies();">Eliminar pol&iacute;ticas activas</a></li>
 						</ul>
@@ -78,6 +78,15 @@
 							<li><a href="#" onclick="uploadCacheConfigutarions();">Carga de configuraciones de cach&eacute;</a></li>
 							<li><a href="#" onclick="loadDefaultCacheConfiguration();">Recarga de configuraciones de cach&eacute; por defecto</a></li>
 							<li><a href="#" onclick="dropSystemCache();">Eliminar configuraciones de cach&eacute; activas</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Hooks <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" onclick="showAvailableHooks();">Hooks disponibles</a></li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="uploadHooks();">Carga de Hooks</a></li>
+							<li><a href="#" onclick="resetToDefaultHooks();">Recarga de Hooks por defecto</a></li>
+							<li><a href="#" onclick="dropAvailableHooks();">Eliminar Hooks disponibles</a></li>
 						</ul>
 					</li>
 				</ul>

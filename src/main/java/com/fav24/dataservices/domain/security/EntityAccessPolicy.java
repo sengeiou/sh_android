@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.generic.hook.GenericServiceHook;
+import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 
 

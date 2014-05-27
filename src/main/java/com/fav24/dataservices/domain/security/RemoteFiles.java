@@ -1,11 +1,11 @@
 package com.fav24.dataservices.domain.security;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.security.AccessPolicyService;
 
 
 /**
@@ -13,8 +13,11 @@ import com.fav24.dataservices.service.security.AccessPolicyService;
  */
 public class RemoteFiles {
 
+	public static final String ERROR_INVALID_URL = "RF003";
+	public static final String ERROR_INVALID_URL_MESSAGE = "La URL <%s> no es válida.";
+
 	private Requestor requestor;
-	private URL[] accessPolicyURLs;
+	private URL[] urls;
 
 
 	/**
@@ -25,59 +28,88 @@ public class RemoteFiles {
 	}
 
 	/**
-	 * Constructor con parámetro.
+	 * Constructor con parámetros.
 	 * 
-	 * @param accessPolicyURLs URLs de las que se obtuvieron las políticas de acceso.
+	 * @param files Conjunto de ficheros a incluir.
+	 * 
+	 * @throws ServerException 
 	 */
-	public RemoteFiles(URL[] accessPolicyURLs) {
-		this.accessPolicyURLs = accessPolicyURLs;
+	public RemoteFiles(File [] files) throws ServerException {
+
+		URL[] urls = null;
+
+		if (files != null && files.length > 0) {
+
+			urls = new URL[files.length];
+
+			int i = 0;
+			
+			try {
+				for (; i<files.length; i++) {
+					urls[i] = files[i].toURI().toURL();
+				}
+			} catch (MalformedURLException e) {
+				throw new ServerException(ERROR_INVALID_URL, String.format(ERROR_INVALID_URL_MESSAGE, files[i]));
+			}
+		}
+
+		setURLs(urls);
 	}
 
 	/**
 	 * Constructor con parámetro.
 	 * 
-	 * @param accessPolicyURLs URLs de las que se obtuvieron las políticas de acceso.
+	 * @param urls URLs de acceso a los ficheros.
+	 */
+	public RemoteFiles(URL[] urls) {
+		this.urls = urls;
+	}
+
+	/**
+	 * Constructor con parámetro.
+	 * 
+	 * @param urls URLs de las que se obtuvieron las políticas de acceso.
 	 * 
 	 * @throws ServerException 
 	 */
-	public RemoteFiles(String[] accessPolicyURLs) throws ServerException {
+	public RemoteFiles(String[] urls) throws ServerException {
 
 		int i=0;
 
 		try {
-			if (accessPolicyURLs != null) {
+			if (urls != null) {
 
-				this.accessPolicyURLs = new URL[accessPolicyURLs.length];
-				for (String url : accessPolicyURLs) {
-					this.accessPolicyURLs[i++] = new URL(url);
+				this.urls = new URL[urls.length];
+				for (String url : urls) {
+					this.urls[i++] = new URL(url);
 				}
 			}
 		} catch (MalformedURLException e) {
-			throw new ServerException(AccessPolicyService.ERROR_INVALID_URL, String.format(AccessPolicyService.ERROR_INVALID_URL_MESSAGE, accessPolicyURLs[i]));
+			throw new ServerException(ERROR_INVALID_URL, String.format(ERROR_INVALID_URL_MESSAGE, urls[i]));
 		}
 	}
 
 	/**
 	 * Constructor de copia.
 	 * 
-	 * @param accesPolicy Objeto referencia a copiar.
+	 * @param remoteFiles Objeto referencia a copiar.
 	 */
-	public RemoteFiles(RemoteFiles accesPolicy) {
+	public RemoteFiles(RemoteFiles remoteFiles) {
 
-		if (accesPolicy.accessPolicyURLs != null) {
+		if (remoteFiles.urls != null) {
 
-			accessPolicyURLs = new URL[accessPolicyURLs.length];
-			System.arraycopy(accesPolicy.accessPolicyURLs, 0, accessPolicyURLs, 0, accesPolicy.accessPolicyURLs.length);
-			requestor = new Requestor(accesPolicy.requestor);
+			urls = new URL[urls.length];
+			System.arraycopy(remoteFiles.urls, 0, urls, 0, remoteFiles.urls.length);
+			requestor = new Requestor(remoteFiles.requestor);
 		}
 		else {
 
-			accessPolicyURLs = null;
+			urls = null;
 		}
 
-		if (accesPolicy.requestor != null) {
+		if (remoteFiles.requestor != null) {
 
-			requestor = new Requestor(accesPolicy.requestor);
+			requestor = new Requestor(remoteFiles.requestor);
 		}
 		else {
 
@@ -104,26 +136,26 @@ public class RemoteFiles {
 	}
 
 	/**
-	 * Retorna las URLs de los ficheros que contienen las políticas de acceso.
+	 * Retorna las URLs de los ficheros remotos.
 	 * 
-	 * @return las URLs de los ficheros que contienen las políticas de acceso.
+	 * @return las URLs de los ficheros remotos.
 	 */
 	public URL[] getURLs() {
-		return accessPolicyURLs;
+		return urls;
 	}
 
 	/**
-	 * Retorna las URLs de los ficheros que contienen las políticas de acceso.
+	 * Retorna las URLs de los ficheros remotos.
 	 * 
-	 * @return las URLs de los ficheros que contienen las políticas de acceso.
+	 * @return las URLs de los ficheros remotos.
 	 */
 	public String[] getURLsAsStrings() {
 
-		if (accessPolicyURLs != null) {
-			String[] accessPolicyURLsAsStrings = new String[accessPolicyURLs.length];
+		if (urls != null) {
+			String[] accessPolicyURLsAsStrings = new String[urls.length];
 
-			for(int i=0; i<accessPolicyURLs.length; i++) {
-				accessPolicyURLsAsStrings[i] = accessPolicyURLs[i].toExternalForm();
+			for(int i=0; i<urls.length; i++) {
+				accessPolicyURLsAsStrings[i] = urls[i].toExternalForm();
 			}
 
 			return accessPolicyURLsAsStrings;
@@ -133,11 +165,11 @@ public class RemoteFiles {
 	}
 
 	/**
-	 * Asigna las URLs de los ficheros que contienen las políticas de acceso.
+	 * Asigna las URLs de los ficheros a denotar.
 	 * 
-	 * @param accessPolicyURLs URLs de los ficheros que contienen las políticas de acceso a asignar.
+	 * @param urls URLs de los ficheros a asignar.
 	 */
-	public void setURLs(URL[] accessPolicyURLs) {
-		this.accessPolicyURLs = accessPolicyURLs;
+	public void setURLs(URL[] urls) {
+		this.urls = urls;
 	}
 }

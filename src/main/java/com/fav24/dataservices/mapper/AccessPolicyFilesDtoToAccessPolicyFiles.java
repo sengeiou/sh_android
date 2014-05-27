@@ -7,11 +7,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de transferencia AccessPolicyFileDto y el objeto de dominio AccessPolicyFile.
- * 
- * @author Fav24
- *
  */
 public class AccessPolicyFilesDtoToAccessPolicyFiles extends Mapper<AccessPolicyFilesDto, RemoteFiles> {
 

@@ -1,10 +1,13 @@
 package com.fav24.dataservices.controller.jsp.security;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -104,16 +107,20 @@ public class AccessPolicyController extends BaseJspController {
 					String fileName = multipartFile.getOriginalFilename();
 					Boolean fileAsDefault = filesAsDefault == null ? false : filesAsDefault.get(i++);
 
+					InputStream inputStream = null;
+					
 					try {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							accessPolicyConfigurationService.loadAccessPolicy(FileUtils.createOrReplaceExistingFile(multipartFile));
+							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile));
 						}
 						else {
 
-							accessPolicyConfigurationService.loadAccessPolicy(multipartFile.getInputStream());
+							inputStream = multipartFile.getInputStream();
 						}
+						
+						accessPolicyConfigurationService.loadAccessPolicy(inputStream);
 
 						filesOK.add(fileName);
 					} catch (ServerException e) {
@@ -122,6 +129,9 @@ public class AccessPolicyController extends BaseJspController {
 					} catch (IOException e) {
 						filesKO.add(fileName);
 						filesErrors.add(e.getMessage());
+					}
+					finally {
+						IOUtils.closeQuietly(inputStream);
 					}
 				}
 			}
@@ -171,46 +181,6 @@ public class AccessPolicyController extends BaseJspController {
 		map.addAttribute("title", "Denegación de acceso.");
 		map.addAttribute("message", "Todas las políticas de acceso han sido revocadas.");
 
-		return "error_pages/server_success";
-	}
-	
-	/**
-	 * Carga los hooks por defecto, contenidas en <dataservices.home>.
-	 * 
-	 * @param map Estructura con los atributos del estado de la operación.
-	 * 
-	 * @return la vista del resultado de la carga.
-	 * 
-	 * @throws ServerException
-	 */
-	@RequestMapping(value = "/hook/loadDefault", method = { RequestMethod.GET, RequestMethod.POST })
-	public String loadDefaultHooks(Model map) throws ServerException {
-		
-		accessPolicyConfigurationService.loadDefaultHooks();
-		
-		map.addAttribute("title", "Carga de hooks defecto.");
-		map.addAttribute("message", "Los hooks han sido cargados con éxito.");
-		
-		return "error_pages/server_success";
-	}
-	
-	/**
-	 * Elimina todos los hooks disponibles.
-	 *  
-	 * @param map Estructura con los atributos del estado de la operación.
-	 *  
-	 * @return la vista del índice general.
-	 * 
-	 * @throws ServerException
-	 */
-	@RequestMapping(value = "/hook/dropAll", method = { RequestMethod.GET, RequestMethod.POST })
-	public String dropHooks(Model map) throws ServerException {
-		
-		accessPolicyConfigurationService.dropHooks();
-		
-		map.addAttribute("title", "Descarte de hooks.");
-		map.addAttribute("message", "Todas los hooks han sido descartados.");
-		
 		return "error_pages/server_success";
 	}
 }

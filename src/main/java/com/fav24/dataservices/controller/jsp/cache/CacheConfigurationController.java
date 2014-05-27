@@ -1,7 +1,9 @@
 package com.fav24.dataservices.controller.jsp.cache;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public class CacheConfigurationController extends BaseJspController {
 	 * @return el nombre del formulario que mostrará los ficheros cargados con éxito.
 	 */
 	@RequestMapping(value = "/cacheConfigurationUpload.save", method = { RequestMethod.POST })
-	public String accessPolicyUpload(@ModelAttribute("uploadCacheConfigurationFiles") UploadFilesDto uploadCacheConfiguration, Model map) {
+	public String cacheConfigurationUpload(@ModelAttribute("uploadCacheConfigurationFiles") UploadFilesDto uploadCacheConfiguration, Model map) {
 
 		List<MultipartFile> files = uploadCacheConfiguration.getFiles();
 		List<Boolean> filesAsDefault = uploadCacheConfiguration.getFilesAsDefault();
@@ -137,16 +139,21 @@ public class CacheConfigurationController extends BaseJspController {
 					String fileName = multipartFile.getOriginalFilename();
 					Boolean fileAsDefault = filesAsDefault == null ? false : filesAsDefault.get(i++);
 
+
+					InputStream inputStream = null;
+
 					try {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							cacheConfigurationService.loadCacheConfiguration(FileUtils.createOrReplaceExistingFile(multipartFile));
+							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile));
 						}
 						else {
 
-							cacheConfigurationService.loadCacheConfiguration(multipartFile.getInputStream());
+							inputStream = multipartFile.getInputStream();
 						}
+
+						cacheConfigurationService.loadCacheConfiguration(inputStream);
 
 						filesOK.add(fileName);
 					} catch (ServerException e) {
@@ -197,7 +204,7 @@ public class CacheConfigurationController extends BaseJspController {
 	 * @throws ServerException 
 	 */
 	@RequestMapping(value = "/dropSystemCache", method = { RequestMethod.GET, RequestMethod.POST })
-	public String denyAll(Model map) throws ServerException {
+	public String dropSystemCache(Model map) throws ServerException {
 
 		cacheConfigurationService.dropSystemCache();
 

@@ -15,8 +15,9 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
-import com.fav24.dataservices.service.generic.hook.GenericServiceHook;
-import com.fav24.dataservices.service.generic.hook.GenericServiceHook.HookMethodOutput;
+import com.fav24.dataservices.service.hook.GenericServiceHook;
+import com.fav24.dataservices.service.hook.HookConfigurationService;
+import com.fav24.dataservices.service.hook.GenericServiceHook.HookMethodOutput;
 import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.system.SystemService;
@@ -35,6 +36,8 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	protected SystemService systemService;
 	@Autowired
 	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
+	@Autowired
+	protected HookConfigurationService hookConfigurationService;
 
 
 	/**
@@ -96,7 +99,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 					GenericServiceHook hook;
 
 					if (hookEntry.getValue() == null) {
-						hook = accessPolicyConfigurationService.getHook(hookEntry.getKey());
+						hook = hookConfigurationService.getHook(hookEntry.getKey());
 
 						if (hook == null) {
 							throw new ServerException(ERROR_HOOK_NOT_LOADED, String.format(ERROR_HOOK_NOT_LOADED_MESSAGE, hookEntry.getKey(), operation.getMetadata().getEntity(), generic.getAlias()));

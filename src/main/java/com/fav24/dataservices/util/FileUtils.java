@@ -1,10 +1,8 @@
 package com.fav24.dataservices.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,13 +100,13 @@ public class FileUtils {
 	 * 
 	 * @param multipartFile Fichero procendete del envío web.
 	 * 
-	 * @return el stream del fichero procedente de un envío, y sustituye el primero existente encontrado en la lista procedente
+	 * @return el fichero procedente de un envío, y sustituye el primero existente encontrado en la lista procedente
 	 * de la ubicación base de la aplicación.
 	 * 
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public static InputStream createOrReplaceExistingFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
+	public static File createOrReplaceExistingFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
 
 		String fileName = multipartFile.getOriginalFilename();
 
@@ -132,7 +130,7 @@ public class FileUtils {
 				try {
 					multipartFile.transferTo(newFile);
 
-					return new FileInputStream(newFile);
+					return newFile;
 				}
 				catch (IllegalStateException | IOException e) {
 
@@ -147,6 +145,6 @@ public class FileUtils {
 		File newFile = new File(DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + "/" + fileName);
 		multipartFile.transferTo(newFile);
 
-		return new FileInputStream(newFile);
+		return newFile;
 	}
 }

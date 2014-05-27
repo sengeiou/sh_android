@@ -15,6 +15,7 @@ import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.SamplesRegister;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
+import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 
 
@@ -65,9 +66,11 @@ public class DataServicesContext {
 	private ApplicationContext applicationContext;
 
 	@Autowired
-	protected AccessPolicyConfigurationService loadAccessPolicyService;
+	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
 	@Autowired
-	protected CacheConfigurationService loadCacheService;
+	protected HookConfigurationService hookConfigurationService;
+	@Autowired
+	protected CacheConfigurationService cacheConfigurationService;
 
 	
 	/**
@@ -186,12 +189,12 @@ public class DataServicesContext {
 	public void loadGenericServiceHooks() throws ServerException {
 
 		try {
-			loadAccessPolicyService.loadDefaultHooks();
+			hookConfigurationService.loadDefaultHooks();
 		}
 		catch(ServerException e) {
 
 			try {
-				loadAccessPolicyService.dropHooks();
+				hookConfigurationService.dropHooks();
 			} catch (ServerException e1) {
 				logger.error(e1.getMessage());
 			}
@@ -208,12 +211,12 @@ public class DataServicesContext {
 	public void loadAccessPolicy() throws ServerException {
 		
 		try {
-			loadAccessPolicyService.loadDefaultAccessPolicy();
+			accessPolicyConfigurationService.loadDefaultAccessPolicy();
 		}
 		catch(ServerException e) {
 			
 			try {
-				loadAccessPolicyService.dropAccessPolicies();
+				accessPolicyConfigurationService.dropAccessPolicies();
 			} catch (ServerException e1) {
 				logger.error(e1.getMessage());
 			}
@@ -230,11 +233,11 @@ public class DataServicesContext {
 	public void loadCache() throws ServerException {
 
 		try {
-			loadCacheService.loadDefaultCacheConfiguration();
+			cacheConfigurationService.loadDefaultCacheConfiguration();
 		}
 		catch(ServerException e) {
 
-			loadCacheService.dropSystemCache();
+			cacheConfigurationService.dropSystemCache();
 
 			throw e;
 		}
