@@ -216,7 +216,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 			for (int i=0; i<keyColumns.size(); i++) {
 
-				Integer type = entityInformation.keyFields.get(keyColumns.get(i));
+				Integer type = entityInformation.keyFields == null ? null : entityInformation.keyFields.get(keyColumns.get(i));
 				if (type == null) {
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(keyColumns.get(i))));
 				}
@@ -230,7 +230,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 			for (int i=0; i<filterColumns.size(); i++) {
 
-				Integer type = entityInformation.filterFields.get(filterColumns.get(i));
+				Integer type = entityInformation.filterFields == null ? null : entityInformation.filterFields.get(filterColumns.get(i));
 				if (type == null) {
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
 				}
