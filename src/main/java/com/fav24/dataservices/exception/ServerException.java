@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 
 /**
  * Excepción general de servidor.
- * 
- * @author Fav24
  */
 public class ServerException extends Exception {
 
