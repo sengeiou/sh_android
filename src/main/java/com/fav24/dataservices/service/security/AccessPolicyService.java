@@ -19,8 +19,4 @@ public interface AccessPolicyService {
 	public static final String ERROR_NO_CURRENT_POLICY_DEFINED_FOR_ENTITY_MESSAGE = "No se han definido políticas de acceso para la entidad <%s>.";
 	public static final String ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED = "PS005";
 	public static final String ERROR_ENTITY_ATTRIBUTES_NOT_ALLOWED_MESSAGE = "La entidad <%s> no tiene definido(s) los atributo(s) <%s> como accesible(s).";
-	public static final String ERROR_INVALID_HOOK_FILE_URL = "PS006";
-	public static final String ERROR_INVALID_HOOK_FILE_URL_MESSAGE = "La URL <%s> no se corresponde con ningún fichero de definición de hook.";
-	public static final String ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD = "PS007";
-	public static final String ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE = "No existe ningún fichero de definición de hook por defecto.";
 }

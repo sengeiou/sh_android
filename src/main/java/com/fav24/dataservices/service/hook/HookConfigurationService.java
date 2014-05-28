@@ -19,6 +19,7 @@ public interface HookConfigurationService extends HookService {
 
 	public static final String HOOK_SOURCE_RELATIVE_LOCATION = "hooks";
 	public static final String HOOK_BINARY_RELATIVE_LOCATION = HOOK_SOURCE_RELATIVE_LOCATION + "/bin";
+	public static final String HOOK_DEPENDENCIES_RELATIVE_LOCATION = HOOK_SOURCE_RELATIVE_LOCATION + "/lib";
 	public static final String HOOK_SOURCE_SUFFIX = ".java";
 	
 	/**

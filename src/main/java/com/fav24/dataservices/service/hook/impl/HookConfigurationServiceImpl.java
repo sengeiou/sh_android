@@ -2,11 +2,14 @@ package com.fav24.dataservices.service.hook.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,15 +28,16 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
-import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.util.FileUtils;
 
 
@@ -44,6 +48,8 @@ import com.fav24.dataservices.util.FileUtils;
 @Component
 public class HookConfigurationServiceImpl implements HookConfigurationService {
 
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 	private NavigableMap<String, GenericServiceHook> hooks;
 
 
@@ -72,8 +78,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 			if (hookSourceFiles.size() == 0) {
 
-				throw new ServerException(AccessPolicyService.ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD, 
-						AccessPolicyService.ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE);
+				throw new ServerException(ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD, ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE);
 			}
 			else {
 
@@ -86,8 +91,8 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 						urls[i++] = hookSourceFile.toURI().toURL();
 					} 
 					catch (MalformedURLException e) {
-						throw new ServerException(AccessPolicyService.ERROR_INVALID_HOOK_FILE_URL, 
-								String.format(AccessPolicyService.ERROR_INVALID_HOOK_FILE_URL_MESSAGE, hookSourceFile.toURI().toString()));
+						
+						throw new ServerException(ERROR_INVALID_HOOK_FILE_URL, String.format(ERROR_INVALID_HOOK_FILE_URL_MESSAGE, hookSourceFile.toURI().toString()));
 					}
 				}
 
@@ -174,6 +179,93 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	}
 
 	/**
+	 * 
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private String getApplicationFolder() throws UnsupportedEncodingException {
+		
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("/WEB-INF/classes/");
+		System.out.println(fullPath);
+		System.out.println(pathArr[0]);
+		fullPath = pathArr[0];
+		
+		return fullPath;
+	}
+	
+	/**
+	 * Retorna el classpath a usar por el compilador.
+	 * 
+	 * @return el classpath a usar por el compilador.
+	 * 
+	 * @throws ServerException 
+	 */
+	private String getClassPath() throws ServerException {
+
+		StringBuilder path = new StringBuilder();
+
+		path.append(".");
+		
+		String classPathProperty = System.getProperty("java.class.path");
+		if (classPathProperty != null) {
+			path.append(File.pathSeparator).append(classPathProperty);
+		}
+
+		URL classLocation = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+		path.append(File.pathSeparator).append(classLocation.getPath());
+		
+		URL classesLocation = this.getClass().getClassLoader().getResource("/");
+
+		if (classesLocation != null) {
+			
+			try {
+
+				String classesLocationPath = classesLocation.getPath();
+				
+				path.append(File.pathSeparator).append(classesLocationPath);
+				
+				String applicationFolder = getApplicationFolder();
+				String applicationFolderName = webApplicationContext.getApplicationName();
+				
+				String libsLocationPath = classesLocationPath + "../lib";
+
+				File libsLocation = new File(libsLocationPath);
+
+				if (libsLocation.exists() == false) {
+					libsLocationPath = URLDecoder.decode(classesLocationPath + "../" + applicationFolderName + "/WEB-INF/lib/", DataServicesContext.DEFAULT_ENCODING);
+					libsLocation = new File(libsLocationPath);
+				}
+
+				File[] filesInLibraryPath = libsLocation.listFiles(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".jar");
+					}
+				});
+
+				if (filesInLibraryPath != null) {
+
+					for (File libraryFile : filesInLibraryPath) {
+						libsLocationPath += File.pathSeparator + URLDecoder.decode(libraryFile.getAbsolutePath(), DataServicesContext.DEFAULT_ENCODING);
+					}
+				}
+
+				path.append(File.pathSeparator).append(libsLocationPath);
+
+				return URLDecoder.decode(path.toString(), DataServicesContext.DEFAULT_ENCODING);
+				
+			} catch (UnsupportedEncodingException e) {
+				
+				throw new ServerException(ERROR_INVALID_HOOK_CLASSPATH_URL, String.format(ERROR_INVALID_HOOK_CLASSPATH_URL_STRING, path.toString()));
+			}
+		}
+
+		return path.toString();
+	}
+
+	/**
 	 * Compila el conjunto de ficheros suministrados por parámetro.
 	 * 
 	 * @param files Conjunto de ficheros a compilar.
@@ -184,7 +276,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 * 
 	 * @throws ServerException 
 	 */
-	private static Map<String, StringBuilder> compile(File[] files) throws ServerException {
+	private Map<String, StringBuilder> compile(File[] files) throws ServerException {
 
 		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 		Map<String, StringBuilder> messages = null;
@@ -197,20 +289,22 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		try {
 
 			File binaryDirectory = new File(applicationHome + "/" + HOOK_BINARY_RELATIVE_LOCATION);
-			
+
 			if (!binaryDirectory.exists()) {
 				binaryDirectory.mkdirs();
 			}
-			
+
 			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
 
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
 
 			List<String> options = new ArrayList<String>();
+			
 			// Se asigna al compilador el mismo classpath usado en runtime.
-			options.addAll(Arrays.asList("-classpath", System.getProperty("java.class.path")));
+			options.addAll(Arrays.asList("-classpath", "/Users/jmvera/development/workspaces/backend/data-services/target/data-services/WEB-INF/classes/"));
+//			options.addAll(Arrays.asList("-classpath", getClassPath()));
 
-			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticListener, null, null, compilationUnits);
+			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits);
 
 			if (!compilationTask.call()) {
 
@@ -240,7 +334,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 * 
 	 * @throws IOException
 	 */
-	private static Map<String, StringBuilder> compile(URL[] urls) throws ServerException {
+	private Map<String, StringBuilder> compile(URL[] urls) throws ServerException {
 
 		File[] files = new File[urls.length];
 
@@ -307,8 +401,26 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		StringBuilder result = new StringBuilder();
 
 		result.append("<p>");
-		result.append("L&iacute;nea ").append("<font color='blue'>").append(diagnostic.getLineNumber()).append("</font>");
+		switch(diagnostic.getKind()) {
+		case ERROR:
+			result.append("<font color='red'>");
+			result.append("ERROR");
+			result.append("</font>");
+			break;
+		case WARNING:
+			result.append("<font color='yellow'>");
+			result.append("WARNING");
+			result.append("</font>");
+			break;
+		case MANDATORY_WARNING:
+		case OTHER:
+		case NOTE:
+		default:
+			break;
+		}
+		result.append(" l&iacute;nea ").append("<font color='blue'>").append(diagnostic.getLineNumber()).append("</font>");
 		result.append(", columna ").append("<font color='blue'>").append(diagnostic.getColumnNumber()).append("</font>").append("<br/>");
+		
 		result.append("diagn&oacute;stico: ").append("<font color='blue'>").append(diagnostic.getMessage(null)).append("</font>").append("<br/>");
 
 		if (diagnostic.getSource() != null && diagnostic.getPosition() != Diagnostic.NOPOS) {
@@ -327,7 +439,6 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 					currentLine++;
 
 					if (currentLine == diagnostic.getLineNumber()) {
-						currentTextLine = currentTextLine.replace("\t", "    ");
 						result.append(currentTextLine.substring(0, (int)diagnostic.getColumnNumber()-1));
 
 						result.append("<font color='red'>");

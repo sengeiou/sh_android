@@ -3,6 +3,8 @@ package com.fav24.dataservices.controller.jsp.hook;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class HookController extends BaseJspController {
 
 	@Autowired
 	protected HookConfigurationService hookConfigurationService;
+	private File hookSourcesTempDir;
 
 
 	/**
@@ -118,10 +121,16 @@ public class HookController extends BaseJspController {
 						}
 						else {
 
-							File tmpFile = File.createTempFile(fileName, HookConfigurationService.HOOK_SOURCE_SUFFIX);
-							multipartFile.transferTo(tmpFile);
+							if (hookSourcesTempDir == null) {
+								
+								Path path = Files.createTempDirectory("hooks-sources");
+								hookSourcesTempDir = path.toFile();
+							}
+									 
+							File source = new File(hookSourcesTempDir.toString() + File.separator + fileName);
+							multipartFile.transferTo(source);
 
-							remoteFiles = new RemoteFiles(new File[]{tmpFile});
+							remoteFiles = new RemoteFiles(new File[]{source});
 						}
 
 						Map<String, StringBuilder> diagnostics = hookConfigurationService.loadHooks(remoteFiles);

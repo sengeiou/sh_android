@@ -15,5 +15,10 @@ public interface HookService {
 	public static final String ERROR_HOOK_CLASS_INSTANCE_MESSAGE = "No ha sido posible crear una instancia de la clase <%s>.";
 	public static final String ERROR_HOOK_DIAGNOSTIC = "HK004";
 	public static final String ERROR_HOOK_DIAGNOSTIC_MESSAGE = "Se ha producido un problema durante la construcción del diagnóstico por parte del compilador para el fichero <%s>.";
-
+	public static final String ERROR_INVALID_HOOK_FILE_URL = "HK005";
+	public static final String ERROR_INVALID_HOOK_FILE_URL_MESSAGE = "La URL <%s> no se corresponde con ningún fichero de definición de hook.";
+	public static final String ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD = "HK006";
+	public static final String ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE = "No existe ningún fichero de definición de hook por defecto.";
+	public static final String ERROR_INVALID_HOOK_CLASSPATH_URL = "HK007";
+	public static final String ERROR_INVALID_HOOK_CLASSPATH_URL_STRING = "La URL de las dependencias de los hooks <%s>, no es válida.";
 }
