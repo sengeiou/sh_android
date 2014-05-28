@@ -220,6 +220,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<warFile>target/data-services.war</warFile>
 					<path>/data-services</path>
 					<contextFile>tomcat-context.xml</contextFile>
+					<outputDirectory>target/classes</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

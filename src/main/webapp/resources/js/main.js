@@ -168,7 +168,7 @@ function resetToDefaultHooks() {
 }
 
 function dropAvailableHooks() {
-	modalAcceptanceShow('&iquest;Desea todos los puntos de inserci&oacute; (hooks) del sistema?', 
+	modalAcceptanceShow('&iquest;Desea eliminar todos los puntos de inserci&oacute;n (hooks) del sistema?', 
 			'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>descarga</strong> de todos los puntos de inserci&oacute;n, y en consecuencia, puede provocar errores en algunos accesos a entidades que hagan referencia a agluno de los hooks cargados.',
 			function(){ sendGetRequest('hook/dropAll'); });
 }

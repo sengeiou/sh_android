@@ -301,8 +301,8 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			List<String> options = new ArrayList<String>();
 			
 			// Se asigna al compilador el mismo classpath usado en runtime.
-			options.addAll(Arrays.asList("-classpath", "/Users/jmvera/development/workspaces/backend/data-services/target/data-services/WEB-INF/classes/"));
-//			options.addAll(Arrays.asList("-classpath", getClassPath()));
+//			options.addAll(Arrays.asList("-classpath", "/Users/jmvera/development/workspaces/backend/data-services/bin/main/java"));
+			options.addAll(Arrays.asList("-classpath", getClassPath()));
 
 			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits);
 
