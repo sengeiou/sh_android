@@ -73,11 +73,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 			AbstractList<File> hookSourceFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_SOURCE_RELATIVE_LOCATION, HOOK_SOURCE_SUFFIX, null);
 
-			if (hookSourceFiles.size() == 0) {
-
-				throw new ServerException(ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD, ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE);
-			}
-			else {
+			if (hookSourceFiles.size() > 0) {
 
 				URL urls[] = new URL[hookSourceFiles.size()];
 				int i=0;
@@ -101,6 +97,8 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
 					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
+		
+		return null;
 	}
 
 	/**
