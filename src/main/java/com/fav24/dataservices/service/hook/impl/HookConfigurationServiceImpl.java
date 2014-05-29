@@ -2,14 +2,11 @@ package com.fav24.dataservices.service.hook.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLDecoder;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,7 +126,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	/**
 	 * {@inheritDocs}
 	 */
-	private Map<String, StringBuilder> loadHooks(URL[] sources) throws ServerException {
+	public Map<String, StringBuilder> loadHooks(URL[] sources) throws ServerException {
 
 		if (sources != null && sources.length > 0) {
 
@@ -177,23 +174,6 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		return hooks.get(alias);
 	}
-
-	/**
-	 * 
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	private String getApplicationFolder() throws UnsupportedEncodingException {
-		
-		String path = this.getClass().getClassLoader().getResource("").getPath();
-		String fullPath = URLDecoder.decode(path, "UTF-8");
-		String pathArr[] = fullPath.split("/WEB-INF/classes/");
-		System.out.println(fullPath);
-		System.out.println(pathArr[0]);
-		fullPath = pathArr[0];
-		
-		return fullPath;
-	}
 	
 	/**
 	 * Retorna el classpath a usar por el compilador.
@@ -204,6 +184,17 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 */
 	private String getClassPath() throws ServerException {
 
+		StringBuilder classpath = new StringBuilder();
+		URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		for (URL url : urlClassLoader.getURLs()) {
+			classpath.append(url.getFile()).append(File.pathSeparator);
+		}
+		
+		System.err.println("El classpath: " + classpath.toString());
+		
+		return classpath.toString();
+		
+		/*
 		StringBuilder path = new StringBuilder();
 
 		path.append(".");
@@ -263,6 +254,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		}
 
 		return path.toString();
+		*/
 	}
 
 	/**
@@ -278,7 +270,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 */
 	private Map<String, StringBuilder> compile(File[] files) throws ServerException {
 
-		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
+		String applicationHome = "/Users/jmvera/development/workspaces/backend/fcb-data-services-home";//DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 		Map<String, StringBuilder> messages = null;
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -301,7 +293,6 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			List<String> options = new ArrayList<String>();
 			
 			// Se asigna al compilador el mismo classpath usado en runtime.
-//			options.addAll(Arrays.asList("-classpath", "/Users/jmvera/development/workspaces/backend/data-services/bin/main/java"));
 			options.addAll(Arrays.asList("-classpath", getClassPath()));
 
 			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits);
