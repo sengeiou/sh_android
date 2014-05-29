@@ -268,7 +268,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 */
 	private Map<String, StringBuilder> compile(File[] files) throws ServerException {
 
-		String applicationHome = "/Users/jmvera/development/workspaces/backend/fcb-data-services-home";//DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 		Map<String, StringBuilder> messages = null;
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
