@@ -141,7 +141,7 @@ public class HookController extends BaseJspController {
 								filesOK.add(fileName);
 							}
 							else {
-								filesKO.add(fileName);
+								filesKO.add((hookSourcesTempDir != null ? hookSourcesTempDir.getPath() : "") + fileName);
 								filesErrors.add(diagnostic.getValue().toString());
 							}
 						}
