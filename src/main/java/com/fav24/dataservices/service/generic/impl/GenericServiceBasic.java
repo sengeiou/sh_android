@@ -193,11 +193,18 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 					}
 				}
 			}
-		} catch (ServerException e) {
+		}
+		catch (ServerException e) {
 
 			endTransaction(connection, false);
 
 			throw e;
+		} 
+		catch (Throwable t) {
+			
+			endTransaction(connection, false);
+			
+			throw new ServerException(ERROR_UNKNOWN, String.format(ERROR_UNKNOWN_MESSAGE, t.toString()), t);
 		}
 
 		endTransaction(connection, true);

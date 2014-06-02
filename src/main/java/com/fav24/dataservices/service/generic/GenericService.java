@@ -59,6 +59,10 @@ public interface GenericService {
 	public static final String ERROR_HOOK_NOT_LOADED_MESSAGE = "El hook <%s> no está disponible para la entidad <%s>, en la request de alias <%s>.";
 	public static final String ERROR_HOOK_STOP_KO = "G021";
 	public static final String ERROR_HOOK_STOP_KO_MESSAGE = "El hook <%s> para la entidad <%s>, en la request de alias <%s>, he terminado con errores.";
+	
+	public static final String ERROR_UNKNOWN = "G999";
+	public static final String ERROR_UNKNOWN_MESSAGE = "Error desconocido en la petición. Mensaje interno: <%s>";
+
 
 	/**
 	 * Procesa en contenido de una estructura Generic.

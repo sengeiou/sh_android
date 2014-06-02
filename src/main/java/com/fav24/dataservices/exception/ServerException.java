@@ -26,9 +26,13 @@ public class ServerException extends Exception {
 	 * @param errorCode Código de error inicial de la excepción.
 	 */
 	public ServerException(String errorCode) {
-		this(errorCode, null, null);
+
+		this.setErrorCode(errorCode);
+		this.setMessage(null);
+		this.setHtmlExplanation(null);
+		this.setStackTrace(null);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -36,7 +40,26 @@ public class ServerException extends Exception {
 	 * @param message Mensaje del la excepción.
 	 */
 	public ServerException(String errorCode, String message) {
-		this(errorCode, message, null);
+
+		this.setErrorCode(errorCode);
+		this.setMessage(message);
+		this.setHtmlExplanation(null);
+		this.setStackTrace(null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param errorCode Código de error inicial de la excepción.
+	 * @param message Mensaje del la excepción.
+	 * @param throwable Causa de esta excepción. 
+	 */
+	public ServerException(String errorCode, String message, Throwable throwable) {
+
+		this.setErrorCode(errorCode);
+		this.setMessage(message);
+		this.setHtmlExplanation(null);
+		this.setStackTrace(throwable.getStackTrace());
 	}
 
 	/**
@@ -47,7 +70,7 @@ public class ServerException extends Exception {
 	 * @param htmlExplanation Una explicación completa de la excepción en formato HTML. 
 	 */
 	public ServerException(String errorCode, String message, String htmlExplanation) {
-		
+
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
 		this.setHtmlExplanation(htmlExplanation);
