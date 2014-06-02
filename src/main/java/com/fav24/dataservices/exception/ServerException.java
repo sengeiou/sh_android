@@ -30,7 +30,6 @@ public class ServerException extends Exception {
 		this.setErrorCode(errorCode);
 		this.setMessage(null);
 		this.setHtmlExplanation(null);
-		this.setStackTrace(null);
 	}
 
 	/**
@@ -44,7 +43,6 @@ public class ServerException extends Exception {
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
 		this.setHtmlExplanation(null);
-		this.setStackTrace(null);
 	}
 
 	/**
