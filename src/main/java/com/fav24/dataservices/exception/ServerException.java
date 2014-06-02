@@ -11,6 +11,7 @@ public class ServerException extends Exception {
 
 	private String errorCode;
 	private String message;
+	private String htmlExplanation;
 
 	/**
 	 * Constructor por defecto.
@@ -25,17 +26,31 @@ public class ServerException extends Exception {
 	 * @param errorCode Código de error inicial de la excepción.
 	 */
 	public ServerException(String errorCode) {
-		this(errorCode, null);
+		this(errorCode, null, null);
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param errorCode Código de error inicial de la excepción.
+	 * @param message Mensaje del la excepción.
+	 */
+	public ServerException(String errorCode, String message) {
+		this(errorCode, message, null);
 	}
 
 	/**
 	 * Constructor
 	 * 
 	 * @param errorCode Código de error inicial de la excepción.
+	 * @param message Mensaje del la excepción.
+	 * @param htmlExplanation Una explicación completa de la excepción en formato HTML. 
 	 */
-	public ServerException(String errorCode, String message) {
-		this.errorCode = errorCode;
+	public ServerException(String errorCode, String message, String htmlExplanation) {
+		
+		this.setErrorCode(errorCode);
 		this.setMessage(message);
+		this.setHtmlExplanation(htmlExplanation);
 	}
 
 	/**
@@ -72,6 +87,24 @@ public class ServerException extends Exception {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	/**
+	 * Retorna una explicación completa de la excepción en formato HTML.
+	 * 
+	 * @return una explicación completa de la excepción en formato HTML.
+	 */
+	public String getHtmlExplanation() {
+		return htmlExplanation;
+	}
+
+	/**
+	 * Asigna una explicación completa de la excepción en formato HTML.
+	 * 
+	 * @param htmlExplanation Explicación completa de la excepción en formato HTML.
+	 */
+	public void setHtmlExplanation(String htmlExplanation) {
+		this.htmlExplanation = htmlExplanation;
 	}
 
 	/**

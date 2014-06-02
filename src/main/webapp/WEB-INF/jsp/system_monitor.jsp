@@ -29,8 +29,8 @@
 <script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor/cpu_monitor.js"></script>
 <script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor.js"></script>
 
-<!-- Panel de detalle de una cierta entidad publicada. -->
-<div id="entityDetails">
+<!-- Panel de monitorización del sistema. -->
+<div id="systemMonitor">
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">

@@ -32,6 +32,7 @@ public class BaseJspController {
 
 		errorView.getModel().put("errorCode", exception.getErrorCode());
 		errorView.getModel().put("message", exception.getMessage());
+		errorView.getModel().put("htmlExplanation", exception.getHtmlExplanation());
 		
 		return errorView;
 	}

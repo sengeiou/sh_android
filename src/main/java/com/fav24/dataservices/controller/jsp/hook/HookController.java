@@ -25,6 +25,7 @@ import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
+import com.fav24.dataservices.service.hook.HookService;
 import com.fav24.dataservices.util.FileUtils;
 
 /**
@@ -122,11 +123,11 @@ public class HookController extends BaseJspController {
 						else {
 
 							if (hookSourcesTempDir == null) {
-								
-								Path path = Files.createTempDirectory("hooks-sources");
+
+								Path path = Files.createTempDirectory("hooks-sources.");
 								hookSourcesTempDir = path.toFile();
 							}
-									 
+
 							File source = new File(hookSourcesTempDir.toString() + File.separator + fileName);
 							multipartFile.transferTo(source);
 
@@ -141,7 +142,7 @@ public class HookController extends BaseJspController {
 								filesOK.add(fileName);
 							}
 							else {
-								filesKO.add((hookSourcesTempDir != null ? hookSourcesTempDir.getPath() : "") + fileName);
+								filesKO.add(remoteFiles.getURLs()[0].getFile());
 								filesErrors.add(diagnostic.getValue().toString());
 							}
 						}
@@ -178,27 +179,22 @@ public class HookController extends BaseJspController {
 
 		Map<String, StringBuilder> diagnostics = hookConfigurationService.loadDefaultHooks();
 
-		List<String> filesOK = new ArrayList<String>();
-		List<String> filesKO = new ArrayList<String>();
-		List<String> filesErrors = new ArrayList<String>();
+		if (diagnostics == null || diagnostics.isEmpty()) {
+			map.addAttribute("title", "Carga de los puntos de inserción (hooks) por defecto.");
+			map.addAttribute("message", "Los hooks han sido cargados con éxito.");
+		}
+		else {
 
-		for(Entry<String, StringBuilder> diagnostic : diagnostics.entrySet()) {
+			for(Entry<String, StringBuilder> diagnostic : diagnostics.entrySet()) {
 
-			if (diagnostic.getValue() == null) {
-				filesOK.add(diagnostic.getKey());
-			}
-			else {
-				filesKO.add(diagnostic.getKey());
-				filesErrors.add(diagnostic.getValue().toString());
+				if (diagnostic.getValue() != null) {
+
+					throw new ServerException(HookService.ERROR_HOOK_COMPILATION_ERRORS_FOUND, 
+							String.format(HookService.ERROR_HOOK_COMPILATION_ERRORS_FOUND_MESSAGE, diagnostic.getKey()), 
+							diagnostic.getValue().toString());
+				}
 			}
 		}
-
-		map.addAttribute("title", "Carga de los puntos de inserción (hooks) por defecto.");
-		map.addAttribute("message", "Los hooks han sido cargados con éxito.");
-
-		map.addAttribute("filesOK", filesOK);
-		map.addAttribute("filesKO", filesKO);
-		map.addAttribute("filesErrors", filesErrors);
 
 		return "error_pages/server_success";
 	}

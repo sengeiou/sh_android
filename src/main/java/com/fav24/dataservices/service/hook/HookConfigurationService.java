@@ -1,5 +1,6 @@
 package com.fav24.dataservices.service.hook;
 
+import java.util.AbstractList;
 import java.util.Map;
 import java.util.NavigableMap;
 
@@ -60,4 +61,11 @@ public interface HookConfigurationService extends HookService {
 	 * @throws ServerException
 	 */
 	public Map<String, StringBuilder> loadHooks(RemoteFiles hookFiles) throws ServerException;
+
+	/**
+	 * Retorna el classpath a organizado por ubicaciones de clases y dependencias.
+	 * 
+	 * @return el classpath a organizado por ubicaciones de clases y dependencias.
+	 */
+	public AbstractList<AbstractList<String>> getOrganizedClassPath();
 }

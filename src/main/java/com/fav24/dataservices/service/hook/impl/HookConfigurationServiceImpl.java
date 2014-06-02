@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 						urls[i++] = hookSourceFile.toURI().toURL();
 					} 
 					catch (MalformedURLException e) {
-						
+
 						throw new ServerException(ERROR_INVALID_HOOK_FILE_URL, String.format(ERROR_INVALID_HOOK_FILE_URL_MESSAGE, hookSourceFile.toURI().toString()));
 					}
 				}
@@ -97,7 +98,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
 					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
-		
+
 		return null;
 	}
 
@@ -172,7 +173,43 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		return hooks.get(alias);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AbstractList<AbstractList<String>> getOrganizedClassPath() {
+
+		AbstractList<AbstractList<String>> organizedClassPath = new ArrayList<AbstractList<String>>();
+		AbstractList<String> classpaths = new ArrayList<String>();
+		AbstractList<String> dependencies = new ArrayList<String>();
+		organizedClassPath.add(classpaths);
+		organizedClassPath.add(dependencies);
+
+		URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		for (URL url : urlClassLoader.getURLs()) {
+
+			try{
+				File file = new File(url.toURI());
+
+				if (file.isDirectory()) {
+					classpaths.add(file.getAbsolutePath());
+				}
+				else {
+					dependencies.add(file.getAbsolutePath());
+				}
+			}
+			catch(Throwable t) {
+				continue;
+			}
+		}
+
+		Collections.sort(classpaths);
+		Collections.sort(dependencies);
+		
+		return organizedClassPath;
+	}
+
 	/**
 	 * Retorna el classpath a usar por el compilador.
 	 * 
@@ -187,16 +224,16 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		for (URL url : urlClassLoader.getURLs()) {
 			classpath.append(url.getFile()).append(File.pathSeparator);
 		}
-		
+
 		System.err.println("El classpath: " + classpath.toString());
-		
+
 		return classpath.toString();
-		
+
 		/*
 		StringBuilder path = new StringBuilder();
 
 		path.append(".");
-		
+
 		String classPathProperty = System.getProperty("java.class.path");
 		if (classPathProperty != null) {
 			path.append(File.pathSeparator).append(classPathProperty);
@@ -204,20 +241,20 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		URL classLocation = this.getClass().getProtectionDomain().getCodeSource().getLocation();
 		path.append(File.pathSeparator).append(classLocation.getPath());
-		
+
 		URL classesLocation = this.getClass().getClassLoader().getResource("/");
 
 		if (classesLocation != null) {
-			
+
 			try {
 
 				String classesLocationPath = classesLocation.getPath();
-				
+
 				path.append(File.pathSeparator).append(classesLocationPath);
-				
+
 				String applicationFolder = getApplicationFolder();
 				String applicationFolderName = webApplicationContext.getApplicationName();
-				
+
 				String libsLocationPath = classesLocationPath + "../lib";
 
 				File libsLocation = new File(libsLocationPath);
@@ -244,15 +281,15 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 				path.append(File.pathSeparator).append(libsLocationPath);
 
 				return URLDecoder.decode(path.toString(), DataServicesContext.DEFAULT_ENCODING);
-				
+
 			} catch (UnsupportedEncodingException e) {
-				
+
 				throw new ServerException(ERROR_INVALID_HOOK_CLASSPATH_URL, String.format(ERROR_INVALID_HOOK_CLASSPATH_URL_STRING, path.toString()));
 			}
 		}
 
 		return path.toString();
-		*/
+		 */
 	}
 
 	/**
@@ -289,7 +326,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
 
 			List<String> options = new ArrayList<String>();
-			
+
 			// Se asigna al compilador el mismo classpath usado en runtime.
 			options.addAll(Arrays.asList("-classpath", getClassPath()));
 
@@ -409,7 +446,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		}
 		result.append(" l&iacute;nea ").append("<font color='blue'>").append(diagnostic.getLineNumber()).append("</font>");
 		result.append(", columna ").append("<font color='blue'>").append(diagnostic.getColumnNumber()).append("</font>").append("<br/>");
-		
+
 		result.append("diagn&oacute;stico: ").append("<font color='blue'>").append(diagnostic.getMessage(null)).append("</font>").append("<br/>");
 
 		if (diagnostic.getSource() != null && diagnostic.getPosition() != Diagnostic.NOPOS) {
@@ -424,6 +461,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 				while((currentTextLine = lineReader.readLine()) != null) {
 
+					currentTextLine = currentTextLine.replace("\t", "    ");
 					readenLines.add(currentTextLine);
 					currentLine++;
 
