@@ -69,7 +69,8 @@ public class HookController extends BaseJspController {
 		ModelAndView model = new ModelAndView("hook_details");
 
 		model.addObject("alias", hook);
-		model.addObject("hook", hookConfigurationService.getHook(hook));
+		model.addObject("hookInstance", hookConfigurationService.getHook(hook));
+		model.addObject("hookSourceURL", hookConfigurationService.getHookSourceURL(hook));
 
 		return model;
 	}
@@ -136,14 +137,20 @@ public class HookController extends BaseJspController {
 
 						Map<String, StringBuilder> diagnostics = hookConfigurationService.loadHooks(remoteFiles);
 
-						for(Entry<String, StringBuilder> diagnostic : diagnostics.entrySet()) {
+						if (diagnostics == null) {
+							filesOK.add(fileName);
+						}
+						else {
+							
+							for(Entry<String, StringBuilder> diagnostic : diagnostics.entrySet()) {
 
-							if (diagnostic.getValue() == null) {
-								filesOK.add(fileName);
-							}
-							else {
-								filesKO.add(remoteFiles.getURLs()[0].getFile());
-								filesErrors.add(diagnostic.getValue().toString());
+								if (diagnostic.getValue() == null) {
+									filesOK.add(fileName);
+								}
+								else {
+									filesKO.add(remoteFiles.getURLs()[0].getFile());
+									filesErrors.add(diagnostic.getValue().toString());
+								}
 							}
 						}
 

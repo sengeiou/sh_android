@@ -1,5 +1,6 @@
 package com.fav24.dataservices.service.hook;
 
+import java.net.URL;
 import java.util.AbstractList;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -36,12 +37,19 @@ public interface HookConfigurationService extends HookService {
 	public void dropHooks() throws ServerException;
 
 	/**
-	 * Retorna el conjunto de hooksdisponible.
+	 * Retorna el conjunto de hooks disponible.
 	 * 
-	 * @return el conjunto de hooksdisponible.
+	 * @return el conjunto de hooks disponible.
 	 */
 	public NavigableMap<String, GenericServiceHook> getAvailableHooks();
 
+	/**
+	 * Retorna las urls del conjunto de hooks disponible.
+	 * 
+	 * @return las urls del conjunto de hooks disponible.
+	 */
+	public NavigableMap<String, URL> getAvailableHooksSourceUrls();
+	
 	/**
 	 * Retorna el hook solicidato, o <code>null</code> en caso de no estar disponible.
 	 * 
@@ -51,6 +59,15 @@ public interface HookConfigurationService extends HookService {
 	 */
 	public GenericServiceHook getHook(String alias);
 
+	/**
+	 * Retorna la URL del fuente para el hook solicidato, o <code>null</code> en caso de no estar disponible.
+	 * 
+	 * @param alias Alias del hook a localizar.
+	 * 
+	 * @return la URL del fuente para el hook solicidato, o <code>null</code> en caso de no estar disponible.
+	 */
+	public URL getHookSourceURL(String alias);
+		
 	/**
 	 * Carga el conjunto de hooks especificados en la estructura suministrada.
 	 * 

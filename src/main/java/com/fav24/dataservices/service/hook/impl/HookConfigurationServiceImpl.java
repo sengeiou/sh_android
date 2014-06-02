@@ -11,10 +11,12 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.tools.Diagnostic;
@@ -49,6 +51,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 	private NavigableMap<String, GenericServiceHook> hooks;
+	private NavigableMap<String, URL> hooksSources;
 
 
 	/**
@@ -57,6 +60,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	public HookConfigurationServiceImpl() {
 
 		this.hooks = new TreeMap<String, GenericServiceHook>();
+		this.hooksSources = new TreeMap<String, URL>();
 	}
 
 	/**
@@ -136,11 +140,15 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 				return compilerDiagnostics;
 			}
 
-			AbstractList<GenericServiceHook> loadedHooks = load(sources);
+			AbstractList<URL> loadedSources = new ArrayList<URL>(sources.length);
+			AbstractList<GenericServiceHook> loadedHooks = load(sources, loadedSources);
 
-			for(GenericServiceHook loadedHook : loadedHooks) {
+			for(int i=0; i < loadedHooks.size(); i++) {
 
+				GenericServiceHook loadedHook = loadedHooks.get(i);
+				
 				hooks.put(loadedHook.getAlias(), loadedHook);
+				hooksSources.put(loadedHook.getAlias(), loadedSources.get(i));
 			}
 		}
 
@@ -154,6 +162,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	public synchronized void dropHooks() throws ServerException {
 
 		hooks.clear();
+		hooksSources.clear();
 	}
 
 	/**
@@ -164,6 +173,15 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		return hooks;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized NavigableMap<String, URL> getAvailableHooksSourceUrls() {
+		
+		return hooksSources;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -172,6 +190,15 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	public synchronized GenericServiceHook getHook(String alias) {
 
 		return hooks.get(alias);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized URL getHookSourceURL(String alias) {
+		
+		return hooksSources.get(alias);
 	}
 
 	/**
@@ -206,7 +233,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		Collections.sort(classpaths);
 		Collections.sort(dependencies);
-		
+
 		return organizedClassPath;
 	}
 
@@ -217,79 +244,28 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 * 
 	 * @throws ServerException 
 	 */
-	private String getClassPath() throws ServerException {
+	public String getClassPath() throws ServerException {
 
-		StringBuilder classpath = new StringBuilder();
-		URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-		for (URL url : urlClassLoader.getURLs()) {
-			classpath.append(url.getFile()).append(File.pathSeparator);
-		}
+		StringBuilder classpath = null;
 
-		System.err.println("El classpath: " + classpath.toString());
+		AbstractList<AbstractList<String>> organizedClassPath = getOrganizedClassPath();
 
-		return classpath.toString();
+		for (AbstractList<String> classPathSection : organizedClassPath) {
 
-		/*
-		StringBuilder path = new StringBuilder();
+			for (String classPathItem : classPathSection) {
 
-		path.append(".");
-
-		String classPathProperty = System.getProperty("java.class.path");
-		if (classPathProperty != null) {
-			path.append(File.pathSeparator).append(classPathProperty);
-		}
-
-		URL classLocation = this.getClass().getProtectionDomain().getCodeSource().getLocation();
-		path.append(File.pathSeparator).append(classLocation.getPath());
-
-		URL classesLocation = this.getClass().getClassLoader().getResource("/");
-
-		if (classesLocation != null) {
-
-			try {
-
-				String classesLocationPath = classesLocation.getPath();
-
-				path.append(File.pathSeparator).append(classesLocationPath);
-
-				String applicationFolder = getApplicationFolder();
-				String applicationFolderName = webApplicationContext.getApplicationName();
-
-				String libsLocationPath = classesLocationPath + "../lib";
-
-				File libsLocation = new File(libsLocationPath);
-
-				if (libsLocation.exists() == false) {
-					libsLocationPath = URLDecoder.decode(classesLocationPath + "../" + applicationFolderName + "/WEB-INF/lib/", DataServicesContext.DEFAULT_ENCODING);
-					libsLocation = new File(libsLocationPath);
+				if (classpath == null) {
+					classpath = new StringBuilder();
+				}
+				else {
+					classpath.append(File.pathSeparator);
 				}
 
-				File[] filesInLibraryPath = libsLocation.listFiles(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.endsWith(".jar");
-					}
-				});
-
-				if (filesInLibraryPath != null) {
-
-					for (File libraryFile : filesInLibraryPath) {
-						libsLocationPath += File.pathSeparator + URLDecoder.decode(libraryFile.getAbsolutePath(), DataServicesContext.DEFAULT_ENCODING);
-					}
-				}
-
-				path.append(File.pathSeparator).append(libsLocationPath);
-
-				return URLDecoder.decode(path.toString(), DataServicesContext.DEFAULT_ENCODING);
-
-			} catch (UnsupportedEncodingException e) {
-
-				throw new ServerException(ERROR_INVALID_HOOK_CLASSPATH_URL, String.format(ERROR_INVALID_HOOK_CLASSPATH_URL_STRING, path.toString()));
+				classpath.append(classPathItem);
 			}
 		}
 
-		return path.toString();
-		 */
+		return classpath.toString();
 	}
 
 	/**
@@ -328,9 +304,9 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			List<String> options = new ArrayList<String>();
 
 			// Se asigna al compilador el mismo classpath usado en runtime.
-			options.addAll(Arrays.asList("-classpath", getClassPath()));
+			options.addAll(Arrays.asList("-cp", getClassPath()));
 
-			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits);
+			JavaCompiler.CompilationTask compilationTask = compiler.getTask(null, null, diagnosticListener, options, null, compilationUnits);
 
 			if (!compilationTask.call()) {
 
@@ -376,28 +352,47 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	/**
 	 * Carga el conjunto de fuentes compilados.
 	 * 
-	 * @param urls Conjunto de ficheros compilados a cargar.
+	 * @param sourceUrls Conjunto de fuentes compilados a cargar.
+	 * @param loadedSources Conjunto de fuentes compilados cargados. 
+	 * 			Esta lista se corresponderá en orden con la lista de instancias retornadas.
 	 * 
 	 * @return una lista de instancias, una for fuente compilado.
 	 */
-	private static AbstractList<GenericServiceHook> load(URL[] urls) throws ServerException {
+	private static AbstractList<GenericServiceHook> load(URL[] sourceUrls, AbstractList<URL> loadedSources) throws ServerException {
 
 		AbstractList<GenericServiceHook> result = new ArrayList<GenericServiceHook>();
 
-		URLClassLoader classLoader = URLClassLoader.newInstance(urls);
+		Set<URL> classPath = new HashSet<URL>();
+		AbstractList<String> classNames = new ArrayList<String>(sourceUrls.length);
 
-		for (URL url : urls) {
+		for (URL sourceUrl : sourceUrls) {
 
-			String className = url.getFile();
+			String url = sourceUrl.toExternalForm();
 
-			className = className.substring(className.lastIndexOf(File.separatorChar) + 1);
+			String className = url.substring(url.lastIndexOf(File.separatorChar) + 1);
 			className = className.substring(0, className.lastIndexOf('.'));
+			try {
+				classNames.add(className);
+				loadedSources.add(sourceUrl);
+				classPath.add(new URL(url.substring(0, url.lastIndexOf(File.separatorChar) + 1)));
+			}
+			catch(MalformedURLException e) {
+			}
+		}
 
+		URL []classPathArray = new URL[classPath.size()];
+		classPath.toArray(classPathArray);
+
+		URLClassLoader classLoader = URLClassLoader.newInstance(classPathArray, Thread.currentThread().getContextClassLoader());
+
+		for (int i=0; i < classNames.size(); i++) {
+
+			String className = classNames.get(i);
+			
 			Class<?> hookClass;
 			try {
-				hookClass = Class.forName(className, true, classLoader);
+				hookClass = classLoader.loadClass(className);
 			} catch (ClassNotFoundException e) {
-
 				throw new ServerException(ERROR_HOOK_CLASS_NOT_FOUND, String.format(ERROR_HOOK_CLASS_NOT_FOUND_MESSAGE, className));
 			}
 

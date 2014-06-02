@@ -12,14 +12,14 @@
 		if (hooks != null && hooks.size() > 0) {
 			
 			output.append("<div class=\"panel-body\">");
-			output.append("<p>Estos son los puntos de inserción (hooks) disponibles en estos momentos.</p>");
+			output.append("<p>Estos son los puntos de inserci&oacute;n (hooks) disponibles en estos momentos.</p>");
 			output.append("</div>");
 		
 			output.append("<ul class=\"list-group\">");
 
 			for (Entry<String, GenericServiceHook> hook : hooks.entrySet()) {
 				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=\"#\" onclick=\"sendGetRequest('/hook/hookDetails?entity=").append(hook.getKey()).append("');\">").append(hook.getKey()).append("</a><br/>");
+				output.append("<a href=\"#\" onclick=\"sendGetRequest('/hook/hookDetails?hook=").append(hook.getKey()).append("');\">").append(hook.getKey()).append("</a><br/>");
 				output.append("</li>");
 			}
 			
