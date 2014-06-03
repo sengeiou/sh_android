@@ -1,18 +1,17 @@
 <%@page import="com.fav24.dataservices.service.hook.GenericServiceHook"%>
 <%@page import="java.net.URL"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.io.InputStreamReader"%>
+<%@page import="java.io.BufferedReader"%>
 <%@include file="includes/locations.jsp" %>
 
 <%!String bodyContent;%>
-<%!String hookName;%>
-<%!String hookDescription;%>
-<%!String hookSource;%>
 
 <%
 	StringBuilder output = new StringBuilder();
 	
 	try {
-		hookName = (String)request.getAttribute("hook");
+		String hookName = (String)request.getAttribute("hook");
 		GenericServiceHook hookInstance = (GenericServiceHook)request.getAttribute("hookInstance");
 
 		if (hookInstance == null) {
@@ -20,8 +19,25 @@
 			output.append("El hook <strong>").append(hookName).append("</strong> no existe, o no est&aacute; disponible.");
 		} 
 		else {
-			hookDescription = hookInstance.getDescription();
+			String hookDescription = hookInstance.getDescription();
 			URL hookSourceURL = (URL)request.getAttribute("hookSourceURL");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(hookSourceURL.openStream()));
+			
+			String line;
+			StringBuilder sourceCode = null;
+			while((line = reader.readLine()) != null) {
+				
+				if (sourceCode == null) {
+					sourceCode = new StringBuilder();
+				}
+				else {
+					sourceCode.append("\n");
+				}
+				line = line.replace("<","&lt;");
+				line = line.replace(">","&gt;");
+				sourceCode.append(line);
+			}
+			reader.close();
 			
 			output.append("<p>Detalle del punto de acceso (hook).<p/>");
 
@@ -42,7 +58,11 @@
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Fuente</div>");
 			output.append("<div class='panel-body'>");
-
+			output.append("<pre class='brush: java; ruler: true;'>");
+			if (sourceCode != null) {
+				output.append(sourceCode);
+			}
+			output.append("</pre>");
 			output.append("</div>");
 			output.append("</div>");
 		}
@@ -54,7 +74,10 @@
 	bodyContent = output.toString();
 %>
 
-<script class="include" type="text/javascript" src="<%=jsURL%>/syntaxhighlighter/shBrushJava.js"></script>
+<link href="<%=cssURL%>/syntaxhighlighter/shCore.css" rel="stylesheet" type="text/css" />
+<link href="<%=cssURL%>/syntaxhighlighter/shThemeDefault.css" rel="stylesheet" type="text/css" />
+<script class="include" type="text/javascript" src="<%=jsURL%>/syntaxhighlighter/shCore.min.js"></script>
+<script class="include" type="text/javascript" src="<%=jsURL%>/syntaxhighlighter/shAutoloader.min.js"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
@@ -68,3 +91,8 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+SyntaxHighlighter.autoloader([ 'java', 'java', '<%=jsURL%>/syntaxhighlighter/shBrushJava.js']);
+SyntaxHighlighter.all();
+</script>
