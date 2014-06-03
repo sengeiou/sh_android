@@ -57,7 +57,6 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Principal <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
-							<li class="divider"></li>
 							<li><a href="#" onclick="showSystemContext();">Informaci&oacute;n de contexto del sistema</a></li>
 							<li class="divider"></li>
 							<li><a href="#" onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
