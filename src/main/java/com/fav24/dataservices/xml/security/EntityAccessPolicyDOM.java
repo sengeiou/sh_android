@@ -26,6 +26,7 @@ public class EntityAccessPolicyDOM extends EntityAccessPolicy
 		Element element = (Element) node;
 
 		setAllowedOperations(element.getAttribute("AllowedOperations"));
+		setVirtual(Boolean.parseBoolean(element.getAttribute("isVirtual")));
 
 		if (element.hasAttribute("Hooks")) {
 			setHooks(element.getAttribute("Hooks"));

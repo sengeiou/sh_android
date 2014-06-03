@@ -70,6 +70,11 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 			// Se recorren las entidades.
 			for (EntityAccessPolicy entityAccessPolicy : accessPolicy.getAccessPolicies()) {
 
+				// Las entidades virtuales no existen en el subsistema.
+				if (entityAccessPolicy.isVirtual()) {
+					continue;
+				}
+				
 				// Entidad.
 				EntityDataSourceInfo entityJDBCInformation = new EntityDataSourceInfo();
 				String table = entityAccessPolicy.getName().getName();

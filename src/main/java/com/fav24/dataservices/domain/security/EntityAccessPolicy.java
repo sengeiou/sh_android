@@ -74,7 +74,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 	private EntityAttribute name;
 	private Set<OperationType> allowedOperations; 
-	private Map<String, GenericServiceHook> hooks; 
+	private Boolean isVirtual;
+ 	private Map<String, GenericServiceHook> hooks; 
 	private EntityData data;
 	private EntityKeys keys;
 	private EntityFilters filters;
@@ -93,6 +94,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 		this.name = null;
 		this.allowedOperations = new TreeSet<OperationType>();
+		this.isVirtual = false;
 		this.hooks = new LinkedHashMap<String, GenericServiceHook>();
 		this.data = null;
 		this.keys = null;
@@ -114,6 +116,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 
 		name = entityAccessPolicy.name == null ? null : new EntityAttribute(entityAccessPolicy.name);
 		allowedOperations = entityAccessPolicy.allowedOperations == null ? null : new TreeSet<OperationType>(entityAccessPolicy.allowedOperations);
+		isVirtual = entityAccessPolicy.isVirtual == null ? null : entityAccessPolicy.isVirtual;
 		hooks = entityAccessPolicy.hooks == null ? null : new LinkedHashMap<String, GenericServiceHook>(entityAccessPolicy.hooks);
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
@@ -158,6 +161,25 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setAllowedOperations(Set<OperationType> allowedOperations) {
 		this.allowedOperations = allowedOperations;
+	}
+	
+	/**
+	 * Retorna true o false en función de si se trata o no de una entidad virtual.
+	 * Una entidad virtual no se refleja en ninguna de las entidades del subsistema.
+	 * 
+	 * @return true o false en función de si se trata o no de una entidad virtual.
+	 */
+	public Boolean isVirtual() {
+		return isVirtual;
+	}
+	
+	/**
+	 * Asigna true o false en función de si se trata o no de una entidad virtual.
+	 * 
+	 * @param isVirtual True si se trata de una entidad virtual, false en caso contrario.
+	 */
+	public void setVirtual(Boolean isVirtual) {
+		this.isVirtual = isVirtual;
 	}
 
 	/**

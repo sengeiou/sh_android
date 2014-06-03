@@ -201,9 +201,9 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 			throw e;
 		} 
 		catch (Throwable t) {
-			
+
 			endTransaction(connection, false);
-			
+
 			throw new ServerException(ERROR_UNKNOWN, String.format(ERROR_UNKNOWN_MESSAGE, t.toString()), t);
 		}
 
@@ -274,73 +274,77 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 			throw e;
 		}
 
-		switch(operation.getMetadata().getOperation()) {
+		// Las entidades virtuales no existen en el subsistema, por que no se ejecutará la operación genérica asociada.
+		if (!entityAccessPolicy.isVirtual()) {
 
-		case CREATE:
-			return create(connection, entityAccessPolicy, operation);
-		case UPDATE:
-			return update(connection, entityAccessPolicy, operation);
-		case RETRIEVE:
+			switch(operation.getMetadata().getOperation()) {
 
-			if (Cache.getSystemCache() != null) {
+			case CREATE:
+				return create(connection, entityAccessPolicy, operation);
+			case UPDATE:
+				return update(connection, entityAccessPolicy, operation);
+			case RETRIEVE:
 
-				net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
+				if (Cache.getSystemCache() != null) {
 
-				if (cache != null) {
+					net.sf.ehcache.Cache cache = Cache.getSystemCache().getCache(operation.getMetadata().getEntity());
 
-					//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
-					String contentKey = operation.organizeContent(new StringBuilder()).toString();
+					if (cache != null) {
 
-					Element cachedElement = cache.get(contentKey);
-					if (cachedElement == null) {
+						//Para garantizar que dos operaciones equivalentes, tiene la misma forma y representación.
+						String contentKey = operation.organizeContent(new StringBuilder()).toString();
 
-						systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
+						Element cachedElement = cache.get(contentKey);
+						if (cachedElement == null) {
 
-						try {
+							systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
 
-							operation = retreave(connection, entityAccessPolicy, operation);
+							try {
+
+								operation = retreave(connection, entityAccessPolicy, operation);
+							}
+							catch (ServerException e) {
+								systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
+
+								throw e;
+							}
+
+							cachedElement = new Element(contentKey, operation);
+							cache.put(cachedElement);
+
+							return operation;
 						}
-						catch (ServerException e) {
-							systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
+						else {
 
-							throw e;
+							Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
+
+							operation.setMetadata(recycledOperation.getMetadata());
+							operation.setData(recycledOperation.getData());
+
+							return operation;
 						}
-
-						cachedElement = new Element(contentKey, operation);
-						cache.put(cachedElement);
-
-						return operation;
-					}
-					else {
-
-						Operation recycledOperation = (Operation) cachedElement.getObjectValue(); 
-
-						operation.setMetadata(recycledOperation.getMetadata());
-						operation.setData(recycledOperation.getData());
-
-						return operation;
 					}
 				}
+
+				try {
+
+					systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
+
+					return retreave(connection, entityAccessPolicy, operation);
+				}
+				catch (ServerException e) {
+					systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
+
+					throw e;
+				}
+
+			case DELETE:
+				return delete(connection, entityAccessPolicy, operation);
+			case CREATE_UPDATE:
+				return createUpdate(connection, entityAccessPolicy, operation);
+			case UPDATE_CREATE:
+				return updateCreate(connection, entityAccessPolicy, operation);
 			}
-
-			try {
-
-				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOperations();
-
-				return retreave(connection, entityAccessPolicy, operation);
-			}
-			catch (ServerException e) {
-				systemService.getWorkloadMeter().incTotalSubsystemOutcommingOpertionsErrors();
-
-				throw e;
-			}
-
-		case DELETE:
-			return delete(connection, entityAccessPolicy, operation);
-		case CREATE_UPDATE:
-			return createUpdate(connection, entityAccessPolicy, operation);
-		case UPDATE_CREATE:
-			return updateCreate(connection, entityAccessPolicy, operation);
 		}
 
 		return operation;
