@@ -93,6 +93,7 @@
 </div>
 
 <script type="text/javascript">
+SyntaxHighlighter.defaults.toolbar = false;
 SyntaxHighlighter.autoloader([ 'java', 'java', '<%=jsURL%>/syntaxhighlighter/shBrushJava.js']);
 SyntaxHighlighter.all();
 </script>
