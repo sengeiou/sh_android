@@ -1,19 +1,11 @@
 package com.fav24.dataservices.domain.cache;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import com.fav24.dataservices.DataServicesContext;
-import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.cache.CacheService;
-import com.fav24.dataservices.util.FileUtils;
-import com.fav24.dataservices.xml.cache.CacheDOM;
 
 
 public class Cache
@@ -315,45 +307,6 @@ public class Cache
 	}
 
 	/**
-	 * Carga las configuraciones de caché contenidas en el directorio base de la aplicación
-	 * definido en el parámetro: "dataservices.home".
-	 * 
-	 * @throws ServerException 
-	 */
-	public static final void loadDefaultCacheConfigurations() throws ServerException {
-
-		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
-
-		// Se cargan los archivos de políticas de seguridad existentes.
-		File applicationHomeDir = new File(applicationHome);
-
-		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
-
-			AbstractList<File> cacheConfigurationFiles = FileUtils.getFilesWithSuffix(applicationHome, APPLICATION_CACHE_FILES_SUFFIX, null);
-
-			if (cacheConfigurationFiles.size() > 0) {
-
-				for(File cacheConfigurationFile : cacheConfigurationFiles) {
-
-					try {
-
-						mergeCurrentCacheConfiguration(new CacheDOM(cacheConfigurationFile.toURI().toURL()));
-					} 
-					catch (MalformedURLException e) {
-						throw new ServerException(CacheService.ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL, 
-								String.format(CacheService.ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL_MESSAGE, cacheConfigurationFile.toURI().toString()));
-					}
-				}
-			}
-		}
-		else {
-
-			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
-					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
-		}
-	}
-
-	/**
 	 * Retorna la referencia a la caché actual del sistema.
 	 * 
 	 * Esta estructura, contiene tanto la información de configuración, como la de actividad.
@@ -362,6 +315,18 @@ public class Cache
 	 */
 	public static final Cache getSystemCache() {
 		return systemCache;
+	}
+	
+	/**
+	 * Asigna la referencia a la nueva caché del sistema.
+	 * 
+	 * @param systemCache La referencia a la nueva caché del sistema a asignar.
+	 */
+	public static final void setSystemCache(Cache systemCache) {
+		
+		destroy();
+		
+		Cache.systemCache = systemCache;
 	}
 
 	/**

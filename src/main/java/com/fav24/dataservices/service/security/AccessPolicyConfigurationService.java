@@ -19,6 +19,8 @@ public interface AccessPolicyConfigurationService extends AccessPolicyService {
 
 	public static final Logger logger = LoggerFactory.getLogger(AccessPolicyConfigurationService.class);
 
+	public static final String POLICY_FILES_RELATIVE_LOCATION = "policy";
+	public static final String POLICY_FILES_SUFFIX = ".policy.xml";
 
 	/**
 	 * Elimina todas las políticas de acceso disponibles hasta el momento.

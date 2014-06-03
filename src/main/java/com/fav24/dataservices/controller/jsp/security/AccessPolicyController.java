@@ -113,7 +113,7 @@ public class AccessPolicyController extends BaseJspController {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile));
+							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile, AccessPolicyConfigurationService.POLICY_FILES_RELATIVE_LOCATION));
 						}
 						else {
 

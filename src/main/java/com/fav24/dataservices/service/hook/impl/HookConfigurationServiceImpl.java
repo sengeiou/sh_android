@@ -24,7 +24,6 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import org.apache.commons.io.IOUtils;
@@ -76,7 +75,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
 
-			AbstractList<File> hookSourceFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_SOURCE_RELATIVE_LOCATION, HOOK_SOURCE_SUFFIX, null);
+			AbstractList<File> hookSourceFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_FILES_RELATIVE_LOCATION, HOOK_LIFES_SUFFIX, null);
 
 			if (hookSourceFiles.size() > 0) {
 
@@ -281,26 +280,17 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	 */
 	private Map<String, StringBuilder> compile(File[] files) throws ServerException {
 
-		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 		Map<String, StringBuilder> messages = null;
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
 		DiagnosticCollector<JavaFileObject> diagnosticListener = new DiagnosticCollector<JavaFileObject>();
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticListener, null, DataServicesContext.DEFAULT_CHARSET);
+		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
 
 		try {
 
-			File binaryDirectory = new File(applicationHome + "/" + HOOK_BINARY_RELATIVE_LOCATION);
-
-			if (!binaryDirectory.exists()) {
-				binaryDirectory.mkdirs();
-			}
-
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(binaryDirectory));
-
-			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
-
+			// Opciones de compilación.
 			List<String> options = new ArrayList<String>();
 
 			// Se asigna al compilador el mismo classpath usado en runtime.
@@ -398,7 +388,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 			try {
 				result.add((GenericServiceHook) hookClass.newInstance());
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException | ClassCastException e) {
 
 				throw new ServerException(ERROR_HOOK_CLASS_INSTANCE, String.format(ERROR_HOOK_CLASS_INSTANCE_MESSAGE, className));
 			}

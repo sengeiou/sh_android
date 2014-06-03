@@ -1,21 +1,27 @@
 package com.fav24.dataservices.service.security.impl;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.security.AccessPolicy;
 import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 import com.fav24.dataservices.domain.security.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.service.generic.impl.GenericServiceJDBCInformation;
+import com.fav24.dataservices.service.generic.impl.GenericServiceDataSourceInfo;
+import com.fav24.dataservices.service.generic.impl.GenericServiceDataSourceInfo.EntityDataSourceInfo;
 import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
-import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
@@ -27,7 +33,7 @@ import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 public class AccessPolicyConfigurationServiceImpl implements AccessPolicyConfigurationService {
 
 	@Autowired
-	private GenericServiceJDBCInformation entitiesInformation;
+	private GenericServiceDataSourceInfo entitiesDataSourceInfo;
 
 
 	/**
@@ -43,28 +49,64 @@ public class AccessPolicyConfigurationServiceImpl implements AccessPolicyConfigu
 	public synchronized void dropAccessPolicies() throws ServerException {
 
 		AccessPolicy.resetAccessPolicies();
-		entitiesInformation.resetAccessPoliciesInformationAgainstDataSource();
+		entitiesDataSourceInfo.resetAccessPoliciesInformationAgainstDataSource();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public synchronized void loadDefaultAccessPolicy() throws ServerException {
 
-		AccessPolicy.resetAccessPolicies();
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 
-		try {
+		// Se cargan los archivos de políticas de seguridad existentes.
+		File applicationHomeDir = new File(applicationHome);
 
-			AccessPolicy.loadDefaultAccessPolicies();
-			entitiesInformation.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
+
+			AbstractList<File> policyFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + POLICY_FILES_RELATIVE_LOCATION, POLICY_FILES_SUFFIX, null);
+
+			if (policyFiles.size() == 0) {
+
+				throw new ServerException(ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD, ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD_MESSAGE);
+			}
+			else {
+
+				AbstractList<AccessPolicy> loadedPolicies = new ArrayList<AccessPolicy>();
+				
+				// Carga de los ficheros de políticas.
+				for(File policyFile : policyFiles) {
+
+					try {
+
+						AccessPolicy loadedPolicy = new AccessPolicyDOM(policyFile.toURI().toURL());
+						entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(loadedPolicy);
+						
+						loadedPolicies.add(loadedPolicy);
+					} 
+					catch (MalformedURLException e) {
+						
+						throw new ServerException(ERROR_INVALID_POLICY_FILE_URL, String.format(ERROR_INVALID_POLICY_FILE_URL_MESSAGE, policyFile.toURI().toString()));
+					}
+				}
+				
+				// Aplicación de las políticas cargadas.
+				AccessPolicy.resetAccessPolicies();
+				
+				for (AccessPolicy loadedPolicy : loadedPolicies) {
+					AccessPolicy.mergeCurrentAccesPolicy(loadedPolicy);
+				}
+				
+				// Recarga de la información de la fuente de datos.
+				Map<String, EntityDataSourceInfo> entitiesInformation = entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+				entitiesDataSourceInfo.setAccessPoliciesInformationAgainstDataSource(entitiesInformation);
+			}
 		}
-		catch(ServerException e) {
+		else {
 
-			AccessPolicy.resetAccessPolicies();
-			entitiesInformation.resetAccessPoliciesInformationAgainstDataSource();
-
-			throw e;
+			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 	}
 
@@ -79,15 +121,24 @@ public class AccessPolicyConfigurationServiceImpl implements AccessPolicyConfigu
 			loadDefaultAccessPolicy();
 		}
 		else {
-
+			AbstractList<AccessPolicy> loadedPolicies = new ArrayList<AccessPolicy>();
+			
 			for(URL url : accessPolicyFiles.getURLs()) {
 
 				AccessPolicy accessPolicy = new AccessPolicyDOM(url);
 
-				entitiesInformation.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
+				entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
 
-				AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
+				loadedPolicies.add(accessPolicy);
 			}
+			
+			// Aplicación de las nuevas políticas cargadas.
+			for (AccessPolicy loadedPolicy : loadedPolicies) {
+				AccessPolicy.mergeCurrentAccesPolicy(loadedPolicy);
+			}
+			
+			Map<String, EntityDataSourceInfo> entitiesInformation = entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+			entitiesDataSourceInfo.setAccessPoliciesInformationAgainstDataSource(entitiesInformation);
 		}
 
 		return accessPolicyFiles;
@@ -99,12 +150,17 @@ public class AccessPolicyConfigurationServiceImpl implements AccessPolicyConfigu
 	@Override
 	public synchronized AccessPolicy loadAccessPolicy(InputStream accessPolicyStream) throws ServerException {
 
+		// Carga de la nueva política.
 		AccessPolicy accessPolicy = new AccessPolicyDOM(accessPolicyStream);
 
-		entitiesInformation.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
+		entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(accessPolicy);
 
+		// Aplicación de la política cargada.
 		AccessPolicy.mergeCurrentAccesPolicy(accessPolicy);
-
+		
+		Map<String, EntityDataSourceInfo> entitiesInformation = entitiesDataSourceInfo.checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy.getCurrentAccesPolicy());
+		entitiesDataSourceInfo.setAccessPoliciesInformationAgainstDataSource(entitiesInformation);
+		
 		return accessPolicy;
 	}
 
@@ -118,7 +174,7 @@ public class AccessPolicyConfigurationServiceImpl implements AccessPolicyConfigu
 				AccessPolicy.getCurrentAccesPolicy().getAccessPolicies() == null || 
 				AccessPolicy.getCurrentAccesPolicy().getAccessPolicies().isEmpty()) {
 
-			throw new ServerException(AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED, AccessPolicyService.ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);
+			throw new ServerException(ERROR_NO_CURRENT_POLICY_DEFINED, ERROR_NO_CURRENT_POLICY_DEFINED_MESSAGE);
 		}
 
 		if (accessPolicy.getAccessPolicies() == null || accessPolicy.getAccessPolicies().size() == 0) {

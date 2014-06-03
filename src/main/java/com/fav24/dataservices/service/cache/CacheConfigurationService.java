@@ -20,6 +20,8 @@ public interface CacheConfigurationService extends CacheService {
 
 	public static final Logger logger = LoggerFactory.getLogger(CacheConfigurationService.class);
 
+	public static final String CACHE_FILES_RELATIVE_LOCATION = "cache";
+	public static final String CACHE_FILES_SUFFIX = ".cache.xml";
 
 	/**
 	 * Elimina la configuración actual de la caché, y vacía todas las cachés.

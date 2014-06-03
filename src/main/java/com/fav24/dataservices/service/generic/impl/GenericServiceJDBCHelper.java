@@ -32,7 +32,7 @@ import com.fav24.dataservices.domain.security.EntityOrderAttribute.Order;
 import com.fav24.dataservices.domain.security.EntityOrdination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
-import com.fav24.dataservices.service.generic.impl.GenericServiceJDBCInformation.EntityJDBCInformation;
+import com.fav24.dataservices.service.generic.impl.GenericServiceDataSourceInfo.EntityDataSourceInfo;
 import com.fav24.dataservices.util.JDBCUtils;
 
 
@@ -111,7 +111,7 @@ public class GenericServiceJDBCHelper {
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de datos.
 	 */
-	public static StringBuilder getInsertDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes, EntityJDBCInformation entityInformation, 
+	public static StringBuilder getInsertDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes, EntityDataSourceInfo entityInformation, 
 			AbstractList<String> inColumns, AbstractList<String> inAliases,
 			AbstractList<String> outColumns, AbstractList<String> outAliases
 			) throws ServerException {
@@ -170,7 +170,7 @@ public class GenericServiceJDBCHelper {
 	 * @return una cadena de texto con el conjunto de campos de datos.
 	 * @throws ServerException 
 	 */
-	public static StringBuilder getSelectForUpdateDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes, EntityJDBCInformation entityInformation) throws ServerException {
+	public static StringBuilder getSelectForUpdateDataString(EntityAccessPolicy entityAccessPolicy, Map<String, Object> attributes, EntityDataSourceInfo entityInformation) throws ServerException {
 
 		StringBuilder querySelect = new StringBuilder();
 
@@ -621,7 +621,7 @@ public class GenericServiceJDBCHelper {
 	 * @throws SQLException 
 	 * @throws ServerException 
 	 */
-	public static void recoverRowFromInsert(Connection connection, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityJDBCInformation entityInformation) throws SQLException, ServerException {
+	public static void recoverRowFromInsert(Connection connection, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException, ServerException {
 
 		StringBuilder recoverQuery = new StringBuilder(); 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
@@ -872,7 +872,7 @@ public class GenericServiceJDBCHelper {
 	 * 
 	 * @throws SQLException 
 	 */
-	public static boolean update(Connection connection, ResultSet resultSet, Timestamp now, NavigableMap<String, Object> attributes, EntityAccessPolicy entityAccessPolicy, EntityJDBCInformation entityInformation) throws SQLException {
+	public static boolean update(Connection connection, ResultSet resultSet, Timestamp now, NavigableMap<String, Object> attributes, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException {
 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
 		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
@@ -1036,7 +1036,7 @@ public class GenericServiceJDBCHelper {
 	 * @throws SQLException 
 	 * @throws ServerException 
 	 */
-	public static void recoverOrUpdateRowFromInsert(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityJDBCInformation entityInformation) throws SQLException, ServerException {
+	public static void recoverOrUpdateRowFromInsert(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException, ServerException {
 
 		StringBuilder recoverQuery = new StringBuilder(); 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION

@@ -119,7 +119,7 @@ public class HookController extends BaseJspController {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							remoteFiles = new RemoteFiles(new File[]{FileUtils.createOrReplaceExistingFile(multipartFile)});
+							remoteFiles = new RemoteFiles(new File[]{FileUtils.createOrReplaceExistingFile(multipartFile, HookConfigurationService.HOOK_FILES_RELATIVE_LOCATION)});
 						}
 						else {
 

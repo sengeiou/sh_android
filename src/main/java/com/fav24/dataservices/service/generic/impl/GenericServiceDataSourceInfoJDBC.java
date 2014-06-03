@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -30,105 +30,8 @@ import com.fav24.dataservices.util.JDBCUtils;
 
 @Scope("singleton")
 @Component
-public class GenericServiceJDBCInformation {
+public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceInfo {
 
-	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED = "G000";
-	public static final String ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE = "Fallo en el chequeo de las políticas de acceso contra la fuente de datos.";
-
-	protected static class EntityJDBCInformation {
-
-		protected String name;
-		protected String catalog;
-		protected String schema;
-		protected Boolean isView;
-		protected Map<String, Integer> dataFields;
-		protected Map<String, Object> dataFieldsDefaults;
-		protected Map<String, Set<String>> keys;
-		protected Map<String, Integer> primaryKey;
-		protected Map<String, Set<String>> indexes;
-		protected Map<String, Integer> keyFields;
-		protected Map<String, Integer> filterFields;
-		protected Set<String> generatedData;
-	}
-
-	private Map<String, EntityJDBCInformation> entitiesInformation;
-	private int product;
-
-	/**
-	 * Retorna el identificador de producto.
-	 * 
-	 * @return el identificador de producto.
-	 */
-	public int getProduct() {
-		return product;
-	}
-
-	/**
-	 * Asigna el identificador de producto.
-	 * 
-	 * @param product Identificador de producto a asignar.
-	 */
-	private void setProduct(int product) {
-		this.product = product;
-	}
-
-	/**
-	 * Retorna la información de la entidad en la fuente de datos.
-	 * 
-	 * @param entity Entidad de la que se desea obtener la información.
-	 *
-	 * @return la información de la entidad en la fuente de datos.
-	 */
-	public EntityJDBCInformation getEntity(String entity) {
-		return entitiesInformation != null ? entitiesInformation.get(entity) : null;
-	}
-	
-	/**
-	 * Retorna true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 * 
-	 * Nota: La comparación se realiza:
-	 * 	- Sin tener en cuenta mayúsculas o minúsculas.
-	 *  - Sin tener en cuenta el orden de los elementos.
-	 * 
-	 * @param collections Conjunto de colecciones a comparar. 
-	 * @param attributeCollection Colección a localizar.
-	 * 
-	 * @return true o false en función de si la colección indicada tiene o no una equivalente en el mapa suministrado.
-	 */
-	private boolean hasEquivalentAttributeCollection(Map<String, Set<String>> collections, AbstractList<EntityAttribute> attributeCollection) {
-
-		for(Entry<String, Set<String>> collectionEntry : collections.entrySet()) {
-
-			Collection<String> collection = collectionEntry.getValue();
-
-			if (attributeCollection.size() == collection.size()) {
-
-				boolean collectionFound = true;
-
-				for(EntityAttribute attributeElement : attributeCollection) {
-
-					boolean elementFound = false;
-					for(String element : collection) {
-						if (element.compareToIgnoreCase(attributeElement.getName()) == 0) {
-							elementFound = true;
-							break;
-						}
-					}
-
-					if (!elementFound) {
-						collectionFound = false;
-						break;
-					}
-				}
-
-				if (collectionFound) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
 
 	/**
 	 * Chequea las políticas de acceso definidas, contra la fuente de datos a la que ataca el servicio.
@@ -144,15 +47,17 @@ public class GenericServiceJDBCInformation {
 	 * 
 	 * @param accessPolicy Política de acceso a chequear.
 	 * 
+	 * @return toda la información necesaria de la fuente de datos, para resolver las peticiones.
+	 *  
 	 * @throws ServerException
 	 */
-	public synchronized void checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
+	public Map<String, EntityDataSourceInfo> checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy accessPolicy) throws ServerException {
 
 		if (accessPolicy == null) {
-			return;
+			return null;
 		}
 
-		entitiesInformation = new HashMap<String, EntityJDBCInformation>();
+		Map<String, EntityDataSourceInfo> entitiesInformation = new LinkedHashMap<String, EntityDataSourceInfo>();
 
 		javax.sql.DataSource dataSource = DataSources.getDataSourceDataService();
 		Connection connection = null;
@@ -166,7 +71,7 @@ public class GenericServiceJDBCInformation {
 			for (EntityAccessPolicy entityAccessPolicy : accessPolicy.getAccessPolicies()) {
 
 				// Entidad.
-				EntityJDBCInformation entityJDBCInformation = new EntityJDBCInformation();
+				EntityDataSourceInfo entityJDBCInformation = new EntityDataSourceInfo();
 				String table = entityAccessPolicy.getName().getName();
 				ResultSet tables = null;
 				try {
@@ -670,15 +575,7 @@ public class GenericServiceJDBCInformation {
 		finally {
 			JDBCUtils.CloseQuietly(connection);
 		}
-	}
-	
-	/**
-	 * Elimina toda la información de la fuente de datos, usada para resolver las peticiones.
-	 * 
-	 * @see #checkAndGatherAccessPoliciesInformationAgainstDataSource(AccessPolicy)
-	 */
-	public synchronized void resetAccessPoliciesInformationAgainstDataSource() {
-
-		entitiesInformation = null;
+		
+		return entitiesInformation;
 	}
 }

@@ -1,7 +1,5 @@
 package com.fav24.dataservices.domain.security;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,13 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.BaseDomain;
 import com.fav24.dataservices.domain.Requestor;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.security.AccessPolicyService;
-import com.fav24.dataservices.util.FileUtils;
-import com.fav24.dataservices.xml.security.AccessPolicyDOM;
 
 
 /**
@@ -237,50 +232,6 @@ public class AccessPolicy extends BaseDomain {
 		synchronized(AccessPolicy.class) {
 
 			currentAccesPolicy = null;
-		}
-	}
-
-	/**
-	 * Carga las políticas de acceso contenidas en el directorio base de la aplicación
-	 * definido en el parámetro: "dataservices.home".
-	 * 
-	 * @throws ServerException 
-	 */
-	public static final void loadDefaultAccessPolicies() throws ServerException {
-
-		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
-
-		// Se cargan los archivos de políticas de seguridad existentes.
-		File applicationHomeDir = new File(applicationHome);
-
-		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
-
-			AbstractList<File> policyFiles = FileUtils.getFilesWithSuffix(applicationHome, APPLICATION_POLICY_FILES_SUFFIX, null);
-
-			if (policyFiles.size() == 0) {
-
-				throw new ServerException(AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD, 
-						AccessPolicyService.ERROR_NO_DEFAULT_POLICY_FILES_TO_LOAD_MESSAGE);
-			}
-			else {
-
-				for(File policyFile : policyFiles) {
-
-					try {
-
-						mergeCurrentAccesPolicy(new AccessPolicyDOM(policyFile.toURI().toURL()));
-					} 
-					catch (MalformedURLException e) {
-						throw new ServerException(AccessPolicyService.ERROR_INVALID_POLICY_FILE_URL, 
-								String.format(AccessPolicyService.ERROR_INVALID_POLICY_FILE_URL_MESSAGE, policyFile.toURI().toString()));
-					}
-				}
-			}
-		}
-		else {
-
-			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
-					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
 		}
 	}
 

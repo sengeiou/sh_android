@@ -99,6 +99,7 @@ public class FileUtils {
 	 * de la ubicación base de la aplicación.
 	 * 
 	 * @param multipartFile Fichero procendete del envío web.
+	 * @param relativeLocation Ubicación relativa al Home de la aplicación. 
 	 * 
 	 * @return el fichero procedente de un envío, y sustituye el primero existente encontrado en la lista procedente
 	 * de la ubicación base de la aplicación.
@@ -106,12 +107,13 @@ public class FileUtils {
 	 * @throws IllegalStateException
 	 * @throws IOException
 	 */
-	public static File createOrReplaceExistingFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
+	public static File createOrReplaceExistingFile(MultipartFile multipartFile, String relativeLocation) throws IllegalStateException, IOException {
 
 		String fileName = multipartFile.getOriginalFilename();
 
-		AbstractList<File> defaultFiles = FileUtils.getFilesWithSuffix(DataServicesContext.getCurrentDataServicesContext().getApplicationHome(), 
-				fileName, null);
+		String location = DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + relativeLocation;
+		
+		AbstractList<File> defaultFiles = FileUtils.getFilesWithSuffix(location, fileName, null);
 
 		for(File file : defaultFiles) {
 

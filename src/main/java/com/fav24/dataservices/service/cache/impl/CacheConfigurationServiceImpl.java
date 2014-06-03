@@ -1,17 +1,22 @@
 package com.fav24.dataservices.service.cache.impl;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.domain.cache.EntityCache;
 import com.fav24.dataservices.domain.cache.EntityCacheManager;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
+import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.cache.CacheDOM;
 
 
@@ -35,10 +40,46 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void loadDefaultCacheConfiguration() throws ServerException {
+	public void loadDefaultCacheConfiguration() throws ServerException {
 
-		Cache.destroy();
-		Cache.loadDefaultCacheConfigurations();
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
+
+		// Se cargan los archivos de políticas de seguridad existentes.
+		File applicationHomeDir = new File(applicationHome);
+
+		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
+
+			AbstractList<File> cacheConfigurationFiles = FileUtils.getFilesWithSuffix(applicationHome, CACHE_FILES_SUFFIX, null);
+
+			if (cacheConfigurationFiles.size() > 0) {
+
+				AbstractList<Cache> loadedCaches = new ArrayList<Cache>();
+
+				for(File cacheConfigurationFile : cacheConfigurationFiles) {
+
+					try {
+						Cache loadedCache = new CacheDOM(cacheConfigurationFile.toURI().toURL());
+
+						loadedCaches.add(loadedCache);
+					} 
+					catch (MalformedURLException e) {
+						throw new ServerException(ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL, 
+								String.format(ERROR_INVALID_CACHE_CONFIGURATION_FILE_URL_MESSAGE, cacheConfigurationFile.toURI().toString()));
+					}
+				}
+
+				// Se aplican las configuraciones de caché cargadas.
+				Cache.destroy();
+				for(Cache loadedCache : loadedCaches) {
+					Cache.mergeCurrentCacheConfiguration(loadedCache);
+				}
+			}
+		}
+		else {
+
+			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+		}
 	}
 
 	/**
@@ -53,7 +94,7 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 
 		return cache;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -61,10 +102,10 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	public synchronized AbstractList<EntityCacheManager> getCacheManagers() {
 
 		if (Cache.getSystemCache() == null) {
-			
+
 			return null;
 		}
-		
+
 		return Cache.getSystemCache().getEntityCacheManagers();
 	}
 
@@ -73,12 +114,12 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	 */
 	@Override
 	public synchronized EntityCacheManager getCacheManagerConfiguration(String cacheManager) {
-		
+
 		if (Cache.getSystemCache() == null) {
-			
+
 			return null;
 		}
-		
+
 		return Cache.getSystemCache().getEntityCacheManager(cacheManager);
 	}
 
@@ -87,18 +128,18 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	 */
 	@Override
 	public synchronized Set<EntityCache> getCacheManagerCaches(String cacheManager) {
-		
+
 		if (Cache.getSystemCache() == null) {
-			
+
 			return null;
 		}
-		
+
 		EntityCacheManager entityCacheManager = Cache.getSystemCache().getEntityCacheManager(cacheManager);
-		
+
 		if (entityCacheManager != null) {
 			return entityCacheManager.getEntitiesCacheConfigurations();
 		}
-		
+
 		return null;
 	}
 
@@ -107,18 +148,18 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	 */
 	@Override
 	public synchronized EntityCache getCacheConfiguration(String cacheManager, String entity) {
-		
+
 		if (Cache.getSystemCache() == null) {
-			
+
 			return null;
 		}
-		
+
 		EntityCacheManager entityCacheManager = Cache.getSystemCache().getEntityCacheManager(cacheManager);
-		
+
 		if (entityCacheManager != null) {
 			return entityCacheManager.getEntityCache(entity);
 		}
-		
+
 		return null;
 	}
 }

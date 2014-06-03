@@ -146,7 +146,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 						if (fileAsDefault != null && fileAsDefault) {
 
-							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile));
+							inputStream = new FileInputStream(FileUtils.createOrReplaceExistingFile(multipartFile, CacheConfigurationService.CACHE_FILES_RELATIVE_LOCATION));
 						}
 						else {
 

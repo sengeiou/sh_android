@@ -19,10 +19,8 @@ public interface HookConfigurationService extends HookService {
 
 	public static final Logger logger = LoggerFactory.getLogger(HookConfigurationService.class);
 
-	public static final String HOOK_SOURCE_RELATIVE_LOCATION = "hooks";
-	public static final String HOOK_BINARY_RELATIVE_LOCATION = HOOK_SOURCE_RELATIVE_LOCATION + "/bin";
-	public static final String HOOK_DEPENDENCIES_RELATIVE_LOCATION = HOOK_SOURCE_RELATIVE_LOCATION + "/lib";
-	public static final String HOOK_SOURCE_SUFFIX = ".java";
+	public static final String HOOK_FILES_RELATIVE_LOCATION = "hooks";
+	public static final String HOOK_LIFES_SUFFIX = ".java";
 	
 	/**
 	 * Carga los hooks que serán asignables desde las políticas de acceso.

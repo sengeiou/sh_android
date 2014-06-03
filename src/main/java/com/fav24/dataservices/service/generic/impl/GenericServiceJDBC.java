@@ -24,7 +24,7 @@ import com.fav24.dataservices.domain.security.EntityDataAttribute;
 import com.fav24.dataservices.domain.security.EntityDataAttribute.SynchronizationField;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
-import com.fav24.dataservices.service.generic.impl.GenericServiceJDBCInformation.EntityJDBCInformation;
+import com.fav24.dataservices.service.generic.impl.GenericServiceDataSourceInfo.EntityDataSourceInfo;
 import com.fav24.dataservices.util.JDBCUtils;
 
 
@@ -36,7 +36,7 @@ import com.fav24.dataservices.util.JDBCUtils;
 public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 	@Autowired
-	private GenericServiceJDBCInformation entitiesInformation;
+	private GenericServiceDataSourceInfoJDBC entitiesInformation;
 
 
 	/**
@@ -104,7 +104,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		StringBuilder queryWhere = new StringBuilder();
 		StringBuilder queryLimit = new StringBuilder();
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		/*
 		 * Especificación del conjunto de campos de la query.
@@ -316,7 +316,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 		StringBuilder queryInsert = new StringBuilder();
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		/*
 		 * Construcción de la sentencia de inserción.
@@ -482,7 +482,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		StringBuilder queryFrom = new StringBuilder();
 		StringBuilder queryWhere = new StringBuilder();
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		String deletedColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName();
 
@@ -689,7 +689,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			throw new ServerException(GenericService.ERROR_INVALID_UPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_UPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		if (entityInformation.primaryKey == null || entityInformation.primaryKey.size() == 0) {
 			throw new ServerException(GenericService.ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY, String.format(GenericService.ERROR_UPDATE_ENTITY_LACKS_PRIMARY_KEY_MESSAGE, operation.getMetadata().getEntity()));
@@ -860,7 +860,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 		StringBuilder queryInsert = new StringBuilder();
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 
 		/*
 		 * Construcción de la sentencia de inserción.
@@ -1030,7 +1030,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			throw new ServerException(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST, String.format(GenericService.ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE, operation.getMetadata().getEntity()));
 		}
 
-		EntityJDBCInformation entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
 		Long millisecondsSinceEpoch = System.currentTimeMillis();
 		Timestamp now = new Timestamp(millisecondsSinceEpoch);
 
