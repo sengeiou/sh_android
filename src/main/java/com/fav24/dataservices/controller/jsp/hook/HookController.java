@@ -221,7 +221,9 @@ public class HookController extends BaseJspController {
 		hookConfigurationService.dropHooks();
 
 		map.addAttribute("title", "Puntos de inserción descargados.");
-		map.addAttribute("message", "Todos los puntos de inserción (hooks) han sido descargados. Todo acceso a entidades con políticas dependientes de algún hook, será rechazado con error.");
+		map.addAttribute("message", "Todos los puntos de inserción (hooks) han sido descargados. "
+				+ "Todo acceso a entidades con políticas dependientes de algún hook cargadas a partir de este momento, será rechazado con error. "
+				+ "Por otro lado, las políticas cargadas hasta el momento, seguirán usando los hooks anteriores hasta que estas sean recargadas.");
 
 		return "error_pages/server_success";
 	}
