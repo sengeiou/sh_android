@@ -11,13 +11,14 @@
 
 <%!String bodyContent;%>
 <%!String entity;%>
+<%!Boolean virtual;%>
 <%
 	StringBuilder output = new StringBuilder();
 	
 	try {
 		entity = (String)request.getAttribute("entity");
 		EntityAccessPolicy entityPolicies = (EntityAccessPolicy)request.getAttribute("entityPolicies");
-
+		virtual = entityPolicies.isVirtual();
 		if (entityPolicies == null) {
 			
 			output.append("La entidad <strong>").append(entity).append("</strong> no existe, o no es accesible.");
@@ -233,8 +234,14 @@
 <div id="entityDetails">
 
 	<!-- Detalles de la entidad -->
+	<%if (virtual) {%>
+	<div class="panel panel-warning">
+		<div class="panel-heading"><h3><%=entity%> <sup>(virtual)</sup></h3></div>
+    <%}
+        else {%>
 	<div class="panel panel-info">
-		<div class="panel-heading"><h3>${entity}</h3></div>
+		<div class="panel-heading"><h3><%=entity%></h3></div>
+    <%} %>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<%=bodyContent%>

@@ -56,7 +56,7 @@
 
 	bodyContent = output.toString();
 %>
-<!-- Panel de información de las entidades publicadas. -->
+<!-- Panel de informaciÃ³n de las entidades publicadas. -->
 <div id="availableEntities">
 
 	<!-- Entidades disponibles -->

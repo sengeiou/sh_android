@@ -4,6 +4,7 @@ package com.fav24.dataservices.controller.jsp.security;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,16 @@ public class AccessPolicyController extends BaseJspController {
 		ModelAndView model = new ModelAndView("available_entities");
 
 		model.addObject("entities", accessPolicyConfigurationService.getPublicEntities());
+		
+		AbstractList<String> virtualEntities = new ArrayList<String>();
+		
+		for (String publicEntity : accessPolicyConfigurationService.getPublicEntities()) {
+			
+			if (accessPolicyConfigurationService.getPublicEntityPolicy(publicEntity).isVirtual()) {
+				virtualEntities.add(publicEntity);
+			}
+		}
+		model.addObject("virtualEntities", virtualEntities);
 
 		return model;
 	}

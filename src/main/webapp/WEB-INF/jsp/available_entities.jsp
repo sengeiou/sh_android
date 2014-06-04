@@ -4,6 +4,7 @@
 <%!String bodyContent;%>
 <%
 	List<String> entities = (List<String>)request.getAttribute("entities");
+	List<String> virtualEntities = (List<String>)request.getAttribute("virtualEntities");
 	StringBuilder output = new StringBuilder();
 	
 	try {
@@ -13,15 +14,20 @@
 			output.append("<p>Estas son las entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>");
 			output.append("</div>");
 		
-			output.append("<ul class=\"list-group\">");
+			output.append("<div class=\"list-group\">");
 
 			for (String entity : entities) {
-				output.append("<li class=\"list-group-item\">");
-				output.append("<a href=\"#\" onclick=\"sendGetRequest('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a><br/>");
-				output.append("</li>");
+				
+				output.append("<a class=\"list-group-item");
+				
+				if (virtualEntities.contains(entity)) {
+					output.append(" list-group-item-warning");
+				}
+
+				output.append("\" href=\"#\" onclick=\"sendGetRequest('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a>");
 			}
 			
-			output.append("</ul>");
+			output.append("</div>");
 		} 
 		else {
 			output.append("<div class=\"panel-body\">");
@@ -35,7 +41,7 @@
 
 	bodyContent = output.toString();
 %>
-<!-- Panel de información de las entidades publicadas. -->
+<!-- Panel de informaciÃ³n de las entidades publicadas. -->
 <div id="availableEntities">
 
 	<!-- Entidades disponibles -->
