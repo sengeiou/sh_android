@@ -2,6 +2,7 @@ package com.fav24.dataservices.util;
 
 import java.net.MalformedURLException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -349,5 +350,57 @@ public class JDBCUtils {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Método de ajuda a la asignación de valores de una sentencia preparada.
+	 * 
+	 * @param statement Sentencia a la que se dese asignar el valor.
+	 * @param columnIndex Índice de la columna a la que se asigna el valor.
+	 * @param value Valor a asignar.
+	 * @param type Tipo de dato SQL.
+	 * 
+	 * @throws SQLException
+	 */
+	public static final void setObject(PreparedStatement statement, int columnIndex, Object value, int type) throws SQLException {
+
+		if (value == null) {
+			statement.setNull(columnIndex, type);
+		}
+		else {
+			statement.setObject(columnIndex, value, type);
+		}
+	}
+
+	/**
+	 * Método de ajuda a la obtención de un valor del conjunto de resultados indicado por parámetro.
+	 * 
+	 * @param resultSet Conjunto de resultados del que se obtendrá el valor.
+	 * @param columnIndex Índice de la columna de la que se obtener el valor.
+	 * @param type Tipo de dato Java.
+	 * 
+	 * @throws SQLException
+	 */
+	public static final <T> T getObject(ResultSet resultSet, int columnIndex, Class<T> type) throws SQLException {
+
+		T value = resultSet.getObject(columnIndex, type);
+
+		return resultSet.wasNull() ? null : value;
+	}
+	
+	/**
+	 * Método de ajuda a la obtención de un valor del conjunto de resultados indicado por parámetro.
+	 * 
+	 * @param resultSet Conjunto de resultados del que se obtendrá el valor.
+	 * @param columnName Nombre de la columna de la que se obtener el valor.
+	 * @param type Tipo de dato Java.
+	 * 
+	 * @throws SQLException
+	 */
+	public static final <T> T getObject(ResultSet resultSet, String columnName, Class<T> type) throws SQLException {
+		
+		T value = resultSet.getObject(columnName, type);
+		
+		return resultSet.wasNull() ? null : value;
 	}
 }

@@ -255,7 +255,17 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				if (params != null) {
 
 					for (int i=0; i<params.length; i++) {
-						preparedStatement.setObject(i+1, params[i], types[i]);
+
+						Object value = params[i];
+
+						if (value == null) {
+
+							preparedStatement.setNull(i+1, types[i]);
+						}
+						else {
+
+							preparedStatement.setObject(i+1, value, types[i]);
+						}
 					}
 				}
 
@@ -274,7 +284,17 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			if (params != null) {
 
 				for (int i=0; i<params.length; i++) {
-					preparedStatement.setObject(i+1, params[i], types[i]);
+
+					Object value = params[i];
+
+					if (value == null) {
+
+						preparedStatement.setNull(i+1, types[i]);
+					}
+					else {
+
+						preparedStatement.setObject(i+1, value, types[i]);
+					}
 				}
 			}
 
@@ -386,13 +406,24 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
 				preparedStatement.setObject(2, now, birthColumnType);
 				preparedStatement.setObject(3, now, modifiedColumnType);
-				preparedStatement.setObject(4, null, deletedColumnType);
+				preparedStatement.setNull(4, deletedColumnType);
 
 				i=5;
 
 				for (String inAlias : inAliases) {
 
-					preparedStatement.setObject(i++, itemAttributes.get(inAlias));
+					Object value = itemAttributes.get(inAlias);
+
+					if (value == null) {
+
+						preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+					}
+					else {
+
+						preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+					}
+
+					i++;
 				}
 
 				boolean isRefurbishedRow = false;
@@ -571,7 +602,17 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			if (params != null) {
 
 				for (int i=0; i<params.length; i++) {
-					preparedStatement.setObject(i+2, params[i], types[i]);
+
+					Object value = params[i];
+
+					if (value == null) {
+
+						preparedStatement.setNull(i+2, types[i]);
+					}
+					else {
+
+						preparedStatement.setObject(i+2, value, types[i]);
+					}
 				}
 			}
 
@@ -617,7 +658,17 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					if (params != null) {
 
 						for (int i=0; i<params.length; i++) {
-							preparedStatement.setObject(i+2, params[i], types[i]);
+
+							Object value = params[i];
+
+							if (value == null) {
+
+								preparedStatement.setNull(i+2, types[i]);
+							}
+							else {
+
+								preparedStatement.setObject(i+2, value, types[i]);
+							}
 						}
 					}
 
@@ -776,7 +827,17 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			preparedStatement = connection.prepareStatement(querySelect.toString());
 
 			for (int i=0; i<params.length; i++) {
-				preparedStatement.setObject(i+1, params[i], types[i]);
+
+				Object value = params[i];
+
+				if (value == null) {
+
+					preparedStatement.setNull(i+1, types[i]);
+				}
+				else {
+
+					preparedStatement.setObject(i+1, value, types[i]);
+				}
 			}
 
 			/*
@@ -922,14 +983,25 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
 				preparedStatement.setObject(2, now, birthColumnType);
 				preparedStatement.setObject(3, now, modifiedColumnType);
-				preparedStatement.setObject(4, null, deletedColumnType);
+				preparedStatement.setNull(4, deletedColumnType);
 
 				i=5;
 				itemAttributes = item.getAttributes();
 
 				for (String inAlias : inAliases) {
 
-					preparedStatement.setObject(i++, itemAttributes.get(inAlias));
+					Object value = itemAttributes.get(inAlias);
+
+					if (value == null) {
+
+						preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+					}
+					else {
+
+						preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+					}
+
+					i++;
 				}
 
 				boolean isRefurbishedOrExistingRow = false;
@@ -1110,14 +1182,25 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				preparedStatement.setObject(1, EntityDataAttribute.DEFAFULT_REVISION, revisionColumnType);
 				preparedStatement.setObject(2, now, birthColumnType);
 				preparedStatement.setObject(3, now, modifiedColumnType);
-				preparedStatement.setObject(4, null, deletedColumnType);
+				preparedStatement.setNull(4, deletedColumnType);
 
 				i=5;
 				itemAttributes = item.getAttributes();
 
 				for (String inAlias : inAliases) {
 
-					preparedStatement.setObject(i++, itemAttributes.get(inAlias));
+					Object value = itemAttributes.get(inAlias);
+
+					if (value == null) {
+
+						preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+					}
+					else {
+
+						preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+					}
+
+					i++;
 				}
 
 				boolean isRefurbishedOrExistingRow = false;

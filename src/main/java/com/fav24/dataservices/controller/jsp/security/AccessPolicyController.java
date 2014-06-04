@@ -47,14 +47,20 @@ public class AccessPolicyController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("available_entities");
 
-		model.addObject("entities", accessPolicyConfigurationService.getPublicEntities());
-		
-		AbstractList<String> virtualEntities = new ArrayList<String>();
-		
-		for (String publicEntity : accessPolicyConfigurationService.getPublicEntities()) {
-			
-			if (accessPolicyConfigurationService.getPublicEntityPolicy(publicEntity).isVirtual()) {
-				virtualEntities.add(publicEntity);
+		AbstractList<String> availableEntities = accessPolicyConfigurationService.getPublicEntities();
+
+		model.addObject("entities", availableEntities);
+
+		AbstractList<String> virtualEntities = null;
+
+		if (availableEntities != null) {
+
+			virtualEntities = new ArrayList<String>();
+			for (String publicEntity : availableEntities) {
+
+				if (accessPolicyConfigurationService.getPublicEntityPolicy(publicEntity).isVirtual()) {
+					virtualEntities.add(publicEntity);
+				}
 			}
 		}
 		model.addObject("virtualEntities", virtualEntities);
@@ -119,7 +125,7 @@ public class AccessPolicyController extends BaseJspController {
 					Boolean fileAsDefault = filesAsDefault == null ? false : filesAsDefault.get(i++);
 
 					InputStream inputStream = null;
-					
+
 					try {
 
 						if (fileAsDefault != null && fileAsDefault) {
@@ -130,7 +136,7 @@ public class AccessPolicyController extends BaseJspController {
 
 							inputStream = multipartFile.getInputStream();
 						}
-						
+
 						accessPolicyConfigurationService.loadAccessPolicy(inputStream);
 
 						filesOK.add(fileName);

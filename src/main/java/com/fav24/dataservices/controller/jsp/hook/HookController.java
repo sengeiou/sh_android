@@ -47,7 +47,7 @@ public class HookController extends BaseJspController {
 	 * @return el modelo y la vista, con la lista de hooks disponibles para este servicio de datos.
 	 */
 	@RequestMapping(value = "/availableHooks", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView availableEntities() {
+	public ModelAndView availableHooks() {
 
 		ModelAndView model = new ModelAndView("available_hooks");
 

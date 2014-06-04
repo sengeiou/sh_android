@@ -771,11 +771,31 @@ public class GenericServiceJDBCHelper {
 
 			int j=1;
 			for (int i=0; i<types.size(); i++, j++) {
-				preparedStatement.setObject(j, params.get(i), types.get(i));
+
+				Object value = params.get(i);
+
+				if (value == null) {
+
+					preparedStatement.setNull(j, types.get(i));
+				}
+				else {
+
+					preparedStatement.setObject(j, value, types.get(i));
+				}
 			}
 
 			for (int i=0; i<fndTypes.size(); i++, j++) {
-				preparedStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
+
+				Object value = fndParams.get(i);
+
+				if (value == null) {
+
+					preparedStatement.setNull(j, fndTypes.get(i));
+				}
+				else {
+
+					preparedStatement.setObject(j, value, fndTypes.get(i));
+				}
 			}
 
 			int modifiedRows = preparedStatement.executeUpdate();
@@ -976,15 +996,25 @@ public class GenericServiceJDBCHelper {
 				preparedStatement = connection.prepareStatement(queryUpdate.toString());
 
 				for (int i=0; i<params.size(); i++) {
-					preparedStatement.setObject(i+1, params.get(i), types.get(i));
+
+					Object value = params.get(i);
+
+					if (value == null) {
+
+						preparedStatement.setNull(i+1, types.get(i));
+					}
+					else {
+
+						preparedStatement.setObject(i+1, value, types.get(i));
+					}
 				}
 
 				int updatedRegisters = preparedStatement.executeUpdate();
-				
+
 				if (updatedRegisters == 0) {
 					return false;
 				}
-				
+
 				if (updatedRegisters > 1) {
 					return false;
 				}
@@ -1187,11 +1217,31 @@ public class GenericServiceJDBCHelper {
 
 			int j=1;
 			for (int i=0; i<types.size(); i++, j++) {
-				recoverQueryStatement.setObject(j, params.get(i), types.get(i));
+
+				Object value = params.get(i);
+
+				if (value == null) {
+
+					recoverQueryStatement.setNull(j, types.get(i));
+				}
+				else {
+
+					recoverQueryStatement.setObject(j, value, types.get(i));
+				}
 			}
 
 			for (int i=0; i<fndTypes.size(); i++, j++) {
-				recoverQueryStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
+				
+				Object value = fndParams.get(i);
+
+				if (value == null) {
+
+					recoverQueryStatement.setNull(j, fndTypes.get(i));
+				}
+				else {
+
+					recoverQueryStatement.setObject(j, value, fndTypes.get(i));
+				}
 			}
 
 			modifiedRows = recoverQueryStatement.executeUpdate();
@@ -1222,7 +1272,17 @@ public class GenericServiceJDBCHelper {
 
 				int j=1;
 				for (int i=0; i<fndTypes.size(); i++, j++) {
-					selectQueryStatement.setObject(j, fndParams.get(i), fndTypes.get(i));
+					
+					Object value = fndParams.get(i);
+		               
+		               if (value == null) {
+		                  
+		            	   selectQueryStatement.setNull(j, fndTypes.get(i));
+		               }
+		               else {
+		                  
+		            	   selectQueryStatement.setObject(j, value, fndTypes.get(i));
+		               }
 				}
 
 				resultSet = selectQueryStatement.executeQuery();
@@ -1288,7 +1348,17 @@ public class GenericServiceJDBCHelper {
 				recoveredQueryStatement = connection.prepareStatement(recoveredQuery.toString());
 
 				for (int i=0; i<fndTypes.size(); i++) {
-					recoveredQueryStatement.setObject(i+1, fndParams.get(i), fndTypes.get(i));
+					
+					Object value = fndParams.get(i);
+
+					if (value == null) {
+
+						recoveredQueryStatement.setNull(i+1, fndTypes.get(i));
+					}
+					else {
+
+						recoveredQueryStatement.setObject(i+1, value, fndTypes.get(i));
+					}
 				}
 
 				resultSet = recoveredQueryStatement.executeQuery();
