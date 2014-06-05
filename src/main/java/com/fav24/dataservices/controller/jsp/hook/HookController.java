@@ -64,7 +64,7 @@ public class HookController extends BaseJspController {
 	 * @return el modelo y la vista, con el el detalle de un hook.
 	 */
 	@RequestMapping(value = "/hookDetails", method = { RequestMethod.GET })
-	public ModelAndView entityPolicies(@ModelAttribute(value="hook") String hook) {
+	public ModelAndView hookDetails(@ModelAttribute(value="hook") String hook) {
 
 		ModelAndView model = new ModelAndView("hook_details");
 
@@ -94,7 +94,7 @@ public class HookController extends BaseJspController {
 	 * @return el nombre del formulario que mostrará los ficheros cargados con éxito.
 	 */
 	@RequestMapping(value = "/hookUpload.save", method = { RequestMethod.POST })
-	public String accessPolicyUpload(@ModelAttribute("uploadHookFiles") UploadFilesDto uploadHookFiles, Model map) {
+	public String hookUpload(@ModelAttribute("uploadHookFiles") UploadFilesDto uploadHookFiles, Model map) {
 
 		List<MultipartFile> files = uploadHookFiles.getFiles();
 		List<Boolean> filesAsDefault = uploadHookFiles.getFilesAsDefault();

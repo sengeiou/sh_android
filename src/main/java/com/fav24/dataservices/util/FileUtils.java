@@ -111,7 +111,7 @@ public class FileUtils {
 
 		String fileName = multipartFile.getOriginalFilename();
 
-		String location = DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + relativeLocation;
+		String location = DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + File.separator + relativeLocation;
 		
 		AbstractList<File> defaultFiles = FileUtils.getFilesWithSuffix(location, fileName, null);
 
