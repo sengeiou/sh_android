@@ -1231,7 +1231,7 @@ public class GenericServiceJDBCHelper {
 			}
 
 			for (int i=0; i<fndTypes.size(); i++, j++) {
-				
+
 				Object value = fndParams.get(i);
 
 				if (value == null) {
@@ -1272,17 +1272,17 @@ public class GenericServiceJDBCHelper {
 
 				int j=1;
 				for (int i=0; i<fndTypes.size(); i++, j++) {
-					
+
 					Object value = fndParams.get(i);
-		               
-		               if (value == null) {
-		                  
-		            	   selectQueryStatement.setNull(j, fndTypes.get(i));
-		               }
-		               else {
-		                  
-		            	   selectQueryStatement.setObject(j, value, fndTypes.get(i));
-		               }
+
+					if (value == null) {
+
+						selectQueryStatement.setNull(j, fndTypes.get(i));
+					}
+					else {
+
+						selectQueryStatement.setObject(j, value, fndTypes.get(i));
+					}
 				}
 
 				resultSet = selectQueryStatement.executeQuery();
@@ -1337,53 +1337,59 @@ public class GenericServiceJDBCHelper {
 				}
 			}
 
-			recoveredQuery.append(" FROM ").append(entityAccessPolicy.getName().getName());
+			/*
+			 *  Si no hay campos clave en la sección data a recuperar, no se ejecuta la sentencia de recuperación. 
+			 */
+			if (!firstField) {
 
-			recoveredQuery.append(" WHERE ").append(fndQuery);
+				recoveredQuery.append(" FROM ").append(entityAccessPolicy.getName().getName());
 
-			PreparedStatement recoveredQueryStatement = null;
-			ResultSet resultSet = null;
+				recoveredQuery.append(" WHERE ").append(fndQuery);
 
-			try {
-				recoveredQueryStatement = connection.prepareStatement(recoveredQuery.toString());
+				PreparedStatement recoveredQueryStatement = null;
+				ResultSet resultSet = null;
 
-				for (int i=0; i<fndTypes.size(); i++) {
-					
-					Object value = fndParams.get(i);
+				try {
+					recoveredQueryStatement = connection.prepareStatement(recoveredQuery.toString());
 
-					if (value == null) {
+					for (int i=0; i<fndTypes.size(); i++) {
 
-						recoveredQueryStatement.setNull(i+1, fndTypes.get(i));
+						Object value = fndParams.get(i);
+
+						if (value == null) {
+
+							recoveredQueryStatement.setNull(i+1, fndTypes.get(i));
+						}
+						else {
+
+							recoveredQueryStatement.setObject(i+1, value, fndTypes.get(i));
+						}
+					}
+
+					resultSet = recoveredQueryStatement.executeQuery();
+
+					if (resultSet.first()) {
+
+						int i=1;
+						for (String attributeAlias : attributes) {
+
+							Object value = resultSet.getObject(i++);
+
+							dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+						}
 					}
 					else {
+						throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+					}
 
-						recoveredQueryStatement.setObject(i+1, value, fndTypes.get(i));
+					if (resultSet.next()) {
+						throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 					}
 				}
-
-				resultSet = recoveredQueryStatement.executeQuery();
-
-				if (resultSet.first()) {
-
-					int i=1;
-					for (String attributeAlias : attributes) {
-
-						Object value = resultSet.getObject(i++);
-
-						dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
-					}
+				finally {
+					JDBCUtils.CloseQuietly(resultSet);
+					JDBCUtils.CloseQuietly(recoveredQueryStatement);
 				}
-				else {
-					throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
-				}
-
-				if (resultSet.next()) {
-					throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
-				}
-			}
-			finally {
-				JDBCUtils.CloseQuietly(resultSet);
-				JDBCUtils.CloseQuietly(recoveredQueryStatement);
 			}
 		}
 	}
