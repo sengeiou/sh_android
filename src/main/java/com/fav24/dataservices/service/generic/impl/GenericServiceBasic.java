@@ -16,8 +16,9 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
-import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.service.hook.GenericServiceHook.HookMethodOutput;
+import com.fav24.dataservices.service.hook.GenericServiceHook.HookMethodOutputCode;
+import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
 import com.fav24.dataservices.service.security.AccessPolicyService;
 import com.fav24.dataservices.service.system.SystemService;
@@ -113,21 +114,21 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 					hookOutput = hook.requestBegin(connection, AccessPolicy.getCurrentAccesPolicy(), generic); 
 
-					if (hookOutput == HookMethodOutput.STOP_KO) {
-						throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hookEntry.getKey(), operation.getMetadata().getEntity(), generic.getAlias()));
+					if (hookOutput.getCode() == HookMethodOutputCode.STOP_KO) {
+						throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hookEntry.getKey(), operation.getMetadata().getEntity(), generic.getAlias(), hookOutput.getMessage()));
 					}
 
-					if (hookOutput == HookMethodOutput.STOP_OK) {
+					if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 						break;
 					}
 				}
 
-				if (hookOutput == HookMethodOutput.STOP_OK) {
+				if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 					break;
 				}
 			}
 
-			if (hookOutput == HookMethodOutput.CONTINUE) {
+			if (hookOutput.getCode() == HookMethodOutputCode.CONTINUE) {
 
 				for (Operation operation : generic.getOperations()) {
 
@@ -138,16 +139,16 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 						hookOutput = hook.operationBegin(connection, entityAccessPolicy, operation); 
 
-						if (hookOutput == HookMethodOutput.STOP_KO) {
-							throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+						if (hookOutput.getCode() == HookMethodOutputCode.STOP_KO) {
+							throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias(), hookOutput.getMessage()));
 						}
 
-						if (hookOutput == HookMethodOutput.STOP_OK) {
+						if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 							break;
 						}
 					}
 
-					if (hookOutput == HookMethodOutput.CONTINUE) {
+					if (hookOutput.getCode() == HookMethodOutputCode.CONTINUE) {
 
 						processOperation(connection, entityAccessPolicy, operation);
 
@@ -156,18 +157,18 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 							hookOutput = hook.operationEnd(connection, entityAccessPolicy, operation); 
 
-							if (hookOutput == HookMethodOutput.STOP_KO) {
-								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+							if (hookOutput.getCode() == HookMethodOutputCode.STOP_KO) {
+								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias(), hookOutput.getMessage()));
 							}
 
-							if (hookOutput == HookMethodOutput.STOP_OK) {
+							if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 								break;
 							}
 						}
 					}
 				}
 
-				if (hookOutput == HookMethodOutput.CONTINUE) {
+				if (hookOutput.getCode() == HookMethodOutputCode.CONTINUE) {
 
 					// Ejecución de los hooks de fin de petición.
 					for (Operation operation : generic.getOperations()) {
@@ -178,16 +179,16 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 							hookOutput = hook.requestEnd(connection, AccessPolicy.getCurrentAccesPolicy(), generic); 
 
-							if (hookOutput == HookMethodOutput.STOP_KO) {
-								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias()));
+							if (hookOutput.getCode() == HookMethodOutputCode.STOP_KO) {
+								throw new ServerException(ERROR_HOOK_STOP_KO, String.format(ERROR_HOOK_STOP_KO_MESSAGE, hook.getAlias(), operation.getMetadata().getEntity(), generic.getAlias(), hookOutput.getMessage()));
 							}
 
-							if (hookOutput == HookMethodOutput.STOP_OK) {
+							if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 								break;
 							}
 						}
 
-						if (hookOutput == HookMethodOutput.STOP_OK) {
+						if (hookOutput.getCode() == HookMethodOutputCode.STOP_OK) {
 							break;
 						}
 					}

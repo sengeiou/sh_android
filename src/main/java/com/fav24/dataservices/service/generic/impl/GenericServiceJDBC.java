@@ -361,7 +361,11 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		AbstractList<String> outColumns = new ArrayList<String>(initSize);
 		AbstractList<String> outAliases = new ArrayList<String>(initSize);
 
-		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+		StringBuilder columnsToInsert = GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases);
+		
+		if (columnsToInsert == null) {
+			throw new ServerException(GenericService.ERROR_INVALID_READONLY_POLICY, String.format(GenericService.ERROR_INVALID_READONLY_POLICY_MESSAGE, operation.getMetadata().getEntity()));	
+		}
 
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 
@@ -946,7 +950,13 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		AbstractList<String> outColumns = new ArrayList<String>(initSize);
 		AbstractList<String> outAliases = new ArrayList<String>(initSize);
 
-		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+		StringBuilder columnsToInsert = GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases);
+		
+		if (columnsToInsert == null) {
+			throw new ServerException(GenericService.ERROR_INVALID_READONLY_POLICY, String.format(GenericService.ERROR_INVALID_READONLY_POLICY_MESSAGE, operation.getMetadata().getEntity()));	
+		}
+		
+		queryInsert.append(',').append(columnsToInsert);
 
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 
@@ -1148,7 +1158,11 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		AbstractList<String> outColumns = new ArrayList<String>(initSize);
 		AbstractList<String> outAliases = new ArrayList<String>(initSize);
 
-		queryInsert.append(',').append(GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases));
+		StringBuilder columnsToInsert = GenericServiceJDBCHelper.getInsertDataString(entityAccessPolicy, firsItem.getNonSystemAttributes(), entityInformation, inColumns, inAliases, outColumns, outAliases);
+		
+		if (columnsToInsert == null) {
+			throw new ServerException(GenericService.ERROR_INVALID_READONLY_POLICY, String.format(GenericService.ERROR_INVALID_READONLY_POLICY_MESSAGE, operation.getMetadata().getEntity()));	
+		}
 
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 

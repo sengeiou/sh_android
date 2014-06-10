@@ -15,10 +15,69 @@ import com.fav24.dataservices.domain.security.EntityAccessPolicy;
 public interface GenericServiceHook {
 
 	/**
-	 * Enumeración de los resultados posibles de una llamada a un método de un hook. 
+	 * Estructura de salida de una llamada a un método de un hook. 
 	 */
-	public static enum HookMethodOutput {
-		
+	public static class HookMethodOutput {
+
+		// Salida por defecto en caso de ejecución exitosa de un hook.
+		public static final HookMethodOutput CONTINUE = new HookMethodOutput(HookMethodOutputCode.CONTINUE, "");
+		// Salida por defecto en caso de ejecución exitosa de un hook pero que detiene la ejecución del resto de operaciones.
+		public static final HookMethodOutput STOP_OK = new HookMethodOutput(HookMethodOutputCode.STOP_OK, "");
+
+		private HookMethodOutputCode code;
+		private String message;
+
+
+		/**
+		 * Constructor de la estructura de resultado STOP_KO.
+		 * 
+		 * @param message Mensaje asociado a la acción de parada con error.
+		 */
+		public HookMethodOutput(String message) {
+
+			this(HookMethodOutputCode.STOP_KO, message);
+		}
+
+		/**
+		 * Constructor de la estructura de resultado.
+		 * 
+		 * @param code Código de la acción a realizar al terminar la ejecución de un método de un hook.
+		 * @param message Mensaje asociado a la acción.
+		 */
+		public HookMethodOutput(HookMethodOutputCode code, String message) {
+
+			this.code = code;
+			this.message = message;
+		}
+
+		/**
+		 * Retorna el código enumerado identifica la acción a realizar al terminar la ejecución de un método de un hook.
+		 * 
+		 * @return el código enumerado identifica la acción a realizar al terminar la ejecución de un método de un hook.
+		 */
+		public HookMethodOutputCode getCode() {
+
+			return code;
+		}
+
+		/**
+		 * Retorna el texto que describe el fin de la ejecución de un método de un hook.
+		 * 
+		 * Nota: Este texto, es el que se mostrará en caso de código STOP_KO.
+		 * 
+		 * @return el texto que describe el fin de la ejecución de un método de un hook.
+		 */
+		public String getMessage() {
+
+			return message;
+		}
+	}
+
+	/**
+	 * Enumeración de los tipos de resultados posibles de una llamada a un método de un hook. 
+	 */
+	public static enum HookMethodOutputCode {
+
 		/** Continua con la ejecución de la petición normalmente, después de ejecutar el método del "hook".*/
 		CONTINUE("Continue"),
 		/** Detiene la ejecución de la petición con éxito, después de ejecutar el método del "hook".*/
@@ -33,7 +92,7 @@ public interface GenericServiceHook {
 		 * 
 		 * @param hookMethodOutput Cadena de texto aue identifica la acción a realizar al terminar la ejecución de un método de un hook.
 		 */
-		HookMethodOutput(String hookMethodOutput) {
+		HookMethodOutputCode(String hookMethodOutput) {
 
 			this.hookMethodOutput = hookMethodOutput;
 		}
@@ -55,11 +114,11 @@ public interface GenericServiceHook {
 		 * 
 		 * @return la acción a realizar al terminar la ejecución de un método de un hook a partir de la cadena de texto indicada.
 		 */
-		public static HookMethodOutput fromString(String text) {
+		public static HookMethodOutputCode fromString(String text) {
 
 			if (text != null) {
 
-				for (HookMethodOutput hookMethodOutput : HookMethodOutput.values()) {
+				for (HookMethodOutputCode hookMethodOutput : HookMethodOutputCode.values()) {
 
 					if (text.equalsIgnoreCase(hookMethodOutput.hookMethodOutput)) {
 						return hookMethodOutput;
@@ -70,7 +129,7 @@ public interface GenericServiceHook {
 		}
 	}
 
-	
+
 	/**
 	 * Retorna una cadena de texto que identifica este hook.
 	 * 
@@ -80,7 +139,7 @@ public interface GenericServiceHook {
 	 * @return una cadena de texto que identifica este hook.
 	 */
 	public String getAlias();
-	
+
 	/**
 	 * Retorna una cadena de texto con una descripción funcional del hook.
 	 * 

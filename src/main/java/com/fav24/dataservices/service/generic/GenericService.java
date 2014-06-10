@@ -55,10 +55,12 @@ public interface GenericService {
 	public static final String ERROR_INVALID_CREATEUPDATE_REQUEST_MESSAGE = "No se ha indicado ningún dato a crear o modificar para la entidad <%s>.";
 	public static final String ERROR_CREATEUPDATE_DUPLICATE_ROW = "G019";
 	public static final String ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE = "Existe más de un registro con al menos un una de las claves indicadas. <%s>.";
-	public static final String ERROR_HOOK_NOT_LOADED = "G020";
+	public static final String ERROR_INVALID_READONLY_POLICY = "G020";
+	public static final String ERROR_INVALID_READONLY_POLICY_MESSAGE = "No se permite escribir en los atributos informados para la entidad <%s>.";
+	public static final String ERROR_HOOK_NOT_LOADED = "G021";
 	public static final String ERROR_HOOK_NOT_LOADED_MESSAGE = "El hook <%s> no está disponible para la entidad <%s>, en la request de alias <%s>.";
-	public static final String ERROR_HOOK_STOP_KO = "G021";
-	public static final String ERROR_HOOK_STOP_KO_MESSAGE = "El hook <%s> para la entidad <%s>, en la request de alias <%s>, he terminado con errores.";
+	public static final String ERROR_HOOK_STOP_KO = "G022";
+	public static final String ERROR_HOOK_STOP_KO_MESSAGE = "El hook <%s> para la entidad <%s>, en la request de alias <%s>, ha terminado con errores: %s";
 	
 	public static final String ERROR_UNKNOWN = "G999";
 	public static final String ERROR_UNKNOWN_MESSAGE = "Error desconocido en la petición. Mensaje interno: <%s>";
