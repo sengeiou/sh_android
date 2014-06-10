@@ -83,8 +83,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	private Boolean onlyByKey;
 	private Boolean onlySpecifiedFilters;
 	private Long maxPageSize;
-	private Long positiveRevisionThreshold;
-	private Long negativeRevisionThreshold;
+	private long positiveRevisionThreshold;
+	private long negativeRevisionThreshold;
 
 
 	/**
@@ -125,6 +125,8 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		onlyByKey = entityAccessPolicy.onlyByKey == null ? null : entityAccessPolicy.onlyByKey;
 		onlySpecifiedFilters = entityAccessPolicy.onlySpecifiedFilters == null ? null : entityAccessPolicy.onlySpecifiedFilters;
 		maxPageSize = entityAccessPolicy.maxPageSize == null ? null : entityAccessPolicy.maxPageSize;
+		positiveRevisionThreshold = entityAccessPolicy.positiveRevisionThreshold;
+		negativeRevisionThreshold = entityAccessPolicy.negativeRevisionThreshold;
 	}
 
 	/**
