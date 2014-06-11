@@ -225,7 +225,7 @@ public class Filter implements Organizable, Serializable {
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("filterItems[");
+		contentKey.append("fi[");
 		if (filterItems != null && filterItems.size() > 0) {
 			boolean firstItem = true;
 			for (FilterItem filterItem : filterItems) {
@@ -239,11 +239,11 @@ public class Filter implements Organizable, Serializable {
 				firstItem = false;
 			}
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		contentKey.append(ELEMENT_SEPARATOR);
 
-		contentKey.append("filter[");
+		contentKey.append("f[");
 		if (filter != null && filter.size() > 0) {
 			boolean firstItem = true;
 			for (Filter currentFilter : filter) {
@@ -257,7 +257,7 @@ public class Filter implements Organizable, Serializable {
 				firstItem = false;
 			}
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		return contentKey;
 	}

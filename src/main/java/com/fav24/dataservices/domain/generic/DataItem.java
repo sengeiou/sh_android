@@ -158,7 +158,7 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("attributes[");
+		contentKey.append("a[");
 
 		if (attributes != null && attributes.size() > 0) {
 			boolean firstItem = true;
@@ -172,13 +172,13 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 				contentKey.append(attribute.getKey());
 				contentKey.append(",");
 				contentKey.append(attribute.getValue());
-				contentKey.append("]");
+				contentKey.append(']');
 
 				firstItem = false;
 			}
 		}
 
-		contentKey.append("]");
+		contentKey.append(']');
 
 		return contentKey;
 	}

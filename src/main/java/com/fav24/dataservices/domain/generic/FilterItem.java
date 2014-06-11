@@ -154,9 +154,9 @@ public class FilterItem implements Organizable, Comparable<FilterItem>, Serializ
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("comparator[").append(comparator.getComparatorType()).append("]").append(ELEMENT_SEPARATOR).
-		append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
-		append("value[").append(value).append("]");
+		contentKey.append("c[").append(comparator.getComparatorType()).append(']').append(ELEMENT_SEPARATOR).
+		append("n[").append(name).append(']').append(ELEMENT_SEPARATOR).
+		append("v[").append(value).append(']');
 
 		return contentKey;
 	}

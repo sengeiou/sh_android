@@ -80,8 +80,8 @@ public class KeyItem implements Organizable, Comparable<KeyItem>, Serializable {
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("name[").append(name).append("]").append(ELEMENT_SEPARATOR).
-		append("value[").append(value).append("]");
+		contentKey.append("n[").append(name).append(']').append(ELEMENT_SEPARATOR).
+		append("v[").append(value).append(']');
 
 		return contentKey;
 	}

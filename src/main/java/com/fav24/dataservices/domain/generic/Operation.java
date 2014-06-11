@@ -62,15 +62,15 @@ public class Operation implements Organizable, Serializable {
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("metadata[");
+		contentKey.append("m[");
 		if (metadata != null) {
 			contentKey = metadata.organizeContent(contentKey);
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		contentKey.append(ELEMENT_SEPARATOR);
 
-		contentKey.append("data[");
+		contentKey.append("d[");
 		if (data != null && data.size() > 0) {
 
 			Collections.sort(data);
@@ -88,7 +88,7 @@ public class Operation implements Organizable, Serializable {
 				firstItem = false;
 			}
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		return contentKey;
 	}

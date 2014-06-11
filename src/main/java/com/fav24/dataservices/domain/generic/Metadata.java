@@ -256,7 +256,21 @@ public class Metadata implements Organizable, Serializable {
 			contentKey = new StringBuilder();
 		}
 
-		contentKey.append("key[");
+		// Paginación.
+		contentKey.append("p[");
+		if (offset != null) {
+			contentKey.append(offset);
+		}
+		contentKey.append('|');
+		if (items != null) {
+			contentKey.append(items);
+		}
+		contentKey.append(']');
+		
+		contentKey.append(ELEMENT_SEPARATOR);
+		
+		// Claves.
+		contentKey.append("k[");
 		if (key != null && key.size() > 0) {
 			Collections.sort(key);
 
@@ -274,26 +288,28 @@ public class Metadata implements Organizable, Serializable {
 				firstItem = false;
 			}
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		contentKey.append(ELEMENT_SEPARATOR);
 
-		contentKey.append("filter[");
+		// Filtros.
+		contentKey.append("f[");
 		if (filter != null) {
 			filter.organizeContent(contentKey);
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		contentKey.append(ELEMENT_SEPARATOR);
 
-		contentKey.append("includeDeleted[");
+		// Borrados.
+		contentKey.append("d[");
 		if (includeDeleted != null) {
 			contentKey.append(includeDeleted);
 		}
 		else {
 			contentKey.append(Boolean.FALSE);
 		}
-		contentKey.append("]");
+		contentKey.append(']');
 
 		return contentKey;
 	}
