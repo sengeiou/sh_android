@@ -1,4 +1,3 @@
-<%@include file="includes/locations.jsp" %>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="com.fav24.dataservices.domain.cache.EntityCacheManager"%>

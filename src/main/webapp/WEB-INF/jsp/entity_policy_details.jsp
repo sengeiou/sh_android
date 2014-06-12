@@ -7,7 +7,6 @@
 <%@page import="com.fav24.dataservices.domain.security.EntityKey"%>
 <%@page import="com.fav24.dataservices.domain.security.EntityFilter"%>
 <%@page import="java.util.Iterator"%>
-<%@include file="includes/locations.jsp" %>
 
 <%!String bodyContent;%>
 <%!String entity;%>
@@ -61,7 +60,7 @@
 					
 					output.append("<tr>");
 					output.append("<td>");
-					output.append("<img class=\"img-polaroid\" width=\"16px\" height=\"16px\" src=\"").append(imagesURL);
+					output.append("<img class=\"img-polaroid\" width=\"16px\" height=\"16px\" src=\"").append("<c:url value='/resources/img'/>");
 					if (attribute.getDirection() == Direction.INPUT) {
 						output.append("/red-input_64x64.png");
 					}

@@ -1,4 +1,3 @@
-<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.List"%>
 
 <%!String bodyContent;%>

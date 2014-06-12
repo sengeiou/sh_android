@@ -1,9 +1,11 @@
-<%@include file="includes/locations.jsp" %>
 <%@page import="java.util.Iterator"%>
 <%@page import="com.fav24.dataservices.domain.cache.EntityCacheManager"%>
 <%@page import="com.fav24.dataservices.domain.cache.EntityCache"%>
 <%@page import="com.fav24.dataservices.domain.cache.CacheConfiguration.MemoryStoreEvictionPolicy"%>
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <%!String bodyContent;%>
 <%!String entity;%>
@@ -133,10 +135,10 @@
 	bodyContent = output.toString();
 %>
 
-<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"></link>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.pieRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">

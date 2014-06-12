@@ -1,6 +1,9 @@
 <%@page import="javax.servlet.RequestDispatcher"%>
 <%@include file="/WEB-INF/jsp/includes/locations.jsp" %>
 
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -9,11 +12,11 @@
 	</head>
 	<body>
 		<h1>Recurso no encontrado</h1>
-		<a href="<%=pagesURL%>/index.jsp">
-			<img src="<%=imagesURL%>/home.png" align="right" width="32" height="32" alt="Ir la men&uacute; principal" />
+		<a href="<c:url value="/jsp/main.jsp"/>">
+			<img src="<c:url value="/resources/img/home.png"/>" align="right" width="32" height="32" alt="Ir la men&uacute; principal" />
 		</a>
 		<h2>El m&eacute;todo HTTP especificado no est&aacute; permitido para el recurso solicitado.</h2>
-		<p><%=forwardRequestURI%></p>
+		<p><%=request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI)%></p>
 	</body>
 	<footer>
 		<p></p>

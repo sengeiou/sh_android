@@ -1,8 +1,10 @@
-<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.AbstractList"%>
 <%@page import="com.fav24.dataservices.monitoring.MonitorSample"%>
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
+
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <%!Long period;%>
 <%!Long timeRange;%>
@@ -10,24 +12,23 @@
 	period = (Long)request.getAttribute("period");
 	timeRange = (Long)request.getAttribute("timeRange");
 %>
-<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/jqplot/jquery.jqplot.min.css"></link>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/jquery.jqplot.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.cursor.min.js"></script>
+<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"/>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>"></script>
 
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"/>"></script>
 
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/custom/jqplot.bytesTickFormatter.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"/>"></script>
 
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/custom/jqplot.bytesTickFormatter.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
-
-<script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor/memory_monitor.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor/cpu_monitor.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/system_monitor.js"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor/memory_monitor.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor.js"/>"></script>
 
 <!-- Panel de monitorización del sistema. -->
 <div id="systemMonitor">
@@ -44,11 +45,13 @@
 				<div class='panel-body'>
 					<div class='row-fluid'>
 						<div class='col-sx-6 col-md-8'>
-							<input id="memoryHistoryFreeze" type="checkbox" onClick="freezeMemoryHistoryMonitor(this.checked);" checked> Congelar</input>
+							<input id="memoryHistoryFreeze" type="checkbox" onClick="freezeMemoryHistoryMonitor(this.checked);" checked/>
+							<label for="memoryHistoryFreeze">Congelar</label>
 							<div id='memoryHistory' style='width:100%; height:300px;'></div>
 						</div>
 						<div class='col-sx-6 col-md-4'>
-							<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryInstantMonitor(this.checked);" checked> Congelar</input>
+							<input id="memoryFreeze" type="checkbox" onClick="freezeMemoryInstantMonitor(this.checked);" checked/>
+							<label for="memoryFreeze">Congelar</label>
 							<div class='container-fluid'>
 								<div class='col-sx-6 col-md-6'>
 									<div id='committedMemoryInstant' style='width:100%; height:300px%;'></div>

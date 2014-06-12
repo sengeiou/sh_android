@@ -1,5 +1,4 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@include file="includes/locations.jsp" %>
 
 <script type="text/javascript">
 
@@ -141,10 +140,10 @@ $(document).ready(function() {
 	//Se Añade el primer fichero a cargar.
 	addFile();
 
-	//Se asocia el click del bot�n de A�adir fichero, a la funci�n de A�adir.
+	//Se asocia el click del botbotónn de Añadir fichero, a la función de Añadir.
     $("#addFile").click(function() {addFile();});
     
-	//Se asocia el click del bot�n de enviar datos del formulario.
+	//Se asocia el click del botón de enviar datos del formulario.
 	$("#uploadButton").on("click", function() {
 		var dataToServer = new FormData(document.getElementById("uploadForm"));
 		

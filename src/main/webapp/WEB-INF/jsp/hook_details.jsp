@@ -3,7 +3,9 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="java.io.BufferedReader"%>
-<%@include file="includes/locations.jsp" %>
+
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <%!String bodyContent;%>
 
@@ -41,7 +43,7 @@
 			
 			output.append("<p>Detalle del punto de acceso (hook).<p/>");
 
-			// Nombre y descripción del hook.
+			// Nombre y descripciÃ³n del hook.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Identificaci&oacute;n</div>");
 			output.append("<div class='panel-body'>");
@@ -54,7 +56,7 @@
 			output.append("</div>");
 			output.append("</div>"); 
 
-			// Previsualización del fuente.
+			// PrevisualizaciÃ³n del fuente.
 			output.append("<div class='panel panel-info'>");
 			output.append("<div class='panel-heading'>Fuente</div>");
 			output.append("<div class='panel-body'>");
@@ -74,10 +76,10 @@
 	bodyContent = output.toString();
 %>
 
-<link href="<%=cssURL%>/syntaxhighlighter/shCore.css" rel="stylesheet" type="text/css" />
-<link href="<%=cssURL%>/syntaxhighlighter/shThemeDefault.css" rel="stylesheet" type="text/css" />
-<script class="include" type="text/javascript" src="<%=jsURL%>/syntaxhighlighter/shCore.min.js"></script>
-<script class="include" type="text/javascript" src="<%=jsURL%>/syntaxhighlighter/shAutoloader.min.js"></script>
+<link href="<c:url value="/resources/css/syntaxhighlighter/shCore.css"/>" rel="stylesheet" type="text/css" />
+<link href="<c:url value="/resources/css/syntaxhighlighter/shThemeDefault.css"/>" rel="stylesheet" type="text/css" />
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/css/syntaxhighlighter/shAutoloader.min.js"/>"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
@@ -94,6 +96,6 @@
 
 <script type="text/javascript">
 SyntaxHighlighter.defaults.toolbar = false;
-SyntaxHighlighter.autoloader([ 'java', 'java', '<%=jsURL%>/syntaxhighlighter/shBrushJava.js']);
+SyntaxHighlighter.autoloader([ 'java', 'java', '<c:url value="/resources/css/syntaxhighlighter/shBrushJava.js"/>']);
 SyntaxHighlighter.all();
 </script>

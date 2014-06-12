@@ -1,4 +1,3 @@
-<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.NavigableMap"%>
 <%@page import="java.util.Map.Entry"%>
 <%@page import="com.fav24.dataservices.service.hook.GenericServiceHook"%>

@@ -1,5 +1,4 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@include file="includes/locations.jsp" %>
 
 <script type="text/javascript">
 

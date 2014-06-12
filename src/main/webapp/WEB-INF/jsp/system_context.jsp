@@ -1,7 +1,10 @@
-<%@include file="includes/locations.jsp"%>
 <%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@page import="java.io.File"%>
 <%@page import="com.fav24.dataservices.util.JDBCUtils"%>
+
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <%!String contextHome;%>
 <%!String contextSoName;%>
@@ -89,8 +92,8 @@
 	HTMLJavaDependencies = output.toString();
 %>
 
-<link class="include" rel="stylesheet" type="text/css" href="<%=cssURL%>/custom/tree.css">
-<script	class="include" type="text/javascript" src="<%=jsURL%>/custom/tree.js"></script>
+<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/tree.css"/>">
+<script	class="include" type="text/javascript" src="<c:url value="/resources/js/custom/tree.js"/>"></script>
 
 <!-- Panel de información del contexto de ejecución. -->
 <div id="context">
