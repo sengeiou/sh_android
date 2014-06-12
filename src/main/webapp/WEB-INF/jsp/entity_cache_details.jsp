@@ -4,7 +4,7 @@
 <%@page import="com.fav24.dataservices.domain.cache.CacheConfiguration.MemoryStoreEvictionPolicy"%>
 <%@page import="com.fav24.dataservices.xml.cache.StorageSize"%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
 <%!String bodyContent;%>

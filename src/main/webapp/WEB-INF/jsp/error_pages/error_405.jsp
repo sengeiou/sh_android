@@ -1,5 +1,4 @@
 <%@page import="javax.servlet.RequestDispatcher"%>
-<%@include file="/WEB-INF/jsp/includes/locations.jsp" %>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 

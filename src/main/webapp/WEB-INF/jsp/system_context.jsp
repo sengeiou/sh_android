@@ -93,7 +93,6 @@
 %>
 
 <link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/tree.css"/>">
-<script	class="include" type="text/javascript" src="<c:url value="/resources/js/custom/tree.js"/>"></script>
 
 <!-- Panel de información del contexto de ejecución. -->
 <div id="context">

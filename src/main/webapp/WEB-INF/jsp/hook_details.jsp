@@ -78,8 +78,6 @@
 
 <link href="<c:url value="/resources/css/syntaxhighlighter/shCore.css"/>" rel="stylesheet" type="text/css" />
 <link href="<c:url value="/resources/css/syntaxhighlighter/shThemeDefault.css"/>" rel="stylesheet" type="text/css" />
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/css/syntaxhighlighter/shAutoloader.min.js"/>"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
@@ -96,6 +94,6 @@
 
 <script type="text/javascript">
 SyntaxHighlighter.defaults.toolbar = false;
-SyntaxHighlighter.autoloader([ 'java', 'java', '<c:url value="/resources/css/syntaxhighlighter/shBrushJava.js"/>']);
+SyntaxHighlighter.autoloader([ 'java', 'java', '<c:url value="/resources/js/syntaxhighlighter/shBrushJava.js"/>']);
 SyntaxHighlighter.all();
 </script>

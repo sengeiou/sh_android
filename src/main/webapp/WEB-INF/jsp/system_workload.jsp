@@ -1,7 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_workload.js"/>"></script>
-
 <!-- Panel de información del trabajo realizado y en curso. -->
 <div id="workload" class="container-fluid ">
 	<div class="page-header">

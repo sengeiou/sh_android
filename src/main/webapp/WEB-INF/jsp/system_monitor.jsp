@@ -13,22 +13,6 @@
 	timeRange = (Long)request.getAttribute("timeRange");
 %>
 <link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"/>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>"></script>
-
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"/>"></script>
-
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/custom/jqplot.bytesTickFormatter.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"/>"></script>
-
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor/memory_monitor.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/js/system_monitor.js"/>"></script>
 
 <!-- Panel de monitorización del sistema. -->
 <div id="systemMonitor">

@@ -1,15 +1,20 @@
-<%@include file="includes/modal_acceptance.jsp"%>
-
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
 <html>
 <head>
+	<%@include file="includes/js-loader.jsp"%>
+	<%@include file="includes/modal_acceptance.jsp"%>
+	
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="application-name" content="DataServices"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
+	<meta name="msapplication-TileColor" content="#da532c"/>
+	<meta name="msapplication-TileImage" content="<c:url value="/resources/img/favicons/mstile-144x144.png"/>"/>
+	
 	<!-- Definición de los iconos -->
 	<link rel="apple-touch-icon" sizes="57x57" href="<c:url value="/resources/img/favicons/apple-touch-icon-57x57.png"/>"/>
 	<link rel="apple-touch-icon" sizes="114x114" href="<c:url value="/resources/img/favicons/apple-touch-icon-114x114.png"/>"/>
@@ -19,13 +24,14 @@
 	<link rel="apple-touch-icon" sizes="120x120" href="<c:url value="/resources/img/favicons/apple-touch-icon-120x120.png"/>"/>
 	<link rel="apple-touch-icon" sizes="76x76" href="<c:url value="/resources/img/favicons/apple-touch-icon-76x76.png"/>"/>
 	<link rel="apple-touch-icon" sizes="152x152" href="<c:url value="/resources/img/favicons/apple-touch-icon-152x152.png"/>"/>
+	<link rel="apple-touch-icon-precomposed" href="<c:url value="/resources/img/favicons/apple-touch-icon-precomposed.png"/>"/>
+	<link rel="apple-touch-icon" href="<c:url value="/resources/img/favicons/apple-touch-icon.png"/>"/>
 	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-196x196.png"/>" sizes="196x196"/>
 	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-160x160.png"/>" sizes="160x160"/>
 	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-96x96.png"/>" sizes="96x96"/>
-	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-16x16.png"/>" sizes="16x16"/>
 	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-32x32.png"/>" sizes="32x32"/>
-	<meta name="msapplication-TileColor" content="#da532c"/>
-	<meta name="msapplication-TileImage" content="<c:url value="/resources/img/favicons/mstile-144x144.png"/>"/>
+	<link rel="shortcut icon" type="image/x-icon" href="<c:url value="/resources/img/favicons/favicon.ico"/>" sizes="16x16"/>
+	<link rel="icon" type="image/png" href="<c:url value="/resources/img/favicons/favicon-16x16.png"/>" sizes="16x16"/>
 
 	<title>Servicios de acceso a datos</title>
 	
@@ -113,34 +119,14 @@
 	<!-- Bootstrap core JavaScript
 	    ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script	class="include" type="text/javascript" src="<c:url value="/resources/js/jquery.min.js"/>"></script>
-	<script class="include" type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
 
 	<script type="text/javascript">
 
-		var App = new Object();
-	
-		App.baseURL = "<c:url value=''/>";
-		App.servicesURL = "<c:url value='/rest'/>";
-		App.pagesURL = "<c:url value='/jsp'/>";
-		App.imagesURL = "<c:url value='/resources/img'/>";
-		App.cssURL = "<c:url value='/resources/css'/>";
-		App.jsURL = "<c:url value='/resources/js'/>";
-		
-		// Asignación de la función de destrución de los procesos activos de una determinada página.
-		App.destructionFunction = null;
-
-		alert(App.baseURL);
-		
 		// Ejecución después de la carga del documento.
-		$(document).ready(function(){
-			showWorkload();
-		});
-
+	    $script.ready([ 'core', 'main', 'plugins', 'custom_L1', 'custom_L2' ], function () {
+		    showWorkload();
+	    });
 	</script>
-	
-	<script class="include" type="text/javascript" src="<c:url value="/resources/js/main.js"/>"></script>
-	
 </body>
 <footer>
 </footer>
