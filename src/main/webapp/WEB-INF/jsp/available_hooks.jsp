@@ -17,7 +17,7 @@
 			output.append("<div class=\"list-group\">");
 
 			for (Entry<String, GenericServiceHook> hook : hooks.entrySet()) {
-				output.append("<a class=\"list-group-item\" href=\"#\" onclick=\"sendGetRequest('/hook/hookDetails?hook=").append(hook.getKey()).append("');\">").append(hook.getKey()).append("</a>");
+				output.append("<a class=\"list-group-item\" href=\"#\" onclick=\"sendGetRequest('hook/hookDetails?hook=").append(hook.getKey()).append("');\">").append(hook.getKey()).append("</a>");
 			}
 			
 			output.append("</div>");

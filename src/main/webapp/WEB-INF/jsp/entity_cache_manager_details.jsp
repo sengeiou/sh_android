@@ -60,7 +60,7 @@
 						
 						output.append("<tr>");
 						output.append("<td>");
-						output.append("<a href=\"#\" onclick=\"sendGetRequest('/cache/cacheConfiguration?").
+						output.append("<a href=\"#\" onclick=\"sendGetRequest('cache/cacheConfiguration?").
 								append("cacheManager=").append(entityCacheManager.getName()).append('&').
 								append("entity=").append(entityCacheConfiguration.getAlias()).
 								append("');\">").append(entityCacheConfiguration.getAlias()).append("</a><br/>");

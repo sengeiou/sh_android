@@ -28,7 +28,7 @@
 					
 					output.append("<tr>");
 					output.append("<td>");
-					output.append("<a href=\"#\" onclick=\"sendGetRequest('/cache/cacheManagerConfiguration?cacheManager=").append(entityCacheManager.getName()).append("');\">").append(entityCacheManager.getName()).append("</a><br/>");
+					output.append("<a href=\"#\" onclick=\"sendGetRequest('cache/cacheManagerConfiguration?cacheManager=").append(entityCacheManager.getName()).append("');\">").append(entityCacheManager.getName()).append("</a><br/>");
 					output.append("</td>");
 					output.append("<td>").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalHeap())).append("</td>");
 					output.append("<td>").append(StorageSize.fromBytesToString(entityCacheManager.getMaxBytesLocalDisk())).append("</td>");

@@ -1,52 +1,39 @@
-<%@page import="java.util.List"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%!String bodyContent;%>
-<%
-	List<String> entities = (List<String>)request.getAttribute("entities");
-	List<String> virtualEntities = (List<String>)request.getAttribute("virtualEntities");
-	StringBuilder output = new StringBuilder();
-	
-	try {
-		if (entities != null && entities.size() > 0) {
-			
-			output.append("<div class=\"panel-body\">");
-			output.append("<p>Estas son las entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>");
-			output.append("</div>");
-		
-			output.append("<div class=\"list-group\">");
 
-			for (String entity : entities) {
-				
-				output.append("<a class=\"list-group-item");
-				
-				if (virtualEntities.contains(entity)) {
-					output.append(" list-group-item-warning");
-				}
-
-				output.append("\" href=\"#\" onclick=\"sendGetRequest('/accesspolicy/entityPolicies?entity=").append(entity).append("');\">").append(entity).append("</a>");
-			}
-			
-			output.append("</div>");
-		} 
-		else {
-			output.append("<div class=\"panel-body\">");
-			output.append("<p>No hay entidades disponibles.</p>");
-			output.append("</div>");
-		}
-		
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
-	bodyContent = output.toString();
-%>
 <!-- Panel de información de las entidades publicadas. -->
 <div id="availableEntities">
 
 	<!-- Entidades disponibles -->
 	<div class="panel panel-info">
 		<div class="panel-heading">Entidades disponibles</div>
+		<div class="panel-body">
 		<!-- Lista de entidades -->
-		<%=bodyContent%>
+		<c:choose>
+			<c:when test="${entities == null or empty entities}">
+				No hay entidades disponibles.
+			</c:when>
+			<c:otherwise>
+				<p>Estas son las entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>
+
+				<div class="list-group">
+					<c:forEach items="${entities}" var="entity">
+					
+						<c:choose>
+							<c:when test="${fn:contains(virtualEntities, entity)}">
+								<c:set value="list-group-item list-group-item-warning" var="entityClass"/>
+							</c:when>
+							<c:otherwise>
+								<c:set value="list-group-item" var="entityClass"/>
+							</c:otherwise>
+						</c:choose>					
+					
+						<a class="${entityClass}" href="#" onclick="sendGetRequest('accesspolicy/entityPolicies?entity=${entity}')">${entity}</a>
+					</c:forEach>
+				</div>
+			</c:otherwise>
+		</c:choose>
+		</div>
 	</div>
 </div>
