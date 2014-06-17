@@ -1,13 +1,3 @@
-<%@page import="java.util.Map"%>
-<%@page import="com.fav24.dataservices.util.JDBCUtils"%>
-
-<%!Map<String, String> dataSourceAttributes;%>
-<%!Map<String, String> statsDataSourceAttributes;%>
-<%
-	dataSourceAttributes = (Map<String, String>)request.getAttribute("dataSource");
-	statsDataSourceAttributes = (Map<String, String>)request.getAttribute("statsDataSource");
-%>
-
 <!-- Panel de información de las fuentes de datos implicadas. -->
 <div id="dataSources">
 
@@ -20,12 +10,12 @@
 		
 		<!-- Atributos de la instancia -->
 		<ul class="list-group">
-			<li class="list-group-item"><Strong>Servidor: </Strong><%=dataSourceAttributes.get(JDBCUtils.HOST)%></li>
-			<li class="list-group-item"><Strong>Puerto: </Strong><%=dataSourceAttributes.get(JDBCUtils.PORT) == null?"default":dataSourceAttributes.get(JDBCUtils.PORT)%></li>
-			<li class="list-group-item"><Strong>Versi&oacute;n: </Strong><%=dataSourceAttributes.get(JDBCUtils.DATABASE_VERSION)%></li>
-			<li class="list-group-item"><Strong>Ruta: </Strong><%=dataSourceAttributes.get(JDBCUtils.PATH)%></li>
-			<li class="list-group-item"><Strong>Usuario: </Strong><%=dataSourceAttributes.get(JDBCUtils.USER)%></li>
-			<li class="list-group-item"><Strong>Cadena de conexi&oacute;n: </Strong><%=dataSourceAttributes.get(JDBCUtils.URL)%></li>
+			<li class="list-group-item"><Strong>Servidor: </Strong>${dataSource.get("host")}</li>
+			<li class="list-group-item"><Strong>Puerto: </Strong>${dataSource.get("port") == null ? "default" : dataSource.get("port")}</li>
+			<li class="list-group-item"><Strong>Versi&oacute;n: </Strong>${dataSource.get("databaseVersion")}</li>
+			<li class="list-group-item"><Strong>Ruta: </Strong>${dataSource.get("path")}</li>
+			<li class="list-group-item"><Strong>Usuario: </Strong>${dataSource.get("user")}</li>
+			<li class="list-group-item"><Strong>Cadena de conexi&oacute;n: </Strong>${dataSource.get("url")}</li>
 		</ul>
 	</div>
 
@@ -38,11 +28,12 @@
 		
 		<!-- Atributos de la instancia -->
 		<ul class="list-group">
-			<li class="list-group-item"><Strong>Servidor: </Strong><%=dataSourceAttributes.get(JDBCUtils.HOST)%></li>
-			<li class="list-group-item"><Strong>Puerto: </Strong><%=dataSourceAttributes.get(JDBCUtils.PORT) == null?"default":dataSourceAttributes.get(JDBCUtils.PORT)%></li>
-			<li class="list-group-item"><Strong>Ruta: </Strong><%=dataSourceAttributes.get(JDBCUtils.PATH)%></li>
-			<li class="list-group-item"><Strong>Usuario: </Strong><%=dataSourceAttributes.get(JDBCUtils.USER)%></li>
-			<li class="list-group-item"><Strong>Cadena de conexi&oacute;n: </Strong><%=dataSourceAttributes.get(JDBCUtils.URL)%></li>
+			<li class="list-group-item"><Strong>Servidor: </Strong>${statsDataSource.get("host")}</li>
+			<li class="list-group-item"><Strong>Puerto: </Strong>${statsDataSource.get("port") == null ? "default" : statsDataSource.get("port")}</li>
+			<li class="list-group-item"><Strong>Versi&oacute;n: </Strong>${statsDataSource.get("databaseVersion")}</li>
+			<li class="list-group-item"><Strong>Ruta: </Strong>${statsDataSource.get("path")}</li>
+			<li class="list-group-item"><Strong>Usuario: </Strong>${statsDataSource.get("user")}</li>
+			<li class="list-group-item"><Strong>Cadena de conexi&oacute;n: </Strong>${statsDataSource.get("url")}</li>
 		</ul>
 	</div>
 </div>
