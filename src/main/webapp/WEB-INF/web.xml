@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+<web-app version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_3_0.xsd">
 	<display-name>data-services</display-name>
 
 	<!-- Debe definirse en primer lugar el logger, para que esté disponible en las inicializaciones y configuraciones de las líneas ulteriores. -->
@@ -89,7 +90,13 @@
 	</session-config>
 
 	<!-- Información de configuración del contenido de las JSPs para Tomcat. -->
+	<!-- Cargar Librerias JSTL -->
+  
 	<jsp-config>
+		<taglib>
+			<taglib-uri>customFunctions.tld</taglib-uri>
+			<taglib-location>/WEB-INF/jstl/customFunctions.tld</taglib-location>
+		</taglib>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
 			<page-encoding>UTF-8</page-encoding>
