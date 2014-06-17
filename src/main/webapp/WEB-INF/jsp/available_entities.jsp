@@ -16,10 +16,9 @@
 			</c:when>
 			<c:otherwise>
 				<p>Estas son las entidades de datos que esta instancia est&aacute; ofreciendo en estos momentos.</p>
-
+				<br/>
 				<div class="list-group">
 					<c:forEach items="${entities}" var="entity">
-					
 						<c:choose>
 							<c:when test="${fn:contains(virtualEntities, entity)}">
 								<c:set value="list-group-item list-group-item-warning" var="entityClass"/>
@@ -28,7 +27,6 @@
 								<c:set value="list-group-item" var="entityClass"/>
 							</c:otherwise>
 						</c:choose>					
-					
 						<a class="${entityClass}" href="#" onclick="sendGetRequest('accesspolicy/entityPolicies?entity=${entity}')">${entity}</a>
 					</c:forEach>
 				</div>
