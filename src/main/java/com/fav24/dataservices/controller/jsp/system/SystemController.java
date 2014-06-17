@@ -59,21 +59,21 @@ public class SystemController extends BaseJspController {
 		
 		ModelAndView model = new ModelAndView("system_context");
 		
-		model.addObject("context.home", DataServicesContext.getCurrentDataServicesContext().getApplicationHome());
-		model.addObject("context.so.name", System.getProperty("os.name"));
-		model.addObject("context.so.arch", System.getProperty("os.arch"));
-		model.addObject("context.so.version", System.getProperty("os.version"));
-		model.addObject("context.so.user", System.getProperty("user.name"));
-		model.addObject("context.container.info", webApplicationContext.getServletContext().getServerInfo());
-		AbstractList<String[]> internalIPs = NetworkUtils.getInternalIPs();
-		model.addObject("context.network.internal-ip", internalIPs);
+		model.addObject("contextHome", DataServicesContext.getCurrentDataServicesContext().getApplicationHome());
+		model.addObject("contextSoName", System.getProperty("os.name"));
+		model.addObject("contextSoArch", System.getProperty("os.arch"));
+		model.addObject("contextSoVersion", System.getProperty("os.version"));
+		model.addObject("contextSoUser", System.getProperty("user.name"));
+		model.addObject("contextContainerInfo", webApplicationContext.getServletContext().getServerInfo());
+		AbstractList<String[]> networkIterfaces = NetworkUtils.getNetworkIterfaces();
+		model.addObject("contextNetworkIterfaces", networkIterfaces);
 		String externalIP = NetworkUtils.getExternalIP();
-		model.addObject("context.network.external-ip", externalIP == null ? "-" : externalIP);
-		model.addObject("context.java.vendor", System.getProperty("java.vm.vendor"));
-		model.addObject("context.java.version", System.getProperty("java.version"));
+		model.addObject("contextNetworkExternalIP", externalIP == null ? "-" : externalIP);
+		model.addObject("contextJavaVendor", System.getProperty("java.vm.vendor"));
+		model.addObject("contextJavaVersion", System.getProperty("java.version"));
 		AbstractList<AbstractList<String>> organizedClassPath = hookConfigurationService.getOrganizedClassPath();
-		model.addObject("context.java.classpath.classpaths", organizedClassPath.get(0));
-		model.addObject("context.java.classpath.dependencies", organizedClassPath.get(1));
+		model.addObject("contextJavaClasspathClasspaths", organizedClassPath.get(0));
+		model.addObject("contextJavaClasspathDependencies", organizedClassPath.get(1));
 		
 		return model;
 	}

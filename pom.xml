@@ -223,6 +223,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<!-- 
 					<outputDirectory>target/classes</outputDirectory>
 					 -->
+					<fork>false</fork>
+					<systemProperties>
+						<user.timezone>UTC</user.timezone>
+						<user.region>ES</user.region>
+                	</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>

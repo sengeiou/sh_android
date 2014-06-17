@@ -47,15 +47,15 @@ public class NetworkUtils {
 	}
 
 	/**
-	 * Retorna una lista de arrays de cadenas de texto con:
+	 * Retorna una lista de arrays de cadenas de texto con información de las interfaces de red disponibles:
 	 * 
 	 *  Display name, Name, IPs.
 	 * 
-	 * @return una lista de cadenas de texto con las direcciones IP internas de la máquina.
+	 * @return una lista de arrays de cadenas de texto con información de las interfaces de red disponibles:
 	 */
-	public static AbstractList<String[]> getInternalIPs() {
+	public static AbstractList<String[]> getNetworkIterfaces() {
 
-		AbstractList<String[]> externalIPs = new ArrayList<String[]>();
+		AbstractList<String[]> networkIterfaces = new ArrayList<String[]>();
 
 		try {
 			Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
@@ -73,13 +73,13 @@ public class NetworkUtils {
 					networkInt[i] = inetAddress.getHostAddress();
 				}
 
-				externalIPs.add(networkInt);
+				networkIterfaces.add(networkInt);
 			}
 		} catch (SocketException e) {
 			return null;
 		}
 
-		return externalIPs;
+		return networkIterfaces;
 	}
 
 	/**
