@@ -507,7 +507,9 @@ public class GenericServiceJDBCHelper {
 
 	/**
 	 * Método para la conversión de tipos de datos.
-	 *  
+	 * 
+	 * Este método se usa de DTO/Domain a JDBC.
+	 * 
 	 * @param destinationType Tipo de dato al que se desea convertir el valor.
 	 * @param value Valor a convertir.
 	 * 
@@ -549,10 +551,44 @@ public class GenericServiceJDBCHelper {
 	}
 
 	/**
+	 * Método para la conversión de tipos de datos.
+	 * 
+	 * Este método se usa de JDBC a DTO/Domain.
+	 * 
+	 * @param originType Tipo de dato del que se desea convertir el valor.
+	 * @param value Valor a convertir.
+	 * 
+	 * @return valor convertido.
+	 */
+	public static Object translateFromType(int originType, Object value) {
+
+		if (value != null) {
+
+			switch(originType) {
+
+			case java.sql.Types.DATE:
+			case java.sql.Types.TIME:
+			case java.sql.Types.TIMESTAMP:
+				if (value instanceof java.util.Date) {
+					return ((java.util.Date)value).getTime();
+				}
+				else if (value instanceof Number) {
+					return ((Number)value).longValue();
+				}
+				break;
+			}
+		}
+
+		return value;
+	}
+
+	/**
 	 * Extrae el conjunto de datos del set de resultados y lo añade a la estructura de datos de la operación.   
 	 * 
 	 * @param resultSet Set de resultados del que se extrae la información.
-	 * @param operation Operación en la que se añade el conjunto de datos extraido.
+	 * @param entityAccessPolicy Políticas de acceso de la entidad.
+	 * @param entityInformation Información de la entidad en el subsistema.
+	 * @param data Salida de la información extraida. 
 	 * 
 	 * Nota: Este método se usa conjuntamente con el {@link #getDataString(EntityAccessPolicy, Map)}
 	 * 
@@ -561,7 +597,7 @@ public class GenericServiceJDBCHelper {
 	 * @throws SQLException
 	 * @throws DataAccessException
 	 */
-	public static long extractData(ResultSet resultSet, EntityAccessPolicy entityAccessPolicy, AbstractList<DataItem> data) throws SQLException, DataAccessException {
+	public static long extractData(ResultSet resultSet, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, AbstractList<DataItem> data) throws SQLException, DataAccessException {
 
 		long numItems = 0;
 
@@ -597,7 +633,16 @@ public class GenericServiceJDBCHelper {
 							if (dataAttribute != null && (dataAttribute.getDirection() == Direction.BOTH || dataAttribute.getDirection() == Direction.OUTPUT)) {
 
 								Object value = resultSet.getObject(i++);
-								dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+
+								if (resultSet.wasNull()) {
+									value = null;
+								}
+								else {
+									
+									value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+								}
+								
+								dataItem.getAttributes().put(attributeAlias, value);
 							}
 						}
 
@@ -813,6 +858,7 @@ public class GenericServiceJDBCHelper {
 		 */
 		StringBuilder recoveredQuery = new StringBuilder("SELECT ");
 		AbstractList<String> attributes = new ArrayList<String>();
+		AbstractList<Integer> attributesType = new ArrayList<Integer>();
 
 		boolean firstField = true;
 		for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
@@ -833,6 +879,7 @@ public class GenericServiceJDBCHelper {
 					scapeColumn(recoveredQuery, entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
 
 					attributes.add(key.getAlias());
+					attributesType.add(entityInformation.keyFields.get(key.getName()));
 				}
 			}
 		}
@@ -858,8 +905,16 @@ public class GenericServiceJDBCHelper {
 				for (String attributeAlias : attributes) {
 
 					Object value = resultSet.getObject(i++);
-
-					dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+					
+					if (resultSet.wasNull()) {
+						value = null;
+					}
+					else {
+						
+						value = translateFromType(attributesType.get(i-1), value);
+					}
+					
+					dataItem.getAttributes().put(attributeAlias, value);
 				}
 			}
 			else {
@@ -952,8 +1007,16 @@ public class GenericServiceJDBCHelper {
 						if (dataAttribute.getDirection() == Direction.OUTPUT) {
 
 							Object value = resultSet.getObject(dataAttribute.getName());
-
-							attributes.put(attributeAlias, resultSet.wasNull() ? null : value);
+							
+							if (resultSet.wasNull()) {
+								value = null;
+							}
+							else {
+								
+								value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+							}
+							
+							attributes.put(attributeAlias, value);
 						}
 						else if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
 
@@ -1044,8 +1107,16 @@ public class GenericServiceJDBCHelper {
 					if (dataAttribute != null && (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH)) {
 
 						Object value = resultSet.getObject(dataAttribute.getName());
-
-						attributes.put(attributeAlias, resultSet.wasNull() ? null : value);
+						
+						if (resultSet.wasNull()) {
+							value = null;
+						}
+						else {
+							
+							value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+						}
+						
+						attributes.put(attributeAlias, value);
 					}
 				}
 			}
@@ -1313,6 +1384,7 @@ public class GenericServiceJDBCHelper {
 			 */
 			StringBuilder recoveredQuery = new StringBuilder("SELECT ");
 			AbstractList<String> attributes = new ArrayList<String>();
+			AbstractList<Integer> attributesType = new ArrayList<Integer>();
 
 			boolean firstField = true;
 			for (EntityKey entityKey : entityAccessPolicy.getKeys().getKeys()) {
@@ -1333,6 +1405,7 @@ public class GenericServiceJDBCHelper {
 						scapeColumn(recoveredQuery, entityAccessPolicy.getData().getAttribute(key.getAlias()).getName());
 
 						attributes.add(key.getAlias());
+						attributesType.add(entityInformation.keyFields.get(key.getName()));
 					}
 				}
 			}
@@ -1374,8 +1447,16 @@ public class GenericServiceJDBCHelper {
 						for (String attributeAlias : attributes) {
 
 							Object value = resultSet.getObject(i++);
-
-							dataItem.getAttributes().put(attributeAlias, resultSet.wasNull() ? null : value);
+							
+							if (resultSet.wasNull()) {
+								value = null;
+							}
+							else {
+								
+								value = translateFromType(attributesType.get(i-1), value);
+							}
+							
+							dataItem.getAttributes().put(attributeAlias, value);
 						}
 					}
 					else {

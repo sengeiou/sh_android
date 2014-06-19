@@ -271,7 +271,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 				resultSet = preparedStatement.executeQuery();
 
-				operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, operation.getData()));
+				operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, entityInformation, operation.getData()));
 
 				resultSet.close();
 				preparedStatement.close();
@@ -678,7 +678,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 					resultSet = preparedStatement.executeQuery();
 
-					operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, operation.getData()));
+					operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, entityInformation, operation.getData()));
 
 					resultSet.close();
 					preparedStatement.close();

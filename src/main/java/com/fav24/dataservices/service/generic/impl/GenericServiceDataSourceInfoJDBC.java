@@ -64,7 +64,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 
 		try {
 			connection = dataSource.getConnection();
-			
+
 			setProduct(JDBCUtils.getProduct(connection));
 
 			// Se recorren las entidades.
@@ -74,7 +74,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 				if (entityAccessPolicy.isVirtual()) {
 					continue;
 				}
-				
+
 				// Entidad.
 				EntityDataSourceInfo entityJDBCInformation = new EntityDataSourceInfo();
 				String table = entityAccessPolicy.getName().getName();
@@ -99,11 +99,11 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						entitiesInformation.put(entityJDBCInformation.name, entityJDBCInformation);
 					}
 					else {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla <" + table + "> no existe en la fuente de datos.");
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La tabla <%s> no existe en la fuente de datos.", table));
 					}
 				}
 				catch(Exception e) {
-					throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de la tabla <"  + table + ">, debido a: " + e.getMessage());
+					throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de la tabla <%s>, debido a: %s", table, e.getMessage()));
 				}
 				finally {
 					JDBCUtils.CloseQuietly(tables);
@@ -126,11 +126,11 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 							} while(primaryKeys.next());
 						}
 						else {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <%s>.", entityJDBCInformation.name));
 						}
 					}
 					catch(Exception e) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener la clave primaria de la tabla <%s>, debido a: %s", entityJDBCInformation.name, e.getMessage()));
 					}
 					finally {
 						JDBCUtils.CloseQuietly(primaryKeys);
@@ -158,11 +158,11 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 								} while(columns.next());
 							}
 							else {
-								throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">.");
+								throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <%s>.", entityJDBCInformation.name));
 							}
 						}
 						catch(Exception e) {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <" + entityJDBCInformation.name + ">, debido a: " + e.getMessage());
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los tipos de datos de las columnas de la clave primaria de la tabla <%s>, debido a: %s" + entityJDBCInformation.name, e.getMessage()));
 						}
 						finally {
 							JDBCUtils.CloseQuietly(columns);
@@ -194,8 +194,12 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 
 									if (entityDataAttribute.getName().equalsIgnoreCase(columnName)) {
 
+										if (!entityDataAttribute.getName().equals(columnName)) {
+											throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa <%s> de la tabla <%s> difiere en mayúsculas y/o minúsculas con el nombre del atributo <%s>.", columnName, table, entityDataAttribute.getName()));
+										}
+
 										if (entityJDBCInformation.isView && entityDataAttribute.getDirection() != Direction.OUTPUT) {
-											throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa " + columnName +" de la tabla "  + table + " es de solo lectura.");
+											throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " La columa <%s> de la tabla <%s> es de solo lectura.", columnName, table));
 										}
 
 										entityJDBCInformation.dataFields.put(columnName, columns.getInt("DATA_TYPE"));
@@ -210,11 +214,11 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						else {
 							JDBCUtils.CloseQuietly(columns);
 
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado columnas para la tabla "  + table + ".");
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado columnas para la tabla <%s>.", table));
 						}
 					}
 					catch(Exception e) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de la tabla "  + table + ", debido a: " + e.getMessage());
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de la tabla <%s>, debido a: %s", table, e.getMessage()));
 					}
 					finally {
 						JDBCUtils.CloseQuietly(columns);
@@ -251,7 +255,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						}
 
 						if (lostFields != null) {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas " + lostFields + " para la tabla "  + table + ".");
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas <%s> para la tabla <%s>.", lostFields.toString(), table));
 						}
 					}
 				}
@@ -301,7 +305,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 							}
 						}
 						catch(Exception e) {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves de la tabla "  + table + ", debido a: " + e.getMessage());
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves de la tabla <%s>, debido a: %s", table, e.getMessage()));
 						}
 						finally {
 							JDBCUtils.CloseQuietly(uniqueIndexes);
@@ -352,7 +356,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						}
 					}
 					catch(Exception e) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de las claves de la tabla "  + table + ", debido a: " + e.getMessage());
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de las claves de la tabla <%s>, debido a: %s", table, e.getMessage()));
 					}
 					finally {
 						JDBCUtils.CloseQuietly(columns);
@@ -394,7 +398,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 							specificMessage.append('>');
 						}
 
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave " + lostKeyFields + " para la tabla "  + table + ".");
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas clave <%s> para la tabla <%s>.", lostKeyFields, table));
 					}
 				}
 
@@ -440,7 +444,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 							}
 						}
 						catch(Exception e) {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de los índices de la tabla "  + table + ", debido a: " + e.getMessage());
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de los índices de la tabla <%s>, debido a: %s", table, e.getMessage()));
 						}
 						finally {
 							JDBCUtils.CloseQuietly(indexes);
@@ -472,7 +476,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 							}
 						}
 						catch(Exception e) {
-							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves foraneas importadas de la tabla "  + table + ", debido a: " + e.getMessage());
+							throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las claves foraneas importadas de la tabla <%s>, debido a: ", table, e.getMessage()));
 						}
 						finally {
 							JDBCUtils.CloseQuietly(importedKeys);
@@ -481,7 +485,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						for (EntityFilter entityFilter : entityAccessPolicy.getFilters().getFilters()) {
 
 							if (!hasEquivalentAttributeCollection(entityJDBCInformation.indexes, entityFilter.getFilter())) {
-								throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Filtro no permitido: La tabla " + table + " no tiene definido un índice para los campos " + entityFilter.getFilterNamesString() + ".");
+								throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " Filtro no permitido: La tabla <%s> no tiene definido un índice para los campos <%s>.", table, entityFilter.getFilterNamesString()));
 							}
 						}
 					}
@@ -503,7 +507,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 						}
 					}
 					catch(SQLException e) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de los filtros definidos para la tabla "  + table + ".");
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se ha podido acceder a la metainformación de las columnas de los filtros definidos para la tabla <%s>.", table));
 					}
 					finally {
 						JDBCUtils.CloseQuietly(columns);
@@ -525,7 +529,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 					}
 
 					if (lostFilterFields != null) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas de filtrado " + lostFilterFields + " para la tabla "  + table + ".");
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han encontrado las columnas de filtrado <%s> para la tabla <%s>.", lostFilterFields.toString(), table));
 					}
 				}
 
@@ -550,7 +554,7 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 					}
 
 					if (illegalAttributes != null) {
-						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han definido los atributos correspondientes en la sección de datos, para los atributos de ordenación <" + illegalAttributes + "> de la entidad "  + entityAccessPolicy.getName().getAlias() + ".");
+						throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No se han definido los atributos correspondientes en la sección de datos, para los atributos de ordenación <%s> de la entidad <%s>.", illegalAttributes.toString(), entityAccessPolicy.getName().getAlias()));
 					}
 				}
 			}
@@ -575,12 +579,12 @@ public class GenericServiceDataSourceInfoJDBC extends GenericServiceDataSourceIn
 				}
 			}
 
-			throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: " + e.getMessage());
+			throw new ServerException(ERROR_ACCESS_POLICY_CHECK_FAILED, String.format(ERROR_ACCESS_POLICY_CHECK_FAILED_MESSAGE + " No ha sido posible obtener los metadatos de la fuente de datos, debido a: %s", e.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(connection);
 		}
-		
+
 		return entitiesInformation;
 	}
 }
