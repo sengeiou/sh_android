@@ -138,7 +138,7 @@
 <link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"></link>
 <script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>"></script>
 <script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.pieRenderer.min.js"/>"></script>
-<script class="include" type="text/javascript" src="<c:url value="/resources/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>"></script>
+<script class="include" type="text/javascript" src="<c:url value="/resources/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>"></script>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
