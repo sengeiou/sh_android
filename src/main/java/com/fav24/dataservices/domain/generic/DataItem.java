@@ -17,6 +17,7 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	private static final long serialVersionUID = 7424979410388955842L;
 
 	private NavigableMap<String, Object> attributes;
+	private NavigableMap<String, Object> internalAttributes;
 
 
 	/**
@@ -25,6 +26,7 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	public DataItem() {
 
 		this.attributes = null;
+		this.internalAttributes = null;
 	}
 	
 	/**
@@ -41,6 +43,15 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 		}
 		else {
 			this.attributes = null;
+		}
+		
+		if (reference.internalAttributes != null) {
+			
+			this.internalAttributes = new TreeMap<String, Object>();
+			this.internalAttributes.putAll(reference.internalAttributes);
+		}
+		else {
+			this.internalAttributes = null;
 		}
 	}
 
@@ -61,6 +72,21 @@ public class DataItem implements Organizable, Comparable<DataItem>, Serializable
 	public NavigableMap<String, Object> getAttributes() {
 
 		return attributes;
+	}
+	
+	/**
+	 * Retorna los atributos insternos asociados al item en formato clave-valor.
+	 * 
+	 * @return los atributos internos del item en formato clave-valor.
+	 */
+	public NavigableMap<String, Object> getInternalAttributes() {
+		
+		if (internalAttributes == null) {
+			
+			internalAttributes = new TreeMap<String, Object>();
+		}
+		
+		return internalAttributes;
 	}
 
 	/**
