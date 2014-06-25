@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fav24.dataservices.domain.cache.Cache;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
-import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
+import com.fav24.dataservices.domain.policy.AccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.hook.GenericServiceHook.HookMethodOutput;
 import com.fav24.dataservices.service.hook.GenericServiceHook.HookMethodOutputCode;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
-import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
-import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.service.policy.AccessPolicyConfigurationService;
+import com.fav24.dataservices.service.policy.AccessPolicyService;
 import com.fav24.dataservices.service.system.SystemService;
 
 

@@ -16,7 +16,7 @@ import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.SamplesRegister;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
-import com.fav24.dataservices.service.security.AccessPolicyConfigurationService;
+import com.fav24.dataservices.service.policy.AccessPolicyConfigurationService;
 
 
 /**

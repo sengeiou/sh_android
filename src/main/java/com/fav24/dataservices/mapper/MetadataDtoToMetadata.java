@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.domain.generic.Metadata;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy.OperationType;
 import com.fav24.dataservices.dto.generic.MetadataDto;
 import com.fav24.dataservices.exception.ServerException;
 

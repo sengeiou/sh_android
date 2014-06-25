@@ -1,8 +1,8 @@
 package com.fav24.dataservices.mapper;
 
-import com.fav24.dataservices.domain.security.RemoteFiles;
+import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.dto.RequestorDto;
-import com.fav24.dataservices.dto.security.AccessPolicyFilesDto;
+import com.fav24.dataservices.dto.policy.AccessPolicyFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

@@ -3,10 +3,10 @@ package com.fav24.dataservices.mapper;
 import java.util.TreeSet;
 
 import com.fav24.dataservices.domain.Requestor;
-import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy;
-import com.fav24.dataservices.dto.security.AccessPolicyDto;
-import com.fav24.dataservices.dto.security.EntityAccessPolicyDto;
+import com.fav24.dataservices.domain.policy.AccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
+import com.fav24.dataservices.dto.policy.AccessPolicyDto;
+import com.fav24.dataservices.dto.policy.EntityAccessPolicyDto;
 import com.fav24.dataservices.exception.ServerException;
 
 

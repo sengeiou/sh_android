@@ -5,7 +5,7 @@ import java.util.AbstractList;
 import java.util.Collections;
 
 import com.fav24.dataservices.domain.cache.Organizable;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy.OperationType;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy.OperationType;
 
 
 /**

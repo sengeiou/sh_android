@@ -2,8 +2,8 @@ package com.fav24.dataservices.service.hook;
 
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
-import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy;
+import com.fav24.dataservices.domain.policy.AccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
 
 /**
  * Puntos de incorporación al ciclo de vido de una petición al servicio de datos genérico.

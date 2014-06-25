@@ -16,14 +16,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.domain.datasource.DataSources;
-import com.fav24.dataservices.domain.security.AccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAccessPolicy;
-import com.fav24.dataservices.domain.security.EntityAttribute;
-import com.fav24.dataservices.domain.security.EntityDataAttribute;
-import com.fav24.dataservices.domain.security.EntityDataAttribute.Direction;
-import com.fav24.dataservices.domain.security.EntityFilter;
-import com.fav24.dataservices.domain.security.EntityKey;
-import com.fav24.dataservices.domain.security.EntityOrderAttribute;
+import com.fav24.dataservices.domain.policy.AccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAttribute;
+import com.fav24.dataservices.domain.policy.EntityDataAttribute;
+import com.fav24.dataservices.domain.policy.EntityFilter;
+import com.fav24.dataservices.domain.policy.EntityKey;
+import com.fav24.dataservices.domain.policy.EntityOrderAttribute;
+import com.fav24.dataservices.domain.policy.EntityDataAttribute.Direction;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.util.JDBCUtils;
 

@@ -8,7 +8,7 @@ import java.util.NavigableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fav24.dataservices.domain.security.RemoteFiles;
+import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
 
 

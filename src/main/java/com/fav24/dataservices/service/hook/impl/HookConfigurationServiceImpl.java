@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fav24.dataservices.DataServicesContext;
-import com.fav24.dataservices.domain.security.RemoteFiles;
+import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.hook.HookConfigurationService;

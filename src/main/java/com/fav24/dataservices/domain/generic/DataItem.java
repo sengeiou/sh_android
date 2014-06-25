@@ -6,7 +6,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import com.fav24.dataservices.domain.cache.Organizable;
-import com.fav24.dataservices.domain.security.EntityDataAttribute.SynchronizationField;
+import com.fav24.dataservices.domain.policy.EntityDataAttribute.SynchronizationField;
 
 
 /**

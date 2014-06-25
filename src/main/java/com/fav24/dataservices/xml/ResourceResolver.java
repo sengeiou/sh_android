@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import com.fav24.dataservices.service.security.AccessPolicyService;
+import com.fav24.dataservices.service.policy.AccessPolicyService;
 
 
 /**

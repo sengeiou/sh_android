@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.controller.jsp.BaseJspController;
-import com.fav24.dataservices.domain.security.RemoteFiles;
+import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
