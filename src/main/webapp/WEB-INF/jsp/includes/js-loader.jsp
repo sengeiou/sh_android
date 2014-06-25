@@ -38,6 +38,7 @@
 			// system_monitor.jsp dependency.
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',
+			'<c:url value="/resources/js/jqplot/plugins/jqplot.pieRenderer.min.js"/>',
 			
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"/>',
