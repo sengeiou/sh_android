@@ -27,7 +27,7 @@
 								<c:set value="list-group-item" var="entityClass"/>
 							</c:otherwise>
 						</c:choose>					
-						<a class="${entityClass}" href="#" onclick="sendGetRequest('accesspolicy/entityPolicies?entity=${entity}')">${entity}</a>
+						<a class="${entityClass}" href="#" onclick="sendGetRequest('accesspolicy/entityPolicies?entity=${entity}'); return false;">${entity}</a>
 					</c:forEach>
 				</div>
 			</c:otherwise>

@@ -14,6 +14,9 @@
 
 	<div class="panel panel-${panelClass}">
 
+		<button onClick='showAvailableEntities();' type='button' class='btn btn-default btn-sm pull-right'>
+   			<span class='glyphicon glyphicon-th-list'></span>
+   		</button>
 		<!-- Detalles de la entidad -->
 		<c:choose>
 			<c:when test="${entityPolicies.isVirtual()}">
@@ -100,6 +103,7 @@
 									ninguna.
 								</c:when>
 								<c:otherwise>
+									<br/>
 									<ul class="list-group">
 										<c:forEach items="${entityPolicies.getKeys().getKeys()}" var="key">
 											<li class="list-group-item">
@@ -124,6 +128,7 @@
 									ninguno.
 								</c:when>
 								<c:otherwise>
+									<br/>
 									<ul class="list-group">
 										<c:forEach items="${entityPolicies.getFilters().getFilters()}" var="filter">
 											<li class="list-group-item">
@@ -144,8 +149,11 @@
 									aleatoria.
 								</c:when>
 								<c:otherwise>
+									<br/>
 									<ul class="list-group">
-										<c:forEach items="${entityPolicies.getOrdination().getOrder()}" var="orderAttribute" varStatus="counter"><c:if test="${counter.count > 1}">, </c:if><c:out value="${orderAttribute.getAlias()}"/> <c:out value="${orderAttribute.getOrder().getOrder()}"/></c:forEach>
+										<li class="list-group-item">
+											<c:forEach items="${entityPolicies.getOrdination().getOrder()}" var="orderAttribute" varStatus="counter"><c:if test="${counter.count > 1}">, </c:if><c:out value="${orderAttribute.getAlias()}"/> <c:out value="${orderAttribute.getOrder().getOrder()}"/></c:forEach>
+										</li>
 									</ul>
 								</c:otherwise>
 							</c:choose>
@@ -160,8 +168,13 @@
 									ninguno.
 								</c:when>
 								<c:otherwise>
+									<br/>
 									<ul class="list-group">
-										<c:forEach items="${entityPolicies.getHooks().keySet()}" var="hook" varStatus="counter"><c:if test="${counter.count > 1}">, </c:if><c:out value="${hook}"/></c:forEach>
+										<c:forEach items="${entityPolicies.getHooks().keySet()}" var="hook" varStatus="counter">
+											<li class="list-group-item">
+												<a href="#" onclick="sendGetRequest('hook/hookDetails?hook=${hook}'); return false;">${hook}</a>
+											</li>
+										</c:forEach>
 									</ul>
 								</c:otherwise>
 							</c:choose>

@@ -1,5 +1,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/general.css"/>"/>
+
 <!-- Panel de información del trabajo realizado y en curso. -->
 <div id="workload" class="container-fluid ">
 	<div class="page-header">
@@ -7,7 +9,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-2 col-md-offset-0">
-			<p class="text-left"><strong>Información desde el: <a id="MeasureStartTime"></a></strong></p>
+			<p class="text-left"><strong>Información desde el: <span class="measure" id="MeasureStartTime"></span></strong></p>
 		</div>
 		<div class="col-md-2 col-md-offset-0">
     		<button onClick='newWorkloadMeasurePeriod();' type='button' class='btn btn-default btn-sm pull-right'>
@@ -21,10 +23,10 @@
 		<div class="col-md-4 col-md-offset-0">
 			<p class="text-left"><strong>Peticiones entrantes</strong></p>
 			<p class="text-left text-muted">
-				<strong>Tasa:</strong> <a id="RequestsRate">- req/s</a><br/>
-				<strong>Tasa m&aacute;xima:</strong> <a id="RequestsRatePeak">- req/s</a><br/>
-				<strong>Total:</strong> <a id="TotalRequests">- req</a><br/>
-				<strong>Errores:</strong> <a id="TotalRequestsKo">- req</a><br/>
+				<strong>Tasa:</strong> <span class="measure" id="RequestsRate">- req/s</span><br/>
+				<strong>Tasa m&aacute;xima:</strong> <a id="RequestsRatePeak">- req/s</span><br/>
+				<strong>Total:</strong> <span class="measure" id="TotalRequests">- req</span><br/>
+				<strong>Errores:</strong> <span class="measure" id="TotalRequestsKo">- req</span><br/>
 			</p>
 		</div>
 	</div>
@@ -42,10 +44,10 @@
 		<div class="col-md-6 col-md-offset-0">
 			<p class="text-left"><strong>Operaciones procesadas</strong></p>
 			<p class="text-left text-muted">
-				<strong>Tasa:</strong> <a id="OperationRate">- op/s</a><br/>
-				<strong>Tasa m&aacute;xima:</strong> <a id="OperationRatePeak">- op/s</a><br/>
-				<strong>Total:</strong> <a id="TotalOperations">- op</a><br/>
-				<strong>Errores:</strong> <a id="TotalOperationsKo">- op</a><br/>
+				<strong>Tasa:</strong> <span class="measure" id="OperationRate">- op/s</span><br/>
+				<strong>Tasa m&aacute;xima:</strong> <span class="measure" id="OperationRatePeak">- op/s</span><br/>
+				<strong>Total:</strong> <span class="measure" id="TotalOperations">- op</span><br/>
+				<strong>Errores:</strong> <span class="measure" id="TotalOperationsKo">- op</span><br/>
 			</p>
 		</div>
 	</div>
@@ -63,10 +65,10 @@
 		<div class="col-md-8 col-md-offset-0">
 			<p class="text-left"><strong>Operaciones enviadas al subsistema</strong></p>
 			<p class="text-left text-muted">
-				<strong>Tasa:</strong> <a id="SubsystemOperationRate">- op/s</a><br/>
-				<strong>Tasa m&aacute;xima:</strong> <a id="SubsystemOperationRatePeak">- op/s</a><br/>
-				<strong>Total:</strong> <a id="TotalSubsystemOperations">- op</a><br/>
-				<strong>Errores:</strong> <a id="TotalSubsystemOpertionsKo">- op</a><br/>
+				<strong>Tasa:</strong> <span class="measure" id="SubsystemOperationRate">- op/s</span><br/>
+				<strong>Tasa m&aacute;xima:</strong> <span class="measure" id="SubsystemOperationRatePeak">- op/s</span><br/>
+				<strong>Total:</strong> <span class="measure" id="TotalSubsystemOperations">- op</span><br/>
+				<strong>Errores:</strong> <span class="measure" id="TotalSubsystemOpertionsKo">- op</span><br/>
 			</p>
 		</div>
 	</div>

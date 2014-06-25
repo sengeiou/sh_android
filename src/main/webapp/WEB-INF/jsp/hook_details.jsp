@@ -7,73 +7,34 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-<%!String bodyContent;%>
+<%!String sourceCode;%>
 
 <%
-	StringBuilder output = new StringBuilder();
-	
 	try {
-		String hookName = (String)request.getAttribute("hook");
-		GenericServiceHook hookInstance = (GenericServiceHook)request.getAttribute("hookInstance");
-
-		if (hookInstance == null) {
-			
-			output.append("El hook <strong>").append(hookName).append("</strong> no existe, o no est&aacute; disponible.");
-		} 
-		else {
-			String hookDescription = hookInstance.getDescription();
-			URL hookSourceURL = (URL)request.getAttribute("hookSourceURL");
+		URL hookSourceURL = (URL)request.getAttribute("hookSourceURL");
+		if (hookSourceURL != null) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(hookSourceURL.openStream()));
 			
 			String line;
-			StringBuilder sourceCode = null;
+			StringBuilder sourceCodeLines = null;
 			while((line = reader.readLine()) != null) {
 				
-				if (sourceCode == null) {
-					sourceCode = new StringBuilder();
+				if (sourceCodeLines == null) {
+					sourceCodeLines = new StringBuilder();
 				}
 				else {
-					sourceCode.append("\n");
+					sourceCodeLines.append("\n");
 				}
 				line = line.replace("<","&lt;");
 				line = line.replace(">","&gt;");
-				sourceCode.append(line);
+				sourceCodeLines.append(line);
 			}
 			reader.close();
-			
-			output.append("<p>Detalle del punto de acceso (hook).<p/>");
-
-			// Nombre y descripción del hook.
-			output.append("<div class='panel panel-info'>");
-			output.append("<div class='panel-heading'>Identificaci&oacute;n</div>");
-			output.append("<div class='panel-body'>");
-			
-			output.append("<ul class='list-group'>");
-			output.append("<li class='list-group-item'><Strong>Alias: </Strong>").append(hookName).append("</li>");
-			output.append("<li class='list-group-item'><Strong>Descripci&oacute;n: </Strong>").append(hookDescription).append("</li>");
-			output.append("</ul>");
-
-			output.append("</div>");
-			output.append("</div>"); 
-
-			// Previsualización del fuente.
-			output.append("<div class='panel panel-info'>");
-			output.append("<div class='panel-heading'>Fuente</div>");
-			output.append("<div class='panel-body'>");
-			output.append("<pre class='brush: java; ruler: true;'>");
-			if (sourceCode != null) {
-				output.append(sourceCode);
-			}
-			output.append("</pre>");
-			output.append("</div>");
-			output.append("</div>");
+			sourceCode = sourceCodeLines.toString();
 		}
-		
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-
-	bodyContent = output.toString();
 %>
 
 <link href="<c:url value="/resources/css/syntaxhighlighter/shCore.css"/>" rel="stylesheet" type="text/css" />
@@ -84,10 +45,42 @@
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
-		<div class="panel-heading"><h3>${entity}</h3></div>
+		<button onClick='showAvailableHooks();' type='button' class='btn btn-default btn-sm pull-right'>
+   			<span class='glyphicon glyphicon-th-list'></span>
+   		</button>
+		<div class="panel-heading">
+    		<h3>${hook}</h3>
+		</div>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
-			<%=bodyContent%>
+			<c:choose>
+				<c:when test="${empty hookInstance}">
+					El hook <strong>${hook}</strong> no existe, o no est&aacute; disponible.
+				</c:when>
+				<c:otherwise>
+					<p>Detalle del punto de acceso (hook).<p/>
+					<!-- Nombre y descripción del hook.  -->
+					<br/>
+					<div class="panel panel-info">
+						<div class="panel-heading">Identificaci&oacute;n</div>
+						<div class="panel-body">
+							<br/>
+							<ul class="list-group">
+								<li class="list-group-item"><Strong>Alias: </Strong>${hook}</li>
+								<li class="list-group-item"><Strong>Descripci&oacute;n: </Strong>${hookInstance.getDescription()}</li>
+							</ul>
+						</div>
+					</div> 
+		
+					<!-- Previsualización del fuente. -->
+					<div class="panel panel-info">
+						<div class="panel-heading">Fuente</div>
+						<div class="panel-body">
+							<pre class="brush: java; ruler: true;"><%=sourceCode%></pre>
+						</div>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 </div>

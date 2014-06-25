@@ -145,6 +145,9 @@
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
+		<button onClick="sendGetRequest('cache/cacheManagerConfiguration?cacheManager=${cacheManager.getName()}');" type="button" class="btn btn-default btn-sm pull-right">
+   			<span class="glyphicon glyphicon-th-list"></span>
+   		</button>
 		<div class="panel-heading"><h3>${entity}</h3></div>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
@@ -196,7 +199,7 @@
 			},
 		legend: {
 				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['<%=entity%>', '<%=cacheManagerName%>'],
+	            labels: ['${entity}', '${cacheManager}'],
 				show: true,
 				showLabels: true,
 				showSwatches: false,
@@ -250,7 +253,7 @@
 			},
 		legend: {
 				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['<%=entity%>', '<%=cacheManagerName%>'],
+	            labels: ['${entity}', '${cacheManager}'],
 				show: true,
 				showLabels: true,
 				showSwatches: false,
