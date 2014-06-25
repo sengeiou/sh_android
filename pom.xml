@@ -22,6 +22,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 		<!-- Versiones por defecto de los artefactos de terceros -->
 		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
+        <spring-security.version>3.2.0.RELEASE</spring-security.version>
 		<org.springframework.payment.version>0.5.0.20110326</org.springframework.payment.version>
 		<junit.version>4.10</junit.version>
 
@@ -133,6 +134,33 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<version>${com.fasterxml.jackson.version}</version>
 		</dependency>
 
+        <!-- Dependencias de seguridad -->
+
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
 		<!-- Dependencias de acceso a BD -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -207,7 +235,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<configuration>
 					<source>${java.source.version}</source>
 					<target>${java.target.version}</target>
-					<outputDirectory>target/classes</outputDirectory>
+
 				</configuration>
 			</plugin>
 			<plugin>
