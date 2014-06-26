@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.fav24.dataservices.domain.datasource.DataSources;
 import com.fav24.dataservices.exception.ServerException;
-import com.fav24.dataservices.monitoring.SamplesRegister;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.service.policy.AccessPolicyConfigurationService;
+import com.fav24.dataservices.service.system.SystemService;
 
 
 /**
@@ -43,18 +43,20 @@ public class DataServicesContext {
 	{
 		MAIN_LOCALE = new Locale("cat", "ES");
 
-		TimeZone Dummy;
+		TimeZone dummy;
 		try
 		{
-			Dummy = TimeZone.getTimeZone("GMT+00:00");
+			dummy = TimeZone.getTimeZone("UTC");
+			TimeZone.setDefault(dummy); // Aseguramos la misma zona horaria para la toda la instancia de JVM.
 		}
 		catch(Throwable t)
 		{
-			Dummy = null;
+			dummy = null;
 		}
-		MAIN_TIME_ZONE = Dummy;
+		MAIN_TIME_ZONE = dummy;
 
 		MAIN_CALENDAR = Calendar.getInstance(MAIN_TIME_ZONE, MAIN_LOCALE);
+		
 	}
 
 	public static final String APPLICATION_NAME = "dataservices";
@@ -65,6 +67,8 @@ public class DataServicesContext {
 	private String applicationHome;
 	private ApplicationContext applicationContext;
 
+	@Autowired
+	protected SystemService systemService;
 	@Autowired
 	protected AccessPolicyConfigurationService accessPolicyConfigurationService;
 	@Autowired
@@ -142,7 +146,7 @@ public class DataServicesContext {
 		else {
 
 			try {
-				SamplesRegister.initSamplesRegister();
+				systemService.initSystemService();
 			}
 			catch(ServerException e) {
 

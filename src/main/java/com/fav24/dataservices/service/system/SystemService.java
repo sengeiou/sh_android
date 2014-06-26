@@ -20,6 +20,13 @@ public interface SystemService {
 
 
 	/**
+	 * Inicializa el monitor de actividad del sistema.
+	 * 
+	 * @throws ServerException
+	 */
+	public void initSystemService() throws ServerException;
+	
+	/**
 	 * Retorna la información de estado de la memoria, en la máquina virtual
 	 * en este mismo instante.
 	 * 
