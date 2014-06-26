@@ -27,8 +27,10 @@ function initSystemMonitor(period, timeRange,
  */
 function destroySystemMonitor() {
 
-	stopMemoryMonitor();
-	stopCPUMonitor();
+	stopMemoryHistoryMonitor();
+	startMemoryInstantMonitor();
+	stopCPUHistoryMonitor();
+	stopCPUInstantMonitor();
 
 	delete MemoryMonitor;
 	delete CPUMonitor;
