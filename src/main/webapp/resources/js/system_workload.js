@@ -106,23 +106,26 @@ function workloadMonitorDataRenderer() {
 
 	var jsonResponse = JSON.parse(xhr.responseText);
 
-	var measureStartTime = new Date();
-	measureStartTime.setTime(jsonResponse["data"]["MeasureStartTime"]);
-	
-	// Asignación de la información a las etiquetas.
-	WorkloadMonitor.MeasureStartTime.innerHTML = measureStartTime;
-	WorkloadMonitor.RequestsRate.innerHTML = Math.floor(jsonResponse["data"]["RequestsRate"]).toFixed(2).toLocaleString() + " req/s";
-	WorkloadMonitor.RequestsRatePeak.innerHTML = Math.floor(jsonResponse["data"]["RequestsRatePeak"]).toFixed(2).toLocaleString() + " req/s";
-	WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"].toLocaleString() + " req";
-	WorkloadMonitor.TotalRequestsKo.innerHTML = jsonResponse["data"]["TotalRequestsKo"].toLocaleString() + " req";
-	WorkloadMonitor.OperationRate.innerHTML = Math.floor(jsonResponse["data"]["OperationRate"]).toFixed(2).toLocaleString() + " op/s";
-	WorkloadMonitor.OperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["OperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
-	WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"].toLocaleString() + " op";
-	WorkloadMonitor.TotalOperationsKo.innerHTML = jsonResponse["data"]["TotalOperationsKo"].toLocaleString() + " op";
-	WorkloadMonitor.SubsystemOperationRate.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRate"]).toFixed(2).toLocaleString() + " op/s";
-	WorkloadMonitor.SubsystemOperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
-	WorkloadMonitor.TotalSubsystemOperations.innerHTML = jsonResponse["data"]["TotalSubsystemOperations"].toLocaleString() + " op";
-	WorkloadMonitor.TotalSubsystemOpertionsKo.innerHTML = jsonResponse["data"]["TotalSubsystemOpertionsKo"].toLocaleString() + " op";
+	if (jsonResponse["data"] != null && jsonResponse["data"]["MeasureStartTime"] != null) {
+
+		var measureStartTime = new Date();
+		measureStartTime.setTime(jsonResponse["data"]["MeasureStartTime"]);
+		
+		// Asignación de la información a las etiquetas.
+		WorkloadMonitor.MeasureStartTime.innerHTML = measureStartTime;
+		WorkloadMonitor.RequestsRate.innerHTML = Math.floor(jsonResponse["data"]["RequestsRate"]).toFixed(2).toLocaleString() + " req/s";
+		WorkloadMonitor.RequestsRatePeak.innerHTML = Math.floor(jsonResponse["data"]["RequestsRatePeak"]).toFixed(2).toLocaleString() + " req/s";
+		WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"].toLocaleString() + " req";
+		WorkloadMonitor.TotalRequestsKo.innerHTML = jsonResponse["data"]["TotalRequestsKo"].toLocaleString() + " req";
+		WorkloadMonitor.OperationRate.innerHTML = Math.floor(jsonResponse["data"]["OperationRate"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.OperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["OperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"].toLocaleString() + " op";
+		WorkloadMonitor.TotalOperationsKo.innerHTML = jsonResponse["data"]["TotalOperationsKo"].toLocaleString() + " op";
+		WorkloadMonitor.SubsystemOperationRate.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRate"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.SubsystemOperationRatePeak.innerHTML = Math.floor(jsonResponse["data"]["SubsystemOperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.TotalSubsystemOperations.innerHTML = jsonResponse["data"]["TotalSubsystemOperations"].toLocaleString() + " op";
+		WorkloadMonitor.TotalSubsystemOpertionsKo.innerHTML = jsonResponse["data"]["TotalSubsystemOpertionsKo"].toLocaleString() + " op";
+	}
 }
 
 /**

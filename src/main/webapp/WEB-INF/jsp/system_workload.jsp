@@ -24,7 +24,7 @@
 			<p class="text-left"><strong>Peticiones entrantes</strong></p>
 			<p class="text-left text-muted">
 				<strong>Tasa:</strong> <span class="measure" id="RequestsRate">- req/s</span><br/>
-				<strong>Tasa m&aacute;xima:</strong> <a id="RequestsRatePeak">- req/s</span><br/>
+				<strong>Tasa m&aacute;xima:</strong> <span class="measure" id="RequestsRatePeak">- req/s</span><br/>
 				<strong>Total:</strong> <span class="measure" id="TotalRequests">- req</span><br/>
 				<strong>Errores:</strong> <span class="measure" id="TotalRequestsKo">- req</span><br/>
 			</p>

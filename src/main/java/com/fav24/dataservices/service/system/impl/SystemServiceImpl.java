@@ -20,10 +20,21 @@ import com.fav24.dataservices.service.system.SystemService;
 @Component
 public class SystemServiceImpl implements SystemService {
 
-	private static final SystemMonitoring SystemActivityMonitoring;
+	private static SystemMonitoring SystemActivityMonitoring;
 
-	static {
-		SystemActivityMonitoring = new SystemMonitoring();
+
+	/**
+	 * Retorna el monitor de actividad del sistema.
+	 * 
+	 * @return el monitor de actividad del sistema.
+	 */
+	public SystemMonitoring getSystemActivityMonitoring() {
+
+		if (SystemActivityMonitoring == null) {
+			SystemActivityMonitoring = new SystemMonitoring();
+		}
+
+		return SystemActivityMonitoring;
 	}
 
 	/**
@@ -32,7 +43,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public MonitorSample getSystemMemoryStatus() {
 
-		return SystemActivityMonitoring.getSystemMemoryStatus();
+		return getSystemActivityMonitoring().getSystemMemoryStatus();
 	}
 
 	/**
@@ -41,7 +52,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public AbstractList<MonitorSample> getSystemMemoryStatus(Long offset, Long timeRange, Long period) throws ServerException {
 
-		return SystemActivityMonitoring.getSystemMemoryStatus(offset, timeRange, period);
+		return getSystemActivityMonitoring().getSystemMemoryStatus(offset, timeRange, period);
 	}
 
 	/**
@@ -49,7 +60,7 @@ public class SystemServiceImpl implements SystemService {
 	 */
 	@Override
 	public CpuMeter getCpuMeter() {
-		return SystemActivityMonitoring.getCpuMeter();
+		return getSystemActivityMonitoring().getCpuMeter();
 	}
 
 	/**
@@ -58,7 +69,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public MonitorSample getSystemCpuActivity() {
 
-		return SystemActivityMonitoring.getSystemCpuActivity();
+		return getSystemActivityMonitoring().getSystemCpuActivity();
 	}
 
 	/**
@@ -67,7 +78,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public AbstractList<MonitorSample> getSystemCpuActivity(Long offset, Long timeRange, Long period) throws ServerException {
 
-		return SystemActivityMonitoring.getSystemCpuActivity(offset, timeRange, period);
+		return getSystemActivityMonitoring().getSystemCpuActivity(offset, timeRange, period);
 	}
 
 	/**
@@ -76,7 +87,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public WorkloadMeter getWorkloadMeter() {
 
-		return SystemActivityMonitoring.getWorkloadMeter();
+		return getSystemActivityMonitoring().getWorkloadMeter();
 	}
 
 	/**
@@ -85,7 +96,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public MonitorSample getSystemWorkload() {
 
-		return SystemActivityMonitoring.getSystemWorkload();
+		return getSystemActivityMonitoring().getSystemWorkload();
 	}
 
 	/**
@@ -94,7 +105,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException {
 
-		return SystemActivityMonitoring.getSystemWorkload(offset, timeRange, period);
+		return getSystemActivityMonitoring().getSystemWorkload(offset, timeRange, period);
 	}
 
 	/**
@@ -103,7 +114,7 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public MonitorSample getSystemStorageStatus(String storeName) {
 
-		return SystemActivityMonitoring.getSystemStorageStatus(storeName);
+		return getSystemActivityMonitoring().getSystemStorageStatus(storeName);
 	}
 
 	/**
@@ -112,6 +123,6 @@ public class SystemServiceImpl implements SystemService {
 	@Override
 	public AbstractList<MonitorSample> getSystemStorageStatus(String storeName, Long offset, Long timeRange, Long period) throws ServerException {
 
-		return SystemActivityMonitoring.getSystemStorageStatus(storeName, offset, timeRange, period);
+		return getSystemActivityMonitoring().getSystemStorageStatus(storeName, offset, timeRange, period);
 	}
 }
