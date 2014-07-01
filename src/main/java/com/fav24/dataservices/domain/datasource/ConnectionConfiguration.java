@@ -3,8 +3,6 @@ package com.fav24.dataservices.domain.datasource;
 import java.sql.Connection;
 
 
-
-
 /**
  * Configuración de las características de una conexión establecida por el pool de conexiones.
  */
