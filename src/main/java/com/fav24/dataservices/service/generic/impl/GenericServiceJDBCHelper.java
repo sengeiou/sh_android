@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 
-import org.springframework.dao.DataAccessException;
-
 import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
@@ -24,12 +22,12 @@ import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
 import com.fav24.dataservices.domain.policy.EntityAttribute;
 import com.fav24.dataservices.domain.policy.EntityData;
 import com.fav24.dataservices.domain.policy.EntityDataAttribute;
-import com.fav24.dataservices.domain.policy.EntityKey;
-import com.fav24.dataservices.domain.policy.EntityOrderAttribute;
-import com.fav24.dataservices.domain.policy.EntityOrdination;
 import com.fav24.dataservices.domain.policy.EntityDataAttribute.Direction;
 import com.fav24.dataservices.domain.policy.EntityDataAttribute.SynchronizationField;
+import com.fav24.dataservices.domain.policy.EntityKey;
+import com.fav24.dataservices.domain.policy.EntityOrderAttribute;
 import com.fav24.dataservices.domain.policy.EntityOrderAttribute.Order;
+import com.fav24.dataservices.domain.policy.EntityOrdination;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.generic.GenericService;
 import com.fav24.dataservices.service.generic.impl.GenericServiceDataSourceInfo.EntityDataSourceInfo;
@@ -595,9 +593,8 @@ public class GenericServiceJDBCHelper {
 	 * @return el número de elementos extraidos.  
 	 * 
 	 * @throws SQLException
-	 * @throws DataAccessException
 	 */
-	public static long extractData(ResultSet resultSet, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, AbstractList<DataItem> data) throws SQLException, DataAccessException {
+	public static long extractData(ResultSet resultSet, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, AbstractList<DataItem> data) throws SQLException {
 
 		long numItems = 0;
 
