@@ -161,6 +161,10 @@ function showAvailableHooks() {
 	sendGetRequest('hook/availableHooks');
 }
 
+function showAvailableHooksDependencies() {
+	sendGetRequest('hook/availableHooksDependencies');
+}
+
 function uploadHooks() {
 	sendGetRequest('hook/hookUpload.show');
 }

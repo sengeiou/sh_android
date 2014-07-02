@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.controller.jsp.BaseJspController;
+import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.util.NetworkUtils;
 
@@ -48,17 +49,19 @@ public class SystemController extends BaseJspController {
 
 		return model;
 	}
-	
+
 	/**
 	 * Muestra el contexto de ejecución del servidor.
 	 * 
 	 * @return el el contexto de ejecución del servidor.
+	 * 
+	 * @throws ServerException 
 	 */
 	@RequestMapping(value = "/context", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView systemContext() {
-		
+	public ModelAndView systemContext() throws ServerException {
+
 		ModelAndView model = new ModelAndView("system_context");
-		
+
 		model.addObject("contextHome", DataServicesContext.getCurrentDataServicesContext().getApplicationHome());
 		model.addObject("contextSoName", System.getProperty("os.name"));
 		model.addObject("contextSoArch", System.getProperty("os.arch"));
@@ -74,10 +77,10 @@ public class SystemController extends BaseJspController {
 		AbstractList<AbstractList<String>> organizedClassPath = hookConfigurationService.getOrganizedClassPath();
 		model.addObject("contextJavaClasspathClasspaths", organizedClassPath.get(0));
 		model.addObject("contextJavaClasspathDependencies", organizedClassPath.get(1));
-		
+
 		return model;
 	}
-	
+
 	/**
 	 * Muestra el diagrama de carga de trabajo del servidor.
 	 * 
@@ -85,9 +88,9 @@ public class SystemController extends BaseJspController {
 	 */
 	@RequestMapping(value = "/workload", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView systemWorkload() {
-		
+
 		ModelAndView model = new ModelAndView("system_workload");
-		
+
 		return model;
 	}
 }

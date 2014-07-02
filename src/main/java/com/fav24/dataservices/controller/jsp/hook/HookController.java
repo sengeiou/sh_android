@@ -55,6 +55,23 @@ public class HookController extends BaseJspController {
 
 		return model;
 	}
+	
+	/**
+	 * Muestra la lista de dependencias disponibles para los hooks en este servicio de datos.
+	 *  
+	 * @return el modelo y la vista, con la lista de dependencias disponibles para los hooks en este servicio de datos.
+	 * 
+	 * @throws ServerException 
+	 */
+	@RequestMapping(value = "/availableHooksDependencies", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView availableHooksDependencies() throws ServerException {
+		
+		ModelAndView model = new ModelAndView("available_hooks_dependencies");
+		
+		model.addObject("hooksDependencies", hookConfigurationService.getOrganizedClassPath().get(2));
+		
+		return model;
+	}
 
 	/**
 	 * Muestra el detalle de un hook.

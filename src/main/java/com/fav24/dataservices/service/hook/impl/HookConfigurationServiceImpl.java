@@ -37,6 +37,7 @@ import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
+import com.fav24.dataservices.util.DynamicURLClassLoaderUtils;
 import com.fav24.dataservices.util.FileUtils;
 
 
@@ -70,12 +71,12 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 
-		// Se cargan los archivos de políticas de seguridad existentes.
+		// Se cargan los archivos fuente de los hooks existentes.
 		File applicationHomeDir = new File(applicationHome);
 
 		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
 
-			AbstractList<File> hookSourceFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_FILES_RELATIVE_LOCATION, HOOK_LIFES_SUFFIX, null);
+			AbstractList<File> hookSourceFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_FILES_RELATIVE_LOCATION, HOOK_FILES_SUFFIX, null);
 
 			if (hookSourceFiles.size() > 0) {
 
@@ -126,9 +127,15 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 	}
 
 	/**
-	 * {@inheritDocs}
+	 * Compila y carga los fuentes de los hooks indicados en forma de URL.
+	 * 
+	 * @param sources Los fuentes de los hooks indicados en forma de URL:
+	 * 
+	 * @return Retorna el conjunto de diagnósticos por fuente con problemas.
+	 * 
+	 * @throws ServerException
 	 */
-	public Map<String, StringBuilder> loadHooks(URL[] sources) throws ServerException {
+	private Map<String, StringBuilder> loadHooks(URL[] sources) throws ServerException {
 
 		if (sources != null && sources.length > 0) {
 
@@ -145,7 +152,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			for(int i=0; i < loadedHooks.size(); i++) {
 
 				GenericServiceHook loadedHook = loadedHooks.get(i);
-				
+
 				hooks.put(loadedHook.getAlias(), loadedHook);
 				hooksSources.put(loadedHook.getAlias(), loadedSources.get(i));
 			}
@@ -172,13 +179,13 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		return hooks;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public synchronized NavigableMap<String, URL> getAvailableHooksSourceUrls() {
-		
+
 		return hooksSources;
 	}
 
@@ -190,25 +197,71 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		return hooks.get(alias);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public synchronized URL getHookSourceURL(String alias) {
-		
+
 		return hooksSources.get(alias);
+	}
+
+	/**
+	 * Retorna la lista de URLs con las dependencias externas para los hooks.
+	 * 
+	 * @return la lista de URLs con las dependencias externas para los hooks.
+	 * 
+	 * @throws ServerException
+	 */
+	private static AbstractList<URL> getHooksDependencies() throws ServerException {
+
+		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
+
+		// Se cargan los archivos de dependencias para los hooks existentes.
+		File applicationHomeDir = new File(applicationHome);
+
+		if (applicationHomeDir.exists() && applicationHomeDir.isDirectory()) {
+
+			AbstractList<File> hookDependencyFiles = FileUtils.getFilesWithSuffix(applicationHome + "/" + HOOK_DEPENDENCY_FILES_RELATIVE_LOCATION, HOOK_DEPENDENCY_FILES_SUFFIX, null);
+
+			if (hookDependencyFiles.size() > 0) {
+
+				AbstractList<URL> hooksDependencies = new ArrayList<URL>(hookDependencyFiles.size());
+				for(File hookDependencyFile : hookDependencyFiles) {
+
+					try {
+
+						hooksDependencies.add(hookDependencyFile.toURI().toURL());
+					} 
+					catch (MalformedURLException e) {
+
+						throw new ServerException(ERROR_INVALID_HOOK_DEPENDENCY_FILE_URL, String.format(ERROR_INVALID_HOOK_DEPENDENCY_FILE_URL_MESSAGE, hookDependencyFile.toURI().toString()));
+					}
+				}
+
+				return hooksDependencies;
+			}
+		}
+		else {
+
+			throw new ServerException(DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED, 
+					DataServicesContext.ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_NOT_DEFINED_MESSAGE);
+		}
+
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractList<AbstractList<String>> getOrganizedClassPath() {
+	public AbstractList<AbstractList<String>> getOrganizedClassPath() throws ServerException {
 
 		AbstractList<AbstractList<String>> organizedClassPath = new ArrayList<AbstractList<String>>();
 		AbstractList<String> classpaths = new ArrayList<String>();
 		AbstractList<String> dependencies = new ArrayList<String>();
+
 		organizedClassPath.add(classpaths);
 		organizedClassPath.add(dependencies);
 
@@ -232,6 +285,27 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		Collections.sort(classpaths);
 		Collections.sort(dependencies);
+
+		AbstractList<URL> hooksDependenciesURLs = getHooksDependencies();
+
+		if (hooksDependenciesURLs != null) {
+
+			AbstractList<String> hooksDependencies = new ArrayList<String>();
+			organizedClassPath.add(hooksDependencies);
+
+			for (URL url : hooksDependenciesURLs) {
+				try{
+					File file = new File(url.toURI());
+
+					hooksDependencies.add(file.getAbsolutePath());
+				}
+				catch(Throwable t) {
+					continue;
+				}
+			}
+
+			Collections.sort(hooksDependencies);
+		}
 
 		return organizedClassPath;
 	}
@@ -352,7 +426,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 
 		AbstractList<GenericServiceHook> result = new ArrayList<GenericServiceHook>();
 
-		Set<URL> classPath = new HashSet<URL>();
+		Set<URL> hooksClassPaths = new HashSet<URL>();
 		AbstractList<String> classNames = new ArrayList<String>(sourceUrls.length);
 
 		for (URL sourceUrl : sourceUrls) {
@@ -364,21 +438,35 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			try {
 				classNames.add(className);
 				loadedSources.add(sourceUrl);
-				classPath.add(new URL(url.substring(0, url.lastIndexOf(File.separatorChar) + 1)));
+				hooksClassPaths.add(new URL(url.substring(0, url.lastIndexOf(File.separatorChar) + 1)));
 			}
 			catch(MalformedURLException e) {
 			}
 		}
 
-		URL []classPathArray = new URL[classPath.size()];
-		classPath.toArray(classPathArray);
+		AbstractList<URL> hooksDependencies = getHooksDependencies();
 
-		URLClassLoader classLoader = URLClassLoader.newInstance(classPathArray, Thread.currentThread().getContextClassLoader());
+		URL []classPathArray = new URL[(hooksDependencies != null ? hooksDependencies.size() : 0) + hooksClassPaths.size()];
 
-		for (int i=0; i < classNames.size(); i++) {
+		int i=0;
+		if (hooksDependencies != null) {
+
+			for (URL hooksDependency : hooksDependencies) {
+				classPathArray[i++] = hooksDependency;
+			}
+		}
+
+		for (URL hooksClassPath : hooksClassPaths) {
+			classPathArray[i++] = hooksClassPath;
+		}
+
+		URLClassLoader classLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		DynamicURLClassLoaderUtils.addURLs(classPathArray, classLoader);		
+
+		for (i=0; i < classNames.size(); i++) {
 
 			String className = classNames.get(i);
-			
+
 			Class<?> hookClass;
 			try {
 				hookClass = classLoader.loadClass(className);
@@ -387,13 +475,19 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			}
 
 			try {
+
 				result.add((GenericServiceHook) hookClass.newInstance());
+
 			} catch (InstantiationException | IllegalAccessException | ClassCastException e) {
 
 				throw new ServerException(ERROR_HOOK_CLASS_INSTANCE, String.format(ERROR_HOOK_CLASS_INSTANCE_MESSAGE, className));
+
+			} catch (NoClassDefFoundError e) {
+
+				throw new ServerException(ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND, String.format(ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND_MESSAGE, e.getMessage(), className));
 			}
 		}
-
+		
 		return result;
 	}
 

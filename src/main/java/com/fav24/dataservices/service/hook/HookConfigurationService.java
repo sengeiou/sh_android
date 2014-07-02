@@ -1,5 +1,6 @@
 package com.fav24.dataservices.service.hook;
 
+import java.io.File;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.Map;
@@ -20,7 +21,10 @@ public interface HookConfigurationService extends HookService {
 	public static final Logger logger = LoggerFactory.getLogger(HookConfigurationService.class);
 
 	public static final String HOOK_FILES_RELATIVE_LOCATION = "hooks";
-	public static final String HOOK_LIFES_SUFFIX = ".java";
+	public static final String HOOK_FILES_SUFFIX = ".java";
+	public static final String HOOK_DEPENDENCY_FILES_RELATIVE_LOCATION = HOOK_FILES_RELATIVE_LOCATION + File.separator + "libs";
+	public static final String HOOK_DEPENDENCY_FILES_SUFFIX = ".jar";
+
 	
 	/**
 	 * Carga los hooks que serán asignables desde las políticas de acceso.
@@ -47,7 +51,7 @@ public interface HookConfigurationService extends HookService {
 	 * @return las urls del conjunto de hooks disponible.
 	 */
 	public NavigableMap<String, URL> getAvailableHooksSourceUrls();
-	
+
 	/**
 	 * Retorna el hook solicidato, o <code>null</code> en caso de no estar disponible.
 	 * 
@@ -65,7 +69,7 @@ public interface HookConfigurationService extends HookService {
 	 * @return la URL del fuente para el hook solicidato, o <code>null</code> en caso de no estar disponible.
 	 */
 	public URL getHookSourceURL(String alias);
-		
+
 	/**
 	 * Carga el conjunto de hooks especificados en la estructura suministrada.
 	 * 
@@ -81,6 +85,8 @@ public interface HookConfigurationService extends HookService {
 	 * Retorna el classpath a organizado por ubicaciones de clases y dependencias.
 	 * 
 	 * @return el classpath a organizado por ubicaciones de clases y dependencias.
+	 * 
+	 * @throws ServerException 
 	 */
-	public AbstractList<AbstractList<String>> getOrganizedClassPath();
+	public AbstractList<AbstractList<String>> getOrganizedClassPath() throws ServerException;
 }

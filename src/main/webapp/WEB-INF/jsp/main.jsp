@@ -91,6 +91,7 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Hooks <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="showAvailableHooks();">Hooks disponibles</a></li>
+							<li><a href="#" onclick="showAvailableHooksDependencies();">Dependencias para hooks</a></li>
 							<li class="divider"></li>
 							<li><a href="#" onclick="uploadHooks();">Carga de Hooks</a></li>
 							<li><a href="#" onclick="resetToDefaultHooks();">Recarga de Hooks por defecto</a></li>

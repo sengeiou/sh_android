@@ -23,4 +23,8 @@ public interface HookService {
 	public static final String ERROR_NO_DEFAULT_HOOK_FILES_TO_LOAD_MESSAGE = "No existe ningún fichero de definición de hook por defecto.";
 	public static final String ERROR_INVALID_HOOK_CLASSPATH_URL = "HK008";
 	public static final String ERROR_INVALID_HOOK_CLASSPATH_URL_STRING = "La URL de las dependencias de los hooks <%s>, no es válida.";
+	public static final String ERROR_INVALID_HOOK_DEPENDENCY_FILE_URL = "HK009";
+	public static final String ERROR_INVALID_HOOK_DEPENDENCY_FILE_URL_MESSAGE = "La URL <%s> no se corresponde con ningún fichero de dependencia para hooks.";
+	public static final String ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND = "HK010";
+	public static final String ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND_MESSAGE = "No ha sido posible localizar dependencia <%s> para la clase <%s>.";
 }
