@@ -37,7 +37,6 @@ import com.fav24.dataservices.domain.policy.RemoteFiles;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
-import com.fav24.dataservices.util.DynamicURLClassLoaderUtils;
 import com.fav24.dataservices.util.FileUtils;
 
 
@@ -460,8 +459,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 			classPathArray[i++] = hooksClassPath;
 		}
 
-		URLClassLoader classLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-		DynamicURLClassLoaderUtils.addURLs(classPathArray, classLoader);		
+		URLClassLoader classLoader = URLClassLoader.newInstance(classPathArray, (URLClassLoader) Thread.currentThread().getContextClassLoader());
 
 		for (i=0; i < classNames.size(); i++) {
 
