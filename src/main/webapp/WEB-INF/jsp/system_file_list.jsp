@@ -15,51 +15,56 @@
 		<div class="panel-body">
 			<p>Directorio actual:</p>
 			<p>
-				<button onClick="showAvailableHooks();" type="button" class="btn btn-default btn-sm pull-left">
+				<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&parent=true&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-left">
 		   			<span class="glyphicon glyphicon-arrow-left"></span>
 		   		</button>
 		   		
-				<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-left">
+				<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-left">
 		   			<span class="glyphicon glyphicon-refresh"></span>
 					<strong>${basePath}</strong>
 		   		</button>
 			</p>
 		</div>
 
-		<table class="table table-condensed">
+		<table class="table table-condensed table-hover">
 			<thead>
 			<tr>
 				<th></th>
-				<th>Nombre</th>
-				<th align="center">Permisos</th>
-				<th align="right">Tamaño</th>
-				<th>Creaci&oacute;n</th>
-				<th>Modificac&oacute;n</th>
+				<th class="text-left">Nombre</th>
+				<th class="text-center">Permisos</th>
+				<th class="text-right">Tamaño</th>
+				<th class="text-center">Creaci&oacute;n</th>
+				<th class="text-center">Modificac&oacute;n</th>
 				<th></th>
 			</tr>
 			</thead>
 			<tbody>
-				<jsp:useBean id="dateValue" class="java.util.Date" />
+				<jsp:useBean id="creationTime" class="java.util.Date" />
+				<jsp:useBean id="lastModifiedTime" class="java.util.Date" />
 				<c:forEach var="fileInformation" items="${fileInformationList}">
-					<tr>
+					
+					<jsp:setProperty name="creationTime" property="time" value="${fileInformation.getCreationTime()}" />
+					<jsp:setProperty name="lastModifiedTime" property="time" value="${fileInformation.getLastModifiedTime()}" />
+					
+					<c:if test="${fileInformation.isDirectory()}">
+						<c:set var="newPath" value="${basePath}${cf:getFileSeparator()}${fileInformation.getName()}"></c:set> 
+						<c:set var="onClick" value="sendGetRequest('system/fileInformationList?path=${newPath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');"></c:set> 
+					</c:if>
+					<tr ondblclick="${onClick}">
 						<c:choose>
 							<c:when test="${fileInformation.isDirectory()}">
-								<td><span><i class="glyphicon glyphicon-folder-open"></i></span></td>
+								<td onClick="${onClick}" class="text-center"><span class="glyphicon glyphicon-folder-open"></span></td>
 							</c:when>
 							<c:otherwise>
-								<td><span><i class="glyphicon glyphicon-file"></i></span></td>
+								<td class="text-center"><span class="glyphicon glyphicon-file"></span></td>
 							</c:otherwise>
 						</c:choose>
-						<td>${fileInformation.getName()}</td>
-						<td align="center" style="font-family:'Lucida Console', Monaco, monospace">${fileInformation.getPermissions()}</td>
-						<td align="right">${cf:fromBytesToString(fileInformation.getSize())}</td>
-						<jsp:setProperty name="dateValue" property="time" value="${fileInformation.getCreationTime()}" />
-						<td><fmt:formatDate value="${dateValue}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
-						<jsp:setProperty name="dateValue" property="time" value="${fileInformation.getLastModifiedTime()}" />
-						<td><fmt:formatDate value="${dateValue}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
-						<td>
-							<button onClick='showAvailableHooks();' type='button' class='btn-default glyphicon glyphicon-download'></button>
-				   		</td>
+						<td class="text-left">${fileInformation.getName()}</td>
+						<td class="text-center" style="font-family:'Lucida Console', Monaco, monospace;">${fileInformation.getPermissions()}</td>
+						<td class="text-right">${cf:fromBytesToString(fileInformation.getSize())}</td>
+						<td class="text-center"><fmt:formatDate value="${creationTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
+						<td class="text-center"><fmt:formatDate value="${lastModifiedTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
+						<td class="text-center"><span onClick="showAvailableHooks();" class="glyphicon glyphicon-download"></span></td>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -149,4 +149,13 @@ public class FileUtils {
 
 		return newFile;
 	}
+	
+	/**
+	 * Retorna el separador de ficheros del sistema.
+	 * 
+	 * @return el separador de ficheros del sistema.
+	 */
+	public static String getFileSeparator() {
+		return File.separator;
+	}
 }

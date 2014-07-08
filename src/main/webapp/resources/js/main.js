@@ -113,7 +113,7 @@ function showSystemContext() {
 }
 
 function showFileSystem() {
-	sendGetRequest('system/fileInformationList?path=&pattern=&directoriesOnly=false&filesOnly=false');
+	sendGetRequest('system/fileInformationList?path=&parent=false&pattern=&directoriesOnly=false&filesOnly=false');
 }
 
 function showSystemMonitor() {

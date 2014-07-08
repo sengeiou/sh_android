@@ -106,6 +106,7 @@ public class SystemController extends BaseJspController {
 	 * patrón indicado, y se corresponden con el parámetro @param directoriesOnly. 
 	 * 
 	 * @param path Ruta de la que se desea obtener la información.
+	 * @param parent Si true, retorna la lista del directorio padre de la ruta indicada, si false o <code>null</code>, la de la propia ruta.
 	 * @param pattern Patrón que deben cumplir los archivos contenidos en la lista.
 	 * @param directoriesOnly True o false en función de si se desean únicamente directorios o no.
 	 * @param filesOnly True o false en función de si se desean únicamente ficheros o no.
@@ -115,6 +116,7 @@ public class SystemController extends BaseJspController {
 	 */
 	@RequestMapping(value = "/fileInformationList", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView systemFileInformationList(@ModelAttribute(value="path") String path, 
+			@ModelAttribute(value="parent") Boolean parent,
 			@ModelAttribute(value="pattern") String pattern, 
 			@ModelAttribute(value="directoriesOnly") Boolean directoriesOnly,
 			@ModelAttribute(value="filesOnly") Boolean filesOnly) {
@@ -122,6 +124,15 @@ public class SystemController extends BaseJspController {
 		ModelAndView model = new ModelAndView("system_file_list");
 
 		Path basePath = FileSystems.getDefault().getPath(path).toAbsolutePath();
+		if (parent != null && parent) {
+			
+			Path parentPath = basePath.getParent();
+			
+			if (parentPath != null) {
+				
+				basePath = parentPath;
+			}
+		}
 		AbstractList<FileInformation> fileInformationList = fileSystemService.getFileInformationList(basePath, pattern, directoriesOnly == null ? false : directoriesOnly, filesOnly == null ? false : filesOnly);
 
 		model.addObject("basePath", basePath.toString());

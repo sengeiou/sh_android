@@ -10,4 +10,9 @@
         <function-class>com.fav24.dataservices.xml.cache.StorageSize</function-class>
         <function-signature>java.lang.String fromBytesToString(java.lang.Long)</function-signature>
     </function>
+    <function>
+        <name>getFileSeparator</name>
+        <function-class>com.fav24.dataservices.util.FileUtils</function-class>
+        <function-signature>java.lang.String getFileSeparator()</function-signature>
+    </function>
 </taglib>
