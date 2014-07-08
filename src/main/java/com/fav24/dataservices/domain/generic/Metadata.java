@@ -23,6 +23,7 @@ public class Metadata implements Organizable, Serializable {
 	private Long items;
 	private AbstractList<KeyItem> key;
 	private Filter filter;
+	private boolean incommingItemsAlwaysWins;
 
 
 	/**
@@ -38,6 +39,8 @@ public class Metadata implements Organizable, Serializable {
 		this.items = null;
 		this.key = null;
 		this.filter = null;
+		
+		this.incommingItemsAlwaysWins = false;
 	}
 
 	/**
@@ -60,6 +63,8 @@ public class Metadata implements Organizable, Serializable {
 		this.offset = offset;
 		this.items = items;
 		this.key = key;
+		
+		this.incommingItemsAlwaysWins = false;
 	}
 
 	/**
@@ -82,6 +87,8 @@ public class Metadata implements Organizable, Serializable {
 		this.offset = offset;
 		this.items = items;
 		this.setFilter(filter);
+		
+		this.incommingItemsAlwaysWins = false;
 	}
 
 	/**
@@ -245,6 +252,27 @@ public class Metadata implements Organizable, Serializable {
 	public boolean hasFilter() {
 
 		return filter != null && filter.isValidFilter();
+	}
+
+	/**
+	 * Retorna true o false en función de si los datos procedentes de la petición 
+	 * prevalecerán en cualquier caso, transgrediendo las reglas de sincronización, o no.
+	 * 
+	 * @return true o false en función de si los datos procedentes de la petición 
+	 * prevalecerán en cualquier caso, transgrediendo las reglas de sincronización, o no.
+	 */
+	public boolean getIncommingItemsAlwaysWins() {
+		return incommingItemsAlwaysWins;
+	}
+
+	/**
+	 * Asigna true o false en función de si se desea que los datos procedentes de la petición 
+	 * prevalezcan en cualquier caso, transgrediendo las reglas de sincronización, o no.
+	 * 
+	 * @param incommingItemsAlwaysWins Valor a asignar.
+	 */
+	public void setIncommingItemsAlwaysWins(boolean incommingItemsAlwaysWins) {
+		this.incommingItemsAlwaysWins = incommingItemsAlwaysWins;
 	}
 
 	/**

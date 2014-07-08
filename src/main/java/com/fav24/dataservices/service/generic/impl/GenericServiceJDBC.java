@@ -864,7 +864,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					 */
 					DataItem dataItem = new DataItem(referenceItem);
 
-					if (GenericServiceJDBCHelper.update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation)) {
+					if (GenericServiceJDBCHelper.update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation, operation.getMetadata())) {
 
 						operation.getData().add(dataItem);
 						numItemns++;
@@ -1038,7 +1038,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 						/*
 						 * En caso de no estar marcado como eliminado o no ser posible su recuperación por colisión entre claves, se lanzará una excepción.
 						 */
-						GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation);
+						GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation, operation.getMetadata());
 					}
 					else {
 						if (preparedStatement != null) {
@@ -1123,7 +1123,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				/*
 				 * En caso de no estar marcado como eliminado o no ser posible su recuperación por colisión entre claves, se lanzará una excepción.
 				 */
-				GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation);
+				GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation, operation.getMetadata());
 			}
 		}
 		catch(SQLException e) {
@@ -1241,7 +1241,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 						/*
 						 * En caso de no estar marcado como eliminado o no ser posible su recuperación por colisión entre claves, se lanzará una excepción.
 						 */
-						GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation);
+						GenericServiceJDBCHelper.recoverOrUpdateRowFromInsert(connection, now, item, entityAccessPolicy, entityInformation, operation.getMetadata());
 					}
 					else {
 						if (preparedStatement != null) {

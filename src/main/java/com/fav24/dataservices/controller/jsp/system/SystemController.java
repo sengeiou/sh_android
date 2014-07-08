@@ -1,6 +1,8 @@
 package com.fav24.dataservices.controller.jsp.system;
 
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.AbstractList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fav24.dataservices.DataServicesContext;
 import com.fav24.dataservices.controller.jsp.BaseJspController;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.service.fileSystem.FileInformation;
+import com.fav24.dataservices.service.fileSystem.FileSystemService;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.util.NetworkUtils;
 
@@ -30,6 +34,9 @@ public class SystemController extends BaseJspController {
 	private WebApplicationContext webApplicationContext;
 	@Autowired
 	private HookConfigurationService hookConfigurationService;
+	@Autowired
+	private FileSystemService fileSystemService;
+
 
 	/**
 	 * Muestra la consola de información del estado de los recursos del sistema.
@@ -90,6 +97,35 @@ public class SystemController extends BaseJspController {
 	public ModelAndView systemWorkload() {
 
 		ModelAndView model = new ModelAndView("system_workload");
+
+		return model;
+	}
+
+	/**
+	 * Retorna una lista con el conjunto de ficheros contenidos en la ruta indicada, que cumplen con el 
+	 * patrón indicado, y se corresponden con el parámetro @param directoriesOnly. 
+	 * 
+	 * @param path Ruta de la que se desea obtener la información.
+	 * @param pattern Patrón que deben cumplir los archivos contenidos en la lista.
+	 * @param directoriesOnly True o false en función de si se desean únicamente directorios o no.
+	 * @param filesOnly True o false en función de si se desean únicamente ficheros o no.
+	 * 
+	 * @return una lista con el conjunto de ficheros contenidos en la ruta indicada, que cumplen con el 
+	 * patrón indicado, y se corresponden con el parámetro @param directoriesOnly.
+	 */
+	@RequestMapping(value = "/fileInformationList", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView systemFileInformationList(@ModelAttribute(value="path") String path, 
+			@ModelAttribute(value="pattern") String pattern, 
+			@ModelAttribute(value="directoriesOnly") Boolean directoriesOnly,
+			@ModelAttribute(value="filesOnly") Boolean filesOnly) {
+
+		ModelAndView model = new ModelAndView("system_file_list");
+
+		Path basePath = FileSystems.getDefault().getPath(path).toAbsolutePath();
+		AbstractList<FileInformation> fileInformationList = fileSystemService.getFileInformationList(basePath, pattern, directoriesOnly == null ? false : directoriesOnly, filesOnly == null ? false : filesOnly);
+
+		model.addObject("basePath", basePath.toString());
+		model.addObject("fileInformationList", fileInformationList);
 
 		return model;
 	}

@@ -17,6 +17,7 @@ public class Operation implements Organizable, Serializable {
 	private Metadata metadata;
 	private AbstractList<DataItem> data;
 
+
 	/**
 	 * Retorna el conjunto de metadatos de la operación. 
 	 * 

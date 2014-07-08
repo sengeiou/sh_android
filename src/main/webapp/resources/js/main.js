@@ -112,6 +112,10 @@ function showSystemContext() {
 	sendGetRequest('system/context');
 }
 
+function showFileSystem() {
+	sendGetRequest('system/fileInformationList?path=&pattern=&directoriesOnly=false&filesOnly=false');
+}
+
 function showSystemMonitor() {
 	sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los últimos 5 minutos con resolución de un segundo.
 }

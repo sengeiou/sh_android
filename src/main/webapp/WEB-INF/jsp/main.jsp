@@ -65,6 +65,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
 							<li><a href="#" onclick="showSystemContext();">Informaci&oacute;n de contexto del sistema</a></li>
+							<li><a href="#" onclick="showFileSystem();">Explorador del sistema de archivos</a></li>
 							<li class="divider"></li>
 							<li><a href="#" onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
 						</ul>

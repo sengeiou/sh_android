@@ -18,6 +18,7 @@ import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Filter;
 import com.fav24.dataservices.domain.generic.FilterItem;
 import com.fav24.dataservices.domain.generic.KeyItem;
+import com.fav24.dataservices.domain.generic.Metadata;
 import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
 import com.fav24.dataservices.domain.policy.EntityAttribute;
 import com.fav24.dataservices.domain.policy.EntityData;
@@ -939,12 +940,13 @@ public class GenericServiceJDBCHelper {
 	 * @param attributes Conjunto de atributos que contienen la información a actualizar y/o que será actualizada.
 	 * @param entityAccessPolicy Políticas de acceso de la entidad sobre la que se realiza el update.
 	 * @param entityInformation Información extraida de la fuente de datos, acerca de la entidad sobre la que se realiza el update.
+	 * @param metadata El conjunto de metadatos de la operación.
 	 * 
 	 * @return true o false en caso de que la operación haya o no tenido éxito. El fallo puede ser debido a que no ha sido posible localizar el registro a modificar, o que se a localizado más de 1.
 	 * 
 	 * @throws SQLException 
 	 */
-	public static boolean update(Connection connection, ResultSet resultSet, Timestamp now, NavigableMap<String, Object> attributes, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException {
+	public static boolean update(Connection connection, ResultSet resultSet, Timestamp now, NavigableMap<String, Object> attributes, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws SQLException {
 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
 		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
@@ -966,7 +968,7 @@ public class GenericServiceJDBCHelper {
 		Long remoteRevision = ((Number)attributes.get(SynchronizationField.REVISION.getSynchronizationField())).longValue();
 
 		// Comprobación de si gana el registro local, o el remoto.
-		if (GenericServiceBasic.incommingItemWins(localModified, remoteModified, 
+		if (metadata.getIncommingItemsAlwaysWins() || GenericServiceBasic.incommingItemWins(localModified, remoteModified, 
 				localRevision, remoteRevision, 
 				entityAccessPolicy.getPositiveRevisionThreshold(), entityAccessPolicy.getNegativeRevisionThreshold())) {
 
@@ -1129,12 +1131,13 @@ public class GenericServiceJDBCHelper {
 	 * @param now Momento en el que se inicia la operación de modificación.
 	 * @param dataItem Elemento que contiene información de la fila a recuperar o modificar y actualizar.
 	 * @param entityAccessPolicy Políticas de acceso de la entidad.
-	 * @param entityInformation Información de la entidad en el subsistema. 
+	 * @param entityInformation Información de la entidad en el subsistema.
+	 * @param metadata El conjunto de metadatos de la operación.
 	 * 
 	 * @throws SQLException 
 	 * @throws ServerException 
 	 */
-	public static void recoverOrUpdateRowFromInsert(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException, ServerException {
+	public static void recoverOrUpdateRowFromInsert(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws SQLException, ServerException {
 
 		StringBuilder recoverQuery = new StringBuilder(); 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
@@ -1362,7 +1365,7 @@ public class GenericServiceJDBCHelper {
 						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 					}
 
-					if (!update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation)) {
+					if (!update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation, metadata)) {
 						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 					}
 				}

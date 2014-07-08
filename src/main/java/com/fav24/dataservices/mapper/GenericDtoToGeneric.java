@@ -11,11 +11,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de transferencia GenericDto y el objeto de dominio Generic.
- * 
- * @author Fav24
- *
  */
 public class GenericDtoToGeneric extends Mapper<GenericDto, Generic> {
 

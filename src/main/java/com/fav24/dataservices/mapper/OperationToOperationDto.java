@@ -9,9 +9,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de dominio Operation y el objeto de transferencia OperationDto.
- *
  */
 public class OperationToOperationDto extends Mapper<Operation, OperationDto> {
 
