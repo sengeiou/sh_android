@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/basics.css"/>">
+		<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/general.css"/>">
 		<title>No se ha encontrado el recurso solicitado.</title>
 	</head>
 	<body>

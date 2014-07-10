@@ -3,8 +3,6 @@ package com.fav24.dataservices.domain.policy;
 
 /**
  * Esta clase contiene la definición de un atributo básico. 
- * 
- * @author Fav24
  */
 public class EntityAttribute implements Comparable<EntityAttribute> {
 

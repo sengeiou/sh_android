@@ -7,8 +7,6 @@ import com.fav24.dataservices.exception.ServerException;
 /**
  * Clase que contiene la estructura de una petición de consulta de
  * políticas de acceso
- * 
- * @author Fav24
  */
 public class AccessPolicyDto extends BaseDto {
 

@@ -8,8 +8,6 @@ import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Excepción en forma de objecto de transferencia, para ser retornado.
- * 
- * @author Fav24
  */
 public class ExceptionDto extends BaseDto {
 

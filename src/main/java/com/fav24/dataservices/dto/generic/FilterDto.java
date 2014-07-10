@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Clase que contiene la estructura de un conjunto de filtros.
- * 
- * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonAutoDetect(

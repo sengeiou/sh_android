@@ -13,11 +13,7 @@ import com.fav24.dataservices.dto.policy.EntityAccessPolicyDto;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de dominio EntityAccessPolicy y el objeto de transferencia EntityAccessPolicyDtoElement.
- * 
- * @author Fav24
- *
  */
 public class EntityAccessPolicyToEntityAccessPolicyDto extends Mapper<EntityAccessPolicy, EntityAccessPolicyDto> {
 

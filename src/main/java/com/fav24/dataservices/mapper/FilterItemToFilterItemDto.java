@@ -5,11 +5,7 @@ import com.fav24.dataservices.dto.generic.FilterItemDto;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de dominio FilterItem y el objeto de transferencia FilterItemDto.
- * 
- * @author Fav24
- *
  */
 public class FilterItemToFilterItemDto extends Mapper<FilterItem, FilterItemDto> {
 

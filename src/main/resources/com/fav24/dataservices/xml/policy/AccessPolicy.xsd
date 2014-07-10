@@ -34,6 +34,7 @@
 		<xsd:attribute name="AllowedOperations" type="TOperationList" use="optional" default="Retrieve"/>
 		<xsd:attribute name="Hooks" type="xsd:string" use="optional"/> <!-- Lista de alias de hooks separados por espacios. -->
 		<xsd:attribute name="isVirtual" type="xsd:boolean" use="optional" default="false"/> <!-- En caso de estar activado, indica que se trata de una entidad virtual. Una entidad virtual no se corresponde con ninguna de las entidades del subsistema. -->
+		<xsd:attribute name="incommingAlwaysWins" type="xsd:boolean" use="optional" default="false"/> <!-- En caso de estar activado, indica que el dato procedente del exterior, siempre "gana" al existente en servidor. -->
 		<xsd:attribute name="OnlyByKey" type="xsd:boolean" use="optional" default="true"/>
 		<xsd:attribute name="OnlySpecifiedFilters" type="xsd:boolean" use="optional" default="true"/>
 		<xsd:attribute name="MaxPageSize" type="xsd:integer" use="optional"/>

@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Clase que contiene la estructura de una acción sobre una entidad.
- * 
- * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonAutoDetect(

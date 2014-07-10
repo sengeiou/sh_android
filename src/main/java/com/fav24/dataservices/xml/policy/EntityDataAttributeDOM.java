@@ -8,8 +8,6 @@ import com.fav24.dataservices.domain.policy.EntityDataAttribute;
 
 /**
  * Esta clase contiene la definición de un atributo dato. 
- * 
- * @author Fav24
  */
 public class EntityDataAttributeDOM extends EntityDataAttribute {
 

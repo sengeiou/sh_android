@@ -11,11 +11,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de transferencia FilterDto y el objeto de dominio Filter.
- * 
- * @author Fav24
- *
  */
 public class FilterDtoToFilter extends Mapper<FilterDto, Filter> {
 

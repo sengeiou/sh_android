@@ -9,8 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Objeto de transferencia de una gráfica de un elemento del sistema.
- *  
- * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonAutoDetect(

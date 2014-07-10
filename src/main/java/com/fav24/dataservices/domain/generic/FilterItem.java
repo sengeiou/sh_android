@@ -8,8 +8,6 @@ import com.fav24.dataservices.domain.cache.Organizable;
 
 /**
  * Clase que contiene la estructura de un filtro.
- * 
- * @author Fav24
  */
 public class FilterItem implements Organizable, Comparable<FilterItem>, Serializable {
 

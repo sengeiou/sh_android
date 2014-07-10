@@ -3,7 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="customFunctions.tld" prefix="cf"%>
 
-<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/tree.css"/>">
+<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/tree.css"/>"/>
 
 <!-- Panel de información del sistema de archivos. -->
 <div id="context">
@@ -48,12 +48,13 @@
 					
 					<c:if test="${fileInformation.isDirectory()}">
 						<c:set var="newPath" value="${basePath}${cf:getFileSeparator()}${fileInformation.getName()}"></c:set> 
-						<c:set var="onClick" value="sendGetRequest('system/fileInformationList?path=${newPath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');"></c:set> 
+						<c:set var="navigateForward" value="sendGetRequest('system/fileInformationList?path=${newPath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');"></c:set> 
 					</c:if>
-					<tr ondblclick="${onClick}">
+					
+					<tr ondblclick="${navigateForward}">
 						<c:choose>
 							<c:when test="${fileInformation.isDirectory()}">
-								<td onClick="${onClick}" class="text-center"><span class="glyphicon glyphicon-folder-open"></span></td>
+								<td onClick="${navigateForward}" class="text-center"><span class="glyphicon glyphicon-folder-open"></span></td>
 							</c:when>
 							<c:otherwise>
 								<td class="text-center"><span class="glyphicon glyphicon-file"></span></td>
@@ -64,10 +65,13 @@
 						<td class="text-right">${cf:fromBytesToString(fileInformation.getSize())}</td>
 						<td class="text-center"><fmt:formatDate value="${creationTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
 						<td class="text-center"><fmt:formatDate value="${lastModifiedTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
-						<td class="text-center"><span onClick="showAvailableHooks();" class="glyphicon glyphicon-download"></span></td>
+						<td class="text-center">
+							<a href="<c:url value='system/downloadFile?file=${basePath}${cf:getFileSeparator()}${fileInformation.getName()}&compress=false'/>" class="glyphicon glyphicon-download"></a>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
 </div>
+

@@ -7,8 +7,6 @@ import com.fav24.dataservices.exception.ServerException;
 /**
  * Clase que contiene la estructura de una petición de carga 
  * de un fichero de definición de políticas de acceso.
- * 
- * @author Fav24
  */
 public class AccessPolicyFilesDto extends BaseDto {
 

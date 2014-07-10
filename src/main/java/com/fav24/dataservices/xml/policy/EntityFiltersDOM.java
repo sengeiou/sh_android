@@ -8,8 +8,6 @@ import com.fav24.dataservices.domain.policy.EntityFilters;
 
 /**
  * Clase que define la sección Filters de la definición de las políticas de acceso de una entidad.
- * 
- * @author Fav24
  */
 public class EntityFiltersDOM extends EntityFilters {
 

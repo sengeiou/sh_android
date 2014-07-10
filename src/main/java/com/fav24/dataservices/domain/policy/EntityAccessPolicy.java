@@ -75,6 +75,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	private EntityAttribute name;
 	private Set<OperationType> allowedOperations; 
 	private Boolean isVirtual;
+	private Boolean incommingAlwaysWins;
  	private Map<String, GenericServiceHook> hooks; 
 	private EntityData data;
 	private EntityKeys keys;
@@ -95,6 +96,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		this.name = null;
 		this.allowedOperations = new TreeSet<OperationType>();
 		this.isVirtual = false;
+		this.incommingAlwaysWins = false;
 		this.hooks = new LinkedHashMap<String, GenericServiceHook>();
 		this.data = null;
 		this.keys = null;
@@ -117,6 +119,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 		name = entityAccessPolicy.name == null ? null : new EntityAttribute(entityAccessPolicy.name);
 		allowedOperations = entityAccessPolicy.allowedOperations == null ? null : new TreeSet<OperationType>(entityAccessPolicy.allowedOperations);
 		isVirtual = entityAccessPolicy.isVirtual == null ? null : entityAccessPolicy.isVirtual;
+		incommingAlwaysWins = entityAccessPolicy.incommingAlwaysWins == null ? null : entityAccessPolicy.incommingAlwaysWins;
 		hooks = entityAccessPolicy.hooks == null ? null : new LinkedHashMap<String, GenericServiceHook>(entityAccessPolicy.hooks);
 		data = entityAccessPolicy.data == null ? null : new EntityData(entityAccessPolicy.data);
 		keys = entityAccessPolicy.keys == null ? null : new EntityKeys(entityAccessPolicy.keys);
@@ -182,6 +185,24 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 	 */
 	public void setVirtual(Boolean isVirtual) {
 		this.isVirtual = isVirtual;
+	}
+	
+	/**
+	 * Retorna true o false en función de si el dato procedente del exterior, siempre "gana" al existente en servidor o no.
+	 * 
+	 * @return true o false en función de si el dato procedente del exterior, siempre "gana" al existente en servidor o no.
+	 */
+	public Boolean getIncommingAlwaysWins() {
+		return incommingAlwaysWins;
+	}
+	
+	/**
+	 * Asigna true o false en función de si el dato procedente del exterior, siempre "gana" al existente en servidor o no.
+	 * 
+	 * @param incommingAlwaysWins True si el dato procedente del exterior, siempre "gana", false en caso contrario.
+	 */
+	public void setIncommingAlwaysWins(Boolean incommingAlwaysWins) {
+		this.incommingAlwaysWins = incommingAlwaysWins;
 	}
 
 	/**

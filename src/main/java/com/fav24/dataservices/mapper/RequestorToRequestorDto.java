@@ -5,11 +5,7 @@ import com.fav24.dataservices.dto.RequestorDto;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de dominio Requestor y el objeto de transferencia RequestorDto.
- * 
- * @author Fav24
- *
  */
 public class RequestorToRequestorDto extends Mapper<Requestor, RequestorDto> {
 

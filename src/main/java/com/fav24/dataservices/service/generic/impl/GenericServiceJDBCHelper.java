@@ -968,8 +968,8 @@ public class GenericServiceJDBCHelper {
 		Long remoteRevision = ((Number)attributes.get(SynchronizationField.REVISION.getSynchronizationField())).longValue();
 
 		// Comprobación de si gana el registro local, o el remoto.
-		if (metadata.getIncommingItemsAlwaysWins() || GenericServiceBasic.incommingItemWins(localModified, remoteModified, 
-				localRevision, remoteRevision, 
+		if (entityAccessPolicy.getIncommingAlwaysWins() || metadata.getIncommingItemsAlwaysWins() || 
+				GenericServiceBasic.incommingItemWins(localModified, remoteModified, localRevision, remoteRevision, 
 				entityAccessPolicy.getPositiveRevisionThreshold(), entityAccessPolicy.getNegativeRevisionThreshold())) {
 
 			// Gana el registro entrante.

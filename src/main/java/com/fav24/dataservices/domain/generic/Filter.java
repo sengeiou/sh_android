@@ -9,8 +9,6 @@ import com.fav24.dataservices.domain.cache.Organizable;
 
 /**
  * Clase que contiene la estructura de un conjunto de filtros.
- * 
- * @author Fav24
  */
 public class Filter implements Organizable, Serializable {
 

@@ -6,11 +6,7 @@ import com.fav24.dataservices.exception.ServerException;
 
 
 /**
- * 
  * Clase encargada del mapeo entre el objeto de transferencia RequestorDto y el objeto de dominio Requestor.
- * 
- * @author Fav24
- *
  */
 public class RequestorDtoToRequestor extends Mapper<RequestorDto, Requestor> {
 

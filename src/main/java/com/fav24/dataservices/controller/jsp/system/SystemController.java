@@ -1,13 +1,19 @@
 package com.fav24.dataservices.controller.jsp.system;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.AbstractList;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +27,7 @@ import com.fav24.dataservices.service.fileSystem.FileInformation;
 import com.fav24.dataservices.service.fileSystem.FileSystemService;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.util.NetworkUtils;
+import com.fav24.dataservices.util.ZipUtils;
 
 /**
  * Controla las peticiones de entrada a la consola de monitorización.
@@ -125,11 +132,11 @@ public class SystemController extends BaseJspController {
 
 		Path basePath = FileSystems.getDefault().getPath(path).toAbsolutePath();
 		if (parent != null && parent) {
-			
+
 			Path parentPath = basePath.getParent();
-			
+
 			if (parentPath != null) {
-				
+
 				basePath = parentPath;
 			}
 		}
@@ -139,5 +146,69 @@ public class SystemController extends BaseJspController {
 		model.addObject("fileInformationList", fileInformationList);
 
 		return model;
+	}
+
+	/**
+	 * Retorna el contenido del fichero seleccionado, en el stream de salida de la respuesta.
+	 * 
+	 * @param file Fichero o directorio del que se desea obtener su contenido.
+	 * @param compress True o false en función de si se desea o no descargar el fichero comprimido.
+	 * @param response Respuesta en la que se copia el contenido del fichero deseado.
+	 * 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/downloadFile", method = { RequestMethod.GET, RequestMethod.POST })
+	public void downloadFile(@ModelAttribute(value="file") String file, 
+			@ModelAttribute(value="compress") Boolean compress, 
+			HttpServletResponse response) throws Exception {
+
+		Path basePath = FileSystems.getDefault().getPath(file).toAbsolutePath();
+
+		if (compress == null) {
+			compress = Boolean.FALSE;
+		}
+
+		// Obtención del fichero.
+		File temp = null;
+		File pathFile = basePath.toFile();
+		String fileName = pathFile.getName();
+		InputStream is = null;
+
+		if (pathFile.isDirectory()) {
+
+			temp = File.createTempFile(fileName, ".zip");
+			ZipUtils.createZip(pathFile.getAbsolutePath(), temp.getAbsolutePath());
+
+			is = new FileInputStream(temp);
+			fileName += ".zip";
+		}
+		else {
+			
+			if (compress) {
+				
+				temp = File.createTempFile(fileName, ".zip");
+				ZipUtils.createZip(pathFile.getAbsolutePath(), temp.getAbsolutePath());
+
+				is = new FileInputStream(temp);
+				fileName += ".zip";
+			}
+			else {
+				is = new FileInputStream(pathFile);
+			}
+		}
+
+		// Asignación de las cabeceras con la meta-información del fichero a enviar. 
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment;filename=\"" + fileName + "\"");
+
+		// Copia el contenido del fichero en el stream de salida de pa respuesta.s
+		FileCopyUtils.copy(is, response.getOutputStream());
+
+		// Cierra stream y retorna a la vista.
+		response.flushBuffer();
+		
+		if (temp != null) {
+			temp.delete();
+		}
 	}
 }

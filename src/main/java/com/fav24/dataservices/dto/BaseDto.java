@@ -11,8 +11,6 @@ import com.fav24.dataservices.exception.ServerException;
 
 /**
  * Clase base de todos los objetos de transferencia.
- *  
- * @author Fav24
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonAutoDetect(
