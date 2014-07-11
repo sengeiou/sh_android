@@ -63,7 +63,7 @@
 									La informaci&oacute;n entrante prevalece sobre la existente en servidor.
 								</c:when>
 								<c:otherwise>
-									Se usa el algoritmo general de sincronizaci&oacute;n
+									Se usa el algoritmo general de sincronizaci&oacute;n.
 								</c:otherwise>
 							</c:choose>
 						</div>
