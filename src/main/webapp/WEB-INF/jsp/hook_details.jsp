@@ -86,7 +86,7 @@
 </div>
 
 <script type="text/javascript">
-SyntaxHighlighter.defaults.toolbar = false;
-SyntaxHighlighter.autoloader([ 'java', 'java', '<c:url value="/resources/js/syntaxhighlighter/shBrushJava.js"/>']);
-SyntaxHighlighter.all();
+	SyntaxHighlighter.defaults.toolbar = false;
+	SyntaxHighlighter.autoloader([ 'java', 'java', '<c:url value="/resources/js/syntaxhighlighter/shBrushJava.js"/>']);
+	SyntaxHighlighter.all();
 </script>

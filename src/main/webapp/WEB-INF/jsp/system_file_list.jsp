@@ -10,20 +10,19 @@
 
 	<!-- Árbol de directorios y ficheros -->
 	<div class="panel panel-info">
-		<div class="panel-heading">&Aacute;rbol de directorios y ficheros
-		</div>
+		<div class="panel-heading">&Aacute;rbol de directorios y ficheros</div>
 		<div class="panel-body">
-			<p>Directorio actual:</p>
-			<p>
+			<div>
 				<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&parent=true&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-left">
 		   			<span class="glyphicon glyphicon-arrow-left"></span>
 		   		</button>
 		   		
-				<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-left">
+		   		<button onClick="sendGetRequest('system/fileInformationList?path=${basePath}&parent=false&pattern=&directoriesOnly=false&filesOnly=false');" type="button" class="btn btn-default btn-sm pull-right">
 		   			<span class="glyphicon glyphicon-refresh"></span>
-					<strong>${basePath}</strong>
 		   		</button>
-			</p>
+
+		   		<h5 class="text-center text-info">${basePath}</h5>
+			</div>
 		</div>
 
 		<table class="table table-condensed table-hover">
@@ -31,6 +30,7 @@
 			<tr>
 				<th></th>
 				<th class="text-left">Nombre</th>
+				<th class="text-center">Grupo:Propietario</th>
 				<th class="text-center">Permisos</th>
 				<th class="text-right">Tamaño</th>
 				<th class="text-center">Creaci&oacute;n</th>
@@ -61,6 +61,7 @@
 							</c:otherwise>
 						</c:choose>
 						<td class="text-left">${fileInformation.getName()}</td>
+						<td class="text-center">${fileInformation.getGroup()}:${fileInformation.getOwner()}</td>
 						<td class="text-center" style="font-family:'Lucida Console', Monaco, monospace;">${fileInformation.getPermissions()}</td>
 						<td class="text-right">${cf:fromBytesToString(fileInformation.getSize())}</td>
 						<td class="text-center"><fmt:formatDate value="${creationTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>

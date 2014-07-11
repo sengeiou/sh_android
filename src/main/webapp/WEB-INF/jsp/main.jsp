@@ -1,5 +1,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%!String applicationPath;%>
+<%
+	applicationPath = getServletContext().getRealPath("/");
+%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -65,7 +69,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#" onclick="showDataSourcesInformation();">Informaci&oacute;n de las fuentes de datos</a></li>
 							<li><a href="#" onclick="showSystemContext();">Informaci&oacute;n de contexto del sistema</a></li>
-							<li><a href="#" onclick="showFileSystem();">Explorador del sistema de archivos</a></li>
+							<li><a href="#" onclick="showFileSystem('<%=applicationPath%>');">Explorador del sistema de archivos</a></li>
 							<li class="divider"></li>
 							<li><a href="#" onclick="showSystemMonitor();">Informaci&oacute;n de recursos del sistema</a></li>
 						</ul>
@@ -128,6 +132,7 @@
 	    $script.ready([ 'core', 'main', 'plugins', 'custom_L1', 'custom_L2' ], function () {
 		    showWorkload();
 	    });
+		
 	</script>
 </body>
 <footer>

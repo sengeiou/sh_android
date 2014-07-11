@@ -112,8 +112,8 @@ function showSystemContext() {
 	sendGetRequest('system/context');
 }
 
-function showFileSystem() {
-	sendGetRequest('system/fileInformationList?path=&parent=false&pattern=&directoriesOnly=false&filesOnly=false');
+function showFileSystem(path) {
+	sendGetRequest('system/fileInformationList?path=' + path + '&parent=false&pattern=&directoriesOnly=false&filesOnly=false');
 }
 
 function showSystemMonitor() {
