@@ -27,6 +27,7 @@ import com.fav24.dataservices.service.fileSystem.FileInformation;
 import com.fav24.dataservices.service.fileSystem.FileSystemService;
 import com.fav24.dataservices.service.hook.HookConfigurationService;
 import com.fav24.dataservices.util.NetworkUtils;
+import com.fav24.dataservices.util.StringUtils;
 import com.fav24.dataservices.util.ZipUtils;
 
 /**
@@ -175,8 +176,10 @@ public class SystemController extends BaseJspController {
 		InputStream is = null;
 
 		if (pathFile.isDirectory()) {
-
-			temp = File.createTempFile(fileName, ".zip");
+			
+			String tempFileName = fileName + "-" + StringUtils.encodeMd5(fileName);
+			
+			temp = File.createTempFile(tempFileName, ".zip");
 			ZipUtils.createZip(pathFile.getAbsolutePath(), temp.getAbsolutePath());
 
 			is = new FileInputStream(temp);
@@ -186,7 +189,9 @@ public class SystemController extends BaseJspController {
 			
 			if (compress) {
 				
-				temp = File.createTempFile(fileName, ".zip");
+				String tempFileName = fileName + "-" + StringUtils.encodeMd5(fileName);
+				
+				temp = File.createTempFile(tempFileName, ".zip");
 				ZipUtils.createZip(pathFile.getAbsolutePath(), temp.getAbsolutePath());
 
 				is = new FileInputStream(temp);
