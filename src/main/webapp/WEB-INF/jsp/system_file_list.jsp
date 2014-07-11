@@ -67,7 +67,12 @@
 						<td class="text-center"><fmt:formatDate value="${creationTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
 						<td class="text-center"><fmt:formatDate value="${lastModifiedTime}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
 						<td class="text-center">
-							<a href="<c:url value='system/downloadFile?file=${basePath}${cf:getFileSeparator()}${fileInformation.getName()}&compress=false'/>" class="glyphicon glyphicon-download"></a>
+							<a id="${fileInformation.getName()}" href="" class="glyphicon glyphicon-download"></a>
+							<script type="text/javascript">
+									var file = App.pagesURL + "/system/downloadFile?file=${basePath}${cf:getFileSeparator()}${fileInformation.getName()}&compress=false";
+									var link = document.getElementById("${fileInformation.getName()}");
+									link.setAttribute("href", file);
+							</script>
 						</td>
 					</tr>
 				</c:forEach>
@@ -75,4 +80,3 @@
 		</table>
 	</div>
 </div>
-

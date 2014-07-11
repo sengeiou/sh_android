@@ -64,8 +64,6 @@ public class ZipUtils {
 		File f = new File(path);
 		String entryName = base + f.getName();
 		
-		System.out.println("Anadiendo la entrada <" + entryName +">");
-		
 		ZipArchiveEntry zipEntry = new ZipArchiveEntry(f, entryName);
 
 		zOut.putArchiveEntry(zipEntry);
@@ -142,8 +140,6 @@ public class ZipUtils {
 				ZipArchiveEntry zipEntry = entries.nextElement();
 				String name = zipEntry.getName();
 				
-				System.out.println("Descomprimiendo la entrada <" + name +">");
-				
 				name = name.replace('\\', '/');
 				int i = name.indexOf('/');
 				if (i > 0) {
@@ -205,22 +201,5 @@ public class ZipUtils {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Method for testing zipping and unzipping.
-	 * @param args 
-	 */
-	public static void main(String[] args) throws IOException {
-		try {
-		createZip("/Users/jmvera/development/workspaces/backend/data-services/src", "/Users/jmvera/development/workspaces/backend/data-services/src.zip");
-		extractZip("/Users/jmvera/development/workspaces/backend/data-services/src/src.zip", "/Users/jmvera/development/workspaces/backend/data-services/srcUnzip");
-		}
-		catch (Exception e) {
-			System.err.print("Error: " + e.getMessage());
-		}
-		finally {
-			
-		}
 	}
 }
