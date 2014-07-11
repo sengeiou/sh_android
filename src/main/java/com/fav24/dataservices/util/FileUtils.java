@@ -144,7 +144,7 @@ public class FileUtils {
 			}
 		}
 
-		File newFile = new File(DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + "/" + fileName);
+		File newFile = new File(location + File.separator + fileName);
 		multipartFile.transferTo(newFile);
 
 		return newFile;

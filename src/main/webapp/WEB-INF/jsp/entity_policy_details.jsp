@@ -54,6 +54,20 @@
 							</c:choose>
 						</div>					
 					</div>
+					<!-- Política de sincronización. -->
+					<div class="panel panel-info">
+						<div class="panel-heading">Pol&iacute;tica de sincronizaci&oacute;n</div>
+						<div class="panel-body">
+							<c:choose>
+								<c:when test="${entityPolicies.getIncommingAlwaysWins()}">
+									La informaci&oacute;n entrante prevalece sobre la existente en servidor.
+								</c:when>
+								<c:otherwise>
+									Se usa el algoritmo general de sincronizaci&oacute;n
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
 					<!-- Dirección y  de los atributos. -->
 					<div class="panel panel-info">
 						<div class="panel-heading">Atributos</div>
@@ -157,6 +171,13 @@
 									</ul>
 								</c:otherwise>
 							</c:choose>
+						</div>
+					</div>
+					<!-- Tamaño de página. -->
+					<div class="panel panel-info">
+						<div class="panel-heading">Tama&ntilde;o de p&aacute;gina</div>
+						<div class="panel-body">
+							${entityPolicies.getMaxPageSize()}
 						</div>
 					</div>
 					<!-- Puntos de inserción (Hooks). -->
