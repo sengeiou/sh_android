@@ -636,10 +636,10 @@ public class GenericServiceJDBCHelper {
 									value = null;
 								}
 								else {
-									
+
 									value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
 								}
-								
+
 								dataItem.getAttributes().put(attributeAlias, value);
 							}
 						}
@@ -661,10 +661,11 @@ public class GenericServiceJDBCHelper {
 	 * @param entityAccessPolicy Políticas de acceso de la entidad.
 	 * @param entityInformation Información de la entidad en el subsistema. 
 	 * 
-	 * @throws SQLException 
+	 * @return true o false en función de si el registro ha podido ser reciclado o no.
+	 * 
 	 * @throws ServerException 
 	 */
-	public static void recoverRowFromInsert(Connection connection, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws SQLException, ServerException {
+	public static boolean recoverRow(Connection connection, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation) throws ServerException {
 
 		StringBuilder recoverQuery = new StringBuilder(); 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
@@ -844,8 +845,11 @@ public class GenericServiceJDBCHelper {
 			int modifiedRows = preparedStatement.executeUpdate();
 
 			if (modifiedRows != 1) {
-				throw new ServerException(GenericService.ERROR_CREATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+				return false;
 			}
+		}
+		catch(SQLException e) {
+			throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(preparedStatement);
@@ -903,30 +907,35 @@ public class GenericServiceJDBCHelper {
 				for (String attributeAlias : attributes) {
 
 					Object value = resultSet.getObject(i++);
-					
+
 					if (resultSet.wasNull()) {
 						value = null;
 					}
 					else {
-						
+
 						value = translateFromType(attributesType.get(i-1), value);
 					}
-					
+
 					dataItem.getAttributes().put(attributeAlias, value);
 				}
 			}
 			else {
-				throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+				throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 			}
 
 			if (resultSet.next()) {
-				throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+				throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 			}
+		}
+		catch(SQLException e) {
+			throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(resultSet);
 			JDBCUtils.CloseQuietly(preparedStatement);
 		}
+		
+		return true;
 	}
 
 
@@ -937,16 +946,18 @@ public class GenericServiceJDBCHelper {
 	 * @param connection Conexión a la base de datos, con la transacción abierta para que el posible update, entre dentro.
 	 * @param resultSet Registro de base de datos sobre el que se evalua su posible actualización.
 	 * @param now Momento en el que se inicia la operación de modificación.
-	 * @param attributes Conjunto de atributos que contienen la información a actualizar y/o que será actualizada.
+	 * @param dataItem Elemento que contiene información de la fila a actualizar.
 	 * @param entityAccessPolicy Políticas de acceso de la entidad sobre la que se realiza el update.
 	 * @param entityInformation Información extraida de la fuente de datos, acerca de la entidad sobre la que se realiza el update.
 	 * @param metadata El conjunto de metadatos de la operación.
 	 * 
 	 * @return true o false en caso de que la operación haya o no tenido éxito. El fallo puede ser debido a que no ha sido posible localizar el registro a modificar, o que se a localizado más de 1.
 	 * 
-	 * @throws SQLException 
+	 * @throws ServerException 
 	 */
-	public static boolean update(Connection connection, ResultSet resultSet, Timestamp now, NavigableMap<String, Object> attributes, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws SQLException {
+	public static boolean updateRow(Connection connection, ResultSet resultSet, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws ServerException {
+
+		NavigableMap<String, Object> attributes = dataItem.getAttributes();
 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
 		String birthColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.BIRTH.getSynchronizationField()).getName(); // BIRTH
@@ -955,106 +966,112 @@ public class GenericServiceJDBCHelper {
 		int revisionColumnType = entityInformation.dataFields.get(revisionColumn);
 		int modifiedColumnType = entityInformation.dataFields.get(modifiedColumn);
 
-		Timestamp localBirth = resultSet.getTimestamp(birthColumn);
-		localBirth.setNanos(0);
+		Timestamp localBirth = null;
+		Timestamp localModified = null;
+		Long localRevision = null;
 
-		Timestamp localModified = resultSet.getTimestamp(modifiedColumn);
-		localModified.setNanos(0);
+		PreparedStatement preparedStatement = null;
 
-		Timestamp remoteModified = new Timestamp((Long)attributes.get(SynchronizationField.MODIFIED.getSynchronizationField()));
-		remoteModified.setNanos(0);
+		try {
 
-		Long localRevision = resultSet.getLong(revisionColumn);
-		Long remoteRevision = ((Number)attributes.get(SynchronizationField.REVISION.getSynchronizationField())).longValue();
+			localBirth = resultSet.getTimestamp(birthColumn);
+			localBirth.setNanos(0);
 
-		// Comprobación de si gana el registro local, o el remoto.
-		if (entityAccessPolicy.getIncommingAlwaysWins() || metadata.getIncommingItemsAlwaysWins() || 
-				GenericServiceBasic.incommingItemWins(localModified, remoteModified, localRevision, remoteRevision, 
-				entityAccessPolicy.getPositiveRevisionThreshold(), entityAccessPolicy.getNegativeRevisionThreshold())) {
+			localModified = resultSet.getTimestamp(modifiedColumn);
+			localModified.setNanos(0);
 
-			// Gana el registro entrante.
-			Long finalRevision = localRevision == remoteRevision ? remoteRevision + 1 : remoteRevision;
+			localRevision = resultSet.getLong(revisionColumn);
 
-			// Propagación de la información de auditoría.
-			attributes.put(SynchronizationField.REVISION.getSynchronizationField(), finalRevision);
-			attributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
-			attributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), now.getTime());
-			attributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
+			Timestamp remoteModified = new Timestamp((Long)attributes.get(SynchronizationField.MODIFIED.getSynchronizationField()));
+			remoteModified.setNanos(0);
 
-			// Propagación de la información de solo salida.
-			AbstractList<Integer> types = new ArrayList<Integer>();
-			AbstractList<Object> params = new ArrayList<Object>();
+			Long remoteRevision = ((Number)attributes.get(SynchronizationField.REVISION.getSynchronizationField())).longValue();
 
-			StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ");
-			GenericServiceJDBCHelper.scapeColumn(queryUpdate, revisionColumn).append("=?,");
-			GenericServiceJDBCHelper.scapeColumn(queryUpdate, modifiedColumn).append("=?");
+			// Comprobación de si gana el registro local, o el remoto.
+			if (entityAccessPolicy.getIncommingAlwaysWins() || metadata.getIncommingItemsAlwaysWins() || 
+					GenericServiceBasic.incommingItemWins(localModified, remoteModified, localRevision, remoteRevision, 
+							entityAccessPolicy.getPositiveRevisionThreshold(), entityAccessPolicy.getNegativeRevisionThreshold())) {
 
-			types.add(revisionColumnType);
-			params.add(finalRevision);
+				// Gana el registro entrante.
+				Long finalRevision = localRevision == remoteRevision ? remoteRevision + 1 : remoteRevision;
 
-			types.add(modifiedColumnType);
-			params.add(now);
+				// Propagación de la información de auditoría.
+				attributes.put(SynchronizationField.REVISION.getSynchronizationField(), finalRevision);
+				attributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
+				attributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), now.getTime());
+				attributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
 
-			for (String attributeAlias : attributes.keySet()) {
+				// Propagación de la información de solo salida.
+				AbstractList<Integer> types = new ArrayList<Integer>();
+				AbstractList<Object> params = new ArrayList<Object>();
 
-				if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
+				StringBuilder queryUpdate = new StringBuilder("UPDATE ").append(entityAccessPolicy.getName().getName()).append(" SET ");
+				GenericServiceJDBCHelper.scapeColumn(queryUpdate, revisionColumn).append("=?,");
+				GenericServiceJDBCHelper.scapeColumn(queryUpdate, modifiedColumn).append("=?");
 
-					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+				types.add(revisionColumnType);
+				params.add(finalRevision);
 
-					if (dataAttribute != null) {
+				types.add(modifiedColumnType);
+				params.add(now);
 
-						if (dataAttribute.getDirection() == Direction.OUTPUT) {
+				for (String attributeAlias : attributes.keySet()) {
 
-							Object value = resultSet.getObject(dataAttribute.getName());
-							
-							if (resultSet.wasNull()) {
-								value = null;
+					if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
+
+						EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+
+						if (dataAttribute != null) {
+
+							if (dataAttribute.getDirection() == Direction.OUTPUT) {
+
+								Object value = resultSet.getObject(dataAttribute.getName());
+
+								if (resultSet.wasNull()) {
+									value = null;
+								}
+								else {
+									value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+								}
+
+								attributes.put(attributeAlias, value);
 							}
-							else {
-								
-								value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+							else if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
+
+								types.add(entityInformation.dataFields.get(dataAttribute.getName()));
+								params.add(attributes.get(attributeAlias));
+
+								queryUpdate.append(',');
+								GenericServiceJDBCHelper.scapeColumn(queryUpdate, dataAttribute.getName()).append("=?");
 							}
-							
-							attributes.put(attributeAlias, value);
-						}
-						else if (!entityInformation.primaryKey.containsKey(dataAttribute.getName())) {
-
-							types.add(entityInformation.dataFields.get(dataAttribute.getName()));
-							params.add(attributes.get(attributeAlias));
-
-							queryUpdate.append(',');
-							GenericServiceJDBCHelper.scapeColumn(queryUpdate, dataAttribute.getName()).append("=?");
 						}
 					}
 				}
-			}
 
-			// Concatenación del filtro por clave primaira.
-			queryUpdate.append(" WHERE ");
+				// Concatenación del filtro por clave primaira.
+				queryUpdate.append(" WHERE ");
 
-			// - Conjunto de attributos que conforman la clave primaria.
-			Iterator<Entry<String, Integer>> primaryKeyColumns = entityInformation.primaryKey.entrySet().iterator();
+				// - Conjunto de attributos que conforman la clave primaria.
+				Iterator<Entry<String, Integer>> primaryKeyColumns = entityInformation.primaryKey.entrySet().iterator();
 
-			Entry<String, Integer> primaryKeyColumn = primaryKeyColumns.next();
-			GenericServiceJDBCHelper.scapeColumn(queryUpdate, primaryKeyColumn.getKey()).append("=?");
-
-			types.add(primaryKeyColumn.getValue());
-			params.add(resultSet.getObject(primaryKeyColumn.getKey()));
-
-			while (primaryKeyColumns.hasNext()) {
-
-				primaryKeyColumn = primaryKeyColumns.next();
-
-				queryUpdate.append(" AND ");
+				Entry<String, Integer> primaryKeyColumn = primaryKeyColumns.next();
 				GenericServiceJDBCHelper.scapeColumn(queryUpdate, primaryKeyColumn.getKey()).append("=?");
 
 				types.add(primaryKeyColumn.getValue());
 				params.add(resultSet.getObject(primaryKeyColumn.getKey()));
-			}
 
-			PreparedStatement preparedStatement = null;
+				while (primaryKeyColumns.hasNext()) {
 
-			try {
+					primaryKeyColumn = primaryKeyColumns.next();
+
+					queryUpdate.append(" AND ");
+					GenericServiceJDBCHelper.scapeColumn(queryUpdate, primaryKeyColumn.getKey()).append("=?");
+
+					types.add(primaryKeyColumn.getValue());
+					params.add(resultSet.getObject(primaryKeyColumn.getKey()));
+				}
+
+
 				preparedStatement = connection.prepareStatement(queryUpdate.toString());
 
 				for (int i=0; i<params.size(); i++) {
@@ -1080,45 +1097,46 @@ public class GenericServiceJDBCHelper {
 				if (updatedRegisters > 1) {
 					return false;
 				}
+
 			}
-			catch (SQLException e) {
-				throw e;
-			}
-			finally {
-				JDBCUtils.CloseQuietly(preparedStatement);
-			}
-		}
-		else { // Gana el registro existente.
+			else { // Gana el registro existente.
 
-			// Propagación de la información de auditoría.
-			attributes.put(SynchronizationField.REVISION.getSynchronizationField(), localRevision);
-			attributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
-			attributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), localModified.getTime());
-			attributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
+				// Propagación de la información de auditoría.
+				attributes.put(SynchronizationField.REVISION.getSynchronizationField(), localRevision);
+				attributes.put(SynchronizationField.BIRTH.getSynchronizationField(), localBirth.getTime());
+				attributes.put(SynchronizationField.MODIFIED.getSynchronizationField(), localModified.getTime());
+				attributes.put(SynchronizationField.DELETED.getSynchronizationField(), null);
 
-			// Propagación de la información de salida.
-			for (String attributeAlias : attributes.keySet()) {
+				// Propagación de la información de salida.
+				for (String attributeAlias : attributes.keySet()) {
 
-				if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
+					if (!SynchronizationField.isSynchronizationField(attributeAlias)) {
 
-					EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
+						EntityDataAttribute dataAttribute = entityAccessPolicy.getData().getAttribute(attributeAlias);
 
-					if (dataAttribute != null && (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH)) {
+						if (dataAttribute != null && (dataAttribute.getDirection() == Direction.OUTPUT || dataAttribute.getDirection() == Direction.BOTH)) {
 
-						Object value = resultSet.getObject(dataAttribute.getName());
-						
-						if (resultSet.wasNull()) {
-							value = null;
+							Object value = resultSet.getObject(dataAttribute.getName());
+
+							if (resultSet.wasNull()) {
+								value = null;
+							}
+							else {
+
+								value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
+							}
+
+							attributes.put(attributeAlias, value);
 						}
-						else {
-							
-							value = translateFromType(entityInformation.dataFields.get(dataAttribute.getName()), value);
-						}
-						
-						attributes.put(attributeAlias, value);
 					}
 				}
 			}
+		}
+		catch (SQLException e) {
+			throw new ServerException(GenericService.ERROR_UPDATING_ROW, String.format(GenericService.ERROR_UPDATING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
+		}
+		finally {
+			JDBCUtils.CloseQuietly(preparedStatement);
 		}
 
 		return true;
@@ -1134,10 +1152,11 @@ public class GenericServiceJDBCHelper {
 	 * @param entityInformation Información de la entidad en el subsistema.
 	 * @param metadata El conjunto de metadatos de la operación.
 	 * 
-	 * @throws SQLException 
+	 * @return true o false en función de si el registro ha podido ser reciclado, o modificado.
+	 * 
 	 * @throws ServerException 
 	 */
-	public static void recoverOrUpdateRowFromInsert(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws SQLException, ServerException {
+	public static boolean recoverOrUpdateRow(Connection connection, Timestamp now, DataItem dataItem, EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Metadata metadata) throws ServerException {
 
 		StringBuilder recoverQuery = new StringBuilder(); 
 		String revisionColumn = entityAccessPolicy.getData().getAttribute(SynchronizationField.REVISION.getSynchronizationField()).getName(); // REVISION
@@ -1272,7 +1291,7 @@ public class GenericServiceJDBCHelper {
 		}
 
 		if (fndQuery == null) {
-			throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+			throw new ServerException(GenericService.ERROR_DUPLICATED_ROW, String.format(GenericService.ERROR_DUPLICATED_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 		}
 
 		recoverQuery.append(" AND (").append(fndQuery).append(')');
@@ -1318,8 +1337,11 @@ public class GenericServiceJDBCHelper {
 			modifiedRows = recoverQueryStatement.executeUpdate();
 
 			if (modifiedRows > 1) {
-				throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+				throw new ServerException(GenericService.ERROR_DUPLICATED_ROW, String.format(GenericService.ERROR_DUPLICATED_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 			}
+		}
+		catch(SQLException e) {
+			throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 		}
 		finally {
 			JDBCUtils.CloseQuietly(recoverQueryStatement);
@@ -1362,16 +1384,17 @@ public class GenericServiceJDBCHelper {
 
 					// Sólo puede haber una row.
 					if (!resultSet.isLast()) {
-						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+						throw new ServerException(GenericService.ERROR_DUPLICATED_ROW, String.format(GenericService.ERROR_DUPLICATED_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
 					}
 
-					if (!update(connection, resultSet, now, dataItem.getAttributes(), entityAccessPolicy, entityInformation, metadata)) {
-						throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
-					}
+					return updateRow(connection, resultSet, now, dataItem, entityAccessPolicy, entityInformation, metadata);
 				}
 				else {
-					throw new ServerException(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW, String.format(GenericService.ERROR_CREATEUPDATE_DUPLICATE_ROW_MESSAGE, "DML: " + recoverQuery + ". Valores: " + params.toString()));
+					return false;
 				}
+			}
+			catch(SQLException e) {
+				throw new ServerException(GenericService.ERROR_UPDATING_ROW, String.format(GenericService.ERROR_UPDATING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 			}
 			finally {
 				JDBCUtils.CloseQuietly(resultSet);
@@ -1447,31 +1470,36 @@ public class GenericServiceJDBCHelper {
 						for (String attributeAlias : attributes) {
 
 							Object value = resultSet.getObject(i++);
-							
+
 							if (resultSet.wasNull()) {
 								value = null;
 							}
 							else {
-								
+
 								value = translateFromType(attributesType.get(i-1), value);
 							}
-							
+
 							dataItem.getAttributes().put(attributeAlias, value);
 						}
 					}
 					else {
-						throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+						throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 					}
 
 					if (resultSet.next()) {
-						throw new ServerException(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_CREATE_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+						throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 					}
+				}
+				catch(SQLException e) {
+					throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 				}
 				finally {
 					JDBCUtils.CloseQuietly(resultSet);
 					JDBCUtils.CloseQuietly(recoveredQueryStatement);
 				}
 			}
+
+			return true;
 		}
 	}
 }

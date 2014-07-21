@@ -84,6 +84,11 @@ public interface HookConfigurationService extends HookService {
 	/**
 	 * Retorna el classpath a organizado por ubicaciones de clases y dependencias.
 	 * 
+	 * Índice 0: classpaths
+	 * Índice 1: dependencias generales.
+	 * Índice 2: dependencias de hooks.
+	 * 
+	 * 
 	 * @return el classpath a organizado por ubicaciones de clases y dependencias.
 	 * 
 	 * @throws ServerException 

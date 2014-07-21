@@ -260,9 +260,11 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		AbstractList<AbstractList<String>> organizedClassPath = new ArrayList<AbstractList<String>>();
 		AbstractList<String> classpaths = new ArrayList<String>();
 		AbstractList<String> dependencies = new ArrayList<String>();
+		AbstractList<String> hooksDependencies = new ArrayList<String>();
 
 		organizedClassPath.add(classpaths);
 		organizedClassPath.add(dependencies);
+		organizedClassPath.add(hooksDependencies);
 
 		URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		for (URL url : urlClassLoader.getURLs()) {
@@ -288,9 +290,6 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 		AbstractList<URL> hooksDependenciesURLs = getHooksDependencies();
 
 		if (hooksDependenciesURLs != null) {
-
-			AbstractList<String> hooksDependencies = new ArrayList<String>();
-			organizedClassPath.add(hooksDependencies);
 
 			for (URL url : hooksDependenciesURLs) {
 				try{
@@ -485,7 +484,7 @@ public class HookConfigurationServiceImpl implements HookConfigurationService {
 				throw new ServerException(ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND, String.format(ERROR_HOOK_CLASS_INSTANCE_DEPENDENCY_NOT_FOUND_MESSAGE, e.getMessage(), className));
 			}
 		}
-		
+
 		return result;
 	}
 
