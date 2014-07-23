@@ -77,6 +77,8 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 		if (generic.getOperations() == null) {
 
+			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
+			
 			throw new ServerException(ERROR_MALFORMED_REQUEST, String.format(ERROR_MALFORMED_REQUEST_MESSAGE, "ops"));
 		}
 
@@ -199,12 +201,16 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 			endTransaction(connection, false);
 
+			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
+			
 			throw e;
 		} 
 		catch (Throwable t) {
 
 			endTransaction(connection, false);
 
+			systemService.getWorkloadMeter().incTotalIncommingRequestsErrors();
+			
 			throw new ServerException(ERROR_UNKNOWN, String.format(ERROR_UNKNOWN_MESSAGE, t.toString()), t);
 		}
 
