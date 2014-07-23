@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -52,7 +52,7 @@ public class BaseRestController {
 	@ExceptionHandler(ServerException.class)
 	public ModelAndView handleAnyException(ServerException exception) {
 
-		logger.error(ExceptionUtils.getFullStackTrace(exception));
+		logger.error(ExceptionUtils.getStackTrace(exception));
 
 		Map<String, String> error = new HashMap<String, String>();
 
@@ -71,7 +71,7 @@ public class BaseRestController {
 	 */
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAnyException(Exception exception) {
-		logger.error(ExceptionUtils.getFullStackTrace(exception));
+		logger.error(ExceptionUtils.getStackTrace(exception));
 
 		Map<String, String> error = new HashMap<String, String>();
 
