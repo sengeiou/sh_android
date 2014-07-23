@@ -5,10 +5,13 @@ import java.util.AbstractList;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.fav24.dataservices.domain.cache.EntityCacheManager;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.Meter;
 import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.monitoring.SamplesRegister;
 import com.fav24.dataservices.monitoring.SystemMonitoring;
+import com.fav24.dataservices.monitoring.meter.CacheMeter;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 import com.fav24.dataservices.service.system.SystemService;
@@ -30,7 +33,7 @@ public class SystemServiceImpl implements SystemService {
 	public void initSystemService() throws ServerException {
 
 		SamplesRegister.initSamplesRegister();
-		
+
 		SystemActivityMonitoring = new SystemMonitoring();
 	}
 
@@ -103,6 +106,42 @@ public class SystemServiceImpl implements SystemService {
 	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException {
 
 		return SystemActivityMonitoring.getSystemWorkload(offset, timeRange, period);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AbstractList<CacheMeter> getCacheMeters(AbstractList<Meter> copyTo) {
+
+		return SystemActivityMonitoring.getCacheMeters(copyTo);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateCacheMeters(AbstractList<EntityCacheManager> entityCacheManagers) {
+
+		SystemActivityMonitoring.updateCacheMeters(entityCacheManagers);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public MonitorSample getSystemCacheStatus(String cacheManagerName, String cacheName) {
+
+		return SystemActivityMonitoring.getSystemCacheStatus(cacheManagerName, cacheName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AbstractList<MonitorSample> getSystemCacheStatus(String cacheManagerName, String cacheName, Long offset, Long timeRange, Long period) throws ServerException {
+
+		return SystemActivityMonitoring.getSystemCacheStatus(cacheManagerName, cacheName, offset, timeRange, period);
 	}
 
 	/**

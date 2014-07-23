@@ -1,12 +1,14 @@
 package com.fav24.dataservices.monitoring;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -51,6 +53,9 @@ public class SamplesRegister {
 	private static final long MINUTE_IN_MILLISECONDS = SECOND_IN_MILLISECONDS * 60;
 	private static final long HOUR_IN_MILLISECONDS = MINUTE_IN_MILLISECONDS * 60;
 	private static final long DAY_IN_MILLISECONDS = HOUR_IN_MILLISECONDS * 24;
+
+	private static final long SAMPLE_FILES_RETENTION_DAYS = 7; // Retención máxima de los ficheros de muestras en días.
+
 
 	/**
 	 * Salida de escritura de registro asociada a un cierto medidor.
@@ -136,7 +141,7 @@ public class SamplesRegister {
 						sampleIndexIterator.remove();
 					}
 				}
-				
+
 				this.lessUsedSamples = 0;
 				this.lastUsedTime = System.currentTimeMillis();
 			}
@@ -198,6 +203,75 @@ public class SamplesRegister {
 	}
 
 	/**
+	 * Retorna un array con los ficheros que contienen información del medidor indicado, anteriores al momento indicado.
+	 *
+	 * @param meter Medidor del que se desea obtener la lista de ficheros.
+	 * @param time Fecha de inicio en milisegundos desde epoch.
+	 * 
+	 * @return un array con los ficheros que contienen información del medidor indicado, anteriores al momento indicado.
+	 */
+	private static File[] getFileNamesBefore(Meter meter, final long time) {
+
+		final String meterName = meter.getMeterName();
+
+		File sampleFilesDirectory = new File(SampleFilesLocation);
+
+		if (sampleFilesDirectory.isDirectory()) {
+
+			final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, DataServicesContext.MAIN_LOCALE);
+
+			FileFilter filter = new FileFilter() {
+
+				@Override
+				public boolean accept(File pathname) {
+
+					String fileName = pathname.getName();
+
+					if (fileName.startsWith(meterName) && fileName.endsWith(SAMPLE_FILES_SUFFIX)) {
+
+						String infix = fileName.substring(meterName.length() + 1);
+						infix = infix.substring(0, infix.length() - SAMPLE_FILES_SUFFIX.length());
+
+						try {
+
+							Date date = dateFormat.parse(infix);
+
+							return date.getTime() < time;
+
+						} catch (ParseException e) {
+						}
+					}
+
+					return false;
+				}
+			};
+
+			return sampleFilesDirectory.listFiles(filter);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Elimina los ficheros que contienen información del medidor indicado, anteriores al momento indicado.
+	 *
+	 * @param meter Medidor del que se desea obtener la lista de ficheros.
+	 * @param time Fecha de inicio en milisegundos desde epoch.
+	 */
+	private static void removeFilesBefore(Meter meter, long time) {
+
+		File[] filesToRemove = getFileNamesBefore(meter, time);
+
+		if (filesToRemove != null) {
+
+			for (File fileToRemove : filesToRemove) {
+
+				fileToRemove.delete();
+			}
+		}
+	}
+
+	/**
 	 * Crea un nuevo fichero de salida para hoy y para el medidor indicado.
 	 * 
 	 * @param meter Medidor para le que se creará el fichero.
@@ -211,6 +285,9 @@ public class SamplesRegister {
 		MeterOutput meterOutput = meterOutputs.get(meter);
 
 		long today = getTodayInMilliseconds();
+
+		// Aplicación de la retención de los ficheros de muestras.
+		removeFilesBefore(meter, today - (SAMPLE_FILES_RETENTION_DAYS * DAY_IN_MILLISECONDS));
 
 		if (meterOutput == null) {
 
@@ -472,7 +549,7 @@ public class SamplesRegister {
 		}
 	}
 
-	
+
 	/**
 	 * Retorna la última muestra indexada de la estructura de muestras leídas, que entra dentro del segmento temporal indicado.
 	 * Completa la lista de muestras suministradas por parámetro.

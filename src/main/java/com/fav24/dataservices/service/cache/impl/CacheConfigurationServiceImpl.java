@@ -7,6 +7,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import com.fav24.dataservices.domain.cache.EntityCache;
 import com.fav24.dataservices.domain.cache.EntityCacheManager;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
+import com.fav24.dataservices.service.system.SystemService;
 import com.fav24.dataservices.util.FileUtils;
 import com.fav24.dataservices.xml.cache.CacheDOM;
 
@@ -27,12 +29,17 @@ import com.fav24.dataservices.xml.cache.CacheDOM;
 @Component
 public class CacheConfigurationServiceImpl implements CacheConfigurationService {
 
+	@Autowired
+	protected SystemService systemService;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public synchronized void dropSystemCache() {
+
+		systemService.updateCacheMeters(null);
+
 		Cache.destroy();
 	}
 
@@ -73,6 +80,8 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 				for(Cache loadedCache : loadedCaches) {
 					Cache.mergeCurrentCacheConfiguration(loadedCache);
 				}
+				
+				systemService.updateCacheMeters(Cache.getSystemCache().getEntityCacheManagers());
 			}
 		}
 		else {
@@ -92,6 +101,8 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 
 		Cache.mergeCurrentCacheConfiguration(cache);
 
+		systemService.updateCacheMeters(Cache.getSystemCache().getEntityCacheManagers());
+		
 		return cache;
 	}
 

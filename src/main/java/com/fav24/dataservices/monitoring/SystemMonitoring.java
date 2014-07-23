@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.sf.ehcache.CacheManager;
+
+import com.fav24.dataservices.domain.cache.EntityCacheManager;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.meter.CacheMeter;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.MemoryMeter;
 import com.fav24.dataservices.monitoring.meter.StorageMeter;
@@ -19,71 +23,32 @@ import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 /**
  * Clase que gestiona y almacena la información de la actividad del sistema. 
  */
-public class SystemMonitoring {
+public class SystemMonitoring extends Timer {
 
 	public static final long SECOND_CADENCE = 1000L;
 	public static final long MINUTE_CADENCE = 60 * SECOND_CADENCE;
 
 	public static final long MONITORING_TIME_WINDOW = 24 * 60 * 60 * 1000; // Se guardará hasta 24 horas de información.
 
-
-
 	private MemoryMeter memoryMeter;
 	private CpuMeter cpuMeter;
+	private AbstractList<CacheMeter> cacheMeters;
 	private AbstractList<StorageMeter> storageMeters;
 	private WorkloadMeter workloadMeter;
 
-	private Timer secondResolutionTimer;
-	private Timer tenSecondsResolutionTimer;
+	private int counter;
 
 
 	public SystemMonitoring() {
 
+		super("System Monitor");
+
 		memoryMeter = new MemoryMeter();
 		cpuMeter = new CpuMeter();
 		workloadMeter = new WorkloadMeter();
-
-		secondResolutionTimer = new Timer("System Second Monitor");
-
-		secondResolutionTimer.schedule(new TimerTask() {
-
-			public void run() {
-
-				long threadId = Thread.currentThread().getId();
-				
-				cpuMeter.excludeThread(threadId);
-
-				// Memory information.
-				try {
-					SamplesRegister.registerSample(memoryMeter, new MonitorSample(memoryMeter.getSystemMemoryStatus()));
-				} catch (ServerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// CPU information.
-				try {
-					SamplesRegister.registerSample(cpuMeter, new MonitorSample(cpuMeter.getSystemCpuActivity()));
-				} catch (ServerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// Workload information.
-				try {
-					SamplesRegister.registerSample(workloadMeter, new MonitorSample(workloadMeter.getSystemWorkload()));
-				} catch (ServerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				cpuMeter.includeThread(threadId);
-			}
-		}, 0L, SECOND_CADENCE);
+		cacheMeters = new ArrayList<CacheMeter>();
 
 		storageMeters = new ArrayList<StorageMeter>();
-		tenSecondsResolutionTimer = new Timer("System Minute Monitor");
-
 		for (Path root : FileSystems.getDefault().getRootDirectories())
 		{
 			try	{
@@ -93,28 +58,70 @@ public class SystemMonitoring {
 			}
 		}
 
-		tenSecondsResolutionTimer.schedule(new TimerTask() {
+		counter = 0;
+
+		schedule(new TimerTask() {
 
 			public void run() {
-				
-				long threadId = Thread.currentThread().getId();
-				
-				cpuMeter.excludeThread(threadId);
-				
-				// Storage information.
-				for(StorageMeter storageMeter : storageMeters) {
 
-					try {
-						SamplesRegister.registerSample(storageMeter, new MonitorSample(storageMeter.getSystemStorageStatus()));
-					} catch (ServerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				long threadId = Thread.currentThread().getId();
+
+				cpuMeter.excludeThread(threadId);
+
+				// Memory information.
+				try {
+					SamplesRegister.registerSample(memoryMeter, new MonitorSample(memoryMeter.getSystemMemoryStatus()));
+				} catch (ServerException e) {
+					e.printStackTrace();
+				}
+
+				// CPU information.
+				try {
+					SamplesRegister.registerSample(cpuMeter, new MonitorSample(cpuMeter.getSystemCpuActivity()));
+				} catch (ServerException e) {
+					e.printStackTrace();
+				}
+
+				// Workload information.
+				try {
+					SamplesRegister.registerSample(workloadMeter, new MonitorSample(workloadMeter.getSystemWorkload()));
+				} catch (ServerException e) {
+					e.printStackTrace();
+				}
+
+				// Caché information.
+				synchronized (cacheMeters) {
+					for(CacheMeter cacheMeter : cacheMeters) {
+
+						try {
+							SamplesRegister.registerSample(cacheMeter, new MonitorSample(cacheMeter.getCacheStatus()));
+						} catch (ServerException e) {
+							e.printStackTrace();
+						}
 					}
 				}
-				
+
+				// Ejecuciones cada 10 segundos.
+				if (counter % 10 == 0) {
+					// Storage information.
+					for(StorageMeter storageMeter : storageMeters) {
+
+						try {
+							SamplesRegister.registerSample(storageMeter, new MonitorSample(storageMeter.getSystemStorageStatus()));
+						} catch (ServerException e) {
+							e.printStackTrace();
+						}
+					}
+
+					counter = 1;
+				}
+				else {
+					counter ++;
+				}
+
 				cpuMeter.includeThread(threadId);
 			}
-		}, 0L, SECOND_CADENCE * 10);
+		}, 0L, SECOND_CADENCE);
 	}
 
 	/**
@@ -219,12 +226,112 @@ public class SystemMonitoring {
 		return SamplesRegister.getSampleTimeSegment(workloadMeter, offset, timeRange, period);
 	}
 
+
 	/**
-	 * Retorna la información asociada al elemento de almacenamiento indicado, en este mismos instante.
+	 * Retorna el medidor de trabajo realizado por el sistema.
+	 * 
+	 * @param copyTo Lista en donde que copiarían los medidores de caché actuales. (Puede ser null).
+	 * 
+	 * @return el medidor de trabajo realizado por el sistema.
+	 */
+	public AbstractList<CacheMeter> getCacheMeters(AbstractList<Meter> copyTo) {
+
+		synchronized (cacheMeters) {
+
+			if (copyTo != null) {
+				copyTo.clear();
+				copyTo.addAll(cacheMeters);
+			}
+		}
+
+		return cacheMeters;
+	}
+
+	/**
+	 * Actualiza los medidores de caché a partir de la lista de gestores de caché suministrada.
+	 * 
+	 * @param entityCacheManagers Lista de gestores de caché.
+	 */
+	public void updateCacheMeters(AbstractList<EntityCacheManager> entityCacheManagers) {
+
+		synchronized (cacheMeters) {
+			cacheMeters.clear();
+		}
+		
+		if (entityCacheManagers != null) {
+			
+			for (EntityCacheManager entityCacheManager : entityCacheManagers) {
+
+				CacheManager cacheManager = entityCacheManager.getCacheManager();
+
+				for (String cacheName : cacheManager.getCacheNames())
+				{
+					synchronized (cacheMeters) {
+
+						cacheMeters.add(new CacheMeter(cacheManager.getCache(cacheName)));
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Retorna la información asociada a la caché indicada, en este mismo instante.
+	 * 
+	 * @param cacheManagerName Nombre del gestor de caché al que pertenece la caché de la que se desea obtener la información.
+	 * @param cacheName Nombre de la caché de la que se desea obtener la información.
+	 * 
+	 * @return la información asociada a la caché indicada, en este mismo instante.
+	 */
+	public MonitorSample getSystemCacheStatus(String cacheManagerName, String cacheName) {
+
+		synchronized (cacheMeters) {
+
+			for (CacheMeter cacheMeter : cacheMeters) {
+
+				if (cacheMeter.getCacheManagerName().equals(cacheManagerName) && cacheMeter.getCacheName().equals(cacheName)) {
+					return SamplesRegister.getLastSample(cacheMeter);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retorna la información asociada a la caché indicada, para el periodo especificado.
+	 * 
+	 * @param cacheManagerName Nombre del gestor de caché al que pertenece la caché de la que se desea obtener la información.
+	 * @param cacheName Nombre de la caché de la que se desea obtener la información.
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
+	 * 
+	 * @return la información asociada a la caché indicada, para el periodo especificado.
+	 * 
+	 * @throws ServerException 
+	 */
+	public AbstractList<MonitorSample> getSystemCacheStatus(String cacheManagerName, String cacheName, Long offset, Long timeRange, Long period) throws ServerException {
+
+		synchronized (cacheMeters) {
+
+			for (CacheMeter cacheMeter : cacheMeters) {
+
+				if (cacheMeter.getCacheManagerName().equals(cacheManagerName) && cacheMeter.getCacheName().equals(cacheName)) {
+					return SamplesRegister.getSampleTimeSegment(cacheMeter, offset, timeRange, period);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retorna la información asociada al elemento de almacenamiento indicado, en este mismo instante.
 	 * 
 	 * @param storeName Nombre del almacén del que se desea obtener la información.
 	 * 
-	 * @return la información asociada al elemento de almacenamiento indicado, en este mismos instante.
+	 * @return la información asociada al elemento de almacenamiento indicado, en este mismo instante.
 	 */
 	public MonitorSample getSystemStorageStatus(String storeName) {
 

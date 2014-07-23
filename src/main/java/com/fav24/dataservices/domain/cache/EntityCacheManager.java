@@ -183,6 +183,7 @@ public class EntityCacheManager extends CacheManagerConfiguration implements Com
 		for (EntityCache entityCacheConfiguration : entitiesCacheConfigurations) {
 
 			net.sf.ehcache.Cache entityCache = new net.sf.ehcache.Cache(entityCacheConfiguration.constructCacheConfiguration(entityCacheConfiguration.getAlias()));
+			
 			cacheManager.addCache(entityCache);
 		}
 	}

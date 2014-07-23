@@ -5,8 +5,11 @@ import java.util.AbstractList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fav24.dataservices.domain.cache.EntityCacheManager;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.Meter;
 import com.fav24.dataservices.monitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.meter.CacheMeter;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
 
@@ -103,6 +106,47 @@ public interface SystemService {
 	 */
 	public AbstractList<MonitorSample> getSystemWorkload(Long offset, Long timeRange, Long period) throws ServerException;
 	
+	/**
+	 * Retorna el medidor de trabajo realizado por el sistema.
+	 * 
+	 * @param copyTo Lista en donde que copiarían los medidores de caché actuales. (Puede ser null).
+	 * 
+	 * @return el medidor de trabajo realizado por el sistema.
+	 */
+	public AbstractList<CacheMeter> getCacheMeters(AbstractList<Meter> copyTo);
+
+	/**
+	 * Actualiza los medidores de caché a partir de la lista de gestores de caché suministrada.
+	 * 
+	 * @param entityCacheManagers Lista de gestores de caché.
+	 */
+	public void updateCacheMeters(AbstractList<EntityCacheManager> entityCacheManagers);
+
+	/**
+	 * Retorna la información asociada a la caché indicada, en este mismo instante.
+	 * 
+	 * @param cacheManagerName Nombre del gestor de caché al que pertenece la caché de la que se desea obtener la información.
+	 * @param cacheName Nombre de la caché de la que se desea obtener la información.
+	 * 
+	 * @return la información asociada a la caché indicada, en este mismo instante.
+	 */
+	public MonitorSample getSystemCacheStatus(String cacheManagerName, String cacheName);
+
+	/**
+	 * Retorna la información asociada a la caché indicada, para el periodo especificado.
+	 * 
+	 * @param cacheManagerName Nombre del gestor de caché al que pertenece la caché de la que se desea obtener la información.
+	 * @param cacheName Nombre de la caché de la que se desea obtener la información.
+	 * @param offset Inicio del corte temporal a obtener en segundos desde epoch.
+	 * @param timeRange Rango temporal que se desea obtener en segundos.
+	 * @param period Granularidad de la información en segundos.
+	 * 
+	 * @return la información asociada a la caché indicada, para el periodo especificado.
+	 * 
+	 * @throws ServerException 
+	 */
+	public AbstractList<MonitorSample> getSystemCacheStatus(String cacheManagerName, String cacheName, Long offset, Long timeRange, Long period) throws ServerException;
+
 	/**
 	 * Retorna la información asociada al elemento de almacenamiento en este mismo instante.
 	 * 
