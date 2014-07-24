@@ -71,22 +71,22 @@ public class SystemMonitoring extends Timer {
 				// Memory information.
 				try {
 					SamplesRegister.registerSample(memoryMeter, new MonitorSample(memoryMeter.getSystemMemoryStatus()));
-				} catch (ServerException e) {
-					e.printStackTrace();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 
 				// CPU information.
 				try {
 					SamplesRegister.registerSample(cpuMeter, new MonitorSample(cpuMeter.getSystemCpuActivity()));
-				} catch (ServerException e) {
-					e.printStackTrace();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 
 				// Workload information.
 				try {
 					SamplesRegister.registerSample(workloadMeter, new MonitorSample(workloadMeter.getSystemWorkload()));
-				} catch (ServerException e) {
-					e.printStackTrace();
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 
 				// Caché information.
@@ -95,8 +95,8 @@ public class SystemMonitoring extends Timer {
 
 						try {
 							SamplesRegister.registerSample(cacheMeter, new MonitorSample(cacheMeter.getCacheStatus()));
-						} catch (ServerException e) {
-							e.printStackTrace();
+						} catch (Throwable t) {
+							t.printStackTrace();
 						}
 					}
 				}
@@ -108,8 +108,8 @@ public class SystemMonitoring extends Timer {
 
 						try {
 							SamplesRegister.registerSample(storageMeter, new MonitorSample(storageMeter.getSystemStorageStatus()));
-						} catch (ServerException e) {
-							e.printStackTrace();
+						} catch (Throwable t) {
+							t.printStackTrace();
 						}
 					}
 
