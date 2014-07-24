@@ -167,7 +167,7 @@ public class EntityFilter {
 			filterNamesString.append(filterIterator.next().getName());
 
 			while(filterIterator.hasNext()) {
-				filterNamesString.append(',');
+				filterNamesString.append(", ");
 				filterNamesString.append(filterIterator.next().getName());
 			}
 		}

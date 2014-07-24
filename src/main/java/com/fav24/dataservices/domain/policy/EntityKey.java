@@ -168,7 +168,7 @@ public class EntityKey {
 			keyNamesString.append(keyIterator.next().getName());
 
 			while(keyIterator.hasNext()) {
-				keyNamesString.append(',');
+				keyNamesString.append(", ");
 				keyNamesString.append(keyIterator.next().getName());
 			}
 		}

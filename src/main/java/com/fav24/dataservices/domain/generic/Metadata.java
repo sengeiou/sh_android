@@ -3,6 +3,8 @@ package com.fav24.dataservices.domain.generic;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fav24.dataservices.domain.cache.Organizable;
 import com.fav24.dataservices.domain.policy.EntityAccessPolicy.OperationType;
@@ -39,7 +41,7 @@ public class Metadata implements Organizable, Serializable {
 		this.items = null;
 		this.key = null;
 		this.filter = null;
-		
+
 		this.incommingItemsAlwaysWins = false;
 	}
 
@@ -63,7 +65,7 @@ public class Metadata implements Organizable, Serializable {
 		this.offset = offset;
 		this.items = items;
 		this.key = key;
-		
+
 		this.incommingItemsAlwaysWins = false;
 	}
 
@@ -87,7 +89,7 @@ public class Metadata implements Organizable, Serializable {
 		this.offset = offset;
 		this.items = items;
 		this.setFilter(filter);
-		
+
 		this.incommingItemsAlwaysWins = false;
 	}
 
@@ -209,6 +211,33 @@ public class Metadata implements Organizable, Serializable {
 	}
 
 	/**
+	 * Retorna una cadena de texto, con el conjunto de atributos implicados en esta clave.
+	 * 
+	 * @return una cadena de texto, con el conjunto de atributos implicados en esta clave.
+	 */
+	public String getKeyAttributeString() {
+
+		StringBuilder result = null;
+
+		Set<String> keyAttributes = new HashSet<String>();
+
+		for (KeyItem keyItem : key) {
+
+			if (keyAttributes.add(keyItem.getName())) {
+
+				if (result == null) {
+					result = new StringBuilder(keyItem.getName());
+				}
+				else {
+					result.append(", ").append(keyItem.getName());
+				}
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
 	 * Asigna la lista de atributos y valores, que conforma la clave del elemento a localizar para la operación.
 	 * 
 	 * @param key La lista a asignar.
@@ -294,9 +323,9 @@ public class Metadata implements Organizable, Serializable {
 			contentKey.append(items);
 		}
 		contentKey.append(']');
-		
+
 		contentKey.append(ELEMENT_SEPARATOR);
-		
+
 		// Claves.
 		contentKey.append("k[");
 		if (key != null && key.size() > 0) {

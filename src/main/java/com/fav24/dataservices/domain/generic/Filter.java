@@ -3,6 +3,8 @@ package com.fav24.dataservices.domain.generic;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fav24.dataservices.domain.cache.Organizable;
 
@@ -342,6 +344,53 @@ public class Filter implements Organizable, Serializable {
 
 		return clone;
 	}
+
+	/**
+	 * Retorna un conjunto con los attributos que se usan en este filtro.
+	 * 
+	 * @return un conjunto con los attributos que se usan en este filtro.
+	 */
+	public Set<String> getFilterAttributeSet(Set<String> filerAttributes) {
+
+		if (filerAttributes == null) {
+			filerAttributes = new HashSet<String>();
+		}
+
+		for (FilterItem filterItem : filterItems) {
+
+			filerAttributes.add(filterItem.getName());	
+		}
+
+		for (Filter currentFilter : filter) {
+
+			currentFilter.getFilterAttributeSet(filerAttributes);
+		}
+		
+		return filerAttributes;
+	}
+
+	/**
+	 * Retorna una cadena de texto, con el conjunto de atributos implicados en este filtro.
+	 * 
+	 * @return una cadena de texto, con el conjunto de atributos implicados en este filtro.
+	 */
+	public String getFilterAttributeString() {
+		
+		StringBuilder result = null;
+		
+		for (String attribute : getFilterAttributeSet(null)) {
+			
+			if (result == null) {
+				result = new StringBuilder(attribute);
+			}
+			else {
+				result.append(", ").append(attribute);
+			}
+		}
+		
+		return result.toString();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

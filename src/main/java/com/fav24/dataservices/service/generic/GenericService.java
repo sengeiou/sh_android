@@ -29,11 +29,11 @@ public interface GenericService {
 	public static final String ERROR_INVALID_REQUEST_NO_KEY = "G006";
 	public static final String ERROR_INVALID_REQUEST_NO_KEY_MESSAGE = "La entidad <%s> únicamente es accesible mediante clave.";
 	public static final String ERROR_INVALID_REQUEST_KEY = "G007";
-	public static final String ERROR_INVALID_REQUEST_KEY_MESSAGE = "La entidad <%s> no es accesible mediante la clave indicada.";
+	public static final String ERROR_INVALID_REQUEST_KEY_MESSAGE = "La entidad <%s> no es accesible mediante la clave <%s>.";
 	public static final String ERROR_INVALID_REQUEST_NO_FILTER = "G008";
 	public static final String ERROR_INVALID_REQUEST_NO_FILTER_MESSAGE = "La entidad <%s> debe ser accedida mediante uno de los filtros definidos.";
 	public static final String ERROR_INVALID_REQUEST_FILTER = "G009";
-	public static final String ERROR_INVALID_REQUEST_FILTER_MESSAGE = "La entidad <%s> no es accesible mediante el filtro indicado.";
+	public static final String ERROR_INVALID_REQUEST_FILTER_MESSAGE = "La entidad <%s> no es accesible mediante el filtro <%s>.";
 	public static final String ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE = "G010";
 	public static final String ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE_MESSAGE = "Filtro no válido para la entidad <%s>. El atributo <%s> no está definido.";
 	public static final String ERROR_INVALID_REQUEST_KEY_ATTRIBUTE = "G011";

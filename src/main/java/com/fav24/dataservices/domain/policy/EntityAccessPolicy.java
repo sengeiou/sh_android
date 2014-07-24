@@ -426,7 +426,7 @@ public class EntityAccessPolicy implements Comparable<EntityAccessPolicy> {
 					notAllowedAttibutes = new StringBuilder(attributeAlias);
 				}
 				else{
-					notAllowedAttibutes.append(',').append(attributeAlias);
+					notAllowedAttibutes.append(", ").append(attributeAlias);
 				}
 			}
 		}

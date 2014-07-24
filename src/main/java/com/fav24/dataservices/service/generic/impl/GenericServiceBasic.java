@@ -251,7 +251,7 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 					if (!entityAccessPolicy.containsKey(operation.getMetadata().getKey())) {
 
-						throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity()));
+						throw new ServerException(ERROR_INVALID_REQUEST_KEY, String.format(ERROR_INVALID_REQUEST_KEY_MESSAGE, operation.getMetadata().getEntity(), operation.getMetadata().getKeyAttributeString()));
 					}
 				}
 				else {
@@ -262,10 +262,10 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 					}
 
 					if (operation.getMetadata().hasFilter()) {
-
+						
 						if (entityAccessPolicy.getOnlySpecifiedFilters() && !entityAccessPolicy.containsFilter(operation.getMetadata().getFilter())) {
 
-							throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity()));
+							throw new ServerException(ERROR_INVALID_REQUEST_FILTER, String.format(ERROR_INVALID_REQUEST_FILTER_MESSAGE, operation.getMetadata().getEntity(), operation.getMetadata().getFilter().getFilterAttributeString()));
 						}
 					}
 					else if (entityAccessPolicy.getOnlySpecifiedFilters()) {
