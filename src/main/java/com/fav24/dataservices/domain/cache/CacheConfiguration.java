@@ -1,6 +1,8 @@
 package com.fav24.dataservices.domain.cache;
 
 import net.sf.ehcache.config.PersistenceConfiguration;
+import net.sf.ehcache.config.SizeOfPolicyConfiguration;
+import net.sf.ehcache.config.SizeOfPolicyConfiguration.MaxDepthExceededBehavior;
 
 
 /**
@@ -314,6 +316,10 @@ public class CacheConfiguration
 		configuration.setEternal(getExpiry().isEternal());
 		configuration.setTimeToIdleSeconds(getExpiry().getTimeToIdleSeconds());
 		configuration.setTimeToLiveSeconds(getExpiry().getTimeToLiveSeconds());
+
+		SizeOfPolicyConfiguration sizeOfPolicyConfiguration = new SizeOfPolicyConfiguration();
+		sizeOfPolicyConfiguration.maxDepth(100000).maxDepthExceededBehavior(MaxDepthExceededBehavior.CONTINUE);
+		configuration.addSizeOfPolicy(sizeOfPolicyConfiguration);
 
 		PersistenceConfiguration persistenceConfiguration = new PersistenceConfiguration();
 		persistenceConfiguration.setStrategy(getPersistente().isActive() ? "localTempSwap" : "none");
