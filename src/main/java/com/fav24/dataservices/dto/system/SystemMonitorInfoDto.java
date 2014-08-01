@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		getterVisibility = JsonAutoDetect.Visibility.NONE, 
 		isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
 		setterVisibility = JsonAutoDetect.Visibility.NONE)
-public class JqPlotDto implements Serializable {
+public class SystemMonitorInfoDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
 
@@ -31,7 +31,7 @@ public class JqPlotDto implements Serializable {
 	/**
 	 * Constructor por defecto.
 	 */
-	public JqPlotDto() {
+	public SystemMonitorInfoDto() {
 
 		this.offset = null;
 		this.timeRange = null;

@@ -5,19 +5,19 @@
 <link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"></link>
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
-<div id="entityDetails">
+<div id="entityCacheDetails">
 
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
 		<button onClick="sendGetRequest('cache/cacheManagerConfiguration?cacheManager=${cacheManager}');" type="button" class="btn btn-default btn-sm pull-right">
    			<span class="glyphicon glyphicon-th-list"></span>
    		</button>
-		<div class="panel-heading"><h3>${entity}</h3></div>
+		<div class="panel-heading"><h3>${cache}</h3></div>
 		<!-- Lista de entidades -->
 		<div class="panel-body">
 			<c:choose>
-				<c:when test="${empty entity or empty cacheManager}">
-					<p>No ha sido posible localizar la cach&eacute; <strong>${entity}</strong> en el gestor <strong>${cacheManager}</strong>.</p>
+				<c:when test="${empty cache or empty cacheManager}">
+					<p>No ha sido posible localizar la cach&eacute; <strong>${cache}</strong> en el gestor <strong>${cacheManager}</strong>.</p>
 				</c:when>
 				<c:otherwise>
 					<p>Detalle de la configuraci&oacute;n<p/>
@@ -157,7 +157,7 @@
 			},
 		legend: {
 				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['${entity}', '${cacheManager}'],
+	            labels: ['${cache}', '${cacheManager}'],
 				show: true,
 				showLabels: true,
 				showSwatches: false,
@@ -211,7 +211,7 @@
 			},
 		legend: {
 				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['${entity}', '${cacheManager}'],
+	            labels: ['${cache}', '${cacheManager}'],
 				show: true,
 				showLabels: true,
 				showSwatches: false,

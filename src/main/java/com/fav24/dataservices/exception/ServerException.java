@@ -11,7 +11,7 @@ public class ServerException extends Exception {
 
 	private String errorCode;
 	private String message;
-	private String htmlExplanation;
+	private String explanation;
 
 	/**
 	 * Constructor por defecto.
@@ -29,7 +29,7 @@ public class ServerException extends Exception {
 
 		this.setErrorCode(errorCode);
 		this.setMessage(null);
-		this.setHtmlExplanation(null);
+		this.setExplanation(null);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class ServerException extends Exception {
 
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
-		this.setHtmlExplanation(null);
+		this.setExplanation(null);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ServerException extends Exception {
 
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
-		this.setHtmlExplanation(null);
+		this.setExplanation(null);
 		this.setStackTrace(throwable.getStackTrace());
 	}
 
@@ -65,13 +65,13 @@ public class ServerException extends Exception {
 	 * 
 	 * @param errorCode Código de error inicial de la excepción.
 	 * @param message Mensaje del la excepción.
-	 * @param htmlExplanation Una explicación completa de la excepción en formato HTML. 
+	 * @param explanation Una explicación completa de la excepción en formato HTML. 
 	 */
-	public ServerException(String errorCode, String message, String htmlExplanation) {
+	public ServerException(String errorCode, String message, String explanation) {
 
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
-		this.setHtmlExplanation(htmlExplanation);
+		this.setExplanation(explanation);
 	}
 
 	/**
@@ -115,17 +115,17 @@ public class ServerException extends Exception {
 	 * 
 	 * @return una explicación completa de la excepción en formato HTML.
 	 */
-	public String getHtmlExplanation() {
-		return htmlExplanation;
+	public String getExplanation() {
+		return explanation;
 	}
 
 	/**
 	 * Asigna una explicación completa de la excepción en formato HTML.
 	 * 
-	 * @param htmlExplanation Explicación completa de la excepción en formato HTML.
+	 * @param explanation Explicación completa de la excepción en formato HTML.
 	 */
-	public void setHtmlExplanation(String htmlExplanation) {
-		this.htmlExplanation = htmlExplanation;
+	public void setExplanation(String explanation) {
+		this.explanation = explanation;
 	}
 
 	/**

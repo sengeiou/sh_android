@@ -23,8 +23,8 @@ public class BaseDto implements Serializable {
 
 	private static final long serialVersionUID = 6557890098016497204L;
 
-	private static final String STATUS_CODE = "code";
-	private static final String STATUS_MESSAGE = "message";
+	public static final String STATUS_CODE = "code";
+	public static final String STATUS_MESSAGE = "message";
 
 	public static final String ERROR_REQUESTOR_CHECK_FAILED = "R000";
 	public static final String ERROR_REQUESTOR_CHECK_FAILED_MESSAGE = "No se ha indicado información del solicitante.";

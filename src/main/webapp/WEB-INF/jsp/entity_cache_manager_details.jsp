@@ -5,7 +5,6 @@
 
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityDetails">
-
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
 		<button onClick='showAvailableCacheManagers();' type='button' class='btn btn-default btn-sm pull-right'>
@@ -41,7 +40,7 @@
 						</div>
 					</div>
 					
-					<!-- Entidades de caché -->
+					<!-- Entidades de  -->
 					<c:choose>
 						<c:when test="${empty cacheManagerConfiguration.getEntitiesCacheConfigurations()}">
 							<div class="panel-body">
@@ -53,7 +52,16 @@
 								<p>Conjunto de cach&eacute;s de entidades.</p>
 							</div>
 							<table class="table">
-								<thead><tr><th></th><th>Memoria</th><th>%</th><th>Disco</th><th>%</th></tr></thead>
+								<thead>
+									<tr>
+										<th class="text-left"></th>
+										<th class="text-right">Memoria</th>
+										<th class="text-right">%</th>
+										<th class="text-right">Disco</th>
+										<th class="text-right">%</th>
+										<th class="text-center">Monitor/Reset</th>
+									</tr>
+								</thead>
 								<tbody>
 									<c:forEach var="cacheConfiguration" items="${cacheManagerConfiguration.getEntitiesCacheConfigurations()}">
 										<tr>
@@ -65,11 +73,19 @@
 											<c:set var="maxBytesLocalDisk" value="${maxBytesLocalDisk * 100}"/>
 											<fmt:formatNumber var="maxBytesLocalDisk" value="${maxBytesLocalDisk}"  minFractionDigits="2" maxFractionDigits="2" />
 
-											<td><a href="#" onclick="sendGetRequest('cache/cacheConfiguration?cacheManager=${cacheManagerConfiguration.getName()}&entity=${cacheConfiguration.getAlias()}');">${cacheConfiguration.getAlias()}</a><br/></td>
-											<td>${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalHeap())}</td>
-											<td>${maxBytesLocalHeap}</td>
-											<td>${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalDisk())}</td>
-											<td>${maxBytesLocalDisk}</td>
+											<td class="text-left"><a href="#" onclick="sendGetRequest('cache/cacheConfiguration?cacheManager=${cacheManagerConfiguration.getName()}&cache=${cacheConfiguration.getAlias()}');">${cacheConfiguration.getAlias()}</a><br/></td>
+											<td class="text-right">${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalHeap())}</td>
+											<td class="text-right">${maxBytesLocalHeap}</td>
+											<td class="text-right">${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalDisk())}</td>
+											<td class="text-right">${maxBytesLocalDisk}</td>
+											<td class="text-center">
+												<button onClick='showAvailableEntities();' type='button' class='btn btn-default btn-sm'>
+										   			<span class='glyphicon glyphicon-stats'></span>
+										   		</button>
+												<button onClick='resetCache("${cacheManagerConfiguration.getName()}", "${cacheConfiguration.getAlias()}");' type='button' class='btn btn-default btn-sm'>
+										   			<span class='glyphicon glyphicon-repeat'></span>
+										   		</button>
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>

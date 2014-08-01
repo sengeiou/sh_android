@@ -11,7 +11,7 @@
 			<ul>
 				<li><strong>errorCode:</strong> <c:out value="${errorCode}"/></li>
 				<li><strong>message:</strong> <c:out value="${message}"/></li>
-				<li><strong>explanation:</strong> ${htmlExplanation}</li>
+				<li><strong>explanation:</strong> ${explanation}</li>
 			</ul>
 		</p>
 	</div>

@@ -32,8 +32,9 @@
          on session expiration as well as webapp lifecycle) -->
     <!--
     <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
-    <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/goles-data-services-home" override="false"/>
-    -->
+    <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/goles-data-services-home-wphone" override="false"/>
     <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/fcb-data-services-home" override="false"/>
+    -->
+    <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/goles-data-services-home" override="false"/>
 </Context>
 

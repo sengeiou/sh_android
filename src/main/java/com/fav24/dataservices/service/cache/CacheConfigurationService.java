@@ -29,6 +29,16 @@ public interface CacheConfigurationService extends CacheService {
 	public void dropSystemCache();
 
 	/**
+	 * Inicializa la configuración de caché de una entidad.
+	 * 
+	 * @param cacheManager Gestor de caché que contiene la caché de la entidad indicada.
+	 * @param entity Entidad de la que se mostrará la configuración de caché.
+	 * 
+	 * @throws ServerException 
+	 */
+	public void resetCache(String cacheManager, String entity) throws ServerException;
+
+	/**
 	 * Carga las configuraciones de caché por defecto. 
 	 * 
 	 * @throws ServerException
@@ -45,14 +55,14 @@ public interface CacheConfigurationService extends CacheService {
 	 * @throws ServerException 
 	 */
 	public Cache loadCacheConfiguration(InputStream cacheConfigurationStream) throws ServerException;
-	
+
 	/**
 	 * Retorna la lista de gestores de caché de entidades configurados.
 	 * 
 	 * @return la lista de gestores de caché de entidades configurados.
 	 */
 	public AbstractList<EntityCacheManager> getCacheManagers();
-	
+
 	/**
 	 * Retorna el detalle de la configuración del gestor de caché de entidades indicado.
 	 * 

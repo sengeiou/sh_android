@@ -147,7 +147,7 @@ $(document).ready(function() {
 	$("#uploadButton").on("click", function() {
 		var dataToServer = new FormData(document.getElementById("uploadForm"));
 		
-		sendPostRequest(dataToServer, "hook/hookUpload.save");
+		sendPostFormRequest(dataToServer, "hook/hookUpload.save");
 
 		return false;
 	});

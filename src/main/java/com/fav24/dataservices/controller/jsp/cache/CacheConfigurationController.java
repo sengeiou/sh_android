@@ -6,18 +6,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.controller.jsp.BaseJspController;
+import com.fav24.dataservices.dto.ResultDto;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.service.cache.CacheConfigurationService;
@@ -86,17 +90,17 @@ public class CacheConfigurationController extends BaseJspController {
 	 * Muestra la configuración de caché de una entidad.
 	 * 
 	 * @param cacheManager Gestor de caché que contiene la caché de la entidad indicada.
-	 * @param entity Entidad de la que se mostrará la configuración de caché.
+	 * @param cache Caché de entidad de la que se mostrará la configuración de caché.
 	 * 
 	 * @return el modelo y la vista, con la configuración de caché de una entidad.
 	 */
 	@RequestMapping(value = "/cacheConfiguration", method = { RequestMethod.GET })
-	public ModelAndView cacheConfiguration(@ModelAttribute(value="cacheManager") String cacheManager, @ModelAttribute(value="entity") String entity) {
+	public ModelAndView cacheConfiguration(@ModelAttribute(value="cacheManager") String cacheManager, @ModelAttribute(value="cache") String cache) {
 
 		ModelAndView model = new ModelAndView("entity_cache_details");
 
 		model.addObject("cacheManagerConfiguration", cacheConfigurationService.getCacheManagerConfiguration(cacheManager));
-		model.addObject("cacheConfiguration", cacheConfigurationService.getCacheConfiguration(cacheManager, entity));
+		model.addObject("cacheConfiguration", cacheConfigurationService.getCacheConfiguration(cacheManager, cache));
 
 		return model;
 	}
@@ -212,5 +216,39 @@ public class CacheConfigurationController extends BaseJspController {
 		map.addAttribute("message", "Todas las cachés asociadas a entidades, han sido eliminadas.");
 
 		return "error_pages/server_success";
+	}
+
+	/**
+	 * Inicializa la configuración de caché de una entidad.
+	 * 
+	 * @param cacheManager Gestor de caché que contiene la caché de la entidad indicada.
+	 * @param cache Caché de entidad a inicializar.
+	 * 
+	 * @return el resultado de la ejecución de la operación.
+	 */
+	@RequestMapping(value = "/resetCache", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody ResultDto resetCache(@RequestBody Map<String, String> parameters) {
+		
+		ResultDto result = new ResultDto();
+		String cacheManager = parameters.get("cacheManager");
+		String cache = parameters.get("cache");
+		
+		try {
+			cacheConfigurationService.resetCache(cacheManager, cache);
+			
+			result.setResult(ResultDto.RESULT_OK);
+			result.setMessage(String.format("La caché <%s> del gestor de caché <%s>, ha sido inicializada correctamente.", cache, cacheManager));
+		} 
+		catch (ServerException e) {
+
+			e.setExplanation("La operación no se ha aplicado.");
+
+			result.setResult(ResultDto.RESULT_ERROR);
+			result.setResultCode(e.getErrorCode());
+			result.setMessage(String.format("No ha sido posible inicializar la caché <%s> del gestor de caché <%s>.", cache, cacheManager));
+			result.setExplanation(e.getMessage());
+		}
+
+		return result;
 	}
 }

@@ -147,7 +147,7 @@ $(document).ready(function() {
 	$("#uploadButton").on("click", function() {
 		var dataToServer = new FormData(document.getElementById("uploadForm"));
 		
-		sendPostRequest(dataToServer, "cache/cacheConfigurationUpload.save");
+		sendPostFormRequest(dataToServer, "cache/cacheConfigurationUpload.save");
 
 		return false;
 	});

@@ -47,7 +47,28 @@ public class CacheConfigurationServiceImpl implements CacheConfigurationService 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void loadDefaultCacheConfiguration() throws ServerException {
+	public synchronized void resetCache(String cacheManager, String cache) throws ServerException {
+
+		EntityCacheManager entityCacheManager = getCacheManagerConfiguration(cacheManager);
+		if (entityCacheManager == null) {
+			throw new ServerException(ERROR_CACHE_MANAGER_NOT_FOUND, 
+					String.format(ERROR_CACHE_MANAGER_NOT_FOUND_MESSAGE, cacheManager));
+		}
+		
+		net.sf.ehcache.Cache cacheInstance = entityCacheManager.getCache(cache);
+		if (cacheInstance == null) {
+			throw new ServerException(ERROR_CACHE_NOT_FOUND, 
+					String.format(ERROR_CACHE_NOT_FOUND_MESSAGE, cacheManager, cache));
+		}
+		
+		cacheInstance.removeAll();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized void loadDefaultCacheConfiguration() throws ServerException {
 
 		String applicationHome = DataServicesContext.getCurrentDataServicesContext().getApplicationHome();
 

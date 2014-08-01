@@ -137,17 +137,17 @@ function addFile() {
 // Ejecuciones al final de la carga del documento.
 $(document).ready(function() {
 
-	//Se AÃ±ade el primer fichero a cargar.
+	//Se añade el primer fichero a cargar.
 	addFile();
 
-	//Se asocia el click del botÃ³n de AÃ±adir fichero, a la funciÃ³n de AÃ±adir.
+	//Se asocia el click del botón de añadir fichero, a la función de añadir.
     $("#addFile").click(function() {addFile();});
     
-	//Se asocia el click del botÃ³n de enviar datos del formulario.
+	//Se asocia el click del botón de enviar datos del formulario.
 	$("#uploadButton").on("click", function() {
 		var dataToServer = new FormData(document.getElementById("uploadForm"));
 		
-		sendPostRequest(dataToServer, "accesspolicy/accessPolicyUpload.save");
+		sendPostFormRequest(dataToServer, "accesspolicy/accessPolicyUpload.save");
 
 		return false;
 	});

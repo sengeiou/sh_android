@@ -1,101 +1,3 @@
-// Gestiona la respuesta del servidor, y la muestra en el contenedor principal.
-function onReadystatechangeHandler(event) {
-
-	var contentObject = $("#mainContent");
-	var status = null;
-
-	try {
-		status = event.target.status;
-	}
-	catch(e) {
-		return;
-	}
-
-	if (status == '200' && event.target.responseText) {
-
-		if (App.destructionFunction) {
-			
-			App.destructionFunction();
-			
-			App.destructionFunction = null;
-		}
-		
-		contentObject.html(event.target.responseText);
-	}
-}
-
-// Gestiona el inicio de la carga de datos.
-function onLoadStartHandler(event) {
-
-	$('#mainProgressBar-bar').css('width', '0%');
-}
-
-// Gestiona el fin de la carga de datos.
-function onLoadEndHandler(event) {
-
-	$('#mainProgressBar').hide();
-}
-
-// Gestiona el progreso.
-function onProgressHandler(event) {
-
-	if (event.lengthComputable) {
-
-		var percent = (event.loaded/event.total)*100;
-		$('#mainProgressBar-bar').css('width', percent + '%');
-
-		if (event.loaded == event.total) {
-			$('#mainProgressBar').hide();	
-		}
-		else {
-			$('#mainProgressBar').show();
-		}
-	}
-	else {
-		$('#mainProgressBar').show();
-	}
-}
-
-// Solicita el recurso indicado, pasando los parámetros en la misma URL del recurso. 
-function sendGetRequest(resource) {
-
-	onLoadStartHandler(null);
-
-	var xhr = new XMLHttpRequest();
-
-	// Asignación de las funciones asociadas a cada envento.
-	xhr.onprogress = onProgressHandler;
-	xhr.onloadend = onLoadEndHandler;
-	xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
-
-	// Preparación de la request.
-	xhr.open('GET', App.pagesURL + '/' + resource, false);
-
-	// Envío.
-	xhr.send();
-}
-
-// Envía los datos de formulario indicados, al recurso indicado. 
-function sendPostRequest(formData, resource) {
-
-	onLoadStartHandler(null);
-
-	var xhr = new XMLHttpRequest();
-
-	// Asignación de las funciones asociadas a cada envento.
-	xhr.upload.addEventListener('loadstart', onLoadStartHandler, false);
-	xhr.upload.addEventListener('progress', onProgressHandler, false);
-	xhr.upload.addEventListener('load', onLoadEndHandler, false);
-	xhr.onprogress = onProgressHandler;
-	xhr.addEventListener('readystatechange', onReadystatechangeHandler,	false);
-
-	// Preparación de la request.
-	xhr.open('POST', App.pagesURL + '/' + resource, false);
-
-	// Envío.
-	xhr.send(formData);
-}
-
 // ====================================
 // operaciones de los menús.
 // ====================================
@@ -155,10 +57,27 @@ function loadDefaultCacheConfiguration() {
 			function(){ sendGetRequest('cache/loadDefault'); });
 }
 
+/**
+ * Elimina por completo la caché del sistema, provocando que todas las peticiones entrantes se resuelvan contra el subsistema.
+ */
 function dropSystemCache() {
 	modalAcceptanceShow('&iquest;Desea eliminar por completo la cach&eacute; del sistema?', 
 			'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; la <strong>destrucci&oacute;n total</strong> de la configuraci&oacute;n de la cach&eacute, as&iacute; como las cach&eacutes activas.',
 			function(){ sendGetRequest('cache/dropSystemCache'); });
+}
+
+/**
+ * Función que inicializa la caché indicada.
+ * 
+ * @param cacheManager Alias del manager que contiene la caché a incializar.
+ * @param cache Alias de la caché a inicializar.
+ */
+function resetCache(cacheManager, cache) {
+	modalAcceptanceShow('&iquest;Desea reiniciar la cach&eacute; ' + cache + ' del gestor de caché ' + cacheManager + '?',
+		'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>vaciado total</strong> de la cach&eacute, produciendo un posible pico de accesos al subsistema.',
+		function() {
+			sendPostRequest({"cacheManager":cacheManager, "cache":cache}, 'cache/resetCache', true); 
+		});
 }
 
 function showAvailableHooks() {

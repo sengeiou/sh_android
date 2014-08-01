@@ -23,19 +23,23 @@
     App.Scripts = {
         /* Primer bloque. */
         core: [
-            '<c:url value="/resources/js/jquery.min.js"/>'
+            '<c:url value="/resources/js/jquery.min.js"/>',
+            '<c:url value="/resources/js/utils.js"/>'
     	],
         /* Segundo bloque. */
         main: [
             '<c:url value="/resources/js/bootstrap.min.js"/>',
 			'<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>',
 			'<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>',
+			'<c:url value="/resources/js/requests.js"/>',
             '<c:url value="/resources/js/main.js"/>'
         ],
         /* Tercer bloque. */
         plugins: [
                   
 			// system_monitor.jsp dependency.
+			'<c:url value="/resources/js/chart/Chart.min.js"/>',
+			
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.pieRenderer.min.js"/>',

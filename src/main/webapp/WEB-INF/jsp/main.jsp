@@ -8,14 +8,13 @@
 <html>
 <head>
 	<%@include file="includes/js-loader.jsp"%>
-	<%@include file="includes/modal_acceptance.jsp"%>
 	
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<meta name="application-name" content="DataServices"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
 	<meta name="msapplication-TileColor" content="#da532c"/>
 	<meta name="msapplication-TileImage" content="<c:url value="/resources/img/favicons/mstile-144x144.png"/>"/>
 	
@@ -43,7 +42,10 @@
 	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.min.css"/>"/>
 	<!-- Optional theme -->
 	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-theme.min.css"/>"/>
-	
+
+	<!-- Latest compiled and minified CSS -->
+	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/general.css"/>"/>
+
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -52,6 +54,8 @@
 </head>
 
 <body role="document">
+	<%@include file="includes/modal_acceptance.jsp"%>
+	
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -85,7 +89,6 @@
 					</li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cach&eacute; <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#" onclick="">Estado de la cach&eacute;</a></li>
 							<li><a href="#" onclick="showAvailableCacheManagers();">Configuraci&oacute;n de la cach&eacute;</a></li>
 							<li class="divider"></li>
 							<li><a href="#" onclick="uploadCacheConfigutarions();">Carga de configuraciones de cach&eacute;</a></li>
@@ -108,19 +111,17 @@
 			<!--/.nav-collapse -->
 		</div>
 		<!-- Barra del progreso. -->
-		<div id="mainProgressBar" class="progress progress-striped active"
-			style="height: 5px;">
-			<div id="mainProgressBar-bar" class="progress-bar" role="progressbar"
-				aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-				style="width: 0%">
+		<div id="mainProgressBar" class="progress progress-striped active" style="height: 5px; width: 100%;">
+			<div id="mainProgressBar-bar" class="progress-bar" style="width: 100%;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
 				<span class="sr-only"></span>
 			</div>
 		</div>
 	</div>
+	<!-- Ubicación de las alertas. -->
+	<div class="navbar-fixed-top alterContainer" data-alert-count="0" id="alertContainer"></div>
 
 	<!-- Contenedor principal. -->
-	<div id="mainContent" class="container" style="padding-top: 70px;">
-	</div>
+	<div id="mainContent" class="container" style="padding-top: 70px;"></div>
 
 	<!-- Bootstrap core JavaScript
 	    ================================================== -->
