@@ -2,6 +2,7 @@ package com.fav24.dataservices.controller.rest.system;
 
 
 import java.util.AbstractList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.system.SystemMonitorInfoDto;
 import com.fav24.dataservices.exception.ServerException;
 import com.fav24.dataservices.monitoring.MonitorSample;
+import com.fav24.dataservices.monitoring.meter.CacheMeter;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
 import com.fav24.dataservices.monitoring.meter.MemoryMeter;
 import com.fav24.dataservices.monitoring.meter.WorkloadMeter;
@@ -38,6 +40,7 @@ public class SystemMonitorController extends BaseRestController {
 	public static final String MEMORY_MONITOR = "MemoryMonitor";
 	public static final String CPU_MONITOR = "CPUMonitor";
 	public static final String WORKLOAD_MONITOR = "WorkloadMonitor";
+	public static final String CACHE_MONITOR = "CacheMonitor";
 	public static final String STORAGE_MONITOR = "StorageMonitor";
 
 	private SystemService systemService;
@@ -76,20 +79,35 @@ public class SystemMonitorController extends BaseRestController {
 	/**
 	 * Procesa una petición de información del estado de la memoria del sistema.
 	 * 
-	 * @param systemMonitorInfo Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
+	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
 	 * 
 	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/memory", method = { RequestMethod.POST })
-	public @ResponseBody SystemMonitorInfoDto getMemory(@RequestBody final SystemMonitorInfoDto systemMonitorInfo) {
+	public @ResponseBody SystemMonitorInfoDto getMemory(@RequestBody final Map<String, Object> parameters) {
 
 		long threadId = Thread.currentThread().getId();
 
 		cpuMeter.excludeThread(threadId);
 
+		Number offset = (Number) parameters.get("offset");
+		Number period = (Number) parameters.get("period");
+		Number timeRange = (Number) parameters.get("timeRange");
+
+		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
+
 		systemMonitorInfo.setName(MEMORY_MONITOR);
+		if (offset != null) {
+			systemMonitorInfo.setOffset(offset.longValue());
+		}
+		if (period != null) {
+			systemMonitorInfo.setPeriod(period.longValue());
+		}
+		if (timeRange != null) {
+			systemMonitorInfo.setTimeRange(timeRange.longValue());
+		}
 
 		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
 
@@ -167,20 +185,35 @@ public class SystemMonitorController extends BaseRestController {
 	/**
 	 * Procesa una petición de información de la actividad de la CPU del sistema.
 	 * 
-	 * @param systemMonitorInfo Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
+	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
 	 * 
 	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/cpu", method = { RequestMethod.POST })
-	public @ResponseBody SystemMonitorInfoDto getCPU(@RequestBody final SystemMonitorInfoDto systemMonitorInfo) {
+	public @ResponseBody SystemMonitorInfoDto getCPU(@RequestBody final Map<String, Object> parameters) {
 
 		long threadId = Thread.currentThread().getId();
 
 		cpuMeter.excludeThread(threadId);
 
+		Number offset = (Number) parameters.get("offset");
+		Number period = (Number) parameters.get("period");
+		Number timeRange = (Number) parameters.get("timeRange");
+
+		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
+
 		systemMonitorInfo.setName(CPU_MONITOR);
+		if (offset != null) {
+			systemMonitorInfo.setOffset(offset.longValue());
+		}
+		if (period != null) {
+			systemMonitorInfo.setPeriod(period.longValue());
+		}
+		if (timeRange != null) {
+			systemMonitorInfo.setTimeRange(timeRange.longValue());
+		}
 
 		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
 
@@ -265,20 +298,35 @@ public class SystemMonitorController extends BaseRestController {
 	/**
 	 * Procesa una petición de información de la actividad de la CPU del sistema.
 	 * 
-	 * @param systemMonitorInfo Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
+	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
 	 * 
 	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/workload", method = { RequestMethod.POST })
-	public @ResponseBody SystemMonitorInfoDto getWorkload(@RequestBody final SystemMonitorInfoDto systemMonitorInfo) {
+	public @ResponseBody SystemMonitorInfoDto getWorkload(@RequestBody final Map<String, Object> parameters) {
 
 		long threadId = Thread.currentThread().getId();
 
 		cpuMeter.excludeThread(threadId);
 
+		Number offset = (Number) parameters.get("offset");
+		Number period = (Number) parameters.get("period");
+		Number timeRange = (Number) parameters.get("timeRange");
+
+		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
+
 		systemMonitorInfo.setName(WORKLOAD_MONITOR);
+		if (offset != null) {
+			systemMonitorInfo.setOffset(offset.longValue());
+		}
+		if (period != null) {
+			systemMonitorInfo.setPeriod(period.longValue());
+		}
+		if (timeRange != null) {
+			systemMonitorInfo.setTimeRange(timeRange.longValue());
+		}
 
 		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
 
@@ -421,89 +469,117 @@ public class SystemMonitorController extends BaseRestController {
 	/**
 	 * Procesa una petición de información del estado de una caché.
 	 * 
-	 * @param systemMonitorInfo Elemento a poblar con la información pendiente. De él se obtienen el periodo y el corte temporal.
+	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
 	 * 
 	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
 	 *  
 	 * @return el resultado del procesado de la petición.
 	 */
 	@RequestMapping(value = "/cache", method = { RequestMethod.POST })
-	public @ResponseBody SystemMonitorInfoDto getCache(@RequestBody final SystemMonitorInfoDto systemMonitorInfo) {
+	public @ResponseBody SystemMonitorInfoDto getCache(@RequestBody final Map<String, Object> parameters) {
 
 		long threadId = Thread.currentThread().getId();
 
 		cpuMeter.excludeThread(threadId);
 
-		systemMonitorInfo.setName(CPU_MONITOR);
+		Number offset = (Number) parameters.get("offset");
+		Number period = (Number) parameters.get("period");
+		Number timeRange = (Number) parameters.get("timeRange");
+		String cacheManager = (String) parameters.get("cacheManager");
+		String cache = (String) parameters.get("cache");
+
+		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
+
+		systemMonitorInfo.setName(CACHE_MONITOR);
+		if (offset != null) {
+			systemMonitorInfo.setOffset(offset.longValue());
+		}
+		if (period != null) {
+			systemMonitorInfo.setPeriod(period.longValue());
+		}
+		if (timeRange != null) {
+			systemMonitorInfo.setTimeRange(timeRange.longValue());
+		}
 
 		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
 
-			MonitorSample cpuMonitorSample = systemService.getSystemCpuActivity();
+			MonitorSample cacheMonitorSample = systemService.getSystemCacheStatus(cacheManager, cache);
 
-			if (cpuMonitorSample != null) {
+			if (cacheMonitorSample != null) {
 
-				Object[][] peakThreadCountData = {{cpuMonitorSample.getData(CpuMeter.PEAK_THREAD_COUNT)}};
-				Object[][] totalStartedThreadCountData = {{cpuMonitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT)}};
-				Object[][] daemonThreadCountData = {{cpuMonitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT)}};
-				Object[][] numberOfThreadsData = {{cpuMonitorSample.getData(CpuMeter.NUMBER_OF_THREADS)}};
-				Object[][] totalCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.CPU_LOAD)}};
-				Object[][] applicationCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD)}};
-				Object[][] systemCpuLoadData = {{cpuMonitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD)}};
+				Object[][] totalHeapHitData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_HEAP_HIT)}};
+				Object[][] totalHeapMissData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_HEAP_MISS)}};
+				Object[][] heapHitRatioData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_HEAP_HIT_RATIO)}};
+				Object[][] heapUsedSpaceData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_HEAP_SPACE)}};
 
-				systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
-				systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
-				systemMonitorInfo.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
-				systemMonitorInfo.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
-				systemMonitorInfo.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
-				systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
-				systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
+				Object[][] totalDiskHitData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_DISK_HIT)}};
+				Object[][] totalDiskMissData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_DISK_MISS)}};
+				Object[][] diskHitRatioData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_DISK_HIT_RATIO)}};
+				Object[][] diskUsedSpaceData = {{cacheMonitorSample.getData(CacheMeter.TOTAL_DISK_SPACE)}};
+
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT, totalHeapHitData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_MISS, totalHeapMissData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT_RATIO, heapHitRatioData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_SPACE, heapUsedSpaceData);
+
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT, totalDiskHitData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_MISS, totalDiskMissData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT_RATIO, diskHitRatioData);
+				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_SPACE, diskUsedSpaceData);
 			}
 		}
 		else {
 
 			try {
 
-				AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(systemMonitorInfo.getOffset(), systemMonitorInfo.getTimeRange(), systemMonitorInfo.getPeriod());
+				AbstractList<MonitorSample> systemCacheStatus = systemService.getSystemCacheStatus(cacheManager, cache, 
+						systemMonitorInfo.getOffset(), systemMonitorInfo.getTimeRange(), systemMonitorInfo.getPeriod());
 
-				if (systemCPUActivity != null) {
+				if (systemCacheStatus != null) {
 
-					Object[][] peakThreadCountData = new Object[systemCPUActivity.size()][2];
-					Object[][] totalStartedThreadCountData = new Object[systemCPUActivity.size()][2];
-					Object[][] daemonThreadCountData = new Object[systemCPUActivity.size()][2];
-					Object[][] numberOfThreadsData = new Object[systemCPUActivity.size()][2];
-					Object[][] totalCpuLoadData = new Object[systemCPUActivity.size()][2];
-					Object[][] applicationCpuLoadData = new Object[systemCPUActivity.size()][2];
-					Object[][] systemCpuLoadData = new Object[systemCPUActivity.size()][2];
+					Object[][] totalHeapHitData = new Object[systemCacheStatus.size()][2];
+					Object[][] totalHeapMissData = new Object[systemCacheStatus.size()][2];
+					Object[][] heapHitRatioData = new Object[systemCacheStatus.size()][2];
+					Object[][] heapUsedSpaceData = new Object[systemCacheStatus.size()][2];
+
+					Object[][] totalDiskHitData = new Object[systemCacheStatus.size()][2];
+					Object[][] totalDiskMissData = new Object[systemCacheStatus.size()][2];
+					Object[][] diskHitRatioData = new Object[systemCacheStatus.size()][2];
+					Object[][] diskUsedSpaceData = new Object[systemCacheStatus.size()][2];
 
 					int i = 0;
-					for (MonitorSample monitorSample : systemCPUActivity) {
+					for (MonitorSample monitorSample : systemCacheStatus) {
 
-						peakThreadCountData[i][0] = monitorSample.getTime();
-						peakThreadCountData[i][1] = monitorSample.getData(CpuMeter.PEAK_THREAD_COUNT);
-						totalStartedThreadCountData[i][0] = monitorSample.getTime();
-						totalStartedThreadCountData[i][1] = monitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT);
-						daemonThreadCountData[i][0] = monitorSample.getTime();
-						daemonThreadCountData[i][1] = monitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT);
-						numberOfThreadsData[i][0] = monitorSample.getTime();
-						numberOfThreadsData[i][1] = monitorSample.getData(CpuMeter.NUMBER_OF_THREADS);
-						totalCpuLoadData[i][0] = monitorSample.getTime();
-						totalCpuLoadData[i][1] = monitorSample.getData(CpuMeter.CPU_LOAD);
-						applicationCpuLoadData[i][0] = monitorSample.getTime();
-						applicationCpuLoadData[i][1] = monitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD);
-						systemCpuLoadData[i][0] = monitorSample.getTime();
-						systemCpuLoadData[i][1] = monitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD);
+						totalHeapHitData[i][0] = monitorSample.getTime();
+						totalHeapHitData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT);
+						totalHeapMissData[i][0] = monitorSample.getTime();
+						totalHeapMissData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_MISS);
+						heapHitRatioData[i][0] = monitorSample.getTime();
+						heapHitRatioData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT_RATIO);
+						heapUsedSpaceData[i][0] = monitorSample.getTime();
+						heapUsedSpaceData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_SPACE);
+
+						totalDiskHitData[i][0] = monitorSample.getTime();
+						totalDiskHitData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT);
+						totalDiskMissData[i][0] = monitorSample.getTime();
+						totalDiskMissData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_MISS);
+						diskHitRatioData[i][0] = monitorSample.getTime();
+						diskHitRatioData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT_RATIO);
+						diskUsedSpaceData[i][0] = monitorSample.getTime();
+						diskUsedSpaceData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_SPACE);
 
 						i++;
 					}
 
-					systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
-					systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
-					systemMonitorInfo.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
-					systemMonitorInfo.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
-					systemMonitorInfo.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
-					systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
-					systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT, totalHeapHitData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_MISS, totalHeapMissData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT_RATIO, heapHitRatioData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_SPACE, heapUsedSpaceData);
 
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT, totalDiskHitData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_MISS, totalDiskMissData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT_RATIO, diskHitRatioData);
+					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_SPACE, diskUsedSpaceData);
 				}
 			} catch (ServerException e) {
 
