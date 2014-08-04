@@ -15,4 +15,19 @@
         <function-class>com.fav24.dataservices.util.FileUtils</function-class>
         <function-signature>java.lang.String getFileSeparator()</function-signature>
     </function>
+    <function>
+        <name>scapeHTML</name>
+        <function-class>com.fav24.dataservices.util.FileUtils</function-class>
+        <function-signature>java.lang.String scapeHTML(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>getTextURLContent</name>
+        <function-class>com.fav24.dataservices.util.FileUtils</function-class>
+        <function-signature>java.lang.String getURLContent(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>getURLContent</name>
+        <function-class>com.fav24.dataservices.util.FileUtils</function-class>
+        <function-signature>java.lang.String getURLContent(java.net.URL)</function-signature>
+    </function>
 </taglib>

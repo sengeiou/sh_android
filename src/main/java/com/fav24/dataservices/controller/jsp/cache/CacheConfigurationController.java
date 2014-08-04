@@ -228,14 +228,14 @@ public class CacheConfigurationController extends BaseJspController {
 	 */
 	@RequestMapping(value = "/resetCache", method = { RequestMethod.GET, RequestMethod.POST })
 	public @ResponseBody ResultDto resetCache(@RequestBody Map<String, String> parameters) {
-		
+
 		ResultDto result = new ResultDto();
 		String cacheManager = parameters.get("cacheManager");
 		String cache = parameters.get("cache");
-		
+
 		try {
 			cacheConfigurationService.resetCache(cacheManager, cache);
-			
+
 			result.setResult(ResultDto.RESULT_OK);
 			result.setMessage(String.format("La caché <%s> del gestor de caché <%s>, ha sido inicializada correctamente.", cache, cacheManager));
 		} 

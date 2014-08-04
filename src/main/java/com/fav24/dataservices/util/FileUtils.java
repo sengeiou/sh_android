@@ -1,8 +1,11 @@
 package com.fav24.dataservices.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -112,7 +115,7 @@ public class FileUtils {
 		String fileName = multipartFile.getOriginalFilename();
 
 		String location = DataServicesContext.getCurrentDataServicesContext().getApplicationHome() + File.separator + relativeLocation;
-		
+
 		AbstractList<File> defaultFiles = FileUtils.getFilesWithSuffix(location, fileName, null);
 
 		for(File file : defaultFiles) {
@@ -149,7 +152,7 @@ public class FileUtils {
 
 		return newFile;
 	}
-	
+
 	/**
 	 * Retorna el separador de ficheros del sistema.
 	 * 
@@ -157,5 +160,124 @@ public class FileUtils {
 	 */
 	public static String getFileSeparator() {
 		return File.separator;
+	}
+
+	/**
+	 * Retorna la cadena de texto con los caracteres propios de HTML escapados. 
+	 * 
+	 * @param text Texto a escapar.
+	 * 
+	 * @return la cadena de texto con los caracteres propios de HTML escapados.
+	 */
+	public static String scapeHTML(String text) {
+
+		try {
+
+			if (text != null) {
+
+				text = text.replace("Á","&Aacute;");
+				text = text.replace("É","&Eacute;");
+				text = text.replace("Í","&Iacute;");
+				text = text.replace("Ó","&Oacute;");
+				text = text.replace("Ú","&Uacute;");
+				text = text.replace("á","&aacute;");
+				text = text.replace("é","&eacute;");
+				text = text.replace("í","&iacute;");
+				text = text.replace("ó","&oacute;");
+				text = text.replace("ú","&uacute;");
+
+				text = text.replace("À","&Agrave;");
+				text = text.replace("È","&Egrave;");
+				text = text.replace("Ì","&Igrave;");
+				text = text.replace("Ò","&Ograve;");
+				text = text.replace("Ù","&Ugrave;");
+				text = text.replace("à","&agrave;");
+				text = text.replace("è","&egrave;");
+				text = text.replace("ì","&igrave;");
+				text = text.replace("ò","&ograve;");
+				text = text.replace("ù","&ugrave;");
+
+				text = text.replace("€","&euro;");
+				text = text.replace("¥","&yen;");
+				text = text.replace("£","&pound;");
+				text = text.replace("¢","&cent;");
+
+				text = text.replace("&","&amp;");
+
+				text = text.replace("<","&lt;");
+				text = text.replace(">","&gt;");
+
+				text = text.replace("©","&copy;");
+				text = text.replace("®","&reg;");
+
+				text = text.replace("µ","&micro;");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return text;
+	}
+
+	/**
+	 * Retorna el contenido de la URL especificada en forma de cadena de texto.
+	 * 
+	 * Tan solo funciona para contenidos de tipo texto.
+	 * 
+	 * @param url URL de la que se desea obtener el contenido.
+	 * 
+	 * @return el contenido de la URL especificada en forma de cadena de texto.
+	 */
+	public static String getURLContent(URL url) {
+
+		StringBuilder sourceCodeLines = null;
+
+		try {
+
+			if (url != null) {
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+
+				String line;
+				while((line = reader.readLine()) != null) {
+
+					if (sourceCodeLines == null) {
+						sourceCodeLines = new StringBuilder();
+					}
+					else {
+						sourceCodeLines.append('\n');
+					}
+					sourceCodeLines.append(line);
+				}
+				reader.close();
+				sourceCodeLines.toString();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return sourceCodeLines == null ? null : sourceCodeLines.toString();
+	}
+
+	/**
+	 * Retorna el contenido de la URL especificada en forma de cadena de texto.
+	 * 
+	 * Tan solo funciona para contenidos de tipo texto.
+	 * 
+	 * @param url URL de la que se desea obtener el contenido.
+	 * 
+	 * @return el contenido de la URL especificada en forma de cadena de texto.
+	 */
+	public static String getURLContent(String url) {
+
+		try {
+
+			return getURLContent(new URL(url));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

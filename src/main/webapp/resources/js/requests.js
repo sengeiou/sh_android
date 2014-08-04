@@ -49,7 +49,7 @@ function alertCallback(event) {
 		var htmlAlert = null;
 
 		var status = null;
-
+		 
 		try {
 			status = event.target.status;
 
@@ -57,18 +57,18 @@ function alertCallback(event) {
 
 				var result = JSON.parse(event.target.responseText);
 
-				if (result.resultCode == "OK") {
+				if (result.result == "OK") {
 					htmlAlert = "<div id='alert-" + nextId + "' class='alert alert-success' role='alert'>";
 
 					if (result.message != undefined) {
-						htmlAlert += result.message;
+						htmlAlert += escapeHtml(result.message);
 
 						if (result.explanation != undefined) {
-							htmlAlert += "<br/>" + result.explanation; 
+							htmlAlert += "<br/>" + escapeHtml(result.explanation); 
 						}
 					}
 					else if (result.explanation != undefined) {
-						htmlAlert += result.explanation; 
+						htmlAlert += escapeHtml(result.explanation); 
 					}
 
 					htmlAlert += "</div>"; 
@@ -77,28 +77,28 @@ function alertCallback(event) {
 					htmlAlert = "<div id='alert-" + nextId + "' class='alert alert-danger' role='alert'>";
 
 					if (result.resultCode != undefined) {
-						htmlAlert += result.resultCode;
+						htmlAlert += escapeHtml(result.resultCode);
 
 						if (result.message != undefined) {
-							htmlAlert += "  " + result.message; 
+							htmlAlert += "  " + escapeHtml(result.message); 
 
 							if (result.explanation != undefined) {
-								htmlAlert += "<br/>" + result.explanation; 
+								htmlAlert += "<br/>" + escapeHtml(result.explanation);
 							}
 						}
 						else if (result.explanation != undefined) {
-							htmlAlert += "<br/>" + result.explanation; 
+							htmlAlert += "<br/>" + escapeHtml(result.explanation);
 						}
 					}
 					else if (result.message != undefined) {
-						htmlAlert += result.message;
+						htmlAlert += escapeHtml(result.message);
 
 						if (result.explanation != undefined) {
-							htmlAlert += "<br/>" + result.explanation; 
+							htmlAlert += "<br/>" + escapeHtml(result.explanation);
 						}
 					}
 					else if (result.explanation != undefined) {
-						htmlAlert += result.explanation; 
+						htmlAlert += escapeHtml(result.explanation); 
 					}
 
 					htmlAlert += "</div>"; 
@@ -112,7 +112,7 @@ function alertCallback(event) {
 		}
 		catch(e) {
 
-			htmlAlert = "<div id='alert-" + nextId + "' class='alert alert-danger' role='alert'> No ja sido posible ejecutar la operación debido a: " + e.message + "</div>";
+			htmlAlert = "<div id='alert-" + nextId + "' class='alert alert-danger' role='alert'> No ja sido posible ejecutar la operación debido a: " + escapeHtml(e.message) + "</div>";
 		}
 
 		alertContainer.append(htmlAlert);

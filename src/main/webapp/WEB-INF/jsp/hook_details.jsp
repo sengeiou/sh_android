@@ -5,37 +5,7 @@
 <%@page import="java.io.BufferedReader"%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-
-<%!String sourceCode;%>
-
-<%
-	try {
-		URL hookSourceURL = (URL)request.getAttribute("hookSourceURL");
-		if (hookSourceURL != null) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(hookSourceURL.openStream()));
-			
-			String line;
-			StringBuilder sourceCodeLines = null;
-			while((line = reader.readLine()) != null) {
-				
-				if (sourceCodeLines == null) {
-					sourceCodeLines = new StringBuilder();
-				}
-				else {
-					sourceCodeLines.append("\n");
-				}
-				line = line.replace("<","&lt;");
-				line = line.replace(">","&gt;");
-				sourceCodeLines.append(line);
-			}
-			reader.close();
-			sourceCode = sourceCodeLines.toString();
-		}
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-%>
+<%@taglib uri="customFunctions.tld" prefix="cf"%>
 
 <link href="<c:url value="/resources/css/syntaxhighlighter/shCore.css"/>" rel="stylesheet" type="text/css" />
 <link href="<c:url value="/resources/css/syntaxhighlighter/shThemeDefault.css"/>" rel="stylesheet" type="text/css" />
@@ -71,12 +41,12 @@
 							</ul>
 						</div>
 					</div> 
-		
+
 					<!-- Previsualización del fuente. -->
 					<div class="panel panel-info">
 						<div class="panel-heading">Fuente</div>
 						<div class="panel-body">
-							<pre class="brush: java; ruler: true;"><%=sourceCode%></pre>
+							<pre class="brush: java; ruler: true;">${cf:scapeHTML(cf:getURLContent(hookSourceURL))}</pre>
 						</div>
 					</div>
 				</c:otherwise>
