@@ -49,18 +49,12 @@ public class SystemController extends BaseJspController {
 	/**
 	 * Muestra la consola de información del estado de los recursos del sistema.
 	 * 
-	 * @param period Granularidad de la información en segundos. Entre 1 y 3600 segundos.
-	 * @param timeRange Rango temporal que se desea obtener en horas. Entre 1 y 24 horas.
-	 * 
 	 * @return la vista de monitorización del sistema.
 	 */
 	@RequestMapping(value = "/monitor", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView systemInformation(@ModelAttribute(value="period") Long period, @ModelAttribute(value="timeRange") Long timeRange) {
+	public ModelAndView systemInformation() {
 
 		ModelAndView model = new ModelAndView("system_monitor");
-
-		model.addObject("period", period);
-		model.addObject("timeRange", timeRange);
 
 		return model;
 	}

@@ -29,6 +29,7 @@
         /* Segundo bloque. */
         main: [
             '<c:url value="/resources/js/bootstrap.min.js"/>',
+			'<c:url value="/resources/js/moment/moment-with-locales.min.js"/>',
 			'<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>',
 			'<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>',
 			'<c:url value="/resources/js/requests.js"/>',
@@ -36,7 +37,11 @@
         ],
         /* Tercer bloque. */
         plugins: [
-                  
+
+            // Complementos de boostrap.
+			'<c:url value="/resources/js/datetimepicker/bootstrap-datetimepicker.js"/>',
+			'<c:url value="/resources/js/combobox/bootstrap-combobox.js"/>',
+
 			// system_monitor.jsp dependency.
 			'<c:url value="/resources/js/chart/Chart.min.js"/>',
 			

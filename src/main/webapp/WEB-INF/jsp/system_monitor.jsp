@@ -60,8 +60,8 @@
 
 <script type="text/javascript">
 
-	initSystemMonitor(${period}, ${timeRange}, 
+	initSystemMonitor(1, 300, 
 			'memoryHistory', 'committedMemoryInstant', 'usedMemoryInstant',
 			'cpuHistory', 'cpuInstant');
-
 </script>
+

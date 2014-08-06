@@ -43,8 +43,14 @@
 	<!-- Optional theme -->
 	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-theme.min.css"/>"/>
 
-	<!-- Latest compiled and minified CSS -->
+	<!-- Estilos propios -->
 	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/custom/general.css"/>"/>
+	
+	<!-- Selector de fecha y hora -->
+	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/datetimepicker/bootstrap-datetimepicker.min.css"/>"/>
+	
+	<!-- Combo box -->
+	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/combobox/bootstrap-combobox.css"/>"/>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

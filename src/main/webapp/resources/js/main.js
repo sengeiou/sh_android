@@ -19,7 +19,7 @@ function showFileSystem(path) {
 }
 
 function showSystemMonitor() {
-	sendGetRequest('system/monitor?period=1&timeRange=300'); // Se solicitan los últimos 5 minutos con resolución de un segundo.
+	sendGetRequest('system/monitor');
 }
 
 function showAvailableEntities() {
@@ -67,6 +67,16 @@ function dropSystemCache() {
 }
 
 /**
+ * Abre el monitor de la caché indicada.
+ * 
+ * @param cacheManager Alias del manager que contiene la caché a monitorizar.
+ * @param cache Alias de la caché a monitorizar.
+ */
+function showCacheMonitor(cacheManager, cache) {
+	sendGetRequest('cache/monitor?cacheManager=' + cacheManager + '&cache=' + cache);
+}
+		
+/**
  * Función que inicializa la caché indicada.
  * 
  * @param cacheManager Alias del manager que contiene la caché a incializar.
@@ -76,7 +86,7 @@ function resetCache(cacheManager, cache) {
 	modalAcceptanceShow('&iquest;Desea reiniciar la cach&eacute; ' + cache + ' del gestor de caché ' + cacheManager + '?',
 		'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>vaciado total</strong> de la cach&eacute, produciendo un posible pico de accesos al subsistema.',
 		function() {
-			sendPostRequest({"cacheManager":cacheManager, "cache":cache}, 'cache/resetCache', true); 
+			sendPostRequest({"cacheManager":cacheManager, "cache":cache}, 'cache/resetCache'); 
 		});
 }
 

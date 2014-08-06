@@ -79,7 +79,7 @@
 											<td class="text-right">${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalDisk())}</td>
 											<td class="text-right">${maxBytesLocalDisk}</td>
 											<td class="text-center">
-												<button onClick='showAvailableEntities();' type='button' class='btn btn-default btn-sm'>
+												<button onClick='showCacheMonitor("${cacheManagerConfiguration.getName()}", "${cacheConfiguration.getAlias()}");' type='button' class='btn btn-default btn-sm'>
 										   			<span class='glyphicon glyphicon-stats'></span>
 										   		</button>
 												<button onClick='resetCache("${cacheManagerConfiguration.getName()}", "${cacheConfiguration.getAlias()}");' type='button' class='btn btn-default btn-sm'>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -217,7 +218,7 @@ public class CacheConfigurationController extends BaseJspController {
 
 		return "error_pages/server_success";
 	}
-
+	
 	/**
 	 * Inicializa la configuración de caché de una entidad.
 	 * 
@@ -226,7 +227,7 @@ public class CacheConfigurationController extends BaseJspController {
 	 * 
 	 * @return el resultado de la ejecución de la operación.
 	 */
-	@RequestMapping(value = "/resetCache", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/resetCache", method = { RequestMethod.POST })
 	public @ResponseBody ResultDto resetCache(@RequestBody Map<String, String> parameters) {
 
 		ResultDto result = new ResultDto();
@@ -250,5 +251,24 @@ public class CacheConfigurationController extends BaseJspController {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Muestra el cuadro de monitorización de la caché indicada.
+	 * 
+	 * @param cacheManager Gestor de caché que contiene la caché de la entidad indicada.
+	 * @param cache Caché de entidad a monitorizar.
+	 * 
+	 * @return la vista de monitorización de la caché indicada.
+	 */
+	@RequestMapping(value = "/monitor", method = { RequestMethod.GET })
+	public ModelAndView cacheMonitor(@RequestParam(value="cacheManager", required=true) String cacheManager, @RequestParam(value="cache", required=true) String cache) {
+
+		ModelAndView model = new ModelAndView("system_cache_monitor");
+
+		model.addObject("cacheManager", cacheManager);
+		model.addObject("cache", cache);
+
+		return model;
 	}
 }
