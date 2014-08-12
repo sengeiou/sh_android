@@ -78,7 +78,7 @@
 								</c:when>
 								<c:otherwise>
 									<table class="table">
-										<thead><tr><th></th><th>Alias</th><th>Nombre en la fuente</th></tr></thead>
+										<thead><tr><th></th><th>Alias</th><th>Nombre en la fuente</th><th>Descripción</th></tr></thead>
 										<tbody>
 											<c:forEach items="${entityPolicies.getData().getData()}" var="attribute">
 												<c:choose>
@@ -96,6 +96,7 @@
 													<td><img class="img-polaroid" width="16px" height="16px" src="<c:url value='/resources/img/${direction}'/>" alt=""/></td>
 													<td>${attribute.getAlias()}</td>
 													<td>${attribute.getName()}</td>
+													<td>${attribute.getDescription()}</td>
 												</tr>												
 											</c:forEach>
 										</tbody>

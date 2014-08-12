@@ -22,6 +22,7 @@ public class EntityDataAttributeDOM extends EntityDataAttribute {
 
 		setAlias(element.getAttribute("Alias"));
 		setDirection(element.getAttribute("Direction"));
+		setDescription(element.getAttribute("Description"));
 		setName(node.getTextContent());
 	}
 

@@ -52,6 +52,9 @@
 	<!-- Combo box -->
 	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/combobox/bootstrap-combobox.css"/>"/>
 
+	<!-- Estilos para gráficas -->
+	<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/chart/Chart.css"/>"/>
+	
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

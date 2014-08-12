@@ -138,13 +138,14 @@ public class EntityDataAttribute extends EntityAttribute {
 
 
 	private Direction direction;
+	private String description;
 
 
 	/**
 	 * Constructor por defecto.
 	 */
 	public EntityDataAttribute() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	/**
@@ -153,12 +154,14 @@ public class EntityDataAttribute extends EntityAttribute {
 	 * @param alias El alias de este atributo.
 	 * @param name El nombre de este atributo.
 	 * @param direction Dirección del flujo de información.
+	 * @param description Descripción de este atributo.
 	 */
-	public EntityDataAttribute(String alias, String name, Direction direction) {
+	public EntityDataAttribute(String alias, String name, Direction direction, String description) {
 
 		super(alias, name);
 
 		this.direction = direction;
+		this.description = description;
 	}
 
 	/**
@@ -168,7 +171,7 @@ public class EntityDataAttribute extends EntityAttribute {
 	 */
 	public EntityDataAttribute(EntityDataAttribute entityDataAttribute) {
 
-		this(entityDataAttribute.getAlias(), entityDataAttribute.getName(), entityDataAttribute.direction);
+		this(entityDataAttribute.getAlias(), entityDataAttribute.getName(), entityDataAttribute.direction, entityDataAttribute.description);
 	}
 
 	/**
@@ -187,5 +190,24 @@ public class EntityDataAttribute extends EntityAttribute {
 	 */
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	/**
+	 * Retorna la descripción para este atributo.
+	 *  
+	 * @return la descripción para este atributo.
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * Asigna la descripción para este atributo.
+	 *  
+	 * @param description La descripción a asignar.
+	 */
+	public void setDescription(String description) {
+		
+		this.description = description;
 	}
 }

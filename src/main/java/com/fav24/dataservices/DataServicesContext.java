@@ -34,7 +34,7 @@ public class DataServicesContext {
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY = "AC002";
 	public static final String ERROR_APPLICATION_CONTEXT_APPLICATION_HOME_IS_NOT_A_DIRECTORY_MESSAGE = "La ruta indicada en el parámetro " + DataServicesContext.APPLICATION_HOME + " <%s> no hace referencia a un directorio.";
 
-	public static final String DEFAULT_ENCODING = "UTF-8";
+	public static final String DEFAULT_ENCODING = "utf-8";
 	public static final Charset DEFAULT_CHARSET = Charset.forName(DataServicesContext.DEFAULT_ENCODING);
 	public static final Locale MAIN_LOCALE;
 	public static final TimeZone MAIN_TIME_ZONE;

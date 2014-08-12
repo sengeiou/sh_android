@@ -16,7 +16,7 @@ import com.fav24.dataservices.dto.policy.EntityAccessPolicyDto;
 
 
 /**
- * Clase encargada del mapeo entre el objeto de transferencia EntityAccessPolicyDtoElement y el objeto de dominio EntityAccessPolicy.
+ * Clase encargada del mapeo entre el objeto de transferencia EntityAccessPolicyDto y el objeto de dominio EntityAccessPolicy.
  */
 public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAccessPolicyDto, EntityAccessPolicy> {
 
@@ -46,7 +46,7 @@ public class EntityAccessPolicyDtoToEntityAccessPolicy extends Mapper<EntityAcce
 
 			for (Entry<String, String> attribute : origin.getAttributes().entrySet()) {
 
-				EntityDataAttribute entityDataAttribute = new EntityDataAttribute(attribute.getKey(), null, Direction.fromString(attribute.getValue()));
+				EntityDataAttribute entityDataAttribute = new EntityDataAttribute(attribute.getKey(), null, Direction.fromString(attribute.getValue()), null);
 				entityData.addDataAttribute(entityDataAttribute);
 			}
 		}

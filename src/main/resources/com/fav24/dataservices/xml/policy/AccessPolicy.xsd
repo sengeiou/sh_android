@@ -58,6 +58,7 @@
 		<xsd:simpleContent>
 			<xsd:extension base="TAttribute">
 				<xsd:attribute name="Direction" type="TDirection" use="optional" default="Output"/>
+				<xsd:attribute name="Description" type="xsd:string" use="optional"/>
 			</xsd:extension>
 		</xsd:simpleContent>
 	</xsd:complexType>
