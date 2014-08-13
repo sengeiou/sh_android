@@ -69,6 +69,17 @@
 								<div id="cacheHeapHistoryContainer">
 									<div class="canvas-container">
 										<canvas style="width: 100%; height: 110px;" class="form-control" id="cacheHeapHistory" width="" height="110"></canvas>
+										
+										<div class="chart-legend">
+											<ul class="list-inline line-legend">
+												<li>
+													<span style="margin-right:5px; background-color:rgba(220,220,220,1)"></span>Hits
+												</li>
+												<li>
+													<span style="margin-right:5px; background-color:rgba(151,187,205,1)"></span>Fails
+												</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -204,7 +215,7 @@ var options = {
 	};
 
 var cacheHeapHistory = new Chart(memoryHistoryContext).Line(data, options);
-$("#cacheHeapHistoryContainer").append(cacheHeapHistory.generateLegend());
+//$("#cacheHeapHistoryContainer").append(cacheHeapHistory.generateLegend());
 
 
 var data = [
