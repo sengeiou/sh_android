@@ -70,16 +70,10 @@
 									<div class="canvas-container">
 										<canvas style="width: 100%; height: 110px;" class="form-control" id="cacheHeapHistory" width="" height="110"></canvas>
 										
-										<div class="chart-legend">
-											<ul class="list-inline line-legend">
-												<li>
-													<span style="margin-right:5px; background-color:rgba(220,220,220,1)"></span>Hits
-												</li>
-												<li>
-													<span style="margin-right:5px; background-color:rgba(151,187,205,1)"></span>Fails
-												</li>
-											</ul>
+										<div id="cacheHeapLengendContainer" class="chart-legend vertical-chart">
+
 										</div>
+
 									</div>
 								</div>
 							</div>
@@ -88,6 +82,10 @@
 							<div class="form-control-group">
 								<div id="cacheHeapInstantContainer" >
 									<canvas style="width: 100%; height: 250px;" class="form-control" id="cacheHeapInstant" width="" height="250"></canvas>
+                                    <div id="cacheHeapInstantLengendContainer" class="chart-legend">
+
+                                    </div>
+
 								</div>
 							</div>
 						</div>
@@ -212,10 +210,12 @@ var options = {
 
 	    //Boolean - Whether to fill the dataset with a colour
 	    datasetFill : true
+
+
 	};
 
-var cacheHeapHistory = new Chart(memoryHistoryContext).Line(data, options);
-//$("#cacheHeapHistoryContainer").append(cacheHeapHistory.generateLegend());
+    var cacheHeapHistory = new Chart(memoryHistoryContext).Line(data, options);
+    $("#cacheHeapLengendContainer").append(cacheHeapHistory.generateLegend());
 
 
 var data = [
@@ -268,7 +268,7 @@ var options = {
 };
 
 var cacheHeapInstant = new Chart(cacheHeapInstantContext).Pie(data, options);
-$("#cacheHeapInstantContainer").append(cacheHeapInstant.generateLegend());
+$("#cacheHeapInstantLengendContainer").append(cacheHeapInstant.generateLegend());
 
 /*
 	initSystemCacheMonitor(${period}, ${offset}, ${timeRange},
