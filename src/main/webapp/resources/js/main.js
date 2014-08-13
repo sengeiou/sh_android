@@ -86,7 +86,7 @@ function resetCache(cacheManager, cache) {
 	modalAcceptanceShow('&iquest;Desea reiniciar la cach&eacute; ' + cache + ' del gestor de caché ' + cacheManager + '?',
 		'La aceptaci&oacute;n de esta acci&oacute;n implicar&aacute; el <strong>vaciado total</strong> de la cach&eacute, produciendo un posible pico de accesos al subsistema.',
 		function() {
-			sendPostRequest({"cacheManager":cacheManager, "cache":cache}, 'cache/resetCache'); 
+			sendPostRequest({"cacheManager":cacheManager, "cache":cache}, 'cache/resetCache', true); 
 		});
 }
 

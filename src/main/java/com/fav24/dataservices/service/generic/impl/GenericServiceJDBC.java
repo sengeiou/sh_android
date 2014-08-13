@@ -738,6 +738,141 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 	 * {@inheritDoc}
 	 */
 	@Override
+	protected Operation trueDelete(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
+
+		StringBuilder queryDelete = new StringBuilder();
+		StringBuilder queryFrom = new StringBuilder();
+		StringBuilder queryWhere = new StringBuilder();
+
+		EntityDataSourceInfo entityInformation = entitiesInformation.getEntity(entityAccessPolicy.getName().getName());
+
+		/*
+		 * Delete.
+		 */
+		queryDelete.append("DELETE");
+
+		/*
+		 * Especificación de la tabla.
+		 */
+		queryFrom.append(" FROM ").append(entityAccessPolicy.getName().getName());
+
+		queryDelete.append(queryFrom);
+		
+		/*
+		 * Especificación del filtro.
+		 */
+		queryWhere.append(" WHERE ");
+
+		AbstractList<String> filterColumns = new ArrayList<String>();
+		AbstractList<Object> filterValues = new ArrayList<Object>();
+		Map<String, Integer> filterTypes = new HashMap<String, Integer>();
+
+		StringBuilder filter = null;
+
+		if (operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0) {
+
+			filterTypes = entityInformation.keyFields;
+			filter = GenericServiceJDBCHelper.getKeyString(entityAccessPolicy, operation.getMetadata().getKey(), filterColumns, filterValues);
+		}
+		else if (operation.getMetadata().getFilter() != null) {
+
+			filterTypes = entityInformation.filterFields;
+			filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, operation.getMetadata().getFilter(), filterColumns, filterValues);
+		}
+		else {
+			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
+		}
+
+		if (filter != null && filter.length() > 0) {
+
+			queryWhere.append(filter);
+		}
+
+		int[] types = new int[filterColumns.size()];
+		Object[] params = new Object[types.length];
+
+		for (int i=0; i<filterColumns.size(); i++) {
+
+			Integer type = filterTypes.get(filterColumns.get(i));
+			if (type == null) {
+
+				if (operation.getMetadata().getKey() != null && operation.getMetadata().getKey().size() > 0) {
+
+					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
+				}
+				else {
+
+					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_FILTER_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), entityAccessPolicy.getAttributeAlias(filterColumns.get(i))));
+				}
+			}
+
+			types[i] = type;
+			params[i] = GenericServiceJDBCHelper.translateToType(types[i], filterValues.get(i));
+		}
+
+		queryDelete.append(queryWhere);
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			/*
+			 * Eliminación de los registros.
+			 */
+			preparedStatement = connection.prepareStatement(queryDelete.toString());
+
+			if (params != null) {
+
+				for (int i=0; i<params.length; i++) {
+
+					Object value = params[i];
+
+					if (value == null) {
+
+						preparedStatement.setNull(i+1, types[i]);
+					}
+					else {
+
+						preparedStatement.setObject(i+1, value, types[i]);
+					}
+				}
+			}
+
+			operation.getMetadata().setItems(Long.valueOf(preparedStatement.executeUpdate()));
+			preparedStatement.close();
+
+			/*
+			 * Obtención del número total de registros después del borrado.
+			 */
+			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom);
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.first()) {
+
+				Long totalItems = resultSet.getLong(1);
+				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
+			}
+			else {
+				operation.getMetadata().setTotalItems(null);
+			}
+		}
+		catch (Throwable t) {
+			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
+		}
+		finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
+
+		return operation;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	protected Operation update(Connection connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 
 		if (operation.getData() == null || operation.getData().size() == 0) {

@@ -347,6 +347,8 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 
 			case DELETE:
 				return delete(connection, entityAccessPolicy, operation);
+			case TRUE_DELETE:
+				return trueDelete(connection, entityAccessPolicy, operation);
 			case CREATE_UPDATE:
 				return createUpdate(connection, entityAccessPolicy, operation);
 			case UPDATE_CREATE:
@@ -403,12 +405,27 @@ public abstract class GenericServiceBasic<T> implements GenericService {
 	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
 	 * @param operation Operación a procesar.
 	 * 
+	 * Nota: una eliminación consiste en informar la fecha de borrado del item.
+	 * 
 	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
 	 */
 	protected Operation delete(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
 		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
 	}
 
+	/**
+	 * Operatión de eliminación real de ítems.
+	 * 
+	 * @param connection Conexión con la que se inició la transacción.
+	 * @param entityAccessPolicy Política de acceso de la entidad sobre la que se ejecutará la operación.
+	 * @param operation Operación a procesar.
+	 * 
+	 * @return operación de entrada, enriquecida con los resultados de su ejecución.
+	 */
+	protected Operation trueDelete(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) throws ServerException {
+		throw new ServerException(ERROR_OPERATION_NOT_AVAILABLE, String.format(ERROR_OPERATION_NOT_AVAILABLE_MESSAGE, operation.getMetadata().getOperation().getOperationType(), "*"));
+	}
+	
 	/**
 	 * Operatión de creación o modificaciónde un ítem.
 	 * 

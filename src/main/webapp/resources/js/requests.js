@@ -182,7 +182,7 @@ function sendGetRequest(resource, isAlert) {
 	xhr.addEventListener("progress", onProgressHandler, false);
 	xhr.addEventListener("loadend", onLoadEndHandler, false);
 	
-	if (isAlert != undefined && isAlert == true) {
+	if (isAlert != undefined && isAlert) {
 		xhr.addEventListener("readystatechange", alertCallback,	false);
 	}
 	else {

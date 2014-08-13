@@ -119,6 +119,7 @@
 			<xsd:enumeration value="Retrieve"/>
 			<xsd:enumeration value="Update"/>
 			<xsd:enumeration value="Delete"/>
+			<xsd:enumeration value="TrueDelete"/>
 			<xsd:enumeration value="CreateUpdate"/>
 			<xsd:enumeration value="UpdateCreate"/>
 		</xsd:restriction>
