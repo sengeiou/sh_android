@@ -68,12 +68,8 @@
 							<div class="form-control-group">
 								<div id="cacheHeapHistoryContainer">
 									<div class="canvas-container">
-										<canvas style="width: 100%; height: 110px;" class="form-control" id="cacheHeapHistory" width="" height="110"></canvas>
-										
-										<div id="cacheHeapLengendContainer" class="chart-legend vertical-chart">
-
-										</div>
-
+										<canvas style="width: 100%; height: 120px;" class="form-control" id="cacheHeapHistory" width="" height="120px"></canvas>
+										<div id="cacheHeapLengendContainer" class="chart-legend"></div>
 									</div>
 								</div>
 							</div>
@@ -81,11 +77,8 @@
 						<div class="col-sx-6 col-md-4">
 							<div class="form-control-group">
 								<div id="cacheHeapInstantContainer" >
-									<canvas style="width: 100%; height: 250px;" class="form-control" id="cacheHeapInstant" width="" height="250"></canvas>
-                                    <div id="cacheHeapInstantLengendContainer" class="chart-legend">
-
-                                    </div>
-
+									<canvas style="width: 100%; height: 250px;" class="form-control" id="cacheHeapInstant" width="" height="250px"></canvas>
+                                    <div id="cacheHeapInstantLengendContainer" class="chart-legend"></div>
 								</div>
 							</div>
 						</div>
@@ -210,8 +203,6 @@ var options = {
 
 	    //Boolean - Whether to fill the dataset with a colour
 	    datasetFill : true
-
-
 	};
 
     var cacheHeapHistory = new Chart(memoryHistoryContext).Line(data, options);
