@@ -1,4 +1,4 @@
-package gm.mobi.android;
+package gm.mobi.android.constant;
 
 /**
  * Created by InmaculadaAlcon on 11/08/2014.

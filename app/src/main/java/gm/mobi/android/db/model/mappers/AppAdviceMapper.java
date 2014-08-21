@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gm.mobi.android.db.model.objects.AppAdvice;
-import gm.mobi.android.db.provider.GMContract.AppAdviceColumns;
-import gm.mobi.android.db.provider.GMContract.SyncColumns;
+import gm.mobi.android.db.model.GMContract.AppAdviceColumns;
+import gm.mobi.android.db.model.GMContract.SyncColumns;
 
 /**
  * Created by InmaculadaAlcon on 14/08/2014.

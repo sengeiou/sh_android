@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import gm.mobi.android.Constants;
+import gm.mobi.android.constant.Constants;
 
 /**
  * Created by InmaculadaAlcon on 11/08/2014.

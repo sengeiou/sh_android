@@ -21,4 +21,5 @@ public class GMBroadcastReceiver extends WakefulBroadcastReceiver {
         startWakefulService(context,intent.setComponent(comp));
         setResultCode(Activity.RESULT_OK);
     }
+
 }

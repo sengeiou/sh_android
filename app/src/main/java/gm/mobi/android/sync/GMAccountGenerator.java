@@ -4,7 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-import gm.mobi.android.Constants;
+import gm.mobi.android.constant.Constants;
 
 /**
  * Created by InmaculadaAlcon on 11/08/2014.

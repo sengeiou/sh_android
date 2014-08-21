@@ -5,7 +5,7 @@ import android.content.Context;
 import gm.mobi.android.service.generic.GenericDto;
 import gm.mobi.android.service.generic.OperationDto;
 import gm.mobi.android.service.generic.RequestorDto;
-import gm.mobi.android.Constants;
+import gm.mobi.android.constant.Constants;
 import gm.mobi.android.util.Utils;
 
 

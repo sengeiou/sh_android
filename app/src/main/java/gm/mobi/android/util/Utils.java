@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import gm.mobi.android.Constants;
+import gm.mobi.android.constant.Constants;
 
 
 /**
