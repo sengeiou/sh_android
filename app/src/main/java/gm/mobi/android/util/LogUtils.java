@@ -2,11 +2,8 @@ package gm.mobi.android.util;
 
 import android.util.Config;
 import android.util.Log;
-
-import org.apache.commons.io.output.ThresholdingOutputStream;
-import org.apache.log4j.spi.ThrowableInformation;
-
-import GolesMessenger.android.mobi.gm.myapplication.BuildConfig;
+import gm.mobi.android.BuildConfig;
+import gm.mobi.android.constant.Constants;
 
 /**
  * Created by InmaculadaAlcon on 21/08/2014.
@@ -25,13 +22,13 @@ public class LogUtils {
 
     public static void LOGD(final String tag, String message) {
     //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
+        if (BuildConfig.DEBUG || Constants.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message);
         }
     }
     public static void LOGD(final String tag, String message, Throwable cause) {
     //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG || Config.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
+        if (BuildConfig.DEBUG || Constants.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
             Log.d(tag, message, cause);
         }
     }
@@ -67,4 +64,5 @@ public class LogUtils {
     public static void LOGE(final String tag, String message, Throwable cause){
         Log.e(tag,message,cause);
     }
+
 }

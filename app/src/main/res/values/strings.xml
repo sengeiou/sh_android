@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Goles5</string>
     <string name="app_title">Goles5</string>
+
+    <!-- Time strings-->
+    <string name="day_title_today">Hoy</string>
+    <string name="day_title_tomorrow">Mañana</string>
+    <string name="day_title_yesterday">Ayer</string>
 </resources>
