@@ -6,6 +6,12 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme">
 
+
+
+       <provider android:name="gm.mobi.android.sync.StubProvider"
+                 android:authorities="gm.mobi.android.sync.provider"
+                 android:exported="false"
+                 android:syncable="true"/>
     </application>
 
 </manifest>
