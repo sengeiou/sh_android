@@ -77,6 +77,17 @@ public class SystemMonitorController extends BaseRestController {
 	}
 
 	/**
+	 * Retorna una cadena estática para permitir chequear el servicio, al mínimo coste posible.
+	 * 
+	 * @return una cadena estática para permitir chequear el servicio, al mínimo coste posible.
+	 */
+	@RequestMapping(value = "/ping", method = { RequestMethod.GET, RequestMethod.POST })
+	public @ResponseBody String getPing() {
+
+		return "pong";
+	}
+
+	/**
 	 * Procesa una petición de información del estado de la memoria del sistema.
 	 * 
 	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
