@@ -1,0 +1,89 @@
+//
+//  Services.h
+//  ProjectUnitTest
+//
+//  Created by Marçal Albert Castellví on 11/06/12.
+//  Copyright (c) 2012 Fav24. All rights reserved.
+//
+
+
+#ifndef Goles_Messenger_Services_h
+#define Goles_Messenger_Services_h
+
+
+#pragma mark - ENDPOINTS
+
+/*****************[ URI webservices ]*****************/
+
+NSString *golesBaseURL;
+
+//PRODUCTION ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////
+#define K_ENDPOINT_PRODUCTION             @"http://api.golesmessenger.com:8081/data-services/rest/generic/"
+
+//TEST ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+#define K_ENDPOINT_DEVELOPER              @"http://46.137.157.81:8081/data-services/rest/generic/"
+
+//Server timestamp
+#define SERVERTIME                      @"http://api.golesmessenger.com:8081/data-services/rest/system/time"
+
+
+/***********************************************************************
+ ** Constants globals de l'applicació                                 **
+ ***********************************************************************/
+#pragma mark - VARIS
+
+#define K_ITUNES_URL                    @"https://itunes.apple.com/es/app/goles-messenger/id546611684?mt=8"
+
+#define K_DEVICE_TOKEN_SIMULATOR        @"Christian&MariSimulator0001"
+
+#define K_TWITTER_MENTION               @"@GolesMessenger"
+
+
+
+#pragma mark - FLURRY
+/***********************************************************************
+ ** Constants Flurry                                                  **
+ ***********************************************************************/
+
+#define K_FLURRY_KEY                    @"PR4HJHYXJ3FVZT2PH2FQ"
+#define K_FLURRY_KEY_DEV                @"W8M79MY8Q3J6XBGJNNBM" //EVO-013 Flurry Inicio
+
+#define K_GENERAL_onFinish_MODO_CHANGE                 @"onFinish_Modo_Change"                  //PARAM: Selected Mode
+
+// JORNADAS
+
+#define K_JORNADAS_onEnter_MATCHES_LIST               @"Jornadas_onEnter_MatchesList"
+#define K_JORNADAS_onEnter_DETAIL_MATCH               @"Jornadas_onEnter_DetailMatch"
+#define K_JORNADAS_onEnter_CRONICA                    @"Jornadas_onEnter_Cronica"
+#define K_JORNADAS_onEnter_LINEUP                     @"Jornadas_onEnter_Lineup"
+#define K_JORNADAS_TWITT_LAST_GOAL_DONE               @"OnTwittLastGoalDone"                    //PARAM: IdPlayer, IdDevice
+#define K_JORNADAS_TWITT_LAST_GOAL_CANCELLED          @"OnTwittLastGoalCancel"                  //PARAM: IdPlayer, IdDevice
+#define K_JORNADAS_TWITT_FINAL_SCORE_DONE             @"OnTwittFinalScoreDone"                  //PARAM: IdPlayer, IdDevice
+#define K_JORNADAS_TWITT_FINAL_SCORE_CANCELLED        @"OnTwittFinalScoreCancel"                //PARAM: IdPlayer, IdDevice
+#define K_JORNADAS_TWITT_LINEUP_DONE                  @"OnTwittLineUpDone"                      //PARAM: IdPlayer, IdDevice
+#define K_JORNADAS_TWITT_LINEUP_CANCELLED             @"OnTwittLineUpCancel"                    //PARAM: IdPlayer, IdDevice
+
+// CLASIFICACION
+#define K_CLASIFICATION_onEnter_CLASIFICATION         @"Clasification_onEnter_Clasification"
+
+// CALENDAR
+#define K_CALENDAR_onEnter_CALENDAR                   @"Calendar_onEnter_Calendar"
+#define K_CALENDAR_onEnter_TOURNAMENT                 @"Calendar_onEnter_Torunament"            //PARAM: Tournament selected
+#define K_CALENDAR_onEnter_ROUND                      @"Calendar_onEnter_Round"
+
+//CUOTAS
+#define K_CUOTAS_onEnter_CUOTAS                       @"Cuotas_onEnter_Cuotas"
+#define K_CUOTAS_onClickToProvider_BetSlip            @"Cuotas_onClickToProvider_BetSlip"
+#define K_CUOTAS_onEnterLandingPage                   @"Cuotas_onEnterLandingPage"
+#define K_CUOTAS_onEnterInformacionUtil               @"Cuotas_onEnterInformacionUtil"
+#define K_CUOTAS_Landing_RegisterClick                @"Cuotas_Landing_RegisterClick"
+#define K_CUOTAS_Landing_AlreadyRegisteredClick       @"Cuotas_Landing_AlreadyRegisteredClick"
+#define K_CUOTAS_RegisterFromMatch                    @"Cuotas_RegisterFromMatch"
+#define K_CUOTAS_ApostarConAmigos                     @"Cuotas_ApostarConAmigos"
+
+// ERRORS EVENTS
+#define K_COREDATA_ERROR_SAVECONTEXT                  @"Core Data Save Context Error"
+#define K_SERVICE_ERROR_DICTIONARY_NULL               @"ServiceErrorDictionaryNULL" // CACTUS: to try to locate a possible source of app crashes
+
+
+#endif
