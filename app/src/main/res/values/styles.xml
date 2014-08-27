@@ -1,8 +1,52 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!-- Base application themes. -->
+    <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>
     </style>
 
+    <style name="GolesTheme.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowTitleSize">0dp</item>
+    </style>
+
+
+    <!-- Styles -->
+    <style name="ActionBar.Solid.Goles" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <!--<item name="android:background">@drawable/ab_solid_goles</item>-->
+        <item name="android:background">@color/primary</item>
+        <item name="android:icon">@drawable/ic_ab_icon</item>
+
+    </style>
+
+
+    <style name="TextAppearance.FloatLabel" parent="android:TextAppearance.Small">
+        <item name="android:textColor">@color/gray_60</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- UI widgets -->
+    <style name="BlueButton">
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginFacebookButton">
+        <item name="android:background">@drawable/btn_facebook</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginEmailButton">
+        <item name="android:background">@drawable/btn_gray</item>
+        <item name="android:textColor">@color/gray_30</item>
+    </style>
+
+    <style name="LoginSessionButton">
+        <item name="android:background">@color/transparent</item>x
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
 </resources>

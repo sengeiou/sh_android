@@ -1,9 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Goles5</string>
-    <string name="app_title">Goles5</string>
+
+    <string name="app_name">Goles Mockup</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_registro_email">Nueva cuenta</string>
 
     <!-- Time strings-->
     <string name="day_title_today">Hoy</string>
     <string name="day_title_tomorrow">Mañana</string>
     <string name="day_title_yesterday">Ayer</string>
+
+    <!-- Welcome texts -->
+    <string name="welcome_title_0">Goles</string>
+    <string name="welcome_subtitle_0">Convierte tu móvil en el notificador de goles más rápido del mundo.</string>
+    <string name="welcome_title_1">Rápida</string>
+    <string name="welcome_subtitle_1"><b>Goles</b> notifica goles y resultados antes que cualquier app.</string>
+    <string name="welcome_title_2">Simple</string>
+    <string name="welcome_subtitle_2"><b>Goles</b> es increíblemente fácil de usar.</string>
+    <string name="welcome_title_3">Sin publicidad</string>
+    <string name="welcome_subtitle_3"><b>Goles</b> no te molesta con anuncios ni cosas raras.</string>
+    <string name="welcome_title_login">Cloud</string>
+    <string name="welcome_subtitle_login">Goles guarda tus equipos y suscripciones en la nube.</string>
+    <string name="title_activity_login_email">Iniciar sesión</string>
+
+    <string-array name="emails_test">
+        <item>rafa.vazsan@gmail.com</item>
+        <item>rafagames92@gmail.com</item>
+        <item>rafael.vazquez@gmail.com</item>
+    </string-array>
+
+    <string name="title_activity_partido">Sevilla-R.Madrid</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="facebookID">716903905047845</string>
+
 </resources>

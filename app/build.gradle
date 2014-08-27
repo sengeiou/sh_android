@@ -33,14 +33,43 @@ android {
         targetSdkVersion 19
         versionCode 1
         versionName "0.1"
+        resConfigs "es", "en"
+        resConfigs "hdpi","xhdpi","xxhdpi"
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+    }
+
+    signingConfigs{
+        release{
+            storeFile file('../certs/release.keystore')
+            storePassword "******"
+            keyAlias "******"
+            keyPassword "******"
+        }
+
+        debug{
+            storeFile file('../certs/debug.keystore')
+        }
+    }
+
     buildTypes {
         release {
             runProguard false //TODO configurarlo y activarlo
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
             signingConfig signingConfigs.debug
         }
 
