@@ -1,8 +1,5 @@
 package gm.mobi.android.constant;
 
-/**
- * Created by InmaculadaAlcon on 22/08/2014.
- */
 public class ServiceConstants {
 
     public static final int APPADVICE_ENTITY = 1;

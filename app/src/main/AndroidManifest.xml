@@ -1,17 +1,52 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="gm.mobi.android">
+<manifest
+    package="gm.mobi.android"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:allowBackup="true"
-        android:label="@string/app_name"
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Sync adapter -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
+    <application
+        android:name=".GolesApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
 
+        <!-- Sync adapter -->
 
-       <provider android:name="gm.mobi.android.sync.StubProvider"
-                 android:authorities="gm.mobi.android.sync.provider"
-                 android:exported="false"
-                 android:syncable="true"/>
+        <service android:name=".sync.GMAccountService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+        </service>
+
+        <provider
+            android:name=".sync.StubProvider"
+            android:authorities="${applicationId}.sync.provider"
+            android:exported="false"
+            android:syncable="true"/>
+
+        <service
+            android:name=".sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
+        </service>
+
+
     </application>
 
 </manifest>

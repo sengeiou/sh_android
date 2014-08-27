@@ -5,8 +5,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-/**
- * Created by InmaculadaAlcon on 22/08/2014.
+/*
+ * Define an implementation of ContentProvider that stubs out
+ * all methods
  */
 public class StubProvider extends ContentProvider {
 
@@ -23,7 +24,7 @@ public class StubProvider extends ContentProvider {
      * */
     @Override
     public String getType(Uri uri) {
-        return new String();
+        return "";
     }
 
     /**

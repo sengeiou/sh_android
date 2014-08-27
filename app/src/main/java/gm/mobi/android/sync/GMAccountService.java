@@ -13,15 +13,8 @@ import android.os.IBinder;
 
 import gm.mobi.android.constant.Constants;
 
-/**
- * Created by InmaculadaAlcon on 11/08/2014.
- */
 public class GMAccountService  extends Service{
     private Authenticator mAuthenticator;
-
-    public static Account getAccount(){
-        return new Account(Constants.ACCOUNT_NAME, Constants.ACCOUNT_TYPE);
-    }
 
     @Override
     public void onCreate() {

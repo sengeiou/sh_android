@@ -1,13 +1,14 @@
 package gm.mobi.android.service.generic;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fav24.dataservices.exception.ServerException;
+import gm.mobi.android.exception.ServerException;
 
 /**
  * Clase base de todos los objetos de transferencia.

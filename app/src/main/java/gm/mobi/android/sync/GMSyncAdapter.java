@@ -7,22 +7,34 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-import gm.mobi.android.sync.connections.GMAsyncResponse;
-
-/**
- * Created by InmaculadaAlcon on 21/08/2014.
- */
 public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
-    public static final String TAG_OFFSET = "offset";
 
-    private Context mContext;
-    private GMAsyncResponse mDelegate;
+    /**
+     * Compatibility with versions previous to 3.0
+     */
     public GMSyncAdapter(Context mContext, boolean autoInitialize){
         super(mContext,autoInitialize);
+        setup();
     }
+
+    /**
+     * Android > 3.0
+     */
+    public GMSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+        super(context, autoInitialize, allowParallelSyncs);
+        setup();
+    }
+
+    /**
+     * Any initial setup tasks
+     */
+    public void setup(){
+        /* no-op */
+    }
+
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-
+        // Big boys stuff
     }
 }

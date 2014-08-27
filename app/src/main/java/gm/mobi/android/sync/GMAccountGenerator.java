@@ -5,30 +5,36 @@ import android.accounts.AccountManager;
 import android.content.Context;
 
 import gm.mobi.android.constant.Constants;
+import gm.mobi.android.constant.SyncConstants;
 
-/**
- * Created by InmaculadaAlcon on 11/08/2014.
- */
 public class GMAccountGenerator {
 
-    private static AccountManager mAccountManager;
-    private static Account mAccount;
-
-    public static Account createSyncAccount(Context context){
+    /**
+     * Create a new dummy account for the sync adapter
+     *
+     * @param context The application context
+     */
+    //TODO crear una cuenta que tenga al menos relación con el usuario real, por aprovechar el framework
+    public static Account createSyncAccount(Context context) {
         //Create account type and default account
         //Get an instance of Android Account Manager
         //Add the account name and type, no password or user data. If ok, return the Account object, otherwise report an error
-        mAccount = new Account(Constants.ACCOUNT_NAME,Constants.ACCOUNT_TYPE);
-        mAccountManager = (AccountManager)context.getSystemService(Context.ACCOUNT_SERVICE);
-        if(mAccountManager.addAccountExplicitly(mAccount,null,null)){
-            //If don't set android:syncable="true" in <provider> manifest's tag, then call.setIsSyncable(account,AUTHORITY,1) here.
-        }else{
-            //The account exists or some other error occurred. Log this, or handle it internally.
-        }
-        return mAccount;
-    }
+        Account newAccount = new Account(SyncConstants.ACCOUNT_NAME, SyncConstants.ACCOUNT_TYPE);
+        AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
 
-    public static Account getAccount() {
-        return mAccount;
+        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+             /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call context.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+        } else {
+            /*
+             * TODO The account exists or some other error occurred. Log this, report it,
+             * or handle it internally.
+             */
+        }
+        return newAccount;
     }
 }

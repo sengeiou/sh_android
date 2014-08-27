@@ -1,68 +1,42 @@
 package gm.mobi.android.util;
 
-import android.util.Config;
 import android.util.Log;
+
 import gm.mobi.android.BuildConfig;
-import gm.mobi.android.constant.Constants;
 
-/**
- * Created by InmaculadaAlcon on 21/08/2014.
- */
 public class LogUtils {
-    private static final String LOG_PREFIX = "goles_";
-    private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
-    private static final int MAX_LOG_TAG_LENGTH = 23;
+    private static final String TAG = "Goles";
 
-    public static String makeLogTag(String str){
-        if(str.length()>MAX_LOG_TAG_LENGTH-LOG_PREFIX_LENGTH){
-            return LOG_PREFIX + str.substring(0,MAX_LOG_TAG_LENGTH-LOG_PREFIX_LENGTH-1);
-        }
-        return LOG_PREFIX + str;
+    public static void d(String message) {
+        if (BuildConfig.DEBUG) Log.d(TAG, message);
     }
 
-    public static void LOGD(final String tag, String message) {
-    //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG || Constants.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
-            Log.d(tag, message);
-        }
-    }
-    public static void LOGD(final String tag, String message, Throwable cause) {
-    //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG || Constants.IS_DOGFOOD_BUILD || Log.isLoggable(tag, Log.DEBUG)) {
-            Log.d(tag, message, cause);
-        }
-    }
-    public static void LOGV(final String tag, String message) {
-    //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
-            Log.v(tag, message);
-        }
-    }
-    public static void LOGV(final String tag, String message, Throwable cause) {
-    //noinspection PointlessBooleanExpression,ConstantConditions
-        if (BuildConfig.DEBUG && Log.isLoggable(tag, Log.VERBOSE)) {
-            Log.v(tag, message, cause);
-        }
+    public static void v(String message) {
+        Log.v(TAG, message);
     }
 
-    public static void LOGI(final String tag, String message){
-        Log.i(tag,message);
-    }
-    public static void LOGI(final String tag, String message, Throwable cause){
-        Log.i(tag,message,cause);
-    }
-    public static void LOGW(final String tag, String message){
-        Log.w(tag,message);
-    }
-    public static void LOGW(final String tag,String message, Throwable cause){
-        Log.w(tag,message,cause);
+    public static void i(String message) {
+        Log.i(TAG, message);
     }
 
-    public static void LOGE(final String tag, String message){
-        Log.e(tag,message);
+    public static void w(String message) {
+        Log.w(TAG, message);
     }
-    public static void LOGE(final String tag, String message, Throwable cause){
-        Log.e(tag,message,cause);
+
+    public static void e(String message) {
+        Log.e(TAG, message);
+    }
+
+    public static void e(String message, Throwable tr) {
+        Log.e(TAG, message, tr);
+    }
+
+    public static void wtf(String message) {
+        Log.wtf(TAG, message);
+    }
+
+    public static void wtf(String message, Throwable tr) {
+        Log.wtf(TAG, message, tr);
     }
 
 }
