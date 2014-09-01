@@ -126,20 +126,33 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 
 //------------------------------------------------------------------------------
 /**
- @brief Request for all matches of a teams array
+ @brief Request for all events of a match
  
- @discussion Creates a request for all matches of given Teams. It retrieves from a view in database.
+ @discussion Creates a request for all events of given match.
  At this moment, this info is not saved in CoreData.
  
- @params NSArray            Array of Teams to retrieve matches from.
+ @params Match              The match of the initial search.
  @params delegate           The class that's in charge for the request
- @params Match              The match of the initial search
  
  @returns The response of the request is automatically sent to FavGeneralDao to parse it.
  */
 - (void)getAllEventsForMatch:(Match *)match andDelegate:(id)delegate;
 
+//------------------------------------------------------------------------------
+/**
+ @brief Request for all subscriptions of a device
+ 
+ @discussion Creates a request for all subscriptions of given device.
+ At this moment, this info is not saved in CoreData.
+ 
+ @returns The response of the request is automatically sent to FavGeneralDao to parse it.
+ */
 - (void)getDeviceSuscriptions;
+
+
 - (void)deviceRegistration:(Device *)device withDelegate:(id)delegate;
+
+- (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate;
+- (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate;
 
 @end

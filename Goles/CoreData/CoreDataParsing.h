@@ -111,6 +111,7 @@ extern NSString *const kALIAS_REGISTER_DEVICE;
 extern NSString *const K_COREDATA_APPADVICE;
 extern NSString *const K_COREDATA_CLASSIFICATION;
 extern NSString *const K_COREDATA_DEVICE;
+extern NSString *const K_COREDATA_EVENT;
 extern NSString *const K_COREDATA_EVENTOFMATCH;
 extern NSString *const K_COREDATA_ROUND;
 extern NSString *const K_COREDATA_MATCH;
@@ -128,7 +129,7 @@ extern NSString *const K_COREDATA_PLAYERPROVIDER;
 extern NSString *const K_CDENTITY_SYNC_CONTROL;
 extern NSString *const K_COREDATA_SUSCRIPTIONS;
 extern NSString *const K_COREDATA_SML;
-
+extern NSString *const K_COREDATA_LINEUP;
 
 #pragma mark - CORE DATA CLASSES
 
@@ -146,6 +147,7 @@ extern NSString *const kJSON_ADVICE_BUTTON_DATA;
 extern NSString *const kJSON_ADVICE_VERSION_START;
 extern NSString *const kJSON_ADVICE_VERSION_END;
 extern NSString *const kJSON_ADVICE_BUTTON_TEXTID;
+extern NSString *const kJSON_ADVICE_IDMESSAGE;
 
 // BETTYPE
 extern NSString *const kJSON_ID_BETTYPE;
@@ -178,11 +180,6 @@ extern NSString *const kJSON_CLASSIFICATION_WEIGHT;
 
 // DEVICE
 extern NSString * const kJSON_ID_DEVICE;
-extern NSString * const kJSON_ACTIVE;
-extern NSString * const kJSON_FACEBOOK_PREDICTION;
-extern NSString * const kJSON_GOOGLE_PLUS_PREDICTION;
-extern NSString * const kJSON_TWITTER_PREDICTION;
-extern NSString * const kJSON_MAIL;
 extern NSString * const kJSON_TOKEN;
 extern NSString *const kJSON_DEVICE_OSVERSION;
 extern NSString *const kJSON_DEVICE_MODEL;

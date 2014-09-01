@@ -83,18 +83,263 @@
     NSLog(@"SENDING CONTENT TO SERVER:%@",[NSDate date]);
     NSLog(@"/////////////////////////////////////////////////////");
 
+    
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[];
+    NSArray *entitiesToSynchro = @[K_COREDATA_APPADVICE, K_COREDATA_BETTYPE, K_COREDATA_MATCH_ODD, K_COREDATA_CLASSIFICATION, K_COREDATA_DEVICE,  K_COREDATA_EVENT, K_COREDATA_EVENTOFMATCH, K_COREDATA_MATCH, K_COREDATA_MATCHBETTYPE, K_COREDATA_MESSAGE, K_COREDATA_PLAYER, K_COREDATA_PLAYERPROVIDER, K_COREDATA_PROVIDER, K_COREDATA_ROUND, K_COREDATA_SML, K_COREDATA_SUSCRIPTIONS, K_COREDATA_TEAM, K_COREDATA_TOURNAMENT];
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"csys_synchronized != 's'"];
         NSArray *entityArray = [[CoreDataManager singleton] getAllEntities:NSClassFromString(entity) withPredicate:predicate];
         
-        for (id updatedEntity in entityArray) {
-        
+            for (id updatedEntity in entityArray) {
+            
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_APPADVICE class]]){
+                    
+                    AppAdvice *appDevice = (AppAdvice *)updatedEntity;
+                    NSTimeInterval birth = [appDevice.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [appDevice.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [appDevice.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_APPADVICE:appDevice.idAppAdvice,
+                                                                                                     kJSON_ADVICE_PATH: appDevice.path, kJSON_ADVICE_IDMESSAGE:appDevice.idMessage, kJSON_ADVICE_PLATFORM: appDevice.platform, kJSON_ADVICE_STATUS: appDevice.status, kJSON_ADVICE_BUTTON_VISIBLE: appDevice.visibleButton, kJSON_ADVICE_BUTTON_ACTION: appDevice.buttonAction, kJSON_ADVICE_BUTTON_TEXTID: appDevice.buttonTextId, kJSON_ADVICE_BUTTON_DATA: appDevice.buttonData,kJSON_ADVICE_DATESTART:appDevice.startDate,kJSON_ADVICE_DATEEND:appDevice.endDate,kJSON_ADVICE_WEIGHT:appDevice.weight, kJSON_ADVICE_VERSION_START: appDevice.startVersion, kJSON_ADVICE_VERSION_END: appDevice.endVersion,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+
+                    if ([appDevice.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_APPADVICE:appDevice.idAppAdvice};
+                   
+                    if ([appDevice.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_APPADVICE withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_APPADVICE withData:dataArray andKey:key andDelegate:delegate];
+
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_BETTYPE class]]){
+                    
+                    BetType *betType = (BetType *)updatedEntity;
+                    NSTimeInterval birth = [betType.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [betType.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [betType.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_BETTYPE: betType.idBetType, kJSON_ALWAYS_VISIBLE: betType.alwaysVisible,
+                                                                                                     kJSON_COMMENT: betType.comment, kJSON_TITLE: betType.title,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([betType.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_BETTYPE:betType.idBetType};
+                    
+                    if ([betType.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_BETTYPE withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_BETTYPE withData:dataArray andKey:key andDelegate:delegate];
+                    
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_BETTYPEODD class]]){
+                    
+                    BetTypeOdd *betTypeOdd = (BetTypeOdd *)updatedEntity;
+                    NSTimeInterval birth = [betTypeOdd.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [betTypeOdd.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [betTypeOdd.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_BETTYPEODD: betTypeOdd.idBetTypeOdd, kJSON_VALUE: betTypeOdd.value,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([betTypeOdd.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_BETTYPEODD:betTypeOdd.idBetTypeOdd};
+                    
+                    if ([betTypeOdd.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_BETTYPEODD withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_BETTYPEODD withData:dataArray andKey:key andDelegate:delegate];
+                    
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_DEVICE class]]){
+                    
+                    Device *device = (Device *)updatedEntity;
+                    NSTimeInterval birth = [device.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [device.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [device.csys_deleted timeIntervalSince1970]*1000;
+
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,
+                                                                                                     kJSON_DEVICE_OSVERSION: device.osVer, kJSON_DEVICE_MODEL: device.model,
+                                                                                                     kJSON_DEVICE_APPVERSION: device.appVer,kJSON_DEVICE_LOCALE: device.locale,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([device.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_DEVICE:device.idDevice};
+                    
+                    if ([device.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_DEVICE withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:delegate];
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_EVENTOFMATCH class]]){
+                    
+                    EventOfMatch *eventOfMatch = (EventOfMatch *)updatedEntity;
+                    NSTimeInterval birth = [eventOfMatch.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [eventOfMatch.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [eventOfMatch.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_EVENT_OF_MATCH: eventOfMatch.idEventOfMatch,
+                                                                                                     kJSON_EVENT_LOCAL_SCORE: eventOfMatch.localScore,
+                                                                                                     kJSON_EVENT_VISITOR_SCORE: eventOfMatch.visitorScore,
+                                                                                                     kJSON_EVENT_STATUS: eventOfMatch.status, kJSON_EVENT_DATEIN: eventOfMatch.dateIn,
+                                                                                                     kJSON_EVENT_IDPERIOD: eventOfMatch.idPeriod,
+                                                                                                     kJSON_EVENT_ACTOR_TRANSMITTER_NAME: eventOfMatch.actorTransmitterName,
+                                                                                                     kJSON_EVENT_ACTOR_RECEPTOR_NAME: eventOfMatch.actorTransmitterName,
+                                                                                                     kJSON_EVENT_ISOWNGOAL: eventOfMatch.isOwnGoal,
+                                                                                                     kJSON_EVENT_ISPENALTY_GOAL: eventOfMatch.isPenaltyGoal,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([eventOfMatch.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_EVENT_OF_MATCH:eventOfMatch.idEventOfMatch};
+                    
+                    if ([eventOfMatch.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_EVENTOFMATCH withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_EVENTOFMATCH withData:dataArray andKey:key andDelegate:delegate];
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_MATCH class]]){
+                    
+                    Match *match = (Match *)updatedEntity;
+                     
+                     NSTimeInterval birth = [match.csys_birth timeIntervalSince1970]*1000;
+                     NSTimeInterval modified = [match.csys_modified timeIntervalSince1970]*1000;
+                     NSTimeInterval deleted = [match.csys_deleted timeIntervalSince1970]*1000;
+                    
+
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_MATCH: match.idMatch, kJSON_MATCH_STATE: match.matchState,
+                                                                                                     kJSON_SCORE_LOCAL: match.localScore, kJSON_SCORE_VISITOR:match.visitorScore,
+                                                                                                     kJSON_ID_TEAM_LOCAL: match.idLocalTeam, kJSON_ID_TEAM_VISITOR: match.idVisitorTeam,
+                                                                                                     kJSON_DATE_MATCH: match.matchDate, kJSON_ELAPSED_MINUTES: match.elapsedMinutes,
+                                                                                                     kJSON_MATCH_TYPE: match.matchType, kJSON_SCORE_TEAMLOCAL_PENALTIES: match.scorePenaltiesLocalTeam,
+                                                                                                     kJSON_SCORE_TEAMVISITOR_PENALTIES: match.scorePenaltiesVisitorTeam,
+                                                                                                     kJSON_DATE_FINAL: match.endFinal, kJSON_DATE_START: match.startDate,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                     
+                     if ([match.csys_syncronized isEqualToString:@"d"])
+                         [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                     
+                     NSArray *dataArray = @[mutDict];
+                     
+                     NSDictionary *key = @{kJSON_ID_MATCH:match.idMatch};
+                     
+                     if ([match.csys_syncronized isEqualToString:@"d"])
+                         [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_MATCH withKey:key andData:dataArray andDelegate:delegate];
+                     else
+                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_MATCH withData:dataArray andKey:key andDelegate:delegate];
+                }
+
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_MATCHBETTYPE class]]){
+                    
+                    MatchBetType *matchBetType = (MatchBetType *)updatedEntity;
+                    
+                    NSTimeInterval birth = [matchBetType.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [matchBetType.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [matchBetType.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_MATCHBETTYPE: matchBetType.idMatchBetType,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([matchBetType.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_MATCHBETTYPE:matchBetType.idMatchBetType};
+                    
+                    if ([matchBetType.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_MATCHBETTYPE withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_MATCHBETTYPE withData:dataArray andKey:key andDelegate:delegate];
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_MESSAGE class]]){
+                    
+                    Message *message = (Message *)updatedEntity;
+                    
+                    NSTimeInterval birth = [message.csys_birth timeIntervalSince1970]*1000;
+                    NSTimeInterval modified = [message.csys_modified timeIntervalSince1970]*1000;
+                    NSTimeInterval deleted = [message.csys_deleted timeIntervalSince1970]*1000;
+                    
+                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_MESSAGE: message.idMessage, kJSON_MESSAGE_MESSAGE: message.message,
+                                                                                                     kJSON_MESSAGE_LANGUAGE: message.locale, kJSON_MESSAGE_PLATFORM: message.platform,
+                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                    
+                    if ([message.csys_syncronized isEqualToString:@"d"])
+                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                    
+                    NSArray *dataArray = @[mutDict];
+                    
+                    NSDictionary *key = @{kJSON_ID_MESSAGE:message.idMessage};
+                    
+                    if ([message.csys_syncronized isEqualToString:@"d"])
+                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_MESSAGE withKey:key andData:dataArray andDelegate:delegate];
+                    else
+                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_MESSAGE withData:dataArray andKey:key andDelegate:delegate];
+                }
+                
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_PLAYER class]]){
+                    
+                     Player *player = (Player *)updatedEntity;
+                    
+                     NSTimeInterval birth = [player.csys_birth timeIntervalSince1970]*1000;
+                     NSTimeInterval modified = [player.csys_modified timeIntervalSince1970]*1000;
+                     NSTimeInterval deleted = [player.csys_deleted timeIntervalSince1970]*1000;
+                    
+                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_PLAYER_ID: player.idPlayer, kJSON_USER_NAME: player.userName,
+                                                                                                      kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                                                      kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                     
+                     if ([player.csys_syncronized isEqualToString:@"d"])
+                     [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                     
+                     NSArray *dataArray = @[mutDict];
+                     
+                     NSDictionary *key = @{kJSON_PLAYER_ID:player.idPlayer};
+                     
+                     if ([player.csys_syncronized isEqualToString:@"d"])
+                         [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_PLAYER withKey:key andData:dataArray andDelegate:delegate];
+                     else
+                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_PLAYER withData:dataArray andKey:key andDelegate:delegate];
+            }
         }
     }
-    
     [self downloadEntitiesProcessingWithDelegate:delegate];
 }
 

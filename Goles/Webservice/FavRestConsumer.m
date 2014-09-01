@@ -524,9 +524,90 @@
     }else
         DLog(@"No valid req structure created");
 
-    
-    
 }
 
+#pragma mark - Create method
+//------------------------------------------------------------------------------
+- (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate{
+    
+    //Create Alias block
+    NSString *alias = [NSString stringWithFormat:@"Create %@",entity];
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = [FavRestConsumerHelper createREQ];
+    
+    //Create 'metadata' block
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_RETREAVE,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
+    
+    //Create 'ops' block
+    NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:dictArray};
+    
+    //Join all 'ops' blocks
+    NSArray *ops = @[opsDictionary];
+    
+    //Create full data structure
+    if (req && [ops count] > 0) {
+        
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        
+        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
+            
+            if (!error)
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error) {
+                    
+                    NSLog(@"%@ CREADA", entity);
+                }];
+            else {
+                DLog(@"Request error:%@",error);
+            }
+        }];
+    }else
+        DLog(@"No valid req structure created");
+}
+
+//------------------------------------------------------------------------------
+- (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate{
+    
+    //Create Alias block
+    NSString *alias = [NSString stringWithFormat:@"Delete %@",entity];
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = [FavRestConsumerHelper createREQ];
+    
+    //Create 'metadata' block
+    
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_DELETE,K_WS_OPS_ENTITY:entity,K_WS_OPS_KEY:key,K_WS_OPS_ITEMS:[NSNull null],K_WS_OPS_TOTAL_ITEMS:[NSNull null]};
+    
+    //Create 'ops' block
+    NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:data};
+    
+    //Join all 'ops' blocks
+    NSArray *ops = @[opsDictionary];
+    
+    //Create full data structure
+    if (req && [ops count] > 0) {
+        
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        
+        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *responseData,NSError *error) {
+            
+            if (!error)
+                [FavGeneralDAO genericParser:responseData onCompletion:^(BOOL status, NSError *error) {
+                    
+                    NSLog(@"%@ BORRADA", entity);
+                }];
+            else {
+                DLog(@"Request error:%@",error);
+            }
+        }];
+    }else
+        DLog(@"No valid req structure created");
+}
 
 @end

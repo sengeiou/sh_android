@@ -52,15 +52,10 @@
 {
     
     [FBLoginView class];
+
     
-    UIDevice *device = [UIDevice currentDevice];
-    NSUUID *uuid = device.identifierForVendor;
-    
-    NSString *name = device.name;
-    NSLog(@"%@", uuid);
-    
-    NSString *uniqueString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    NSLog(@"uniqueString: %@", uniqueString);
+    /*NSString *uniqueString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    NSLog(@"uniqueString: %@", uniqueString);*/
     
     
 //    [[AFNetworkReachabilityManager sharedManager] startMonitoring];

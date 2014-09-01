@@ -113,6 +113,7 @@ NSString *const kALIAS_REGISTER_DEVICE                 = @"GET_ALL_EVENTS_FOR_MA
 NSString *const K_COREDATA_APPADVICE                    = @"AppAdvice";
 NSString *const K_COREDATA_CLASSIFICATION               = @"Classification";
 NSString *const K_COREDATA_DEVICE                       = @"Device";
+NSString *const K_COREDATA_EVENT                        = @"Event";
 NSString *const K_COREDATA_EVENTOFMATCH                 = @"EventOfMatch";
 NSString *const K_COREDATA_ROUND                        = @"Round";
 NSString *const K_COREDATA_MATCH                        = @"Match";
@@ -130,6 +131,7 @@ NSString *const K_COREDATA_PLAYERPROVIDER               = @"PlayerProvider";
 NSString *const K_COREDATA_SUSCRIPTIONS                 = @"Subscription";
 NSString *const K_CDENTITY_SYNC_CONTROL                 = @"SyncControl";
 NSString *const K_COREDATA_SML                          = @"SML";
+NSString *const K_COREDATA_LINEUP                       = @"LineUp";
 
 
 #pragma mark - CORE DATA CLASSES
@@ -148,6 +150,7 @@ NSString *const kJSON_ADVICE_BUTTON_DATA                = @"buttonData";
 NSString *const kJSON_ADVICE_VERSION_START              = @"startVersion";
 NSString *const kJSON_ADVICE_VERSION_END                = @"endVersion";
 NSString *const kJSON_ADVICE_BUTTON_TEXTID              = @"buttonTextId";
+NSString *const kJSON_ADVICE_IDMESSAGE                  = @"idMessage";
 
 //BETTYPE
 NSString *const kJSON_BETTYPE                           = @"betType";
@@ -180,11 +183,6 @@ NSString *const kJSON_CLASSIFICATION_WEIGHT           = @"weight";
 
 //DEVICE
 NSString *const kJSON_ID_DEVICE                        = @"idDevice";
-NSString *const kJSON_ACTIVE                           = @"active";
-NSString *const kJSON_FACEBOOK_PREDICTION              = @"facebookPrediction";
-NSString *const kJSON_GOOGLE_PLUS_PREDICTION           = @"googlePlusPrediction";
-NSString *const kJSON_TWITTER_PREDICTION               = @"twitterPrediction";
-NSString *const kJSON_MAIL                             = @"email";
 NSString *const kJSON_TOKEN                            = @"token";
 NSString *const kJSON_DEVICE_OSVERSION                 = @"osVersion";
 NSString *const kJSON_DEVICE_MODEL                     = @"model";
