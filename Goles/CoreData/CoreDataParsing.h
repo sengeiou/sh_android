@@ -149,35 +149,6 @@ extern NSString *const kJSON_ADVICE_VERSION_END;
 extern NSString *const kJSON_ADVICE_BUTTON_TEXTID;
 extern NSString *const kJSON_ADVICE_IDMESSAGE;
 
-// BETTYPE
-extern NSString *const kJSON_ID_BETTYPE;
-extern NSString *const kJSON_BETTYPE;
-extern NSString *const kJSON_ALWAYS_VISIBLE;
-extern NSString *const kJSON_COMMENT;
-extern NSString *const kJSON_TITLE;
-
-// BETTYPEODD
-extern NSString *const kJSON_BETTYPEODD;
-extern NSString *const kJSON_ID_BETTYPEODD;
-extern NSString *const kJSON_VALUE;
-extern NSString *const kJSON_URL;
-
-// CLASSIFICATION
-extern NSString *const kJSON_CLASSIFICATION_PL;
-extern NSString *const kJSON_CLASSIFICATION_WL;
-extern NSString *const kJSON_CLASSIFICATION_LL;
-extern NSString *const kJSON_CLASSIFICATION_DL;
-extern NSString *const kJSON_CLASSIFICATION_GFL;
-extern NSString *const kJSON_CLASSIFICATION_GAL;
-extern NSString *const kJSON_CLASSIFICATION_PV;
-extern NSString *const kJSON_CLASSIFICATION_WV;
-extern NSString *const kJSON_CLASSIFICATION_LV;
-extern NSString *const kJSON_CLASSIFICATION_DV;
-extern NSString *const kJSON_CLASSIFICATION_GFV;
-extern NSString *const kJSON_CLASSIFICATION_GAV;
-extern NSString *const kJSON_CLASSIFICATION_POINTS;
-extern NSString *const kJSON_CLASSIFICATION_WEIGHT;
-
 // DEVICE
 extern NSString * const kJSON_ID_DEVICE;
 extern NSString * const kJSON_TOKEN;
@@ -213,16 +184,6 @@ extern NSString * const kJSON_ROUND_END_DATE;
 extern NSString * const kJSON_ROUND_TYPE;
 extern NSString * const kJSON_MATCHES;
 
-// LINEUP
-extern NSString *const kJSON_LINEUP_ID;
-extern NSString *const kJSON_LINEUP_GOALKEEPER;
-extern NSString *const kJSON_LINEUP_DEFENDERS;
-extern NSString *const kJSON_LINEUP_MIDFIELDER01;
-extern NSString *const kJSON_LINEUP_MIDFIELDER02;
-extern NSString *const kJSON_LINEUP_STRIKER;
-extern NSString *const kJSON_LINEUP_RESERVE;
-extern NSString *const kJSON_LINEUP_COACH;
-extern NSString *const kJSON_LINEUP_FORMATION;
 
 // MATCH
 extern NSString * const kJSON_MATCHLIST;
@@ -253,9 +214,6 @@ extern NSString * const kJSON_SCORE_LOCAL;
 extern NSString * const kJSON_SCORE_VISITOR;
 extern NSString * const kJSON_DATE_START;
 
-//MATCHBETTYPE
-extern NSString * const kJSON_ID_MATCHBETTYPE;
-
 //MESSAGE
 extern NSString *const kJSON_ID_MESSAGE;
 extern NSString *const kJSON_MESSAGE_MESSAGE;
@@ -272,26 +230,6 @@ extern NSString * const kJSON_PLAYER_ID;
 extern NSString * const kJSON_USER_NAME;
 extern NSString * const kJSON_ID_PLAYER;
 
-// PLAYERPROVIDER
-extern NSString *const kJSON_ID_PLAYERPROVIDER;
-extern NSString *const kJSON_STATUS;
-
-// PROVIDER
-extern NSString * const kJSON_PROVIDER;
-extern NSString * const kJSON_ID_PROVIDER;
-extern NSString * const kJSON_NAME;
-extern NSString * const kJSON_SWEEPSTAKE_ACTIVE;
-extern NSString * const kJSON_MATCH_ODDS;
-extern NSString * const kJSON_PREDICTION_ODDS;
-extern NSString * const kJSON_UNIQUE_KEY;
-extern NSString * const kJSON_VISIBLE;
-extern NSString * const kJSON_PROVIDER_ACTIVE;
-extern NSString * const kJSON_DISCLAIMER;
-extern NSString * const kJSON_TRACKER;
-extern NSString * const kJSON_ZONEID;
-extern NSString * const kJSON_REGISTRYURL;
-extern NSString * const kJSON_PARTNERID;
-
 // SWEEPSTAKEROUND
 extern NSString * const kJSON_ID_TEAM;
 extern NSString * const kJSON_NAME_SHORT;
@@ -299,6 +237,8 @@ extern NSString * const kJSON_NAME_TINY;
 extern NSString * const kJSON_URL_IMAGE;
 extern NSString * const kJSON_ID_LEAGUE;
 extern NSString * const kJSON_IS_NATIONAL_TEAM;
+extern NSString * const kJSON_NAME;
+extern NSString *const kJSON_VALUE;
 
 // SML
 extern NSString * const kJSON_SML;

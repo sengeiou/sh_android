@@ -18,8 +18,6 @@
 		A5FB2E0E199A2941002A75C4 /* OptionsPartidosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E0D199A2941002A75C4 /* OptionsPartidosTableViewCell.m */; };
 		A5FB2E1A199A6E02002A75C4 /* GenteMatchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */; };
 		A5FB2E1D199A6E2A002A75C4 /* YoMatchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E1C199A6E2A002A75C4 /* YoMatchTableViewController.m */; };
-		A5FB2E31199BAD17002A75C4 /* NotificationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E30199BAD17002A75C4 /* NotificationsTableViewController.m */; };
-		AA05ADFA199A63660046EB6F /* MatchDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADF9199A63660046EB6F /* MatchDetailTableViewController.m */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
@@ -46,43 +44,29 @@
 		AA623D421998CF4B00A942A9 /* g.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3D1998CF4B00A942A9 /* g.aiff */; };
 		AA623D431998CF4B00A942A9 /* s.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3E1998CF4B00A942A9 /* s.aiff */; };
 		AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D461998D17700A942A9 /* _AppAdvice.m */; };
-		AA623E191998D17800A942A9 /* _BetType.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D481998D17700A942A9 /* _BetType.m */; };
-		AA623E1A1998D17800A942A9 /* _BetTypeOdd.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D4A1998D17700A942A9 /* _BetTypeOdd.m */; };
-		AA623E1B1998D17800A942A9 /* _Classification.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D4C1998D17700A942A9 /* _Classification.m */; };
 		AA623E1C1998D17800A942A9 /* _Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D4E1998D17700A942A9 /* _Device.m */; };
 		AA623E1D1998D17800A942A9 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D501998D17700A942A9 /* _Event.m */; };
 		AA623E1E1998D17800A942A9 /* _EventOfMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D521998D17700A942A9 /* _EventOfMatch.m */; };
 		AA623E1F1998D17800A942A9 /* _Round.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D541998D17700A942A9 /* _Round.m */; };
-		AA623E261998D17800A942A9 /* _LineUp.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D621998D17700A942A9 /* _LineUp.m */; };
 		AA623E271998D17800A942A9 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D641998D17700A942A9 /* _Match.m */; };
-		AA623E281998D17800A942A9 /* _MatchBetType.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D661998D17700A942A9 /* _MatchBetType.m */; };
 		AA623E2A1998D17800A942A9 /* _Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6A1998D17700A942A9 /* _Message.m */; };
 		AA623E2B1998D17800A942A9 /* _Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6C1998D17700A942A9 /* _Mode.m */; };
 		AA623E2C1998D17800A942A9 /* _Player.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6E1998D17700A942A9 /* _Player.m */; };
-		AA623E2D1998D17800A942A9 /* _PlayerProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D701998D17700A942A9 /* _PlayerProvider.m */; };
-		AA623E311998D17800A942A9 /* _Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D781998D17700A942A9 /* _Provider.m */; };
 		AA623E321998D17800A942A9 /* _SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D7A1998D17700A942A9 /* _SML.m */; };
 		AA623E331998D17800A942A9 /* _Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D7C1998D17700A942A9 /* _Subscription.m */; };
 		AA623E351998D17800A942A9 /* _Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D801998D17700A942A9 /* _Team.m */; };
 		AA623E361998D17800A942A9 /* _Tournament.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D821998D17700A942A9 /* _Tournament.m */; };
 		AA623E371998D17800A942A9 /* AppAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D841998D17700A942A9 /* AppAdvice.m */; };
-		AA623E381998D17800A942A9 /* BetType.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D861998D17700A942A9 /* BetType.m */; };
-		AA623E391998D17800A942A9 /* BetTypeOdd.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D881998D17700A942A9 /* BetTypeOdd.m */; };
-		AA623E3A1998D17800A942A9 /* Classification.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D8A1998D17700A942A9 /* Classification.m */; };
 		AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D8C1998D17700A942A9 /* CoreDataGenerator.m */; };
 		AA623E3C1998D17800A942A9 /* CoreDataParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D8E1998D17700A942A9 /* CoreDataParsing.m */; };
 		AA623E3D1998D17800A942A9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D901998D17700A942A9 /* Device.m */; };
 		AA623E3E1998D17800A942A9 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D921998D17700A942A9 /* Event.m */; };
 		AA623E3F1998D17800A942A9 /* EventOfMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D941998D17700A942A9 /* EventOfMatch.m */; };
 		AA623E401998D17800A942A9 /* Round.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D961998D17700A942A9 /* Round.m */; };
-		AA623E471998D17800A942A9 /* LineUp.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA41998D17700A942A9 /* LineUp.m */; };
 		AA623E481998D17800A942A9 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA61998D17700A942A9 /* Match.m */; };
-		AA623E491998D17800A942A9 /* MatchBetType.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA81998D17700A942A9 /* MatchBetType.m */; };
 		AA623E4B1998D17800A942A9 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAC1998D17700A942A9 /* Message.m */; };
 		AA623E4C1998D17800A942A9 /* Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAE1998D17700A942A9 /* Mode.m */; };
 		AA623E4D1998D17800A942A9 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DB01998D17700A942A9 /* Player.m */; };
-		AA623E4E1998D17800A942A9 /* PlayerProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DB21998D17700A942A9 /* PlayerProvider.m */; };
-		AA623E521998D17800A942A9 /* Provider.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBA1998D17700A942A9 /* Provider.m */; };
 		AA623E531998D17800A942A9 /* SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBC1998D17700A942A9 /* SML.m */; };
 		AA623E541998D17800A942A9 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBE1998D17700A942A9 /* Subscription.m */; };
 		AA623E561998D17800A942A9 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC21998D17700A942A9 /* Team.m */; };
@@ -107,7 +91,6 @@
 		AA623E6A1998D17800A942A9 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DF41998D17800A942A9 /* UIProgressView+AFNetworking.m */; };
 		AA623E6B1998D17800A942A9 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DF61998D17800A942A9 /* UIWebView+AFNetworking.m */; };
 		AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DF91998D17800A942A9 /* CoreDataManager.m */; };
-		AA623E6D1998D17800A942A9 /* CuotasManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DFB1998D17800A942A9 /* CuotasManager.m */; };
 		AA623E6E1998D17800A942A9 /* LeaguesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DFD1998D17800A942A9 /* LeaguesManager.m */; };
 		AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DFF1998D17800A942A9 /* NavigationManager.m */; };
 		AA623E701998D17800A942A9 /* SubscriptionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E011998D17800A942A9 /* SubscriptionManager.m */; };
@@ -126,48 +109,6 @@
 		AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */; };
 		AA623EE01998D78600A942A9 /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E851998D78600A942A9 /* LandingViewController.m */; };
 		AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E861998D78600A942A9 /* LandingViewController.xib */; };
-		AA623EE21998D78600A942A9 /* LineUpsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E8B1998D78600A942A9 /* LineUpsViewController.m */; };
-		AA623EE31998D78600A942A9 /* LineUpsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E8C1998D78600A942A9 /* LineUpsViewController.xib */; };
-		AA623EE41998D78600A942A9 /* CalendarFavoritesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E8F1998D78600A942A9 /* CalendarFavoritesTableViewController.m */; };
-		AA623EE51998D78600A942A9 /* CalendarFavoritesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E901998D78600A942A9 /* CalendarFavoritesTableViewController.xib */; };
-		AA623EE61998D78600A942A9 /* CalendarFixtureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E921998D78600A942A9 /* CalendarFixtureViewController.m */; };
-		AA623EE71998D78600A942A9 /* CalendarFixtureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E931998D78600A942A9 /* CalendarFixtureViewController.xib */; };
-		AA623EE81998D78600A942A9 /* CalendarMatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E951998D78600A942A9 /* CalendarMatchViewController.m */; };
-		AA623EE91998D78600A942A9 /* CalendarMatchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E961998D78600A942A9 /* CalendarMatchViewController.xib */; };
-		AA623EEA1998D78600A942A9 /* CalendarTournamentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E981998D78600A942A9 /* CalendarTournamentsViewController.m */; };
-		AA623EEB1998D78600A942A9 /* CalendarTournamentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E991998D78600A942A9 /* CalendarTournamentsViewController.xib */; };
-		AA623EEC1998D78600A942A9 /* CalendarCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E9C1998D78600A942A9 /* CalendarCustomCell.m */; };
-		AA623EED1998D78600A942A9 /* CalendarCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E9D1998D78600A942A9 /* CalendarCustomCell.xib */; };
-		AA623EEE1998D78600A942A9 /* CustomCellCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E9F1998D78600A942A9 /* CustomCellCalendar.m */; };
-		AA623EEF1998D78600A942A9 /* CustomCellCalendar.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EA01998D78600A942A9 /* CustomCellCalendar.xib */; };
-		AA623EF01998D78600A942A9 /* ClassificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EA31998D78600A942A9 /* ClassificationViewController.m */; };
-		AA623EF11998D78600A942A9 /* ClassificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EA41998D78600A942A9 /* ClassificationViewController.xib */; };
-		AA623EF21998D78600A942A9 /* ClassificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EA71998D78600A942A9 /* ClassificationCell.m */; };
-		AA623EF31998D78600A942A9 /* ClassificationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EA81998D78600A942A9 /* ClassificationCell.xib */; };
-		AA623EF41998D78600A942A9 /* ConfigTeamGoalSoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EAC1998D78600A942A9 /* ConfigTeamGoalSoundViewController.m */; };
-		AA623EF51998D78600A942A9 /* ConfigTeamGoalSoundViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EAD1998D78600A942A9 /* ConfigTeamGoalSoundViewController.xib */; };
-		AA623EF61998D78600A942A9 /* ConfigTeamGoalTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EB01998D78600A942A9 /* ConfigTeamGoalTextViewController.m */; };
-		AA623EF71998D78600A942A9 /* ConfigTeamGoalTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EB11998D78600A942A9 /* ConfigTeamGoalTextViewController.xib */; };
-		AA623EF81998D78600A942A9 /* ConfigTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EB31998D78600A942A9 /* ConfigTeamViewController.m */; };
-		AA623EF91998D78600A942A9 /* ConfigTeamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EB41998D78600A942A9 /* ConfigTeamViewController.xib */; };
-		AA623EFA1998D78600A942A9 /* MatchChronicleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EB71998D78600A942A9 /* MatchChronicleViewController.m */; };
-		AA623EFC1998D78600A942A9 /* ActivityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EBB1998D78600A942A9 /* ActivityProvider.m */; };
-		AA623EFD1998D78600A942A9 /* BetWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EBD1998D78600A942A9 /* BetWebViewController.m */; };
-		AA623EFE1998D78600A942A9 /* BetWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EBE1998D78600A942A9 /* BetWebViewController.xib */; };
-		AA623EFF1998D78600A942A9 /* CuotasCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EC01998D78600A942A9 /* CuotasCell.m */; };
-		AA623F001998D78600A942A9 /* BetDescriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EC31998D78600A942A9 /* BetDescriptionCell.m */; };
-		AA623F011998D78600A942A9 /* MoneyBetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EC51998D78600A942A9 /* MoneyBetCell.m */; };
-		AA623F021998D78600A942A9 /* MoneyBetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EC61998D78600A942A9 /* MoneyBetCell.xib */; };
-		AA623F031998D78600A942A9 /* InformationBetWithFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623EC81998D78600A942A9 /* InformationBetWithFriendsViewController.m */; };
-		AA623F041998D78600A942A9 /* InformationBetWithFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623EC91998D78600A942A9 /* InformationBetWithFriendsViewController.xib */; };
-		AA623F051998D78600A942A9 /* InformationExclusiveOfferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ECB1998D78600A942A9 /* InformationExclusiveOfferViewController.m */; };
-		AA623F061998D78600A942A9 /* InformationExclusiveOfferViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623ECC1998D78600A942A9 /* InformationExclusiveOfferViewController.xib */; };
-		AA623F071998D78600A942A9 /* InformationToBetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ECE1998D78600A942A9 /* InformationToBetViewController.m */; };
-		AA623F081998D78600A942A9 /* InformationToBetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623ECF1998D78600A942A9 /* InformationToBetViewController.xib */; };
-		AA623F091998D78600A942A9 /* LandingPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED11998D78600A942A9 /* LandingPageViewController.m */; };
-		AA623F0A1998D78600A942A9 /* LandingPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623ED21998D78600A942A9 /* LandingPageViewController.xib */; };
-		AA623F0B1998D78600A942A9 /* ProviderBetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED41998D78600A942A9 /* ProviderBetViewController.m */; };
-		AA623F0C1998D78600A942A9 /* ProviderBetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623ED51998D78600A942A9 /* ProviderBetViewController.xib */; };
 		AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED91998D78600A942A9 /* LoginViewController.m */; };
 		AA623F111998F29D00A942A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623F131998F29D00A942A9 /* Localizable.strings */; };
 		AA623F171998F46E00A942A9 /* GenteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F161998F46E00A942A9 /* GenteTableViewController.m */; };
@@ -204,10 +145,6 @@
 		A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenteMatchTableViewController.m; sourceTree = "<group>"; };
 		A5FB2E1B199A6E2A002A75C4 /* YoMatchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoMatchTableViewController.h; sourceTree = "<group>"; };
 		A5FB2E1C199A6E2A002A75C4 /* YoMatchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoMatchTableViewController.m; sourceTree = "<group>"; };
-		A5FB2E2F199BAD17002A75C4 /* NotificationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsTableViewController.h; sourceTree = "<group>"; };
-		A5FB2E30199BAD17002A75C4 /* NotificationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsTableViewController.m; sourceTree = "<group>"; };
-		AA05ADF8199A63660046EB6F /* MatchDetailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchDetailTableViewController.h; sourceTree = "<group>"; };
-		AA05ADF9199A63660046EB6F /* MatchDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchDetailTableViewController.m; sourceTree = "<group>"; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
 		AA05ADFD199A6E320046EB6F /* FilterCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCreation.m; sourceTree = "<group>"; };
 		AA241F81199CFB4900897D6D /* SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncControl.h; sourceTree = "<group>"; };
@@ -249,12 +186,6 @@
 		AA623D3E1998CF4B00A942A9 /* s.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = s.aiff; sourceTree = "<group>"; };
 		AA623D451998D17700A942A9 /* _AppAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _AppAdvice.h; sourceTree = "<group>"; };
 		AA623D461998D17700A942A9 /* _AppAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _AppAdvice.m; sourceTree = "<group>"; };
-		AA623D471998D17700A942A9 /* _BetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BetType.h; sourceTree = "<group>"; };
-		AA623D481998D17700A942A9 /* _BetType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BetType.m; sourceTree = "<group>"; };
-		AA623D491998D17700A942A9 /* _BetTypeOdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _BetTypeOdd.h; sourceTree = "<group>"; };
-		AA623D4A1998D17700A942A9 /* _BetTypeOdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _BetTypeOdd.m; sourceTree = "<group>"; };
-		AA623D4B1998D17700A942A9 /* _Classification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Classification.h; sourceTree = "<group>"; };
-		AA623D4C1998D17700A942A9 /* _Classification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Classification.m; sourceTree = "<group>"; };
 		AA623D4D1998D17700A942A9 /* _Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Device.h; sourceTree = "<group>"; };
 		AA623D4E1998D17700A942A9 /* _Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Device.m; sourceTree = "<group>"; };
 		AA623D4F1998D17700A942A9 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
@@ -263,22 +194,14 @@
 		AA623D521998D17700A942A9 /* _EventOfMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EventOfMatch.m; sourceTree = "<group>"; };
 		AA623D531998D17700A942A9 /* _Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Round.h; sourceTree = "<group>"; };
 		AA623D541998D17700A942A9 /* _Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Round.m; sourceTree = "<group>"; };
-		AA623D611998D17700A942A9 /* _LineUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _LineUp.h; sourceTree = "<group>"; };
-		AA623D621998D17700A942A9 /* _LineUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _LineUp.m; sourceTree = "<group>"; };
 		AA623D631998D17700A942A9 /* _Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Match.h; sourceTree = "<group>"; };
 		AA623D641998D17700A942A9 /* _Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Match.m; sourceTree = "<group>"; };
-		AA623D651998D17700A942A9 /* _MatchBetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MatchBetType.h; sourceTree = "<group>"; };
-		AA623D661998D17700A942A9 /* _MatchBetType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MatchBetType.m; sourceTree = "<group>"; };
 		AA623D691998D17700A942A9 /* _Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Message.h; sourceTree = "<group>"; };
 		AA623D6A1998D17700A942A9 /* _Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Message.m; sourceTree = "<group>"; };
 		AA623D6B1998D17700A942A9 /* _Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Mode.h; sourceTree = "<group>"; };
 		AA623D6C1998D17700A942A9 /* _Mode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Mode.m; sourceTree = "<group>"; };
 		AA623D6D1998D17700A942A9 /* _Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Player.h; sourceTree = "<group>"; };
 		AA623D6E1998D17700A942A9 /* _Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Player.m; sourceTree = "<group>"; };
-		AA623D6F1998D17700A942A9 /* _PlayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _PlayerProvider.h; sourceTree = "<group>"; };
-		AA623D701998D17700A942A9 /* _PlayerProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _PlayerProvider.m; sourceTree = "<group>"; };
-		AA623D771998D17700A942A9 /* _Provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Provider.h; sourceTree = "<group>"; };
-		AA623D781998D17700A942A9 /* _Provider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Provider.m; sourceTree = "<group>"; };
 		AA623D791998D17700A942A9 /* _SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SML.h; sourceTree = "<group>"; };
 		AA623D7A1998D17700A942A9 /* _SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SML.m; sourceTree = "<group>"; };
 		AA623D7B1998D17700A942A9 /* _Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Subscription.h; sourceTree = "<group>"; };
@@ -289,12 +212,6 @@
 		AA623D821998D17700A942A9 /* _Tournament.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tournament.m; sourceTree = "<group>"; };
 		AA623D831998D17700A942A9 /* AppAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppAdvice.h; sourceTree = "<group>"; };
 		AA623D841998D17700A942A9 /* AppAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppAdvice.m; sourceTree = "<group>"; };
-		AA623D851998D17700A942A9 /* BetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetType.h; sourceTree = "<group>"; };
-		AA623D861998D17700A942A9 /* BetType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetType.m; sourceTree = "<group>"; };
-		AA623D871998D17700A942A9 /* BetTypeOdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetTypeOdd.h; sourceTree = "<group>"; };
-		AA623D881998D17700A942A9 /* BetTypeOdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetTypeOdd.m; sourceTree = "<group>"; };
-		AA623D891998D17700A942A9 /* Classification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Classification.h; sourceTree = "<group>"; };
-		AA623D8A1998D17700A942A9 /* Classification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Classification.m; sourceTree = "<group>"; };
 		AA623D8B1998D17700A942A9 /* CoreDataGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataGenerator.h; sourceTree = "<group>"; };
 		AA623D8C1998D17700A942A9 /* CoreDataGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataGenerator.m; sourceTree = "<group>"; };
 		AA623D8D1998D17700A942A9 /* CoreDataParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataParsing.h; sourceTree = "<group>"; };
@@ -307,22 +224,14 @@
 		AA623D941998D17700A942A9 /* EventOfMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventOfMatch.m; sourceTree = "<group>"; };
 		AA623D951998D17700A942A9 /* Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Round.h; sourceTree = "<group>"; };
 		AA623D961998D17700A942A9 /* Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Round.m; sourceTree = "<group>"; };
-		AA623DA31998D17700A942A9 /* LineUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineUp.h; sourceTree = "<group>"; };
-		AA623DA41998D17700A942A9 /* LineUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineUp.m; sourceTree = "<group>"; };
 		AA623DA51998D17700A942A9 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		AA623DA61998D17700A942A9 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
-		AA623DA71998D17700A942A9 /* MatchBetType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchBetType.h; sourceTree = "<group>"; };
-		AA623DA81998D17700A942A9 /* MatchBetType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchBetType.m; sourceTree = "<group>"; };
 		AA623DAB1998D17700A942A9 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		AA623DAC1998D17700A942A9 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		AA623DAD1998D17700A942A9 /* Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mode.h; sourceTree = "<group>"; };
 		AA623DAE1998D17700A942A9 /* Mode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mode.m; sourceTree = "<group>"; };
 		AA623DAF1998D17700A942A9 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		AA623DB01998D17700A942A9 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
-		AA623DB11998D17700A942A9 /* PlayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerProvider.h; sourceTree = "<group>"; };
-		AA623DB21998D17700A942A9 /* PlayerProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerProvider.m; sourceTree = "<group>"; };
-		AA623DB91998D17700A942A9 /* Provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Provider.h; sourceTree = "<group>"; };
-		AA623DBA1998D17700A942A9 /* Provider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Provider.m; sourceTree = "<group>"; };
 		AA623DBB1998D17700A942A9 /* SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SML.h; sourceTree = "<group>"; };
 		AA623DBC1998D17700A942A9 /* SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SML.m; sourceTree = "<group>"; };
 		AA623DBD1998D17700A942A9 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
@@ -374,8 +283,6 @@
 		AA623DF61998D17800A942A9 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		AA623DF81998D17800A942A9 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		AA623DF91998D17800A942A9 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
-		AA623DFA1998D17800A942A9 /* CuotasManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CuotasManager.h; sourceTree = "<group>"; };
-		AA623DFB1998D17800A942A9 /* CuotasManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CuotasManager.m; sourceTree = "<group>"; };
 		AA623DFC1998D17800A942A9 /* LeaguesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeaguesManager.h; sourceTree = "<group>"; };
 		AA623DFD1998D17800A942A9 /* LeaguesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeaguesManager.m; sourceTree = "<group>"; };
 		AA623DFE1998D17800A942A9 /* NavigationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationManager.h; sourceTree = "<group>"; };
@@ -411,71 +318,6 @@
 		AA623E841998D78600A942A9 /* LandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingViewController.h; sourceTree = "<group>"; };
 		AA623E851998D78600A942A9 /* LandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingViewController.m; sourceTree = "<group>"; };
 		AA623E861998D78600A942A9 /* LandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingViewController.xib; sourceTree = "<group>"; };
-		AA623E8A1998D78600A942A9 /* LineUpsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineUpsViewController.h; sourceTree = "<group>"; };
-		AA623E8B1998D78600A942A9 /* LineUpsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineUpsViewController.m; sourceTree = "<group>"; };
-		AA623E8C1998D78600A942A9 /* LineUpsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LineUpsViewController.xib; sourceTree = "<group>"; };
-		AA623E8E1998D78600A942A9 /* CalendarFavoritesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarFavoritesTableViewController.h; sourceTree = "<group>"; };
-		AA623E8F1998D78600A942A9 /* CalendarFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarFavoritesTableViewController.m; sourceTree = "<group>"; };
-		AA623E901998D78600A942A9 /* CalendarFavoritesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarFavoritesTableViewController.xib; sourceTree = "<group>"; };
-		AA623E911998D78600A942A9 /* CalendarFixtureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarFixtureViewController.h; sourceTree = "<group>"; };
-		AA623E921998D78600A942A9 /* CalendarFixtureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarFixtureViewController.m; sourceTree = "<group>"; };
-		AA623E931998D78600A942A9 /* CalendarFixtureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarFixtureViewController.xib; sourceTree = "<group>"; };
-		AA623E941998D78600A942A9 /* CalendarMatchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarMatchViewController.h; sourceTree = "<group>"; };
-		AA623E951998D78600A942A9 /* CalendarMatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarMatchViewController.m; sourceTree = "<group>"; };
-		AA623E961998D78600A942A9 /* CalendarMatchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarMatchViewController.xib; sourceTree = "<group>"; };
-		AA623E971998D78600A942A9 /* CalendarTournamentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarTournamentsViewController.h; sourceTree = "<group>"; };
-		AA623E981998D78600A942A9 /* CalendarTournamentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarTournamentsViewController.m; sourceTree = "<group>"; };
-		AA623E991998D78600A942A9 /* CalendarTournamentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarTournamentsViewController.xib; sourceTree = "<group>"; };
-		AA623E9B1998D78600A942A9 /* CalendarCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarCustomCell.h; sourceTree = "<group>"; };
-		AA623E9C1998D78600A942A9 /* CalendarCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarCustomCell.m; sourceTree = "<group>"; };
-		AA623E9D1998D78600A942A9 /* CalendarCustomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalendarCustomCell.xib; sourceTree = "<group>"; };
-		AA623E9E1998D78600A942A9 /* CustomCellCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellCalendar.h; sourceTree = "<group>"; };
-		AA623E9F1998D78600A942A9 /* CustomCellCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellCalendar.m; sourceTree = "<group>"; };
-		AA623EA01998D78600A942A9 /* CustomCellCalendar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCellCalendar.xib; sourceTree = "<group>"; };
-		AA623EA21998D78600A942A9 /* ClassificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassificationViewController.h; sourceTree = "<group>"; };
-		AA623EA31998D78600A942A9 /* ClassificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassificationViewController.m; sourceTree = "<group>"; };
-		AA623EA41998D78600A942A9 /* ClassificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ClassificationViewController.xib; sourceTree = "<group>"; };
-		AA623EA61998D78600A942A9 /* ClassificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassificationCell.h; sourceTree = "<group>"; };
-		AA623EA71998D78600A942A9 /* ClassificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassificationCell.m; sourceTree = "<group>"; };
-		AA623EA81998D78600A942A9 /* ClassificationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ClassificationCell.xib; sourceTree = "<group>"; };
-		AA623EAB1998D78600A942A9 /* ConfigTeamGoalSoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigTeamGoalSoundViewController.h; sourceTree = "<group>"; };
-		AA623EAC1998D78600A942A9 /* ConfigTeamGoalSoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigTeamGoalSoundViewController.m; sourceTree = "<group>"; };
-		AA623EAD1998D78600A942A9 /* ConfigTeamGoalSoundViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigTeamGoalSoundViewController.xib; sourceTree = "<group>"; };
-		AA623EAF1998D78600A942A9 /* ConfigTeamGoalTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigTeamGoalTextViewController.h; sourceTree = "<group>"; };
-		AA623EB01998D78600A942A9 /* ConfigTeamGoalTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigTeamGoalTextViewController.m; sourceTree = "<group>"; };
-		AA623EB11998D78600A942A9 /* ConfigTeamGoalTextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigTeamGoalTextViewController.xib; sourceTree = "<group>"; };
-		AA623EB21998D78600A942A9 /* ConfigTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigTeamViewController.h; sourceTree = "<group>"; };
-		AA623EB31998D78600A942A9 /* ConfigTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigTeamViewController.m; sourceTree = "<group>"; };
-		AA623EB41998D78600A942A9 /* ConfigTeamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigTeamViewController.xib; sourceTree = "<group>"; };
-		AA623EB61998D78600A942A9 /* MatchChronicleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchChronicleViewController.h; sourceTree = "<group>"; };
-		AA623EB71998D78600A942A9 /* MatchChronicleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchChronicleViewController.m; sourceTree = "<group>"; };
-		AA623EBA1998D78600A942A9 /* ActivityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityProvider.h; sourceTree = "<group>"; };
-		AA623EBB1998D78600A942A9 /* ActivityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityProvider.m; sourceTree = "<group>"; };
-		AA623EBC1998D78600A942A9 /* BetWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetWebViewController.h; sourceTree = "<group>"; };
-		AA623EBD1998D78600A942A9 /* BetWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetWebViewController.m; sourceTree = "<group>"; };
-		AA623EBE1998D78600A942A9 /* BetWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BetWebViewController.xib; sourceTree = "<group>"; };
-		AA623EBF1998D78600A942A9 /* CuotasCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CuotasCell.h; sourceTree = "<group>"; };
-		AA623EC01998D78600A942A9 /* CuotasCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CuotasCell.m; sourceTree = "<group>"; };
-		AA623EC21998D78600A942A9 /* BetDescriptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BetDescriptionCell.h; sourceTree = "<group>"; };
-		AA623EC31998D78600A942A9 /* BetDescriptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BetDescriptionCell.m; sourceTree = "<group>"; };
-		AA623EC41998D78600A942A9 /* MoneyBetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoneyBetCell.h; sourceTree = "<group>"; };
-		AA623EC51998D78600A942A9 /* MoneyBetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoneyBetCell.m; sourceTree = "<group>"; };
-		AA623EC61998D78600A942A9 /* MoneyBetCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoneyBetCell.xib; sourceTree = "<group>"; };
-		AA623EC71998D78600A942A9 /* InformationBetWithFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationBetWithFriendsViewController.h; sourceTree = "<group>"; };
-		AA623EC81998D78600A942A9 /* InformationBetWithFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationBetWithFriendsViewController.m; sourceTree = "<group>"; };
-		AA623EC91998D78600A942A9 /* InformationBetWithFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InformationBetWithFriendsViewController.xib; sourceTree = "<group>"; };
-		AA623ECA1998D78600A942A9 /* InformationExclusiveOfferViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationExclusiveOfferViewController.h; sourceTree = "<group>"; };
-		AA623ECB1998D78600A942A9 /* InformationExclusiveOfferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationExclusiveOfferViewController.m; sourceTree = "<group>"; };
-		AA623ECC1998D78600A942A9 /* InformationExclusiveOfferViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InformationExclusiveOfferViewController.xib; sourceTree = "<group>"; };
-		AA623ECD1998D78600A942A9 /* InformationToBetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InformationToBetViewController.h; sourceTree = "<group>"; };
-		AA623ECE1998D78600A942A9 /* InformationToBetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InformationToBetViewController.m; sourceTree = "<group>"; };
-		AA623ECF1998D78600A942A9 /* InformationToBetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InformationToBetViewController.xib; sourceTree = "<group>"; };
-		AA623ED01998D78600A942A9 /* LandingPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingPageViewController.h; sourceTree = "<group>"; };
-		AA623ED11998D78600A942A9 /* LandingPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingPageViewController.m; sourceTree = "<group>"; };
-		AA623ED21998D78600A942A9 /* LandingPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingPageViewController.xib; sourceTree = "<group>"; };
-		AA623ED31998D78600A942A9 /* ProviderBetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProviderBetViewController.h; sourceTree = "<group>"; };
-		AA623ED41998D78600A942A9 /* ProviderBetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProviderBetViewController.m; sourceTree = "<group>"; };
-		AA623ED51998D78600A942A9 /* ProviderBetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProviderBetViewController.xib; sourceTree = "<group>"; };
 		AA623ED81998D78600A942A9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		AA623ED91998D78600A942A9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		AA623F121998F29D00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -522,12 +364,6 @@
 				AA241F85199CFB5200897D6D /* _SyncControl.m */,
 				AA623D451998D17700A942A9 /* _AppAdvice.h */,
 				AA623D461998D17700A942A9 /* _AppAdvice.m */,
-				AA623D471998D17700A942A9 /* _BetType.h */,
-				AA623D481998D17700A942A9 /* _BetType.m */,
-				AA623D491998D17700A942A9 /* _BetTypeOdd.h */,
-				AA623D4A1998D17700A942A9 /* _BetTypeOdd.m */,
-				AA623D4B1998D17700A942A9 /* _Classification.h */,
-				AA623D4C1998D17700A942A9 /* _Classification.m */,
 				AA623D4D1998D17700A942A9 /* _Device.h */,
 				AA623D4E1998D17700A942A9 /* _Device.m */,
 				AA623D4F1998D17700A942A9 /* _Event.h */,
@@ -536,22 +372,14 @@
 				AA623D521998D17700A942A9 /* _EventOfMatch.m */,
 				AA623D531998D17700A942A9 /* _Round.h */,
 				AA623D541998D17700A942A9 /* _Round.m */,
-				AA623D611998D17700A942A9 /* _LineUp.h */,
-				AA623D621998D17700A942A9 /* _LineUp.m */,
 				AA623D631998D17700A942A9 /* _Match.h */,
 				AA623D641998D17700A942A9 /* _Match.m */,
-				AA623D651998D17700A942A9 /* _MatchBetType.h */,
-				AA623D661998D17700A942A9 /* _MatchBetType.m */,
 				AA623D691998D17700A942A9 /* _Message.h */,
 				AA623D6A1998D17700A942A9 /* _Message.m */,
 				AA623D6B1998D17700A942A9 /* _Mode.h */,
 				AA623D6C1998D17700A942A9 /* _Mode.m */,
 				AA623D6D1998D17700A942A9 /* _Player.h */,
 				AA623D6E1998D17700A942A9 /* _Player.m */,
-				AA623D6F1998D17700A942A9 /* _PlayerProvider.h */,
-				AA623D701998D17700A942A9 /* _PlayerProvider.m */,
-				AA623D771998D17700A942A9 /* _Provider.h */,
-				AA623D781998D17700A942A9 /* _Provider.m */,
 				AA623D791998D17700A942A9 /* _SML.h */,
 				AA623D7A1998D17700A942A9 /* _SML.m */,
 				AA623D7B1998D17700A942A9 /* _Subscription.h */,
@@ -578,11 +406,6 @@
 		A5FB2E2B199B70A2002A75C4 /* InfoPartido */ = {
 			isa = PBXGroup;
 			children = (
-				A5FB2E2F199BAD17002A75C4 /* NotificationsTableViewController.h */,
-				A5FB2E30199BAD17002A75C4 /* NotificationsTableViewController.m */,
-				AA623E891998D78600A942A9 /* Alineaciones */,
-				AA623EB51998D78600A942A9 /* Cronica */,
-				AA623EB91998D78600A942A9 /* Cuotas */,
 			);
 			name = InfoPartido;
 			sourceTree = "<group>";
@@ -594,12 +417,6 @@
 				AA241F82199CFB4900897D6D /* SyncControl.m */,
 				AA623D831998D17700A942A9 /* AppAdvice.h */,
 				AA623D841998D17700A942A9 /* AppAdvice.m */,
-				AA623D851998D17700A942A9 /* BetType.h */,
-				AA623D861998D17700A942A9 /* BetType.m */,
-				AA623D871998D17700A942A9 /* BetTypeOdd.h */,
-				AA623D881998D17700A942A9 /* BetTypeOdd.m */,
-				AA623D891998D17700A942A9 /* Classification.h */,
-				AA623D8A1998D17700A942A9 /* Classification.m */,
 				AA623D8F1998D17700A942A9 /* Device.h */,
 				AA623D901998D17700A942A9 /* Device.m */,
 				AA623D911998D17700A942A9 /* Event.h */,
@@ -608,22 +425,14 @@
 				AA623D941998D17700A942A9 /* EventOfMatch.m */,
 				AA623D951998D17700A942A9 /* Round.h */,
 				AA623D961998D17700A942A9 /* Round.m */,
-				AA623DA31998D17700A942A9 /* LineUp.h */,
-				AA623DA41998D17700A942A9 /* LineUp.m */,
 				AA623DA51998D17700A942A9 /* Match.h */,
 				AA623DA61998D17700A942A9 /* Match.m */,
-				AA623DA71998D17700A942A9 /* MatchBetType.h */,
-				AA623DA81998D17700A942A9 /* MatchBetType.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
 				AA623DAC1998D17700A942A9 /* Message.m */,
 				AA623DAD1998D17700A942A9 /* Mode.h */,
 				AA623DAE1998D17700A942A9 /* Mode.m */,
 				AA623DAF1998D17700A942A9 /* Player.h */,
 				AA623DB01998D17700A942A9 /* Player.m */,
-				AA623DB11998D17700A942A9 /* PlayerProvider.h */,
-				AA623DB21998D17700A942A9 /* PlayerProvider.m */,
-				AA623DB91998D17700A942A9 /* Provider.h */,
-				AA623DBA1998D17700A942A9 /* Provider.m */,
 				AA623DBB1998D17700A942A9 /* SML.h */,
 				AA623DBC1998D17700A942A9 /* SML.m */,
 				AA623DBD1998D17700A942A9 /* Subscription.h */,
@@ -875,8 +684,6 @@
 				AA623DF91998D17800A942A9 /* CoreDataManager.m */,
 				AA241F87199CFB6400897D6D /* SyncManager.h */,
 				AA241F88199CFB6400897D6D /* SyncManager.m */,
-				AA623DFA1998D17800A942A9 /* CuotasManager.h */,
-				AA623DFB1998D17800A942A9 /* CuotasManager.m */,
 				AA623DFC1998D17800A942A9 /* LeaguesManager.h */,
 				AA623DFD1998D17800A942A9 /* LeaguesManager.m */,
 				AA623DFE1998D17800A942A9 /* NavigationManager.h */,
@@ -973,13 +780,8 @@
 			children = (
 				A5FB2E2B199B70A2002A75C4 /* InfoPartido */,
 				A5FB2E21199B602E002A75C4 /* CustomCell */,
-				AA623E8D1998D78600A942A9 /* Calendari */,
-				AA623EA11998D78600A942A9 /* Classificacio */,
-				AA623EA91998D78600A942A9 /* Configurar equipo */,
 				AA623F181998F48000A942A9 /* PartidosTableViewController.h */,
 				AA623F191998F48000A942A9 /* PartidosTableViewController.m */,
-				AA05ADF8199A63660046EB6F /* MatchDetailTableViewController.h */,
-				AA05ADF9199A63660046EB6F /* MatchDetailTableViewController.m */,
 				A5FB2E18199A6E02002A75C4 /* GenteMatchTableViewController.h */,
 				A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */,
 				A5FB2E1B199A6E2A002A75C4 /* YoMatchTableViewController.h */,
@@ -987,153 +789,6 @@
 			);
 			name = Partidos;
 			path = ViewControllers/Partidos;
-			sourceTree = "<group>";
-		};
-		AA623E891998D78600A942A9 /* Alineaciones */ = {
-			isa = PBXGroup;
-			children = (
-				AA623E8A1998D78600A942A9 /* LineUpsViewController.h */,
-				AA623E8B1998D78600A942A9 /* LineUpsViewController.m */,
-				AA623E8C1998D78600A942A9 /* LineUpsViewController.xib */,
-			);
-			path = Alineaciones;
-			sourceTree = "<group>";
-		};
-		AA623E8D1998D78600A942A9 /* Calendari */ = {
-			isa = PBXGroup;
-			children = (
-				AA623E8E1998D78600A942A9 /* CalendarFavoritesTableViewController.h */,
-				AA623E8F1998D78600A942A9 /* CalendarFavoritesTableViewController.m */,
-				AA623E901998D78600A942A9 /* CalendarFavoritesTableViewController.xib */,
-				AA623E911998D78600A942A9 /* CalendarFixtureViewController.h */,
-				AA623E921998D78600A942A9 /* CalendarFixtureViewController.m */,
-				AA623E931998D78600A942A9 /* CalendarFixtureViewController.xib */,
-				AA623E941998D78600A942A9 /* CalendarMatchViewController.h */,
-				AA623E951998D78600A942A9 /* CalendarMatchViewController.m */,
-				AA623E961998D78600A942A9 /* CalendarMatchViewController.xib */,
-				AA623E971998D78600A942A9 /* CalendarTournamentsViewController.h */,
-				AA623E981998D78600A942A9 /* CalendarTournamentsViewController.m */,
-				AA623E991998D78600A942A9 /* CalendarTournamentsViewController.xib */,
-				AA623E9A1998D78600A942A9 /* CustomCell */,
-			);
-			path = Calendari;
-			sourceTree = "<group>";
-		};
-		AA623E9A1998D78600A942A9 /* CustomCell */ = {
-			isa = PBXGroup;
-			children = (
-				AA623E9B1998D78600A942A9 /* CalendarCustomCell.h */,
-				AA623E9C1998D78600A942A9 /* CalendarCustomCell.m */,
-				AA623E9D1998D78600A942A9 /* CalendarCustomCell.xib */,
-				AA623E9E1998D78600A942A9 /* CustomCellCalendar.h */,
-				AA623E9F1998D78600A942A9 /* CustomCellCalendar.m */,
-				AA623EA01998D78600A942A9 /* CustomCellCalendar.xib */,
-			);
-			path = CustomCell;
-			sourceTree = "<group>";
-		};
-		AA623EA11998D78600A942A9 /* Classificacio */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EA21998D78600A942A9 /* ClassificationViewController.h */,
-				AA623EA31998D78600A942A9 /* ClassificationViewController.m */,
-				AA623EA41998D78600A942A9 /* ClassificationViewController.xib */,
-				AA623EA51998D78600A942A9 /* CustomCell */,
-			);
-			path = Classificacio;
-			sourceTree = "<group>";
-		};
-		AA623EA51998D78600A942A9 /* CustomCell */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EA61998D78600A942A9 /* ClassificationCell.h */,
-				AA623EA71998D78600A942A9 /* ClassificationCell.m */,
-				AA623EA81998D78600A942A9 /* ClassificationCell.xib */,
-			);
-			path = CustomCell;
-			sourceTree = "<group>";
-		};
-		AA623EA91998D78600A942A9 /* Configurar equipo */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EAA1998D78600A942A9 /* ConfigTeamGoalSound */,
-				AA623EAE1998D78600A942A9 /* ConfigTeamGoalText */,
-				AA623EB21998D78600A942A9 /* ConfigTeamViewController.h */,
-				AA623EB31998D78600A942A9 /* ConfigTeamViewController.m */,
-				AA623EB41998D78600A942A9 /* ConfigTeamViewController.xib */,
-			);
-			path = "Configurar equipo";
-			sourceTree = "<group>";
-		};
-		AA623EAA1998D78600A942A9 /* ConfigTeamGoalSound */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EAB1998D78600A942A9 /* ConfigTeamGoalSoundViewController.h */,
-				AA623EAC1998D78600A942A9 /* ConfigTeamGoalSoundViewController.m */,
-				AA623EAD1998D78600A942A9 /* ConfigTeamGoalSoundViewController.xib */,
-			);
-			path = ConfigTeamGoalSound;
-			sourceTree = "<group>";
-		};
-		AA623EAE1998D78600A942A9 /* ConfigTeamGoalText */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EAF1998D78600A942A9 /* ConfigTeamGoalTextViewController.h */,
-				AA623EB01998D78600A942A9 /* ConfigTeamGoalTextViewController.m */,
-				AA623EB11998D78600A942A9 /* ConfigTeamGoalTextViewController.xib */,
-			);
-			path = ConfigTeamGoalText;
-			sourceTree = "<group>";
-		};
-		AA623EB51998D78600A942A9 /* Cronica */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EB61998D78600A942A9 /* MatchChronicleViewController.h */,
-				AA623EB71998D78600A942A9 /* MatchChronicleViewController.m */,
-			);
-			path = Cronica;
-			sourceTree = "<group>";
-		};
-		AA623EB91998D78600A942A9 /* Cuotas */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EBA1998D78600A942A9 /* ActivityProvider.h */,
-				AA623EBB1998D78600A942A9 /* ActivityProvider.m */,
-				AA623EBC1998D78600A942A9 /* BetWebViewController.h */,
-				AA623EBD1998D78600A942A9 /* BetWebViewController.m */,
-				AA623EBE1998D78600A942A9 /* BetWebViewController.xib */,
-				AA623EBF1998D78600A942A9 /* CuotasCell.h */,
-				AA623EC01998D78600A942A9 /* CuotasCell.m */,
-				AA623EC11998D78600A942A9 /* CustomCell */,
-				AA623EC71998D78600A942A9 /* InformationBetWithFriendsViewController.h */,
-				AA623EC81998D78600A942A9 /* InformationBetWithFriendsViewController.m */,
-				AA623EC91998D78600A942A9 /* InformationBetWithFriendsViewController.xib */,
-				AA623ECA1998D78600A942A9 /* InformationExclusiveOfferViewController.h */,
-				AA623ECB1998D78600A942A9 /* InformationExclusiveOfferViewController.m */,
-				AA623ECC1998D78600A942A9 /* InformationExclusiveOfferViewController.xib */,
-				AA623ECD1998D78600A942A9 /* InformationToBetViewController.h */,
-				AA623ECE1998D78600A942A9 /* InformationToBetViewController.m */,
-				AA623ECF1998D78600A942A9 /* InformationToBetViewController.xib */,
-				AA623ED01998D78600A942A9 /* LandingPageViewController.h */,
-				AA623ED11998D78600A942A9 /* LandingPageViewController.m */,
-				AA623ED21998D78600A942A9 /* LandingPageViewController.xib */,
-				AA623ED31998D78600A942A9 /* ProviderBetViewController.h */,
-				AA623ED41998D78600A942A9 /* ProviderBetViewController.m */,
-				AA623ED51998D78600A942A9 /* ProviderBetViewController.xib */,
-			);
-			path = Cuotas;
-			sourceTree = "<group>";
-		};
-		AA623EC11998D78600A942A9 /* CustomCell */ = {
-			isa = PBXGroup;
-			children = (
-				AA623EC21998D78600A942A9 /* BetDescriptionCell.h */,
-				AA623EC31998D78600A942A9 /* BetDescriptionCell.m */,
-				AA623EC41998D78600A942A9 /* MoneyBetCell.h */,
-				AA623EC51998D78600A942A9 /* MoneyBetCell.m */,
-				AA623EC61998D78600A942A9 /* MoneyBetCell.xib */,
-			);
-			path = CustomCell;
 			sourceTree = "<group>";
 		};
 		AA623ED61998D78600A942A9 /* Retar_Pronosticar */ = {
@@ -1244,41 +899,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA623EEB1998D78600A942A9 /* CalendarTournamentsViewController.xib in Resources */,
 				AA623D231998CE1500A942A9 /* Setup.storyboard in Resources */,
 				AA623D3F1998CF4B00A942A9 /* InfoPlist.strings in Resources */,
 				AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */,
 				AA623D2C1998CE4F00A942A9 /* Yo.storyboard in Resources */,
 				AA623D431998CF4B00A942A9 /* s.aiff in Resources */,
-				AA623F061998D78600A942A9 /* InformationExclusiveOfferViewController.xib in Resources */,
 				AA623D291998CE4C00A942A9 /* Partidos.storyboard in Resources */,
-				AA623EEF1998D78600A942A9 /* CustomCellCalendar.xib in Resources */,
 				AA623D2F1998CE5200A942A9 /* Gente.storyboard in Resources */,
-				AA623EF91998D78600A942A9 /* ConfigTeamViewController.xib in Resources */,
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
-				AA623F0A1998D78600A942A9 /* LandingPageViewController.xib in Resources */,
 				AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */,
 				AA623D261998CE4900A942A9 /* Retar_Pronosticar.storyboard in Resources */,
-				AA623F0C1998D78600A942A9 /* ProviderBetViewController.xib in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
-				AA623F081998D78600A942A9 /* InformationToBetViewController.xib in Resources */,
-				AA623EE71998D78600A942A9 /* CalendarFixtureViewController.xib in Resources */,
-				AA623EED1998D78600A942A9 /* CalendarCustomCell.xib in Resources */,
 				AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */,
-				AA623EF31998D78600A942A9 /* ClassificationCell.xib in Resources */,
-				AA623F041998D78600A942A9 /* InformationBetWithFriendsViewController.xib in Resources */,
-				AA623F021998D78600A942A9 /* MoneyBetCell.xib in Resources */,
 				AA623D411998CF4B00A942A9 /* a.aiff in Resources */,
 				AA623CF11998A7F200A942A9 /* Images.xcassets in Resources */,
-				AA623EE91998D78600A942A9 /* CalendarMatchViewController.xib in Resources */,
-				AA623EF11998D78600A942A9 /* ClassificationViewController.xib in Resources */,
-				AA623EE51998D78600A942A9 /* CalendarFavoritesTableViewController.xib in Resources */,
 				AA623EDD1998D78600A942A9 /* AppAdviceViewController.xib in Resources */,
-				AA623EF71998D78600A942A9 /* ConfigTeamGoalTextViewController.xib in Resources */,
-				AA623EF51998D78600A942A9 /* ConfigTeamGoalSoundViewController.xib in Resources */,
-				AA623EFE1998D78600A942A9 /* BetWebViewController.xib in Resources */,
-				AA623EE31998D78600A942A9 /* LineUpsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,75 +949,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA623EE81998D78600A942A9 /* CalendarMatchViewController.m in Sources */,
 				A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */,
 				AA623E601998D17800A942A9 /* AFURLSessionManager.m in Sources */,
 				AA623E561998D17800A942A9 /* Team.m in Sources */,
 				AA623E5C1998D17800A942A9 /* AFSecurityPolicy.m in Sources */,
-				AA623F091998D78600A942A9 /* LandingPageViewController.m in Sources */,
 				A5FB2E0B199A158F002A75C4 /* PartidosTableViewCell.m in Sources */,
 				AA623EE01998D78600A942A9 /* LandingViewController.m in Sources */,
-				AA623EF21998D78600A942A9 /* ClassificationCell.m in Sources */,
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
 				AA623E641998D17800A942A9 /* NSDate+Utils.m in Sources */,
-				AA623EFC1998D78600A942A9 /* ActivityProvider.m in Sources */,
 				AA623E3D1998D17800A942A9 /* Device.m in Sources */,
 				AA623E5F1998D17800A942A9 /* AFURLResponseSerialization.m in Sources */,
 				AA623E1E1998D17800A942A9 /* _EventOfMatch.m in Sources */,
 				AA623E751998D17800A942A9 /* FavEntityDescriptor.m in Sources */,
-				AA623EF61998D78600A942A9 /* ConfigTeamGoalTextViewController.m in Sources */,
 				AA623E3F1998D17800A942A9 /* EventOfMatch.m in Sources */,
 				AA623E771998D17800A942A9 /* FavRestConsumer.m in Sources */,
 				AA623E351998D17800A942A9 /* _Team.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
-				AA623EF81998D78600A942A9 /* ConfigTeamViewController.m in Sources */,
-				AA623EFA1998D78600A942A9 /* MatchChronicleViewController.m in Sources */,
 				A5FB2E0E199A2941002A75C4 /* OptionsPartidosTableViewCell.m in Sources */,
-				AA623F0B1998D78600A942A9 /* ProviderBetViewController.m in Sources */,
-				AA623EF41998D78600A942A9 /* ConfigTeamGoalSoundViewController.m in Sources */,
 				AA623E541998D17800A942A9 /* Subscription.m in Sources */,
-				AA623E1B1998D17800A942A9 /* _Classification.m in Sources */,
-				AA623E4E1998D17800A942A9 /* PlayerProvider.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
-				AA623F001998D78600A942A9 /* BetDescriptionCell.m in Sources */,
-				AA623E6D1998D17800A942A9 /* CuotasManager.m in Sources */,
-				AA623EF01998D78600A942A9 /* ClassificationViewController.m in Sources */,
 				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
 				A5FB2E1D199A6E2A002A75C4 /* YoMatchTableViewController.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
-				AA623E261998D17800A942A9 /* _LineUp.m in Sources */,
-				AA623F071998D78600A942A9 /* InformationToBetViewController.m in Sources */,
-				AA05ADFA199A63660046EB6F /* MatchDetailTableViewController.m in Sources */,
-				AA623E281998D17800A942A9 /* _MatchBetType.m in Sources */,
 				A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */,
-				AA623E191998D17800A942A9 /* _BetType.m in Sources */,
-				AA623E381998D17800A942A9 /* BetType.m in Sources */,
-				AA623EEE1998D78600A942A9 /* CustomCellCalendar.m in Sources */,
 				AA623E1D1998D17800A942A9 /* _Event.m in Sources */,
-				AA623E1A1998D17800A942A9 /* _BetTypeOdd.m in Sources */,
 				AA623F1A1998F48000A942A9 /* PartidosTableViewController.m in Sources */,
-				AA623E491998D17800A942A9 /* MatchBetType.m in Sources */,
 				AA623E581998D17800A942A9 /* AFHTTPRequestOperation.m in Sources */,
 				AA623E361998D17800A942A9 /* _Tournament.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
 				AA623E6E1998D17800A942A9 /* LeaguesManager.m in Sources */,
-				AA623EEC1998D78600A942A9 /* CalendarCustomCell.m in Sources */,
-				AA623E311998D17800A942A9 /* _Provider.m in Sources */,
 				AA623E271998D17800A942A9 /* _Match.m in Sources */,
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AA623E1F1998D17800A942A9 /* _Round.m in Sources */,
 				AA623E5A1998D17800A942A9 /* AFHTTPSessionManager.m in Sources */,
-				A5FB2E31199BAD17002A75C4 /* NotificationsTableViewController.m in Sources */,
 				AA623E401998D17800A942A9 /* Round.m in Sources */,
 				A5FB2E1A199A6E02002A75C4 /* GenteMatchTableViewController.m in Sources */,
 				AA623E5D1998D17800A942A9 /* AFURLConnectionOperation.m in Sources */,
-				AA623E391998D17800A942A9 /* BetTypeOdd.m in Sources */,
 				AA623E2C1998D17800A942A9 /* _Player.m in Sources */,
-				AA623E3A1998D17800A942A9 /* Classification.m in Sources */,
-				AA623EFD1998D78600A942A9 /* BetWebViewController.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,
@@ -1389,7 +996,6 @@
 				AA623E321998D17800A942A9 /* _SML.m in Sources */,
 				AA623E3E1998D17800A942A9 /* Event.m in Sources */,
 				AA623E5E1998D17800A942A9 /* AFURLRequestSerialization.m in Sources */,
-				AA623F031998D78600A942A9 /* InformationBetWithFriendsViewController.m in Sources */,
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,
 				AA623EDE1998D78600A942A9 /* Fav24ExtendedNavigationController.m in Sources */,
 				AA623E6A1998D17800A942A9 /* UIProgressView+AFNetworking.m in Sources */,
@@ -1398,8 +1004,6 @@
 				AA623EDC1998D78600A942A9 /* AppAdviceViewController.m in Sources */,
 				AA623E681998D17800A942A9 /* UIButton+AFNetworking.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
-				AA623EEA1998D78600A942A9 /* CalendarTournamentsViewController.m in Sources */,
-				AA623EE61998D78600A942A9 /* CalendarFixtureViewController.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623E5B1998D17800A942A9 /* AFNetworkReachabilityManager.m in Sources */,
 				AA623F1D1998F49700A942A9 /* YoContainerViewController.m in Sources */,
@@ -1407,26 +1011,18 @@
 				AA623F171998F46E00A942A9 /* GenteTableViewController.m in Sources */,
 				AA623E571998D17800A942A9 /* Tournament.m in Sources */,
 				A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */,
-				AA623F051998D78600A942A9 /* InformationExclusiveOfferViewController.m in Sources */,
-				AA623E2D1998D17800A942A9 /* _PlayerProvider.m in Sources */,
 				AA623E671998D17800A942A9 /* UIAlertView+AFNetworking.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
-				AA623EE41998D78600A942A9 /* CalendarFavoritesTableViewController.m in Sources */,
 				A5E3E200199918D200322727 /* UILabel+Resize.m in Sources */,
 				AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */,
 				AA623E4C1998D17800A942A9 /* Mode.m in Sources */,
 				AA623E691998D17800A942A9 /* UIImageView+AFNetworking.m in Sources */,
-				AA623EFF1998D78600A942A9 /* CuotasCell.m in Sources */,
-				AA623E471998D17800A942A9 /* LineUp.m in Sources */,
 				AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */,
-				AA623EE21998D78600A942A9 /* LineUpsViewController.m in Sources */,
-				AA623F011998D78600A942A9 /* MoneyBetCell.m in Sources */,
 				AA623E2B1998D17800A942A9 /* _Mode.m in Sources */,
 				AA623E3C1998D17800A942A9 /* CoreDataParsing.m in Sources */,
 				AA623E661998D17800A942A9 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				AA623E711998D17800A942A9 /* UserManager.m in Sources */,
 				AA623E331998D17800A942A9 /* _Subscription.m in Sources */,
-				AA623E521998D17800A942A9 /* Provider.m in Sources */,
 				AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */,
 				AA623E651998D17800A942A9 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				AA623E6B1998D17800A942A9 /* UIWebView+AFNetworking.m in Sources */,

@@ -28,14 +28,12 @@ extern const struct PlayerAttributes {
 
 extern const struct PlayerRelationships {
 	__unsafe_unretained NSString *device;
-	__unsafe_unretained NSString *playerProvider;
 } PlayerRelationships;
 
 extern const struct PlayerFetchedProperties {
 } PlayerFetchedProperties;
 
 @class Device;
-@class PlayerProvider;
 
 
 
@@ -303,22 +301,10 @@ extern const struct PlayerFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *playerProvider;
-
-- (NSMutableSet*)playerProviderSet;
-
-
-
-
 
 @end
 
 @interface _Player (CoreDataGeneratedAccessors)
-
-- (void)addPlayerProvider:(NSSet*)value_;
-- (void)removePlayerProvider:(NSSet*)value_;
-- (void)addPlayerProviderObject:(PlayerProvider*)value_;
-- (void)removePlayerProviderObject:(PlayerProvider*)value_;
 
 @end
 
@@ -469,11 +455,6 @@ extern const struct PlayerFetchedProperties {
 
 - (Device*)primitiveDevice;
 - (void)setPrimitiveDevice:(Device*)value;
-
-
-
-- (NSMutableSet*)primitivePlayerProvider;
-- (void)setPrimitivePlayerProvider:(NSMutableSet*)value;
 
 
 @end

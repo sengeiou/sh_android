@@ -26,7 +26,6 @@ const struct TournamentAttributes TournamentAttributes = {
 };
 
 const struct TournamentRelationships TournamentRelationships = {
-	.classifications = @"classifications",
 	.modes = @"modes",
 	.rounds = @"rounds",
 };
@@ -463,19 +462,6 @@ const struct TournamentFetchedProperties TournamentFetchedProperties = {
 
 
 
-
-@dynamic classifications;
-
-	
-- (NSMutableSet*)classificationsSet {
-	[self willAccessValueForKey:@"classifications"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"classifications"];
-  
-	[self didAccessValueForKey:@"classifications"];
-	return result;
-}
-	
 
 @dynamic modes;
 

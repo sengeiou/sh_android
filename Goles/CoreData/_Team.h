@@ -19,9 +19,7 @@ extern const struct TeamAttributes {
 } TeamAttributes;
 
 extern const struct TeamRelationships {
-	__unsafe_unretained NSString *classifications;
 	__unsafe_unretained NSString *events;
-	__unsafe_unretained NSString *lineUp;
 	__unsafe_unretained NSString *matchesAsLocal;
 	__unsafe_unretained NSString *matchesAsVisitor;
 	__unsafe_unretained NSString *mode;
@@ -31,9 +29,7 @@ extern const struct TeamRelationships {
 extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
-@class Classification;
 @class EventOfMatch;
-@class LineUp;
 @class Match;
 @class Match;
 @class Mode;
@@ -190,23 +186,9 @@ extern const struct TeamFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *classifications;
-
-- (NSMutableSet*)classificationsSet;
-
-
-
-
 @property (nonatomic, strong) NSSet *events;
 
 - (NSMutableSet*)eventsSet;
-
-
-
-
-@property (nonatomic, strong) LineUp *lineUp;
-
-//- (BOOL)validateLineUp:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -243,11 +225,6 @@ extern const struct TeamFetchedProperties {
 @end
 
 @interface _Team (CoreDataGeneratedAccessors)
-
-- (void)addClassifications:(NSSet*)value_;
-- (void)removeClassifications:(NSSet*)value_;
-- (void)addClassificationsObject:(Classification*)value_;
-- (void)removeClassificationsObject:(Classification*)value_;
 
 - (void)addEvents:(NSSet*)value_;
 - (void)removeEvents:(NSSet*)value_;
@@ -348,18 +325,8 @@ extern const struct TeamFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveClassifications;
-- (void)setPrimitiveClassifications:(NSMutableSet*)value;
-
-
-
 - (NSMutableSet*)primitiveEvents;
 - (void)setPrimitiveEvents:(NSMutableSet*)value;
-
-
-
-- (LineUp*)primitiveLineUp;
-- (void)setPrimitiveLineUp:(LineUp*)value;
 
 
 

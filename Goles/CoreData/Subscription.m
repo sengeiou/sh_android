@@ -3,7 +3,6 @@
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "UserManager.h"
-#import "Cuotasmanager.h"
 #import "Team.h"
 #import "SML.h"
 #import "Utils.h"
@@ -126,12 +125,7 @@
         securityIDAllEvents = securityIDAllEvents + cambios;
         ++subscriptionsCounter;
     }
-    
-    if ([[CuotasManager singleton] isProviderActive])
-        if ( value & cuotas ){
-            securityIDAllEvents = securityIDAllEvents + cuotas;
-            ++subscriptionsCounter;
-        }
+
     
     self.idAllEvents = [NSNumber numberWithInt:securityIDAllEvents];
     [[CoreDataManager singleton] saveContext];

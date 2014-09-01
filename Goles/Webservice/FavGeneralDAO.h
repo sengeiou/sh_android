@@ -14,13 +14,6 @@
 //Generic parser
 +(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error))completionBlock;
 
-//Cuotas parsers
-+(void)cuotasParserForData:(NSDictionary *)data andMatch:(Match *)match withdelegate:(id)delegate;
-+(BOOL)providerAndBetTypeAndBetTypeOddParser:(NSDictionary *)dict forMatchBetType:(NSDictionary *)matchBetType andMatch:(Match *)match;
-
-//Team Calendar View parser
-+(NSArray *)parseMatchesForCalendar:(NSDictionary *)dict;
-
 //Device
 +(BOOL)parseDevice:(NSDictionary *)deviceData;
 

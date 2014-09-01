@@ -11,7 +11,6 @@
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "Event.h"
-#import "Classification.h"
 #import "Tournament.h"
 
 @implementation CoreDataGenerator

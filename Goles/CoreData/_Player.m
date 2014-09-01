@@ -27,7 +27,6 @@ const struct PlayerAttributes PlayerAttributes = {
 
 const struct PlayerRelationships PlayerRelationships = {
 	.device = @"device",
-	.playerProvider = @"playerProvider",
 };
 
 const struct PlayerFetchedProperties PlayerFetchedProperties = {
@@ -417,19 +416,6 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 @dynamic device;
 
-	
-
-@dynamic playerProvider;
-
-	
-- (NSMutableSet*)playerProviderSet {
-	[self willAccessValueForKey:@"playerProvider"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"playerProvider"];
-  
-	[self didAccessValueForKey:@"playerProvider"];
-	return result;
-}
 	
 
 

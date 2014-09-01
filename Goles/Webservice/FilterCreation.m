@@ -15,8 +15,6 @@
 #import "AppAdvice.h"
 #import "Subscription.h"
 #import "Team.h"
-#import "Provider.h"
-#import "Classification.h"
 #import "Tournament.h"
 
 @implementation FilterCreation
@@ -29,12 +27,6 @@
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_MESSAGE_PLATFORM,K_CD_VALUE:@1}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
-        return filter;
-    }
-
-    else if ([entity isSubclassOfClass:[Classification class]]){
-        NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_TOURNAMENT_ID_TOURNAMENT,K_CD_VALUE:[NSNull null]}];
-        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsTeams,K_WS_FILTERS:@[]}};
         return filter;
     }
     
@@ -53,10 +45,6 @@
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
         return filter;
     }
-    
-    else if ([entity isSubclassOfClass:[Provider class]])
-        return @{};
-    
     else if ([entity isSubclassOfClass:[SML class]]){
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,kJSON_NAME:kJSON_ID_SML,kJSON_VALUE:[NSNull null]}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};

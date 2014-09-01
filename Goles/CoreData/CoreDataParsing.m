@@ -120,14 +120,9 @@ NSString *const K_COREDATA_MATCH                        = @"Match";
 NSString *const K_COREDATA_MESSAGE                      = @"Message";
 NSString *const K_COREDATA_MODE                         = @"Mode";
 NSString *const K_COREDATA_PLAYER                       = @"Player";
-NSString *const K_COREDATA_PROVIDER                     = @"Provider";
 NSString *const K_COREDATA_TEAM                         = @"Team";
 NSString *const K_COREDATA_TOURNAMENT                   = @"Tournament";
 NSString *const K_COREDATA_MATCH_ODD                    = @"MatchOdd";
-NSString *const K_COREDATA_MATCHBETTYPE                 = @"MatchBetType";
-NSString *const K_COREDATA_BETTYPE                      = @"BetType";
-NSString *const K_COREDATA_BETTYPEODD                   = @"BetTypeOdd";
-NSString *const K_COREDATA_PLAYERPROVIDER               = @"PlayerProvider";
 NSString *const K_COREDATA_SUSCRIPTIONS                 = @"Subscription";
 NSString *const K_CDENTITY_SYNC_CONTROL                 = @"SyncControl";
 NSString *const K_COREDATA_SML                          = @"SML";
@@ -152,34 +147,6 @@ NSString *const kJSON_ADVICE_VERSION_END                = @"endVersion";
 NSString *const kJSON_ADVICE_BUTTON_TEXTID              = @"buttonTextId";
 NSString *const kJSON_ADVICE_IDMESSAGE                  = @"idMessage";
 
-//BETTYPE
-NSString *const kJSON_BETTYPE                           = @"betType";
-NSString *const kJSON_ID_BETTYPE                        = @"idBetType";
-NSString *const kJSON_ALWAYS_VISIBLE                    = @"alwaysVisible";
-NSString *const kJSON_COMMENT                           = @"comment";
-NSString *const kJSON_TITLE                             = @"title";
-
-//BETTYPEODD
-NSString *const kJSON_BETTYPEODD                        = @"betTypeOdd";
-NSString *const kJSON_ID_BETTYPEODD                     = @"idBetTypeOdd";
-NSString *const kJSON_VALUE                             = @"value";
-NSString *const kJSON_URL                               = @"url";
-
-//CLASSIFICATION
-NSString *const kJSON_CLASSIFICATION_PL               = @"pl";
-NSString *const kJSON_CLASSIFICATION_WL               = @"wl";
-NSString *const kJSON_CLASSIFICATION_LL               = @"ll";
-NSString *const kJSON_CLASSIFICATION_DL               = @"dl";
-NSString *const kJSON_CLASSIFICATION_GFL              = @"gfl";
-NSString *const kJSON_CLASSIFICATION_GAL              = @"gal";
-NSString *const kJSON_CLASSIFICATION_PV               = @"pv";
-NSString *const kJSON_CLASSIFICATION_WV               = @"wv";
-NSString *const kJSON_CLASSIFICATION_LV               = @"lv";
-NSString *const kJSON_CLASSIFICATION_DV               = @"dv";
-NSString *const kJSON_CLASSIFICATION_GFV              = @"gfv";
-NSString *const kJSON_CLASSIFICATION_GAV              = @"gcv";
-NSString *const kJSON_CLASSIFICATION_POINTS           = @"points";
-NSString *const kJSON_CLASSIFICATION_WEIGHT           = @"weight";
 
 //DEVICE
 NSString *const kJSON_ID_DEVICE                        = @"idDevice";
@@ -215,17 +182,6 @@ NSString *const kJSON_ROUND_END_DATE                   = @"endDate";
 NSString *const kJSON_ROUND_TYPE                       = @"roundType";
 NSString *const kJSON_MATCHES                          = @"matchesList";
 
-//LINEUP
-NSString *const kJSON_LINEUP_ID                        = @"idLineUp";
-NSString *const kJSON_LINEUP_GOALKEEPER                = @"goalkeeper";
-NSString *const kJSON_LINEUP_DEFENDERS                 = @"defenders";
-NSString *const kJSON_LINEUP_MIDFIELDER01              = @"midfielder01";
-NSString *const kJSON_LINEUP_MIDFIELDER02              = @"midfielder02";
-NSString *const kJSON_LINEUP_STRIKER                   = @"striker";
-NSString *const kJSON_LINEUP_RESERVE                   = @"reserve";
-NSString *const kJSON_LINEUP_COACH                     = @"coach";
-NSString *const kJSON_LINEUP_FORMATION                 = @"formation";
-
 //MATCH
 NSString *const kJSON_MATCHLIST                        = @"matchList";
 NSString *const kJSON_ID_MATCH                         = @"idMatch";
@@ -254,8 +210,6 @@ NSString *const kJSON_SCORE_LOCAL                      = @"localStore";
 NSString *const kJSON_SCORE_VISITOR                    = @"visitorStore";
 NSString *const kJSON_DATE_START                       = @"startDate";
 
-//MATCHBETTYPE
-NSString *const kJSON_ID_MATCHBETTYPE                   = @"idMatchBetType";
 
 //MESSAGE
 NSString *const kJSON_ID_MESSAGE                        = @"idMessage";
@@ -273,26 +227,6 @@ NSString *const kJSON_PLAYER_ID                        = @"playerId";
 NSString *const kJSON_USER_NAME                        = @"userName";
 NSString *const kJSON_ID_PLAYER                        = @"idPlayer";
 
-//PLAYERPROVIDER
-NSString *const kJSON_ID_PLAYERPROVIDER                 = @"idPlayerProvider";
-NSString *const kJSON_STATUS                            = @"status";
-
-//PROVIDER
-NSString *const kJSON_PROVIDER                         = @"provider";
-NSString *const kJSON_ID_PROVIDER                      = @"idProvider";
-NSString *const kJSON_NAME                             = @"name";
-NSString *const kJSON_SWEEPSTAKE_ACTIVE                = @"activePorra";
-NSString *const kJSON_PROVIDER_ACTIVE                  = @"active";
-NSString *const kJSON_MATCH_ODDS                       = @"matchOdds";
-NSString *const kJSON_PREDICTION_ODDS                  = @"predictionsOdds";
-NSString *const kJSON_UNIQUE_KEY                       = @"uniqueKey";
-NSString *const kJSON_VISIBLE                          = @"visibleIOS";
-NSString *const kJSON_DISCLAIMER                       = @"disclaimer";
-NSString *const kJSON_TRACKER                          = @"tracker";
-NSString *const kJSON_ZONEID                           = @"zoneID";
-NSString *const kJSON_REGISTRYURL                      = @"registryURL";
-NSString *const kJSON_PARTNERID                        = @"partnerId";
-
 //SWEEPSTAKEROUND
 NSString *const kJSON_ID_TEAM                          = @"idTeam";
 NSString *const kJSON_NAME_SHORT                       = @"nameShort";
@@ -300,6 +234,8 @@ NSString *const kJSON_NAME_TINY                        = @"nameTiny";
 NSString *const kJSON_URL_IMAGE                        = @"urlImage";
 NSString *const kJSON_ID_LEAGUE                        = @"idLeague";
 NSString *const kJSON_IS_NATIONAL_TEAM                 = @"isNationalTeam";
+NSString *const kJSON_NAME                             = @"name";
+NSString *const kJSON_VALUE                            = @"value";
 
 //SUBSCRIPTION
 NSString *const kJSON_ID_SUBSCRIPTION                  = @"idSubscription";

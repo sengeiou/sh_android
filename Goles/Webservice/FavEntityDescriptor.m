@@ -11,16 +11,10 @@
 #import "EventOfMatch.h"
 #import "Match.h"
 #import "Team.h"
-#import "Provider.h"
-#import "MatchBetType.h"
-#import "BetType.h"
-#import "BetTypeOdd.h"
-#import "PlayerProvider.h"
 #import "Subscription.h"
 #import "SML.h"
 #import "Message.h"
 #import "AppAdvice.h"
-#import "Classification.h"
 #import "Tournament.h"
 
 @implementation FavEntityDescriptor
@@ -97,75 +91,6 @@
                  kJSON_ID_MODE:[NSNull null]};
         
     }
-    else if ([entityClass isSubclassOfClass:[Provider class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_PROVIDER:[NSNull null],
-                 kJSON_NAME:[NSNull null],
-                 kJSON_PROVIDER_ACTIVE:[NSNull null],
-                 kJSON_UNIQUE_KEY:[NSNull null],
-                 kJSON_WEIGHT:[NSNull null],
-                 kJSON_DISCLAIMER:[NSNull null],
-                 kJSON_REGISTRYURL:[NSNull null],
-                 kJSON_COMMENT:[NSNull null],
-                 kJSON_VISIBLE:[NSNull null]};
-        
-    }
-    else if ([entityClass isSubclassOfClass:[MatchBetType class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_MATCHBETTYPE:[NSNull null],
-                 kJSON_ID_PROVIDER:[NSNull null],
-                 kJSON_ID_MATCH:[NSNull null],
-                 kJSON_ID_BETTYPE:[NSNull null]};
-    }
-    else if ([entityClass isSubclassOfClass:[BetType class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_BETTYPE:[NSNull null],
-                 kJSON_UNIQUE_KEY:[NSNull null],
-                 kJSON_NAME:[NSNull null],
-                 kJSON_COMMENT:[NSNull null],
-                 kJSON_ALWAYS_VISIBLE:[NSNull null],
-                 kJSON_TITLE:[NSNull null],
-                 kJSON_WEIGHT:[NSNull null]};
-    }
-    else if ([entityClass isSubclassOfClass:[BetTypeOdd class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_BETTYPEODD:[NSNull null],
-                 kJSON_ID_MATCHBETTYPE:[NSNull null],
-                 kJSON_NAME:[NSNull null],
-                 kJSON_COMMENT:[NSNull null],
-                 kJSON_VALUE:[NSNull null],
-                 kJSON_URL:[NSNull null]};
-    }
-    else if ([entityClass isSubclassOfClass:[PlayerProvider class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_PLAYERPROVIDER:[NSNull null],
-                 kJSON_WEIGHT:[NSNull null],
-                 kJSON_VISIBLE:[NSNull null],
-                 kJSON_STATUS:[NSNull null],
-                 kJSON_ID_PLAYER:[NSNull null],
-                 kJSON_ID_PROVIDER:[NSNull null]};
-    }
-
     else if ([entityClass isSubclassOfClass:[Subscription class]]) {
         
         return @{K_WS_OPS_REVISION:[NSNull null],
@@ -222,29 +147,6 @@
                  kJSON_ADVICE_VERSION_START:[NSNull null],
                  kJSON_ADVICE_VERSION_END:[NSNull null],
                  kJSON_ADVICE_BUTTON_TEXTID:[NSNull null]};
-    }
-    
-    else if ([entityClass isSubclassOfClass:[Classification class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_TOURNAMENT_ID_TOURNAMENT:[NSNull null],
-                 kJSON_ID_TEAM:[NSNull null],
-                 kJSON_CLASSIFICATION_PL:[NSNull null],
-                 kJSON_CLASSIFICATION_WL:[NSNull null],
-                 kJSON_CLASSIFICATION_LL:[NSNull null],
-                 kJSON_CLASSIFICATION_DL:[NSNull null],
-                 kJSON_CLASSIFICATION_GFL:[NSNull null],
-                 kJSON_CLASSIFICATION_GAL:[NSNull null],
-                 kJSON_CLASSIFICATION_PV:[NSNull null],
-                 kJSON_CLASSIFICATION_WV:[NSNull null],
-                 kJSON_CLASSIFICATION_LV:[NSNull null],
-                 kJSON_CLASSIFICATION_DV:[NSNull null],
-                 kJSON_CLASSIFICATION_GFV:[NSNull null],
-                 kJSON_CLASSIFICATION_GAV:[NSNull null],
-                 kJSON_CLASSIFICATION_POINTS:[NSNull null]};
     }
     
     else if ([entityClass isSubclassOfClass:[Tournament class]]) {

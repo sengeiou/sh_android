@@ -16,9 +16,7 @@
 #import "FavEntityDescriptor.h"
 #import "FilterCreation.h"
 #import "FavRestConsumerHelper.h"
-#import "CuotasManager.h"
 #import "CoreDataManager.h"
-#import "CalendarFavoritesTableViewController.h"
 #import "LeaguesManager.h"
 
 @interface FavRestConsumer ()
@@ -185,121 +183,6 @@
     }
 }
 
-#pragma mark - Bwin cuotas request creation methods
-
-//------------------------------------------------------------------------------
-- (void)getOddsForMatch:(Match *)match withDelegate:(id)delegate {
-
-    //Create Alias block
-    NSString *alias = kALIAS_GET_MATCHBETTYPES;
-    
-    //Create Staus block
-    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
-    
-    //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
-
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:K_COREDATA_MATCHBETTYPE
-                                                                     withItems:@100
-                                                                     withOffSet:@0
-                                                                     andFilter:[FavRestConsumerHelper createFilterForParameter:kJSON_ID_MATCH andValue:match.idMatch]];
-    //Create ONE 'ops' block
-    NSDictionary *simpleOPS = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[MatchBetType class]]]};
-    
-    //Create 'ops' block
-    NSArray *ops = @[simpleOPS];
-    
-    //Create full data structure
-    if (req && ops) {
-        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-
-        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-            
-            if (!error)
-                [FavGeneralDAO cuotasParserForData:data andMatch:match withdelegate:delegate];
-
-            else {
-                DLog(@"Request error:%@",error);
-            }
-        }];
-    }else
-        DLog(@"No valid req structure created");
-}
-
-//------------------------------------------------------------------------------
-- (void)getCompleteInfo:(NSArray *)matchBetTypesArray andMatch:(Match *)match andDelegate:(id)delegate{
-    
-    __block int responseCounter = 0;
-    
-    for (NSDictionary *dict in matchBetTypesArray) {
-        
-        //Create Alias block
-        NSString *alias = kALIAS_GET_BETINFO;
-        
-        //Create Staus block
-        NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
-        
-        //Create 'req' block
-        NSArray *req = [FavRestConsumerHelper createREQ];
-        
-        //Create Provider 'metadata' block
-        NSDictionary *meta = @{K_WS_OPS_OPERATION: K_OP_RETREAVE,K_WS_OPS_ENTITY:K_COREDATA_PROVIDER};
-        NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
-        [metadata addEntriesFromDictionary:@{K_WS_OPS_KEY:@{kJSON_ID_PROVIDER:[dict objectForKey:kJSON_ID_PROVIDER]}}];
-        [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
-        [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:@1}];
-        
-        //Create BetType 'metadata' block
-        NSDictionary *meta2 = @{K_WS_OPS_OPERATION: K_OP_RETREAVE,K_WS_OPS_ENTITY:K_COREDATA_BETTYPE};
-        NSMutableDictionary *metadata2 = [[NSMutableDictionary alloc] initWithDictionary:meta2];
-        [metadata2 addEntriesFromDictionary:@{K_WS_OPS_KEY:@{kJSON_ID_BETTYPE:[dict objectForKey:kJSON_ID_BETTYPE]}}];
-        [metadata2 addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
-        [metadata2 addEntriesFromDictionary:@{K_WS_OPS_ITEMS:@1}];
-
-        //Create BetTypeOdd 'metadata' block
-        NSDictionary *meta3 = @{K_WS_OPS_OPERATION: K_OP_RETREAVE,K_WS_OPS_ENTITY:K_COREDATA_BETTYPEODD};
-        NSMutableDictionary *metadata3 = [[NSMutableDictionary alloc] initWithDictionary:meta3];
-        [metadata3 addEntriesFromDictionary:[FavRestConsumerHelper createFilterForParameter:kJSON_ID_MATCHBETTYPE andValue:[dict objectForKey:kJSON_ID_MATCHBETTYPE]]];
-        [metadata3 addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
-        [metadata3 addEntriesFromDictionary:@{K_WS_OPS_ITEMS:@50}];
-        
-        //Create Provider 'ops' block
-        NSDictionary *providerOPS = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Provider class]]]};
-        
-        //Create BetType 'ops' block
-        NSDictionary *betTypeOPS = @{K_WS_OPS_METADATA:metadata2,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[BetType class]]]};
-        
-        //Create BetTypeOdd 'ops' block
-        NSDictionary *betTypeOddOPS = @{K_WS_OPS_METADATA:metadata3,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[BetTypeOdd class]]]};
-
-        //Create 'ops' block
-        NSArray *ops = @[providerOPS,betTypeOPS,betTypeOddOPS];
-        
-        //Create full data structure
-        
-        if (req && ops) {
-            NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-            [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-                
-                if (!error) {
-                    BOOL singleResponse = [FavGeneralDAO providerAndBetTypeAndBetTypeOddParser:data forMatchBetType:dict andMatch:match];
-                    if (singleResponse) {
-                        ++responseCounter;
-                        if (responseCounter == [matchBetTypesArray count]) {
-                            if ([delegate respondsToSelector:@selector(getOddsForMatchResponse:)]) {
-                                [delegate getOddsForMatchResponse:YES];
-                            }
-                        }
-                    }
-                } else {
-                    DLog(@"Server error response:%@",error);
-                }
-            }];
-        }
-    }
-}
-
 #pragma mark - Request for favorite teams calendar view
 //------------------------------------------------------------------------------
 - (void)getAllMatchesForTeams:(NSArray *)teams andDelegate:(id)delegate{
@@ -380,8 +263,8 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error){
-                NSArray *matches = [FavGeneralDAO parseMatchesForCalendar:data];
-                [delegate getTeamCalendarDidResponse:matches];
+               // NSArray *matches = [FavGeneralDAO parseMatchesForCalendar:data];
+                //[delegate getTeamCalendarDidResponse:matches];
             }
             else {
                 DLog(@"Request error:%@",error);

@@ -45,7 +45,6 @@
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending;
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate;
 
-- (Provider *)getActiveProvider;
 - (void)unlinkTeams:(NSArray *)dataArray fromMode:(NSNumber *)mode;
 - (void)deleteOldTeamsInClasification:(NSArray *)dataArray;
 

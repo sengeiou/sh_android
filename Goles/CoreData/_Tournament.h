@@ -27,7 +27,6 @@ extern const struct TournamentAttributes {
 } TournamentAttributes;
 
 extern const struct TournamentRelationships {
-	__unsafe_unretained NSString *classifications;
 	__unsafe_unretained NSString *modes;
 	__unsafe_unretained NSString *rounds;
 } TournamentRelationships;
@@ -35,7 +34,6 @@ extern const struct TournamentRelationships {
 extern const struct TournamentFetchedProperties {
 } TournamentFetchedProperties;
 
-@class Classification;
 @class Mode;
 @class Round;
 
@@ -306,13 +304,6 @@ extern const struct TournamentFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *classifications;
-
-- (NSMutableSet*)classificationsSet;
-
-
-
-
 @property (nonatomic, strong) NSSet *modes;
 
 - (NSMutableSet*)modesSet;
@@ -331,11 +322,6 @@ extern const struct TournamentFetchedProperties {
 @end
 
 @interface _Tournament (CoreDataGeneratedAccessors)
-
-- (void)addClassifications:(NSSet*)value_;
-- (void)removeClassifications:(NSSet*)value_;
-- (void)addClassificationsObject:(Classification*)value_;
-- (void)removeClassificationsObject:(Classification*)value_;
 
 - (void)addModes:(NSSet*)value_;
 - (void)removeModes:(NSSet*)value_;
@@ -497,11 +483,6 @@ extern const struct TournamentFetchedProperties {
 - (void)setPrimitiveYearValue:(int64_t)value_;
 
 
-
-
-
-- (NSMutableSet*)primitiveClassifications;
-- (void)setPrimitiveClassifications:(NSMutableSet*)value;
 
 
 

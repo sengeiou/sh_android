@@ -39,9 +39,6 @@ extern const struct MatchAttributes {
 
 extern const struct MatchRelationships {
 	__unsafe_unretained NSString *eventsOfMatch;
-	__unsafe_unretained NSString *lineUpLocal;
-	__unsafe_unretained NSString *lineUpVisitor;
-	__unsafe_unretained NSString *matchBetType;
 	__unsafe_unretained NSString *round;
 	__unsafe_unretained NSString *subscription;
 	__unsafe_unretained NSString *teamLocal;
@@ -52,9 +49,6 @@ extern const struct MatchFetchedProperties {
 } MatchFetchedProperties;
 
 @class EventOfMatch;
-@class LineUp;
-@class LineUp;
-@class MatchBetType;
 @class Round;
 @class Subscription;
 @class Team;
@@ -507,27 +501,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) LineUp *lineUpLocal;
-
-//- (BOOL)validateLineUpLocal:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) LineUp *lineUpVisitor;
-
-//- (BOOL)validateLineUpVisitor:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) NSSet *matchBetType;
-
-- (NSMutableSet*)matchBetTypeSet;
-
-
-
-
 @property (nonatomic, strong) Round *round;
 
 //- (BOOL)validateRound:(id*)value_ error:(NSError**)error_;
@@ -565,11 +538,6 @@ extern const struct MatchFetchedProperties {
 - (void)removeEventsOfMatch:(NSSet*)value_;
 - (void)addEventsOfMatchObject:(EventOfMatch*)value_;
 - (void)removeEventsOfMatchObject:(EventOfMatch*)value_;
-
-- (void)addMatchBetType:(NSSet*)value_;
-- (void)removeMatchBetType:(NSSet*)value_;
-- (void)addMatchBetTypeObject:(MatchBetType*)value_;
-- (void)removeMatchBetTypeObject:(MatchBetType*)value_;
 
 @end
 
@@ -831,21 +799,6 @@ extern const struct MatchFetchedProperties {
 
 - (NSMutableSet*)primitiveEventsOfMatch;
 - (void)setPrimitiveEventsOfMatch:(NSMutableSet*)value;
-
-
-
-- (LineUp*)primitiveLineUpLocal;
-- (void)setPrimitiveLineUpLocal:(LineUp*)value;
-
-
-
-- (LineUp*)primitiveLineUpVisitor;
-- (void)setPrimitiveLineUpVisitor:(LineUp*)value;
-
-
-
-- (NSMutableSet*)primitiveMatchBetType;
-- (void)setPrimitiveMatchBetType:(NSMutableSet*)value;
 
 
 

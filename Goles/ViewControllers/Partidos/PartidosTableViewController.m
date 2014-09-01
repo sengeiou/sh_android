@@ -12,8 +12,6 @@
 #import "PartidosTableViewCell.h"
 #import "NSDate+Utils.h"
 #import "OptionsPartidosTableViewCell.h"
-#import "Classificacio/ClassificationViewController.h"
-#import "MatchDetailTableViewController.h"
 #import "Fav24ExtendedNavigationController.h"
 #import "FavRestConsumer.h"
 
@@ -144,16 +142,10 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    /*if ([segue.identifier isEqualToString:@"clasificacion"]) {
-        ClassificationViewController *clasificacionVC = [segue destinationViewController];
-    }*/
-    
+
     if ([segue.identifier isEqualToString:kSEGUE_MATCH_DETAIL]) {
-        NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-        MatchDetailTableViewController *matchDetailVC = [segue destinationViewController];
-        matchDetailVC.selectedMacth = self.matchesArray[indexPath.row-1];
+       
     }
-    
 }
 
 #pragma mark - Delegate Methods from Webservice

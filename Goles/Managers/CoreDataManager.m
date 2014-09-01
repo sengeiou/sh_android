@@ -13,10 +13,6 @@
 //#import "Flurry.h"
 #import "Event.h"
 #import "Team.h"
-#import "MatchBetType.h"
-#import "BetTypeOdd.h"
-#import "BetType.h"
-#import "Classification.h"
 
 @interface CoreDataManager()
 {
@@ -177,17 +173,6 @@
     return result;
 }
 
-//------------------------------------------------------------------------------
-- (Provider *) getActiveProvider
-{
-    Provider *result = nil;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"active = YES"];
-    NSArray *providers = [[CoreDataManager singleton] getAllEntities:[Provider class] withPredicate:predicate];
-    if ( [providers count] > 0 )
-        result = [providers objectAtIndex:0];
-
-    return result;
-}
 
 //------------------------------------------------------------------------------
 - (void) deleteObject:(NSManagedObject *)object{
@@ -227,22 +212,6 @@
     return toDelete;
 }
 
-//------------------------------------------------------------------------------
-- (void)deleteOldTeamsInClasification:(NSArray *)dataArray{
-    
-    if ( [dataArray isKindOfClass:[NSArray class]] ){
-        
-        for (NSDictionary *dict in dataArray) {
-            
-            NSNumber *teamToSearch = [dict objectForKey:kJSON_ID_TEAM];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team.idTeam = %@",teamToSearch];
-            NSArray *toDelete = [[CoreDataManager singleton] getAllEntities:[Classification class] withPredicate:predicate];
-            if (toDelete.count == 0)
-                [[CoreDataManager singleton] deleteObject:toDelete.firstObject];
-            
-        }
-    }
-}
 
 //------------------------------------------------------------------------------
 - (void)unlinkTeams:(NSArray *)dataArray fromMode:(NSNumber *)mode{

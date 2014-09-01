@@ -15,8 +15,6 @@
 #import "AppAdvice.h"
 #import "Subscription.h"
 #import "Team.h"
-#import "Provider.h"
-#import "Classification.h"
 #import "Tournament.h"
 
 @implementation FavRestConsumerHelper
@@ -37,10 +35,6 @@
         return kALIAS_GET_ALL_TEAMS;
     else if ([entity isSubclassOfClass:[Subscription class]])
         return kALIAS_GETALL_SUSCRIPTIONS;
-    else if ([entity isSubclassOfClass:[Provider class]])
-        return kALIAS_GETALL_PROVIDERS;
-    else if ([entity isSubclassOfClass:[Classification class]])
-        return kALIAS_GETALL_CLASSIFICATIONS;
     else if ([entity isSubclassOfClass:[Tournament class]])
         return kALIAS_GETALL_TOURNAMENTS;
     
