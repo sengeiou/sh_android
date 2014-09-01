@@ -48,12 +48,18 @@
     
     if ( idTeam ){
         Team *team = [[CoreDataManager singleton] getEntity:[Team class] withId:[idTeam integerValue]];
-        if ( team )
-            [team setTeamValuesWithDictionary:dict];      // Update entity
-        else
-            team = [Team insertWithDictionary:dict];      // insert new entity
-    
-        if ( index > -1 )       [team setOrderValue:index];
+        
+        if (team && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+            [[CoreDataManager singleton] deleteEntitiesIn:@[self]];
+            return nil;
+        }else {
+            if ( team )
+                [team setTeamValuesWithDictionary:dict];      // Update entity
+            else
+                team = [Team insertWithDictionary:dict];      // insert new entity
+        }
+        
+//        if ( index > -1 )       [team setOrderValue:index];
 
         return team;
     }

@@ -17,7 +17,7 @@
 
 #define IS_DEVELOPING   YES  // Pointing to PRE or PRO
 
-#define IS_GENERATING_DEFAULT_DATABASE      YES
+#define IS_GENERATING_DEFAULT_DATABASE      NO
 
 //Synchronization switch
 #define SYNCHRO_ACTIVATED      NO

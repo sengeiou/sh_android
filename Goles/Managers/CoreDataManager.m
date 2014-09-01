@@ -322,21 +322,13 @@
 - (NSArray *)updateEntities:(Class)entityClass WithArray:(NSArray *)dataArray {
     
     NSMutableArray *resultInserted = [[NSMutableArray alloc] init];
-    NSMutableArray *resultDeleted = [[NSMutableArray alloc] init];
     
     for (NSDictionary *entityDict in dataArray) {
-        
-        if ([[entityDict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![entityDict objectForKey:K_WS_OPS_DELETE_DATE]) {
-            id entity = [entityClass updateWithDictionary:entityDict];
+
+        id entity = [entityClass updateWithDictionary:entityDict];
             if ( entity )
                 [resultInserted addObject:entity];
         }
-        else
-            [resultDeleted addObject:entityDict];
-    }
-
-    if (resultDeleted.count > 0)
-        [[CoreDataManager sharedInstance] deleteEntitiesIn:resultDeleted];
 
     return resultInserted;
 }
