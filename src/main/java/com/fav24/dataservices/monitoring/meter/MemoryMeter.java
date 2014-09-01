@@ -97,14 +97,14 @@ public final class MemoryMeter extends Meter {
 		double totalCommitted = heapMemoryUsage.getCommitted() + nonHeapMemoryUsage.getCommitted();
 		double usedHeap = heapMemoryUsage.getUsed(); 
 		double usedNonHeap = nonHeapMemoryUsage.getUsed(); 
-		double totaUsed = usedHeap + usedNonHeap; 
+		double totalUsed = usedHeap + usedNonHeap; 
 
 		systemMemoryStatus.put(TOTAL_INIT_MEMORY, totalInit);
 		systemMemoryStatus.put(TOTAL_MAX_MEMORY, totalMax);
 		systemMemoryStatus.put(TOTAL_COMMITTED_MEMORY, totalCommitted);
 		systemMemoryStatus.put(USED_HEAP_MEMORY, usedHeap);
 		systemMemoryStatus.put(USED_NONHEAP_MEMORY, usedNonHeap);
-		systemMemoryStatus.put(TOTAL_USED_MEMORY, totaUsed);
+		systemMemoryStatus.put(TOTAL_USED_MEMORY, totalUsed);
 
 		return systemMemoryStatus;
 	}
