@@ -62,7 +62,6 @@
 		AA623E3D1998D17800A942A9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D901998D17700A942A9 /* Device.m */; };
 		AA623E3E1998D17800A942A9 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D921998D17700A942A9 /* Event.m */; };
 		AA623E3F1998D17800A942A9 /* EventOfMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D941998D17700A942A9 /* EventOfMatch.m */; };
-		AA623E401998D17800A942A9 /* Round.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D961998D17700A942A9 /* Round.m */; };
 		AA623E481998D17800A942A9 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA61998D17700A942A9 /* Match.m */; };
 		AA623E4B1998D17800A942A9 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAC1998D17700A942A9 /* Message.m */; };
 		AA623E4C1998D17800A942A9 /* Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAE1998D17700A942A9 /* Mode.m */; };
@@ -224,8 +223,6 @@
 		AA623D921998D17700A942A9 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		AA623D931998D17700A942A9 /* EventOfMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventOfMatch.h; sourceTree = "<group>"; };
 		AA623D941998D17700A942A9 /* EventOfMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventOfMatch.m; sourceTree = "<group>"; };
-		AA623D951998D17700A942A9 /* Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Round.h; sourceTree = "<group>"; };
-		AA623D961998D17700A942A9 /* Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Round.m; sourceTree = "<group>"; };
 		AA623DA51998D17700A942A9 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		AA623DA61998D17700A942A9 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		AA623DAB1998D17700A942A9 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -425,8 +422,6 @@
 				AA623D921998D17700A942A9 /* Event.m */,
 				AA623D931998D17700A942A9 /* EventOfMatch.h */,
 				AA623D941998D17700A942A9 /* EventOfMatch.m */,
-				AA623D951998D17700A942A9 /* Round.h */,
-				AA623D961998D17700A942A9 /* Round.m */,
 				AA623DA51998D17700A942A9 /* Match.h */,
 				AA623DA61998D17700A942A9 /* Match.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
@@ -989,7 +984,6 @@
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AA623E1F1998D17800A942A9 /* _Round.m in Sources */,
 				AA623E5A1998D17800A942A9 /* AFHTTPSessionManager.m in Sources */,
-				AA623E401998D17800A942A9 /* Round.m in Sources */,
 				A5FB2E1A199A6E02002A75C4 /* GenteMatchTableViewController.m in Sources */,
 				AA623E5D1998D17800A942A9 /* AFURLConnectionOperation.m in Sources */,
 				AA623E2C1998D17800A942A9 /* _Player.m in Sources */,

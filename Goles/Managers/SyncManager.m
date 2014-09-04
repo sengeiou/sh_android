@@ -9,14 +9,6 @@
 
 @interface SyncManager ()
 
-@property (nonatomic) BOOL userSendOK;
-@property (nonatomic) BOOL deviceSendOK;
-@property (nonatomic) BOOL userPenyaSendOK;
-@property (nonatomic) BOOL userContentSendOK;
-@property (nonatomic) BOOL topicMailboxSendOK;
-
-@property (nonatomic)              int              contentLanguageCounter;
-@property (nonatomic)              int              countryCounter;
 
 @end
 
