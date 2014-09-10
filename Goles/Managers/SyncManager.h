@@ -37,6 +37,7 @@
 - (void)setSyncData:(NSDictionary *)dict withValue:(long long)value;
 - (void)synchroEntity:(NSString *)entity withDelegate:(id)delegate;
 
+
 //------------------------------------------------------------------------------
 /**
  @brief Send data to server

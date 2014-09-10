@@ -41,10 +41,6 @@
     return self.mUser;
 }
 
-//------------------------------------------------------------------------------
--(BOOL)isAnonimousPlayer{
-    return [[self mUser] anonymousUserValue];
-}
 
 //------------------------------------------------------------------------------
 -(NSNumber *)getUserId{

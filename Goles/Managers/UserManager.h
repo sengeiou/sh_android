@@ -19,7 +19,6 @@
 + (UserManager *)sharedInstance;
 - (NSNumber *)getUserId;
 - (Player *)getActiveUser;
-- (BOOL)isAnonimousPlayer;
 - (Device *)getDevice;
 - (NSNumber *)getIdDevice;
 - (void)setDeviceToken:(NSString *)token;

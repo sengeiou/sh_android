@@ -33,10 +33,8 @@
 		AA623D021998A7F200A942A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623D001998A7F200A942A9 /* InfoPlist.strings */; };
 		AA623D041998A7F200A942A9 /* GolesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D031998A7F200A942A9 /* GolesTests.m */; };
 		AA623D231998CE1500A942A9 /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D251998CE1500A942A9 /* Setup.storyboard */; };
-		AA623D261998CE4900A942A9 /* Retar_Pronosticar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D281998CE4900A942A9 /* Retar_Pronosticar.storyboard */; };
-		AA623D291998CE4C00A942A9 /* Partidos.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D2B1998CE4C00A942A9 /* Partidos.storyboard */; };
-		AA623D2C1998CE4F00A942A9 /* Yo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D2E1998CE4F00A942A9 /* Yo.storyboard */; };
-		AA623D2F1998CE5200A942A9 /* Gente.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D311998CE5200A942A9 /* Gente.storyboard */; };
+		AA623D2C1998CE4F00A942A9 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D2E1998CE4F00A942A9 /* Me.storyboard */; };
+		AA623D2F1998CE5200A942A9 /* People.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA623D311998CE5200A942A9 /* People.storyboard */; };
 		AA623D3F1998CF4B00A942A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623D381998CF4B00A942A9 /* InfoPlist.strings */; };
 		AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3A1998CF4B00A942A9 /* golesMogen.sh */; };
 		AA623D411998CF4B00A942A9 /* a.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3C1998CF4B00A942A9 /* a.aiff */; };
@@ -167,15 +165,11 @@
 		AA623D011998A7F200A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AA623D031998A7F200A942A9 /* GolesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GolesTests.m; sourceTree = "<group>"; };
 		AA623D241998CE1500A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup.storyboard; sourceTree = "<group>"; };
-		AA623D271998CE4900A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Retar_Pronosticar.storyboard; sourceTree = "<group>"; };
-		AA623D2A1998CE4C00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Partidos.storyboard; sourceTree = "<group>"; };
-		AA623D2D1998CE4F00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Yo.storyboard; sourceTree = "<group>"; };
-		AA623D301998CE5200A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Gente.storyboard; sourceTree = "<group>"; };
+		AA623D2D1998CE4F00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Me.storyboard; sourceTree = "<group>"; };
+		AA623D301998CE5200A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/People.storyboard; sourceTree = "<group>"; };
 		AA623D321998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Setup.storyboard; sourceTree = "<group>"; };
-		AA623D331998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Retar_Pronosticar.storyboard; sourceTree = "<group>"; };
-		AA623D341998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Partidos.storyboard; sourceTree = "<group>"; };
-		AA623D351998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Yo.storyboard; sourceTree = "<group>"; };
-		AA623D361998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Gente.storyboard; sourceTree = "<group>"; };
+		AA623D351998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Me.storyboard; sourceTree = "<group>"; };
+		AA623D361998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/People.storyboard; sourceTree = "<group>"; };
 		AA623D371998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AA623D381998CF4B00A942A9 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		AA623D3A1998CF4B00A942A9 /* golesMogen.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = golesMogen.sh; sourceTree = "<group>"; };
@@ -519,10 +513,8 @@
 			isa = PBXGroup;
 			children = (
 				AA623D251998CE1500A942A9 /* Setup.storyboard */,
-				AA623D281998CE4900A942A9 /* Retar_Pronosticar.storyboard */,
-				AA623D2B1998CE4C00A942A9 /* Partidos.storyboard */,
-				AA623D2E1998CE4F00A942A9 /* Yo.storyboard */,
-				AA623D311998CE5200A942A9 /* Gente.storyboard */,
+				AA623D2E1998CE4F00A942A9 /* Me.storyboard */,
+				AA623D311998CE5200A942A9 /* People.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -668,7 +660,7 @@
 			isa = PBXGroup;
 			children = (
 				AA623E7C1998D78600A942A9 /* Base Controllers */,
-				AA623E871998D78600A942A9 /* Gente */,
+				AA623E871998D78600A942A9 /* People */,
 				AA623E881998D78600A942A9 /* Partidos */,
 				AA623ED61998D78600A942A9 /* Retar_Pronosticar */,
 				AA623ED71998D78600A942A9 /* Setup */,
@@ -695,13 +687,13 @@
 			path = "ViewControllers/Base Controllers";
 			sourceTree = "<group>";
 		};
-		AA623E871998D78600A942A9 /* Gente */ = {
+		AA623E871998D78600A942A9 /* People */ = {
 			isa = PBXGroup;
 			children = (
 				AA623F151998F46E00A942A9 /* GenteTableViewController.h */,
 				AA623F161998F46E00A942A9 /* GenteTableViewController.m */,
 			);
-			name = Gente;
+			name = People;
 			path = ViewControllers/Gente;
 			sourceTree = "<group>";
 		};
@@ -882,14 +874,12 @@
 				AA623D231998CE1500A942A9 /* Setup.storyboard in Resources */,
 				AA623D3F1998CF4B00A942A9 /* InfoPlist.strings in Resources */,
 				AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */,
-				AA623D2C1998CE4F00A942A9 /* Yo.storyboard in Resources */,
+				AA623D2C1998CE4F00A942A9 /* Me.storyboard in Resources */,
 				AA623D431998CF4B00A942A9 /* s.aiff in Resources */,
-				AA623D291998CE4C00A942A9 /* Partidos.storyboard in Resources */,
-				AA623D2F1998CE5200A942A9 /* Gente.storyboard in Resources */,
+				AA623D2F1998CE5200A942A9 /* People.storyboard in Resources */,
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
 				AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */,
-				AA623D261998CE4900A942A9 /* Retar_Pronosticar.storyboard in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
 				AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */,
 				AA623D411998CF4B00A942A9 /* a.aiff in Resources */,
@@ -1047,40 +1037,22 @@
 			name = Setup.storyboard;
 			sourceTree = "<group>";
 		};
-		AA623D281998CE4900A942A9 /* Retar_Pronosticar.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AA623D271998CE4900A942A9 /* en */,
-				AA623D331998CE6B00A942A9 /* es */,
-			);
-			name = Retar_Pronosticar.storyboard;
-			sourceTree = "<group>";
-		};
-		AA623D2B1998CE4C00A942A9 /* Partidos.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AA623D2A1998CE4C00A942A9 /* en */,
-				AA623D341998CE6B00A942A9 /* es */,
-			);
-			name = Partidos.storyboard;
-			sourceTree = "<group>";
-		};
-		AA623D2E1998CE4F00A942A9 /* Yo.storyboard */ = {
+		AA623D2E1998CE4F00A942A9 /* Me.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AA623D2D1998CE4F00A942A9 /* en */,
 				AA623D351998CE6B00A942A9 /* es */,
 			);
-			name = Yo.storyboard;
+			name = Me.storyboard;
 			sourceTree = "<group>";
 		};
-		AA623D311998CE5200A942A9 /* Gente.storyboard */ = {
+		AA623D311998CE5200A942A9 /* People.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AA623D301998CE5200A942A9 /* en */,
 				AA623D361998CE6B00A942A9 /* es */,
 			);
-			name = Gente.storyboard;
+			name = People.storyboard;
 			sourceTree = "<group>";
 		};
 		AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */ = {
