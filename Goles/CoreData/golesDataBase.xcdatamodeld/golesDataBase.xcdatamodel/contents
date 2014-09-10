@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AppAdvice" representedClassName="AppAdvice" syncable="YES">
         <attribute name="buttonAction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="buttonData" optional="YES" attributeType="String" syncable="YES"/>
@@ -39,44 +39,8 @@
         <attribute name="status" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timeZone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="modes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mode" inverseName="device" inverseEntity="Mode" syncable="YES"/>
+        <relationship name="modes" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
         <relationship name="player" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Player" inverseName="device" inverseEntity="Player" syncable="YES"/>
-    </entity>
-    <entity name="Event" representedClassName="Event" syncable="YES">
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="idEvent" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="eventsOfMatch" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventOfMatch" inverseName="event" inverseEntity="EventOfMatch" syncable="YES"/>
-    </entity>
-    <entity name="EventOfMatch" representedClassName="EventOfMatch" syncable="YES">
-        <attribute name="actorInTransmitterName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="actorReceptorName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="actorTransmitterName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="dateIn" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="idEvent" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="idEventOfMatch" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="idMatch" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="idPeriod" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="idTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="isOwnGoal" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="isPenaltyGoal" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="localScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="matchMinute" attributeType="Integer 16" syncable="YES"/>
-        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="-1" syncable="YES"/>
-        <attribute name="twittGoalDone" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="eventsOfMatch" inverseEntity="Event" syncable="YES"/>
-        <relationship name="eventTeam" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="eventsOfMatch" inverseEntity="Match" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -109,9 +73,9 @@
         <attribute name="twitterLocal" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="twitterVisitor" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="eventsOfMatch" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventOfMatch" inverseName="match" inverseEntity="EventOfMatch" syncable="YES"/>
-        <relationship name="round" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Round" inverseName="matchesList" inverseEntity="Round" syncable="YES"/>
-        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Subscription" inverseName="match" inverseEntity="Subscription" syncable="YES"/>
+        <relationship name="eventsOfMatch" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
+        <relationship name="round" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" syncable="YES"/>
+        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" syncable="YES"/>
         <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsLocal" inverseEntity="Team" syncable="YES"/>
         <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsVisitor" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -126,19 +90,6 @@
         <attribute name="message" attributeType="String" syncable="YES"/>
         <attribute name="platform" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
         <relationship name="advice" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AppAdvice" inverseName="message" inverseEntity="AppAdvice" syncable="YES"/>
-    </entity>
-    <entity name="Mode" representedClassName="Mode" syncable="YES">
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="idMode" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="order" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="modes" inverseEntity="Device" syncable="YES"/>
-        <relationship name="teams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="mode" inverseEntity="Team" syncable="YES"/>
-        <relationship name="tournaments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tournament" inverseName="modes" inverseEntity="Tournament" syncable="YES"/>
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES">
         <attribute name="anonymousUser" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
@@ -162,23 +113,6 @@
         <attribute name="userName" attributeType="String" syncable="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="player" inverseEntity="Device" syncable="YES"/>
     </entity>
-    <entity name="Round" representedClassName="Round" syncable="YES">
-        <attribute name="campaign" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="endDate" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="idCampaign" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="idRound" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="roundType" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
-        <attribute name="startDate" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="matchesList" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="round" inverseEntity="Match" syncable="YES"/>
-        <relationship name="tournament" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Tournament" inverseName="rounds" inverseEntity="Tournament" syncable="YES"/>
-    </entity>
     <entity name="SML" representedClassName="SML" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -189,22 +123,7 @@
         <attribute name="language" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="message" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
         <attribute name="sound" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
-        <relationship name="subscription" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subscription" inverseName="sml" inverseEntity="Subscription" syncable="YES"/>
-    </entity>
-    <entity name="Subscription" representedClassName="Subscription" syncable="YES">
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" optional="YES" attributeType="String" defaultValueString="u" syncable="YES"/>
-        <attribute name="idAllEvents" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="idDevice" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="idSubscription" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="negation" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="tipus" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="match" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="subscription" inverseEntity="Match" syncable="YES"/>
-        <relationship name="sml" maxCount="1" deletionRule="Nullify" destinationEntity="SML" inverseName="subscription" inverseEntity="SML" syncable="YES"/>
-        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="subscription" inverseEntity="Team" syncable="YES"/>
+        <relationship name="subscription" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
     </entity>
     <entity name="SyncControl" representedClassName="SyncControl" syncable="YES">
         <attribute name="aliasView" optional="YES" attributeType="String" syncable="YES"/>
@@ -225,49 +144,20 @@
         <attribute name="nameShort" attributeType="String" syncable="YES"/>
         <attribute name="order" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
         <attribute name="urlImage" optional="YES" attributeType="String" defaultValueString="DefaultTeamShield.png" syncable="YES"/>
-        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EventOfMatch" inverseName="eventTeam" inverseEntity="EventOfMatch" syncable="YES"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
         <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
-        <relationship name="mode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Mode" inverseName="teams" inverseEntity="Mode" syncable="YES"/>
-        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Subscription" inverseName="team" inverseEntity="Subscription" syncable="YES"/>
-    </entity>
-    <entity name="Tournament" representedClassName="Tournament" syncable="YES">
-        <attribute name="csys_birth" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="csys_deleted" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="csys_modified" optional="YES" attributeType="Date" defaultDateTimeInterval="0" syncable="YES"/>
-        <attribute name="csys_revision" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_syncronized" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="firstC" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="fourthC" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="idTournament" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="isLeague" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="orderBy" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="secondC" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
-        <attribute name="thirdC" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="visibleApp" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="year" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <relationship name="modes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Mode" inverseName="tournaments" inverseEntity="Mode" syncable="YES"/>
-        <relationship name="rounds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Round" inverseName="tournament" inverseEntity="Round" syncable="YES"/>
+        <relationship name="mode" optional="YES" maxCount="1" deletionRule="Nullify" syncable="YES"/>
+        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AppAdvice" positionX="18" positionY="162" width="128" height="345"/>
-        <element name="Device" positionX="0" positionY="0" width="128" height="315"/>
-        <element name="Event" positionX="0" positionY="0" width="128" height="165"/>
-        <element name="EventOfMatch" positionX="0" positionY="0" width="128" height="403"/>
-        <element name="Match" positionX="0" positionY="0" width="128" height="30"/>
-        <element name="Message" positionX="9" positionY="153" width="128" height="195"/>
-        <element name="Mode" positionX="0" positionY="0" width="128" height="208"/>
-        <element name="Player" positionX="0" positionY="0" width="128" height="30"/>
-        <element name="Round" positionX="0" positionY="0" width="128" height="270"/>
-        <element name="SML" positionX="0" positionY="0" width="128" height="195"/>
-        <element name="Subscription" positionX="0" positionY="0" width="128" height="240"/>
-        <element name="SyncControl" positionX="9" positionY="153" width="128" height="120"/>
-        <element name="Team" positionX="-216" positionY="-171" width="128" height="30"/>
-        <element name="Tournament" positionX="-450" positionY="12" width="128" height="30"/>
+        <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
+        <element name="Device" positionX="-207" positionY="351" width="128" height="315"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="568"/>
+        <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
+        <element name="Player" positionX="-425" positionY="324" width="128" height="343"/>
+        <element name="SML" positionX="-290" positionY="45" width="128" height="193"/>
+        <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="283"/>
     </elements>
 </model>

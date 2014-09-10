@@ -38,31 +38,20 @@
 		AA623D431998CF4B00A942A9 /* s.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3E1998CF4B00A942A9 /* s.aiff */; };
 		AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D461998D17700A942A9 /* _AppAdvice.m */; };
 		AA623E1C1998D17800A942A9 /* _Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D4E1998D17700A942A9 /* _Device.m */; };
-		AA623E1D1998D17800A942A9 /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D501998D17700A942A9 /* _Event.m */; };
-		AA623E1E1998D17800A942A9 /* _EventOfMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D521998D17700A942A9 /* _EventOfMatch.m */; };
-		AA623E1F1998D17800A942A9 /* _Round.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D541998D17700A942A9 /* _Round.m */; };
 		AA623E271998D17800A942A9 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D641998D17700A942A9 /* _Match.m */; };
 		AA623E2A1998D17800A942A9 /* _Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6A1998D17700A942A9 /* _Message.m */; };
-		AA623E2B1998D17800A942A9 /* _Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6C1998D17700A942A9 /* _Mode.m */; };
 		AA623E2C1998D17800A942A9 /* _Player.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6E1998D17700A942A9 /* _Player.m */; };
 		AA623E321998D17800A942A9 /* _SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D7A1998D17700A942A9 /* _SML.m */; };
-		AA623E331998D17800A942A9 /* _Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D7C1998D17700A942A9 /* _Subscription.m */; };
 		AA623E351998D17800A942A9 /* _Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D801998D17700A942A9 /* _Team.m */; };
-		AA623E361998D17800A942A9 /* _Tournament.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D821998D17700A942A9 /* _Tournament.m */; };
 		AA623E371998D17800A942A9 /* AppAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D841998D17700A942A9 /* AppAdvice.m */; };
 		AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D8C1998D17700A942A9 /* CoreDataGenerator.m */; };
 		AA623E3C1998D17800A942A9 /* CoreDataParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D8E1998D17700A942A9 /* CoreDataParsing.m */; };
 		AA623E3D1998D17800A942A9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D901998D17700A942A9 /* Device.m */; };
-		AA623E3E1998D17800A942A9 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D921998D17700A942A9 /* Event.m */; };
-		AA623E3F1998D17800A942A9 /* EventOfMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D941998D17700A942A9 /* EventOfMatch.m */; };
 		AA623E481998D17800A942A9 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA61998D17700A942A9 /* Match.m */; };
 		AA623E4B1998D17800A942A9 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAC1998D17700A942A9 /* Message.m */; };
-		AA623E4C1998D17800A942A9 /* Mode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAE1998D17700A942A9 /* Mode.m */; };
 		AA623E4D1998D17800A942A9 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DB01998D17700A942A9 /* Player.m */; };
 		AA623E531998D17800A942A9 /* SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBC1998D17700A942A9 /* SML.m */; };
-		AA623E541998D17800A942A9 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBE1998D17700A942A9 /* Subscription.m */; };
 		AA623E561998D17800A942A9 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC21998D17700A942A9 /* Team.m */; };
-		AA623E571998D17800A942A9 /* Tournament.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC41998D17700A942A9 /* Tournament.m */; };
 		AA623E611998D17800A942A9 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DDC1998D17700A942A9 /* Appirater.m */; };
 		AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */; };
 		AA623E641998D17800A942A9 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DE51998D17700A942A9 /* NSDate+Utils.m */; };
@@ -117,8 +106,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A57E570E19B4C2C400A89478 /* Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Round.m; sourceTree = "<group>"; };
-		A57E571019B4C2CE00A89478 /* Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Round.h; sourceTree = "<group>"; };
 		A58F910C19A4A5830076AA1E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A5E3E1FB1999158700322727 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -167,28 +154,16 @@
 		AA623D461998D17700A942A9 /* _AppAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _AppAdvice.m; sourceTree = "<group>"; };
 		AA623D4D1998D17700A942A9 /* _Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Device.h; sourceTree = "<group>"; };
 		AA623D4E1998D17700A942A9 /* _Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Device.m; sourceTree = "<group>"; };
-		AA623D4F1998D17700A942A9 /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Event.h; sourceTree = "<group>"; };
-		AA623D501998D17700A942A9 /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Event.m; sourceTree = "<group>"; };
-		AA623D511998D17700A942A9 /* _EventOfMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _EventOfMatch.h; sourceTree = "<group>"; };
-		AA623D521998D17700A942A9 /* _EventOfMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _EventOfMatch.m; sourceTree = "<group>"; };
-		AA623D531998D17700A942A9 /* _Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Round.h; sourceTree = "<group>"; };
-		AA623D541998D17700A942A9 /* _Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Round.m; sourceTree = "<group>"; };
 		AA623D631998D17700A942A9 /* _Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Match.h; sourceTree = "<group>"; };
 		AA623D641998D17700A942A9 /* _Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Match.m; sourceTree = "<group>"; };
 		AA623D691998D17700A942A9 /* _Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Message.h; sourceTree = "<group>"; };
 		AA623D6A1998D17700A942A9 /* _Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Message.m; sourceTree = "<group>"; };
-		AA623D6B1998D17700A942A9 /* _Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Mode.h; sourceTree = "<group>"; };
-		AA623D6C1998D17700A942A9 /* _Mode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Mode.m; sourceTree = "<group>"; };
 		AA623D6D1998D17700A942A9 /* _Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Player.h; sourceTree = "<group>"; };
 		AA623D6E1998D17700A942A9 /* _Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Player.m; sourceTree = "<group>"; };
 		AA623D791998D17700A942A9 /* _SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SML.h; sourceTree = "<group>"; };
 		AA623D7A1998D17700A942A9 /* _SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SML.m; sourceTree = "<group>"; };
-		AA623D7B1998D17700A942A9 /* _Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Subscription.h; sourceTree = "<group>"; };
-		AA623D7C1998D17700A942A9 /* _Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Subscription.m; sourceTree = "<group>"; };
 		AA623D7F1998D17700A942A9 /* _Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Team.h; sourceTree = "<group>"; };
 		AA623D801998D17700A942A9 /* _Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Team.m; sourceTree = "<group>"; };
-		AA623D811998D17700A942A9 /* _Tournament.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Tournament.h; sourceTree = "<group>"; };
-		AA623D821998D17700A942A9 /* _Tournament.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Tournament.m; sourceTree = "<group>"; };
 		AA623D831998D17700A942A9 /* AppAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppAdvice.h; sourceTree = "<group>"; };
 		AA623D841998D17700A942A9 /* AppAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppAdvice.m; sourceTree = "<group>"; };
 		AA623D8B1998D17700A942A9 /* CoreDataGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataGenerator.h; sourceTree = "<group>"; };
@@ -197,26 +172,16 @@
 		AA623D8E1998D17700A942A9 /* CoreDataParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataParsing.m; sourceTree = "<group>"; };
 		AA623D8F1998D17700A942A9 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		AA623D901998D17700A942A9 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
-		AA623D911998D17700A942A9 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
-		AA623D921998D17700A942A9 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
-		AA623D931998D17700A942A9 /* EventOfMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventOfMatch.h; sourceTree = "<group>"; };
-		AA623D941998D17700A942A9 /* EventOfMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventOfMatch.m; sourceTree = "<group>"; };
 		AA623DA51998D17700A942A9 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
 		AA623DA61998D17700A942A9 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		AA623DAB1998D17700A942A9 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		AA623DAC1998D17700A942A9 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		AA623DAD1998D17700A942A9 /* Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mode.h; sourceTree = "<group>"; };
-		AA623DAE1998D17700A942A9 /* Mode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mode.m; sourceTree = "<group>"; };
 		AA623DAF1998D17700A942A9 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		AA623DB01998D17700A942A9 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		AA623DBB1998D17700A942A9 /* SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SML.h; sourceTree = "<group>"; };
 		AA623DBC1998D17700A942A9 /* SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SML.m; sourceTree = "<group>"; };
-		AA623DBD1998D17700A942A9 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
-		AA623DBE1998D17700A942A9 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		AA623DC11998D17700A942A9 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		AA623DC21998D17700A942A9 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
-		AA623DC31998D17700A942A9 /* Tournament.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tournament.h; sourceTree = "<group>"; };
-		AA623DC41998D17700A942A9 /* Tournament.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tournament.m; sourceTree = "<group>"; };
 		AA623DDB1998D17700A942A9 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		AA623DDC1998D17700A942A9 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		AA623DDD1998D17700A942A9 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
@@ -337,28 +302,16 @@
 				AA623D461998D17700A942A9 /* _AppAdvice.m */,
 				AA623D4D1998D17700A942A9 /* _Device.h */,
 				AA623D4E1998D17700A942A9 /* _Device.m */,
-				AA623D4F1998D17700A942A9 /* _Event.h */,
-				AA623D501998D17700A942A9 /* _Event.m */,
-				AA623D511998D17700A942A9 /* _EventOfMatch.h */,
-				AA623D521998D17700A942A9 /* _EventOfMatch.m */,
-				AA623D531998D17700A942A9 /* _Round.h */,
-				AA623D541998D17700A942A9 /* _Round.m */,
 				AA623D631998D17700A942A9 /* _Match.h */,
 				AA623D641998D17700A942A9 /* _Match.m */,
 				AA623D691998D17700A942A9 /* _Message.h */,
 				AA623D6A1998D17700A942A9 /* _Message.m */,
-				AA623D6B1998D17700A942A9 /* _Mode.h */,
-				AA623D6C1998D17700A942A9 /* _Mode.m */,
 				AA623D6D1998D17700A942A9 /* _Player.h */,
 				AA623D6E1998D17700A942A9 /* _Player.m */,
 				AA623D791998D17700A942A9 /* _SML.h */,
 				AA623D7A1998D17700A942A9 /* _SML.m */,
-				AA623D7B1998D17700A942A9 /* _Subscription.h */,
-				AA623D7C1998D17700A942A9 /* _Subscription.m */,
 				AA623D7F1998D17700A942A9 /* _Team.h */,
 				AA623D801998D17700A942A9 /* _Team.m */,
-				AA623D811998D17700A942A9 /* _Tournament.h */,
-				AA623D821998D17700A942A9 /* _Tournament.m */,
 			);
 			name = MachineClass;
 			sourceTree = "<group>";
@@ -372,28 +325,16 @@
 				AA623D841998D17700A942A9 /* AppAdvice.m */,
 				AA623D8F1998D17700A942A9 /* Device.h */,
 				AA623D901998D17700A942A9 /* Device.m */,
-				AA623D911998D17700A942A9 /* Event.h */,
-				AA623D921998D17700A942A9 /* Event.m */,
-				AA623D931998D17700A942A9 /* EventOfMatch.h */,
-				AA623D941998D17700A942A9 /* EventOfMatch.m */,
 				AA623DA51998D17700A942A9 /* Match.h */,
 				AA623DA61998D17700A942A9 /* Match.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
 				AA623DAC1998D17700A942A9 /* Message.m */,
-				AA623DAD1998D17700A942A9 /* Mode.h */,
-				AA623DAE1998D17700A942A9 /* Mode.m */,
 				AA623DAF1998D17700A942A9 /* Player.h */,
 				AA623DB01998D17700A942A9 /* Player.m */,
-				A57E571019B4C2CE00A89478 /* Round.h */,
-				A57E570E19B4C2C400A89478 /* Round.m */,
 				AA623DBB1998D17700A942A9 /* SML.h */,
 				AA623DBC1998D17700A942A9 /* SML.m */,
-				AA623DBD1998D17700A942A9 /* Subscription.h */,
-				AA623DBE1998D17700A942A9 /* Subscription.m */,
 				AA623DC11998D17700A942A9 /* Team.h */,
 				AA623DC21998D17700A942A9 /* Team.m */,
-				AA623DC31998D17700A942A9 /* Tournament.h */,
-				AA623DC41998D17700A942A9 /* Tournament.m */,
 			);
 			name = "CoreData Classes";
 			sourceTree = "<group>";
@@ -880,21 +821,16 @@
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
 				AACA544819C057C000E39D94 /* UIButton+AFNetworking.m in Sources */,
 				AA623E3D1998D17800A942A9 /* Device.m in Sources */,
-				AA623E1E1998D17800A942A9 /* _EventOfMatch.m in Sources */,
 				AA623E751998D17800A942A9 /* FavEntityDescriptor.m in Sources */,
-				AA623E3F1998D17800A942A9 /* EventOfMatch.m in Sources */,
 				AACA544119C057C000E39D94 /* AFURLConnectionOperation.m in Sources */,
 				AA623E771998D17800A942A9 /* FavRestConsumer.m in Sources */,
 				AA623E351998D17800A942A9 /* _Team.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
-				AA623E541998D17800A942A9 /* Subscription.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
 				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */,
-				AA623E1D1998D17800A942A9 /* _Event.m in Sources */,
-				AA623E361998D17800A942A9 /* _Tournament.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
@@ -902,7 +838,6 @@
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
-				AA623E1F1998D17800A942A9 /* _Round.m in Sources */,
 				AA623E2C1998D17800A942A9 /* _Player.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
@@ -910,7 +845,6 @@
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,
 				AA623E371998D17800A942A9 /* AppAdvice.m in Sources */,
 				AA623E321998D17800A942A9 /* _SML.m in Sources */,
-				AA623E3E1998D17800A942A9 /* Event.m in Sources */,
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,
 				AA623EDE1998D78600A942A9 /* Fav24ExtendedNavigationController.m in Sources */,
 				AACA544619C057C000E39D94 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -924,20 +858,16 @@
 				AA623F1D1998F49700A942A9 /* YoContainerViewController.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,
 				AA623F171998F46E00A942A9 /* GenteTableViewController.m in Sources */,
-				AA623E571998D17800A942A9 /* Tournament.m in Sources */,
 				A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
 				A5E3E200199918D200322727 /* UILabel+Resize.m in Sources */,
 				AACA544A19C057C000E39D94 /* UIProgressView+AFNetworking.m in Sources */,
 				AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */,
-				AA623E4C1998D17800A942A9 /* Mode.m in Sources */,
 				AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */,
 				AACA544019C057C000E39D94 /* AFSecurityPolicy.m in Sources */,
-				AA623E2B1998D17800A942A9 /* _Mode.m in Sources */,
 				AA623E3C1998D17800A942A9 /* CoreDataParsing.m in Sources */,
 				AACA544719C057C000E39D94 /* UIAlertView+AFNetworking.m in Sources */,
 				AA623E711998D17800A942A9 /* UserManager.m in Sources */,
-				AA623E331998D17800A942A9 /* _Subscription.m in Sources */,
 				AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */,
 				AA623E531998D17800A942A9 /* SML.m in Sources */,
 				AACA544919C057C000E39D94 /* UIImageView+AFNetworking.m in Sources */,
