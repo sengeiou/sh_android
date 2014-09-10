@@ -10,8 +10,6 @@
 #import "CoreDataGenerator.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
-#import "Event.h"
-#import "Tournament.h"
 
 @implementation CoreDataGenerator
 
@@ -47,51 +45,15 @@
 -(void)generateDefaultCoreDataBase {
     
     [[CoreDataManager singleton] eraseCoreData];
-    NSArray *entitiesToDownload = @[[Team class],[SML class],[Message class],[Tournament class]];
-    [entitiesToDownload enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:obj withDelegate:self];
-    }];
-
+//    NSArray *entitiesToDownload = @[[Team class],[SML class],[Message class]];
+//    [entitiesToDownload enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:obj withDelegate:self];
+//    }];
+//
     [self startSyncControlPopulation];
-    [self setEvents];
 }
 
 #pragma mark - Private methods
-//------------------------------------------------------------------------------
-- (void)setEvents {
-    
-    CoreDataManager *DB = [CoreDataManager singleton];
-    NSArray *currentEventsArray = [DB getAllEntities:[Event class]];
-    if ([currentEventsArray count] != 21) {
-        
-        [DB deleteAllEntities:[Event class]];
-        NSArray *eventsArray = @[@{kJSON_EVENT_ID:@1,kJSON_NAME:@"Comienza el partido"},
-                                 @{kJSON_EVENT_ID:@2,kJSON_NAME:@"Gol de"},
-                                 @{kJSON_EVENT_ID:@3,kJSON_NAME:@"Expulsión de"},
-                                 @{kJSON_EVENT_ID:@4,kJSON_NAME:@"Final de partido"},
-                                 @{kJSON_EVENT_ID:@5,kJSON_NAME:@"Inicio del descanso"},
-                                 @{kJSON_EVENT_ID:@6,kJSON_NAME:@"Final del descanso"},
-                                 @{kJSON_EVENT_ID:@7,kJSON_NAME:@"Final 90 minutos"},
-                                 @{kJSON_EVENT_ID:@8,kJSON_NAME:@"Final de la prórroga"},
-                                 @{kJSON_EVENT_ID:@9,kJSON_NAME:@"Penalti señalado"},
-                                 @{kJSON_EVENT_ID:@10,kJSON_NAME:@"Penalti y expulsión"},
-                                 @{kJSON_EVENT_ID:@11,kJSON_NAME:@"Penalti fallado"},
-                                 @{kJSON_EVENT_ID:@12,kJSON_NAME:@"Inicio de prórroga"},
-                                 @{kJSON_EVENT_ID:@13,kJSON_NAME:@"Inicio penaltis"},
-                                 @{kJSON_EVENT_ID:@14,kJSON_NAME:@"Falta 1h para el partido"},
-                                 @{kJSON_EVENT_ID:@15,kJSON_NAME:@"Partido suspendido"},
-                                 @{kJSON_EVENT_ID:@16,kJSON_NAME:@"Tarjeta amarilla"},
-                                 @{kJSON_EVENT_ID:@17,kJSON_NAME:@"Alineación"},
-                                 @{kJSON_EVENT_ID:@18,kJSON_NAME:@"Cambio jugador"},
-                                 @{kJSON_EVENT_ID:@19,kJSON_NAME:@"Oferta del partido"},
-                                 @{kJSON_EVENT_ID:@20,kJSON_NAME:@"Penalti y amarilla"},
-                                 @{kJSON_EVENT_ID:@21,kJSON_NAME:@"Cuotas"}];
-        
-        [DB insertEntities:[Event class] WithArray:eventsArray];
-    }
-    
-    [self saveAndAlert];
-}
 
 #pragma mark - UIAlertViewDelegate methods
 //------------------------------------------------------------------------------

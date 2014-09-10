@@ -19,21 +19,15 @@ extern const struct TeamAttributes {
 } TeamAttributes;
 
 extern const struct TeamRelationships {
-	__unsafe_unretained NSString *events;
 	__unsafe_unretained NSString *matchesAsLocal;
 	__unsafe_unretained NSString *matchesAsVisitor;
-	__unsafe_unretained NSString *mode;
-	__unsafe_unretained NSString *subscription;
 } TeamRelationships;
 
 extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
-@class EventOfMatch;
 @class Match;
 @class Match;
-@class Mode;
-@class Subscription;
 
 
 
@@ -186,13 +180,6 @@ extern const struct TeamFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *events;
-
-- (NSMutableSet*)eventsSet;
-
-
-
-
 @property (nonatomic, strong) NSSet *matchesAsLocal;
 
 - (NSMutableSet*)matchesAsLocalSet;
@@ -207,29 +194,10 @@ extern const struct TeamFetchedProperties {
 
 
 
-@property (nonatomic, strong) Mode *mode;
-
-//- (BOOL)validateMode:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) Subscription *subscription;
-
-//- (BOOL)validateSubscription:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @end
 
 @interface _Team (CoreDataGeneratedAccessors)
-
-- (void)addEvents:(NSSet*)value_;
-- (void)removeEvents:(NSSet*)value_;
-- (void)addEventsObject:(EventOfMatch*)value_;
-- (void)removeEventsObject:(EventOfMatch*)value_;
 
 - (void)addMatchesAsLocal:(NSSet*)value_;
 - (void)removeMatchesAsLocal:(NSSet*)value_;
@@ -325,11 +293,6 @@ extern const struct TeamFetchedProperties {
 
 
 
-- (NSMutableSet*)primitiveEvents;
-- (void)setPrimitiveEvents:(NSMutableSet*)value;
-
-
-
 - (NSMutableSet*)primitiveMatchesAsLocal;
 - (void)setPrimitiveMatchesAsLocal:(NSMutableSet*)value;
 
@@ -337,16 +300,6 @@ extern const struct TeamFetchedProperties {
 
 - (NSMutableSet*)primitiveMatchesAsVisitor;
 - (void)setPrimitiveMatchesAsVisitor:(NSMutableSet*)value;
-
-
-
-- (Mode*)primitiveMode;
-- (void)setPrimitiveMode:(Mode*)value;
-
-
-
-- (Subscription*)primitiveSubscription;
-- (void)setPrimitiveSubscription:(Subscription*)value;
 
 
 @end

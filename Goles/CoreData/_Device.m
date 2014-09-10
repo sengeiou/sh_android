@@ -23,7 +23,6 @@ const struct DeviceAttributes DeviceAttributes = {
 };
 
 const struct DeviceRelationships DeviceRelationships = {
-	.modes = @"modes",
 	.player = @"player",
 };
 
@@ -270,19 +269,6 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 
 
 
-
-@dynamic modes;
-
-	
-- (NSMutableSet*)modesSet {
-	[self willAccessValueForKey:@"modes"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"modes"];
-  
-	[self didAccessValueForKey:@"modes"];
-	return result;
-}
-	
 
 @dynamic player;
 

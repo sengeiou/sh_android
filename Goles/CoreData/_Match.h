@@ -38,9 +38,6 @@ extern const struct MatchAttributes {
 } MatchAttributes;
 
 extern const struct MatchRelationships {
-	__unsafe_unretained NSString *eventsOfMatch;
-	__unsafe_unretained NSString *round;
-	__unsafe_unretained NSString *subscription;
 	__unsafe_unretained NSString *teamLocal;
 	__unsafe_unretained NSString *teamVisitor;
 } MatchRelationships;
@@ -48,9 +45,6 @@ extern const struct MatchRelationships {
 extern const struct MatchFetchedProperties {
 } MatchFetchedProperties;
 
-@class EventOfMatch;
-@class Round;
-@class Subscription;
 @class Team;
 @class Team;
 
@@ -494,27 +488,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *eventsOfMatch;
-
-- (NSMutableSet*)eventsOfMatchSet;
-
-
-
-
-@property (nonatomic, strong) Round *round;
-
-//- (BOOL)validateRound:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) Subscription *subscription;
-
-//- (BOOL)validateSubscription:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, strong) Team *teamLocal;
 
 //- (BOOL)validateTeamLocal:(id*)value_ error:(NSError**)error_;
@@ -533,11 +506,6 @@ extern const struct MatchFetchedProperties {
 @end
 
 @interface _Match (CoreDataGeneratedAccessors)
-
-- (void)addEventsOfMatch:(NSSet*)value_;
-- (void)removeEventsOfMatch:(NSSet*)value_;
-- (void)addEventsOfMatchObject:(EventOfMatch*)value_;
-- (void)removeEventsOfMatchObject:(EventOfMatch*)value_;
 
 @end
 
@@ -794,21 +762,6 @@ extern const struct MatchFetchedProperties {
 - (void)setPrimitiveVisitorScoreValue:(int16_t)value_;
 
 
-
-
-
-- (NSMutableSet*)primitiveEventsOfMatch;
-- (void)setPrimitiveEventsOfMatch:(NSMutableSet*)value;
-
-
-
-- (Round*)primitiveRound;
-- (void)setPrimitiveRound:(Round*)value;
-
-
-
-- (Subscription*)primitiveSubscription;
-- (void)setPrimitiveSubscription:(Subscription*)value;
 
 
 

@@ -16,7 +16,6 @@ const struct SMLAttributes SMLAttributes = {
 };
 
 const struct SMLRelationships SMLRelationships = {
-	.subscription = @"subscription",
 };
 
 const struct SMLFetchedProperties SMLFetchedProperties = {
@@ -237,19 +236,6 @@ const struct SMLFetchedProperties SMLFetchedProperties = {
 
 
 
-
-@dynamic subscription;
-
-	
-- (NSMutableSet*)subscriptionSet {
-	[self willAccessValueForKey:@"subscription"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"subscription"];
-  
-	[self didAccessValueForKey:@"subscription"];
-	return result;
-}
-	
 
 
 

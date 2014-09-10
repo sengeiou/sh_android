@@ -15,7 +15,6 @@
 #import "FAVFormContainerViewController.h"
 #import "Match.h"
 #import "GenteTableViewController.h"
-#import "PartidosTableViewController.h"
 #import "YoContainerViewController.h"
 #import "FavRestConsumer.h"
 #import "LoginViewController.h"
@@ -156,30 +155,29 @@
 //------------------------------------------------------------------------------
 -(void)setTabBarItems {
 
-    self.genteSB = [UIStoryboard storyboardWithName:@"Gente" bundle:nil];
+    self.genteSB = [UIStoryboard storyboardWithName:@"People" bundle:nil];
     GenteTableViewController *genteVC = [self.genteSB instantiateViewControllerWithIdentifier:@"genteTableVC"];
     UINavigationController *navGenteVC = [[UINavigationController alloc]initWithRootViewController:genteVC];
+
+//    self.partidosSB = [UIStoryboard storyboardWithName:@"Partidos" bundle:nil];
+//    PartidosTableViewController *partidosVC = [self.partidosSB instantiateViewControllerWithIdentifier:@"partidosTableVC"];
+//    UINavigationController *navPartidosVC = [[UINavigationController alloc]initWithRootViewController:partidosVC];
+
     
-    
-    self.partidosSB = [UIStoryboard storyboardWithName:@"Partidos" bundle:nil];
-    GenteTableViewController *partidosVC = [self.partidosSB instantiateViewControllerWithIdentifier:@"partidosTableVC"];
-    UINavigationController *navPartidosVC = [[UINavigationController alloc]initWithRootViewController:partidosVC];
-    
-    
-    self.yoSB = [UIStoryboard storyboardWithName:@"Yo" bundle:nil];
+    self.yoSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
     YoContainerViewController *yoVC = [self.yoSB instantiateViewControllerWithIdentifier:@"yoContainerVC"];
     UINavigationController *navYoVC = [[UINavigationController alloc]initWithRootViewController:yoVC];
     
     
     navGenteVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"GenteTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
-    navPartidosVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PartidosTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+//    navPartidosVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PartidosTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
-    navYoVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"YoTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+//    navYoVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"YoTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = @[navGenteVC,navPartidosVC,navYoVC];
+    self.tabBarController.viewControllers = @[navGenteVC,navYoVC];
     self.window.rootViewController = self.tabBarController;
 
 }

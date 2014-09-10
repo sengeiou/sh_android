@@ -1,6 +1,4 @@
 #import "Team.h"
-#import "Mode.h"
-#import "Subscription.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 
@@ -87,10 +85,6 @@
     [newTeam setOrder:[team order]];
     [newTeam setUrlImage:[team urlImage]];
 
-    Subscription *newSubscription = [Subscription createTemporarySubscriptionWithSubscription:[team subscription]];
-    [newSubscription setTeam:newTeam];
-    [newTeam setSubscription:newSubscription];
-    
     return newTeam;
 }
 
@@ -126,13 +120,6 @@
     if ( [isNationalTeam isKindOfClass:[NSNumber class]] )
         [self setIsNationalTeam:isNationalTeam];
     
-    // Get Mode
-    NSNumber *idMode = [dict objectForKey:kJSON_ID_LEAGUE];
-    if ( [idTeam isKindOfClass:[NSNumber class]] ) {
-        Mode *mode = [[CoreDataManager singleton] getEntity:[Mode class] withId:[idMode integerValue]];
-        if ( mode )
-            [self setMode:mode];
-    }
     
     //SYNCRO  PROPERTIES
     

@@ -37,9 +37,6 @@ const struct MatchAttributes MatchAttributes = {
 };
 
 const struct MatchRelationships MatchRelationships = {
-	.eventsOfMatch = @"eventsOfMatch",
-	.round = @"round",
-	.subscription = @"subscription",
 	.teamLocal = @"teamLocal",
 	.teamVisitor = @"teamVisitor",
 };
@@ -865,27 +862,6 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 
 
-
-@dynamic eventsOfMatch;
-
-	
-- (NSMutableSet*)eventsOfMatchSet {
-	[self willAccessValueForKey:@"eventsOfMatch"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"eventsOfMatch"];
-  
-	[self didAccessValueForKey:@"eventsOfMatch"];
-	return result;
-}
-	
-
-@dynamic round;
-
-	
-
-@dynamic subscription;
-
-	
 
 @dynamic teamLocal;
 

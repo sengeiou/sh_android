@@ -93,6 +93,7 @@
 		AACA544A19C057C000E39D94 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543719C057C000E39D94 /* UIProgressView+AFNetworking.m */; };
 		AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543919C057C000E39D94 /* UIRefreshControl+AFNetworking.m */; };
 		AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */; };
+		AACA544F19C088B100E39D94 /* Timeline.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AACA545119C088B100E39D94 /* Timeline.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -265,6 +266,8 @@
 		AACA543919C057C000E39D94 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		AACA543A19C057C000E39D94 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		AACA545019C088B100E39D94 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Timeline.storyboard; sourceTree = "<group>"; };
+		AACA545219C088B800E39D94 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Timeline.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -423,6 +426,7 @@
 				AA623D251998CE1500A942A9 /* Setup.storyboard */,
 				AA623D2E1998CE4F00A942A9 /* Me.storyboard */,
 				AA623D311998CE5200A942A9 /* People.storyboard */,
+				AACA545119C088B100E39D94 /* Timeline.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -769,6 +773,7 @@
 				AA623D431998CF4B00A942A9 /* s.aiff in Resources */,
 				AA623D2F1998CE5200A942A9 /* People.storyboard in Resources */,
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
+				AACA544F19C088B100E39D94 /* Timeline.storyboard in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
 				AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
@@ -946,6 +951,15 @@
 			);
 			name = Localizable.strings;
 			path = ../..;
+			sourceTree = "<group>";
+		};
+		AACA545119C088B100E39D94 /* Timeline.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AACA545019C088B100E39D94 /* en */,
+				AACA545219C088B800E39D94 /* es */,
+			);
+			name = Timeline.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

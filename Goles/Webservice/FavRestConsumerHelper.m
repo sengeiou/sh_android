@@ -13,9 +13,7 @@
 #import "Message.h"
 #import "SML.h"
 #import "AppAdvice.h"
-#import "Subscription.h"
 #import "Team.h"
-#import "Tournament.h"
 
 @implementation FavRestConsumerHelper
 
@@ -33,10 +31,6 @@
         return kALIAS_GET_SML;
     else if ([entity isSubclassOfClass:[Team class]])
         return kALIAS_GET_ALL_TEAMS;
-    else if ([entity isSubclassOfClass:[Subscription class]])
-        return kALIAS_GETALL_SUSCRIPTIONS;
-    else if ([entity isSubclassOfClass:[Tournament class]])
-        return kALIAS_GETALL_TOURNAMENTS;
     
     return nil;
 }

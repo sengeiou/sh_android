@@ -18,11 +18,8 @@ const struct TeamAttributes TeamAttributes = {
 };
 
 const struct TeamRelationships TeamRelationships = {
-	.events = @"events",
 	.matchesAsLocal = @"matchesAsLocal",
 	.matchesAsVisitor = @"matchesAsVisitor",
-	.mode = @"mode",
-	.subscription = @"subscription",
 };
 
 const struct TeamFetchedProperties TeamFetchedProperties = {
@@ -234,19 +231,6 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 
 
 
-@dynamic events;
-
-	
-- (NSMutableSet*)eventsSet {
-	[self willAccessValueForKey:@"events"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"events"];
-  
-	[self didAccessValueForKey:@"events"];
-	return result;
-}
-	
-
 @dynamic matchesAsLocal;
 
 	
@@ -271,14 +255,6 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 	[self didAccessValueForKey:@"matchesAsVisitor"];
 	return result;
 }
-	
-
-@dynamic mode;
-
-	
-
-@dynamic subscription;
-
 	
 
 

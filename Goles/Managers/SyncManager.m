@@ -138,39 +138,7 @@
                     else
                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:delegate];
                 }
-                
-                if  ([updatedEntity isKindOfClass:[K_COREDATA_EVENTOFMATCH class]]){
-                    
-                    EventOfMatch *eventOfMatch = (EventOfMatch *)updatedEntity;
-                    NSTimeInterval birth = [eventOfMatch.csys_birth timeIntervalSince1970]*1000;
-                    NSTimeInterval modified = [eventOfMatch.csys_modified timeIntervalSince1970]*1000;
-                    NSTimeInterval deleted = [eventOfMatch.csys_deleted timeIntervalSince1970]*1000;
-                    
-                    NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_EVENT_OF_MATCH: eventOfMatch.idEventOfMatch,
-                                                                                                     kJSON_EVENT_LOCAL_SCORE: eventOfMatch.localScore,
-                                                                                                     kJSON_EVENT_VISITOR_SCORE: eventOfMatch.visitorScore,
-                                                                                                     kJSON_EVENT_STATUS: eventOfMatch.status, kJSON_EVENT_DATEIN: eventOfMatch.dateIn,
-                                                                                                     kJSON_EVENT_IDPERIOD: eventOfMatch.idPeriod,
-                                                                                                     kJSON_EVENT_ACTOR_TRANSMITTER_NAME: eventOfMatch.actorTransmitterName,
-                                                                                                     kJSON_EVENT_ACTOR_RECEPTOR_NAME: eventOfMatch.actorTransmitterName,
-                                                                                                     kJSON_EVENT_ISOWNGOAL: eventOfMatch.isOwnGoal,
-                                                                                                     kJSON_EVENT_ISPENALTY_GOAL: eventOfMatch.isPenaltyGoal,
-                                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
-                                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
-                    
-                    if ([eventOfMatch.csys_syncronized isEqualToString:@"d"])
-                        [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
-                    
-                    NSArray *dataArray = @[mutDict];
-                    
-                    NSDictionary *key = @{kJSON_ID_EVENT_OF_MATCH:eventOfMatch.idEventOfMatch};
-                    
-                    if ([eventOfMatch.csys_syncronized isEqualToString:@"d"])
-                        [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_EVENTOFMATCH withKey:key andData:dataArray andDelegate:delegate];
-                    else
-                        [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_EVENTOFMATCH withData:dataArray andKey:key andDelegate:delegate];
-                }
-                
+                              
                 if  ([updatedEntity isKindOfClass:[K_COREDATA_MATCH class]]){
                     
                     Match *match = (Match *)updatedEntity;

@@ -1,5 +1,4 @@
 #import "Device.h"
-#import "Mode.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #include <sys/types.h>
@@ -61,12 +60,6 @@
     [tempDevice setAppVer:[device appVer]];
     [tempDevice setOsVer:[device osVer]];
     
-    for (Mode *mode in [device modes]){
-        Mode *tempMode = [Mode createTemporaryModeWithMode:mode];
-        [tempMode setDevice:tempDevice];
-        [[tempDevice modesSet] addObject:tempMode];
-    }
-        
     return tempDevice;
 }
 
@@ -139,18 +132,6 @@
         NSString *token = [dict objectForKey:kJSON_TOKEN];
         if ([token isKindOfClass:[NSString class]])
             [self setToken:token];
-        
-        // Add related modes
-        NSArray *activeModes = [dict objectForKey:kJSON_ID_LEAGUE];
-        if ( activeModes ){
-            [[self modesSet] removeAllObjects];
-            
-            for (NSNumber *idMode in activeModes){
-                Mode *mode = [[CoreDataManager singleton] getEntity:[Mode class] withId:[idMode integerValue]];
-                if ( mode )
-                    [[self modesSet] addObject:mode];
-            }
-        }
     }
         
     self.model =                         [self platformString];

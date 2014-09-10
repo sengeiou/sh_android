@@ -1,7 +1,5 @@
 #import "Match.h"
 #import "Team.h"
-#import "Subscription.h"
-#import "Event.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 
@@ -42,12 +40,6 @@
     
     Match *newMatch = [self createTemporaryMatch];
     [newMatch copyFromMatch:match];
-    
-    if ( [match subscription] ){
-        Subscription *newSubscription = [Subscription createTemporarySubscriptionWithSubscription:[match subscription]];
-        [newSubscription setMatch:newMatch];
-        [newMatch setSubscription:newSubscription];
-    }
 
     return newMatch;
 }
@@ -119,68 +111,6 @@
         if (mutMatch)            [finalMacthes addObject:mutMatch];
     }
     return finalMacthes;
-}
-
-
-//------------------------------------------------------------------------------
--(NSArray *)getOrderedEvents{
-
-    NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:@"dateIn" ascending:NO];
-    return [self.eventsOfMatch sortedArrayUsingDescriptors:@[descriptor]];
-
-}
-
-//------------------------------------------------------------------------------
--(BOOL)checkForPenaltiesRoundInMatch {
-    
-    for (EventOfMatch *eventOM in self.eventsOfMatch) {
-        if (eventOM.event.idEventValue == 8)
-            return YES;
-    }
-        
-    return NO;
-}
-
-//------------------------------------------------------------------------------
--(NSArray *)getChronicleOrderedEvents{
-    
-    NSMutableArray *firstHalfEvents = [[NSMutableArray alloc] init];
-    NSMutableArray *secondHalfEvents = [[NSMutableArray alloc] init];
-    BOOL restReached = NO;
-    
-    NSSortDescriptor *firstDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateIn" ascending:YES];
-    NSArray *sortedEvents = [self.eventsOfMatch sortedArrayUsingDescriptors:@[firstDescriptor]];
-    
-    for (EventOfMatch *event in sortedEvents) {
-        if (event.event.idEventValue == 6)
-            restReached = YES;
-        
-        if (!restReached) {
-            [firstHalfEvents addObject:event];
-        }else
-            [secondHalfEvents addObject:event];
-    }
-    
-    NSSortDescriptor *descriptorMinute = [[NSSortDescriptor alloc] initWithKey:@"minuteOfMatch" ascending:NO];
-    NSSortDescriptor *descriptorEventID = [[NSSortDescriptor alloc] initWithKey:@"dateIn" ascending:NO];
-    
-    NSArray *first = [firstHalfEvents sortedArrayUsingDescriptors:@[descriptorMinute,descriptorEventID]];
-    NSArray *second = [secondHalfEvents sortedArrayUsingDescriptors:@[descriptorMinute,descriptorEventID]];
-    
-    NSMutableArray *secondMutable = [second mutableCopy];
-    
-    for (EventOfMatch *newEvent in first)
-        [secondMutable addObject:newEvent];
-    
-    return [secondMutable copy];
-    
-}
-
-//------------------------------------------------------------------------------
--(void)updateMatchElapsedMinute:(int)newElapsedMinute {
-    
-    [self setElapsedMinutes:[NSNumber numberWithInt:newElapsedMinute]];
-    [[CoreDataManager singleton] saveContext];
 }
 
 

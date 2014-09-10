@@ -39,7 +39,6 @@
         <attribute name="status" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timeZone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="modes" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
         <relationship name="player" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Player" inverseName="device" inverseEntity="Player" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
@@ -73,9 +72,6 @@
         <attribute name="twitterLocal" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="twitterVisitor" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="eventsOfMatch" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
-        <relationship name="round" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" syncable="YES"/>
-        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" syncable="YES"/>
         <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsLocal" inverseEntity="Team" syncable="YES"/>
         <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsVisitor" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -123,7 +119,6 @@
         <attribute name="language" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="message" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
         <attribute name="sound" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
-        <relationship name="subscription" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
     </entity>
     <entity name="SyncControl" representedClassName="SyncControl" syncable="YES">
         <attribute name="aliasView" optional="YES" attributeType="String" syncable="YES"/>
@@ -144,20 +139,17 @@
         <attribute name="nameShort" attributeType="String" syncable="YES"/>
         <attribute name="order" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
         <attribute name="urlImage" optional="YES" attributeType="String" defaultValueString="DefaultTeamShield.png" syncable="YES"/>
-        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" syncable="YES"/>
         <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
-        <relationship name="mode" optional="YES" maxCount="1" deletionRule="Nullify" syncable="YES"/>
-        <relationship name="subscription" optional="YES" maxCount="1" deletionRule="Cascade" syncable="YES"/>
     </entity>
     <elements>
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
-        <element name="Device" positionX="-207" positionY="351" width="128" height="315"/>
-        <element name="Match" positionX="-45" positionY="-27" width="128" height="568"/>
+        <element name="Device" positionX="-207" positionY="351" width="128" height="298"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="523"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
         <element name="Player" positionX="-425" positionY="324" width="128" height="343"/>
-        <element name="SML" positionX="-290" positionY="45" width="128" height="193"/>
+        <element name="SML" positionX="-290" positionY="45" width="128" height="178"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
-        <element name="Team" positionX="169" positionY="77" width="128" height="283"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
     </elements>
 </model>

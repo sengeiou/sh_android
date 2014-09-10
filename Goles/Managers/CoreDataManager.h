@@ -11,9 +11,6 @@
 #import "CoreDataParsing.h"
 #import "Match.h"
 #import "Player.h"
-#import "Round.h"
-#import "EventOfMatch.h"
-#import "Subscription.h"
 
 @interface CoreDataManager : NSObject
     

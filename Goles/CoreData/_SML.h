@@ -17,13 +17,11 @@ extern const struct SMLAttributes {
 } SMLAttributes;
 
 extern const struct SMLRelationships {
-	__unsafe_unretained NSString *subscription;
 } SMLRelationships;
 
 extern const struct SMLFetchedProperties {
 } SMLFetchedProperties;
 
-@class Subscription;
 
 
 
@@ -158,22 +156,10 @@ extern const struct SMLFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *subscription;
-
-- (NSMutableSet*)subscriptionSet;
-
-
-
-
 
 @end
 
 @interface _SML (CoreDataGeneratedAccessors)
-
-- (void)addSubscription:(NSSet*)value_;
-- (void)removeSubscription:(NSSet*)value_;
-- (void)addSubscriptionObject:(Subscription*)value_;
-- (void)removeSubscriptionObject:(Subscription*)value_;
 
 @end
 
@@ -247,11 +233,6 @@ extern const struct SMLFetchedProperties {
 - (void)setPrimitiveSoundValue:(int16_t)value_;
 
 
-
-
-
-- (NSMutableSet*)primitiveSubscription;
-- (void)setPrimitiveSubscription:(NSMutableSet*)value;
 
 
 @end

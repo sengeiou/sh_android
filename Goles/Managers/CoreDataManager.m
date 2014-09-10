@@ -10,7 +10,6 @@
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "Constants.h"
-#import "Event.h"
 #import "Team.h"
 
 @interface CoreDataManager()
@@ -204,47 +203,6 @@
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (%K IN %@)",entityId, idsArray];
         toDelete = [[CoreDataManager singleton] getAllEntities:entityClass withPredicate:predicate];
-        [[CoreDataManager singleton] deleteEntitiesIn:toDelete];
-    }
-    
-    return toDelete;
-}
-
-
-//------------------------------------------------------------------------------
-- (void)unlinkTeams:(NSArray *)dataArray fromMode:(NSNumber *)mode{
-    
-    if ( [dataArray isKindOfClass:[NSArray class]] ){
-        NSString *entityId = [NSString stringWithFormat:@"idTeam"];
-        
-        // Get all objects ids
-        NSArray *idsArray = [dataArray valueForKey:entityId];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (%K IN %@) && mode.idMode = %@",entityId, idsArray,mode];
-        NSArray *toChange = [[CoreDataManager singleton] getAllEntities:[Team class] withPredicate:predicate];
-        for (Team *team in toChange)
-            [team setMode:nil];
-    }
-    
-}
-
-//------------------------------------------------------------------------------
-/**
- Every time we call EventsOfMatch WS we delete all events of match that we have in CoreData and don't arrive in the WS response.
- This is necessary to delete events deleted in server. We can't delete all the match events every time because we want
- to have previous data when entering in detailMatch.
- */
-//------------------------------------------------------------------------------
-- (NSArray *)deleteMatchEventsForMatch:(Match *)match notIn:(NSArray *)dataArray{
-    
-    NSArray *toDelete = nil;
-    
-    if (match && [dataArray isKindOfClass:[NSArray class]]) {
-        NSArray *idsArray = [dataArray valueForKey:kJSON_ID_EVENT_OF_MATCH];
-        NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"match.idMatch = %i",match.idMatchValue];
-        NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"NOT (%K IN %@)",kJSON_ID_EVENT_OF_MATCH, idsArray];
-        NSPredicate *eventsPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicate1, predicate2]];
-        toDelete = [[CoreDataManager singleton] getAllEntities:[EventOfMatch class] withPredicate:eventsPredicate];
         [[CoreDataManager singleton] deleteEntitiesIn:toDelete];
     }
     

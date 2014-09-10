@@ -13,9 +13,7 @@
 #import "Message.h"
 #import "SML.h"
 #import "AppAdvice.h"
-#import "Subscription.h"
 #import "Team.h"
-#import "Tournament.h"
 
 @implementation FilterCreation
 
@@ -51,13 +49,6 @@
         return filter;
     }
     
-    else if ([entity isSubclassOfClass:[Subscription class]]){
-        NSNumber *idDevice = [[UserManager sharedInstance] getIdDevice];
-        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,kJSON_NAME:kJSON_ID_SUBSCRIPTION,kJSON_VALUE:idDevice}];
-        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
-        return filter;
-    }
-    
     else if ([entity isSubclassOfClass:[Team class]]){
         NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_ID_TEAM,K_CD_VALUE:[NSNull null]}];
         
@@ -65,13 +56,6 @@
         return filter;
     }
     
-    else if ([entity isSubclassOfClass:[Tournament class]]){
-        NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR:K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
-                                      @{K_WS_COMPARATOR:K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}];
-        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsTeams,K_WS_FILTERS:@[]}};
-        return filter;
-    }
-
     return @{};
 }
 

@@ -24,14 +24,12 @@ extern const struct DeviceAttributes {
 } DeviceAttributes;
 
 extern const struct DeviceRelationships {
-	__unsafe_unretained NSString *modes;
 	__unsafe_unretained NSString *player;
 } DeviceRelationships;
 
 extern const struct DeviceFetchedProperties {
 } DeviceFetchedProperties;
 
-@class Mode;
 @class Player;
 
 
@@ -240,13 +238,6 @@ extern const struct DeviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *modes;
-
-- (NSMutableSet*)modesSet;
-
-
-
-
 @property (nonatomic, strong) Player *player;
 
 //- (BOOL)validatePlayer:(id*)value_ error:(NSError**)error_;
@@ -258,11 +249,6 @@ extern const struct DeviceFetchedProperties {
 @end
 
 @interface _Device (CoreDataGeneratedAccessors)
-
-- (void)addModes:(NSSet*)value_;
-- (void)removeModes:(NSSet*)value_;
-- (void)addModesObject:(Mode*)value_;
-- (void)removeModesObject:(Mode*)value_;
 
 @end
 
@@ -375,11 +361,6 @@ extern const struct DeviceFetchedProperties {
 - (void)setPrimitiveToken:(NSString*)value;
 
 
-
-
-
-- (NSMutableSet*)primitiveModes;
-- (void)setPrimitiveModes:(NSMutableSet*)value;
 
 
 
