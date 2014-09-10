@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Match.h"
+#import "FavRestConsumer.h"
 
 @interface GolesTests : XCTestCase
 
@@ -28,7 +30,21 @@
 
 - (void)testExample
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    
+    
+    
+    FavRestConsumer *consumer = [FavRestConsumer sharedInstance];
+    XCTAssertNotNil(consumer);
+
+    [consumer getAllEntitiesFromClass:[Match class] withDelegate:nil];
+    
 }
+
+- (void)testgetLastSyncroTime
+{
+    
+
+}
+
 
 @end
