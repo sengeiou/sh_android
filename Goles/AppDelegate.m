@@ -162,7 +162,7 @@
     
     
     self.partidosSB = [UIStoryboard storyboardWithName:@"Partidos" bundle:nil];
-    PartidosTableViewController *partidosVC = [self.partidosSB instantiateViewControllerWithIdentifier:@"partidosTableVC"];
+    GenteTableViewController *partidosVC = [self.partidosSB instantiateViewControllerWithIdentifier:@"partidosTableVC"];
     UINavigationController *navPartidosVC = [[UINavigationController alloc]initWithRootViewController:partidosVC];
     
     
