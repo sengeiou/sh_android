@@ -28,22 +28,48 @@
     [super tearDown];
 }
 
-- (void)testExample
-{
-    
-    
-    
-    FavRestConsumer *consumer = [FavRestConsumer sharedInstance];
-    XCTAssertNotNil(consumer);
+#pragma mark - helper methods
 
-    [consumer getAllEntitiesFromClass:[Match class] withDelegate:nil];
+- (FavRestConsumer *)createUniqueInstance {
+    
+    return [[FavRestConsumer alloc] init];
+}
+
+- (FavRestConsumer *)getSharedInstance {
+    
+    return [FavRestConsumer sharedInstance];
+}
+
+#pragma mark - tests
+
+- (void)testSingletonSharedInstanceCreated {
+    
+    XCTAssertNotNil([self getSharedInstance]);
+}
+
+- (void)testSingletonUniqueInstanceCreated {
+    
+    XCTAssertNotNil([self createUniqueInstance]);
     
 }
 
-- (void)testgetLastSyncroTime
-{
+- (void)testSingletonReturnsSameSharedInstanceTwice {
     
+    FavRestConsumer *s1 = [self getSharedInstance];
+    XCTAssertEqual(s1, [self getSharedInstance]);
+    
+}
 
+- (void)testSingletonSharedInstanceSeparateFromUniqueInstance {
+    
+    FavRestConsumer *s1 = [self getSharedInstance];
+    XCTAssertNotEqual(s1, [self createUniqueInstance]);
+}
+
+- (void)testSingletonReturnsSeparateUniqueInstances {
+    
+    FavRestConsumer *s1 = [self createUniqueInstance];
+    XCTAssertNotEqual(s1, [self createUniqueInstance]);
 }
 
 

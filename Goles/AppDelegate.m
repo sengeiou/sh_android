@@ -81,9 +81,7 @@
 
         // Clear app icon notification badges
         [application setApplicationIconBadgeNumber:0];
-        
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Team class] withDelegate:self];
-        
+                
         //Show second splashscreen to control internet connection
 //        LandingViewController *landing = [[LandingViewController alloc] initWithNibName:@"LandingViewController" bundle:nil];
 //        self.window.rootViewController = landing;
