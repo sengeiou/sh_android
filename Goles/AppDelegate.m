@@ -10,7 +10,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "Constants.h"
 #import "CoreDataGenerator.h"
-#import "Flurry.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "FAVFormContainerViewController.h"
@@ -80,11 +79,7 @@
         
         // Set Apirater settings
         [self setApiraterSettings];
-        
-        //Start Flurry logging
-        if (!IS_DEVELOPING && !K_DEBUG_MODE)        [Flurry startSession:K_FLURRY_KEY];
-        else                                        [Flurry startSession:K_FLURRY_KEY_DEV];
-        
+
         // Clear app icon notification badges
         [application setApplicationIconBadgeNumber:0];
         
@@ -358,10 +353,7 @@
 #pragma mark - RestConsumers delegate methods
 //------------------------------------------------------------------------------
 -(void)deviceRegistrationDidResponse:(NSDictionary *)device {
-    //[[UserManager singleton] retrieveUserFromPreviousPlayerId];
-    [[FavRestConsumer sharedInstance] getDeviceSuscriptions];
-    //[[CuotasManager singleton] deleteOldCuotas];
-   // [self checkAppVersion];
+
 }
 
 #pragma mark - Webservice response methods

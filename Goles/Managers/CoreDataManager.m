@@ -10,7 +10,6 @@
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "Constants.h"
-//#import "Flurry.h"
 #import "Event.h"
 #import "Team.h"
 
@@ -90,7 +89,6 @@
     NSError *error;
     if (![managedObjectContext save:&error]) {
         DLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-//        [Flurry logError:K_COREDATA_ERROR_SAVECONTEXT message:@"Core Data Save Context Error" error:error];
         return NO;
     }
     return YES;
