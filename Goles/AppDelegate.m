@@ -55,9 +55,6 @@
     /*NSString *uniqueString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     NSLog(@"uniqueString: %@", uniqueString);*/
     
-    
-//    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
-    
     if ( IS_GENERATING_DEFAULT_DATABASE ) {
         golesBaseURL = K_ENDPOINT_PRODUCTION;
         [[CoreDataGenerator singleton] generateDefaultCoreDataBase];
@@ -81,11 +78,7 @@
 
         // Clear app icon notification badges
         [application setApplicationIconBadgeNumber:0];
-                
-        //Show second splashscreen to control internet connection
-//        LandingViewController *landing = [[LandingViewController alloc] initWithNibName:@"LandingViewController" bundle:nil];
-//        self.window.rootViewController = landing;
-        
+
         self.waitingForAPNS = YES;
         
         [Appirater appLaunched:YES];
@@ -321,7 +314,7 @@
 //------------------------------------------------------------------------------
 - (void)updateUserDataIfAppleServicesReady {
     
-    if (self.waitingForAPNS == NO ) //&& self.waitingForICloud == NO
+    if (self.waitingForAPNS == NO )
         [self updateUserData];
 }
 

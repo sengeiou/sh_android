@@ -70,8 +70,6 @@
 		AA623EDD1998D78600A942A9 /* AppAdviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E7F1998D78600A942A9 /* AppAdviceViewController.xib */; };
 		AA623EDE1998D78600A942A9 /* Fav24ExtendedNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E811998D78600A942A9 /* Fav24ExtendedNavigationController.m */; };
 		AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */; };
-		AA623EE01998D78600A942A9 /* LandingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E851998D78600A942A9 /* LandingViewController.m */; };
-		AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA623E861998D78600A942A9 /* LandingViewController.xib */; };
 		AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED91998D78600A942A9 /* LoginViewController.m */; };
 		AA623F111998F29D00A942A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623F131998F29D00A942A9 /* Localizable.strings */; };
 		AA623F171998F46E00A942A9 /* GenteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F161998F46E00A942A9 /* GenteTableViewController.m */; };
@@ -219,9 +217,6 @@
 		AA623E811998D78600A942A9 /* Fav24ExtendedNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fav24ExtendedNavigationController.m; sourceTree = "<group>"; };
 		AA623E821998D78600A942A9 /* FAVFormContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAVFormContainerViewController.h; sourceTree = "<group>"; };
 		AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FAVFormContainerViewController.m; sourceTree = "<group>"; };
-		AA623E841998D78600A942A9 /* LandingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingViewController.h; sourceTree = "<group>"; };
-		AA623E851998D78600A942A9 /* LandingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingViewController.m; sourceTree = "<group>"; };
-		AA623E861998D78600A942A9 /* LandingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingViewController.xib; sourceTree = "<group>"; };
 		AA623ED81998D78600A942A9 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		AA623ED91998D78600A942A9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		AA623F121998F29D00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -590,9 +585,6 @@
 				AA623E811998D78600A942A9 /* Fav24ExtendedNavigationController.m */,
 				AA623E821998D78600A942A9 /* FAVFormContainerViewController.h */,
 				AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */,
-				AA623E841998D78600A942A9 /* LandingViewController.h */,
-				AA623E851998D78600A942A9 /* LandingViewController.m */,
-				AA623E861998D78600A942A9 /* LandingViewController.xib */,
 			);
 			name = "Base Controllers";
 			path = "ViewControllers/Base Controllers";
@@ -775,7 +767,6 @@
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
 				AACA544F19C088B100E39D94 /* Timeline.storyboard in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
-				AA623EE11998D78600A942A9 /* LandingViewController.xib in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
 				AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */,
 				AA623D411998CF4B00A942A9 /* a.aiff in Resources */,
@@ -817,7 +808,6 @@
 			files = (
 				A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */,
 				AA623E561998D17800A942A9 /* Team.m in Sources */,
-				AA623EE01998D78600A942A9 /* LandingViewController.m in Sources */,
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
