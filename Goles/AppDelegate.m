@@ -7,15 +7,13 @@
 //
 
 #import "AppDelegate.h"
-#import <FacebookSDK/FacebookSDK.h>
 #import "Constants.h"
 #import "CoreDataGenerator.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
-#import "FAVFormContainerViewController.h"
-#import "Match.h"
-#import "GenteTableViewController.h"
-#import "YoContainerViewController.h"
+#import "PeopleTableViewController.h"
+#import "TimeLineViewController.h"
+#import "MeContainerViewController.h"
 #import "FavRestConsumer.h"
 #import "LoginViewController.h"
 #import "UserManager.h"
@@ -36,25 +34,21 @@
 
 @interface AppDelegate () <ParserProtocol>
 
-@property (nonatomic,strong)      UITabBarItem            *tabBarGente;
-@property (nonatomic,strong)      UITabBarItem            *tabBarYo;
-@property (nonatomic,strong)      UITabBarItem            *tabBarPartidos;
+@property (nonatomic,strong)      UITabBarItem            *tabBarPeople;
+@property (nonatomic,strong)      UITabBarItem            *tabBarTimeline;
+@property (nonatomic,strong)      UITabBarItem            *tabBarMe;
 @property (nonatomic,strong)      UITabBarController      *tabBarController;
 @property (nonatomic)             BOOL                    waitingForAPNS;
 
 @end
 
+
+
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    
-    [FBLoginView class];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    
-    /*NSString *uniqueString = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    NSLog(@"uniqueString: %@", uniqueString);*/
-    
+
     if ( IS_GENERATING_DEFAULT_DATABASE ) {
         golesBaseURL = K_ENDPOINT_PRODUCTION;
         [[CoreDataGenerator singleton] generateDefaultCoreDataBase];
@@ -88,50 +82,39 @@
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
     //cuando terminemos de obtener los friends de facebook pasamos dentro de la app
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTabBarItems) name:@"enterOfApp" object:nil];
     
-    /*if ([UserManager sharedInstance].mUser == nil)
-        [[UserManager singleton] retrieveUserFromPreviousPlayerId];
     
-    if ([UserManager sharedInstance].mUser.sessionFacebook) {
-        [self setTabBarItems];
-    }else{
-        //SHOW LOGIN
-        [self showInitView];
-    }*/
-
-    
-    //[self showInitView];
     // Set the titles and images of tabbar items
     [self setTabBarItems];
+    
+    //Show the login view
+//    [self showInitView];
     
     return YES;
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    
    [[[SyncManager singleton] synchroTimer] invalidate];
 
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    
+
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+   
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+- (void)applicationWillTerminate:(UIApplication *)application {
+
 }
 
 #pragma mark - Private methods
@@ -146,29 +129,29 @@
 //------------------------------------------------------------------------------
 -(void)setTabBarItems {
 
-    self.genteSB = [UIStoryboard storyboardWithName:@"People" bundle:nil];
-    GenteTableViewController *genteVC = [self.genteSB instantiateViewControllerWithIdentifier:@"genteTableVC"];
-    UINavigationController *navGenteVC = [[UINavigationController alloc]initWithRootViewController:genteVC];
+    self.peopleSB = [UIStoryboard storyboardWithName:@"People" bundle:nil];
+    PeopleTableViewController *peopleVC = [self.peopleSB instantiateViewControllerWithIdentifier:@"peopleTableVC"];
+    UINavigationController *navPeopleVC = [[UINavigationController alloc]initWithRootViewController:peopleVC];
 
-//    self.partidosSB = [UIStoryboard storyboardWithName:@"Partidos" bundle:nil];
-//    PartidosTableViewController *partidosVC = [self.partidosSB instantiateViewControllerWithIdentifier:@"partidosTableVC"];
-//    UINavigationController *navPartidosVC = [[UINavigationController alloc]initWithRootViewController:partidosVC];
+    self.timelineSB = [UIStoryboard storyboardWithName:@"Timeline" bundle:nil];
+    TimeLineViewController *timelineVC = [self.timelineSB instantiateViewControllerWithIdentifier:@"timelineVC"];
+    UINavigationController *navTimelineVC = [[UINavigationController alloc]initWithRootViewController:timelineVC];
 
     
-    self.yoSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-    YoContainerViewController *yoVC = [self.yoSB instantiateViewControllerWithIdentifier:@"yoContainerVC"];
-    UINavigationController *navYoVC = [[UINavigationController alloc]initWithRootViewController:yoVC];
+    self.meSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    MeContainerViewController *meVC = [self.meSB instantiateViewControllerWithIdentifier:@"meContainerVC"];
+    UINavigationController *navMeVC = [[UINavigationController alloc]initWithRootViewController:meVC];
     
     
-    navGenteVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"GenteTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    navPeopleVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PeopleTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
-//    navPartidosVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PartidosTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    timelineVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"TimelineTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
-//    navYoVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"YoTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    navMeVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"MeTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
     
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = @[navGenteVC,navYoVC];
+    self.tabBarController.viewControllers = @[navPeopleVC,navTimelineVC,navMeVC];
     self.window.rootViewController = self.tabBarController;
 
 }

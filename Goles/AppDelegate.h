@@ -14,9 +14,9 @@
 @property (strong, nonatomic) UIWindow *window;
 
 //STORYBOARDS
-@property (strong, nonatomic) UIStoryboard *genteSB;
-@property (strong, nonatomic) UIStoryboard *partidosSB;
-@property (strong, nonatomic) UIStoryboard *yoSB;
+@property (strong, nonatomic) UIStoryboard *peopleSB;
+@property (strong, nonatomic) UIStoryboard *timelineSB;
+@property (strong, nonatomic) UIStoryboard *meSB;
 @property (strong, nonatomic) UIStoryboard *setupSB;
 
 + (void)removeAllCache;
