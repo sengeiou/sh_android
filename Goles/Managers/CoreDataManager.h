@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "CoreDataParsing.h"
-#import "Match.h"
+//#import "Match.h"
 #import "Player.h"
 
 @interface CoreDataManager : NSObject
@@ -42,8 +42,6 @@
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending;
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate;
 
-- (void)unlinkTeams:(NSArray *)dataArray fromMode:(NSNumber *)mode;
-
 - (NSArray *)insertEntities:(Class)entityClass WithArray:(NSArray *)dataArray;
 - (NSArray *)insertEntities:(Class)entityClass WithOrderedArray:(NSArray *)dataArray;
 - (NSArray *)updateEntities:(Class)entityClass WithArray:(NSArray *)dataArray;
@@ -52,5 +50,5 @@
 - (void) deleteAllEntities:(Class)entityClass;
 - (void) deleteEntitiesIn:(NSArray *)entitiesArray;
 - (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray;
-- (NSArray *)deleteMatchEventsForMatch:(Match *)match notIn:(NSArray *)dataArray;
+
 @end

@@ -28,10 +28,4 @@ typedef enum{
 //------------------------------------------------------------------------------
 + (NSArray *)changeMatchesFormatToParse:(NSArray *)matchesToChange;
 
-//-(void)addPrediction:(Prediction *)prediction;
--(NSArray *)getOrderedEvents;
--(NSArray *)getChronicleOrderedEvents;
--(void)updateMatchElapsedMinute:(int)newElapsedMinute;
--(BOOL)checkForPenaltiesRoundInMatch;
-
 @end

@@ -7,6 +7,10 @@
  */
 
 
+// GENERIC
+
+"_ok" = "OK";
+
 // TABBAR
 "MeTabTitle" = "Me";
 "PeopleTabTitle" = "People";

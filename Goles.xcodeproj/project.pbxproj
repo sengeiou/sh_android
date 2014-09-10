@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
 		A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */; };
-		A5E3E200199918D200322727 /* UILabel+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E1FF199918D200322727 /* UILabel+Resize.m */; };
-		A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2021999193000322727 /* UIview+moveTo.m */; };
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
@@ -54,7 +52,6 @@
 		AA623E561998D17800A942A9 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC21998D17700A942A9 /* Team.m */; };
 		AA623E611998D17800A942A9 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DDC1998D17700A942A9 /* Appirater.m */; };
 		AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */; };
-		AA623E641998D17800A942A9 /* NSDate+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DE51998D17700A942A9 /* NSDate+Utils.m */; };
 		AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DF91998D17800A942A9 /* CoreDataManager.m */; };
 		AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DFF1998D17800A942A9 /* NavigationManager.m */; };
 		AA623E711998D17800A942A9 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E031998D17800A942A9 /* UserManager.m */; };
@@ -109,10 +106,6 @@
 		A58F910C19A4A5830076AA1E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A5E3E1FB1999158700322727 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
-		A5E3E1FE199918D200322727 /* UILabel+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Resize.h"; sourceTree = "<group>"; };
-		A5E3E1FF199918D200322727 /* UILabel+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Resize.m"; sourceTree = "<group>"; };
-		A5E3E2011999193000322727 /* UIview+moveTo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIview+moveTo.h"; sourceTree = "<group>"; };
-		A5E3E2021999193000322727 /* UIview+moveTo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIview+moveTo.m"; sourceTree = "<group>"; };
 		A5E3E2061999205E00322727 /* golesDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = golesDataBase.xcdatamodel; sourceTree = "<group>"; };
 		A5E3E2081999206C00322727 /* defaultDataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultDataBase.sqlite; sourceTree = "<group>"; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
@@ -186,8 +179,6 @@
 		AA623DDC1998D17700A942A9 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		AA623DDD1998D17700A942A9 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
 		AA623DDF1998D17700A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
-		AA623DE41998D17700A942A9 /* NSDate+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utils.h"; sourceTree = "<group>"; };
-		AA623DE51998D17700A942A9 /* NSDate+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utils.m"; sourceTree = "<group>"; };
 		AA623DF81998D17800A942A9 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		AA623DF91998D17800A942A9 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		AA623DFE1998D17800A942A9 /* NavigationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationManager.h; sourceTree = "<group>"; };
@@ -480,7 +471,6 @@
 				AACA542A19C057C000E39D94 /* UIKit+AFNetworking */,
 				AA623E791998D19000A942A9 /* FacebookSDK.framework */,
 				AA623DDA1998D17700A942A9 /* appirater */,
-				AA623DE31998D17700A942A9 /* NSDateUtils */,
 				AA623DE61998D17700A942A9 /* Reachability */,
 			);
 			path = Libraries;
@@ -495,15 +485,6 @@
 				AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */,
 			);
 			path = appirater;
-			sourceTree = "<group>";
-		};
-		AA623DE31998D17700A942A9 /* NSDateUtils */ = {
-			isa = PBXGroup;
-			children = (
-				AA623DE41998D17700A942A9 /* NSDate+Utils.h */,
-				AA623DE51998D17700A942A9 /* NSDate+Utils.m */,
-			);
-			path = NSDateUtils;
 			sourceTree = "<group>";
 		};
 		AA623DE61998D17700A942A9 /* Reachability */ = {
@@ -531,10 +512,6 @@
 		AA623E041998D17800A942A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A5E3E2011999193000322727 /* UIview+moveTo.h */,
-				A5E3E2021999193000322727 /* UIview+moveTo.m */,
-				A5E3E1FE199918D200322727 /* UILabel+Resize.h */,
-				A5E3E1FF199918D200322727 /* UILabel+Resize.m */,
 				A5E3E1FB1999158700322727 /* UIImage+ImageEffects.h */,
 				A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */,
 				AA623E061998D17800A942A9 /* Constants.h */,
@@ -816,7 +793,6 @@
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
-				AA623E641998D17800A942A9 /* NSDate+Utils.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
@@ -831,7 +807,6 @@
 				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
-				A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
@@ -861,7 +836,6 @@
 				AA623F171998F46E00A942A9 /* PeopleTableViewController.m in Sources */,
 				A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
-				A5E3E200199918D200322727 /* UILabel+Resize.m in Sources */,
 				AACA544A19C057C000E39D94 /* UIProgressView+AFNetworking.m in Sources */,
 				AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */,
 				AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */,

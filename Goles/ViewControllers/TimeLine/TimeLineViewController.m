@@ -10,19 +10,36 @@
 
 @interface TimeLineViewController ()
 
+@property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
+
 @end
 
 @implementation TimeLineViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
+//------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
+
+//------------------------------------------------------------------------------
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+     
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
+ 
+    return cell;
+ }
+ 
 
 /*
 #pragma mark - Navigation

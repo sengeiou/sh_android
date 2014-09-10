@@ -11,8 +11,8 @@
 @end
 
 
-#define SMLMessages         @{@"0":NSLocalizedString(@"Goool!",nil), @"1":NSLocalizedString(@"Gooooool!!!",nil), @"2":NSLocalizedString(@"Gol",nil)}
-#define SMLSoundMessages    @{@"1":NSLocalizedString(@"Sistema",nil), @"2":NSLocalizedString(@"Gooooool!!!",nil), @"3":NSLocalizedString(@"_TeamDetailNeutralGoalSoundNameLabel",nil),@"4":NSLocalizedString(@"Silbidos",nil)}
+#define SMLMessages         @{@"0":@"Goool!", @"1":@"Gooooool!!!", @"2":@"Gol"}
+#define SMLSoundMessages    @{@"1":@"Sistema", @"2":@"Gooooool!!!", @"3":@"_TeamDetailNeutralGoalSoundNameLabel",@"4":@"Silbidos"}
 
 @implementation SML
 

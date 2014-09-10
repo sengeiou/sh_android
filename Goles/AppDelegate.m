@@ -211,11 +211,11 @@
 //------------------------------------------------------------------------------
 -(void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
 	//DLog(@"Notifications are disabled for this application.");
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error de registro",nil)
-                                                    message:NSLocalizedString(@"No ha sido posible registrar este dispositivo. Verifica si tienes una conexión a internet y que el puerto 5223 TCP este abierto.",nil)
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error de registro"
+                                                    message:@"No ha sido posible registrar este dispositivo. Verifica si tienes una conexión a internet y que el puerto 5223 TCP este abierto."
                                                    delegate:self
                                           cancelButtonTitle:nil
-                                          otherButtonTitles:NSLocalizedString(@"Reintentar",nil),nil];
+                                          otherButtonTitles:@"Reintentar", nil];
 	
 	alert.tag = kAlertViewError;
 	[alert show];
