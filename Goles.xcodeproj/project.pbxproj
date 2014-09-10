@@ -13,10 +13,6 @@
 		A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2021999193000322727 /* UIview+moveTo.m */; };
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
-		A5FB2E0B199A158F002A75C4 /* PartidosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E0A199A158F002A75C4 /* PartidosTableViewCell.m */; };
-		A5FB2E0E199A2941002A75C4 /* OptionsPartidosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E0D199A2941002A75C4 /* OptionsPartidosTableViewCell.m */; };
-		A5FB2E1A199A6E02002A75C4 /* GenteMatchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */; };
-		A5FB2E1D199A6E2A002A75C4 /* YoMatchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FB2E1C199A6E2A002A75C4 /* YoMatchTableViewController.m */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
@@ -90,7 +86,6 @@
 		AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED91998D78600A942A9 /* LoginViewController.m */; };
 		AA623F111998F29D00A942A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623F131998F29D00A942A9 /* Localizable.strings */; };
 		AA623F171998F46E00A942A9 /* GenteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F161998F46E00A942A9 /* GenteTableViewController.m */; };
-		AA623F1A1998F48000A942A9 /* PartidosTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F191998F48000A942A9 /* PartidosTableViewController.m */; };
 		AA623F1D1998F49700A942A9 /* YoContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F1C1998F49700A942A9 /* YoContainerViewController.m */; };
 		AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */; };
 		AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541A19C057C000E39D94 /* AFHTTPRequestOperationManager.m */; };
@@ -133,14 +128,6 @@
 		A5E3E2021999193000322727 /* UIview+moveTo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIview+moveTo.m"; sourceTree = "<group>"; };
 		A5E3E2061999205E00322727 /* golesDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = golesDataBase.xcdatamodel; sourceTree = "<group>"; };
 		A5E3E2081999206C00322727 /* defaultDataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultDataBase.sqlite; sourceTree = "<group>"; };
-		A5FB2E09199A158F002A75C4 /* PartidosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartidosTableViewCell.h; sourceTree = "<group>"; };
-		A5FB2E0A199A158F002A75C4 /* PartidosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PartidosTableViewCell.m; sourceTree = "<group>"; };
-		A5FB2E0C199A2941002A75C4 /* OptionsPartidosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OptionsPartidosTableViewCell.h; path = ../../OptionsPartidosTableViewCell.h; sourceTree = "<group>"; };
-		A5FB2E0D199A2941002A75C4 /* OptionsPartidosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OptionsPartidosTableViewCell.m; path = ../../OptionsPartidosTableViewCell.m; sourceTree = "<group>"; };
-		A5FB2E18199A6E02002A75C4 /* GenteMatchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenteMatchTableViewController.h; sourceTree = "<group>"; };
-		A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenteMatchTableViewController.m; sourceTree = "<group>"; };
-		A5FB2E1B199A6E2A002A75C4 /* YoMatchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoMatchTableViewController.h; sourceTree = "<group>"; };
-		A5FB2E1C199A6E2A002A75C4 /* YoMatchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoMatchTableViewController.m; sourceTree = "<group>"; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
 		AA05ADFD199A6E320046EB6F /* FilterCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCreation.m; sourceTree = "<group>"; };
 		AA241F81199CFB4900897D6D /* SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncControl.h; sourceTree = "<group>"; };
@@ -275,8 +262,6 @@
 		AA623F141998F2A000A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA623F151998F46E00A942A9 /* GenteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenteTableViewController.h; sourceTree = "<group>"; };
 		AA623F161998F46E00A942A9 /* GenteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenteTableViewController.m; sourceTree = "<group>"; };
-		AA623F181998F48000A942A9 /* PartidosTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartidosTableViewController.h; sourceTree = "<group>"; };
-		AA623F191998F48000A942A9 /* PartidosTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PartidosTableViewController.m; sourceTree = "<group>"; };
 		AA623F1B1998F49700A942A9 /* YoContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoContainerViewController.h; sourceTree = "<group>"; };
 		AA623F1C1998F49700A942A9 /* YoContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoContainerViewController.m; sourceTree = "<group>"; };
 		AACA541719C057C000E39D94 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -376,24 +361,6 @@
 				AA623D821998D17700A942A9 /* _Tournament.m */,
 			);
 			name = MachineClass;
-			sourceTree = "<group>";
-		};
-		A5FB2E21199B602E002A75C4 /* CustomCell */ = {
-			isa = PBXGroup;
-			children = (
-				A5FB2E09199A158F002A75C4 /* PartidosTableViewCell.h */,
-				A5FB2E0A199A158F002A75C4 /* PartidosTableViewCell.m */,
-				A5FB2E0C199A2941002A75C4 /* OptionsPartidosTableViewCell.h */,
-				A5FB2E0D199A2941002A75C4 /* OptionsPartidosTableViewCell.m */,
-			);
-			name = CustomCell;
-			sourceTree = "<group>";
-		};
-		A5FB2E2B199B70A2002A75C4 /* InfoPartido */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = InfoPartido;
 			sourceTree = "<group>";
 		};
 		AA05ADFB199A6DF80046EB6F /* CoreData Classes */ = {
@@ -661,8 +628,7 @@
 			children = (
 				AA623E7C1998D78600A942A9 /* Base Controllers */,
 				AA623E871998D78600A942A9 /* People */,
-				AA623E881998D78600A942A9 /* Partidos */,
-				AA623ED61998D78600A942A9 /* Retar_Pronosticar */,
+				AA623E881998D78600A942A9 /* Timeline */,
 				AA623ED71998D78600A942A9 /* Setup */,
 				AA623EDB1998D78600A942A9 /* Yo */,
 			);
@@ -697,28 +663,12 @@
 			path = ViewControllers/Gente;
 			sourceTree = "<group>";
 		};
-		AA623E881998D78600A942A9 /* Partidos */ = {
+		AA623E881998D78600A942A9 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
-				A5FB2E2B199B70A2002A75C4 /* InfoPartido */,
-				A5FB2E21199B602E002A75C4 /* CustomCell */,
-				AA623F181998F48000A942A9 /* PartidosTableViewController.h */,
-				AA623F191998F48000A942A9 /* PartidosTableViewController.m */,
-				A5FB2E18199A6E02002A75C4 /* GenteMatchTableViewController.h */,
-				A5FB2E19199A6E02002A75C4 /* GenteMatchTableViewController.m */,
-				A5FB2E1B199A6E2A002A75C4 /* YoMatchTableViewController.h */,
-				A5FB2E1C199A6E2A002A75C4 /* YoMatchTableViewController.m */,
 			);
-			name = Partidos;
+			name = Timeline;
 			path = ViewControllers/Partidos;
-			sourceTree = "<group>";
-		};
-		AA623ED61998D78600A942A9 /* Retar_Pronosticar */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Retar_Pronosticar;
-			path = ViewControllers/Retar_Pronosticar;
 			sourceTree = "<group>";
 		};
 		AA623ED71998D78600A942A9 /* Setup */ = {
@@ -921,7 +871,6 @@
 			files = (
 				A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */,
 				AA623E561998D17800A942A9 /* Team.m in Sources */,
-				A5FB2E0B199A158F002A75C4 /* PartidosTableViewCell.m in Sources */,
 				AA623EE01998D78600A942A9 /* LandingViewController.m in Sources */,
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
@@ -938,16 +887,13 @@
 				AA623E771998D17800A942A9 /* FavRestConsumer.m in Sources */,
 				AA623E351998D17800A942A9 /* _Team.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
-				A5FB2E0E199A2941002A75C4 /* OptionsPartidosTableViewCell.m in Sources */,
 				AA623E541998D17800A942A9 /* Subscription.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
 				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
-				A5FB2E1D199A6E2A002A75C4 /* YoMatchTableViewController.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				A5E3E2031999193000322727 /* UIview+moveTo.m in Sources */,
 				AA623E1D1998D17800A942A9 /* _Event.m in Sources */,
-				AA623F1A1998F48000A942A9 /* PartidosTableViewController.m in Sources */,
 				AA623E361998D17800A942A9 /* _Tournament.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
@@ -957,7 +903,6 @@
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
 				AA623E1F1998D17800A942A9 /* _Round.m in Sources */,
-				A5FB2E1A199A6E02002A75C4 /* GenteMatchTableViewController.m in Sources */,
 				AA623E2C1998D17800A942A9 /* _Player.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
