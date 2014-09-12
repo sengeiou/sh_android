@@ -96,10 +96,6 @@ android {
 
             buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
         }
-
-        debugPro.initWith(buildTypes.debug)
-        debugPro {
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
