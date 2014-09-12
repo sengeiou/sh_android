@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 
+import javax.inject.Inject;
+
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 
-    public static final String PREF_IS_USER_REGISTERED = "is_user_registered";
 
+    public static final String PREF_IS_USER_REGISTERED = "is_user_registered";
 
     //TODO recibir parámetros para indicar si viene de registro, login o nueva
     public static Intent getIntent(Context context) {
@@ -24,13 +28,13 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (canOpenApp()) {
-            setContentView(R.layout.main_activity);
-        } else {
+        if (!canOpenApp()) {
             finish();
             overridePendingTransition(0, 0);
             startActivity(new Intent(this, WelcomeLoginActivity.class));
+            return;
         }
+        setContainerContent(R.layout.main_activity);
     }
 
     public boolean canOpenApp() {

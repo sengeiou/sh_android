@@ -45,7 +45,7 @@ import gm.mobi.android.ui.adapters.WelcomePagerAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.widgets.WelcomeIndicator;
 import gm.mobi.android.util.FacebookUtils;
-import gm.mobi.android.util.LogUtils;
+import timber.log.Timber;
 
 public class WelcomeLoginActivity extends BaseActivity {
 
@@ -85,7 +85,7 @@ public class WelcomeLoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome_login);
+        setContainerContent(R.layout.activity_welcome_login);
         ButterKnife.inject(this);
         bus = BusProvider.getInstance();
 
@@ -178,7 +178,7 @@ public class WelcomeLoginActivity extends BaseActivity {
         // Mata sesión de facebook anterior si había
         Session activeSession = Session.getActiveSession();
         if (!(activeSession == null || activeSession.getState().isClosed())) {
-            LogUtils.d("Matando sesión actual");
+            Timber.d("Matando sesión actual");
             activeSession.closeAndClearTokenInformation();
         }
 
@@ -246,14 +246,14 @@ public class WelcomeLoginActivity extends BaseActivity {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         String accessToken = session.getAccessToken();
         if (state.isOpened() && accessToken != null && !TextUtils.isEmpty(accessToken)) {
-            LogUtils.d("Logged in");
-            LogUtils.d("Access Token: " + accessToken);
+            Timber.d("Logged in");
+            Timber.d("Access Token: " + accessToken);
             Toast.makeText(this, "Obteniendo datos", Toast.LENGTH_SHORT).show();
             mButtonFacebook.setEnabled(false);
             /* Launch background job, result received at {@link #fbProfileReceived(FacebookProfileEvent)} */
             GolesApplication.getInstance().getJobManager().addJobInBackground(new GetFacebookProfileJob(session));
         } else if (state.isClosed()) {
-            LogUtils.d("Logged out or activity recreated");
+            Timber.d("Logged out or activity recreated");
             mButtonFacebook.setEnabled(true);
         }
     }
@@ -270,12 +270,12 @@ public class WelcomeLoginActivity extends BaseActivity {
             startActivity(FacebookRegistroActivity.getIntent(this, email, username, avatar).addFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish(); // Clear task doesn't work on api<11
             String message = "Bienvenido, " + graphUser.getFirstName();
-            LogUtils.d(message);
+            Timber.d(message);
 
         } else {
             String message = "Error al obtener el perfil: " + event.getError().getMessage();
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            LogUtils.e(message, event.getError());
+            Timber.e(message, event.getError());
             //TODO error handling bueno
         }
 

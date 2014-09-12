@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+import org.tmatesoft.svn.core.wc.*
 
 buildscript {
 
@@ -9,7 +9,18 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:0.12.2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
+        classpath 'org.tmatesoft.svnkit:svnkit:1.8.5'
     }
+}
+
+// http://wickedsource.org/2014/02/28/svn-revision-gradle/
+def getSvnRevision(){
+    ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+    SVNClientManager clientManager = SVNClientManager.newInstance(options);
+    SVNStatusClient statusClient = clientManager.getStatusClient();
+    SVNStatus status = statusClient.doStatus(projectDir, false);
+    SVNRevision revision = status.getRevision();
+    return revision.getNumber();
 }
 
 apply plugin: 'com.android.application'
@@ -23,6 +34,10 @@ repositories {
     maven { url 'http://mente.github.io/facebook-api-android-aar' }
 }
 
+//def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def gitSha = getSvnRevision()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
 android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
@@ -31,10 +46,15 @@ android {
         applicationId "gm.mobi.android.goles5"
         minSdkVersion 14
         targetSdkVersion 19
+
         versionCode 1
         versionName "0.1"
+
         resConfigs "es", "en"
         resConfigs "hdpi","xhdpi","xxhdpi"
+
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
 
     packagingOptions {
@@ -66,11 +86,15 @@ android {
             runProguard false //TODO configurarlo y activarlo
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            buildConfigField "Boolean", "USE_FILE_LOGGER", "false"
         }
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
             signingConfig signingConfigs.debug
+
+            buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
         }
 
         debugPro.initWith(buildTypes.debug)
@@ -95,9 +119,15 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.4'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.4'
 
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+
     compile 'com.squareup:otto:1.3.4'
     compile 'com.squareup.picasso:picasso:2.3.2'
+
     compile 'com.jakewharton:butterknife:5.1.2'
+    compile 'com.jakewharton.timber:timber:2.4.+'
+    debugCompile 'com.jakewharton.scalpel:scalpel:1.1.1'
 
     compile 'com.path:android-priority-jobqueue:1.1.2'
     compile 'com.github.castorflex.smoothprogressbar:library:0.5.2'

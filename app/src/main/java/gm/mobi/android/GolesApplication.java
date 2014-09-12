@@ -1,16 +1,22 @@
 package gm.mobi.android;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 
+import dagger.ObjectGraph;
+import gm.mobi.android.util.FileLogger;
+import timber.log.Timber;
+
 public class GolesApplication extends Application {
 
     private static GolesApplication instance;
     private JobManager jobManager;
+    private ObjectGraph objectGraph;
 
     public GolesApplication() {
         instance = this;
@@ -20,6 +26,18 @@ public class GolesApplication extends Application {
     public void onCreate() {
         super.onCreate();
         configureJobManager();
+        buildObjectGraphAndInject();
+        plantTrees();
+    }
+
+    private void plantTrees() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+            Timber.plant(new FileLogger.FileLogTree());
+        } else {
+            //TODO Crashlytics tree
+        }
+
     }
 
     private void configureJobManager() {
@@ -35,29 +53,49 @@ public class GolesApplication extends Application {
 
                                   @Override
                                   public void d(String text, Object... args) {
-                                      Log.d(TAG, String.format(text, args));
+                                      Timber.d(text, args);
                                   }
 
                                   @Override
                                   public void e(Throwable t, String text, Object... args) {
-                                      Log.e(TAG, String.format(text, args), t);
+                                      Timber.e(t, text, args);
                                   }
 
                                   @Override
                                   public void e(String text, Object... args) {
-                                      Log.e(TAG, String.format(text, args));
+                                      Timber.e(text, args);
                                   }
                               })
                 .build();
         jobManager = new JobManager(this, configuration);
     }
 
+    public void buildObjectGraphAndInject() {
+        objectGraph = ObjectGraph.create(Modules.list(this));
+        objectGraph.inject(this);
+    }
+
+    /**
+     * Injects the members of {@code instance}, including injectable members
+     * inherited from its supertypes.
+     *
+     * @throws IllegalArgumentException if the runtime type of {@code instance} is
+     *     not one of this object graph's {@link dagger.Module#injects injectable types}.
+     */
+    public void inject(Object o) {
+        objectGraph.inject(o);
+    }
+
     public JobManager getJobManager() {
         return jobManager;
     }
 
+    @Deprecated
     public static GolesApplication getInstance() {
         return instance;
     }
 
+    public static GolesApplication get(Context context) {
+        return (GolesApplication) context.getApplicationContext();
+    }
 }

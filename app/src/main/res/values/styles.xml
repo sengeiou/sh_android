@@ -1,5 +1,8 @@
 <resources>
 
+    <style name="None">
+    </style>
+
     <!-- Base application themes. -->
     <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>

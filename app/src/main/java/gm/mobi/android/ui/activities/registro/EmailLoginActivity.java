@@ -40,7 +40,7 @@ public class EmailLoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_email);
+        setContainerContent(R.layout.activity_login_email);
         ButterKnife.inject(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);

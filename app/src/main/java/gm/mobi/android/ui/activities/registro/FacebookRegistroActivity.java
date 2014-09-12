@@ -45,7 +45,7 @@ public class FacebookRegistroActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_facebook);
+        setContainerContent(R.layout.activity_registro_facebook);
         ButterKnife.inject(this);
 
         Bundle extras = savedInstanceState != null ? savedInstanceState : getIntent().getExtras();

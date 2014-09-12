@@ -43,7 +43,7 @@ public class EmailRegistrationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_email);
+        setContainerContent(R.layout.activity_registro_email);
         ButterKnife.inject(this);
 
         bus = BusProvider.getInstance();

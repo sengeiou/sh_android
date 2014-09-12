@@ -39,7 +39,7 @@ public class PartidoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_partido);
+        setContainerContent(R.layout.activity_partido);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();

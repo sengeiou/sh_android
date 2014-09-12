@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import gm.mobi.android.BuildConfig;
+import timber.log.Timber;
 
 public class VersionUtils {
 
@@ -12,7 +13,7 @@ public class VersionUtils {
         try {
             return getPackageInfo(context).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.e("Error obteniendo version code, devolviendo -1", e);
+            Timber.e("Error obteniendo version code, devolviendo -1", e);
             return -1;
         }
     }
@@ -21,7 +22,7 @@ public class VersionUtils {
         try {
             return getPackageInfo(context).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.e("Error obteniendo version name, devolviendo 0.0", e);
+            Timber.e("Error obteniendo version name, devolviendo 0.0", e);
             return "0.0";
         }
     }
