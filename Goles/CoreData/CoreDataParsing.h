@@ -84,52 +84,26 @@ extern NSString *const K_WS_OPS_DELETE_DATE;
 
 extern NSString *const K_CD_NAME;
 extern NSString *const K_CD_VALUE;
-extern NSString * const kCUOTAS_USERCLICK;
-extern NSString * const kFIRSTTIMEALERTMORE17;
-extern NSString * const kJSON_WEIGHT;
+extern NSString *const kJSON_WEIGHT;
 
 #pragma mark - WEBSERVICE ALIAS
 
-extern NSString *const kALIAS_GETALL_PROVIDERS;
-extern NSString *const kALIAS_GET_MATCHBETTYPES;
-extern NSString *const kALIAS_GET_BETINFO;
-extern NSString *const kALIAS_GETALL_TEAMS;
-extern NSString *const kALIAS_GETALL_TOURNAMENTS;
-extern NSString *const kALIAS_GETALL_SUSCRIPTIONS;
-extern NSString *const kALIAS_GET_CALENDAR;
 extern NSString *const kALIAS_GET_SML;
 extern NSString *const kALIAS_GET_MESSAGE;
 extern NSString *const kALIAS_GET_ADVICE;
-extern NSString *const kALIAS_GET_MATCHES_FOR_TEAM;
 extern NSString *const kALIAS_GET_ALL_TEAMS;
-extern NSString *const kALIAS_GETALL_CLASSIFICATIONS;
-extern NSString *const kALIAS_GET_ALL_EVENTS_FOR_MATCH;
 extern NSString *const kALIAS_REGISTER_DEVICE;
 
 #pragma mark - CORE DATA ENTITY NAMES
 
 extern NSString *const K_COREDATA_APPADVICE;
-extern NSString *const K_COREDATA_CLASSIFICATION;
 extern NSString *const K_COREDATA_DEVICE;
-extern NSString *const K_COREDATA_EVENT;
-extern NSString *const K_COREDATA_EVENTOFMATCH;
-extern NSString *const K_COREDATA_ROUND;
 extern NSString *const K_COREDATA_MATCH;
 extern NSString *const K_COREDATA_MESSAGE;
-extern NSString *const K_COREDATA_MODE;
 extern NSString *const K_COREDATA_PLAYER;
-extern NSString *const K_COREDATA_PROVIDER;
 extern NSString *const K_COREDATA_TEAM;
-extern NSString *const K_COREDATA_TOURNAMENT;
-extern NSString *const K_COREDATA_MATCH_ODD;
-extern NSString *const K_COREDATA_MATCHBETTYPE;
-extern NSString *const K_COREDATA_BETTYPE;
-extern NSString *const K_COREDATA_BETTYPEODD;
-extern NSString *const K_COREDATA_PLAYERPROVIDER;
 extern NSString *const K_CDENTITY_SYNC_CONTROL;
-extern NSString *const K_COREDATA_SUSCRIPTIONS;
 extern NSString *const K_COREDATA_SML;
-extern NSString *const K_COREDATA_LINEUP;
 
 #pragma mark - CORE DATA CLASSES
 
@@ -157,33 +131,9 @@ extern NSString *const kJSON_DEVICE_MODEL;
 extern NSString *const kJSON_DEVICE_APPVERSION;
 extern NSString *const kJSON_DEVICE_LOCALE;
 
-// EVENT
-extern NSString * const kJSON_EVENT_ID;
-
-// EVENTS OF MATCH
-extern NSString * const kJSON_ID_EVENT_OF_MATCH;
-extern NSString * const kJSON_EVENT_LOCAL_SCORE;
-extern NSString * const kJSON_EVENT_VISITOR_SCORE;
-extern NSString * const kJSON_EVENT_COMMENTS;
-extern NSString * const kJSON_EVENT_MINUTEOFMATCH;
-extern NSString * const kJSON_EVENT_STATUS;
-extern NSString * const kJSON_EVENT_DATEIN;
-extern NSString * const kJSON_EVENT_IDPERIOD;
-extern NSString * const kJSON_EVENT_ACTOR_TRANSMITTER_NAME;
-extern NSString * const kJSON_EVENT_ACTORIN_TRANSMITTER_NAME;
-extern NSString * const kJSON_EVENT_ACTOR_RECEPTOR_NAME;
-extern NSString * const kJSON_EVENT_ISOWNGOAL;
-extern NSString * const kJSON_EVENT_ISPENALTY_GOAL;
-
-// ROUND
-extern NSString * const kJSON_ROUND;
-extern NSString * const kJSON_ROUND_NAME;
-extern NSString * const kJSON_ID_ROUND;
-extern NSString * const kJSON_ROUND_START_DATE;
-extern NSString * const kJSON_ROUND_END_DATE;
-extern NSString * const kJSON_ROUND_TYPE;
-extern NSString * const kJSON_MATCHES;
-
+// TEAM
+extern NSString * const kJSON_TEAM_IDTEAM;
+extern NSString * const kJSON_TEAM_NAMESHORT;
 
 // MATCH
 extern NSString * const kJSON_MATCHLIST;
@@ -220,25 +170,10 @@ extern NSString *const kJSON_MESSAGE_MESSAGE;
 extern NSString *const kJSON_MESSAGE_LANGUAGE;
 extern NSString *const kJSON_MESSAGE_PLATFORM;
 
-// MODE
-extern NSString * const kJSON_ID_MODE;
-extern NSString * const kJSON_LEAGUES;
-extern NSString * const kJSON_TEAMS;
-
 // PLAYER
 extern NSString * const kJSON_PLAYER_ID;
 extern NSString * const kJSON_USER_NAME;
 extern NSString * const kJSON_ID_PLAYER;
-
-// SWEEPSTAKEROUND
-extern NSString * const kJSON_ID_TEAM;
-extern NSString * const kJSON_NAME_SHORT;
-extern NSString * const kJSON_NAME_TINY;
-extern NSString * const kJSON_URL_IMAGE;
-extern NSString * const kJSON_ID_LEAGUE;
-extern NSString * const kJSON_IS_NATIONAL_TEAM;
-extern NSString * const kJSON_NAME;
-extern NSString *const kJSON_VALUE;
 
 // SML
 extern NSString * const kJSON_SML;
@@ -246,41 +181,6 @@ extern NSString * const kJSON_ID_SML;
 extern NSString * const kJSON_SOUND;
 extern NSString * const kJSON_MESSAGE;
 extern NSString * const kJSON_LANGUAGE;
-
-// SUBSCRIPTION
-extern NSString * const kJSON_ID_SUBSCRIPTION;
-extern NSString * const kJSON_SUBSCRIPTIONS;
-extern NSString * const kJSON_GOAL;
-extern NSString * const kJSON_STARTENDMATCH;
-extern NSString * const kJSON_RED_CARD;
-extern NSString * const kJSON_INTENSE_MODE_1H;
-extern NSString * const kJSON_INTENSE_MODE_HALF_TIME;
-extern NSString * const kJSON_INTENSE_MODE_ALINEACION;
-extern NSString * const kJSON_INTENSE_MODE_PENALTY;
-extern NSString * const kJSON_INTENSE_MODE_YELLOW;
-extern NSString * const kJSON_INTENSE_MODE_CAMBIOS;
-extern NSString * const kJSON_INTENSE_MODE_OFERTA_PARTIDO;
-extern NSString * const kJSON_ID_ALL_EVENTS;
-extern NSString * const kJSON_NEGATION;
-
-// TOURNAMENT
-extern NSString *const kJSON_TOURNAMENT_ID_TOURNAMENT;
-extern NSString *const kJSON_TOURNAMENT_YEAR;
-extern NSString *const kJSON_TOURNAMENT_YEAR_TOURNAMENT;
-extern NSString *const kJSON_TOURNAMENT_IMAGE_NAME;
-extern NSString *const kJSON_TOURNAMENT_IS_LEAGUE;
-extern NSString *const kJSON_TOURNAMENT_DATE_START;
-extern NSString *const kJSON_TOURNAMENT_START_DATE;
-extern NSString *const kJSON_TOURNAMENT_END_DATE;
-extern NSString *const kJSON_TOURNAMENT_DATE_END;
-extern NSString *const kJSON_TOURNAMENT_NAME;
-extern NSString *const kJSON_TOURNAMENT_ORDERBY;
-extern NSString *const kJSON_TOURNAMENT_VISIBLE;
-extern NSString *const kJSON_TOURNAMENT_COLOR_FIRST;
-extern NSString *const kJSON_TOURNAMENT_COLOR_SECOND;
-extern NSString *const kJSON_TOURNAMENT_COLOR_THIRD;
-extern NSString *const kJSON_TOURNAMENT_COLOR_FOURTH;
-
 
 
 #pragma mark - SEGUES IDENTIFIERS

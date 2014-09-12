@@ -26,23 +26,14 @@
                  K_WS_OPS_DELETE_DATE:[NSNull null],
                  kJSON_ID_TEAM_LOCAL:[NSNull null],
                  kJSON_ID_TEAM_VISITOR:[NSNull null],
-                 kJSON_ID_ROUND:[NSNull null],
                  kJSON_DATE_MATCH:[NSNull null],
-//                 kJSON_LOCAL_MATCH_SCORE:[NSNull null],
-//                 kJSON_VISITOR_MATCH_SCORE:[NSNull null],
                  kJSON_MATCH_TYPE:[NSNull null],
-//                 kJSON_ELAPSED_MINUTES:[NSNull null],
                  kJSON_SCORE_TEAMLOCAL_PENALTIES:[NSNull null],
                  kJSON_SCORE_TEAMVISITOR_PENALTIES:[NSNull null],
                  kJSON_DATE_START:[NSNull null],
                  kJSON_DATE_FINAL:[NSNull null],
                  kJSON_MATCH_STATE:[NSNull null],
                  kJSON_ID_MATCH:[NSNull null],
-//                 kJSON_TWITTERLOCAL:[NSNull null],
-//                 kJSON_TWITTERVISITOR:[NSNull null],
-//                 kJSON_MATCH_REFEREE:[NSNull null],
-//                 kJSON_PREVIOUS_SCORELOCAL:[NSNull null],
-//                 kJSON_PREVIOUS_SCOREVISITOR:[NSNull null]
                  };
     }
     else if ([entityClass isSubclassOfClass:[Team class]]) {
@@ -50,14 +41,9 @@
                  K_WS_OPS_BIRTH_DATE:[NSNull null],
                  K_WS_OPS_UPDATE_DATE:[NSNull null],
                  K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_NAME:[NSNull null],
-                 kJSON_NAME_SHORT:[NSNull null],
-                 kJSON_URL_IMAGE:[NSNull null],
-                 kJSON_ID_TEAM:[NSNull null],
-                 kJSON_NAME_TINY:[NSNull null],
-                 kJSON_IS_NATIONAL_TEAM:[NSNull null],
-                 kJSON_ID_MODE:[NSNull null]};
-        
+                 K_CD_NAME:[NSNull null],
+                 kJSON_TEAM_NAMESHORT:[NSNull null],
+                 kJSON_TEAM_IDTEAM:[NSNull null]};
     }
     else if ([entityClass isSubclassOfClass:[SML class]]) {
         

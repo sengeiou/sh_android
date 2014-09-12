@@ -52,13 +52,14 @@
                     </view>
                     <navigationItem key="navigationItem" title="Timeline" id="GoU-Ma-av1"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="timelineTableView" destination="gzw-fZ-SqR" id="e2X-u9-TtQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dAf-eY-IHs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="777" y="364"/>
+            <point key="canvasLocation" x="777" y="363.99999999999994"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BCL-et-o4s">
@@ -76,7 +77,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p4C-c5-KK4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="245" y="364"/>
+            <point key="canvasLocation" x="245" y="363.99999999999994"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

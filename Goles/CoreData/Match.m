@@ -98,11 +98,11 @@
         if ( [visitorScore isKindOfClass:[NSNumber class]] )
             [mutMatch setObject:visitorScore forKey:kJSON_SCORE_VISITOR];
         
-        NSDictionary *localTeamDict = @{kJSON_ID_TEAM:[match objectForKey:@"idTeamLocal"],
-                                        kJSON_NAME_SHORT:[match objectForKey:@"localName"]};
+        NSDictionary *localTeamDict = @{kJSON_TEAM_IDTEAM:[match objectForKey:@"idTeamLocal"],
+                                        kJSON_TEAM_NAMESHORT:[match objectForKey:@"localName"]};
         
-        NSDictionary *visitorTeamDict = @{kJSON_ID_TEAM:[match objectForKey:@"idTeamVisitor"],
-                                          kJSON_NAME_SHORT:[match objectForKey:@"visitorName"]};
+        NSDictionary *visitorTeamDict = @{kJSON_TEAM_IDTEAM:[match objectForKey:@"idTeamVisitor"],
+                                          kJSON_TEAM_NAMESHORT:[match objectForKey:@"visitorName"]};
         
         [mutMatch addEntriesFromDictionary:@{@"matchDate":[match objectForKey:@"dateMatch"],
                                              @"localTeamData":localTeamDict,

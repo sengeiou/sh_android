@@ -44,13 +44,13 @@
         return filter;
     }
     else if ([entity isSubclassOfClass:[SML class]]){
-        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,kJSON_NAME:kJSON_ID_SML,kJSON_VALUE:[NSNull null]}];
+        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_ID_SML,K_CD_VALUE:[NSNull null]}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
         return filter;
     }
     
     else if ([entity isSubclassOfClass:[Team class]]){
-        NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_ID_TEAM,K_CD_VALUE:[NSNull null]}];
+        NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_TEAM_IDTEAM,K_CD_VALUE:[NSNull null]}];
         
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsTeams,K_WS_FILTERS:@[]}};
         return filter;

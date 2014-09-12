@@ -22,7 +22,7 @@
 + (NSString *)getAliasForEntity:(Class)entity {
     
     if ([entity isSubclassOfClass:[Match class]])
-        return kALIAS_GET_MATCHES_FOR_TEAM;
+        return nil;
     else if ([entity isSubclassOfClass:[Message class]])
         return kALIAS_GET_MESSAGE;
     else if ([entity isSubclassOfClass:[AppAdvice class]])
@@ -109,7 +109,7 @@
 + (NSDictionary *)createFilterForParameter:(NSString *)entity andValue:(NSNumber *)idToSearch {
     
     if ([entity isKindOfClass:[NSString class]] && [idToSearch isKindOfClass:[NSNumber class]]) {
-        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,kJSON_NAME:entity,kJSON_VALUE:idToSearch}];
+        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:entity,K_CD_VALUE:idToSearch}];
         NSDictionary *filter = @{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]};
         return filter;
     }else {
@@ -123,7 +123,7 @@
 + (NSDictionary *)createFilterForAllItems:(NSString *)entity{
     
     if ([entity isKindOfClass:[NSString class]]) {
-        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,kJSON_NAME:entity,kJSON_VALUE:[NSNull null]}];
+        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:entity,K_CD_VALUE:[NSNull null]}];
         NSDictionary *filter = @{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]};
         return filter;
     }

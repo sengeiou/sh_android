@@ -42,7 +42,7 @@
 //------------------------------------------------------------------------------
 +(Team *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index{
     
-    NSNumber *idTeam = [dict objectForKey:kJSON_ID_TEAM];
+    NSNumber *idTeam = [dict objectForKey:kJSON_TEAM_IDTEAM];
     
     if ( idTeam ){
         Team *team = [[CoreDataManager singleton] getEntity:[Team class] withId:[idTeam integerValue]];
@@ -94,14 +94,14 @@
     
     if (![dict isKindOfClass:[NSDictionary class]] )        return NO;
     
-    NSNumber *idTeam = [dict objectForKey:kJSON_ID_TEAM];
+    NSNumber *idTeam = [dict objectForKey:kJSON_TEAM_IDTEAM];
     if ( [idTeam isKindOfClass:[NSNumber class]] )
         [self setIdTeam:idTeam];
     else
         return NO;
   
-    NSString *nameShort = [dict objectForKey:kJSON_NAME_SHORT];
-    NSString *name = [dict objectForKey:kJSON_NAME];
+    NSString *nameShort = [dict objectForKey:kJSON_TEAM_NAMESHORT];
+    NSString *name = [dict objectForKey:K_CD_NAME];
     
     if ( [nameShort isKindOfClass:[NSString class]] ){
         [self setNameShort:nameShort];
@@ -112,15 +112,6 @@
     } else
         return NO;
 
-    NSString *urlImage = [dict objectForKey:kJSON_URL_IMAGE];
-    if ( [urlImage isKindOfClass:[NSString class]] )
-        [self setUrlImage:urlImage];
-    
-    NSNumber *isNationalTeam = [dict objectForKey:kJSON_IS_NATIONAL_TEAM];
-    if ( [isNationalTeam isKindOfClass:[NSNumber class]] )
-        [self setIsNationalTeam:isNationalTeam];
-    
-    
     //SYNCRO  PROPERTIES
     
     NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
