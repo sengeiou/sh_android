@@ -90,6 +90,8 @@
 		AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */; };
 		AACA544F19C088B100E39D94 /* Timeline.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AACA545119C088B100E39D94 /* Timeline.storyboard */; };
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
+		AACA545719C33D7900E39D94 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */; };
+		AACA545919C3419600E39D94 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545819C3419600E39D94 /* PerformanceTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +259,8 @@
 		AACA545219C088B800E39D94 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Timeline.storyboard; sourceTree = "<group>"; };
 		AACA545319C08E4A00E39D94 /* TimeLineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineViewController.h; path = Goles/ViewControllers/TimeLine/TimeLineViewController.h; sourceTree = SOURCE_ROOT; };
 		AACA545419C08E4A00E39D94 /* TimeLineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineViewController.m; path = Goles/ViewControllers/TimeLine/TimeLineViewController.m; sourceTree = SOURCE_ROOT; };
+		AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavRestConsumerHelperTest.m; sourceTree = "<group>"; };
+		AACA545819C3419600E39D94 /* PerformanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerformanceTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -394,6 +398,8 @@
 		AA623CFD1998A7F200A942A9 /* GolesTests */ = {
 			isa = PBXGroup;
 			children = (
+				AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */,
+				AACA545819C3419600E39D94 /* PerformanceTests.m */,
 				AA623D031998A7F200A942A9 /* GolesTests.m */,
 				AA623CFE1998A7F200A942A9 /* Supporting Files */,
 			);
@@ -547,10 +553,10 @@
 			isa = PBXGroup;
 			children = (
 				AA623E7C1998D78600A942A9 /* Base Controllers */,
+				AA623ED71998D78600A942A9 /* Setup */,
 				AA623E871998D78600A942A9 /* People */,
 				AA623E881998D78600A942A9 /* Timeline */,
-				AA623ED71998D78600A942A9 /* Setup */,
-				AA623EDB1998D78600A942A9 /* Yo */,
+				AA623EDB1998D78600A942A9 /* Me */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -600,13 +606,13 @@
 			path = ViewControllers/Setup;
 			sourceTree = "<group>";
 		};
-		AA623EDB1998D78600A942A9 /* Yo */ = {
+		AA623EDB1998D78600A942A9 /* Me */ = {
 			isa = PBXGroup;
 			children = (
 				AA623F1B1998F49700A942A9 /* MeContainerViewController.h */,
 				AA623F1C1998F49700A942A9 /* MeContainerViewController.m */,
 			);
-			name = Yo;
+			name = Me;
 			path = ViewControllers/Yo;
 			sourceTree = "<group>";
 		};
@@ -855,6 +861,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA623D041998A7F200A942A9 /* GolesTests.m in Sources */,
+				AACA545919C3419600E39D94 /* PerformanceTests.m in Sources */,
+				AACA545719C33D7900E39D94 /* FavRestConsumerHelperTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

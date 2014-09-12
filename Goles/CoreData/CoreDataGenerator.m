@@ -44,16 +44,18 @@
     
     [[CoreDataManager singleton] eraseCoreData];
 
-    [self saveAndAlert];
-    //Insert data on SyncControl db entity
-//    [self startSyncControlPopulation];
-    
+    [self createTestingData];
+}
+
+#pragma mark
+//------------------------------------------------------------------------------
+-(void)createTestingData {
+
     //Download needed entities
-//    NSArray *entitiesToDownload = @[[Team class],[SML class],[Message class]];
-//    [entitiesToDownload enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:obj withDelegate:self];
-//    }];
-//
+    NSArray *entitiesToDownload = @[[Team class],[Match class]];
+    [entitiesToDownload enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:obj withDelegate:self];
+    }];
 }
 
 #pragma mark - UIAlertViewDelegate methods
@@ -85,33 +87,12 @@
     }
 }
 
-#pragma mark - SyncEntity Start Population
-//------------------------------------------------------------------------------
-- (void)startSyncControlPopulation {
-    
-//    NSNumber *startDate = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]];
-//    NSNumber *update12hours = @86400;
-//    NSNumber *update30minutes = @1800;
-//    NSNumber *update10minutes = @600;
-//    NSNumber *update1minute = @60;
-    
-//    NSDictionary *config = @{k_SYNC_NAME_ENTITY:K_CDENTITY_CONFIG,k_SYNC_LASTSERVER_DATE:startDate,
-//                             k_SYNC_PRIORITY:update12hours,k_SYNC_DEPENDENCY:[NSNull null],k_SYNC_ITEMS:@100,k_SYNC_ALIAS:K_CDENTITY_CONFIG};
-//    
-//    NSDictionary *userProfile = @{k_SYNC_NAME_ENTITY:K_CDENTITY_USER_PROFILE,k_SYNC_LASTSERVER_DATE:startDate,
-//                                  k_SYNC_PRIORITY:update30minutes,k_SYNC_DEPENDENCY:@"Profile",k_SYNC_ITEMS:@10,k_SYNC_ALIAS:K_CDENTITY_USER_PROFILE};
-//    
-//    
-//    [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[config,content,contentLanguage,contentTopic,country,countryLanguage,device,image,language,location,mailbox,media,mediaImage,penya,problemLanguage,problemType,template,templateGroup,topic,topicTemplate,topicMailBox,user,userContent,userPenya,userProfile]];
-//    
-//    
-}
-
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
-    
+    if (status)
+        [self saveAndAlert];
 }
 
 @end

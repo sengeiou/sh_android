@@ -109,8 +109,7 @@
             [self setName:name];
         else if ( ![self name] )
             [self setName:nameShort];
-    } else
-        return NO;
+    }
 
     //SYNCRO  PROPERTIES
     

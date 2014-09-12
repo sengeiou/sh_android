@@ -22,7 +22,7 @@
 + (NSString *)getAliasForEntity:(Class)entity {
     
     if ([entity isSubclassOfClass:[Match class]])
-        return nil;
+        return @"Get Matches of FCBarcelona";
     else if ([entity isSubclassOfClass:[Message class]])
         return kALIAS_GET_MESSAGE;
     else if ([entity isSubclassOfClass:[AppAdvice class]])
