@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.task.BusProvider;
@@ -64,23 +65,22 @@ public class WelcomeLoginActivity extends BaseActivity {
     // Login views
     @InjectView(R.id.login_icon) ImageView mLoginIcon;
     @InjectView(R.id.login_btn_facebook) TextView mTitle;
-    @InjectView(R.id.login_subtitle) TextView mSubtitle;
-    @InjectView(R.id.login_btn_facebook) LoginButton mButtonFacebook;
+//    @InjectView(R.id.login_subtitle) TextView mSubtitle;
+//    @InjectView(R.id.login_btn_facebook) LoginButton mButtonFacebook;
     @InjectView(R.id.login_btn_email) Button mButtonEmail;
     @InjectView(R.id.login_btn_login) TextView mButtonLogin;
-    @InjectView(R.id.login_skip) TextView mButtonSkip;
 
 
     private Context mContext = this;
     private WelcomePagerAdapter mAdapter;
-    private UiLifecycleHelper uiHelper;
+//    private UiLifecycleHelper uiHelper;
     private Bus bus;
-    private Session.StatusCallback callback = new Session.StatusCallback() {
+   /* private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class WelcomeLoginActivity extends BaseActivity {
         ButterKnife.inject(this);
         bus = BusProvider.getInstance();
 
-        setupWelcomePage();
+//        setupWelcomePage();
         setupLoginPage(savedInstanceState);
     }
 
@@ -156,25 +156,6 @@ public class WelcomeLoginActivity extends BaseActivity {
     }
 
     private void setupLoginPage(Bundle savedInstanceState) {
-        mButtonEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mContext, EmailRegistrationActivity.class));
-            }
-        });
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mContext, EmailLoginActivity.class));
-            }
-        });
-        mButtonSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(PartidoActivity.getIntent(WelcomeLoginActivity.this));
-            }
-        });
-
         // Mata sesión de facebook anterior si había
         Session activeSession = Session.getActiveSession();
         if (!(activeSession == null || activeSession.getState().isClosed())) {
@@ -183,10 +164,16 @@ public class WelcomeLoginActivity extends BaseActivity {
         }
 
         // Facebook setup
-        mButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
-        uiHelper = new UiLifecycleHelper(this, callback);
-        uiHelper.onCreate(savedInstanceState);
+//        mButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
+//        uiHelper = new UiLifecycleHelper(this, callback);
+//        uiHelper.onCreate(savedInstanceState);
     }
+
+    @OnClick(R.id.login_btn_login)
+    public void login() {
+        startActivity(new Intent(mContext, EmailLoginActivity.class));
+    }
+
 
     private void changePageToLogin() {
         hideWelcomePage();
@@ -243,22 +230,22 @@ public class WelcomeLoginActivity extends BaseActivity {
     /**
      * Detecta el login de facebook
      */
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+    /*private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         String accessToken = session.getAccessToken();
         if (state.isOpened() && accessToken != null && !TextUtils.isEmpty(accessToken)) {
             Timber.d("Logged in");
             Timber.d("Access Token: " + accessToken);
             Toast.makeText(this, "Obteniendo datos", Toast.LENGTH_SHORT).show();
             mButtonFacebook.setEnabled(false);
-            /* Launch background job, result received at {@link #fbProfileReceived(FacebookProfileEvent)} */
+            *//* Launch background job, result received at {@link #fbProfileReceived(FacebookProfileEvent)} *//*
             GolesApplication.getInstance().getJobManager().addJobInBackground(new GetFacebookProfileJob(session));
         } else if (state.isClosed()) {
             Timber.d("Logged out or activity recreated");
             mButtonFacebook.setEnabled(true);
         }
-    }
+    }*/
 
-    @Subscribe
+    /*@Subscribe
     public void fbProfileReceived(FacebookProfileEvent event) {
         if (!event.hasError()) {
             // Launch facebook registration activity with fb data
@@ -279,14 +266,14 @@ public class WelcomeLoginActivity extends BaseActivity {
             //TODO error handling bueno
         }
 
-    }
+    }*/
 
 
     /* Activity lifecycle stuff */
     @Override
     public void onResume() {
         super.onResume();
-        uiHelper.onResume();
+//        uiHelper.onResume();
         bus.register(this);
 
     }
@@ -294,25 +281,25 @@ public class WelcomeLoginActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
+//        uiHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        uiHelper.onPause();
+//        uiHelper.onPause();
         bus.unregister(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        uiHelper.onDestroy();
+//        uiHelper.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
+//        uiHelper.onSaveInstanceState(outState);
     }
 }

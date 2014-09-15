@@ -5,11 +5,9 @@ import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.dd.CircularProgressButton;
 import com.squareup.otto.Subscribe;
@@ -20,9 +18,12 @@ import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.task.BusProvider;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
 import gm.mobi.android.ui.activities.MainActivity;
@@ -30,12 +31,15 @@ import gm.mobi.android.ui.base.BaseActivity;
 
 public class EmailLoginActivity extends BaseActivity {
 
+    private static final int BUTTON_ERROR = -1;
+    private static final int BUTTON_NORMAL = 0;
+    private static final int BUTTON_LOADING = 1;
+
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
     @InjectView(R.id.email_login_button) CircularProgressButton mLoginButton;
-    @InjectView(R.id.email_login_progress) ProgressBar mProgress;
-    private LoginUserJob currentLoginJob;
 
+    private LoginUserJob currentLoginJob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,6 @@ public class EmailLoginActivity extends BaseActivity {
         // Set the email accounts in the AutoComplete
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getEmailAccounts());
         mEmailUsername.setAdapter(adapter);
-
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptLogin();
-            }
-        });
     }
 
 
@@ -66,27 +63,40 @@ public class EmailLoginActivity extends BaseActivity {
         currentLoginJob = null;
         if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS) {
             // Yey!
+            //TODO gestionar de forma más avanzada
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MainActivity.PREF_IS_USER_REGISTERED, true).commit();
+
+            finish();
             startActivity(MainActivity.getIntent(this));
         } else {
-            //TODO depende de si el servidor dice qué credencial es incorrecta. Si no lo hace, hay que poner un error genérico para ambos campos
-            mEmailUsername.setError("Credenciales incorrectas");
-            mEmailUsername.requestFocus();
+            mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
+            mLoginButton.setProgress(BUTTON_ERROR);
         }
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        mLoginButton.setErrorText(getString(R.string.connection_lost));
+        mLoginButton.setProgress(BUTTON_ERROR);
     }
 
 
     private void setLoading(boolean loading) {
-        //mProgress.setVisibility(loading ? View.VISIBLE : View.GONE);
-        //TODO
         mLoginButton.setIndeterminateProgressMode(true);
-        mLoginButton.setProgress(loading ? 1 : 0);
-//        mLoginButton.setEnabled(!loading);
+        mLoginButton.setProgress(loading ? BUTTON_LOADING : BUTTON_NORMAL);
+    }
+
+    @OnTextChanged({R.id.email_login_username_email, R.id.email_login_password})
+    public void resetErrorStatus() {
+        if(mLoginButton.getProgress()==BUTTON_ERROR){
+            mLoginButton.setProgress(BUTTON_NORMAL);
+        }
     }
 
     /* --- Simple logic methods --- */
 
-    private void attemptLogin() {
+    @OnClick(R.id.email_login_button)
+    public void attemptLogin() {
         // Is a login executing already?
 
         String emailUsername = mEmailUsername.getText().toString();
@@ -102,9 +112,13 @@ public class EmailLoginActivity extends BaseActivity {
     }
 
 
+    /**
+     * Retrieves Gmail accounts from the phone.
+     */
     public List<String> getEmailAccounts() {
         List<String> emailAccounts = new ArrayList<String>();
         Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+        //TODO ¿other types?
         for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
             if (emailPattern.matcher(account.name).matches()) {
                 emailAccounts.add(account.name);

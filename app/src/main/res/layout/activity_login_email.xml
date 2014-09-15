@@ -7,16 +7,6 @@
               android:orientation="vertical"
               tools:context=".EmailLoginActivity">
 
-    <!--    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="32dp"
-            android:text="Nombre de usuario"
-            android:textColor="@color/gray_60"
-            />-->
-
-
     <gm.mobi.android.ui.widgets.FloatLabelLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,8 +20,9 @@
             android:id="@+id/email_login_username_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email o nombre de usuario"
+            android:hint="@string/activity_login_email_id_hint"
             android:inputType="textEmailAddress|textNoSuggestions"
+            android:imeOptions="actionNext"
             >
 
             <requestFocus/>
@@ -39,15 +30,6 @@
 
     </gm.mobi.android.ui.widgets.FloatLabelLayout>
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Contraseña"
-        android:textColor="@color/gray_60"
-        />
--->
 
     <gm.mobi.android.ui.widgets.FloatLabelLayout
         android:layout_width="match_parent"
@@ -63,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:hint="Contraseña"
+            android:hint="@string/activity_login_email_password_hint"
+            android:imeOptions="actionDone"
             android:inputType="textPassword">
 
 
@@ -93,9 +76,8 @@
         app:cpb_selectorIdle="@drawable/btn_circular_progress_background"
         app:cpb_colorIndicator="@color/primary"
         app:cpb_colorProgress="@color/transparent"
-        app:cpb_textComplete="Completo"
-        app:cpb_textError="Erró"
-        app:cpb_textIdle="Iniciar sesión"
+        app:cpb_textError="@string/activity_login_email_error_credentials"
+        app:cpb_textIdle="@string/activity_login_email_button"
         />
 
     <TextView
@@ -109,7 +91,7 @@
         android:textColor="@color/accent"
         />
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/email_login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -117,7 +99,7 @@
         android:layout_marginTop="8dp"
         android:visibility="gone"
         tools:visibility="visible"
-        />
+        />-->
 
     <FrameLayout
         android:layout_width="match_parent"

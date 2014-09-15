@@ -2,9 +2,12 @@ package gm.mobi.android.task.jobs;
 
 
 import com.path.android.jobqueue.Params;
+import com.path.android.jobqueue.network.NetworkUtil;
 
 import gm.mobi.android.task.BusProvider;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.LoginResultEvent;
+import gm.mobi.android.util.NetworkUtils;
 
 public class LoginUserJob extends CancellableJob {
 
@@ -32,13 +35,16 @@ public class LoginUserJob extends CancellableJob {
     public void onRun() throws Throwable {
         //TODO enviar información de login al servidor y comunicar el resultado
         if(isCancelled()) return;
+        // TODO network available? (ConnectionNotAvailableEvent)
+//        BusProvider.getInstance().post(new ConnectionNotAvailableEvent());
+
         // Mock login:
         if (usernameEmail.equals("rafa.vazsan@gmail.com") || usernameEmail.equals("sloydev")) {
-            
             BusProvider.getInstance().post(LoginResultEvent.successful());
         } else {
             BusProvider.getInstance().post(LoginResultEvent.invalid());
         }
+
     }
 
     @Override

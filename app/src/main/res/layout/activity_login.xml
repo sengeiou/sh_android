@@ -4,21 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:animateLayoutChanges="true"
+    android:orientation="vertical"
     >
-
-    <TextView
-        android:id="@+id/login_skip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:fontFamily="sans-serif-medium"
-        android:padding="16dp"
-        android:text="Omitir"
-        android:textAllCaps="true"
-        android:textColor="@color/primary"
-        />
 
     <ImageView
         android:id="@+id/login_icon"
@@ -26,7 +14,7 @@
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:src="@drawable/ic_welcome_login"/>
+        android:src="@drawable/ic_welcome_0"/>
 
 
     <TextView
@@ -34,28 +22,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="56dp"
         android:layout_marginTop="22dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center_horizontal"
-        android:text="@string/welcome_title_login"
+        android:text="@string/app_name"
         android:textColor="@color/gray_10"
         android:textSize="27sp"/>
 
-    <TextView
-        android:id="@+id/login_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center_horizontal"
-        android:lines="3"
-        android:text="@string/welcome_subtitle_login"
-        android:textColor="@color/gray_50"
-        android:textSize="15sp"/>
+    <!-- <TextView
+         android:id="@+id/login_subtitle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+         android:layout_marginBottom="16dp"
+         android:layout_marginLeft="48dp"
+         android:layout_marginRight="48dp"
+         android:layout_marginTop="16dp"
+         android:gravity="center_horizontal"
+         android:lines="3"
+         android:text="@string/welcome_subtitle_login"
+         android:textColor="@color/gray_50"
+         android:textSize="15sp"/>
 
+ -->
     <com.facebook.widget.LoginButton
         android:id="@+id/login_btn_facebook"
         style="@style/LoginFacebookButton"
@@ -63,18 +53,18 @@
         android:layout_height="48dp"
         android:layout_marginLeft="52dp"
         android:layout_marginRight="52dp"
-        android:text="Entrar con Facebook"/>
+        android:text="@string/activity_login_register_facebook"/>
 
-<!--
-    <Button
-        android:id="@+id/login_btn_facebook"
-        style="@style/LoginFacebookButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="52dp"
-        android:text="Entrar con Facebook"/>
--->
+    <!--
+        <Button
+            android:id="@+id/login_btn_facebook"
+            style="@style/LoginFacebookButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="52dp"
+            android:text="Entrar con Facebook"/>
+    -->
 
     <Button
         android:id="@+id/login_btn_email"
@@ -84,7 +74,7 @@
         android:layout_marginLeft="56dp"
         android:layout_marginRight="56dp"
         android:layout_marginTop="16dp"
-        android:text="Registrar con Email"/>
+        android:text="@string/activity_login_register_email"/>
 
     <TextView
         android:id="@+id/login_btn_login"
@@ -95,7 +85,7 @@
         android:layout_marginRight="72dp"
         android:layout_marginTop="8dp"
         android:padding="8dp"
-        android:text="Iniciar sesión"/>
+        android:text="@string/activity_login_signin"/>
 
 
 </LinearLayout>

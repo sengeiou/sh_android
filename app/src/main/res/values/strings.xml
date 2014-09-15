@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Goles Mockup</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_registro_email">Nueva cuenta</string>
 
     <!-- Time strings-->
-    <string name="day_title_today">Hoy</string>
-    <string name="day_title_tomorrow">Mañana</string>
-    <string name="day_title_yesterday">Ayer</string>
+    <string name="day_title_today">Today</string>
+    <string name="day_title_tomorrow">Tomorrow</string>
+    <string name="day_title_yesterday">Yesterday</string>
 
     <!-- Welcome texts -->
     <string name="welcome_title_0">Goles</string>
@@ -34,5 +33,17 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="facebookID">716903905047845</string>
+
+    <string name="connection_lost">The network connection was lost.</string>
+
+    <!-- Activity literals -->
+    <string name="activity_login_signin">Sign In</string>
+    <string name="activity_login_register_email">Register with Email</string>
+    <string name="activity_login_register_facebook">Sign In with Facebook</string>
+
+    <string name="activity_login_email_id_hint">Username or Email</string>
+    <string name="activity_login_email_password_hint">Password</string>
+    <string name="activity_login_email_button">Enter</string>
+    <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
 
 </resources>

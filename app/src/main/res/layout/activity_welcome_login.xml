@@ -6,11 +6,11 @@
 
     <include
         layout="@layout/activity_welcome"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <include
         layout="@layout/activity_login"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
 </FrameLayout>

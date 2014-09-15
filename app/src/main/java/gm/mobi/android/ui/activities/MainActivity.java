@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.AppContainer;
+import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 
