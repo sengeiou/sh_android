@@ -4,25 +4,19 @@
 #import "_Player.h"
 
 const struct PlayerAttributes PlayerAttributes = {
-	.anonymousUser = @"anonymousUser",
 	.csys_birth = @"csys_birth",
 	.csys_deleted = @"csys_deleted",
 	.csys_modified = @"csys_modified",
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
-	.displayName = @"displayName",
 	.eMail = @"eMail",
-	.favoriteTeam = @"favoriteTeam",
-	.idPlayer = @"idPlayer",
-	.index = @"index",
-	.phoneNumber = @"phoneNumber",
-	.photoTimeStamp = @"photoTimeStamp",
-	.photoUrl = @"photoUrl",
-	.pointsTotalAvailable = @"pointsTotalAvailable",
-	.pointsWon = @"pointsWon",
-	.sessionFacebook = @"sessionFacebook",
-	.tokenFacebook = @"tokenFacebook",
-	.userName = @"userName",
+	.idFavouriteTeam = @"idFavouriteTeam",
+	.idUser = @"idUser",
+	.name = @"name",
+	.nick = @"nick",
+	.password = @"password",
+	.photo = @"photo",
+	.sessionToken = @"sessionToken",
 };
 
 const struct PlayerRelationships PlayerRelationships = {
@@ -39,16 +33,16 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription insertNewObjectForEntityForName:@"Player" inManagedObjectContext:moc_];
+	return [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:moc_];
 }
 
 + (NSString*)entityName {
-	return @"Player";
+	return @"User";
 }
 
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription entityForName:@"Player" inManagedObjectContext:moc_];
+	return [NSEntityDescription entityForName:@"User" inManagedObjectContext:moc_];
 }
 
 - (PlayerID*)objectID {
@@ -58,80 +52,24 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"anonymousUserValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"anonymousUser"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 	if ([key isEqualToString:@"csys_revisionValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_revision"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"favoriteTeamValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"favoriteTeam"];
+	if ([key isEqualToString:@"idFavouriteTeamValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"idFavouriteTeam"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"idPlayerValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"idPlayer"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"indexValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"index"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"photoTimeStampValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"photoTimeStamp"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"pointsTotalAvailableValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"pointsTotalAvailable"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"pointsWonValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"pointsWon"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"sessionFacebookValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"sessionFacebook"];
+	if ([key isEqualToString:@"idUserValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"idUser"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
 
 	return keyPaths;
 }
-
-
-
-
-@dynamic anonymousUser;
-
-
-
-- (BOOL)anonymousUserValue {
-	NSNumber *result = [self anonymousUser];
-	return [result boolValue];
-}
-
-- (void)setAnonymousUserValue:(BOOL)value_ {
-	[self setAnonymousUser:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveAnonymousUserValue {
-	NSNumber *result = [self primitiveAnonymousUser];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveAnonymousUserValue:(BOOL)value_ {
-	[self setPrimitiveAnonymousUser:[NSNumber numberWithBool:value_]];
-}
-
 
 
 
@@ -190,13 +128,6 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 
 
-@dynamic displayName;
-
-
-
-
-
-
 @dynamic eMail;
 
 
@@ -204,210 +135,87 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 
 
-@dynamic favoriteTeam;
+@dynamic idFavouriteTeam;
 
 
 
-- (int64_t)favoriteTeamValue {
-	NSNumber *result = [self favoriteTeam];
+- (int64_t)idFavouriteTeamValue {
+	NSNumber *result = [self idFavouriteTeam];
 	return [result longLongValue];
 }
 
-- (void)setFavoriteTeamValue:(int64_t)value_ {
-	[self setFavoriteTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setIdFavouriteTeamValue:(int64_t)value_ {
+	[self setIdFavouriteTeam:[NSNumber numberWithLongLong:value_]];
 }
 
-- (int64_t)primitiveFavoriteTeamValue {
-	NSNumber *result = [self primitiveFavoriteTeam];
+- (int64_t)primitiveIdFavouriteTeamValue {
+	NSNumber *result = [self primitiveIdFavouriteTeam];
 	return [result longLongValue];
 }
 
-- (void)setPrimitiveFavoriteTeamValue:(int64_t)value_ {
-	[self setPrimitiveFavoriteTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setPrimitiveIdFavouriteTeamValue:(int64_t)value_ {
+	[self setPrimitiveIdFavouriteTeam:[NSNumber numberWithLongLong:value_]];
 }
 
 
 
 
 
-@dynamic idPlayer;
+@dynamic idUser;
 
 
 
-- (int64_t)idPlayerValue {
-	NSNumber *result = [self idPlayer];
+- (int64_t)idUserValue {
+	NSNumber *result = [self idUser];
 	return [result longLongValue];
 }
 
-- (void)setIdPlayerValue:(int64_t)value_ {
-	[self setIdPlayer:[NSNumber numberWithLongLong:value_]];
+- (void)setIdUserValue:(int64_t)value_ {
+	[self setIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
-- (int64_t)primitiveIdPlayerValue {
-	NSNumber *result = [self primitiveIdPlayer];
+- (int64_t)primitiveIdUserValue {
+	NSNumber *result = [self primitiveIdUser];
 	return [result longLongValue];
 }
 
-- (void)setPrimitiveIdPlayerValue:(int64_t)value_ {
-	[self setPrimitiveIdPlayer:[NSNumber numberWithLongLong:value_]];
+- (void)setPrimitiveIdUserValue:(int64_t)value_ {
+	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
 
 
 
 
-@dynamic index;
+@dynamic name;
 
 
 
-- (int64_t)indexValue {
-	NSNumber *result = [self index];
-	return [result longLongValue];
-}
 
-- (void)setIndexValue:(int64_t)value_ {
-	[self setIndex:[NSNumber numberWithLongLong:value_]];
-}
 
-- (int64_t)primitiveIndexValue {
-	NSNumber *result = [self primitiveIndex];
-	return [result longLongValue];
-}
 
-- (void)setPrimitiveIndexValue:(int64_t)value_ {
-	[self setPrimitiveIndex:[NSNumber numberWithLongLong:value_]];
-}
+@dynamic nick;
 
 
 
 
 
-@dynamic phoneNumber;
 
+@dynamic password;
 
 
 
 
 
-@dynamic photoTimeStamp;
 
+@dynamic photo;
 
 
-- (int64_t)photoTimeStampValue {
-	NSNumber *result = [self photoTimeStamp];
-	return [result longLongValue];
-}
 
-- (void)setPhotoTimeStampValue:(int64_t)value_ {
-	[self setPhotoTimeStamp:[NSNumber numberWithLongLong:value_]];
-}
 
-- (int64_t)primitivePhotoTimeStampValue {
-	NSNumber *result = [self primitivePhotoTimeStamp];
-	return [result longLongValue];
-}
 
-- (void)setPrimitivePhotoTimeStampValue:(int64_t)value_ {
-	[self setPrimitivePhotoTimeStamp:[NSNumber numberWithLongLong:value_]];
-}
 
-
-
-
-
-@dynamic photoUrl;
-
-
-
-
-
-
-@dynamic pointsTotalAvailable;
-
-
-
-- (int32_t)pointsTotalAvailableValue {
-	NSNumber *result = [self pointsTotalAvailable];
-	return [result intValue];
-}
-
-- (void)setPointsTotalAvailableValue:(int32_t)value_ {
-	[self setPointsTotalAvailable:[NSNumber numberWithInt:value_]];
-}
-
-- (int32_t)primitivePointsTotalAvailableValue {
-	NSNumber *result = [self primitivePointsTotalAvailable];
-	return [result intValue];
-}
-
-- (void)setPrimitivePointsTotalAvailableValue:(int32_t)value_ {
-	[self setPrimitivePointsTotalAvailable:[NSNumber numberWithInt:value_]];
-}
-
-
-
-
-
-@dynamic pointsWon;
-
-
-
-- (int32_t)pointsWonValue {
-	NSNumber *result = [self pointsWon];
-	return [result intValue];
-}
-
-- (void)setPointsWonValue:(int32_t)value_ {
-	[self setPointsWon:[NSNumber numberWithInt:value_]];
-}
-
-- (int32_t)primitivePointsWonValue {
-	NSNumber *result = [self primitivePointsWon];
-	return [result intValue];
-}
-
-- (void)setPrimitivePointsWonValue:(int32_t)value_ {
-	[self setPrimitivePointsWon:[NSNumber numberWithInt:value_]];
-}
-
-
-
-
-
-@dynamic sessionFacebook;
-
-
-
-- (BOOL)sessionFacebookValue {
-	NSNumber *result = [self sessionFacebook];
-	return [result boolValue];
-}
-
-- (void)setSessionFacebookValue:(BOOL)value_ {
-	[self setSessionFacebook:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveSessionFacebookValue {
-	NSNumber *result = [self primitiveSessionFacebook];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveSessionFacebookValue:(BOOL)value_ {
-	[self setPrimitiveSessionFacebook:[NSNumber numberWithBool:value_]];
-}
-
-
-
-
-
-@dynamic tokenFacebook;
-
-
-
-
-
-
-@dynamic userName;
+@dynamic sessionToken;
 
 
 

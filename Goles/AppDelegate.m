@@ -81,6 +81,7 @@
             [[SyncManager singleton] startSyncProcess];
     }
     
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -93,7 +94,7 @@
     [self setTabBarItems];
     
     //Show the login view
-//    [self showInitView];
+   //[self showInitView];
     
     return YES;
 }
@@ -122,8 +123,12 @@
 -(void) showInitView{
     
     self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
+    
     LoginViewController *loginVC = [self.setupSB instantiateViewControllerWithIdentifier:@"loginVC"];
-    self.window.rootViewController = loginVC;
+    
+    UINavigationController *navLoginVC = [[UINavigationController alloc]initWithRootViewController:loginVC];
+
+    self.window.rootViewController = navLoginVC;
 
 }
 //------------------------------------------------------------------------------
@@ -143,11 +148,11 @@
     UINavigationController *navMeVC = [[UINavigationController alloc]initWithRootViewController:meVC];
     
     
-    navPeopleVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PeopleTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    navPeopleVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PeopleTabTitle", nil) image:[UIImage imageNamed:@"Icon_People_OFF"] selectedImage:[UIImage imageNamed:@"Icon_People_ON"]];
     
-    timelineVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"TimelineTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    timelineVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"TimelineTabTitle", nil) image:[UIImage imageNamed:@"Icon_Timeline_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Timeline_ON"]];
     
-    navMeVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"MeTabTitle", nil) image:[UIImage imageNamed:@"Partidos.png"] selectedImage:[UIImage imageNamed:@"PartidosSelected"]];
+    navMeVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"MeTabTitle", nil) image:[UIImage imageNamed:@"Icon_Me_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Me_ON"]];
     
     
     self.tabBarController = [[UITabBarController alloc] init];

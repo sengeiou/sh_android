@@ -5,25 +5,19 @@
 
 
 extern const struct PlayerAttributes {
-	__unsafe_unretained NSString *anonymousUser;
 	__unsafe_unretained NSString *csys_birth;
 	__unsafe_unretained NSString *csys_deleted;
 	__unsafe_unretained NSString *csys_modified;
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
-	__unsafe_unretained NSString *displayName;
 	__unsafe_unretained NSString *eMail;
-	__unsafe_unretained NSString *favoriteTeam;
-	__unsafe_unretained NSString *idPlayer;
-	__unsafe_unretained NSString *index;
-	__unsafe_unretained NSString *phoneNumber;
-	__unsafe_unretained NSString *photoTimeStamp;
-	__unsafe_unretained NSString *photoUrl;
-	__unsafe_unretained NSString *pointsTotalAvailable;
-	__unsafe_unretained NSString *pointsWon;
-	__unsafe_unretained NSString *sessionFacebook;
-	__unsafe_unretained NSString *tokenFacebook;
-	__unsafe_unretained NSString *userName;
+	__unsafe_unretained NSString *idFavouriteTeam;
+	__unsafe_unretained NSString *idUser;
+	__unsafe_unretained NSString *name;
+	__unsafe_unretained NSString *nick;
+	__unsafe_unretained NSString *password;
+	__unsafe_unretained NSString *photo;
+	__unsafe_unretained NSString *sessionToken;
 } PlayerAttributes;
 
 extern const struct PlayerRelationships {
@@ -49,12 +43,6 @@ extern const struct PlayerFetchedProperties {
 
 
 
-
-
-
-
-
-
 @interface PlayerID : NSManagedObjectID {}
 @end
 
@@ -63,20 +51,6 @@ extern const struct PlayerFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (PlayerID*)objectID;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* anonymousUser;
-
-
-
-@property BOOL anonymousUserValue;
-- (BOOL)anonymousUserValue;
-- (void)setAnonymousUserValue:(BOOL)value_;
-
-//- (BOOL)validateAnonymousUser:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -136,16 +110,6 @@ extern const struct PlayerFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* displayName;
-
-
-
-//- (BOOL)validateDisplayName:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSString* eMail;
 
 
@@ -156,139 +120,79 @@ extern const struct PlayerFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* favoriteTeam;
+@property (nonatomic, strong) NSNumber* idFavouriteTeam;
 
 
 
-@property int64_t favoriteTeamValue;
-- (int64_t)favoriteTeamValue;
-- (void)setFavoriteTeamValue:(int64_t)value_;
+@property int64_t idFavouriteTeamValue;
+- (int64_t)idFavouriteTeamValue;
+- (void)setIdFavouriteTeamValue:(int64_t)value_;
 
-//- (BOOL)validateFavoriteTeam:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIdFavouriteTeam:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSNumber* idPlayer;
+@property (nonatomic, strong) NSNumber* idUser;
 
 
 
-@property int64_t idPlayerValue;
-- (int64_t)idPlayerValue;
-- (void)setIdPlayerValue:(int64_t)value_;
+@property int64_t idUserValue;
+- (int64_t)idUserValue;
+- (void)setIdUserValue:(int64_t)value_;
 
-//- (BOOL)validateIdPlayer:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIdUser:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSNumber* index;
+@property (nonatomic, strong) NSString* name;
 
 
 
-@property int64_t indexValue;
-- (int64_t)indexValue;
-- (void)setIndexValue:(int64_t)value_;
+//- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
 
-//- (BOOL)validateIndex:(id*)value_ error:(NSError**)error_;
 
 
 
 
+@property (nonatomic, strong) NSString* nick;
 
-@property (nonatomic, strong) NSString* phoneNumber;
 
 
+//- (BOOL)validateNick:(id*)value_ error:(NSError**)error_;
 
-//- (BOOL)validatePhoneNumber:(id*)value_ error:(NSError**)error_;
 
 
 
 
+@property (nonatomic, strong) NSString* password;
 
-@property (nonatomic, strong) NSNumber* photoTimeStamp;
 
 
+//- (BOOL)validatePassword:(id*)value_ error:(NSError**)error_;
 
-@property int64_t photoTimeStampValue;
-- (int64_t)photoTimeStampValue;
-- (void)setPhotoTimeStampValue:(int64_t)value_;
 
-//- (BOOL)validatePhotoTimeStamp:(id*)value_ error:(NSError**)error_;
 
 
 
+@property (nonatomic, strong) NSString* photo;
 
 
-@property (nonatomic, strong) NSString* photoUrl;
 
+//- (BOOL)validatePhoto:(id*)value_ error:(NSError**)error_;
 
 
-//- (BOOL)validatePhotoUrl:(id*)value_ error:(NSError**)error_;
 
 
 
+@property (nonatomic, strong) NSString* sessionToken;
 
 
-@property (nonatomic, strong) NSNumber* pointsTotalAvailable;
 
-
-
-@property int32_t pointsTotalAvailableValue;
-- (int32_t)pointsTotalAvailableValue;
-- (void)setPointsTotalAvailableValue:(int32_t)value_;
-
-//- (BOOL)validatePointsTotalAvailable:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* pointsWon;
-
-
-
-@property int32_t pointsWonValue;
-- (int32_t)pointsWonValue;
-- (void)setPointsWonValue:(int32_t)value_;
-
-//- (BOOL)validatePointsWon:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* sessionFacebook;
-
-
-
-@property BOOL sessionFacebookValue;
-- (BOOL)sessionFacebookValue;
-- (void)setSessionFacebookValue:(BOOL)value_;
-
-//- (BOOL)validateSessionFacebook:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* tokenFacebook;
-
-
-
-//- (BOOL)validateTokenFacebook:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* userName;
-
-
-
-//- (BOOL)validateUserName:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateSessionToken:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -309,15 +213,6 @@ extern const struct PlayerFetchedProperties {
 @end
 
 @interface _Player (CoreDataGeneratedPrimitiveAccessors)
-
-
-- (NSNumber*)primitiveAnonymousUser;
-- (void)setPrimitiveAnonymousUser:(NSNumber*)value;
-
-- (BOOL)primitiveAnonymousUserValue;
-- (void)setPrimitiveAnonymousUserValue:(BOOL)value_;
-
-
 
 
 - (NSDate*)primitiveCsys_birth;
@@ -353,101 +248,56 @@ extern const struct PlayerFetchedProperties {
 
 
 
-- (NSString*)primitiveDisplayName;
-- (void)setPrimitiveDisplayName:(NSString*)value;
-
-
-
-
 - (NSString*)primitiveEMail;
 - (void)setPrimitiveEMail:(NSString*)value;
 
 
 
 
-- (NSNumber*)primitiveFavoriteTeam;
-- (void)setPrimitiveFavoriteTeam:(NSNumber*)value;
+- (NSNumber*)primitiveIdFavouriteTeam;
+- (void)setPrimitiveIdFavouriteTeam:(NSNumber*)value;
 
-- (int64_t)primitiveFavoriteTeamValue;
-- (void)setPrimitiveFavoriteTeamValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveIdPlayer;
-- (void)setPrimitiveIdPlayer:(NSNumber*)value;
-
-- (int64_t)primitiveIdPlayerValue;
-- (void)setPrimitiveIdPlayerValue:(int64_t)value_;
+- (int64_t)primitiveIdFavouriteTeamValue;
+- (void)setPrimitiveIdFavouriteTeamValue:(int64_t)value_;
 
 
 
 
-- (NSNumber*)primitiveIndex;
-- (void)setPrimitiveIndex:(NSNumber*)value;
+- (NSNumber*)primitiveIdUser;
+- (void)setPrimitiveIdUser:(NSNumber*)value;
 
-- (int64_t)primitiveIndexValue;
-- (void)setPrimitiveIndexValue:(int64_t)value_;
-
-
-
-
-- (NSString*)primitivePhoneNumber;
-- (void)setPrimitivePhoneNumber:(NSString*)value;
+- (int64_t)primitiveIdUserValue;
+- (void)setPrimitiveIdUserValue:(int64_t)value_;
 
 
 
 
-- (NSNumber*)primitivePhotoTimeStamp;
-- (void)setPrimitivePhotoTimeStamp:(NSNumber*)value;
-
-- (int64_t)primitivePhotoTimeStampValue;
-- (void)setPrimitivePhotoTimeStampValue:(int64_t)value_;
+- (NSString*)primitiveName;
+- (void)setPrimitiveName:(NSString*)value;
 
 
 
 
-- (NSString*)primitivePhotoUrl;
-- (void)setPrimitivePhotoUrl:(NSString*)value;
+- (NSString*)primitiveNick;
+- (void)setPrimitiveNick:(NSString*)value;
 
 
 
 
-- (NSNumber*)primitivePointsTotalAvailable;
-- (void)setPrimitivePointsTotalAvailable:(NSNumber*)value;
-
-- (int32_t)primitivePointsTotalAvailableValue;
-- (void)setPrimitivePointsTotalAvailableValue:(int32_t)value_;
+- (NSString*)primitivePassword;
+- (void)setPrimitivePassword:(NSString*)value;
 
 
 
 
-- (NSNumber*)primitivePointsWon;
-- (void)setPrimitivePointsWon:(NSNumber*)value;
-
-- (int32_t)primitivePointsWonValue;
-- (void)setPrimitivePointsWonValue:(int32_t)value_;
+- (NSString*)primitivePhoto;
+- (void)setPrimitivePhoto:(NSString*)value;
 
 
 
 
-- (NSNumber*)primitiveSessionFacebook;
-- (void)setPrimitiveSessionFacebook:(NSNumber*)value;
-
-- (BOOL)primitiveSessionFacebookValue;
-- (void)setPrimitiveSessionFacebookValue:(BOOL)value_;
-
-
-
-
-- (NSString*)primitiveTokenFacebook;
-- (void)setPrimitiveTokenFacebook:(NSString*)value;
-
-
-
-
-- (NSString*)primitiveUserName;
-- (void)setPrimitiveUserName:(NSString*)value;
+- (NSString*)primitiveSessionToken;
+- (void)setPrimitiveSessionToken:(NSString*)value;
 
 
 

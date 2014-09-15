@@ -205,7 +205,7 @@
                      NSTimeInterval modified = [player.csys_modified timeIntervalSince1970]*1000;
                      NSTimeInterval deleted = [player.csys_deleted timeIntervalSince1970]*1000;
                     
-                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_PLAYER_ID: player.idPlayer, kJSON_USER_NAME: player.userName,
+                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: player.idUser, kJSON_NICK: player.nick,
                                                                                                       kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
                                                                                                       kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
                      
@@ -214,7 +214,7 @@
                      
                      NSArray *dataArray = @[mutDict];
                      
-                     NSDictionary *key = @{kJSON_PLAYER_ID:player.idPlayer};
+                     NSDictionary *key = @{kJSON_ID_USER:player.idUser};
                      
                      if ([player.csys_syncronized isEqualToString:@"d"])
                          [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_PLAYER withKey:key andData:dataArray andDelegate:delegate];

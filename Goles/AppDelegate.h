@@ -21,5 +21,6 @@
 
 + (void)removeAllCache;
 - (void)registerAPNS;
+- (void) setTabBarItems;
 
 @end

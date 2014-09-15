@@ -44,7 +44,7 @@
 
 //------------------------------------------------------------------------------
 -(NSNumber *)getUserId{
-    return [[self mUser] idPlayer];
+    return [[self mUser] idUser];
 }
 
 
@@ -82,21 +82,21 @@
     
     // Get playerID from User defaults
     NSUserDefaults *localStorage = [NSUserDefaults standardUserDefaults];
-    NSInteger idPlayerDefaults = [localStorage integerForKey:kJSON_ID_PLAYER];
+    NSInteger idPlayerDefaults = [localStorage integerForKey:kJSON_ID_USER];
     
     // Get playerID from iCloud
     NSUbiquitousKeyValueStore *iCloudStorage = [NSUbiquitousKeyValueStore defaultStore];
-    NSNumber *idPlayerICloud = [iCloudStorage objectForKey:kJSON_ID_PLAYER];
+    NSNumber *idPlayerICloud = [iCloudStorage objectForKey:kJSON_ID_USER];
     
     // Synchronize id's
     if ( idPlayerDefaults != [idPlayerICloud integerValue] ) {
 
         //Save the oldest player in both environments
         if ( [idPlayerICloud integerValue] > idPlayerDefaults ){
-            [localStorage setObject:idPlayerICloud forKey:kJSON_ID_PLAYER];
+            [localStorage setObject:idPlayerICloud forKey:kJSON_ID_USER];
             [localStorage synchronize];
         } else {
-            [iCloudStorage setObject:@(idPlayerDefaults) forKey:kJSON_ID_PLAYER];
+            [iCloudStorage setObject:@(idPlayerDefaults) forKey:kJSON_ID_USER];
             [iCloudStorage synchronize];
         }
     }
@@ -109,12 +109,12 @@
     
     // Set playerID to User defaults
     NSUserDefaults *localStorage = [NSUserDefaults standardUserDefaults];
-    [localStorage setObject:idPlayer forKey:kJSON_ID_PLAYER];
+    [localStorage setObject:idPlayer forKey:kJSON_ID_USER];
     [localStorage synchronize];
     
     // Set playerID to iCloud
     NSUbiquitousKeyValueStore *iCloudStorage = [NSUbiquitousKeyValueStore defaultStore];
-    [iCloudStorage setObject:idPlayer forKey:kJSON_ID_PLAYER];
+    [iCloudStorage setObject:idPlayer forKey:kJSON_ID_USER];
     [iCloudStorage synchronize];
 }
 
@@ -124,7 +124,7 @@
     
     NSMutableDictionary *requester = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[self getDevice] idDevice],kJSON_ID_DEVICE, nil];
     if ( [self mUser] )
-        requester[kJSON_ID_PLAYER] = [self getUserId];
+        requester[kJSON_ID_USER] = [self getUserId];
     
     return requester;
 }

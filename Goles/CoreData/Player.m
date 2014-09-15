@@ -32,7 +32,7 @@
 //------------------------------------------------------------------------------
 +(Player *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index{
     
-    NSNumber *idPlayer = [dict objectForKey:kJSON_PLAYER_ID];
+    NSNumber *idPlayer = [dict objectForKey:kJSON_ID_USER];
     
     if ( idPlayer ){
         Player *player = [[CoreDataManager singleton] getEntity:[Player class] withId:[idPlayer integerValue]];
@@ -42,7 +42,6 @@
         else
             player = [Player insertWithDictionary:dict];    // insert new entity
         
-        [player setIndexValue:index];
         return player;
     }
     return nil;
@@ -55,18 +54,16 @@
     
     BOOL result = YES;
     
-    NSNumber *idPlayer = [dict objectForKey:kJSON_PLAYER_ID];
-    if ( [idPlayer isKindOfClass:[NSNumber class]] )
-        [self setIdPlayer:idPlayer];
+    NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
+    if ( [idUser isKindOfClass:[NSNumber class]] )
+        [self setIdUser:idUser];
     else
         result = NO;
     
-    NSString *tempName = [dict objectForKey:kJSON_USER_NAME ];
-    if ([tempName isKindOfClass:[NSNull class]]) {
-        tempName = @"TEMPUSER";
+    NSString *nick = [dict objectForKey:kJSON_NICK ];
+    if ([nick isKindOfClass:[NSNull class]]) {
+        [self setNick:nick];
     }
-    
-    [self setUserName:tempName];
 
     //SYNCRO  PROPERTIES
     

@@ -170,10 +170,15 @@ NSString *const kJSON_MESSAGE_MESSAGE                   = @"message";
 NSString *const kJSON_MESSAGE_LANGUAGE                  = @"locale";
 NSString *const kJSON_MESSAGE_PLATFORM                  = @"platform";
 
-//PLAYER
-NSString *const kJSON_PLAYER_ID                        = @"playerId";
-NSString *const kJSON_USER_NAME                        = @"userName";
-NSString *const kJSON_ID_PLAYER                        = @"idPlayer";
+//USER
+NSString *const kJSON_ID_USER                          = @"idUser";
+NSString *const kJSON_NICK                             = @"nick";
+NSString *const kJSON_ID_FAVOURITE_TEAM                = @"idFavouriteTeam";
+NSString *const kJSON_SESSIONTOKEN                     = @"sessionToken";
+NSString *const kJSON_EMAIL                            = @"email";
+NSString *const kJSON_NAME                             = @"name";
+NSString *const kJSON_PASSWORD                         = @"password";
+NSString *const kJSON_PHOTO                            = @"photo";
 
 //SML
 NSString *const kJSON_SML                              = @"SML";

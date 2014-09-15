@@ -170,10 +170,15 @@ extern NSString *const kJSON_MESSAGE_MESSAGE;
 extern NSString *const kJSON_MESSAGE_LANGUAGE;
 extern NSString *const kJSON_MESSAGE_PLATFORM;
 
-// PLAYER
-extern NSString * const kJSON_PLAYER_ID;
-extern NSString * const kJSON_USER_NAME;
-extern NSString * const kJSON_ID_PLAYER;
+// USER
+extern NSString *const kJSON_ID_USER;
+extern NSString *const kJSON_NICK;
+extern NSString *const kJSON_ID_FAVOURITE_TEAM;
+extern NSString *const kJSON_SESSIONTOKEN;
+extern NSString *const kJSON_EMAIL;
+extern NSString *const kJSON_NAME;
+extern NSString *const kJSON_PASSWORD;
+extern NSString *const kJSON_PHOTO;
 
 // SML
 extern NSString * const kJSON_SML;

@@ -8,7 +8,9 @@
 
 #import <XCTest/XCTest.h>
 #import "Match.h"
-#import "FavRestConsumer.h"
+#import "SyncManager.h"
+#import "Services.pch"
+#import "CoreDataManager.h"
 
 @interface GolesTests : XCTestCase
 
@@ -30,17 +32,39 @@
 
 #pragma mark - helper methods
 
-- (FavRestConsumer *)createUniqueInstance {
+- (SyncManager *)createUniqueInstance {
     
-    return [[FavRestConsumer alloc] init];
+    return [[SyncManager alloc] init];
 }
 
-- (FavRestConsumer *)getSharedInstance {
+- (SyncManager *)getSharedInstance {
     
-    return [FavRestConsumer sharedInstance];
+    return [SyncManager sharedInstance];
 }
 
 #pragma mark - tests
+
+
+#pragma mark - Conection
+
+- (void)testConection {
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:SERVERTIME]];
+    
+    NSURLResponse *response = nil;
+    
+    NSError *err = nil;
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
+    
+    XCTAssertNotNil(response, @"Deberíamos tener respuesta");
+    
+    XCTAssertNil(err, @"No deberíamos tener error");
+    
+    XCTAssertTrue([data length] > 0, @"Deberíamos tener datos");
+}
+
+#pragma mark - SingletonForSyncmanager
 
 - (void)testSingletonSharedInstanceCreated {
     
@@ -55,21 +79,40 @@
 
 - (void)testSingletonReturnsSameSharedInstanceTwice {
     
-    FavRestConsumer *s1 = [self getSharedInstance];
+    SyncManager *s1 = [self getSharedInstance];
     XCTAssertEqual(s1, [self getSharedInstance]);
     
 }
 
 - (void)testSingletonSharedInstanceSeparateFromUniqueInstance {
     
-    FavRestConsumer *s1 = [self getSharedInstance];
+    SyncManager *s1 = [self getSharedInstance];
     XCTAssertNotEqual(s1, [self createUniqueInstance]);
 }
 
 - (void)testSingletonReturnsSeparateUniqueInstances {
     
-    FavRestConsumer *s1 = [self createUniqueInstance];
+    SyncManager *s1 = [self createUniqueInstance];
     XCTAssertNotEqual(s1, [self createUniqueInstance]);
+}
+
+#pragma mark - Get Entities for Syncronization
+
+-(void) testGetSyncForEntity{
+    
+    NSArray *entitiesToSynchro = @[K_COREDATA_APPADVICE, K_COREDATA_DEVICE, K_COREDATA_MATCH, K_COREDATA_MESSAGE, K_COREDATA_PLAYER, K_COREDATA_SML, K_COREDATA_TEAM];
+    
+    NSPredicate *predicate;
+    
+    
+    for (int i = 0; i < entitiesToSynchro.count; i++) {
+        predicate = [NSPredicate predicateWithFormat:@"%K = %@ OR %K = %@",k_SYNC_NAME_ENTITY,entitiesToSynchro[i],k_SYNC_ALIAS,entitiesToSynchro[i]];
+    }
+    
+    NSArray *syncEntityArray = [[CoreDataManager singleton] getAllEntities:[SyncControl class] withPredicate:predicate];
+   
+    XCTAssertNotNil(syncEntityArray);
+
 }
 
 

@@ -39,7 +39,7 @@
         <attribute name="status" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="timeZone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="player" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="Player" inverseName="device" inverseEntity="Player" syncable="YES"/>
+        <relationship name="player" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="device" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Match" representedClassName="Match" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -87,28 +87,6 @@
         <attribute name="platform" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
         <relationship name="advice" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AppAdvice" inverseName="message" inverseEntity="AppAdvice" syncable="YES"/>
     </entity>
-    <entity name="Player" representedClassName="Player" syncable="YES">
-        <attribute name="anonymousUser" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
-        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="displayName" attributeType="String" syncable="YES"/>
-        <attribute name="eMail" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="favoriteTeam" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="idPlayer" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="photoTimeStamp" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="photoUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="pointsTotalAvailable" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="pointsWon" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="sessionFacebook" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="tokenFacebook" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userName" attributeType="String" syncable="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="player" inverseEntity="Device" syncable="YES"/>
-    </entity>
     <entity name="SML" representedClassName="SML" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -142,12 +120,28 @@
         <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
     </entity>
+    <entity name="User" representedClassName="Player" syncable="YES">
+        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="eMail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="idFavouriteTeam" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="idUser" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick" attributeType="String" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="photo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionToken" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="player" inverseEntity="Device" syncable="YES"/>
+    </entity>
     <elements>
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
         <element name="Device" positionX="-207" positionY="351" width="128" height="298"/>
         <element name="Match" positionX="-45" positionY="-27" width="128" height="523"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
-        <element name="Player" positionX="-425" positionY="324" width="128" height="343"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="255"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="178"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
         <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
