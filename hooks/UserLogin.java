@@ -1,19 +1,19 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import com.fav24.dataservices.domain.generic.Generic;
+import com.fav24.dataservices.domain.generic.KeyItem;
+import com.fav24.dataservices.domain.generic.Metadata;
+import com.fav24.dataservices.domain.generic.Operation;
+import com.fav24.dataservices.domain.policy.AccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
+import com.fav24.dataservices.domain.policy.EntityData;
+import com.fav24.dataservices.domain.policy.EntityDataAttribute;
+import com.fav24.dataservices.service.hook.GenericServiceHook;
+import com.fav24.dataservices.util.JDBCUtils;
+
+import java.sql.*;
 import java.util.AbstractList;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-
-import com.fav24.dataservices.domain.generic.*;
-import com.fav24.dataservices.domain.policy.AccessPolicy;
-import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
-import com.fav24.dataservices.domain.policy.EntityAccessPolicy.OperationType;
-import com.fav24.dataservices.service.hook.GenericServiceHook;
-import com.fav24.dataservices.util.JDBCUtils;
 
 
 public class UserLogin implements GenericServiceHook {
@@ -163,7 +163,23 @@ public class UserLogin implements GenericServiceHook {
             if ( existingUser == null ){
                 return new HookMethodOutput("No se ha encontraro ningún usuario con esas credenciales");
             } else {
-                operation.getData().get(0).setAttributes(existingUser);
+
+
+                EntityData entityData = entityAccessPolicy.getData();
+                AbstractList<EntityDataAttribute>  entityDataAttributes = entityData.getData();
+
+               //Solo se devuelven los campos que estan autorizados por la politica y que el usuario ha pedido
+                for(Map.Entry entry : operation.getData().get(0).getAttributes().entrySet()){
+
+                    String key = (String) entry.getKey();
+
+                    for(EntityDataAttribute entityDataAttribute : entityDataAttributes){
+                        if ( key.equals(entityDataAttribute.getName()) && (EntityDataAttribute.Direction.OUTPUT.equals( entityDataAttribute.getDirection()) || EntityDataAttribute.Direction.BOTH.equals(entityDataAttribute.getDirection())) ){
+                                entry.setValue(existingUser.get(key));
+                        }
+                    }
+
+                }
             }
 
 
@@ -244,7 +260,12 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_MODIFIED, timestamp.getTime());
                 }
 
-                timestamp = JDBCUtils.getObject(resultSet, 10, Timestamp.class);
+                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 10, Long.class));
+                if (resultSet.wasNull()) {
+                    attributes.put(ATTR_REVISION, null);
+                }
+
+                timestamp = JDBCUtils.getObject(resultSet, 11, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_DELETED, null);
                 }
@@ -253,10 +274,7 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_DELETED, timestamp.getTime());
                 }
 
-                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 11, Long.class));
-                if (resultSet.wasNull()) {
-                    attributes.put(ATTR_REVISION, null);
-                }
+
 
                 if (resultSet.next()) {
                     return null;
