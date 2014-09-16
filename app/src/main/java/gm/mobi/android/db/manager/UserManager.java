@@ -13,7 +13,7 @@ import gm.mobi.android.db.objects.User;
 
 public class UserManager {
 
-    public static User getSignedUser(SQLiteDatabase db) {
+    public static User getCurrentUser(SQLiteDatabase db) {
         User user = null;
         Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
         if (c.getCount() > 0) {

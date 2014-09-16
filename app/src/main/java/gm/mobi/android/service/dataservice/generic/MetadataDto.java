@@ -1,4 +1,4 @@
-package gm.mobi.android.service.generic;
+package gm.mobi.android.service.dataservice.generic;
 
 import java.util.Map;
 

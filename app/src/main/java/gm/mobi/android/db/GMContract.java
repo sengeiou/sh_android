@@ -26,6 +26,7 @@ public class GMContract {
         public static final String FAVOURITE_TEAM_ID = "idFavouriteTeam";
         public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
+        public static final String PASSWORD = "password"; // Only used for Login request, never in Database
         public static final String EMAIL = "email";
         public static final String NAME = "name";
         public static final String PHOTO = "photo";
