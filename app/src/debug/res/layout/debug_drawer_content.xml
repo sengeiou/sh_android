@@ -393,6 +393,19 @@
         android:layout_gravity="start|end|center_vertical"
         />
 
+    <TextView
+        style="@style/Widget.U2020.DebugDrawer.RowTitle"
+        android:layout_gravity="start|end|center_vertical"
+        android:text="Database"
+        />
+
+    <Button
+        android:id="@+id/debug_device_database_delete"
+        style="@style/Widget.U2020.DebugDrawer.RowValue"
+        android:text="Delete"
+        android:layout_gravity="start|end|center_vertical"
+        />
+
     <!-- PICASSO SECTION -->
 
     <TextView

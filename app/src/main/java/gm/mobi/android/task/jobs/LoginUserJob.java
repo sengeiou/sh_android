@@ -1,9 +1,14 @@
 package gm.mobi.android.task.jobs;
 
 
+import android.content.Context;
+
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 
+import gm.mobi.android.db.OpenHelper;
+import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.BusProvider;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.LoginResultEvent;
@@ -15,14 +20,15 @@ public class LoginUserJob extends CancellableJob {
     private static final int RETRY_ATTEMTS = 3;
     private String usernameEmail;
     private String password;
+    private OpenHelper mDbHelper;
 
-
-    public LoginUserJob(String usernameEmail, String password) {
+    public LoginUserJob(Context context, String usernameEmail, String password) {
         super(new Params(PRIORITY)
                 .delayInMs(1000)//debug
         );
         this.usernameEmail = usernameEmail;
         this.password = password;
+        this.mDbHelper = new OpenHelper(context);
     }
 
 
@@ -40,7 +46,17 @@ public class LoginUserJob extends CancellableJob {
 
         // Mock login:
         if (usernameEmail.equals("rafa.vazsan@gmail.com") || usernameEmail.equals("sloydev")) {
-            BusProvider.getInstance().post(LoginResultEvent.successful());
+            User mockUser = new User();
+            mockUser.setId(1);
+            mockUser.setName("Rafa");
+            mockUser.setSessionToken("Nnananananananana");
+            mockUser.setEmail(usernameEmail);
+            mockUser.setUserName("rafavazsan");
+            mockUser.setFavouriteTeamId(1);
+            mockUser.setPhoto("http://example.com");
+            UserManager.saveUser(mDbHelper.getWritableDatabase(), mockUser);
+
+            BusProvider.getInstance().post(LoginResultEvent.successful(mockUser));
         } else {
             BusProvider.getInstance().post(LoginResultEvent.invalid());
         }

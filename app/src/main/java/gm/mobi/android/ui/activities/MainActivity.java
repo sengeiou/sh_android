@@ -10,6 +10,9 @@ import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.OpenHelper;
+import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
@@ -39,6 +42,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public boolean canOpenApp() {
-        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_IS_USER_REGISTERED, false);
+        OpenHelper helper = new OpenHelper(this);
+
+        User signedUser = UserManager.getSignedUser(helper.getReadableDatabase());
+        return signedUser != null;
     }
 }

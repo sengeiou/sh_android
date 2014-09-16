@@ -28,6 +28,7 @@ import gm.mobi.android.task.events.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
+import timber.log.Timber;
 
 public class EmailLoginActivity extends BaseActivity {
 
@@ -61,10 +62,10 @@ public class EmailLoginActivity extends BaseActivity {
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
         currentLoginJob = null;
-        if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS) {
+        if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS && event.getSignedUser()!=null) {
             // Yey!
-            //TODO gestionar de forma más avanzada
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MainActivity.PREF_IS_USER_REGISTERED, true).commit();
+            Timber.d("Welcome, %s", event.getSignedUser().getName());
+            //TODO gestionar de forma más avanzada?
 
             finish();
             startActivity(MainActivity.getIntent(this));
@@ -106,7 +107,7 @@ public class EmailLoginActivity extends BaseActivity {
         if (currentLoginJob != null) {
             currentLoginJob.cancelJob();
         }
-        currentLoginJob = new LoginUserJob(emailUsername, password);
+        currentLoginJob = new LoginUserJob(this, emailUsername, password);
         GolesApplication.getInstance().getJobManager().addJobInBackground(currentLoginJob);
         setLoading(true);
     }

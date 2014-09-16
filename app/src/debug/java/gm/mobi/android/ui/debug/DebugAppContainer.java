@@ -57,6 +57,7 @@ import gm.mobi.android.data.SeenDebugDrawer;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
+import gm.mobi.android.db.manager.GeneralManager;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.LogReaderActivity;
 import gm.mobi.android.ui.activities.MainActivity;
@@ -143,6 +144,7 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_device_release) TextView deviceReleaseView;
     @InjectView(R.id.debug_device_api) TextView deviceApiView;
     @InjectView(R.id.debug_device_log) TextView deviceLogView;
+    @InjectView(R.id.debug_device_database_delete) TextView deviceDatabaseDeleteView;
 
     @InjectView(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
     @InjectView(R.id.debug_picasso_cache_size) TextView picassoCacheSizeView;
@@ -463,6 +465,12 @@ public class DebugAppContainer implements AppContainer {
     @OnClick(R.id.debug_device_log)
     public void openLog() {
         drawerContext.startActivity(new Intent(drawerContext, LogReaderActivity.class));
+    }
+
+    @OnClick(R.id.debug_device_database_delete)
+    public void deleteDatabase() {
+        GeneralManager.deleteDatabase(drawerContext);
+        Toast.makeText(drawerContext, "Database deleted. Restart app.", Toast.LENGTH_LONG).show();
     }
 
     private void setupPicassoSection() {
