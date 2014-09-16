@@ -7,6 +7,9 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Bagdad.Resources;
+using System.Collections.Generic;
+using Microsoft.Phone.Net.NetworkInformation;
+using Windows.Networking.Connectivity;
 
 namespace Bagdad
 {
@@ -23,6 +26,9 @@ namespace Bagdad
         /// </summary>
         public App()
         {
+            //Initialize the Network Status Control
+            NetworkControl();
+
             // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
@@ -159,6 +165,53 @@ namespace Bagdad
             while (RootFrame.RemoveBackEntry() != null)
             {
                 ; // no hacer nada
+            }
+        }
+
+        #endregion
+        
+        #region CONNECTIVITY_INFO
+
+        /// <summary>
+        /// It will have only 2 positions:
+        /// 0: Connection Type Name.
+        /// 1: If there is connection avalible: True or False
+        /// </summary>
+        private List<String> Connection;
+        
+        //Value of current connection status
+        public static bool isInternetAvailable;
+
+        //Print status on Console
+        private void ShowConnectionInfo()
+        {
+            Debug.WriteLine("\n Conexión con " + Connection[0] + ": " + Connection[1] + "\n");
+        }
+
+        //Prepares the app to get control over network status
+        private void NetworkControl()
+        {
+            isInternetAvailable = NetworkInterface.GetIsNetworkAvailable();
+
+            Connection = new List<String>() { NetworkInterface.NetworkInterfaceType.ToString(), NetworkInterface.GetIsNetworkAvailable().ToString() };
+
+            NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
+
+            ShowConnectionInfo();
+        }
+
+        //Update the curren status of the network
+        void NetworkInformation_NetworkStatusChanged(object sender)
+        {
+            Connection = new List<String>() { NetworkInterface.NetworkInterfaceType.ToString(), NetworkInterface.GetIsNetworkAvailable().ToString() };
+            if (Connection != null)
+                if (Connection[1] != null)
+                    if (Connection[1] == "True") isInternetAvailable = true;
+                    else if (Connection[1] == "False") isInternetAvailable = false;
+            ShowConnectionInfo();
+            if (isInternetAvailable)
+            {
+                //There is the place to do something when connection is restablished
             }
         }
 

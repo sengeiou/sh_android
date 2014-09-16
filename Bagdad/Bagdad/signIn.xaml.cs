@@ -19,7 +19,15 @@ namespace Bagdad
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: All the functions needed to Signing In
+            if (App.isInternetAvailable)
+            {
+                //TODO: All the functions needed to Signing In
+                MessageBox.Show("THERE IS INTERNET CONNECTION!!");
+            }
+            else
+            {
+                MessageBox.Show("THERE IS NO INTERNET CONNECTION!!");
+            }
         }
 
         //Prevents the TextBox of autoChange Background color on got Focus
