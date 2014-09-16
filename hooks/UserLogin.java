@@ -22,12 +22,12 @@ public class UserLogin implements GenericServiceHook {
     private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
             "FROM `shooter`.`User` " +
-            "WHERE `email` = ? AND `password` = ? AND `csys_deleted` = NULL";
+            "WHERE `email` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
     private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
             "FROM `shooter`.`User` " +
-            "WHERE `userName` = ? AND `password` = ? AND `csys_deleted` = NULL";
+            "WHERE `userName` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
     private static final String ATTR_PASSWORD = "password";
     private static final String ATTR_USERNAME = "userName";
