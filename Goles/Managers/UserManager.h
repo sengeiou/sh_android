@@ -7,22 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Player.h"
+#import "User.h"
 
 
 @interface UserManager : NSObject
 
-@property (nonatomic, strong) Player    *mUser;
+@property (nonatomic, strong) User    *mUser;
 
 //DataAccessLayer singleton instance shared across application
 + (UserManager *)singleton;
 + (UserManager *)sharedInstance;
 - (NSNumber *)getUserId;
-- (Player *)getActiveUser;
+- (User *)getActiveUser;
 - (Device *)getDevice;
 - (NSNumber *)getIdDevice;
 - (void)setDeviceToken:(NSString *)token;
 - (void)setIdDevice:(NSNumber *)idDevice;
+-(NSString *)getUserSessionToken;
 
 //------------------------------------------------------------------------------
 /**

@@ -13,10 +13,9 @@ const struct PlayerAttributes PlayerAttributes = {
 	.idFavouriteTeam = @"idFavouriteTeam",
 	.idUser = @"idUser",
 	.name = @"name",
-	.nick = @"nick",
-	.password = @"password",
 	.photo = @"photo",
 	.sessionToken = @"sessionToken",
+	.userName = @"userName",
 };
 
 const struct PlayerRelationships PlayerRelationships = {
@@ -194,20 +193,6 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 
 
-@dynamic nick;
-
-
-
-
-
-
-@dynamic password;
-
-
-
-
-
-
 @dynamic photo;
 
 
@@ -216,6 +201,13 @@ const struct PlayerFetchedProperties PlayerFetchedProperties = {
 
 
 @dynamic sessionToken;
+
+
+
+
+
+
+@dynamic userName;
 
 
 

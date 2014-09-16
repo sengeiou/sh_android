@@ -11,7 +11,7 @@ const struct DeviceAttributes DeviceAttributes = {
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
 	.idDevice = @"idDevice",
-	.idPlayer = @"idPlayer",
+	.idUser = @"idUser",
 	.language = @"language",
 	.locale = @"locale",
 	.model = @"model",
@@ -23,7 +23,7 @@ const struct DeviceAttributes DeviceAttributes = {
 };
 
 const struct DeviceRelationships DeviceRelationships = {
-	.player = @"player",
+	.user = @"user",
 };
 
 const struct DeviceFetchedProperties DeviceFetchedProperties = {
@@ -65,8 +65,8 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"idPlayerValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"idPlayer"];
+	if ([key isEqualToString:@"idUserValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"idUser"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -169,26 +169,26 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 
 
 
-@dynamic idPlayer;
+@dynamic idUser;
 
 
 
-- (int64_t)idPlayerValue {
-	NSNumber *result = [self idPlayer];
+- (int64_t)idUserValue {
+	NSNumber *result = [self idUser];
 	return [result longLongValue];
 }
 
-- (void)setIdPlayerValue:(int64_t)value_ {
-	[self setIdPlayer:[NSNumber numberWithLongLong:value_]];
+- (void)setIdUserValue:(int64_t)value_ {
+	[self setIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
-- (int64_t)primitiveIdPlayerValue {
-	NSNumber *result = [self primitiveIdPlayer];
+- (int64_t)primitiveIdUserValue {
+	NSNumber *result = [self primitiveIdUser];
 	return [result longLongValue];
 }
 
-- (void)setPrimitiveIdPlayerValue:(int64_t)value_ {
-	[self setPrimitiveIdPlayer:[NSNumber numberWithLongLong:value_]];
+- (void)setPrimitiveIdUserValue:(int64_t)value_ {
+	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
 
@@ -270,7 +270,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 
 
 
-@dynamic player;
+@dynamic user;
 
 	
 

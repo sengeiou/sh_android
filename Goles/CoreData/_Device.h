@@ -12,7 +12,7 @@ extern const struct DeviceAttributes {
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
 	__unsafe_unretained NSString *idDevice;
-	__unsafe_unretained NSString *idPlayer;
+	__unsafe_unretained NSString *idUser;
 	__unsafe_unretained NSString *language;
 	__unsafe_unretained NSString *locale;
 	__unsafe_unretained NSString *model;
@@ -24,7 +24,7 @@ extern const struct DeviceAttributes {
 } DeviceAttributes;
 
 extern const struct DeviceRelationships {
-	__unsafe_unretained NSString *player;
+	__unsafe_unretained NSString *user;
 } DeviceRelationships;
 
 extern const struct DeviceFetchedProperties {
@@ -140,15 +140,15 @@ extern const struct DeviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* idPlayer;
+@property (nonatomic, strong) NSNumber* idUser;
 
 
 
-@property int64_t idPlayerValue;
-- (int64_t)idPlayerValue;
-- (void)setIdPlayerValue:(int64_t)value_;
+@property int64_t idUserValue;
+- (int64_t)idUserValue;
+- (void)setIdUserValue:(int64_t)value_;
 
-//- (BOOL)validateIdPlayer:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIdUser:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -238,9 +238,9 @@ extern const struct DeviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) Player *player;
+@property (nonatomic, strong) Player *user;
 
-//- (BOOL)validatePlayer:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -303,11 +303,11 @@ extern const struct DeviceFetchedProperties {
 
 
 
-- (NSNumber*)primitiveIdPlayer;
-- (void)setPrimitiveIdPlayer:(NSNumber*)value;
+- (NSNumber*)primitiveIdUser;
+- (void)setPrimitiveIdUser:(NSNumber*)value;
 
-- (int64_t)primitiveIdPlayerValue;
-- (void)setPrimitiveIdPlayerValue:(int64_t)value_;
+- (int64_t)primitiveIdUserValue;
+- (void)setPrimitiveIdUserValue:(int64_t)value_;
 
 
 
@@ -364,8 +364,8 @@ extern const struct DeviceFetchedProperties {
 
 
 
-- (Player*)primitivePlayer;
-- (void)setPrimitivePlayer:(Player*)value;
+- (Player*)primitiveUser;
+- (void)setPrimitiveUser:(Player*)value;
 
 
 @end

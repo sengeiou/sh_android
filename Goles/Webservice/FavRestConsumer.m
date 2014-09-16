@@ -17,6 +17,7 @@
 #import "FilterCreation.h"
 #import "FavRestConsumerHelper.h"
 #import "CoreDataManager.h"
+#import "AppDelegate.h"
 
 @interface FavRestConsumer ()
 
@@ -137,7 +138,7 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = [AppDelegate getRequest];
     
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
@@ -195,7 +196,7 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = [AppDelegate getRequest];
     
     //Create Suscriptions 'metadata' block
     NSNumber *idDevice = [[UserManager sharedInstance] getIdDevice];
@@ -236,7 +237,7 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = [AppDelegate getRequest];
     
     //Create 'metadata' block
     NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_RETREAVE,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
@@ -277,7 +278,7 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = [AppDelegate getRequest];
     
     //Create 'metadata' block
     

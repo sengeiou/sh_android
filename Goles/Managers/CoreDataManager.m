@@ -108,11 +108,11 @@
 }
 
 //------------------------------------------------------------------------------
-- (Player *)getCurrentUser {
+- (User *)getCurrentUser {
     
-    Player *result = nil;
+    User *result = nil;
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"!(profile = nil) AND (profile.active = YES)"];
-    NSArray *playersWithProfile = [self getAllEntities:[Player class] withPredicate:predicate];
+    NSArray *playersWithProfile = [self getAllEntities:[User class] withPredicate:predicate];
     
     NSInteger count = [playersWithProfile count];
     if ( count > 0 ){
@@ -344,8 +344,10 @@
     if (persistentStoreCoordinator != nil)
         return persistentStoreCoordinator;
     
+    //path BD
     NSURL *storeURL = [[CoreDataManager applicationPrivateDocumentsDirectory] URLByAppendingPathComponent:@"golesDataBase.sqlite"];
-    
+  
+    NSLog(@"%@",[storeURL absoluteString]);
 
     if (!IS_GENERATING_DEFAULT_DATABASE && ![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSUTF8StringEncoding error:nil] isDirectory:NO])
         [self copyDefaultDataToSQLiteDataBase];

@@ -24,6 +24,7 @@
 #import "UserManager.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AdSupport/ASIdentifierManager.h>
+#import "FavRestConsumerHelper.h"
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -48,7 +49,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-
+   
+    
     if ( IS_GENERATING_DEFAULT_DATABASE ) {
         golesBaseURL = K_ENDPOINT_PRODUCTION;
         [[CoreDataGenerator singleton] generateDefaultCoreDataBase];
@@ -83,18 +85,11 @@
     
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
+    //self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    //cuando terminemos de obtener los friends de facebook pasamos dentro de la app
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTabBarItems) name:@"enterOfApp" object:nil];
-    
-    
-    // Set the titles and images of tabbar items
-    [self setTabBarItems];
-    
     //Show the login view
-   //[self showInitView];
+    [self showInitView];
     
     return YES;
 }
@@ -119,17 +114,27 @@
 }
 
 #pragma mark - Private methods
+//-----------------------------------------------------------------------------
++(NSArray *)getRequest{
+   return [FavRestConsumerHelper createREQ];
+}
+
+
 //------------------------------------------------------------------------------
 -(void) showInitView{
     
-    self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
+    if (![[UserManager sharedInstance] getUserSessionToken]) {
+        
+        self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
+        
+        LoginViewController *loginVC = [self.setupSB instantiateViewControllerWithIdentifier:@"loginVC"];
+        
+        UINavigationController *navLoginVC = [[UINavigationController alloc]initWithRootViewController:loginVC];
+        
+        self.window.rootViewController = navLoginVC;
+    }else
+        [self setTabBarItems];
     
-    LoginViewController *loginVC = [self.setupSB instantiateViewControllerWithIdentifier:@"loginVC"];
-    
-    UINavigationController *navLoginVC = [[UINavigationController alloc]initWithRootViewController:loginVC];
-
-    self.window.rootViewController = navLoginVC;
-
 }
 //------------------------------------------------------------------------------
 -(void)setTabBarItems {
@@ -160,6 +165,7 @@
     self.window.rootViewController = self.tabBarController;
 
 }
+
 
 //------------------------------------------------------------------------------
 -(void)setApiraterSettings {

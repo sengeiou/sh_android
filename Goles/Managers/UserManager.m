@@ -36,7 +36,7 @@
 
 #pragma mark - public methods
 //------------------------------------------------------------------------------
-- (Player *)getActiveUser {
+- (User *)getActiveUser {
     
     return self.mUser;
 }
@@ -45,6 +45,11 @@
 //------------------------------------------------------------------------------
 -(NSNumber *)getUserId{
     return [[self mUser] idUser];
+}
+
+//------------------------------------------------------------------------------
+-(NSString *)getUserSessionToken{
+    return [[self mUser] sessionToken];
 }
 
 

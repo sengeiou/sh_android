@@ -199,24 +199,24 @@
                 
                 if  ([updatedEntity isKindOfClass:[K_COREDATA_PLAYER class]]){
                     
-                     Player *player = (Player *)updatedEntity;
+                     User *user = (User *)updatedEntity;
                     
-                     NSTimeInterval birth = [player.csys_birth timeIntervalSince1970]*1000;
-                     NSTimeInterval modified = [player.csys_modified timeIntervalSince1970]*1000;
-                     NSTimeInterval deleted = [player.csys_deleted timeIntervalSince1970]*1000;
+                     NSTimeInterval birth = [user.csys_birth timeIntervalSince1970]*1000;
+                     NSTimeInterval modified = [user.csys_modified timeIntervalSince1970]*1000;
+                     NSTimeInterval deleted = [user.csys_deleted timeIntervalSince1970]*1000;
                     
-                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: player.idUser, kJSON_NICK: player.nick,
+                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,
                                                                                                       kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
                                                                                                       kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
                      
-                     if ([player.csys_syncronized isEqualToString:@"d"])
+                     if ([user.csys_syncronized isEqualToString:@"d"])
                      [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
                      
                      NSArray *dataArray = @[mutDict];
                      
-                     NSDictionary *key = @{kJSON_ID_USER:player.idUser};
+                     NSDictionary *key = @{kJSON_ID_USER:user.idUser};
                      
-                     if ([player.csys_syncronized isEqualToString:@"d"])
+                     if ([user.csys_syncronized isEqualToString:@"d"])
                          [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_PLAYER withKey:key andData:dataArray andDelegate:delegate];
                      else
                          [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_PLAYER withData:dataArray andKey:key andDelegate:delegate];

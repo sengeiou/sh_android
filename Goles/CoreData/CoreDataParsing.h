@@ -172,7 +172,7 @@ extern NSString *const kJSON_MESSAGE_PLATFORM;
 
 // USER
 extern NSString *const kJSON_ID_USER;
-extern NSString *const kJSON_NICK;
+extern NSString *const kJSON_USERNAME;
 extern NSString *const kJSON_ID_FAVOURITE_TEAM;
 extern NSString *const kJSON_SESSIONTOKEN;
 extern NSString *const kJSON_EMAIL;

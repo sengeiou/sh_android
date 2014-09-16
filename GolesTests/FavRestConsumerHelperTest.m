@@ -30,13 +30,15 @@
 - (void)testCreateRequest {
     
     NSArray *requestorArray = [FavRestConsumerHelper createREQ];
-    XCTAssertEqual(requestorArray.count, 5);
+    XCTAssertEqual(requestorArray.count, 6);
     
     XCTAssertEqual([[requestorArray objectAtIndex:0] isKindOfClass:[NSNumber class]], true);
     XCTAssertEqual([[requestorArray objectAtIndex:1] isKindOfClass:[NSNumber class]], true);
     XCTAssertEqual([[requestorArray objectAtIndex:2] isKindOfClass:[NSNumber class]], true);
     XCTAssertEqual([[requestorArray objectAtIndex:3] isKindOfClass:[NSNumber class]], true);
     XCTAssertEqual([[requestorArray objectAtIndex:4] isKindOfClass:[NSNumber class]], true);
+    XCTAssertEqual([[requestorArray objectAtIndex:5] isKindOfClass:[NSNumber class]], true);
+
 }
 
 

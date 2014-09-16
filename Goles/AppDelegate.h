@@ -22,5 +22,6 @@
 + (void)removeAllCache;
 - (void)registerAPNS;
 - (void) setTabBarItems;
++ (NSArray *)getRequest;
 
 @end

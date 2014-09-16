@@ -44,6 +44,8 @@
     
     NSNumber *idDevice = [[UserManager singleton] getIdDevice];
     NSNumber *idPlayer = [[UserManager singleton] getUserId];
+    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
+    
     NSNumber *idPlatform = @1;
     NSInteger appVersion = [self getAppVersion];
     NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
@@ -58,6 +60,9 @@
     [req addObject:idPlatform];
     [req addObject:[NSNumber numberWithInt:appVersion]];
     [req addObject:[NSNumber numberWithLongLong:epochTime]];
+    
+    if (sessionToken != nil)
+        [req addObject:sessionToken];
     
     return [req copy];
 }

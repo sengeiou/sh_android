@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "CoreDataParsing.h"
-//#import "Match.h"
-#import "Player.h"
+#import "User.h"
 
 @interface CoreDataManager : NSObject
     
@@ -34,7 +33,7 @@
 - (BOOL)eraseCoreData;
 
 - (id) getEntity:(Class)entityClass withId:(NSInteger)entityId;
-- (Player *)getCurrentUser;
+- (User *)getCurrentUser;
 
 - (NSArray *) getAllEntities:(Class)entityClass;
 - (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate;

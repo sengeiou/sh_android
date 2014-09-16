@@ -172,7 +172,7 @@ NSString *const kJSON_MESSAGE_PLATFORM                  = @"platform";
 
 //USER
 NSString *const kJSON_ID_USER                          = @"idUser";
-NSString *const kJSON_NICK                             = @"nick";
+NSString *const kJSON_USERNAME                         = @"userName";
 NSString *const kJSON_ID_FAVOURITE_TEAM                = @"idFavouriteTeam";
 NSString *const kJSON_SESSIONTOKEN                     = @"sessionToken";
 NSString *const kJSON_EMAIL                            = @"email";

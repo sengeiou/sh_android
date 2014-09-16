@@ -14,10 +14,9 @@ extern const struct PlayerAttributes {
 	__unsafe_unretained NSString *idFavouriteTeam;
 	__unsafe_unretained NSString *idUser;
 	__unsafe_unretained NSString *name;
-	__unsafe_unretained NSString *nick;
-	__unsafe_unretained NSString *password;
 	__unsafe_unretained NSString *photo;
 	__unsafe_unretained NSString *sessionToken;
+	__unsafe_unretained NSString *userName;
 } PlayerAttributes;
 
 extern const struct PlayerRelationships {
@@ -28,7 +27,6 @@ extern const struct PlayerFetchedProperties {
 } PlayerFetchedProperties;
 
 @class Device;
-
 
 
 
@@ -158,26 +156,6 @@ extern const struct PlayerFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* nick;
-
-
-
-//- (BOOL)validateNick:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* password;
-
-
-
-//- (BOOL)validatePassword:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSString* photo;
 
 
@@ -193,6 +171,16 @@ extern const struct PlayerFetchedProperties {
 
 
 //- (BOOL)validateSessionToken:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* userName;
+
+
+
+//- (BOOL)validateUserName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -278,18 +266,6 @@ extern const struct PlayerFetchedProperties {
 
 
 
-- (NSString*)primitiveNick;
-- (void)setPrimitiveNick:(NSString*)value;
-
-
-
-
-- (NSString*)primitivePassword;
-- (void)setPrimitivePassword:(NSString*)value;
-
-
-
-
 - (NSString*)primitivePhoto;
 - (void)setPrimitivePhoto:(NSString*)value;
 
@@ -298,6 +274,12 @@ extern const struct PlayerFetchedProperties {
 
 - (NSString*)primitiveSessionToken;
 - (void)setPrimitiveSessionToken:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveUserName;
+- (void)setPrimitiveUserName:(NSString*)value;
 
 
 
