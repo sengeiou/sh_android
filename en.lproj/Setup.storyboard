@@ -95,10 +95,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QqG-FM-vBF">
-                                <rect key="frame" x="0.0" y="64" width="320" height="544"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QqG-FM-vBF">
+                                <rect key="frame" x="16" y="64" width="288" height="544"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="H7s-8x-oGB">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="H7s-8x-oGB">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
@@ -122,7 +122,7 @@
                                             <outlet property="delegate" destination="kei-0y-Nst" id="IR8-uP-SSb"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LAq-Ol-dhh">
+                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LAq-Ol-dhh">
                                         <rect key="frame" x="0.0" y="110" width="320" height="395"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bba-8I-JaV">
@@ -157,19 +157,19 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="H7s-8x-oGB" firstAttribute="top" secondItem="QqG-FM-vBF" secondAttribute="top" id="1Rm-hC-w7h"/>
-                                    <constraint firstAttribute="centerX" secondItem="H7s-8x-oGB" secondAttribute="centerX" id="emQ-I4-bMf"/>
-                                    <constraint firstItem="H7s-8x-oGB" firstAttribute="leading" secondItem="QqG-FM-vBF" secondAttribute="leading" id="j0w-cR-Bzh"/>
-                                    <constraint firstAttribute="trailing" secondItem="H7s-8x-oGB" secondAttribute="trailing" id="yiJ-Ul-f6p"/>
+                                    <constraint firstAttribute="trailing" secondItem="LAq-Ol-dhh" secondAttribute="trailing" constant="-32" id="3Gy-3a-gbk"/>
+                                    <constraint firstItem="LAq-Ol-dhh" firstAttribute="top" secondItem="H7s-8x-oGB" secondAttribute="bottom" id="5JG-VX-Uce"/>
+                                    <constraint firstItem="LAq-Ol-dhh" firstAttribute="leading" secondItem="QqG-FM-vBF" secondAttribute="leading" id="NKN-aq-eeI"/>
+                                    <constraint firstAttribute="bottom" secondItem="LAq-Ol-dhh" secondAttribute="bottom" constant="39" id="Rlp-OY-XYr"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="QqG-FM-vBF" secondAttribute="trailing" constant="-56" id="Qz0-W5-60h"/>
-                            <constraint firstItem="QqG-FM-vBF" firstAttribute="top" secondItem="AJC-0B-vH5" secondAttribute="bottom" id="kPW-wW-cb1"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="QqG-FM-vBF" secondAttribute="bottom" constant="-40" id="o3K-i3-HBt"/>
-                            <constraint firstItem="QqG-FM-vBF" firstAttribute="leading" secondItem="pim-Sl-MW7" secondAttribute="leadingMargin" constant="-16" id="xsx-T2-hot"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="QqG-FM-vBF" secondAttribute="bottom" constant="-40" id="Oq7-s1-uFm"/>
+                            <constraint firstItem="QqG-FM-vBF" firstAttribute="trailing" secondItem="pim-Sl-MW7" secondAttribute="trailingMargin" id="P0b-jJ-GSz"/>
+                            <constraint firstItem="QqG-FM-vBF" firstAttribute="leading" secondItem="pim-Sl-MW7" secondAttribute="leadingMargin" id="U1T-cH-ztz"/>
+                            <constraint firstItem="QqG-FM-vBF" firstAttribute="top" secondItem="AJC-0B-vH5" secondAttribute="bottom" id="nbG-8p-JMD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="r7F-g6-62Y">
