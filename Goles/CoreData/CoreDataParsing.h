@@ -93,6 +93,7 @@ extern NSString *const kALIAS_GET_MESSAGE;
 extern NSString *const kALIAS_GET_ADVICE;
 extern NSString *const kALIAS_GET_ALL_TEAMS;
 extern NSString *const kALIAS_REGISTER_DEVICE;
+extern NSString *const kALIAS_LOGIN;
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -100,7 +101,7 @@ extern NSString *const K_COREDATA_APPADVICE;
 extern NSString *const K_COREDATA_DEVICE;
 extern NSString *const K_COREDATA_MATCH;
 extern NSString *const K_COREDATA_MESSAGE;
-extern NSString *const K_COREDATA_PLAYER;
+extern NSString *const K_COREDATA_USER;
 extern NSString *const K_COREDATA_TEAM;
 extern NSString *const K_CDENTITY_SYNC_CONTROL;
 extern NSString *const K_COREDATA_SML;

@@ -18,10 +18,11 @@
 @property (strong, nonatomic) UIStoryboard *timelineSB;
 @property (strong, nonatomic) UIStoryboard *meSB;
 @property (strong, nonatomic) UIStoryboard *setupSB;
+@property (strong, nonatomic)NSArray *request;
+
 
 + (void)removeAllCache;
 - (void)registerAPNS;
 - (void) setTabBarItems;
-+ (NSArray *)getRequest;
 
 @end

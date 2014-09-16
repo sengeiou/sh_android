@@ -25,6 +25,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AdSupport/ASIdentifierManager.h>
 #import "FavRestConsumerHelper.h"
+#import "Conection.h"
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -48,9 +49,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
    
-    
     if ( IS_GENERATING_DEFAULT_DATABASE ) {
         golesBaseURL = K_ENDPOINT_PRODUCTION;
         [[CoreDataGenerator singleton] generateDefaultCoreDataBase];
@@ -88,6 +87,8 @@
     //self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    self.request = [FavRestConsumerHelper createREQ];
+    
     //Show the login view
     [self showInitView];
     
@@ -114,12 +115,6 @@
 }
 
 #pragma mark - Private methods
-//-----------------------------------------------------------------------------
-+(NSArray *)getRequest{
-   return [FavRestConsumerHelper createREQ];
-}
-
-
 //------------------------------------------------------------------------------
 -(void) showInitView{
     

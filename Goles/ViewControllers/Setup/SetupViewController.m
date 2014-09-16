@@ -8,14 +8,26 @@
 
 #import "SetupViewController.h"
 #import "AppDelegate.h"
+#import "Conection.h"
+#import "FavRestConsumer.h"
+#import "CoreDataParsing.h"
+#import "Encryption.h"
+#import "User.h"
 
-@interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>{
+    
+    UITextField *txtFieldName;
+     UITextField *txtFieldPwd;
+}
+
 @property (weak, nonatomic) IBOutlet UITableView *mtableView;
 @property (weak, nonatomic) IBOutlet UIButton *btnForgotPwd;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (weak, nonatomic) IBOutlet UILabel *lblNote;
 @property (weak, nonatomic) IBOutlet UIButton *btnCreateCount;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnEnter;
+@property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
+
 - (IBAction)passEnter:(id)sender;
 
 @end
@@ -26,7 +38,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = NO;
+    self.btnEnter.enabled = NO;
+    
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+    
+}
 
+-(void)dismissKeyboard {
+    [txtFieldName resignFirstResponder];
+
+    [txtFieldPwd resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,15 +60,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - Table view data source
 
@@ -60,86 +77,99 @@
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
  {
      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellSetup"  forIndexPath:indexPath];
- 
+     
+     
      switch (indexPath.row) {
          case 0:
-             cell.textLabel.text = @"Email or Username";
+         {
+            cell.textLabel.text = @"Email or Username";
+             txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,140,40)];
+             txtFieldName.delegate = self;
+             txtFieldName.clearButtonMode = YES;
+             [txtFieldName setReturnKeyType:UIReturnKeyNext];
+             [cell addSubview:txtFieldName];
+             txtFieldName.placeholder = @"Required";
+         }
              break;
          case 1:
+         {
              cell.textLabel.text = @"Password";
-             break;
+             txtFieldPwd = [[UITextField alloc] initWithFrame:CGRectMake(180,3,140,40)];
+             txtFieldPwd.delegate = self;
+             txtFieldPwd.clearButtonMode = YES;
+             [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
+             [cell addSubview:txtFieldPwd];
+             txtFieldPwd.placeholder = @"Required";         }
+            
+            break;
          default:
              break;
      }
      
      /* only called when cell is created */
-     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(180,0,140,40)];
-     textField.delegate = self;
-     textField.clearButtonMode = YES;
-     [textField setReturnKeyType:UIReturnKeyDone];
-     [cell addSubview:textField];
-     textField.placeholder = @"Required";
- // Configure the cell...
+     
+     // Configure the cell...
  
- return cell;
+     return cell;
+}
+
+- (IBAction)passEnter:(id)sender {
+    
+    
+    NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
+    
+    [[Conection sharedInstance]getServerTime];
+    
+    if ([[Conection sharedInstance]isConection]) {
+        
+        NSDictionary *key = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+       // [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self]; //FALTA TERMINARAAAA
+        
+        [appDelegate setTabBarItems];
+
+    };
 }
 
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
 
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+   
+    NSUInteger length = txtFieldName.text.length - range.length + string.length;
+    
+    NSUInteger length1 = txtFieldPwd.text.length - range.length + string.length;
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
+    
+    if (length > 1 && length1 > 1) {
+        self.btnEnter.enabled = YES;
+    } else {
+        self.btnEnter.enabled = NO;
+    }
+    return YES;
+}
 
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == txtFieldName)
+        [txtFieldPwd becomeFirstResponder];
+    
+    else if (textField == txtFieldPwd && ![txtFieldName.text isEqualToString:@""])
+        [self passEnter:nil];
+    
+
+    return true;
+}
 
 /*
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
  }
  */
 
-
-
-- (IBAction)passEnter:(id)sender {
-    
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    [appDelegate setTabBarItems];
-}
 @end

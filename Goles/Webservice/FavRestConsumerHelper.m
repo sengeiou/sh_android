@@ -31,6 +31,8 @@
         return kALIAS_GET_SML;
     else if ([entity isSubclassOfClass:[Team class]])
         return kALIAS_GET_ALL_TEAMS;
+    else if ([entity isSubclassOfClass:[User class]])
+        return kALIAS_LOGIN;
     
     return nil;
 }

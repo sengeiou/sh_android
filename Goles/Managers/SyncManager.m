@@ -77,7 +77,7 @@
 
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_APPADVICE, K_COREDATA_DEVICE, K_COREDATA_MATCH, K_COREDATA_MESSAGE, K_COREDATA_PLAYER, K_COREDATA_SML, K_COREDATA_TEAM];
+    NSArray *entitiesToSynchro = @[K_COREDATA_APPADVICE, K_COREDATA_DEVICE, K_COREDATA_MATCH, K_COREDATA_MESSAGE, K_COREDATA_USER, K_COREDATA_SML, K_COREDATA_TEAM];
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"csys_synchronized != 's'"];
@@ -197,7 +197,7 @@
                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_MESSAGE withData:dataArray andKey:key andDelegate:delegate];
                 }
                 
-                if  ([updatedEntity isKindOfClass:[K_COREDATA_PLAYER class]]){
+                if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
                     
                      User *user = (User *)updatedEntity;
                     
@@ -217,9 +217,9 @@
                      NSDictionary *key = @{kJSON_ID_USER:user.idUser};
                      
                      if ([user.csys_syncronized isEqualToString:@"d"])
-                         [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_PLAYER withKey:key andData:dataArray andDelegate:delegate];
+                         [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_USER withKey:key andData:dataArray andDelegate:delegate];
                      else
-                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_PLAYER withData:dataArray andKey:key andDelegate:delegate];
+                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate];
             }
         }
     }

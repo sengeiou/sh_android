@@ -94,6 +94,7 @@ NSString *const kALIAS_GET_MESSAGE                     = @"GET_ALL_MESSAGE";
 NSString *const kALIAS_GET_ADVICE                      = @"GET_ALL_ADVICE";
 NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_ALL_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
+NSString *const kALIAS_LOGIN                           = @"LOGIN";
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -101,7 +102,7 @@ NSString *const K_COREDATA_APPADVICE                    = @"AppAdvice";
 NSString *const K_COREDATA_DEVICE                       = @"Device";
 NSString *const K_COREDATA_MATCH                        = @"Match";
 NSString *const K_COREDATA_MESSAGE                      = @"Message";
-NSString *const K_COREDATA_PLAYER                       = @"Player";
+NSString *const K_COREDATA_USER                         = @"User";
 NSString *const K_COREDATA_TEAM                         = @"Team";
 NSString *const K_CDENTITY_SYNC_CONTROL                 = @"SyncControl";
 NSString *const K_COREDATA_SML                          = @"SML";
