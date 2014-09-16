@@ -80,6 +80,11 @@ public class UserLogin implements GenericServiceHook {
 
 	/**
 	 * {@inheritDoc}
+     *
+     * Este metodo valida que se cumplen todas las precondiciones antes de empezar a resolver las operaciones.
+     *
+     * Si alguna precondicion no se cumple devuelve su respectivo error.
+     *
 	 */
 	@Override
 	public <T> HookMethodOutput requestBegin(T connection, AccessPolicy accessPolicy, Generic generic) {
@@ -89,11 +94,11 @@ public class UserLogin implements GenericServiceHook {
             int numberOfOperations = generic.getOperations().size();
 
             if ( numberOfOperations != 1){
-                return new HookMethodOutput("En esta llamada debe ejecutarse UNA y solamente UNA operacion y la petición contiene  " + numberOfOperations + " operaciones");
+                return new HookMethodOutput("This call should run one and only one operation and the request contains  " + numberOfOperations + " operations");
             }
 
             if (generic.getOperations().get(0).getMetadata().getKey().size() != 2 ){
-                return new HookMethodOutput("Esta llamada solo admite acceso por key doble");
+                return new HookMethodOutput("This request only supports dual key access");
             }
 
             String identifierName = generic.getOperations().get(0).getMetadata().getKey().get(0).getName();
@@ -105,27 +110,27 @@ public class UserLogin implements GenericServiceHook {
 
 
             if ( !ATTR_USERNAME.equals(identifierName) && !ATTR_MAIL.equals(identifierName) ){
-                return new HookMethodOutput("Esta llamada como <b>identificador</b> el email o el <b>userName</b> y se ha enviado: <b>"  + identifierName + "</b>");
+                return new HookMethodOutput("This request must have as identifier  <b>email</b> or < b> userName < / b >. The identifier submitted was : <b > "  + identifierName + "</b>");
             }
 
             if ( identifierValue.length() < 3  ){
-                return new HookMethodOutput("El identificador ha de tener almenos 3 carácteres de longitud. El identificador que enviado (" +identifierValue+" ) tiene "  + identifierValue.length());
+                return new HookMethodOutput("The identifier must be at least 3 characters. The identifier submitted was (" +identifierValue+" ) and had "  + identifierValue.length());
             }
 
             if ( ATTR_USERNAME.equals(identifierName) && identifierValue.length() > 20  ){
-                return new HookMethodOutput("Los userNames tienen como máximo 20 carácteres de longitud. El identificador que enviado (" +identifierValue+" ) tiene "  + identifierValue.length());
+                return new HookMethodOutput("userNames have no more than 20 characters. The identifier submitted was (" +identifierValue+" ) and had "  + identifierValue.length());
             }
 
             if ( !ATTR_PASSWORD.equals(passwordName) ){
-                return new HookMethodOutput("No se ha indicado un password. En vez de password se ha enviado : " + passwordName);
+                return new HookMethodOutput("No password was specified. Instead password, was sent : " + passwordName);
             }
 
             if ( passwordValue.length() < 6 &&  passwordValue.length() > 20){
-                return new HookMethodOutput("El password ha de tener entre 6 y 20 carácteres. El password enviado tiene  : " + passwordValue.length() + " carácteres");
+                return new HookMethodOutput("The password must be between 6 and 20 characters. The password submitted has  : " + passwordValue.length() + " characters");
             }
 
         }catch(Exception e){
-            return new HookMethodOutput("La llamada tiene un formato incorrecto");
+            return new HookMethodOutput("Invalid Request");
         }
 
 
@@ -143,6 +148,10 @@ public class UserLogin implements GenericServiceHook {
 
 	/**
 	 * {@inheritDoc}
+     *
+     * Resuelve la operación validando teniendo en cuenta las restricciones de la politica en cuestión
+     *
+     *
 	 */
 	@Override
 	public <T> HookMethodOutput operationBegin(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) {
@@ -157,11 +166,11 @@ public class UserLogin implements GenericServiceHook {
             } catch (SQLException e) {
                 operation.getMetadata().setItems(0L);
                 operation.getMetadata().setTotalItems(operation.getMetadata().getItems());
-                return new HookMethodOutput(String.format("No ha sido posible hacer login  debido a: %s", e.getMessage()));
+                return new HookMethodOutput(String.format("Login not possible because : %s", e.getMessage()));
             }
 
             if ( existingUser == null ){
-                return new HookMethodOutput("No se ha encontraro ningún usuario con esas credenciales");
+                return new HookMethodOutput("User Not Found");
             } else {
 
 
