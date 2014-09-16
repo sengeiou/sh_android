@@ -20,7 +20,6 @@
     <string name="welcome_subtitle_3"><b>Goles</b> no te molesta con anuncios ni cosas raras.</string>
     <string name="welcome_title_login">Cloud</string>
     <string name="welcome_subtitle_login">Goles guarda tus equipos y suscripciones en la nube.</string>
-    <string name="title_activity_login_email">Iniciar sesión</string>
 
     <string-array name="emails_test">
         <item>rafa.vazsan@gmail.com</item>
@@ -41,9 +40,11 @@
     <string name="activity_login_register_email">Register with Email</string>
     <string name="activity_login_register_facebook">Sign In with Facebook</string>
 
+    <string name="title_activity_login_email">Sign In</string>
     <string name="activity_login_email_id_hint">Username or Email</string>
     <string name="activity_login_email_password_hint">Password</string>
     <string name="activity_login_email_button">Enter</string>
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
+    <string name="activity_login_email_forgot">Forgot Password?</string>
 
 </resources>

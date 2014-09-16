@@ -4,7 +4,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ import gm.mobi.android.task.events.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class EmailLoginActivity extends BaseActivity {
@@ -47,7 +50,6 @@ public class EmailLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_login_email);
         ButterKnife.inject(this);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set the email accounts in the AutoComplete
@@ -147,6 +149,17 @@ public class EmailLoginActivity extends BaseActivity {
         super.onDestroy();
         if (currentLoginJob != null) {
             currentLoginJob.cancelJob();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
