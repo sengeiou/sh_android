@@ -122,44 +122,11 @@
     <comment>Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</comment>
   </data>
   <data name="ResourceLanguage" xml:space="preserve">
-    <value>es-es</value>
+    <value>es</value>
     <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
   </data>
-  <data name="ApplicationTitle" xml:space="preserve">
-    <value>Bagdad</value>
-  </data>
-  <data name="AppBarButtonText" xml:space="preserve">
-    <value>agregar</value>
-  </data>
-  <data name="AppBarMenuItemText" xml:space="preserve">
-    <value>Elemento de menú</value>
-  </data>
   <data name="SignInTitle" xml:space="preserve">
-    <value>Sign in</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="FacebookAdvice1" xml:space="preserve">
-    <value>Shooter will never post without your permission.</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="ForgotPassword" xml:space="preserve">
-    <value>Forgot Password?</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="NewAccount" xml:space="preserve">
-    <value>Create New Account</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="SignWithFacebook" xml:space="preserve">
-    <value>Sign In with Facebook</value>
-    <comment>SignIn.xaml</comment>
-  </data>
-  <data name="UserOrEmail" xml:space="preserve">
-    <value>Email or Username</value>
+    <value>Acceder</value>
     <comment>SignIn.xaml</comment>
   </data>
 </root>

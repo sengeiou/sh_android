@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="es-ES" target-language="es" original="AppResources.resx" tool-id="MultilingualAppToolkit" product-name="Bagdad" product-version="1.0.0.0" build-num="0">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="3.1.1085.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="Resx">
+        <trans-unit id="Resx/ResourceFlowDirection" translate="yes" xml:space="preserve">
+          <source>LeftToRight</source>
+          <target state="translated">LeftToRight</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</note>
+          </trans-unit>
+        <trans-unit id="Resx/ResourceLanguage" translate="yes" xml:space="preserve">
+          <source>es-es</source>
+          <target state="translated">es</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</note>
+          </trans-unit>
+        <trans-unit id="Resx/ApplicationTitle" translate="yes" xml:space="preserve">
+          <source>Bagdad</source>
+          <target state="new">Bagdad</target>
+        </trans-unit>
+        <trans-unit id="Resx/AppBarButtonText" translate="yes" xml:space="preserve">
+          <source>agregar</source>
+          <target state="new">agregar</target>
+        </trans-unit>
+        <trans-unit id="Resx/AppBarMenuItemText" translate="yes" xml:space="preserve">
+          <source>Elemento de menú</source>
+          <target state="new">Elemento de menú</target>
+        </trans-unit>
+        <trans-unit id="Resx/SignInTitle" translate="yes" xml:space="preserve">
+          <source>Sign in</source>
+          <target state="translated">Acceder</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/UserOrEmail" translate="yes" xml:space="preserve">
+          <source>Email or Username</source>
+          <target state="new">Email or Username</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/SignWithFacebook" translate="yes" xml:space="preserve">
+          <source>Sign In with Facebook</source>
+          <target state="new">Sign In with Facebook</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Password" translate="yes" xml:space="preserve">
+          <source>Password</source>
+          <target state="new">Password</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/NewAccount" translate="yes" xml:space="preserve">
+          <source>Create New Account</source>
+          <target state="new">Create New Account</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/ForgotPassword" translate="yes" xml:space="preserve">
+          <source>Forgot Password?</source>
+          <target state="new">Forgot Password?</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/FacebookAdvice1" translate="yes" xml:space="preserve">
+          <source>Shooter will never post without your permission.</source>
+          <target state="new">Shooter will never post without your permission.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
