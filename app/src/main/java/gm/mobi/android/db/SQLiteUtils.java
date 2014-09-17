@@ -19,4 +19,17 @@ public class SQLiteUtils {
            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL);";
- }
+
+    public static final String CREATE_TABLE_SHOT = "CREATE TABLE IF NOT EXISTS "+ShotTable.TABLE+" ("
+            + ShotTable.ID_SHOT+" INT NOT NULL PRIMARY KEY,"
+            + ShotTable.ID_USER+" INT NOT NULL,"
+            + ShotTable.COMMENT+" VARCHAR(255) NOT NULL,"
+            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)" +
+            " PRIMARY KEY("+ShotTable.ID_SHOT+"), " +
+            " KEY 'FK_SHOT_USER1_IDX'("+ShotTable.ID_USER+")," +
+            " CONSTRAINT 'FK_SHOT_USER1' FOREIGN KEY("+ShotTable.ID_USER+") REFERENCES "+UserTable.TABLE+"("+ShotTable.ID_USER+") ON DELETE NO ACTION ON UPDATE NO ACTION );";
+}
