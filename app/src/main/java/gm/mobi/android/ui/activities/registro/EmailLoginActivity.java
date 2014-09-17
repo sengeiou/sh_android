@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
@@ -77,7 +78,9 @@ public class EmailLoginActivity extends BaseActivity {
             Intent i = new Intent(this,MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
-        } else {
+        } else if(event.getStatus() == LoginResultEvent.STATUS_SERVER_FAILURE){
+            Toast.makeText(this,"No hay conexión",Toast.LENGTH_LONG).show();
+        }else{
             mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
             mLoginButton.setProgress(BUTTON_ERROR);
         }
