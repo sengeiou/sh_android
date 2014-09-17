@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.LoginResultEvent;
 
@@ -44,15 +45,19 @@ public class LoginUserJob extends CancellableJob {
         if(isCancelled()) return;
         // TODO network available? (ConnectionNotAvailableEvent)
 //        BusProvider.getInstance().post(new ConnectionNotAvailableEvent());
-
-        User user = service.login(usernameEmail, password);
-        if (user != null) {
-            UserManager.saveUser(mDbHelper.getWritableDatabase(), user);
-
-            bus.post(LoginResultEvent.successful(user));
-        } else {
-            bus.post(LoginResultEvent.invalid());
-        }
+        try{
+                User user = service.login(usernameEmail, password);
+                if(user!=null){
+                    UserManager.saveUser(mDbHelper.getWritableDatabase(), user);
+                    bus.post(LoginResultEvent.successful(user));
+                }
+            }catch(ServerException e){
+                if(e.getErrorCode().equals(ServerException.V999)){
+                    bus.post(LoginResultEvent.serverError(e.getErrorCode(), e.getMessage()));
+                }else{
+                    bus.post(LoginResultEvent.invalid());
+                }
+            }
     }
 
     @Override
