@@ -47,5 +47,26 @@ public class GMContract {
         };
     }
 
+    public static final class ShotTable implements SyncColumns{
+
+        public static final String TABLE = "Shot";
+
+        public static final String ID_SHOT = "idShot";
+        public static final String ID_USER = "idUser";
+        public static final String COMMENT = "comment";
+
+        public static final String[] PROJECTION = {
+                ID_SHOT,
+                ID_USER,
+                COMMENT,
+                CSYS_BIRTH,
+                CSYS_MODIFIED,
+                CSYS_DELETED,
+                CSYS_REVISION,
+                CSYS_SYNCHRONIZED
+        };
+
+    }
+
 
 }
