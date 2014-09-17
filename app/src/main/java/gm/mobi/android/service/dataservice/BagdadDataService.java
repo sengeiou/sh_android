@@ -1,5 +1,6 @@
 package gm.mobi.android.service.dataservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -38,23 +40,33 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public User login(String id, String password) throws IOException{
+    public User login(String id, String password) throws IOException {
         GenericDto loginDto = UserDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
 
         GenericDto responseDto = postRequest(loginDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops==null || ops.length < 0) {
-            //TODO throw error? Decide approach
-            Timber.e("Received 0 opperations");
-            return null;
+        if (responseDto != null) {
+            OperationDto[] ops = responseDto.getOps();
+            if (ops == null || ops.length < 0) {
+                Timber.e("Received 0 operations");
+                return null;
+            }
+
+            Map<String, Object>[] data = ops[0].getData();
+            User user = UserMapper.fromDto(data[0]);
+
+            return user;
         }
-        Map<String, Object>[] data = ops[0].getData();
-        User user = UserMapper.fromDto(data[0]);
-        return user;
+        return null;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
-        String requestJson = mapper.writeValueAsString(dto);
+        GenericDto genericDto = null;
+        String requestJson = null;
+        try {
+            requestJson = mapper.writeValueAsString(dto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         Timber.d("Executing request: %s", requestJson);
 
         RequestBody body = RequestBody.create(JSON, requestJson);
@@ -62,15 +74,32 @@ public class BagdadDataService implements BagdadService {
                 .url(endpoint.getUrl())
                 .post(body)
                 .build();
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
+        Response response = null;
+        try{
+           response  = client.newCall(request).execute();
+        }catch(IOException e){
+            throw new ServerException(ServerException.V999);
+        }
+
+
+        if (response != null && response.isSuccessful()) {
             String responseBody = response.body().string();
             Timber.d("Response received: %s", responseBody);
-            return mapper.readValue(responseBody, GenericDto.class);
+            genericDto = mapper.readValue(responseBody, GenericDto.class);
+            String statusCode = genericDto.getStatusCode();
+            String statusMessage = genericDto.getStatusMessage();
+            String codeOk = ServerException.OK;
+            if (!statusCode.equals(codeOk)) {
+                throw new ServerException(statusCode, statusMessage);
+            }
+            return genericDto;
         } else {
             //TODO http error handling. Decide the approach to server errors
-            return null;
+            throw new ServerException(ServerException.V999);
+
         }
     }
 
 }
+
+
