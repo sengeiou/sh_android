@@ -42,7 +42,7 @@ public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
 
-    @Provides SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
+    @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new OpenHelper(application.getApplicationContext());
     }
 
