@@ -183,7 +183,7 @@ public class UserLogin implements GenericServiceHook {
                     String key = (String) entry.getKey();
 
                     for(EntityDataAttribute entityDataAttribute : entityDataAttributes){
-                        if ( key.equals(entityDataAttribute.getName()) && (EntityDataAttribute.Direction.OUTPUT.equals( entityDataAttribute.getDirection()) || EntityDataAttribute.Direction.BOTH.equals(entityDataAttribute.getDirection())) ){
+                        if ( key.equals(entityDataAttribute.getAlias()) && (EntityDataAttribute.Direction.OUTPUT.equals( entityDataAttribute.getDirection()) || EntityDataAttribute.Direction.BOTH.equals(entityDataAttribute.getDirection())) ){
                                 entry.setValue(existingUser.get(key));
                         }
                     }
