@@ -5,11 +5,11 @@ import android.provider.BaseColumns;
 public class GMContract {
 
     public static interface SyncColumns extends BaseColumns {
-        static final String CSYS_BIRTH = "csys_birth";
-        static final String CSYS_MODIFIED = "csys_modified";
-        static final String CSYS_DELETED = "csys_deleted";
-        static final String CSYS_REVISION = "csys_revision";
-        static final String CSYS_SYNCHRONIZED = "csys_synchronized";
+        static final String CSYS_BIRTH = "birth";
+        static final String CSYS_MODIFIED = "modified";
+        static final String CSYS_DELETED = "deleted";
+        static final String CSYS_REVISION = "revision";
+        static final String CSYS_SYNCHRONIZED = "synchronized";
 
         public static final String SYNC_ID_NEW = "N";
         public static final String SYNC_ID_UPDATED = "U";
