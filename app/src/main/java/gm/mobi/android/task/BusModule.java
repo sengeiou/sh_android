@@ -25,7 +25,7 @@ import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class
         },
-        complete = true
+        complete = false
 )
 public class BusModule {
 
