@@ -20,34 +20,20 @@ namespace Bagdad
 
         private async void SignIn_Click(object sender, RoutedEventArgs e)
         {
-            if (App.isInternetAvailable)
+            try
             {
-                Util util = new Util();
-                ServiceCommunication sercom = new ServiceCommunication();
+                if (App.isInternetAvailable)
+                {
+                    Util util = new Util();
+                    ServiceCommunication sercom = new ServiceCommunication();
 
-                if (util.isAnEmail(txbUser.Text))
-                {
-                    //it's an email
-                    if (util.isAValidPassword(pbPassword.Password))
+                    if (util.isAnEmail(txbUser.Text))
                     {
-                        //Call by email
-                        await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + txbUser.Text + "\",\"password\" : \"" + pbPassword.Password + "\"}", 0);
-                    }
-                    else
-                    {
-                        //invalid password
-                        MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
-                    }
-                }
-                else
-                {
-                    //not an email
-                    if (util.isAValidUser(txbUser.Text))
-                    {
+                        //it's an email
                         if (util.isAValidPassword(pbPassword.Password))
                         {
-                            //Call by userName
-                            await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + txbUser.Text + "\",\"password\" : \"" + pbPassword.Password + "\"}", 0);
+                            //Call by email
+                            await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + txbUser.Text + "\",\"password\" : \"" + Util.encryptPassword(pbPassword.Password) + "\"}", 0);
                         }
                         else
                         {
@@ -57,15 +43,36 @@ namespace Bagdad
                     }
                     else
                     {
-                        //invalid mail or user
-                        MessageBox.Show("INVALID USER OR E-MAIL!!");
+                        //not an email
+                        if (util.isAValidUser(txbUser.Text))
+                        {
+                            if (util.isAValidPassword(pbPassword.Password))
+                            {
+                                //Call by userName
+                                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + txbUser.Text + "\",\"password\" : \"" + Util.encryptPassword(pbPassword.Password) + "\"}", 0);
+                            }
+                            else
+                            {
+                                //invalid password
+                                MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
+                            }
+                        }
+                        else
+                        {
+                            //invalid mail or user
+                            MessageBox.Show("INVALID USER OR E-MAIL!!");
+                        }
                     }
                 }
+                else
+                {
+                    //No Internet Connection Message.
+                    MessageBox.Show("THERE IS NO INTERNET CONNECTION!!");
+                }
             }
-            else
+            catch (Exception ef)
             {
-                //No Internet Connection Message.
-                MessageBox.Show("THERE IS NO INTERNET CONNECTION!!");
+                MessageBox.Show(ef.Message);
             }
         }
 
