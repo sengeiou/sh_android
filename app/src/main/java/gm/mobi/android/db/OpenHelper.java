@@ -18,11 +18,13 @@ public class OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQLiteUtils.CREATE_TABLE_USER);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_SHOT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ GMContract.UserTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ GMContract.ShotTable.TABLE);
         onCreate(db);
     }
 
