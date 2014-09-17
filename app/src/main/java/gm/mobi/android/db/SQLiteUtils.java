@@ -14,10 +14,10 @@ public class SQLiteUtils {
            + UserTable.EMAIL+ " VARCHAR(255) NULL,"
            + UserTable.NAME+ " VARCHAR(255) NULL,"
            + UserTable.PHOTO+ " VARCHAR(1024) NOT NULL,"
-           + SyncColumns.CSYS_BIRTH + " DATETIME NULL,"
-           + SyncColumns.CSYS_MODIFIED + " DATETIME NULL,"
-           + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-           + SyncColumns.CSYS_REVISION + " INT NULL,"
-           + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL);";
+           + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
+           + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
+           + SyncColumns.CSYS_DELETED + " DATETIME NOT NULL,"
+           + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
+           + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NOT NULL);";
 
  }
