@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Bagdad.Utils;
 
 namespace Bagdad
 {
@@ -17,15 +18,53 @@ namespace Bagdad
             InitializeComponent();
         }
 
-        private void SignIn_Click(object sender, RoutedEventArgs e)
+        private async void SignIn_Click(object sender, RoutedEventArgs e)
         {
             if (App.isInternetAvailable)
             {
-                //TODO: All the functions needed to Signing In
-                MessageBox.Show("THERE IS INTERNET CONNECTION!!");
+                Util util = new Util();
+                ServiceCommunication sercom = new ServiceCommunication();
+
+                if (util.isAnEmail(txbUser.Text))
+                {
+                    //it's an email
+                    if (util.isAValidPassword(pbPassword.Password))
+                    {
+                        //Call by email
+                        await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + txbUser.Text + "\",\"password\" : \"" + pbPassword.Password + "\"}", 0);
+                    }
+                    else
+                    {
+                        //invalid password
+                        MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
+                    }
+                }
+                else
+                {
+                    //not an email
+                    if (util.isAValidUser(txbUser.Text))
+                    {
+                        if (util.isAValidPassword(pbPassword.Password))
+                        {
+                            //Call by userName
+                            await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + txbUser.Text + "\",\"password\" : \"" + pbPassword.Password + "\"}", 0);
+                        }
+                        else
+                        {
+                            //invalid password
+                            MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
+                        }
+                    }
+                    else
+                    {
+                        //invalid mail or user
+                        MessageBox.Show("INVALID USER OR E-MAIL!!");
+                    }
+                }
             }
             else
             {
+                //No Internet Connection Message.
                 MessageBox.Show("THERE IS NO INTERNET CONNECTION!!");
             }
         }
@@ -35,7 +74,7 @@ namespace Bagdad
         {
             System.Windows.Media.SolidColorBrush Brush2 = new System.Windows.Media.SolidColorBrush();
             Brush2.Color = System.Windows.Media.Colors.Transparent;
-            ((TextBox)sender).Background = Brush2;
+            txbUser.Background = Brush2;
         }
 
         //Prevents the PasswordBox of autoChange Background color on got Focus
@@ -43,7 +82,7 @@ namespace Bagdad
         {
             System.Windows.Media.SolidColorBrush Brush2 = new System.Windows.Media.SolidColorBrush();
             Brush2.Color = System.Windows.Media.Colors.Transparent;
-            ((PasswordBox)sender).Background = Brush2;
+            pbPassword.Background = Brush2;
         }
     }
 }

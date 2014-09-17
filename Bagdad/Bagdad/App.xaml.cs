@@ -10,11 +10,25 @@ using Bagdad.Resources;
 using System.Collections.Generic;
 using Microsoft.Phone.Net.NetworkInformation;
 using Windows.Networking.Connectivity;
+using System.Threading.Tasks;
+using SQLiteWinRT;
+using Windows.Storage;
+using System.Threading;
+using Bagdad.Utils;
 
 namespace Bagdad
 {
     public partial class App : Application
     {
+
+        #region VARIABLES
+
+        public static int ID_DEVICE = 0;
+        public static int ID_PLAYER = 0;
+        public const int PLATFORM_ID = 2;
+
+        #endregion
+
         /// <summary>
         /// Proporcionar acceso sencillo al marco raíz de la aplicación telefónica.
         /// </summary>
@@ -65,8 +79,10 @@ namespace Bagdad
 
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)
         // Este código no se ejecutará cuando la aplicación se reactive
-        private void Application_Launching(object sender, LaunchingEventArgs e)
+        private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            await PrepareDB.initializeDatabase();
+            InitializeDB();
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -213,6 +229,68 @@ namespace Bagdad
             {
                 //There is the place to do something when connection is restablished
             }
+        }
+
+        #endregion
+
+        #region APP_INFO
+
+        public static string osVersion()
+        {
+            return Environment.OSVersion.Version.ToString();
+        }
+
+        public static string appVersion()
+        {
+            System.Reflection.Assembly assem = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Reflection.AssemblyName assemName = assem.GetName();
+            Version vers = assemName.Version;
+
+            return vers.Major.ToString() + "." + vers.Minor.ToString() + "." + vers.Build.ToString() + "." + vers.Revision.ToString();
+        }
+
+        public static int appVersionInt()
+        {
+
+            System.Reflection.Assembly assem = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Reflection.AssemblyName assemName = assem.GetName();
+            Version vers = assemName.Version;
+
+            String version = vers.Major.ToString() + "." + vers.Minor.ToString() + "." + vers.Build.ToString();
+
+            String[] array = version.Trim().Split('.');
+            Double ver = 0d;
+            for (int i = 0; i < array.Length; i++)
+            {
+                ver += long.Parse(array[i]) * Math.Pow(1000, 2 - i);
+            }
+
+            return int.Parse(ver.ToString());
+
+        }
+
+        #endregion
+
+        #region DATA_BASE
+
+        public static Database db;
+
+        public static ManualResetEvent DBLoaded = new ManualResetEvent(false);
+
+        private async void InitializeDB()
+        {
+            db = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
+            await db.OpenAsync();
+            DBLoaded.Set();
+        }
+
+        public static Task<SQLiteWinRT.Database> GetDatabaseAsync()
+        {
+            return Task.Run(() =>
+            {
+                DBLoaded.WaitOne(-1);
+                return db;
+            });
         }
 
         #endregion
