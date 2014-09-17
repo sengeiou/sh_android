@@ -2,6 +2,7 @@ package gm.mobi.android.ui.activities.registro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
@@ -70,7 +71,9 @@ public class EmailLoginActivity extends BaseActivity {
             //TODO gestionar de forma más avanzada?
 
             finish();
-            startActivity(MainActivity.getIntent(this));
+            Intent i = new Intent(this,MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         } else {
             mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
             mLoginButton.setProgress(BUTTON_ERROR);
