@@ -21,10 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import gm.mobi.android.R;
-import gm.mobi.android.task.BusProvider;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.util.Gravatar;
 
@@ -38,15 +39,13 @@ public class EmailRegistrationActivity extends BaseActivity {
 
     private List<String> emailAccounts;
 
-    private Bus bus;
+    @Inject Bus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_registro_email);
         ButterKnife.inject(this);
-
-        bus = BusProvider.getInstance();
 
         emailAccounts = getEmailAccounts();
 

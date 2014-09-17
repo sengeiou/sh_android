@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.ui.activities.MainActivity;
-import gm.mobi.android.ui.activities.PartidoActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
@@ -18,7 +17,6 @@ import gm.mobi.android.ui.base.BaseActivity;
                 BaseActivity.class,
                 WelcomeLoginActivity.class,
                 MainActivity.class,
-                PartidoActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,

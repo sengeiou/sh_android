@@ -3,7 +3,6 @@ package gm.mobi.android.ui.activities.registro;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -22,12 +22,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.task.BusProvider;
 import gm.mobi.android.task.events.RegistrationCompletedEvent;
 import gm.mobi.android.task.jobs.RegisterNewUserJob;
-import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 
 public class FacebookRegistroActivity extends BaseActivity {
@@ -37,6 +34,7 @@ public class FacebookRegistroActivity extends BaseActivity {
     private static final String KEY_AVATAR = "avatar";
 
     @Inject JobManager jobManager;
+    @Inject Bus bus;
 
     @InjectView(R.id.facebook_login_email) TextView mEmailText;
     @InjectView(R.id.facebook_login_username) EditText mUsernameText;
@@ -93,7 +91,7 @@ public class FacebookRegistroActivity extends BaseActivity {
             currentRegisterJob.cancelJob();
             currentRegisterJob = null;
         }
-        currentRegisterJob = new RegisterNewUserJob(username, email, avatarUrl);
+        currentRegisterJob = new RegisterNewUserJob(this, username, email, avatarUrl);
         jobManager.addJobInBackground(currentRegisterJob);
     }
 
@@ -140,13 +138,13 @@ public class FacebookRegistroActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
+        bus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BusProvider.getInstance().unregister(this);
+        bus.unregister(this);
     }
 
     public static Intent getIntent(Context context, String email, String username, String avatarUrl) {

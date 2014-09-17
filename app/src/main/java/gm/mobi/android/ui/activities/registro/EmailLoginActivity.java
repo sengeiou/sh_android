@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import android.widget.EditText;
 
 import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -26,15 +26,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.task.BusProvider;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
-import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class EmailLoginActivity extends BaseActivity {
@@ -44,6 +41,7 @@ public class EmailLoginActivity extends BaseActivity {
     private static final int BUTTON_LOADING = 1;
 
     @Inject JobManager jobManager;
+    @Inject Bus bus;
 
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
@@ -143,13 +141,13 @@ public class EmailLoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
+        bus.register(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BusProvider.getInstance().unregister(this);
+        bus.unregister(this);
     }
 
     @Override

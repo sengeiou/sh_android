@@ -10,18 +10,21 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import gm.mobi.android.R;
-import gm.mobi.android.task.BusProvider;
 import gm.mobi.android.task.events.OpenEmojiPanelEvent;
 
 public class PartidoAmigosAdapter extends BaseAdapter {
 
+    @Inject Bus bus;
     private LayoutInflater layoutInflater;
     private Picasso picasso;
     private List<Object> items;
@@ -47,7 +50,7 @@ public class PartidoAmigosAdapter extends BaseAdapter {
                 Integer position = (Integer) v.getTag();
                 View row = (View) v.getTag(R.id.tag_row);
                 AmigoTmp amigo = (AmigoTmp) getItem(position);
-                BusProvider.getInstance().post(new OpenEmojiPanelEvent(row, v, position, amigo));
+                bus.post(new OpenEmojiPanelEvent(row, v, position, amigo));
             }
         };
     }

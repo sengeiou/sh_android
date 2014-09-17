@@ -1,18 +1,25 @@
 package gm.mobi.android.task.jobs;
 
-import com.path.android.jobqueue.Params;
+import android.content.Context;
 
-import gm.mobi.android.task.BusProvider;
+import com.path.android.jobqueue.Params;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
+
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.task.events.RegistrationCompletedEvent;
 
 public class RegisterNewUserJob extends CancellableJob {
     private static final int PRIORITY = 1;
 
+    @Inject Bus bus;
 
-    public RegisterNewUserJob(String username, String email, String avatarUrl) {
+    public RegisterNewUserJob(Context context, String username, String email, String avatarUrl) {
         super(new Params(PRIORITY)
                         .delayInMs(1000)
         );
+        GolesApplication.get(context).inject(this);
     }
 
     @Override
@@ -23,7 +30,7 @@ public class RegisterNewUserJob extends CancellableJob {
     @Override
     public void onRun() throws Throwable {
         if (isCancelled()) return;
-        BusProvider.getInstance().post(new RegistrationCompletedEvent());
+        bus.post(new RegistrationCompletedEvent());
     }
 
     @Override

@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -18,34 +16,22 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.task.BusProvider;
-import gm.mobi.android.task.events.FacebookProfileEvent;
-import gm.mobi.android.task.jobs.GetFacebookProfileJob;
-import gm.mobi.android.ui.activities.PartidoActivity;
 import gm.mobi.android.ui.adapters.WelcomePagerAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.widgets.WelcomeIndicator;
-import gm.mobi.android.util.FacebookUtils;
 import timber.log.Timber;
 
 public class WelcomeLoginActivity extends BaseActivity {
@@ -74,7 +60,7 @@ public class WelcomeLoginActivity extends BaseActivity {
     private Context mContext = this;
     private WelcomePagerAdapter mAdapter;
 //    private UiLifecycleHelper uiHelper;
-    private Bus bus;
+    @Inject Bus bus;
    /* private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -87,7 +73,6 @@ public class WelcomeLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_welcome_login);
         ButterKnife.inject(this);
-        bus = BusProvider.getInstance();
 
 //        setupWelcomePage();
         setupLoginPage(savedInstanceState);
