@@ -13,11 +13,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.dd.CircularProgressButton;
+import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +42,8 @@ public class EmailLoginActivity extends BaseActivity {
     private static final int BUTTON_ERROR = -1;
     private static final int BUTTON_NORMAL = 0;
     private static final int BUTTON_LOADING = 1;
+
+    @Inject JobManager jobManager;
 
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
@@ -113,7 +118,7 @@ public class EmailLoginActivity extends BaseActivity {
             currentLoginJob.cancelJob();
         }
         currentLoginJob = new LoginUserJob(this, emailUsername, password);
-        GolesApplication.getInstance().getJobManager().addJobInBackground(currentLoginJob);
+        jobManager.addJobInBackground(currentLoginJob);
         setLoading(true);
     }
 

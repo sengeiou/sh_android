@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.ui.AppContainer;
 
@@ -18,8 +19,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GolesApplication app = GolesApplication.get(this);
-        app.inject(this);
+        getObjectGraph().inject(this);
         container = appContainer.get(this);
     }
 
@@ -29,5 +29,15 @@ public class BaseActivity extends ActionBarActivity {
      */
     public void setContainerContent(int layoutResID) {
         getLayoutInflater().inflate(layoutResID, container);
+    }
+
+    /**
+     * Base implementation for the Activity object graph.
+     * Can be extended to provide different or extended graphs to inject from.
+     *
+     * @return By default returns the Application global object graph.
+     */
+    public ObjectGraph getObjectGraph() {
+        return GolesApplication.get(this).getObjectGraph();
     }
 }

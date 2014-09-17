@@ -2,6 +2,8 @@ package gm.mobi.android.task.jobs;
 
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
@@ -25,7 +27,7 @@ public class LoginUserJob extends CancellableJob {
     private String usernameEmail;
     private String password;
 
-    private OpenHelper mDbHelper; //TODO inject
+    @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
 
     public LoginUserJob(Context context, String usernameEmail, String password) {
@@ -33,7 +35,6 @@ public class LoginUserJob extends CancellableJob {
         this.usernameEmail = usernameEmail;
         this.password = password;
 
-        this.mDbHelper = new OpenHelper(context);
         GolesApplication.get(context).inject(this);
     }
 

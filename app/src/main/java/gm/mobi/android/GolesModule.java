@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.data.DataModule;
 import gm.mobi.android.ui.UiModule;
+import gm.mobi.android.ui.activities.MainActivity;
 
 @Module(
         includes = {

@@ -24,8 +24,7 @@ import gm.mobi.android.ui.base.BaseActivity;
                 FacebookRegistroActivity.class,
 
         },
-        complete = false,
-        library = true
+        complete = false
 )
 public class UiModule {
     @Provides @Singleton AppContainer provideAppContainer() {

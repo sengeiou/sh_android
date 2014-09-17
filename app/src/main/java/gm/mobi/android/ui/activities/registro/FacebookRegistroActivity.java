@@ -14,8 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,6 +35,8 @@ public class FacebookRegistroActivity extends BaseActivity {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_USERNAME = "usernameSuggestion";
     private static final String KEY_AVATAR = "avatar";
+
+    @Inject JobManager jobManager;
 
     @InjectView(R.id.facebook_login_email) TextView mEmailText;
     @InjectView(R.id.facebook_login_username) EditText mUsernameText;
@@ -89,14 +94,14 @@ public class FacebookRegistroActivity extends BaseActivity {
             currentRegisterJob = null;
         }
         currentRegisterJob = new RegisterNewUserJob(username, email, avatarUrl);
-        GolesApplication.getInstance().getJobManager().addJobInBackground(currentRegisterJob);
+        jobManager.addJobInBackground(currentRegisterJob);
     }
 
     @Subscribe
     public void registrationCompleted(RegistrationCompletedEvent event) {
         setLoading(false);
         if (!event.hasError()) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MainActivity.PREF_IS_USER_REGISTERED, true).commit();
+            //TODO log user in
             Toast.makeText(this, "Listo Ebaristo!", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Error :(", Toast.LENGTH_SHORT).show();

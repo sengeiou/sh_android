@@ -14,8 +14,7 @@ import gm.mobi.android.task.jobs.LoginUserJob;
         injects = {
                 LoginUserJob.class,
         },
-        complete = false,
-        library = true
+        complete = false
 )
 public final class ApiModule {
 
@@ -27,9 +26,7 @@ public final class ApiModule {
         return new ObjectMapper();
     }
 
-    @Provides
-    @Singleton
-    Endpoint provideEndpoint() {
+    @Provides @Singleton Endpoint provideEndpoint() {
         return new Endpoint() {
             @Override
             public String getUrl() {
