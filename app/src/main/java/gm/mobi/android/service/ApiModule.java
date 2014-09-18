@@ -37,7 +37,7 @@ public final class ApiModule {
 
             @Override
             public String getName() {
-                return "Test";
+                return "Production";
             }
         };
     }
