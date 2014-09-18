@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Bagdad.Utils;
+using Bagdad.Resources;
 
 namespace Bagdad
 {
@@ -54,7 +55,7 @@ namespace Bagdad
                         else
                         {
                             //invalid password
-                            MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
+                            MessageBox.Show(AppResources.InvalidPassword);
                         }
                     }
                     else
@@ -71,25 +72,26 @@ namespace Bagdad
                             else
                             {
                                 //invalid password
-                                MessageBox.Show("THE PASSWORD NOT MATCH OR IS INVALID!!");
+                                MessageBox.Show(AppResources.InvalidPassword);
                             }
                         }
                         else
                         {
                             //invalid mail or user
-                            MessageBox.Show("INVALID USER OR E-MAIL!!");
+                            MessageBox.Show(AppResources.InvalidUserOrEmail);
                         }
                     }
                 }
                 else
                 {
                     //No Internet Connection Message.
-                    MessageBox.Show("THERE IS NO INTERNET CONNECTION!!");
+                    MessageBox.Show(AppResources.NoInternetConnection);
                 }
             }
             catch (Exception ef)
             {
-                MessageBox.Show(ef.Message);
+                //ServerError
+                MessageBox.Show(AppResources.UserOrPasswordDoesntMatch);
             }
         }
 

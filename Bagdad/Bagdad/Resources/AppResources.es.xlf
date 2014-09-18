@@ -43,6 +43,21 @@
           <target state="new">TIMELINE</target>
           <note from="MultilingualBuild" annotates="source" priority="2">All</note>
         </trans-unit>
+        <trans-unit id="Resx/NoInternetConnection" translate="yes" xml:space="preserve">
+          <source>There is no Internet connection, please try again later.</source>
+          <target state="new">There is no Internet connection, please try again later.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
+        <trans-unit id="Resx/InvalidUserOrEmail" translate="yes" xml:space="preserve">
+          <source>The Nick or Email are in an invalid format.</source>
+          <target state="new">The Nick or Email are in an invalid format.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
+        <trans-unit id="Resx/InvalidPassword" translate="yes" xml:space="preserve">
+          <source>The Password is in an invalid format.</source>
+          <target state="new">The Password is in an invalid format.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
         <trans-unit id="Resx/NoOneWatching" translate="yes" xml:space="preserve">
           <source>No one watching</source>
           <target state="new">No one watching</target>
@@ -52,6 +67,11 @@
           <source>Start Shooting</source>
           <target state="new">Start Shooting</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/UserOrPasswordDoesntMatch" translate="yes" xml:space="preserve">
+          <source>User or Password doesn't match.</source>
+          <target state="new">User or Password doesn't match.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
         <trans-unit id="Resx/NoShootsSubtitle" translate="yes" xml:space="preserve">
           <source>Share with friends about football.</source>

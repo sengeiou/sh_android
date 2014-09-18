@@ -115,6 +115,24 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The Password is in an invalid format..
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The Username or Email are in an invalid format..
+        /// </summary>
+        public static string InvalidUserOrEmail {
+            get {
+                return ResourceManager.GetString("InvalidUserOrEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Me.
         /// </summary>
         public static string Me {
@@ -129,6 +147,15 @@ namespace Bagdad.Resources {
         public static string NewAccount {
             get {
                 return ResourceManager.GetString("NewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a There is no Internet connection, please try again later..
+        /// </summary>
+        public static string NoInternetConnection {
+            get {
+                return ResourceManager.GetString("NoInternetConnection", resourceCulture);
             }
         }
         
@@ -273,6 +300,15 @@ namespace Bagdad.Resources {
         public static string UserOrEmail {
             get {
                 return ResourceManager.GetString("UserOrEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a User or Password doesn&apos;t match..
+        /// </summary>
+        public static string UserOrPasswordDoesntMatch {
+            get {
+                return ResourceManager.GetString("UserOrPasswordDoesntMatch", resourceCulture);
             }
         }
     }
