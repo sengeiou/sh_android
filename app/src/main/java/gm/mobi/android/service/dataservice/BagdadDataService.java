@@ -8,6 +8,9 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -40,10 +43,16 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public User login(String id, String password) throws IOException {
+    public User login(String id, String password) throws IOException, JSONException {
         GenericDto loginDto = UserDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
 
-        GenericDto responseDto = postRequest(loginDto);
+        GenericDto responseDto = null;
+        try {
+            responseDto = postRequest(loginDto);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new JSONException("JSONException");
+        }
         if (responseDto != null) {
             OperationDto[] ops = responseDto.getOps();
             if (ops == null || ops.length < 0) {
@@ -59,13 +68,14 @@ public class BagdadDataService implements BagdadService {
         return null;
     }
 
-    private GenericDto postRequest(GenericDto dto) throws IOException {
+    private GenericDto postRequest(GenericDto dto) throws IOException, JSONException {
         GenericDto genericDto = null;
         String requestJson = null;
         try {
             requestJson = mapper.writeValueAsString(dto);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            Timber.e(e,"JSONError");
+            throw new JSONException("JSONError");
         }
         Timber.d("Executing request: %s", requestJson);
 
@@ -78,6 +88,7 @@ public class BagdadDataService implements BagdadService {
         try{
            response  = client.newCall(request).execute();
         }catch(IOException e){
+            Timber.e(e,"IOException");
             throw new ServerException(ServerException.V999);
         }
 
@@ -90,11 +101,13 @@ public class BagdadDataService implements BagdadService {
             String statusMessage = genericDto.getStatusMessage();
             String codeOk = ServerException.OK;
             if (!statusCode.equals(codeOk)) {
+                Timber.e("ServerException","StatusCode "+statusCode);
                 throw new ServerException(statusCode, statusMessage);
             }
             return genericDto;
         } else {
             //TODO http error handling. Decide the approach to server errors
+            Timber.e("ServerException","No se ha recibido respuesta del servidor");
             throw new ServerException(ServerException.V999);
 
         }
