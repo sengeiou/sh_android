@@ -27,7 +27,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
@@ -69,11 +71,13 @@ public class EmailLoginActivity extends BaseActivity {
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
         currentLoginJob = null;
-        if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS && event.getSignedUser()!=null) {
+        User user = event.getSignedUser();
+        if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS && user !=null) {
             // Yey!
-            Timber.d("Welcome, %s", event.getSignedUser().getName());
-            //TODO gestionar de forma más avanzada?
-
+            Timber.d("Succesfuly logged in %s", user.getUserName());
+            // Store user in current session
+            GolesApplication.get(this).setCurrentUser(user);
+            // Launch main activity, and destroy the stack trace
             finish();
             Intent i = new Intent(this,MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
