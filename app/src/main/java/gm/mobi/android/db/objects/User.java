@@ -2,67 +2,67 @@ package gm.mobi.android.db.objects;
 
 public class User extends Synchronized {
 
-    private Integer id;
-    private Integer favouriteTeamId;
-    private String sessionToken;
-    private String userName;
-    private String email;
-    private String name;
-    private String photo;
+    private Integer mIdUser;
+    private Integer mFavouriteTeamId;
+    private String mSessionToken;
+    private String mUserName;
+    private String mEmail;
+    private String mName;
+    private String mPhoto;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdUser() {
+        return mIdUser;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdUser(Integer idUser) {
+        mIdUser = idUser;
     }
 
     public Integer getFavouriteTeamId() {
-        return favouriteTeamId;
+        return mFavouriteTeamId;
     }
 
     public void setFavouriteTeamId(Integer favouriteTeamId) {
-        this.favouriteTeamId = favouriteTeamId;
+        mFavouriteTeamId = favouriteTeamId;
     }
 
     public String getSessionToken() {
-        return sessionToken;
+        return mSessionToken;
     }
 
     public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
+        mSessionToken = sessionToken;
     }
 
     public String getUserName() {
-        return userName;
+        return mUserName;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        mUserName = userName;
     }
 
     public String getEmail() {
-        return email;
+        return mEmail;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        mEmail = email;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public String getPhoto() {
-        return photo;
+        return mPhoto;
     }
 
     public void setPhoto(String photo) {
-        this.photo = photo;
+        mPhoto = photo;
     }
 }
