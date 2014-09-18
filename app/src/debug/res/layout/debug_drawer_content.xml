@@ -77,14 +77,12 @@
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
         android:text="Endpoint"
-        android:visibility="gone"
         />
 
     <LinearLayout
         android:layout_gravity="start|end|center_vertical"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone"
         >
 
         <Spinner
@@ -108,53 +106,57 @@
     <TextView
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
+        android:text="Net. Enabled"
+        />
+
+    <Switch
+        android:id="@+id/debug_network_enabled"
+        style="@style/Widget.U2020.DebugDrawer.RowWidget"
+        android:layout_gravity="start|center_vertical"
+        />
+
+    <TextView
+        style="@style/Widget.U2020.DebugDrawer.RowTitle"
+        android:layout_gravity="start|end|center_vertical"
         android:text="Delay"
-        android:visibility="gone"
         />
 
     <Spinner
         android:id="@+id/debug_network_delay"
         android:layout_gravity="start|end|center_vertical"
-        android:visibility="gone"
         />
 
     <TextView
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
         android:text="Variance"
-        android:visibility="gone"
         />
 
     <Spinner
         android:id="@+id/debug_network_variance"
         android:layout_gravity="start|end|center_vertical"
-        android:visibility="gone"
         />
 
     <TextView
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
         android:text="Error"
-        android:visibility="gone"
         />
 
     <Spinner
         android:id="@+id/debug_network_error"
         android:layout_gravity="start|end|center_vertical"
-        android:visibility="gone"
         />
 
     <TextView
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         android:layout_gravity="start|end|center_vertical"
         android:text="Proxy"
-        android:visibility="gone"
         />
 
     <Spinner
         android:id="@+id/debug_network_proxy"
         android:layout_gravity="start|end|center_vertical"
-        android:visibility="gone"
         />
 
     <TextView

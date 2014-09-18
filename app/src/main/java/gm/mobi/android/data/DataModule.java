@@ -9,6 +9,8 @@ import android.net.http.HttpResponseCache;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
+import com.path.android.jobqueue.network.NetworkUtil;
+import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
@@ -67,13 +69,18 @@ public class DataModule {
         return createOkHttpClient(app);
     }
 
-    @Provides @Singleton JobManager provideJobManager(Application app) {
-        return configureJobManager(app);
+    @Provides @Singleton NetworkUtil provideNetworkUtil(Application app) {
+        return new NetworkUtilImpl(app);
     }
 
-    static JobManager configureJobManager(Application app) {
+    @Provides @Singleton JobManager provideJobManager(Application app, NetworkUtil networkUtil) {
+        return configureJobManager(app, networkUtil);
+    }
+
+    static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
         // Custom config: https://github.com/path/android-priority-jobqueue/wiki/Job-Manager-Configuration, https://github.com/path/android-priority-jobqueue/blob/master/examples/twitter/TwitterClient/src/com/path/android/jobqueue/examples/twitter/TwitterApplication.java
         Configuration configuration = new Configuration.Builder(app)
+                .networkUtil(networkUtil)
                 .customLogger(new CustomLogger() {
 
                     @Override

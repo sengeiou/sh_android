@@ -18,6 +18,8 @@ import gm.mobi.android.task.jobs.LoginUserJob;
 )
 public final class ApiModule {
 
+    public static final String PRODUCTION_API_URL = "http://tst.shootermessenger.com/data-services/rest/generic";
+
     @Provides @Singleton BagdadService provideBagdadService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper) {
         return new BagdadDataService(client, endpoint, mapper);
     }
@@ -30,7 +32,7 @@ public final class ApiModule {
         return new Endpoint() {
             @Override
             public String getUrl() {
-                return "http://tst.shootermessenger.com/data-services/rest/generic";
+                return PRODUCTION_API_URL;
             }
 
             @Override

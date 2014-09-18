@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.scalpel.ScalpelFrameLayout;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
 
@@ -50,6 +51,9 @@ import gm.mobi.android.BuildConfig;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.AnimationSpeed;
+import gm.mobi.android.data.ApiEndpoint;
+import gm.mobi.android.data.ApiEndpoints;
+import gm.mobi.android.data.NetworkEnabled;
 import gm.mobi.android.data.PicassoDebugging;
 import gm.mobi.android.data.ScalpelEnabled;
 import gm.mobi.android.data.ScalpelWireframeEnabled;
@@ -58,6 +62,7 @@ import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.db.manager.GeneralManager;
+import gm.mobi.android.service.BagdadMockService;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.LogReaderActivity;
 import gm.mobi.android.ui.activities.MainActivity;
@@ -68,7 +73,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static butterknife.ButterKnife.findById;
-import static java.net.Proxy.Type.HTTP;
 
 /**
  * An {@link AppContainer} for debug builds which wrap the content view with a sliding drawer on
@@ -79,34 +83,46 @@ public class DebugAppContainer implements AppContainer {
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
 
 
+    private final OkHttpClient client;
     private final Picasso picasso;
+    private final StringPreference networkEndpoint;
+    private final BooleanPreference networkEnabled;
+    private final StringPreference networkProxy;
     private final IntPreference animationSpeed;
     private final BooleanPreference picassoDebugging;
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference seenDebugDrawer;
-    //  private final RestAdapter restAdapter;
-//  private final MockRestAdapter mockRestAdapter;
+//      private final RestAdapter restAdapter;
+    private final BagdadMockService mockBagdadService;
     private final Application app;
 
     Activity activity;
     Context drawerContext;
 
     @Inject
-    public DebugAppContainer(Picasso picasso,
+    public DebugAppContainer(OkHttpClient client, Picasso picasso,
+                             @ApiEndpoint StringPreference networkEndpoint,
+                             @NetworkEnabled BooleanPreference networkEnabled,
+                             @NetworkProxy StringPreference networkProxy,
                              @AnimationSpeed IntPreference animationSpeed,
                              @PicassoDebugging BooleanPreference picassoDebugging,
                              @ScalpelEnabled BooleanPreference scalpelEnabled,
                              @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
                              @SeenDebugDrawer BooleanPreference seenDebugDrawer,
+                             BagdadMockService mockBagdadService,
                              Application app) {
+        this.client = client;
         this.picasso = picasso;
-
+        this.networkProxy = networkProxy;
+        this.networkEnabled = networkEnabled;
+        this.networkEndpoint = networkEndpoint;
         this.scalpelEnabled = scalpelEnabled;
         this.scalpelWireframeEnabled = scalpelWireframeEnabled;
         this.seenDebugDrawer = seenDebugDrawer;
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
+        this.mockBagdadService = mockBagdadService;
         this.app = app;
     }
 
@@ -120,6 +136,7 @@ public class DebugAppContainer implements AppContainer {
 
     @InjectView(R.id.debug_network_endpoint) Spinner endpointView;
     @InjectView(R.id.debug_network_endpoint_edit) View endpointEditView;
+    @InjectView(R.id.debug_ui_pixel_grid) Switch networkEnabledView;
     @InjectView(R.id.debug_network_delay) Spinner networkDelayView;
     @InjectView(R.id.debug_network_variance) Spinner networkVarianceView;
     @InjectView(R.id.debug_network_error) Spinner networkErrorView;
@@ -196,7 +213,7 @@ public class DebugAppContainer implements AppContainer {
             seenDebugDrawer.set(true);
         }
 
-//    setupNetworkSection();
+        setupNetworkSection();
         setupUserInterfaceSection();
         setupBuildSection();
         setupDeviceSection();
@@ -206,7 +223,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void setupNetworkSection() {
-    /*final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
+    final ApiEndpoints currentEndpoint = ApiEndpoints.from(networkEndpoint.get());
     final EnumAdapter<ApiEndpoints> endpointAdapter =
         new EnumAdapter<>(drawerContext, ApiEndpoints.class);
     endpointView.setAdapter(endpointAdapter);
@@ -231,17 +248,26 @@ public class DebugAppContainer implements AppContainer {
       }
     });
 
+        boolean networkEnabledValue = networkEnabled.get();
+        networkEnabledView.setChecked(networkEnabledValue);
+        networkEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Timber.d("Setting Network Enabled to " + isChecked);
+                networkEnabled.set(isChecked);
+            }
+        });
+
     final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
     networkDelayView.setAdapter(delayAdapter);
     networkDelayView.setSelection(
-        NetworkDelayAdapter.getPositionForValue(mockRestAdapter.getDelay()));
+        NetworkDelayAdapter.getPositionForValue(mockBagdadService.getDelay()));
     networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         long selected = delayAdapter.getItem(position);
-        if (selected != mockRestAdapter.getDelay()) {
+        if (selected != mockBagdadService.getDelay()) {
           Timber.d("Setting network delay to %sms", selected);
-          mockRestAdapter.setDelay(selected);
+          mockBagdadService.setDelay(selected);
         } else {
           Timber.d("Ignoring re-selection of network delay %sms", selected);
         }
@@ -254,14 +280,14 @@ public class DebugAppContainer implements AppContainer {
     final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
     networkVarianceView.setAdapter(varianceAdapter);
     networkVarianceView.setSelection(
-        NetworkVarianceAdapter.getPositionForValue(mockRestAdapter.getVariancePercentage()));
+            NetworkVarianceAdapter.getPositionForValue(mockBagdadService.getVariancePercentage()));
     networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         int selected = varianceAdapter.getItem(position);
-        if (selected != mockRestAdapter.getVariancePercentage()) {
+        if (selected != mockBagdadService.getVariancePercentage()) {
           Timber.d("Setting network variance to %s%%", selected);
-          mockRestAdapter.setVariancePercentage(selected);
+          mockBagdadService.setVariancePercentage(selected);
         } else {
           Timber.d("Ignoring re-selection of network variance %s%%", selected);
         }
@@ -274,14 +300,14 @@ public class DebugAppContainer implements AppContainer {
     final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
     networkErrorView.setAdapter(errorAdapter);
     networkErrorView.setSelection(
-        NetworkErrorAdapter.getPositionForValue(mockRestAdapter.getErrorPercentage()));
+            NetworkErrorAdapter.getPositionForValue(mockBagdadService.getErrorPercentage()));
     networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         int selected = errorAdapter.getItem(position);
-        if (selected != mockRestAdapter.getErrorPercentage()) {
+        if (selected != mockBagdadService.getErrorPercentage()) {
           Timber.d("Setting network error to %s%%", selected);
-          mockRestAdapter.setErrorPercentage(selected);
+          mockBagdadService.setErrorPercentage(selected);
         } else {
           Timber.d("Ignoring re-selection of network error %s%%", selected);
         }
@@ -329,7 +355,7 @@ public class DebugAppContainer implements AppContainer {
     }
 
     // We use the JSON rest adapter as the source of truth for the log level.
-    final EnumAdapter<LogLevel> loggingAdapter = new EnumAdapter<>(activity, LogLevel.class);
+    /*final EnumAdapter<LogLevel> loggingAdapter = new EnumAdapter<>(activity, LogLevel.class);
     networkLoggingView.setAdapter(loggingAdapter);
     networkLoggingView.setSelection(restAdapter.getLogLevel().ordinal());
     networkLoggingView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -545,7 +571,7 @@ public class DebugAppContainer implements AppContainer {
         return bytes + units[unit];
     }
 
-  /*private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
+  private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
     final int originalSelection = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
 
     View view = LayoutInflater.from(app).inflate(R.layout.debug_drawer_network_proxy, null);
@@ -563,7 +589,7 @@ public class DebugAppContainer implements AppContainer {
         .setPositiveButton("Use", new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int i) {
             String theHost = host.getText().toString();
-            if (!Strings.isBlank(theHost)) {
+            if (!TextUtils.isEmpty(theHost)) {
               String[] parts = theHost.split(":", 2);
               SocketAddress address =
                   InetSocketAddress.createUnresolved(parts[0], Integer.parseInt(parts[1]));
@@ -572,7 +598,7 @@ public class DebugAppContainer implements AppContainer {
               proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
               networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
 
-              client.setProxy(new Proxy(HTTP, address));
+              client.setProxy(new Proxy(Proxy.Type.HTTP, address));
             } else {
               networkProxyView.setSelection(originalSelection);
             }
@@ -584,9 +610,9 @@ public class DebugAppContainer implements AppContainer {
           }
         })
         .show();
-  }*/
+  }
 
-  /*private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
+  private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
     View view = LayoutInflater.from(app).inflate(R.layout.debug_drawer_network_endpoint, null);
     final EditText url = findById(view, R.id.debug_drawer_network_endpoint_url);
     url.setText(defaultUrl);
@@ -617,9 +643,9 @@ public class DebugAppContainer implements AppContainer {
           }
         })
         .show();
-  }*/
+  }
 
-/*  private void setEndpointAndRelaunch(String endpoint) {
+  private void setEndpointAndRelaunch(String endpoint) {
 //    Timber.d("Setting network endpoint to %s", endpoint);
     networkEndpoint.set(endpoint);
 
@@ -627,5 +653,5 @@ public class DebugAppContainer implements AppContainer {
     newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
     app.startActivity(newApp);
     GolesApplication.get(app).buildObjectGraphAndInject();
-  }*/
+  }
 }

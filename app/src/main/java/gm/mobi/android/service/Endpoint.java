@@ -13,5 +13,4 @@ public interface Endpoint {
 
     /** A name for differentiating between multiple API URLs. */
     String getName();
-
 }
