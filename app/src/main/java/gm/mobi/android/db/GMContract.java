@@ -2,6 +2,8 @@ package gm.mobi.android.db;
 
 import android.provider.BaseColumns;
 
+import com.google.android.gms.maps.Projection;
+
 public class GMContract {
 
     public static interface SyncColumns extends BaseColumns {
@@ -47,7 +49,7 @@ public class GMContract {
         };
     }
 
-    public static final class ShotTable implements SyncColumns{
+    public static final class ShotTable implements SyncColumns {
 
         public static final String TABLE = "Shot";
 
@@ -65,8 +67,22 @@ public class GMContract {
                 CSYS_REVISION,
                 CSYS_SYNCHRONIZED
         };
-
     }
 
+    public static final class FollowTable implements SyncColumns {
+        public static final String TABLE = "Follow";
+        public static final String ID_USER = "idUser";
+        public static final String ID_FOLLOWED_USER = "idFollowedUser";
+
+        public static final String[] PROJECTION = {
+                ID_USER,
+                ID_FOLLOWED_USER,
+                CSYS_BIRTH,
+                CSYS_MODIFIED,
+                CSYS_DELETED,
+                CSYS_REVISION,
+                CSYS_SYNCHRONIZED
+        };
+    }
 
 }
