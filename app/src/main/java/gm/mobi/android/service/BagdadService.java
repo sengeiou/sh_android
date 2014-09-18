@@ -8,7 +8,7 @@ import gm.mobi.android.db.objects.User;
 
 public interface BagdadService {
 
-    public User login(String id, String password) throws IOException, JSONException;
+    public User login(String id, String password) throws IOException;
 
 
 }

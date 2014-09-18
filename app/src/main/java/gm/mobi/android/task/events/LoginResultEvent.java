@@ -12,16 +12,10 @@ public class LoginResultEvent {
     private Exception error;
     private int status;
     private User signedUser;
-    private String code, message;
+
     // Private constructor, create through static methods
     private LoginResultEvent(int status) {
         this.status = status;
-    }
-
-    private LoginResultEvent(int status, String code, String message){
-        this.status = status;
-        this.code = code;
-        this.message = message;
     }
 
     public static LoginResultEvent successful(User user) {
@@ -34,8 +28,10 @@ public class LoginResultEvent {
         return new LoginResultEvent(STATUS_INVALID);
     }
 
-    public static LoginResultEvent serverError(String code, String message){
-        return new LoginResultEvent(STATUS_SERVER_FAILURE,code,message);
+    public static LoginResultEvent serverError(Exception e) {
+        LoginResultEvent event = new LoginResultEvent(STATUS_SERVER_FAILURE);
+        event.setError(e);
+        return event;
     }
 
     public int getStatus() {
@@ -44,6 +40,10 @@ public class LoginResultEvent {
 
     public Exception getError() {
         return error;
+    }
+
+    public void setError(Exception error) {
+        this.error = error;
     }
 
     public boolean hasError() {

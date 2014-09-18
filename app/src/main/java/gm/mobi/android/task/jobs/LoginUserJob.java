@@ -9,6 +9,8 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
@@ -55,19 +57,29 @@ public class LoginUserJob extends CancellableJob {
         try {
             User user = service.login(usernameEmail, password);
             if (user != null) {
+                // Store user in database
                 UserManager.saveUser(mDbHelper.getWritableDatabase(), user);
                 bus.post(LoginResultEvent.successful(user));
-            }else{
-                bus.post(LoginResultEvent.invalid());
+            } else {
+                sendServerError(null);
             }
         } catch (ServerException e) {
-
             if (e.getErrorCode().equals(ServerException.G025)) {
-                bus.post(LoginResultEvent.invalid());
+                sendCredentialError();
             } else {
-                bus.post(LoginResultEvent.serverError(e.getErrorCode(), e.getMessage()));
+                sendServerError(e);
             }
+        } catch (IOException e) {
+            sendServerError(e);
         }
+    }
+
+    private void sendCredentialError() {
+        bus.post(LoginResultEvent.invalid());
+    }
+
+    private void sendServerError(Exception e) {
+        bus.post(LoginResultEvent.serverError(e));
     }
 
     @Override
