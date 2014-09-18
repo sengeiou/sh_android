@@ -57,12 +57,15 @@ public class LoginUserJob extends CancellableJob {
             if (user != null) {
                 UserManager.saveUser(mDbHelper.getWritableDatabase(), user);
                 bus.post(LoginResultEvent.successful(user));
+            }else{
+                bus.post(LoginResultEvent.invalid());
             }
         } catch (ServerException e) {
-            if (e.getErrorCode().equals(ServerException.V999)) {
-                bus.post(LoginResultEvent.serverError(e.getErrorCode(), e.getMessage()));
-            } else {
+
+            if (e.getErrorCode().equals(ServerException.G025)) {
                 bus.post(LoginResultEvent.invalid());
+            } else {
+                bus.post(LoginResultEvent.serverError(e.getErrorCode(), e.getMessage()));
             }
         }
     }
