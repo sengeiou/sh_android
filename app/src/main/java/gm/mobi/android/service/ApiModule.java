@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.service.dataservice.BagdadDataService;
-import gm.mobi.android.task.jobs.LoginUserJob;
+import gm.mobi.android.task.jobs.registrationlogin.LoginUserJob;
 
 @Module(
         injects = {
