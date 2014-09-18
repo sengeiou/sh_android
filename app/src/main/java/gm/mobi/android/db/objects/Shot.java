@@ -1,38 +1,32 @@
 package gm.mobi.android.db.objects;
 
-import gm.mobi.android.db.GMContract;
-
-/**
- * Created by InmaculadaAlcon on 17/09/2014.
- */
 public class Shot extends Synchronized{
 
-    private Integer idShot;
-    private Integer idUser;
-    private String comment;
-
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Integer getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
-    }
+    private Integer mIdShot;
+    private Integer mIdUser;
+    private String mComment;
 
     public Integer getIdShot() {
-        return idShot;
+        return mIdShot;
     }
 
     public void setIdShot(Integer idShot) {
-        this.idShot = idShot;
+        mIdShot = idShot;
+    }
+
+    public Integer getIdUser() {
+        return mIdUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        mIdUser = idUser;
+    }
+
+    public String getComment() {
+        return mComment;
+    }
+
+    public void setComment(String comment) {
+        mComment = comment;
     }
 }
