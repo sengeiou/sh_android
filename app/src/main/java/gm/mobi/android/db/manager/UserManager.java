@@ -25,7 +25,7 @@ public class UserManager {
         return user;
     }
 
-    public static void saveUser(SQLiteDatabase db, User u) throws SQLException{
+    public static void saveUser(SQLiteDatabase db, User u) throws SQLException {
         ContentValues contentValues = UserMapper.toContentValues(u);
         long res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         //TODO error handling? if(res<0)
