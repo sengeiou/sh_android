@@ -79,7 +79,7 @@ public class EmailLoginActivity extends BaseActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         } else if(event.getStatus() == LoginResultEvent.STATUS_SERVER_FAILURE){
-            Toast.makeText(this,"No hay conexión",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,R.string.communication_error,Toast.LENGTH_LONG).show();
         }else{
             mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
             mLoginButton.setProgress(BUTTON_ERROR);
