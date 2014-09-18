@@ -15,7 +15,7 @@ import gm.mobi.android.db.objects.Shot;
  */
 public class ShotManager {
 
-    public static Shot getCurrentUser(SQLiteDatabase db) {
+    public static Shot getCurrentShot(SQLiteDatabase db) {
         Shot shot = null;
         Cursor c = db.query(GMContract.ShotTable.TABLE, GMContract.ShotTable.PROJECTION, null, null, null, null, "1");
         if (c.getCount() > 0) {
@@ -23,7 +23,6 @@ public class ShotManager {
             shot = ShotMapper.fromCursor(c);
         }
         c.close();
-
         return shot;
     }
 
