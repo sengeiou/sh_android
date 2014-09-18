@@ -9,13 +9,12 @@ import java.util.Map;
 
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
 
 public class UserMapper extends GenericMapper {
 
     public static User fromCursor(Cursor c) {
         User user = new User();
-        user.setId(c.getInt(c.getColumnIndex(UserTable.ID)));
+        user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
         user.setFavouriteTeamId(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID));
         user.setSessionToken(c.getString(c.getColumnIndex(UserTable.SESSION_TOKEN)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
@@ -30,7 +29,7 @@ public class UserMapper extends GenericMapper {
 
     public static ContentValues toContentValues(User u) {
         ContentValues cv = new ContentValues();
-        cv.put(UserTable.ID, u.getId());
+        cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVOURITE_TEAM_ID, u.getFavouriteTeamId());
         cv.put(UserTable.SESSION_TOKEN, u.getSessionToken());
         cv.put(UserTable.USER_NAME, u.getUserName());
@@ -45,7 +44,7 @@ public class UserMapper extends GenericMapper {
 
     public static User fromDto(Map<String, Object> dto) {
         User user = new User();
-        user.setId((Integer) dto.get(UserTable.ID));
+        user.setIdUser((Integer) dto.get(UserTable.ID));
         user.setFavouriteTeamId((Integer) dto.get(UserTable.FAVOURITE_TEAM_ID));
         user.setSessionToken((String) dto.get(UserTable.SESSION_TOKEN));
         user.setUserName((String) dto.get(UserTable.USER_NAME));
@@ -61,7 +60,7 @@ public class UserMapper extends GenericMapper {
     public static Map<String, Object> toDto(User user) {
         Map<String, Object> dto = new HashMap<>();
 
-        dto.put(UserTable.ID, user == null ? null : user.getId());
+        dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
         dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
