@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.net.http.HttpResponseCache;
 
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
@@ -13,7 +12,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -27,8 +25,7 @@ import dagger.Provides;
 import gm.mobi.android.BuildConfig;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.task.jobs.LoginUserJob;
-import gm.mobi.android.ui.activities.MainActivity;
+import gm.mobi.android.task.jobs.registrationlogin.LoginUserJob;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
