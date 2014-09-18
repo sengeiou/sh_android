@@ -10,21 +10,8 @@ import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.objects.Shot;
 
-/**
- * Created by InmaculadaAlcon on 17/09/2014.
- */
 public class ShotManager {
 
-    public static Shot getCurrentShot(SQLiteDatabase db) {
-        Shot shot = null;
-        Cursor c = db.query(GMContract.ShotTable.TABLE, GMContract.ShotTable.PROJECTION, null, null, null, null, "1");
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            shot = ShotMapper.fromCursor(c);
-        }
-        c.close();
-        return shot;
-    }
 
     public static void saveShot(SQLiteDatabase db, Shot shot) throws SQLException {
         ContentValues contentValues = ShotMapper.toContentValues(shot);
