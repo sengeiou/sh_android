@@ -84,7 +84,7 @@ public class BagdadDataService implements BagdadService {
             // Check for Data-Service errors
             String statusCode = genericDto.getStatusCode();
             String statusMessage = genericDto.getStatusMessage();
-            if (!statusCode.equals(ServerException.OK)) {
+            if (statusCode == null || !statusCode.equals(ServerException.OK)) {
                 ServerException serverException = new ServerException(statusCode, statusMessage);
                 Timber.e(serverException, "Server error with status code %s", statusCode);
                 throw serverException;

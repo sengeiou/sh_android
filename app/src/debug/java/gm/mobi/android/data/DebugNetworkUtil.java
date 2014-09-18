@@ -24,7 +24,6 @@ public class DebugNetworkUtil extends NetworkUtilImpl {
     }
 
     @Override
-    @DebugLog
     public boolean isConnected(Context context) {
         return !(ApiEndpoints.isMockMode(selectedEndpoint.get()) && !isNetworkEnabled.get()) && super.isConnected(context);
     }

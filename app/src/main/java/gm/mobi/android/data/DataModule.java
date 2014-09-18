@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -42,6 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 )
 public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+    private static final long TIMEOUT = 10; // 10 seconds
 
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
@@ -115,6 +117,8 @@ public class DataModule {
             File cacheDir = new File(app.getCacheDir(), "http");
             Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
             client.setCache(cache);
+            client.setReadTimeout(TIMEOUT, TimeUnit.SECONDS);
+            client.setWriteTimeout(TIMEOUT, TimeUnit.SECONDS);
         } catch (IOException e) {
             Timber.e(e, "Unable to install disk cache.");
         }
