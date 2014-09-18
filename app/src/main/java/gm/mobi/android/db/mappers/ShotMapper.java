@@ -9,9 +9,6 @@ import java.util.Map;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.objects.Shot;
 
-/**
- * Created by InmaculadaAlcon on 17/09/2014.
- */
 public class ShotMapper extends GenericMapper {
 
     public static Shot fromCursor(Cursor c) {
