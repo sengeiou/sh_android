@@ -1,0 +1,118 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Bagdad.TimeLine"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c4ftk="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
+    mc:Ignorable="d"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+	<phone:PhoneApplicationPage.Resources>
+		<DataTemplate x:Key="PanoramaTitle">
+			<Grid Margin="0,50,0,0">
+				<TextBlock Height="35" Text="{Binding}" Style="{StaticResource PhoneTextTitle3Style}"/>
+			</Grid>
+		</DataTemplate>
+	</phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+                    
+        <!--Row0-->
+        <ListBoxItem Grid.Row="0" Background="{StaticResource PhoneBackgroundBrush}" toolkit:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+            
+                <!--Row0.0-->
+                <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+
+                <!--Row0.1-->
+                <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.NoOneWatching, Source={StaticResource LocalizedStrings}}" FontStyle="Italic" Style="{StaticResource PhoneTextBlockBase}"/>
+            
+            </Grid>
+        </ListBoxItem>
+
+        <!--Row1-->
+        <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" Grid.Row="1" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
+        <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus"/>
+                    
+        <!--Row2-->
+        <TextBlock Grid.Row="2" Margin="12,0,12,12" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextAccentStyle}" Tap="ImWatching_Tap"/>
+        
+        <!--Row3-->
+        <ListBox Grid.Row="3" Margin="12,0">
+            <ListBoxItem>
+                <ListBoxItem.Template>
+                    <ControlTemplate>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                                        
+                            <!--Column0-->
+                            <Grid VerticalAlignment="Top" Grid.Column="0">
+                                <Rectangle Fill="{StaticResource PhoneAccentBrush}" Width="75" Height="75"/>
+                                <Image Source="\Resources\icons\appbar.user.png" Width="75" Height="75"/>
+                            </Grid>
+                            <!--Column1-->
+                            <Grid Grid.Column="1" Margin="12,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                            
+                                <!--Row0-->
+                                <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Bold" Text="Windows Phone"/>
+                                <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Thin" HorizontalAlignment="Right" Text="3 min"/>
+                                            
+                                <!--Row1-->
+                                <TextBlock Grid.Row="1" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="Barcelona - Elche 16/12"/>
+                                            
+                                <!--Row2-->
+                                <TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Light" TextWrapping="Wrap" Text="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo."/>
+                                            
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </ListBoxItem.Template>
+            </ListBoxItem>
+        </ListBox>
+
+        <Grid Grid.Row="3" x:Name="NoShootsAdvice" Background="{StaticResource PhoneBackgroundBrush}">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--Row0-->
+                <TextBlock Grid.Row="0"  Text="{Binding LocalizedResources.NoShoots, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle1Style}"/>
+
+                <!--Row1-->
+                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding LocalizedResources.NoShootsSubtitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+
+                <!--Row2-->
+                <TextBlock Grid.Row="2" Text="{Binding LocalizedResources.StartShooting, Source={StaticResource LocalizedStrings}}" Style="{StaticResource LongListSelectorGroupHeaderStyle}" Tap="StartShooting_Tap"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>

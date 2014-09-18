@@ -101,5 +101,28 @@ namespace Bagdad.Models
             }
             return done;
         }
+
+        public async Task<String> getSessionToken()
+        {
+            String sessionToken = "";
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetSessionToken);
+
+                if (await st.StepAsync())
+                {
+                    sessionToken = st.GetTextAt(0);
+                }
+
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - getSessionToken: " + e.Message);
+            }
+            return sessionToken;
+        }
     }
 }

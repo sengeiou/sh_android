@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bagdad.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -63,5 +64,23 @@ namespace Bagdad.Utils
                 throw e;
             }
         }
+
+        public async Task<bool> isUserAlreadyLoged()
+        {
+            try
+            {
+                User u = new User();
+                String sessionToken = await u.getSessionToken();
+
+                if (sessionToken.Equals("")) return false;
+                else return true;
+            }
+            catch (System.Security.SecurityException e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                throw e;
+            }
+        }
+
     }
 }

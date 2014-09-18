@@ -162,4 +162,52 @@
     <value>Email or Username</value>
     <comment>SignIn.xaml</comment>
   </data>
+  <data name="ImWatching" xml:space="preserve">
+    <value>I'm Watching</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Me" xml:space="preserve">
+    <value>Me</value>
+    <comment>All</comment>
+  </data>
+  <data name="People" xml:space="preserve">
+    <value>People</value>
+    <comment>All</comment>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Shoot" xml:space="preserve">
+    <value>Shoot</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="TimeLine" xml:space="preserve">
+    <value>TIMELINE</value>
+    <comment>All</comment>
+  </data>
+  <data name="NoOneWatching" xml:space="preserve">
+    <value>No one watching</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="NoShoots" xml:space="preserve">
+    <value>No Shoots</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="NoShootsSubtitle" xml:space="preserve">
+    <value>Share with friends about football.</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="StartShooting" xml:space="preserve">
+    <value>Start Shooting</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
 </root>

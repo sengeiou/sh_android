@@ -106,6 +106,24 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a I&apos;m Watching.
+        /// </summary>
+        public static string ImWatching {
+            get {
+                return ResourceManager.GetString("ImWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Me.
+        /// </summary>
+        public static string Me {
+            get {
+                return ResourceManager.GetString("Me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Create New Account.
         /// </summary>
         public static string NewAccount {
@@ -115,11 +133,56 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No one watching.
+        /// </summary>
+        public static string NoOneWatching {
+            get {
+                return ResourceManager.GetString("NoOneWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No Shoots.
+        /// </summary>
+        public static string NoShoots {
+            get {
+                return ResourceManager.GetString("NoShoots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Share with friends about football..
+        /// </summary>
+        public static string NoShootsSubtitle {
+            get {
+                return ResourceManager.GetString("NoShootsSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Password.
         /// </summary>
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a People.
+        /// </summary>
+        public static string People {
+            get {
+                return ResourceManager.GetString("People", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
             }
         }
         
@@ -142,6 +205,33 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Select.
+        /// </summary>
+        public static string Select {
+            get {
+                return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shoot.
+        /// </summary>
+        public static string Shoot {
+            get {
+                return ResourceManager.GetString("Shoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Sign in.
         /// </summary>
         public static string SignInTitle {
@@ -156,6 +246,24 @@ namespace Bagdad.Resources {
         public static string SignWithFacebook {
             get {
                 return ResourceManager.GetString("SignWithFacebook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Start Shooting.
+        /// </summary>
+        public static string StartShooting {
+            get {
+                return ResourceManager.GetString("StartShooting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a TIMELINE.
+        /// </summary>
+        public static string TimeLine {
+            get {
+                return ResourceManager.GetString("TimeLine", resourceCulture);
             }
         }
         

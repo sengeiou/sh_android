@@ -38,6 +38,66 @@
           <target state="new">Email or Username</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/TimeLine" translate="yes" xml:space="preserve">
+          <source>TIMELINE</source>
+          <target state="new">TIMELINE</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">All</note>
+        </trans-unit>
+        <trans-unit id="Resx/NoOneWatching" translate="yes" xml:space="preserve">
+          <source>No one watching</source>
+          <target state="new">No one watching</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/StartShooting" translate="yes" xml:space="preserve">
+          <source>Start Shooting</source>
+          <target state="new">Start Shooting</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/NoShootsSubtitle" translate="yes" xml:space="preserve">
+          <source>Share with friends about football.</source>
+          <target state="new">Share with friends about football.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/NoShoots" translate="yes" xml:space="preserve">
+          <source>No Shoots</source>
+          <target state="new">No Shoots</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Shoot" translate="yes" xml:space="preserve">
+          <source>Shoot</source>
+          <target state="new">Shoot</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Select" translate="yes" xml:space="preserve">
+          <source>Select</source>
+          <target state="new">Select</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Search" translate="yes" xml:space="preserve">
+          <source>Search</source>
+          <target state="new">Search</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Refresh" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <target state="new">Refresh</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/People" translate="yes" xml:space="preserve">
+          <source>People</source>
+          <target state="new">People</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">All</note>
+        </trans-unit>
+        <trans-unit id="Resx/Me" translate="yes" xml:space="preserve">
+          <source>Me</source>
+          <target state="new">Me</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">All</note>
+        </trans-unit>
+        <trans-unit id="Resx/ImWatching" translate="yes" xml:space="preserve">
+          <source>I'm Watching</source>
+          <target state="new">I'm Watching</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/SignWithFacebook" translate="yes" xml:space="preserve">
           <source>Sign In with Facebook</source>
           <target state="new">Sign In with Facebook</target>
