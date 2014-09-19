@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fav24.dataservices.controller.jsp.BaseJspController;
+import com.fav24.dataservices.domain.cache.EntityCache;
 import com.fav24.dataservices.dto.ResultDto;
 import com.fav24.dataservices.dto.UploadFilesDto;
 import com.fav24.dataservices.exception.ServerException;
@@ -266,8 +267,12 @@ public class CacheConfigurationController extends BaseJspController {
 
 		ModelAndView model = new ModelAndView("system_cache_monitor");
 
+		EntityCache entityCache = cacheConfigurationService.getCacheConfiguration(cacheManager, cache);
+
 		model.addObject("cacheManager", cacheManager);
 		model.addObject("cache", cache);
+		model.addObject("maxBytesLocalHeap", entityCache.getMaxBytesLocalHeap());
+		model.addObject("maxBytesLocalDisk", entityCache.getMaxBytesLocalDisk());
 
 		return model;
 	}

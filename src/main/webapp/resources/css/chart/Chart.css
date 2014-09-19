@@ -4,6 +4,7 @@
 .chart-legend ul {
     list-style: none;
     width: 100%;
+    height: 100%;
     margin: 5px auto 0;
 }
 .chart-legend li {
@@ -15,7 +16,7 @@
     margin-top:3px;
     display: block;
     float: left;
-    width: 33%;
+    width: 50%;
     font-size: 0.8em;
 
 }

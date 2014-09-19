@@ -24,7 +24,8 @@
         /* Primer bloque. */
         core: [
             '<c:url value="/resources/js/jquery.min.js"/>',
-            '<c:url value="/resources/js/utils.js"/>'
+            '<c:url value="/resources/js/utils.js"/>',
+            '<c:url value="/resources/js/sprintf.js"/>'
     	],
         /* Segundo bloque. */
         main: [
@@ -62,7 +63,10 @@
 			'<c:url value="/resources/js/custom/tree.js"/>',
 			
 			// hook_details.jsp dependency.
-			'<c:url value="/resources/js/syntaxhighlighter/shAutoloader.min.js"/>'
+			'<c:url value="/resources/js/syntaxhighlighter/shAutoloader.min.js"/>',
+			
+			// Configuraciones de las graficas del monitor de cachés. 
+			'<c:url value="/resources/js/system_monitor/cache_monitor_config.js"/>'
         ],
         custom_L1: [
 
@@ -71,10 +75,13 @@
           
 			// system_monitor.jsp dependency.
 			'<c:url value="/resources/js/system_monitor/memory_monitor.js"/>',
-			'<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>'
+			'<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>',
+			// system_cache_monitor.jsp dependency.
+			'<c:url value="/resources/js/system_monitor/cache_monitor.js"/>'
         ],
         custom_L2: [
-			'<c:url value="/resources/js/system_monitor.js"/>'
+			'<c:url value="/resources/js/system_monitor.js"/>',
+			'<c:url value="/resources/js/system_cache_monitor.js"/>'
         ]
     };
 

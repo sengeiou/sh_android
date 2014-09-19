@@ -28,7 +28,7 @@ function initSystemMonitor(period, timeRange,
 function destroySystemMonitor() {
 
 	stopMemoryHistoryMonitor();
-	startMemoryInstantMonitor();
+	stopMemoryInstantMonitor();
 	stopCPUHistoryMonitor();
 	stopCPUInstantMonitor();
 

@@ -28,8 +28,6 @@ public class SystemMonitoring extends Timer {
 	public static final long SECOND_CADENCE = 1000L;
 	public static final long MINUTE_CADENCE = 60 * SECOND_CADENCE;
 
-	public static final long MONITORING_TIME_WINDOW = 24 * 60 * 60 * 1000; // Se guardará hasta 24 horas de información.
-
 	private MemoryMeter memoryMeter;
 	private CpuMeter cpuMeter;
 	private AbstractList<CacheMeter> cacheMeters;
