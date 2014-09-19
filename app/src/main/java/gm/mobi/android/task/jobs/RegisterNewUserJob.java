@@ -8,8 +8,7 @@ import com.squareup.otto.Bus;
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
-import gm.mobi.android.task.events.RegistrationCompletedEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
 
 public class RegisterNewUserJob extends CancellableJob {
     private static final int PRIORITY = 1;
