@@ -1,4 +1,4 @@
-package gm.mobi.android.task.jobs;
+package gm.mobi.android.task.jobs.loginregister;
 
 
 import android.app.Application;
@@ -20,6 +20,7 @@ import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
+import gm.mobi.android.task.jobs.CancellableJob;
 
 public class LoginUserJob extends CancellableJob {
 

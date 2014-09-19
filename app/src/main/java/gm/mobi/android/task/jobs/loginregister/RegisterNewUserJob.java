@@ -1,4 +1,4 @@
-package gm.mobi.android.task.jobs;
+package gm.mobi.android.task.jobs.loginregister;
 
 import android.content.Context;
 
@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
+import gm.mobi.android.task.jobs.CancellableJob;
 
 public class RegisterNewUserJob extends CancellableJob {
     private static final int PRIORITY = 1;

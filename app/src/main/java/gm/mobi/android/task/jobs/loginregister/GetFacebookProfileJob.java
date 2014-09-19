@@ -1,4 +1,4 @@
-package gm.mobi.android.task.jobs;
+package gm.mobi.android.task.jobs.loginregister;
 
 import android.content.Context;
 

@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.task.jobs.GetFacebookProfileJob;
-import gm.mobi.android.task.jobs.LoginUserJob;
-import gm.mobi.android.task.jobs.RegisterNewUserJob;
+import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
+import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;

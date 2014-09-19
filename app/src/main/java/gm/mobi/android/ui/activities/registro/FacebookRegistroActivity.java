@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import gm.mobi.android.R;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
-import gm.mobi.android.task.jobs.RegisterNewUserJob;
+import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.ui.base.BaseActivity;
 
 public class FacebookRegistroActivity extends BaseActivity {
