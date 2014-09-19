@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.exception.FacebookException;
-import gm.mobi.android.task.events.FacebookProfileEvent;
+import gm.mobi.android.task.events.loginregister.FacebookProfileEvent;
 
 public class GetFacebookProfileJob extends Job {
 
