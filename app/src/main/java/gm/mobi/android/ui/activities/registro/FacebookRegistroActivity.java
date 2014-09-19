@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import gm.mobi.android.R;
-import gm.mobi.android.task.events.RegistrationCompletedEvent;
+import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
 import gm.mobi.android.task.jobs.RegisterNewUserJob;
 import gm.mobi.android.ui.base.BaseActivity;
 
