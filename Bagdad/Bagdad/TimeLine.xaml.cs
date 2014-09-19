@@ -8,6 +8,9 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Bagdad.Resources;
+using Bagdad.Utils;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Bagdad
 {
@@ -15,11 +18,33 @@ namespace Bagdad
     {
 
         ApplicationBarIconButton appBarButton;
+        Util util = new Util();
         
         public TimeLine()
         {
+            IsRedirectionNeeded();
             InitializeComponent();
             BuildLocalizedApplicationBar();
+        }
+
+        //When Click BACK on the Main Page (TimeLine) we close the App.
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            base.OnBackKeyPress(e);            
+            Application.Current.Terminate();
+        }
+
+        private async void IsRedirectionNeeded()
+        {
+            try
+            {
+                //IF The User isn't Loged --> GO TO: Registration (Now goes to SignIn because Registration is not yet implemented)
+                if (!await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/SignIn.xaml", UriKind.Relative));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : IsRedirectionNeeded: " + e.Message);
+            }
         }
 
         // Build a localized ApplicationBar

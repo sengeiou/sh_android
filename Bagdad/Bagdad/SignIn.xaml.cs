@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Bagdad.Utils;
 using Bagdad.Resources;
+using System.Diagnostics;
 
 namespace Bagdad
 {
@@ -18,20 +19,7 @@ namespace Bagdad
 
         public SignIn()
         {
-            IsSkipNeeded();
             InitializeComponent();
-        }
-
-        private async void IsSkipNeeded()
-        {
-            try
-            {
-                if (await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("E R R O R : IsSkipNeeded: " + e.Message);
-            }
         }
 
         private async void SignIn_Click(object sender, RoutedEventArgs e)

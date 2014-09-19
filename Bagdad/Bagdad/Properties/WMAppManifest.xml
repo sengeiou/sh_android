@@ -14,7 +14,7 @@
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="SignIn.xaml" />
+      <DefaultTask Name="_default" NavigationPage="TimeLine.xaml" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="BagdadToken" TaskName="_default">

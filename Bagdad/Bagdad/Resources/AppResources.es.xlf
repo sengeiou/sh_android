@@ -49,8 +49,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
         <trans-unit id="Resx/InvalidUserOrEmail" translate="yes" xml:space="preserve">
-          <source>The Nick or Email are in an invalid format.</source>
-          <target state="new">The Nick or Email are in an invalid format.</target>
+          <source>The Username or Email are in an invalid format.</source>
+          <target state="new">The Username or Email are in an invalid format.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
         <trans-unit id="Resx/InvalidPassword" translate="yes" xml:space="preserve">
