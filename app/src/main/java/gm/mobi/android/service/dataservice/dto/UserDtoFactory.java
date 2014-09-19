@@ -2,19 +2,21 @@ package gm.mobi.android.service.dataservice.dto;
 
 
 import android.support.v4.util.ArrayMap;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.ServiceConstants;
+import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.service.dataservice.generic.FilterDto;
+import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.service.dataservice.generic.RequestorDto;
+import gm.mobi.android.db.GMContract.FollowTable;
 
 public class UserDtoFactory {
 
@@ -43,6 +45,46 @@ public class UserDtoFactory {
         op.setData(data);
 
         return getGenericDtoFromOperation(ALIAS_LOGIN, op);
+    }
+
+
+//    public static GenericDto getFollowingListOperationDto(Integer idUser, Long offset){
+//        OperationDto od = new OperationDto();
+//
+//    }
+
+    public static OperationDto getFollowOperationDto(Integer idUser, Long offset) {
+        OperationDto od = new OperationDto();
+        //TODO Obtener la ultima fecha de modificación de la tabla, en este caso de la tabla Follow
+        Long date = null;
+        GenericDto genericDto = new GenericDto();
+        FilterDto filter = new FilterDto(Constants.NEXUS_OR,
+                new FilterItemDto[]{
+                        new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
+                        new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
+                },
+                new FilterDto[]{
+                        new FilterDto(Constants.NEXUS_OR,
+                                new FilterItemDto[]{
+                                        new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_DELETED, date)
+                                },
+                                new FilterDto[]{
+                                        new FilterDto(Constants.NEXUS_AND,
+                                                new FilterItemDto[]{
+                                                        new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_MODIFIED, date),
+                                                        new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_MODIFIED, date)
+                                }, null)
+                })
+        }
+        );
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE,true,null,offset,1000L,filter);
+
+        od.setMetadata(md);
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = FollowMapper.toDto(null);
+        od.setData(array);
+
+        return od;
     }
 
 
