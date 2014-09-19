@@ -48,6 +48,7 @@ public class GMContract {
                 CSYS_SYNCHRONIZED
         };
     }
+
     public static final class UserTable implements SyncColumns {
 
         public static final String TABLE = "User";
