@@ -31,7 +31,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.LoginResultEvent;
+import gm.mobi.android.task.events.loginregister.LoginResultEvent;
 import gm.mobi.android.task.jobs.LoginUserJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
