@@ -82,5 +82,35 @@ namespace Bagdad.Utils
             }
         }
 
+        public async Task<bool> LogInByEmail(String email, String password)
+        {
+            try
+            {
+                ServiceCommunication sercom = new ServiceCommunication();
+                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + email + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
+                return true;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+            }
+            return false;
+        }
+
+        public async Task<bool> LogInByUserName(String userName, String password)
+        {
+            try
+            {
+                ServiceCommunication sercom = new ServiceCommunication();
+                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + userName + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
+                return true;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+            }
+            return false;
+        }
+
     }
 }

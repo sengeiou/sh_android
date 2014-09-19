@@ -28,17 +28,13 @@ namespace Bagdad
             {
                 if (App.isInternetAvailable)
                 {
-                    
-                    ServiceCommunication sercom = new ServiceCommunication();
-
                     if (util.isAnEmail(txbUser.Text))
                     {
                         //it's an email
                         if (util.isAValidPassword(pbPassword.Password))
                         {
                             //Call by email
-                            await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + txbUser.Text + "\",\"password\" : \"" + Util.encryptPassword(pbPassword.Password) + "\"}", 0);
-                            NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+                            if(await util.LogInByEmail(txbUser.Text, pbPassword.Password)) NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
                         }
                         else
                         {
@@ -54,8 +50,7 @@ namespace Bagdad
                             if (util.isAValidPassword(pbPassword.Password))
                             {
                                 //Call by userName
-                                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + txbUser.Text + "\",\"password\" : \"" + Util.encryptPassword(pbPassword.Password) + "\"}", 0);
-                                NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+                                if (await util.LogInByUserName(txbUser.Text, pbPassword.Password)) NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
                             }
                             else
                             {
