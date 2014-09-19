@@ -24,7 +24,6 @@ public class GMContract {
         public static final String TABLE = "TablesSync";
 
         public static final String ORDER = "order";
-
         public static final String ENTITY = "entity";
         public static final String FREQUENCY = "frequency";
         public static final String MAX_TIMESTAMP = "max_timestamp";
