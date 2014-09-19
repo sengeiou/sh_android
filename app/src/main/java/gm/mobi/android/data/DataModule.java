@@ -25,7 +25,7 @@ import dagger.Provides;
 import gm.mobi.android.BuildConfig;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.task.jobs.registrationlogin.LoginUserJob;
+import gm.mobi.android.task.jobs.LoginUserJob;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
