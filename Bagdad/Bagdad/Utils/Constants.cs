@@ -13,14 +13,21 @@ namespace Bagdad.Utils
 
         //OPERATIONS
         public const String SERCOM_OP_MANUAL_JSON_REQUEST = "#OMJR";
-
         public const String SERCOM_OP_RETRIEVE = "retrieve";
 
         //TABLES
         public const String SERCOM_TB_LOGIN = "Login";
+        public const String SERCOM_TB_USER = "User";
+        public const String SERCOM_TB_FOLLOW = "Follow";
+        public const String SERCOM_TB_SHOT = "Shot";
 
         //PARAMS
         public const int SERCOM_PARAM_OFFSET_PAG = 100;
+
+        //SynchroTypes
+        public const int ST_UPLOAD_ONLY = 0;
+        public const int ST_DOWNLOAD_ONLY = 1;
+        public const int ST_FULL_SYNCHRO = 2;
 
         #endregion
 

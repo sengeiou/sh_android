@@ -15,6 +15,7 @@ using SQLiteWinRT;
 using Windows.Storage;
 using System.Threading;
 using Bagdad.Utils;
+using System.ComponentModel;
 
 namespace Bagdad
 {
@@ -48,6 +49,8 @@ namespace Bagdad
 
             // Inicialización XAML estándar
             InitializeComponent();
+
+            UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -165,7 +168,10 @@ namespace Bagdad
             // Si la aplicación ha recibido una navegación 'reset', tenemos que comprobarlo
             // en la siguiente navegación para ver si se debe restablecer la pila de páginas
             if (e.NavigationMode == NavigationMode.Reset)
+            {
                 RootFrame.Navigated += ClearBackStackAfterReset;
+                UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
+            }
         }
 
         private void ClearBackStackAfterReset(object sender, NavigationEventArgs e)
@@ -227,10 +233,47 @@ namespace Bagdad
             ShowConnectionInfo();
             if (isInternetAvailable)
             {
-                //There is the place to do something when connection is restablished
+                //Recuperada la conexión, llamamos a Synchro.
+                UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
             }
         }
 
+        #endregion
+
+        #region SYNCHRO
+
+        //Semaforo para la Synchro
+        private static bool isSynchroProcessWorking;
+        //Cambios realizados en Sincro
+        public static int changesOnSynchro = 0;
+
+        public static bool isSynchroRunning()
+        {
+            return isSynchroProcessWorking;
+        }
+
+        public static void lockSynchro()
+        {
+            isSynchroProcessWorking = true;
+        }
+
+        public static void releaseSynchro()
+        {
+            isSynchroProcessWorking = false;
+        }
+
+        //Llamada a la Synchro
+        public static void UpdateServices(int Type, ServiceCommunication.enumSynchroTables tablesType)
+        {
+            ServiceCommunication sc = new ServiceCommunication();
+            sc.initTablesToSynchro(tablesType);
+            BackgroundWorker bgw = new BackgroundWorker();
+
+            sc.SetSynchroType(Type);
+
+            bgw.DoWork += sc.SynchronizeProcess;
+            bgw.RunWorkerAsync();
+        }
         #endregion
 
         #region APP_INFO
