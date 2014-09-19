@@ -1,0 +1,159 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Bagdad.Me"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--Row0-->
+        <TextBlock x:Name="ProfileTitle" Grid.Row="0" Text="{Binding LocalizedResources.Me, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
+
+        <!--Row1-->
+        <Grid x:Name="Header" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!--Column0-->
+            <Rectangle Grid.Column="0" Fill="{StaticResource PhoneChromeBrush}" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="125" Height="125"/>
+            <Image Grid.Column="0" Margin="12,12,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="125" Height="125" Source="\Resources\icons\appbar.user.png"/>
+            
+            <!--Column1-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!--Row0-->
+                <TextBlock Grid.Row="0" Margin="12,12,0,0" Text="Name" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold"/>
+
+                <!--Row1-->
+                <TextBlock Grid.Row="1" Margin="12,0,0,0" Text="Rank" Style="{StaticResource PhoneTextNormalStyle}"/>
+                
+                <!--Row2-->
+                <TextBlock Grid.Row="2" Margin="12,0,0,0" Text="@username, Team" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                
+            </Grid>
+        </Grid>
+        
+        <!--Row2-->
+        <Grid Grid.Row="2" Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!--Column0-->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!--Row0-->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Column0-->
+                    <Rectangle Grid.Column="0" Width="15" Height="15" Fill="{StaticResource PhoneAccentBrush}"/>
+
+                    <!--Column1-->
+                    <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding LocalizedResources.Shots ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+
+                </Grid>
+
+                <!--Row1-->
+                <TextBlock Grid.Row="1" Text="500" FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontWeight="ExtraLight"/>
+                
+            </Grid>
+
+            <!--Column1-->
+            <Rectangle Grid.Column="1" Margin="12,0" Fill="{StaticResource PhoneChromeBrush}" Width="1"/>
+            
+            <!--Column2-->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!--Row0-->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!--Column0-->
+                    <Rectangle Grid.Column="0" Width="15" Height="15" Fill="{StaticResource PhoneForegroundBrush}"/>
+                    
+                    <!--Column1-->
+                    <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding LocalizedResources.Following ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                    
+                </Grid>
+                <!--Row1-->
+                <TextBlock Grid.Row="1" Text="46" FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontWeight="ExtraLight"/>
+
+            </Grid>
+            
+            <!--Column3-->
+            <Rectangle Grid.Column="3" Margin="12,0" Fill="{StaticResource PhoneChromeBrush}" Width="1"/>
+            
+            <!--Column4-->
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!--Row0-->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Column0-->
+                    <Rectangle Grid.Column="0" Width="15" Height="15" Fill="{StaticResource PhoneChromeBrush}"/>
+
+                    <!--Column1-->
+                    <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding LocalizedResources.Followers ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+
+                </Grid>
+
+                <!--Row1-->
+                <TextBlock Grid.Row="1" Text="2683" FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontWeight="ExtraLight"/>
+
+            </Grid>
+
+        </Grid>
+        
+    </Grid>
+
+</phone:PhoneApplicationPage>

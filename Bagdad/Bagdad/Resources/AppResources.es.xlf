@@ -73,6 +73,21 @@
           <target state="new">User or Password doesn't match.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
+        <trans-unit id="Resx/Shots" translate="yes" xml:space="preserve">
+          <source>Shots</source>
+          <target state="new">Shots</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Following" translate="yes" xml:space="preserve">
+          <source>Following</source>
+          <target state="new">Following</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Followers" translate="yes" xml:space="preserve">
+          <source>Followers</source>
+          <target state="new">Followers</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/NoShootsSubtitle" translate="yes" xml:space="preserve">
           <source>Share with friends about football.</source>
           <target state="new">Share with friends about football.</target>

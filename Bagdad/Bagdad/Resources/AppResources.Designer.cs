@@ -97,6 +97,24 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Followers.
+        /// </summary>
+        public static string Followers {
+            get {
+                return ResourceManager.GetString("Followers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Following.
+        /// </summary>
+        public static string Following {
+            get {
+                return ResourceManager.GetString("Following", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Forgot Password?.
         /// </summary>
         public static string ForgotPassword {
@@ -255,6 +273,15 @@ namespace Bagdad.Resources {
         public static string Shoot {
             get {
                 return ResourceManager.GetString("Shoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shots.
+        /// </summary>
+        public static string Shots {
+            get {
+                return ResourceManager.GetString("Shots", resourceCulture);
             }
         }
         

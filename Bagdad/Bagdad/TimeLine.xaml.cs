@@ -87,7 +87,13 @@ namespace Bagdad
 
             ApplicationBarMenuItem appBarMenuItem3 =
                 new ApplicationBarMenuItem(AppResources.Me);
+            appBarMenuItem3.Click += appBarMenuItem3_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItem3);
+        }
+
+        private void appBarMenuItem3_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
         }
 
         private void appBarShootButton_Click(object sender, EventArgs e)

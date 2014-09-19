@@ -99,6 +99,9 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Me.xaml.cs">
+      <DependentUpon>Me.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Follow.cs" />
     <Compile Include="Models\GenericModel.cs" />
     <Compile Include="Models\Shot.cs" />
@@ -131,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Me.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -226,4 +226,16 @@
     <value>User or Password doesn't match.</value>
     <comment>SignIn.xaml.cs</comment>
   </data>
+  <data name="Followers" xml:space="preserve">
+    <value>Followers</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>Following</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="Shots" xml:space="preserve">
+    <value>Shots</value>
+    <comment>Me.xaml</comment>
+  </data>
 </root>
