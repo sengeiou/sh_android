@@ -44,4 +44,15 @@ public class SQLiteUtils {
             + " CONSTRAINT 'fk_User_User1' FOREIGN KEY (" + FollowTable.ID_USER + ") REFERENCES " + UserTable.TABLE + "(" + UserTable.ID + ") ON DELETE NO ACTION ON UPDATE NO ACTION,"
             + " CONSTRAINT 'fk_User_User2' FOREIGN KEY (" + FollowTable.ID_FOLLOWED_USER + ") REFERENCES " + UserTable.TABLE + "(" + UserTable.ID + ") ON DELETE NO ACTION ON UPDATE NO ACTION)";
 
+    public static final String CREATE_TABLE_TABLESSYNC = "CREATE TABLE IF NOT EXISTS "+ TablesSync.TABLE+" ("
+            + TablesSync.MIN_TIMESTAMP+" DATETIME,"
+            + TablesSync.MAX_TIMESTAMP+" DATETIME,"
+            + TablesSync.MIN_ROWS+" INT,"
+            + TablesSync.MAX_ROWS+" INT,"
+            + TablesSync.DIRECTION+" VARCHAR(255) NULL,"
+            + TablesSync.ORDER +" INT NOT NULL,"
+            + TablesSync.ENTITY+" VARCHAR(255) NOT NULL,"
+            + TablesSync.FREQUENCY+" INT NULL,"
+            + " PRIMARY KEY ("+TablesSync.ORDER+"));";
+
 }
