@@ -2,8 +2,6 @@
 <%@taglib uri="customFunctions.tld" prefix="cf"%>
 
 
-<link class="include" rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jqplot/jquery.jqplot.min.css"/>"></link>
-
 <!-- Panel de detalle de una cierta entidad publicada. -->
 <div id="entityCacheDetails">
 
@@ -39,7 +37,7 @@
 							</ul>
 						</div>
 					</div>
-		
+
 					<!-- Límites de almacenamiento. -->
 					<div class="panel panel-info">
 						<div class="panel-heading">L&iacute;mites de alacenamiento</div>
@@ -54,38 +52,21 @@
 								<li class="list-group-item"><strong>Persistencia:</strong> S&iacute;</li>
 							</ul>
 						
-							<!-- Respecto al manager que contiene esta caché. -->
-							<div class="row">
-							
-								<div class="col-sm-6">
-									<div class="panel panel-info">
-										<div class="panel-heading">Memoria respecto al gestor</div>
-										<div class="panel-body">
-											<div id="managerRelativeHeap" style="width:500px; height:250px;"></div>
-										</div>
+							<!-- Tamaños respecto al manager que contiene esta caché. -->
+							<div class="row-fluid">
+								<div class="col-sx-6 col-md-6">
+									<div id="cacheHeap">
+										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
+										<div class="chart-legend"></div>
 									</div>
 								</div>
-				
-								<div class="col-sm-6">
-									<div class="panel panel-info">
-										<div class="panel-heading">Disco respecto al gestor</div>
-										<div class="panel-body">
-											<div id="managerRelativeDisk" style="width:500px; height:250px;"></div>
-										</div>
+								<div class="col-sx-6 col-md-6">
+									<div id="cacheDisk" >
+										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
+	                                    <div class="chart-legend"></div>
 									</div>
 								</div>
-									
 							</div>
-
-							<c:set var="heapPercent" value="${cacheConfiguration.getMaxBytesLocalHeap() / cacheManagerConfiguration.getMaxBytesLocalHeap()}"/>
-							<c:set var="heapPercent" value="${heapPercent * 100}"/>
-							<c:set var="diskPercent" value="${cacheConfiguration.getMaxBytesLocalDisk() / cacheManagerConfiguration.getMaxBytesLocalDisk()}"/>
-							<c:set var="diskPercent" value="${diskPercent * 100}"/>
-
-							<script type="text/javascript">
-								var managerRelativeDataHeap = [${heapPercent}, 100-${heapPercent}];
-								var managerRelativeDataDisk = [${diskPercent}, 100-${diskPercent}];
-							</script>
 						</div>
 					</div>
 					
@@ -115,111 +96,8 @@
 </div>
 
 <script type="text/javascript">
-
-	var managerRelativeHeap = jQuery.jqplot ('managerRelativeHeap', [managerRelativeDataHeap], 
-	    { 
-		grid: {
-			drawBorder: false,
-			drawGridlines: false,
-			background: '#ffffff',
-			shadow: false
-		},
-		axesDefaults: {
-             
-        },
-        animate: true,
-        // Will animate plot on calls to plot1.replot({resetAxes:true})
-        animateReplot: true,
-        cursor: {
-            show: true,
-            zoom: true,
-            looseZoom: true,
-            showTooltip: false
-        },
-        seriesColors:['#F38630', '#69D2E7'],
-        seriesDefaults: {
-				trendline: {
-					show: true
-					},
-				shadow: false,
-				// Make this a pie chart.
-				renderer: jQuery.jqplot.PieRenderer,
-				rendererOptions: {
-					// Put data labels on the pie slices.
-					// Turn off filling of slices.
-					fill: true,
-					showDataLabels: true,
-					// Add a margin to seperate the slices.
-					sliceMargin: 4,
-					// stroke the slices with a little thicker line.
-					lineWidth: 5
-				}
-			},
-		legend: {
-				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['${cache}', '${cacheManager}'],
-				show: true,
-				showLabels: true,
-				showSwatches: false,
-				rowSpacing: '10px',
-				marginLeft: '-150px',
-				placement: 'outsideGrid',
-				location: 'e',
-				border: 'none'
-			}
-	});
-
-	
-	var managerRelativeDisk = jQuery.jqplot ('managerRelativeDisk', [managerRelativeDataDisk], 
-	    { 
-		grid: {
-			drawBorder: false,
-			drawGridlines: false,
-			background: '#ffffff',
-			shadow: false
-		},
-		axesDefaults: {
-             
-        },
-        animate: true,
-        // Will animate plot on calls to plot1.replot({resetAxes:true})
-        animateReplot: true,
-        cursor: {
-            show: true,
-            zoom: true,
-            looseZoom: true,
-            showTooltip: false
-        },
-        seriesColors:['#F38630', '#69D2E7'],
-        seriesDefaults: {
-				trendline: {
-					show: true
-					},
-				shadow: false,
-				// Make this a pie chart.
-				renderer: jQuery.jqplot.PieRenderer,
-				rendererOptions: {
-					// Put data labels on the pie slices.
-					// Turn off filling of slices.
-					fill: true,
-					showDataLabels: true,
-					// Add a margin to seperate the slices.
-					sliceMargin: 4,
-					// stroke the slices with a little thicker line.
-					lineWidth: 5
-				}
-			},
-		legend: {
-				renderer: jQuery.jqplot.EnhancedLegendRenderer,
-	            labels: ['${cache}', '${cacheManager}'],
-				show: true,
-				showLabels: true,
-				showSwatches: false,
-				rowSpacing: '10px',
-				marginLeft: '-150px',
-				placement: 'outsideGrid',
-				location: 'e',
-				border: 'none'
-			}
-		});
+drawCacheSizes('${cacheManager}', '${cache}',
+		'cacheHeap', ${cacheConfiguration.getMaxBytesLocalHeap()}, ${cacheManagerConfiguration.getMaxBytesLocalHeap()},
+		'cacheDisk', ${cacheConfiguration.getMaxBytesLocalDisk()}, ${cacheManagerConfiguration.getMaxBytesLocalDisk()}
+);
 </script>

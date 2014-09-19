@@ -45,6 +45,7 @@
 
 			// system_monitor.jsp dependency.
 			'<c:url value="/resources/js/chart/Chart.js"/>',
+			'<c:url value="/resources/js/custom/chartHelper.js"/>',
 			
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',
@@ -77,7 +78,9 @@
 			'<c:url value="/resources/js/system_monitor/memory_monitor.js"/>',
 			'<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>',
 			// system_cache_monitor.jsp dependency.
-			'<c:url value="/resources/js/system_monitor/cache_monitor.js"/>'
+			'<c:url value="/resources/js/system_monitor/cache_monitor.js"/>',
+			// entity_cache_details.jsp dependency.
+			'<c:url value="/resources/js/entity_cache_details.js"/>'
         ],
         custom_L2: [
 			'<c:url value="/resources/js/system_monitor.js"/>',

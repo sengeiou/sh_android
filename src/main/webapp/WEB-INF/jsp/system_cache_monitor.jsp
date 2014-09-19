@@ -188,7 +188,7 @@
 </div>
 
 <script type="text/javascript">
-initSystemCacheMonitor('${cacheManager}', '${cache}', '${maxBytesLocalHeap}', '${maxBytesLocalDisk}',
+initSystemCacheMonitor('${cacheManager}', '${cache}', ${maxBytesLocalHeap}, ${maxBytesLocalDisk},
 		'period', 'segment', 'datetimePickerAccessFrom', 'datetimePickerAccessTo', 'applyTimeWindowButton', 
 		'cacheHAHeapHistory', 'cacheHAHeap', 
 		'cacheHADiskHistory', 'cacheHADisk', 
