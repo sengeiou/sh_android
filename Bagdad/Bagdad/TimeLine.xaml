@@ -30,7 +30,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-                    
         <!--Row0-->
         <ListBoxItem Grid.Row="0" Background="{StaticResource PhoneBackgroundBrush}" toolkit:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
             <Grid>
@@ -38,23 +37,25 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-            
+
                 <!--Row0.0-->
                 <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
                 <!--Row0.1-->
                 <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.NoOneWatching, Source={StaticResource LocalizedStrings}}" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
-            
+
             </Grid>
         </ListBoxItem>
+
+        <Image  x:Name="imageToShow" Source="\Resources\icons\appbar.user.png" Width="75" Height="75"/>
 
         <!--Row1-->
         <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" Grid.Row="1" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
         <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus"/>
-                    
+
         <!--Row2-->
         <TextBlock Grid.Row="2" Margin="12,0,12,12" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextAccentStyle}" Tap="ImWatching_Tap"/>
-        
+
         <!--Row3-->
         <ListBox Grid.Row="3" Margin="12,0">
             <ListBoxItem>
@@ -65,7 +66,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                                        
+
                             <!--Column0-->
                             <Grid VerticalAlignment="Top" Grid.Column="0">
                                 <Rectangle Fill="{StaticResource PhoneAccentBrush}" Width="75" Height="75"/>
@@ -78,17 +79,17 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                            
+
                                 <!--Row0-->
                                 <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Bold" Text="Windows Phone"/>
                                 <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Thin" HorizontalAlignment="Right" Text="3 min"/>
-                                            
+
                                 <!--Row1-->
                                 <TextBlock Grid.Row="1" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="Barcelona - Elche 16/12"/>
-                                            
+
                                 <!--Row2-->
                                 <TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Light" TextWrapping="Wrap" Text="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo."/>
-                                            
+
                             </Grid>
                         </Grid>
                     </ControlTemplate>

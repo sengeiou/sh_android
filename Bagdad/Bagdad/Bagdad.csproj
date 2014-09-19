@@ -114,6 +114,7 @@
     </Compile>
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\UserImageManager.cs" />
     <Compile Include="Utils\MD5Class.cs" />
     <Compile Include="Utils\PrepareDB.cs" />
     <Compile Include="Utils\SQLQuerys.cs" />
