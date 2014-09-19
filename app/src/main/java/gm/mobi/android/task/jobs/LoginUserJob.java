@@ -19,7 +19,7 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.LoginResultEvent;
+import gm.mobi.android.task.events.loginregister.LoginResultEvent;
 
 public class LoginUserJob extends CancellableJob {
 
