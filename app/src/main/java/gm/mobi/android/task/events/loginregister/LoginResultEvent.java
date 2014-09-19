@@ -1,4 +1,4 @@
-package gm.mobi.android.task.events;
+package gm.mobi.android.task.events.loginregister;
 
 
 import gm.mobi.android.db.objects.User;
