@@ -47,6 +47,13 @@
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
     <string name="activity_login_email_forgot">Forgot Password?</string>
 
+    <string name="activity_timeline_new_text">What\'s Up?</string>
+
+    <!-- Menu names -->
+    <string name="menu_info">Info</string>
+    <string name="menu_search">Search timeline</string>
+
+    <!-- Errors -->
     <string name="communication_error">Communication error</string>
 
 </resources>

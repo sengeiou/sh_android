@@ -26,6 +26,7 @@ import gm.mobi.android.BuildConfig;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import gm.mobi.android.ui.fragments.TimelineFragment;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -33,6 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 @Module(
         injects = {
                 LoginUserJob.class,
+                TimelineFragment.class,
         },
         includes = ApiModule.class,
         complete = false,

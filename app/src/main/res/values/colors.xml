@@ -6,13 +6,19 @@
     <color name="accent">#478ceb</color>
     <color name="facebook">#4c66a4</color>
     <color name="transparent">#00ffffff</color>
+    <color name="separator">#e6e6e6</color>
+
+    <!-- Shadows -->
+    <color name="shadow_start">#33000000</color>
 
     <!-- Gray scale -->
     <color name="gray_10">#1a1a1a</color>
     <color name="gray_30">#4d4d4d</color>
+    <color name="gray_40">#ff666666</color>
     <color name="gray_50">#808080</color>
     <color name="gray_60">#9a9a9a</color>
     <color name="gray_70">#bbbbbb</color>
     <color name="gray_80">#cccccc</color>
+    <color name="gray_90">#e6e6e6</color>
     <color name="white">#ffffff</color>
 </resources>

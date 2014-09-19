@@ -18,10 +18,6 @@ import gm.mobi.android.ui.base.BaseSignedInActivity;
 
 public class MainActivity extends BaseSignedInActivity {
 
-    @Inject Picasso picasso;
-    @InjectView(android.R.id.text1) TextView textView;
-    @InjectView(android.R.id.icon) ImageView imageView;
-
 
     //TODO recibir parámetros para indicar si viene de registro, login o nueva
     public static Intent getIntent(Context context) {
@@ -38,8 +34,5 @@ public class MainActivity extends BaseSignedInActivity {
 
         setContainerContent(R.layout.main_activity);
         ButterKnife.inject(this);
-
-        textView.setText("Bienvenido, " + getCurrentUser().getName());
-        picasso.load(getCurrentUser().getPhoto()).into(imageView);
     }
 }

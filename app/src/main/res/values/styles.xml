@@ -6,6 +6,7 @@
     <!-- Base application themes. -->
     <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="GolesTheme.NoActionBar">

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/timeline_imwatching"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="I'm Watching"
+                android:textAllCaps="true"
+                android:textColor="@color/accent"
+                />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="top"
+            android:background="@drawable/shadow_top_down"/>
+    </LinearLayout>
+
+
+    <gm.mobi.android.ui.widgets.ScrollListView
+        android:id="@+id/timeline_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        tools:listitem="@layout/item_list_shot"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/timeline_new"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/shadow_down_top"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            >
+
+            <TextView
+                android:id="@+id/timeline_new_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toLeftOf="@+id/timeline_new_send"
+                android:background="?android:editTextBackground"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/activity_timeline_new_text"
+                android:textColor="@color/gray_60"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:id="@+id/timeline_new_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_send"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>
