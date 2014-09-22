@@ -3,16 +3,7 @@ package gm.mobi.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-
-import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 
