@@ -42,13 +42,26 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
+    public static Map<String, Object> reqRestUsersToDto(User user) {
+        Map<String, Object> dto = new HashMap<>();
+
+        dto.put(UserTable.ID, user == null ? null : user.getIdUser());
+        dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
+        dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
+        dto.put(UserTable.NAME, user == null ? null : user.getName());
+        dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
+         setSynchronizedToDto(dto, user);
+
+        return dto;
+    }
+
     public static User fromDto(Map<String, Object> dto) {
         User user = new User();
-        user.setIdUser((Integer) dto.get(UserTable.ID));
-        user.setFavouriteTeamId((Integer) dto.get(UserTable.FAVOURITE_TEAM_ID));
-        user.setSessionToken((String) dto.get(UserTable.SESSION_TOKEN));
+        user.setIdUser(dto.containsKey(UserTable.ID)? (Integer) dto.get(UserTable.ID) : null);
+        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID)? (Integer)dto.get(UserTable.FAVOURITE_TEAM_ID) : null);
+        user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) :  null);
         user.setUserName((String) dto.get(UserTable.USER_NAME));
-        user.setEmail((String) dto.get(UserTable.EMAIL));
+        user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName((String) dto.get(UserTable.NAME));
         user.setPhoto((String) dto.get(UserTable.PHOTO));
 
