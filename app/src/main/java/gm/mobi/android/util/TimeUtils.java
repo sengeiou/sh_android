@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import gm.mobi.android.BuildConfig;
 import gm.mobi.android.R;
@@ -67,4 +68,12 @@ public class TimeUtils {
     }
 
 
+    public static long getMilisecondsByDaysNumber(Integer daysNumber){
+        return TimeUnit.MILLISECONDS.convert(daysNumber, TimeUnit.DAYS);
+    }
+
+    public static Long getNDaysAgo(Context context,Integer daysNumber){
+        long sevenDays = getMilisecondsByDaysNumber(daysNumber);
+        return getCurrentTime(context) - sevenDays;
+    }
 }
