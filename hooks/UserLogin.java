@@ -229,16 +229,22 @@ public class UserLogin implements GenericServiceHook {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
+        String identifierName = null;
+        String identifierValue = null;
+        String passwordValue = null;
 
-        AbstractList<KeyItem> keys = metadata.getKey();
-
-        KeyItem identifier = keys.get(0);
-        KeyItem password = keys.get(1);
-
-        String identifierName = identifier.getName();
-        String identifierValue = (String) identifier.getValue();
-
-        String passwordValue = (String) password.getValue();
+        for(int i = 0 ; i < 2 ; i++){
+            String tmp = metadata.getKey().get(i).getName();
+            if ( ATTR_USERNAME.equals(tmp)) {
+                identifierName = tmp;
+                identifierValue =  metadata.getKey().get(i).getValue().toString();
+            }else if ( ATTR_MAIL.equals(tmp)) {
+                identifierName = tmp;
+                identifierValue =  metadata.getKey().get(i).getValue().toString();
+            }else if ( ATTR_PASSWORD.equals(tmp)) {
+                passwordValue = metadata.getKey().get(i).getValue().toString();
+            }
+        }
 
         try {
 
