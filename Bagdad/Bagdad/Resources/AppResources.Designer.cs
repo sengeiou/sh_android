@@ -133,6 +133,42 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Free.
+        /// </summary>
+        public static string Free {
+            get {
+                return ResourceManager.GetString("Free", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shooter is free. No ads. No fees..
+        /// </summary>
+        public static string FreeInfo {
+            get {
+                return ResourceManager.GetString("FreeInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Fun.
+        /// </summary>
+        public static string Fun {
+            get {
+                return ResourceManager.GetString("Fun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shooter is instant, 24 hours a day fun..
+        /// </summary>
+        public static string FunInfo {
+            get {
+                return ResourceManager.GetString("FunInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Id or Password are not valid..
         /// </summary>
         public static string GeneralLoginError {
@@ -178,11 +214,29 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a New.
+        /// </summary>
+        public static string New {
+            get {
+                return ResourceManager.GetString("New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Create New Account.
         /// </summary>
         public static string NewAccount {
             get {
                 return ResourceManager.GetString("NewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shooter connects you with friends and family..
+        /// </summary>
+        public static string NewInfo {
+            get {
+                return ResourceManager.GetString("NewInfo", resourceCulture);
             }
         }
         
@@ -250,6 +304,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Register with Email.
+        /// </summary>
+        public static string RegisterWithEmail {
+            get {
+                return ResourceManager.GetString("RegisterWithEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a LeftToRight.
         /// </summary>
         public static string ResourceFlowDirection {
@@ -291,6 +354,24 @@ namespace Bagdad.Resources {
         public static string Shoot {
             get {
                 return ResourceManager.GetString("Shoot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shooter.
+        /// </summary>
+        public static string Shooter {
+            get {
+                return ResourceManager.GetString("Shooter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shooter is a new way to share football..
+        /// </summary>
+        public static string ShooterInfo {
+            get {
+                return ResourceManager.GetString("ShooterInfo", resourceCulture);
             }
         }
         

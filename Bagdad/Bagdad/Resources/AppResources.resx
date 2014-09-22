@@ -136,7 +136,7 @@
   </data>
   <data name="SignInTitle" xml:space="preserve">
     <value>Sign in</value>
-    <comment>SignIn.xaml</comment>
+    <comment>SignIn.xaml, LoginOrregister.xaml</comment>
   </data>
   <data name="FacebookAdvice1" xml:space="preserve">
     <value>Shooter will never post without your permission.</value>
@@ -220,7 +220,7 @@
   </data>
   <data name="StartShooting" xml:space="preserve">
     <value>Start Shooting</value>
-    <comment>TimeLine.xaml</comment>
+    <comment>TimeLine.xaml, Start.xaml</comment>
   </data>
   <data name="UserOrPasswordDoesntMatch" xml:space="preserve">
     <value>User or Password doesn't match.</value>
@@ -242,9 +242,45 @@
     <value>Enter</value>
     <comment>SignIn.xaml</comment>
   </data>
+  <data name="Free" xml:space="preserve">
+    <value>Free</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="FreeInfo" xml:space="preserve">
+    <value>Shooter is free. No ads. No fees.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="Fun" xml:space="preserve">
+    <value>Fun</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="FunInfo" xml:space="preserve">
+    <value>Shooter is instant, 24 hours a day fun.</value>
+    <comment>Start.xaml</comment>
+  </data>
   <data name="GeneralLoginError" xml:space="preserve">
     <value>Id or Password are not valid.</value>
     <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="NewInfo" xml:space="preserve">
+    <value>Shooter connects you with friends and family.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="RegisterWithEmail" xml:space="preserve">
+    <value>Register with Email</value>
+    <comment>LoginOrregister.xaml</comment>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>Shooter</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="ShooterInfo" xml:space="preserve">
+    <value>Shooter is a new way to share football.</value>
+    <comment>Start.xaml</comment>
   </data>
   <data name="WhatsUp" xml:space="preserve">
     <value>What's Up?</value>

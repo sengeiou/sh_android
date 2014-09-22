@@ -127,6 +127,6 @@
   </data>
   <data name="SignInTitle" xml:space="preserve">
     <value>Acceder</value>
-    <comment>SignIn.xaml</comment>
+    <comment>SignIn.xaml, LoginOrregister.xaml</comment>
   </data>
 </root>

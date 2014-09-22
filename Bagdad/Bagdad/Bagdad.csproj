@@ -96,6 +96,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="LoginOrRegister.xaml.cs">
+      <DependentUpon>LoginOrRegister.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeLine.xaml.cs">
       <DependentUpon>TimeLine.xaml</DependentUpon>
     </Compile>
@@ -133,6 +139,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="LoginOrRegister.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SignIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Start.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +179,11 @@
     <Content Include="Resources\icons\appbar.quill.png" />
     <Content Include="Resources\icons\appbar.refresh.png" />
     <Content Include="Resources\icons\appbar.user.png" />
+    <Content Include="Resources\start\Facebook.png" />
+    <Content Include="Resources\start\start_free.png" />
+    <Content Include="Resources\start\start_fun.png" />
+    <Content Include="Resources\start\start_new.png" />
+    <Content Include="Resources\start\start_shooter.png" />
     <Content Include="shooter.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

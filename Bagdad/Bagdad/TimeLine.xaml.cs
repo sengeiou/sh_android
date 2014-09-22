@@ -39,7 +39,7 @@ namespace Bagdad
             try
             {
                 //IF The User isn't Loged --> GO TO: Registration (Now goes to SignIn because Registration is not yet implemented)
-                if (!await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/SignIn.xaml", UriKind.Relative));
+                if (!await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/Start.xaml", UriKind.Relative));
             }
             catch (Exception e)
             {
