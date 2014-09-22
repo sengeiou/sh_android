@@ -26,6 +26,7 @@
 #import <AdSupport/ASIdentifierManager.h>
 #import "FavRestConsumerHelper.h"
 #import "Conection.h"
+#import "User.h"
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -77,7 +78,7 @@
         self.waitingForAPNS = YES;
         
         [Appirater appLaunched:YES];
-        
+
         self.request = [FavRestConsumerHelper createREQ];
         
         if (SYNCHRO_ACTIVATED)

@@ -34,10 +34,7 @@ static NSArray *cuotasToDelete;
             //Check for entity class
             NSString *class = [[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ENTITY];
             
-            //+ (NSString *)getClassForString:(NSString *)entityString {
-
-            
-            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:NSClassFromString([FavRestConsumerHelper getClassForString:class]) WithArray:dataArray]; //NSClassFromString(@"User")
+            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:NSClassFromString([FavRestConsumerHelper getClassForString:class]) WithArray:dataArray];
             if (insertedArray.count > 0){
                 if ([[CoreDataManager singleton] saveContext])
                     completionBlock(YES,nil);

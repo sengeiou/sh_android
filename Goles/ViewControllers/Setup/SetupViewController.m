@@ -13,6 +13,7 @@
 #import "CoreDataParsing.h"
 #import "Encryption.h"
 #import "User.h"
+#import "Utils.h"
 
 @interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ConectionProtocol>{
     
@@ -141,16 +142,17 @@
         if ([[Conection sharedInstance]isConection]) {
             NSDictionary *key;
            
-            if ([txtFieldName.text rangeOfString:@"/@"].location == NSNotFound)
-                key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
-            else
+            if ([Utils NSStringIsValidEmail:txtFieldName.text])
                 key   = @{kJSON_EMAIL:txtFieldName.text, kJSON_PASSWORD:result};
+            else
+                key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
             
             [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self];
             
         };
     }
 }
+
 
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------

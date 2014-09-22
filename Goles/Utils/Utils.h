@@ -52,5 +52,6 @@
 
 + (NSString *)changeQuantityToEURFormat:(CGFloat)money;
 + (NSString *)setTwoDecimalsToBetOdd:(CGFloat)betOdd;
++ (BOOL) NSStringIsValidEmail:(NSString *)checkString;
 
 @end

@@ -11,6 +11,7 @@
 #import "CoreDataParsing.h"
 #import "Constants.h"
 #import "Team.h"
+#import "UserManager.h"
 
 @interface CoreDataManager()
 {
@@ -120,6 +121,8 @@
             DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
 
         result = [usersWithProfile objectAtIndex:0];
+        
+        [[UserManager sharedInstance] setMUser:result];
     }
     return result;
 }

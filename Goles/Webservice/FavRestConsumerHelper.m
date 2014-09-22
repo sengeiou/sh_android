@@ -61,6 +61,7 @@
 
 //-----------------------------------------------------------------------------
 + (NSArray *)createREQ {
+    [User getUser];
     
     //Create 'req' array
     NSMutableArray *req = [[NSMutableArray alloc] initWithCapacity:5];

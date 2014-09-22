@@ -125,5 +125,10 @@
     return result;
 }
 
++ (User *)getUser {
+    User *user = [[CoreDataManager singleton] getCurrentUser];
+    
+    return user;
+}
 
 @end
