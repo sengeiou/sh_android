@@ -143,7 +143,7 @@
             NSDictionary *key;
            
             if ([Utils NSStringIsValidEmail:txtFieldName.text])
-                key   = @{kJSON_EMAIL:txtFieldName.text, kJSON_PASSWORD:result};
+                key   = @{kJSON_EMAIL:@"mari@gmail.com", kJSON_PASSWORD:result};
             else
                 key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
 
@@ -173,6 +173,7 @@
     
     NSUInteger length1 = txtFieldPwd.text.length - range.length + string.length;
 
+    NSLog(@"%@", txtFieldName.text);
     
     if (length > 1 && length1 > 1) {
         self.btnEnter.enabled = YES;
