@@ -47,12 +47,12 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException {
+    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException {
         return null;
     }
 
     @Override
-    public List<User> getUsers(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException {
+    public List<User> getUsersByUserIdList(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException {
         return null;
     }
 
