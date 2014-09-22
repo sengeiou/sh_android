@@ -1,12 +1,15 @@
 package gm.mobi.android.ui.activities;
 
 import android.app.Application;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
@@ -97,9 +100,10 @@ public class MainActivity extends BaseSignedInActivity {
         mShotList = event.getShots();
         if(event.getStatus() == ShotsResultEvent.STATUS_SUCCESS && mShotList!=null){
             //Aquí deberíamos pintar el fragment del timeline
-
+            Toast.makeText(getApplicationContext(),"Ha descargado todos los shots", Toast.LENGTH_LONG).show();
             android.support.v4.app.FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_timeline, new TimelineFragment());
+
+            ft.add(new TimelineFragment(),"TIME_LINE_FRAGMENT");
             ft.commit();
         }
     }
