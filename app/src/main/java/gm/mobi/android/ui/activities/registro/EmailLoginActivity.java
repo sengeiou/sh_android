@@ -127,7 +127,6 @@ public class EmailLoginActivity extends BaseActivity {
         setLoading(true);
     }
 
-
     /**
      * Retrieves Gmail accounts from the phone.
      */
