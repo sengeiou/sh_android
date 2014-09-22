@@ -361,10 +361,13 @@ public class Filter implements Organizable, Serializable {
 			filerAttributes.add(filterItem.getName());	
 		}
 
-		for (Filter currentFilter : filter) {
+        if ( filter != null){ //BUGFIX bu carlos: a veces llega null
+            for (Filter currentFilter : filter) {
 
-			currentFilter.getFilterAttributeSet(filerAttributes);
-		}
+                currentFilter.getFilterAttributeSet(filerAttributes);
+            }
+        }
+
 		
 		return filerAttributes;
 	}
