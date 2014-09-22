@@ -66,7 +66,7 @@ public class UsersJob extends CancellableJob{
             return;
         }
         try {
-            List<User> users = service.getUsers(userIds,context, mDbHelper.getWritableDatabase());
+            List<User> users = service.getUsersByUserIdList(userIds,context, mDbHelper.getWritableDatabase());
             if(users != null && users.size()>0 && users.get(0).getIdUser()!=null){
 
                 UserManager.saveUsers(mDbHelper.getWritableDatabase(), users);
