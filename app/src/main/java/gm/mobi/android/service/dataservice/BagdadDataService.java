@@ -1,5 +1,9 @@
 package gm.mobi.android.service.dataservice;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -8,11 +12,18 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.manager.SyncTableManager;
+import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
@@ -49,6 +60,26 @@ public class BagdadDataService implements BagdadService {
         }
         Map<String, Object>[] data = ops[0].getData();
         return UserMapper.fromDto(data[0]);
+    }
+
+    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db) throws IOException{
+        List<Follow> follows = new ArrayList<>();
+        Long date = SyncTableManager.getLastModifiedDate(context, db, GMContract.FollowTable.TABLE);
+        GenericDto genericDto = UserDtoFactory.getFollowOperationDto(idUser, 1000L, context, UserDtoFactory.GET_FOLLOWING, date);
+        GenericDto responseDto = postRequest(genericDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        if(ops.length>0){
+            Map<String, Object>[] data = ops[0].getData();
+            for(int i=0;i<data.length;i++){
+                Follow f = FollowMapper.fromDto(data[i]);
+                follows.add(f);
+            }
+        }
+        return follows;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
