@@ -95,7 +95,8 @@ NSString *const kALIAS_GET_ADVICE                      = @"GET_ADVICE";
 NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
 NSString *const kALIAS_LOGIN                           = @"LOGIN";
-NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOW";
+NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWS";
+NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
 
 #pragma mark - CORE DATA ENTITY NAMES
 

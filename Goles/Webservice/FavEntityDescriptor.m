@@ -15,6 +15,7 @@
 #import "AppAdvice.h"
 #import "User.h"
 #import "Follow.h"
+#import "Shot.h"
 
 @implementation FavEntityDescriptor
 
@@ -116,6 +117,18 @@
                  kJSON_ID_USER:[NSNull null],
                  kJSON_FOLLOW_IDUSERFOLLOWED:[NSNull null]};
     }
+    
+    else if ([entityClass isSubclassOfClass:[Shot class]]) {
+        
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_ID_USER:[NSNull null],
+                 kJSON_SHOT_IDSHOT:[NSNull null],
+                 kJSON_SHOT_COMMENT:[NSNull null]};
+    }
+
 
 
   

@@ -9,6 +9,7 @@
 #import "TimeLineViewController.h"
 #import "FavRestConsumer.h"
 #import "Follow.h"
+#import "Shot.h"
 
 @interface TimeLineViewController ()
 
@@ -22,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
 }
 
 //------------------------------------------------------------------------------

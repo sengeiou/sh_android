@@ -16,6 +16,7 @@
 #import "Team.h"
 #import "User.h"
 #import "Follow.h"
+#import "Shot.h"
 
 @implementation FavRestConsumerHelper
 
@@ -37,6 +38,8 @@
         return kALIAS_LOGIN;
     else if ([entity isSubclassOfClass:[Follow class]])
         return kALIAS_FOLLOW;
+    else if ([entity isSubclassOfClass:[Shot class]])
+        return kALIAS_SHOT;
     
     
     return nil;
@@ -88,8 +91,8 @@
     [req addObject:[NSNumber numberWithInt:appVersion]];
     [req addObject:[NSNumber numberWithLongLong:epochTime]];
     
-    if (sessionToken != nil)
-        [req addObject:sessionToken];
+//    if (sessionToken != nil)
+//        [req addObject:sessionToken];
     
     return [req copy];
 }

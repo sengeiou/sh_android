@@ -95,6 +95,7 @@ extern NSString *const kALIAS_GET_ALL_TEAMS;
 extern NSString *const kALIAS_REGISTER_DEVICE;
 extern NSString *const kALIAS_LOGIN;
 extern NSString *const kALIAS_FOLLOW;
+extern NSString *const kALIAS_SHOT;
 
 #pragma mark - CORE DATA ENTITY NAMES
 

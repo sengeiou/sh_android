@@ -22,6 +22,8 @@
 //-----------------------------------------------------------------------------
 + (NSDictionary *)getFilterForEntity:(Class)entity {
     
+    NSNumber *userID = [[UserManager singleton] getUserId];
+    
     if ([entity isSubclassOfClass:[AppAdvice class]]){
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
@@ -61,13 +63,13 @@
     if ([entity isSubclassOfClass:[Shot class]]){
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
-                                 @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_MESSAGE_PLATFORM,K_CD_VALUE:@1}];
+                                 @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
         return filter;
     }
     
     if ([entity isSubclassOfClass:[Follow class]]){
-        NSNumber *userID = [[UserManager singleton] getUserId];
+        
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
                                  @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID},
