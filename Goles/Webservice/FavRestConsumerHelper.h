@@ -24,6 +24,11 @@
  */
 + (NSString *)getAliasForEntity:(Class)entity;
 
++ (NSString *)getEntityForClass:(Class)entity;
+
++ (NSString *)getClassForString:(NSString *)entityString;
+
+
 //------------------------------------------------------------------------------
 /**
  @brief Requestor block for the webservice request

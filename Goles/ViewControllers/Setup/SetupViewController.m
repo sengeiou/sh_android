@@ -14,7 +14,7 @@
 #import "Encryption.h"
 #import "User.h"
 
-@interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>{
+@interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ConectionProtocol>{
     
      UITextField *txtFieldName;
      UITextField *txtFieldPwd;
@@ -46,7 +46,10 @@
     
     [self.view addGestureRecognizer:tap];
     
-    
+    [self addTextFields];
+}
+
+-(void)addTextFields{
     txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
     txtFieldName.delegate = self;
     txtFieldName.clearButtonMode = YES;
@@ -58,17 +61,14 @@
     txtFieldPwd.clearButtonMode = YES;
     [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
     txtFieldPwd.placeholder = @"Required";
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = NO;
-
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
-
 }
 
 -(void)dismissKeyboard {
@@ -122,29 +122,34 @@
              break;
      }
      
-     /* only called when cell is created */
-     
-     // Configure the cell...
-//     tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, self.view.frame.size.width, tableView.frame.size.height);
-//     cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.size.width, cell.frame.size.height);
-
      return cell;
 }
 
 - (IBAction)passEnter:(id)sender {
-    
-    
-    NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
-    
-    [[Conection sharedInstance]getServerTime];
-    
-    if ([[Conection sharedInstance]isConection]) {
-        
-        NSDictionary *key = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
-        
-        [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self]; //FALTA TERMINARAAAA
 
-    };
+    [[Conection sharedInstance]getServerTimewithDelegate:self];
+}
+
+
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status{
+    
+    if (status){
+        NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
+        
+        if ([[Conection sharedInstance]isConection]) {
+            NSDictionary *key;
+           
+            if ([txtFieldName.text rangeOfString:@"/@"].location == NSNotFound)
+                key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
+            else
+                key   = @{kJSON_EMAIL:txtFieldName.text, kJSON_PASSWORD:result};
+            
+            [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self];
+            
+        };
+    }
 }
 
 #pragma mark - Webservice response methods
@@ -155,7 +160,9 @@
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
         [appDelegate setTabBarItems];
-    }
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"Id or Password are not valid" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];    }
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

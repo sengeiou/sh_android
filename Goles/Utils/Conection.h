@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+
+@protocol ConectionProtocol
+
+- (void)conectionResponseForStatus:(BOOL)status;
+
+@end
+
 @interface Conection : NSObject <UIAlertViewDelegate>
 
 @property (nonatomic) int timeToCheck;
@@ -15,7 +22,7 @@
 @property (nonatomic,strong) NSDate *requestDate;
 @property (nonatomic, assign) BOOL isConection;
 
-- (void)getServerTime;
+- (void)getServerTimewithDelegate:(id)delegate;
 
 + (Conection *)sharedInstance;
 

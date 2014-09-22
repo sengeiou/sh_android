@@ -11,6 +11,7 @@
 #import "Constants.h"
 #import "CoreDataParsing.h"
 #import "CoreDataManager.h"
+#import "FavRestConsumerHelper.h"
 
 static NSArray *cuotasToDelete;
 
@@ -33,7 +34,10 @@ static NSArray *cuotasToDelete;
             //Check for entity class
             NSString *class = [[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ENTITY];
             
-            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:NSClassFromString(@"User") WithArray:dataArray];
+            //+ (NSString *)getClassForString:(NSString *)entityString {
+
+            
+            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:NSClassFromString([FavRestConsumerHelper getClassForString:class]) WithArray:dataArray]; //NSClassFromString(@"User")
             if (insertedArray.count > 0){
                 if ([[CoreDataManager singleton] saveContext])
                     completionBlock(YES,nil);

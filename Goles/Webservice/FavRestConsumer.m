@@ -331,7 +331,7 @@
     
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:@"Login"
+                                                                     andEntity:[FavRestConsumerHelper getEntityForClass:entityClass]
                                                                      withItems:@1
                                                                     withOffSet:@0
                                                                      andKey:key];

@@ -23,7 +23,7 @@
 - (NSNumber *)getIdDevice;
 - (void)setDeviceToken:(NSString *)token;
 - (void)setIdDevice:(NSNumber *)idDevice;
--(NSString *)getUserSessionToken;
+- (NSString *)getUserSessionToken;
 
 //------------------------------------------------------------------------------
 /**

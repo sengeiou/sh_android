@@ -1,5 +1,6 @@
 #import "User.h"
 #import "CoreDataManager.h"
+#import "UserManager.h"
 
 @interface User ()
 
@@ -59,6 +60,29 @@
     else
         result = NO;
     
+    NSNumber *idFavouriteTeam = [dict objectForKey:kJSON_ID_FAVOURITE_TEAM ];
+    if ([idFavouriteTeam isKindOfClass:[NSNumber class]])
+        [self setIdFavouriteTeam:idFavouriteTeam];
+    
+    NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
+    if ([sessionToken isKindOfClass:[NSString class]])
+        [self setSessionToken:sessionToken];
+    
+    
+    NSString *email = [dict objectForKey:kJSON_EMAIL ];
+    if ([email isKindOfClass:[NSString class]])
+        [self setEMail:sessionToken];
+    
+    NSString *name = [dict objectForKey:kJSON_NAME ];
+    if ([name isKindOfClass:[NSString class]])
+        [self setName:name];
+    
+    NSString *photo = [dict objectForKey:kJSON_PHOTO ];
+    if ([name isKindOfClass:[NSString class]])
+        [self setPhoto:photo];
+
+
+    
     //SYNCRO  PROPERTIES
     
     NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
@@ -95,7 +119,11 @@
             [self setCsys_deleted:deletedDate];
     }
     
+    if (result)
+        [[UserManager sharedInstance] setMUser:self];
+        
     return result;
 }
+
 
 @end

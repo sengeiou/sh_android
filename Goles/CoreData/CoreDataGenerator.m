@@ -72,7 +72,7 @@
     
     if ( isSaved ){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"SUCCES!!"
-                                                        message:@"Bagdad Core Data default database has been generated succesfully"
+                                                        message:@"Shooter Core Data default database has been generated succesfully"
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"_ok", @"_ok")
                                               otherButtonTitles:nil, nil];

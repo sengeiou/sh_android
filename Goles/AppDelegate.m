@@ -119,7 +119,7 @@
 //------------------------------------------------------------------------------
 -(void) showInitView{
     
-    if (![[UserManager sharedInstance] getUserSessionToken]) {
+    if (![[UserManager singleton] getUserSessionToken]) {
         
         self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
         

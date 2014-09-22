@@ -49,7 +49,8 @@
 
 //------------------------------------------------------------------------------
 -(NSString *)getUserSessionToken{
-    return [[self mUser] sessionToken];
+
+    return self.mUser.sessionToken;
 }
 
 

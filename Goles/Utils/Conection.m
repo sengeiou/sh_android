@@ -27,7 +27,7 @@
     return sharedConection;
 }
 
-- (void)getServerTime {
+- (void)getServerTimewithDelegate:(id)delegate {
     
     self.timeToCheck += 1;
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -44,6 +44,8 @@
                 if (!error){
                     
                     self.isConection = YES;
+                    [delegate conectionResponseForStatus:YES];
+                    
                     [self conectionOkToContinue];
                
                 } else {
@@ -74,13 +76,13 @@
         
         if (error.code < 400) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No se puede acceder a Goles" message:@"Revisa tu conexión a Internet." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Reintentar", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"The network connection was lost." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No se puede acceder a Goles" message:@"Estamos trabajando para solucionarlo lo antes posible." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Reintentar", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"We are working to fix it as soon as possible." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }

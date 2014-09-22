@@ -23,7 +23,7 @@
 + (NSString *)getAliasForEntity:(Class)entity {
     
     if ([entity isSubclassOfClass:[Match class]])
-        return @"Get Matches of FCBarcelona";
+        return @"Get Matches of Shooter";
     else if ([entity isSubclassOfClass:[Message class]])
         return kALIAS_GET_MESSAGE;
     else if ([entity isSubclassOfClass:[AppAdvice class]])
@@ -34,6 +34,26 @@
         return kALIAS_GET_ALL_TEAMS;
     else if ([entity isSubclassOfClass:[User class]])
         return kALIAS_LOGIN;
+    
+    
+    return nil;
+}
+
+//-----------------------------------------------------------------------------
++ (NSString *)getEntityForClass:(Class)entity {
+    
+  if ([entity isSubclassOfClass:[User class]])
+        return @"Login";
+    
+    
+    return nil;
+}
+
+//-----------------------------------------------------------------------------
++ (NSString *)getClassForString:(NSString *)entityString {
+    
+    if ([entityString isEqualToString:@"Login"])
+        return @"User";
     
     return nil;
 }
