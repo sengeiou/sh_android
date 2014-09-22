@@ -39,10 +39,6 @@
             android:theme="@style/GolesTheme.NoActionBar"
             android:launchMode="singleTop">
         </activity>
-        <activity android:name=".ui.activities.registro.FollowingActivity"
-                  android:theme="@style/GolesTheme.NoActionBar"
-                  android:launchMode="singleTop">
-                  </activity>
         <!--<activity
             android:name=".ui.activities.registro.EmailRegistrationActivity"
             android:label="@string/title_activity_registro_email">
