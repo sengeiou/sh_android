@@ -52,7 +52,7 @@ public class SQLiteUtils {
             + TablesSync.DIRECTION+" VARCHAR(255) NULL,"
             + TablesSync.ORDER +" INT NOT NULL,"
             + TablesSync.ENTITY+" VARCHAR(255) NOT NULL,"
-            + TablesSync.FREQUENCY+" INT NULL,"
-            + " PRIMARY KEY ("+TablesSync.ORDER+"));";
+            + TablesSync.FREQUENCY+" INT NULL, " +
+            "PRIMARY KEY("+TablesSync.ORDER+"));";
 
 }
