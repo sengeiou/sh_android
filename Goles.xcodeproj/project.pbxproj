@@ -77,6 +77,8 @@
 		AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F1C1998F49700A942A9 /* MeContainerViewController.m */; };
 		AA72640619D03A510067A39D /* _Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640519D03A510067A39D /* _Shot.m */; };
 		AA72640919D03A6E0067A39D /* Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640819D03A6E0067A39D /* Shot.m */; };
+		AA72640C19D0505A0067A39D /* _Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640B19D0505A0067A39D /* _Follow.m */; };
+		AA72640F19D0506A0067A39D /* Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640E19D0506A0067A39D /* Follow.m */; };
 		AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */; };
 		AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541A19C057C000E39D94 /* AFHTTPRequestOperationManager.m */; };
 		AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541C19C057C000E39D94 /* AFHTTPSessionManager.m */; };
@@ -236,6 +238,10 @@
 		AA72640519D03A510067A39D /* _Shot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Shot.m; sourceTree = "<group>"; };
 		AA72640719D03A6E0067A39D /* Shot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shot.h; sourceTree = "<group>"; };
 		AA72640819D03A6E0067A39D /* Shot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shot.m; sourceTree = "<group>"; };
+		AA72640A19D0505A0067A39D /* _Follow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Follow.h; sourceTree = "<group>"; };
+		AA72640B19D0505A0067A39D /* _Follow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Follow.m; sourceTree = "<group>"; };
+		AA72640D19D0506A0067A39D /* Follow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Follow.h; sourceTree = "<group>"; };
+		AA72640E19D0506A0067A39D /* Follow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Follow.m; sourceTree = "<group>"; };
 		AACA541719C057C000E39D94 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		AACA541919C057C000E39D94 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -307,6 +313,8 @@
 		A5E3E20419991A1100322727 /* MachineClass */ = {
 			isa = PBXGroup;
 			children = (
+				AA72640A19D0505A0067A39D /* _Follow.h */,
+				AA72640B19D0505A0067A39D /* _Follow.m */,
 				AA72640419D03A510067A39D /* _Shot.h */,
 				AA72640519D03A510067A39D /* _Shot.m */,
 				A58DA83F19D02EA9003EE5CB /* _User.h */,
@@ -336,6 +344,8 @@
 				AA623D841998D17700A942A9 /* AppAdvice.m */,
 				AA623D8F1998D17700A942A9 /* Device.h */,
 				AA623D901998D17700A942A9 /* Device.m */,
+				AA72640D19D0506A0067A39D /* Follow.h */,
+				AA72640E19D0506A0067A39D /* Follow.m */,
 				AA623DA51998D17700A942A9 /* Match.h */,
 				AA623DA61998D17700A942A9 /* Match.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
@@ -847,6 +857,7 @@
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
+				AA72640C19D0505A0067A39D /* _Follow.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,
 				AA623E371998D17800A942A9 /* AppAdvice.m in Sources */,
@@ -863,6 +874,7 @@
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,
+				AA72640F19D0506A0067A39D /* Follow.m in Sources */,
 				AA623F171998F46E00A942A9 /* PeopleTableViewController.m in Sources */,
 				A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,

@@ -146,7 +146,7 @@
                 key   = @{kJSON_EMAIL:txtFieldName.text, kJSON_PASSWORD:result};
             else
                 key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
-            
+
             [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self];
             
         };

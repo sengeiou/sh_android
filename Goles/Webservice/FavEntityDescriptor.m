@@ -14,6 +14,7 @@
 #import "Message.h"
 #import "AppAdvice.h"
 #import "User.h"
+#import "Follow.h"
 
 @implementation FavEntityDescriptor
 
@@ -105,6 +106,17 @@
                  kJSON_PASSWORD:[NSNull null],
                  kJSON_PHOTO:[NSNull null]};
     }
+    
+    else if ([entityClass isSubclassOfClass:[Follow class]]) {
+        
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_ID_USER:[NSNull null],
+                 kJSON_FOLLOW_IDUSERFOLLOWED:[NSNull null]};
+    }
+
 
   
     return nil;

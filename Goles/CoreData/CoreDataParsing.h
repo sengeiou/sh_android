@@ -94,6 +94,7 @@ extern NSString *const kALIAS_GET_ADVICE;
 extern NSString *const kALIAS_GET_ALL_TEAMS;
 extern NSString *const kALIAS_REGISTER_DEVICE;
 extern NSString *const kALIAS_LOGIN;
+extern NSString *const kALIAS_FOLLOW;
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -131,6 +132,9 @@ extern NSString *const kJSON_DEVICE_OSVERSION;
 extern NSString *const kJSON_DEVICE_MODEL;
 extern NSString *const kJSON_DEVICE_APPVERSION;
 extern NSString *const kJSON_DEVICE_LOCALE;
+
+//FOLLOW
+extern NSString *const kJSON_FOLLOW_IDUSERFOLLOWED;
 
 // TEAM
 extern NSString * const kJSON_TEAM_IDTEAM;

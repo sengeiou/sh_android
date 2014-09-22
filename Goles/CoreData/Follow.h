@@ -1,8 +1,6 @@
-#import "_User.h"
+#import "_Follow.h"
 
-@interface User : _User {}
-
-+ (User *)getUser;
+@interface Follow : _Follow {}
 
 +(instancetype)insertWithDictionary:(NSDictionary *)dict;
 +(instancetype)updateWithDictionary:(NSDictionary *)dict;

@@ -34,6 +34,21 @@
     return [self singleton];
 }
 
+//------------------------------------------------------------------------------
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+
+    }
+    return self;
+}
+
+//------------------------------------------------------------------------------
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
 #pragma mark - public methods
 //------------------------------------------------------------------------------
 - (User *)getActiveUser {
@@ -83,47 +98,6 @@
     [[CoreDataManager singleton] saveContext];
 }
 
-//------------------------------------------------------------------------------
--(NSInteger)getUserPreviousPlayerId {
-    
-    // Get playerID from User defaults
-    NSUserDefaults *localStorage = [NSUserDefaults standardUserDefaults];
-    NSInteger idPlayerDefaults = [localStorage integerForKey:kJSON_ID_USER];
-    
-    // Get playerID from iCloud
-    NSUbiquitousKeyValueStore *iCloudStorage = [NSUbiquitousKeyValueStore defaultStore];
-    NSNumber *idPlayerICloud = [iCloudStorage objectForKey:kJSON_ID_USER];
-    
-    // Synchronize id's
-    if ( idPlayerDefaults != [idPlayerICloud integerValue] ) {
-
-        //Save the oldest player in both environments
-        if ( [idPlayerICloud integerValue] > idPlayerDefaults ){
-            [localStorage setObject:idPlayerICloud forKey:kJSON_ID_USER];
-            [localStorage synchronize];
-        } else {
-            [iCloudStorage setObject:@(idPlayerDefaults) forKey:kJSON_ID_USER];
-            [iCloudStorage synchronize];
-        }
-    }
-    
-    return idPlayerDefaults;
-}
-
-//------------------------------------------------------------------------------
--(void)setUserPreviousPlayerId:(NSNumber *)idPlayer {
-    
-    // Set playerID to User defaults
-    NSUserDefaults *localStorage = [NSUserDefaults standardUserDefaults];
-    [localStorage setObject:idPlayer forKey:kJSON_ID_USER];
-    [localStorage synchronize];
-    
-    // Set playerID to iCloud
-    NSUbiquitousKeyValueStore *iCloudStorage = [NSUbiquitousKeyValueStore defaultStore];
-    [iCloudStorage setObject:idPlayer forKey:kJSON_ID_USER];
-    [iCloudStorage synchronize];
-}
-
 
 //------------------------------------------------------------------------------
 - (NSDictionary *)getRequesterDictionary {
@@ -133,24 +107,6 @@
         requester[kJSON_ID_USER] = [self getUserId];
     
     return requester;
-}
-
-#pragma mark - Singleton overwritten methods
-//------------------------------------------------------------------------------
-- (id)init {
-	self = [super init];
-	if (self != nil) {
-//        [self setMclient:[[WSClient alloc] init]];
-//        [[self mclient] setDelegate:self];
-//        [[self mclient] setShowHUD:NO];
-	}
-	return self;
-}
-
-//------------------------------------------------------------------------------
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
 }
 
 @end

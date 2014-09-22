@@ -7,6 +7,8 @@
 //
 
 #import "TimeLineViewController.h"
+#import "FavRestConsumer.h"
+#import "Follow.h"
 
 @interface TimeLineViewController ()
 
@@ -19,6 +21,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
 }
 
 //------------------------------------------------------------------------------
@@ -41,14 +44,13 @@
  }
  
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Webservice response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+    
+    if (status){
+        NSLog(@"Response OK");
+    }
 }
-*/
 
 @end

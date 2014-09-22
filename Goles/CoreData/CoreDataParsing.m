@@ -89,12 +89,13 @@ NSString *const kJSON_WEIGHT                            = @"weight";
 
 #pragma mark - WEBSERVICE ALIAS
 
-NSString *const kALIAS_GET_SML                         = @"GET_ALL_SML";
-NSString *const kALIAS_GET_MESSAGE                     = @"GET_ALL_MESSAGE";
-NSString *const kALIAS_GET_ADVICE                      = @"GET_ALL_ADVICE";
-NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_ALL_TEAMS";
+NSString *const kALIAS_GET_SML                         = @"GET_SML";
+NSString *const kALIAS_GET_MESSAGE                     = @"GET_MESSAGE";
+NSString *const kALIAS_GET_ADVICE                      = @"GET_ADVICE";
+NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
 NSString *const kALIAS_LOGIN                           = @"LOGIN";
+NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOW";
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -132,6 +133,9 @@ NSString *const kJSON_DEVICE_OSVERSION                 = @"osVersion";
 NSString *const kJSON_DEVICE_MODEL                     = @"model";
 NSString *const kJSON_DEVICE_APPVERSION                = @"appVer";
 NSString *const kJSON_DEVICE_LOCALE                    = @"locale";
+
+//FOLLOW
+NSString *const kJSON_FOLLOW_IDUSERFOLLOWED            = @"idFollowedUser";
 
 //MATCH
 NSString *const kJSON_MATCHLIST                        = @"matchList";

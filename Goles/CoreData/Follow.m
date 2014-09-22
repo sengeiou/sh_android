@@ -1,70 +1,61 @@
-#import "Shot.h"
+#import "Follow.h"
 #import "CoreDataManager.h"
-#import "User.h"
 
-@implementation Shot
+
+@implementation Follow
 
 //------------------------------------------------------------------------------
-+(Shot *)insertWithDictionary:(NSDictionary *)dict {
++(Follow *)insertWithDictionary:(NSDictionary *)dict {
     
     NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
-    Shot *shot = [NSEntityDescription insertNewObjectForEntityForName:@"Shot"
+    Follow *follow = [NSEntityDescription insertNewObjectForEntityForName:@"Follow"
                                                inManagedObjectContext:context];
     
-    BOOL insertedCorrectly = [shot setShotValuesWithDictionary:dict];
+    BOOL insertedCorrectly = [follow setFollowValuesWithDictionary:dict];
     if ( !insertedCorrectly ){
-        [[CoreDataManager singleton] deleteObject:shot];
+        [[CoreDataManager singleton] deleteObject:follow];
         return nil;
     }
-    return shot;
+    return follow;
 }
 
 //------------------------------------------------------------------------------
 +(instancetype)updateWithDictionary:(NSDictionary *)dict {
+
+    NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
+    NSNumber *idUserFollowed = [dict objectForKey:kJSON_FOLLOW_IDUSERFOLLOWED];
     
-    NSString *identifier = [NSString stringWithFormat:@"id%@",[[self class] description]];
-    NSNumber *idNumber = [dict objectForKey:identifier];
-    
-    if ( idNumber ){
-        id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
-        if ( objectInstance )
-            [objectInstance setShotValuesWithDictionary:dict];      // Update entity
+    if ( idUser && idUserFollowed ){
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser = %@ && idUserFollowed = %@",idUser,idUserFollowed];
+        NSArray *objectsArray = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+        Follow *follow = [objectsArray firstObject];
+        if (follow)
+            [follow setFollowValuesWithDictionary:dict];      // Update entity
         else
-            objectInstance = [self insertWithDictionary:dict];      // insert new entity
-        return objectInstance;
+            follow = [self insertWithDictionary:dict];      // insert new entity
+        return follow;
     }
     return nil;
 }
 
 //------------------------------------------------------------------------------
--(BOOL)setShotValuesWithDictionary:(NSDictionary *)dict {
+-(BOOL)setFollowValuesWithDictionary:(NSDictionary *)dict {
     
     BOOL result = YES;
     
     NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
-    if ( [idUser isKindOfClass:[NSNumber class]] ){
-        User *currentUser = [[CoreDataManager singleton] getEntity:[User class] withId:[idUser integerValue]];
-        if (currentUser)
-            [self setUser:currentUser];
-        else
-            result = NO;
-    }
+    if ( [idUser isKindOfClass:[NSNumber class]])
+        [self setIdUser:idUser];
     else
         result = NO;
     
-    NSNumber *idShot = [dict objectForKey:kJSON_SHOT_IDSHOT ];
-    if ([idShot isKindOfClass:[NSNumber class]])
-        [self setIdShot:idShot];
+    NSNumber *idUserFollowed = [dict objectForKey:kJSON_FOLLOW_IDUSERFOLLOWED];
+    if ([idUserFollowed isKindOfClass:[NSNumber class]])
+        [self setIdUserFollowed:idUserFollowed];
     else
         result = NO;
     
-    NSString *comment = [dict objectForKey:kJSON_SHOT_COMMENT];
-    if ([comment isKindOfClass:[NSString class]])
-        [self setComment:comment];
-    else
-        result = NO;
 
-    
     //SYNCRO  PROPERTIES
     
     NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];

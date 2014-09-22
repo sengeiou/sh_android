@@ -15,6 +15,7 @@
 #import "AppAdvice.h"
 #import "Team.h"
 #import "User.h"
+#import "Follow.h"
 
 @implementation FavRestConsumerHelper
 
@@ -34,6 +35,8 @@
         return kALIAS_GET_ALL_TEAMS;
     else if ([entity isSubclassOfClass:[User class]])
         return kALIAS_LOGIN;
+    else if ([entity isSubclassOfClass:[Follow class]])
+        return kALIAS_FOLLOW;
     
     
     return nil;
@@ -55,7 +58,7 @@
     if ([entityString isEqualToString:@"Login"])
         return @"User";
     
-    return nil;
+    return entityString;
 }
 
 
@@ -124,12 +127,12 @@
     //Create 'metadata' block
     NSDictionary *meta = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_ENTITY:entity};
     NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
-    [metadata addEntriesFromDictionary:filter];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_INCLUDE_DELETED:K_WS_TRUE}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
-    [metadata addEntriesFromDictionary:@{K_WS_OPS_FILTER:filter}];
+    [metadata addEntriesFromDictionary:filter];
+
     
     return metadata;
 }
@@ -140,7 +143,6 @@
     //Create 'metadata' block
     NSDictionary *meta = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_ENTITY:entity};
     NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
-    [metadata addEntriesFromDictionary:key];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_INCLUDE_DELETED:K_WS_TRUE}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
