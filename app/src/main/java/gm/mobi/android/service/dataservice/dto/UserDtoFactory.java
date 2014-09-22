@@ -4,10 +4,14 @@ package gm.mobi.android.service.dataservice.dto;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.SyncStateContract;
 import android.support.v4.util.ArrayMap;
+
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -27,7 +31,7 @@ import gm.mobi.android.service.dataservice.generic.RequestorDto;
 import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.util.TimeUtils;
 
-public class UserDtoFactory {
+public class UserDtoFactory extends DtoFactory{
 
     static final Integer NUMBER_OF_DAYS_AGO = 7;
     public static final int GET_FOLLOWERS = 0;
@@ -37,7 +41,8 @@ public class UserDtoFactory {
 
     private static final String ENTITY_LOGIN = "Login";
     private static final String ALIAS_LOGIN = "Login";
-    private static final String ALIAS_GET_FOLLOW =  "ALIAS_GET_FOLLOWING";
+    private static final String ALIAS_GET_FOLLOWINGS =  "GET_FOLLOWINGS";
+    private static final String ALIAS_GET_USERS = "GET_USERS";
 
     public static GenericDto getLoginOperationDto(String id, String password) {
         Map<String, Object> keys = new ArrayMap<>(2);
@@ -73,7 +78,23 @@ public class UserDtoFactory {
         array[0] = FollowMapper.toDto(null);
         od.setData(array);
 
-        return getGenericDtoFromOperation(ALIAS_GET_FOLLOW,od);
+        return getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS,od);
+    }
+
+    public static GenericDto getUsersOperationDto(List<Integer> userIds,Long offset, Context context, Long date){
+       OperationDto od = new OperationDto();
+
+
+        FilterDto filter = getUsersByUserIds(userIds, new Date(date), context);
+
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, UserTable.TABLE, true, null, 0l, 100L, filter);
+        od.setMetadata(md);
+
+        Map<String, Object>[] array = new HashMap[1];
+        array[0] = UserMapper.reqRestUsersToDto(null);
+        od.setData(array);
+
+        return getGenericDtoFromOperation(ALIAS_GET_USERS,od);
     }
 
     public static FilterDto[] getTimeFilterDto(Date lastModifiedDate, Context context) {
@@ -87,13 +108,30 @@ public class UserDtoFactory {
         };
     }
 
+    public static FilterDto[] getUserByUsersId(List<Integer> userIds,Date lastModifiedDate, Context context) {
+        FilterDto[] mFilterDto = new FilterDto[1];
+//        FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
+//        int i = 0;
+//        for(Integer userId: userIds) {
+//            mFilterItemDtos[i] = new FilterItemDto(Constants.COMPARATOR_EQUAL, UserTable.ID, userId);
+//            i++;
+//        }
+
+//        /mFilterDto[0] = new FilterDto(Constants.NEXUS_OR,mFilterItemDtos,null);
+        mFilterDto[0] = new FilterDto(Constants.NEXUS_OR,new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_DELETED, lastModifiedDate),
+                new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_MODIFIED, lastModifiedDate)},null);
+
+        return mFilterDto;
+    }
+
     public static FilterDto getFollowsByIdUserAndRelationship(Integer idUser, int relationship, Date lastModifiedDate, Context context) {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
                 filterDto = new FilterDto(Constants.NEXUS_AND,
                         new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
+                                new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, null)
                         }, getTimeFilterDto(lastModifiedDate, context)
                 );
                 break;
@@ -125,21 +163,21 @@ public class UserDtoFactory {
         return filterDto;
     }
 
-    private static GenericDto getGenericDtoFromOperation(String alias, OperationDto[] ops) {
-        GenericDto generic = new GenericDto();
-        generic.setOps(ops);
-        generic.setStatusCode(null);
-        generic.setStatusMessage(null);
+    public static FilterDto getUsersByUserIds( List<Integer> userIds, Date lastModifiedDate, Context context){
+        FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
+        int i = 0;
+        for(Integer userId: userIds) {
+            mFilterItemDtos[i] = new FilterItemDto(Constants.COMPARATOR_EQUAL, UserTable.ID, userId);
+            i++;
+        }
+        FilterDto filterDto = new FilterDto(Constants.NEXUS_OR,
 
-        //TODO Builder, injected or something else
-        generic.setRequestor(new RequestorDto(null, null, Constants.ANDROID_PLATFORM, 0L, System.currentTimeMillis()));
-        generic.setAlias(alias);
-
-        return generic;
+                mFilterItemDtos
+                ,
+                getUserByUsersId(userIds, lastModifiedDate, context)
+        );
+        return filterDto;
     }
 
-    private static GenericDto getGenericDtoFromOperation(String alias, OperationDto op) {
-        return getGenericDtoFromOperation(alias, new OperationDto[]{op});
-    }
 
 }
