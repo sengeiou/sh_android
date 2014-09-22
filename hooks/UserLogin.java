@@ -101,16 +101,35 @@ public class UserLogin implements GenericServiceHook {
                 return new HookMethodOutput("This request only supports dual key access");
             }
 
-            String identifierName = generic.getOperations().get(0).getMetadata().getKey().get(0).getName();
-            String identifierValue = generic.getOperations().get(0).getMetadata().getKey().get(0).getValue().toString();
+            String identifierName = null;
+            String identifierValue = null;
+            String passwordName = null;
+            String passwordValue = null;
 
-            String passwordName = generic.getOperations().get(0).getMetadata().getKey().get(1).getName();
-            String passwordValue = generic.getOperations().get(0).getMetadata().getKey().get(1).getValue().toString();
+            for(int i = 0 ; i < 2 ; i++){
+                String tmp = generic.getOperations().get(0).getMetadata().getKey().get(i).getName();
+                if ( ATTR_USERNAME.equals(tmp)) {
+                    identifierName = tmp;
+                    identifierValue =  generic.getOperations().get(0).getMetadata().getKey().get(i).getValue().toString();
+                }else if ( ATTR_MAIL.equals(tmp)) {
+                    identifierName = tmp;
+                    identifierValue =  generic.getOperations().get(0).getMetadata().getKey().get(i).getValue().toString();
+                }else if ( ATTR_PASSWORD.equals(tmp)) {
+                    passwordName = tmp;
+                    passwordValue = generic.getOperations().get(0).getMetadata().getKey().get(i).getValue().toString();
+                }
+            }
 
 
 
             if ( !ATTR_USERNAME.equals(identifierName) && !ATTR_MAIL.equals(identifierName) ){
-                return new HookMethodOutput("This request must have as identifier  <b>email</b> or < b> userName < / b >. The identifier submitted was : <b > "  + identifierName + "</b>");
+                return new HookMethodOutput("This request must have as identifier  <b>email</b> or <b> userName </b>.");
+            }
+
+
+
+            if ( !ATTR_PASSWORD.equals(passwordName) ){
+                return new HookMethodOutput("No password was specified.");
             }
 
             if ( identifierValue.length() < 3  ){
@@ -121,13 +140,10 @@ public class UserLogin implements GenericServiceHook {
                 return new HookMethodOutput("userNames have no more than 20 characters. The identifier submitted was (" +identifierValue+" ) and had "  + identifierValue.length());
             }
 
-            if ( !ATTR_PASSWORD.equals(passwordName) ){
-                return new HookMethodOutput("No password was specified. Instead password, was sent : " + passwordName);
-            }
-
             if ( passwordValue.length() < 6 &&  passwordValue.length() > 20){
                 return new HookMethodOutput("The password must be between 6 and 20 characters. The password submitted has  : " + passwordValue.length() + " characters");
             }
+
 
         }catch(Exception e){
             return new HookMethodOutput("Invalid Request");
