@@ -25,7 +25,7 @@ import gm.mobi.android.task.jobs.CancellableJob;
 public class LoginUserJob extends CancellableJob {
 
     private static final int PRIORITY = 8; //TODO definir valores estáticos para determinados casos
-    private static final int RETRY_ATTEMTS = 3;
+    private static final int RETRY_ATTEMPTS = 3;
     private String usernameEmail;
     private String password;
 
@@ -95,6 +95,6 @@ public class LoginUserJob extends CancellableJob {
 
     @Override
     protected int getRetryLimit() {
-        return RETRY_ATTEMTS;
+        return RETRY_ATTEMPTS;
     }
 }
