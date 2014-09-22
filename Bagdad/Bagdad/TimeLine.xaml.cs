@@ -160,17 +160,17 @@ namespace Bagdad
         private void Info_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             //TODO: DELETE THIS: JUST TRYING THE IMAGEMANAGER SOURCE
-            UserImageManager im = new UserImageManager();
-            imageToShow.Source = im.GetUserImage(2);
+            //UserImageManager im = new UserImageManager();
+            //imageToShow.Source = im.GetUserImage(2);
         }
 
         private void ImWatching_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             //TODO: DELETE THIS: JUST TRYING THE IMAGEMANAGER SOURCE
-            UserImageManager im = new UserImageManager();
-            //im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/bender.jpg", 1);
-            imageToShow.Source = im.GetUserImage(3);
-            if (imageToShow.Source == null) imageToShow.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("http://s3-eu-west-1.amazonaws.com/bagdag/nixon.jpg", UriKind.Absolute));
+            //UserImageManager im = new UserImageManager();
+            ////im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/bender.jpg", 1);
+            //imageToShow.Source = im.GetUserImage(3);
+            //if (imageToShow.Source == null) imageToShow.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("http://s3-eu-west-1.amazonaws.com/bagdag/nixon.jpg", UriKind.Absolute));
         }
     }
 }

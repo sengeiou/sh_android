@@ -78,6 +78,21 @@
           <target state="new">Shots</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/Enter" translate="yes" xml:space="preserve">
+          <source>Enter</source>
+          <target state="new">Enter</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/GeneralLoginError" translate="yes" xml:space="preserve">
+          <source>Id or Password are not valid.</source>
+          <target state="new">Id or Password are not valid.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
+        <trans-unit id="Resx/WhatsUp" translate="yes" xml:space="preserve">
+          <source>What's Up?</source>
+          <target state="new">What's Up?</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/Following" translate="yes" xml:space="preserve">
           <source>Following</source>
           <target state="new">Following</target>

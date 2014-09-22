@@ -53,7 +53,7 @@
         
         <!--Row1-->
         <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" Grid.Row="1" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
-        <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus"/>
+        <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" />
 
         <!--Row2-->
         <TextBlock Grid.Row="2" Margin="12,0,12,12" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextAccentStyle}" Tap="ImWatching_Tap"/>

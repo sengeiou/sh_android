@@ -88,6 +88,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Enter.
+        /// </summary>
+        public static string Enter {
+            get {
+                return ResourceManager.GetString("Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Shooter will never post without your permission..
         /// </summary>
         public static string FacebookAdvice1 {
@@ -120,6 +129,15 @@ namespace Bagdad.Resources {
         public static string ForgotPassword {
             get {
                 return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Id or Password are not valid..
+        /// </summary>
+        public static string GeneralLoginError {
+            get {
+                return ResourceManager.GetString("GeneralLoginError", resourceCulture);
             }
         }
         
@@ -336,6 +354,15 @@ namespace Bagdad.Resources {
         public static string UserOrPasswordDoesntMatch {
             get {
                 return ResourceManager.GetString("UserOrPasswordDoesntMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a What&apos;s Up?.
+        /// </summary>
+        public static string WhatsUp {
+            get {
+                return ResourceManager.GetString("WhatsUp", resourceCulture);
             }
         }
     }

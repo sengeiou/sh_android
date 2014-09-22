@@ -238,4 +238,16 @@
     <value>Shots</value>
     <comment>Me.xaml</comment>
   </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="GeneralLoginError" xml:space="preserve">
+    <value>Id or Password are not valid.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="WhatsUp" xml:space="preserve">
+    <value>What's Up?</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
 </root>

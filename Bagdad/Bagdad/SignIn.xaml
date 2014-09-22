@@ -11,6 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    OrientationChanged="PhoneApplicationPage_OrientationChanged"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -26,20 +27,76 @@
             <TextBlock Foreground="{StaticResource PhoneBorderBrush}" Text="{Binding LocalizedResources.SignInTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="10,10,14,-10">
-            <ScrollViewer>
-                <Grid Margin="0,0,0,100">
-                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.UserOrEmail, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <TextBox x:Name="txbUser" HorizontalAlignment="Left" Foreground="{StaticResource PhoneForegroundBrush}" Background="{StaticResource PhoneBackgroundBrush}" BorderBrush="{StaticResource PhoneBorderBrush}"  BorderThickness="2" Height="72" Margin="0,35,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456" GotFocus="TextBox_GotFocus"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,112,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.Password, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <PasswordBox x:Name="pbPassword" HorizontalAlignment="Left" Foreground="{StaticResource PhoneForegroundBrush}" Background="{StaticResource PhoneBackgroundBrush}" BorderBrush="{StaticResource PhoneBorderBrush}" BorderThickness="2" Margin="0,137,0,0" VerticalAlignment="Top" Width="456" GotFocus="PasswordBox_GotFocus"/>
-                    <Button Content="{Binding LocalizedResources.SignInTitle, Source={StaticResource LocalizedStrings}}" Foreground="White" Padding="25,5" Background="{StaticResource PhoneAccentBrush}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" HorizontalAlignment="Left" Margin="0,214,0,0" VerticalAlignment="Top" Click="SignIn_Click"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,288,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.ForgotPassword, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,411,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.SignWithFacebook, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,438,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.FacebookAdvice1, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,507,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.NewAccount, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,12,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Row0-->
+            <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.UserOrEmail, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBox Grid.Row="0" x:Name="txbUser" HorizontalAlignment="Left" Foreground="{StaticResource PhoneForegroundBrush}" Background="{StaticResource PhoneBackgroundBrush}" BorderBrush="{StaticResource PhoneBorderBrush}"  BorderThickness="2" Height="72" Margin="0,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456" GotFocus="TextBox_GotFocus"/>
+
+            <!--Row1-->
+            <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.Password, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <PasswordBox Grid.Row="1" x:Name="pbPassword" HorizontalAlignment="Left" Foreground="{StaticResource PhoneForegroundBrush}" Background="{StaticResource PhoneBackgroundBrush}" BorderBrush="{StaticResource PhoneBorderBrush}" BorderThickness="2" Margin="0,37,0,0" VerticalAlignment="Top" Width="456" GotFocus="PasswordBox_GotFocus"/>
+
+            <!--Row2-->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Row2.0-->
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Row2.0.0-->
+                    <Button Grid.Row="0" Content="{Binding LocalizedResources.Enter, Source={StaticResource LocalizedStrings}}" Foreground="White" Padding="25,5" Background="{StaticResource PhoneAccentBrush}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" HorizontalAlignment="Left" Margin="0,12,0,0" VerticalAlignment="Top" Click="SignIn_Click"/>
+
+                    <!--Row2.0.1-->
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.ForgotPassword, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top" Style="{StaticResource PhoneTextNormalStyle}"/>
+
                 </Grid>
-            </ScrollViewer>
+
+                <!--Row2.1-->
+                <Grid Grid.Row="1" Grid.Column="0" x:Name="signInFacebook">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Row2.1.0-->
+                        <!--White Space-->
+                    <!--Row2.1.1-->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!--Row2.1.0.0-->
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.SignWithFacebook, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
+
+                        <!--Row2.1.0.1-->
+                        <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Text="{Binding LocalizedResources.FacebookAdvice1, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
+
+                    </Grid>
+
+                    <!--Row2.1.2-->
+                    <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="12,12,0,0" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Text="{Binding LocalizedResources.NewAccount, Source={StaticResource LocalizedStrings}}" VerticalAlignment="Top"/>
+
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
     
