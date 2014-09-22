@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QFF-cF-PMu">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -36,6 +35,9 @@
                                                 <state key="normal" title="Register with Email">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="registerEmail:" destination="TWn-ZF-YTx" eventType="touchUpInside" id="aK5-0B-emf"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGB-Cw-1TK">
                                                 <rect key="frame" x="2" y="297" width="214" height="47"/>
@@ -43,6 +45,9 @@
                                                 <state key="normal" backgroundImage="Facebook_SignIn">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="signInFacebook:" destination="TWn-ZF-YTx" eventType="touchUpInside" id="CYs-Vj-pMC"/>
+                                                </connections>
                                             </button>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Ball" translatesAutoresizingMaskIntoConstraints="NO" id="yij-PS-wGm">
                                                 <rect key="frame" x="35" y="21" width="149" height="149"/>
@@ -82,6 +87,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="kRq-V2-5kF"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="btnFacebook" destination="KGB-Cw-1TK" id="MN1-XP-Hgv"/>
+                        <outlet property="btnRegister" destination="kCC-fj-4C4" id="22a-vv-vZg"/>
+                        <outlet property="btnSignIn" destination="fle-FZ-97g" id="wOd-1S-Rxm"/>
+                        <outlet property="btnTitle" destination="oaX-O7-PZL" id="FYD-yw-Ly9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZH-1o-5mq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

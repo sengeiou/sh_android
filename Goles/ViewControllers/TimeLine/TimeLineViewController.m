@@ -14,6 +14,9 @@
 @interface TimeLineViewController ()
 
 @property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
+@property (weak, nonatomic) IBOutlet UIButton *btnWatching;
+@property (weak, nonatomic) IBOutlet UIButton *btnSearch;
+@property (weak, nonatomic) IBOutlet UIButton *btnInfo;
 
 @end
 
@@ -24,6 +27,10 @@
     [super viewDidLoad];
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = YES;
+
 }
 
 //------------------------------------------------------------------------------

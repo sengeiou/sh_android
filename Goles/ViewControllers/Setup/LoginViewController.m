@@ -11,7 +11,14 @@
 #import "CoreDataManager.h"
 
 @interface LoginViewController ()
+@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 
+@property (weak, nonatomic) IBOutlet UILabel *btnTitle;
+@property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
+@property (weak, nonatomic) IBOutlet UIButton *btnRegister;
+
+- (IBAction)signInFacebook:(id)sender;
+- (IBAction)registerEmail:(id)sender;
 
 @end
 
@@ -41,4 +48,9 @@
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)signInFacebook:(id)sender {
+}
+
+- (IBAction)registerEmail:(id)sender {
+}
 @end

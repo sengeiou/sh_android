@@ -172,8 +172,6 @@
     NSUInteger length = txtFieldName.text.length - range.length + string.length;
     
     NSUInteger length1 = txtFieldPwd.text.length - range.length + string.length;
-
-    NSLog(@"%@", txtFieldName.text);
     
     if (length > 1 && length1 > 1) {
         self.btnEnter.enabled = YES;
