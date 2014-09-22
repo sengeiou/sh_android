@@ -1,7 +1,15 @@
 package gm.mobi.android.service;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.io.IOException;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import gm.mobi.android.db.objects.Follow;
+import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import hugo.weaving.DebugLog;
 
@@ -30,6 +38,21 @@ public class BagdadMockService implements BagdadService {
             mockUser.setPhoto("http://example.com");
             return mockUser;
         }
+        return null;
+    }
+
+    @Override
+    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db) throws IOException {
+        return null;
+    }
+
+    @Override
+    public List<Shot> getShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException {
+        return null;
+    }
+
+    @Override
+    public List<User> getUsers(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException {
         return null;
     }
 
