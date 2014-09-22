@@ -356,12 +356,14 @@ public class Filter implements Organizable, Serializable {
 			filerAttributes = new HashSet<String>();
 		}
 
-		for (FilterItem filterItem : filterItems) {
+        if ( filterItems != null) { //BUGFIX carlos: a veces llega null
+            for (FilterItem filterItem : filterItems) {
 
-			filerAttributes.add(filterItem.getName());	
-		}
+                filerAttributes.add(filterItem.getName());
+            }
+        }
 
-        if ( filter != null){ //BUGFIX bu carlos: a veces llega null
+        if ( filter != null){ //BUGFIX carlos: a veces llega null
             for (Filter currentFilter : filter) {
 
                 currentFilter.getFilterAttributeSet(filerAttributes);
@@ -383,15 +385,15 @@ public class Filter implements Organizable, Serializable {
 		
 		for (String attribute : getFilterAttributeSet(null)) {
 			
-			if (result == null) {
+			if (result == null && attribute != null) {
 				result = new StringBuilder(attribute);
 			}
-			else {
+			else if (result != null){
 				result.append(", ").append(attribute);
 			}
 		}
-		
-		return result.toString();
+
+		return (result == null) ? "Unknown Attributes" : result.toString();
 	}
 	
 	/**
