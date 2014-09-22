@@ -1,53 +1,47 @@
 #import "User.h"
-#import "Constants.h"
 #import "CoreDataManager.h"
-#import "Device.h"
-#import "CoreDataParsing.h"
-
 
 @interface User ()
 
+// Private interface goes here.
 
 @end
+
 
 @implementation User
 
 //------------------------------------------------------------------------------
-+(User *)insertWithDictionary:(NSDictionary *)dict{
++(User *)insertWithDictionary:(NSDictionary *)dict {
     
     NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
-    User *player = [NSEntityDescription insertNewObjectForEntityForName:@"User"
-                                                   inManagedObjectContext:context];
+    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User"
+                                               inManagedObjectContext:context];
     
-    BOOL correctlyInserted = [player setUserValuesWithDictionary:dict];
-    if ( !correctlyInserted ){
-        [[CoreDataManager singleton] deleteObject:player];
+    BOOL insertedCorrectly = [user setUserValuesWithDictionary:dict];
+    if ( !insertedCorrectly ){
+        [[CoreDataManager singleton] deleteObject:user];
         return nil;
     }
-    
-    return player;
+    return user;
 }
 
 //------------------------------------------------------------------------------
-+(User *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index{
++(instancetype)updateWithDictionary:(NSDictionary *)dict {
     
-    NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
+    NSString *identifier = [NSString stringWithFormat:@"id%@",[[self class] description]];
+    NSNumber *idNumber = [dict objectForKey:identifier];
     
-    if ( idUser ){
-        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:[idUser integerValue]];
-        
-        if ( user )
-            [user setUserValuesWithDictionary:dict];    // Update entity
+    if ( idNumber ){
+        id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
+        if ( objectInstance )
+            [objectInstance setUserValuesWithDictionary:dict];      // Update entity
         else
-            user = [User insertWithDictionary:dict];    // insert new entity
-        
-        return user;
+            objectInstance = [self insertWithDictionary:dict];      // insert new entity
+        return objectInstance;
     }
     return nil;
 }
 
-
-#pragma mark - Public Methods
 //------------------------------------------------------------------------------
 -(BOOL)setUserValuesWithDictionary:(NSDictionary *)dict {
     
@@ -60,10 +54,11 @@
         result = NO;
     
     NSString *userName = [dict objectForKey:kJSON_USERNAME ];
-    if ([userName isKindOfClass:[NSNull class]]) {
+    if ([userName isKindOfClass:[NSString class]])
         [self setUserName:userName];
-    }
-
+    else
+        result = NO;
+    
     //SYNCRO  PROPERTIES
     
     NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
@@ -99,7 +94,8 @@
         if ([deletedDate isKindOfClass:[NSDate class]])
             [self setCsys_deleted:deletedDate];
     }
-
-     return result;
+    
+    return result;
 }
+
 @end

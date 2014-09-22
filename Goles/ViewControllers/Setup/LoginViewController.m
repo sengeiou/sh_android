@@ -29,10 +29,9 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
- 
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewDidAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
 
 }

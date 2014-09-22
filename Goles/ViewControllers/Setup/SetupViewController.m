@@ -16,7 +16,7 @@
 
 @interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>{
     
-    UITextField *txtFieldName;
+     UITextField *txtFieldName;
      UITextField *txtFieldPwd;
 }
 
@@ -37,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden = NO;
     self.btnEnter.enabled = NO;
     
     
@@ -47,6 +46,29 @@
     
     [self.view addGestureRecognizer:tap];
     
+    
+    txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
+    txtFieldName.delegate = self;
+    txtFieldName.clearButtonMode = YES;
+    [txtFieldName setReturnKeyType:UIReturnKeyNext];
+    txtFieldName.placeholder = @"Required";
+    
+    txtFieldPwd = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
+    txtFieldPwd.delegate = self;
+    txtFieldPwd.clearButtonMode = YES;
+    [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
+    txtFieldPwd.placeholder = @"Required";
+
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = NO;
+
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = YES;
+
 }
 
 -(void)dismissKeyboard {
@@ -83,23 +105,17 @@
          case 0:
          {
             cell.textLabel.text = @"Email or Username";
-             txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,140,40)];
-             txtFieldName.delegate = self;
-             txtFieldName.clearButtonMode = YES;
-             [txtFieldName setReturnKeyType:UIReturnKeyNext];
-             [cell addSubview:txtFieldName];
-             txtFieldName.placeholder = @"Required";
+             txtFieldName.frame = CGRectMake(180,3,self.view.frame.size.width-210,40);
+            [cell addSubview:txtFieldName];
          }
              break;
          case 1:
          {
              cell.textLabel.text = @"Password";
-             txtFieldPwd = [[UITextField alloc] initWithFrame:CGRectMake(180,3,140,40)];
-             txtFieldPwd.delegate = self;
-             txtFieldPwd.clearButtonMode = YES;
-             [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
+             txtFieldPwd.frame = CGRectMake(180,3,self.view.frame.size.width-210,40);
+
              [cell addSubview:txtFieldPwd];
-             txtFieldPwd.placeholder = @"Required";         }
+         }
             
             break;
          default:
@@ -109,7 +125,9 @@
      /* only called when cell is created */
      
      // Configure the cell...
- 
+//     tableView.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y, self.view.frame.size.width, tableView.frame.size.height);
+//     cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.size.width, cell.frame.size.height);
+
      return cell;
 }
 
@@ -124,16 +142,21 @@
         
         NSDictionary *key = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
         
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
-       // [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self]; //FALTA TERMINARAAAA
-        
-        [appDelegate setTabBarItems];
+        [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self]; //FALTA TERMINARAAAA
 
     };
 }
 
+#pragma mark - Webservice response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+    
+    if (status){
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
+        [appDelegate setTabBarItems];
+    }
+}
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
    
@@ -171,5 +194,12 @@
  // Pass the selected object to the new view controller.
  }
  */
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    
+    [self.mtableView reloadData];
+    [self.mtableView setNeedsDisplay];
+
+}
 
 @end

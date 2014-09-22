@@ -30,7 +30,7 @@ extern const struct DeviceRelationships {
 extern const struct DeviceFetchedProperties {
 } DeviceFetchedProperties;
 
-@class Player;
+@class User;
 
 
 
@@ -238,7 +238,7 @@ extern const struct DeviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) Player *user;
+@property (nonatomic, strong) User *user;
 
 //- (BOOL)validateUser:(id*)value_ error:(NSError**)error_;
 
@@ -364,8 +364,8 @@ extern const struct DeviceFetchedProperties {
 
 
 
-- (Player*)primitiveUser;
-- (void)setPrimitiveUser:(Player*)value;
+- (User*)primitiveUser;
+- (void)setPrimitiveUser:(User*)value;
 
 
 @end

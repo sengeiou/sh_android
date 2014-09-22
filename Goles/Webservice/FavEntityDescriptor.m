@@ -13,6 +13,7 @@
 #import "SML.h"
 #import "Message.h"
 #import "AppAdvice.h"
+#import "User.h"
 
 @implementation FavEntityDescriptor
 
@@ -89,6 +90,22 @@
                  kJSON_ADVICE_VERSION_END:[NSNull null],
                  kJSON_ADVICE_BUTTON_TEXTID:[NSNull null]};
     }
+    else if ([entityClass isSubclassOfClass:[User class]]) {
+        
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_ID_USER:[NSNull null],
+                 kJSON_USERNAME:[NSNull null],
+                 kJSON_ID_FAVOURITE_TEAM:[NSNull null],
+                 kJSON_SESSIONTOKEN:[NSNull null],
+                 kJSON_EMAIL:[NSNull null],
+                 kJSON_NAME:[NSNull null],
+                 kJSON_PASSWORD:[NSNull null],
+                 kJSON_PHOTO:[NSNull null]};
+    }
+
   
     return nil;
 }

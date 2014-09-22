@@ -74,4 +74,9 @@
  */
 + (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter;
 
+//COMENTARIOOOOOOS
++ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key;
+
+
+
 @end

@@ -78,19 +78,20 @@
         
         [Appirater appLaunched:YES];
         
+        self.request = [FavRestConsumerHelper createREQ];
+        
         if (SYNCHRO_ACTIVATED)
             [[SyncManager singleton] startSyncProcess];
     }
     
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    //self.window.backgroundColor = [UIColor whiteColor];
+//    self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    
-    self.request = [FavRestConsumerHelper createREQ];
     
     //Show the login view
     [self showInitView];
+    
     
     return YES;
 }
@@ -211,7 +212,6 @@
     
     [[UserManager singleton] setDeviceToken:token];
     self.waitingForAPNS = NO;
-    [self updateUserDataIfAppleServicesReady];
 }
 
 //------------------------------------------------------------------------------
@@ -296,28 +296,18 @@
     }
 }
 
-//------------------------------------------------------------------------------
-/**
- Manages the iCloud server and APNS status. If both server responses are ok it initiates the process for registering to Goles server.
- */
-//------------------------------------------------------------------------------
-- (void)updateUserDataIfAppleServicesReady {
-    
-    if (self.waitingForAPNS == NO )
-        [self updateUserData];
-}
 
 //------------------------------------------------------------------------------
--(void)updateUserData {
-    
-    //Check for device entity in CoreData
-    Device *device = [[UserManager singleton] getDevice];
-    if (!device) {
-        device = [Device updateWithDictionary:nil];
-        [[CoreDataManager singleton] saveContext];
-    }
-    [[FavRestConsumer sharedInstance] deviceRegistration:device withDelegate:self];
-}
+//-(void)updateUserData {
+//    
+//    //Check for device entity in CoreData
+//    Device *device = [[UserManager singleton] getDevice];
+//    if (!device) {
+//        device = [Device updateWithDictionary:nil];
+//        [[CoreDataManager singleton] saveContext];
+//    }
+//    [[FavRestConsumer sharedInstance] deviceRegistration:device withDelegate:self];
+//}
 
 
 #pragma mark - Public methods

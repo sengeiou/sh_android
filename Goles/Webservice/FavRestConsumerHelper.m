@@ -14,6 +14,7 @@
 #import "SML.h"
 #import "AppAdvice.h"
 #import "Team.h"
+#import "User.h"
 
 @implementation FavRestConsumerHelper
 
@@ -108,6 +109,22 @@
     [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_FILTER:filter}];
+    
+    return metadata;
+}
+
+//-----------------------------------------------------------------------------
++ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key {
+    
+    //Create 'metadata' block
+    NSDictionary *meta = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_ENTITY:entity};
+    NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
+    [metadata addEntriesFromDictionary:key];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_INCLUDE_DELETED:K_WS_TRUE}];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_KEY:key}];
     
     return metadata;
 }

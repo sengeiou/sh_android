@@ -133,18 +133,6 @@
     
     return requester;
 }
-//------------------------------------------------------------------------------
-- (void)getPlayerInfoDidResponse:(NSInteger)playerStatus {
-    
-//    if ( playerStatus == 2)       // player inexistent -> create new player
-//        [[RestConsumer sharedInstance] createAnonymousPlayer:[[[[UserManager singleton] getDevice] idDevice] intValue] withDelegate:self];
-}
-
-//------------------------------------------------------------------------------
-- (void)createAnonymousPlayerDidResponse {
-    
-    
-}
 
 #pragma mark - Singleton overwritten methods
 //------------------------------------------------------------------------------

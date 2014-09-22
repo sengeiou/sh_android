@@ -120,7 +120,7 @@
         <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="Player" syncable="YES">
+    <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -140,9 +140,9 @@
         <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
         <element name="Match" positionX="-45" positionY="-27" width="128" height="523"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
-        <element name="User" positionX="-425" positionY="324" width="128" height="238"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="178"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
         <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="238"/>
     </elements>
 </model>

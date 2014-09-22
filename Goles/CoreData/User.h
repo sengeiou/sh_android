@@ -1,9 +1,8 @@
-#import "_Player.h"
+#import "_User.h"
 
+@interface User : _User {}
 
-@interface User : _Player {}
-
-+(User *)insertWithDictionary:(NSDictionary *)dict;
-+(User *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index;
++(instancetype)insertWithDictionary:(NSDictionary *)dict;
++(instancetype)updateWithDictionary:(NSDictionary *)dict;
 
 @end

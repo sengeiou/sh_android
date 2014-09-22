@@ -108,21 +108,21 @@
 }
 
 //------------------------------------------------------------------------------
-- (User *)getCurrentUser {
-    
-    User *result = nil;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"!(profile = nil) AND (profile.active = YES)"];
-    NSArray *playersWithProfile = [self getAllEntities:[User class] withPredicate:predicate];
-    
-    NSInteger count = [playersWithProfile count];
-    if ( count > 0 ){
-        if ( count > 1 )
-            DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
-
-        result = [playersWithProfile objectAtIndex:0];
-    }
-    return result;
-}
+//- (User *)getCurrentUser {
+//    
+//    User *result = nil;
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"!(profile = nil) AND (profile.active = YES)"];
+//    NSArray *playersWithProfile = [self getAllEntities:[User class] withPredicate:predicate];
+//    
+//    NSInteger count = [playersWithProfile count];
+//    if ( count > 0 ){
+//        if ( count > 1 )
+//            DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
+//
+//        result = [playersWithProfile objectAtIndex:0];
+//    }
+//    return result;
+//}
 
 //------------------------------------------------------------------------------
 - (NSArray *) getAllEntities:(Class)entityClass

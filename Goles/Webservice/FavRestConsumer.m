@@ -331,10 +331,10 @@
     
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:NSStringFromClass(entityClass)
+                                                                     andEntity:@"Login"
                                                                      withItems:@1
                                                                     withOffSet:@0
-                                                                     andFilter:nil];
+                                                                     andKey:key];
     
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:entityClass]]};

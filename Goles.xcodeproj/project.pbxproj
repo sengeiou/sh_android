@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
+		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
+		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
 		A5A678A419C71FC200DEEA51 /* People.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678A619C71FC200DEEA51 /* People.storyboard */; };
 		A5A678AA19C7243500DEEA51 /* Timeline.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678AC19C7243500DEEA51 /* Timeline.storyboard */; };
@@ -42,7 +44,6 @@
 		AA623E1C1998D17800A942A9 /* _Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D4E1998D17700A942A9 /* _Device.m */; };
 		AA623E271998D17800A942A9 /* _Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D641998D17700A942A9 /* _Match.m */; };
 		AA623E2A1998D17800A942A9 /* _Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6A1998D17700A942A9 /* _Message.m */; };
-		AA623E2C1998D17800A942A9 /* _Player.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D6E1998D17700A942A9 /* _Player.m */; };
 		AA623E321998D17800A942A9 /* _SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D7A1998D17700A942A9 /* _SML.m */; };
 		AA623E351998D17800A942A9 /* _Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D801998D17700A942A9 /* _Team.m */; };
 		AA623E371998D17800A942A9 /* AppAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D841998D17700A942A9 /* AppAdvice.m */; };
@@ -51,7 +52,6 @@
 		AA623E3D1998D17800A942A9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D901998D17700A942A9 /* Device.m */; };
 		AA623E481998D17800A942A9 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA61998D17700A942A9 /* Match.m */; };
 		AA623E4B1998D17800A942A9 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAC1998D17700A942A9 /* Message.m */; };
-		AA623E4D1998D17800A942A9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DB01998D17700A942A9 /* User.m */; };
 		AA623E531998D17800A942A9 /* SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBC1998D17700A942A9 /* SML.m */; };
 		AA623E561998D17800A942A9 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC21998D17700A942A9 /* Team.m */; };
 		AA623E611998D17800A942A9 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DDC1998D17700A942A9 /* Appirater.m */; };
@@ -112,6 +112,10 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
+		A58DA83F19D02EA9003EE5CB /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
+		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
+		A58DA84219D02EB8003EE5CB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		A58DA84319D02EB8003EE5CB /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		A58F910C19A4A5830076AA1E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A5A678A519C71FC200DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/People.storyboard; sourceTree = "<group>"; };
 		A5A678A719C71FC400DEEA51 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/People.storyboard; sourceTree = "<group>"; };
@@ -164,8 +168,6 @@
 		AA623D641998D17700A942A9 /* _Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Match.m; sourceTree = "<group>"; };
 		AA623D691998D17700A942A9 /* _Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Message.h; sourceTree = "<group>"; };
 		AA623D6A1998D17700A942A9 /* _Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Message.m; sourceTree = "<group>"; };
-		AA623D6D1998D17700A942A9 /* _Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Player.h; sourceTree = "<group>"; };
-		AA623D6E1998D17700A942A9 /* _Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Player.m; sourceTree = "<group>"; };
 		AA623D791998D17700A942A9 /* _SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SML.h; sourceTree = "<group>"; };
 		AA623D7A1998D17700A942A9 /* _SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SML.m; sourceTree = "<group>"; };
 		AA623D7F1998D17700A942A9 /* _Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Team.h; sourceTree = "<group>"; };
@@ -182,8 +184,6 @@
 		AA623DA61998D17700A942A9 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		AA623DAB1998D17700A942A9 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		AA623DAC1998D17700A942A9 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		AA623DAF1998D17700A942A9 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		AA623DB01998D17700A942A9 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		AA623DBB1998D17700A942A9 /* SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SML.h; sourceTree = "<group>"; };
 		AA623DBC1998D17700A942A9 /* SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SML.m; sourceTree = "<group>"; };
 		AA623DC11998D17700A942A9 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
@@ -301,6 +301,8 @@
 		A5E3E20419991A1100322727 /* MachineClass */ = {
 			isa = PBXGroup;
 			children = (
+				A58DA83F19D02EA9003EE5CB /* _User.h */,
+				A58DA84019D02EA9003EE5CB /* _User.m */,
 				AA241F84199CFB5200897D6D /* _SyncControl.h */,
 				AA241F85199CFB5200897D6D /* _SyncControl.m */,
 				AA623D451998D17700A942A9 /* _AppAdvice.h */,
@@ -311,8 +313,6 @@
 				AA623D641998D17700A942A9 /* _Match.m */,
 				AA623D691998D17700A942A9 /* _Message.h */,
 				AA623D6A1998D17700A942A9 /* _Message.m */,
-				AA623D6D1998D17700A942A9 /* _Player.h */,
-				AA623D6E1998D17700A942A9 /* _Player.m */,
 				AA623D791998D17700A942A9 /* _SML.h */,
 				AA623D7A1998D17700A942A9 /* _SML.m */,
 				AA623D7F1998D17700A942A9 /* _Team.h */,
@@ -324,6 +324,8 @@
 		AA05ADFB199A6DF80046EB6F /* CoreData Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A58DA84219D02EB8003EE5CB /* User.h */,
+				A58DA84319D02EB8003EE5CB /* User.m */,
 				AA241F81199CFB4900897D6D /* SyncControl.h */,
 				AA241F82199CFB4900897D6D /* SyncControl.m */,
 				AA623D831998D17700A942A9 /* AppAdvice.h */,
@@ -334,8 +336,6 @@
 				AA623DA61998D17700A942A9 /* Match.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
 				AA623DAC1998D17700A942A9 /* Message.m */,
-				AA623DAF1998D17700A942A9 /* User.h */,
-				AA623DB01998D17700A942A9 /* User.m */,
 				AA623DBB1998D17700A942A9 /* SML.h */,
 				AA623DBC1998D17700A942A9 /* SML.m */,
 				AA623DC11998D17700A942A9 /* Team.h */,
@@ -814,6 +814,7 @@
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
+				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
 				AACA544819C057C000E39D94 /* UIButton+AFNetworking.m in Sources */,
 				AA623E3D1998D17800A942A9 /* Device.m in Sources */,
@@ -833,7 +834,6 @@
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
-				AA623E2C1998D17800A942A9 /* _Player.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
@@ -844,11 +844,11 @@
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,
 				AA623EDE1998D78600A942A9 /* Fav24ExtendedNavigationController.m in Sources */,
 				AACA544619C057C000E39D94 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
-				AA623E4D1998D17800A942A9 /* User.m in Sources */,
 				AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */,
 				AACA544219C057C000E39D94 /* AFURLRequestSerialization.m in Sources */,
 				AACA544519C057C000E39D94 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				AA623EDC1998D78600A942A9 /* AppAdviceViewController.m in Sources */,
+				A58DA84419D02EB8003EE5CB /* User.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */,
@@ -1041,7 +1041,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Goles-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Goles-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Goles;
 				WRAPPER_EXTENSION = app;
@@ -1061,7 +1061,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Goles-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Goles-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Goles;
 				WRAPPER_EXTENSION = app;
