@@ -64,7 +64,7 @@ public class ShotsJob extends CancellableJob {
             return;
         }
         try {
-            List<Shot> shots = service.getShots(mFollowingUserIds, mContext, mDbHelper.getWritableDatabase());
+            List<Shot> shots = service.getShotsByUserIdList(mFollowingUserIds, mContext, mDbHelper.getWritableDatabase());
             if(shots != null){
                 ShotManager.saveShots(mDbHelper.getWritableDatabase(), shots);
                 ShotsResultEvent fResultEvent = new ShotsResultEvent(ShotsResultEvent.STATUS_SUCCESS);
