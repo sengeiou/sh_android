@@ -2,8 +2,6 @@ package gm.mobi.android.db;
 
 import android.provider.BaseColumns;
 
-import com.google.android.gms.maps.Projection;
-
 public class GMContract {
 
     public static interface SyncColumns extends BaseColumns {
@@ -40,12 +38,7 @@ public class GMContract {
                 MIN_ROWS,
                 MAX_TIMESTAMP,
                 MIN_TIMESTAMP,
-                DIRECTION,
-                CSYS_BIRTH,
-                CSYS_MODIFIED,
-                CSYS_DELETED,
-                CSYS_REVISION,
-                CSYS_SYNCHRONIZED
+                DIRECTION
         };
     }
 
