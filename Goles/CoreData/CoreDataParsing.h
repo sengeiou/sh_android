@@ -188,6 +188,9 @@ extern NSString * const kJSON_SOUND;
 extern NSString * const kJSON_MESSAGE;
 extern NSString * const kJSON_LANGUAGE;
 
+//SHOT
+extern NSString *const kJSON_SHOT_IDSHOT;
+extern NSString *const kJSON_SHOT_COMMENT;
 
 #pragma mark - SEGUES IDENTIFIERS
 extern NSString *const kSEGUE_MATCH_DETAIL;

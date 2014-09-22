@@ -87,6 +87,16 @@
         <attribute name="platform" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
         <relationship name="advice" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AppAdvice" inverseName="message" inverseEntity="AppAdvice" syncable="YES"/>
     </entity>
+    <entity name="Shot" representedClassName="Shot" syncable="YES">
+        <attribute name="comment" attributeType="String" syncable="YES"/>
+        <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idShot" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="shots" inverseEntity="User" syncable="YES"/>
+    </entity>
     <entity name="SML" representedClassName="SML" syncable="YES">
         <attribute name="csys_birth" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Date" defaultDateTimeInterval="-978267600" syncable="YES"/>
@@ -134,6 +144,7 @@
         <attribute name="sessionToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" attributeType="String" syncable="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
+        <relationship name="shots" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Shot" inverseName="user" inverseEntity="Shot" syncable="YES"/>
     </entity>
     <elements>
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
@@ -143,6 +154,7 @@
         <element name="SML" positionX="-290" positionY="45" width="128" height="178"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
         <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
-        <element name="User" positionX="-425" positionY="324" width="128" height="238"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="255"/>
+        <element name="Shot" positionX="-702" positionY="126" width="128" height="163"/>
     </elements>
 </model>

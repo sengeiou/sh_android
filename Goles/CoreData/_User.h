@@ -21,12 +21,14 @@ extern const struct UserAttributes {
 
 extern const struct UserRelationships {
 	__unsafe_unretained NSString *device;
+	__unsafe_unretained NSString *shots;
 } UserRelationships;
 
 extern const struct UserFetchedProperties {
 } UserFetchedProperties;
 
 @class Device;
+@class Shot;
 
 
 
@@ -193,10 +195,22 @@ extern const struct UserFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *shots;
+
+- (NSMutableSet*)shotsSet;
+
+
+
+
 
 @end
 
 @interface _User (CoreDataGeneratedAccessors)
+
+- (void)addShots:(NSSet*)value_;
+- (void)removeShots:(NSSet*)value_;
+- (void)addShotsObject:(Shot*)value_;
+- (void)removeShotsObject:(Shot*)value_;
 
 @end
 
@@ -287,6 +301,11 @@ extern const struct UserFetchedProperties {
 
 - (Device*)primitiveDevice;
 - (void)setPrimitiveDevice:(Device*)value;
+
+
+
+- (NSMutableSet*)primitiveShots;
+- (void)setPrimitiveShots:(NSMutableSet*)value;
 
 
 @end

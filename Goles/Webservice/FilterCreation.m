@@ -14,6 +14,7 @@
 #import "SML.h"
 #import "AppAdvice.h"
 #import "Team.h"
+#import "Shot.h"
 
 @implementation FilterCreation
 
@@ -53,6 +54,14 @@
         NSArray *filterItemsTeams = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_TEAM_IDTEAM,K_CD_VALUE:[NSNull null]}];
         
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsTeams,K_WS_FILTERS:@[]}};
+        return filter;
+    }
+    
+    if ([entity isSubclassOfClass:[Shot class]]){
+        NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
+                                 @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
+                                 @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_MESSAGE_PLATFORM,K_CD_VALUE:@1}];
+        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItems,K_WS_FILTERS:@[]}};
         return filter;
     }
     

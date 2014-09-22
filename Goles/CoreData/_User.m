@@ -20,6 +20,7 @@ const struct UserAttributes UserAttributes = {
 
 const struct UserRelationships UserRelationships = {
 	.device = @"device",
+	.shots = @"shots",
 };
 
 const struct UserFetchedProperties UserFetchedProperties = {
@@ -216,6 +217,19 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 @dynamic device;
 
+	
+
+@dynamic shots;
+
+	
+- (NSMutableSet*)shotsSet {
+	[self willAccessValueForKey:@"shots"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"shots"];
+  
+	[self didAccessValueForKey:@"shots"];
+	return result;
+}
 	
 
 

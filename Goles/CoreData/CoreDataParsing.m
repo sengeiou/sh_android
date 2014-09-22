@@ -188,6 +188,11 @@ NSString *const kJSON_SOUND                            = @"sound";
 NSString *const kJSON_MESSAGE                          = @"message";
 NSString *const kJSON_LANGUAGE                         = @"language";
 
+//SHOT
+NSString *const kJSON_SHOT_IDSHOT                      = @"idShot";
+NSString *const kJSON_SHOT_COMMENT                     = @"comment";
+
+
 #pragma mark - SEGUES IDENTIFIERS
 NSString *const kSEGUE_MATCH_DETAIL              = @"toMatchDetail";
 
