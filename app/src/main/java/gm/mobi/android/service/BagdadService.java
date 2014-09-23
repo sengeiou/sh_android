@@ -13,7 +13,10 @@ import gm.mobi.android.db.objects.User;
 public interface BagdadService {
 
     public User login(String id, String password) throws IOException;
-    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db) throws IOException;
-    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Context context,SQLiteDatabase db) throws IOException;
+
+    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db, int typeFollow) throws IOException;
+
+    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException;
+
     public List<User> getUsersByUserIdList(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException;
 }
