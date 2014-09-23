@@ -34,7 +34,13 @@
     
     if ( idNumber ){
         id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
-        if ( objectInstance )
+        
+        if (objectInstance && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+            [[CoreDataManager singleton] deleteObject:objectInstance];
+            return nil;
+        }
+
+        else if ( objectInstance )
             [objectInstance setUserValuesWithDictionary:dict];      // Update entity
         else
             objectInstance = [self insertWithDictionary:dict];      // insert new entity
@@ -71,7 +77,7 @@
     
     NSString *email = [dict objectForKey:kJSON_EMAIL ];
     if ([email isKindOfClass:[NSString class]])
-        [self setEMail:sessionToken];
+        [self setEMail:email];
     
     NSString *name = [dict objectForKey:kJSON_NAME ];
     if ([name isKindOfClass:[NSString class]])

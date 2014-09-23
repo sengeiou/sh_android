@@ -7,15 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Match.h"
 
 @interface FavGeneralDAO : NSObject
 
 //Generic parser
 +(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error))completionBlock;
-
-//Device
-+(BOOL)parseDevice:(NSDictionary *)deviceData;
 
 
 @end

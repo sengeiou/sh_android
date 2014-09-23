@@ -182,55 +182,8 @@
                 DLog(@"Request error:%@",error);
             }
         }];
-    }else if (delegateRespondsToProtocol){
-        
-        NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
-        [delegate parserResponseForClass:entityClass status:NO andError:reqError];
-        DLog(@"No valid req structure created");
-    }
-}
-
-#pragma mark - Device Consumer methods
-//------------------------------------------------------------------------------
-// DEVICE RESTCONSUMER
-//------------------------------------------------------------------------------
-- (void)deviceRegistration:(Device *)device withDelegate:(id)delegate{
-     
-    //Create Alias block
-    NSString *alias = kALIAS_REGISTER_DEVICE;
-    
-    //Create Staus block
-    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
-    
-    //Create 'req' block
-    NSArray *req = self.appDelegate.request;
-    
-    //Create Suscriptions 'metadata' block
-    NSNumber *idDevice = [[UserManager sharedInstance] getIdDevice];
-   
-    NSDictionary *metadataSuscriptions = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE andEntity:K_COREDATA_DEVICE withItems:@1 withOffSet:@0 andFilter:[FavRestConsumerHelper createFilterForParameter:kJSON_ID_DEVICE andValue:idDevice]];
-    
-    //Create Teams 'ops' block
-    NSDictionary *opsSuscriptions = @{K_WS_OPS_METADATA:metadataSuscriptions,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Device class]]]};
-    
-    //Create 'ops' block
-    NSArray *ops = @[opsSuscriptions];
-    
-    //Create full data structure
-    if (req && ops) {
-        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-            
-            if (!error)
-            
-                [FavGeneralDAO parseDevice:data];
-            else {
-                DLog(@"Request error:%@",error);
-            }
-        }];
     }else
-        DLog(@"No valid req structure created");
-
+        DLog(@"No valid req structure created for class %@",NSStringFromClass(entityClass));
 }
 
 #pragma mark - Create method

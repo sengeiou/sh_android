@@ -96,7 +96,7 @@ NSString *const kALIAS_GET_ADVICE                      = @"GET_ADVICE";
 NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
 NSString *const kALIAS_LOGIN                           = @"LOGIN";
-NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWING";
+NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWINGS";
 NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
 NSString *const kALIAS_USER                            = @"GET_USERS";
 

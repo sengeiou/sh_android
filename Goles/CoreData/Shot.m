@@ -27,10 +27,16 @@
     
     if ( idNumber ){
         id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
-        if ( objectInstance )
+        
+        if (objectInstance && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+            [[CoreDataManager singleton] deleteObject:objectInstance];
+            return nil;
+        }
+        else if ( objectInstance )
             [objectInstance setShotValuesWithDictionary:dict];      // Update entity
         else
             objectInstance = [self insertWithDictionary:dict];      // insert new entity
+        
         return objectInstance;
     }
     return nil;

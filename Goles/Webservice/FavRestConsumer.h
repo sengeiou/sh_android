@@ -60,9 +60,6 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 
 //Special request methods
 
-
-- (void)deviceRegistration:(Device *)device withDelegate:(id)delegate;
-
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate;
 - (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate;
 - (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate;

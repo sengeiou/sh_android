@@ -43,11 +43,18 @@
 -(void)generateDefaultCoreDataBase {
     
     [[CoreDataManager singleton] eraseCoreData];
-
-    [self createTestingData];
+    [self createSynchroTableData];
+//    [self createTestingData];
 }
 
-#pragma mark
+#pragma mark - For testing purposes
+//------------------------------------------------------------------------------
+- (void)createSynchroTableData {
+    
+    
+}
+
+#pragma mark - For testing purposes
 //------------------------------------------------------------------------------
 -(void)createTestingData {
 

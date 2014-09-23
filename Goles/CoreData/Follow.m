@@ -24,12 +24,17 @@
 
     NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
     NSNumber *idUserFollowed = [dict objectForKey:kJSON_FOLLOW_IDUSERFOLLOWED];
-    
+
     if ( idUser && idUserFollowed ){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser = %@ && idUserFollowed = %@",idUser,idUserFollowed];
         NSArray *objectsArray = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
         Follow *follow = [objectsArray firstObject];
-        if (follow)
+        
+        if (follow && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+            [[CoreDataManager singleton] deleteObject:follow];
+            return nil;
+        }
+        else if (follow)
             [follow setFollowValuesWithDictionary:dict];      // Update entity
         else
             follow = [self insertWithDictionary:dict];      // insert new entity

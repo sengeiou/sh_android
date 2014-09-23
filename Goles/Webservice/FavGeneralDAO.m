@@ -49,22 +49,6 @@ static NSArray *cuotasToDelete;
     }
 }
 
-
-+(BOOL)parseDevice:(NSDictionary *)deviceData {
-    
-    if (!deviceData || [deviceData isKindOfClass:[NSNull class]]) {
-        return NO;
-    }
-    else {
-        NSNumber *idDevice = [deviceData objectForKey:kJSON_ID_DEVICE];
-        if ([idDevice isKindOfClass:[NSNumber class]]) {
-            Device *device = [Device updateWithDictionary:deviceData];
-            if (device)     return YES;
-        }
-    }
-    return NO;
-}
-
 //------------------------------------------------------------------------------
 /**
  @brief Get the Class type for a request operation
@@ -82,7 +66,5 @@ static NSArray *cuotasToDelete;
     Class class = NSClassFromString(entityType);
     return class;
 }
-
-#pragma mark - Private Methods
 
 @end
