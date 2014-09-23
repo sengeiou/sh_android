@@ -73,7 +73,8 @@ public class BagdadDataService implements BagdadService {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0){
+
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
             Map<String, Object>[] data = ops[0].getData();
             for(int i=0;i<data.length;i++){
                 Follow f = FollowMapper.fromDto(data[i]);
@@ -94,7 +95,7 @@ public class BagdadDataService implements BagdadService {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0){
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
             Map<String, Object>[] data = ops[0].getData();
             for(int i=0;i<data.length;i++){
                 User user = UserMapper.fromDto(data[i]);
@@ -114,7 +115,8 @@ public class BagdadDataService implements BagdadService {
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
-        }else{
+        }
+        if( ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
             Map<String,Object>[] data = ops[0].getData();
             for(int i = 0; i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
@@ -134,7 +136,8 @@ public class BagdadDataService implements BagdadService {
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
-        }else{
+        }
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
             Map<String,Object>[] data = ops[0].getData();
             for(int i = 0; i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
@@ -154,7 +157,8 @@ public class BagdadDataService implements BagdadService {
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
-        }else{
+        }
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
             Map<String, Object>[] data = ops[0].getData();
             for(int i=0;i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
