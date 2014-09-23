@@ -129,7 +129,7 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
     @InjectView(R.id.debug_content) ViewGroup content;
 
-    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
+//    @InjectView(R.id.debug_content) ScalpelFrameLayout scalpelFrameLayout;
 
     @InjectView(R.id.debug_contextual_title) View contextualTitleView;
     @InjectView(R.id.debug_contextual_list) LinearLayout contextualListView;
@@ -434,7 +434,7 @@ public class DebugAppContainer implements AppContainer {
       }
     });
 */
-        boolean scalpel = scalpelEnabled.get();
+       /* boolean scalpel = scalpelEnabled.get();
         scalpelFrameLayout.setLayerInteractionEnabled(scalpel);
         uiScalpelView.setChecked(scalpel);
         uiScalpelWireframeView.setEnabled(scalpel);
@@ -458,7 +458,7 @@ public class DebugAppContainer implements AppContainer {
                 scalpelWireframeEnabled.set(isChecked);
                 scalpelFrameLayout.setDrawViews(!isChecked);
             }
-        });
+        });*/
     }
 
     private void setupBuildSection() {

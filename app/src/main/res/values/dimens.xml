@@ -3,5 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="keyline_2">72dp</dimen>
-    <dimen name="shot_avatar_size">40dp</dimen>
+    <dimen name="shot_avatar_size">52dp</dimen>
+
+    <!-- Timeline -->
+    <dimen name="watching_bar_height">72dp</dimen>
+    <dimen name="new_shot_height">48dp</dimen>
 </resources>

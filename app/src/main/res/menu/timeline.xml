@@ -10,12 +10,12 @@
         android:title="@string/menu_search"
         app:showAsAction="always"
         />
-    <item
+    <!--<item
         android:id="@+id/menu_info"
         android:icon="@drawable/ic_action_info"
         android:showAsAction="always"
         android:title="@string/menu_info"
         app:showAsAction="always"
-        />
+        />-->
 
 </menu>

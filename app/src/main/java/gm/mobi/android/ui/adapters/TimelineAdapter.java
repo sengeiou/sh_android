@@ -5,18 +5,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import gm.mobi.android.R;
 
 public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
@@ -33,34 +32,100 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
         shots = MockShot.getMockList();
     }
 
-    @Override public int getCount() {
-        return shots.size();
+    @Override
+    public boolean areAllItemsEnabled() {
+        return true;
     }
 
-    @Override public MockShot getItem(int position) {
-        return shots.get(position);
+    @Override
+    public boolean isEnabled(int position) {
+        return getItemViewType(position) > 0;
     }
 
-    @Override public long getItemId(int position) {
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return -1;
+        }else if (isLast(position)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 3;
+    }
+
+    @Override
+    public int getCount() {
+        return  1+ shots.size() + 1; // White space and loading indicator
+    }
+
+    public boolean isLast(int position) {
+        return position == getCount() - 1;
+    }
+
+    @Override
+    public MockShot getItem(int position) {
+        if (position!=0 && !isLast(position)) {
+            return shots.get(position-1); // Substract the margin item offset
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public long getItemId(int position) {
         return position;
     }
 
-    @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
-        View view = inflater.inflate(R.layout.item_list_shot, container, false);
-        view.setTag(new ViewHolder(view, avatarClickListener));
+    @Override
+    public View newView(LayoutInflater inflater, int position, ViewGroup container) {
+        View view = null;
+        switch (getItemViewType(position)) {
+            case -1: // Empty space
+                view = inflater.inflate(R.layout.timeline_margin, container, false);
+                break;
+            case 0: // Loading more
+                view = inflater.inflate(R.layout.item_list_loading, container, false);
+                break;
+            case 1: // Shot
+                view = inflater.inflate(R.layout.item_list_shot, container, false);
+                view.setTag(new ViewHolder(view, avatarClickListener));
+                break;
+        }
         return view;
     }
 
-    @Override public void bindView(MockShot item, int position, View view) {
-        ViewHolder vh = (ViewHolder) view.getTag();
-        vh.position = position;
+    @Override
+    public void bindView(MockShot item, int position, View view) {
+        switch (getItemViewType(position)) {
+            case 0:
+                break;
+            case 1:
+                ViewHolder vh = (ViewHolder) view.getTag();
+                vh.position = position;
 
-        vh.name.setText(item.name);
-        vh.text.setText(item.text);
-        vh.timestamp.setText(item.timestamp);
-        picasso.load(item.avatar).into(vh.avatar);
+                vh.name.setText(item.name);
+                vh.text.setText(item.text);
+                vh.timestamp.setText(item.timestamp);
+                picasso.load(item.avatar).into(vh.avatar);
 
-        vh.avatar.setTag(vh);
+                vh.avatar.setTag(vh);
+                break;
+        }
+    }
+
+    public void addShotsBelow(List<MockShot> newShots) {
+        this.shots.addAll(newShots);
+        notifyDataSetChanged();
+    }
+
+    public void addShotsAbove(List<MockShot> newShots) {
+        this.shots.addAll(0, newShots);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder {
@@ -90,12 +155,12 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
             this.timestamp = timestamp;
         }
 
-        static List<MockShot> getMockList() {
-            return Arrays.asList(
+        public static List<MockShot> getMockList() {
+            List<MockShot> mockShots = Arrays.asList(
                     new MockShot("Ignasi", "Barcelona scores first", "https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg", "3m"),
-                    new MockShot("Victor", "He's an idiot", "https://s3.amazonaws.com/uifaces/faces/twitter/idiot/128.jpg", "15m"),
+                    new MockShot("Victor", "He's such a nice person", "https://s3.amazonaws.com/uifaces/faces/twitter/idiot/128.jpg", "15m"),
                     new MockShot("Victor", "Who's the referee?", "https://s3.amazonaws.com/uifaces/faces/twitter/idiot/128.jpg", "22m"),
-                    new MockShot("Christian", "Messi's goal!! https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://s3.amazonaws.com/uifaces/faces/twitter/peterlandt/128.jpg", "56m"),
+                    new MockShot("Christian", "Messi's goal!! https://www.youtube.com/watch?v=dQw4w9WgXcQx", "https://s3.amazonaws.com/uifaces/faces/twitter/peterlandt/128.jpg", "56m"),
                     new MockShot("Philip", "Nanananana batmannn", "https://s3.amazonaws.com/uifaces/faces/twitter/peterme/128.jpg", "58m"),
 
                     new MockShot("Ignasi", "He de reconocer que el lugar del evento es envidiable. De los pocos pabellones que sobrevivieron de la Expo 92. ", "https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg", "3m"),
@@ -112,12 +177,19 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
                     new MockShot("Victor", "Who's the referee?", "https://s3.amazonaws.com/uifaces/faces/twitter/idiot/128.jpg", "22m"),
                     new MockShot("Christian", "Messi's goal!! https://www.youtube.com/watch?v=dQw4w9WgXcQ", "https://s3.amazonaws.com/uifaces/faces/twitter/peterlandt/128.jpg", "56m"),
                     new MockShot("Philip", "Nanananana batmannn", "https://s3.amazonaws.com/uifaces/faces/twitter/peterme/128.jpg", "58m"),
-                    new MockShot("Charles", "Gonna grab some beers for the match", "https://s3.amazonaws.com/uifaces/faces/twitter/teleject/128.jpg", "1h")
-
+                    new MockShot("Charles", "Barcelona scores last", "https://s3.amazonaws.com/uifaces/faces/twitter/teleject/128.jpg", "1h")
             );
+            return new ArrayList<>(mockShots);
 
         }
 
+        public static List<MockShot> getBlueList() {
+            return Arrays.asList(
+                    new MockShot("Blueman", "Blue shot", "https://s3.amazonaws.com/uifaces/faces/twitter/mrrocks/128.jpg", "2d"),
+                    new MockShot("Blueman", "Blue shot", "https://s3.amazonaws.com/uifaces/faces/twitter/mrrocks/128.jpg", "2d"),
+                    new MockShot("Blueman", "Blue shot", "https://s3.amazonaws.com/uifaces/faces/twitter/mrrocks/128.jpg", "2d")
+            );
+        }
     }
 
 }
