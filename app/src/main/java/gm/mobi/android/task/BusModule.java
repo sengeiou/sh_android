@@ -12,7 +12,7 @@ import dagger.Provides;
 import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
-import gm.mobi.android.task.jobs.timeline.FollowsJob;
+import gm.mobi.android.task.jobs.timeline.FollowingsJob;
 import gm.mobi.android.task.jobs.timeline.ShotsJob;
 import gm.mobi.android.task.jobs.timeline.UsersJob;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
@@ -25,7 +25,7 @@ import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
                 LoginUserJob.class,
                 UsersJob.class,
                 ShotsJob.class,
-                FollowsJob.class,
+                FollowingsJob.class,
                 RegisterNewUserJob.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
