@@ -122,55 +122,55 @@ namespace Bagdad.Models
                     {
                         await database.ExecuteStatementAsync("BEGIN TRANSACTION");
 
-                        foreach (JToken userLogin in job["ops"][0]["data"])
+                        foreach (JToken userFollowing in job["ops"][0]["data"])
                         {
                             //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
                             custstmt.Reset();
 
-                            if (userLogin["idUser"] == null || String.IsNullOrEmpty(userLogin["idUser"].ToString()))
+                            if (userFollowing["idUser"] == null || String.IsNullOrEmpty(userFollowing["idUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUser");
                             else
-                                custstmt.BindIntParameterWithName("@idUser", int.Parse(userLogin["idUser"].ToString()));
+                                custstmt.BindIntParameterWithName("@idUser", int.Parse(userFollowing["idUser"].ToString()));
 
-                            if (userLogin["idFavouriteTeam"] == null || String.IsNullOrEmpty(userLogin["idFavouriteTeam"].ToString()))
+                            if (userFollowing["idFavouriteTeam"] == null || String.IsNullOrEmpty(userFollowing["idFavouriteTeam"].ToString()))
                                 custstmt.BindNullParameterWithName("@idFavouriteTeam");
                             else
-                                custstmt.BindIntParameterWithName("@idFavouriteTeam", int.Parse(userLogin["idFavouriteTeam"].ToString()));
+                                custstmt.BindIntParameterWithName("@idFavouriteTeam", int.Parse(userFollowing["idFavouriteTeam"].ToString()));
 
-                            if (userLogin["userName"] == null || String.IsNullOrEmpty(userLogin["userName"].ToString()))
+                            if (userFollowing["userName"] == null || String.IsNullOrEmpty(userFollowing["userName"].ToString()))
                                 custstmt.BindNullParameterWithName("@userName");
                             else
-                                custstmt.BindTextParameterWithName("@userName", userLogin["userName"].ToString());
+                                custstmt.BindTextParameterWithName("@userName", userFollowing["userName"].ToString());
 
-                            if (userLogin["name"] == null || String.IsNullOrEmpty(userLogin["name"].ToString()))
+                            if (userFollowing["name"] == null || String.IsNullOrEmpty(userFollowing["name"].ToString()))
                                 custstmt.BindNullParameterWithName("@name");
                             else
-                                custstmt.BindTextParameterWithName("@name", userLogin["name"].ToString());
+                                custstmt.BindTextParameterWithName("@name", userFollowing["name"].ToString());
 
-                            if (userLogin["photo"] == null || String.IsNullOrEmpty(userLogin["photo"].ToString()))
+                            if (userFollowing["photo"] == null || String.IsNullOrEmpty(userFollowing["photo"].ToString()))
                                 custstmt.BindNullParameterWithName("@photo");
                             else
-                                custstmt.BindTextParameterWithName("@photo", userLogin["photo"].ToString());
+                                custstmt.BindTextParameterWithName("@photo", userFollowing["photo"].ToString());
 
-                            if (userLogin["birth"] == null || String.IsNullOrEmpty(userLogin["birth"].ToString()))
+                            if (userFollowing["birth"] == null || String.IsNullOrEmpty(userFollowing["birth"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_birth");
                             else
-                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(userLogin["birth"].ToString()).ToString("s").Replace('T', ' '));
+                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(userFollowing["birth"].ToString()).ToString("s").Replace('T', ' '));
 
-                            if (userLogin["modified"] == null || String.IsNullOrEmpty(userLogin["modified"].ToString()))
+                            if (userFollowing["modified"] == null || String.IsNullOrEmpty(userFollowing["modified"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_modified");
                             else
-                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(userLogin["modified"].ToString()).ToString("s").Replace('T', ' '));
+                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(userFollowing["modified"].ToString()).ToString("s").Replace('T', ' '));
 
-                            if (userLogin["deleted"] == null || String.IsNullOrEmpty(userLogin["deleted"].ToString()))
+                            if (userFollowing["deleted"] == null || String.IsNullOrEmpty(userFollowing["deleted"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_deleted");
                             else
-                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(userLogin["deleted"].ToString()).ToString("s").Replace('T', ' '));
+                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(userFollowing["deleted"].ToString()).ToString("s").Replace('T', ' '));
 
-                            if (userLogin["revision"] == null || String.IsNullOrEmpty(userLogin["revision"].ToString()))
+                            if (userFollowing["revision"] == null || String.IsNullOrEmpty(userFollowing["revision"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_revision");
                             else
-                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userLogin["revision"].ToString()));
+                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userFollowing["revision"].ToString()));
 
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
@@ -223,7 +223,7 @@ namespace Bagdad.Models
         /// <returns></returns>
         public string constructFilterFollow(string conditionDate)
         {
-            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate  + "],\"nexus\":\"and\"";
+            return "\"filterItems\":[{\"comparator\":\"ne\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate  + "],\"nexus\":\"and\"";
         }
     }
 }
