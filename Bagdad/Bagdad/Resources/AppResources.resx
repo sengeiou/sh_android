@@ -135,7 +135,7 @@
     <value>Elemento de menú</value>
   </data>
   <data name="SignInTitle" xml:space="preserve">
-    <value>Sign in</value>
+    <value>Sign In</value>
     <comment>SignIn.xaml, LoginOrregister.xaml</comment>
   </data>
   <data name="FacebookAdvice1" xml:space="preserve">

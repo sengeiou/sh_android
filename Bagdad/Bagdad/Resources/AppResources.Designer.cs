@@ -385,7 +385,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Sign in.
+        ///   Busca una cadena traducida similar a Sign In.
         /// </summary>
         public static string SignInTitle {
             get {

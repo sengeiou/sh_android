@@ -25,6 +25,27 @@ namespace Bagdad
             IsRedirectionNeeded();
             InitializeComponent();
             BuildLocalizedApplicationBar();
+            DataContext = App.ShotsVM;
+        }
+
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            try
+            {
+
+                if (!App.ShotsVM.IsDataLoaded)
+                {
+                    await App.ShotsVM.LoadData();
+                }
+                else
+                {
+                    if (App.ShotsVM.Shots.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("E R R O R : TimeLine - OnNavigatedTo: " + ex.Message);
+            }
         }
 
         //When Click BACK on the Main Page (TimeLine) we close the App.
@@ -67,6 +88,7 @@ namespace Bagdad
                 new ApplicationBarIconButton(new
                 Uri("/Resources/icons/appbar.refresh.png", UriKind.Relative));
             appBarButton2.Text = AppResources.Refresh;
+            appBarButton2.Click += appBarRefreshButton_Click;
             ApplicationBar.Buttons.Add(appBarButton2);
 
             ApplicationBarIconButton appBarButton3 =
@@ -89,6 +111,14 @@ namespace Bagdad
                 new ApplicationBarMenuItem(AppResources.Me);
             appBarMenuItem3.Click += appBarMenuItem3_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItem3);
+        }
+
+        private async void appBarRefreshButton_Click(object sender, EventArgs e)
+        {
+            App.ShotsVM.Shots.Clear();
+            await App.ShotsVM.LoadData();
+            if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
+            else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void appBarMenuItem3_Click(object sender, EventArgs e)

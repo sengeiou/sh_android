@@ -21,27 +21,7 @@ namespace Bagdad
         {
             InitializeComponent();
         }
-
-        private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
-        {
-            // Switch the placement of the buttons based on an orientation change.
-            if ((e.Orientation & PageOrientation.Portrait) == (PageOrientation.Portrait))
-            {
-                Grid.SetRow(signInFacebook, 1);
-                Grid.SetColumn(signInFacebook, 0);
-                signInFacebook.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                ContentPanel.Margin = new Thickness(12, 12, 12, 0);
-            }
-            // If not in portrait, move buttonList content to visible row and column.
-            else
-            {
-                Grid.SetRow(signInFacebook, 0);
-                Grid.SetColumn(signInFacebook, 1);
-                signInFacebook.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                ContentPanel.Margin = new Thickness(12,0,12,0);
-            }
-        } 
-
+        
         private async void SignIn_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -16,6 +16,7 @@ using Windows.Storage;
 using System.Threading;
 using Bagdad.Utils;
 using System.ComponentModel;
+using Bagdad.ViewModels;
 
 namespace Bagdad
 {
@@ -334,6 +335,23 @@ namespace Bagdad
                 DBLoaded.WaitOne(-1);
                 return db;
             });
+        }
+
+        #endregion
+
+        #region DATA_VIEW_MODELS
+
+        private static ShotsViewModel shotsViewModel = null;
+
+        public static ShotsViewModel ShotsVM
+        {
+            get
+            {
+                if (shotsViewModel == null)
+                    shotsViewModel = new ShotsViewModel();
+
+                return shotsViewModel;
+            }
         }
 
         #endregion

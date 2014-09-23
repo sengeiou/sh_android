@@ -21,31 +21,31 @@
         </Grid.RowDefinitions>
 
         <!--Row0-->
-        <Image Grid.Row="0" Source="/Resources/start/start_shooter.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Image Grid.Row="0" Source="/Resources/start/start_shooter.png" Width="250" Height="250" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
         <!--Row1-->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!--Row1.0-->
-            <TextBlock Grid.Row="0" TextAlignment="Center" Text="{Binding LocalizedResources.Shooter, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
+            <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Bottom" Text="{Binding LocalizedResources.Shooter, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
 
             <!--Row1.1-->
-            <Grid Grid.Row="1" Width="400" Height="47">
-                <Rectangle Fill="#3c5a99" Width="400" Height="47"/>
+            <Grid Grid.Row="1" Width="345" Height="47" Margin="0,55,0,0">
+                <Rectangle Fill="#3c5a99" Width="345" Height="47"/>
                 <Image Source="/Resources/start/Facebook.png" Width="45" Height="45" HorizontalAlignment="Left"/>
-                <TextBlock TextAlignment="Center" TextWrapping="NoWrap" Text="{Binding LocalizedResources.SignWithFacebook, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMediumLarge}" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center" Margin="45,0,0,0"/>
+                <TextBlock TextAlignment="Center" TextWrapping="NoWrap" Text="{Binding LocalizedResources.SignWithFacebook, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeMediumLarge}" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center" Margin="24,0,0,3"/>
             </Grid>
 
             <!--Row1.0-->
-            <TextBlock Grid.Row="2" TextAlignment="Center" Text="{Binding LocalizedResources.RegisterWithEmail, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Foreground="{StaticResource ResourceKey=PhoneAccentBrush}" VerticalAlignment="Bottom" Margin="0,0,0,24"/>
+            <TextBlock Grid.Row="2" TextAlignment="Center" Text="{Binding LocalizedResources.RegisterWithEmail, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource ResourceKey=PhoneAccentBrush}" VerticalAlignment="Bottom"/>
 
-            <TextBlock Grid.Row="3" TextAlignment="Center" Text="{Binding LocalizedResources.SignInTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Foreground="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
+            <TextBlock Grid.Row="3" TextAlignment="Center" Text="{Binding LocalizedResources.SignInTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" FontSize="{StaticResource PhoneFontSizeMedium}" Foreground="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top" Margin="0,24">
 				<i:Interaction.Triggers>
 					<i:EventTrigger EventName="MouseLeftButtonDown">
 						<ec:NavigateToPageAction TargetPage="/SignIn.xaml"/>

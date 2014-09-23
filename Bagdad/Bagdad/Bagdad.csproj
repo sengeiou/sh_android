@@ -133,6 +133,8 @@
     <Compile Include="Utils\SQLQuerys.cs" />
     <Compile Include="Utils\ServiceCommunication.cs" />
     <Compile Include="Utils\Util.cs" />
+    <Compile Include="ViewModels\ShotsViewModel.cs" />
+    <Compile Include="ViewModels\ShotViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -148,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Me.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleData\ShotsSampleData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,10 +253,7 @@
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SampleData\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <XliffResource Include="Resources\AppResources.es.xlf">
       <Generator>XliffResxGenerator</Generator>

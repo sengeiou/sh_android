@@ -7,8 +7,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c4ftk="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
+    xmlns:local="clr-namespace:Bagdad"
     mc:Ignorable="d"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    d:DataContext="{d:DesignData SampleData/ShotsSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -56,50 +58,48 @@
         <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" />
 
         <!--Row2-->
-        <TextBlock Grid.Row="2" Margin="12,0,12,12" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextAccentStyle}" Tap="ImWatching_Tap"/>
+        <TextBlock Grid.Row="2" Margin="47,-12,12,24" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Tap="ImWatching_Tap" Foreground="{StaticResource PhoneAccentBrush}"/>
 
         <!--Row3-->
-        <ListBox Grid.Row="3" Margin="12,0">
-            <ListBoxItem>
-                <ListBoxItem.Template>
-                    <ControlTemplate>
-                        <Grid Margin="0,0,0,12">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+        <ListBox Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding Shots}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,12" Width="436" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                            <!--Column0-->
-                            <Grid VerticalAlignment="Top" Grid.Column="0">
-                                <Rectangle Fill="{StaticResource PhoneChromeBrush}" Width="75" Height="75"/>
-                                <Image Source="/Resources/icons/appbar.user.png" Width="75" Height="75"/>
-                            </Grid>
-                            <!--Column1-->
-                            <Grid Grid.Column="1" Margin="12,0,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-
-                                <!--Row0-->
-                                <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Bold" Text="Windows Phone"/>
-                                <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Thin" HorizontalAlignment="Right" Text="3 min"/>
-
-                                <!--Row1-->
-                                <TextBlock Grid.Row="1" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="Barcelona - Elche 16/12"/>
-
-                                <!--Row2-->
-                                <TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Light" TextWrapping="Wrap" Text="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo."/>
-
-                            </Grid>
+                        <!--Column0-->
+                        <Grid VerticalAlignment="Top" Grid.Column="0">
+                            <Rectangle Fill="{StaticResource PhoneChromeBrush}" Width="75" Height="75"/>
+                            <Image Source="{Binding Path=shotUserImage}" Width="75" Height="75"/>
                         </Grid>
-                    </ControlTemplate>
-                </ListBoxItem.Template>
-            </ListBoxItem>
+                        <!--Column1-->
+                        <Grid Grid.Column="1" Margin="12,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!--Row0-->
+                            <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Bold" Text="{Binding shotUserName}"/>
+                            <TextBlock Grid.Row="0" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Thin" HorizontalAlignment="Right" Text="{Binding shotTime}"/>
+
+                            <!--Row1-->
+                            <TextBlock Grid.Row="1" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="{Binding shotTag}"/>
+
+                            <!--Row2-->
+                            <TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Light" TextWrapping="Wrap" Text="{Binding shotMessage}"/>
+
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
 
-        <Grid Grid.Row="3" x:Name="NoShootsAdvice" Background="{StaticResource PhoneBackgroundBrush}">
+        <Grid Grid.Row="3" x:Name="NoShootsAdvice" Visibility="Collapsed" Background="{StaticResource PhoneBackgroundBrush}">
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

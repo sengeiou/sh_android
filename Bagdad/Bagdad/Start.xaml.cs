@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.ComponentModel;
 
 namespace Bagdad
 {
@@ -16,6 +17,13 @@ namespace Bagdad
         public Start()
         {
             InitializeComponent();
+        }
+
+        //When Click BACK on the Main Page (TimeLine) we close the App.
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            base.OnBackKeyPress(e);
+            Application.Current.Terminate();
         }
 
         private void PivotSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
