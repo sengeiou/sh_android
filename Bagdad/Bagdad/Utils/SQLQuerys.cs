@@ -13,7 +13,7 @@ namespace Bagdad.Utils
 
         public const String InsertLoginData = "INSERT INTO User (idUser, idFavouriteTeam, sessionToken, userName, email, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @sessionToken, @userName, @email, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String InsertUserData = "INSERT INTO User (idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @userName, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @userName, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
         public const String GetSessionToken = "SELECT sessionToken, idUser FROM User WHERE sessionToken IS NOT NULL";
 
@@ -38,7 +38,7 @@ namespace Bagdad.Utils
 
         public const String getMaxModificationDateOf = "SELECT maxTimestamp FROM Synchro WHERE Entity = @Entity";
 
-        public const String updateModificationDateOf = "UPDATE Synchro SET LastModified = @maxTimestamp WHERE Entity = @Entity";
+        public const String updateModificationDateOf = "UPDATE Synchro SET maxTimestamp = @maxTimestamp WHERE Entity = @Entity";
 
         public const String GetSynchronizationTables = "SELECT `order`, entity, frequency, maxTimestamp, minTimestamp, direction, maxRows, minRows  FROM Synchro ORDER BY `order` ASC";
 
