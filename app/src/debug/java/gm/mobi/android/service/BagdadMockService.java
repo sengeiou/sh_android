@@ -42,7 +42,7 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db) throws IOException {
+    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db, int typeFollow) throws IOException {
         return null;
     }
 
