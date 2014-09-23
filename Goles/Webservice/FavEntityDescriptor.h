@@ -24,4 +24,6 @@
  */
 + (NSDictionary *)createPropertyListForEntity:(Class)entityClass;
 
++ (NSDictionary *)createPropertyListForEntityByKey:(Class)entityClass;
+
 @end

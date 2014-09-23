@@ -102,8 +102,7 @@
                  kJSON_USERNAME:[NSNull null],
                  kJSON_ID_FAVOURITE_TEAM:[NSNull null],
                  kJSON_NAME:[NSNull null],
-                 kJSON_PHOTO:[NSNull null],
-                 kJSON_SESSIONTOKEN:[NSNull null]};
+                 kJSON_PHOTO:[NSNull null],};
     }
     
     else if ([entityClass isSubclassOfClass:[Follow class]]) {
@@ -130,6 +129,26 @@
 
 
   
+    return nil;
+}
+
+
++ (NSDictionary *)createPropertyListForEntityByKey:(Class)entityClass {
+
+    if ([entityClass isSubclassOfClass:[User class]]) {
+        
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_ID_USER:[NSNull null],
+                 kJSON_USERNAME:[NSNull null],
+                 kJSON_ID_FAVOURITE_TEAM:[NSNull null],
+                 kJSON_NAME:[NSNull null],
+                 kJSON_PHOTO:[NSNull null],
+                 kJSON_SESSIONTOKEN:[NSNull null]};
+    }
+    
     return nil;
 }
 

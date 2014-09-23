@@ -290,7 +290,7 @@
                                                                      andKey:key];
     
     //Create playerProvider 'ops' block
-    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:entityClass]]};
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntityByKey:entityClass]]};
     
     //Create 'ops' block
     NSArray *ops = @[operation];
