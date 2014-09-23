@@ -12,11 +12,11 @@ public abstract  class ResultEvent  {
         this.status = status;
     }
 
-    public abstract ResultEvent successful(Object o);
+    public abstract ResultEvent setSuccessful(Object o);
 
-    public abstract  ResultEvent invalid();
+    public abstract  ResultEvent setInvalid();
 
-    public abstract ResultEvent serverError(Exception e);
+    public abstract ResultEvent setServerError(Exception e);
 
     public int getStatus(){
         return status;
