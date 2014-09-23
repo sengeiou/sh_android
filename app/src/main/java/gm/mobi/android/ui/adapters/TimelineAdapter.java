@@ -39,28 +39,22 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
 
     @Override
     public boolean isEnabled(int position) {
-        return getItemViewType(position) > 0;
+        return true;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return -1;
-        }else if (isLast(position)) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return 0;
     }
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return 1;
     }
 
     @Override
     public int getCount() {
-        return  1+ shots.size() + 1; // White space and loading indicator
+        return shots.size(); // White space and loading indicator
     }
 
     public boolean isLast(int position) {
@@ -69,11 +63,7 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
 
     @Override
     public MockShot getItem(int position) {
-        if (position!=0 && !isLast(position)) {
-            return shots.get(position-1); // Substract the margin item offset
-        } else {
-            return null;
-        }
+        return shots.get(position); // Substract the margin item offset
     }
 
     @Override
@@ -85,13 +75,7 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
     public View newView(LayoutInflater inflater, int position, ViewGroup container) {
         View view = null;
         switch (getItemViewType(position)) {
-            case -1: // Empty space
-                view = inflater.inflate(R.layout.timeline_margin, container, false);
-                break;
-            case 0: // Loading more
-                view = inflater.inflate(R.layout.item_list_loading, container, false);
-                break;
-            case 1: // Shot
+            case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
                 view.setTag(new ViewHolder(view, avatarClickListener));
                 break;
@@ -102,9 +86,7 @@ public class TimelineAdapter extends BindableAdapter<TimelineAdapter.MockShot> {
     @Override
     public void bindView(MockShot item, int position, View view) {
         switch (getItemViewType(position)) {
-            case 0:
-                break;
-            case 1:
+            case 0: // Shot
                 ViewHolder vh = (ViewHolder) view.getTag();
                 vh.position = position;
 

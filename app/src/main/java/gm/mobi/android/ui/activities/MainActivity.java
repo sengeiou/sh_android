@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseSignedInActivity {
         if(user!=null){
             jobManager.addJobInBackground(new FollowingsJob(getApplicationContext(),user.getIdUser(),db));
         }
-//        setContainerContent(R.layout.main_activity);
+        setContainerContent(R.layout.main_activity);
         ButterKnife.inject(this);
     }
 

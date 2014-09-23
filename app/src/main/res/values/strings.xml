@@ -49,6 +49,8 @@
 
     <string name="activity_timeline_new_text">What\'s Up?</string>
 
+    <string name="no_more_shots">No more shots</string>
+
     <!-- Menu names -->
     <string name="menu_info">Info</string>
     <string name="menu_search">Search timeline</string>

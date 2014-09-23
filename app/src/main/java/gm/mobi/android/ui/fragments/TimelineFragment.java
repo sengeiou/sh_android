@@ -14,12 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,7 +38,6 @@ import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
@@ -49,12 +51,19 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     @InjectView(R.id.timeline_watching_container) View watchingContainer;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
 
+    private View headerView;
+    private View footerView;
+    private ProgressBar footerProgress;
+    private TextView footerText;
+
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private boolean mFistAttach = true;
     private boolean isLoadingMore;
     private boolean isRefreshing;
     private int watchingHeight;
+    private boolean moreShots = true;
+
 
      /* ---- Lifecycle methods ---- */
 
@@ -96,49 +105,47 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+
+        //TODO change by drawerLayout, not the fragment itself
         try {
             getActivity().getActionBar().setTitle("Timeline");
         } catch (NullPointerException e) {
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
-        watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
+        // Header and footer
+        headerView = LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
+        footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+        footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
+        footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
+        listView.addHeaderView(headerView, null, false);
+        listView.addFooterView(footerView, null, false);
+
+        watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3, R.color.refresh_4);
         swipeRefreshLayout.setTopMargin(watchingHeight);
 
-        // FAB
-//        imwatchingView.attachToListView(listView); //TODO should automatically hide the fab, but doesn't work
-        newShotView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        final int newShotHeight = newShotView.getMeasuredHeight();
-
         // List scroll stuff
-
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
             public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
             @Override
             public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 // delta negativo: scoll abajo
-                if (delta < -10 && scrollPosition < -watchingHeight) {
-//                    newShotView.animate().setInterpolator(mInterpolator).setDuration(200).translationY(newShotHeight);
+                if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
                     watchingContainer.animate().setInterpolator(mInterpolator).setDuration(200).translationY(-watchingHeight);
-//                    newShotView.setTranslationY(newShotHeight);
-//                    imwatchingView.hide();
-                } else if (delta > 10) {
+                } else if (delta > 10) { // Show
                     watchingContainer.animate().setInterpolator(mInterpolator).setDuration(200).translationY(0).start();
-//                    newShotView.animate().translationY(0).setDuration(200).start();
-//                    newShotView.setTranslationY(0);
-//                    imwatchingView.show();
                 }
             }
 
             @Override
             public void onScrollIdle() {
                 int lastVisiblePosition = listView.getLastVisiblePosition();
-                if (adapter.isLast(lastVisiblePosition)) {
+                if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
                     startLoadMoreShots();
                 }
             }
@@ -157,7 +164,6 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.timeline, menu);
         // Little hack for ActionBarCompat
-//        menu.findItem(R.id.menu_info).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
@@ -209,14 +215,15 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
     //TODO parameter: last shot as offset
     public void startLoadMoreShots() {
-        if (!isLoadingMore) {
+        if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
             //Debug:
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    List<TimelineAdapter.MockShot> newShots = TimelineAdapter.MockShot.getBlueList();
+//                    List<TimelineAdapter.MockShot> newShots = TimelineAdapter.MockShot.getBlueList();
+                    List<TimelineAdapter.MockShot> newShots = new ArrayList<TimelineAdapter.MockShot>();
                     bus.post(new OldShotsReceivedEvent(newShots));
                 }
             }, 2000);
@@ -233,12 +240,16 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             Timber.e("Null shot list received");
             return;
         }
-        Timber.d("Received %d new shots", newShots.size());
-        int originalPosition = listView.getFirstVisiblePosition();
-        int newPosition = originalPosition + newShots.size() - 1;
-        adapter.addShotsAbove(newShots);
-        listView.setSelection(newPosition);
-        listView.smoothScrollToPosition(0);
+        if (newShots.size() == 0) {
+            Toast.makeText(getActivity(), "No new shots", Toast.LENGTH_SHORT).show();
+        } else {
+            Timber.d("Received %d new shots", newShots.size());
+            int originalPosition = listView.getFirstVisiblePosition();
+            int newPosition = originalPosition + newShots.size() - 1;
+            adapter.addShotsAbove(newShots);
+            listView.setSelection(newPosition);
+            listView.smoothScrollToPosition(0);
+        }
     }
 
     @Subscribe
@@ -250,8 +261,15 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             Timber.e("Null shot list received");
             return;
         }
-        Timber.d("Received %d old shots", oldShots.size());
-        adapter.addShotsBelow(oldShots);
+        if (oldShots.size() == 0) {
+            footerProgress.setVisibility(View.INVISIBLE); // Maintain size
+            footerText.setVisibility(View.VISIBLE);
+            footerText.setText(R.string.no_more_shots);
+            moreShots = false;
+        } else {
+            Timber.d("Received %d old shots", oldShots.size());
+            adapter.addShotsBelow(oldShots);
+        }
     }
 }
 
