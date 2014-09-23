@@ -11,6 +11,7 @@ namespace Bagdad.Models
 {
     class Follow
     {
+        
 
         public async Task<int> saveData(JObject job)
         {
@@ -36,10 +37,10 @@ namespace Bagdad.Models
                             else
                                 custstmt.BindIntParameterWithName("@idUser", int.Parse(follow["idUser"].ToString()));
 
-                            if (follow["idUserFollowed"] == null || String.IsNullOrEmpty(follow["idUserFollowed"].ToString()))
+                            if (follow["idFollowedUser"] == null || String.IsNullOrEmpty(follow["idFollowedUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUserFollowed");
                             else
-                                custstmt.BindIntParameterWithName("@idUserFollowed", int.Parse(follow["idUserFollowed"].ToString()));
+                                custstmt.BindIntParameterWithName("@idUserFollowed", int.Parse(follow["idFollowedUser"].ToString()));
 
                             if (follow["birth"] == null || String.IsNullOrEmpty(follow["birth"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_birth");
@@ -61,7 +62,6 @@ namespace Bagdad.Models
                             else
                                 custstmt.BindIntParameterWithName("@csys_revision", int.Parse(follow["revision"].ToString()));
 
-                            custstmt.BindNullParameterWithName("@csys_deleted");
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
@@ -74,9 +74,14 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("E R R O R - User - saveDataPeople: " + e.Message);
+                throw new Exception("E R R O R - User - saveDataFollow: " + e.Message);
             }
             return done;
+        }
+
+        public string constructFilterFollow(string conditionDate)
+        {
+            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
         }
     }
 }

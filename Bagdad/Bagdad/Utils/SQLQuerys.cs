@@ -15,7 +15,9 @@ namespace Bagdad.Utils
 
         public const String InsertUserData = "INSERT INTO User (idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @userName, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String GetSessionToken = "SELECT sessionToken FROM User WHERE sessionToken IS NOT NULL";
+        public const String GetSessionToken = "SELECT sessionToken, idUser FROM User WHERE sessionToken IS NOT NULL";
+
+        public const String hasLoggedSQL = "SELECT idUser FROM User WHERE sessionToken IS NOT NULL";
 
         #endregion
 
@@ -23,7 +25,12 @@ namespace Bagdad.Utils
 
         public const String InsertShotData = "INSERT INTO Shot (idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idShot, @idUser, @comment, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
+        #endregion
+
+        #region FOLLOW
+
         public const String InsertFollowData = "INSERT INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+            
 
         #endregion
 
@@ -33,7 +40,7 @@ namespace Bagdad.Utils
 
         public const String updateModificationDateOf = "UPDATE Synchro SET LastModified = @maxTimestamp WHERE Entity = @Entity";
 
-        public const String GetSynchronizationTables = "SELECT order, entity, frequency, maxTimestamp, minTimestamp, direction, maxRows, minRows  FROM Synchro ORDER BY `Order` ASC";
+        public const String GetSynchronizationTables = "SELECT `order`, entity, frequency, maxTimestamp, minTimestamp, direction, maxRows, minRows  FROM Synchro ORDER BY `order` ASC";
 
         #endregion
     }

@@ -51,8 +51,6 @@ namespace Bagdad
             // Inicialización XAML estándar
             InitializeComponent();
 
-            UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
-
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
 
@@ -87,6 +85,8 @@ namespace Bagdad
         {
             await PrepareDB.initializeDatabase();
             InitializeDB();
+            var synchroLogin = await hasLoggedBefore();
+            if (synchroLogin) UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -337,6 +337,14 @@ namespace Bagdad
             });
         }
 
+        private async Task<bool> hasLoggedBefore()
+        {
+            Util util = new Util();
+
+            var log = await util.isUserAlreadyLoged();
+            if (log) return true;
+            else return false;
+        }
         #endregion
 
         #region DATA_VIEW_MODELS

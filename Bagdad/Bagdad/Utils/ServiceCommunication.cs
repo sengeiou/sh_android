@@ -38,13 +38,11 @@ namespace Bagdad.Utils
         private ObservableCollection<String> listTables;
         private ObservableCollection<String> listTablesSynchronized;
 
-        #region OPS_DATA
-
-        private String OPS_DATA_LOGIN = "\"idUser\": null,\"idFavouriteTeam\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        #region OPS
         private String OPS_DATA_USER = "\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        private String OPS_DATA_SHOT = "\"idShot\": null,\"idUSer\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        private String OPS_DATA_FOLLOW = "\"idUser\": null,\"idUserFollowed\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-
+        private String OPS_DATA_LOGIN = "\"idUser\": null,\"idFavouriteTeam\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        private String OPS_DATA_SHOT = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        private String OPS_DATA_FOLLOW = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
         #endregion
 
         public ServiceCommunication()
@@ -114,18 +112,12 @@ namespace Bagdad.Utils
                                             if (SynchroType == Constants.ST_DOWNLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO)
                                             {
                                                 Debug.WriteLine("DESCARGANDO: " + Table.Entity);
-
-                                                
-                                                
-                                                    double date = await gm.getMaxModificationDateOf(Table.Entity);
-
-                                                    total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, "\"filter\":{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}", 0);
-                                                    nChanges += total;      //Solo tiene en cuenta la sincro estandard
-
-
+                                                double date = await gm.getMaxModificationDateOf(Table.Entity);
+                                                string sParams = getParams(Table.Entity, date);
+                                                total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
+                                                nChanges += total;      //Solo tiene en cuenta la sincro estandard
                                                 Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
-
-                                        }
+                                            }
                                     }
                                 }
                                 catch (Exception ex)
@@ -197,6 +189,31 @@ namespace Bagdad.Utils
             {
                 Debug.WriteLine("\n\n No se ha podido establecer el valor para SynchroType.\n Valores admitidos: \n\t - 0: Update \n\t - 1: Download \n\t - 2: Both \n\n Nota: Si este parametro no se establece, SynchronizeProcess actuará como si SynchroType fuera Both.\n\n");
             }
+        }
+
+        public string getParams(string entity, double date)
+        {
+            string sFilterModifyDelete = "{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
+            switch (entity)
+            {
+                case Constants.SERCOM_TB_USER:
+                    User user = new User();
+                    sFilterModifyDelete = "\"filter\":{" + user.constructFilterFollow(sFilterModifyDelete) + "}";
+                    break;
+                case Constants.SERCOM_TB_FOLLOW:
+                    Follow follow = new Follow();
+                    sFilterModifyDelete = "\"filter\":{" + follow.constructFilterFollow(sFilterModifyDelete) + "}";
+                    break;
+                case Constants.SERCOM_TB_SHOT:
+                    Shot shot = new Shot();
+                    sFilterModifyDelete = "\"filter\":{" + shot.constructFilterShot(sFilterModifyDelete) + "}";
+                    break;
+                default:
+                    sFilterModifyDelete = "\"filter\":{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
+                    break;
+            }
+
+            return sFilterModifyDelete;
         }
 
         public async Task<int> doRequest(String operation, String entity, String searchParams, int offset)
@@ -291,13 +308,13 @@ namespace Bagdad.Utils
                         ops = "\"ops\":[{\"data\":[{" + OPS_DATA_LOGIN + "}],\"metadata\":{\"items\": 1,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
                         break;
                     case Constants.SERCOM_TB_USER:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_USER + "}],\"metadata\":{\"items\": 1,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_USER + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
                         break;
                     case Constants.SERCOM_TB_FOLLOW:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_FOLLOW + "}],\"metadata\":{\"items\": 1,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_FOLLOW + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
                         break;
                     case Constants.SERCOM_TB_SHOT:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_SHOT + "}],\"metadata\":{\"items\": 1,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_SHOT + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
                         break;
                     default:
                         ops = "";

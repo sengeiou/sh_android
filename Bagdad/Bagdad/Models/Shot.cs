@@ -11,6 +11,7 @@ namespace Bagdad.Models
 {
     class Shot
     {
+        
 
         public async Task<int> saveData(JObject job)
         {
@@ -65,7 +66,6 @@ namespace Bagdad.Models
                             else
                                 custstmt.BindIntParameterWithName("@csys_revision", int.Parse(shot["revision"].ToString()));
 
-                            custstmt.BindNullParameterWithName("@csys_deleted");
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
@@ -82,5 +82,11 @@ namespace Bagdad.Models
             }
             return done;
         }
+
+        public string constructFilterShot(string conditionDate)
+        {
+            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
+        }
+
     }
 }

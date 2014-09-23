@@ -11,6 +11,7 @@ namespace Bagdad.Models
 {
     class User
     {
+
         public async Task<int> saveData(JObject job)
         {
             int done = 0;
@@ -32,7 +33,10 @@ namespace Bagdad.Models
                             if (userLogin["idUser"] == null || String.IsNullOrEmpty(userLogin["idUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUser");
                             else
+                            {
                                 custstmt.BindIntParameterWithName("@idUser", int.Parse(userLogin["idUser"].ToString()));
+                                App.ID_PLAYER = int.Parse(userLogin["idUser"].ToString());
+                            }
 
                             if (userLogin["idFavouriteTeam"] == null || String.IsNullOrEmpty(userLogin["idFavouriteTeam"].ToString()))
                                 custstmt.BindNullParameterWithName("@idFavouriteTeam");
@@ -84,7 +88,6 @@ namespace Bagdad.Models
                             else
                                 custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userLogin["revision"].ToString()));
 
-                            custstmt.BindNullParameterWithName("@csys_deleted");
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
                             
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
@@ -166,7 +169,6 @@ namespace Bagdad.Models
                             else
                                 custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userLogin["revision"].ToString()));
 
-                            custstmt.BindNullParameterWithName("@csys_deleted");
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
@@ -196,6 +198,8 @@ namespace Bagdad.Models
                 if (await st.StepAsync())
                 {
                     sessionToken = st.GetTextAt(0);
+                    int idPlayer = st.GetIntAt(1);
+                    if (idPlayer > 0) App.ID_PLAYER = idPlayer;
                 }
 
                 App.DBLoaded.Set();
@@ -205,6 +209,17 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - User - getSessionToken: " + e.Message);
             }
             return sessionToken;
+        }
+
+
+        /// <summary>
+        /// Construimos el filtro 
+        /// </summary>
+        /// <param name="conditionDate"></param>
+        /// <returns></returns>
+        public string constructFilterFollow(string conditionDate)
+        {
+            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate  + "],\"nexus\":\"and\"";
         }
     }
 }
