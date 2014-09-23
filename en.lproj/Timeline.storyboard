@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -114,9 +115,6 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="189" id="seo-9H-FRQ"/>
-                                        </constraints>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="hJL-3r-zfN">
                                         <rect key="frame" x="0.0" y="52" width="320" height="1"/>
@@ -146,13 +144,12 @@
                                                             <color key="textColor" red="0.76078431369999999" green="0.76078431369999999" blue="0.76078431369999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLo-GY-onO">
+                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLo-GY-onO">
                                                             <rect key="frame" x="74" y="26" width="237" height="80"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                                         </textView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXk-Q8-LaK">
                                                             <rect key="frame" x="80" y="6" width="122" height="25"/>
@@ -184,16 +181,15 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="cfX-1I-iII" secondAttribute="centerX" id="0Vx-D0-LFw"/>
+                                    <constraint firstItem="VYB-IF-QLU" firstAttribute="top" secondItem="hJL-3r-zfN" secondAttribute="bottom" constant="76" id="11F-gr-AlF"/>
                                     <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="3LI-rv-TeB" secondAttribute="top" constant="3" id="943-dJ-fvw"/>
                                     <constraint firstAttribute="trailing" secondItem="hAK-0x-gdD" secondAttribute="trailing" id="AHD-cF-xC3"/>
                                     <constraint firstItem="hJL-3r-zfN" firstAttribute="leading" secondItem="3LI-rv-TeB" secondAttribute="leading" id="MzF-Tc-6SG"/>
                                     <constraint firstAttribute="centerX" secondItem="hAK-0x-gdD" secondAttribute="centerX" id="OVb-ht-asd"/>
-                                    <constraint firstAttribute="bottom" secondItem="VYB-IF-QLU" secondAttribute="bottom" constant="225" id="Ojv-Ae-RVh"/>
-                                    <constraint firstItem="VYB-IF-QLU" firstAttribute="top" secondItem="cfX-1I-iII" secondAttribute="bottom" id="P2O-hX-tfr"/>
                                     <constraint firstItem="cfX-1I-iII" firstAttribute="leading" secondItem="3LI-rv-TeB" secondAttribute="leading" id="WEX-Sq-gBv"/>
-                                    <constraint firstAttribute="centerX" secondItem="VYB-IF-QLU" secondAttribute="centerX" id="ZIN-qe-b4x"/>
                                     <constraint firstItem="cfX-1I-iII" firstAttribute="top" secondItem="hJL-3r-zfN" secondAttribute="bottom" id="auE-R2-v47"/>
                                     <constraint firstAttribute="centerX" secondItem="hJL-3r-zfN" secondAttribute="centerX" id="eWS-YJ-kht"/>
+                                    <constraint firstItem="VYB-IF-QLU" firstAttribute="leading" secondItem="3LI-rv-TeB" secondAttribute="leading" constant="35" id="rT5-O4-x6n"/>
                                     <constraint firstItem="hJL-3r-zfN" firstAttribute="top" secondItem="hAK-0x-gdD" secondAttribute="bottom" id="s0t-dX-HZ5"/>
                                     <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="3LI-rv-TeB" secondAttribute="leading" id="vlA-rA-xYv"/>
                                     <constraint firstAttribute="trailing" secondItem="cfX-1I-iII" secondAttribute="trailing" id="xBD-9h-Yy3"/>

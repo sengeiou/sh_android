@@ -25,7 +25,8 @@
     // This function returns a newImage, based on image, that has been:
     // - scaled to fit in (CGRect) rect
     // - and cropped within a circle of radius: rectWidth/2
-
+    
+    
     //Create the bitmap graphics context
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(rect.size.width, rect.size.height), NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();

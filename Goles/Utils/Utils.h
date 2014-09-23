@@ -52,6 +52,12 @@
 
 + (NSString *)changeQuantityToEURFormat:(CGFloat)money;
 + (NSString *)setTwoDecimalsToBetOdd:(CGFloat)betOdd;
+
+
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString;
+
++(NSString *)getDateShot:(NSDate *) dateShot;
+
++ (CGFloat)heightForShoot: (NSString *) text;
 
 @end

@@ -452,7 +452,7 @@
     return [formatter stringFromNumber:[NSNumber numberWithFloat:betOdd]];
 }
 
-
+//Comprove if a format mail is valid
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString
 {
     BOOL stricterFilter = NO;
@@ -462,5 +462,49 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
 }
+
+//Get difference hours between dates
++(NSString *)getDateShot:(NSDate *) dateShot{
+    
+    NSString *timeLeft;
+    
+    NSDate *today =[NSDate date];
+    
+    NSInteger seconds = [today timeIntervalSinceDate:dateShot];
+    
+    NSInteger days = (int) (floor(seconds / (3600 * 24)));
+    if(days) seconds -= days * 3600 * 24;
+    
+    NSInteger hours = (int) (floor(seconds / 3600));
+    if(hours) seconds -= hours * 3600;
+    
+    NSInteger minutes = (int) (floor(seconds / 60));
+    if(minutes) seconds -= minutes * 60;
+    
+    if(days)
+        timeLeft = [NSString stringWithFormat:@"%ldd", (long)days*-1];
+    else if(hours)
+        timeLeft = [NSString stringWithFormat: @"%ldh", (long)hours*-1];
+    else if(minutes)
+        timeLeft = [NSString stringWithFormat: @"%ldm", (long)minutes*-1];
+    else if(seconds)
+        timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds*-1];
+    
+    timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    
+    return timeLeft;
+}
+
+//Calculate size for height Cell
++ (CGFloat)heightForShoot: (NSString *) text{
+    
+    NSInteger MAX_HEIGHT = 2000;
+    UITextView * textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 26, 320, MAX_HEIGHT)];
+    textView.text = text;
+    textView.font = [UIFont boldSystemFontOfSize:18];
+    [textView sizeToFit];
+    return textView.frame.size.height+54;
+}
+
 
 @end

@@ -14,6 +14,7 @@
 #import "CoreDataManager.h"
 #import "ShotTableViewCell.h"
 #import "UIImageView+FadeIn.h"
+#import "Utils.h"
 
 @interface TimeLineViewController (){
     int lengthTextField;
@@ -28,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIView *viewNotShoots;
 @property (strong, nonatomic) NSArray *arrayShoots;
 @property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 @end
 
@@ -53,7 +55,11 @@
         [self hiddenViewNotShoots];
 }
 
+//------------------------------------------------------------------------------
 -(void)hiddenViewNotShoots{
+    
+    [self addPullToRefresh];
+    
     self.timelineTableView.hidden = NO;
     self.viewNotShoots.hidden = YES;
     self.timelineTableView.delegate = self;
@@ -61,6 +67,7 @@
     self.mScrollView.scrollEnabled = NO;
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
 }
@@ -70,6 +77,30 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - Pull to refresh and return from background refresh
+//------------------------------------------------------------------------------
+-(void)addPullToRefresh{
+    // Config pull to refresh
+    if (self.refreshControl == nil) {
+        self.refreshControl = [[UIRefreshControl alloc] init];
+        [self.refreshControl addTarget:self action:@selector(onPullToRefresh:) forControlEvents:UIControlEventValueChanged];
+        [self.timelineTableView addSubview:self.refreshControl];
+    }  
+}
+//------------------------------------------------------------------------------
+- (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
+    
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:YES];
+    
+    [self.refreshControl endRefreshing];
+    
+}
+
+
+#pragma mark - UITableViewDelegate
+
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -78,7 +109,10 @@
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 90;
+    //return 90;
+    Shot *shot = self.arrayShoots[indexPath.row];
+
+    return [Utils heightForShoot:shot.comment];
 }
 
 //------------------------------------------------------------------------------
@@ -90,42 +124,13 @@
     
     cell.txvText.text = shot.comment;
     cell.lblName.text = shot.user.name;
-    [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:YES andInnerBorder:NO];
-    cell.lblDate.text = [self getDateShot:shot.csys_birth];
+    [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
+    cell.lblDate.text = [Utils getDateShot:shot.csys_birth];
 
     return cell;
  }
 
--(NSString *)getDateShot:(NSDate *) dateShot{
-    
-    NSString *timeLeft;
-    
-    NSDate *today10am =[NSDate date];
-    
-    NSInteger seconds = [today10am timeIntervalSinceDate:dateShot];
-    
-    NSInteger days = (int) (floor(seconds / (3600 * 24)));
-    if(days) seconds -= days * 3600 * 24;
-    
-    NSInteger hours = (int) (floor(seconds / 3600));
-    if(hours) seconds -= hours * 3600;
-    
-    NSInteger minutes = (int) (floor(seconds / 60));
-    if(minutes) seconds -= minutes * 60;
-    
-    if(days)
-        timeLeft = [NSString stringWithFormat:@"%ldd", (long)days*-1];
-    else if(hours)
-        timeLeft = [NSString stringWithFormat: @"%ldh", (long)hours*-1];
-    else if(minutes)
-        timeLeft = [NSString stringWithFormat: @"%ldm", (long)minutes*-1];
-    else if(seconds)
-        timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds*-1];
-    
-    timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    
-    return timeLeft;
-}
+
 
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
@@ -153,7 +158,8 @@
 //------------------------------------------------------------------------------
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-        lengthTextField = self.txtField.text.length - range.length + string.length;
+    
+    lengthTextField = self.txtField.text.length - range.length + string.length;
    
     
     if (lengthTextField > 1)
