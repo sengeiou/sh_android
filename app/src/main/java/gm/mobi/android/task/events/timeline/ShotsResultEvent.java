@@ -14,9 +14,6 @@ public class ShotsResultEvent extends ResultEvent{
     public ShotsResultEvent(int status){
         super(status);
     }
-
-
-
     @Override
     public ResultEvent setSuccessful(Object o) {
         this.setShots((List<Shot>)o);
