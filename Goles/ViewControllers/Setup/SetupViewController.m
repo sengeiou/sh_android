@@ -65,6 +65,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    self.navigationItem.backBarButtonItem.title = @"Back";
     self.navigationController.navigationBarHidden = NO;
 }
 

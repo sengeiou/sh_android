@@ -18,6 +18,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnWatching;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
+@property (weak, nonatomic) IBOutlet UITextField *txtField;
+@property (weak, nonatomic) IBOutlet UIButton *btnShoot;
+@property (weak, nonatomic) IBOutlet UIView *viewNotShoots;
+@property (weak, nonatomic) NSArray *arrayShoots;
 
 @end
 
@@ -26,11 +30,16 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    
+    if (self.arrayShoots.count == 0)
+        self.timelineTableView.hidden = YES;
+        
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
-
 }
 
 //------------------------------------------------------------------------------
