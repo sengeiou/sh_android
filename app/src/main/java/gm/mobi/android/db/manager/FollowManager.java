@@ -15,40 +15,65 @@ import gm.mobi.android.db.objects.Follow;
 
 public class FollowManager {
 
-    public static void saveFollow(SQLiteDatabase db, Follow follow) throws SQLException{
+
+    /**
+     * Insert a Follow
+     */
+    public static void saveFollow(SQLiteDatabase db, Follow follow) throws SQLException {
+        long res;
         ContentValues contentValues = FollowMapper.toContentValues(follow);
-        long res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
+            res = deleteFollow(db, follow);
+        } else {
+            res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
     }
 
-    public static void saveFollows(SQLiteDatabase db, List<Follow> followList){
-        for(Follow follow: followList){
+    /**
+     * Insert a Follow list
+     * *
+     */
+    public static void saveFollows(SQLiteDatabase db, List<Follow> followList) {
+        long res;
+        for (Follow follow : followList) {
             ContentValues contentValues = FollowMapper.toContentValues(follow);
             db.beginTransaction();
-            db.insertWithOnConflict(GMContract.FollowTable.TABLE,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+            if (contentValues.getAsLong(GMContract.SyncColumns.CSYS_DELETED) != null) {
+                res = deleteFollow(db, follow);
+            } else {
+                res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
             db.endTransaction();
         }
     }
 
-    public static List<Integer> getUserFollowingIds(SQLiteDatabase db, Integer idUser) throws SQLException{
-        List<Integer> userIds = new ArrayList<Integer>();
-        SQLiteQueryBuilder qBuilder = new SQLiteQueryBuilder();
+    /**
+     * Retrieve a Following User
+     */
+    public static List<Integer> getUserFollowingIds(SQLiteDatabase db, Integer idUser) throws SQLException {
+        List<Integer> userIds = new ArrayList<>();
 
-        String raw_query = "SELECT "+ GMContract.FollowTable.ID_FOLLOWED_USER+" as IDFOLLOWING FROM "
+        String raw_query = "SELECT " + GMContract.FollowTable.ID_FOLLOWED_USER + " as IDFOLLOWING FROM "
                 + GMContract.FollowTable.TABLE
-                + " WHERE"
-                +  GMContract.UserTable.ID+" = "+idUser;
+                + " WHERE "
+                + GMContract.UserTable.ID + " = " + idUser;
         Cursor c = db.rawQuery(raw_query, new String[]{});
-        int count = c.getCount();
-        if(count > 0) {
+        if (c.getCount() > 0) {
             c.moveToFirst();
-            while(!c.isAfterLast()) {
+            while (!c.isAfterLast()) {
                 userIds.add(c.getColumnIndex("IDFOLLOWING"));
                 c.moveToNext();
             }
         }
-
         c.close();
+        return userIds;
+    }
 
-    return userIds;
+    /**
+     * Delete one Follow
+     */
+    public static long deleteFollow(SQLiteDatabase db, Follow follow) {
+        return db.delete(GMContract.FollowTable.TABLE, GMContract.FollowTable.ID_FOLLOWED_USER + "=? AND " + GMContract.FollowTable.ID_USER + "=?",
+                new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});
     }
 }
