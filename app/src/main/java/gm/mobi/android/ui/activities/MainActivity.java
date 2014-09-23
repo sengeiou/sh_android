@@ -83,7 +83,7 @@ public class MainActivity extends BaseSignedInActivity {
     public void onGetUsersFollowingResult(UsersResultEvent event){
         if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS ){
             //Aquí llamamos a obtener los shots
-            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db, ShotsJob.FIRST_TIME));
+            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db, ShotsJob.FIRST_TIME,null));
         }
     }
 
