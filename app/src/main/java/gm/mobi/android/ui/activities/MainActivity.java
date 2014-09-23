@@ -1,9 +1,6 @@
 package gm.mobi.android.ui.activities;
 
 import android.app.Application;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,14 +18,13 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import gm.mobi.android.GolesApplication;
-import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.timeline.FollowsResultEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.events.timeline.UsersResultEvent;
-import gm.mobi.android.task.jobs.timeline.FollowsJob;
+import gm.mobi.android.task.jobs.timeline.FollowingsJob;
 import gm.mobi.android.task.jobs.timeline.ShotsJob;
 import gm.mobi.android.task.jobs.timeline.UsersJob;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
@@ -64,12 +60,10 @@ public class MainActivity extends BaseSignedInActivity {
             return;
         }
         db = mDbHelper.getReadableDatabase();
-
         User user = ((GolesApplication)getApplication()).getCurrentUser();
         if(user!=null){
-            jobManager.addJobInBackground(new FollowsJob(getApplicationContext(),user.getIdUser(),db));
+            jobManager.addJobInBackground(new FollowingsJob(getApplicationContext(),user.getIdUser(),db));
         }
-
 //        setContainerContent(R.layout.main_activity);
         ButterKnife.inject(this);
     }
@@ -79,7 +73,7 @@ public class MainActivity extends BaseSignedInActivity {
         mFollowingList = event.getFollows();
         List<Integer> followingIds = event.getFollowingIds();
         if (event.getStatus() == FollowsResultEvent.STATUS_SUCCESS && mFollowingList != null) {
-            //Aquí llamamos al siqguiente Job, que será obtener los users objects de los followings que hemos retornado
+            //Aquí llamamos al siguiente Job, que será obtener los users objects de los followings que hemos retornado
             jobManager.addJobInBackground(new UsersJob(getApplicationContext(), followingIds, db));
         }
 
@@ -91,7 +85,7 @@ public class MainActivity extends BaseSignedInActivity {
         List<Integer> followingIds = event.getFollowingUserIds();
         if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS && mFollowingUserList != null){
             //Aquí llamamos a obtener los shots
-            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), followingIds, db));
+            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db));
         }
     }
 
@@ -102,7 +96,6 @@ public class MainActivity extends BaseSignedInActivity {
             //Aquí deberíamos pintar el fragment del timeline
             Toast.makeText(getApplicationContext(),"Ha descargado todos los shots", Toast.LENGTH_LONG).show();
             android.support.v4.app.FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
-
             ft.add(new TimelineFragment(),"TIME_LINE_FRAGMENT");
             ft.commit();
         }
@@ -119,7 +112,4 @@ public class MainActivity extends BaseSignedInActivity {
         super.onResume();
         bus.register(this);
     }
-
-
-
 }
