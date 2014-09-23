@@ -15,18 +15,18 @@ public class UsersResultEvent extends ResultEvent {
     }
 
     @Override
-    public ResultEvent successful(Object o) {
+    public ResultEvent setSuccessful(Object o) {
         this.setUsers((List<User>)o);
         return this;
     }
 
     @Override
-    public ResultEvent invalid() {
+    public ResultEvent setInvalid() {
         return this;
     }
 
     @Override
-    public ResultEvent serverError(Exception e) {
+    public ResultEvent setServerError(Exception e) {
         this.setError(e);
         return this;
     }
