@@ -15,8 +15,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
+import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
@@ -43,10 +46,10 @@ public class ShotsJob extends CancellableJob {
     public SQLiteDatabase mDb;
     public List<Integer> mFollowingUserIds;
 
-    public ShotsJob(Context context, List<Integer> followingUserIds, SQLiteDatabase db){
+    public ShotsJob(Context context, SQLiteDatabase db){
         super(new Params(PRIORITY));
         mContext = context;
-        mFollowingUserIds = followingUserIds;
+        mDb = db;
         GolesApplication.get(mContext).inject(this);
     }
 
@@ -64,6 +67,10 @@ public class ShotsJob extends CancellableJob {
             return;
         }
         try {
+            User user = ((GolesApplication)app).getCurrentUser();
+            mFollowingUserIds = FollowManager.getUserFollowingIds(mDb, user.getIdUser());
+            //Adding owner user, because I need to retrieve all the shots including my owns
+            mFollowingUserIds.add(user.getIdUser());
             List<Shot> shots = service.getShotsByUserIdList(mFollowingUserIds, mContext, mDbHelper.getWritableDatabase());
             if(shots != null){
                 ShotManager.saveShots(mDbHelper.getWritableDatabase(), shots);
@@ -100,12 +107,12 @@ public class ShotsJob extends CancellableJob {
 
     private void sendCredentialError() {
         ShotsResultEvent fResultEvent = new ShotsResultEvent(ShotsResultEvent.STATUS_INVALID);
-        bus.post(fResultEvent.invalid());
+        bus.post(fResultEvent.setInvalid());
     }
 
     private void sendServerError(Exception e) {
         ShotsResultEvent fResultEvent = new ShotsResultEvent(ShotsResultEvent.STATUS_SERVER_FAILURE);
-        bus.post(fResultEvent.serverError(e));
+        bus.post(fResultEvent.setServerError(e));
     }
 
 
