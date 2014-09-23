@@ -104,6 +104,45 @@ public class BagdadDataService implements BagdadService {
         return users;
     }
 
+    @Override
+    public List<Shot> getNewShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db, Shot lastNewShot) throws IOException {
+        List<Shot> newerShots = new ArrayList<>();
+        Long date = SyncTableManager.getLastModifiedDate(context,db,GMContract.ShotTable.TABLE);
+        GenericDto genericDto = TimeLineDtoFactory.getNewerShotsOperationDto(followingUserIds,date,lastNewShot,context);
+        GenericDto responseDto = postRequest(genericDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }else{
+            Map<String,Object>[] data = ops[0].getData();
+            for(int i = 0; i<data.length;i++){
+                Shot shot = ShotMapper.fromDto(data[i]);
+                newerShots.add(shot);
+            }
+        }
+        return newerShots;
+    }
+
+    @Override
+    public List<Shot> getOlderShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db, Shot lastOlderShot) throws IOException {
+        List<Shot> newerShots = new ArrayList<>();
+        Long date = SyncTableManager.getLastModifiedDate(context,db,GMContract.ShotTable.TABLE);
+        GenericDto genericDto = TimeLineDtoFactory.getOlderShotsOperationDto(followingUserIds,date,lastOlderShot,context);
+        GenericDto responseDto = postRequest(genericDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }else{
+            Map<String,Object>[] data = ops[0].getData();
+            for(int i = 0; i<data.length;i++){
+                Shot shot = ShotMapper.fromDto(data[i]);
+                newerShots.add(shot);
+            }
+        }
+        return newerShots;
+    }
 
     @Override
     public List<Shot> getShotsByUserIdList( List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException {
@@ -115,8 +154,7 @@ public class BagdadDataService implements BagdadService {
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
-        }
-        if(ops.length>0){
+        }else{
             Map<String, Object>[] data = ops[0].getData();
             for(int i=0;i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
@@ -125,8 +163,6 @@ public class BagdadDataService implements BagdadService {
         }
         return shots;
     }
-
-
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
@@ -173,8 +209,6 @@ public class BagdadDataService implements BagdadService {
 
         }
     }
-
-
 
 }
 
