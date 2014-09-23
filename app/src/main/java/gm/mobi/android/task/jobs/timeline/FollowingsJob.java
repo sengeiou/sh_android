@@ -19,11 +19,12 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 
-public class FollowsJob extends CancellableJob{
+public class FollowingsJob extends CancellableJob{
 
     @Inject Application app;
     @Inject NetworkUtil networkUtil;
@@ -37,7 +38,7 @@ public class FollowsJob extends CancellableJob{
     private Context context;
     public SQLiteDatabase db;
 
-    public FollowsJob(Context context, Integer idUser, SQLiteDatabase db){
+    public FollowingsJob(Context context, Integer idUser, SQLiteDatabase db){
         super(new Params(PRIORITY));
         this.context = context;
         this.idUser = idUser;
@@ -58,7 +59,7 @@ public class FollowsJob extends CancellableJob{
             return;
         }
         try {
-            List<Follow> follows = service.getFollows(idUser,context, mDbHelper.getWritableDatabase());
+            List<Follow> follows = service.getFollows(idUser,context, mDbHelper.getWritableDatabase(), UserDtoFactory.GET_FOLLOWING);
             if(follows != null){
                 FollowManager.saveFollows(mDbHelper.getWritableDatabase(), follows);
                 FollowsResultEvent fResultEvent = new FollowsResultEvent(FollowsResultEvent.STATUS_SUCCESS);
@@ -87,12 +88,12 @@ public class FollowsJob extends CancellableJob{
 
     private void sendCredentialError() {
         FollowsResultEvent fResultEvent = new FollowsResultEvent(FollowsResultEvent.STATUS_INVALID);
-        bus.post(fResultEvent.invalid());
+        bus.post(fResultEvent.setInvalid());
     }
 
     private void sendServerError(Exception e) {
         FollowsResultEvent fResultEvent = new FollowsResultEvent(FollowsResultEvent.STATUS_SERVER_FAILURE);
-        bus.post(fResultEvent.serverError(e));
+        bus.post(fResultEvent.setServerError(e));
     }
 
     @Override
