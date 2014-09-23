@@ -66,6 +66,7 @@ NSString *const K_WS_OPS_OR                             = @"or";
 NSString *const K_WS_OPS_EQ                             = @"eq";
 NSString *const K_WS_OPS_NE                             = @"ne";
 NSString *const K_WS_OPS_GT                             = @"gt";
+NSString *const K_WS_OPS_GE                             = @"ge";
 NSString *const K_WS_FILTERITEMS                        = @"filterItems";
 NSString *const K_WS_COMPARATOR                         = @"comparator";
 NSString *const K_WS_FILTERS                            = @"filters";
@@ -95,8 +96,9 @@ NSString *const kALIAS_GET_ADVICE                      = @"GET_ADVICE";
 NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
 NSString *const kALIAS_LOGIN                           = @"LOGIN";
-NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWS";
+NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWING";
 NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
+NSString *const kALIAS_USER                            = @"GET_USERS";
 
 #pragma mark - CORE DATA ENTITY NAMES
 

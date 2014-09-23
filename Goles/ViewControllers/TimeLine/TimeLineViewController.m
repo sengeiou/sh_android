@@ -9,6 +9,7 @@
 #import "TimeLineViewController.h"
 #import "FavRestConsumer.h"
 #import "Follow.h"
+#import "User.h"
 #import "Shot.h"
 
 @interface TimeLineViewController ()
@@ -26,7 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
 }
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
@@ -57,8 +57,11 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
-    if (status){
-        NSLog(@"Response OK");
+    if (status && [entityClass isSubclassOfClass:[Follow class]]){
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+    }
+    else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     }
 }
 

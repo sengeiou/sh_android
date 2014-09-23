@@ -24,18 +24,8 @@
 //-----------------------------------------------------------------------------
 + (NSString *)getAliasForEntity:(Class)entity {
     
-    if ([entity isSubclassOfClass:[Match class]])
-        return @"Get Matches of Shooter";
-    else if ([entity isSubclassOfClass:[Message class]])
-        return kALIAS_GET_MESSAGE;
-    else if ([entity isSubclassOfClass:[AppAdvice class]])
-        return kALIAS_GET_ADVICE;
-    else if ([entity isSubclassOfClass:[SML class]])
-        return kALIAS_GET_SML;
-    else if ([entity isSubclassOfClass:[Team class]])
-        return kALIAS_GET_ALL_TEAMS;
-    else if ([entity isSubclassOfClass:[User class]])
-        return kALIAS_LOGIN;
+    if ([entity isSubclassOfClass:[User class]])
+        return kALIAS_USER;
     else if ([entity isSubclassOfClass:[Follow class]])
         return kALIAS_FOLLOW;
     else if ([entity isSubclassOfClass:[Shot class]])

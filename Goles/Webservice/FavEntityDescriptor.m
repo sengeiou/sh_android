@@ -101,10 +101,7 @@
                  kJSON_ID_USER:[NSNull null],
                  kJSON_USERNAME:[NSNull null],
                  kJSON_ID_FAVOURITE_TEAM:[NSNull null],
-                 kJSON_SESSIONTOKEN:[NSNull null],
-                 kJSON_EMAIL:[NSNull null],
                  kJSON_NAME:[NSNull null],
-                 kJSON_PASSWORD:[NSNull null],
                  kJSON_PHOTO:[NSNull null]};
     }
     

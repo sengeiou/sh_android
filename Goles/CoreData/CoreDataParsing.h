@@ -64,6 +64,7 @@ extern NSString *const K_WS_OPS_NEXUS;
 extern NSString *const K_WS_OPS_AND;
 extern NSString *const K_WS_OPS_OR;
 extern NSString *const K_WS_OPS_GT;
+extern NSString *const K_WS_OPS_GE;
 extern NSString *const K_WS_OPS_EQ;
 extern NSString *const K_WS_OPS_NE;
 extern NSString *const K_WS_FILTERITEMS;
@@ -96,6 +97,7 @@ extern NSString *const kALIAS_REGISTER_DEVICE;
 extern NSString *const kALIAS_LOGIN;
 extern NSString *const kALIAS_FOLLOW;
 extern NSString *const kALIAS_SHOT;
+extern NSString *const kALIAS_USER;
 
 #pragma mark - CORE DATA ENTITY NAMES
 
