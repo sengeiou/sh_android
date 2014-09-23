@@ -77,16 +77,13 @@ public class MainActivity extends BaseSignedInActivity {
             //Aquí llamamos al siguiente Job, que será obtener los users objects de los followings que hemos retornado
             jobManager.addJobInBackground(new UsersJob(getApplicationContext(), followingIds, db));
         }
-
     }
 
     @Subscribe
     public void onGetUsersFollowingResult(UsersResultEvent event){
-        mFollowingUserList = event.getUsers();
-        List<Integer> followingIds = event.getFollowingUserIds();
-        if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS && mFollowingUserList != null){
+        if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS ){
             //Aquí llamamos a obtener los shots
-            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db));
+            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db, ShotsJob.FIRST_TIME));
         }
     }
 
