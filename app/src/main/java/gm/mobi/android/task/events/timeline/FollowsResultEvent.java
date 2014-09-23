@@ -10,23 +10,24 @@ public class FollowsResultEvent extends ResultEvent{
 
     private List<Follow> follows;
     private List<Integer> followingIds;
+
     public FollowsResultEvent(int status) {
         super(status);
     }
 
     @Override
-    public ResultEvent successful(Object o) {
+    public ResultEvent setSuccessful(Object o) {
         this.setFollows((List<Follow>)o);
         return this;
     }
 
     @Override
-    public ResultEvent invalid() {
+    public ResultEvent setInvalid() {
         return this;
     }
 
     @Override
-    public ResultEvent serverError(Exception e) {
+    public ResultEvent setServerError(Exception e) {
         this.setError(e);
         return this;
     }
