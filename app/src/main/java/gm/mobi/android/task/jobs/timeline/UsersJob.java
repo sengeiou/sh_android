@@ -15,9 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
-import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
@@ -50,7 +48,6 @@ public class UsersJob extends CancellableJob{
         this.context = context;
         this.userIds = userIds;
         GolesApplication.get(context).inject(this);
-
     }
 
     @Override
@@ -96,12 +93,12 @@ public class UsersJob extends CancellableJob{
 
     private void sendCredentialError() {
         UsersResultEvent fResultEvent = new UsersResultEvent(UsersResultEvent.STATUS_INVALID);
-        bus.post(fResultEvent.invalid());
+        bus.post(fResultEvent.setInvalid());
     }
 
     private void sendServerError(Exception e) {
         UsersResultEvent fResultEvent = new UsersResultEvent(FollowsResultEvent.STATUS_SERVER_FAILURE);
-        bus.post(fResultEvent.serverError(e));
+        bus.post(fResultEvent.setServerError(e));
     }
 
     @Override
