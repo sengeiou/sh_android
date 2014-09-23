@@ -60,7 +60,8 @@ public class FollowingsJob extends CancellableJob{
         }
         try {
             List<Follow> follows = service.getFollows(idUser,context, mDbHelper.getWritableDatabase(), UserDtoFactory.GET_FOLLOWING);
-            if(follows != null){
+
+            if(follows != null && follows.size()>0){
                 FollowManager.saveFollows(mDbHelper.getWritableDatabase(), follows);
                 FollowsResultEvent fResultEvent = new FollowsResultEvent(FollowsResultEvent.STATUS_SUCCESS);
                 fResultEvent.setFollows(follows);
