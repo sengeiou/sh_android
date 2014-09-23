@@ -2,8 +2,6 @@ package gm.mobi.android.service.dataservice;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.text.format.Time;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.MediaType;
@@ -20,7 +18,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
@@ -66,10 +63,10 @@ public class BagdadDataService implements BagdadService {
         return UserMapper.fromDto(data[0]);
     }
 
-    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db) throws IOException{
+    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db, int typeFollow) throws IOException{
         List<Follow> follows = new ArrayList<>();
         Long date = SyncTableManager.getLastModifiedDate(context, db, GMContract.FollowTable.TABLE);
-        GenericDto genericDto = UserDtoFactory.getFollowOperationDto(idUser, 1000L, context, UserDtoFactory.GET_FOLLOWING, date);
+        GenericDto genericDto = UserDtoFactory.getFollowOperationDto(idUser, 1000L, context,typeFollow, date);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -105,7 +102,6 @@ public class BagdadDataService implements BagdadService {
             }
         }
         return users;
-
     }
 
 
@@ -125,7 +121,6 @@ public class BagdadDataService implements BagdadService {
             for(int i=0;i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
                 shots.add(shot);
-
             }
         }
         return shots;
