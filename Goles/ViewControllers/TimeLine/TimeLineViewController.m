@@ -11,6 +11,7 @@
 #import "Follow.h"
 #import "User.h"
 #import "Shot.h"
+#import "CoreDataManager.h"
 
 @interface TimeLineViewController ()
 
@@ -35,7 +36,8 @@
     
     if (self.arrayShoots.count == 0)
         self.timelineTableView.hidden = YES;
-        
+    else
+        self.viewNotShoots.hidden = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -50,7 +52,7 @@
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 1;
+    return self.arrayShoots.count;
 }
 
 //------------------------------------------------------------------------------
@@ -71,6 +73,10 @@
     }
     else if (status && [entityClass isSubclassOfClass:[User class]]){
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    }
+    else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+       self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:YES];
+        [self.timelineTableView reloadData];
     }
 }
 

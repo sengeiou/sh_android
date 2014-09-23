@@ -19,6 +19,10 @@
     
      UITextField *txtFieldName;
      UITextField *txtFieldPwd;
+    
+    int lengthName;
+    
+    int lengthPwd;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *mtableView;
@@ -62,6 +66,8 @@
     txtFieldPwd.clearButtonMode = YES;
     [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
     txtFieldPwd.placeholder = @"Required";
+    txtFieldPwd.secureTextEntry = YES;
+    txtFieldPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -168,13 +174,20 @@
         [alert show];    }
 }
 
+#pragma mark - UITextField response methods
+//------------------------------------------------------------------------------
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
    
-    NSUInteger length = txtFieldName.text.length - range.length + string.length;
+
+    if ([textField isEqual:txtFieldPwd]) {
+        lengthPwd = txtFieldPwd.text.length - range.length + string.length;
+    }else{
+        lengthName = txtFieldName.text.length - range.length + string.length;
+    }
     
-    NSUInteger length1 = txtFieldPwd.text.length - range.length + string.length;
     
-    if (length > 1 && length1 > 1) {
+    if (lengthName > 2 && lengthPwd >  5) {
+        
         self.btnEnter.enabled = YES;
     } else {
         self.btnEnter.enabled = NO;
@@ -182,13 +195,21 @@
     return YES;
 }
 
+//------------------------------------------------------------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField == txtFieldName)
         [txtFieldPwd becomeFirstResponder];
     
-    else if (textField == txtFieldPwd && ![txtFieldName.text isEqualToString:@""])
+    else if (textField == txtFieldPwd && ![txtFieldName.text isEqualToString:@""]){
+
+      if (lengthName > 2 && lengthPwd >  5)
         [self passEnter:nil];
+      else{
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"Id or Password are not valid" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+          [alert show];
+      }
+    }
     
 
     return true;
@@ -203,7 +224,8 @@
  // Pass the selected object to the new view controller.
  }
  */
-
+#pragma mark - Rotation response methods
+//------------------------------------------------------------------------------
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     
     [self.mtableView reloadData];
