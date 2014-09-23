@@ -150,7 +150,7 @@
             NSDictionary *key;
            
             if ([Utils NSStringIsValidEmail:txtFieldName.text])
-                key   = @{kJSON_EMAIL:@"mari@gmail.com", kJSON_PASSWORD:result};
+                key   = @{kJSON_EMAIL:txtFieldName.text , kJSON_PASSWORD:result};
             else
                 key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
 
