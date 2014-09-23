@@ -159,6 +159,7 @@
     
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = @[navPeopleVC,navTimelineVC,navMeVC];
+    self.tabBarController.selectedIndex = 1;
     self.window.rootViewController = self.tabBarController;
 
 }

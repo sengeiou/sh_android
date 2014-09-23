@@ -6,6 +6,9 @@
 #import "FavRestConsumer.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
+#import "Follow.h"
+#import "User.h"
+#import "Shot.h"
 
 @interface SyncManager ()
 
@@ -222,6 +225,22 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@ OR %K = %@",k_SYNC_NAME_ENTITY,entity,k_SYNC_ALIAS,entity];
     NSArray *syncEntityArray = [[CoreDataManager singleton] getAllEntities:[SyncControl class] withPredicate:predicate];
     return [syncEntityArray firstObject];
+}
+
+#pragma mark - Webservice response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+    
+    if (status && [entityClass isSubclassOfClass:[Follow class]]){
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+    }
+    else if (status && [entityClass isSubclassOfClass:[User class]]){
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    }
+    else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+        
+#warning Need to notify to all classes that needs to update the UI
+    }
 }
 
 @end

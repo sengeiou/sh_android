@@ -52,19 +52,20 @@
 //------------------------------------------------------------------------------
 - (void)createSynchroTableData {
     
+    NSNumber *referenceDate = @969715332000; // 23/09/2000
     NSNumber *startDate = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSinceReferenceDate]];
     NSNumber *update12hours = @86400;
     NSNumber *update30minutes = @1800;
     NSNumber *update10minutes = @600;
     NSNumber *update1minute = @60;
     
-    NSDictionary *user = @{k_SYNC_NAME_ENTITY:K_COREDATA_USER,k_SYNC_LASTSERVER_DATE:startDate,k_SYNC_PRIORITY:update30minutes,
+    NSDictionary *user = @{k_SYNC_NAME_ENTITY:K_COREDATA_USER,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                            k_SYNC_ALIAS:K_COREDATA_USER};
     
-    NSDictionary *follow = @{k_SYNC_NAME_ENTITY:K_COREDATA_FOLLOW,k_SYNC_LASTSERVER_DATE:startDate,k_SYNC_PRIORITY:update30minutes,
+    NSDictionary *follow = @{k_SYNC_NAME_ENTITY:K_COREDATA_FOLLOW,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                            k_SYNC_ALIAS:K_COREDATA_FOLLOW};
 
-    NSDictionary *shots = @{k_SYNC_NAME_ENTITY:K_COREDATA_SHOT,k_SYNC_LASTSERVER_DATE:startDate,k_SYNC_PRIORITY:update1minute,
+    NSDictionary *shots = @{k_SYNC_NAME_ENTITY:K_COREDATA_SHOT,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update1minute,
                              k_SYNC_ALIAS:K_COREDATA_SHOT};
     
     NSArray *inserted = [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[user,follow,shots]];
