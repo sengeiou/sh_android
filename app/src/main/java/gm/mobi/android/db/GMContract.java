@@ -18,7 +18,7 @@ public class GMContract {
     }
 
 
-    public static final class TablesSync implements SyncColumns{
+    public static final class TablesSync implements SyncColumns {
         public static final String TABLE = "TablesSync";
 
         public static final String ORDER = "idOrder";
