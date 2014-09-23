@@ -30,6 +30,7 @@ namespace Bagdad.Models
                         foreach (JToken shot in job["ops"][0]["data"])
                         {
                             //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                            custstmt.Reset();
 
                             if (shot["idShot"] == null || String.IsNullOrEmpty(shot["idShot"].ToString()))
                                 custstmt.BindNullParameterWithName("@idShot");
@@ -69,15 +70,16 @@ namespace Bagdad.Models
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                            done++;
                         }
                         await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                     }
                 }
                 App.DBLoaded.Set();
-                done = 1;
             }
             catch (Exception e)
             {
+                App.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - saveData: " + e.Message);
             }
             return done;

@@ -29,6 +29,7 @@ namespace Bagdad.Models
                         foreach (JToken userLogin in job["ops"][0]["data"])
                         {
                             //idUser, idFavouriteTeam, sessionToken, userName, email, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                            custstmt.Reset();
 
                             if (userLogin["idUser"] == null || String.IsNullOrEmpty(userLogin["idUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUser");
@@ -91,15 +92,17 @@ namespace Bagdad.Models
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
                             
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                            done++;
                         }
                         await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                     }
                 }
                 App.DBLoaded.Set();
-                done = 1;
+                
             }
             catch (Exception e)
             {
+                App.DBLoaded.Set();
                 throw new Exception("E R R O R - User - saveData: " + e.Message);
             }
             return done;
@@ -122,7 +125,7 @@ namespace Bagdad.Models
                         foreach (JToken userLogin in job["ops"][0]["data"])
                         {
                             //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                            
+                            custstmt.Reset();
 
                             if (userLogin["idUser"] == null || String.IsNullOrEmpty(userLogin["idUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUser");
@@ -172,15 +175,16 @@ namespace Bagdad.Models
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                            done++;
                         }
                         await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                     }
                 }
                 App.DBLoaded.Set();
-                done = 1;
             }
             catch (Exception e)
             {
+                App.DBLoaded.Set();
                 throw new Exception("E R R O R - User - saveDataPeople: " + e.Message);
             }
             return done;

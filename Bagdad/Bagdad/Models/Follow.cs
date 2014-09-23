@@ -30,7 +30,7 @@ namespace Bagdad.Models
                         foreach (JToken follow in job["ops"][0]["data"])
                         {
                             //idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-
+                            custstmt.Reset();
 
                             if (follow["idUser"] == null || String.IsNullOrEmpty(follow["idUser"].ToString()))
                                 custstmt.BindNullParameterWithName("@idUser");
@@ -65,15 +65,17 @@ namespace Bagdad.Models
                             custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
                             await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                            done++;
                         }
                         await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                     }
                 }
                 App.DBLoaded.Set();
-                done = 1;
+               
             }
             catch (Exception e)
             {
+                App.DBLoaded.Set();
                 throw new Exception("E R R O R - User - saveDataFollow: " + e.Message);
             }
             return done;
