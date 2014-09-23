@@ -18,18 +18,18 @@ public class ShotsResultEvent extends ResultEvent{
 
 
     @Override
-    public ResultEvent successful(Object o) {
+    public ResultEvent setSuccessful(Object o) {
         this.setShots((List<Shot>)o);
         return null;
     }
 
     @Override
-    public ResultEvent invalid() {
+    public ResultEvent setInvalid() {
         return this;
     }
 
     @Override
-    public ResultEvent serverError(Exception e) {
+    public ResultEvent setServerError(Exception e) {
         this.setError(e);
         return this;
     }
