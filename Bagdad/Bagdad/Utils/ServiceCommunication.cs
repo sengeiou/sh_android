@@ -152,7 +152,7 @@ namespace Bagdad.Utils
                 switch (Entity)
                 {
                     default:
-                        result = "\t ERROR: " + Entity + "\n";
+                        result = "\t NOT DONE YET: " + Entity + "\n";
                         break;
                 }
                 return result;
@@ -272,7 +272,11 @@ namespace Bagdad.Utils
 
                     if (totalDone > 0 && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
                     {
-                        //TODO: Save the last Synchro Date for the Entity.
+                        if (entity != Constants.SERCOM_TB_LOGIN)
+                        {
+                            GenericModel gm = new GenericModel();
+                            await gm.updateModificationDateOf((double)job["req"].Last, entity);
+                        }
                     }
                 }
                 else
