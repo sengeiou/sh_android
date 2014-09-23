@@ -6,7 +6,7 @@ import java.util.List;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.task.events.loginregister.ResultEvent;
 
-public class ShotsResultEvent extends ResultEvent{
+public class ShotsResultEvent extends ResultEvent<List<Shot>>{
 
 
     private List<Shot> shots;
@@ -14,10 +14,11 @@ public class ShotsResultEvent extends ResultEvent{
     public ShotsResultEvent(int status){
         super(status);
     }
+
     @Override
-    public ResultEvent setSuccessful(Object o) {
-        this.setShots((List<Shot>)o);
-        return null;
+    public ResultEvent setSuccessful(List<Shot> o) {
+        this.setShots(o);
+        return this;
     }
 
     @Override

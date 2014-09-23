@@ -19,6 +19,10 @@ public class TimeUtils {
         return TimeZone.getDefault();
     }
 
+    @Deprecated
+    /**
+     * @deprecated Should't use this method if don't have context reference
+     */
     public static long getCurrentTime(Context context) {
         long currentTime = System.currentTimeMillis();
         if (BuildConfig.DEBUG) {
@@ -72,8 +76,8 @@ public class TimeUtils {
         return TimeUnit.MILLISECONDS.convert(daysNumber, TimeUnit.DAYS);
     }
 
-    public static Long getNDaysAgo(Context context,Integer daysNumber){
-        long sevenDays = getMilisecondsByDaysNumber(daysNumber);
-        return getCurrentTime(context) - sevenDays;
+    public static Long getNDaysAgo(Integer daysNumber){
+        long daysInMillis = getMilisecondsByDaysNumber(daysNumber);
+        return System.currentTimeMillis() - daysInMillis;
     }
 }

@@ -14,13 +14,13 @@ public interface BagdadService {
 
     public User login(String id, String password) throws IOException;
 
-    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db, int typeFollow) throws IOException;
+    public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException;
 
-    public List<User> getUsersByUserIdList(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException;
+    public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException;
 
-    public List<Shot> getNewShots(List<Integer> followingUserIds,Context context, SQLiteDatabase db, Shot lastNewShot) throws IOException;
+    public List<Shot> getNewShots(List<Integer> followingUserIds, Shot lastNewShot, Long lastModifiedDate) throws IOException;
 
-    public List<Shot> getOlderShots(List<Integer> follwingUserIds, Context context, SQLiteDatabase db, Shot lastOlderShot) throws  IOException;
+    public List<Shot> getOlderShots(List<Integer> follwingUserIds, Shot lastOlderShot, Long lastModifiedDate) throws  IOException;
 
-    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException;
+    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException;
 }

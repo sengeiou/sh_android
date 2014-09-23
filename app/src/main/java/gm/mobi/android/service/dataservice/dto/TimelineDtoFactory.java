@@ -18,15 +18,15 @@ import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 
-public class TimeLineDtoFactory extends DtoFactory{
+public class TimelineDtoFactory extends DtoFactory{
 
     public static final String ALIAS_GET_SHOTS =  "GET_SHOTS";
     public static final String ALIAS_GET_NEWER_SHOTS = "GET_NEWER_SHOTS";
     public static final String ALIAS_GET_OLDER_SHOTS = "GET_OLDER_SHOTS";
 
-    public static GenericDto getShotsOperationDto(List<Integer> followingUserIds, Long date, Context context){
+    public static GenericDto getShotsOperationDto(List<Integer> followingUserIds, Long date){
         OperationDto od = new OperationDto();
-        FilterDto filter = new FilterDto(Constants.NEXUS_AND,new FilterItemDto[]{},getShotsFilter(followingUserIds,new Date(date), context));
+        FilterDto filter = new FilterDto(Constants.NEXUS_AND,new FilterItemDto[]{},getShotsFilter(followingUserIds,new Date(date)));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true, null, 0L, 1000L, filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];
@@ -35,7 +35,7 @@ public class TimeLineDtoFactory extends DtoFactory{
         return DtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, od);
     }
 
-    public static FilterDto[] getShotsFilter(List<Integer> followingUserIds, Date date, Context context){
+    public static FilterDto[] getShotsFilter(List<Integer> followingUserIds, Date date){
         FilterDto[] mFilterDto = new FilterDto[2];
         FilterItemDto[] mFilterItemDtos = new FilterItemDto[followingUserIds.size()];
         int i = 0;
@@ -47,15 +47,15 @@ public class TimeLineDtoFactory extends DtoFactory{
                 new FilterDto(Constants.NEXUS_OR,
                         mFilterItemDtos
                         ,null);
-        mFilterDto[1] = new FilterDto(Constants.NEXUS_OR,null,getTimeFilterDto(date, context));
+        mFilterDto[1] = new FilterDto(Constants.NEXUS_OR,null,getTimeFilterDto(date));
 
         return mFilterDto;
     }
 
 
-    public static GenericDto getNewerShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot, Context context){
+    public static GenericDto getNewerShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
-        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date),context));
+        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date)));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];
@@ -64,9 +64,9 @@ public class TimeLineDtoFactory extends DtoFactory{
         return DtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEWER_SHOTS, od);
     }
 
-    public static GenericDto getOlderShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot, Context context){
+    public static GenericDto getOlderShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
-        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date),context));
+        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date)));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];

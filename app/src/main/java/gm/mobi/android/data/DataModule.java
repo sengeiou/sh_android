@@ -26,9 +26,9 @@ import gm.mobi.android.BuildConfig;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
-import gm.mobi.android.task.jobs.timeline.ShotsJob;
-import gm.mobi.android.task.jobs.timeline.UsersJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
+import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
 import timber.log.Timber;
 
@@ -38,9 +38,9 @@ import static android.content.Context.MODE_PRIVATE;
         injects = {
                 MainActivity.class,
                 LoginUserJob.class,
-                UsersJob.class,
-                ShotsJob.class,
+                TimelineJob.class,
                 TimelineFragment.class,
+                InitialSetupFragment.class
         },
         includes = ApiModule.class,
         complete = false,

@@ -42,14 +42,14 @@ public class UserManager {
         long res;
         for (User user : userList) {
             ContentValues contentValues = UserMapper.toContentValues(user);
-            db.beginTransaction();
+//            db.beginTransaction();
             if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
                 res = deleteUser(db, user);
             } else {
                 res = db.insertWithOnConflict(GMContract.UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
             insertUserInTableSync(db);
-            db.endTransaction();
+//            db.endTransaction();
         }
         //TODO error handling if(res<0)
     }

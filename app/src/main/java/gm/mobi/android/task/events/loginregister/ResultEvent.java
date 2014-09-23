@@ -1,6 +1,6 @@
 package gm.mobi.android.task.events.loginregister;
 
-public abstract  class ResultEvent  {
+public abstract class ResultEvent<T>  {
 
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_INVALID = 2;
@@ -12,7 +12,7 @@ public abstract  class ResultEvent  {
         this.status = status;
     }
 
-    public abstract ResultEvent setSuccessful(Object o);
+    public abstract ResultEvent setSuccessful(T o);
 
     public abstract  ResultEvent setInvalid();
 

@@ -31,7 +31,7 @@ public class DtoFactory {
         return getGenericDtoFromOperation(alias, new OperationDto[]{op});
     }
 
-    public static FilterDto[] getTimeFilterDto(Date lastModifiedDate, Context context) {
+    public static FilterDto[] getTimeFilterDto(Date lastModifiedDate) {
         return new FilterDto[]{
                 new FilterDto(Constants.NEXUS_OR,
                         new FilterItemDto[]{

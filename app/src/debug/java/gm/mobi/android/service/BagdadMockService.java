@@ -42,27 +42,23 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    public List<Follow> getFollows(Integer idUser, Context context, SQLiteDatabase db, int typeFollow) throws IOException {
+    public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException {
         return null;
     }
 
-    @Override
-    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Context context, SQLiteDatabase db) throws IOException {
+    @Override public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException {
         return null;
     }
 
-    @Override
-    public List<User> getUsersByUserIdList(List<Integer> userIds, Context context, SQLiteDatabase db) throws IOException {
+    @Override public List<Shot> getNewShots(List<Integer> followingUserIds, Shot lastNewShot, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override
-    public List<Shot> getNewShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db, Shot lastNewShot) throws IOException {
+    @Override public List<Shot> getOlderShots(List<Integer> follwingUserIds, Shot lastOlderShot, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override
-    public List<Shot> getOlderShots(List<Integer> follwingUserIds, Context context, SQLiteDatabase db, Shot lastOlderShot) throws IOException {
+    @Override public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException {
         return null;
     }
 

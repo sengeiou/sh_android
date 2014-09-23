@@ -4,9 +4,8 @@ import java.util.List;
 
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.task.events.loginregister.ResultEvent;
-import gm.mobi.android.ui.adapters.TimelineAdapter;
 
-public class NewShotsReceivedEvent extends ResultEvent{
+public class NewShotsReceivedEvent extends ResultEvent<List<Shot>>{
 
     private List<Shot> shots;
 
@@ -23,17 +22,18 @@ public class NewShotsReceivedEvent extends ResultEvent{
     }
 
     @Override
-    public ResultEvent setSuccessful(Object o) {
-        return null;
+    public ResultEvent setSuccessful(List<Shot> o) {
+        shots = o;
+        return this;
     }
 
     @Override
     public ResultEvent setInvalid() {
-        return null;
+        return this;
     }
 
     @Override
     public ResultEvent setServerError(Exception e) {
-        return null;
+        return this;
     }
 }

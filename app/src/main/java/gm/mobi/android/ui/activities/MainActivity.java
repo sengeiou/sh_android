@@ -1,52 +1,26 @@
 package gm.mobi.android.ui.activities;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
-import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
-import gm.mobi.android.task.events.timeline.FollowsResultEvent;
-import gm.mobi.android.task.events.timeline.ShotsResultEvent;
-import gm.mobi.android.task.events.timeline.UsersResultEvent;
-import gm.mobi.android.task.jobs.timeline.FollowingsJob;
-import gm.mobi.android.task.jobs.timeline.ShotsJob;
-import gm.mobi.android.task.jobs.timeline.UsersJob;
+import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
+import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
 
 public class MainActivity extends BaseSignedInActivity {
 
-    @Inject
-    JobManager jobManager;
-    @Inject
-    Bus bus;
-
-    @Inject
-    Application app;
-    @Inject
-    SQLiteOpenHelper mDbHelper;
-
-    SQLiteDatabase db;
-    List<Follow> mFollowingList;
-    List<Shot> mShotList;
-    List<User> mFollowingUserList;
+    @Inject Bus bus;
 
     //TODO recibir parámetros para indicar si viene de registro, login o nueva
     public static Intent getIntent(Context context) {
@@ -60,44 +34,56 @@ public class MainActivity extends BaseSignedInActivity {
             // Stop execution if there is no user logged in
             return;
         }
-        db = mDbHelper.getReadableDatabase();
-        User user = ((GolesApplication)getApplication()).getCurrentUser();
-        if(user!=null){
-            jobManager.addJobInBackground(new FollowingsJob(getApplicationContext(),user.getIdUser(),db));
-        }
+
         setContainerContent(R.layout.main_activity);
         ButterKnife.inject(this);
+
+        //TODO setup navigation drawer
+        if (needsSetup()) {
+            initialSetup();
+        } else {
+            normalSetup();
+        }
+
+    }
+
+
+    private boolean needsSetup() {
+        return true;
+    }
+
+    private void initialSetup() {
+        //TODO lock navigation drawer
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+        InitialSetupFragment initFragment = new InitialSetupFragment();
+        fragmentTransaction.add(R.id.main_content, initFragment);
+        fragmentTransaction.commit();
+    }
+
+
+    private void normalSetup() {
+        //TODO unlock navigation drawer
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+        //TODO advanced management
+        BaseFragment currentFragment = (BaseFragment) fm.findFragmentById(R.id.main_content);
+        if (currentFragment != null) {
+            fragmentTransaction.remove(currentFragment);
+        }
+        TimelineFragment timelineFragment = new TimelineFragment();
+        fragmentTransaction.add(R.id.main_content, timelineFragment, "timeline");
+
+        fragmentTransaction.commit();
     }
 
     @Subscribe
-    public void onGetFollowingResult(FollowsResultEvent event) {
-        mFollowingList = event.getFollows();
-        List<Integer> followingIds = event.getFollowingIds();
-        if (event.getStatus() == FollowsResultEvent.STATUS_SUCCESS && mFollowingList != null) {
-            //Aquí llamamos al siguiente Job, que será obtener los users objects de los followings que hemos retornado
-            jobManager.addJobInBackground(new UsersJob(getApplicationContext(), followingIds, db));
-        }
+    public void initialSetupCompleted(InitialSetupFragment.InitialSetupCompletedEvent event) {
+        normalSetup();
     }
 
-    @Subscribe
-    public void onGetUsersFollowingResult(UsersResultEvent event){
-        if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS ){
-            //Aquí llamamos a obtener los shots
-            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db, ShotsJob.FIRST_TIME,null));
-        }
-    }
-
-    @Subscribe
-    public void onGetShotsResult(ShotsResultEvent event){
-        mShotList = event.getShots();
-        if(event.getStatus() == ShotsResultEvent.STATUS_SUCCESS && mShotList!=null){
-            //Aquí deberíamos pintar el fragment del timeline
-            Toast.makeText(getApplicationContext(),"Ha descargado todos los shots", Toast.LENGTH_LONG).show();
-            android.support.v4.app.FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
-            ft.add(new TimelineFragment(),"TIME_LINE_FRAGMENT");
-            ft.commit();
-        }
-    }
 
     @Override
     protected void onPause() {

@@ -12,10 +12,11 @@ import gm.mobi.android.util.TimeUtils;
 public class SyncTableManager {
 
     public static int NUMDAYS = 7;
-    public static Long getLastModifiedDate(Context context, SQLiteDatabase db, String entity) {
+    
+    public static Long getLastModifiedDate(SQLiteDatabase db, String entity) {
         Long lastDateModified = null;
         if(GeneralManager.isTableEmpty(db,entity)){
-            lastDateModified = TimeUtils.getNDaysAgo(context,NUMDAYS);
+            lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
         }else{
             String sql = "SELECT * FROM "+TablesSync.TABLE +" WHERE "+TablesSync.ENTITY+" = '"+entity+"'";
             Cursor c = db.rawQuery(sql, null);
@@ -23,7 +24,7 @@ public class SyncTableManager {
                 c.moveToFirst();
                 lastDateModified = c.getLong(c.getColumnIndex(TablesSync.MAX_TIMESTAMP));
             } else {
-                lastDateModified = TimeUtils.getNDaysAgo(context,NUMDAYS);
+                lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
             }
             c.close();
         }

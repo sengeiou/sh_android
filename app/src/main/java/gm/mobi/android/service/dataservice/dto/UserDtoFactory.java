@@ -34,6 +34,7 @@ import gm.mobi.android.util.TimeUtils;
 public class UserDtoFactory extends DtoFactory {
 
     static final Integer NUMBER_OF_DAYS_AGO = 7;
+
     public static final int GET_FOLLOWERS = 0;
     public static final int GET_FOLLOWING = 1;
     public static final int GET_ALL_FOLLOW = 2;
@@ -66,11 +67,11 @@ public class UserDtoFactory extends DtoFactory {
         return getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
-    public static GenericDto getFollowOperationDto(Integer idUser, Long offset, Context context, int relationship, Long date) {
+    public static GenericDto getFollowOperationDto(Integer idUser, Long offset, int relationship, Long date) {
 
         OperationDto od = new OperationDto();
 
-        FilterDto filter = getFollowsByIdUserAndRelationship(idUser, relationship, new Date(date), context);
+        FilterDto filter = getFollowsByIdUserAndRelationship(idUser, relationship, new Date(date));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, true, null, 0l, 100L, filter);
         od.setMetadata(md);
 
@@ -81,11 +82,11 @@ public class UserDtoFactory extends DtoFactory {
         return getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
     }
 
-    public static GenericDto getUsersOperationDto(List<Integer> userIds, Long offset, Context context, Long date) {
+    public static GenericDto getUsersOperationDto(List<Integer> userIds, Long offset, Long date) {
         OperationDto od = new OperationDto();
 
 
-        FilterDto filter = getUsersByUserIds(userIds, new Date(date), context);
+        FilterDto filter = getUsersByUserIds(userIds, new Date(date));
 
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, UserTable.TABLE, true, null, 0l, 100L, filter);
         od.setMetadata(md);
@@ -97,7 +98,7 @@ public class UserDtoFactory extends DtoFactory {
         return getGenericDtoFromOperation(ALIAS_GET_USERS, od);
     }
 
-    public static FilterDto[] getTimeFilterDto(Date lastModifiedDate, Context context) {
+    public static FilterDto[] getTimeFilterDto(Date lastModifiedDate) {
         return new FilterDto[]{
                 new FilterDto(Constants.NEXUS_OR,
                         new FilterItemDto[]{
@@ -108,7 +109,7 @@ public class UserDtoFactory extends DtoFactory {
         };
     }
 
-    public static FilterDto[] getUserByUsersId(List<Integer> userIds, Date lastModifiedDate, Context context) {
+    public static FilterDto[] getUserByUsersId(List<Integer> userIds, Date lastModifiedDate) {
         FilterDto[] mFilterDto = new FilterDto[1];
 //        FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
 //        int i = 0;
@@ -124,7 +125,7 @@ public class UserDtoFactory extends DtoFactory {
         return mFilterDto;
     }
 
-    public static FilterDto getFollowsByIdUserAndRelationship(Integer idUser, int relationship, Date lastModifiedDate, Context context) {
+    public static FilterDto getFollowsByIdUserAndRelationship(Integer idUser, int relationship, Date lastModifiedDate) {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
@@ -132,7 +133,7 @@ public class UserDtoFactory extends DtoFactory {
                         new FilterItemDto[]{
                                 new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, null)
-                        }, getTimeFilterDto(lastModifiedDate, context)
+                        }, getTimeFilterDto(lastModifiedDate)
                 );
                 break;
             case GET_FOLLOWING:
@@ -140,7 +141,7 @@ public class UserDtoFactory extends DtoFactory {
                         new FilterItemDto[]{
                                 new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, null),
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
-                        }, getTimeFilterDto(lastModifiedDate, context)
+                        }, getTimeFilterDto(lastModifiedDate)
                 );
                 break;
             case GET_ALL_FOLLOW:
@@ -148,7 +149,7 @@ public class UserDtoFactory extends DtoFactory {
                         new FilterItemDto[]{
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
-                        }, getTimeFilterDto(lastModifiedDate, context)
+                        }, getTimeFilterDto(lastModifiedDate)
                 );
                 break;
             case GET_JUST_BOTHFOLLOW:
@@ -156,14 +157,14 @@ public class UserDtoFactory extends DtoFactory {
                         new FilterItemDto[]{
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
-                        }, getTimeFilterDto(lastModifiedDate, context)
+                        }, getTimeFilterDto(lastModifiedDate)
                 );
                 break;
         }
         return filterDto;
     }
 
-    public static FilterDto getUsersByUserIds(List<Integer> userIds, Date lastModifiedDate, Context context) {
+    public static FilterDto getUsersByUserIds(List<Integer> userIds, Date lastModifiedDate) {
         FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
         int i = 0;
         for (Integer userId : userIds) {
@@ -174,7 +175,7 @@ public class UserDtoFactory extends DtoFactory {
 
                 mFilterItemDtos
                 ,
-                getUserByUsersId(userIds, lastModifiedDate, context)
+                getUserByUsersId(userIds, lastModifiedDate)
         );
         return filterDto;
     }

@@ -12,9 +12,8 @@ import dagger.Provides;
 import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
-import gm.mobi.android.task.jobs.timeline.FollowingsJob;
-import gm.mobi.android.task.jobs.timeline.ShotsJob;
-import gm.mobi.android.task.jobs.timeline.UsersJob;
+import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
@@ -23,9 +22,8 @@ import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
         injects = {
                 GetFacebookProfileJob.class,
                 LoginUserJob.class,
-                UsersJob.class,
-                ShotsJob.class,
-                FollowingsJob.class,
+                TimelineJob.class,
+                GetFollowingsJob.class,
                 RegisterNewUserJob.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,

@@ -6,6 +6,8 @@ public class Shot extends Synchronized{
     private Integer mIdUser;
     private String mComment;
 
+    private User mUserObject;
+
     public Integer getIdShot() {
         return mIdShot;
     }
@@ -28,5 +30,13 @@ public class Shot extends Synchronized{
 
     public void setComment(String comment) {
         mComment = comment;
+    }
+
+    public User getUser() {
+        return mUserObject;
+    }
+
+    public void setUser(User mUser) {
+        this.mUserObject = mUser;
     }
 }
