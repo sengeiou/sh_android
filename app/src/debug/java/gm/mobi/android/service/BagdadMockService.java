@@ -56,6 +56,16 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override
+    public List<Shot> getNewShots(List<Integer> followingUserIds, Context context, SQLiteDatabase db, Shot lastNewShot) throws IOException {
+        return null;
+    }
+
+    @Override
+    public List<Shot> getOlderShots(List<Integer> follwingUserIds, Context context, SQLiteDatabase db, Shot lastOlderShot) throws IOException {
+        return null;
+    }
+
 
     public long getDelay() {
         return delay;
