@@ -25,7 +25,7 @@
 	</phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Visibility="Collapsed">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>

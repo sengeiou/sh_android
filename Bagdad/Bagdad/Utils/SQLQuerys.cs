@@ -30,7 +30,6 @@ namespace Bagdad.Utils
         #region FOLLOW
 
         public const String InsertFollowData = "INSERT INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
-            
 
         #endregion
 

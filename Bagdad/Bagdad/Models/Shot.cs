@@ -45,7 +45,7 @@ namespace Bagdad.Models
                             if (shot["comment"] == null || String.IsNullOrEmpty(shot["comment"].ToString()))
                                 custstmt.BindNullParameterWithName("@comment");
                             else
-                                custstmt.BindIntParameterWithName("@comment", int.Parse(shot["comment"].ToString()));
+                                custstmt.BindTextParameterWithName("@comment", shot["comment"].ToString());
 
                             if (shot["birth"] == null || String.IsNullOrEmpty(shot["birth"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_birth");
