@@ -26,8 +26,8 @@
 + (NSDictionary *)getFilterForEntity:(Class)entity {
     
     NSNumber *userID = [[UserManager singleton] getUserId];
-    NSNumber *entityFilterDate = @1408779530000; // For testing purposes
-    //NSNumber *entityFilterDate = [[SyncManager singleton] getFilterDateForEntity:NSStringFromClass(entity)];
+//    NSNumber *entityFilterDate = @1408779530000; // For testing purposes
+    NSNumber *entityFilterDate = [[SyncManager singleton] getFilterDateForEntity:NSStringFromClass(entity)];
     
     NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
                                                     @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],

@@ -32,6 +32,8 @@
             [[CoreDataManager singleton] deleteObject:objectInstance];
             return nil;
         }
+        else if ((![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE]))
+            return nil;
         else if ( objectInstance )
             [objectInstance setShotValuesWithDictionary:dict];      // Update entity
         else

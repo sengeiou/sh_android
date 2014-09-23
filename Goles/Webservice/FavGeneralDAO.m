@@ -46,7 +46,9 @@ static NSArray *cuotasToDelete;
             completionBlock(YES,nil);
         }
     }
-    else{
+    else if (statusOK)
+        completionBlock(YES,nil);
+    else if (!statusOK){
         
         DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
         NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];

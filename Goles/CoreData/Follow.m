@@ -34,6 +34,8 @@
             [[CoreDataManager singleton] deleteObject:follow];
             return nil;
         }
+        else if ((![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE]))
+            return nil;
         else if (follow)
             [follow setFollowValuesWithDictionary:dict];      // Update entity
         else
