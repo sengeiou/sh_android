@@ -18,6 +18,7 @@
 #import "Shot.h"
 #import "Follow.h"
 #import "User.h"
+#import "SyncManager.h"
 
 @implementation FilterCreation
 
@@ -25,10 +26,11 @@
 + (NSDictionary *)getFilterForEntity:(Class)entity {
     
     NSNumber *userID = [[UserManager singleton] getUserId];
-    NSNumber *temporaryDateFilter = @1408779530000;
+//    NSNumber *entityFilterDate = @1408779530000; // For testing purposes
+    NSNumber *entityFilterDate = [[SyncManager singleton] getFilterDateForEntity:NSStringFromClass(entity)];
     
-    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:temporaryDateFilter},
-                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:temporaryDateFilter}],
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_OR};
     

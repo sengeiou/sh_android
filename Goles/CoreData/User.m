@@ -35,7 +35,7 @@
     if ( idNumber ){
         id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
         
-        if (objectInstance && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+        if (objectInstance && (![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
             [[CoreDataManager singleton] deleteObject:objectInstance];
             return nil;
         }

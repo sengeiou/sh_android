@@ -292,6 +292,33 @@
     return resultInserted;
 }
 
+//------------------------------------------------------------------------------
+- (long long) getMaxModifiedValueForEntity:(NSString *)entityClass {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:entityClass orderedByKey:@"csys_modified" ascending:NO];
+    request.fetchLimit = 1;
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] )
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    long long value;
+    
+    if ([result count] > 0) {
+        NSDate *date = [[result firstObject] csys_modified];
+        NSTimeInterval timeI = [date  timeIntervalSince1970]*1000;
+        value = (long long)timeI;
+    }
+    else {
+        NSTimeInterval timeI = [[NSDate date] timeIntervalSince1970]*1000;
+        return timeI;
+        value = (long long)timeI;
+    }
+    return value;
+    
+}
+
 #pragma mark - Private methods
 
 //------------------------------------------------------------------------------

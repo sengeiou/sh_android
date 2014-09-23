@@ -86,6 +86,7 @@ extern NSString *const K_WS_OPS_DELETE_DATE;
 extern NSString *const K_CD_NAME;
 extern NSString *const K_CD_VALUE;
 extern NSString *const kJSON_WEIGHT;
+extern NSString *const kJSON_LOGIN;
 
 #pragma mark - WEBSERVICE ALIAS
 
@@ -109,6 +110,8 @@ extern NSString *const K_COREDATA_USER;
 extern NSString *const K_COREDATA_TEAM;
 extern NSString *const K_CDENTITY_SYNC_CONTROL;
 extern NSString *const K_COREDATA_SML;
+extern NSString *const K_COREDATA_FOLLOW;
+extern NSString *const K_COREDATA_SHOT;
 
 #pragma mark - CORE DATA CLASSES
 

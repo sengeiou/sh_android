@@ -50,4 +50,6 @@
 - (void) deleteEntitiesIn:(NSArray *)entitiesArray;
 - (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray;
 
+- (long long) getMaxModifiedValueForEntity:(NSString *)entityClass;
+
 @end

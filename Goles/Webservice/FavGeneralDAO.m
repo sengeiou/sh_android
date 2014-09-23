@@ -12,6 +12,7 @@
 #import "CoreDataParsing.h"
 #import "CoreDataManager.h"
 #import "FavRestConsumerHelper.h"
+#import "SyncManager.h"
 
 static NSArray *cuotasToDelete;
 
@@ -36,8 +37,11 @@ static NSArray *cuotasToDelete;
             
             NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:NSClassFromString([FavRestConsumerHelper getClassForString:class]) WithArray:dataArray];
             if (insertedArray.count > 0){
-                if ([[CoreDataManager singleton] saveContext])
+                if ([[CoreDataManager singleton] saveContext]){
                     completionBlock(YES,nil);
+                    long long value = [[CoreDataManager singleton] getMaxModifiedValueForEntity:class];
+                    [[SyncManager singleton] setSyncData:dict withValue:value];
+                }
             }
         }
     }

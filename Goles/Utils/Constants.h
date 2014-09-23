@@ -20,10 +20,10 @@
 #define IS_GENERATING_DEFAULT_DATABASE      NO
 
 //Synchronization switch
-#define SYNCHRO_ACTIVATED      NO
+#define SYNCHRO_ACTIVATED      YES
 
 //Syncro time process in seconds
-#define SYNCHRO_TIMER   300
+#define SYNCHRO_TIMER   60
 
 #endif  
 

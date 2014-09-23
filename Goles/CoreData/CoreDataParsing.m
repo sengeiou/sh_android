@@ -26,7 +26,7 @@ NSString *const kJSON_SYNCRO_SYNCRONIZED                = @"s";
 //SYNC_CONTROL
 NSString *const k_SYNC_NAME_ENTITY                     = @"nameEntity";
 NSString *const k_SYNC_LASTSERVER_DATE                 = @"lastServerDate";
-NSString *const k_SYNC_LASTCALL                         = @"lastCall";
+NSString *const k_SYNC_LASTCALL                        = @"lastCall";
 NSString *const k_SYNC_PRIORITY                        = @"updatePriority";
 NSString *const k_SYNC_ALIAS                           = @"aliasView";
 
@@ -87,6 +87,7 @@ NSString *const K_WS_OPS_DELETE_DATE                    = @"deleted";
 NSString *const K_CD_NAME                               = @"name";
 NSString *const K_CD_VALUE                              = @"value";
 NSString *const kJSON_WEIGHT                            = @"weight";
+NSString *const kJSON_LOGIN                             = @"Login";
 
 #pragma mark - WEBSERVICE ALIAS
 
@@ -110,6 +111,8 @@ NSString *const K_COREDATA_USER                         = @"User";
 NSString *const K_COREDATA_TEAM                         = @"Team";
 NSString *const K_CDENTITY_SYNC_CONTROL                 = @"SyncControl";
 NSString *const K_COREDATA_SML                          = @"SML";
+NSString *const K_COREDATA_FOLLOW                       = @"Follow";
+NSString *const K_COREDATA_SHOT                         = @"Shot";
 
 #pragma mark - CORE DATA CLASSES
 

@@ -30,7 +30,7 @@
         NSArray *objectsArray = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
         Follow *follow = [objectsArray firstObject];
         
-        if (follow && ([[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
+        if (follow && (![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
             [[CoreDataManager singleton] deleteObject:follow];
             return nil;
         }
