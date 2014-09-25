@@ -98,14 +98,14 @@
     
     if ( isSaved ){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"SUCCES!!"
-                                                        message:@"Shooter Core Data default database has been generated succesfully"
+                                                        message:@"Shootr Core Data default database has been generated succesfully."
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"_ok", @"_ok")
                                               otherButtonTitles:nil, nil];
         [alert show];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"_error"
-                                                        message:@"There has been some kind of error in the generation process. Launch the app to try again"
+                                                        message:@"There has been some kind of error in the generation process. Launch the app to try again."
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"_ok", @"_ok")
                                               otherButtonTitles:nil, nil];

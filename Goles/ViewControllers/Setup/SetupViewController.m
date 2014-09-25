@@ -14,6 +14,7 @@
 #import "Encryption.h"
 #import "User.h"
 #import "Utils.h"
+#import "Fav24Colors.h"
 
 @interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ConectionProtocol>{
     
@@ -73,6 +74,16 @@
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationItem.backBarButtonItem.title = @"Back";
     self.navigationController.navigationBarHidden = NO;
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+                             forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.translucent = YES;
+    [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
+                                           [Fav24Colors iosSevenGray], NSForegroundColorAttributeName,
+                                           nil]
+                                 forState:UIControlStateNormal];
+
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -135,7 +146,13 @@
 
 - (IBAction)passEnter:(id)sender {
 
-    [[Conection sharedInstance]getServerTimewithDelegate:self];
+    if (lengthName > 2 && lengthPwd >  5)
+        [[Conection sharedInstance]getServerTimewithDelegate:self];
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
+
 }
 
 
@@ -170,7 +187,7 @@
 
         [appDelegate setTabBarItems];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"Id or Password are not valid" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];    }
 }
 
@@ -186,11 +203,24 @@
     }
     
     
-    if (lengthName > 2 && lengthPwd >  5) {
+    if (lengthName >= 1 && lengthPwd >=  1) {
         
         self.btnEnter.enabled = YES;
+        
+        [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
+                                               [Fav24Colors iosSevenBlue], NSForegroundColorAttributeName,
+                                               nil]
+                                     forState:UIControlStateNormal];
+        
     } else {
         self.btnEnter.enabled = NO;
+        
+        [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
+                                               [Fav24Colors iosSevenGray], NSForegroundColorAttributeName,
+                                               nil]
+                                     forState:UIControlStateNormal];
     }
     return YES;
 }
@@ -206,7 +236,7 @@
       if (lengthName > 2 && lengthPwd >  5)
         [self passEnter:nil];
       else{
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"Id or Password are not valid" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
           [alert show];
       }
     }

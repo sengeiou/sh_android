@@ -40,8 +40,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
+   // [UIApplication sharedApplication].statusBarHidden = YES;
 }
-
+-(BOOL)prefersStatusBarHidden {
+    return YES;
+}
 - (void)didReceiveMemoryWarning {
     
     [super didReceiveMemoryWarning];

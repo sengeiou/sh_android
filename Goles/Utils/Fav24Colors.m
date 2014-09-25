@@ -47,4 +47,8 @@
     return [UIColor colorWithRed:109.0f/255.0f green:109.0f/255.0f blue:114.0f/255.0f alpha:1.0];
 }
 
++(UIColor *)iosSevenGray {
+    return [UIColor colorWithRed:196.0f/255.0f green:196.0f/255.0f blue:196.0f/255.0f alpha:1.0];
+}
+
 @end

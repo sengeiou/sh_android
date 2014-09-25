@@ -19,5 +19,6 @@
 +(UIColor *)cellLabelGray;
 +(UIColor *)teamsNotClassified;
 +(UIColor *)tableFooters;
++(UIColor *)iosSevenGray;
 
 @end
