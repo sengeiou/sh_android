@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+    xmlns:tk="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     x:Class="Bagdad.LoginOrRegister"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -13,6 +14,27 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
+
+    <tk:TransitionService.NavigationInTransition>
+        <tk:NavigationInTransition>
+            <tk:NavigationInTransition.Backward>
+                <tk:TurnstileTransition Mode="BackwardIn"/>
+            </tk:NavigationInTransition.Backward>
+            <tk:NavigationInTransition.Forward>
+                <tk:SlideTransition/>
+            </tk:NavigationInTransition.Forward>
+        </tk:NavigationInTransition>
+    </tk:TransitionService.NavigationInTransition>
+    <tk:TransitionService.NavigationOutTransition>
+        <tk:NavigationOutTransition>
+            <tk:NavigationOutTransition.Backward>
+                <tk:TurnstileTransition Mode="BackwardOut"/>
+            </tk:NavigationOutTransition.Backward>
+            <tk:NavigationOutTransition.Forward>
+                <tk:TurnstileTransition Mode="ForwardOut"/>
+            </tk:NavigationOutTransition.Forward>
+        </tk:NavigationOutTransition>
+    </tk:TransitionService.NavigationOutTransition>
 
     <Grid x:Name="LayoutRoot" Background="Transparent" Margin="12,38,12,0">
         <Grid.RowDefinitions>

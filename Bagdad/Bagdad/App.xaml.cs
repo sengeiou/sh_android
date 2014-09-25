@@ -140,7 +140,7 @@ namespace Bagdad
 
             // Crear el marco pero no establecerlo como RootVisual todavía; esto permite que
             // la pantalla de presentación permanezca activa hasta que la aplicación esté lista para la presentación.
-            RootFrame = new PhoneApplicationFrame();
+            RootFrame = new TransitionFrame();
             RootFrame.Navigated += CompleteInitializePhoneApplication;
 
             // Controlar errores de navegación
