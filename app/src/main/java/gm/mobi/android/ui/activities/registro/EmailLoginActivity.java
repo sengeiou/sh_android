@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,8 @@ import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +106,12 @@ public class EmailLoginActivity extends BaseActivity {
     }
 
     @OnTextChanged({R.id.email_login_username_email, R.id.email_login_password})
-    public void resetErrorStatus() {
+    public void validateInput() {
+        if (TextUtils.isEmpty(mEmailUsername.getText().toString()) || TextUtils.isEmpty(mPassword.getText().toString())) {
+            mLoginButton.setEnabled(false);
+        } else {
+            mLoginButton.setEnabled(true);
+        }
         if(mLoginButton.getProgress()==BUTTON_ERROR){
             mLoginButton.setProgress(BUTTON_NORMAL);
         }

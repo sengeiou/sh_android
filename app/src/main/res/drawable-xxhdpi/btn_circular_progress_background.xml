@@ -9,7 +9,7 @@
           android:state_focused="true"
         />
 
-    <item android:color="@color/gray_60"
+    <item android:color="@color/primary_disabled"
           android:state_enabled="false"
         />
     <item android:color="@color/primary"/>
