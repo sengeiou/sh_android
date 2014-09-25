@@ -97,7 +97,7 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
                 vh.text.setText(item.getComment());
 
                 long timestamp = item.getCsys_birth().getTime();
-                vh.timestamp.setText(TimeUtils.getRelativeTimeSpanString(view.getContext(), timestamp));
+                vh.timestamp.setText(TimeUtils.getElapsedTime(getContext(), timestamp));
 
                 picasso.load(item.getUser().getPhoto()).into(vh.avatar);
 
