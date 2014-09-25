@@ -21,8 +21,7 @@ namespace Bagdad
         Util util = new Util();
         
         public TimeLine()
-        {
-            IsRedirectionNeeded();            
+        {      
             InitializeComponent();
             BuildLocalizedApplicationBar();
             DataContext = App.ShotsVM;
@@ -32,7 +31,6 @@ namespace Bagdad
         {
             try
             {
-
                 if (!App.ShotsVM.IsDataLoaded)
                 {
                     App.ShotsVM.Shots.Clear();
@@ -54,20 +52,6 @@ namespace Bagdad
         {
             base.OnBackKeyPress(e);            
             Application.Current.Terminate();
-        }
-
-        private async void IsRedirectionNeeded()
-        {
-            try
-            {
-                //IF The User isn't Loged --> GO TO: Registration (Now goes to SignIn because Registration is not yet implemented)
-                if (!await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/Start.xaml", UriKind.Relative));
-                else LayoutRoot.Visibility = Visibility.Visible;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("E R R O R : IsRedirectionNeeded: " + e.Message);
-            }
         }
 
         // Build a localized ApplicationBar

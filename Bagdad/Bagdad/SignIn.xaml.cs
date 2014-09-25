@@ -68,7 +68,7 @@ namespace Bagdad
                 else
                 {
                     //No Internet Connection Message.
-                    MessageBox.Show(AppResources.GeneralLoginError);
+                    MessageBox.Show(AppResources.NoInternet, AppResources.CanConnect, MessageBoxButton.OK);
                 }
             }
             catch (Exception ef)

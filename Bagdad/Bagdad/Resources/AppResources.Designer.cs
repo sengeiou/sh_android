@@ -88,6 +88,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Can&apos;t connect.
+        /// </summary>
+        public static string CanConnect {
+            get {
+                return ResourceManager.GetString("CanConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Enter.
         /// </summary>
         public static string Enter {
@@ -237,6 +246,15 @@ namespace Bagdad.Resources {
         public static string NewInfo {
             get {
                 return ResourceManager.GetString("NewInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a There&apos;s a problem connecting with the internet. Check your connection and try again..
+        /// </summary>
+        public static string NoInternet {
+            get {
+                return ResourceManager.GetString("NoInternet", resourceCulture);
             }
         }
         

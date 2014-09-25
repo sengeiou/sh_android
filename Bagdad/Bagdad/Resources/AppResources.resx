@@ -286,4 +286,12 @@
     <value>What's Up?</value>
     <comment>TimeLine.xaml</comment>
   </data>
+  <data name="CanConnect" xml:space="preserve">
+    <value>Can't connect</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="NoInternet" xml:space="preserve">
+    <value>There's a problem connecting with the internet. Check your connection and try again.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
 </root>

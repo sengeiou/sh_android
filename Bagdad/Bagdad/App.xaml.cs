@@ -79,14 +79,16 @@ namespace Bagdad
 
         }
 
+
+        #region Inicialización de la aplicación telefónica
+
         // Código para ejecutar cuando la aplicación se inicia (p.ej. a partir de Inicio)
         // Este código no se ejecutará cuando la aplicación se reactive
         private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
             await PrepareDB.initializeDatabase();
             InitializeDB();
-            var synchroLogin = await hasLoggedBefore();
-            if (synchroLogin) UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
+            Setup();
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -126,8 +128,6 @@ namespace Bagdad
                 Debugger.Break();
             }
         }
-
-        #region Inicialización de la aplicación telefónica
 
         // Evitar inicialización doble
         private bool phoneApplicationInitialized = false;
@@ -191,6 +191,28 @@ namespace Bagdad
             }
         }
 
+        private async void Setup()
+        {
+            try
+            {
+                Util util = new Util();
+                var synchroLogin = await util.isUserAlreadyLoged();
+                if (synchroLogin)
+                {
+                    UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
+                }
+                else
+                {
+                    (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri("/Start.xaml", UriKind.Relative));
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R: App.xaml.cs - Setup " + e.Message);
+            }
+        }
+
         #endregion
         
         #region CONNECTIVITY_INFO
@@ -232,11 +254,6 @@ namespace Bagdad
                     if (Connection[1] == "True") isInternetAvailable = true;
                     else if (Connection[1] == "False") isInternetAvailable = false;
             ShowConnectionInfo();
-            if (isInternetAvailable)
-            {
-                //Recuperada la conexión, llamamos a Synchro.
-                UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
-            }
         }
 
         #endregion
@@ -337,14 +354,6 @@ namespace Bagdad
             });
         }
 
-        private async Task<bool> hasLoggedBefore()
-        {
-            Util util = new Util();
-
-            var log = await util.isUserAlreadyLoged();
-            if (log) return true;
-            else return false;
-        }
         #endregion
 
         #region DATA_VIEW_MODELS

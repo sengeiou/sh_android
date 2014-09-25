@@ -138,6 +138,16 @@
           <target state="new">What's Up?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/NoInternet" translate="yes" xml:space="preserve">
+          <source>There's a problem connecting with the internet. Check your connection and try again.</source>
+          <target state="new">There's a problem connecting with the internet. Check your connection and try again.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
+        <trans-unit id="Resx/CanConnect" translate="yes" xml:space="preserve">
+          <source>Can't connect</source>
+          <target state="new">Can't connect</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
+        </trans-unit>
         <trans-unit id="Resx/Following" translate="yes" xml:space="preserve">
           <source>Following</source>
           <target state="new">Following</target>
