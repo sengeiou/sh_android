@@ -3,6 +3,7 @@
 
     <color name="primary">#ce5043</color>
     <color name="primary_dark">#ffb0120a</color>
+    <color name="primary_disabled">#ffe67c73</color>
     <color name="primary_red">#ce5043</color>
     <color name="primary_red_dark">#ffb0120a</color>
     <color name="accent">#ce5043</color>
@@ -30,4 +31,7 @@
     <color name="refresh_2">#f69988</color>
     <color name="refresh_3">#e51c23</color>
     <color name="refresh_4">#f69988</color>
+
+    <color name="new_shot_bottom">#04000000</color>
+
 </resources>

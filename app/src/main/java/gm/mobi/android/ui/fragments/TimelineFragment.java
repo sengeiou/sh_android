@@ -3,6 +3,7 @@ package gm.mobi.android.ui.fragments;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
@@ -43,6 +45,7 @@ import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
@@ -50,23 +53,15 @@ import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
 
-    @Inject
-    Picasso picasso;
-    @Inject
-    Bus bus;
-    @Inject
-    SQLiteOpenHelper dbHelper;
-    @Inject
-    JobManager jobManager;
+    @Inject Picasso picasso;
+    @Inject Bus bus;
+    @Inject SQLiteOpenHelper dbHelper;
+    @Inject JobManager jobManager;
 
-    @InjectView(R.id.timeline_list)
-    ListView listView;
-    @InjectView(R.id.timeline_new)
-    View newShotView;
-    @InjectView(R.id.timeline_watching_container)
-    View watchingContainer;
-    @InjectView(R.id.timeline_swipe_refresh)
-    SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @InjectView(R.id.timeline_list) ListView listView;
+    @InjectView(R.id.timeline_new) View newShotView;
+    @InjectView(R.id.timeline_watching_container) View watchingContainer;
+    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
 
     private View headerView;
     private View footerView;
@@ -90,8 +85,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         setHasOptionsMenu(true);
 
         avatarClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
                 openProfile(position);
             }
@@ -198,6 +192,12 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
     /* --- UI Events --- */
 
+    @OnClick(R.id.timeline_new_text)
+    public void startNewShot() {
+        //TODO start activity for new shot with slide animation
+        startActivity(new Intent(getActivity(), NewShotActivity.class));
+    }
+
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
         //TODO Shot detail
@@ -260,6 +260,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         }
         if (newShots.size() == 0) {
             Toast.makeText(getActivity(), "No new shots", Toast.LENGTH_SHORT).show();
+            adapter.notifyDataSetChanged(); // Refresh time indicator
         } else {
             Timber.d("Received %d new shots", newShots.size());
             int originalPosition = listView.getFirstVisiblePosition();
@@ -268,7 +269,6 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             listView.setSelection(newPosition);
             listView.smoothScrollToPosition(0);
         }
-        adapter.notifyDataSetChanged();
     }
 
     @Subscribe

@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.ui.activities.MainActivity;
+import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
@@ -20,6 +21,7 @@ import gm.mobi.android.ui.base.BaseActivity;
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,
+                NewShotActivity.class
 
         },
         complete = false

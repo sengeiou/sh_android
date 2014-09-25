@@ -51,12 +51,17 @@
 
     <string name="no_more_shots">No more shots</string>
 
+    <string name="new_shoot_action">Shoot</string>
+
     <!-- Menu names -->
     <string name="menu_info">Info</string>
     <string name="menu_search">Search timeline</string>
 
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
+
+    <!-- Watching status texts -->
+    <string name="watching_text_me_and_more">Me &amp; %d people watching</string>
 
     <!--TimeUtils-->
     <string name="plural_days">days</string>

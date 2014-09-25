@@ -8,4 +8,5 @@
     <!-- Timeline -->
     <dimen name="watching_bar_height">72dp</dimen>
     <dimen name="new_shot_height">48dp</dimen>
+    <dimen name="card_radius">4dp</dimen>
 </resources>

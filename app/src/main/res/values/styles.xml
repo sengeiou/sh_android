@@ -17,12 +17,19 @@
     </style>
 
 
+    <style name="GolesTheme.NoActionBar.Floating">
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowIsFloating">true</item>-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+
     <!-- Styles -->
     <style name="ActionBar.Solid.Goles" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <!--<item name="android:background">@drawable/ab_solid_goles</item>-->
         <item name="android:background">@color/primary</item>
         <item name="android:icon">@drawable/ic_ab_icon</item>
-
     </style>
 
 

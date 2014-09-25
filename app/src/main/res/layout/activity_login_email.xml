@@ -82,6 +82,7 @@
             android:layout_marginTop="16dp"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:enabled="false"
             app:cpb_colorIndicator="@color/primary"
             app:cpb_colorProgress="@color/transparent"
             app:cpb_selectorIdle="@drawable/btn_circular_progress_background"
