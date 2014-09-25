@@ -200,7 +200,6 @@ public class BagdadDataService implements BagdadService {
         } else {
             Timber.e("Server response unsuccesfull with code %d: %s", response.code(), response.message());
             throw new ServerException(ServerException.V999);
-
         }
     }
 
