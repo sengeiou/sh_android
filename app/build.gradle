@@ -8,6 +8,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'org.robolectric:robolectric-gradle-plugin:0.11.+'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'org.tmatesoft.svnkit:svnkit:1.8.5'
     }
@@ -25,6 +26,7 @@ def getSvnRevision(){
 
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
+apply plugin: 'robolectric'
 
 
 repositories {
@@ -135,4 +137,9 @@ dependencies {
     }
 
     compile project(':ext-libs:SwipeRefreshLayoutOverlay:library')
+
+    androidTestCompile 'org.robolectric:robolectric:2.3'
+    androidTestCompile 'junit:junit:4.11'
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.0.0'
+    androidTestCompile 'org.assertj:assertj-core:1.2.0'
 }
