@@ -10,7 +10,6 @@ import java.util.List;
 
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
@@ -36,11 +35,53 @@ public class ShotManager {
         }
     }
 
+    public static List<Shot> retrieveOldOrNewTimeLineWithUsers(SQLiteDatabase db, List<Shot> shots) {
+        String idShots = "(";
+        String idUsers = "(";
+        for (Shot shot : shots) {
+            idUsers = idUsers.concat(shot.getIdUser() + ",");
+            idShots = idShots.concat(shot.getIdShot() + ",");
+        }
+        idShots = idShots.concat(")");
+        idShots = idShots.replace(",)", ")");
+        idUsers = idUsers.concat(")");
+        idUsers = idUsers.replace(",)", ")");
+        String query = "SELECT " + ShotTable.ID_SHOT +
+                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT + ",b." + UserTable.NAME + "," + UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
+                " FROM " + ShotTable.TABLE + " a "
+                + " INNER JOIN " + UserTable.TABLE + " b " +
+                "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID
+                + " WHERE b." + ShotTable.ID_USER + " IN " + idUsers + " AND " + ShotTable.ID_SHOT + " IN " + idShots + ";";
+        Timber.d("Executing query: %s", query);
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        if (count == 0) {
+            return new ArrayList<>(0);
+        }
+        List<Shot> shotList = new ArrayList<>(count);
+        cursor.moveToFirst();
+        do {
+            Shot shot = ShotMapper.fromCursor(cursor);
+            User user = UserMapper.basicFromCursor(cursor);
+            if (user != null) {
+                shot.setUser(user);
+                shotList.add(shot);
+            } else {
+                Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
+            }
+        } while (cursor.moveToNext());
+
+        cursor.close();
+        return shotList;
+    }
+
     public static List<Shot> retrieveTimelineWithUsers(SQLiteDatabase db) {
-        String query = "SELECT * FROM " + ShotTable.TABLE + " a "
+        String query = "SELECT " + ShotTable.ID_SHOT +
+                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT + ",b." + UserTable.NAME + "," + UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
+                " FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID +
-                " ORDER BY "+ShotTable.CSYS_BIRTH+" DESC;";
+                " ORDER BY a." + ShotTable.CSYS_BIRTH + " DESC;";
         Timber.d("Executing query: %s", query);
         Cursor cursor = db.rawQuery(query, null);
 
@@ -52,7 +93,7 @@ public class ShotManager {
         cursor.moveToFirst();
         do {
             Shot shot = ShotMapper.fromCursor(cursor);
-            User user = UserMapper.fromCursor(cursor);
+            User user = UserMapper.basicFromCursor(cursor);
             if (user != null) {
                 shot.setUser(user);
                 shots.add(shot);
@@ -72,48 +113,45 @@ public class ShotManager {
         long res;
         for (Shot shot : shotList) {
             ContentValues contentValues = ShotMapper.toContentValues(shot);
-//            db.beginTransaction();
             if (contentValues.getAsLong(ShotTable.CSYS_DELETED) != null) {
                 res = deleteShot(db, shot);
-            }else{
-                res = db.insertWithOnConflict(ShotTable.TABLE,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+            } else {
+
+                res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
             insertShotInTableSync(db);
-//            db.endTransaction();
         }
-   }
+    }
 
-    /***
+    /**
      * Delete a shot
-     * */
-   public static long deleteShot(SQLiteDatabase db, Shot shot){
-       long res = 0;
-       String args = GMContract.ShotTable.ID_SHOT+"=?";
-       String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
-       Cursor c = db.query(GMContract.ShotTable.TABLE, GMContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
-       if (c.getCount() > 0) {
-           res = db.delete(GMContract.ShotTable.TABLE, GMContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
-       }
-       c.close();
-       return res;
-   }
+     */
+    public static long deleteShot(SQLiteDatabase db, Shot shot) {
+        long res = 0;
+        String args = GMContract.ShotTable.ID_SHOT + "=?";
+        String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
+        Cursor c = db.query(GMContract.ShotTable.TABLE, GMContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
+        if (c.getCount() > 0) {
+            res = db.delete(GMContract.ShotTable.TABLE, GMContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
+        }
+        c.close();
+        return res;
+    }
 
-    public static long insertShotInTableSync(SQLiteDatabase db){
+    public static long insertShotInTableSync(SQLiteDatabase db) {
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(3); // It's the third data type the application insert in database
         tablesSync.setDirection("BOTH");
         tablesSync.setEntity(GMContract.ShotTable.TABLE);
         tablesSync.setMax_timestamp(System.currentTimeMillis());
-        if(GeneralManager.isTableEmpty(db, GMContract.ShotTable.TABLE)){
+        if (GeneralManager.isTableEmpty(db, GMContract.ShotTable.TABLE)) {
             tablesSync.setMin_timestamp(System.currentTimeMillis());
         }
-        //We don't have this information already
-//        tablesSync.setMaxRows();
-//        tablesSync.setMinRows();
-        return SyncTableManager.insertOrUpdateSyncTable(db,tablesSync);
+        tablesSync.setMaxRows(1000);
+        tablesSync.setMinRows(0);
+        return SyncTableManager.insertOrUpdateSyncTable(db, tablesSync);
     }
-
 
 
 }
