@@ -98,7 +98,7 @@
 
 #pragma mark - Get Entities for Syncronization
 
--(void) testGetSyncForEntity{
+/*-(void) testGetSyncForEntity{
     
     NSArray *entitiesToSynchro = @[K_COREDATA_APPADVICE, K_COREDATA_DEVICE, K_COREDATA_MATCH, K_COREDATA_MESSAGE, K_COREDATA_USER, K_COREDATA_SML, K_COREDATA_TEAM];
     
@@ -113,7 +113,7 @@
    
     XCTAssertNotNil(syncEntityArray);
 
-}
+}*/
 
 
 @end

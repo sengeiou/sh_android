@@ -15,8 +15,9 @@
 #import "ShotTableViewCell.h"
 #import "UIImageView+FadeIn.h"
 #import "Utils.h"
+#import "Conection.h"
 
-@interface TimeLineViewController (){
+@interface TimeLineViewController ()<ConectionProtocol>{
     int lengthTextField;
 }
 
@@ -30,6 +31,7 @@
 @property (strong, nonatomic) NSArray *arrayShoots;
 @property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UIView *viewOptions;
 
 @end
 
@@ -45,13 +47,21 @@
     
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
     
-    self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:YES];
+    NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970]*1000;
+    NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ < %@", kJSON_BIRTH, nowDateString];
+    self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
     
     if (self.arrayShoots.count == 0){
         self.mScrollView.scrollEnabled = YES;
         self.timelineTableView.hidden = YES;
     }else
         [self hiddenViewNotShoots];
+    
+    UIImage *image = [[UIImage imageNamed:@"Icon_Magnifier"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.btnSearch setImage:image forState:UIControlStateNormal];
+    self.btnSearch.tintColor = [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1];
 }
 
 //------------------------------------------------------------------------------
@@ -88,13 +98,26 @@
 }
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
-    
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
-    
-    [self.refreshControl endRefreshing];
-    
+
+    [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status{
+
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    
+    if (status){
+        if ([[Conection sharedInstance]isConection]) {
+            
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+            
+            [self.refreshControl endRefreshing];
+        };
+    }else
+        [self.refreshControl endRefreshing];
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -127,8 +150,6 @@
     return cell;
  }
 
-
-
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
@@ -155,16 +176,56 @@
 //------------------------------------------------------------------------------
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-    
     lengthTextField = self.txtField.text.length - range.length + string.length;
    
-    
     if (lengthTextField > 1)
         self.btnShoot.enabled = YES;
      else
         self.btnShoot.enabled = NO;
     
     return YES;
+}
+
+-(void)hiddenViewOptions{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                        /* self.mSubMenuNavigation.frame = CGRectMake(0, kSUBMENU_INIT_POSITION, 320, kSUBMENU_HEIGHT);
+                         self.bSilenceMode.alpha = 0.0f;
+                         self.bBasicMode.alpha = 0.0f;
+                         self.bIntenseMode.alpha = 0.0f;
+                         self.lLabelSubscriptionMode.alpha = 0.0f;
+                         self.blackBottomImage.alpha = 0.0f;
+                         //                                 [self.whiteLine removeFromSuperview];
+                         self.navigationItem.title = [self getTeamNames];*/
+                     }
+                     completion:^(BOOL finished) {
+                        // [[self mSubMenuNavigation] setAlpha:0.0f];
+                     }];
+}
+
+-(void)showViewOptions{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                       /*  self.mSubMenuNavigation.frame = CGRectMake(0, kSUBMENU_INIT_POSITION+self.mSubMenuNavigation.frame.size.height, 320, kSUBMENU_HEIGHT);
+                         self.bSilenceMode.alpha = 1.0f;
+                         self.bBasicMode.alpha = 1.0f;
+                         self.bIntenseMode.alpha = 1.0f;
+                         self.lLabelSubscriptionMode.alpha = 1.0f;
+                         self.blackBottomImage.alpha = 0.3f;
+                         //                                 self.whiteLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, 320, 1)];
+                         //                                 [self.whiteLine setBackgroundColor:[UIColor whiteColor]];
+                         //                                 self.whiteLine.alpha = 0.9f;
+                         //                                 [self.navigationController.navigationBar addSubview:self.whiteLine];
+                         self.navigationItem.title = @"Notificaciones";*/
+                     }
+     
+                     completion:^(BOOL finished) {
+                     }];
+
 }
 
 @end

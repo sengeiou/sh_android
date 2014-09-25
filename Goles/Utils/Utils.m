@@ -468,7 +468,7 @@
     
     NSString *timeLeft;
     
-    NSDate *today =[NSDate date];
+    NSDate *today = [NSDate date];
     
     NSInteger seconds = [today timeIntervalSinceDate:dateShot];
     

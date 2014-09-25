@@ -54,7 +54,7 @@
                     /*NSTimeInterval time1 = -[self.requestDate timeIntervalSinceNow];
                     if (time1 < self.timeToCheck)
                         [NSThread sleepForTimeInterval:((time1+0.5)-self.timeToCheck)*-1];*/
-                    [self retryConnectionWithError:error];
+                    [self retryConnectionWithError:error andDelegate:delegate];
                 }
                 
             }] resume];
@@ -62,7 +62,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)retryConnectionWithError:(NSError *)error {
+- (void)retryConnectionWithError:(NSError *)error andDelegate:(id)delegate{
     
    /* if (self.retryCounter <= kNUMBER_OF_RETRIES) {
         self.retryCounter +=1;
@@ -76,16 +76,19 @@
         
         if (error.code < 400) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"The network connection was lost." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"The network connection was lost." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shooter" message:@"We are working to fix it as soon as possible." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"We are working to fix it as soon as possible." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }
+    
+        [delegate conectionResponseForStatus:NO];
+    
     //}
 }
 
