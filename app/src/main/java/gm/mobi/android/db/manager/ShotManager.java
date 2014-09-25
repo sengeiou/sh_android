@@ -37,11 +37,10 @@ public class ShotManager {
     }
 
     public static List<Shot> retrieveTimelineWithUsers(SQLiteDatabase db) {
-//        Cursor cursor = db.query(ShotTable.TABLE, ShotTable.PROJECTION, SyncColumns.CSYS_DELETED + " IS NOT NULL", null, null, null, TIMELINE_LIMIT);
         String query = "SELECT * FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID +
-                ";";
+                " ORDER BY "+ShotTable.CSYS_BIRTH+" DESC;";
         Timber.d("Executing query: %s", query);
         Cursor cursor = db.rawQuery(query, null);
 
