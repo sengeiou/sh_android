@@ -73,6 +73,7 @@ public class FollowManager {
         }
         db.endTransaction();
         c.close();
+        userIds.add(idUser);
         return userIds;
     }
 
