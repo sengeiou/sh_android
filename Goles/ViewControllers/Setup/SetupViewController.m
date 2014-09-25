@@ -61,7 +61,8 @@
     txtFieldName.clearButtonMode = YES;
     [txtFieldName setReturnKeyType:UIReturnKeyNext];
     txtFieldName.placeholder = @"Required";
-    
+    txtFieldName.autocapitalizationType = UITextAutocapitalizationTypeNone;
+
     txtFieldPwd = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
     txtFieldPwd.delegate = self;
     txtFieldPwd.clearButtonMode = YES;
