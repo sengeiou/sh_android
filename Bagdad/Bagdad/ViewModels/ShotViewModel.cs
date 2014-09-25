@@ -9,6 +9,8 @@ namespace Bagdad.ViewModels
 {
     public class ShotViewModel
     {
+        public int shotId { get; set; }
+        public int shotUserId { get; set; }
         public String shotUserName { get; set; }
         public BitmapImage shotUserImage { get; set; }
         public String shotTag { get; set; }

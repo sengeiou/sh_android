@@ -171,7 +171,7 @@ namespace Bagdad
             if (e.NavigationMode == NavigationMode.Reset)
             {
                 RootFrame.Navigated += ClearBackStackAfterReset;
-                UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
+                //UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
             }
         }
 

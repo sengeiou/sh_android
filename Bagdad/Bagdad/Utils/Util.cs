@@ -92,7 +92,7 @@ namespace Bagdad.Utils
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("E R R O R :  LogInByEmail: " + e.Message);
                 throw e;
             }
         }
@@ -107,7 +107,7 @@ namespace Bagdad.Utils
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("E R R O R :  LogInByUserName: " + e.Message);
                 throw e;
             }
         }

@@ -22,7 +22,7 @@ namespace Bagdad
         
         public TimeLine()
         {
-            IsRedirectionNeeded();
+            IsRedirectionNeeded();            
             InitializeComponent();
             BuildLocalizedApplicationBar();
             DataContext = App.ShotsVM;
@@ -35,6 +35,7 @@ namespace Bagdad
 
                 if (!App.ShotsVM.IsDataLoaded)
                 {
+                    App.ShotsVM.Shots.Clear();
                     await App.ShotsVM.LoadData();
                 }
                 else
@@ -47,7 +48,7 @@ namespace Bagdad
                 Debug.WriteLine("E R R O R : TimeLine - OnNavigatedTo: " + ex.Message);
             }
         }
-
+        
         //When Click BACK on the Main Page (TimeLine) we close the App.
         protected override void OnBackKeyPress(CancelEventArgs e)
         {
@@ -61,6 +62,7 @@ namespace Bagdad
             {
                 //IF The User isn't Loged --> GO TO: Registration (Now goes to SignIn because Registration is not yet implemented)
                 if (!await util.isUserAlreadyLoged()) NavigationService.Navigate(new Uri("/Start.xaml", UriKind.Relative));
+                else LayoutRoot.Visibility = Visibility.Visible;
             }
             catch (Exception e)
             {
@@ -192,6 +194,7 @@ namespace Bagdad
             //TODO: DELETE THIS: JUST TRYING THE IMAGEMANAGER SOURCE
             //UserImageManager im = new UserImageManager();
             //imageToShow.Source = im.GetUserImage(2);
+            MessageBox.Show("Info");
         }
 
         private void ImWatching_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -201,6 +204,22 @@ namespace Bagdad
             ////im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/bender.jpg", 1);
             //imageToShow.Source = im.GetUserImage(3);
             //if (imageToShow.Source == null) imageToShow.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("http://s3-eu-west-1.amazonaws.com/bagdag/nixon.jpg", UriKind.Absolute));
+            MessageBox.Show("I'm Watching!");
         }
+
+        private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+
+            int shotId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotId;
+            MyShots.SelectedIndex = -1;
+            MessageBox.Show("Shot #" + shotId);
+        }
+
+        private void ShotUserProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            int shotUserId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotUserId;
+            MessageBox.Show("User #" + shotUserId);
+        }
+
     }
 }

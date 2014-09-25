@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Bagdad.Utils

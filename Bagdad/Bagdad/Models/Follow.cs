@@ -23,6 +23,7 @@ namespace Bagdad.Models
                 if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
                 {
                     database = await App.GetDatabaseAsync();
+
                     using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertFollowData))
                     {
                         await database.ExecuteStatementAsync("BEGIN TRANSACTION");

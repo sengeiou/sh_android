@@ -30,23 +30,27 @@ namespace Bagdad.ViewModels
             try
             {
                 BitmapImage image;
-                UserImageManager im = new UserImageManager();
-
-                //im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/bender.jpg", 1); //Chargue someting
-                //im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/mordisquitos.jpg", 2);
+                UserImageManager uim = new UserImageManager();
                                 
-                image = im.GetUserImage(1);
+                //Get Data
+
+
+
+
+
+
+                image = uim.GetUserImage(1);
             
                 if (image == null) image = new System.Windows.Media.Imaging.BitmapImage(new Uri("http://s3-eu-west-1.amazonaws.com/bagdag/nixon.jpg", UriKind.Absolute));
 
                 //Shots.Add(new ShotViewModel { shotMessage = "", shotTag = "", shotTime = "", shotUserImage = null, shotUserName = "" });
 
-                Shots.Add(new ShotViewModel { shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo.", shotTag="Barcelona-Elche 16/12", shotTime="3m", shotUserImage=image, shotUserName="Windows Phone"});
-                Shots.Add(new ShotViewModel { shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = im.GetUserImage(2), shotUserName = "Windows Phone" });
-                Shots.Add(new ShotViewModel { shotMessage="Lorem fistrum hasta luego Lucas.", shotTag="Barcelona-Elche 16/12", shotTime="3m", shotUserImage=image, shotUserName="Windows Phone"});
-                Shots.Add(new ShotViewModel { shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = im.GetUserImage(2), shotUserName = "Windows Phone" });
-                Shots.Add(new ShotViewModel { shotMessage="Lorem fistrum hasta luego Lucas.", shotTag="Barcelona-Elche 16/12", shotTime="3m", shotUserImage=image, shotUserName="Windows Phone"});
-                Shots.Add(new ShotViewModel { shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = im.GetUserImage(2), shotUserName = "Windows Phone" });
+                Shots.Add(new ShotViewModel { shotId = 1, shotUserId = 1, shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo.", shotTag="Barcelona-Elche 16/12", shotTime="3m", shotUserImage=image, shotUserName="Windows Phone"});
+                Shots.Add(new ShotViewModel { shotId = 2, shotUserId = 2, shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = uim.GetUserImage(2), shotUserName = "Windows Phone" });
+                Shots.Add(new ShotViewModel { shotId = 3, shotUserId = 1, shotMessage = "Lorem fistrum hasta luego Lucas.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = image, shotUserName = "Windows Phone" });
+                Shots.Add(new ShotViewModel { shotId = 4, shotUserId = 2, shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = uim.GetUserImage(2), shotUserName = "Windows Phone" });
+                Shots.Add(new ShotViewModel { shotId = 5, shotUserId = 1, shotMessage = "Lorem fistrum hasta luego Lucas.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = image, shotUserName = "Windows Phone" });
+                Shots.Add(new ShotViewModel { shotId = 6, shotUserId = 2, shotMessage = "Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo.", shotTag = "Barcelona-Elche 16/12", shotTime = "3m", shotUserImage = uim.GetUserImage(2), shotUserName = "Windows Phone" });
 
                 IsDataLoaded = true;
                 return 1;

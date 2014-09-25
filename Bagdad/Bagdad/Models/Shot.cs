@@ -85,6 +85,8 @@ namespace Bagdad.Models
             return done;
         }
 
+        
+
         public string constructFilterShot(string conditionDate)
         {
             return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";

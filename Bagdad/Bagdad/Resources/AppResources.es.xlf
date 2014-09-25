@@ -84,8 +84,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/FunInfo" translate="yes" xml:space="preserve">
-          <source>Shooter is instant, 24 hours a day fun.</source>
-          <target state="new">Shooter is instant, 24 hours a day fun.</target>
+          <source>Shootr is instant, 24 hours a day fun.</source>
+          <target state="new">Shootr is instant, 24 hours a day fun.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/Fun" translate="yes" xml:space="preserve">
@@ -94,8 +94,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/FreeInfo" translate="yes" xml:space="preserve">
-          <source>Shooter is free. No ads. No fees.</source>
-          <target state="new">Shooter is free. No ads. No fees.</target>
+          <source>Shootr is free. No ads. No fees.</source>
+          <target state="new">Shootr is free. No ads. No fees.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/Free" translate="yes" xml:space="preserve">
@@ -109,18 +109,18 @@
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
         <trans-unit id="Resx/ShooterInfo" translate="yes" xml:space="preserve">
-          <source>Shooter is a new way to share football.</source>
-          <target state="new">Shooter is a new way to share football.</target>
+          <source>Shootr is a new way to share football.</source>
+          <target state="new">Shootr is a new way to share football.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/Shooter" translate="yes" xml:space="preserve">
-          <source>Shooter</source>
-          <target state="new">Shooter</target>
+          <source>Shootr</source>
+          <target state="new">Shootr</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/NewInfo" translate="yes" xml:space="preserve">
-          <source>Shooter connects you with friends and family.</source>
-          <target state="new">Shooter connects you with friends and family.</target>
+          <source>Shootr connects you with friends and family.</source>
+          <target state="new">Shootr connects you with friends and family.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/RegisterWithEmail" translate="yes" xml:space="preserve">
@@ -214,8 +214,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/FacebookAdvice1" translate="yes" xml:space="preserve">
-          <source>Shooter will never post without your permission.</source>
-          <target state="new">Shooter will never post without your permission.</target>
+          <source>Shootr will never post without your permission.</source>
+          <target state="new">Shootr will never post without your permission.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml</note>
         </trans-unit>
       </group>

@@ -97,7 +97,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter will never post without your permission..
+        ///   Busca una cadena traducida similar a Shootr will never post without your permission..
         /// </summary>
         public static string FacebookAdvice1 {
             get {
@@ -142,7 +142,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter is free. No ads. No fees..
+        ///   Busca una cadena traducida similar a Shootr is free. No ads. No fees..
         /// </summary>
         public static string FreeInfo {
             get {
@@ -160,7 +160,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter is instant, 24 hours a day fun..
+        ///   Busca una cadena traducida similar a Shootr is instant, 24 hours a day fun..
         /// </summary>
         public static string FunInfo {
             get {
@@ -232,7 +232,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter connects you with friends and family..
+        ///   Busca una cadena traducida similar a Shootr connects you with friends and family..
         /// </summary>
         public static string NewInfo {
             get {
@@ -358,7 +358,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter.
+        ///   Busca una cadena traducida similar a Shootr.
         /// </summary>
         public static string Shooter {
             get {
@@ -367,7 +367,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Shooter is a new way to share football..
+        ///   Busca una cadena traducida similar a Shootr is a new way to share football..
         /// </summary>
         public static string ShooterInfo {
             get {

@@ -112,6 +112,7 @@ namespace Bagdad.Models
         {
             int done = 0;
             Database database;
+            UserImageManager uim = new UserImageManager();
 
             try
             {
@@ -150,7 +151,11 @@ namespace Bagdad.Models
                             if (userFollowing["photo"] == null || String.IsNullOrEmpty(userFollowing["photo"].ToString()))
                                 custstmt.BindNullParameterWithName("@photo");
                             else
+                            {
                                 custstmt.BindTextParameterWithName("@photo", userFollowing["photo"].ToString());
+                                //Store image in local
+                                //uim.SaveImageFromURL(userFollowing["photo"].ToString(), int.Parse(userFollowing["idUser"].ToString()));
+                            }
 
                             if (userFollowing["birth"] == null || String.IsNullOrEmpty(userFollowing["birth"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_birth");
