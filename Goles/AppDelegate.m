@@ -10,6 +10,7 @@
 #import "Constants.h"
 #import "CoreDataGenerator.h"
 #import "CoreDataManager.h"
+#import "ShotManager.h"
 #import "CoreDataParsing.h"
 #import "PeopleTableViewController.h"
 #import "TimeLineViewController.h"
@@ -19,7 +20,6 @@
 #import "UserManager.h"
 #import "SyncManager.h"
 #import "Utils.h"
-#import "Device.h"
 #import "FavRestConsumer.h"
 #import "UserManager.h"
 #import <AudioToolbox/AudioToolbox.h>
@@ -81,8 +81,6 @@
 
         self.request = [FavRestConsumerHelper createREQ];
         
-        if (SYNCHRO_ACTIVATED)
-            [[SyncManager singleton] startSyncProcess];
     }
     
     
@@ -297,20 +295,6 @@
         }
     }
 }
-
-
-//------------------------------------------------------------------------------
-//-(void)updateUserData {
-//    
-//    //Check for device entity in CoreData
-//    Device *device = [[UserManager singleton] getDevice];
-//    if (!device) {
-//        device = [Device updateWithDictionary:nil];
-//        [[CoreDataManager singleton] saveContext];
-//    }
-//    [[FavRestConsumer sharedInstance] deviceRegistration:device withDelegate:self];
-//}
-
 
 #pragma mark - Public methods
 //------------------------------------------------------------------------------

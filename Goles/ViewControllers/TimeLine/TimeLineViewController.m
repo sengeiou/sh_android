@@ -8,13 +8,13 @@
 
 #import "TimeLineViewController.h"
 #import "FavRestConsumer.h"
-#import "Follow.h"
 #import "User.h"
 #import "Shot.h"
 #import "CoreDataManager.h"
 #import "ShotTableViewCell.h"
 #import "UIImageView+FadeIn.h"
 #import "Utils.h"
+#import "ShotManager.h"
 #import "Conection.h"
 
 @interface TimeLineViewController ()<ConectionProtocol>{
@@ -45,13 +45,9 @@
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     
-    NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970]*1000;
-    NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ < %@", kJSON_BIRTH, nowDateString];
-    self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+    self.arrayShoots = [[ShotManager singleton] getShotsForTimeLine];
     
     if (self.arrayShoots.count == 0){
         self.mScrollView.scrollEnabled = YES;
@@ -106,12 +102,12 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
 
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     
     if (status){
         if ([[Conection sharedInstance]isConection]) {
             
-            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
             
             [self.refreshControl endRefreshing];
         };
@@ -154,15 +150,9 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
-    if (status && [entityClass isSubclassOfClass:[Follow class]]){
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-    }
-    else if (status && [entityClass isSubclassOfClass:[User class]]){
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    }
-    else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+    if (status && [entityClass isSubclassOfClass:[Shot class]]){
         
-        self.arrayShoots = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO];
+        self.arrayShoots = [[ShotManager singleton] getShotsForTimeLine];
         
         if (self.arrayShoots.count > 0) {
             [self hiddenViewNotShoots];

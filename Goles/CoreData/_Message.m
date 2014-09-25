@@ -48,6 +48,21 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"csys_birthValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"csys_deletedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"csys_deleted"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"csys_modifiedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"csys_modified"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"csys_revisionValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_revision"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -74,6 +89,25 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 
 
 
+- (int64_t)csys_birthValue {
+	NSNumber *result = [self csys_birth];
+	return [result longLongValue];
+}
+
+- (void)setCsys_birthValue:(int64_t)value_ {
+	[self setCsys_birth:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveCsys_birthValue {
+	NSNumber *result = [self primitiveCsys_birth];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveCsys_birthValue:(int64_t)value_ {
+	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
+}
+
+
 
 
 
@@ -81,11 +115,49 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 
 
 
+- (int64_t)csys_deletedValue {
+	NSNumber *result = [self csys_deleted];
+	return [result longLongValue];
+}
+
+- (void)setCsys_deletedValue:(int64_t)value_ {
+	[self setCsys_deleted:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveCsys_deletedValue {
+	NSNumber *result = [self primitiveCsys_deleted];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveCsys_deletedValue:(int64_t)value_ {
+	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
+}
+
+
 
 
 
 @dynamic csys_modified;
 
+
+
+- (int64_t)csys_modifiedValue {
+	NSNumber *result = [self csys_modified];
+	return [result longLongValue];
+}
+
+- (void)setCsys_modifiedValue:(int64_t)value_ {
+	[self setCsys_modified:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveCsys_modifiedValue {
+	NSNumber *result = [self primitiveCsys_modified];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveCsys_modifiedValue:(int64_t)value_ {
+	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
+}
 
 
 

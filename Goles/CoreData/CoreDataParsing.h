@@ -87,6 +87,7 @@ extern NSString *const K_CD_NAME;
 extern NSString *const K_CD_VALUE;
 extern NSString *const kJSON_WEIGHT;
 extern NSString *const kJSON_LOGIN;
+extern NSString *const UD_LAST_DELETE_DATE;
 
 #pragma mark - WEBSERVICE ALIAS
 

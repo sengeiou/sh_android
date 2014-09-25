@@ -175,6 +175,19 @@
     return result;
 }
 
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withFetchLimit:(NSNumber *)fetchLimit {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
+    request.fetchLimit = [fetchLimit integerValue];
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    }
+    
+    return result;
+}
 
 //------------------------------------------------------------------------------
 - (void) deleteObject:(NSManagedObject *)object{
@@ -295,9 +308,9 @@
 }
 
 //------------------------------------------------------------------------------
-- (long long) getMaxModifiedValueForEntity:(NSString *)entityClass {
+- (NSNumber *) getMaxModifiedValueForEntity:(NSString *)entityClass {
     
-    NSFetchRequest *request = [self createFetchRequestForEntityNamed:entityClass orderedByKey:@"csys_modified" ascending:NO];
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:entityClass orderedByKey:kJSON_MODIFIED ascending:NO];
     request.fetchLimit = 1;
     
     NSError * error = nil;
@@ -305,18 +318,11 @@
     if ( [request entity] )
         result = [managedObjectContext executeFetchRequest:request error:&error];
     
-    long long value;
+    NSNumber *value;
     
-    if ([result count] > 0) {
-        NSDate *date = [[result firstObject] csys_modified];
-        NSTimeInterval timeI = [date  timeIntervalSince1970]*1000;
-        value = (long long)timeI;
-    }
-    else {
-        NSTimeInterval timeI = [[NSDate date] timeIntervalSince1970]*1000;
-        return timeI;
-        value = (long long)timeI;
-    }
+    if ([result count] > 0)
+        return [[result firstObject] csys_modified];
+   
     return value;
     
 }

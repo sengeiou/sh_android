@@ -20,6 +20,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 @protocol ParserProtocol
 
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error;
+- (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error;
 
 @end
 
@@ -63,5 +64,6 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate;
 - (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate;
 - (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate;
+- (void)userLoginWithKey:(NSDictionary *)key withDelegate:(id)delegate;
 
 @end

@@ -88,6 +88,7 @@ NSString *const K_CD_NAME                               = @"name";
 NSString *const K_CD_VALUE                              = @"value";
 NSString *const kJSON_WEIGHT                            = @"weight";
 NSString *const kJSON_LOGIN                             = @"Login";
+NSString *const UD_LAST_DELETE_DATE                     = @"userDefaultsLastDeleteOlds";
 
 #pragma mark - WEBSERVICE ALIAS
 
@@ -96,7 +97,7 @@ NSString *const kALIAS_GET_MESSAGE                     = @"GET_MESSAGE";
 NSString *const kALIAS_GET_ADVICE                      = @"GET_ADVICE";
 NSString *const kALIAS_GET_ALL_TEAMS                   = @"GET_TEAMS";
 NSString *const kALIAS_REGISTER_DEVICE                 = @"REGISTER_DEVICE";
-NSString *const kALIAS_LOGIN                           = @"LOGIN";
+NSString *const kALIAS_LOGIN                           = @"USER_LOGIN";
 NSString *const kALIAS_FOLLOW                          = @"GET_FOLLOWINGS";
 NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
 NSString *const kALIAS_USER                            = @"GET_USERS";
@@ -201,7 +202,6 @@ NSString *const kJSON_LANGUAGE                         = @"language";
 //SHOT
 NSString *const kJSON_SHOT_IDSHOT                      = @"idShot";
 NSString *const kJSON_SHOT_COMMENT                     = @"comment";
-
 
 #pragma mark - SEGUES IDENTIFIERS
 NSString *const kSEGUE_MATCH_DETAIL              = @"toMatchDetail";

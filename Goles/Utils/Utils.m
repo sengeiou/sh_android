@@ -464,13 +464,15 @@
 }
 
 //Get difference hours between dates
-+(NSString *)getDateShot:(NSDate *) dateShot{
++(NSString *)getDateShot:(NSNumber *) dateShot{
     
     NSString *timeLeft;
     
     NSDate *today = [NSDate date];
+
+    NSDate *refDate = [NSDate dateWithTimeIntervalSince1970:[dateShot doubleValue]];
     
-    NSInteger seconds = [today timeIntervalSinceDate:dateShot];
+    NSInteger seconds = [today timeIntervalSinceDate:refDate];
     
     NSInteger days = (int) (floor(seconds / (3600 * 24)));
     if(days) seconds -= days * 3600 * 24;

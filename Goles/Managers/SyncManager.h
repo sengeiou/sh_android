@@ -34,7 +34,7 @@
 
 
 
-- (void)setSyncData:(NSDictionary *)dict withValue:(long long)value;
+- (void)setSyncData:(NSDictionary *)dict withValue:(NSNumber *)value;
 - (void)synchroEntity:(NSString *)entity withDelegate:(id)delegate;
 - (NSNumber *)getFilterDateForEntity:(NSString *)entity;
 

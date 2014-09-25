@@ -56,7 +56,7 @@
 
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString;
 
-+(NSString *)getDateShot:(NSDate *) dateShot;
++(NSString *)getDateShot:(NSNumber *) dateShot;
 
 + (CGFloat)heightForShoot: (NSString *) text;
 

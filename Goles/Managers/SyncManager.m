@@ -92,16 +92,16 @@
                     
                      User *user = (User *)updatedEntity;
                     
-                     NSTimeInterval birth = [user.csys_birth timeIntervalSince1970]*1000;
-                     NSTimeInterval modified = [user.csys_modified timeIntervalSince1970]*1000;
-                     NSTimeInterval deleted = [user.csys_deleted timeIntervalSince1970]*1000;
+                     NSNumber *birth = user.csys_birth;
+                     NSNumber *modified = user.csys_modified;
+                     NSNumber *deleted = user.csys_deleted;
                     
                      NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,
-                                                                                                      kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
-                                                                                                      kJSON_MODIFIED:[NSNumber numberWithLongLong:modified]}];
+                                                                                                      kJSON_BIRTH:birth,
+                                                                                                      kJSON_MODIFIED:modified}];
                      
                      if ([user.csys_syncronized isEqualToString:@"d"])
-                     [mutDict addEntriesFromDictionary:@{kJSON_DELETED:[NSNumber numberWithLongLong:deleted]}];
+                     [mutDict addEntriesFromDictionary:@{kJSON_DELETED:deleted}];
                      
                      NSArray *dataArray = @[mutDict];
                      
@@ -162,9 +162,8 @@
 
 #pragma mark - SynchControl
 //------------------------------------------------------------------------------
-- (void)setSyncData:(NSDictionary *)dict withValue:(long long)value{
+- (void)setSyncData:(NSDictionary *)dict withValue:(NSNumber *)value{
     
-    NSNumber *dateServer = [NSNumber numberWithLongLong:value];
     NSString *className = [self getEntityForOperation:[dict objectForKey:K_WS_OPS]];
     
     if (![className isEqualToString:kJSON_LOGIN]) {
@@ -174,7 +173,7 @@
         NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970];
         NSNumber *now = [NSNumber numberWithLong:nowDate];
 
-        NSArray *insert = [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[@{k_SYNC_NAME_ENTITY:dependencyEntity,k_SYNC_LASTSERVER_DATE:dateServer,k_SYNC_LASTCALL:now}]];
+        NSArray *insert = [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[@{k_SYNC_NAME_ENTITY:dependencyEntity,k_SYNC_LASTSERVER_DATE:value,k_SYNC_LASTCALL:now}]];
         
         if (insert.count > 0)
             [[CoreDataManager singleton] saveContext];

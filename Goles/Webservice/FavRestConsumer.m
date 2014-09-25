@@ -284,13 +284,13 @@
     
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:[FavRestConsumerHelper getEntityForClass:entityClass]
+                                                                     andEntity:NSStringFromClass(entityClass)
                                                                      withItems:@1
                                                                     withOffSet:@0
                                                                      andKey:key];
     
     //Create playerProvider 'ops' block
-    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntityByKey:entityClass]]};
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:entityClass]]};
     
     //Create 'ops' block
     NSArray *ops = @[operation];
@@ -325,7 +325,60 @@
     }
 }
 
+//------------------------------------------------------------------------------
+- (void)userLoginWithKey:(NSDictionary *)key withDelegate:(id)delegate {
+    
+    //Create Alias block
+    NSString *alias = kALIAS_LOGIN;
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = self.appDelegate.request;
+    
+    //Create Provider 'metadata' block
+    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+                                                                     andEntity:kJSON_LOGIN
+                                                                     withItems:@1
+                                                                    withOffSet:@0
+                                                                        andKey:key];
+    
+    //Create playerProvider 'ops' block
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForLogin]]};
+    
+    //Create 'ops' block
+    NSArray *ops = @[operation];
+    
+    //Check if delegate has protocol "ParserProtocol" implemented
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    
+    //Create full data structure
+    if (req && ops) {
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
+            
+            if (!error && delegateRespondsToProtocol)
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                    
+                    if (!error && status)
+                        [delegate parserResponseFromLoginWithStatus:YES andError:nil];
+                    else
+                        [delegate parserResponseFromLoginWithStatus:NO andError:error];
+                }];
+            else if (delegateRespondsToProtocol){
+                [delegate parserResponseFromLoginWithStatus:NO andError:error];
+                DLog(@"Request error:%@",error);
+            }
+        }];
+    }else if (delegateRespondsToProtocol){
+        
+        NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
+        [delegate parserResponseFromLoginWithStatus:NO andError:reqError];
+        DLog(@"No valid req structure created");
+    }
 
+}
 
 
 @end

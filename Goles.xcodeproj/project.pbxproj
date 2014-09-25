@@ -82,6 +82,8 @@
 		AA72640919D03A6E0067A39D /* Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640819D03A6E0067A39D /* Shot.m */; };
 		AA72640C19D0505A0067A39D /* _Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640B19D0505A0067A39D /* _Follow.m */; };
 		AA72640F19D0506A0067A39D /* Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640E19D0506A0067A39D /* Follow.m */; };
+		AA72641219D1C8280067A39D /* ShotManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641119D1C8280067A39D /* ShotManager.m */; };
+		AA72641519D422570067A39D /* CleanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641419D422570067A39D /* CleanManager.m */; };
 		AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */; };
 		AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541A19C057C000E39D94 /* AFHTTPRequestOperationManager.m */; };
 		AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541C19C057C000E39D94 /* AFHTTPSessionManager.m */; };
@@ -251,6 +253,10 @@
 		AA72640B19D0505A0067A39D /* _Follow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Follow.m; sourceTree = "<group>"; };
 		AA72640D19D0506A0067A39D /* Follow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Follow.h; sourceTree = "<group>"; };
 		AA72640E19D0506A0067A39D /* Follow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Follow.m; sourceTree = "<group>"; };
+		AA72641019D1C8280067A39D /* ShotManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShotManager.h; sourceTree = "<group>"; };
+		AA72641119D1C8280067A39D /* ShotManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShotManager.m; sourceTree = "<group>"; };
+		AA72641319D422570067A39D /* CleanManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CleanManager.h; sourceTree = "<group>"; };
+		AA72641419D422570067A39D /* CleanManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanManager.m; sourceTree = "<group>"; };
 		AACA541719C057C000E39D94 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		AACA541919C057C000E39D94 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -558,6 +564,10 @@
 				AA623DFF1998D17800A942A9 /* NavigationManager.m */,
 				AA623E021998D17800A942A9 /* UserManager.h */,
 				AA623E031998D17800A942A9 /* UserManager.m */,
+				AA72641019D1C8280067A39D /* ShotManager.h */,
+				AA72641119D1C8280067A39D /* ShotManager.m */,
+				AA72641319D422570067A39D /* CleanManager.h */,
+				AA72641419D422570067A39D /* CleanManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -856,6 +866,7 @@
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
+				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
@@ -871,6 +882,7 @@
 				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
+				AA72641519D422570067A39D /* CleanManager.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,

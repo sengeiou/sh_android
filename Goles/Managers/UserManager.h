@@ -24,20 +24,7 @@
 - (void)setDeviceToken:(NSString *)token;
 - (void)setIdDevice:(NSNumber *)idDevice;
 - (NSString *)getUserSessionToken;
-
-//------------------------------------------------------------------------------
-/**
- This method searchs for a previous idPlayer stored in NSUserDefaults. If it's not
- present, try to recover it from iCloud. Then if the recovered idPlayer is a valid
- one, it's stored in NSUserdefaults to keep data consistency between the two storages
- a return the number.
-
- @return    NSInteger    The found idPlayer. If no valid idPlayer is found, it returns 0
- */
-//------------------------------------------------------------------------------
--(NSInteger)getUserPreviousPlayerId;
-
-
--(NSDictionary *)getRequesterDictionary;
+- (NSDictionary *)getRequesterDictionary;
+- (NSArray *)getActiveUsersIDs;
 
 @end

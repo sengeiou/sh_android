@@ -11,9 +11,13 @@
 #import "Conection.h"
 #import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
+#import "SyncManager.h"
 #import "Encryption.h"
 #import "User.h"
+#import "Follow.h"
+#import "Shot.h"
 #import "Utils.h"
+#import "Constants.h"
 #import "Fav24Colors.h"
 
 @interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ConectionProtocol>{
@@ -185,7 +189,7 @@
             else
                 key   = @{kJSON_USERNAME:txtFieldName.text, kJSON_PASSWORD:result};
 
-            [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self];
+            [[FavRestConsumer sharedInstance] userLoginWithKey:key withDelegate:self];
             
         };
     }else  if (status && (lengthName < 3 || lengthPwd <  6)){
@@ -200,13 +204,34 @@
 
 
 #pragma mark - Webservice response methods
+
+//------------------------------------------------------------------------------
+- (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error {
+    
+    if (status)
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    
+}
+
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
     if (status){
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-        [appDelegate setTabBarItems];
+        if (status && [entityClass isSubclassOfClass:[Follow class]]){
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+        }
+        else if (status && [entityClass isSubclassOfClass:[User class]]){
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+        }
+        else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+            //Turn on synchro process
+            if (SYNCHRO_ACTIVATED)
+                [[SyncManager singleton] startSyncProcess];
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [appDelegate setTabBarItems];
+        }
+        
     }else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];

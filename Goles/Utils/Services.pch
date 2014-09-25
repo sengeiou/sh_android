@@ -18,14 +18,13 @@
 NSString *golesBaseURL;
 
 //PRODUCTION ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////
-#define K_ENDPOINT_PRODUCTION             @"http://api.golesmessenger.net/data-services/rest/generic/"
+#define K_ENDPOINT_PRODUCTION             @"http://tst.shootermessenger.com/data-services/rest/generic/"
 
 //TEST ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-//#define K_ENDPOINT_DEVELOPER              @"http://46.137.157.81:8081/data-services/rest/generic/"
 #define K_ENDPOINT_DEVELOPER              @"http://tst.shootermessenger.com/data-services/rest/generic/"
 //Server timestamp
-#define SERVERTIME                      @"http://api.golesmessenger.net/data-services/rest/system/ping"
-#define SERVERTIME_DEVELOPER            @"http://46.137.157.81:8081/data-services/rest/system/ping"
+#define SERVERTIME                      @"http://tst.shootermessenger.com/data-services/rest/system/ping"
+#define SERVERTIME_DEVELOPER            @"http://tst.shootermessenger.com/data-services/rest/system/ping"
 
 
 /***********************************************************************

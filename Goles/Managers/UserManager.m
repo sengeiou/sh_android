@@ -12,7 +12,7 @@
 #import "Constants.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
-#import "Device.h"
+#import "Follow.h"
 
 @implementation UserManager
 
@@ -75,13 +75,13 @@
 }
 
 //------------------------------------------------------------------------------
-- (NSNumber *)getIdDevice{
+-(NSNumber *)getIdDevice{
     return [[self getDevice] idDevice];
 }
 
 
 //------------------------------------------------------------------------------
-- (void)setDeviceToken:(NSString *)token {
+-(void)setDeviceToken:(NSString *)token {
     
     if ( token )
         [Device updateWithDictionary:@{kJSON_TOKEN:token}];
@@ -92,7 +92,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)setIdDevice:(NSNumber *)idDevice {
+-(void)setIdDevice:(NSNumber *)idDevice {
     
     [Device updateWithDictionary:@{kJSON_ID_DEVICE:idDevice}];
     [[CoreDataManager singleton] saveContext];
@@ -100,13 +100,30 @@
 
 
 //------------------------------------------------------------------------------
-- (NSDictionary *)getRequesterDictionary {
+-(NSDictionary *)getRequesterDictionary {
     
     NSMutableDictionary *requester = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[self getDevice] idDevice],kJSON_ID_DEVICE, nil];
     if ( [self mUser] )
         requester[kJSON_ID_USER] = [self getUserId];
     
     return requester;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *)getActiveUsersIDs {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[self getUserId]];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count+1];
+    for (Follow *obj in follows) {
+        [idUsersArray addObject:obj.idUserFollowed];
+    }
+    [idUsersArray addObject:[self getUserId]];
+    
+    if (idUsersArray.count > 0)
+        return idUsersArray;
+    
+    return nil;
 }
 
 @end

@@ -102,9 +102,13 @@ extern const struct AppAdviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSDate* csys_birth;
+@property (nonatomic, strong) NSNumber* csys_birth;
 
 
+
+@property int64_t csys_birthValue;
+- (int64_t)csys_birthValue;
+- (void)setCsys_birthValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_birth:(id*)value_ error:(NSError**)error_;
 
@@ -112,9 +116,13 @@ extern const struct AppAdviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSDate* csys_deleted;
+@property (nonatomic, strong) NSNumber* csys_deleted;
 
 
+
+@property int64_t csys_deletedValue;
+- (int64_t)csys_deletedValue;
+- (void)setCsys_deletedValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_deleted:(id*)value_ error:(NSError**)error_;
 
@@ -122,9 +130,13 @@ extern const struct AppAdviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSDate* csys_modified;
+@property (nonatomic, strong) NSNumber* csys_modified;
 
 
+
+@property int64_t csys_modifiedValue;
+- (int64_t)csys_modifiedValue;
+- (void)setCsys_modifiedValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_modified:(id*)value_ error:(NSError**)error_;
 
@@ -336,20 +348,29 @@ extern const struct AppAdviceFetchedProperties {
 
 
 
-- (NSDate*)primitiveCsys_birth;
-- (void)setPrimitiveCsys_birth:(NSDate*)value;
+- (NSNumber*)primitiveCsys_birth;
+- (void)setPrimitiveCsys_birth:(NSNumber*)value;
+
+- (int64_t)primitiveCsys_birthValue;
+- (void)setPrimitiveCsys_birthValue:(int64_t)value_;
 
 
 
 
-- (NSDate*)primitiveCsys_deleted;
-- (void)setPrimitiveCsys_deleted:(NSDate*)value;
+- (NSNumber*)primitiveCsys_deleted;
+- (void)setPrimitiveCsys_deleted:(NSNumber*)value;
+
+- (int64_t)primitiveCsys_deletedValue;
+- (void)setPrimitiveCsys_deletedValue:(int64_t)value_;
 
 
 
 
-- (NSDate*)primitiveCsys_modified;
-- (void)setPrimitiveCsys_modified:(NSDate*)value;
+- (NSNumber*)primitiveCsys_modified;
+- (void)setPrimitiveCsys_modified:(NSNumber*)value;
+
+- (int64_t)primitiveCsys_modifiedValue;
+- (void)setPrimitiveCsys_modifiedValue:(int64_t)value_;
 
 
 

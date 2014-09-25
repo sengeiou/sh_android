@@ -40,6 +40,7 @@
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key;
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending;
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate;
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withFetchLimit:(NSNumber *)fetchLimit;
 
 - (NSArray *)insertEntities:(Class)entityClass WithArray:(NSArray *)dataArray;
 - (NSArray *)insertEntities:(Class)entityClass WithOrderedArray:(NSArray *)dataArray;
@@ -50,6 +51,6 @@
 - (void) deleteEntitiesIn:(NSArray *)entitiesArray;
 - (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray;
 
-- (long long) getMaxModifiedValueForEntity:(NSString *)entityClass;
+- (NSNumber *) getMaxModifiedValueForEntity:(NSString *)entityClass;
 
 @end

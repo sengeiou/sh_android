@@ -194,26 +194,17 @@
         
         NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
         if ([birth isKindOfClass:[NSNumber class]]) {
-            NSTimeInterval epochBirth = [birth doubleValue]/1000;
-            NSDate *birthDate = [NSDate dateWithTimeIntervalSince1970:epochBirth];
-            if ([birthDate isKindOfClass:[NSDate class]])
-                [self setCsys_birth:birthDate];
+            [self setCsys_birth:birth];
         }
         
         NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
         if ([modified isKindOfClass:[NSNumber class]]) {
-            NSTimeInterval epochModified = [modified doubleValue]/1000;
-            NSDate *modifiedDate = [NSDate dateWithTimeIntervalSince1970:epochModified];
-            if ([modifiedDate isKindOfClass:[NSDate class]])
-                [self setCsys_modified:modifiedDate];
+            [self setCsys_modified:modified];
         }
         
         NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
         if ([deleted isKindOfClass:[NSNumber class]]) {
-            NSTimeInterval epochDeleted = [deleted doubleValue]/1000;
-            NSDate *deletedDate = [NSDate dateWithTimeIntervalSince1970:epochDeleted];
-            if ([deletedDate isKindOfClass:[NSDate class]])
-                [self setCsys_deleted:deletedDate];
+            [self setCsys_deleted:deleted];
         }
         
     }
