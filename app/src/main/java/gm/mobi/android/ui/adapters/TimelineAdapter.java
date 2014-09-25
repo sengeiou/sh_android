@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.util.TimeUtils;
 
 public class TimelineAdapter extends BindableAdapter<Shot> {
 
@@ -96,7 +97,7 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
                 vh.text.setText(item.getComment());
 
                 long timestamp = item.getCsys_birth().getTime();
-                vh.timestamp.setText(String.valueOf(timestamp));
+                vh.timestamp.setText(TimeUtils.getRelativeTimeSpanString(view.getContext(), timestamp));
 
                 picasso.load(item.getUser().getPhoto()).into(vh.avatar);
 

@@ -1,7 +1,9 @@
 package gm.mobi.android.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.format.DateUtils;
+import android.text.format.Time;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -80,4 +82,45 @@ public class TimeUtils {
         long daysInMillis = getMilisecondsByDaysNumber(daysNumber);
         return System.currentTimeMillis() - daysInMillis;
     }
+
+    /**
+     * Source: Android's DateUtil
+     * @param c
+     * @param millis
+     * @return
+     */
+    public static CharSequence getRelativeTimeSpanString(Context c, long millis) {
+        String result;
+        long now = System.currentTimeMillis();
+        long span = Math.abs(now - millis);
+        synchronized (TimeUtils.class) {
+            if (sNowTime == null) {
+                sNowTime = new Time();
+            }
+            if (sThenTime == null) {
+                sThenTime = new Time();
+            }
+            sNowTime.set(now);
+            sThenTime.set(millis);
+            if (span < DateUtils.DAY_IN_MILLIS && sNowTime.weekDay == sThenTime.weekDay) {
+                // Same day
+                int flags = DateUtils.FORMAT_SHOW_TIME;
+                result = DateUtils.formatDateRange(c, millis, millis, flags);
+            } else if (sNowTime.year != sThenTime.year) {
+                // Different years
+                int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NUMERIC_DATE;
+                result = DateUtils.formatDateRange(c, millis, millis, flags);
+                // This is a date (like "10/31/2008" so use the date preposition)
+            } else {
+                // Default
+                int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
+                result = DateUtils.formatDateRange(c, millis, millis, flags);
+            }
+        }
+        return result;
+    }
+
+    private static Time sNowTime;
+    private static Time sThenTime;
+
 }
