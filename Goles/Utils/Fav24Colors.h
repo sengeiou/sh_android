@@ -20,5 +20,6 @@
 +(UIColor *)teamsNotClassified;
 +(UIColor *)tableFooters;
 +(UIColor *)iosSevenGray;
++(UIColor *)iosNavigationBar;
 
 @end

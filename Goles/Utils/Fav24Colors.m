@@ -51,4 +51,8 @@
     return [UIColor colorWithRed:196.0f/255.0f green:196.0f/255.0f blue:196.0f/255.0f alpha:1.0];
 }
 
++(UIColor *)iosNavigationBar{ 
+    return [UIColor colorWithRed:247.0f/255.0f green:247.0f/255.0f blue:247.0f/255.0f alpha:1.0];
+}
+
 @end

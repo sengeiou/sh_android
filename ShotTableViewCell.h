@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ShotTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UITextView *txvText;
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblDate;

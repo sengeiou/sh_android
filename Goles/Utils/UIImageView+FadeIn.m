@@ -43,7 +43,7 @@
                              if (matte) {
                                  circularImage = [image circularMedallionToFit:weakSelf.bounds withInnerBorder:inner];
                              } else {
-                                 circularImage = [image circularImageToFit:CGRectMake(0, 0, 53, 53)]; //weakSelf.bounds
+                                 circularImage = [image circularImageToFit:CGRectMake(0, 0, 48, 48)]; //weakSelf.bounds
                              }
                              if (response) {
                                  [weakSelf fadeInImage:circularImage];

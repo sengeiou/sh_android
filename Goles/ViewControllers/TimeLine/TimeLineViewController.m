@@ -16,9 +16,11 @@
 #import "Utils.h"
 #import "ShotManager.h"
 #import "Conection.h"
+#import "Fav24Colors.h"
 
-@interface TimeLineViewController ()<ConectionProtocol>{
+@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate>{
     int lengthTextField;
+    BOOL move;
 }
 
 @property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
@@ -27,11 +29,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
 @property (weak, nonatomic) IBOutlet UITextField *txtField;
 @property (weak, nonatomic) IBOutlet UIButton *btnShoot;
-@property (weak, nonatomic) IBOutlet UIView *viewNotShoots;
-@property (strong, nonatomic) NSArray *arrayShoots;
-@property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
+@property (weak, nonatomic) IBOutlet UIView *viewNotShots;
+@property (strong, nonatomic) NSArray *arrayShots;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UIView *viewOptions;
+@property (weak, nonatomic) IBOutlet UIView *viewTextField;
+@property (nonatomic, assign) CGFloat lastContentOffset;
+@property (nonatomic, assign) CGRect originalFrame;
 
 @end
 
@@ -41,35 +45,51 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.arrayShoots = [[NSArray alloc]init];
+    lengthTextField = 0;
+    self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
     [[Conection sharedInstance]getServerTimewithDelegate:self];
     
-    self.arrayShoots = [[ShotManager singleton] getShotsForTimeLine];
-    
-    if (self.arrayShoots.count == 0){
-        self.mScrollView.scrollEnabled = YES;
+    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
+
+    if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
-    }else
-        [self hiddenViewNotShoots];
+    else
+        [self hiddenViewNotShots];
     
-    UIImage *image = [[UIImage imageNamed:@"Icon_Magnifier"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.btnSearch setImage:image forState:UIControlStateNormal];
-    self.btnSearch.tintColor = [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1];
+    
+    [self customButtonSearch];
+    
+    self.originalFrame = self.tabBarController.tabBar.frame;
+    
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    //self.timelineTableView.contentSize = self.viewOptions.bounds.size;
+    self.timelineTableView.backgroundColor = [UIColor clearColor];
 }
 
 //------------------------------------------------------------------------------
--(void)hiddenViewNotShoots{
+-(void)customButtonSearch{
+    
+    UIImage *image = [[UIImage imageNamed:@"Icon_Magnifier"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.btnSearch setImage:image forState:UIControlStateNormal];
+    self.btnSearch.tintColor = [Fav24Colors iosSevenBlue];
+}
+
+//------------------------------------------------------------------------------
+-(void)hiddenViewNotShots{
     
     [self addPullToRefresh];
     
     self.timelineTableView.hidden = NO;
-    self.viewNotShoots.hidden = YES;
+    self.viewNotShots.hidden = YES;
     self.timelineTableView.delegate = self;
     self.timelineTableView.dataSource = self;
-    self.mScrollView.scrollEnabled = NO;
 }
 
 //------------------------------------------------------------------------------
@@ -94,7 +114,7 @@
 }
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
-
+    
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
@@ -102,41 +122,44 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
     
-    if (status){
-        if ([[Conection sharedInstance]isConection]) {
-            
-            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-            
-            [self.refreshControl endRefreshing];
-        };
-    }else
-        [self.refreshControl endRefreshing];
+    [self.refreshControl endRefreshing];
 }
 
 #pragma mark - UITableViewDelegate
-
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 60;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    header.backgroundColor = [UIColor clearColor];
+    
+    return header;
+}
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.arrayShoots.count;
+    return self.arrayShots.count;
+
 }
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     //return 90;
-    Shot *shot = self.arrayShoots[indexPath.row];
+    Shot *shot = self.arrayShots[indexPath.row];
 
-    return [Utils heightForShoot:shot.comment];
+    return [Utils heightForShot:shot.comment];
 }
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    Shot *shot = self.arrayShoots[indexPath.row];
+    Shot *shot = self.arrayShots[indexPath.row];
     
-    ShotTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
+    ShotTableViewCell *cell = (ShotTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
     
     cell.txvText.text = shot.comment;
+    
     cell.lblName.text = shot.user.name;
     [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
     cell.lblDate.text = [Utils getDateShot:shot.csys_birth];
@@ -149,11 +172,11 @@
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
+
+        self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
         
-        self.arrayShoots = [[ShotManager singleton] getShotsForTimeLine];
-        
-        if (self.arrayShoots.count > 0) {
-            [self hiddenViewNotShoots];
+        if (self.arrayShots.count > 0) {
+            [self hiddenViewNotShots];
             [self.timelineTableView reloadData];
 
         }
@@ -166,7 +189,7 @@
     
     lengthTextField = self.txtField.text.length - range.length + string.length;
    
-    if (lengthTextField > 1)
+    if (lengthTextField >= 1)
         self.btnShoot.enabled = YES;
      else
         self.btnShoot.enabled = NO;
@@ -174,46 +197,108 @@
     return YES;
 }
 
+#pragma mark - UITableViewDelegate
+
+/*typedef enum ScrollDirection {
+    ScrollDirectionNone,
+    ScrollDirectionRight,
+    ScrollDirectionLeft,
+    ScrollDirectionUp,
+    ScrollDirectionDown,
+    ScrollDirectionCrazy,
+} ScrollDirection;
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender
+{
+    ScrollDirection scrollDirection;
+    if (self.lastContentOffset+20 > sender.contentOffset.y && move){
+       
+        scrollDirection = ScrollDirectionDown;
+        [self showViewOptions];
+        NSLog(@"down");
+        move = NO;
+        
+    } else if (self.lastContentOffset+20 < sender.contentOffset.y && !move){
+ 
+        scrollDirection = ScrollDirectionUp;
+        [self hiddenViewOptions];
+        NSLog(@"up");
+        move = YES;
+    }
+    
+//    if (sender.contentOffset.y == 0 && move) {
+//        [self showViewOptions];
+//        NSLog(@"init");
+//         move = NO;
+//        
+//    }
+    
+    self.lastContentOffset = sender.contentOffset.y;
+    
+    // do whatever you need to with scrollDirection here.
+}*/
+
+
 -(void)hiddenViewOptions{
-    [UIView animateWithDuration:0.3
+    if (!move)
+        [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                        /* self.mSubMenuNavigation.frame = CGRectMake(0, kSUBMENU_INIT_POSITION, 320, kSUBMENU_HEIGHT);
-                         self.bSilenceMode.alpha = 0.0f;
-                         self.bBasicMode.alpha = 0.0f;
-                         self.bIntenseMode.alpha = 0.0f;
-                         self.lLabelSubscriptionMode.alpha = 0.0f;
-                         self.blackBottomImage.alpha = 0.0f;
-                         //                                 [self.whiteLine removeFromSuperview];
-                         self.navigationItem.title = [self getTeamNames];*/
+                         NSLog(@"oculto");
+                         if (self.timelineTableView.frame.origin.y == 117) {
+                              self.timelineTableView.frame = CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width,  self.timelineTableView.frame.size.height+self.viewOptions.frame.size.height);
+                         }
+                        
                      }
                      completion:^(BOOL finished) {
-                        // [[self mSubMenuNavigation] setAlpha:0.0f];
+                         
+                         self.viewOptions.alpha = 0.0f;
+
                      }];
 }
 
 -(void)showViewOptions{
-    [UIView animateWithDuration:0.3
+    
+    if (move)
+        [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                       /*  self.mSubMenuNavigation.frame = CGRectMake(0, kSUBMENU_INIT_POSITION+self.mSubMenuNavigation.frame.size.height, 320, kSUBMENU_HEIGHT);
-                         self.bSilenceMode.alpha = 1.0f;
-                         self.bBasicMode.alpha = 1.0f;
-                         self.bIntenseMode.alpha = 1.0f;
-                         self.lLabelSubscriptionMode.alpha = 1.0f;
-                         self.blackBottomImage.alpha = 0.3f;
-                         //                                 self.whiteLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, 320, 1)];
-                         //                                 [self.whiteLine setBackgroundColor:[UIColor whiteColor]];
-                         //                                 self.whiteLine.alpha = 0.9f;
-                         //                                 [self.navigationController.navigationBar addSubview:self.whiteLine];
-                         self.navigationItem.title = @"Notificaciones";*/
-                     }
-     
+                          NSLog(@"muestro");
+                         if (self.timelineTableView.frame.origin.y == 117 - self.viewOptions.frame.size.height) {
+                          self.timelineTableView.frame = CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y +self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width,  self.timelineTableView.frame.size.height-self.viewOptions.frame.size.height);
+                         }
+                        
+                    }
                      completion:^(BOOL finished) {
+                         
+                          self.viewOptions.alpha = 1.0f;
                      }];
 
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+   
+    /*UITabBar *tb = self.tabBarController.tabBar;
+    NSInteger yOffset = scrollView.contentOffset.y;
+    if (yOffset > 0) {
+        tb.frame = CGRectMake(tb.frame.origin.x, self.originalFrame.origin.y + yOffset, tb.frame.size.width, tb.frame.size.height);
+    }
+    if (yOffset < 1) tb.frame = self.originalFrame;*/
+    NSLog(@"antiguo %f",self.lastContentOffset );
+    NSLog(@"nuevo %f",scrollView.contentOffset.y );
+
+    
+   if (self.lastContentOffset > scrollView.contentOffset.y){
+        NSLog(@"entroooo");
+        self.viewOptions.alpha = 1.0;
+   }else if (scrollView.contentOffset.y > 60) {
+       
+       NSLog(@"ssss");
+       self.viewOptions.alpha =0.0;
+   }
+    
+     self.lastContentOffset = scrollView.contentOffset.y;
 }
 
 @end

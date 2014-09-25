@@ -58,6 +58,6 @@
 
 +(NSString *)getDateShot:(NSNumber *) dateShot;
 
-+ (CGFloat)heightForShoot: (NSString *) text;
++ (CGFloat)heightForShot: (NSString *) text;
 
 @end

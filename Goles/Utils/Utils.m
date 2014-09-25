@@ -497,14 +497,14 @@
 }
 
 //Calculate size for height Cell
-+ (CGFloat)heightForShoot: (NSString *) text{
++ (CGFloat)heightForShot: (NSString *) text{
     
     NSInteger MAX_HEIGHT = 2000;
     UITextView * textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 26, 320, MAX_HEIGHT)];
     textView.text = text;
     textView.font = [UIFont boldSystemFontOfSize:18];
     [textView sizeToFit];
-    return textView.frame.size.height+54;
+    return textView.frame.size.height+44;
 }
 
 
