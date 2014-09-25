@@ -45,7 +45,7 @@
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    [[Conection sharedInstance]getServerTimewithDelegate:self];
     
     self.arrayShoots = [[ShotManager singleton] getShotsForTimeLine];
     
@@ -101,8 +101,6 @@
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
-
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     
     if (status){
         if ([[Conection sharedInstance]isConection]) {

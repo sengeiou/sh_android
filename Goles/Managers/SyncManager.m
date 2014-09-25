@@ -132,7 +132,7 @@
         NSLog(@"/////////////////////////////////////////////////////");
         
         //Array of all entities that needs to be synchronized
-        NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT,K_COREDATA_USER];
+        NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
 
         for (id entity in entitiesToSynchro) {
             if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
@@ -233,9 +233,7 @@
     if (status && [entityClass isSubclassOfClass:[Follow class]]){
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
     }
-    else if (status && [entityClass isSubclassOfClass:[User class]]){
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    }
+
     else if (status && [entityClass isSubclassOfClass:[Shot class]]){
         
 #warning Need to notify to all classes that needs to update the UI
