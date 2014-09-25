@@ -93,8 +93,8 @@ namespace Bagdad.Utils
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                throw e;
             }
-            return false;
         }
 
         public async Task<bool> LogInByUserName(String userName, String password)
@@ -108,8 +108,8 @@ namespace Bagdad.Utils
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                throw e;
             }
-            return false;
         }
 
     }
