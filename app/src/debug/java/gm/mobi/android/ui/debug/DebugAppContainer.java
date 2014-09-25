@@ -59,6 +59,7 @@ import gm.mobi.android.data.ScalpelEnabled;
 import gm.mobi.android.data.ScalpelWireframeEnabled;
 import gm.mobi.android.data.SeenDebugDrawer;
 import gm.mobi.android.data.prefs.BooleanPreference;
+import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.db.manager.GeneralManager;
@@ -93,7 +94,8 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference seenDebugDrawer;
-//      private final RestAdapter restAdapter;
+    private BooleanPreference initialSetupCompleted;
+    //      private final RestAdapter restAdapter;
     private final BagdadMockService mockBagdadService;
     private final Application app;
 
@@ -110,6 +112,7 @@ public class DebugAppContainer implements AppContainer {
                              @ScalpelEnabled BooleanPreference scalpelEnabled,
                              @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
                              @SeenDebugDrawer BooleanPreference seenDebugDrawer,
+                             @InitialSetupCompleted BooleanPreference initialSetupCompleted,
                              BagdadMockService mockBagdadService,
                              Application app) {
         this.client = client;
@@ -122,6 +125,7 @@ public class DebugAppContainer implements AppContainer {
         this.seenDebugDrawer = seenDebugDrawer;
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
+        this.initialSetupCompleted = initialSetupCompleted;
         this.mockBagdadService = mockBagdadService;
         this.app = app;
     }
@@ -496,6 +500,7 @@ public class DebugAppContainer implements AppContainer {
     @OnClick(R.id.debug_device_database_delete)
     public void deleteDatabase() {
         GeneralManager.deleteDatabase(drawerContext);
+        initialSetupCompleted.delete();
         Toast.makeText(drawerContext, "Database deleted. Restart app.", Toast.LENGTH_LONG).show();
     }
 
