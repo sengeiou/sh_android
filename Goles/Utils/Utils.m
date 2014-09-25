@@ -469,8 +469,7 @@
     NSString *timeLeft;
     
     NSDate *today = [NSDate date];
-
-    NSDate *refDate = [NSDate dateWithTimeIntervalSince1970:[dateShot doubleValue]];
+    NSDate *refDate = [NSDate dateWithTimeIntervalSince1970:[dateShot doubleValue]/1000];
     
     NSInteger seconds = [today timeIntervalSinceDate:refDate];
     
