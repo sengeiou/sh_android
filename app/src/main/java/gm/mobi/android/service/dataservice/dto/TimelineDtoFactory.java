@@ -1,8 +1,5 @@
 package gm.mobi.android.service.dataservice.dto;
 
-import android.content.Context;
-import android.provider.SyncStateContract;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +52,9 @@ public class TimelineDtoFactory extends DtoFactory{
 
     public static GenericDto getNewerShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
-        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date)));
+        FilterDto filter = new FilterDto(Constants.NEXUS_AND,
+                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_THAN,
+                        GMContract.ShotTable.CSYS_MODIFIED,shot.getCsys_modified())}, getShotsFilter(followingUserIds,shot.getCsys_modified()));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];
@@ -66,7 +65,8 @@ public class TimelineDtoFactory extends DtoFactory{
 
     public static GenericDto getOlderShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
-        FilterDto filter = new FilterDto(Constants.NEXUS_AND, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_THAN, GMContract.ShotTable.ID_SHOT,shot.getIdShot())}, getShotsFilter(followingUserIds,new Date(date)));
+        FilterDto filter = new FilterDto(Constants.NEXUS_AND,
+                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_THAN, GMContract.ShotTable.CSYS_MODIFIED,shot.getCsys_modified())}, getShotsFilter(followingUserIds,new Date(date)));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];
@@ -74,8 +74,5 @@ public class TimelineDtoFactory extends DtoFactory{
         od.setData(map);
         return DtoFactory.getGenericDtoFromOperation(ALIAS_GET_OLDER_SHOTS, od);
     }
-
-
-
 
 }
