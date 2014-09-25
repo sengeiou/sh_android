@@ -1,7 +1,5 @@
 package gm.mobi.android.service.dataservice.dto;
 
-import android.content.Context;
-
 import java.util.Date;
 
 import gm.mobi.android.constant.Constants;
@@ -12,9 +10,14 @@ import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.service.dataservice.generic.RequestorDto;
 
-public class DtoFactory {
+public class UtilityDtoFactory {
 
-    public static GenericDto getGenericDtoFromOperation(String alias, OperationDto[] ops) {
+
+    public GenericDto getGenericDtoFromOperation(String alias, OperationDto op) {
+        return getGenericDtoFromOperations(alias, new OperationDto[]{op});
+    }
+
+    public GenericDto getGenericDtoFromOperations(String alias, OperationDto[] ops) {
         GenericDto generic = new GenericDto();
         generic.setOps(ops);
         generic.setStatusCode(null);
@@ -27,11 +30,7 @@ public class DtoFactory {
         return generic;
     }
 
-    public static GenericDto getGenericDtoFromOperation(String alias, OperationDto op) {
-        return getGenericDtoFromOperation(alias, new OperationDto[]{op});
-    }
-
-    public static FilterDto[] getTimeFilterDto(Date lastModifiedDate) {
+    public FilterDto[] getTimeFilterDto(Date lastModifiedDate) {
         return new FilterDto[]{
                 new FilterDto(Constants.NEXUS_OR,
                         new FilterItemDto[]{

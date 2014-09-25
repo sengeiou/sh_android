@@ -37,17 +37,21 @@ public class BagdadDataService implements BagdadService {
     private OkHttpClient client;
     private Endpoint endpoint;
     private ObjectMapper mapper;
+    private UserDtoFactory userDtoFactory;
+    private TimelineDtoFactory timelineDtoFactory;
 
     @Inject
-    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper) {
+    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory, TimelineDtoFactory timelineDtoFactory) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
+        this.userDtoFactory = userDtoFactory;
+        this.timelineDtoFactory = timelineDtoFactory;
     }
 
     @Override
     public User login(String id, String password) throws IOException {
-        GenericDto loginDto = UserDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
+        GenericDto loginDto = userDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
         GenericDto responseDto = postRequest(loginDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -58,9 +62,10 @@ public class BagdadDataService implements BagdadService {
         return UserMapper.fromDto(data[0]);
     }
 
+    @Override
     public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException{
         List<Follow> follows = new ArrayList<>();
-        GenericDto requestDto = UserDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate);
+        GenericDto requestDto = userDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -81,7 +86,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException {
         List<User> users = new ArrayList<>();
-        GenericDto genericDto = UserDtoFactory.getUsersOperationDto(userIds,1000L,0L);
+        GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds,1000L,0L);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -101,7 +106,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getNewShots(List<Integer> followingUserIds, Shot lastNewShot, Long lastModifiedDate) throws IOException {
         List<Shot> newerShots = new ArrayList<>();
-        GenericDto genericDto = TimelineDtoFactory.getNewerShotsOperationDto(followingUserIds, lastModifiedDate, lastNewShot);
+        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, lastModifiedDate, lastNewShot);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -121,7 +126,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getOlderShots(List<Integer> followingUserIds, Shot lastOlderShot, Long lastModifiedDate) throws IOException {
         List<Shot> newerShots = new ArrayList<>();
-        GenericDto genericDto = TimelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, lastOlderShot);
+        GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, lastOlderShot);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -141,7 +146,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException {
         List<Shot> shots = new ArrayList<>();
-        GenericDto genericDto = TimelineDtoFactory.getShotsOperationDto(followingUserIds, lastModifiedDate);
+        GenericDto genericDto = timelineDtoFactory.getShotsOperationDto(followingUserIds, lastModifiedDate);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){

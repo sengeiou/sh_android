@@ -29,11 +29,11 @@ public class DebugApiModule {
         return new BagdadMockService();
     }
 
-    @Provides @Singleton BagdadService provideBagdadService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, @IsMockMode boolean isMockMode) {
+    @Provides @Singleton BagdadService provideBagdadService(BagdadDataService bagdadDataService, @IsMockMode boolean isMockMode) {
         if (isMockMode) {
             return new BagdadMockService();
         } else {
-            return new BagdadDataService(client, endpoint, mapper);
+            return bagdadDataService;
         }
     }
 }
