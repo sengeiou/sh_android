@@ -15,7 +15,7 @@ public class UserMapper extends GenericMapper {
     public static User fromCursor(Cursor c) {
         User user = new User();
         user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
-        user.setFavouriteTeamId(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID));
+        user.setFavouriteTeamId(c.getInt(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID)));
         user.setSessionToken(c.getString(c.getColumnIndex(UserTable.SESSION_TOKEN)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
@@ -24,6 +24,15 @@ public class UserMapper extends GenericMapper {
 
         setSynchronizedFromCursor(c, user);
 
+        return user;
+    }
+
+    public static User basicFromCursor(Cursor c) {
+        User user = new User();
+        user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
+        user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
+        user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
+        user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
         return user;
     }
 
@@ -50,16 +59,16 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
-         setSynchronizedToDto(dto, user);
+        setSynchronizedToDto(dto, user);
 
         return dto;
     }
 
     public static User fromDto(Map<String, Object> dto) {
         User user = new User();
-        user.setIdUser(dto.containsKey(UserTable.ID)? (Integer) dto.get(UserTable.ID) : null);
-        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID)? (Integer)dto.get(UserTable.FAVOURITE_TEAM_ID) : null);
-        user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) :  null);
+        user.setIdUser(dto.containsKey(UserTable.ID) ? (Integer) dto.get(UserTable.ID) : null);
+        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID) ? (Integer) dto.get(UserTable.FAVOURITE_TEAM_ID) : null);
+        user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName((String) dto.get(UserTable.USER_NAME));
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName((String) dto.get(UserTable.NAME));
