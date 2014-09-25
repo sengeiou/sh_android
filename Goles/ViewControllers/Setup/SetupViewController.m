@@ -43,8 +43,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.btnEnter.enabled = NO;
-    
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -73,20 +71,43 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+   
+    [self modifyNavigationBar];
+    
+    if (self.view.frame.size.height == 480)
+        self.mScrollView.contentInset = UIEdgeInsetsMake(-40.0, 0, 0, 0.0);
+}
+
+-(void)modifyNavigationBar{
+    
     self.navigationItem.backBarButtonItem.title = @"Back";
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-                             forBarMetrics:UIBarMetricsDefault];
+                                                  forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.navigationController.navigationBar.translucent = YES;
+    [self disableButtonItem];
+}
+
+-(void)enableButtonItem{
+    self.btnEnter.enabled = YES;
+    
+    [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
+                                           [Fav24Colors iosSevenBlue], NSForegroundColorAttributeName,
+                                           nil]
+                                 forState:UIControlStateNormal];
+
+}
+-(void)disableButtonItem{
+    self.btnEnter.enabled = NO;
+
     [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                            [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
                                            [Fav24Colors iosSevenGray], NSForegroundColorAttributeName,
                                            nil]
                                  forState:UIControlStateNormal];
-
 }
-
 -(void)viewDidDisappear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
 }
@@ -120,7 +141,6 @@
  {
      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellSetup"  forIndexPath:indexPath];
      
-     
      switch (indexPath.row) {
          case 0:
          {
@@ -147,21 +167,14 @@
 
 - (IBAction)passEnter:(id)sender {
 
-    if (lengthName > 2 && lengthPwd >  5)
-        [[Conection sharedInstance]getServerTimewithDelegate:self];
-    else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
-
+    [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
-
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
     
-    if (status){
+    if (status && (lengthName > 2 && lengthPwd >  5)){
         NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
         
         if ([[Conection sharedInstance]isConection]) {
@@ -175,6 +188,13 @@
             [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:key withDelegate:self];
             
         };
+    }else  if (status && (lengthName < 3 || lengthPwd <  6)){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+            [alert show];
+
+        });
     }
 }
 
@@ -188,41 +208,48 @@
 
         [appDelegate setTabBarItems];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];    }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
 }
 
 #pragma mark - UITextField response methods
+
+//------------------------------------------------------------------------------
+- (BOOL)textFieldShouldClear:(UITextField *)textField{
+    
+    if ([textField isEqual:txtFieldPwd])
+        lengthPwd = 0;
+    else
+        lengthName = 0;
+    
+    if (lengthName >= 1 && lengthPwd >=  1)
+        [self enableButtonItem];
+    else
+        [self disableButtonItem];
+
+    
+    return YES;
+}
+
 //------------------------------------------------------------------------------
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
    
-
+    
     if ([textField isEqual:txtFieldPwd]) {
         lengthPwd = txtFieldPwd.text.length - range.length + string.length;
     }else{
         lengthName = txtFieldName.text.length - range.length + string.length;
     }
     
+    if (lengthName >= 1 && lengthPwd >=  1)
+        
+        [self enableButtonItem];
+    else
+        [self disableButtonItem];
     
-    if (lengthName >= 1 && lengthPwd >=  1) {
-        
-        self.btnEnter.enabled = YES;
-        
-        [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
-                                               [Fav24Colors iosSevenBlue], NSForegroundColorAttributeName,
-                                               nil]
-                                     forState:UIControlStateNormal];
-        
-    } else {
-        self.btnEnter.enabled = NO;
-        
-        [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                               [UIFont boldSystemFontOfSize:17.0], NSFontAttributeName,
-                                               [Fav24Colors iosSevenGray], NSForegroundColorAttributeName,
-                                               nil]
-                                     forState:UIControlStateNormal];
-    }
+
+    
     return YES;
 }
 
@@ -232,17 +259,16 @@
     if (textField == txtFieldName)
         [txtFieldPwd becomeFirstResponder];
     
-    else if (textField == txtFieldPwd && ![txtFieldName.text isEqualToString:@""]){
+    else if (textField == txtFieldPwd){
 
       if (lengthName > 2 && lengthPwd >  5)
         [self passEnter:nil];
       else{
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"Id or Password are not valid." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
           [alert show];
       }
     }
     
-
     return true;
 }
 
@@ -255,13 +281,6 @@
  // Pass the selected object to the new view controller.
  }
  */
-#pragma mark - Rotation response methods
-//------------------------------------------------------------------------------
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    
-    [self.mtableView reloadData];
-    [self.mtableView setNeedsDisplay];
 
-}
 
 @end

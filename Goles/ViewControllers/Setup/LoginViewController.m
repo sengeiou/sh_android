@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *btnTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
 @property (weak, nonatomic) IBOutlet UIButton *btnRegister;
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 
 - (IBAction)signInFacebook:(id)sender;
 - (IBAction)registerEmail:(id)sender;
@@ -40,8 +41,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     self.navigationController.navigationBarHidden = YES;
-   // [UIApplication sharedApplication].statusBarHidden = YES;
 }
+
 -(BOOL)prefersStatusBarHidden {
     return YES;
 }

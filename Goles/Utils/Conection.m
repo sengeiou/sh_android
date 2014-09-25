@@ -76,13 +76,13 @@
         
         if (error.code < 400) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"The network connection was lost." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"The network connection was lost" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You can not access Shootr" message:@"We are working to fix it as soon as possible." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We are working to fix it as soon as possible" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             });
         }
