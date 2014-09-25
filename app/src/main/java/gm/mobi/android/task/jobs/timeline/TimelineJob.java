@@ -55,7 +55,7 @@ public class TimelineJob extends CancellableJob {
     public Shot referenceShot;
     private User currentUser;
 
-    public TimelineJob(Context context, User currentUser, int retrieveType, Shot referenceShot){
+    public TimelineJob(Context context, User currentUser, int retrieveType, Shot referenceShot) {
         super(new Params(PRIORITY));
         this.referenceShot = referenceShot;
         this.shotRetrieveType = retrieveType;
@@ -119,7 +119,8 @@ public class TimelineJob extends CancellableJob {
 
         if (newShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), newShots);
-            bus.post(new NewShotsReceivedEvent(NewShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(newShots));
+            List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), newShots);
+            bus.post(new NewShotsReceivedEvent(NewShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(shotsWithUsers));
         } else {
             sendServerError(RETRIEVE_NEWER, null);
         }
@@ -129,7 +130,8 @@ public class TimelineJob extends CancellableJob {
         List<Shot> oldShots = service.getOlderShots(getFollowingIds(), referenceShot, 0L);
         if (oldShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
-            bus.post(new OldShotsReceivedEvent(OldShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(oldShots));
+            List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), oldShots);
+            bus.post(new OldShotsReceivedEvent(OldShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(shotsWithUsers));
         } else {
             sendServerError(RETRIEVE_OLDER, null);
         }
@@ -161,7 +163,7 @@ public class TimelineJob extends CancellableJob {
 
 
     private void sendCredentialError(int shotRetrieveType) {
-        switch (shotRetrieveType){
+        switch (shotRetrieveType) {
             case RETRIEVE_INITIAL:
                 ShotsResultEvent fResultEvent = new ShotsResultEvent(ShotsResultEvent.STATUS_INVALID);
                 bus.post(fResultEvent.setInvalid());
