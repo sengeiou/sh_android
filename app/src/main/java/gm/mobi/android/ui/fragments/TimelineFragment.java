@@ -50,15 +50,23 @@ import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
 
-    @Inject Picasso picasso;
-    @Inject Bus bus;
-    @Inject SQLiteOpenHelper dbHelper;
-    @Inject JobManager jobManager;
+    @Inject
+    Picasso picasso;
+    @Inject
+    Bus bus;
+    @Inject
+    SQLiteOpenHelper dbHelper;
+    @Inject
+    JobManager jobManager;
 
-    @InjectView(R.id.timeline_list) ListView listView;
-    @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_watching_container) View watchingContainer;
-    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @InjectView(R.id.timeline_list)
+    ListView listView;
+    @InjectView(R.id.timeline_new)
+    View newShotView;
+    @InjectView(R.id.timeline_watching_container)
+    View watchingContainer;
+    @InjectView(R.id.timeline_swipe_refresh)
+    SwipeRefreshLayoutOverlay swipeRefreshLayout;
 
     private View headerView;
     private View footerView;
@@ -82,7 +90,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         setHasOptionsMenu(true);
 
         avatarClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
                 openProfile(position);
             }
@@ -192,15 +201,15 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
         //TODO Shot detail
-        Shot shot = adapter.getItem(position);
-        Toast.makeText(getActivity(), "Shot " + position, Toast.LENGTH_SHORT).show();
+        Shot shot = adapter.getItem(position - 1);
+        Toast.makeText(getActivity(), "Shot " + shot.getUser().getName(), Toast.LENGTH_SHORT).show();
         Timber.d("Clicked shot %d", position);
     }
 
     public void openProfile(int position) {
         Shot shot = adapter.getItem(position);
         //TODO profile
-        Toast.makeText(getActivity(), "Open profile "+position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Open profile " + position, Toast.LENGTH_SHORT).show();
         Timber.d("Open profile in position %d", position);
     }
 
@@ -221,7 +230,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             isLoadingMore = true;
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-            Shot oldestShot = adapter.getItem(adapter.getCount()-1);
+            Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
             jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER, oldestShot));
         }
     }
