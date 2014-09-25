@@ -113,7 +113,7 @@ namespace Bagdad.Utils
                                             {
                                                 Debug.WriteLine("DESCARGANDO: " + Table.Entity);
                                                 double date = await gm.getMaxModificationDateOf(Table.Entity);
-                                                string sParams = getParams(Table.Entity, date);
+                                                string sParams = await getParams(Table.Entity, date);
                                                 total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
                                                 nChanges += total;      //Solo tiene en cuenta la sincro estandard
                                                 Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
@@ -191,14 +191,14 @@ namespace Bagdad.Utils
             }
         }
 
-        public string getParams(string entity, double date)
+        public async Task<string> getParams(string entity, double date)
         {
             string sFilterModifyDelete = "{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
             switch (entity)
             {
                 case Constants.SERCOM_TB_USER:
                     User user = new User();
-                    sFilterModifyDelete = "\"filter\":{" + user.constructFilterFollow(sFilterModifyDelete) + "}";
+                    sFilterModifyDelete = "\"filter\":{" + await user.constructFilterFollow(sFilterModifyDelete) + "}";
                     break;
                 case Constants.SERCOM_TB_FOLLOW:
                     Follow follow = new Follow();
@@ -206,7 +206,7 @@ namespace Bagdad.Utils
                     break;
                 case Constants.SERCOM_TB_SHOT:
                     Shot shot = new Shot();
-                    sFilterModifyDelete = "\"filter\":{" + shot.constructFilterShot(sFilterModifyDelete) + "}";
+                    sFilterModifyDelete = "\"filter\":{" + await shot.constructFilterShot(sFilterModifyDelete) + "}";
                     break;
                 default:
                     sFilterModifyDelete = "\"filter\":{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";

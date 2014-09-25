@@ -226,9 +226,29 @@ namespace Bagdad.Models
         /// </summary>
         /// <param name="conditionDate"></param>
         /// <returns></returns>
-        public string constructFilterFollow(string conditionDate)
+        public async Task<string> constructFilterFollow(string conditionDate)
         {
-            return "\"filterItems\":[{\"comparator\":\"ne\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate  + "],\"nexus\":\"and\"";
+            StringBuilder sbFilterIdUser = new StringBuilder();
+            try
+            {
+                Follow follow = new Follow();
+                 var followList = await follow.getidUserFollowing();
+                 bool isFirst = true;
+                 foreach (int idUser in followList)
+                 {
+                     if (!isFirst)
+                     {
+                         sbFilterIdUser.Append(",");
+                     }
+                     sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
+                     isFirst = false;
+                 }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
+            }
+            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ " + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
     }
 }

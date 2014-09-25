@@ -87,9 +87,24 @@ namespace Bagdad.Models
 
         
 
-        public string constructFilterShot(string conditionDate)
+        public async Task<string> constructFilterShot(string conditionDate)
         {
-            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
+            StringBuilder sbFilterIdUser = new StringBuilder();
+            try
+            {
+                Follow follow = new Follow();
+                var followList = await follow.getidUserFollowing();
+                foreach (int idUser in followList)
+                {
+                    sbFilterIdUser.Append(",");
+                    sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
+            }
+            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
 
     }

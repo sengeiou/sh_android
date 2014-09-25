@@ -82,9 +82,39 @@ namespace Bagdad.Models
             return done;
         }
 
+        public async Task<List<int>> getidUserFollowing()
+        {
+            List<int> listOfidUserFollowing = new List<int>();
+            try
+            {
+
+                Database database = await App.GetDatabaseAsync();
+
+                string selectQuery = SQLQuerys.SelectIdUserFollowing;
+
+                Statement selectStatement = await database.PrepareStatementAsync(selectQuery);
+
+                selectStatement.BindIntParameterWithName("@idUser", App.ID_PLAYER);
+
+                while (await selectStatement.StepAsync())
+                {
+                    listOfidUserFollowing.Add(selectStatement.GetIntAt(0));
+                }
+
+                App.DBLoaded.Set();
+
+                return listOfidUserFollowing;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - getidUserFollowing: " + e.Message, e);
+            }
+        }
+
         public string constructFilterFollow(string conditionDate)
         {
             return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
         }
+
     }
 }
