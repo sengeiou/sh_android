@@ -268,6 +268,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             listView.setSelection(newPosition);
             listView.smoothScrollToPosition(0);
         }
+        adapter.notifyDataSetChanged();
     }
 
     @Subscribe
