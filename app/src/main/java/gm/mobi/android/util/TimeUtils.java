@@ -21,19 +21,34 @@ public class TimeUtils {
         return TimeZone.getDefault();
     }
 
-    @Deprecated
-    /**
-     * @deprecated Should't use this method if don't have context reference
-     */
-    public static long getCurrentTime(Context context) {
-        long currentTime = System.currentTimeMillis();
-        if (BuildConfig.DEBUG) {
-            //For testing another times
-            currentTime = PrefUtils.getMockPreferences(context).getLong(PrefUtils.PREF_MOCK_CURRENT_TIME, currentTime);
-        }
-        return currentTime;
-    }
 
+    public static String getElapsedTime(Context context, long publishTime) {
+        long difference = System.currentTimeMillis() - publishTime;
+
+        long days =  TimeUnit.MILLISECONDS.toDays(difference);
+        if(days>0){
+            String time = context.getResources().getString(R.string.days);
+            return String.valueOf(days+time);
+        }
+
+       long hours = TimeUnit.MILLISECONDS.toHours(difference);
+       if (hours > 0) {
+            String time = context.getResources().getString(R.string.hours);
+            return String.valueOf(hours+time);
+       }
+       long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
+        if(minutes>0){
+            String time = context.getResources().getString(R.string.minutes);
+            return String.valueOf(minutes+time);
+        }
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
+        if(seconds>0){
+            String time = context.getResources().getString(R.string.seconds);
+            return String.valueOf(seconds+time);
+        }
+        return "";
+    }
     /**
      * @return String short format for a date
      */
@@ -54,25 +69,23 @@ public class TimeUtils {
     }
 
     /*Format date to : case Today : It shows TODAY ; case Tomorrow: It shows TOMORROW; case Yesterday : It shows YESTERDAY othercase: shows SHORT FORMAT DATE*/
-    public static String formatHumanFriendlyShortDate(final Context context, long timestamp) {
-        long mLocalTimeStamp, mLocalTime;
-        long mNow = getCurrentTime(context);
-        TimeZone mTimeZone = getDisplayTimeZone(context);
-        mLocalTimeStamp = timestamp + mTimeZone.getOffset(timestamp);
-        mLocalTime = mNow + mTimeZone.getOffset(mNow);
-        long dayOrd = mLocalTimeStamp / 86400000L;
-        long nowOrd = mLocalTime / 86400000L;
-        if (dayOrd == nowOrd) {
-            return context.getString(R.string.day_title_today);
-        } else if (dayOrd == nowOrd - 1) {
-            return context.getString(R.string.day_title_yesterday);
-        } else if (dayOrd == nowOrd + 1) {
-            return context.getString(R.string.day_title_tomorrow);
-        } else {
-            return formatShortDate(context, new Date(timestamp));
-        }
-    }
-
+    public static String formatHumanFriendlyShortDate(final Context context, long timestamp) {return null;}
+//        long mLocalTimeStamp, mLocalTime;
+////        long mNow = getCurrentTime(context);
+//        TimeZone mTimeZone = getDisplayTimeZone(context);
+//        mLocalTimeStamp = timestamp + mTimeZone.getOffset(timestamp);
+//        mLocalTime = mNow + mTimeZone.getOffset(mNow);
+//        long dayOrd = mLocalTimeStamp / 86400000L;
+//        long nowOrd = mLocalTime / 86400000L;
+//        if (dayOrd == nowOrd) {
+//            return context.getString(R.string.day_title_today);
+//        } else if (dayOrd == nowOrd - 1) {
+//            return context.getString(R.string.day_title_yesterday);
+//        } else if (dayOrd == nowOrd + 1) {
+//            return context.getString(R.string.day_title_tomorrow);
+//        } else {
+//            return formatShortDate(context, new Date(timestamp));
+//        }
 
     public static long getMilisecondsByDaysNumber(Integer daysNumber){
         return TimeUnit.MILLISECONDS.convert(daysNumber, TimeUnit.DAYS);
