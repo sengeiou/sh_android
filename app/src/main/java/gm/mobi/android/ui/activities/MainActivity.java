@@ -13,6 +13,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import gm.mobi.android.R;
+import gm.mobi.android.data.prefs.BooleanPreference;
+import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
@@ -21,6 +23,7 @@ import gm.mobi.android.ui.fragments.TimelineFragment;
 public class MainActivity extends BaseSignedInActivity {
 
     @Inject Bus bus;
+    @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     //TODO recibir parámetros para indicar si viene de registro, login o nueva
     public static Intent getIntent(Context context) {
@@ -49,7 +52,7 @@ public class MainActivity extends BaseSignedInActivity {
 
 
     private boolean needsSetup() {
-        return true;
+        return !initialSetupCompleted.get();
     }
 
     private void initialSetup() {
@@ -81,6 +84,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @Subscribe
     public void initialSetupCompleted(InitialSetupFragment.InitialSetupCompletedEvent event) {
+        initialSetupCompleted.set(true);
         normalSetup();
     }
 

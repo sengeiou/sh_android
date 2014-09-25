@@ -75,6 +75,11 @@ public class GetFollowingsJob extends CancellableJob{
                 followingIds.add(following.getFollowedUser());
             }
 
+            if (followings.size() == 0) {
+                sendSucces(null);
+                return;
+            }
+
             if (isCancelled()) return;
             if(!checkConnection()) return;
 

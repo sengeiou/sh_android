@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.BuildConfig;
+import gm.mobi.android.data.prefs.PreferenceModule;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
@@ -42,7 +43,10 @@ import static android.content.Context.MODE_PRIVATE;
                 TimelineFragment.class,
                 InitialSetupFragment.class
         },
-        includes = ApiModule.class,
+        includes = {
+                ApiModule.class,
+                PreferenceModule.class
+        },
         complete = false,
         library = true
 )
