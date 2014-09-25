@@ -58,4 +58,11 @@
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
 
+    <!--TimeUtils-->
+    <string name="plural_days">days</string>
+    <string name="singular_day">day</string>
+    <string name="minutes">m</string>
+    <string name="seconds">s</string>
+    <string name="hours">h</string>
+    <string name="days">d</string>
 </resources>
