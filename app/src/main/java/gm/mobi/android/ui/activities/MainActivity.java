@@ -1,5 +1,7 @@
 package gm.mobi.android.ui.activities;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,15 +15,22 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import gm.mobi.android.R;
+import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
+import gm.mobi.android.sync.ShootrAccountGenerator;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
 
+import static gm.mobi.android.constant.SyncConstants.AUTHORITY;
+
 public class MainActivity extends BaseSignedInActivity {
 
+
+    ContentResolver mContentResolver;
+    private Account mAccount;
     @Inject Bus bus;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
@@ -33,6 +42,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (!restoreSessionOrLogin()) {
             // Stop execution if there is no user logged in
             return;
@@ -41,12 +51,16 @@ public class MainActivity extends BaseSignedInActivity {
         setContainerContent(R.layout.main_activity);
         ButterKnife.inject(this);
 
+        mContentResolver = getContentResolver();
+        mAccount = ShootrAccountGenerator.createSyncAccount(getApplicationContext());
+
         //TODO setup navigation drawer
         if (needsSetup()) {
             initialSetup();
         } else {
             normalSetup();
         }
+
 
     }
 
@@ -86,7 +100,38 @@ public class MainActivity extends BaseSignedInActivity {
     public void initialSetupCompleted(InitialSetupFragment.InitialSetupCompletedEvent event) {
         initialSetupCompleted.set(true);
         normalSetup();
+
     }
+
+    private void setPeriodicSync(){
+        //Retrieve Followings
+        //Retrieve Followins's users
+        //Retrieve Shots
+
+
+        // Is it possible to sync?
+        ContentResolver.setIsSyncable(mAccount, AUTHORITY, 0);
+        // Should sync be done automatically by Android when the provider
+        // sends a notifyChange() with syncToNetwork set to true?
+        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+        // Set some sync parameters
+        Bundle params = new Bundle();
+        params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, false);
+        params.putBoolean(ContentResolver.SYNC_EXTRAS_DO_NOT_RETRY, false);
+        params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, false);
+
+        params.putInt(SyncConstants.CALL_TYPE,SyncConstants.GET_SHOTS_CALL_TYPE);
+        // How often should automatic sync be done? (say 15 minutes)
+        ContentResolver.addPeriodicSync(mAccount, AUTHORITY, params,SyncConstants.SYNC_INTERVAL_FOR_SHOTS);
+        // Request a sync right now
+        ContentResolver.requestSync(mAccount, AUTHORITY, params);
+
+        Bundle bundleShots = new Bundle();
+        bundleShots.putInt(SyncConstants.CALL_TYPE,SyncConstants.GET_SHOTS_CALL_TYPE);
+//        ContentResolver.requestSync(mAccount,SyncConstants.AUTHORITY,bundleShots);
+        ContentResolver.addPeriodicSync(mAccount, AUTHORITY,bundleShots,SyncConstants.SYNC_INTERVAL_FOR_SHOTS);
+    }
+
 
 
     @Override
@@ -99,5 +144,7 @@ public class MainActivity extends BaseSignedInActivity {
     protected void onResume() {
         super.onResume();
         bus.register(this);
+        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+        setPeriodicSync();
     }
 }
