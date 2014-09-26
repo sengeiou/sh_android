@@ -18,7 +18,6 @@
 #import "Conection.h"
 #import "Fav24Colors.h"
 
-#define SYZE_KEYBOARD   167
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate>{
     int lengthTextField;
@@ -40,6 +39,9 @@
 @property (nonatomic, assign) CGRect originalFrame;
 @property (weak, nonatomic) IBOutlet UIImageView *line1;
 @property (weak, nonatomic) IBOutlet UIImageView *line2;
+@property (strong, nonatomic) UIView *backgroundView;
+@property (assign, nonatomic) int sizeKeyboard;
+@property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
 
 @end
 
@@ -81,6 +83,9 @@
     
     self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
     self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myNotificationMethod:) name:UIKeyboardDidShowNotification object:nil];
+
 }
 
 - (void)viewDidLayoutSubviews
@@ -91,6 +96,12 @@
 
 -(void) search{
     
+}
+
+-(void) loadTextField{
+    
+    self.txtViewWrite.backgroundColor = [UIColor whiteColor];
+    self.txtViewWrite.placeholder = @"what's Up?";
 }
 
 //------------------------------------------------------------------------------
@@ -106,7 +117,6 @@
 
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
-   // self.navigationController.navigationBarHidden = YES;
     self.title = @"Timeline";
 }
 
@@ -123,8 +133,6 @@
         self.refreshControl = [[UIRefreshControl alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y+100, 40, 40)];
         [self.refreshControl addTarget:self action:@selector(onPullToRefresh:) forControlEvents:UIControlEventValueChanged];
         [self.timelineTableView addSubview:self.refreshControl];
-
-        
     }  
 }
 //------------------------------------------------------------------------------
@@ -153,6 +161,7 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     if (isVisible)
         self.viewOptions.alpha = 1.0;
     return self.arrayShots.count;
@@ -172,38 +181,14 @@
     
 
     static NSString *CellIdentifier = @"shootCell";
-    ShotTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-
+    ShotTableViewCell *cell = (ShotTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+   
     Shot *shot = self.arrayShots[indexPath.row];
+
     [cell configureBasicCellWithShot:shot];
     
     return cell;
  }
-- (BOOL)canBecomeFirstResponder {
-    return NO;
-}
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
-    /*UIMenuController *menuController = [UIMenuController sharedMenuController];
-    if (menuController) {
-        [UIMenuController sharedMenuController].menuVisible = NO;
-    }
-    return NO;*/
-    
-    /*switch (action) {
-     case @selector(paste:):
-     case @selector(copy:):
-     case @selector(cut:):
-     case @selector(cut:):
-     case @selector(select:):
-     case @selector(selectAll:):
-     return NO;
-     }
-     return [super canPerformAction:action withSender:sender];*/
-    [UIMenuController sharedMenuController].menuVisible = NO;  //do not display the menu
-    [self resignFirstResponder];                      //do not allow the user to selected anything
-    return NO;
-}
 
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
@@ -235,19 +220,6 @@
 }
 
 
-#pragma mark - UITextField response methods
-//------------------------------------------------------------------------------
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    lengthTextField = self.txtField.text.length - range.length + string.length;
-   
-    if (lengthTextField >= 1)
-        self.btnShoot.enabled = YES;
-     else
-        self.btnShoot.enabled = NO;
-    
-    return YES;
-}
 
 #pragma mark - UIScrollViewDelegate
 //------------------------------------------------------------------------------
@@ -263,7 +235,7 @@
     
     
     if (self.lastContentOffset > scrollView.contentOffset.y){
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             
             self.viewOptions.alpha = 1.0;
             self.viewTextField.alpha = 1.0;
@@ -281,13 +253,30 @@
      self.lastContentOffset = scrollView.contentOffset.y;
 }
 
+- (void)myNotificationMethod:(NSNotification*)notification
+{
+    NSDictionary* keyboardInfo = [notification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -40;//- self.viewTextField.frame.size.height;
+}
+
 -(void)keyboardShow{
     
-    [UIView animateWithDuration:0.2 animations:^{
+    if (self.backgroundView == nil) {
+        self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
+        self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+    }
+   
+    [self.timelineTableView addSubview:self.backgroundView];
+    self.timelineTableView.scrollEnabled = NO;
+    
+    [UIView animateWithDuration:0.25 animations:^{
         self.viewOptions.alpha = 0.0;
     }];
 
-    [self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
+    //[self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
     
     //[self.timelineTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
@@ -295,7 +284,7 @@
     isVisible = YES;
     
     CGRect rectFild = self.viewTextField.frame;
-    rectFild.origin.y -= SYZE_KEYBOARD;
+    rectFild.origin.y -= 167;
     
     [UIView animateWithDuration:0.25f
                      animations:^{
@@ -305,21 +294,22 @@
 }
 
 -(void)keyboardHide{
+    
+    [self.backgroundView removeFromSuperview];
+    
     [UIView animateWithDuration:0.2 animations:^{
         self.viewOptions.alpha = 1.0;
-        
-       
-
     }];
     
     [self.timelineTableView setScrollsToTop:YES];
-    
+    self.timelineTableView.scrollEnabled = YES;
+
     // [self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y + self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
     
     isVisible = NO;
     
     CGRect rectFild = self.viewTextField.frame;
-    rectFild.origin.y += SYZE_KEYBOARD;
+    rectFild.origin.y += 167;
     
     [UIView animateWithDuration:0.25f
                      animations:^{
@@ -351,5 +341,23 @@
     [textField resignFirstResponder];
     return YES;
 }
+
+
+#pragma mark - UITextField response methods
+//------------------------------------------------------------------------------
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    lengthTextField = self.txtField.text.length - range.length + string.length;
+    
+    if (lengthTextField >= 1)
+        self.btnShoot.enabled = YES;
+    else
+        self.btnShoot.enabled = NO;
+    
+    [textField sizeToFit];
+    
+    return YES;
+}
+
 
 @end
