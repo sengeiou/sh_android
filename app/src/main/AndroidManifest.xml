@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- Sync adapter -->
+    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
@@ -80,15 +81,15 @@
         </service>
 
         <provider
-            android:name=".sync.StubProvider"
-            android:authorities="${applicationId}.sync.provider"
+            android:authorities="gm.mobi.android.db.provider"
+            android:name="gm.mobi.android.db.provider.ShootrContentProvider"
             android:exported="false"
             android:syncable="true"/>
 
         <service
             android:name=".sync.SyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
