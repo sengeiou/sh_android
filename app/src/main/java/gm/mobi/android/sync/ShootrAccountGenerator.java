@@ -7,7 +7,7 @@ import android.content.Context;
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.SyncConstants;
 
-public class GMAccountGenerator {
+public class ShootrAccountGenerator {
 
     /**
      * Create a new dummy account for the sync adapter
