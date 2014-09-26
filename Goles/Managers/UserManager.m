@@ -53,19 +53,20 @@
 //------------------------------------------------------------------------------
 - (User *)getActiveUser {
     
-    return self.mUser;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sessionToken != nil"];
+    return [[[CoreDataManager singleton] getAllEntities:[User class] withPredicate:predicate] firstObject];
+
 }
 
 
 //------------------------------------------------------------------------------
--(NSNumber *)getUserId{
-    return [[self mUser] idUser];
+-(NSNumber *)getUserId {
+    return [[self getActiveUser] idUser];
 }
 
 //------------------------------------------------------------------------------
--(NSString *)getUserSessionToken{
-
-    return self.mUser.sessionToken;
+-(NSString *)getUserSessionToken {
+   return [[self getActiveUser] sessionToken];
 }
 
 
@@ -98,16 +99,6 @@
     [[CoreDataManager singleton] saveContext];
 }
 
-
-//------------------------------------------------------------------------------
--(NSDictionary *)getRequesterDictionary {
-    
-    NSMutableDictionary *requester = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[[self getDevice] idDevice],kJSON_ID_DEVICE, nil];
-    if ( [self mUser] )
-        requester[kJSON_ID_USER] = [self getUserId];
-    
-    return requester;
-}
 
 //------------------------------------------------------------------------------
 - (NSArray *)getActiveUsersIDs {

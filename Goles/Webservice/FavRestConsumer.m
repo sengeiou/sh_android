@@ -335,7 +335,7 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = self.appDelegate.request;
+    NSArray *req = [FavRestConsumerHelper createREQ];
     
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE

@@ -50,9 +50,6 @@
                   andSecondMethod:(SEL)methodTwo
                      withDelegate:(id)delegate;
 
-+ (NSString *)changeQuantityToEURFormat:(CGFloat)money;
-+ (NSString *)setTwoDecimalsToBetOdd:(CGFloat)betOdd;
-
 
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString;
 

@@ -12,8 +12,6 @@
 
 @interface UserManager : NSObject
 
-@property (nonatomic, strong) User    *mUser;
-
 //DataAccessLayer singleton instance shared across application
 + (UserManager *)singleton;
 + (UserManager *)sharedInstance;
@@ -24,7 +22,6 @@
 - (void)setDeviceToken:(NSString *)token;
 - (void)setIdDevice:(NSNumber *)idDevice;
 - (NSString *)getUserSessionToken;
-- (NSDictionary *)getRequesterDictionary;
 - (NSArray *)getActiveUsersIDs;
 
 @end

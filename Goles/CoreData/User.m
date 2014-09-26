@@ -116,10 +116,7 @@
     if ([deleted isKindOfClass:[NSNumber class]]) {
         [self setCsys_deleted:deleted];
     }
-    
-    if (result)
-        [[UserManager sharedInstance] setMUser:self];
-        
+
     return result;
 }
 

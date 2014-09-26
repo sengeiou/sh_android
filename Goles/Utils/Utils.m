@@ -432,26 +432,6 @@
 }
 
 
-+ (NSString *)changeQuantityToEURFormat:(CGFloat)money{
-    
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-//    [formatter setCurrencyCode:[[NSLocale currentLocale] objectForKey:NSLocaleCurrencyCode]];
-    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"es_ES"];
-    [formatter setCurrencyCode:[locale objectForKey:NSLocaleCurrencyCode]];
-    
-    return [formatter stringFromNumber:[NSNumber numberWithFloat:money]];
-}
-
-+ (NSString *)setTwoDecimalsToBetOdd:(CGFloat)betOdd{
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.decimalSeparator = @".";
-    [formatter setMinimumFractionDigits:2];
-    [formatter setMaximumFractionDigits:2];
-    
-    return [formatter stringFromNumber:[NSNumber numberWithFloat:betOdd]];
-}
-
 //Comprove if a format mail is valid
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString
 {

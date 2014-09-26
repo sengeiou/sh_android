@@ -79,8 +79,6 @@
         
         [Appirater appLaunched:YES];
 
-        self.request = [FavRestConsumerHelper createREQ];
-        
     }
     
     
@@ -121,14 +119,14 @@
     if (![[UserManager singleton] getUserSessionToken]) {
         
         self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
-        
         LoginViewController *loginVC = [self.setupSB instantiateViewControllerWithIdentifier:@"loginVC"];
-        
         UINavigationController *navLoginVC = [[UINavigationController alloc]initWithRootViewController:loginVC];
-        
         self.window.rootViewController = navLoginVC;
-    }else
+        
+    }else {
+        self.request = [FavRestConsumerHelper createREQ];
         [self setTabBarItems];
+    }
     
 }
 //------------------------------------------------------------------------------

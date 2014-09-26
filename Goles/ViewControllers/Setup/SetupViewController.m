@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "Conection.h"
 #import "FavRestConsumer.h"
+#import "FavRestConsumerHelper.h"
 #import "CoreDataParsing.h"
 #import "SyncManager.h"
 #import "Encryption.h"
@@ -208,8 +209,11 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error {
     
-    if (status)
+    if (status) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        appDelegate.request = [FavRestConsumerHelper createREQ];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+    }
     
 }
 

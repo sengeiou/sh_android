@@ -236,7 +236,8 @@
 
     else if (status && [entityClass isSubclassOfClass:[Shot class]]){
         
-#warning Need to notify to all classes that needs to update the UI
+    #warning Need to notify to all classes that needs to update the UI
+    #warning Need to call the clearManager
     }
 }
 

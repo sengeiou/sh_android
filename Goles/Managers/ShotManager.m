@@ -50,12 +50,10 @@
 - (NSArray *)getShotsForTimeLine {
 
     NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970];
-    NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate];
-#warning Predicate not valid
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND %@ < %@",[[UserManager singleton] getActiveUsersIDs],kJSON_BIRTH,nowDateString];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@",[[UserManager singleton] getActiveUsersIDs]];
-
+    NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate*1000];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth < %@",[[UserManager singleton] getActiveUsersIDs],nowDateString];
     return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+
 }
 
 
@@ -63,16 +61,17 @@
 //------------------------------------------------------------------------------
 - (BOOL)createShotWithComment:(NSString *)comment {
 
-    User *user = [[UserManager singleton] mUser];
+    User *user = [[UserManager singleton] getActiveUser];
     NSNumber *revision = @0;
     NSTimeInterval birth = [[NSDate date] timeIntervalSince1970]*1000;
     NSTimeInterval modified = [[NSDate date] timeIntervalSince1970]*1000;
     
     NSDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser,
-                                                                                     kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
-                                                                                     kJSON_MODIFIED:[NSNumber numberWithLongLong:modified],
-                                                                                     kJSON_REVISION:revision,
-                                                                                     kJSON_SHOT_COMMENT:comment}];
+                                                                              kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
+                                                                              kJSON_MODIFIED:[NSNumber numberWithLongLong:modified],
+                                                                              kJSON_REVISION:revision,
+                                                                              kJSON_SHOT_COMMENT:comment,
+                                                                              kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW}];
 #warning Insert shot in CoreData and send it to the server
     return YES;
 }

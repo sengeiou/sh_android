@@ -122,7 +122,6 @@
 
         result = [usersWithProfile objectAtIndex:0];
         
-        [[UserManager sharedInstance] setMUser:result];
     }
     return result;
 }
