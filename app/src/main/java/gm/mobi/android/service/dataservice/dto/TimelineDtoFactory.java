@@ -61,7 +61,7 @@ public class TimelineDtoFactory {
     public GenericDto getNewerShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
         FilterDto filter = new FilterDto(Constants.NEXUS_AND,
-                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_THAN,
+                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN,
                         GMContract.ShotTable.CSYS_MODIFIED,shot.getCsys_modified())}, getShotsFilter(followingUserIds,shot.getCsys_modified()));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
@@ -74,7 +74,7 @@ public class TimelineDtoFactory {
     public GenericDto getOlderShotsOperationDto(List<Integer> followingUserIds, Long date, Shot shot){
         OperationDto od = new OperationDto();
         FilterDto filter = new FilterDto(Constants.NEXUS_AND,
-                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_THAN, GMContract.ShotTable.CSYS_MODIFIED,shot.getCsys_modified())}, getShotsFilter(followingUserIds,new Date(date)));
+                new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_LESS_EQUAL_THAN, GMContract.ShotTable.CSYS_MODIFIED,shot.getCsys_modified())}, getShotsFilter(followingUserIds,new Date(date)));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.ShotTable.TABLE, true,null,0L,1000L,filter);
         od.setMetadata(md);
         Map<String,Object>[] map = new HashMap[1];
