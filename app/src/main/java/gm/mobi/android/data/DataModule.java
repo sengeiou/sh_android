@@ -27,6 +27,7 @@ import gm.mobi.android.data.prefs.PreferenceModule;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import gm.mobi.android.task.jobs.shots.NewShotJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
@@ -40,6 +41,7 @@ import static android.content.Context.MODE_PRIVATE;
                 MainActivity.class,
                 LoginUserJob.class,
                 TimelineJob.class,
+                NewShotJob.class,
                 TimelineFragment.class,
                 InitialSetupFragment.class
         },

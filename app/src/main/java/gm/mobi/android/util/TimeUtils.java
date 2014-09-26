@@ -26,28 +26,29 @@ public class TimeUtils {
         long difference = System.currentTimeMillis() - publishTime;
 
         long days =  TimeUnit.MILLISECONDS.toDays(difference);
+        Resources res = context.getResources();
         if(days>0){
-            String time = context.getResources().getString(R.string.days);
+            String time = res.getString(R.string.days);
             return String.valueOf(days+time);
         }
 
        long hours = TimeUnit.MILLISECONDS.toHours(difference);
        if (hours > 0) {
-            String time = context.getResources().getString(R.string.hours);
+            String time = res.getString(R.string.hours);
             return String.valueOf(hours+time);
        }
        long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
         if(minutes>0){
-            String time = context.getResources().getString(R.string.minutes);
+            String time = res.getString(R.string.minutes);
             return String.valueOf(minutes+time);
         }
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
         if(seconds>0){
-            String time = context.getResources().getString(R.string.seconds);
+            String time = res.getString(R.string.seconds);
             return String.valueOf(seconds+time);
         }
-        return "";
+        return res.getString(R.string.now);
     }
     /**
      * @return String short format for a date

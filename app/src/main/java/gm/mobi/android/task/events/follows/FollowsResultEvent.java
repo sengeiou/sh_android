@@ -3,7 +3,7 @@ package gm.mobi.android.task.events.follows;
 import java.util.List;
 
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.task.events.loginregister.ResultEvent;
+import gm.mobi.android.task.events.ResultEvent;
 
 public class FollowsResultEvent extends ResultEvent<List<User>> {
 

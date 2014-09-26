@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:background="@drawable/floating_rounded_background"
+    android:animateLayoutChanges="true"
     >
 
     <LinearLayout
@@ -102,14 +103,26 @@
                 android:clickable="true"
                 android:drawablePadding="8dp"
                 android:drawableRight="@drawable/ic_send"
+                android:enabled="false"
                 android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/new_shoot_action"
-                android:textColor="@color/primary"
+                android:textColor="@color/primary_selector"
                 android:textSize="16sp"
+                tools:enabled="true"
                 />
 
+            <ProgressBar
+                android:id="@+id/new_shot_send_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                />
 
         </RelativeLayout>
     </LinearLayout>

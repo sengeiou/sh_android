@@ -1,4 +1,4 @@
-package gm.mobi.android.task.events.loginregister;
+package gm.mobi.android.task.events;
 
 public abstract class ResultEvent<T>  {
 

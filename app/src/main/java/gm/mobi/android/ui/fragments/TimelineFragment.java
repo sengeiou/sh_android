@@ -52,10 +52,12 @@ import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
 
+    public static final int REQUEST_NEW_SHOT = 1;
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject SQLiteOpenHelper dbHelper;
@@ -198,12 +200,26 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_SHOT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT);
+                startRefreshing(getActivity());
+            }
+        }
+    }
+
     /* --- UI Events --- */
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
         Bundle anim = ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(), newShotView.getHeight()).toBundle();
-        ActivityCompat.startActivity(getActivity(), new Intent(getActivity(), NewShotActivity.class), anim);
+        Intent intent = new Intent(getActivity(), NewShotActivity.class);
+        intent.putExtras(anim);
+        startActivityForResult(intent, REQUEST_NEW_SHOT);
+//        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
     @OnItemClick(R.id.timeline_list)
@@ -221,6 +237,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         Timber.d("Open profile in position %d", position);
     }
 
+    @DebugLog
     public void startRefreshing(Context context) {
         if (!isRefreshing) {
             isRefreshing = true;

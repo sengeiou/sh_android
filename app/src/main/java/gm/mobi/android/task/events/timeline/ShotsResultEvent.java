@@ -1,10 +1,9 @@
 package gm.mobi.android.task.events.timeline;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.task.events.loginregister.ResultEvent;
+import gm.mobi.android.task.events.ResultEvent;
 
 public class ShotsResultEvent extends ResultEvent<List<Shot>>{
 

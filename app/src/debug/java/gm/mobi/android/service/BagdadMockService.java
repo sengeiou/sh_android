@@ -62,6 +62,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Shot postNewShot(Integer idUser, String comment) throws IOException {
+        return null;
+    }
+
 
     public long getDelay() {
         return delay;
