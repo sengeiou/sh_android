@@ -76,8 +76,9 @@
     
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"SENDING CONTENT TO SERVER:%@",[NSDate date]);
-    NSLog(@"/////////////////////////////////////////////////////");
+    NSLog(@"");
 
+#warning Move all process in this method to a block
     
     //Array of all entities that send data to server
     NSArray *entitiesToSynchro = @[K_COREDATA_USER];
@@ -122,23 +123,18 @@
 //------------------------------------------------------------------------------
 - (void)downloadEntitiesProcessingWithDelegate:(id)delegate {
     
-    NSNumber *lastSync = [self getLastSyncroTime];
-    double lastTime = [lastSync doubleValue];
-    NSDate* date = [[NSDate dateWithTimeIntervalSince1970:lastTime] dateByAddingTimeInterval:120];
-    if ([date compare:[NSDate date]] == NSOrderedAscending) {
+    NSLog(@"/////////////////////////////////////////////////////");
+    NSLog(@"START SYNC PROCESS:%@",[NSDate date]);
+    NSLog(@"");
+    
+    //Array of all entities that needs to be synchronized
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
 
-        NSLog(@"/////////////////////////////////////////////////////");
-        NSLog(@"START SYNC PROCESS:%@",[NSDate date]);
-        NSLog(@"/////////////////////////////////////////////////////");
-        
-        //Array of all entities that needs to be synchronized
-        NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
-
-        for (id entity in entitiesToSynchro) {
-            if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
-                [self synchroEntity:entity withDelegate:delegate];
-        }
+    for (id entity in entitiesToSynchro) {
+        if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
+            [self synchroEntity:entity withDelegate:delegate];
     }
+
 }
 
 //------------------------------------------------------------------------------
@@ -184,16 +180,6 @@
 #pragma mark - Private Helper methods
 
 //------------------------------------------------------------------------------
-- (NSNumber *)getLastSyncroTime {
-    
-    NSArray *result = [[CoreDataManager singleton] getAllEntities:[SyncControl class] orderedByKey:k_SYNC_LASTCALL ascending:NO withPredicate:nil];
-
-    if (result.count > 0)
-        return [[result firstObject] lastCall];
-    return @0;
-}
-
-//------------------------------------------------------------------------------
 - (NSString *)getEntityForOperation:(NSArray *)operation {
     
     NSString *entityName = [[[operation firstObject] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ENTITY];
@@ -235,9 +221,8 @@
     }
 
     else if (status && [entityClass isSubclassOfClass:[Shot class]]){
-        
-    #warning Need to notify to all classes that needs to update the UI
-    #warning Need to call the clearManager
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotificationName:K_NOTIF_SHOT_END object:nil userInfo:nil];
     }
 }
 

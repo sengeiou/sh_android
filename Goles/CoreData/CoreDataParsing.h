@@ -30,6 +30,9 @@ extern NSString *const k_SYNC_LASTCALL;
 extern NSString *const k_SYNC_PRIORITY;
 extern NSString *const k_SYNC_ALIAS;
 
+#pragma mark - INTERNAL NOTIFICATIONS
+extern NSString *const K_NOTIF_SHOT_END;
+
 #pragma mark - REQUEST CREATION
 
 //Operation Types

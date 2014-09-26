@@ -125,6 +125,8 @@
         
     }else {
         self.request = [FavRestConsumerHelper createREQ];
+        if (SYNCHRO_ACTIVATED)
+            [[SyncManager singleton] startSyncProcess];
         [self setTabBarItems];
     }
     

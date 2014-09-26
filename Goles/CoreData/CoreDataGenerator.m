@@ -55,7 +55,7 @@
     NSNumber *referenceDate = @0;
     NSNumber *startDate = @0;
     NSNumber *update30minutes = @1800;
-    NSNumber *update1minute = @60;
+    NSNumber *update1minute = @10;
     
     NSDictionary *user = @{k_SYNC_NAME_ENTITY:K_COREDATA_USER,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                            k_SYNC_ALIAS:K_COREDATA_USER};

@@ -171,7 +171,7 @@
             if (!error && delegateRespondsToProtocol)
                 [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
                    
-                   if (!error && status)
+                    if (!error && status)
                        [delegate parserResponseForClass:entityClass status:YES andError:nil];
                     else
                        [delegate parserResponseForClass:entityClass status:NO andError:error];

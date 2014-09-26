@@ -30,6 +30,10 @@ NSString *const k_SYNC_LASTCALL                        = @"lastCall";
 NSString *const k_SYNC_PRIORITY                        = @"updatePriority";
 NSString *const k_SYNC_ALIAS                           = @"aliasView";
 
+
+#pragma mark - INTERNAL NOTIFICATIONS
+NSString *const K_NOTIF_SHOT_END                           = @"shots_synchro_end";
+
 #pragma mark - REQUEST CREATION
 
 //Operation Types

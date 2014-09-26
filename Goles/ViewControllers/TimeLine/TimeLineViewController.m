@@ -43,6 +43,7 @@
 
 @implementation TimeLineViewController
 
+#pragma mark - View lifecycle
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,9 +53,14 @@
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
+    //Get shots from server
     [[Conection sharedInstance]getServerTimewithDelegate:self];
     
+    //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
+
+    //Listen for synchro process end
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
 
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
@@ -106,7 +112,7 @@
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark - Pull to refresh and return from background refresh
+#pragma mark - Pull to refresh
 //------------------------------------------------------------------------------
 -(void)addPullToRefresh{
     // Config pull to refresh
@@ -122,17 +128,13 @@
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
-#pragma mark - Conection response methods
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status{
-    
-    [self.refreshControl endRefreshing];
-}
-
 #pragma mark - UITableViewDelegate
+//------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return self.viewOptions.frame.size.height;
 }
+
+//------------------------------------------------------------------------------
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
@@ -140,6 +142,7 @@
     
     return header;
 }
+
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -174,21 +177,35 @@
     return cell;
  }
 
+#pragma mark - Reload table View
+//------------------------------------------------------------------------------
+- (void)reloadShotsTable:(id)sender {
+    
+    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
+    
+    if (self.arrayShots.count > 0) {
+        [self hiddenViewNotShots];
+        [self.timelineTableView reloadData];
+        
+    }
+}
+
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
     
-    if (status && [entityClass isSubclassOfClass:[Shot class]]){
-
-        self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-        
-        if (self.arrayShots.count > 0) {
-            [self hiddenViewNotShots];
-            [self.timelineTableView reloadData];
-
-        }
-    }
+    if (status && [entityClass isSubclassOfClass:[Shot class]])
+        [self reloadShotsTable:nil];
 }
+
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status{
+    
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    [self.refreshControl endRefreshing];
+}
+
 
 #pragma mark - UITextField response methods
 //------------------------------------------------------------------------------
