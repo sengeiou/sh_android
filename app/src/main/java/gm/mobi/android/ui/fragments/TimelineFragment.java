@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.IntentCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -105,6 +108,11 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline, container, false);
     }
@@ -194,8 +202,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
-        //TODO start activity for new shot with slide animation
-        startActivity(new Intent(getActivity(), NewShotActivity.class));
+        Bundle anim = ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(), newShotView.getHeight()).toBundle();
+        ActivityCompat.startActivity(getActivity(), new Intent(getActivity(), NewShotActivity.class), anim);
     }
 
     @OnItemClick(R.id.timeline_list)
@@ -259,10 +267,10 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             return;
         }
         if (newShots.size() == 0) {
-            Toast.makeText(getActivity(), "No new shots", Toast.LENGTH_SHORT).show();
+            Timber.i("No new shots");
             adapter.notifyDataSetChanged(); // Refresh time indicator
         } else {
-            Timber.d("Received %d new shots", newShots.size());
+            Timber.i("Received %d new shots", newShots.size());
             int originalPosition = listView.getFirstVisiblePosition();
             int newPosition = originalPosition + newShots.size() - 1;
             adapter.addShotsAbove(newShots);

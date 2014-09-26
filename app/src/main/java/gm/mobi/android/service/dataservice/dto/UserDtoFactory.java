@@ -44,6 +44,12 @@ public class UserDtoFactory {
     }
 
     public GenericDto getLoginOperationDto(String id, String password) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id must not be null");
+        }
+        if (password == null) {
+            throw new IllegalArgumentException("Password must not be null");
+        }
         Map<String, Object> keys = new ArrayMap<>(2);
         keys.put(id.contains("@") ? UserTable.EMAIL : UserTable.USER_NAME, id);
         keys.put(UserTable.PASSWORD, password);

@@ -502,6 +502,7 @@ public class DebugAppContainer implements AppContainer {
         GeneralManager.deleteDatabase(drawerContext);
         initialSetupCompleted.delete();
         Toast.makeText(drawerContext, "Database deleted. Restart app.", Toast.LENGTH_LONG).show();
+        relaunch();
     }
 
     private void setupPicassoSection() {
@@ -654,9 +655,13 @@ public class DebugAppContainer implements AppContainer {
 //    Timber.d("Setting network endpoint to %s", endpoint);
     networkEndpoint.set(endpoint);
 
-    Intent newApp = new Intent(app, MainActivity.class);
-    newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
-    app.startActivity(newApp);
-    GolesApplication.get(app).buildObjectGraphAndInject();
+      relaunch();
   }
+
+    private void relaunch() {
+        Intent newApp = new Intent(app, MainActivity.class);
+        newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
+        app.startActivity(newApp);
+        GolesApplication.get(app).buildObjectGraphAndInject();
+    }
 }
