@@ -151,7 +151,8 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+    if (isVisible)
+        self.viewOptions.alpha = 1.0;
     return self.arrayShots.count;
 
 }
@@ -166,7 +167,7 @@
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.viewOptions.alpha = 1.0;
+    
 
     static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
