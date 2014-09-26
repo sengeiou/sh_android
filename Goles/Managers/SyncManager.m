@@ -6,6 +6,7 @@
 #import "FavRestConsumer.h"
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
+#import "CleanManager.h"
 #import "Follow.h"
 #import "User.h"
 #import "Shot.h"
@@ -76,7 +77,6 @@
     
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"SENDING CONTENT TO SERVER:%@",[NSDate date]);
-    NSLog(@"");
 
 #warning Move all process in this method to a block
     
@@ -125,23 +125,30 @@
     
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"START SYNC PROCESS:%@",[NSDate date]);
-    NSLog(@"");
-    
-    //Array of all entities that needs to be synchronized
-    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
 
-    for (id entity in entitiesToSynchro) {
-        if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
-            [self synchroEntity:entity withDelegate:delegate];
-    }
+    [self synchroEntityWithCompletion:^(BOOL status,NSError *error){
+        
+        if (!error && status){
+            NSLog(@"SYNC ENDED");
+            [[CleanManager singleton] beginCleanProcess];
+        }
+        else
+            NSLog(@"Sync error");
+    }];
 
 }
 
 //------------------------------------------------------------------------------
-- (void)synchroEntity:(NSString *)entity withDelegate:(id)delegate{
+- (void)synchroEntityWithCompletion:(void (^)(BOOL status,NSError *error))completionBlock{
     
-    //Create request for given entity
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:NSClassFromString(entity) withDelegate:self];
+    //Array of all entities that needs to be synchronized
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
+    
+    for (id entity in entitiesToSynchro) {
+        if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:NSClassFromString(entity) withDelegate:self];
+    }
+    completionBlock(YES,nil);
 }
 
 //------------------------------------------------------------------------------
@@ -196,10 +203,10 @@
         long lastUpdate = [sync.lastCall longValue];
         long now = (long)[[NSDate date] timeIntervalSince1970];
         
-        if ((now - lastUpdate) > sync.updatePriorityValue)
+        if ((now - lastUpdate) > sync.updatePriorityValue){
+            NSLog(@"Synchornizing %@",entity);
             return @1;
-        else
-            NSLog(@"%@ needs no synchro",entity);
+        }
     }
     
     return @0;

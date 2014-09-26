@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Shot.h"
 
 @interface ShotTableViewCell : UITableViewCell
 
@@ -14,5 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblDate;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
+
+- (void)configureBasicCellWithShot:(Shot *)shot;
 
 @end
