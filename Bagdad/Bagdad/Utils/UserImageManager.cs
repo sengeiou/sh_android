@@ -1,16 +1,52 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Bagdad.Utils
 {
-    class UserImageManager
+    public class UserImageManager
     {
         int idUser;
+        bool multipleImage = false;
+        Queue<String> userUrlImage = new Queue<string>();
+
+        public void Enqueue(String newItem)
+        {
+            userUrlImage.Enqueue(newItem);
+        }
+
+        public void SaveMultipleImages()
+        {
+            try
+            {
+                multipleImage = true;
+                if (userUrlImage.Count>0)
+                {
+                    var nextItem = userUrlImage.Dequeue();
+
+                    var dividedItem = nextItem.Split('♠');
+                    
+                    idUser = int.Parse(dividedItem[0]);
+                    string url = dividedItem[1];
+
+                    Debug.WriteLine("SAVING IMAGE: " + url + " FOR idUser: " + idUser);
+
+                    var webClientImg = new WebClient();
+                    webClientImg.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
+                    webClientImg.OpenReadAsync(new Uri(url, UriKind.Absolute));
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("E R R O R : SaveMultipleImages: " + e.Message);
+            }
+        }
 
         /// <summary>
         /// Save the image from the url in an IsolatedStorageFile with the userID as the name of the image
@@ -21,6 +57,7 @@ namespace Bagdad.Utils
         {
             try
             {
+                multipleImage = false;
                 idUser = userID;
                 WebClient webClientImg = new WebClient();
                 webClientImg.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
@@ -34,14 +71,20 @@ namespace Bagdad.Utils
 
         void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
-            bool isSpaceAvailable = IsSpaceIsAvailable(e.Result.Length);
-            if (isSpaceAvailable)
+            if (e.Error == null)
             {
-                SaveToJpeg(e.Result, idUser);
-            }
-            else
-            {
-                Debug.WriteLine("W A R N I N G : client_OpenReadCompleted: You are running low on storage space on your phone. Hence the image will be loaded from the internet and not saved on the phone.");
+                bool isSpaceAvailable = IsSpaceIsAvailable(e.Result.Length);
+                if (isSpaceAvailable)
+                {
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        SaveToJpeg(e.Result, idUser);
+                    });
+                }
+                else
+                {
+                    Debug.WriteLine("W A R N I N G : client_OpenReadCompleted: You are running low on storage space on your phone. Hence the image will be loaded from the internet and not saved on the phone.");
+                }
             }
         }
 
@@ -80,6 +123,7 @@ namespace Bagdad.Utils
                         // Encode WriteableBitmap object to a JPEG stream. 
                         System.Windows.Media.Imaging.Extensions.SaveJpeg(wb, isostream, wb.PixelWidth, wb.PixelHeight, 0, 85);
                         isostream.Close();
+                        if (multipleImage) SaveMultipleImages();
                     }
                 }
             }

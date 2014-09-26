@@ -164,8 +164,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/NoShoots" translate="yes" xml:space="preserve">
-          <source>No Shoots</source>
-          <target state="new">No Shoots</target>
+          <source>No Shots</source>
+          <target state="new">No Shots</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/Shoot" translate="yes" xml:space="preserve">

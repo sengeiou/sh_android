@@ -26,7 +26,7 @@ namespace Bagdad
         #region VARIABLES
 
         public static int ID_DEVICE = 0;
-        public static int ID_PLAYER = 0;
+        public static int ID_USER = 2;
         public const int PLATFORM_ID = 2;
 
         #endregion
@@ -355,6 +355,18 @@ namespace Bagdad
         }
 
         #endregion
+
+        private static UserImageManager userImageManager = null;
+
+        public static UserImageManager UIM
+        {
+            get
+            {
+                if (userImageManager == null)
+                    userImageManager = new UserImageManager();
+                return userImageManager;
+            }
+        }
 
         #region DATA_VIEW_MODELS
 

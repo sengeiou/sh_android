@@ -36,7 +36,7 @@ namespace Bagdad.Models
                             else
                             {
                                 custstmt.BindIntParameterWithName("@idUser", int.Parse(userLogin["idUser"].ToString()));
-                                App.ID_PLAYER = int.Parse(userLogin["idUser"].ToString());
+                                App.ID_USER = int.Parse(userLogin["idUser"].ToString());
                             }
 
                             if (userLogin["idFavouriteTeam"] == null || String.IsNullOrEmpty(userLogin["idFavouriteTeam"].ToString()))
@@ -67,7 +67,10 @@ namespace Bagdad.Models
                             if (userLogin["photo"] == null || String.IsNullOrEmpty(userLogin["photo"].ToString()))
                                 custstmt.BindNullParameterWithName("@photo");
                             else
+                            {
                                 custstmt.BindTextParameterWithName("@photo", userLogin["photo"].ToString());
+                                App.UIM.SaveImageFromURL(userLogin["photo"].ToString(), int.Parse(userLogin["idUser"].ToString()));
+                            }
 
                             if (userLogin["birth"] == null || String.IsNullOrEmpty(userLogin["birth"].ToString()))
                                 custstmt.BindNullParameterWithName("@csys_birth");
@@ -112,7 +115,6 @@ namespace Bagdad.Models
         {
             int done = 0;
             Database database;
-            UserImageManager uim = new UserImageManager();
 
             try
             {
@@ -155,6 +157,7 @@ namespace Bagdad.Models
                                 custstmt.BindTextParameterWithName("@photo", userFollowing["photo"].ToString());
                                 //Store image in local
                                 //uim.SaveImageFromURL(userFollowing["photo"].ToString(), int.Parse(userFollowing["idUser"].ToString()));
+                                App.UIM.Enqueue(userFollowing["idUser"].ToString() + "♠" + userFollowing["photo"].ToString());
                             }
 
                             if (userFollowing["birth"] == null || String.IsNullOrEmpty(userFollowing["birth"].ToString()))
@@ -186,6 +189,7 @@ namespace Bagdad.Models
                     }
                 }
                 App.DBLoaded.Set();
+                App.UIM.SaveMultipleImages();
             }
             catch (Exception e)
             {
@@ -208,7 +212,7 @@ namespace Bagdad.Models
                 {
                     sessionToken = st.GetTextAt(0);
                     int idPlayer = st.GetIntAt(1);
-                    if (idPlayer > 0) App.ID_PLAYER = idPlayer;
+                    if (idPlayer > 0) App.ID_USER = idPlayer;
                 }
 
                 App.DBLoaded.Set();

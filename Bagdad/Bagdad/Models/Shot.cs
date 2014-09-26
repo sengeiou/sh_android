@@ -1,4 +1,5 @@
 ﻿using Bagdad.Utils;
+using Bagdad.ViewModels;
 using Newtonsoft.Json.Linq;
 using SQLiteWinRT;
 using System;
@@ -85,10 +86,40 @@ namespace Bagdad.Models
             return done;
         }
 
-        
+        public async Task<List<ShotModel>> getTimeLineShots()
+        {
+            try
+            {
+                List<ShotModel> shotList = new List<ShotModel>();
+
+                Database database = await App.GetDatabaseAsync();
+
+                Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineShots);
+                selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
+                while (await selectStatement.StepAsync())
+                {
+                    //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
+                    shotList.Add(new ShotModel {
+                        shotId = selectStatement.GetIntAt(0),
+                        shotUserId = selectStatement.GetIntAt(1),
+                        shotMessage = selectStatement.GetTextAt(2),
+                        shotUserName = selectStatement.GetTextAt(3),
+                        shotUserImageURL = selectStatement.GetTextAt(4),
+                        shotTime = selectStatement.GetTextAt(5)
+                    });
+                }
+                return shotList;
+            }
+            catch (Exception e)
+            {
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - getTimeLineShots: " + e.Message);
+            }
+        }
 
         public async Task<string> constructFilterShot(string conditionDate)
         {
+
             StringBuilder sbFilterIdUser = new StringBuilder();
             try
             {
@@ -104,7 +135,7 @@ namespace Bagdad.Models
             {
                 throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
             }
-            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
+            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
 
     }

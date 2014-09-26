@@ -94,7 +94,7 @@ namespace Bagdad.Models
 
                 Statement selectStatement = await database.PrepareStatementAsync(selectQuery);
 
-                selectStatement.BindIntParameterWithName("@idUser", App.ID_PLAYER);
+                selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
 
                 while (await selectStatement.StepAsync())
                 {
@@ -113,7 +113,7 @@ namespace Bagdad.Models
 
         public string constructFilterFollow(string conditionDate)
         {
-            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_PLAYER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
+            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
         }
 
     }

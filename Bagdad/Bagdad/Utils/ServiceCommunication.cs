@@ -297,7 +297,7 @@ namespace Bagdad.Utils
 
         private async Task<String> GetREQ()
         {
-            String req = "\"req\":[" + App.ID_DEVICE + "," + App.ID_PLAYER + "," + App.PLATFORM_ID + "," + App.appVersionInt() + "," + await getServerTime() + "]";
+            String req = "\"req\":[" + App.ID_DEVICE + "," + App.ID_USER + "," + App.PLATFORM_ID + "," + App.appVersionInt() + "," + await getServerTime() + "]";
             return req;
         }
 

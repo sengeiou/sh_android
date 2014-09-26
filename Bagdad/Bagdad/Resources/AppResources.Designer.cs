@@ -277,7 +277,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a No Shoots.
+        ///   Busca una cadena traducida similar a No Shots.
         /// </summary>
         public static string NoShoots {
             get {

@@ -11,6 +11,7 @@ using Bagdad.Resources;
 using Bagdad.Utils;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace Bagdad
 {
@@ -204,6 +205,8 @@ namespace Bagdad
             int shotUserId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotUserId;
             MessageBox.Show("User #" + shotUserId);
         }
+
+        
 
     }
 }
