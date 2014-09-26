@@ -36,6 +36,8 @@
 @property (weak, nonatomic) IBOutlet UIView *viewTextField;
 @property (nonatomic, assign) CGFloat lastContentOffset;
 @property (nonatomic, assign) CGRect originalFrame;
+@property (weak, nonatomic) IBOutlet UIImageView *line1;
+@property (weak, nonatomic) IBOutlet UIImageView *line2;
 
 @end
 
@@ -59,26 +61,27 @@
     else
         [self hiddenViewNotShots];
     
-    
-    [self customButtonSearch];
-    
     self.originalFrame = self.tabBarController.tabBar.frame;
     
+    
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
+    btnSearch.tintColor = [Fav24Colors iosSevenBlue];
+    self.navigationItem.rightBarButtonItem = btnSearch;
+    
+    
+    self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
+    self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
+
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    //self.timelineTableView.contentSize = self.viewOptions.bounds.size;
     self.timelineTableView.backgroundColor = [UIColor clearColor];
 }
 
-//------------------------------------------------------------------------------
--(void)customButtonSearch{
+-(void) search{
     
-    UIImage *image = [[UIImage imageNamed:@"Icon_Magnifier"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.btnSearch setImage:image forState:UIControlStateNormal];
-    self.btnSearch.tintColor = [Fav24Colors iosSevenBlue];
 }
 
 //------------------------------------------------------------------------------
@@ -94,7 +97,8 @@
 
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
-    self.navigationController.navigationBarHidden = YES;
+   // self.navigationController.navigationBarHidden = YES;
+    self.title = @"Timeline";
 }
 
 //------------------------------------------------------------------------------
@@ -127,7 +131,7 @@
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 60;
+    return self.viewOptions.frame.size.height;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
@@ -156,7 +160,10 @@
     
     Shot *shot = self.arrayShots[indexPath.row];
     
-    ShotTableViewCell *cell = (ShotTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
+    ShotTableViewCell *cell = [self.timelineTableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
+    
+//    if(indexPath.row == 0)
+//        cell.backgroundColor = [UIColor redColor];
     
     cell.txvText.text = shot.comment;
     
@@ -197,106 +204,29 @@
     return YES;
 }
 
-#pragma mark - UITableViewDelegate
-
-/*typedef enum ScrollDirection {
-    ScrollDirectionNone,
-    ScrollDirectionRight,
-    ScrollDirectionLeft,
-    ScrollDirectionUp,
-    ScrollDirectionDown,
-    ScrollDirectionCrazy,
-} ScrollDirection;
-
-- (void)scrollViewDidScroll:(UIScrollView *)sender
-{
-    ScrollDirection scrollDirection;
-    if (self.lastContentOffset+20 > sender.contentOffset.y && move){
-       
-        scrollDirection = ScrollDirectionDown;
-        [self showViewOptions];
-        NSLog(@"down");
-        move = NO;
-        
-    } else if (self.lastContentOffset+20 < sender.contentOffset.y && !move){
- 
-        scrollDirection = ScrollDirectionUp;
-        [self hiddenViewOptions];
-        NSLog(@"up");
-        move = YES;
-    }
-    
-//    if (sender.contentOffset.y == 0 && move) {
-//        [self showViewOptions];
-//        NSLog(@"init");
-//         move = NO;
-//        
-//    }
-    
-    self.lastContentOffset = sender.contentOffset.y;
-    
-    // do whatever you need to with scrollDirection here.
-}*/
-
-
--(void)hiddenViewOptions{
-    if (!move)
-        [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         NSLog(@"oculto");
-                         if (self.timelineTableView.frame.origin.y == 117) {
-                              self.timelineTableView.frame = CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width,  self.timelineTableView.frame.size.height+self.viewOptions.frame.size.height);
-                         }
-                        
-                     }
-                     completion:^(BOOL finished) {
-                         
-                         self.viewOptions.alpha = 0.0f;
-
-                     }];
-}
-
--(void)showViewOptions{
-    
-    if (move)
-        [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                          NSLog(@"muestro");
-                         if (self.timelineTableView.frame.origin.y == 117 - self.viewOptions.frame.size.height) {
-                          self.timelineTableView.frame = CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y +self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width,  self.timelineTableView.frame.size.height-self.viewOptions.frame.size.height);
-                         }
-                        
-                    }
-                     completion:^(BOOL finished) {
-                         
-                          self.viewOptions.alpha = 1.0f;
-                     }];
-
-}
+#pragma mark - UIScrollViewDelegate
+//------------------------------------------------------------------------------
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
    
+    //Hide tabbar like safari
     /*UITabBar *tb = self.tabBarController.tabBar;
     NSInteger yOffset = scrollView.contentOffset.y;
     if (yOffset > 0) {
         tb.frame = CGRectMake(tb.frame.origin.x, self.originalFrame.origin.y + yOffset, tb.frame.size.width, tb.frame.size.height);
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
-    NSLog(@"antiguo %f",self.lastContentOffset );
-    NSLog(@"nuevo %f",scrollView.contentOffset.y );
-
     
-   if (self.lastContentOffset > scrollView.contentOffset.y){
-        NSLog(@"entroooo");
-        self.viewOptions.alpha = 1.0;
-   }else if (scrollView.contentOffset.y > 60) {
-       
-       NSLog(@"ssss");
-       self.viewOptions.alpha =0.0;
-   }
+    if (self.lastContentOffset > scrollView.contentOffset.y){
+        [UIView animateWithDuration:0.2 animations:^{
+            self.viewOptions.alpha = 1.0;
+        }];
+        
+    }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
+        [UIView animateWithDuration:0.2 animations:^{
+            self.viewOptions.alpha = 0.0;
+        }];
+    }
+   
     
      self.lastContentOffset = scrollView.contentOffset.y;
 }
