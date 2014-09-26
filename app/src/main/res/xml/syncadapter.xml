@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="${applicationId}.sync.provider"
+    android:contentAuthority="gm.mobi.android.db.provider"
     android:accountType="gm.mobi.android"
-    android:userVisible="false"
+    android:userVisible="true"
     android:supportsUploading="true"
     android:allowParallelSyncs="false"
     android:isAlwaysSyncable="true"/>
