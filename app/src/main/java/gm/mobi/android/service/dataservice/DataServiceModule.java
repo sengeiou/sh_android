@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UtilityDtoFactory;
@@ -27,5 +28,9 @@ public class DataServiceModule {
 
     @Provides @Singleton TimelineDtoFactory provideTimelineDtoFactory(UtilityDtoFactory utilityDtoFactory) {
         return new TimelineDtoFactory(utilityDtoFactory);
+    }
+
+    @Provides @Singleton ShotDtoFactory provideShotDtoFactory(UtilityDtoFactory utilityDtoFactory) {
+        return new ShotDtoFactory(utilityDtoFactory);
     }
 }

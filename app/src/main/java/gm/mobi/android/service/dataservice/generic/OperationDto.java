@@ -1,10 +1,14 @@
 package gm.mobi.android.service.dataservice.generic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.google.android.gms.drive.Metadata;
 
 
 /**
@@ -19,7 +23,46 @@ isGetterVisibility = JsonAutoDetect.Visibility.NONE,
 setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class OperationDto {
 
-	private MetadataDto metadata;
+    public static class Builder {
+
+        private final OperationDto operationDto;
+
+        public Builder() {
+            operationDto = new OperationDto();
+        }
+
+        public OperationDto build() {
+            return operationDto;
+        }
+
+        public Builder metadata(MetadataDto metadataDto) {
+            operationDto.setMetadata(metadataDto);
+            return this;
+        }
+
+        public Builder setData(Map<String, Object>[] data) {
+            operationDto.setData(data);
+            return this;
+        }
+
+        public Builder putData(Map<String, Object> dataItem) {
+            Map<String, Object>[] datas = operationDto.getData();
+            if (datas != null) {
+                List<Map<String, Object>> datasList = Arrays.asList(datas);
+                datasList.add(dataItem);
+                operationDto.setData(datasList.toArray(new HashMap[datasList.size()]));
+            } else {
+                datas = new HashMap[1];
+                datas[0] = dataItem;
+                operationDto.setData(datas);
+            }
+            return this;
+        }
+
+
+    }
+
+    private MetadataDto metadata;
 	private Map<String, Object>[] data;
 	
 	

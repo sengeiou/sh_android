@@ -1,9 +1,11 @@
 package gm.mobi.android.service.dataservice.generic;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.android.gms.drive.Metadata;
 
 
 /**
@@ -20,7 +22,96 @@ isGetterVisibility = JsonAutoDetect.Visibility.NONE,
 setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class MetadataDto {
 
-	private String operation;
+    public static class Builder {
+
+        private static final boolean DEFAULT_INCLUDE_DELETED = false;
+        private static final long DEFAULT_TOTAL_ITEMS = 1L;
+        private static final long DEFAULT_OFFSET = 0L;
+        private static final long DEFAULT_ITEMS = 1L;
+
+        private final MetadataDto metadataDto;
+
+        public Builder() {
+            metadataDto = new MetadataDto();
+        }
+
+        public MetadataDto build() {
+            if (metadataDto.getOperation() == null) {
+                throw new IllegalStateException("Operation cannot be null");
+            }
+            if (metadataDto.getEntity() == null) {
+                throw new IllegalStateException("Entity cannot be null");
+            }
+            if (metadataDto.getFilter() == null && metadataDto.getKey() == null) {
+                throw new IllegalStateException("MetadataDto must use either filters or keys");
+            }
+            if (metadataDto.getOffset() == null) {
+                metadataDto.setOffset(DEFAULT_OFFSET);
+            }
+            if (metadataDto.getItems() == null) {
+                metadataDto.setItems(DEFAULT_ITEMS);
+            }
+            if (metadataDto.getTotalItems() == null) {
+                metadataDto.setTotalItems(DEFAULT_TOTAL_ITEMS);
+            }
+            if (metadataDto.getIncludeDeleted() == null) {
+                metadataDto.setIncludeDeleted(DEFAULT_INCLUDE_DELETED);
+            }
+            return metadataDto;
+        }
+
+        public Builder operation(String operation) {
+            metadataDto.setOperation(operation);
+            return this;
+        }
+
+        public Builder entity(String entity) {
+            metadataDto.setEntity(entity);
+            return this;
+        }
+
+        public Builder includeDeleted(boolean includeDeleted) {
+            metadataDto.setIncludeDeleted(includeDeleted);
+            return this;
+        }
+
+        public Builder totalItems(Long totalItems) {
+            metadataDto.setTotalItems(totalItems);
+            return this;
+        }
+
+        public Builder offset(Long offset) {
+            metadataDto.setOffset(offset);
+            return this;
+        }
+
+        public Builder items(Long items) {
+            metadataDto.setItems(items);
+            return this;
+        }
+
+        public Builder setKeys(Map<String, Object> keys) {
+            metadataDto.setKey(keys);
+            return this;
+        }
+
+        public Builder putKey(String key, Object value) {
+            Map<String, Object> keys = metadataDto.getKey();
+            if (keys == null) {
+                keys = new HashMap<>();
+                metadataDto.setKey(keys);
+            }
+            keys.put(key, value);
+            return this;
+        }
+
+        public Builder filter(FilterDto filterDto) {
+            metadataDto.setFilter(filterDto);
+            return this;
+        }
+    }
+
+    private String operation;
 	private String entity;
 	private Boolean includeDeleted;
 	private Long totalItems;

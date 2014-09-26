@@ -23,6 +23,7 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
+import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -39,14 +40,16 @@ public class BagdadDataService implements BagdadService {
     private ObjectMapper mapper;
     private UserDtoFactory userDtoFactory;
     private TimelineDtoFactory timelineDtoFactory;
+    private ShotDtoFactory shotDtoFactory;
 
     @Inject
-    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory, TimelineDtoFactory timelineDtoFactory) {
+    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory, TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
+        this.shotDtoFactory = shotDtoFactory;
     }
 
     @Override
@@ -161,6 +164,23 @@ public class BagdadDataService implements BagdadService {
             }
         }
         return shots;
+    }
+
+    @Override
+    public Shot postNewShot(Integer idUser, String comment) throws IOException {
+        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object> dataItem = ops[0].getData()[0];
+            return ShotMapper.fromDto(dataItem);
+        } else {
+            return null;
+        }
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
