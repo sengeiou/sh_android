@@ -18,9 +18,11 @@
 #import "Conection.h"
 #import "Fav24Colors.h"
 
-@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate>{
+#define SYZE_KEYBOARD   167
+
+@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate>{
     int lengthTextField;
-    BOOL move;
+    BOOL isVisible;
 }
 
 @property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
@@ -77,7 +79,6 @@
     
     self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
     self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
-
 }
 
 - (void)viewDidLayoutSubviews
@@ -117,29 +118,34 @@
 -(void)addPullToRefresh{
     // Config pull to refresh
     if (self.refreshControl == nil) {
-        self.refreshControl = [[UIRefreshControl alloc] init];
+        self.refreshControl = [[UIRefreshControl alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y+100, 40, 40)];
         [self.refreshControl addTarget:self action:@selector(onPullToRefresh:) forControlEvents:UIControlEventValueChanged];
         [self.timelineTableView addSubview:self.refreshControl];
+
+        
     }  
 }
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
     
+    self.viewOptions.alpha = 0.0;
+
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
 #pragma mark - UITableViewDelegate
-//------------------------------------------------------------------------------
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return self.viewOptions.frame.size.height;
 }
 
 //------------------------------------------------------------------------------
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewOptions.frame.size.height)];
     header.backgroundColor = [UIColor clearColor];
-    
+
     return header;
 }
 
@@ -152,23 +158,28 @@
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    //return 90;
+
     Shot *shot = self.arrayShots[indexPath.row];
 
-    return [Utils heightForShot:shot.comment];
+   return [Utils heightForShot:shot.comment];
 }
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    self.viewOptions.alpha = 1.0;
+
+    static NSString *CellIdentifier = @"shootCell";
+    ShotTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+
     Shot *shot = self.arrayShots[indexPath.row];
-    
-    ShotTableViewCell *cell = [self.timelineTableView dequeueReusableCellWithIdentifier:@"shootCell" forIndexPath:indexPath];
-    
-//    if(indexPath.row == 0)
-//        cell.backgroundColor = [UIColor redColor];
-    
+
     cell.txvText.text = shot.comment;
+    cell.txvText.frame = CGRectMake(cell.txvText.frame.origin.x, cell.txvText.frame.origin.y,cell.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
+    
+    //cell.txvText.selectedTextRange = nil;
+    //cell.txvText.delegate = self;
+    //cell.txvText.selectable = NO;
+    [cell.txvText setUserInteractionEnabled:NO];
     
     cell.lblName.text = shot.user.name;
     [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
@@ -176,6 +187,31 @@
 
     return cell;
  }
+- (BOOL)canBecomeFirstResponder {
+    return NO;
+}
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    /*UIMenuController *menuController = [UIMenuController sharedMenuController];
+    if (menuController) {
+        [UIMenuController sharedMenuController].menuVisible = NO;
+    }
+    return NO;*/
+    
+    /*switch (action) {
+     case @selector(paste:):
+     case @selector(copy:):
+     case @selector(cut:):
+     case @selector(cut:):
+     case @selector(select:):
+     case @selector(selectAll:):
+     return NO;
+     }
+     return [super canPerformAction:action withSender:sender];*/
+    [UIMenuController sharedMenuController].menuVisible = NO;  //do not display the menu
+    [self resignFirstResponder];                      //do not allow the user to selected anything
+    return NO;
+}
 
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
@@ -233,19 +269,95 @@
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
     
+    
     if (self.lastContentOffset > scrollView.contentOffset.y){
         [UIView animateWithDuration:0.2 animations:^{
+            
             self.viewOptions.alpha = 1.0;
+            self.viewTextField.alpha = 1.0;
         }];
         
     }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
         [UIView animateWithDuration:0.2 animations:^{
             self.viewOptions.alpha = 0.0;
+            self.viewTextField.alpha = 0.0;
+
         }];
     }
    
     
      self.lastContentOffset = scrollView.contentOffset.y;
+}
+
+-(void)keyboardShow{
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        self.viewOptions.alpha = 0.0;
+    }];
+
+    [self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
+    
+    //[self.timelineTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    
+    isVisible = YES;
+    
+    CGRect rectFild = self.viewTextField.frame;
+    rectFild.origin.y -= SYZE_KEYBOARD;
+    
+    [UIView animateWithDuration:0.25f
+                     animations:^{
+                         [self.viewTextField setFrame:rectFild];
+            }
+     ];
+}
+
+-(void)keyboardHide{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.viewOptions.alpha = 1.0;
+        
+       
+
+    }];
+    
+    [self.timelineTableView setScrollsToTop:YES];
+    
+    // [self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y + self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
+    
+    isVisible = NO;
+    
+    CGRect rectFild = self.viewTextField.frame;
+    rectFild.origin.y += SYZE_KEYBOARD;
+    
+    [UIView animateWithDuration:0.25f
+                     animations:^{
+                         [self.viewTextField setFrame:rectFild];
+                    }
+     ];
+}
+
+
+#pragma mark -
+#pragma mark TextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    [self keyboardShow];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    if (isVisible) {
+        
+        [self keyboardHide];
+    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField setText:nil];
+    
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
