@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import gm.mobi.android.db.GMContract;
@@ -51,7 +52,7 @@ public class ShotManager {
                 " FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID
-                + " WHERE b." + ShotTable.ID_USER + " IN " + idUsers + " AND " + ShotTable.ID_SHOT + " IN " + idShots + ";";
+                + " WHERE b." + ShotTable.ID_USER + " IN " + idUsers + " AND " + ShotTable.ID_SHOT + " IN " + idShots + " ORDER BY a." + ShotTable.CSYS_BIRTH + " DESC;";
         Timber.d("Executing query: %s", query);
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
@@ -120,7 +121,7 @@ public class ShotManager {
                 res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
-            insertShotInTableSync(db);
+            insertShotInTableSync(db, shot.getCsys_modified());
         }
     }
 
@@ -139,14 +140,14 @@ public class ShotManager {
         return res;
     }
 
-    public static long insertShotInTableSync(SQLiteDatabase db) {
+    public static long insertShotInTableSync(SQLiteDatabase db, Date dateModified) {
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(3); // It's the third data type the application insert in database
         tablesSync.setDirection("BOTH");
         tablesSync.setEntity(GMContract.ShotTable.TABLE);
-        tablesSync.setMax_timestamp(System.currentTimeMillis());
+        tablesSync.setMax_timestamp(dateModified.getTime());
         if (GeneralManager.isTableEmpty(db, GMContract.ShotTable.TABLE)) {
-            tablesSync.setMin_timestamp(System.currentTimeMillis());
+            tablesSync.setMin_timestamp(dateModified.getTime());
         }
         tablesSync.setMaxRows(1000);
         tablesSync.setMinRows(0);
