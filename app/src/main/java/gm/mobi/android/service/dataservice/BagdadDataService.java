@@ -125,7 +125,7 @@ public class BagdadDataService implements BagdadService {
 
     @Override
     public List<Shot> getOlderShots(List<Integer> followingUserIds, Shot lastOlderShot, Long lastModifiedDate) throws IOException {
-        List<Shot> newerShots = new ArrayList<>();
+        List<Shot> olderShots = new ArrayList<>();
         GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, lastOlderShot);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
@@ -137,10 +137,10 @@ public class BagdadDataService implements BagdadService {
             Map<String,Object>[] data = ops[0].getData();
             for(int i = 0; i<data.length;i++){
                 Shot shot = ShotMapper.fromDto(data[i]);
-                newerShots.add(shot);
+                olderShots.add(shot);
             }
         }
-        return newerShots;
+        return olderShots;
     }
 
     @Override
