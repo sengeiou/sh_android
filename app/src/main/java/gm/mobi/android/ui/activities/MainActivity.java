@@ -23,6 +23,7 @@ import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
+import hugo.weaving.DebugLog;
 
 import static gm.mobi.android.constant.SyncConstants.AUTHORITY;
 
@@ -64,7 +65,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     }
 
-
+    @DebugLog
     private boolean needsSetup() {
         return !initialSetupCompleted.get();
     }

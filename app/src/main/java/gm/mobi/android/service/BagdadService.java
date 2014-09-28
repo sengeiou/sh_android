@@ -18,9 +18,9 @@ public interface BagdadService {
 
     public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException;
 
-    public List<Shot> getNewShots(List<Integer> followingUserIds, Shot lastNewShot, Long lastModifiedDate) throws IOException;
+    public List<Shot> getNewShots(List<Integer> followingUserIds, Long newestShotDate) throws IOException;
 
-    public List<Shot> getOlderShots(List<Integer> follwingUserIds, Shot lastOlderShot, Long lastModifiedDate) throws  IOException;
+    public List<Shot> getOlderShots(List<Integer> followingUserIds, Long oldestShotDate) throws IOException;
 
     public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException;
 

@@ -30,6 +30,7 @@ import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
+import timber.log.Timber;
 
 public class TimelineJob extends CancellableJob {
 
@@ -112,10 +113,14 @@ public class TimelineJob extends CancellableJob {
     }
 
     private void retrieveNewer() throws IOException, SQLException {
-        Long lastModifiedDate = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.ShotTable.TABLE);
-        //TODO last modified puede dar problemas. Hay que discutirlo
-
-        List<Shot> newShots = service.getNewShots(getFollowingIds(), referenceShot, lastModifiedDate);
+        Long newestShotDate = 0L;
+        if (referenceShot != null) {
+            newestShotDate = referenceShot.getCsys_birth().getTime();
+            Timber.d("Retrieving shots newer than shot with id %d and date %d", referenceShot.getIdShot(), newestShotDate);
+        } else {
+            Timber.w("Retrieving new shots: No reference shot provided, using date 0L");
+        }
+        List<Shot> newShots = service.getNewShots(getFollowingIds(), newestShotDate);
 
         if (newShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), newShots);
@@ -127,7 +132,7 @@ public class TimelineJob extends CancellableJob {
     }
 
     private void retrieveOlder() throws IOException, SQLException {
-        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), referenceShot, 0L);
+        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), referenceShot != null ? referenceShot.getCsys_birth().getTime() : 0L);
         if (oldShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
             List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), oldShots);

@@ -237,15 +237,18 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         Timber.d("Open profile in position %d", position);
     }
 
-    @DebugLog
     public void startRefreshing(Context context) {
         if (!isRefreshing) {
             isRefreshing = true;
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-            Shot latestShot = adapter.getItem(0);
-            //TODO stop job from being launched again and again. Cancell current or restrict
-            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER, latestShot));
+            if (adapter != null) {
+                Shot latestShot = adapter.getItem(0);
+                //TODO stop job from being launched again and again. Cancell current or restrict
+                jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER, latestShot));
+            } else {
+                jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER, null));
+            }
         }
     }
 
@@ -268,9 +271,12 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     @Subscribe
     public void showTimeline(ShotsResultEvent event) {
         List<Shot> shots = event.getShots();
-        Timber.d("Nananananana %d", shots.size());
-        adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
-        listView.setAdapter(adapter);
+        if (shots != null && shots.size() > 0) {
+            adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
+            listView.setAdapter(adapter);
+        } else {
+            Timber.w("No shots received");
+        }
     }
 
     @Subscribe
