@@ -14,6 +14,6 @@
 + (ShotManager *)sharedInstance;
 
 - (NSArray *)getShotsForTimeLine;
-- (BOOL)createShotWithComment:(NSString *)comment;
+- (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate;
 
 @end

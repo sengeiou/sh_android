@@ -18,6 +18,7 @@
 #import "FavRestConsumerHelper.h"
 #import "CoreDataManager.h"
 #import "AppDelegate.h"
+#import "ShotManager.h"
 
 @interface FavRestConsumer ()
 
@@ -133,7 +134,7 @@
     }];
 }
 
-#pragma mark - Generic Request creation
+#pragma mark - RETRIEVE
 
 //------------------------------------------------------------------------------
 - (void)getAllEntitiesFromClass:(Class)entityClass withDelegate:(id)delegate {
@@ -186,7 +187,62 @@
         DLog(@"No valid req structure created for class %@",NSStringFromClass(entityClass));
 }
 
-#pragma mark - Create method
+//------------------------------------------------------------------------------
+- (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate {
+    
+    //Create Alias block
+    NSString *alias = [FavRestConsumerHelper getAliasForEntity:entityClass];
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = self.appDelegate.request;
+    
+    //Create Provider 'metadata' block
+    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+                                                                     andEntity:NSStringFromClass(entityClass)
+                                                                     withItems:@1
+                                                                    withOffSet:@0
+                                                                        andKey:key];
+    
+    //Create playerProvider 'ops' block
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:entityClass]]};
+    
+    //Create 'ops' block
+    NSArray *ops = @[operation];
+    
+    //Check if delegate has protocol "ParserProtocol" implemented
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    
+    //Create full data structure
+    if (req && ops) {
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
+            
+            if (!error && delegateRespondsToProtocol)
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                    
+                    if (!error && status)
+                        [delegate parserResponseForClass:entityClass status:YES andError:nil];
+                    else
+                        [delegate parserResponseForClass:entityClass status:NO andError:error];
+                }];
+            else if (delegateRespondsToProtocol){
+                
+                [delegate parserResponseForClass:entityClass status:NO andError:error];
+                DLog(@"Request error:%@",error);
+            }
+        }];
+    }else if (delegateRespondsToProtocol){
+        
+        NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
+        [delegate parserResponseForClass:entityClass status:NO andError:reqError];
+        DLog(@"No valid req structure created");
+    }
+}
+
+#pragma mark - CREATE
 //------------------------------------------------------------------------------
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate{
     
@@ -200,7 +256,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create 'metadata' block
-    NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_RETREAVE,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_CREATE_UPDATE,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
     
     //Create 'ops' block
     NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:dictArray};
@@ -217,7 +273,9 @@
             
             if (!error)
                 [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error) {
-                    
+                    if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)]) {
+                        [delegate createShotResponseWithStatus:YES andError:nil];
+                    }
                     NSLog(@"%@ CREADA", entity);
                 }];
             else {
@@ -228,6 +286,7 @@
         DLog(@"No valid req structure created");
 }
 
+#pragma mark - DELETE
 //------------------------------------------------------------------------------
 - (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate{
     
@@ -270,61 +329,7 @@
         DLog(@"No valid req structure created");
 }
 
-//------------------------------------------------------------------------------
-- (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate {
-    
-    //Create Alias block
-    NSString *alias = [FavRestConsumerHelper getAliasForEntity:entityClass];
-    
-    //Create Staus block
-    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
-    
-    //Create 'req' block
-    NSArray *req = self.appDelegate.request;
-    
-    //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:NSStringFromClass(entityClass)
-                                                                     withItems:@1
-                                                                    withOffSet:@0
-                                                                     andKey:key];
-    
-    //Create playerProvider 'ops' block
-    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:entityClass]]};
-    
-    //Create 'ops' block
-    NSArray *ops = @[operation];
-    
-    //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
-    
-    //Create full data structure
-    if (req && ops) {
-        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-            
-            if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
-                    
-                    if (!error && status)
-                        [delegate parserResponseForClass:entityClass status:YES andError:nil];
-                    else
-                        [delegate parserResponseForClass:entityClass status:NO andError:error];
-                }];
-            else if (delegateRespondsToProtocol){
-                
-                [delegate parserResponseForClass:entityClass status:NO andError:error];
-                DLog(@"Request error:%@",error);
-            }
-        }];
-    }else if (delegateRespondsToProtocol){
-        
-        NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
-        [delegate parserResponseForClass:entityClass status:NO andError:reqError];
-        DLog(@"No valid req structure created");
-    }
-}
-
+#pragma mark - LOGIN
 //------------------------------------------------------------------------------
 - (void)userLoginWithKey:(NSDictionary *)key withDelegate:(id)delegate {
     

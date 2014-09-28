@@ -24,6 +24,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 @optional
 
 - (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error;
+- (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error;
 
 @end
 

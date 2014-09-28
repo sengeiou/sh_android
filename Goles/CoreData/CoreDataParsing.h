@@ -38,6 +38,7 @@ extern NSString *const K_NOTIF_SHOT_END;
 //Operation Types
 extern NSString *const K_OP_RETREAVE;
 extern NSString *const K_OP_INSERT;
+extern NSString *const K_OP_CREATE_UPDATE;
 extern NSString *const K_OP_UPDATE;
 extern NSString *const K_OP_DELETE;
 

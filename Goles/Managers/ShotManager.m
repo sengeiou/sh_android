@@ -9,6 +9,7 @@
 #import "ShotManager.h"
 #import "UserManager.h"
 #import "CoreDataManager.h"
+#import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
 #import "Shot.h"
 
@@ -59,21 +60,20 @@
 
 #pragma mark - SHOT CREATION
 //------------------------------------------------------------------------------
-- (BOOL)createShotWithComment:(NSString *)comment {
+- (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate{
 
     User *user = [[UserManager singleton] getActiveUser];
     NSNumber *revision = @0;
-    NSTimeInterval birth = [[NSDate date] timeIntervalSince1970]*1000;
-    NSTimeInterval modified = [[NSDate date] timeIntervalSince1970]*1000;
+    NSTimeInterval birth = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval modified = [[NSDate date] timeIntervalSince1970];
     
-    NSDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser,
-                                                                              kJSON_BIRTH:[NSNumber numberWithLongLong:birth],
-                                                                              kJSON_MODIFIED:[NSNumber numberWithLongLong:modified],
-                                                                              kJSON_REVISION:revision,
-                                                                              kJSON_SHOT_COMMENT:comment,
-                                                                              kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW}];
-#warning Insert shot in CoreData and send it to the server
-    return YES;
+    NSDictionary *key = @{kJSON_SHOT_IDSHOT:[NSNull null]};
+    NSDictionary *sendData = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser,
+                                                                               kJSON_SHOT_IDSHOT:[NSNull null],
+                                                                               kJSON_SHOT_COMMENT:comment}];
+
+    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_SHOT withData:@[sendData] andKey:key andDelegate:delegate];
+
 }
 
 

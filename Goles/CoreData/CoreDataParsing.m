@@ -39,6 +39,7 @@ NSString *const K_NOTIF_SHOT_END                           = @"shots_synchro_end
 //Operation Types
 NSString *const K_OP_RETREAVE                           = @"retrieve";
 NSString *const K_OP_INSERT                             = @"create";
+NSString *const K_OP_CREATE_UPDATE                      = @"createUpdate";
 NSString *const K_OP_UPDATE                             = @"update";
 NSString *const K_OP_DELETE                             = @"delete";
 

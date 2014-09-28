@@ -8,13 +8,13 @@
 
 #import "TimeLineViewController.h"
 #import "FavRestConsumer.h"
+#import "ShotManager.h"
 #import "User.h"
 #import "Shot.h"
 #import "CoreDataManager.h"
 #import "ShotTableViewCell.h"
 #import "UIImageView+FadeIn.h"
 #import "Utils.h"
-#import "ShotManager.h"
 #import "Conection.h"
 #import "Fav24Colors.h"
 
@@ -203,6 +203,14 @@
     }
 }
 
+#pragma mark - Send shot
+#warning Need to verify shot before sending to webservice
+//------------------------------------------------------------------------------
+- (IBAction)sendShot:(id)sender {
+
+    [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
+}
+
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
@@ -219,6 +227,13 @@
     [self.refreshControl endRefreshing];
 }
 
+#pragma mark - ShotCreationProtocol response
+//------------------------------------------------------------------------------
+- (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
+    
+    if (status && !error)
+        [self reloadShotsTable:nil];
+}
 
 
 #pragma mark - UIScrollViewDelegate
@@ -253,8 +268,9 @@
      self.lastContentOffset = scrollView.contentOffset.y;
 }
 
-- (void)myNotificationMethod:(NSNotification*)notification
-{
+//------------------------------------------------------------------------------
+- (void)myNotificationMethod:(NSNotification*)notification {
+    
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
@@ -262,6 +278,7 @@
     self.sizeKeyboard = keyboardFrameBeginRect.size.height  -40;//- self.viewTextField.frame.size.height;
 }
 
+//------------------------------------------------------------------------------
 -(void)keyboardShow{
     
     if (self.backgroundView == nil) {
@@ -293,6 +310,7 @@
      ];
 }
 
+//------------------------------------------------------------------------------
 -(void)keyboardHide{
     
     [self.backgroundView removeFromSuperview];
@@ -318,15 +336,14 @@
      ];
 }
 
-
-#pragma mark -
 #pragma mark TextFieldDelegate
-
+//------------------------------------------------------------------------------
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     [self keyboardShow];
 }
 
+//------------------------------------------------------------------------------
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
     if (isVisible) {
@@ -335,6 +352,7 @@
     }
 }
 
+//------------------------------------------------------------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField setText:nil];
     
