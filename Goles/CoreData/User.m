@@ -121,7 +121,7 @@
 }
 
 + (User *)getUser {
-    User *user = [[CoreDataManager singleton] getCurrentUser];
+    User *user = [[UserManager singleton] getActiveUser];
     
     return user;
 }

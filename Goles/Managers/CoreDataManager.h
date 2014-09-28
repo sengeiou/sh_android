@@ -33,7 +33,6 @@
 - (BOOL)eraseCoreData;
 
 - (id) getEntity:(Class)entityClass withId:(NSInteger)entityId;
-- (User *)getCurrentUser;
 
 - (NSArray *) getAllEntities:(Class)entityClass;
 - (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate;

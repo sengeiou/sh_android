@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "UserManager.h"
+#import "ShotManager.h"
 
 @interface PerformanceTests : XCTestCase
 
@@ -25,10 +27,17 @@
     [super tearDown];
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
+- (void)testGetActiveUsersIDs {
+
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        [[UserManager singleton] getActiveUsersIDs];
+    }];
+}
+
+- (void)testGetShotsForTimeLine {
+    
+    [self measureBlock:^{
+        [[ShotManager singleton] getShotsForTimeLine];
     }];
 }
 

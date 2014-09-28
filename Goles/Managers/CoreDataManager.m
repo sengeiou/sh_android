@@ -98,7 +98,7 @@
     
     NSAssert( (entityClass != [NSNull class] && entityClass),@"[GOLES MESSENGER ERROR]: Error trying to find entity of class '%@'",NSStringFromClass(entityClass));
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %i",NSStringFromClass(entityClass),entityId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %li",NSStringFromClass(entityClass),(long)entityId]];
     NSArray *result = [self getAllEntities:entityClass withPredicate:predicate];
     
     if ( [result count]>0 )     return [result objectAtIndex:0];
@@ -109,32 +109,42 @@
 }
 
 //------------------------------------------------------------------------------
-- (User *)getCurrentUser {
+- (NSArray *) getAllEntities:(Class)entityClass {
     
-    User *result = nil;
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sessionToken != nil"];
-    NSArray *usersWithProfile = [self getAllEntities:[User class] withPredicate:predicate];
-    
-    NSInteger count = [usersWithProfile count];
-    if ( count > 0 ){
-        if ( count > 1 )
-            DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
-
-        result = [usersWithProfile objectAtIndex:0];
-        
-    }
-    return result;
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *) getAllEntities:(Class)entityClass
-{    
     return [self getAllEntities:entityClass orderedByKey:nil];
 }
 
 //------------------------------------------------------------------------------
-- (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate
-{
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key {
+    
+    return [self getAllEntities:entityClass orderedByKey:key ascending:YES];
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending {
+    
+    return [self getAllEntities:entityClass orderedByKey:key ascending:ascending withPredicate:nil];
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
+    //  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path = %@ && status = 1 && platform = 1",path];
+    
+    [request setPredicate:predicate];
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    }
+    
+    return result;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate {
+    
     NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:nil ascending:YES];
     [request setPredicate:predicate];
     
@@ -143,34 +153,6 @@
     if ( [request entity] ){
         result = [managedObjectContext executeFetchRequest:request error:&error];
     }
-    return result;
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key
-{
-    return [self getAllEntities:entityClass orderedByKey:key ascending:YES];
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending
-{    
-    return [self getAllEntities:entityClass orderedByKey:key ascending:ascending withPredicate:nil];
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate
-{
-    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
-  //  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path = %@ && status = 1 && platform = 1",path];
-
-    [request setPredicate:predicate];
-    NSError * error = nil;
-    NSArray *result = nil;
-    if ( [request entity] ){
-        result = [managedObjectContext executeFetchRequest:request error:&error];
-    }
-    
     return result;
 }
 

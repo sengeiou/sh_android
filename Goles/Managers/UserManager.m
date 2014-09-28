@@ -54,8 +54,14 @@
 - (User *)getActiveUser {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sessionToken != nil"];
-    return [[[CoreDataManager singleton] getAllEntities:[User class] withPredicate:predicate] firstObject];
-
+    NSArray *usersWithProfile = [[CoreDataManager singleton] getAllEntities:[User class] withPredicate:predicate];
+    
+    if ( usersWithProfile.count == 1 )
+        return [usersWithProfile firstObject];
+    else if ( usersWithProfile.count > 1 )
+        DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
+    
+    return nil;
 }
 
 

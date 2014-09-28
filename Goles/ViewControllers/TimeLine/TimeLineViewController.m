@@ -169,7 +169,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
     Shot *shot = self.arrayShots[indexPath.row];
 
