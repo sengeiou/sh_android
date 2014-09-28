@@ -265,7 +265,7 @@
     NSArray *ops = @[opsDictionary];
     
     //Create full data structure
-    if (req && [ops count] > 0) {
+    if (req && ops.count > 0) {
         
         NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
         
@@ -273,10 +273,8 @@
             
             if (!error)
                 [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error) {
-                    if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)]) {
+                    if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
                         [delegate createShotResponseWithStatus:YES andError:nil];
-                    }
-                    NSLog(@"%@ CREADA", entity);
                 }];
             else {
                 DLog(@"Request error:%@",error);
