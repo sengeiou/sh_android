@@ -2,6 +2,7 @@ package gm.mobi.android.db.manager;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import gm.mobi.android.db.GMContract;
@@ -28,4 +29,12 @@ public class GeneralManager {
     }
 
 
+    /**
+     * Retrieve row's number for table we need
+     * */
+
+    public static long numberOfRows(SQLiteDatabase db, String table){
+        long numRows = DatabaseUtils.queryNumEntries(db, table);
+        return numRows;
+    }
 }
