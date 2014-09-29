@@ -9,6 +9,9 @@ public class User extends Synchronized {
     private String mEmail;
     private String mName;
     private String mPhoto;
+    private Integer mPoints;
+    private Integer mNumFollowings;
+    private Integer mNumFollowers;
 
     public Integer getIdUser() {
         return mIdUser;
@@ -64,5 +67,29 @@ public class User extends Synchronized {
 
     public void setPhoto(String photo) {
         mPhoto = photo;
+    }
+
+    public Integer getPoints() {
+        return mPoints;
+    }
+
+    public void setPoints(Integer points) {
+        mPoints = points;
+    }
+
+    public Integer getNumFollowings() {
+        return mNumFollowings;
+    }
+
+    public void setNumFollowings(Integer numFollowings) {
+        mNumFollowings = numFollowings;
+    }
+
+    public Integer getNumFollowers() {
+        return mNumFollowers;
+    }
+
+    public void setNumFollowers(Integer numFollowers) {
+        mNumFollowers = numFollowers;
     }
 }
