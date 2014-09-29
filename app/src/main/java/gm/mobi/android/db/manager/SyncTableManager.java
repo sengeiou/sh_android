@@ -48,10 +48,6 @@ public class SyncTableManager {
     public static int getNumMaxOfRowsByEntity(SQLiteDatabase db, String entity){
         int numRows = 0;
 
-
-//        int numMax = SyncTableManager.getNumMaxOfRowsByEntity(mDbHelper.getReadableDatabase(), GMContract.ShotTable.TABLE);
-//        Timber.e("Número máximo de rows en la tabla %s es %d", GMContract.ShotTable.TABLE, numMax);
-
         String[] column = new String[]{TablesSync.MAX_ROWS};
         String[] stringArgs = new String[]{entity};
 
@@ -62,6 +58,7 @@ public class SyncTableManager {
             c.moveToFirst();
             numRows = c.getInt(0);
         }
+
         c.close();
         return numRows;
     }
