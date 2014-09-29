@@ -34,4 +34,6 @@
 
     <color name="new_shot_bottom">#09000000</color>
 
+    <color name="error">#ffcc0000</color>
+
 </resources>

@@ -154,5 +154,15 @@ public class ShotManager {
         return SyncTableManager.insertOrUpdateSyncTable(db, tablesSync);
     }
 
+    public static Shot retrieveLastShotFromUser(SQLiteDatabase db, Integer userId) {
+        Cursor c = db.query(ShotTable.TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?", new String[]{String.valueOf(userId)}, null, null, ShotTable.CSYS_BIRTH + " DESC", "1");
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            Shot lastShot = ShotMapper.fromCursor(c);
+            c.close();
+            return lastShot;
+        }
+        return null;
+    }
 
 }

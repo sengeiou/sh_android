@@ -1,5 +1,6 @@
 package gm.mobi.android.ui.activities;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,8 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.manager.ShotManager;
+import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
@@ -43,9 +46,13 @@ public class NewShotActivity extends BaseSignedInActivity {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
+    @Inject SQLiteOpenHelper dbHelper;
 
     private User currentUser;
 
+    private int charCounterColorError;
+    private int charCounterColorNormal;
+    private Shot previousShot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,11 @@ public class NewShotActivity extends BaseSignedInActivity {
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
 
+        charCounterColorError = getResources().getColor(R.color.error);
+        charCounterColorNormal = getResources().getColor(R.color.gray_70);
+
+        previousShot = ShotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(), GolesApplication.get(this).getCurrentUser().getIdUser());
+
         // Compound drawable hack
 //        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
 //        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
@@ -74,29 +86,35 @@ public class NewShotActivity extends BaseSignedInActivity {
 
     @OnTextChanged(R.id.new_shot_text)
     public void textChanged() {
-        String text = filteredText(this.text.getText().toString());
+        // We don't trim or filter the text for character checking, so the user doesn't see incoherences.
+        String text = this.text.getText().toString();
         int textLength = text.length();
         // Send button disabled when no text
         sendButton.setEnabled(isValidComment(text));
         // Set remaining characters
         int remainingLength = MAX_LENGTH - textLength;
         charCounter.setText(String.valueOf(remainingLength));
-        if (remainingLength < 0) {
-            //TODO setear estado negativo
-        } else {
-            //TODO setear positivo
-        }
+
+        setCharCounterStatus(remainingLength > 0);
+    }
+
+    private void setCharCounterStatus(boolean valid) {
+        charCounter.setTextColor(valid ? charCounterColorNormal : charCounterColorError);
     }
 
     @OnClick(R.id.new_shot_send_button)
     public void sendShot() {
         String comment = filteredText(text.getText().toString());
+        if (isCommentRepeated(comment)) {
+            Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (isValidComment(comment)) {
             jobManager.addJobInBackground(new NewShotJob(this, currentUser, comment));
             setProgressUI(true);
         } else {
             Timber.i("Comment invalid: \"%s\"", comment);
-            //TODO definir comportamiento de inválido
+            Toast.makeText(this, "Invalid text", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -131,9 +149,12 @@ public class NewShotActivity extends BaseSignedInActivity {
     }
 
     private boolean isValidComment(String text) {
-        return text.length() > 0;
+        return text.length() > 0 && text.length() <= MAX_LENGTH;
     }
 
+    private boolean isCommentRepeated(String text) {
+        return previousShot.getComment().equals(text);
+    }
     @Override
     protected void onResume() {
         super.onResume();
