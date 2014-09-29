@@ -309,16 +309,16 @@ namespace Bagdad.Utils
                 switch (entity)
                 {
                     case Constants.SERCOM_TB_LOGIN:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_LOGIN + "}],\"metadata\":{\"items\": 1,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = ConstructOPS(OPS_DATA_LOGIN, operation, entity, searchParams, offset, 1);
                         break;
                     case Constants.SERCOM_TB_USER:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_USER + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = ConstructOPS(OPS_DATA_USER, operation, entity, searchParams, offset, 100);
                         break;
                     case Constants.SERCOM_TB_FOLLOW:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_FOLLOW + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = ConstructOPS(OPS_DATA_FOLLOW, operation, entity, searchParams, offset, 100);
                         break;
                     case Constants.SERCOM_TB_SHOT:
-                        ops = "\"ops\":[{\"data\":[{" + OPS_DATA_SHOT + "}],\"metadata\":{\"items\": 100,\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+                        ops = ConstructOPS(OPS_DATA_SHOT, operation, entity, searchParams, offset, 100);
                         break;
                     default:
                         ops = "";
@@ -332,6 +332,13 @@ namespace Bagdad.Utils
             return ops;
 
         }
+
+        private String ConstructOPS(String opsData, String operation, String entity, String searchParams, int offset, int nItems)
+        {
+
+            return "\"ops\":[{\"data\":[{" + opsData + "}],\"metadata\":{\"items\": " + nItems + ((offset != 0)?",\"offset\":" + offset : "") + ",\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
+        }
+
 
         private async Task<int> saveData(String entity, JObject response)
         {
