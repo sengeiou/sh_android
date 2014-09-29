@@ -21,7 +21,9 @@ public class UserMapper extends GenericMapper {
         user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
-
+        user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
+        user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
+        user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
         setSynchronizedFromCursor(c, user);
 
         return user;
@@ -45,6 +47,9 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.EMAIL, u.getEmail());
         cv.put(UserTable.NAME, u.getName());
         cv.put(UserTable.PHOTO, u.getPhoto());
+        cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
+        cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
+        cv.put(UserTable.POINTS, u.getPoints());
 
         setSynchronizedToContentValues(cv, u);
 
@@ -59,6 +64,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
+        dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
+        dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
+        dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
         setSynchronizedToDto(dto, user);
 
         return dto;
@@ -73,7 +81,9 @@ public class UserMapper extends GenericMapper {
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName((String) dto.get(UserTable.NAME));
         user.setPhoto((String) dto.get(UserTable.PHOTO));
-
+        user.setNumFollowers((Integer)dto.get(UserTable.NUM_FOLLOWERS));
+        user.setNumFollowings((Integer)dto.get(UserTable.NUM_FOLLOWINGS));
+        user.setPoints((Integer)dto.get(UserTable.POINTS));
         setSynchronizedFromDto(dto, user);
 
         return user;
@@ -89,7 +99,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
-
+        dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
+        dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
+        dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
         setSynchronizedToDto(dto, user);
 
         return dto;
