@@ -52,9 +52,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:@"shootCell"];
-    
+        
     lengthTextField = 0;
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
@@ -199,21 +197,8 @@
    
     Shot *shot = self.arrayShots[indexPath.row];
 
-    if (cell) {
-        cell.txvText.text = [shot.comment stringByReplacingOccurrencesOfString:@"http://" withString:@""];
-        cell.txvText.textColor = [UIColor blackColor];
-        cell.txvText.frame = CGRectMake(cell.txvText.frame.origin.x, cell.txvText.frame.origin.y,cell.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
-        //[self.txvText setUserInteractionEnabled:NO];
-        cell.txvText.scrollEnabled = NO;
-        
-        cell.lblName.text = shot.user.name;
-        [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
-        cell.lblDate.text = [Utils getDateShot:shot.csys_birth];
-        cell.txvText.text = @"TEST";
-    }
 
-//    cell = [cell initWithShot:shot reuseIdentifier:CellIdentifier];
-//    [cell configureBasicCellWithShot:shot];
+    [cell configureBasicCellWithShot:shot];
     
     return cell;
  }
