@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xLn-LT-hqF" userLabel="ContentView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xLn-LT-hqF" userLabel="ContentView">
                                 <rect key="frame" x="52" y="32" width="217" height="415"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Shootr" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaX-O7-PZL">
@@ -62,13 +62,16 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="217" id="8x0-PI-CL8"/>
+                                    <constraint firstAttribute="height" constant="415" id="GE3-Fr-NAv"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="xLn-LT-hqF" firstAttribute="leading" secondItem="L0n-L4-j4y" secondAttribute="leadingMargin" constant="36" id="Qtm-zA-lGy"/>
-                            <constraint firstAttribute="centerY" secondItem="xLn-LT-hqF" secondAttribute="centerY" id="nuF-lg-ARs"/>
-                            <constraint firstAttribute="centerX" secondItem="xLn-LT-hqF" secondAttribute="centerX" id="qka-Qo-hFQ"/>
+                            <constraint firstAttribute="centerX" secondItem="xLn-LT-hqF" secondAttribute="centerX" id="Dt7-Fv-w8a"/>
+                            <constraint firstAttribute="centerY" secondItem="xLn-LT-hqF" secondAttribute="centerY" id="KyB-Xq-1i8"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kRq-V2-5kF"/>
@@ -85,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZH-1o-5mq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="389" y="644.99999999999977"/>
+            <point key="canvasLocation" x="385" y="644"/>
         </scene>
         <!--Setup View Controller-->
         <scene sceneID="NXI-VX-GtJ">
