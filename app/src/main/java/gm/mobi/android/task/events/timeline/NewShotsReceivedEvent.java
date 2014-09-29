@@ -7,23 +7,33 @@ import gm.mobi.android.task.events.ResultEvent;
 
 public class NewShotsReceivedEvent extends ResultEvent<List<Shot>>{
 
-    private List<Shot> shots;
+    private List<Shot> allShots;
+
+    public int getNewShotsCount() {
+        return newShotsCount;
+    }
+
+    public void setNewShotsCount(int newShotsCount) {
+        this.newShotsCount = newShotsCount;
+    }
+
+    private int newShotsCount;
 
     public NewShotsReceivedEvent(int status) {
         super(status);
     }
 
-    public List<Shot> getShots() {
-        return shots;
+    public List<Shot> getAllShots() {
+        return allShots;
     }
 
-    public void setShots(List<Shot> newerShots){
-        this.shots = newerShots;
+    public void setAllShots(List<Shot> newerShots){
+        this.allShots = newerShots;
     }
 
     @Override
     public ResultEvent setSuccessful(List<Shot> o) {
-        shots = o;
+        allShots = o;
         return this;
     }
 

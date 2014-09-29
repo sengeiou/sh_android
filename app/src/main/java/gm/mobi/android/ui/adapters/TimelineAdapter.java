@@ -111,8 +111,8 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
         notifyDataSetChanged();
     }
 
-    public void addShotsAbove(List<Shot> newShots) {
-        this.shots.addAll(0, newShots);
+    public void setShots(List<Shot> shots) {
+        this.shots = shots;
         notifyDataSetChanged();
     }
 

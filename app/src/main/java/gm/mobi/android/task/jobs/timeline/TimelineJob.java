@@ -26,6 +26,7 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
+import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
@@ -112,6 +113,7 @@ public class TimelineJob extends CancellableJob {
         }
     }
 
+
     private void retrieveNewer() throws IOException, SQLException {
         Long newestShotDate = 0L;
         if (referenceShot != null) {
@@ -124,8 +126,11 @@ public class TimelineJob extends CancellableJob {
 
         if (newShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), newShots);
-            List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), newShots);
-            bus.post(new NewShotsReceivedEvent(NewShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(shotsWithUsers));
+            List<Shot> updatedTimeline = ShotManager.retrieveTimelineWithUsers(mDbHelper.getReadableDatabase());
+            NewShotsReceivedEvent resultEvent = new NewShotsReceivedEvent(NewShotsReceivedEvent.STATUS_SUCCESS);
+            resultEvent.setSuccessful(updatedTimeline);
+            resultEvent.setNewShotsCount(newShots.size());
+            bus.post(resultEvent);
         } else {
             sendServerError(RETRIEVE_NEWER, null);
         }

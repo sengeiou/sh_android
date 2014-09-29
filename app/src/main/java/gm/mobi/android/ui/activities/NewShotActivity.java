@@ -1,6 +1,7 @@
 package gm.mobi.android.ui.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,7 +38,7 @@ public class NewShotActivity extends BaseSignedInActivity {
     @InjectView(R.id.new_shot_subtitle) TextView username;
     @InjectView(R.id.new_shot_text) TextView text;
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
-    @InjectView(R.id.new_shot_send_button) View sendButton;
+    @InjectView(R.id.new_shot_send_button) TextView sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
 
     @Inject Picasso picasso;
@@ -65,6 +66,11 @@ public class NewShotActivity extends BaseSignedInActivity {
         username.setText("@" + currentUser.getUserName());
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
+
+        // Compound drawable hack
+//        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
+//        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+//        sendButton.setCompoundDrawables(null, null, icon, null);
     }
 
     @OnTextChanged(R.id.new_shot_text)

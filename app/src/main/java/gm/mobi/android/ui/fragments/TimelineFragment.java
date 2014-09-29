@@ -6,12 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.IntentCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +25,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,7 +36,6 @@ import butterknife.OnItemClick;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
@@ -52,7 +46,6 @@ import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
@@ -240,6 +233,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void startRefreshing(Context context) {
         if (!isRefreshing) {
             isRefreshing = true;
+            swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             if (adapter != null) {
@@ -266,10 +260,12 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
         jobManager.addJobInBackground(new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL, null));
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Subscribe
     public void showTimeline(ShotsResultEvent event) {
+        swipeRefreshLayout.setRefreshing(false);
         List<Shot> shots = event.getShots();
         if (shots != null && shots.size() > 0) {
             adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
@@ -283,20 +279,22 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void displayNewShots(NewShotsReceivedEvent event) {
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
-        List<Shot> newShots = event.getShots();
-        if (newShots == null) {
+        List<Shot> updatedTimeline = event.getAllShots();
+        int newShotsCount = event.getNewShotsCount();
+
+        if (updatedTimeline == null) {
             //TODO mostrar error? Es posible esta situación? No debería
             Timber.e("Null shot list received");
             return;
         }
-        if (newShots.size() == 0) {
+        if (newShotsCount == 0) {
             Timber.i("No new shots");
             adapter.notifyDataSetChanged(); // Refresh time indicator
         } else {
-            Timber.i("Received %d new shots", newShots.size());
+            Timber.i("Received %d new shots", newShotsCount);
             int originalPosition = listView.getFirstVisiblePosition();
-            int newPosition = originalPosition + newShots.size() - 1;
-            adapter.addShotsAbove(newShots);
+            int newPosition = originalPosition + newShotsCount - 1;
+            adapter.setShots(updatedTimeline);
             listView.setSelection(newPosition);
             listView.smoothScrollToPosition(0);
         }

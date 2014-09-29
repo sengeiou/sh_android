@@ -3,6 +3,7 @@ package gm.mobi.android.task.jobs.loginregister;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.path.android.jobqueue.Params;
@@ -59,7 +60,9 @@ public class LoginUserJob extends CancellableJob {
             User user = service.login(usernameEmail, password);
             if (user != null) {
                 // Store user in database
-                UserManager.saveUser(mDbHelper.getWritableDatabase(), user);
+                SQLiteDatabase wdb = mDbHelper.getWritableDatabase();
+                UserManager.saveUser(wdb, user);
+                wdb.close();
                 bus.post(LoginResultEvent.successful(user));
             } else {
                 sendServerError(null);

@@ -104,7 +104,7 @@ public class InitialSetupFragment extends BaseFragment {
 
     @Subscribe
     public void onGetShotsResult(ShotsResultEvent event){
-        mShotList = event.getShots();
+        mShotList = event.getAllShots();
         if(event.getStatus() == ShotsResultEvent.STATUS_SUCCESS && mShotList!=null){
             //Aquí deberíamos pintar el fragment del timeline
             Toast.makeText(getApplicationContext(), "Ha descargado todos los shots", Toast.LENGTH_LONG).show();

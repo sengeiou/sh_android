@@ -101,7 +101,7 @@
                 android:layout_alignParentRight="true"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                android:drawablePadding="8dp"
+                android:drawablePadding="0dp"
                 android:drawableRight="@drawable/ic_send"
                 android:enabled="false"
                 android:gravity="center"
@@ -110,7 +110,6 @@
                 android:text="@string/new_shoot_action"
                 android:textColor="@color/primary_selector"
                 android:textSize="16sp"
-                tools:enabled="true"
                 />
 
             <ProgressBar
