@@ -25,6 +25,10 @@
                                         <subviews>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rE8-86-ctg">
                                                 <rect key="frame" x="20" y="0.0" width="288" height="110"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="288" id="1xG-in-Mcr"/>
+                                                    <constraint firstAttribute="height" constant="110" id="usR-1J-vxH"/>
+                                                </constraints>
                                                 <prototypes>
                                                     <tableViewCell contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSetup" id="6cA-CV-HnS">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -92,6 +96,12 @@
                                             <constraint firstItem="gQB-TK-l5Z" firstAttribute="leading" secondItem="rE8-86-ctg" secondAttribute="leading" id="olI-G2-KUR"/>
                                             <constraint firstItem="gQB-TK-l5Z" firstAttribute="trailing" secondItem="rE8-86-ctg" secondAttribute="trailing" id="wLP-gP-thQ"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="mIs-bR-vvB"/>
+                                                <exclude reference="MgU-Ro-TBt"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <constraints>
