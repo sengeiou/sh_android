@@ -195,7 +195,7 @@
                                             <action selector="signInFacebook:" destination="6B8-Oo-GZG" eventType="touchUpInside" id="Ae1-aM-iiU"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Ball" translatesAutoresizingMaskIntoConstraints="NO" id="tav-xY-S2w">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Shootr" translatesAutoresizingMaskIntoConstraints="NO" id="tav-xY-S2w">
                                         <rect key="frame" x="35" y="9" width="149" height="149"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5R-fh-b5W">
@@ -262,7 +262,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Ball" width="149" height="149"/>
         <image name="Facebook_SignIn" width="214" height="47"/>
+        <image name="Shootr" width="149" height="149"/>
     </resources>
 </document>

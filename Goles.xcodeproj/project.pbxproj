@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
+		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
 		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
@@ -27,7 +28,6 @@
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
-		AA5E23C519D96A37004F8511 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA5E23C719D96A37004F8511 /* Setup2.storyboard */; };
 		AA623CDF1998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CE11998A7F200A942A9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE01998A7F200A942A9 /* CoreGraphics.framework */; };
 		AA623CE31998A7F200A942A9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE21998A7F200A942A9 /* UIKit.framework */; };
@@ -122,6 +122,7 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
+		A53ACC0D19D96E26009421D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		A58DA83F19D02EA9003EE5CB /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
 		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
 		A58DA84219D02EB8003EE5CB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -134,11 +135,8 @@
 		A59EECE819D17BF400D011C5 /* UIImage+CircularClip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CircularClip.h"; sourceTree = "<group>"; };
 		A59EECE919D17BF400D011C5 /* UIImage+CircularClip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CircularClip.m"; sourceTree = "<group>"; };
 		A5A678A519C71FC200DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/People.storyboard; sourceTree = "<group>"; };
-		A5A678A719C71FC400DEEA51 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/People.storyboard; sourceTree = "<group>"; };
 		A5A678AB19C7243500DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Timeline.storyboard; sourceTree = "<group>"; };
-		A5A678AD19C7243700DEEA51 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Timeline.storyboard; sourceTree = "<group>"; };
 		A5A678B119C7249000DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Me.storyboard; sourceTree = "<group>"; };
-		A5A678B319C7249300DEEA51 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Me.storyboard; sourceTree = "<group>"; };
 		A5A678C919C731AE00DEEA51 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A5C2E6D919C748A600E2F988 /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
 		A5C2E6DA19C748A600E2F988 /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
@@ -154,8 +152,6 @@
 		AA241F85199CFB5200897D6D /* _SyncControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SyncControl.m; sourceTree = "<group>"; };
 		AA241F87199CFB6400897D6D /* SyncManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncManager.h; sourceTree = "<group>"; };
 		AA241F88199CFB6400897D6D /* SyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncManager.m; sourceTree = "<group>"; };
-		AA5E23C619D96A37004F8511 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
-		AA5E23C819D96A39004F8511 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		AA623CDB1998A7F200A942A9 /* Goles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CDE1998A7F200A942A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AA623CE01998A7F200A942A9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -474,10 +470,10 @@
 		AA623D171998CAE100A942A9 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				A53ACC0C19D96E26009421D8 /* Setup2.storyboard */,
 				A5A678A619C71FC200DEEA51 /* People.storyboard */,
 				A5A678AC19C7243500DEEA51 /* Timeline.storyboard */,
 				A5A678B219C7249000DEEA51 /* Me.storyboard */,
-				AA5E23C719D96A37004F8511 /* Setup2.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -822,11 +818,11 @@
 				AA623D3F1998CF4B00A942A9 /* InfoPlist.strings in Resources */,
 				A5A678B019C7249000DEEA51 /* Me.storyboard in Resources */,
 				AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */,
+				A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */,
 				A5A678AA19C7243500DEEA51 /* Timeline.storyboard in Resources */,
 				AA623D431998CF4B00A942A9 /* s.aiff in Resources */,
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
-				AA5E23C519D96A37004F8511 /* Setup2.storyboard in Resources */,
 				A5A678A419C71FC200DEEA51 /* People.storyboard in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
 				A5A678CA19C731AE00DEEA51 /* Images.xcassets in Resources */,
@@ -963,11 +959,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A53ACC0C19D96E26009421D8 /* Setup2.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A53ACC0D19D96E26009421D8 /* en */,
+			);
+			name = Setup2.storyboard;
+			sourceTree = "<group>";
+		};
 		A5A678A619C71FC200DEEA51 /* People.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A5A678A519C71FC200DEEA51 /* en */,
-				A5A678A719C71FC400DEEA51 /* es */,
 			);
 			name = People.storyboard;
 			sourceTree = "<group>";
@@ -976,7 +979,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A5A678AB19C7243500DEEA51 /* en */,
-				A5A678AD19C7243700DEEA51 /* es */,
 			);
 			name = Timeline.storyboard;
 			sourceTree = "<group>";
@@ -985,18 +987,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				A5A678B119C7249000DEEA51 /* en */,
-				A5A678B319C7249300DEEA51 /* es */,
 			);
 			name = Me.storyboard;
-			sourceTree = "<group>";
-		};
-		AA5E23C719D96A37004F8511 /* Setup2.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AA5E23C619D96A37004F8511 /* en */,
-				AA5E23C819D96A39004F8511 /* es */,
-			);
-			name = Setup2.storyboard;
 			sourceTree = "<group>";
 		};
 		AA623D001998A7F200A942A9 /* InfoPlist.strings */ = {
