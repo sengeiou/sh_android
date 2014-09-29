@@ -19,14 +19,14 @@ import java.util.TreeMap;
 public class UserLogin implements GenericServiceHook {
 
 
-    private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` , " +
+    private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` , `points` , `numFollowings` , `numFollowers` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
-            "FROM `shooter`.`User` " +
+            "FROM `shooter`.`UserView` " +
             "WHERE `email` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
-    private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` , " +
+    private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` , `points` , `numFollowings` , `numFollowers` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
-            "FROM `shooter`.`User` " +
+            "FROM `shooter`.`UserView` " +
             "WHERE `userName` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
     private static final String ATTR_PASSWORD = "password";
@@ -38,6 +38,10 @@ public class UserLogin implements GenericServiceHook {
     private static final String ATTR_PHOTO = "photo";
     private static final String ATTR_SESSIONTOKEN = "sessionToken";
     private static final String ATTR_NAME = "name";
+
+    private static final String ATTR_POINTS = "points";
+    private static final String ATTR_NUMFOLLOWINGS = "numFollowings";
+    private static final String ATTR_NUMFOLLOWERS = "numFollowers";
 
 
     private static final String ATTR_BIRTH = "birth";
@@ -272,8 +276,12 @@ public class UserLogin implements GenericServiceHook {
                 attributes.put(ATTR_NAME, JDBCUtils.getObject(resultSet, 6, String.class));
                 attributes.put(ATTR_PHOTO, JDBCUtils.getObject(resultSet, 7, String.class));
 
+                attributes.put(ATTR_POINTS, JDBCUtils.getObject(resultSet, 8, Long.class));
+                attributes.put(ATTR_NUMFOLLOWINGS, JDBCUtils.getObject(resultSet, 9, Long.class));
+                attributes.put(ATTR_NUMFOLLOWERS, JDBCUtils.getObject(resultSet, 10, Long.class));
 
-                Timestamp timestamp = JDBCUtils.getObject(resultSet, 8, Timestamp.class);
+
+                Timestamp timestamp = JDBCUtils.getObject(resultSet, 11, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_BIRTH, null);
                 }
@@ -282,7 +290,7 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_BIRTH, timestamp.getTime());
                 }
 
-                timestamp = JDBCUtils.getObject(resultSet, 9, Timestamp.class);
+                timestamp = JDBCUtils.getObject(resultSet, 12, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_MODIFIED, null);
                 }
@@ -291,12 +299,12 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_MODIFIED, timestamp.getTime());
                 }
 
-                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 10, Long.class));
+                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 13, Long.class));
                 if (resultSet.wasNull()) {
                     attributes.put(ATTR_REVISION, null);
                 }
 
-                timestamp = JDBCUtils.getObject(resultSet, 11, Timestamp.class);
+                timestamp = JDBCUtils.getObject(resultSet, 14, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_DELETED, null);
                 }
