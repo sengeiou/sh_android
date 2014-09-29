@@ -2,7 +2,7 @@
 <AccessPolicy Version="1.0.0" Description="Políticas de acceso a las entidades de la aplicación Shooter">
     <Entities Name="Entidades Base">
         <Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
-            <Name Alias="User">User</Name>
+            <Name Alias="User">UserView</Name>
             <Data>
                 <!-- User -->
                 <Attribute Alias="idUser" Direction="Output" Description="User identifier">idUser</Attribute>
@@ -10,6 +10,9 @@
                 <Attribute Alias="userName" Direction="Output" Description="User nick It is not modifiable">userName</Attribute>
                 <Attribute Alias="name" Direction="Output" Description="User name. It is modifiable">name</Attribute>
                 <Attribute Alias="photo" Direction="Output" Description="User photo url">photo</Attribute>
+                <Attribute Alias="numFollowings" Direction="Output" Description="User's following number">numFollowings</Attribute>
+                <Attribute Alias="numFollowers" Direction="Output" Description="User's follower number">numFollowers</Attribute>
+                <Attribute Alias="points" Direction="Output" Description="User's points">points</Attribute>
 
                 <!-- Información de auditoría -->
                 <Attribute Alias="revision" Direction="Output" Description="It's initialized by 0 to the creation. Must be increased by 1 in each modification ">csys_revision</Attribute>
