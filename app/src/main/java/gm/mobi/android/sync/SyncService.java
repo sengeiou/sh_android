@@ -16,11 +16,14 @@ public class SyncService extends Service {
     // Object to use as a thread-safe lock
     private static final Object sSyncAdapterLock = new Object();
 
+
+    public SyncService(){super();}
     /*
      * Instantiate the sync adapter object.
      */
     @Override
     public void onCreate() {
+        super.onCreate();
         /*
          * Create the sync adapter as a singleton.
          * Set the sync adapter as syncable
