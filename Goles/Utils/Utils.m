@@ -488,4 +488,19 @@
 }
 
 
++ (int)getIphone: (CGFloat) height{
+    
+    if (height == 736)
+       return 7;
+    else if (height == 667)
+        return 6;
+    else if (height == 568)
+        return 5;
+    else if (height == 480)
+       return 4;
+    
+
+    return 0;
+}
+
 @end

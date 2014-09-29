@@ -57,4 +57,6 @@
 
 + (CGFloat)heightForShot: (NSString *) text;
 
++ (int)getIphone: (CGFloat) height;
+
 @end

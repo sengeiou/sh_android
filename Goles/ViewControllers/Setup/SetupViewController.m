@@ -47,6 +47,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self adjustFrame];
+    
     // Do any additional setup after loading the view.
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -57,6 +60,16 @@
     
     [self addTextFields];
 }
+
+-(void)adjustFrame{
+   
+    self.mtableView.frame = CGRectMake(self.mtableView.frame.origin.x, 0, self.view.frame.size.width, self.mtableView.frame.size.height);
+    
+    if ([Utils getIphone:self.view.frame.size.height] == 6 || [Utils getIphone:self.view.frame.size.height] == 7)
+        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-10, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
+
+}
+
 
 -(void)addTextFields{
     txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
