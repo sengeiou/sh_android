@@ -81,15 +81,15 @@
         </service>
 
         <provider
-            android:authorities="gm.mobi.android.db.provider"
             android:name="gm.mobi.android.db.provider.ShootrContentProvider"
+            android:authorities="gm.mobi.android.db.provider"
             android:exported="false"
             android:syncable="true"/>
 
         <service
-            android:name=".sync.SyncService"
-            android:enabled="true"
-            android:exported="false">
+            android:name="gm.mobi.android.sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
