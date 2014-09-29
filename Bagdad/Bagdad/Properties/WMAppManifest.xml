@@ -5,7 +5,7 @@
     <Language code="es" />
   </Languages>
   <App xmlns="" ProductID="{bbf2a5f0-fea1-4d3f-b9a3-b12397bee02f}" Title="Bagdad" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Bagdad author" Description="Sample description" Publisher="Bagdad" PublisherID="{dfd351f1-8cbc-4668-b740-6e057e213146}">
-    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
+    <IconPath IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
       <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
