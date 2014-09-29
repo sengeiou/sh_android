@@ -10,6 +10,7 @@
 #import "User.h"
 #import "Utils.h"
 #import "UIImageView+FadeIn.h"
+#import "NSString+CleanLinks.h"
 
 @implementation ShotTableViewCell
 
@@ -30,7 +31,7 @@
 
 - (void)configureBasicCellWithShot:(Shot *)shot {
 
-    self.txvText.text = [shot.comment stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+    self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
     self.txvText.textColor = [UIColor blackColor];
     self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
     //[self.txvText setUserInteractionEnabled:NO];

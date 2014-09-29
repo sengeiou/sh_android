@@ -11,7 +11,7 @@
 @implementation NSString (CleanLinks)
 
 - (NSString *)cleanStringfromLinks:(NSString *)string {
-    return nil;
+    return [string stringByReplacingOccurrencesOfString:@"http://" withString:@""];
 }
 
 @end
