@@ -16,12 +16,17 @@ import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.service.dataservice.generic.FilterBuilder;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.db.GMContract.FollowTable;
+
+import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
+import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;
+import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
 
@@ -102,23 +107,6 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
     }
 
-
-    public static FilterDto[] getUserByUsersId(List<Integer> userIds, Date lastModifiedDate) {
-        FilterDto[] mFilterDto = new FilterDto[1];
-//        FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
-//        int i = 0;
-//        for(Integer userId: userIds) {
-//            mFilterItemDtos[i] = new FilterItemDto(Constants.COMPARATOR_EQUAL, UserTable.ID, userId);
-//            i++;
-//        }
-
-//        /mFilterDto[0] = new FilterDto(Constants.NEXUS_OR,mFilterItemDtos,null);
-        mFilterDto[0] = new FilterDto(Constants.NEXUS_OR, new FilterItemDto[]{new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_DELETED, lastModifiedDate),
-                new FilterItemDto(Constants.COMPARATOR_GREAT_EQUAL_THAN, GMContract.SyncColumns.CSYS_MODIFIED, lastModifiedDate)}, null);
-
-        return mFilterDto;
-    }
-
     public FilterDto getFollowsByIdUserAndRelationship(Integer idUser, int relationship, Date lastModifiedDate) {
         FilterDto filterDto = null;
         switch (relationship) {
@@ -159,19 +147,10 @@ public class UserDtoFactory {
     }
 
     public FilterDto getUsersByUserIds(List<Integer> userIds, Date lastModifiedDate) {
-        FilterItemDto[] mFilterItemDtos = new FilterItemDto[userIds.size()];
-        int i = 0;
-        for (Integer userId : userIds) {
-            mFilterItemDtos[i] = new FilterItemDto(Constants.COMPARATOR_EQUAL, UserTable.ID, userId);
-            i++;
-        }
-        FilterDto filterDto = new FilterDto(Constants.NEXUS_OR,
-
-                mFilterItemDtos
-                ,
-                getUserByUsersId(userIds, lastModifiedDate)
-        );
-        return filterDto;
+        return and(
+                or(UserTable.ID).isIn(userIds),
+                orModifiedOrDeletedAfter(lastModifiedDate.getTime())
+        ).build();
     }
 
 
