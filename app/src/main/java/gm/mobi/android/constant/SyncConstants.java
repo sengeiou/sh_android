@@ -1,14 +1,13 @@
 package gm.mobi.android.constant;
 
-import gm.mobi.android.BuildConfig;
 
 public class SyncConstants {
 
     // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME+".sync.provider";
+    public static final String AUTHORITY = "gm.mobi.android.db.provider";
 
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "gm.mobi.android";
+    public static final String ACCOUNT_TYPE = "shootr.mobi.android";
 
     // The account name
 
@@ -23,7 +22,7 @@ public class SyncConstants {
     public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
     public static final long SYNC_INTERVAL_SHOTS = 10L;
     //Sync Interval
-    public static final long SYNC_INTERVAL_FOR_SHOTS = 10000L;
+    public static final long SYNC_INTERVAL_FOR_REMOVE_SHOTS =24*60*60;//Sync frequency in Seconds - Every 24 hours
 
 
     //Sync callTypes
@@ -31,6 +30,7 @@ public class SyncConstants {
 
 
     public static int GET_SHOTS_CALL_TYPE = 300;
+    public static int REMOVE_OLD_SHOTS = 301;
 
 
 
