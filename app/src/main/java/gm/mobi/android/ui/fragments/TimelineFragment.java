@@ -38,6 +38,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
@@ -53,7 +54,6 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public static final int REQUEST_NEW_SHOT = 1;
     @Inject Picasso picasso;
     @Inject Bus bus;
-    @Inject SQLiteOpenHelper dbHelper;
     @Inject JobManager jobManager;
 
     @InjectView(R.id.timeline_list) ListView listView;
@@ -105,6 +105,14 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+        isLoadingMore = false;
+        isRefreshing = false;
     }
 
     @Override

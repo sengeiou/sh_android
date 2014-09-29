@@ -92,6 +92,14 @@ public class TimelineJob extends CancellableJob {
         }
     }
 
+    private boolean checkNetwork() {
+        if (!mNetworkUtil.isConnected(app)) {
+            bus.post(new ConnectionNotAvailableEvent());
+            return false;
+        }
+        return true;
+    }
+
     private void retrieveInitial() throws IOException, SQLException {
         // Try to get timeline from database
         List<Shot> localShots = ShotManager.retrieveTimelineWithUsers(mDbHelper.getReadableDatabase());
@@ -102,6 +110,7 @@ public class TimelineJob extends CancellableJob {
         }
 
         // If we don't have any, check the server
+        if (!checkNetwork()) return;
         List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
         if (remoteShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), remoteShots);
@@ -115,6 +124,7 @@ public class TimelineJob extends CancellableJob {
 
 
     private void retrieveNewer() throws IOException, SQLException {
+        if (!checkNetwork()) return;
         Long newestShotDate = 0L;
         if (referenceShot != null) {
             newestShotDate = referenceShot.getCsys_birth().getTime();
@@ -137,6 +147,7 @@ public class TimelineJob extends CancellableJob {
     }
 
     private void retrieveOlder() throws IOException, SQLException {
+        if (!checkNetwork()) return;
         List<Shot> oldShots = service.getOlderShots(getFollowingIds(), referenceShot != null ? referenceShot.getCsys_birth().getTime() : 0L);
         if (oldShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
