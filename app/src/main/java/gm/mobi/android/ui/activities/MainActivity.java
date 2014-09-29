@@ -1,6 +1,8 @@
 package gm.mobi.android.ui.activities;
 
 import android.accounts.Account;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.sync.ShootrAccountGenerator;
+import gm.mobi.android.sync.SyncService;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
@@ -32,8 +35,11 @@ public class MainActivity extends BaseSignedInActivity {
 
     ContentResolver mContentResolver;
     private Account mAccount;
-    @Inject Bus bus;
-    @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
+    @Inject
+    Bus bus;
+    @Inject
+    @InitialSetupCompleted
+    BooleanPreference initialSetupCompleted;
 
     //TODO recibir parámetros para indicar si viene de registro, login o nueva
     public static Intent getIntent(Context context) {
@@ -56,6 +62,7 @@ public class MainActivity extends BaseSignedInActivity {
         mAccount = ShootrAccountGenerator.createSyncAccount(getApplicationContext());
 
         //TODO setup navigation drawer
+
         if (needsSetup()) {
             initialSetup();
         } else {
@@ -104,36 +111,6 @@ public class MainActivity extends BaseSignedInActivity {
 
     }
 
-    private void setPeriodicSync(){
-        //Retrieve Followings
-        //Retrieve Followins's users
-        //Retrieve Shots
-
-
-        // Is it possible to sync?
-        ContentResolver.setIsSyncable(mAccount, AUTHORITY, 0);
-        // Should sync be done automatically by Android when the provider
-        // sends a notifyChange() with syncToNetwork set to true?
-        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
-        // Set some sync parameters
-        Bundle params = new Bundle();
-        params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, false);
-        params.putBoolean(ContentResolver.SYNC_EXTRAS_DO_NOT_RETRY, false);
-        params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, false);
-
-        params.putInt(SyncConstants.CALL_TYPE,SyncConstants.GET_SHOTS_CALL_TYPE);
-        // How often should automatic sync be done? (say 15 minutes)
-        ContentResolver.addPeriodicSync(mAccount, AUTHORITY, params,SyncConstants.SYNC_INTERVAL_FOR_SHOTS);
-        // Request a sync right now
-        ContentResolver.requestSync(mAccount, AUTHORITY, params);
-
-        Bundle bundleShots = new Bundle();
-        bundleShots.putInt(SyncConstants.CALL_TYPE,SyncConstants.GET_SHOTS_CALL_TYPE);
-//        ContentResolver.requestSync(mAccount,SyncConstants.AUTHORITY,bundleShots);
-        ContentResolver.addPeriodicSync(mAccount, AUTHORITY,bundleShots,SyncConstants.SYNC_INTERVAL_FOR_SHOTS);
-    }
-
-
 
     @Override
     protected void onPause() {
@@ -145,8 +122,6 @@ public class MainActivity extends BaseSignedInActivity {
     protected void onResume() {
         super.onResume();
         bus.register(this);
-        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
-        setPeriodicSync();
     }
 
     @Override
