@@ -62,4 +62,12 @@
         <item name="android:textSize">15sp</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
+
+    <style name="ProfileMarkTitle">
+        <item name="android:textColor">@color/gray_60</item>
+    </style>
+    <style name="ProfileMarkValue">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
