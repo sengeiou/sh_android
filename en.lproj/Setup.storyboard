@@ -15,7 +15,7 @@
                         <viewControllerLayoutGuide type="bottom" id="XeZ-Ys-yw1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="L0n-L4-j4y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xLn-LT-hqF" userLabel="ContentView">
@@ -66,14 +66,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="xLn-LT-hqF" secondAttribute="centerY" id="bGR-oi-Qjh"/>
-                            <constraint firstAttribute="centerX" secondItem="xLn-LT-hqF" secondAttribute="centerX" id="odf-SK-aDa"/>
+                            <constraint firstItem="xLn-LT-hqF" firstAttribute="leading" secondItem="L0n-L4-j4y" secondAttribute="leadingMargin" constant="36" id="Qtm-zA-lGy"/>
+                            <constraint firstAttribute="centerY" secondItem="xLn-LT-hqF" secondAttribute="centerY" id="nuF-lg-ARs"/>
+                            <constraint firstAttribute="centerX" secondItem="xLn-LT-hqF" secondAttribute="centerX" id="qka-Qo-hFQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kRq-V2-5kF"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="btnFacebook" destination="KGB-Cw-1TK" id="MN1-XP-Hgv"/>
                         <outlet property="btnRegister" destination="kCC-fj-4C4" id="22a-vv-vZg"/>
@@ -84,7 +85,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jZH-1o-5mq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="389" y="645"/>
+            <point key="canvasLocation" x="389" y="644.99999999999977"/>
         </scene>
         <!--Setup View Controller-->
         <scene sceneID="NXI-VX-GtJ">
@@ -98,8 +99,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QqG-FM-vBF">
-                                <rect key="frame" x="16" y="44" width="288" height="544"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QqG-FM-vBF">
+                                <rect key="frame" x="16" y="44" width="288" height="524"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3SJ-wk-XQW">
                                         <rect key="frame" x="-20" y="0.0" width="328" height="450"/>
@@ -127,8 +128,8 @@
                                                     <outlet property="delegate" destination="kei-0y-Nst" id="IR8-uP-SSb"/>
                                                 </connections>
                                             </tableView>
-                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LAq-Ol-dhh">
-                                                <rect key="frame" x="20" y="110" width="288" height="375"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LAq-Ol-dhh">
+                                                <rect key="frame" x="20" y="110" width="288" height="320"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bba-8I-JaV">
                                                         <rect key="frame" x="16" y="-6" width="173" height="30"/>
@@ -214,7 +215,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CfP-Bv-CWf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="867" y="645"/>
+            <point key="canvasLocation" x="867" y="644.99999999999977"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dxM-Ra-l4t">
@@ -233,7 +234,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ea6-OE-6uO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-67" y="645"/>
+            <point key="canvasLocation" x="-67" y="644.99999999999977"/>
         </scene>
     </scenes>
     <resources>
