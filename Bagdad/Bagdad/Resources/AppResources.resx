@@ -294,4 +294,8 @@
     <value>There's a problem connecting with the internet. Check your connection and try again.</value>
     <comment>SignIn.xaml.cs</comment>
   </data>
+  <data name="Synchroning" xml:space="preserve">
+    <value>Syncing...</value>
+    <comment>TimeLine.xaml.cs</comment>
+  </data>
 </root>

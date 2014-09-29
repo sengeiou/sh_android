@@ -8,24 +8,38 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Bagdad.Resources;
-using Bagdad.Utils;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Bagdad
 {
     public partial class TimeLine : PhoneApplicationPage
     {
 
-        ApplicationBarIconButton appBarButton;
-        Util util = new Util();
+        ApplicationBarIconButton appBarButtonShot;
+        private DispatcherTimer timer;
+        public ProgressIndicator progress;
+        
         
         public TimeLine()
         {      
             InitializeComponent();
             BuildLocalizedApplicationBar();
             DataContext = App.ShotsVM;
+            progress = new ProgressIndicator()
+            {
+                Text = AppResources.Synchroning,
+                IsIndeterminate = true,
+                IsVisible = false
+
+            };
+            SystemTray.SetProgressIndicator(this, progress);
+            timer = new DispatcherTimer();
+            timer.Tick += timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 0, 10);  
+
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -63,52 +77,92 @@ namespace Bagdad
             ApplicationBar = new ApplicationBar();
 
             // Create a new button and set the text value to the localized string from AppResources.
-            appBarButton =
+            appBarButtonShot =
                 new ApplicationBarIconButton(new
                 Uri("/Resources/icons/appbar.message.send.png", UriKind.Relative));
-            appBarButton.Text = AppResources.Shoot;
-            appBarButton.IsEnabled = false;
-            appBarButton.Click += appBarShootButton_Click;
-            ApplicationBar.Buttons.Add(appBarButton);
+            appBarButtonShot.Text = AppResources.Shoot;
+            appBarButtonShot.IsEnabled = false;
+            appBarButtonShot.Click += appBarShootButton_Click;
+            ApplicationBar.Buttons.Add(appBarButtonShot);
 
-            ApplicationBarIconButton appBarButton2 =
+            ApplicationBarIconButton appBarButtonRefresh =
                 new ApplicationBarIconButton(new
                 Uri("/Resources/icons/appbar.refresh.png", UriKind.Relative));
-            appBarButton2.Text = AppResources.Refresh;
-            appBarButton2.Click += appBarRefreshButton_Click;
-            ApplicationBar.Buttons.Add(appBarButton2);
+            appBarButtonRefresh.Text = AppResources.Refresh;
+            appBarButtonRefresh.Click += appBarRefreshButton_Click;
+            ApplicationBar.Buttons.Add(appBarButtonRefresh);
 
-            ApplicationBarIconButton appBarButton3 =
+            ApplicationBarIconButton appBarButtonSearch =
                 new ApplicationBarIconButton(new
                 Uri("/Resources/icons/appbar.magnify.png", UriKind.Relative));
-            appBarButton3.Text = AppResources.Search;
-            ApplicationBar.Buttons.Add(appBarButton3);
+            appBarButtonSearch.Text = AppResources.Search;
+            ApplicationBar.Buttons.Add(appBarButtonSearch);
 
             // Create a new menu item with the localized string from AppResources.
-            ApplicationBarMenuItem appBarMenuItem =
+            ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
-            ApplicationBar.MenuItems.Add(appBarMenuItem);
+            ApplicationBar.MenuItems.Add(appBarMenuItemPeople);
 
-            ApplicationBarMenuItem appBarMenuItem2 =
+            ApplicationBarMenuItem appBarMenuItemTimeLine =
                 new ApplicationBarMenuItem(AppResources.TimeLine);
-            appBarMenuItem2.IsEnabled = false;
-            ApplicationBar.MenuItems.Add(appBarMenuItem2);
+            appBarMenuItemTimeLine.IsEnabled = false;
+            ApplicationBar.MenuItems.Add(appBarMenuItemTimeLine);
 
-            ApplicationBarMenuItem appBarMenuItem3 =
+            ApplicationBarMenuItem appBarMenuItemMe =
                 new ApplicationBarMenuItem(AppResources.Me);
-            appBarMenuItem3.Click += appBarMenuItem3_Click;
-            ApplicationBar.MenuItems.Add(appBarMenuItem3);
+            appBarMenuItemMe.Click += appBarMenuItemMe_Click;
+            ApplicationBar.MenuItems.Add(appBarMenuItemMe);
         }
 
-        private async void appBarRefreshButton_Click(object sender, EventArgs e)
+        private void SynchronizeShots()
         {
-            App.ShotsVM.Shots.Clear();
-            await App.ShotsVM.LoadData();
-            if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
-            else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
+            try
+            {
+                App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.SHOTS);
+                timer.Interval = new TimeSpan(0, 0, 0, 1);
+                timer.Start();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  Timeline.xaml.cs - RefreshShots: " + e.Message);
+            }
         }
 
-        private void appBarMenuItem3_Click(object sender, EventArgs e)
+        private async void RefreshData()
+        {
+            try
+            {
+                App.ShotsVM.Shots.Clear();
+                await App.ShotsVM.LoadData();
+                if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
+                else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
+                timer.Interval = new TimeSpan(0, 0, 0, 10);
+                timer.Start();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  Timeline.xaml.cs - RefreshData: " + e.Message);
+            }
+        }
+
+        private int extraCharacters()
+        {
+            int extra = 140; //TODO: GET THIS VAR FROM DB SYNCHRONIZED WITH SERVER
+
+            extra = extra - newShot.Text.Count();
+
+            return extra;
+        }
+
+        #region GESTURE EVENTS
+
+        private void appBarRefreshButton_Click(object sender, EventArgs e)
+        {
+            progress.IsVisible = true;
+            SynchronizeShots();
+        }
+
+        private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
         }
@@ -116,9 +170,11 @@ namespace Bagdad
         private void appBarShootButton_Click(object sender, EventArgs e)
         {
             extraChars.Visibility = System.Windows.Visibility.Collapsed;
+            App.ShotsVM.SendShot(newShot.Text);
             extraChars.Text = "140";
             newShot.Text = "";
             Focus();
+
             if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible)
             {
                 NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
@@ -129,7 +185,7 @@ namespace Bagdad
         {
             if (!newShot.Text.Equals(""))
             {
-                appBarButton.IsEnabled = true;
+                appBarButtonShot.IsEnabled = true;
 
                 if (extraCharacters() >= 0) extraChars.Text = extraCharacters().ToString();
                 else
@@ -141,18 +197,9 @@ namespace Bagdad
             }
             else
             {
-                appBarButton.IsEnabled = false;
+                appBarButtonShot.IsEnabled = false;
                 extraChars.Text = extraCharacters().ToString();
             }
-        }
-
-        private int extraCharacters()
-        {
-            int extra = 140; //TODO: GET THIS VAR FROM DB SYNCHRONIZED WITH SERVER
-
-            extra = extra - newShot.Text.Count();
-
-            return extra;
         }
 
         private void newShot_GotFocus(object sender, RoutedEventArgs e)
@@ -205,8 +252,23 @@ namespace Bagdad
             int shotUserId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotUserId;
             MessageBox.Show("User #" + shotUserId);
         }
+        #endregion
 
-        
+        /// <summary>
+        /// Evento del timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (!App.isSynchroRunning())
+            {
+                timer.Stop();
+                if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 10))) SynchronizeShots();
+                else progress.IsVisible = false;
+                RefreshData();
+            }
+        }       
 
     }
 }

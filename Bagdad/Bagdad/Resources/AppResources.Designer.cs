@@ -430,6 +430,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Syncing....
+        /// </summary>
+        public static string Synchroning {
+            get {
+                return ResourceManager.GetString("Synchroning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a TIMELINE.
         /// </summary>
         public static string TimeLine {

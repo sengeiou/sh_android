@@ -68,5 +68,28 @@ namespace Bagdad.ViewModels
                 return 0;
             }
         }
+
+        /// <summary>
+        /// Envía un shot al servidor
+        /// </summary>
+        /// <param name="text"></param>
+        public void SendShot(string text)
+        {
+            try
+            {
+                Shot shot = new Shot();
+                shot.comment = text;
+                shot.idUser = App.ID_USER;
+                shot.csys_revision = 0;
+                shot.csys_synchronized = 'N';
+                shot.synchronizeShot();
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - SendShot: " + e.Message);
+            }
+        }
+
     }
 }

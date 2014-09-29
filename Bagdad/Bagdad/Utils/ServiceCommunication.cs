@@ -17,7 +17,7 @@ namespace Bagdad.Utils
 
         public enum enumSynchroTables
         {
-            FULL = 0
+            FULL = 0, SHOTS = 1
         }
 
         public int nChanges = 0;    //Número de cambios provocador por la sincro
@@ -65,6 +65,9 @@ namespace Bagdad.Utils
                 case enumSynchroTables.FULL:
                     listTables.Add(Constants.SERCOM_TB_USER);
                     listTables.Add(Constants.SERCOM_TB_FOLLOW);
+                    listTables.Add(Constants.SERCOM_TB_SHOT);
+                    break;
+                case enumSynchroTables.SHOTS:
                     listTables.Add(Constants.SERCOM_TB_SHOT);
                     break;
             }
@@ -144,18 +147,53 @@ namespace Bagdad.Utils
             }
         }
 
-        private async Task<string> UpdateServer(String Entity)
+        private async Task<string> UpdateServer(String entity)
         {
             try
             {
                 String result = "\t No hay elementos pendientes de sincronizar\n";
-                switch (Entity)
+                string json = string.Empty;
+                switch (entity)
                 {
+                    case Constants.SERCOM_TB_SHOT:
+                        Shot shot = new Shot();
+                        json = await shot.synchronizeShot();
+                        result = "\t Sincronizado: " + entity + "\n";
+                        break;
                     default:
-                        result = "\t NOT DONE YET: " + Entity + "\n";
+                        result = "\t NOT DONE YET: " + entity + "\n";
                         break;
                 }
+
+                if(!String.IsNullOrEmpty(json)) sendDataToServer(entity, json);
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ServiceCommunication - UpdateServer: " + ex.Message, ex);
+            }
+        }
+
+        public async void sendDataToServer(String entity, String json)
+        { 
+            try
+            {
+                int tryCount = 0;
+                int done = 0;
+                while (done == 0)
+                {
+                    TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                    double epochDate = t.TotalMilliseconds;
+
+                    done = await doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, entity, json, 0);
+                    tryCount++;
+                    if (tryCount == 5) break;
+
+                    //New Date (evitar caché)
+                    t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                    epochDate = t.TotalMilliseconds;
+                    json = json.Replace("@requestTime", epochDate.ToString().Split(',')[0]);
+                }
             }
             catch (Exception ex)
             {

@@ -12,7 +12,14 @@ namespace Bagdad.Models
 {
     class Shot
     {
-        
+        public int idShot { get; set; }
+        public int idUser { get; set; }
+        public string comment  { get; set; }
+        public DateTime csys_birth { get; set; }
+        public DateTime csys_modified { get; set; }
+        public DateTime csys_deleted { get; set; }
+        public int csys_revision { get; set; }
+        public char csys_synchronized { get; set; }
 
         public async Task<int> saveData(JObject job)
         {
@@ -86,12 +93,40 @@ namespace Bagdad.Models
             return done;
         }
 
-        public async Task<List<ShotModel>> getTimeLineShots()
+
+        private async Task<int> synchronized(int idShot)
+        {
+            try
+            {
+                int done = 0;
+
+                Database database = await App.GetDatabaseAsync();
+
+                string sQuery = sQuery = SQLQuerys.shotsSynchronized;
+
+                Statement custstmt = await database.PrepareStatementAsync(sQuery);
+
+                custstmt.BindTextParameterWithName("@csys_synchronized", 'S'.ToString());
+                
+                custstmt.BindIntParameterWithName("@idShot", idShot);
+                await custstmt.StepAsync();
+
+                App.DBLoaded.Set();
+
+                return done;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Shot - synchronized: " + e.Message, e);
+            }
+        }
+
+
+         public async Task<List<ShotModel>> getTimeLineShots()
         {
             try
             {
                 List<ShotModel> shotList = new List<ShotModel>();
-
                 Database database = await App.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineShots);
@@ -136,6 +171,77 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
             }
             return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
+        }
+
+
+
+        public async Task<string> synchronizeShot()
+        {
+            try
+            {
+                String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                            "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
+                            "\"ops\": [{@Data\"metadata\": {" +
+                                "\"items\": null," +
+                                "\"TotalItems\": null," +
+                                "\"operation\": \"@Operation\"," +
+                                "\"key\": {" +
+                                    "\"idShot\": null" +
+                                "}," +
+                                "\"entity\": \"Shot\"" +
+                            "}}]}";
+
+                String Data = "\"data\": [{" +
+                                "\"idShot\": null," +
+                                "\"idUser\": @idUser," +
+                                "\"comment\": \"@comment\"," +
+                                "\"birth\": @birth," +
+                                "\"revision\": @revision," +
+                                "\"modified\": @modified," +
+                                "\"deleted\": @deleted" +
+                            "}],";
+
+                TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                double epochDate = t.TotalMilliseconds;
+
+                //req
+                json = json.Replace("@idDevice", "\"null\"");
+                json = json.Replace("@idUser", this.idUser.ToString());
+                json = json.Replace("@appVersion", App.appVersionInt().ToString());
+                json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
+                json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+
+                //ops
+                Data = Data.Replace("@idUser", this.idUser.ToString());
+                Data = Data.Replace("@comment", this.comment);
+                Data = Data.Replace("@birth", Math.Round(epochDate, 0).ToString());
+                Data = Data.Replace("@modified", Math.Round(epochDate, 0).ToString());
+                Data = Data.Replace("@revision", "0");
+                Data = Data.Replace("@deleted", "null");
+
+
+
+                json = json.Replace("@Operation", Constants.SERCOM_OP_UPDATECREATE);
+                json = json.Replace("@Data", Data);
+
+
+                if (this.csys_synchronized.Equals('D'))
+                {
+                    //TODO: NOT IMPLEMENTED YET DELETE SHOT
+                }
+                else
+                {
+                    ServiceCommunication serviceCom = new ServiceCommunication();
+                    serviceCom.sendDataToServer(Constants.SERCOM_TB_SHOT, json);
+                    //await synchronized();
+                }
+
+                return json;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("SubscriptionModel - SynchronizeSubscriptions: " + e.Message, e);
+            }
         }
 
     }

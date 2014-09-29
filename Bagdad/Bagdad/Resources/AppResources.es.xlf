@@ -143,6 +143,11 @@
           <target state="new">There's a problem connecting with the internet. Check your connection and try again.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
+        <trans-unit id="Resx/Synchroning" translate="yes" xml:space="preserve">
+          <source>Syncing...</source>
+          <target state="new">Syncing...</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml.cs</note>
+        </trans-unit>
         <trans-unit id="Resx/CanConnect" translate="yes" xml:space="preserve">
           <source>Can't connect</source>
           <target state="new">Can't connect</target>

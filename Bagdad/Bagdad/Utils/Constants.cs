@@ -14,6 +14,7 @@ namespace Bagdad.Utils
         //OPERATIONS
         public const String SERCOM_OP_MANUAL_JSON_REQUEST = "#OMJR";
         public const String SERCOM_OP_RETRIEVE = "retrieve";
+        public const String SERCOM_OP_UPDATECREATE = "CreateUpdate";
 
         //TABLES
         public const String SERCOM_TB_LOGIN = "Login";
