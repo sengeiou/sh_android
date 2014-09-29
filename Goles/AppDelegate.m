@@ -118,7 +118,7 @@
     
     if (![[UserManager singleton] getUserSessionToken]) {
         
-        self.setupSB = [UIStoryboard storyboardWithName:@"Setup" bundle:nil];
+        self.setupSB = [UIStoryboard storyboardWithName:@"Setup2" bundle:nil];
         LoginViewController *loginVC = [self.setupSB instantiateViewControllerWithIdentifier:@"loginVC"];
         UINavigationController *navLoginVC = [[UINavigationController alloc]initWithRootViewController:loginVC];
         self.window.rootViewController = navLoginVC;
@@ -154,7 +154,7 @@
     
     navMeVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"MeTabTitle", nil) image:[UIImage imageNamed:@"Icon_Me_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Me_ON"]];
     
-    
+    self.tabBarController.tabBar.barTintColor = [UIColor clearColor];
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = @[navPeopleVC,navTimelineVC,navMeVC];
     self.tabBarController.selectedIndex = 1;

@@ -53,7 +53,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:@"shootCell"];
+    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:@"shootCell"];
     
     lengthTextField = 0;
     self.arrayShots = [[NSArray alloc]init];
@@ -68,7 +68,8 @@
 
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myNotificationMethod:) name:UIKeyboardDidShowNotification object:nil];
+    
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
@@ -85,8 +86,6 @@
     self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
     self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myNotificationMethod:) name:UIKeyboardDidShowNotification object:nil];
-
 }
 
 - (void)viewDidLayoutSubviews
@@ -196,11 +195,25 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"shootCell";
-    ShotTableViewCell *cell = (ShotTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
    
     Shot *shot = self.arrayShots[indexPath.row];
 
-    [cell configureBasicCellWithShot:shot];
+    if (cell) {
+        cell.txvText.text = [shot.comment stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+        cell.txvText.textColor = [UIColor blackColor];
+        cell.txvText.frame = CGRectMake(cell.txvText.frame.origin.x, cell.txvText.frame.origin.y,cell.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
+        //[self.txvText setUserInteractionEnabled:NO];
+        cell.txvText.scrollEnabled = NO;
+        
+        cell.lblName.text = shot.user.name;
+        [cell.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
+        cell.lblDate.text = [Utils getDateShot:shot.csys_birth];
+        cell.txvText.text = @"TEST";
+    }
+
+//    cell = [cell initWithShot:shot reuseIdentifier:CellIdentifier];
+//    [cell configureBasicCellWithShot:shot];
     
     return cell;
  }
@@ -392,5 +405,10 @@
     return YES;
 }
 
+//------------------------------------------------------------------------------
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end

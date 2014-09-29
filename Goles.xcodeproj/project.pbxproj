@@ -20,7 +20,6 @@
 		A5A678B019C7249000DEEA51 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678B219C7249000DEEA51 /* Me.storyboard */; };
 		A5A678CA19C731AE00DEEA51 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5A678C919C731AE00DEEA51 /* Images.xcassets */; };
 		A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C2E6DA19C748A600E2F988 /* SetupViewController.m */; };
-		A5C2E6E419C8162D00E2F988 /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5C2E6E619C8162D00E2F988 /* Setup.storyboard */; };
 		A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */; };
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
@@ -28,6 +27,7 @@
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
+		AA5E23C519D96A37004F8511 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA5E23C719D96A37004F8511 /* Setup2.storyboard */; };
 		AA623CDF1998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CE11998A7F200A942A9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE01998A7F200A942A9 /* CoreGraphics.framework */; };
 		AA623CE31998A7F200A942A9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE21998A7F200A942A9 /* UIKit.framework */; };
@@ -84,6 +84,7 @@
 		AA72640F19D0506A0067A39D /* Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640E19D0506A0067A39D /* Follow.m */; };
 		AA72641219D1C8280067A39D /* ShotManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641119D1C8280067A39D /* ShotManager.m */; };
 		AA72641519D422570067A39D /* CleanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641419D422570067A39D /* CleanManager.m */; };
+		AA9D039B19D95ABD00E59C83 /* NSString+CleanLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */; };
 		AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */; };
 		AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541A19C057C000E39D94 /* AFHTTPRequestOperationManager.m */; };
 		AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541C19C057C000E39D94 /* AFHTTPSessionManager.m */; };
@@ -141,8 +142,6 @@
 		A5A678C919C731AE00DEEA51 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A5C2E6D919C748A600E2F988 /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
 		A5C2E6DA19C748A600E2F988 /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
-		A5C2E6E519C8162D00E2F988 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup.storyboard; sourceTree = "<group>"; };
-		A5C2E6E719C8163100E2F988 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Setup.storyboard; sourceTree = "<group>"; };
 		A5E3E1FB1999158700322727 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		A5E3E2061999205E00322727 /* golesDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = golesDataBase.xcdatamodel; sourceTree = "<group>"; };
@@ -155,6 +154,8 @@
 		AA241F85199CFB5200897D6D /* _SyncControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SyncControl.m; sourceTree = "<group>"; };
 		AA241F87199CFB6400897D6D /* SyncManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncManager.h; sourceTree = "<group>"; };
 		AA241F88199CFB6400897D6D /* SyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncManager.m; sourceTree = "<group>"; };
+		AA5E23C619D96A37004F8511 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
+		AA5E23C819D96A39004F8511 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = es; path = es.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		AA623CDB1998A7F200A942A9 /* Goles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CDE1998A7F200A942A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AA623CE01998A7F200A942A9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -257,6 +258,8 @@
 		AA72641119D1C8280067A39D /* ShotManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShotManager.m; sourceTree = "<group>"; };
 		AA72641319D422570067A39D /* CleanManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CleanManager.h; sourceTree = "<group>"; };
 		AA72641419D422570067A39D /* CleanManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanManager.m; sourceTree = "<group>"; };
+		AA9D039919D95ABD00E59C83 /* NSString+CleanLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CleanLinks.h"; sourceTree = "<group>"; };
+		AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CleanLinks.m"; sourceTree = "<group>"; };
 		AACA541719C057C000E39D94 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		AACA541919C057C000E39D94 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -474,7 +477,7 @@
 				A5A678A619C71FC200DEEA51 /* People.storyboard */,
 				A5A678AC19C7243500DEEA51 /* Timeline.storyboard */,
 				A5A678B219C7249000DEEA51 /* Me.storyboard */,
-				A5C2E6E619C8162D00E2F988 /* Setup.storyboard */,
+				AA5E23C719D96A37004F8511 /* Setup2.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -577,6 +580,8 @@
 			children = (
 				A5E3E1FB1999158700322727 /* UIImage+ImageEffects.h */,
 				A5E3E1FC1999158700322727 /* UIImage+ImageEffects.m */,
+				AA9D039919D95ABD00E59C83 /* NSString+CleanLinks.h */,
+				AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */,
 				AA623E061998D17800A942A9 /* Constants.h */,
 				AA623E071998D17800A942A9 /* Fav24Colors.h */,
 				AA623E081998D17800A942A9 /* Fav24Colors.m */,
@@ -821,13 +826,13 @@
 				AA623D431998CF4B00A942A9 /* s.aiff in Resources */,
 				AA623D421998CF4B00A942A9 /* g.aiff in Resources */,
 				AA623F111998F29D00A942A9 /* Localizable.strings in Resources */,
+				AA5E23C519D96A37004F8511 /* Setup2.storyboard in Resources */,
 				A5A678A419C71FC200DEEA51 /* People.storyboard in Resources */,
 				A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */,
 				A5A678CA19C731AE00DEEA51 /* Images.xcassets in Resources */,
 				AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */,
 				AA623D411998CF4B00A942A9 /* a.aiff in Resources */,
 				AA623EDD1998D78600A942A9 /* AppAdviceViewController.xib in Resources */,
-				A5C2E6E419C8162D00E2F988 /* Setup.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -893,6 +898,7 @@
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
+				AA9D039B19D95ABD00E59C83 /* NSString+CleanLinks.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
@@ -984,13 +990,13 @@
 			name = Me.storyboard;
 			sourceTree = "<group>";
 		};
-		A5C2E6E619C8162D00E2F988 /* Setup.storyboard */ = {
+		AA5E23C719D96A37004F8511 /* Setup2.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A5C2E6E519C8162D00E2F988 /* en */,
-				A5C2E6E719C8163100E2F988 /* es */,
+				AA5E23C619D96A37004F8511 /* en */,
+				AA5E23C819D96A39004F8511 /* es */,
 			);
-			name = Setup.storyboard;
+			name = Setup2.storyboard;
 			sourceTree = "<group>";
 		};
 		AA623D001998A7F200A942A9 /* InfoPlist.strings */ = {

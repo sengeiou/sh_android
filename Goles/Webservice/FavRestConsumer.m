@@ -247,7 +247,7 @@
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate{
     
     //Create Alias block
-    NSString *alias = [NSString stringWithFormat:@"Create %@",entity];
+    NSString *alias = [NSString stringWithFormat:@"CREATE_%@",entity.uppercaseString];
     
     //Create Staus block
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};

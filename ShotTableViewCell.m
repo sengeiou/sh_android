@@ -15,12 +15,42 @@
 
 - (void)awakeFromNib {
     
+    
+}
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
+- (id)initWithShot:(Shot *)shot reuseIdentifier:(NSString *)reuseIdentifier {
+
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    
+    if (self) {
+        self.txvText.text = [shot.comment stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+        self.txvText.textColor = [UIColor blackColor];
+        self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
+        //[self.txvText setUserInteractionEnabled:NO];
+        self.txvText.scrollEnabled = NO;
+        
+        self.lblName.text = shot.user.name;
+        [self.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
+        self.lblDate.text = [Utils getDateShot:shot.csys_birth];
+        self.txvText.text = @"TEST";
+    }
+    
+    return self;
 }
 
 - (void)configureBasicCellWithShot:(Shot *)shot {
 
-    self.txvText.text = shot.comment;
+    self.txvText.text = [shot.comment stringByReplacingOccurrencesOfString:@"http://" withString:@""];
     self.txvText.textColor = [UIColor blackColor];
     self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
     //[self.txvText setUserInteractionEnabled:NO];

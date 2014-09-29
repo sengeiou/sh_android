@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 
 - (void)configureBasicCellWithShot:(Shot *)shot;
+- (id)initWithShot:(Shot *)shot reuseIdentifier:(NSString *)reuseIdentifier;
 
 @end
