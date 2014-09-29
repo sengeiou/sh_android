@@ -12,9 +12,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import gm.mobi.android.constant.Constants;
+import gm.mobi.android.constant.SyncConstants;
 
 public class GMAccountService  extends Service{
     private Authenticator mAuthenticator;
+
+    public static Account getAccount(){
+        return new Account(SyncConstants.ACCOUNT_NAME,SyncConstants.ACCOUNT_TYPE);
+    }
 
     @Override
     public void onCreate() {
@@ -59,5 +64,4 @@ public class GMAccountService  extends Service{
             throw  new UnsupportedOperationException();
         }
     }
-
 }
