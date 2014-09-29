@@ -167,11 +167,16 @@
                                     <action selector="registerEmail:" destination="6B8-Oo-GZG" eventType="touchUpInside" id="RYH-lM-z4K"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="v5K-Ld-94k">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo_f_i5" id="aey-2c-Ve3">
                                 <rect key="frame" x="53" y="304" width="214" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" backgroundImage="Facebook_SignIn">
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="v5K-Ld-94k">
+                                <rect key="frame" x="84" y="304" width="183" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Sign In with Facebook">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -190,16 +195,17 @@
                         <outlet property="btnRegister" destination="lyR-Ud-2vk" id="UEq-z0-MYZ"/>
                         <outlet property="btnSignIn" destination="d5R-fh-b5W" id="yjm-fP-7PN"/>
                         <outlet property="btnTitle" destination="P7O-Fx-Yr6" id="tNt-Nw-dLD"/>
+                        <outlet property="imgFacebook" destination="aey-2c-Ve3" id="4hb-JS-asf"/>
                         <outlet property="imgShootr" destination="tav-xY-S2w" id="AvJ-9h-SDk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hG3-I0-qdm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="468.80000000000001" y="1309.24"/>
+            <point key="canvasLocation" x="468" y="1309"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Facebook_SignIn" width="214" height="47"/>
+        <image name="Logo_f_i5" width="225" height="45"/>
         <image name="Shootr" width="149" height="149"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
