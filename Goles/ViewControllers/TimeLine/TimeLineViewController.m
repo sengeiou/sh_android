@@ -52,7 +52,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
+    
     lengthTextField = 0;
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
@@ -190,15 +190,23 @@
 }
 
 //------------------------------------------------------------------------------
+- (void)addLoadMoreCell {
+
+    [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
+}
+
+//------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
    
     Shot *shot = self.arrayShots[indexPath.row];
-
-
     [cell configureBasicCellWithShot:shot];
+    
+    if (indexPath.row == self.arrayShots.count-5)
+        [self addLoadMoreCell];
+        
     
     return cell;
  }
@@ -261,6 +269,8 @@
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
     
+    if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height)
+        [self addLoadMoreCell];
     
     if (self.lastContentOffset > scrollView.contentOffset.y){
         [UIView animateWithDuration:0.25 animations:^{

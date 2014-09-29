@@ -11,5 +11,5 @@
 @interface FilterCreation : NSObject
 
 + (NSDictionary *)getFilterForEntity:(Class)entity;
-
++ (NSDictionary *)getFilterForOldShots;
 @end

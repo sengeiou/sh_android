@@ -1138,14 +1138,14 @@
 		AA623D0B1998A7F200A942A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Goles.app/Goles";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shootr.app/Shootr";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Goles/Goles-Prefix.pch";
+				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1160,14 +1160,14 @@
 		AA623D0C1998A7F200A942A9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Goles.app/Goles";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shootr.app/Shootr";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Goles/Goles-Prefix.pch";
+				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "GolesTests/ShootrTests-Info.plist";
 				PRODUCT_NAME = ShootrTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";

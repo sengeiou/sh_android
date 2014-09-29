@@ -21,13 +21,8 @@
 + (NSDictionary *)getFilterForEntity:(Class)entity {
     
     NSNumber *userID = [[UserManager singleton] getUserId];
-//    NSNumber *entityFilterDate = @1408779530000; // For testing purposes
-    NSNumber *entityFilterDate = [[SyncManager singleton] getFilterDateForEntity:NSStringFromClass(entity)];
-    
-    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
-                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],
-                                 K_WS_FILTERS:[NSNull null],
-                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+
+    NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
     
     if ([entity isSubclassOfClass:[Follow class]]){
         
@@ -52,14 +47,7 @@
     
     if ([entity isSubclassOfClass:[Shot class]]){
         
-        NSArray *users = [[CoreDataManager singleton] getAllEntities:[User class]];
-        NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:users.count];
-        
-        for (User *userItem in users) {
-            [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userItem.idUser}];
-        }
-
-        NSArray *filters = @[@{K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
+        NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
                              @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
         return filter;
@@ -68,5 +56,63 @@
     return @{};
 }
 
+//-----------------------------------------------------------------------------
++ (NSDictionary *)getFilterForOldShots {
+    
+    NSDictionary *filterDate = [self composeFilterDateForOldShots];
+
+    NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
+                         @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
+    return filter;
+}
+
+#pragma mark - Helper methods
+//-----------------------------------------------------------------------------
++ (NSDictionary *)composeFilterDateForEntity:(Class)entity {
+
+    NSNumber *entityFilterDate = [[SyncManager singleton] getFilterDateForEntity:NSStringFromClass(entity)];
+    
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    return filterDate;
+}
+
+//-----------------------------------------------------------------------------
++ (NSDictionary *)composeFilterDateForOldShots {
+    
+    NSNumber *entityFilterDate = [self getDateOfOlderShot];
+    
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_LT,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    return filterDate;
+}
+
+//-----------------------------------------------------------------------------
++ (NSNumber *)getDateOfOlderShot {
+
+    NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_MODIFIED ascending:YES withFetchLimit:@1];
+    if (shotsArray.count == 1)
+        return [shotsArray.firstObject csys_modified];
+    else
+        return nil;
+}
+
+//-----------------------------------------------------------------------------
++ (NSArray *)composeUsersToFilter {
+    
+    NSArray *users = [[CoreDataManager singleton] getAllEntities:[User class]];
+    NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:users.count];
+    
+    for (User *userItem in users) {
+        [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userItem.idUser}];
+    }
+    
+    return [usersArray copy];
+}
 
 @end

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>51B49AEF-5A84-4888-913B-D7FACDBB0F75</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Shootr</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
+		<string>http://desarrollo.golesmessenger.com/svn/ios/Goles5/trunk</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Shootr.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
+		<string>http://desarrollo.golesmessenger.com/svn/ios</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://desarrollo.golesmessenger.com/svn/ios/Goles5/trunk/Shootr.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>e767c7ee-930a-4462-95f7-2222c70908f9++5214</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>e767c7ee-930a-4462-95f7-2222c70908f9++5214</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Goles5</string>
+		</dict>
+	</array>
+</dict>
+</plist>
