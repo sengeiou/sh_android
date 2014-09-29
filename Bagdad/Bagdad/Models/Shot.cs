@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    class Shot
+    class Shot : BaseModelJsonConstructor
     {
         public int idShot { get; set; }
         public int idUser { get; set; }
@@ -152,7 +152,9 @@ namespace Bagdad.Models
             }
         }
 
-        public async Task<string> constructFilterShot(string conditionDate)
+        protected override String GetEntityName() { return Constants.SERCOM_TB_SHOT; }
+
+        public override async Task<string> ConstructFilter(string conditionDate)
         {
 
             StringBuilder sbFilterIdUser = new StringBuilder();

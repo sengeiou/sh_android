@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    class User
+    public class User : BaseModelJsonConstructor
     {
 
+        
         public async Task<int> saveData(JObject job)
         {
             int done = 0;
@@ -224,13 +225,14 @@ namespace Bagdad.Models
             return sessionToken;
         }
 
+        protected override String GetEntityName() { return Constants.SERCOM_TB_USER; }
 
         /// <summary>
         /// Construimos el filtro 
         /// </summary>
         /// <param name="conditionDate"></param>
         /// <returns></returns>
-        public async Task<string> constructFilterFollow(string conditionDate)
+        public override async Task<string> ConstructFilter(string conditionDate)
         {
             StringBuilder sbFilterIdUser = new StringBuilder();
             try

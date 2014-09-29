@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    class Follow
+    public class Follow : BaseModelJsonConstructor
     {
-        
 
         public async Task<int> saveData(JObject job)
         {
@@ -111,7 +110,9 @@ namespace Bagdad.Models
             }
         }
 
-        public string constructFilterFollow(string conditionDate)
+        protected override String GetEntityName() { return Constants.SERCOM_TB_FOLLOW; }
+
+        public override async Task<string> ConstructFilter(string conditionDate)
         {
             return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
         }

@@ -57,7 +57,7 @@
         <TextBlock Grid.Row="2" Margin="47,-12,12,24" Text="{Binding LocalizedResources.ImWatching, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Tap="ImWatching_Tap" Foreground="{StaticResource PhoneAccentBrush}"/>
 
         <!--Row3-->
-        <ListBox x:Name="MyShots" Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding Shots}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <ListBox x:Name="MyShots" Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding Shots}" ScrollViewer.VerticalScrollBarVisibility="Hidden" MouseEnter="MyShots_MouseEnter">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,0,0,12" MinWidth="456">

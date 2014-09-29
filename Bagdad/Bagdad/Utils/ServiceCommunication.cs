@@ -81,60 +81,57 @@ namespace Bagdad.Utils
         {
             try
             {
-                if (App.isInternetAvailable)
+                if (App.isInternetAvailable && !App.isSynchroRunning())
                 {
-                    if (!App.isSynchroRunning())
+                    if (await ExistAndSetServer())
                     {
-                        if (await ExistAndSetServer())
+                        listTablesSynchronized.Clear();
+                        App.lockSynchro();
+
+                        GenericModel gm = new GenericModel();
+                        List<SynchroTableInfo> Tables = await gm.GetSynchronizationTables();
+
+                        int total = 0;
+
+                        foreach (SynchroTableInfo Table in Tables)
                         {
-                            listTablesSynchronized.Clear();
-                            App.lockSynchro();
-
-                            GenericModel gm = new GenericModel();
-                            List<SynchroTableInfo> Tables = await gm.GetSynchronizationTables();
-
-                            int total = 0;
-
-                            foreach (SynchroTableInfo Table in Tables)
+                            try
                             {
-                                try
+                                listTablesSynchronized.Add(Table.Entity);
+
+
+                                total = 0;
+                                if (listTables.Contains(Table.Entity))
                                 {
-                                    listTablesSynchronized.Add(Table.Entity);
-                                    
+                                    if (Table.Direction.Equals("Both") && (SynchroType == Constants.ST_UPLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO))
+                                    {
+                                        Debug.WriteLine("SUBIENDO: " + Table.Entity);
+                                        string sText = await UpdateServer(Table.Entity);
+                                        Debug.WriteLine(sText);
+                                    }
 
-                                        total = 0;
-                                        if (listTables.Contains(Table.Entity))
-                                        {
-                                            if (Table.Direction.Equals("Both") && (SynchroType == Constants.ST_UPLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO))
-                                            {
-                                                Debug.WriteLine("SUBIENDO: " + Table.Entity);
-                                                string sText = await UpdateServer(Table.Entity);
-                                                Debug.WriteLine(sText);
-                                            }
-
-                                            if (SynchroType == Constants.ST_DOWNLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO)
-                                            {
-                                                Debug.WriteLine("DESCARGANDO: " + Table.Entity);
-                                                double date = await gm.getMaxModificationDateOf(Table.Entity);
-                                                string sParams = await getParams(Table.Entity, date);
-                                                total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
-                                                nChanges += total;      //Solo tiene en cuenta la sincro estandard
-                                                Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
-                                            }
+                                    if (SynchroType == Constants.ST_DOWNLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO)
+                                    {
+                                        Debug.WriteLine("DESCARGANDO: " + Table.Entity);
+                                        double date = await gm.getMaxModificationDateOf(Table.Entity);
+                                        string sParams = await getParamsForSync(Table.Entity, date);
+                                        total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
+                                        nChanges += total;      //Solo tiene en cuenta la sincro estandard
+                                        Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
                                     }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Debug.WriteLine("ServiceCommunication - SynchronizeProcess - " + Table.Entity + ": " + ex.Message);
-                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("ServiceCommunication - SynchronizeProcess - " + Table.Entity + ": " + ex.Message);
                             }
                         }
-                        App.releaseSynchro();
-                        App.changesOnSynchro = nChanges;
-                        Debug.WriteLine("Cambios totales en la sincronización: " + nChanges.ToString());
-                        Debug.WriteLine("______________________________________________________________________________________ \n");
-
                     }
+                    App.releaseSynchro();
+                    App.changesOnSynchro = nChanges;
+                    Debug.WriteLine("Cambios totales en la sincronización: " + nChanges.ToString());
+                    Debug.WriteLine("______________________________________________________________________________________ \n");
+
                 }
                 else
                 {
@@ -229,28 +226,49 @@ namespace Bagdad.Utils
             }
         }
 
-        public async Task<string> getParams(string entity, double date)
+        public async Task<string> getParamsForSync(string entity, double date)
         {
-            string sFilterModifyDelete = "{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
+            return await getParams(entity, date, false);
+        }
+
+        public async Task<string> getParamsForPaging(string entity, double date)
+        {
+            return await getParams(entity, date, true);
+        }
+
+        private static async Task<string> getParams(string entity, double date, Boolean getOlder)
+        {
+            string sFilterModifyDelete = ConstructFilterModifyDelete(date, getOlder);
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
+            sFilterModifyDelete = "\"filter\":{" + await model.ConstructFilter(sFilterModifyDelete) + "}";
+
+            return sFilterModifyDelete;
+
+        }
+
+        private static BaseModelJsonConstructor CreateModelJsonConstructor(string entity)
+        {
+            BaseModelJsonConstructor model = null;
             switch (entity)
             {
                 case Constants.SERCOM_TB_USER:
-                    User user = new User();
-                    sFilterModifyDelete = "\"filter\":{" + await user.constructFilterFollow(sFilterModifyDelete) + "}";
+                    model = new User();
                     break;
                 case Constants.SERCOM_TB_FOLLOW:
-                    Follow follow = new Follow();
-                    sFilterModifyDelete = "\"filter\":{" + follow.constructFilterFollow(sFilterModifyDelete) + "}";
+                    model = new Follow();
                     break;
                 case Constants.SERCOM_TB_SHOT:
-                    Shot shot = new Shot();
-                    sFilterModifyDelete = "\"filter\":{" + await shot.constructFilterShot(sFilterModifyDelete) + "}";
+                    model = new Shot();
                     break;
                 default:
-                    sFilterModifyDelete = "\"filter\":{\"filterItems\":[{\"comparator\":\"gt\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
                     break;
             }
+            return model;
+        }
 
+        private static string ConstructFilterModifyDelete(double date, Boolean getOlder)
+        {
+            string sFilterModifyDelete = "{\"filterItems\":[{\"comparator\":\"" + (getOlder?"lt":"gt") + "\",\"name\":\"modified\",\"value\":" + date + "},{\"comparator\":\"gt\",\"name\":\"deleted\",\"value\":" + date + "}],\"filters\":[],\"nexus\":\"or\"}";
             return sFilterModifyDelete;
         }
 
@@ -350,13 +368,16 @@ namespace Bagdad.Utils
                         ops = ConstructOPS(OPS_DATA_LOGIN, operation, entity, searchParams, offset, 1);
                         break;
                     case Constants.SERCOM_TB_USER:
-                        ops = ConstructOPS(OPS_DATA_USER, operation, entity, searchParams, offset, 100);
+                        User user = new User();
+                        ops = user.ConstructOperation(OPS_DATA_USER, operation, searchParams, offset, 100);
                         break;
                     case Constants.SERCOM_TB_FOLLOW:
-                        ops = ConstructOPS(OPS_DATA_FOLLOW, operation, entity, searchParams, offset, 100);
+                        Follow follow = new Follow();
+                        ops = follow.ConstructOperation(OPS_DATA_FOLLOW, operation, searchParams, offset, 100);
                         break;
                     case Constants.SERCOM_TB_SHOT:
-                        ops = ConstructOPS(OPS_DATA_SHOT, operation, entity, searchParams, offset, 100);
+                        Shot shot = new Shot();
+                        ops = shot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, 100);
                         break;
                     default:
                         ops = "";

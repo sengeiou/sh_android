@@ -31,10 +31,42 @@ namespace Bagdad.ViewModels
         public async Task<int> LoadData(){
             try
             {
-                BitmapImage image;
                 Shot shotModel = new Shot();
-                
-                foreach (ShotModel shot in await shotModel.getTimeLineShots()){
+
+                return ParseShotsForPrinting(await shotModel.getTimeLineShots());               
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - LoadData: " + e.Message);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Adds to the Shot List the next X shots from the server.
+        /// </summary>
+        /// <returns>The number of pages to charge</returns>
+        public async Task<int> LoadOlderShots()
+        {
+            try
+            {
+                //ParseShotsForPrinting();
+                return 0;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - LoadOlderShots: " + e.Message);
+                return 1;
+            }
+        }
+
+        private int ParseShotsForPrinting(List<ShotModel> shots)
+        {
+            try
+            {
+                BitmapImage image;
+                foreach (ShotModel shot in shots)
+                {
 
                     //time
                     String timeString = "";
@@ -56,18 +88,20 @@ namespace Bagdad.ViewModels
                     //Message
                     String message = shot.shotMessage;
 
-                    Shots.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId,  shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+                    Shots.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
                 }
-                
+
                 IsDataLoaded = true;
+
                 return 1;
             }
             catch (Exception e)
             {
-                Debug.WriteLine("E R R O R : ShotsViewModel - LoadData: " + e.Message);
+                Debug.WriteLine("E R R O R : ShotsViewModel - ParseShotsForPrinting: " + e.Message);
                 return 0;
             }
         }
+
 
         /// <summary>
         /// Envía un shot al servidor

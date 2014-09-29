@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bagdad", "Bagdad\Bagdad.csproj", "{BBF2A5F0-FEA1-4D3F-B9A3-B12397BEE02F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLiteWinRTPhone", "..\..\..\sqllite\trunk\SQLiteWinRTPhone.vcxproj", "{4AE0193F-5986-404E-87B6-1EC9301D16D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BagdadTest", "BagdadTest\BagdadTest.csproj", "{F877EB09-EC57-4587-8D90-C0F37133F1B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,26 @@ Global
 		{4AE0193F-5986-404E-87B6-1EC9301D16D8}.Release|Win32.Build.0 = Release|Win32
 		{4AE0193F-5986-404E-87B6-1EC9301D16D8}.Release|x86.ActiveCfg = Release|Win32
 		{4AE0193F-5986-404E-87B6-1EC9301D16D8}.Release|x86.Build.0 = Release|Win32
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|ARM.Build.0 = Debug|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|ARM.Deploy.0 = Debug|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|Win32.ActiveCfg = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|Win32.Build.0 = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|Win32.Deploy.0 = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|x86.ActiveCfg = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|x86.Build.0 = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Debug|x86.Deploy.0 = Debug|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|Any CPU.ActiveCfg = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|ARM.ActiveCfg = Release|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|ARM.Build.0 = Release|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|ARM.Deploy.0 = Release|ARM
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|Win32.ActiveCfg = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|Win32.Build.0 = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|Win32.Deploy.0 = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|x86.ActiveCfg = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|x86.Build.0 = Release|x86
+		{F877EB09-EC57-4587-8D90-C0F37133F1B3}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

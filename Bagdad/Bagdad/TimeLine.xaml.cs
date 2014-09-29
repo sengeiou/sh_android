@@ -11,6 +11,9 @@ using Bagdad.Resources;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Media;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
+using Bagdad.ViewModels;
 using System.Windows.Threading;
 
 namespace Bagdad
@@ -21,6 +24,7 @@ namespace Bagdad
         ApplicationBarIconButton appBarButtonShot;
         private DispatcherTimer timer;
         public ProgressIndicator progress;
+        bool endOfList = false;
         
         
         public TimeLine()
@@ -254,6 +258,30 @@ namespace Bagdad
         }
         #endregion
 
+
+        private async void MyShots_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(MyShots);
+            // not feeling creative with my var names today...
+            IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+
+
+            int scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
+
+            if (scrollInterface.VerticalScrollPercent >= scrollToChargue && !endOfList)
+            {
+                //Here is the place to call to older Shots
+
+                int charge = 0; //TODO: CALL TO SHOTVIEWMODEL FUNCTION AWAITED
+
+                //if there is no more shots, don't need to charge it again
+                if (charge == 0)
+                {
+                    endOfList = true;
+                }
+            }
+        }
+
         /// <summary>
         /// Evento del timer
         /// </summary>
@@ -269,6 +297,6 @@ namespace Bagdad
                 RefreshData();
             }
         }       
-
+        
     }
 }

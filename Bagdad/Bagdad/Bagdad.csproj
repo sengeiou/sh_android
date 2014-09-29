@@ -105,6 +105,7 @@
     <Compile Include="Me.xaml.cs">
       <DependentUpon>Me.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaseModelJsonConstructor.cs" />
     <Compile Include="Models\Follow.cs" />
     <Compile Include="Models\GenericModel.cs" />
     <Compile Include="Models\Shot.cs" />
