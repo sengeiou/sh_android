@@ -54,6 +54,10 @@ public class GMContract {
         public static final String EMAIL = "email";
         public static final String NAME = "name";
         public static final String PHOTO = "photo";
+        public static final String NUM_FOLLOWERS = "numFollowers";
+        public static final String NUM_FOLLOWINGS = "numFollowings";
+        public static final String POINTS = "points";
+
 
         public static final String[] PROJECTION = {
                 ID,
@@ -63,6 +67,9 @@ public class GMContract {
                 EMAIL,
                 NAME,
                 PHOTO,
+                NUM_FOLLOWERS,
+                NUM_FOLLOWINGS,
+                POINTS,
                 CSYS_BIRTH,
                 CSYS_MODIFIED,
                 CSYS_DELETED,
