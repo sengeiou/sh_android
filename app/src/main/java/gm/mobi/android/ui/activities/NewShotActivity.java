@@ -1,7 +1,5 @@
 package gm.mobi.android.ui.activities;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +21,7 @@ import butterknife.OnTextChanged;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
 import gm.mobi.android.task.jobs.shots.NewShotJob;
@@ -94,13 +93,18 @@ public class NewShotActivity extends BaseSignedInActivity {
         String comment = filteredText(text.getText().toString());
         if (isValidComment(comment)) {
             jobManager.addJobInBackground(new NewShotJob(this, currentUser, comment));
-            progress.setVisibility(View.VISIBLE);
-            sendButton.setVisibility(View.GONE);
+            setProgressUI(true);
         } else {
             Timber.i("Comment invalid: \"%s\"", comment);
             //TODO definir comportamiento de inválido
 
         }
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        setProgressUI(false);
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
@@ -111,11 +115,14 @@ public class NewShotActivity extends BaseSignedInActivity {
             finish(); //TODO animación hacia abjo
         } else {
             Timber.e("Shot not sent successfuly :(");
-            progress.setVisibility(View.GONE);
-            sendButton.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "Error :(", Toast.LENGTH_SHORT).show();
+            setProgressUI(false);
+            Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private void setProgressUI(boolean showProgress) {
+        progress.setVisibility(showProgress ? View.VISIBLE : View.GONE);
+        sendButton.setVisibility(showProgress ? View.GONE : View.VISIBLE);
     }
 
     private String filteredText(String originalText) {
