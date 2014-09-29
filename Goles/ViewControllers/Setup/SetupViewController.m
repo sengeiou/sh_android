@@ -149,14 +149,14 @@
          case 0:
          {
             cell.textLabel.text = @"Email or Username";
-             txtFieldName.frame = CGRectMake(180,3,self.view.frame.size.width-210,40);
+             txtFieldName.frame = CGRectMake(177,3,self.view.frame.size.width-210,40);
             [cell addSubview:txtFieldName];
          }
              break;
          case 1:
          {
              cell.textLabel.text = @"Password";
-             txtFieldPwd.frame = CGRectMake(180,3,self.view.frame.size.width-210,40);
+             txtFieldPwd.frame = CGRectMake(177,3,self.view.frame.size.width-210,40);
 
              [cell addSubview:txtFieldPwd];
          }
