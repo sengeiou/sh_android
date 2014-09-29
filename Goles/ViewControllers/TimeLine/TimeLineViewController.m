@@ -17,6 +17,7 @@
 #import "Utils.h"
 #import "Conection.h"
 #import "Fav24Colors.h"
+#import "AppDelegate.h"
 
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate>{
@@ -159,6 +160,21 @@
     return header;
 }
 
+
+/*- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return self.viewTextField.frame.size.height;
+}
+
+//------------------------------------------------------------------------------
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    
+    UIView *footer =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewTextField.frame.size.height)];
+    footer.backgroundColor = [UIColor clearColor];
+    
+    return footer;
+}*/
+
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -179,7 +195,6 @@
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-
     static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = (ShotTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
    
