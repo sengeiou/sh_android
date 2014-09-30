@@ -197,6 +197,11 @@ extern NSString *const kJSON_EMAIL;
 extern NSString *const kJSON_NAME;
 extern NSString *const kJSON_PASSWORD;
 extern NSString *const kJSON_PHOTO;
+extern NSString *const kJSON_BIO;
+extern NSString *const kJSON_WEBSITE;
+extern NSString *const kJSON_POINTS;
+extern NSString *const kJSON_NUMFOLLOWING;
+extern NSString *const kJSON_NUMFOLLOWERS;
 
 // SML
 extern NSString * const kJSON_SML;

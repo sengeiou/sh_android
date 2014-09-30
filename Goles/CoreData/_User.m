@@ -4,6 +4,7 @@
 #import "_User.h"
 
 const struct UserAttributes UserAttributes = {
+	.bio = @"bio",
 	.csys_birth = @"csys_birth",
 	.csys_deleted = @"csys_deleted",
 	.csys_modified = @"csys_modified",
@@ -13,9 +14,14 @@ const struct UserAttributes UserAttributes = {
 	.idFavouriteTeam = @"idFavouriteTeam",
 	.idUser = @"idUser",
 	.name = @"name",
+	.numFollowers = @"numFollowers",
+	.numFollowing = @"numFollowing",
 	.photo = @"photo",
+	.points = @"points",
+	.rank = @"rank",
 	.sessionToken = @"sessionToken",
 	.userName = @"userName",
+	.website = @"website",
 };
 
 const struct UserRelationships UserRelationships = {
@@ -82,9 +88,36 @@ const struct UserFetchedProperties UserFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
+	if ([key isEqualToString:@"numFollowersValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"numFollowers"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"numFollowingValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"numFollowing"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"pointsValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"points"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"rankValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"rank"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic bio;
+
+
 
 
 
@@ -266,8 +299,112 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 
 
+@dynamic numFollowers;
+
+
+
+- (int32_t)numFollowersValue {
+	NSNumber *result = [self numFollowers];
+	return [result intValue];
+}
+
+- (void)setNumFollowersValue:(int32_t)value_ {
+	[self setNumFollowers:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveNumFollowersValue {
+	NSNumber *result = [self primitiveNumFollowers];
+	return [result intValue];
+}
+
+- (void)setPrimitiveNumFollowersValue:(int32_t)value_ {
+	[self setPrimitiveNumFollowers:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
+@dynamic numFollowing;
+
+
+
+- (int32_t)numFollowingValue {
+	NSNumber *result = [self numFollowing];
+	return [result intValue];
+}
+
+- (void)setNumFollowingValue:(int32_t)value_ {
+	[self setNumFollowing:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveNumFollowingValue {
+	NSNumber *result = [self primitiveNumFollowing];
+	return [result intValue];
+}
+
+- (void)setPrimitiveNumFollowingValue:(int32_t)value_ {
+	[self setPrimitiveNumFollowing:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
 @dynamic photo;
 
+
+
+
+
+
+@dynamic points;
+
+
+
+- (int64_t)pointsValue {
+	NSNumber *result = [self points];
+	return [result longLongValue];
+}
+
+- (void)setPointsValue:(int64_t)value_ {
+	[self setPoints:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitivePointsValue {
+	NSNumber *result = [self primitivePoints];
+	return [result longLongValue];
+}
+
+- (void)setPrimitivePointsValue:(int64_t)value_ {
+	[self setPrimitivePoints:[NSNumber numberWithLongLong:value_]];
+}
+
+
+
+
+
+@dynamic rank;
+
+
+
+- (int64_t)rankValue {
+	NSNumber *result = [self rank];
+	return [result longLongValue];
+}
+
+- (void)setRankValue:(int64_t)value_ {
+	[self setRank:[NSNumber numberWithLongLong:value_]];
+}
+
+- (int64_t)primitiveRankValue {
+	NSNumber *result = [self primitiveRank];
+	return [result longLongValue];
+}
+
+- (void)setPrimitiveRankValue:(int64_t)value_ {
+	[self setPrimitiveRank:[NSNumber numberWithLongLong:value_]];
+}
 
 
 
@@ -281,6 +418,13 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 
 @dynamic userName;
+
+
+
+
+
+
+@dynamic website;
 
 
 

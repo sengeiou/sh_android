@@ -264,7 +264,7 @@
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
-    
+
     //Show OptionsView
     self.viewOptions.alpha = 1.0;
     isVisible = YES;
@@ -303,8 +303,8 @@
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
 
-    NSLog(@"content: %f", scrollView.contentOffset.y);
-    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height - self.viewTextField.frame.size.height);
+    /*NSLog(@"content: %f", scrollView.contentOffset.y);
+    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height - self.viewTextField.frame.size.height);*/
 
     if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height)
         [self addLoadMoreCell];

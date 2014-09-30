@@ -85,9 +85,28 @@
         [self setName:name];
     
     NSString *photo = [dict objectForKey:kJSON_PHOTO ];
-    if ([name isKindOfClass:[NSString class]])
+    if ([photo isKindOfClass:[NSString class]])
         [self setPhoto:photo];
-
+    
+    NSString *bio = [dict objectForKey:kJSON_BIO ];
+    if ([bio isKindOfClass:[NSString class]])
+        [self setBio:bio];
+    
+    NSString *website = [dict objectForKey:kJSON_WEBSITE ];
+    if ([website isKindOfClass:[NSString class]])
+        [self setWebsite:website];
+    
+    NSNumber *points = [dict objectForKey:kJSON_POINTS ];
+    if ([points isKindOfClass:[NSNumber class]])
+        [self setPoints:points];
+    
+    NSNumber *numFollowing = [dict objectForKey:kJSON_NUMFOLLOWING ];
+    if ([numFollowing isKindOfClass:[NSNumber class]])
+        [self setNumFollowing:numFollowing];
+    
+    NSNumber *numFollowers = [dict objectForKey:kJSON_NUMFOLLOWERS ];
+    if ([numFollowers isKindOfClass:[NSNumber class]])
+        [self setNumFollowers:numFollowers];
 
     
     //SYNCRO  PROPERTIES
