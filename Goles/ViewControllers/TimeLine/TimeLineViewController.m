@@ -167,7 +167,9 @@
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
     
-    self.viewOptions.alpha = 0.0;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.viewOptions.alpha = 0.0;
+    }];
     
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
@@ -191,7 +193,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (isVisible)
-        self.viewOptions.alpha = 1.0;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.viewOptions.alpha = 1.0;
+        }];
     return self.arrayShots.count;
 
 }
@@ -295,7 +299,9 @@
 
 -(void) showOptions{
     //Show OptionsView
-    self.viewOptions.alpha = 1.0;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.viewOptions.alpha = 1.0;
+    }];
     //isVisible = YES;
 }
 -(void) reloadTimeLine{
@@ -371,18 +377,25 @@
     [self.timelineTableView addSubview:self.backgroundView];
     self.timelineTableView.scrollEnabled = NO;
     
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25f animations:^{
         self.viewOptions.alpha = 0.0;
     }];
 
     isVisible = YES;
     
-    self.bottomViewConstraint.constant -= self.sizeKeyboard;
+//    if (self.txtField.autocorrectionType == UITextAutocorrectionTypeDefault) {
+//        [UIView animateWithDuration:0.25f animations:^{
+//            self.bottomViewConstraint.constant -= 45;
+//            [self.view layoutIfNeeded];
+//        }];
+//        
+//    }else {
+        [UIView animateWithDuration:0.25f animations:^{
+            self.bottomViewConstraint.constant -= self.sizeKeyboard;
+            [self.view layoutIfNeeded];
+        }];
+//    }
     
-    [UIView animateWithDuration:0.5 animations:^{
-        [self.view layoutIfNeeded];
-    }];
-
 }
 
 
@@ -391,7 +404,7 @@
     
     [self.backgroundView removeFromSuperview];
     
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.25f animations:^{
         self.viewOptions.alpha = 1.0;
     }];
     
