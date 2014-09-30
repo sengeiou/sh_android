@@ -22,10 +22,10 @@ public class GetUserInfoJob extends Job {
     @Inject SQLiteOpenHelper dbHelper;
     @Inject Bus bus;
 
-    private int userId;
+    private Long userId;
     private User currentUser;
 
-    public GetUserInfoJob(Context context, int userId, User currentUser) {
+    public GetUserInfoJob(Context context, Long userId, User currentUser) {
         super(new Params(PRIORITY));
         this.userId = userId;
         this.currentUser = currentUser;
