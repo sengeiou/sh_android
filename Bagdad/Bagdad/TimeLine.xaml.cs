@@ -136,8 +136,11 @@ namespace Bagdad
         {
             try
             {
-                App.ShotsVM.Shots.Clear();
-                await App.ShotsVM.LoadData();
+                if (App.changesOnSynchro > 0)
+                {
+                    App.ShotsVM.Shots.Clear();
+                    await App.ShotsVM.LoadData();
+                }
                 if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 timer.Interval = new TimeSpan(0, 0, 0, 10);
