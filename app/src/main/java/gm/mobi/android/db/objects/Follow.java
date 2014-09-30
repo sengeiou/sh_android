@@ -8,22 +8,22 @@ public class Follow extends Synchronized{
     public static final int RELATIONSHIP_FOLLOWER = 3;
     public static final int RELATIONSHIP_BOTH = 4;
 
-    private Integer mIdUser;
-    private Integer mFollowedUser;
+    private Long mIdUser;
+    private Long mFollowedUser;
 
-    public Integer getIdUser() {
+    public Long getIdUser() {
         return mIdUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(Long idUser) {
         mIdUser = idUser;
     }
 
-    public Integer getFollowedUser() {
+    public Long getFollowedUser() {
         return mFollowedUser;
     }
 
-    public void setFollowedUser(Integer followedUser) {
+    public void setFollowedUser(Long followedUser) {
         mFollowedUser = followedUser;
     }
 }
