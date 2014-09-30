@@ -24,6 +24,9 @@ public class UserMapper extends GenericMapper {
         user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
         user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
         user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
+        user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
+        user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
+        user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
         setSynchronizedFromCursor(c, user);
 
         return user;
@@ -38,6 +41,9 @@ public class UserMapper extends GenericMapper {
         user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
         user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
         user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
+        user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
+        user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
+        user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         return user;
     }
 
@@ -53,6 +59,9 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
         cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
         cv.put(UserTable.POINTS, u.getPoints());
+        cv.put(UserTable.RANK, u.getRank());
+        cv.put(UserTable.BIO, u.getBio());
+        cv.put(UserTable.WEBSITE, u.getWebsite());
 
         setSynchronizedToContentValues(cv, u);
 
@@ -70,6 +79,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
         dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
         dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
+        dto.put(UserTable.BIO, user == null ? null : user.getBio());
+        dto.put(UserTable.RANK, user == null ? null : user.getRank());
+        dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
         setSynchronizedToDto(dto, user);
 
         return dto;
@@ -87,6 +99,9 @@ public class UserMapper extends GenericMapper {
         user.setNumFollowers((Integer)dto.get(UserTable.NUM_FOLLOWERS));
         user.setNumFollowings((Integer)dto.get(UserTable.NUM_FOLLOWINGS));
         user.setPoints((Integer)dto.get(UserTable.POINTS));
+        user.setWebsite((String)dto.get(UserTable.WEBSITE));
+        user.setBio((String)dto.get(UserTable.BIO));
+        user.setRank((Integer)dto.get(UserTable.RANK));
         setSynchronizedFromDto(dto, user);
 
         return user;
@@ -105,6 +120,9 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
         dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
         dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
+        dto.put(UserTable.BIO, user == null ? null : user.getBio());
+        dto.put(UserTable.RANK, user == null ? null : user.getRank());
+        dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
         setSynchronizedToDto(dto, user);
 
         return dto;
