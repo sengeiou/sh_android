@@ -238,6 +238,7 @@
     }
 }
 
+//------------------------------------------------------------------------------
 -(BOOL) controlRepeatedShot:(NSString *)texto{
     
      self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
@@ -282,13 +283,10 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        [self reloadShotsTable:nil];
-       
-        [self.txtField setText:nil];
-        
         if (isVisible)
-            [self keyboardHide];
-
+            [self keyboardHide:nil];
+        [self reloadShotsTable:nil];
+        [self.txtField setText:nil];
     }
 }
 
@@ -427,7 +425,6 @@
 
 //------------------------------------------------------------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-   // [textField setText:nil];
     
     [textField resignFirstResponder];
     return YES;
