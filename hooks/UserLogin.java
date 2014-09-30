@@ -1,5 +1,4 @@
 import com.fav24.dataservices.domain.generic.Generic;
-import com.fav24.dataservices.domain.generic.KeyItem;
 import com.fav24.dataservices.domain.generic.Metadata;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.policy.AccessPolicy;
@@ -19,12 +18,12 @@ import java.util.TreeMap;
 public class UserLogin implements GenericServiceHook {
 
 
-    private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` , `points` , `numFollowings` , `numFollowers` , " +
+    private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
             "FROM `shooter`.`UserView` " +
             "WHERE `email` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
-    private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` , `points` , `numFollowings` , `numFollowers` , " +
+    private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
             "`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
             "FROM `shooter`.`UserView` " +
             "WHERE `userName` = ? AND `password` = ? AND `csys_deleted` IS NULL";
@@ -39,7 +38,13 @@ public class UserLogin implements GenericServiceHook {
     private static final String ATTR_SESSIONTOKEN = "sessionToken";
     private static final String ATTR_NAME = "name";
 
+    private static final String ATTR_WEBSITE = "website";
+    private static final String ATTR_BIO = "bio";
+
     private static final String ATTR_POINTS = "points";
+    private static final String ATTR_RANK = "rank";
+
+
     private static final String ATTR_NUMFOLLOWINGS = "numFollowings";
     private static final String ATTR_NUMFOLLOWERS = "numFollowers";
 
@@ -276,12 +281,17 @@ public class UserLogin implements GenericServiceHook {
                 attributes.put(ATTR_NAME, JDBCUtils.getObject(resultSet, 6, String.class));
                 attributes.put(ATTR_PHOTO, JDBCUtils.getObject(resultSet, 7, String.class));
 
-                attributes.put(ATTR_POINTS, JDBCUtils.getObject(resultSet, 8, Long.class));
-                attributes.put(ATTR_NUMFOLLOWINGS, JDBCUtils.getObject(resultSet, 9, Long.class));
-                attributes.put(ATTR_NUMFOLLOWERS, JDBCUtils.getObject(resultSet, 10, Long.class));
+                attributes.put(ATTR_BIO, JDBCUtils.getObject(resultSet, 8, String.class));
+                attributes.put(ATTR_WEBSITE, JDBCUtils.getObject(resultSet, 9, String.class));
+
+                attributes.put(ATTR_RANK, JDBCUtils.getObject(resultSet, 10, Long.class));
+                attributes.put(ATTR_POINTS, JDBCUtils.getObject(resultSet, 11, Long.class));
+
+                attributes.put(ATTR_NUMFOLLOWINGS, JDBCUtils.getObject(resultSet, 12, Long.class));
+                attributes.put(ATTR_NUMFOLLOWERS, JDBCUtils.getObject(resultSet, 13, Long.class));
 
 
-                Timestamp timestamp = JDBCUtils.getObject(resultSet, 11, Timestamp.class);
+                Timestamp timestamp = JDBCUtils.getObject(resultSet, 14, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_BIRTH, null);
                 }
@@ -290,7 +300,7 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_BIRTH, timestamp.getTime());
                 }
 
-                timestamp = JDBCUtils.getObject(resultSet, 12, Timestamp.class);
+                timestamp = JDBCUtils.getObject(resultSet, 15, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_MODIFIED, null);
                 }
@@ -299,12 +309,12 @@ public class UserLogin implements GenericServiceHook {
                     attributes.put(ATTR_MODIFIED, timestamp.getTime());
                 }
 
-                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 13, Long.class));
+                attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 16, Long.class));
                 if (resultSet.wasNull()) {
                     attributes.put(ATTR_REVISION, null);
                 }
 
-                timestamp = JDBCUtils.getObject(resultSet, 14, Timestamp.class);
+                timestamp = JDBCUtils.getObject(resultSet, 17, Timestamp.class);
                 if (timestamp == null) {
                     attributes.put(ATTR_DELETED, null);
                 }
