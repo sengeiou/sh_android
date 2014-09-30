@@ -93,6 +93,72 @@ namespace Bagdad.Models
             return done;
         }
 
+        public async Task<int> addOlderShotsToTimeLine(JObject job)
+        {
+            int done = 0;
+            
+            bool add;
+            int idShot = 0;
+            int idUser = 0;
+            string comment = "";
+            string shotDate = "";
+            User user = new User();
+            List<String> userData = null;
+            List<ShotModel> OldShots = new List<ShotModel>();
+
+            try
+            {
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken shot in job["ops"][0]["data"])
+                    {
+                        add = true;
+
+                        if (shot["idShot"] == null || String.IsNullOrEmpty(shot["idShot"].ToString()))
+                            add = false;
+                        else
+                           idShot = int.Parse(shot["idShot"].ToString());
+
+                        if (shot["idUser"] == null || String.IsNullOrEmpty(shot["idUser"].ToString()))
+                            add = false;
+                        else
+                        {
+                            idUser = int.Parse(shot["idUser"].ToString());
+                            //get Name and URL By idUser
+                            userData = await user.GetNameAndImageURL(idUser);
+                            if(userData == null) add = false;
+                        }
+
+                        if (shot["comment"] == null || String.IsNullOrEmpty(shot["comment"].ToString()))
+                            add = false;
+                        else
+                            comment = shot["comment"].ToString();
+
+                        if (shot["birth"] == null || String.IsNullOrEmpty(shot["birth"].ToString()))
+                            add = false;
+                        else
+                            shotDate = Util.FromUnixTime(shot["birth"].ToString()).ToString("s").Replace('T', ' ');
+
+
+                        if (add)
+                        {
+                            OldShots.Add( new ShotModel() { shotId = idShot, shotMessage = comment, shotTime = shotDate, shotUserId = idUser, shotUserImageURL = userData[1], shotUserName = userData[0] });
+                            done++;
+                        }
+
+                    }
+                    OldShots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
+                    OldShots.Reverse();
+                    App.ShotsVM.ParseShotsForPrinting(OldShots);
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - Shot - addOlderShotsToTimeLine: " + e.Message);
+            }
+            return done;
+        }
 
         private async Task<int> synchronized(int idShot)
         {
@@ -242,7 +308,34 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("SubscriptionModel - SynchronizeSubscriptions: " + e.Message, e);
+                throw new Exception("Shot - SynchronizeSubscriptions: " + e.Message, e);
+            }
+        }
+
+        public async Task<double> GetOlderShotDate()
+        {
+            try
+            {
+
+                Database database = await App.GetDatabaseAsync();
+                double maxDate = 0;
+
+                Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.getOlderShotDate);
+
+                if (await selectStatement.StepAsync())
+                {
+                    TimeSpan t = DateTime.Parse(selectStatement.GetTextAt(0)) - new DateTime(1970, 1, 1);
+                    maxDate = t.TotalMilliseconds;
+                    System.Diagnostics.Debug.WriteLine("Shot - GetOlderShotDate. Older Shot Date: " + maxDate.ToString());
+                }
+
+                App.DBLoaded.Set();
+
+                return maxDate;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Shot - GetOlderShotDate: " + e.Message, e);
             }
         }
 

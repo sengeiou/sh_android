@@ -45,22 +45,23 @@ namespace Bagdad.ViewModels
         /// <summary>
         /// Adds to the Shot List the next X shots from the server.
         /// </summary>
-        /// <returns>The number of pages to charge</returns>
-        public async Task<int> LoadOlderShots()
+        /// <returns>The number of charged items</returns>
+        public async Task<int> LoadOlderShots(int offset)
         {
             try
             {
-                //ParseShotsForPrinting();
-                return 0;
+                ServiceCommunication sc = new ServiceCommunication();
+
+                return await sc.GetOlderShots(offset);
             }
             catch (Exception e)
             {
                 Debug.WriteLine("E R R O R : ShotsViewModel - LoadOlderShots: " + e.Message);
-                return 1;
+                return 0;
             }
         }
 
-        private int ParseShotsForPrinting(List<ShotModel> shots)
+        public int ParseShotsForPrinting(List<ShotModel> shots)
         {
             try
             {

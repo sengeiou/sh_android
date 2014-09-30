@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    class ShotModel
+    public class ShotModel
     {
         public int shotId { get; set; }
         public int shotUserId { get; set; }

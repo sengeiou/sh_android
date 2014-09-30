@@ -15,6 +15,7 @@ using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using Bagdad.ViewModels;
 using System.Windows.Threading;
+using Bagdad.Utils;
 
 namespace Bagdad
 {
@@ -167,6 +168,7 @@ namespace Bagdad
         {
             progress.IsVisible = true;
             SynchronizeShots();
+            endOfList = false;
         }
 
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
@@ -261,6 +263,7 @@ namespace Bagdad
         }
         #endregion
 
+        private int offset = 0;
 
         private async void MyShots_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -274,8 +277,11 @@ namespace Bagdad
             if (scrollInterface.VerticalScrollPercent >= scrollToChargue && !endOfList)
             {
                 //Here is the place to call to older Shots
+                ShotsViewModel svm = new ShotsViewModel();
 
-                int charge = 0; //TODO: CALL TO SHOTVIEWMODEL FUNCTION AWAITED
+                int charge = await svm.LoadOlderShots(offset);
+
+                offset += Constants.SERCOM_PARAM_OFFSET_PAG;
 
                 //if there is no more shots, don't need to charge it again
                 if (charge == 0)

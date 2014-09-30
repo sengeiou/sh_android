@@ -19,6 +19,8 @@ namespace Bagdad.Utils
 
         public const String hasLoggedSQL = "SELECT idUser FROM User WHERE sessionToken IS NOT NULL";
 
+        public const String GetNameAndURL = "SELECT name, photo FROM User WHERE idUser = @idUser";
+
         #endregion
 
         #region SHOT
@@ -28,6 +30,8 @@ namespace Bagdad.Utils
         public const String GetTimeLineShots = "SELECT s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth FROM Shot s JOIN User u ON s.idUser = u.idUser JOIN Follow f ON s.idUser = f.idUserFollowed OR s.idUser = f.idUser WHERE f.idUser = @idUser GROUP BY s.idShot ORDER BY s.csys_birth DESC;";
 
         public const String shotsSynchronized = "UPDATE Shot SET csys_synchronized = @csys_synchronized WHERE idShot = @idShot";
+
+        public const String getOlderShotDate = "SELECT MIN(csys_birth) FROM Shot;";
 
         #endregion
 

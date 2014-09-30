@@ -14,6 +14,7 @@ namespace Bagdad.Utils
         //OPERATIONS
         public const String SERCOM_OP_MANUAL_JSON_REQUEST = "#OMJR";
         public const String SERCOM_OP_RETRIEVE = "retrieve";
+        public const String SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET = "retrieveNoAutoOffset";
         public const String SERCOM_OP_UPDATECREATE = "CreateUpdate";
 
         //TABLES
@@ -21,6 +22,7 @@ namespace Bagdad.Utils
         public const String SERCOM_TB_USER = "User";
         public const String SERCOM_TB_FOLLOW = "Follow";
         public const String SERCOM_TB_SHOT = "Shot";
+        public const String SERCOM_TB_OLD_SHOTS = "OldShots";
 
         //PARAMS
         public const int SERCOM_PARAM_OFFSET_PAG = 100;

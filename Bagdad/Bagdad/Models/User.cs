@@ -256,5 +256,30 @@ namespace Bagdad.Models
             }
             return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ " + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
+
+        public async Task<List<String>> GetNameAndImageURL(int idUser)
+        {
+            List<String> userInfo = new List<string>();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetNameAndURL);
+                st.BindIntParameterWithName("@idUser", idUser);
+
+                if (await st.StepAsync())
+                {
+                    userInfo.Add(st.GetTextAt(0)); //Name
+                    userInfo.Add(st.GetTextAt(1)); //URL
+                }
+
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - GetNameAndImageURL: " + e.Message);
+            }
+            return userInfo;
+        }
     }
 }

@@ -147,6 +147,17 @@ namespace Bagdad.Utils
             }
         }
 
+        public async Task<int> GetOlderShots(int offset)
+        {
+            Debug.WriteLine("DESCARGANDO: OLD " + Constants.SERCOM_TB_SHOT);
+            Shot shot = new Shot();
+            double date = await shot.GetOlderShotDate();
+            string sParams = await getParamsForPaging(Constants.SERCOM_TB_SHOT, date);
+            int total = await doRequest(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET, Constants.SERCOM_TB_OLD_SHOTS, sParams, offset);
+            Debug.WriteLine("\tOLD " + Constants.SERCOM_TB_SHOT + " acabado con un total de: " + total + "\n");
+            return total;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -311,7 +322,7 @@ namespace Bagdad.Utils
                 {
                     String status = "\"status\":{\"message\":null,\"code\":null}";
                     String req = await GetREQ();
-                    String ops = GetOPS(operation, entity, searchParams, offset);
+                    String ops = GetOPS(translate(operation), translate(entity), searchParams, offset);
 
                     json = "{" + status + "," + req + "," + ops + "}";
                 }
@@ -320,7 +331,7 @@ namespace Bagdad.Utils
                 JObject job = JObject.Parse(response);
                
                 //Llamamos al retrieve
-                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE))
+                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
                 {
                     //Any ERRORs?
                     if (job["status"].ToString().Equals("No Server Available"))
@@ -334,7 +345,7 @@ namespace Bagdad.Utils
                         totalDone += await saveData(entity, job);
                         
                         //If there is offset
-                        if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG)
+                        if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
                         {
                             //Recursively get all the items
                             totalDone += await doRequest(operation, entity, searchParams, offset + Constants.SERCOM_PARAM_OFFSET_PAG);
@@ -370,6 +381,19 @@ namespace Bagdad.Utils
             catch (Exception e)
             {
                 throw new Exception("ServiceCommunication - doRequest: " + entity.ToString() + " - " + sErrorJSON + " - " + e.Message, e);
+            }
+        }
+
+        private string translate(string text)
+        {
+            switch (text)
+            {
+                case Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET:
+                    return Constants.SERCOM_OP_RETRIEVE;
+                case Constants.SERCOM_TB_OLD_SHOTS:
+                    return Constants.SERCOM_TB_SHOT;
+                default:
+                    return text;
             }
         }
 
@@ -443,6 +467,10 @@ namespace Bagdad.Utils
                     case Constants.SERCOM_TB_SHOT:
                         Shot shot = new Shot();
                         changes = await shot.saveData(response);
+                        break;
+                    case Constants.SERCOM_TB_OLD_SHOTS:
+                        Shot oldShots = new Shot();
+                        changes = await oldShots.addOlderShotsToTimeLine(response);
                         break;
                     default:
 
