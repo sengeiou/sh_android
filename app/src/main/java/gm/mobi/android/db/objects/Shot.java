@@ -2,25 +2,25 @@ package gm.mobi.android.db.objects;
 
 public class Shot extends Synchronized{
 
-    private Integer mIdShot;
-    private Integer mIdUser;
+    private Long mIdShot;
+    private Long mIdUser;
     private String mComment;
 
     private User mUserObject;
 
-    public Integer getIdShot() {
+    public Long getIdShot() {
         return mIdShot;
     }
 
-    public void setIdShot(Integer idShot) {
+    public void setIdShot(Long idShot) {
         mIdShot = idShot;
     }
 
-    public Integer getIdUser() {
+    public Long getIdUser() {
         return mIdUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(Long idUser) {
         mIdUser = idUser;
     }
 
