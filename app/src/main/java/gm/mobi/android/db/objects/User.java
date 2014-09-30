@@ -12,6 +12,9 @@ public class User extends Synchronized {
     private Integer mPoints;
     private Integer mNumFollowings;
     private Integer mNumFollowers;
+    private Integer mRank;
+    private String mWebsite;
+    private String mBio;
 
     public Integer getIdUser() {
         return mIdUser;
@@ -93,6 +96,29 @@ public class User extends Synchronized {
         mNumFollowers = numFollowers;
     }
 
+    public Integer getRank() {
+        return mRank;
+    }
+
+    public void setRank(Integer rank) {
+        mRank = rank;
+    }
+
+    public String getWebsite() {
+        return mWebsite;
+    }
+
+    public void setWebsite(String website) {
+        mWebsite = website;
+    }
+
+    public String getBio() {
+        return mBio;
+    }
+
+    public void setBio(String bio) {
+        mBio = bio;
+    }
 
     @Override
     public String toString() {
@@ -107,6 +133,9 @@ public class User extends Synchronized {
                 ", mPoints=" + mPoints +
                 ", mNumFollowings=" + mNumFollowings +
                 ", mNumFollowers=" + mNumFollowers +
+                ", mRank=" + mRank +
+                ", mWebsite='" + mWebsite + '\'' +
+                ", mBio='" + mBio + '\'' +
                 '}';
     }
 }
