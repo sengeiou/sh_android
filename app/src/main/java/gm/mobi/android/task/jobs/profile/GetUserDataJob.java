@@ -27,7 +27,7 @@ public class GetUserDataJob extends CancellableJob {
     private static final int PRIORITY = 7;
     private static final int RETRY_ATTEMPTS = 3;
 
-    private Integer idUser;
+    private Long idUser;
 
     @Inject
     Application mApp;
@@ -40,7 +40,7 @@ public class GetUserDataJob extends CancellableJob {
     @Inject
     BagdadService service;
 
-    public GetUserDataJob(Context context, Integer idUser){
+    public GetUserDataJob(Context context, Long idUser){
         super(new Params(PRIORITY));
         this.idUser = idUser;
         GolesApplication.get(context).inject(this);
