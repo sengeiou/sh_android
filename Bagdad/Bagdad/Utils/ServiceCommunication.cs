@@ -87,6 +87,7 @@ namespace Bagdad.Utils
                     {
                         listTablesSynchronized.Clear();
                         App.lockSynchro();
+                            App.changesOnSynchro = 0;
 
                         GenericModel gm = new GenericModel();
                         List<SynchroTableInfo> Tables = await gm.GetSynchronizationTables();
@@ -97,7 +98,9 @@ namespace Bagdad.Utils
                         {
                             try
                             {
+
                                 listTablesSynchronized.Add(Table.Entity);
+
 
 
                                 total = 0;
@@ -144,6 +147,11 @@ namespace Bagdad.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         private async Task<string> UpdateServer(String entity)
         {
             try
@@ -171,12 +179,16 @@ namespace Bagdad.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity">Entity to synchro</param>
+        /// <param name="json">json to send to the server</param>
         public async void sendDataToServer(String entity, String json)
-        { 
+        {
+            int tryCount = 0, done = 0;
             try
             {
-                int tryCount = 0;
-                int done = 0;
                 while (done == 0)
                 {
                     TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
@@ -189,7 +201,7 @@ namespace Bagdad.Utils
                     //New Date (evitar caché)
                     t = DateTime.UtcNow - new DateTime(1970, 1, 1);
                     epochDate = t.TotalMilliseconds;
-                    json = json.Replace("@requestTime", epochDate.ToString().Split(',')[0]);
+                    json = json.Replace("@requestTime", Math.Round(epochDate,0).ToString());
                 }
             }
             catch (Exception ex)
@@ -225,6 +237,7 @@ namespace Bagdad.Utils
                 Debug.WriteLine("\n\n No se ha podido establecer el valor para SynchroType.\n Valores admitidos: \n\t - 0: Update \n\t - 1: Download \n\t - 2: Both \n\n Nota: Si este parametro no se establece, SynchronizeProcess actuará como si SynchroType fuera Both.\n\n");
             }
         }
+
 
         public async Task<string> getParamsForSync(string entity, double date)
         {
@@ -272,6 +285,14 @@ namespace Bagdad.Utils
             return sFilterModifyDelete;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operation">Operation (retrieve, CreateUpdate)</param>
+        /// <param name="entity">Entity to synchronize</param>
+        /// <param name="searchParams"></param>
+        /// <param name="offset">offset of the page</param>
+        /// <returns></returns>
         public async Task<int> doRequest(String operation, String entity, String searchParams, int offset)
         {
             String sErrorJSON = "";
@@ -337,6 +358,7 @@ namespace Bagdad.Utils
                 }
                 else
                 {
+                    ////////////if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
                     //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                     if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         totalDone = 1;
