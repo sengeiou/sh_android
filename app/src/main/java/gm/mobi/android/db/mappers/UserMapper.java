@@ -4,6 +4,7 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import gm.mobi.android.db.GMContract;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,9 +17,7 @@ public class UserMapper extends GenericMapper {
         User user = new User();
         user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
         user.setFavouriteTeamId(c.getInt(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID)));
-        user.setSessionToken(c.getString(c.getColumnIndex(UserTable.SESSION_TOKEN)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
-        user.setEmail(c.getString(c.getColumnIndex(UserTable.EMAIL)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
         user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
@@ -27,6 +26,17 @@ public class UserMapper extends GenericMapper {
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
+
+        // Fields that might not come from server for all users
+        int sessionTokenIndex = c.getColumnIndex(UserTable.SESSION_TOKEN);
+        if (sessionTokenIndex >= 0) {
+            user.setSessionToken(c.getString(sessionTokenIndex));
+        }
+        int emailTokenIndex = c.getColumnIndex(UserTable.EMAIL);
+        if (emailTokenIndex >= 0) {
+            user.setEmail(c.getString(emailTokenIndex));
+        }
+
         setSynchronizedFromCursor(c, user);
         return user;
     }
