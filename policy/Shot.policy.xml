@@ -30,6 +30,10 @@
 
             </Filters>
 
+            <Ordination>
+                <Attribute Alias="idShot" Order="Descending">idShot</Attribute>
+            </Ordination>
+
         </Entity>
     </Entities>
 </AccessPolicy>
