@@ -107,7 +107,8 @@
                  kJSON_WEBSITE:[NSNull null],
                  kJSON_POINTS:[NSNull null],
                  kJSON_NUMFOLLOWING:[NSNull null],
-                 kJSON_NUMFOLLOWERS:[NSNull null]};
+                 kJSON_NUMFOLLOWERS:[NSNull null],
+                 kJSON_RANK:[NSNull null]};
     }
     
     else if ([entityClass isSubclassOfClass:[Follow class]]) {
@@ -154,7 +155,8 @@
              kJSON_WEBSITE:[NSNull null],
              kJSON_POINTS:[NSNull null],
              kJSON_NUMFOLLOWING:[NSNull null],
-             kJSON_NUMFOLLOWERS:[NSNull null]};
+             kJSON_NUMFOLLOWERS:[NSNull null],
+             kJSON_RANK:[NSNull null]};
 
 }
 

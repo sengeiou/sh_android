@@ -101,6 +101,7 @@
                      NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,
                                                                                                       kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,
                                                                                                       kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,
+                                                                                                      kJSON_RANK:user.rank,
                                                                                                       kJSON_BIRTH:birth,
                                                                                                       kJSON_MODIFIED:modified}];
                      

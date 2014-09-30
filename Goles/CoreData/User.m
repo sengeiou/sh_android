@@ -107,6 +107,10 @@
     NSNumber *numFollowers = [dict objectForKey:kJSON_NUMFOLLOWERS ];
     if ([numFollowers isKindOfClass:[NSNumber class]])
         [self setNumFollowers:numFollowers];
+    
+    NSNumber *rank = [dict objectForKey:kJSON_RANK ];
+    if ([rank isKindOfClass:[NSNumber class]])
+        [self setRank:rank];
 
     
     //SYNCRO  PROPERTIES

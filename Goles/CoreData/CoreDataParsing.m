@@ -203,6 +203,8 @@ NSString *const kJSON_WEBSITE                          = @"website";
 NSString *const kJSON_POINTS                           = @"points";
 NSString *const kJSON_NUMFOLLOWING                     = @"numFollowings";
 NSString *const kJSON_NUMFOLLOWERS                     = @"numFollowers";
+NSString *const kJSON_RANK                             = @"rank";
+
 
 //SML
 NSString *const kJSON_SML                              = @"SML";
