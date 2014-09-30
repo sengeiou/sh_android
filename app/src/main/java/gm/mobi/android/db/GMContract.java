@@ -57,7 +57,9 @@ public class GMContract {
         public static final String NUM_FOLLOWERS = "numFollowers";
         public static final String NUM_FOLLOWINGS = "numFollowings";
         public static final String POINTS = "points";
-
+        public static final String WEBSITE = "website";
+        public static final String BIO = "bio";
+        public static final String RANK = "rank";
 
         public static final String[] PROJECTION = {
                 ID,
@@ -70,6 +72,9 @@ public class GMContract {
                 NUM_FOLLOWERS,
                 NUM_FOLLOWINGS,
                 POINTS,
+                WEBSITE,
+                BIO,
+                RANK,
                 CSYS_BIRTH,
                 CSYS_MODIFIED,
                 CSYS_DELETED,
