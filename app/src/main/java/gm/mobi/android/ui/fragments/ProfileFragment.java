@@ -54,7 +54,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
 
-    @Arg Integer userId;
+    @Arg Long userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
