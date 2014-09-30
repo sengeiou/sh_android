@@ -380,11 +380,16 @@
 
     isVisible = YES;
 
-    [UIView animateWithDuration:0.25f animations:^{
-        self.bottomViewConstraint.constant = - self.sizeKeyboard;
-        [self.view layoutIfNeeded];
-    }];
-    
+    double animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+
+    [UIView animateWithDuration:animationDuration
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.bottomViewConstraint.constant = - self.sizeKeyboard;
+                         [self.view layoutIfNeeded];
+                     } completion:NULL];
+
 }
 
 
