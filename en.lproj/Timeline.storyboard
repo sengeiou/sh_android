@@ -220,8 +220,11 @@
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
                                 <rect key="frame" x="-4" y="553" width="608" height="47"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="fDT-Kv-eYE">
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="fDT-Kv-eYE">
                                         <rect key="frame" x="0.0" y="0.0" width="608" height="1"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="0.40000000000000002" id="yF1-do-eh8"/>
+                                        </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41t-je-TRg">
                                         <rect key="frame" x="547" y="9" width="53" height="30"/>
@@ -254,6 +257,7 @@
                                     <constraint firstItem="st6-gN-ziw" firstAttribute="leading" secondItem="HR5-eu-cfc" secondAttribute="leading" constant="8" id="Mrz-Od-0G8"/>
                                     <constraint firstAttribute="trailing" secondItem="fDT-Kv-eYE" secondAttribute="trailing" id="foW-2l-Vge"/>
                                     <constraint firstAttribute="height" constant="47" id="fxF-sH-uaZ"/>
+                                    <constraint firstItem="fDT-Kv-eYE" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="top" id="l4e-nt-A2Z"/>
                                     <constraint firstItem="fDT-Kv-eYE" firstAttribute="leading" secondItem="HR5-eu-cfc" secondAttribute="leading" id="tpf-8U-fJ1"/>
                                     <constraint firstAttribute="bottom" secondItem="st6-gN-ziw" secondAttribute="bottom" constant="8" id="xvh-go-O2u"/>
                                     <constraint firstItem="41t-je-TRg" firstAttribute="leading" secondItem="st6-gN-ziw" secondAttribute="trailing" constant="8" id="y1D-jX-uZ5"/>

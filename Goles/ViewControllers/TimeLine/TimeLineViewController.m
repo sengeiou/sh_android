@@ -87,20 +87,11 @@
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
     self.navigationItem.rightBarButtonItem = btnSearch;
     
-    [self.timelineTableView setContentInset:UIEdgeInsetsMake(0, 0, 47, 0)];
-    self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
-    self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
+//    [self.timelineTableView setContentInset:UIEdgeInsetsMake(0, 0, 37, 0)];
     
     [self createConstraintForBottomView];
     
 }
-//
-////------------------------------------------------------------------------------
-//-(void)setTimer
-//{
-//    self.mTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self
-//                                                 selector:@selector(btnNotPullToRefresh) userInfo:nil repeats:NO];
-//}
 
 //------------------------------------------------------------------------------
 - (void)viewDidLayoutSubviews {
@@ -329,11 +320,20 @@
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
 
-    /*NSLog(@"content: %f", scrollView.contentOffset.y);
-    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height - self.viewTextField.frame.size.height);*/
+    NSLog(@"content: %f", scrollView.contentOffset.y - self.viewOptions.frame.size.height);
+    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height);
 
-    if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height)
+//    if (scrollView.contentOffset.y - self.viewOptions.frame.size.height == scrollView.contentSize.height - scrollView.frame.size.height)
+//    if (scroll.contentSize.height - scroll.frame.size.height = scroll.contentOffset.y)
+//        [self addLoadMoreCell];
+
+    CGFloat currentOffset = scrollView.contentOffset.y;
+    CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+    
+    // Change 10.0 to adjust the distance from bottom
+    if (maximumOffset - currentOffset <= 200.0)
         [self addLoadMoreCell];
+    
     
     if (self.lastContentOffset > scrollView.contentOffset.y){
         [UIView animateWithDuration:0.25 animations:^{

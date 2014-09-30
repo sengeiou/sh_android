@@ -202,7 +202,7 @@
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_SHOT
-                                                                     withItems:@5
+                                                                     withItems:@20
                                                                     withOffSet:@0
                                                                      andFilter:[FilterCreation getFilterForOldShots]];
     
