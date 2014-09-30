@@ -80,7 +80,7 @@
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
     self.navigationItem.rightBarButtonItem = btnSearch;
     
-    
+    [self.timelineTableView setContentInset:UIEdgeInsetsMake(0, 0, 47, 0)];
     self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
     self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
     
