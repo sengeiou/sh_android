@@ -105,8 +105,12 @@
                                                         <rect key="frame" x="350" y="8" width="42" height="21"/>
                                                     </variation>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekn-Ro-Da9">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ekn-Ro-Da9">
                                                     <rect key="frame" x="14" y="11" width="48" height="48"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="48" id="Kh9-eE-mkf"/>
+                                                        <constraint firstAttribute="height" constant="48" id="shO-6H-era"/>
+                                                    </constraints>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
                                                         <rect key="frame" x="16" y="11" width="48" height="48"/>
                                                     </variation>
@@ -133,6 +137,8 @@
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="leading" secondItem="ekn-Ro-Da9" secondAttribute="trailing" constant="29" id="UJS-QT-KmA"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dLo-GY-onO" secondAttribute="trailing" constant="7" id="aO3-Dw-Lnr"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="18" id="aaf-3I-Tbg"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="3" id="oSv-sU-DEU"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="6" id="p5U-eH-sKe"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
