@@ -166,35 +166,32 @@
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="wbw-vs-QZd">
-                                        <rect key="frame" x="300" y="0.0" width="1" height="47"/>
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="wbw-vs-QZd">
+                                        <rect key="frame" x="304" y="0.0" width="1" height="47"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="47" id="Ty4-fa-3el"/>
-                                            <constraint firstAttribute="width" constant="1" id="gbS-yU-W3A"/>
+                                            <constraint firstAttribute="width" constant="0.5" id="aIb-fX-MZT"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="pao-fz-mhd">
-                                        <rect key="frame" x="0.0" y="46" width="608" height="1"/>
+                                    <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="pao-fz-mhd">
+                                        <rect key="frame" x="-20" y="46" width="648" height="1"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="kKo-H1-QHt"/>
+                                            <constraint firstAttribute="height" constant="0.5" id="5N9-iy-70F"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.95294117647058818" green="0.95294117647058818" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="pao-fz-mhd" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" constant="-20" id="1yW-UV-snG"/>
                                     <constraint firstAttribute="centerY" secondItem="lha-vI-5wj" secondAttribute="centerY" id="2Sa-AF-fKT"/>
                                     <constraint firstAttribute="centerY" secondItem="qN5-Nb-Req" secondAttribute="centerY" id="3s4-nq-Obh"/>
-                                    <constraint firstAttribute="bottom" secondItem="pao-fz-mhd" secondAttribute="bottom" id="5zR-c7-1yF"/>
-                                    <constraint firstItem="pao-fz-mhd" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" id="CQI-Pi-q9F"/>
-                                    <constraint firstAttribute="centerX" secondItem="pao-fz-mhd" secondAttribute="centerX" id="MCt-vA-SeF"/>
+                                    <constraint firstAttribute="bottom" secondItem="pao-fz-mhd" secondAttribute="bottom" id="4dL-aE-XRj"/>
+                                    <constraint firstAttribute="trailing" secondItem="pao-fz-mhd" secondAttribute="trailing" constant="-20" id="5YC-py-DH9"/>
                                     <constraint firstItem="qN5-Nb-Req" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" constant="30" id="Rzx-Hf-a4Z"/>
-                                    <constraint firstItem="wbw-vs-QZd" firstAttribute="top" secondItem="hAK-0x-gdD" secondAttribute="top" id="UGS-Rr-kax"/>
-                                    <constraint firstAttribute="trailing" secondItem="pao-fz-mhd" secondAttribute="trailing" id="Yqp-a8-egH"/>
+                                    <constraint firstAttribute="centerX" secondItem="wbw-vs-QZd" secondAttribute="centerX" id="Yc9-Tc-1ny"/>
                                     <constraint firstAttribute="trailing" secondItem="lha-vI-5wj" secondAttribute="trailing" constant="30" id="bKp-EK-q69"/>
-                                    <constraint firstItem="pao-fz-mhd" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" id="hRq-jh-myl"/>
-                                    <constraint firstItem="lha-vI-5wj" firstAttribute="leading" secondItem="wbw-vs-QZd" secondAttribute="trailing" constant="198" id="imN-qb-O5J"/>
                                     <constraint firstAttribute="height" constant="47" id="k6p-VJ-VUS"/>
-                                    <constraint firstItem="wbw-vs-QZd" firstAttribute="leading" secondItem="qN5-Nb-Req" secondAttribute="trailing" constant="157" id="zad-mb-xv4"/>
+                                    <constraint firstAttribute="centerY" secondItem="wbw-vs-QZd" secondAttribute="centerY" id="plk-hx-bEE"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
@@ -262,7 +259,7 @@
                         <outlet property="btnInfo" destination="qN5-Nb-Req" id="Csh-an-UL1"/>
                         <outlet property="btnShoot" destination="41t-je-TRg" id="KtR-gA-HMn"/>
                         <outlet property="btnWatching" destination="lha-vI-5wj" id="EXj-Zw-0tJ"/>
-                        <outlet property="line1" destination="fDT-Kv-eYE" id="s6K-AW-KH2"/>
+                        <outlet property="line1" destination="wbw-vs-QZd" id="1Rb-Lb-rST"/>
                         <outlet property="line2" destination="pao-fz-mhd" id="pDf-gV-Opi"/>
                         <outlet property="timelineTableView" destination="cfX-1I-iII" id="Z50-EZ-goo"/>
                         <outlet property="txtField" destination="st6-gN-ziw" id="6cZ-l1-32r"/>
