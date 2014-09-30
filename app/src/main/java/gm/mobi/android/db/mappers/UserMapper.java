@@ -28,7 +28,6 @@ public class UserMapper extends GenericMapper {
         user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
         setSynchronizedFromCursor(c, user);
-
         return user;
     }
 
@@ -47,6 +46,7 @@ public class UserMapper extends GenericMapper {
         return user;
     }
 
+
     public static ContentValues toContentValues(User u) {
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
@@ -62,15 +62,12 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.RANK, u.getRank());
         cv.put(UserTable.BIO, u.getBio());
         cv.put(UserTable.WEBSITE, u.getWebsite());
-
         setSynchronizedToContentValues(cv, u);
-
         return cv;
     }
 
     public static Map<String, Object> reqRestUsersToDto(User user) {
         Map<String, Object> dto = new HashMap<>();
-
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
@@ -83,7 +80,6 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.RANK, user == null ? null : user.getRank());
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
         setSynchronizedToDto(dto, user);
-
         return dto;
     }
 
@@ -96,20 +92,18 @@ public class UserMapper extends GenericMapper {
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName((String) dto.get(UserTable.NAME));
         user.setPhoto((String) dto.get(UserTable.PHOTO));
-        user.setNumFollowers((Integer)dto.get(UserTable.NUM_FOLLOWERS));
-        user.setNumFollowings((Integer)dto.get(UserTable.NUM_FOLLOWINGS));
-        user.setPoints((Integer)dto.get(UserTable.POINTS));
-        user.setWebsite((String)dto.get(UserTable.WEBSITE));
-        user.setBio((String)dto.get(UserTable.BIO));
-        user.setRank((Integer)dto.get(UserTable.RANK));
+        user.setNumFollowers((Integer) dto.get(UserTable.NUM_FOLLOWERS));
+        user.setNumFollowings((Integer) dto.get(UserTable.NUM_FOLLOWINGS));
+        user.setPoints((Integer) dto.get(UserTable.POINTS));
+        user.setWebsite((String) dto.get(UserTable.WEBSITE));
+        user.setBio((String) dto.get(UserTable.BIO));
+        user.setRank((Integer) dto.get(UserTable.RANK));
         setSynchronizedFromDto(dto, user);
-
         return user;
     }
 
     public static Map<String, Object> toDto(User user) {
         Map<String, Object> dto = new HashMap<>();
-
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
         dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
@@ -124,7 +118,6 @@ public class UserMapper extends GenericMapper {
         dto.put(UserTable.RANK, user == null ? null : user.getRank());
         dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
         setSynchronizedToDto(dto, user);
-
         return dto;
     }
 
