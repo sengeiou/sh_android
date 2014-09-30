@@ -15,16 +15,16 @@ public class UserMapper extends GenericMapper {
 
     public static User fromCursor(Cursor c) {
         User user = new User();
-        user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
-        user.setFavouriteTeamId(c.getInt(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID)));
+        user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
+        user.setFavouriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
-        user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
-        user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
-        user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
+        user.setNumFollowers(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
+        user.setNumFollowings(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
+        user.setPoints(c.getLong(c.getColumnIndex(UserTable.POINTS)));
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
-        user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
+        user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
 
         // Fields that might not come from server for all users
@@ -43,14 +43,14 @@ public class UserMapper extends GenericMapper {
 
     public static User basicFromCursor(Cursor c) {
         User user = new User();
-        user.setIdUser(c.getInt(c.getColumnIndex(UserTable.ID)));
+        user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
-        user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
-        user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
-        user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
-        user.setRank(c.getInt(c.getColumnIndex(UserTable.RANK)));
+        user.setNumFollowers(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
+        user.setNumFollowings(c.getLong(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
+        user.setPoints(c.getLong(c.getColumnIndex(UserTable.POINTS)));
+        user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
         user.setBio(c.getString(c.getColumnIndex(UserTable.BIO)));
         return user;
@@ -95,19 +95,19 @@ public class UserMapper extends GenericMapper {
 
     public static User fromDto(Map<String, Object> dto) {
         User user = new User();
-        user.setIdUser(dto.containsKey(UserTable.ID) ? (Integer) dto.get(UserTable.ID) : null);
-        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID) ? (Integer) dto.get(UserTable.FAVOURITE_TEAM_ID) : null);
+        user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
+        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVOURITE_TEAM_ID)).longValue() : null);
         user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName((String) dto.get(UserTable.USER_NAME));
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
         user.setName((String) dto.get(UserTable.NAME));
         user.setPhoto((String) dto.get(UserTable.PHOTO));
-        user.setNumFollowers((Integer) dto.get(UserTable.NUM_FOLLOWERS));
-        user.setNumFollowings((Integer) dto.get(UserTable.NUM_FOLLOWINGS));
-        user.setPoints((Integer) dto.get(UserTable.POINTS));
+        user.setNumFollowers(((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue());
+        user.setNumFollowings(((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue());
+        user.setPoints(((Number) dto.get(UserTable.POINTS)).longValue());
         user.setWebsite((String) dto.get(UserTable.WEBSITE));
         user.setBio((String) dto.get(UserTable.BIO));
-        user.setRank((Integer) dto.get(UserTable.RANK));
+        user.setRank(((Number) dto.get(UserTable.RANK)).longValue());
         setSynchronizedFromDto(dto, user);
         return user;
     }
