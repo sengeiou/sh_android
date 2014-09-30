@@ -35,7 +35,7 @@ import timber.log.Timber;
 public class BagdadDataService implements BagdadService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    public static final long DEFAULT_LIMIT = 1000L;
+    public static final long DEFAULT_LIMIT = 10L;
 
     private OkHttpClient client;
     private Endpoint endpoint;

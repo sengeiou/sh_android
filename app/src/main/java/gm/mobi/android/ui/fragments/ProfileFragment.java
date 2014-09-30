@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,9 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.task.events.profile.UserInfoResult;
+import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import hugo.weaving.DebugLog;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -30,6 +30,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
 
@@ -95,8 +96,9 @@ public class ProfileFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void userInfoReceived(UserInfoResult event) {
+    public void userInfoReceived(UserInfoResultEvent event) {
         setUserInfo(event.getUser(), event.getRelationship());
+
     }
 
     private void setTitle(String title) {

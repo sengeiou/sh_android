@@ -1,6 +1,7 @@
 package gm.mobi.android.task.jobs.profile;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
@@ -9,8 +10,9 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.task.events.profile.UserInfoResult;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.task.events.profile.UserInfoResultEvent;
+import java.io.IOException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -21,6 +23,7 @@ public class GetUserInfoJob extends Job {
 
     @Inject SQLiteOpenHelper dbHelper;
     @Inject Bus bus;
+    @Inject BagdadService service;
 
     private Long userId;
     private User currentUser;
@@ -39,19 +42,36 @@ public class GetUserInfoJob extends Job {
 
     @Override public void onRun() throws Throwable {
         User consultedUser = UserManager.getUserByIdUser(dbHelper.getReadableDatabase(), userId);
-        if (consultedUser == null) {
-            Timber.e("Retrieved null user from database with id %d", userId);
-            //TODO control de errores, network, and stuff
-            return;
+        if (consultedUser != null) {
+            // Get relationship
+            int followRelationship =
+                FollowManager.getFollowRelationship(dbHelper.getReadableDatabase(), currentUser,
+                    consultedUser);
+
+            UserInfoResultEvent result = new UserInfoResultEvent(consultedUser, followRelationship);
+            bus.post(result);
+            //TODO control de errores
+        } else {
+            Timber.i("User with id %d not found in local database. Retrieving from the service...",
+                userId);
         }
 
-        // Get relationship
-        int followRelationship =
-            FollowManager.getFollowRelationship(dbHelper.getReadableDatabase(), currentUser, consultedUser);
+        // Refresh anyways
+        try {
+            User consultedUserFromService = service.getUserByIdUser(userId);
+            //TODO retrieve follows relations also
+            //Store user in db
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            UserManager.saveUser(db, consultedUserFromService);
+            db.close();
 
-        UserInfoResult result = new UserInfoResult(consultedUser, followRelationship);
-        bus.post(result);
-        //TODO control de errores
+            UserInfoResultEvent result = new UserInfoResultEvent(consultedUserFromService,
+                0);//TODO meter follow obtenido y calculado
+            bus.post(result);
+        } catch (IOException e) {
+            //TODO server error
+            Timber.e("Error consulting user info from service. User id: %d", userId);
+        }
     }
 
     @Override protected void onCancel() {

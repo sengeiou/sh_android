@@ -2,11 +2,11 @@ package gm.mobi.android.task.events.profile;
 
 import gm.mobi.android.db.objects.User;
 
-public class UserInfoResult {
+public class UserInfoResultEvent {
     private User user;
     private int relationship;
 
-    public UserInfoResult(User user, int relationship) {
+    public UserInfoResultEvent(User user, int relationship) {
         this.user = user;
         this.relationship = relationship;
     }
