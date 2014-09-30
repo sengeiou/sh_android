@@ -20,7 +20,7 @@
 #import "AppDelegate.h"
 
 
-@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate>{
+@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     int lengthTextField;
     BOOL isVisible;
 }
@@ -44,6 +44,7 @@
 @property (assign, nonatomic) int sizeKeyboard;
 @property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewConstraint;
+@property (nonatomic, strong) NSTimer *mTimer;
 
 @end
 
@@ -58,6 +59,8 @@
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
+    
+   // [self setTimer];
     
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
@@ -91,6 +94,13 @@
     [self createConstraintForBottomView];
     
 }
+//
+////------------------------------------------------------------------------------
+//-(void)setTimer
+//{
+//    self.mTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self
+//                                                 selector:@selector(btnNotPullToRefresh) userInfo:nil repeats:NO];
+//}
 
 //------------------------------------------------------------------------------
 - (void)viewDidLayoutSubviews {
@@ -228,15 +238,9 @@
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-
-    if (![self controlRepeatedShot:self.txtField.text])
-        [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
-    else{
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
+    [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
+
 
 //------------------------------------------------------------------------------
 -(BOOL) controlRepeatedShot:(NSString *)texto{
@@ -265,12 +269,28 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
 
-    [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
-
-
-    [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
-
-    [self.refreshControl endRefreshing];
+    if (self.txtField.text.length >= 1) {
+        
+        if ([[Conection sharedInstance] isConection]) {
+            if (![self controlRepeatedShot:self.txtField.text])
+                [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
+            else{
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
+            }
+        }else{
+            
+        }
+    }else{
+        
+        [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
+        
+        
+        [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
+        
+        [self.refreshControl endRefreshing];
+    }
 }
 
 -(void) showOptions{
@@ -291,6 +311,7 @@
             [self keyboardHide:nil];
         [self reloadShotsTable:nil];
         [self.txtField setText:nil];
+        self.btnShoot.enabled = NO;
     }
 }
 
