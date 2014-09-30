@@ -26,7 +26,7 @@ public class ShotDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
     }
 
-    public GenericDto getNewShotOperationDto(Integer idUser, String comment) {
+    public GenericDto getNewShotOperationDto(Long idUser, String comment) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }
