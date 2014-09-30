@@ -265,15 +265,19 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
 
-    //Show OptionsView
-    self.viewOptions.alpha = 1.0;
-    isVisible = YES;
+    [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
+
 
     [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
 
     [self.refreshControl endRefreshing];
 }
 
+-(void) showOptions{
+    //Show OptionsView
+    self.viewOptions.alpha = 1.0;
+    //isVisible = YES;
+}
 -(void) reloadTimeLine{
      [self.timelineTableView reloadData];
 }
