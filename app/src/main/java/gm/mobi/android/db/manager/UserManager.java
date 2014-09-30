@@ -25,12 +25,14 @@ public class UserManager {
      */
     public static User getCurrentUser(SQLiteDatabase db) {
         User user = null;
-        Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            user = UserMapper.fromCursor(c);
+        if(!GeneralManager.isTableEmpty(db,UserTable.TABLE)) {
+   Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                user = UserMapper.fromCursor(c);
+            }
+            c.close();
         }
-        c.close();
         return user;
     }
 
@@ -60,7 +62,14 @@ public class UserManager {
         if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
             res = deleteUser(db, user);
         } else {
-            res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+
+            if(getCurrentUser(db) != null && getCurrentUser(db).equals(user)){
+                Timber.e("Usuario propio, sólo hace update");
+                res = db.update(UserTable.TABLE,contentValues,null,null);
+            }else{
+                Timber.e("Reemplaza el usuario");
+                res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
         }
         insertOrUpdateUserInTableSync(db);
         //TODO error handling? if(res<0)
@@ -99,14 +108,14 @@ public class UserManager {
     /**
      * Retrieve User by idUser
      * */
-    public static User getUserByIdUser(SQLiteDatabase db, Integer idUser){
+    public static User getUserByIdUser(SQLiteDatabase db, Long idUser){
        User resUser = null;
        String args = UserTable.ID+"=?";
        String[] argsString =  new String[]{String.valueOf(idUser)};
        Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION,args,argsString,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
-            resUser = UserMapper.basicFromCursor(c);
+            resUser = UserMapper.fromCursor(c);
         }
         c.close();
         return resUser;
