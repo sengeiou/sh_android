@@ -61,4 +61,14 @@ public class SQLiteUtils {
             + TablesSync.FREQUENCY+" INT NULL, " +
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
+    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+TablesSync.TABLE+" ("
+            + TeamTable.ID_TEAM+" INT NOT NULL,"
+            + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
+            + TeamTable.CLUB_NAME+" VARCHAR(255),"
+            + TeamTable.SHORT_NAME+" VARCHAR(255,)"
+            + TeamTable.TLA_NAME+" VARCHAR(255)"
+            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
 }
