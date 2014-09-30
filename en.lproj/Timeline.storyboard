@@ -82,8 +82,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YX4-SR-9wA" id="2EL-DM-I0W">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXk-Q8-LaK">
-                                                    <rect key="frame" x="76" y="6" width="150" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXk-Q8-LaK">
+                                                    <rect key="frame" x="80" y="8" width="44" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
@@ -106,7 +106,7 @@
                                                     </variation>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ekn-Ro-Da9">
-                                                    <rect key="frame" x="14" y="11" width="48" height="48"/>
+                                                    <rect key="frame" x="18" y="13" width="48" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="48" id="Kh9-eE-mkf"/>
                                                         <constraint firstAttribute="height" constant="48" id="shO-6H-era"/>
@@ -134,11 +134,13 @@
                                                 </textView>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="leading" secondItem="ekn-Ro-Da9" secondAttribute="trailing" constant="14" id="RN1-yv-Ic1"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="leading" secondItem="ekn-Ro-Da9" secondAttribute="trailing" constant="29" id="UJS-QT-KmA"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dLo-GY-onO" secondAttribute="trailing" constant="7" id="aO3-Dw-Lnr"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="18" id="aaf-3I-Tbg"/>
-                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="3" id="oSv-sU-DEU"/>
-                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="6" id="p5U-eH-sKe"/>
+                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" id="gQA-DB-9qo"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="5" id="oSv-sU-DEU"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="10" id="p5U-eH-sKe"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
