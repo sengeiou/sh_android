@@ -1,6 +1,7 @@
 package gm.mobi.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -67,7 +68,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException{
+    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow) throws IOException{
         List<Follow> follows = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate);
         GenericDto responseDto = postRequest(requestDto);
@@ -88,7 +89,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException {
+    public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException {
         List<User> users = new ArrayList<>();
         GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds, 1000L,0L);
         GenericDto responseDto = postRequest(genericDto);
@@ -108,7 +109,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getNewShots(List<Integer> followingUserIds, Long newestShotDate) throws IOException {
+    public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         List<Shot> newerShots = new ArrayList<>();
         GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, newestShotDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
@@ -128,7 +129,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getOlderShots(List<Integer> followingUserIds, Long oldestShotDate) throws IOException {
+    public List<Shot> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
         List<Shot> olderShots = new ArrayList<>();
         GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, oldestShotDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
@@ -148,9 +149,9 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException {
+    public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<Shot> shots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, DEFAULT_LIMIT);
+        GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, 10l);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -168,7 +169,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public Shot postNewShot(Integer idUser, String comment) throws IOException {
+    public Shot postNewShot(Long idUser, String comment) throws IOException {
         GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -185,7 +186,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public User getUserByIdUser(Integer idUser) throws IOException {
+    public User getUserByIdUser(Long idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
