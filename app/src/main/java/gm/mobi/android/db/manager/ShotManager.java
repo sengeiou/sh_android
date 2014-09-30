@@ -48,7 +48,15 @@ public class ShotManager {
         idUsers = idUsers.concat(")");
         idUsers = idUsers.replace(",)", ")");
         String query = "SELECT " + ShotTable.ID_SHOT +
-                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT + ",b." + UserTable.NAME + ", b."+UserTable.FAVOURITE_TEAM_ID+",b." + UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
+                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT + ",b." + UserTable.NAME +
+                ", b."+UserTable.FAVOURITE_TEAM_ID+
+                ",b."+UserTable.NUM_FOLLOWERS+
+                ",b."+UserTable.NUM_FOLLOWINGS+
+                ",b."+UserTable.BIO+
+                ",b."+UserTable.POINTS+
+                ",b."+UserTable.WEBSITE+
+                ",b."+UserTable.RANK+
+                ",b." + UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
                 " FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID
@@ -78,7 +86,19 @@ public class ShotManager {
 
     public static List<Shot> retrieveTimelineWithUsers(SQLiteDatabase db) {
         String query = "SELECT " + ShotTable.ID_SHOT +
-                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT +",b." +UserTable.BIO +",b." + UserTable.WEBSITE +",b." + UserTable.RANK + ",b." + UserTable.NAME + ","+ UserTable.POINTS+","+ UserTable.NUM_FOLLOWERS+","+ UserTable.NUM_FOLLOWINGS+","+ UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
+                ",b." + ShotTable.ID_USER + ","
+                + ShotTable.COMMENT +
+                ",b."+UserTable.FAVOURITE_TEAM_ID+
+                ",b." +UserTable.BIO +
+                ",b." + UserTable.WEBSITE +
+                ",b." + UserTable.RANK +
+                ",b." + UserTable.NAME +
+                ","+ UserTable.POINTS+
+                ","+ UserTable.NUM_FOLLOWERS+
+                ","+ UserTable.NUM_FOLLOWINGS+
+                ","+ UserTable.PHOTO +
+                "," + UserTable.USER_NAME +
+                ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
                 " FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID +
@@ -94,7 +114,7 @@ public class ShotManager {
         cursor.moveToFirst();
         do {
             Shot shot = ShotMapper.fromCursor(cursor);
-            User user = UserMapper.basicFromCursor(cursor);
+            User user = UserMapper.fromCursor(cursor);
             if (user != null) {
                 shot.setUser(user);
                 shots.add(shot);
@@ -154,7 +174,7 @@ public class ShotManager {
         return SyncTableManager.insertOrUpdateSyncTable(db, tablesSync);
     }
 
-    public static Shot retrieveLastShotFromUser(SQLiteDatabase db, Integer userId) {
+    public static Shot retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
         Cursor c = db.query(ShotTable.TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?", new String[]{String.valueOf(userId)}, null, null, ShotTable.CSYS_BIRTH + " DESC", "1");
         if (c.getCount() > 0) {
             c.moveToFirst();
