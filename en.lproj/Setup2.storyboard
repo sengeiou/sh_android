@@ -141,7 +141,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Shootr" id="tav-xY-S2w">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Shootr_i6" id="tav-xY-S2w">
                                 <rect key="frame" x="86" y="61" width="149" height="149"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -206,7 +206,7 @@
     </scenes>
     <resources>
         <image name="Logo_f_i5" width="225" height="45"/>
-        <image name="Shootr" width="149" height="149"/>
+        <image name="Shootr_i6" width="149" height="149"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

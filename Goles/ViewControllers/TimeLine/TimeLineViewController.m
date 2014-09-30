@@ -426,13 +426,21 @@
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     lengthTextField = self.txtField.text.length - range.length + string.length;
-    
-    if (lengthTextField >= 1)
+   
+    self.txtField.text = [self.txtField.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
+
+    if ([string isEqualToString:@" "]) {
+        self.btnShoot.enabled = NO;
+    }else if (lengthTextField >= 1 && ![textField.text isEqualToString:@"  "])
         self.btnShoot.enabled = YES;
     else
         self.btnShoot.enabled = NO;
     
     return YES;
+}
+
+-(void) countCharacters{
+    
 }
 
 //------------------------------------------------------------------------------
