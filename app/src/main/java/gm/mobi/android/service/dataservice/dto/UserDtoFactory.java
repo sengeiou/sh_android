@@ -30,7 +30,7 @@ import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orModifi
 
 public class UserDtoFactory {
 
-    static final Integer NUMBER_OF_DAYS_AGO = 7;
+    static final int NUMBER_OF_DAYS_AGO = 7;
 
     public static final int GET_FOLLOWERS = 0;
     public static final int GET_FOLLOWING = 1;
@@ -77,7 +77,7 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
-    public GenericDto getFollowOperationDto(Integer idUser, Long offset, int relationship, Long date) {
+    public GenericDto getFollowOperationDto(Long idUser, Long offset, int relationship, Long date) {
 
         OperationDto od = new OperationDto();
 
@@ -93,7 +93,7 @@ public class UserDtoFactory {
     }
 
 
-    public GenericDto getUserByUserId(Integer userId){
+    public GenericDto getUserByUserId(Long userId){
         OperationDto od  = new OperationDto();
         Map<String,Object> key = new HashMap<>();
         key.put(UserTable.ID,userId);
@@ -106,7 +106,7 @@ public class UserDtoFactory {
     }
 
 
-    public GenericDto getUsersOperationDto(List<Integer> userIds, Long offset, Long date) {
+    public GenericDto getUsersOperationDto(List<Long> userIds, Long offset, Long date) {
         OperationDto od = new OperationDto();
 
 
@@ -122,7 +122,7 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
     }
 
-    public FilterDto getFollowsByIdUserAndRelationship(Integer idUser, int relationship, Date lastModifiedDate) {
+    public FilterDto getFollowsByIdUserAndRelationship(Long idUser, int relationship, Date lastModifiedDate) {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
@@ -161,7 +161,7 @@ public class UserDtoFactory {
         return filterDto;
     }
 
-    public FilterDto getUsersByUserIds(List<Integer> userIds, Date lastModifiedDate) {
+    public FilterDto getUsersByUserIds(List<Long> userIds, Date lastModifiedDate) {
         return and(
                 or(UserTable.ID).isIn(userIds),
                 orModifiedOrDeletedAfter(lastModifiedDate.getTime())
