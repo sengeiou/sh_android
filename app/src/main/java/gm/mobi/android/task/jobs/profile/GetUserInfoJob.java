@@ -47,8 +47,7 @@ public class GetUserInfoJob extends Job {
 
         // Get relationship
         int followRelationship =
-            FollowManager.getFollowRelationship(dbHelper.getReadableDatabase(), consultedUser,
-                currentUser);
+            FollowManager.getFollowRelationship(dbHelper.getReadableDatabase(), currentUser, consultedUser);
 
         UserInfoResult result = new UserInfoResult(consultedUser, followRelationship);
         bus.post(result);
