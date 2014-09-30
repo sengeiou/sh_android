@@ -57,8 +57,8 @@ public class FollowManager {
     /**
      * Retrieve a Following User
      */
-    public static List<Integer> getUserFollowingIds(SQLiteDatabase db, Integer idUser) throws SQLException {
-        List<Integer> userIds = new ArrayList<>();
+    public static List<Long> getUserFollowingIds(SQLiteDatabase db, Long idUser) throws SQLException {
+        List<Long> userIds = new ArrayList<>();
         db.beginTransaction();
         String args = GMContract.FollowTable.ID_USER+"=?";
         String[] argsString = new String[]{String.valueOf(idUser)};
@@ -69,7 +69,7 @@ public class FollowManager {
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                userIds.add(c.getInt(0));
+                userIds.add(c.getLong(0));
                 c.moveToNext();
             }
         }
