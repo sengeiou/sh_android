@@ -102,8 +102,12 @@
                  kJSON_USERNAME:[NSNull null],
                  kJSON_ID_FAVOURITE_TEAM:[NSNull null],
                  kJSON_NAME:[NSNull null],
-                 kJSON_PHOTO:[NSNull null]};
-
+                 kJSON_PHOTO:[NSNull null],
+                 kJSON_BIO:[NSNull null],
+                 kJSON_WEBSITE:[NSNull null],
+                 kJSON_POINTS:[NSNull null],
+                 kJSON_NUMFOLLOWING:[NSNull null],
+                 kJSON_NUMFOLLOWERS:[NSNull null]};
     }
     
     else if ([entityClass isSubclassOfClass:[Follow class]]) {
