@@ -201,7 +201,7 @@ NSString *const kJSON_PHOTO                            = @"photo";
 NSString *const kJSON_BIO                              = @"bio";
 NSString *const kJSON_WEBSITE                          = @"website";
 NSString *const kJSON_POINTS                           = @"points";
-NSString *const kJSON_NUMFOLLOWING                     = @"numFollowing";
+NSString *const kJSON_NUMFOLLOWING                     = @"numFollowings";
 NSString *const kJSON_NUMFOLLOWERS                     = @"numFollowers";
 
 //SML

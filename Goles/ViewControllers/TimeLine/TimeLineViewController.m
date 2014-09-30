@@ -358,7 +358,7 @@
     
     self.bottomViewConstraint.constant -= self.sizeKeyboard;
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         [self.view layoutIfNeeded];
     }];
 
@@ -367,13 +367,6 @@
 
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
-    
-    NSDictionary* keyboardInfo = [notification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-
-    self.sizeKeyboard = -47;//- self.viewTextField.frame.size.height;
-//    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
     
     [self.backgroundView removeFromSuperview];
     
