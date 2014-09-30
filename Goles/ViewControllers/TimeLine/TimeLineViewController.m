@@ -139,7 +139,7 @@
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
     
     self.viewOptions.alpha = 0.0;
-
+    
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
@@ -262,7 +262,14 @@
 - (void)conectionResponseForStatus:(BOOL)status{
     
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    
+    [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
+    
     [self.refreshControl endRefreshing];
+}
+
+-(void) reloadTimeLine{
+     [self.timelineTableView reloadData];
 }
 
 #pragma mark - ShotCreationProtocol response
@@ -272,6 +279,8 @@
     if (status && !error){
         [self reloadShotsTable:nil];
        
+        [self.txtField setText:nil];
+        
         if (isVisible)
             [self keyboardHide];
 
