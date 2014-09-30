@@ -2,33 +2,33 @@ package gm.mobi.android.db.objects;
 
 public class User extends Synchronized {
 
-    private Integer mIdUser;
-    private Integer mFavouriteTeamId;
+    private Long mIdUser;
+    private Long mFavouriteTeamId;
     private String mSessionToken;
     private String mUserName;
     private String mEmail;
     private String mName;
     private String mPhoto;
-    private Integer mPoints;
-    private Integer mNumFollowings;
-    private Integer mNumFollowers;
-    private Integer mRank;
+    private Long mPoints;
+    private Long mNumFollowings;
+    private Long mNumFollowers;
+    private Long mRank;
     private String mWebsite;
     private String mBio;
 
-    public Integer getIdUser() {
+    public Long getIdUser() {
         return mIdUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(Long idUser) {
         mIdUser = idUser;
     }
 
-    public Integer getFavouriteTeamId() {
+    public Long getFavouriteTeamId() {
         return mFavouriteTeamId;
     }
 
-    public void setFavouriteTeamId(Integer favouriteTeamId) {
+    public void setFavouriteTeamId(Long favouriteTeamId) {
         mFavouriteTeamId = favouriteTeamId;
     }
 
@@ -72,35 +72,35 @@ public class User extends Synchronized {
         mPhoto = photo;
     }
 
-    public Integer getPoints() {
+    public Long getPoints() {
         return mPoints;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(Long points) {
         mPoints = points;
     }
 
-    public Integer getNumFollowings() {
+    public Long getNumFollowings() {
         return mNumFollowings;
     }
 
-    public void setNumFollowings(Integer numFollowings) {
+    public void setNumFollowings(Long numFollowings) {
         mNumFollowings = numFollowings;
     }
 
-    public Integer getNumFollowers() {
+    public Long getNumFollowers() {
         return mNumFollowers;
     }
 
-    public void setNumFollowers(Integer numFollowers) {
+    public void setNumFollowers(Long numFollowers) {
         mNumFollowers = numFollowers;
     }
 
-    public Integer getRank() {
+    public Long getRank() {
         return mRank;
     }
 
-    public void setRank(Integer rank) {
+    public void setRank(Long rank) {
         mRank = rank;
     }
 
