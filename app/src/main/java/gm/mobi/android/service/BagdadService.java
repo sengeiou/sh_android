@@ -14,17 +14,17 @@ public interface BagdadService {
 
     public User login(String id, String password) throws IOException;
 
-    public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException;
+    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow) throws IOException;
 
-    public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException;
+    public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException;
 
-    public List<Shot> getNewShots(List<Integer> followingUserIds, Long newestShotDate) throws IOException;
+    public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 
-    public List<Shot> getOlderShots(List<Integer> followingUserIds, Long oldestShotDate) throws IOException;
+    public List<Shot> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException;
 
-    public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException;
+    public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException;
 
-    public Shot postNewShot(Integer idUser, String comment) throws IOException;
+    public Shot postNewShot(Long idUser, String comment) throws IOException;
 
-    public User getUserByIdUser(Integer idUser) throws IOException;
+    public User getUserByIdUser(Long idUser) throws IOException;
 }
