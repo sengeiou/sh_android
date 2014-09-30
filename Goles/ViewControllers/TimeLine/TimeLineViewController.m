@@ -264,7 +264,6 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
     
-
     //Show OptionsView
     self.viewOptions.alpha = 1.0;
     isVisible = YES;
@@ -393,7 +392,7 @@
 }
 
 //------------------------------------------------------------------------------
-<<<<<<< .mine
+
 //-(void)keyboardChange:(NSNotification*)notification{
 //    
 //    NSDictionary* keyboardInfo = [notification userInfo];
@@ -423,13 +422,6 @@
 //    }];
 //    
 //}
-=======
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    
-    if (isVisible)
-        [self keyboardHide];
-}
->>>>>>> .r776
 
 #pragma mark TextFieldDelegate
 
