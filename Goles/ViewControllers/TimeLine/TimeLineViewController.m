@@ -43,6 +43,7 @@
 @property (strong, nonatomic) UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
 @property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
+@property (nonatomic, strong) NSLayoutConstraint *bottomViewConstraint;
 
 @end
 
@@ -68,8 +69,9 @@
 
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myNotificationMethod:) name:UIKeyboardDidShowNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
@@ -86,18 +88,35 @@
     self.line1.frame = CGRectMake(self.line1.frame.origin.x, self.line1.frame.origin.y, self.line1.frame.size.width, 0.5);
     self.line2.frame = CGRectMake(self.line2.frame.origin.x, self.line2.frame.origin.y, self.line2.frame.size.width, 0.5);
     
+    [self createConstraintForBottomView];
+    
 }
 
-- (void)viewDidLayoutSubviews
-{
+//------------------------------------------------------------------------------
+- (void)viewDidLayoutSubviews {
+    
     [super viewDidLayoutSubviews];
     self.timelineTableView.backgroundColor = [UIColor clearColor];
 }
 
+//------------------------------------------------------------------------------
+- (void)createConstraintForBottomView {
+    
+    self.bottomViewConstraint = [NSLayoutConstraint constraintWithItem:self.viewTextField
+                                                             attribute:NSLayoutAttributeBottom
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:self.view
+                                                             attribute:NSLayoutAttributeBottom
+                                                            multiplier:1.0f constant:-47.0f];
+    [self.view addConstraint:self.bottomViewConstraint];
+}
+
+//------------------------------------------------------------------------------
 -(void) search{
     
 }
 
+//------------------------------------------------------------------------------
 -(void) loadTextField{
     
     self.txtViewWrite.backgroundColor = [UIColor whiteColor];
@@ -150,7 +169,6 @@
 }
 
 //------------------------------------------------------------------------------
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewOptions.frame.size.height)];
@@ -158,21 +176,6 @@
 
     return header;
 }
-
-
-/*- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return self.viewTextField.frame.size.height;
-}
-
-//------------------------------------------------------------------------------
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    
-    UIView *footer =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewTextField.frame.size.height)];
-    footer.backgroundColor = [UIColor clearColor];
-    
-    return footer;
-}*/
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -261,10 +264,13 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status{
     
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    
+
+    //Show OptionsView
+    self.viewOptions.alpha = 1.0;
+    isVisible = YES;
+
     [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
-    
+
     [self.refreshControl endRefreshing];
 }
 
@@ -325,18 +331,15 @@
      self.lastContentOffset = scrollView.contentOffset.y;
 }
 
+#pragma mark - KEYBOARD
 //------------------------------------------------------------------------------
-- (void)myNotificationMethod:(NSNotification*)notification {
+-(void)keyboardShow:(NSNotification*)notification{
     
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
     
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -40;//- self.viewTextField.frame.size.height;
-}
-
-//------------------------------------------------------------------------------
--(void)keyboardShow{
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
     
     if (self.backgroundView == nil) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
@@ -352,18 +355,23 @@
 
     isVisible = YES;
     
-    CGRect rectFild = self.viewTextField.frame;
-    rectFild.origin.y -= 167;
+    self.bottomViewConstraint.constant -= self.sizeKeyboard;
     
-    [UIView animateWithDuration:0.25f
-                     animations:^{
-                         [self.viewTextField setFrame:rectFild];
-            }
-     ];
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.view layoutIfNeeded];
+    }];
+
 }
 
+
 //------------------------------------------------------------------------------
--(void)keyboardHide{
+-(void)keyboardHide:(NSNotification*)notification{
+    
+    NSDictionary* keyboardInfo = [notification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
     
     [self.backgroundView removeFromSuperview];
     
@@ -374,33 +382,56 @@
     [self.timelineTableView setScrollsToTop:YES];
     self.timelineTableView.scrollEnabled = YES;
 
-    // [self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y + self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
-    
     isVisible = NO;
     
-    CGRect rectFild = self.viewTextField.frame;
-    rectFild.origin.y += 167;
+    self.bottomViewConstraint.constant += self.sizeKeyboard;
     
-    [UIView animateWithDuration:0.25f
-                     animations:^{
-                         [self.viewTextField setFrame:rectFild];
-                    }
-     ];
-}
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.view layoutIfNeeded];
+    }];
 
-#pragma mark TextFieldDelegate
-//------------------------------------------------------------------------------
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    [self keyboardShow];
 }
 
 //------------------------------------------------------------------------------
+<<<<<<< .mine
+//-(void)keyboardChange:(NSNotification*)notification{
+//    
+//    NSDictionary* keyboardInfo = [notification userInfo];
+//    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+//    
+//    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
+//    
+//    if (self.backgroundView == nil) {
+//        self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
+//        self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+//    }
+//    
+//    [self.timelineTableView addSubview:self.backgroundView];
+//    self.timelineTableView.scrollEnabled = NO;
+//    
+//    [UIView animateWithDuration:0.25 animations:^{
+//        self.viewOptions.alpha = 0.0;
+//    }];
+//    
+//    isVisible = YES;
+//    
+//    self.bottomViewConstraint.constant = self.sizeKeyboard;
+//    
+//    [UIView animateWithDuration:0.5f animations:^{
+//        [self.view layoutIfNeeded];
+//    }];
+//    
+//}
+=======
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
     if (isVisible)
         [self keyboardHide];
 }
+>>>>>>> .r776
+
+#pragma mark TextFieldDelegate
 
 //------------------------------------------------------------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -411,7 +442,7 @@
 }
 
 
-#pragma mark - UITextField response methods
+#pragma mark  UITextField response methods
 //------------------------------------------------------------------------------
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
@@ -422,7 +453,7 @@
     else
         self.btnShoot.enabled = NO;
     
-    [textField sizeToFit];
+//    [textField sizeToFit];
     
     
     return YES;

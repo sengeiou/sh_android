@@ -214,13 +214,17 @@
                                     <constraint firstAttribute="centerY" secondItem="wbw-vs-QZd" secondAttribute="centerY" id="plk-hx-bEE"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
                                 <rect key="frame" x="-4" y="553" width="608" height="47"/>
                                 <subviews>
+<<<<<<< .mine
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="fDT-Kv-eYE">
+=======
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="fDT-Kv-eYE">
+>>>>>>> .r776
                                         <rect key="frame" x="0.0" y="0.0" width="608" height="1"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41t-je-TRg">
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41t-je-TRg">
                                         <rect key="frame" x="547" y="9" width="53" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="53" id="9w8-Uh-jJI"/>
@@ -231,7 +235,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="What's Up?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="st6-gN-ziw">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="What's Up?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="st6-gN-ziw">
                                         <rect key="frame" x="8" y="9" width="531" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="rLo-qE-eCb"/>
@@ -268,7 +272,6 @@
                             <constraint firstItem="HR5-eu-cfc" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="N7k-Sj-Bps"/>
                             <constraint firstAttribute="trailingMargin" secondItem="VYB-IF-QLU" secondAttribute="trailing" constant="-20" id="SpO-yQ-LGO"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="hJa-nW-fCp"/>
-                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="bottom" id="lp7-c7-SpB"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="mcD-h8-8da"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="u5c-J4-z3W"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="w2p-sj-d3E"/>
