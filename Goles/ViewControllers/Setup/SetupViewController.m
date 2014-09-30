@@ -57,7 +57,7 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
-    
+  
     [self addTextFields];
 }
 
@@ -70,7 +70,7 @@
     
     if ([Utils getIphone:self.view.frame.size.height] == 6){
         
-        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x-6, self.lblNote.frame.origin.y, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
+        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x-6, self.lblNote.frame.origin.y+5, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
         self.btnCreateCount.frame = CGRectMake(self.btnCreateCount.frame.origin.x-6, self.btnCreateCount.frame.origin.y, self.btnCreateCount.frame.size.width, self.btnCreateCount.frame.size.height);
         self.btnSignIn.frame = CGRectMake(self.btnSignIn.frame.origin.x-6, self.btnSignIn.frame.origin.y, self.btnSignIn.frame.size.width, self.btnSignIn.frame.size.height);
         self.btnForgotPwd.frame = CGRectMake(self.btnForgotPwd.frame.origin.x-7, self.btnForgotPwd.frame.origin.y, self.btnForgotPwd.frame.size.width, self.btnSignIn.frame.size.height);
@@ -82,16 +82,22 @@
         self.btnForgotPwd.frame = CGRectMake(self.btnForgotPwd.frame.origin.x-7, self.btnForgotPwd.frame.origin.y, self.btnForgotPwd.frame.size.width, self.btnSignIn.frame.size.height);
     }
     else if ([Utils getIphone:self.view.frame.size.height] == 4){
-        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x-6, self.lblNote.frame.origin.y+2, self.lblNote.frame.size.width-35, self.lblNote.frame.size.height);
+       
+        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x-6, self.lblNote.frame.origin.y-20, self.lblNote.frame.size.width-30, self.lblNote.frame.size.height+40);
+        self.lblNote.numberOfLines = 2;
+        
         self.btnCreateCount.frame = CGRectMake(self.btnCreateCount.frame.origin.x-6, self.btnCreateCount.frame.origin.y, self.btnCreateCount.frame.size.width, self.btnCreateCount.frame.size.height);
         self.btnSignIn.frame = CGRectMake(self.btnSignIn.frame.origin.x-6, self.btnSignIn.frame.origin.y, self.btnSignIn.frame.size.width, self.btnSignIn.frame.size.height);
-        self.btnForgotPwd.frame = CGRectMake(self.btnForgotPwd.frame.origin.x-6, self.btnForgotPwd.frame.origin.y, self.btnForgotPwd.frame.size.width, self.btnSignIn.frame.size.height);
+        self.btnForgotPwd.frame = CGRectMake(self.btnForgotPwd.frame.origin.x-6, self.btnForgotPwd.frame.origin.y+10, self.btnForgotPwd.frame.size.width, self.btnSignIn.frame.size.height);
+
+        self.mtableView.frame = CGRectMake(self.mtableView.frame.origin.x, 10, self.view.frame.size.width, self.mtableView.frame.size.height);
 
     }
     
     if ([Utils getIphone:self.view.frame.size.height] == 7){
-        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-7, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
-
+        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y+7, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
+        
+        
     }
     
     if ([Utils getIphone:self.view.frame.size.height] == 4)
@@ -194,14 +200,14 @@
          {
             cell.textLabel.text = @"Email or Username";
 
-             txtFieldName.frame = CGRectMake(177,3,self.view.frame.size.width-210,40);
+             txtFieldName.frame = CGRectMake(177,3,self.view.frame.size.width-180,40);
             [cell addSubview:txtFieldName];
          }
              break;
          case 1:
          {
              cell.textLabel.text = @"Password";
-             txtFieldPwd.frame = CGRectMake(177,3,self.view.frame.size.width-210,40);
+             txtFieldPwd.frame = CGRectMake(177,3,self.view.frame.size.width-180,40);
 
              [cell addSubview:txtFieldPwd];
          }
