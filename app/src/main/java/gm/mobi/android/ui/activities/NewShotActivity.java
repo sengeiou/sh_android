@@ -1,8 +1,11 @@
 package gm.mobi.android.ui.activities;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,7 +41,7 @@ public class NewShotActivity extends BaseSignedInActivity {
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
     @InjectView(R.id.new_shot_subtitle) TextView username;
-    @InjectView(R.id.new_shot_text) TextView text;
+    @InjectView(R.id.new_shot_text) EditText text;
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
     @InjectView(R.id.new_shot_send_button) TextView sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
@@ -105,6 +108,9 @@ public class NewShotActivity extends BaseSignedInActivity {
     @OnClick(R.id.new_shot_send_button)
     public void sendShot() {
         String comment = filteredText(text.getText().toString());
+        InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(text.getWindowToken(),0);
+
         if (isCommentRepeated(comment)) {
             Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
             return;
