@@ -14,6 +14,7 @@
 + (ShotManager *)sharedInstance;
 
 - (NSArray *)getShotsForTimeLine;
+- (NSArray *) getShotsForTimeLineBetweenHours;
 - (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate;
 
 @end

@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^booleanReturnBlock)(BOOL success, NSError *error);
+
 @interface CleanManager : NSObject
 
 + (CleanManager *)singleton;
 + (CleanManager *)sharedInstance;
 
-- (void)beginCleanProcess;
+- (void)beginCleanProcessOnCompletion:(booleanReturnBlock)completion;
 
 @end

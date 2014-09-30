@@ -58,6 +58,8 @@
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
+    [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
+    
     //Get shots from server
     [[Conection sharedInstance]getServerTimewithDelegate:self];
     
@@ -221,11 +223,30 @@
 }
 
 #pragma mark - Send shot
-#warning Need to verify shot before sending to webservice
 //------------------------------------------------------------------------------
-- (IBAction)sendShot:(id)sender {
+- (void)sendShot{
 
-    [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
+    if (![self controlRepeatedShot:self.txtField.text])
+        [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
+    else{
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
+}
+
+-(BOOL) controlRepeatedShot:(NSString *)texto{
+    
+     self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
+    
+    for (Shot *shot in self.arrayShots) {
+        
+        if ([shot.comment isEqualToString:texto])
+            return YES;
+            
+    }
+
+    return NO;
 }
 
 #pragma mark - Webservice response methods
@@ -248,8 +269,13 @@
 //------------------------------------------------------------------------------
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
-    if (status && !error)
+    if (status && !error){
         [self reloadShotsTable:nil];
+       
+        if (isVisible)
+            [self keyboardHide];
+
+    }
 }
 
 
@@ -264,7 +290,10 @@
         tb.frame = CGRectMake(tb.frame.origin.x, self.originalFrame.origin.y + yOffset, tb.frame.size.width, tb.frame.size.height);
     }
     if (yOffset < 1) tb.frame = self.originalFrame;*/
-    
+
+    NSLog(@"content: %f", scrollView.contentOffset.y);
+    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height - self.viewTextField.frame.size.height);
+
     if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height)
         [self addLoadMoreCell];
     
@@ -312,11 +341,6 @@
         self.viewOptions.alpha = 0.0;
     }];
 
-    //[self.timelineTableView scrollRectToVisible:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y - self.viewOptions.frame.size.height, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height) animated:YES];
-    
-    //[self.timelineTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    
-    
     isVisible = YES;
     
     CGRect rectFild = self.viewTextField.frame;
@@ -365,15 +389,13 @@
 //------------------------------------------------------------------------------
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
-    if (isVisible) {
-        
+    if (isVisible)
         [self keyboardHide];
-    }
 }
 
 //------------------------------------------------------------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField setText:nil];
+   // [textField setText:nil];
     
     [textField resignFirstResponder];
     return YES;

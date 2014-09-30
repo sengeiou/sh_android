@@ -65,8 +65,8 @@
    
     self.mtableView.frame = CGRectMake(self.mtableView.frame.origin.x, 0, self.view.frame.size.width, self.mtableView.frame.size.height);
     
-    if ([Utils getIphone:self.view.frame.size.height] == 6 || [Utils getIphone:self.view.frame.size.height] == 7)
-        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-15, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
+    /*if ([Utils getIphone:self.view.frame.size.height] == 6 || [Utils getIphone:self.view.frame.size.height] == 7)
+        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-15, self.lblNote.frame.size.width, self.lblNote.frame.size.height);*/
     
     if ([Utils getIphone:self.view.frame.size.height] == 6){
         
@@ -94,11 +94,9 @@
 
     }
     
-    if ([Utils getIphone:self.view.frame.size.height] == 7){
+    if ([Utils getIphone:self.view.frame.size.height] == 7)
         self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y+7, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
-        
-        
-    }
+  
     
     if ([Utils getIphone:self.view.frame.size.height] == 4)
         self.mScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height-65);
@@ -326,9 +324,7 @@
         [self enableButtonItem];
     else
         [self disableButtonItem];
-    
 
-    
     return YES;
 }
 

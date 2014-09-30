@@ -50,13 +50,16 @@
 //Check for the last clean process date
 //------------------------------------------------------------------------------
 -(void) updateLastActiveDate{
-    BOOL updateUserDefaultsDate = NO;
+    __block BOOL updateUserDefaultsDate = NO;
+    
     NSDate *previousDate =[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_DELETE_DATE];
     if (previousDate && [previousDate isKindOfClass:[NSDate class]]) {
         NSDate *nowDate = [NSDate date];
         if ([nowDate timeIntervalSinceDate:previousDate] > 60*60*24){			// > 1 day 60*60*24
-            [self beginCleanProcess];
-            updateUserDefaultsDate = YES;
+            [self beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
+                updateUserDefaultsDate = YES;
+
+            }];
         }
     }
     else{
@@ -72,11 +75,24 @@
 
 //Check if we have more than X shots in DB
 //------------------------------------------------------------------------------
-- (void)beginCleanProcess {
+- (void)beginCleanProcessOnCompletion:(booleanReturnBlock)completion{
     
     NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class]];
-    if (shotsArray.count > 1000) {
-        [self deleteOldShots];
+    
+    if (shotsArray.count > 0){
+        
+        [self deleteOldShotsOnCompletion:^(BOOL success, NSError *error) {
+            if (success)
+                completion(YES, nil);
+            else{
+                completion(YES, nil);
+                 if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
+            }
+        }];
+        
+    }else{
+        if (completion)
+            completion(YES, nil);
     }
 }
 
@@ -84,13 +100,25 @@
 
 //Get the shots to be deleted
 //------------------------------------------------------------------------------
--(void)deleteOldShots {
+-(void)deleteOldShotsOnCompletion:(booleanReturnBlock)completion{
     
     NSArray *newShots = [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@1000];
-    NSArray *shotsToDelete = [[CoreDataManager singleton] deleteEntities:[Shot class] NotIn:newShots];
-    if (shotsToDelete.count > 0)
-        [[CoreDataManager singleton] saveContext];
+    NSArray *shotsToDelete;
     
+    if (newShots > 0)
+        shotsToDelete = [[CoreDataManager singleton] deleteEntities:[Shot class] NotIn:newShots];
+    
+    if (shotsToDelete.count > 0){
+        [[CoreDataManager singleton] saveContext];
+        
+        if (completion)
+            completion(YES, nil);
+        else
+            completion(NO, nil);
+        
+    }else{
+           completion(YES, nil);
+    }
 }
 
 @end

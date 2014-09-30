@@ -60,6 +60,7 @@
     //The main timer for the syncro process
     self.synchroTimer = [NSTimer timerWithTimeInterval:SYNCHRO_TIMER target:self selector:@selector(beginEntitiesProcessing:) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.synchroTimer forMode:NSRunLoopCommonModes];
+    
 }
 
 
@@ -125,15 +126,27 @@
     
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"START SYNC PROCESS:%@",[NSDate date]);
-
+    
+    if ([self.synchroTimer isValid])
+        [self.synchroTimer invalidate];
+    
     [self synchroEntityWithCompletion:^(BOOL status,NSError *error){
         
         if (!error && status){
             NSLog(@"SYNC ENDED");
-            [[CleanManager singleton] beginCleanProcess];
+            
+            [[CleanManager singleton] beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
+                if (success) {
+                    if (![self.synchroTimer isValid])
+                        [self performSelectorOnMainThread:@selector(startSyncProcess) withObject:nil waitUntilDone:NO];
+                }else{
+                    if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
+                   
+                }
+            }];
         }
         else
-            NSLog(@"Sync error");
+            if (error) NSLog(@"Sync error: %s %@",__PRETTY_FUNCTION__,error);
     }];
 
 }

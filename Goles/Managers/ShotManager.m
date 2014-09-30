@@ -50,11 +50,28 @@
 //------------------------------------------------------------------------------
 - (NSArray *)getShotsForTimeLine {
 
-    NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970];
-    NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate*1000];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth < %@",[[UserManager singleton] getActiveUsersIDs],nowDateString];
+    //NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970];
+    //NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate*1000];
+   // NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth < %@",[[UserManager singleton] getActiveUsersIDs],nowDateString];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@",[[UserManager singleton] getActiveUsersIDs]];
+
     return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
 
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *)getShotsForTimeLineBetweenHours {
+    
+    NSDate *now = [NSDate date];
+    NSDate *oneDayAgo = [now dateByAddingTimeInterval:-1*24*60*60];
+    NSTimeInterval oneDayAgoDate = [oneDayAgo timeIntervalSince1970];
+    NSString *oneDayAgoString = [NSString stringWithFormat:@"%f", oneDayAgoDate*1000];
+    
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth > %@",[[UserManager singleton] getActiveUsersIDs],oneDayAgoString];
+    
+    return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+    
 }
 
 
@@ -63,9 +80,9 @@
 - (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate{
 
     User *user = [[UserManager singleton] getActiveUser];
-    NSNumber *revision = @0;
+    /*NSNumber *revision = @0;
     NSTimeInterval birth = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval modified = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval modified = [[NSDate date] timeIntervalSince1970];*/
     
     NSDictionary *key = @{kJSON_SHOT_IDSHOT:[NSNull null]};
     NSDictionary *sendData = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser,

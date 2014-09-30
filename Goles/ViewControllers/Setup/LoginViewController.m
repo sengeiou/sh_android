@@ -12,8 +12,8 @@
 #import "Utils.h"
 
 @interface LoginViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 
+@property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (weak, nonatomic) IBOutlet UILabel *btnTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
 @property (weak, nonatomic) IBOutlet UIButton *btnRegister;
@@ -64,7 +64,6 @@
         self.btnRegister.titleLabel.font = [UIFont systemFontOfSize:17.0];
         self.btnSignIn.frame = CGRectMake(self.btnSignIn.frame.origin.x+50, self.btnSignIn.frame.origin.y+170, self.btnSignIn.frame.size.width, self.btnSignIn.frame.size.height);
         self.btnSignIn.titleLabel.font = [UIFont systemFontOfSize:17.0];
-       // self.btnSignIn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0f];
         
     }else if ([Utils getIphone:self.view.frame.size.height] == 6){
         

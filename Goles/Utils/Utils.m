@@ -463,15 +463,18 @@
     if(minutes) seconds -= minutes * 60;
     
     if(days)
-        timeLeft = [NSString stringWithFormat:@"%ldd", (long)days*-1];
+        timeLeft = [NSString stringWithFormat:@"%ldd", (long)days];
     else if(hours)
-        timeLeft = [NSString stringWithFormat: @"%ldh", (long)hours*-1];
+        timeLeft = [NSString stringWithFormat: @"%ldh", (long)hours];
     else if(minutes)
-        timeLeft = [NSString stringWithFormat: @"%ldm", (long)minutes*-1];
+        timeLeft = [NSString stringWithFormat: @"%ldm", (long)minutes];
     else if(seconds)
-        timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds*-1];
+        timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds];
     
-    timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if (seconds < 0)
+        timeLeft = @"Now";
+
+    //timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];
     
     return timeLeft;
 }
