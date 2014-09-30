@@ -159,7 +159,7 @@ public class TimelineJob extends CancellableJob {
     }
 
 
-    private List<Integer> getFollowingIds() throws SQLException {
+    private List<Long> getFollowingIds() throws SQLException {
         return FollowManager.getUserFollowingIds(mDbHelper.getReadableDatabase(), currentUser.getIdUser());
     }
 
