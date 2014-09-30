@@ -276,6 +276,7 @@
     if (self.txtField.text.length >= 1) {
         
         if ([[Conection sharedInstance] isConection]) {
+            
             if (![self controlRepeatedShot:self.txtField.text])
                 [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
             else{
@@ -283,18 +284,10 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alert show];
             }
-        }else{
-            
         }
-    }else{
-        
+    }else
         [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
-        
-        
-        [self performSelectorOnMainThread:@selector(reloadTimeLine) withObject:nil waitUntilDone:YES];
-        
-        [self.refreshControl endRefreshing];
-    }
+    
 }
 
 -(void) showOptions{
@@ -302,11 +295,12 @@
     [UIView animateWithDuration:0.25 animations:^{
         self.viewOptions.alpha = 1.0;
     }];
+    [self.timelineTableView reloadData];
+    [self.refreshControl endRefreshing];
+
     //isVisible = YES;
 }
--(void) reloadTimeLine{
-     [self.timelineTableView reloadData];
-}
+
 
 #pragma mark - ShotCreationProtocol response
 //------------------------------------------------------------------------------
