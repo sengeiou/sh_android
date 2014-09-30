@@ -25,6 +25,9 @@
 //Syncro time process in seconds
 #define SYNCHRO_TIMER   10
 
+//Syncro time process in seconds
+#define CHARACTERS_SHOT   140
+
 #endif  
 
 #ifdef DEBUG

@@ -18,10 +18,11 @@
 #import "Conection.h"
 #import "Fav24Colors.h"
 #import "AppDelegate.h"
+#import "Constants.h"
 
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
-    int lengthTextField;
+    NSUInteger lengthTextField;
     BOOL isVisible;
 }
 
@@ -427,7 +428,7 @@
     
     lengthTextField = self.txtField.text.length - range.length + string.length;
    
-    self.txtField.text = [self.txtField.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
+    //self.txtField.text = [self.txtField.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
 
     if ([string isEqualToString:@" "]) {
         self.btnShoot.enabled = NO;
@@ -436,11 +437,19 @@
     else
         self.btnShoot.enabled = NO;
     
-    return YES;
+    
+    NSLog(@"Caracteres que quedan= %lu", (unsigned long)[self countCharacters:lengthTextField]);
+    
+    return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 }
 
--(void) countCharacters{
+//------------------------------------------------------------------------------
+-(NSUInteger) countCharacters:(NSUInteger) lenght{
     
+    if (lenght <= CHARACTERS_SHOT)
+        return CHARACTERS_SHOT - lenght;
+    
+    return 0;
 }
 
 //------------------------------------------------------------------------------
