@@ -43,35 +43,6 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hAK-0x-gdD">
-                                <rect key="frame" x="0.0" y="20" width="320" height="37"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="pao-fz-mhd">
-                                        <rect key="frame" x="0.0" y="37" width="320" height="1"/>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lha-vI-5wj">
-                                        <rect key="frame" x="160" y="3" width="160" height="34"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="I'm Watching">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qN5-Nb-Req">
-                                        <rect key="frame" x="0.0" y="3" width="160" height="34"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="3 People Watching">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                    </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="wbw-vs-QZd">
-                                        <rect key="frame" x="160" y="0.0" width="1" height="37"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.95294117647058818" green="0.95294117647058818" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="142" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cfX-1I-iII">
                                 <rect key="frame" x="-4" y="20" width="608" height="580"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -169,6 +140,63 @@
                                     <rect key="frame" x="0.0" y="20" width="800" height="780"/>
                                 </variation>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAK-0x-gdD">
+                                <rect key="frame" x="-4" y="20" width="608" height="47"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lha-vI-5wj">
+                                        <rect key="frame" x="499" y="10" width="79" height="28"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="MXK-ZJ-cdH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="I'm Watching">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qN5-Nb-Req">
+                                        <rect key="frame" x="30" y="10" width="113" height="28"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="28" id="s2e-AA-c3L"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="3 People Watching">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="wbw-vs-QZd">
+                                        <rect key="frame" x="300" y="0.0" width="1" height="47"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="47" id="Ty4-fa-3el"/>
+                                            <constraint firstAttribute="width" constant="1" id="gbS-yU-W3A"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="pao-fz-mhd">
+                                        <rect key="frame" x="0.0" y="46" width="608" height="1"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="kKo-H1-QHt"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.95294117647058818" green="0.95294117647058818" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="lha-vI-5wj" secondAttribute="centerY" id="2Sa-AF-fKT"/>
+                                    <constraint firstAttribute="centerY" secondItem="qN5-Nb-Req" secondAttribute="centerY" id="3s4-nq-Obh"/>
+                                    <constraint firstAttribute="bottom" secondItem="pao-fz-mhd" secondAttribute="bottom" id="5zR-c7-1yF"/>
+                                    <constraint firstItem="pao-fz-mhd" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" id="CQI-Pi-q9F"/>
+                                    <constraint firstAttribute="centerX" secondItem="pao-fz-mhd" secondAttribute="centerX" id="MCt-vA-SeF"/>
+                                    <constraint firstItem="qN5-Nb-Req" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" constant="30" id="Rzx-Hf-a4Z"/>
+                                    <constraint firstItem="wbw-vs-QZd" firstAttribute="top" secondItem="hAK-0x-gdD" secondAttribute="top" id="UGS-Rr-kax"/>
+                                    <constraint firstAttribute="trailing" secondItem="pao-fz-mhd" secondAttribute="trailing" id="Yqp-a8-egH"/>
+                                    <constraint firstAttribute="trailing" secondItem="lha-vI-5wj" secondAttribute="trailing" constant="30" id="bKp-EK-q69"/>
+                                    <constraint firstItem="pao-fz-mhd" firstAttribute="leading" secondItem="hAK-0x-gdD" secondAttribute="leading" id="hRq-jh-myl"/>
+                                    <constraint firstItem="lha-vI-5wj" firstAttribute="leading" secondItem="wbw-vs-QZd" secondAttribute="trailing" constant="198" id="imN-qb-O5J"/>
+                                    <constraint firstAttribute="height" constant="47" id="k6p-VJ-VUS"/>
+                                    <constraint firstItem="wbw-vs-QZd" firstAttribute="leading" secondItem="qN5-Nb-Req" secondAttribute="trailing" constant="157" id="zad-mb-xv4"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
                                 <rect key="frame" x="-4" y="553" width="608" height="47"/>
                                 <subviews>
@@ -214,11 +242,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="hAK-0x-gdD" secondAttribute="trailing" constant="-20" id="16K-4k-c1D"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="cfX-1I-iII" secondAttribute="bottom" id="8qb-6j-OmV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cfX-1I-iII" secondAttribute="trailing" constant="-20" id="I7D-Hj-sF7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="HR5-eu-cfc" secondAttribute="trailing" constant="-20" id="IIt-1S-DOZ"/>
                             <constraint firstItem="HR5-eu-cfc" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="N7k-Sj-Bps"/>
+                            <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="hJa-nW-fCp"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="bottom" id="lp7-c7-SpB"/>
+                            <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="mcD-h8-8da"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="u5c-J4-z3W"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="w2p-sj-d3E"/>
                         </constraints>
@@ -242,7 +273,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oxw-qx-bzr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6918" y="485"/>
+            <point key="canvasLocation" x="-6918" y="541"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RSl-Oj-MTN">
