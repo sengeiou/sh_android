@@ -70,7 +70,7 @@ public class GetFollowingsJob extends CancellableJob{
                 return;
             }
             Timber.d("Downloaded %d following relations", followings.size());
-            List<Integer> followingIds = new ArrayList<>(followings.size());
+            List<Long> followingIds = new ArrayList<>(followings.size());
             for (Follow following : followings) {
                 followingIds.add(following.getFollowedUser());
             }
