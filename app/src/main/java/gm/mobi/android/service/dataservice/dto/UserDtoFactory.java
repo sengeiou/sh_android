@@ -41,6 +41,7 @@ public class UserDtoFactory {
     private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_GET_FOLLOWINGS = "GET_FOLLOWINGS";
     private static final String ALIAS_GET_USERS = "GET_USERS";
+    private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
 
     private UtilityDtoFactory utilityDtoFactory;
 
@@ -90,6 +91,20 @@ public class UserDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
     }
+
+
+    public GenericDto getUserByUserId(Integer userId){
+        OperationDto od  = new OperationDto();
+        Map<String,Object> key = new HashMap<>();
+        key.put(UserTable.ID,userId);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE,true,null,0L,1L,key);
+        od.setMetadata(md);
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = UserMapper.reqRestUsersToDto(null);
+        od.setData(array);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
+    }
+
 
     public GenericDto getUsersOperationDto(List<Integer> userIds, Long offset, Long date) {
         OperationDto od = new OperationDto();
