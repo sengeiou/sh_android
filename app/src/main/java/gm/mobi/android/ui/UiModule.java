@@ -1,5 +1,6 @@
 package gm.mobi.android.ui;
 
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -21,7 +22,8 @@ import gm.mobi.android.ui.base.BaseActivity;
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,
-                NewShotActivity.class
+                NewShotActivity.class,
+                ProfileContainerActivity.class
 
         },
         complete = false

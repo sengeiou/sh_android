@@ -25,6 +25,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
+import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import timber.log.Timber;
@@ -127,7 +129,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
         //TODO change by drawerLayout, not the fragment itself
         try {
-            getActivity().getActionBar().setTitle("Timeline");
+            ((BaseActivity)getActivity()).getSupportActionBar().setTitle("Timeline");
         } catch (NullPointerException e) {
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
@@ -235,10 +237,10 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     public void openProfile(int position) {
-        Shot shot = adapter.getItem(position);
-        //TODO profile
-        Toast.makeText(getActivity(), "Open profile " + position, Toast.LENGTH_SHORT).show();
-        Timber.d("Open profile in position %d", position);
+        User user = adapter.getItem(position).getUser();
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user.getIdUser());
+        startActivity(profileIntent);
+
     }
 
     public void startRefreshing(Context context) {

@@ -54,6 +54,9 @@
     <string name="new_shoot_action">Shoot</string>
     <string name="new_shot_repeated">Whoops! You already shot that.</string>
 
+    <string name="profile_following">Following</string>
+    <string name="profile_follow">Follow</string>
+
     <!-- Menu names -->
     <string name="menu_info">Info</string>
     <string name="menu_search">Search timeline</string>

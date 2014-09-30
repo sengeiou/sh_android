@@ -14,6 +14,8 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import gm.mobi.android.ui.fragments.ProfileFragment;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +30,6 @@ import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
-import gm.mobi.android.task.jobs.profile.GetUserDataJob;
 import gm.mobi.android.task.jobs.shots.NewShotJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
@@ -44,8 +45,9 @@ import static android.content.Context.MODE_PRIVATE;
                 LoginUserJob.class,
                 TimelineJob.class,
                 NewShotJob.class,
-                GetUserDataJob.class,
+                GetUserInfoJob.class,
                 TimelineFragment.class,
+                ProfileFragment.class,
                 InitialSetupFragment.class,
                 GMSyncAdapter.class
 

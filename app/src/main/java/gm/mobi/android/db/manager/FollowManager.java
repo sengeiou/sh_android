@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import gm.mobi.android.db.objects.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.objects.Follow;
@@ -75,6 +77,54 @@ public class FollowManager {
         c.close();
         userIds.add(idUser);
         return userIds;
+    }
+
+    public static int getFollowRelationship(SQLiteDatabase db, User fromUser, User toUser) {
+        int resultRelationship = Follow.RELATIONSHIP_NONE;
+        String fromUserIdArgument = String.valueOf(fromUser.getIdUser());
+        String toUserIdArgument = String.valueOf(toUser.getIdUser());
+
+        String selection = "("
+            + FollowTable.ID_USER
+            + "=? and "
+            + FollowTable.ID_FOLLOWED_USER
+            + "=?) OR ("
+            + FollowTable.ID_USER
+            + "=? and "
+            + FollowTable.ID_FOLLOWED_USER
+            + "=?)";
+
+        Cursor queryResults = db.query(FollowTable.TABLE, FollowTable.PROJECTION, selection,
+            new String[] {
+                fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument
+            }, null, null, null, null);
+
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            boolean iFollowHim = false;
+            boolean heFollowsMe = false;
+            do {
+                Follow follow = FollowMapper.fromCursor(queryResults);
+                if (follow != null) {
+                    if (follow.getIdUser().equals(fromUser.getIdUser()) && follow.getFollowedUser()
+                        .equals(toUser.getIdUser())) {
+                        iFollowHim = true;
+                    } else if (follow.getIdUser().equals(toUser.getIdUser())
+                        && follow.getFollowedUser().equals(fromUser.getIdUser())) {
+                        heFollowsMe = true;
+                    }
+
+                    if (iFollowHim && heFollowsMe) {
+                        resultRelationship = Follow.RELATIONSHIP_BOTH;
+                    }else if (iFollowHim) {
+                        resultRelationship = Follow.RELATIONSHIP_FOLLOWING;
+                    }else if (heFollowsMe) {
+                        resultRelationship = Follow.RELATIONSHIP_FOLLOWER;
+                    }
+                }
+            } while (queryResults.moveToNext());
+        }
+        return resultRelationship;
     }
 
     /**

@@ -1,7 +1,6 @@
 <resources>
 
-    <style name="None">
-    </style>
+    <style name="None"></style>
 
     <!-- Base application themes. -->
     <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -66,8 +65,40 @@
     <style name="ProfileMarkTitle">
         <item name="android:textColor">@color/gray_60</item>
     </style>
+
     <style name="ProfileMarkValue">
         <item name="android:textColor">@color/accent</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
     </style>
+
+    <!-- Follow button -->
+    <style name="ProfileFollowButton">
+        <item name="android:background">@drawable/btn_follow</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ProfileFollowButtonText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/profile_follow</item>
+    </style>
+
+    <style name="ProfileFollowButton.Checked">
+        <item name="android:background">@drawable/btn_following</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ProfileFollowButtonText.Checked">
+        <item name="android:textColor">@color/gray_10</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableLeft">@drawable/ic_check_primary</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/profile_following</item>
+    </style>
+
 </resources>

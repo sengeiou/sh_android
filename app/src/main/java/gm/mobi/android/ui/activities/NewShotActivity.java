@@ -159,7 +159,11 @@ public class NewShotActivity extends BaseSignedInActivity {
     }
 
     private boolean isCommentRepeated(String text) {
-        return previousShot.getComment().equals(text);
+        if (previousShot != null) {
+            return previousShot.getComment().equals(text);
+        } else {
+            return false;
+        }
     }
     @Override
     protected void onResume() {
