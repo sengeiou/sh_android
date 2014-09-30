@@ -74,14 +74,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
         [self hiddenViewNotShots];
     
     self.originalFrame = self.tabBarController.tabBar.frame;
-    
     
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
@@ -367,6 +366,8 @@
     if (self.backgroundView == nil) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
         self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+        [self.backgroundView addGestureRecognizer:tapTapRecognizer];
     }
    
     [self.timelineTableView addSubview:self.backgroundView];
