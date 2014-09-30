@@ -13,8 +13,8 @@ public class ShotMapper extends GenericMapper {
 
     public static Shot fromCursor(Cursor c) {
         Shot shot = new Shot();
-        shot.setIdShot(c.getInt(c.getColumnIndex(GMContract.ShotTable.ID_SHOT)));
-        shot.setIdUser(c.getInt(c.getColumnIndex(GMContract.ShotTable.ID_USER)));
+        shot.setIdShot(c.getLong(c.getColumnIndex(GMContract.ShotTable.ID_SHOT)));
+        shot.setIdUser(c.getLong(c.getColumnIndex(GMContract.ShotTable.ID_USER)));
         shot.setComment(c.getString(c.getColumnIndex(GMContract.ShotTable.COMMENT)));
         setSynchronizedFromCursor(c, shot);
         return shot;
@@ -31,8 +31,8 @@ public class ShotMapper extends GenericMapper {
 
     public static Shot fromDto(Map<String, Object> dto) {
         Shot shot = new Shot();
-        shot.setIdShot((Integer) dto.get(GMContract.ShotTable.ID_SHOT));
-        shot.setIdUser((Integer) dto.get(GMContract.ShotTable.ID_USER));
+        shot.setIdShot(((Number) dto.get(GMContract.ShotTable.ID_SHOT)).longValue());
+        shot.setIdUser(((Number) dto.get(GMContract.ShotTable.ID_USER)).longValue());
         shot.setComment((String) dto.get(GMContract.ShotTable.COMMENT));
         setSynchronizedFromDto(dto, shot);
         return shot;
