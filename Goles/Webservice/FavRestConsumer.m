@@ -151,7 +151,7 @@
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:NSStringFromClass(entityClass)
-                                                                     withItems:@15
+                                                                     withItems:@12
                                                                      withOffSet:@0
                                                                      andFilter:[FilterCreation getFilterForEntity:entityClass]];
     

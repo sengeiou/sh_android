@@ -203,11 +203,7 @@
    
     Shot *shot = self.arrayShots[indexPath.row];
     [cell configureBasicCellWithShot:shot];
-    
-    if (indexPath.row == self.arrayShots.count-5)
-        [self addLoadMoreCell];
-        
-    
+
     return cell;
  }
 
