@@ -4,18 +4,17 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.*;
-import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.User;
+import timber.log.Timber;
 
 
 public class UserManager {
@@ -42,14 +41,12 @@ public class UserManager {
         long res;
         for (User user : userList) {
             ContentValues contentValues = UserMapper.toContentValues(user);
-//            db.beginTransaction();
             if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
                 res = deleteUser(db, user);
             } else {
                 res = db.insertWithOnConflict(GMContract.UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
-            insertUserInTableSync(db);
-//            db.endTransaction();
+            insertOrUpdateUserInTableSync(db);
         }
         //TODO error handling if(res<0)
     }
@@ -65,7 +62,7 @@ public class UserManager {
         } else {
             res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertUserInTableSync(db);
+        insertOrUpdateUserInTableSync(db);
         //TODO error handling? if(res<0)
     }
 
@@ -84,7 +81,10 @@ public class UserManager {
         return res;
     }
 
-    public static long insertUserInTableSync(SQLiteDatabase db){
+    /**
+     * Insert or Update the entry in sync table
+     * **/
+        public static long insertOrUpdateUserInTableSync(SQLiteDatabase db){
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(1); // It's the first table we add in this table, because it's the first data type the application insert in database
         tablesSync.setDirection("OUTPUT");
@@ -93,11 +93,24 @@ public class UserManager {
         if(GeneralManager.isTableEmpty(db, UserTable.TABLE)){
             tablesSync.setMin_timestamp(System.currentTimeMillis());
         }
-        //We don't have this information already
-//        tablesSync.setMaxRows();
-//        tablesSync.setMinRows();
-
         return SyncTableManager.insertOrUpdateSyncTable(db,tablesSync);
     }
+
+    /**
+     * Retrieve User by idUser
+     * */
+    public static User getUserByIdUser(SQLiteDatabase db, Integer idUser){
+       User resUser = null;
+       String args = UserTable.ID+"=?";
+       String[] argsString =  new String[]{String.valueOf(idUser)};
+       Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION,args,argsString,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            resUser = UserMapper.basicFromCursor(c);
+        }
+        c.close();
+        return resUser;
+    }
+
 
 }

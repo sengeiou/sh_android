@@ -35,6 +35,9 @@ public class UserMapper extends GenericMapper {
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));
+        user.setNumFollowers(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWERS)));
+        user.setNumFollowings(c.getInt(c.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
+        user.setPoints(c.getInt(c.getColumnIndex(UserTable.POINTS)));
         return user;
     }
 

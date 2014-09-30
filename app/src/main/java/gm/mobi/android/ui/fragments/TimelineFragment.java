@@ -227,7 +227,10 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     public void openShot(int position) {
         //TODO Shot detail
         Shot shot = adapter.getItem(position - 1);
-        Toast.makeText(getActivity(), "Shot " + shot.getUser().getName(), Toast.LENGTH_SHORT).show();
+        User user = shot.getUser();
+
+        Toast.makeText(getActivity(), "Shot " + user.toString()+"---"+shot.getUser().getName(), Toast.LENGTH_SHORT).show();
+
         Timber.d("Clicked shot %d", position);
     }
 

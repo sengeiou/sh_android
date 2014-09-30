@@ -92,4 +92,21 @@ public class User extends Synchronized {
     public void setNumFollowers(Integer numFollowers) {
         mNumFollowers = numFollowers;
     }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mIdUser=" + mIdUser +
+                ", mFavouriteTeamId=" + mFavouriteTeamId +
+                ", mSessionToken='" + mSessionToken + '\'' +
+                ", mUserName='" + mUserName + '\'' +
+                ", mEmail='" + mEmail + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mPhoto='" + mPhoto + '\'' +
+                ", mPoints=" + mPoints +
+                ", mNumFollowings=" + mNumFollowings +
+                ", mNumFollowers=" + mNumFollowers +
+                '}';
+    }
 }
