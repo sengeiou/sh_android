@@ -184,6 +184,24 @@ public class BagdadDataService implements BagdadService {
         }
     }
 
+    @Override
+    public User getUserByIdUser(Integer idUser) throws IOException {
+        GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops==null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+            Map<String,Object> dataItem = ops[0].getData()[0];
+            return UserMapper.fromDto(dataItem);
+        }else{
+            return null;
+        }
+
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);
