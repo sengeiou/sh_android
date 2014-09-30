@@ -78,7 +78,7 @@ public class ShotManager {
 
     public static List<Shot> retrieveTimelineWithUsers(SQLiteDatabase db) {
         String query = "SELECT " + ShotTable.ID_SHOT +
-                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT + ",b." + UserTable.NAME + ","+ UserTable.POINTS+","+ UserTable.NUM_FOLLOWERS+","+ UserTable.NUM_FOLLOWINGS+","+ UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
+                ",b." + ShotTable.ID_USER + "," + ShotTable.COMMENT +",b." +UserTable.BIO +",b." + UserTable.WEBSITE +",b." + UserTable.RANK + ",b." + UserTable.NAME + ","+ UserTable.POINTS+","+ UserTable.NUM_FOLLOWERS+","+ UserTable.NUM_FOLLOWINGS+","+ UserTable.PHOTO + "," + UserTable.USER_NAME + ",a." + ShotTable.CSYS_SYNCHRONIZED + ",a." + ShotTable.CSYS_BIRTH + ",a." + ShotTable.CSYS_REVISION + ",a." + ShotTable.CSYS_MODIFIED + ",a." + ShotTable.CSYS_DELETED +
                 " FROM " + ShotTable.TABLE + " a "
                 + " INNER JOIN " + UserTable.TABLE + " b " +
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID +
