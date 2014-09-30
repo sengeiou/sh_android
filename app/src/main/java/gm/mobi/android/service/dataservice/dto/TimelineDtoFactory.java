@@ -29,7 +29,7 @@ public class TimelineDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
     }
 
-    public GenericDto getAllShotsOperationDto(List<Integer> usersIds, Long limit) {
+    public GenericDto getAllShotsOperationDto(List<Long> usersIds, Long limit) {
         FilterDto shotsFilter = and(
                 or(ShotTable.ID_USER).isIn(usersIds)
         )
@@ -54,7 +54,7 @@ public class TimelineDtoFactory {
 
     }
 
-    public GenericDto getNewerShotsOperationDto(List<Integer> usersIds, Long referenceDate, Long limit) {
+    public GenericDto getNewerShotsOperationDto(List<Long> usersIds, Long referenceDate, Long limit) {
         // Build filter
         FilterDto newShotsFilter = and(
                 or(ShotTable.ID_USER).isIn(usersIds),
@@ -79,7 +79,7 @@ public class TimelineDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEWER_SHOTS, op);
     }
 
-    public GenericDto getOlderShotsOperationDto(List<Integer> usersIds, Long referenceDate, Long limit) {
+    public GenericDto getOlderShotsOperationDto(List<Long> usersIds, Long referenceDate, Long limit) {
         FilterDto oldShotsFilter = and(
                 or(ShotTable.ID_USER).isIn(usersIds)
         )
