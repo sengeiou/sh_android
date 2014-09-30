@@ -14,7 +14,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
 
     private static final String EXTRA_USER_ID = "userid";
 
-    public static Intent getIntent(Context context, int userId) {
+    public static Intent getIntent(Context context, Long userId) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
         i.putExtra(EXTRA_USER_ID, userId);
         return i;
@@ -27,7 +27,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setContainerContent(R.layout.activity_fragment_container);
 
         if (savedInstanceState == null) {
-            int userId = getIntent().getIntExtra(EXTRA_USER_ID, 0);
+            Long userId = getIntent().getLongExtra(EXTRA_USER_ID, 0);
             if (userId < 1) {
                 Timber.e("Se intentó abrir la pantalla de perfil con id inválido: %d", userId);
                 finish();
