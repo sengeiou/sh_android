@@ -80,10 +80,6 @@
 - (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate{
 
     User *user = [[UserManager singleton] getActiveUser];
-    /*NSNumber *revision = @0;
-    NSTimeInterval birth = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval modified = [[NSDate date] timeIntervalSince1970];*/
-    
     NSDictionary *key = @{kJSON_SHOT_IDSHOT:[NSNull null]};
     NSDictionary *sendData = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser,
                                                                                kJSON_SHOT_IDSHOT:[NSNull null],

@@ -367,8 +367,9 @@
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
+
+    self.sizeKeyboard = -47;//- self.viewTextField.frame.size.height;
+//    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
     
     [self.backgroundView removeFromSuperview];
     
@@ -381,7 +382,9 @@
 
     isVisible = NO;
     
-    self.bottomViewConstraint.constant += self.sizeKeyboard;
+    [self textFieldShouldReturn:self.txtField];
+    
+    self.bottomViewConstraint.constant = -47;
     
     [UIView animateWithDuration:0.5f animations:^{
         [self.view layoutIfNeeded];
@@ -441,9 +444,6 @@
         self.btnShoot.enabled = YES;
     else
         self.btnShoot.enabled = NO;
-    
-//    [textField sizeToFit];
-    
     
     return YES;
 }
