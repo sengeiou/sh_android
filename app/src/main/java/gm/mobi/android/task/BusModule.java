@@ -13,6 +13,7 @@ import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.profile.GetUserDataJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
@@ -25,6 +26,7 @@ import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
                 TimelineJob.class,
                 GetFollowingsJob.class,
                 RegisterNewUserJob.class,
+                GetUserDataJob.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class
