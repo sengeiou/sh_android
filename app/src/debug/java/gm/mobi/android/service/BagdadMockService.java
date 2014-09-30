@@ -29,12 +29,12 @@ public class BagdadMockService implements BagdadService {
     public User login(String id, String password) {
         if (id.equals("rafa.vazsan@gmail.com") || id.equals("sloydev")) {
             User mockUser = new User();
-            mockUser.setIdUser(1);
+            mockUser.setIdUser(1L);
             mockUser.setName("Rafa");
             mockUser.setSessionToken("Nnananananananana");
             mockUser.setEmail("rafa.vazsan@gmail.com");
             mockUser.setUserName("rafavazsan");
-            mockUser.setFavouriteTeamId(1);
+            mockUser.setFavouriteTeamId(1l);
             mockUser.setPhoto("http://example.com");
             return mockUser;
         }
@@ -42,32 +42,32 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    public List<Follow> getFollows(Integer idUser, Long lastModifiedDate, int typeFollow) throws IOException {
+    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow) throws IOException {
         return null;
     }
 
-    @Override public List<User> getUsersByUserIdList(List<Integer> userIds) throws IOException {
+    @Override public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getNewShots(List<Integer> followingUserIds, Long newestShotDate) throws IOException {
+    @Override public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getOlderShots(List<Integer> followingUserIds, Long oldestShotDate) throws IOException {
+    @Override public List<Shot> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getShotsByUserIdList(List<Integer> followingUserIds, Long lastModifiedDate) throws IOException {
+    @Override public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override public Shot postNewShot(Integer idUser, String comment) throws IOException {
+    @Override public Shot postNewShot(Long idUser, String comment) throws IOException {
         return null;
     }
 
     @Override
-    public User getUserByIdUser(Integer idUser) throws IOException {
+    public User getUserByIdUser(Long idUser) throws IOException {
         return null;
     }
 
