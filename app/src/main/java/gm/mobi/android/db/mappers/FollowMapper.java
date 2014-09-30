@@ -13,8 +13,8 @@ public class FollowMapper extends GenericMapper {
 
     public static Follow fromCursor(Cursor c) {
         Follow follow = new Follow();
-        follow.setIdUser(c.getInt(c.getColumnIndex(GMContract.FollowTable.ID_USER)));
-        follow.setFollowedUser(c.getInt(c.getColumnIndex(GMContract.FollowTable.ID_FOLLOWED_USER)));
+        follow.setIdUser(c.getLong(c.getColumnIndex(GMContract.FollowTable.ID_USER)));
+        follow.setFollowedUser(c.getLong(c.getColumnIndex(GMContract.FollowTable.ID_FOLLOWED_USER)));
         setSynchronizedFromCursor(c, follow);
         return follow;
     }
@@ -29,8 +29,8 @@ public class FollowMapper extends GenericMapper {
 
     public static Follow fromDto(Map<String, Object> dto) {
         Follow follow = new Follow();
-        follow.setIdUser((Integer) dto.get(GMContract.FollowTable.ID_USER));
-        follow.setFollowedUser((Integer) dto.get(GMContract.FollowTable.ID_FOLLOWED_USER));
+        follow.setIdUser(((Number) dto.get(GMContract.FollowTable.ID_USER)).longValue());
+        follow.setFollowedUser(((Number) dto.get(GMContract.FollowTable.ID_FOLLOWED_USER)).longValue());
         setSynchronizedFromDto(dto, follow);
         return follow;
     }
