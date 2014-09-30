@@ -19,7 +19,7 @@ public class SQLiteUtils {
             + UserTable.NUM_FOLLOWERS+" INT NOT NULL,"
             + UserTable.WEBSITE+" VARCHAR(255),"
             + UserTable.RANK+" INT,"
-            + UserTable.BIO+"VARCHAR(150),"
+            + UserTable.BIO+" VARCHAR(150),"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
