@@ -290,15 +290,15 @@
     
 }
 
+//------------------------------------------------------------------------------
 -(void) showOptions{
-    //Show OptionsView
+
     [UIView animateWithDuration:0.25 animations:^{
         self.viewOptions.alpha = 1.0;
     }];
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
 
-    //isVisible = YES;
 }
 
 
@@ -310,6 +310,7 @@
         if (isVisible)
             [self keyboardHide:nil];
         [self reloadShotsTable:nil];
+        [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
         [self.txtField setText:nil];
         self.btnShoot.enabled = NO;
     }
@@ -361,7 +362,7 @@
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
     
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height;//- self.viewTextField.frame.size.height;
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height;
     
     if (self.backgroundView == nil) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
@@ -408,38 +409,6 @@
     }];
 
 }
-
-//------------------------------------------------------------------------------
-
-//-(void)keyboardChange:(NSNotification*)notification{
-//    
-//    NSDictionary* keyboardInfo = [notification userInfo];
-//    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-//    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-//    
-//    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
-//    
-//    if (self.backgroundView == nil) {
-//        self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
-//        self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-//    }
-//    
-//    [self.timelineTableView addSubview:self.backgroundView];
-//    self.timelineTableView.scrollEnabled = NO;
-//    
-//    [UIView animateWithDuration:0.25 animations:^{
-//        self.viewOptions.alpha = 0.0;
-//    }];
-//    
-//    isVisible = YES;
-//    
-//    self.bottomViewConstraint.constant = self.sizeKeyboard;
-//    
-//    [UIView animateWithDuration:0.5f animations:^{
-//        [self.view layoutIfNeeded];
-//    }];
-//    
-//}
 
 #pragma mark TextFieldDelegate
 
