@@ -358,10 +358,10 @@
 -(void)keyboardShow:(NSNotification*)notification{
     
     NSDictionary* keyboardInfo = [notification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
     
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height  -47;//- self.viewTextField.frame.size.height;
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height;//- self.viewTextField.frame.size.height;
     
     if (self.backgroundView == nil) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
@@ -376,19 +376,11 @@
     }];
 
     isVisible = YES;
-    
-//    if (self.txtField.autocorrectionType == UITextAutocorrectionTypeDefault) {
-//        [UIView animateWithDuration:0.25f animations:^{
-//            self.bottomViewConstraint.constant -= 45;
-//            [self.view layoutIfNeeded];
-//        }];
-//        
-//    }else {
-        [UIView animateWithDuration:0.25f animations:^{
-            self.bottomViewConstraint.constant -= self.sizeKeyboard;
-            [self.view layoutIfNeeded];
-        }];
-//    }
+
+    [UIView animateWithDuration:0.25f animations:^{
+        self.bottomViewConstraint.constant = - self.sizeKeyboard;
+        [self.view layoutIfNeeded];
+    }];
     
 }
 
@@ -411,7 +403,7 @@
     
     self.bottomViewConstraint.constant = -47;
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
     }];
 
