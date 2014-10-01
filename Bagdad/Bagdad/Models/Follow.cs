@@ -71,7 +71,7 @@ namespace Bagdad.Models
                     }
                 }
                 App.DBLoaded.Set();
-               
+
             }
             catch (Exception e)
             {

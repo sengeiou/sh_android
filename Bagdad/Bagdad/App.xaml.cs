@@ -360,18 +360,6 @@ namespace Bagdad
 
         #endregion
 
-        private static UserImageManager userImageManager = null;
-
-        public static UserImageManager UIM
-        {
-            get
-            {
-                if (userImageManager == null)
-                    userImageManager = new UserImageManager();
-                return userImageManager;
-            }
-        }
-
         #region DATA_VIEW_MODELS
 
         private static ShotsViewModel shotsViewModel = null;

@@ -26,7 +26,7 @@ namespace Bagdad.Utils
             try
             {
                 multipleImage = true;
-                if (userUrlImage.Count>0)
+                if (userUrlImage.Count > 0)
                 {
                     var nextItem = userUrlImage.Dequeue();
 
@@ -34,12 +34,14 @@ namespace Bagdad.Utils
                     
                     idUser = int.Parse(dividedItem[0]);
                     string url = dividedItem[1];
+                    if (!IsolatedStorageFile.GetUserStoreForApplication().FileExists(idUser + ".jpg"))
+                    {
+                        Debug.WriteLine("SAVING IMAGE: " + url + " FOR idUser: " + idUser);
 
-                    Debug.WriteLine("SAVING IMAGE: " + url + " FOR idUser: " + idUser);
-
-                    var webClientImg = new WebClient();
-                    webClientImg.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
-                    webClientImg.OpenReadAsync(new Uri(url, UriKind.Absolute));
+                        var webClientImg = new WebClient();
+                        webClientImg.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
+                        webClientImg.OpenReadAsync(new Uri(url, UriKind.Absolute));
+                    }
                 }
             }
             catch(Exception e)
@@ -163,6 +165,16 @@ namespace Bagdad.Utils
                 Debug.WriteLine("E R R O R : GetUserImage: " + e.Message);
             }
             return null;
+        }
+
+        public string GetUserImagename(int idUser)
+        {
+            string retorn = String.Empty;
+            try {
+                retorn = IsolatedStorageFile.GetUserStoreForApplication().ToString() + idUser + ".jpg";
+            }
+            catch { }
+            return retorn;
         }
     }
 }

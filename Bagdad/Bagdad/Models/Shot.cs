@@ -22,7 +22,7 @@ namespace Bagdad.Models
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
 
-        public async Task<int> saveData(JObject job)
+        public async Task<int> SaveData(JObject job)
         {
             int done = 0;
             Database database;
@@ -88,13 +88,14 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString(); 
                 App.DBLoaded.Set();
-                throw new Exception("E R R O R - Shot - saveData: " + e.Message);
+                throw new Exception("E R R O R - Shot - SaveData: " + e.Message);
             }
             return done;
         }
 
-        public async Task<int> addOlderShotsToTimeLine(JObject job)
+        public async Task<int> AddOlderShotsToTimeLine(JObject job)
         {
             int done = 0;
             
@@ -156,12 +157,12 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("E R R O R - Shot - addOlderShotsToTimeLine: " + e.Message);
+                throw new Exception("E R R O R - Shot - AddOlderShotsToTimeLine: " + e.Message);
             }
             return done;
         }
 
-        private async Task<int> synchronized(int idShot)
+        private async Task<int> Synchronized(int idShot)
         {
             try
             {
@@ -184,7 +185,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Shot - synchronized: " + e.Message, e);
+                throw new Exception("Shot - Synchronized: " + e.Message, e);
             }
         }
 
@@ -203,7 +204,8 @@ namespace Bagdad.Models
                 while (await selectStatement.StepAsync())
                 {
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new ShotModel {
+                    shotList.Add(new ShotModel
+                    {
                         shotId = selectStatement.GetIntAt(0),
                         shotUserId = selectStatement.GetIntAt(1),
                         shotMessage = selectStatement.GetTextAt(2),
@@ -217,7 +219,7 @@ namespace Bagdad.Models
             catch (Exception e)
             {
                 App.DBLoaded.Set();
-                throw new Exception("E R R O R - Shot - getTimeLineShots: " + e.Message);
+                throw new Exception("E R R O R - Shot - GetTimeLineShots: " + e.Message);
             }
         }
 
@@ -282,9 +284,7 @@ namespace Bagdad.Models
             return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
 
-
-
-        public async Task<string> synchronizeShot()
+        public async Task<string> SynchronizeShot()
         {
             try
             {

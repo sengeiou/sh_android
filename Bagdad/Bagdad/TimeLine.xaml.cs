@@ -45,8 +45,8 @@ namespace Bagdad
             SystemTray.SetProgressIndicator(this, progress);
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 0, 10);  
-
+            timer.Interval = new TimeSpan(0, 0, 0, 10);
+            timer.Start();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -146,11 +146,10 @@ namespace Bagdad
         {
             try
             {
-                if (App.changesOnSynchro > 0)
-                {
-                    App.ShotsVM.Shots.Clear();
-                    await App.ShotsVM.LoadData();
-                }
+
+                App.ShotsVM.Shots.Clear();
+                await App.ShotsVM.LoadData();
+
                 if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 timer.Interval = new TimeSpan(0, 0, 0, 10);
@@ -192,8 +191,10 @@ namespace Bagdad
 
         private void appBarShootButton_Click(object sender, EventArgs e)
         {
+            timer.Stop();
             extraChars.Visibility = System.Windows.Visibility.Collapsed;
             App.ShotsVM.SendShot(newShot.Text);
+            timer.Interval = new TimeSpan(0, 0, 0, 1);
             extraChars.Text = "140";
             newShot.Text = "";
             Focus();
@@ -202,6 +203,7 @@ namespace Bagdad
             {
                 NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
             }
+            timer.Start();
         }
 
         private void ChatBubbleTextBox_TextChanged(object sender, TextChangedEventArgs e)

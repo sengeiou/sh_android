@@ -18,5 +18,6 @@ namespace Bagdad.ViewModels
         public String shotMessage { get; set; }
         public String shotTime { get; set; }
 
+        public ShotViewModel() { }
     }
 }

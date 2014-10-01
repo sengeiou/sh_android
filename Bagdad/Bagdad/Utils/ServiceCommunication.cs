@@ -173,7 +173,7 @@ namespace Bagdad.Utils
                 {
                     case Constants.SERCOM_TB_SHOT:
                         Shot shot = new Shot();
-                        json = await shot.synchronizeShot();
+                        json = await shot.SynchronizeShot();
                         result = "\t Sincronizado: " + entity + "\n";
                         break;
                     default:
@@ -248,7 +248,6 @@ namespace Bagdad.Utils
                 Debug.WriteLine("\n\n No se ha podido establecer el valor para SynchroType.\n Valores admitidos: \n\t - 0: Update \n\t - 1: Download \n\t - 2: Both \n\n Nota: Si este parametro no se establece, SynchronizeProcess actuará como si SynchroType fuera Both.\n\n");
             }
         }
-
 
         public async Task<string> getParamsForSync(string entity, double date)
         {
@@ -369,7 +368,7 @@ namespace Bagdad.Utils
                 }
                 else
                 {
-                    ////////////if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
+                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
                     //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                     if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         totalDone = 1;
@@ -448,7 +447,6 @@ namespace Bagdad.Utils
             return "\"ops\":[{\"data\":[{" + opsData + "}],\"metadata\":{\"items\": " + nItems + ((offset != 0)?",\"offset\":" + offset : "") + ",\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
         }
 
-
         private async Task<int> saveData(String entity, JObject response)
         {
             int changes = 0;
@@ -470,11 +468,11 @@ namespace Bagdad.Utils
                         break;
                     case Constants.SERCOM_TB_SHOT:
                         Shot shot = new Shot();
-                        changes = await shot.saveData(response);
+                        changes = await shot.SaveData(response);
                         break;
                     case Constants.SERCOM_TB_OLD_SHOTS:
                         Shot oldShots = new Shot();
-                        changes = await oldShots.addOlderShotsToTimeLine(response);
+                        changes = await oldShots.AddOlderShotsToTimeLine(response);
                         break;
                     default:
 
@@ -483,7 +481,7 @@ namespace Bagdad.Utils
             }
             catch (Exception e)
             {
-                throw new Exception("ServiceCommunication - saveData: " + entity.ToString() + " " + e.Message, e);
+                throw new Exception("ServiceCommunication - SaveData: " + entity.ToString() + " " + e.Message, e);
             }
             return changes;
         }
@@ -558,7 +556,7 @@ namespace Bagdad.Utils
                 else return false;
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 throw new Exception("{\"status\":\"No Server Available\"}");
             }

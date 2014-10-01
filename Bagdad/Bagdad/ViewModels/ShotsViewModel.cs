@@ -10,10 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace Bagdad.ViewModels
 {
-    public class ShotsViewModel
+    public class ShotsViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<ShotViewModel> Shots { get; private set; }
 
@@ -34,7 +35,7 @@ namespace Bagdad.ViewModels
             {
                 Shot shotModel = new Shot();
 
-                return ParseShotsForPrinting(await shotModel.getTimeLineShots());               
+                return ParseShotsForPrinting(await shotModel.GetTimeLineShots());               
             }
             catch (Exception e)
             {
@@ -83,6 +84,8 @@ namespace Bagdad.ViewModels
             {
                 BitmapImage image;
 
+                UserImageManager userImageManager = new UserImageManager();
+
                 if (shots.Count == 0) return 0;
                 int done = 0;
 
@@ -99,7 +102,7 @@ namespace Bagdad.ViewModels
                     else if (time.Seconds != 0) timeString = time.Seconds + "s";
 
                     //image
-                    image = App.UIM.GetUserImage(shot.shotUserId);
+                    image = userImageManager.GetUserImage(shot.shotUserId);
                     if (image == null) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(shot.shotUserImageURL, UriKind.Absolute));
 
                     //Tag
@@ -130,21 +133,36 @@ namespace Bagdad.ViewModels
         /// Envía un shot al servidor
         /// </summary>
         /// <param name="text"></param>
-        public void SendShot(string text)
+        public async void SendShot(string text)
         {
+            Shot shot = new Shot();
             try
             {
-                Shot shot = new Shot();
                 shot.comment = text;
                 shot.idUser = App.ID_USER;
                 shot.csys_revision = 0;
                 shot.csys_synchronized = 'N';
-                shot.synchronizeShot();
-
+                await shot.SynchronizeShot();
+                List<ShotModel> oneShot = new List<ShotModel>();
+                UserImageManager userImage = new UserImageManager();
+                oneShot.Add(new ShotModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = shot.csys_birth.ToShortDateString(), shotUserImageURL = userImage.GetUserImagename(shot.idUser) });
+                ParseShotsForPrinting(oneShot);
+                NotifyPropertyChanged("Shots");
             }
             catch (Exception e)
             {
                 Debug.WriteLine("E R R O R : ShotsViewModel - SendShot: " + e.Message);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (null != handler)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
