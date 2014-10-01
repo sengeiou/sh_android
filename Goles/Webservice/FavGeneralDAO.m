@@ -21,16 +21,16 @@ static NSArray *cuotasToDelete;
 #pragma mark - Public Methods
 
 //------------------------------------------------------------------------------
-+(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error))completionBlock {
++(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock {
 
     BOOL statusOK = [[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_CODE] isEqualToString:K_WS_STATUS_OK];
     NSArray *ops = [dict objectForKey:K_WS_OPS];
     BOOL returnedItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ITEMS] integerValue] > 0;
     
-    if (dict && statusOK && returnedItems) {
+    if (dict && statusOK) {
         
         NSArray *dataArray = [[ops objectAtIndex:0] objectForKey:K_WS_OPS_DATA];
-        if (dataArray.count > 0) {
+        if (returnedItems) {
             
             //Check for entity class
             NSString *class = [[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ENTITY];
@@ -42,16 +42,17 @@ static NSArray *cuotasToDelete;
                     [[SyncManager singleton] setSyncData:dict withValue:value];
                 }
             }
-            completionBlock(YES,nil);
+            completionBlock(YES,nil, YES);
+        }else{
+            NSLog(@"NOO HAY MAS:::::::");
+            completionBlock(NO,nil, NO);
         }
     }
-    else if (statusOK)
-        completionBlock(YES,nil);
     else if (!statusOK){
         
         DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
         NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];
-        completionBlock(NO,error);
+        completionBlock(NO,error, NO);
     }
 }
 

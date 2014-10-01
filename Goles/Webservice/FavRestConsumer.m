@@ -162,7 +162,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
     
     //Create full data structure
     if (req && ops) {
@@ -170,16 +170,16 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                    
                     if (!error && status)
-                       [delegate parserResponseForClass:entityClass status:YES andError:nil];
+                       [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
                     else
-                       [delegate parserResponseForClass:entityClass status:NO andError:error];
+                       [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
                 }];
             else if (delegateRespondsToProtocol){
                 
-                [delegate parserResponseForClass:entityClass status:NO andError:error];
+                [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:NO];
                 DLog(@"Request error:%@",error);
             }
         }];
@@ -213,7 +213,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
     
     //Create full data structure
     if (req && ops) {
@@ -221,16 +221,16 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                     
                     if (!error && status)
-                        [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:YES andError:nil];
+                        [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:YES andError:nil andRefresh:refresh];
                     else
-                        [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:NO andError:error];
+                        [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:NO andError:error andRefresh:refresh];
                 }];
             else if (delegateRespondsToProtocol){
                 
-                [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:NO andError:error];
+                [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:NO andError:error andRefresh:NO];
                 DLog(@"Request error:%@",error);
             }
         }];
@@ -264,7 +264,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
     
     //Create full data structure
     if (req && ops) {
@@ -272,23 +272,23 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                     
                     if (!error && status)
-                        [delegate parserResponseForClass:entityClass status:YES andError:nil];
+                        [delegate parserResponseForClass:entityClass status:YES andError:nil andRefresh:refresh];
                     else
-                        [delegate parserResponseForClass:entityClass status:NO andError:error];
+                        [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
                 }];
             else if (delegateRespondsToProtocol){
                 
-                [delegate parserResponseForClass:entityClass status:NO andError:error];
+                [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:NO];
                 DLog(@"Request error:%@",error);
             }
         }];
     }else if (delegateRespondsToProtocol){
         
         NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
-        [delegate parserResponseForClass:entityClass status:NO andError:reqError];
+        [delegate parserResponseForClass:entityClass status:NO andError:reqError andRefresh:NO];
         DLog(@"No valid req structure created");
     }
 }
@@ -323,7 +323,7 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error) {
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
                     if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
                         [delegate createShotResponseWithStatus:YES andError:nil];
                 }];
@@ -366,7 +366,7 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *responseData,NSError *error) {
             
             if (!error)
-                [FavGeneralDAO genericParser:responseData onCompletion:^(BOOL status, NSError *error) {
+                [FavGeneralDAO genericParser:responseData onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
                     
                     NSLog(@"%@ BORRADA", entity);
                 }];
@@ -405,7 +405,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
     
     //Create full data structure
     if (req && ops) {
@@ -413,7 +413,7 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error){
+                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                     
                     if (!error && status)
                         [delegate parserResponseFromLoginWithStatus:YES andError:nil];

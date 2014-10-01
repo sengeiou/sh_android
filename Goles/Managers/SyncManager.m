@@ -237,7 +237,7 @@
 
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
     if (status && [entityClass isSubclassOfClass:[Follow class]]){
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];

@@ -86,9 +86,9 @@
     NSNumber *entityFilterDate = [self getDateOfOlderShot];
     
     NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_LT,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:entityFilterDate},
-                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:entityFilterDate}],
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}],
                                  K_WS_FILTERS:[NSNull null],
-                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+                                 K_WS_OPS_NEXUS:K_WS_OPS_AND};
     return filterDate;
 }
 
@@ -96,9 +96,10 @@
 + (NSNumber *)getDateOfOlderShot {
 
     NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_MODIFIED ascending:YES withFetchLimit:@1];
-    if (shotsArray.count == 1)
+    if (shotsArray.count == 1){
+        
         return [shotsArray.firstObject csys_modified];
-    else
+    }else
         return nil;
 }
 

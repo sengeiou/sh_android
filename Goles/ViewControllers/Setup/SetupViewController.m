@@ -219,12 +219,12 @@
 
 - (IBAction)passEnter:(id)sender {
 
-    [[Conection sharedInstance]getServerTimewithDelegate:self];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
 }
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status{
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
     
     if (status && (lengthName > 2 && lengthPwd >  5)){
         NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
@@ -265,7 +265,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
     if (status){
 

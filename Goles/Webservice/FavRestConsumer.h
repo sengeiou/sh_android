@@ -19,7 +19,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 
 @protocol ParserProtocol
 
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error;
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh: (BOOL) refresh;
 
 @optional
 

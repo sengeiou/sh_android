@@ -11,7 +11,7 @@
 
 @protocol ConectionProtocol
 
-- (void)conectionResponseForStatus:(BOOL)status;
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL) refresh;
 
 @end
 
@@ -22,7 +22,7 @@
 @property (nonatomic,strong) NSDate *requestDate;
 @property (nonatomic, assign) BOOL isConection;
 
-- (void)getServerTimewithDelegate:(id)delegate;
+- (void)getServerTimewithDelegate:(id)delegate andRefresh: (BOOL) refresh;
 
 + (Conection *)sharedInstance;
 

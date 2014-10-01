@@ -11,7 +11,7 @@
 @interface FavGeneralDAO : NSObject
 
 //Generic parser
-+(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error))completionBlock;
++(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock;
 
 
 @end

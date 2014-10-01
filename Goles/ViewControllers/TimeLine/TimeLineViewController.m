@@ -24,6 +24,8 @@
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
     BOOL isVisible;
+    BOOL moreCells;
+    BOOL refreshTable;
 }
 
 @property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
@@ -43,6 +45,8 @@
 @property (assign, nonatomic) int sizeKeyboard;
 @property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewConstraint;
+@property(nonatomic, strong) UIActivityIndicatorView *spinner;
+
 
 @end
 
@@ -54,18 +58,21 @@
     [super viewDidLoad];
     
     lengthTextField = 0;
+   
+    
+    [self initSpinner];
+    
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
-    
+
     //For Alpha version
     self.viewOptions.hidden = YES;
-    
-    
+
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
     //Get shots from server
-    [[Conection sharedInstance]getServerTimewithDelegate:self];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES];
     
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
@@ -130,6 +137,15 @@
     
 }
 
+-(void)initSpinner{
+    moreCells = YES;
+    refreshTable = YES;
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.spinner startAnimating];
+    self.spinner.frame = CGRectMake(0, 0, 320, 44);
+}
+
 //------------------------------------------------------------------------------
 -(void) infoButton{
     
@@ -185,7 +201,7 @@
 //    [UIView animateWithDuration:0.25 animations:^{
 //        self.viewOptions.alpha = 0.0;
 //    }];
-    [[Conection sharedInstance]getServerTimewithDelegate:self];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
 }
 
 #pragma mark - UITableViewDelegate
@@ -206,24 +222,31 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    
+    if (isVisible)
+        [UIView animateWithDuration:0.25 animations:^{
+            self.viewOptions.alpha = 1.0;
+        }];
+    
     return self.arrayShots.count;
-
 }
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
+   
     Shot *shot = self.arrayShots[indexPath.row];
 
-   return [Utils heightForShot:shot.comment];
+    return [Utils heightForShot:shot.comment];
 }
 
 //------------------------------------------------------------------------------
-//- (void)addLoadMoreCellWithCompletion:(void (^)(BOOL status,NSError *error))completionBlock{
 - (void)addLoadMoreCell{
+    self.timelineTableView.tableFooterView = self.spinner;
 
+    moreCells = NO;
     [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
+
 }
 
 //------------------------------------------------------------------------------
@@ -232,11 +255,26 @@
     static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
    
+   
     Shot *shot = self.arrayShots[indexPath.row];
     [cell configureBasicCellWithShot:shot];
-
+    
     return cell;
  }
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!refreshTable){
+        self.spinner.hidden = YES;
+        
+        UILabel *lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
+        lblFooter.text = @"No more shots";
+        lblFooter.textColor = [Fav24Colors iosSevenGray];
+        lblFooter.textAlignment = NSTextAlignmentCenter;
+        self.timelineTableView.tableFooterView = lblFooter;
+        
+    }
+}
 
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
@@ -247,16 +285,14 @@
     if (self.arrayShots.count > 0) {
         [self hiddenViewNotShots];
         [self.timelineTableView reloadData];
-        
     }
 }
 
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-    [[Conection sharedInstance]getServerTimewithDelegate:self];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
 }
-
 
 //------------------------------------------------------------------------------
 -(BOOL) controlRepeatedShot:(NSString *)texto{
@@ -275,15 +311,20 @@
 
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error {
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
-    if (status && [entityClass isSubclassOfClass:[Shot class]])
-        [self reloadShotsTable:nil];
+    if (status && [entityClass isSubclassOfClass:[Shot class]]){
+         [self reloadShotsTable:nil];
+        moreCells = YES;
+    }else if (!refresh){
+        moreCells = NO;
+        refreshTable = NO;
+    }
 }
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status{
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
 
     if (self.txtField.text.length >= 1) {
         
@@ -297,9 +338,15 @@
                 [alert show];
             }
         }
-    }else
+    }else if(refresh){
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    }else{
         [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
-    
+    }
+}
+
+-(void)reloadData{
+    [self.timelineTableView reloadData];
 }
 
 //------------------------------------------------------------------------------
@@ -307,7 +354,6 @@
     
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
-
 }
 
 
@@ -354,18 +400,9 @@
 //            self.viewTextField.alpha = 0.0; // For Beta version and only iphone 4
 //        }];
     else{
-       /* __block BOOL finish = NO;
-        
-        // Change 200.0 to adjust the distance from bottom
-        if (maximumOffset - currentOffset <= 200.0 && finish)
-            [self addLoadMoreCellWithCompletion:^(BOOL status, NSError *error) {
-                if (status) finish = YES;
-                 
-            }];*/
-        
-        if (maximumOffset - currentOffset <= 200.0)
+        if (maximumOffset - currentOffset <= 200.0 && moreCells)
             [self addLoadMoreCell];
-         
+
 // For Beta version and only iphone 4
 //         if (self.lastContentOffset > scrollView.contentOffset.y){
 //             [UIView animateWithDuration:0.25 animations:^{
@@ -377,8 +414,8 @@
 //                 self.viewTextField.alpha = 0.0;
 //             
 //             }];
-//         }
     }
+  
     
      self.lastContentOffset = scrollView.contentOffset.y;
 }
