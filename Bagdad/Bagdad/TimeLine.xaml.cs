@@ -46,13 +46,17 @@ namespace Bagdad
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 10);
-            timer.Start();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             try
             {
+                Util util = new Util();
+                var synchroLogin = await util.isUserAlreadyLoged();
+                if (synchroLogin) timer.Start();
+
+
                 if (!App.ShotsVM.IsDataLoaded)
                 {
                     App.ShotsVM.Shots.Clear();

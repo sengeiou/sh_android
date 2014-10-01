@@ -368,7 +368,7 @@ namespace Bagdad.Utils
                 }
                 else
                 {
-                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
+                    //if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
                     //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                     if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         totalDone = 1;
