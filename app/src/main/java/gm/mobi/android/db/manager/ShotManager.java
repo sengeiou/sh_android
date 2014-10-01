@@ -140,7 +140,6 @@ public class ShotManager {
             if (contentValues.getAsLong(ShotTable.CSYS_DELETED) != null) {
                 res = deleteShot(db, shot);
             } else {
-
                 res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
