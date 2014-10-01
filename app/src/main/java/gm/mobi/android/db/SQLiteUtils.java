@@ -64,6 +64,7 @@ public class SQLiteUtils {
             + TeamTable.CLUB_NAME+" VARCHAR(255),"
             + TeamTable.SHORT_NAME+" VARCHAR(255),"
             + TeamTable.TLA_NAME+" VARCHAR(255),"
+            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
