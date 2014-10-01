@@ -86,6 +86,7 @@ public class MainActivity extends BaseSignedInActivity {
         //mContentResolver = getContentResolver();
         //mAccount = ShootrAccountGenerator.createSyncAccount(getApplicationContext());
 
+        setupNavigationDrawer();
         if (needsSetup()) {
             initialSetup();
         } else {
@@ -111,7 +112,6 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void normalSetup(Bundle savedInstanceState) {
-        setupNavigationDrawer();
         lockMenuDrawer(false);
 
         // Coloca el Fragment que toque, por defecto el Timeline
