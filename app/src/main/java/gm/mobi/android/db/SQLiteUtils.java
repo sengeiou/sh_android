@@ -35,8 +35,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL," +
-            " PRIMARY KEY(" + ShotTable.ID_SHOT + "), " +
-            " CONSTRAINT 'FK_SHOT_USER1' FOREIGN KEY(" + ShotTable.ID_USER + ") REFERENCES " + UserTable.TABLE + "(" + ShotTable.ID_USER + ") ON DELETE NO ACTION ON UPDATE NO ACTION );";
+            " PRIMARY KEY(" + ShotTable.ID_SHOT + "))";
 
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS " + FollowTable.TABLE + " ("
             + FollowTable.ID_USER + " INT NOT NULL,"
@@ -46,9 +45,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL,"
-            + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + ")"
-            + " CONSTRAINT 'fk_User_User1' FOREIGN KEY (" + FollowTable.ID_USER + ") REFERENCES " + UserTable.TABLE + "(" + UserTable.ID + ") ON DELETE NO ACTION ON UPDATE NO ACTION,"
-            + " CONSTRAINT 'fk_User_User2' FOREIGN KEY (" + FollowTable.ID_FOLLOWED_USER + ") REFERENCES " + UserTable.TABLE + "(" + UserTable.ID + ") ON DELETE NO ACTION ON UPDATE NO ACTION)";
+            + " PRIMARY KEY(" + FollowTable.ID_USER + "," + FollowTable.ID_FOLLOWED_USER + "))";
 
     public static final String CREATE_TABLE_TABLESSYNC = "CREATE TABLE IF NOT EXISTS "+ TablesSync.TABLE+" ("
             + TablesSync.MIN_TIMESTAMP+" DATETIME,"
@@ -62,7 +59,7 @@ public class SQLiteUtils {
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
     public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+TeamTable.TABLE+" ("
-            + TeamTable.ID_TEAM+" INT NOT NULL,"
+            + TeamTable.ID_TEAM+" INT NOT NULL PRIMARY KEY,"
             + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
             + TeamTable.CLUB_NAME+" VARCHAR(255),"
             + TeamTable.SHORT_NAME+" VARCHAR(255),"
