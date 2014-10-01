@@ -13,15 +13,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import gm.mobi.android.db.manager.SyncTableManager;
+import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
@@ -43,6 +47,7 @@ public class BagdadDataService implements BagdadService {
     private Endpoint endpoint;
     private ObjectMapper mapper;
     private UserDtoFactory userDtoFactory;
+
     private TimelineDtoFactory timelineDtoFactory;
     private ShotDtoFactory shotDtoFactory;
 
@@ -202,7 +207,45 @@ public class BagdadDataService implements BagdadService {
         }else{
             return null;
         }
+    }
 
+    @Override
+    public Team getTeamByIdTeam(Long idTeam) throws IOException {
+        GenericDto requestDto = userDtoFactory.getTeamByTeamId(idTeam);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null ||ops.length<1){
+            Timber.e("Received 0 operation");
+            return null;
+        }
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+            Map<String,Object> dataItem = ops[0].getData()[0];
+            return TeamMapper.fromDto(dataItem);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public List<Team> getTeamsByIdTeams(Set<Long> teamIds, Long lastModifiedDate) throws IOException {
+        List<Team> teams = new ArrayList<>();
+        GenericDto requestDto = userDtoFactory.getTeamsByTeamIds(teamIds);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null ||ops.length<1){
+            Timber.e("Received 0 operation");
+            return null;
+        }
+
+        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+            for(int i = 0; i<ops[0].getMetadata().getTotalItems(); i++){
+                Map<String,Object> dataItem = ops[0].getData()[i];
+                teams.add(TeamMapper.fromDto(dataItem));
+            }
+        }else{
+            return null;
+        }
+        return teams;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
