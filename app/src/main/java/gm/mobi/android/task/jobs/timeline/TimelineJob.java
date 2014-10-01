@@ -2,6 +2,7 @@ package gm.mobi.android.task.jobs.timeline;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -54,12 +55,11 @@ public class TimelineJob extends CancellableJob {
     BagdadService service;
 
     public int shotRetrieveType;
-    public Shot referenceShot;
+
     private User currentUser;
 
-    public TimelineJob(Context context, User currentUser, int retrieveType, Shot referenceShot) {
+    public TimelineJob(Context context, User currentUser, int retrieveType) {
         super(new Params(PRIORITY));
-        this.referenceShot = referenceShot;
         this.shotRetrieveType = retrieveType;
         this.currentUser = currentUser;
 
@@ -125,14 +125,8 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveNewer() throws IOException, SQLException {
         if (!checkNetwork()) return;
-        Long newestShotDate = 0L;
-        if (referenceShot != null) {
-            newestShotDate = referenceShot.getCsys_birth().getTime();
-            Timber.d("Retrieving shots newer than shot with id %d and date %d", referenceShot.getIdShot(), newestShotDate);
-        } else {
-            Timber.w("Retrieving new shots: No reference shot provided, using date 0L");
-        }
-        List<Shot> newShots = service.getNewShots(getFollowingIds(), newestShotDate);
+        Long lastModifiedDate = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.ShotTable.TABLE);
+        List<Shot> newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
 
         if (newShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), newShots);
@@ -148,7 +142,9 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveOlder() throws IOException, SQLException {
         if (!checkNetwork()) return;
-        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), referenceShot != null ? referenceShot.getCsys_birth().getTime() : 0L);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Long lastModifiedDate = SyncTableManager.getLastModifiedDate(db, GMContract.ShotTable.TABLE);
+        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), lastModifiedDate);
         if (oldShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
             List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), oldShots);
