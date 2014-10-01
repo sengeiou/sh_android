@@ -97,7 +97,7 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
-        setUserInfo(event.getUser(), event.getRelationship());
+        setUserInfo(event.getUser(), event.getRelationship(), event.getFavouriteTeam().getClubName());
 
     }
 
@@ -105,14 +105,13 @@ public class ProfileFragment extends BaseFragment {
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
-    private void setUserInfo(User user, int relationshipWithUser) {
+    private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
         setTitle(user.getUserName());
         nameTextView.setText(user.getName());
-        bioTextView.setText(user.getBio());
+        bioTextView.setText(favTeamName+". "+user.getBio());
         websiteTextView.setText(user.getWebsite());
         rankTextView.setText(getString(R.string.profile_rank_format, String.valueOf(user.getRank())));
         picasso.load(user.getPhoto()).into(avatarImageView);
-
         pointsTextView.setText(String.valueOf(user.getPoints()));
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
