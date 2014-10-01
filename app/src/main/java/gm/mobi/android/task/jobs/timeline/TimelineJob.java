@@ -12,7 +12,6 @@ import com.squareup.otto.Bus;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,15 +23,12 @@ import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
-import timber.log.Timber;
 
 public class TimelineJob extends CancellableJob {
 
