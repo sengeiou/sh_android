@@ -10,11 +10,13 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
@@ -129,9 +131,9 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
+    public List<Shot> getOlderShots(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<Shot> olderShots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, oldestShotDate, DEFAULT_LIMIT);
+        GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
