@@ -79,7 +79,7 @@
     
     NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class]];
     
-    if (shotsArray.count > 0){
+    if (shotsArray.count > 1000){
         
         [self deleteOldShotsOnCompletion:^(BOOL success, NSError *error) {
             if (success)

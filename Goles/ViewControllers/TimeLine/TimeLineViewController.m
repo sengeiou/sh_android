@@ -200,7 +200,8 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)addLoadMoreCell {
+//- (void)addLoadMoreCellWithCompletion:(void (^)(BOOL status,NSError *error))completionBlock{
+- (void)addLoadMoreCell{
 
     [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
 }
@@ -283,10 +284,7 @@
 
 //------------------------------------------------------------------------------
 -(void) showOptions{
-
-    [UIView animateWithDuration:0.25 animations:^{
-        self.viewOptions.alpha = 1.0;
-    }];
+    
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
 
@@ -307,49 +305,62 @@
     }
 }
 
-
 #pragma mark - UIScrollViewDelegate
-//------------------------------------------------------------------------------
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
    
-    //Hide tabbar like safari
-    /*UITabBar *tb = self.tabBarController.tabBar;
-    NSInteger yOffset = scrollView.contentOffset.y;
-    if (yOffset > 0) {
-        tb.frame = CGRectMake(tb.frame.origin.x, self.originalFrame.origin.y + yOffset, tb.frame.size.width, tb.frame.size.height);
-    }
-    if (yOffset < 1) tb.frame = self.originalFrame;*/
-
-    NSLog(@"content: %f", scrollView.contentOffset.y - self.viewOptions.frame.size.height);
-    NSLog(@"resta: %f", scrollView.contentSize.height - scrollView.frame.size.height);
-
-//    if (scrollView.contentOffset.y - self.viewOptions.frame.size.height == scrollView.contentSize.height - scrollView.frame.size.height)
-//    if (scroll.contentSize.height - scroll.frame.size.height = scroll.contentOffset.y)
-//        [self addLoadMoreCell];
-
     CGFloat currentOffset = scrollView.contentOffset.y;
-    CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
     
-    // Change 10.0 to adjust the distance from bottom
-    if (maximumOffset - currentOffset <= 200.0)
-        [self addLoadMoreCell];
-    
-    
-    if (self.lastContentOffset > scrollView.contentOffset.y){
+   if (currentOffset == 0)
         [UIView animateWithDuration:0.25 animations:^{
             
             self.viewOptions.alpha = 1.0;
             self.viewTextField.alpha = 1.0;
         }];
+}
+
+//------------------------------------------------------------------------------
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+ 
+    
+    CGFloat currentOffset = scrollView.contentOffset.y;
+    CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+   
+    if (currentOffset < 0)
         
-    }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
         [UIView animateWithDuration:0.2 animations:^{
             self.viewOptions.alpha = 0.0;
             self.viewTextField.alpha = 0.0;
-
         }];
+    else{
+       /* __block BOOL finish = NO;
+        
+        // Change 200.0 to adjust the distance from bottom
+        if (maximumOffset - currentOffset <= 200.0 && finish)
+            [self addLoadMoreCellWithCompletion:^(BOOL status, NSError *error) {
+                if (status) finish = YES;
+                 
+            }];*/
+        
+        if (maximumOffset - currentOffset <= 200.0)
+            [self addLoadMoreCell];
+         
+         
+         if (self.lastContentOffset > scrollView.contentOffset.y){
+             [UIView animateWithDuration:0.25 animations:^{
+             
+             self.viewOptions.alpha = 1.0;
+             self.viewTextField.alpha = 1.0;
+             }];
+         
+         }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
+             [UIView animateWithDuration:0.2 animations:^{
+                 self.viewOptions.alpha = 0.0;
+                 self.viewTextField.alpha = 0.0;
+             
+             }];
+         }
     }
-   
     
      self.lastContentOffset = scrollView.contentOffset.y;
 }
@@ -434,15 +445,14 @@
     lengthTextField = self.txtField.text.length - range.length + string.length;
    
     //self.txtField.text = [self.txtField.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
+    
+        if ([string isEqualToString:@" "])
+            self.btnShoot.enabled = NO;
+        else if (lengthTextField >= 1 && ![textField.text isEqualToString:@"  "])
+            self.btnShoot.enabled = YES;
+        else
+            self.btnShoot.enabled = NO;
 
-    if ([string isEqualToString:@" "]) {
-        self.btnShoot.enabled = NO;
-    }else if (lengthTextField >= 1 && ![textField.text isEqualToString:@"  "])
-        self.btnShoot.enabled = YES;
-    else
-        self.btnShoot.enabled = NO;
-    
-    
     NSLog(@"Caracteres que quedan= %lu", (unsigned long)[self countCharacters:lengthTextField]);
     
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
