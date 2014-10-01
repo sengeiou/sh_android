@@ -17,15 +17,15 @@ public class SyncTableManager {
     public static int NUMDAYS = 15;
     
     public static Long getLastModifiedDate(SQLiteDatabase db, String entity) {
-        Long lastDateModified = 0L;
+        Long lastDateModified;
         if(GeneralManager.isTableEmpty(db,entity)){
             lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
         }else{
-            String sql = "SELECT * FROM "+TablesSync.TABLE +" WHERE "+TablesSync.ENTITY+" = '"+entity+"'";
+            String sql = "SELECT "+ GMContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + GMContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
             Cursor c = db.rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                lastDateModified = c.getLong(c.getColumnIndex(TablesSync.MAX_TIMESTAMP));
+                lastDateModified = c.getLong(c.getColumnIndex(GMContract.SyncColumns.CSYS_MODIFIED));
             } else {
                 lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
             }
@@ -35,7 +35,7 @@ public class SyncTableManager {
     }
 
     public static Long getFirstModifiedDate(SQLiteDatabase db, String entity){
-        Long firstDateModified = 0L;
+        Long firstDateModified;
         if(GeneralManager.isTableEmpty(db,entity)){
             firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
         }else{
