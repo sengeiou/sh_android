@@ -27,12 +27,13 @@
     BOOL refreshTable;
 }
 
-@property (nonatomic,strong) IBOutlet UITableView    *timelineTableView;
+@property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
 @property (weak, nonatomic) IBOutlet UIButton *btnWatching;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
 @property (weak, nonatomic) IBOutlet UITextView *txtField;
 @property (weak, nonatomic) IBOutlet UIButton *btnShoot;
+@property (weak, nonatomic) IBOutlet UILabel *charactersLeft;
 @property (weak, nonatomic) IBOutlet UIView *viewNotShots;
 @property (strong, nonatomic) NSArray *arrayShots;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
@@ -40,7 +41,7 @@
 @property (weak, nonatomic) IBOutlet UIView *viewTextField;
 @property (nonatomic, assign) CGFloat lastContentOffset;
 @property (nonatomic, assign) CGRect originalFrame;
-@property (strong, nonatomic) UIView *backgroundView;
+@property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewConstraint;
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
@@ -361,7 +362,7 @@
     if (status && !error){
         [self keyboardHide:nil];
         [self reloadShotsTable:nil];
-        [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        [self.timelineTableView setScrollsToTop:YES];
         [self.txtField setText:nil];
         self.btnShoot.enabled = NO;
     }
@@ -420,21 +421,17 @@
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
     
+    self.txtField.text = nil;
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-//    -self.viewTextField.frame.size.height
-//    self.sizeKeyboard = keyboardFrameBeginRect.size.height;
-    self.sizeKeyboard = keyboardFrameBeginRect.origin.y;
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height-50;
     
-    if (self.backgroundView == nil) {
-        self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
-        self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-        UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-        [self.backgroundView addGestureRecognizer:tapTapRecognizer];
-    }
-   
-    [self.timelineTableView addSubview:self.backgroundView];
+    //Darken background view
+    self.backgroundView.hidden = NO;
+    UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    [self.backgroundView addGestureRecognizer:tapTapRecognizer];
+    
     self.timelineTableView.scrollEnabled = NO;
 
     double animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -443,7 +440,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         self.bottomViewConstraint.constant += self.sizeKeyboard;
+                         self.bottomViewConstraint.constant = self.sizeKeyboard;
 
                          [self.view layoutIfNeeded];
                      } completion:NULL];
@@ -454,13 +451,13 @@
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
     
-    [self.backgroundView removeFromSuperview];
-
+    self.backgroundView.hidden = YES;
     [self.timelineTableView setScrollsToTop:YES];
     self.timelineTableView.scrollEnabled = YES;
     
-    self.bottomViewConstraint.constant = 0.0f;
     
+    //move writing field
+    self.bottomViewConstraint.constant = 0.0f;
     [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
     }];
@@ -481,18 +478,24 @@
     else
         self.btnShoot.enabled = NO;
     
-    NSLog(@"Caracteres que quedan= %lu", (unsigned long)[self countCharacters:lengthTextField]);
-    
+    self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
+    
+    [self adaptViewSizeWhenWriting:textView];
 
 }
 
+- (void)adaptViewSizeWhenWriting:(UITextView *)textView {
+    
+}
+
 //------------------------------------------------------------------------------
--(NSUInteger) countCharacters:(NSUInteger) lenght{
+-(NSString *) countCharacters:(NSUInteger) lenght{
     
-    if (lenght <= CHARACTERS_SHOT)
-        return CHARACTERS_SHOT - lenght;
-    
+    if (lenght <= CHARACTERS_SHOT){
+        NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
+        return charLeft;
+    }
     return 0;
 }
 

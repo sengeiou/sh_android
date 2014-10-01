@@ -23,14 +23,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblTeamBio;
 @property (weak, nonatomic) IBOutlet UITextView *txtViewWebSite;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-
+@property (weak, nonatomic) IBOutlet UIView *mainView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {

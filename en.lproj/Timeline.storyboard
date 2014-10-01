@@ -253,6 +253,10 @@
                                     <constraint firstAttribute="trailing" secondItem="RkQ-hv-BdO" secondAttribute="trailing" constant="-20" id="yC7-hb-WZC"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jf2-bW-Lse">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
                                 <rect key="frame" x="-4" y="540" width="608" height="60"/>
                                 <subviews>
@@ -279,15 +283,27 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="140" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCp-RM-5b3">
+                                        <rect key="frame" x="546" y="31" width="42" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="Pu4-cc-zov"/>
+                                            <constraint firstAttribute="width" constant="42" id="hhb-XA-K9H"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="top" secondItem="41t-je-TRg" secondAttribute="top" id="H5C-jW-SAd"/>
                                     <constraint firstAttribute="trailing" secondItem="fDT-Kv-eYE" secondAttribute="trailing" constant="-20" id="MCE-5X-yyy"/>
+                                    <constraint firstAttribute="trailing" secondItem="OCp-RM-5b3" secondAttribute="trailing" constant="20" id="NVy-cS-jaE"/>
                                     <constraint firstItem="41t-je-TRg" firstAttribute="leading" secondItem="zPp-71-7UU" secondAttribute="trailing" constant="8" id="YpZ-AT-Ozk"/>
                                     <constraint firstAttribute="height" constant="60" id="fxF-sH-uaZ"/>
                                     <constraint firstItem="fDT-Kv-eYE" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="top" id="l4e-nt-A2Z"/>
                                     <constraint firstItem="fDT-Kv-eYE" firstAttribute="leading" secondItem="HR5-eu-cfc" secondAttribute="leading" constant="-20" id="mFs-iD-tWQ"/>
+                                    <constraint firstItem="OCp-RM-5b3" firstAttribute="top" secondItem="fDT-Kv-eYE" secondAttribute="bottom" constant="30" id="mPr-K5-CK6"/>
                                     <constraint firstItem="zPp-71-7UU" firstAttribute="top" secondItem="fDT-Kv-eYE" secondAttribute="bottom" constant="8" id="t3K-r8-EgX"/>
                                     <constraint firstItem="zPp-71-7UU" firstAttribute="leading" secondItem="HR5-eu-cfc" secondAttribute="leading" constant="8" id="uFS-dh-fVo"/>
                                     <constraint firstAttribute="trailing" secondItem="41t-je-TRg" secondAttribute="trailing" constant="10" id="wKZ-pw-tRQ"/>
@@ -298,6 +314,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="VYB-IF-QLU" firstAttribute="top" secondItem="hAK-0x-gdD" secondAttribute="bottom" constant="79" id="6rx-fR-gla"/>
+                            <constraint firstItem="Jf2-bW-Lse" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="72T-ch-W0D"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="cfX-1I-iII" secondAttribute="bottom" id="8qb-6j-OmV"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="bottom" id="Cfi-LK-l7y"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="Dan-L3-EUl"/>
@@ -305,11 +322,14 @@
                             <constraint firstAttribute="trailingMargin" secondItem="HR5-eu-cfc" secondAttribute="trailing" constant="-20" id="IIt-1S-DOZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hAK-0x-gdD" secondAttribute="trailing" constant="-20" id="MyE-TD-7uU"/>
                             <constraint firstItem="HR5-eu-cfc" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="N7k-Sj-Bps"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Jf2-bW-Lse" secondAttribute="trailing" constant="-16" id="Xoo-dN-ANA"/>
                             <constraint firstAttribute="trailingMargin" secondItem="VYB-IF-QLU" secondAttribute="trailing" constant="-16" id="lZH-Tr-gdk"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="nDk-BC-SGd"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="u5c-J4-z3W"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="w2p-sj-d3E"/>
+                            <constraint firstItem="Jf2-bW-Lse" firstAttribute="top" secondItem="KoL-Ez-vwg" secondAttribute="topMargin" id="xXA-R4-3Jw"/>
                             <constraint firstItem="VYB-IF-QLU" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="xx5-RT-4XS"/>
+                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="Jf2-bW-Lse" secondAttribute="bottom" id="yJ5-gr-EH8"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Zeq-sw-PKO">
@@ -317,10 +337,12 @@
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="backgroundView" destination="Jf2-bW-Lse" id="JAd-hk-o4Q"/>
                         <outlet property="bottomViewConstraint" destination="Cfi-LK-l7y" id="72m-Md-rxe"/>
                         <outlet property="btnInfo" destination="qN5-Nb-Req" id="Csh-an-UL1"/>
                         <outlet property="btnShoot" destination="41t-je-TRg" id="KtR-gA-HMn"/>
                         <outlet property="btnWatching" destination="lha-vI-5wj" id="EXj-Zw-0tJ"/>
+                        <outlet property="charactersLeft" destination="OCp-RM-5b3" id="cyY-Vx-Ywl"/>
                         <outlet property="timelineTableView" destination="cfX-1I-iII" id="Z50-EZ-goo"/>
                         <outlet property="txtField" destination="zPp-71-7UU" id="ls4-3A-INs"/>
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
