@@ -185,6 +185,7 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/profile_bio"
       android:text="sevibus.sloydev.com"
+      android:autoLink="web"
       android:textColor="@color/links" />
 
   </RelativeLayout>
