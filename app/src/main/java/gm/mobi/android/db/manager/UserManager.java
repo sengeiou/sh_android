@@ -26,7 +26,7 @@ public class UserManager {
     public static User getCurrentUser(SQLiteDatabase db) {
         User user = null;
         if(!GeneralManager.isTableEmpty(db,UserTable.TABLE)) {
-   Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
+             Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 user = UserMapper.fromCursor(c);
@@ -57,19 +57,18 @@ public class UserManager {
      * Insert a user
      */
     public static void saveUser(SQLiteDatabase db, User user) throws SQLException {
-        ContentValues contentValues = UserMapper.toContentValues(user);
-        long res;
+        User currentUser = getCurrentUser(db);
+        ContentValues contentValues = null;
+        String[] projection = UserTable.PROJECTION;
+        String where = UserTable.ID+"=?";
+        contentValues = currentUser!=null ? UserMapper.userToContentValues(user,currentUser) : UserMapper.toContentValues(user);
+        String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
+        String[] args = {userId};
+
         if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
-            res = deleteUser(db, user);
-        } else {
-            User currentUser = getUserByIdUser(db,user.getIdUser());
-            if(currentUser != null){
-                Timber.e("Sólo hace update porque ya existe");
-                res = db.update(UserTable.TABLE,contentValues,null,null);
-            }else{
-                Timber.e("Inserta el usuario porque no existe");
-                res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-            }
+             deleteUser(db, user);
+        }else{
+            GeneralManager.insertOrUpdate(db, UserTable.TABLE,contentValues,projection,where,args);
         }
         insertOrUpdateUserInTableSync(db);
         //TODO error handling? if(res<0)
@@ -93,7 +92,7 @@ public class UserManager {
     /**
      * Insert or Update the entry in sync table
      * **/
-        public static long insertOrUpdateUserInTableSync(SQLiteDatabase db){
+     public static long insertOrUpdateUserInTableSync(SQLiteDatabase db){
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(1); // It's the first table we add in this table, because it's the first data type the application insert in database
         tablesSync.setDirection("OUTPUT");
