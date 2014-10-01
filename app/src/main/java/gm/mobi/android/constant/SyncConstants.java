@@ -15,23 +15,19 @@ public class SyncConstants {
     //TODO usar un nombre de cuenta real, ya que tenemos login
     public static final String ACCOUNT_NAME = "Shootr";
 
-
-    //Sync Interval Constants
-    public static final long MILLISECONDS_PER_SECOND = 1000L;
-    public static final long SECONDS_PER_MINUTE = 60L;
-    public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
-    public static final long SYNC_INTERVAL_SHOTS = 10L;
     //Sync Interval
+    public static final long SYNC_INTERVAL_FOLLOWINGS = 24*60*60; //Sync frequency in Seconds - Every 24 hours
     public static final long SYNC_INTERVAL_FOR_REMOVE_SHOTS =24*60*60;//Sync frequency in Seconds - Every 24 hours
 
 
+
     //Sync callTypes
-    public static String CALL_TYPE = "callType";
+    public static final String CALL_TYPE = "callType";
 
 
-    public static int GET_SHOTS_CALL_TYPE = 300;
-    public static int REMOVE_OLD_SHOTS = 301;
-
+    public static final int GET_NEW_SHOTS_CALLTYPE = 300;
+    public static final int REMOVE_OLD_SHOTS_CALLTYPE = 301;
+    public static final int GET_FOLLOWINGS_CALLTYPE = 302;
 
 
 
