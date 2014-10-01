@@ -25,7 +25,9 @@ namespace Bagdad
         ApplicationBarIconButton appBarButtonShot;
         private DispatcherTimer timer;
         public ProgressIndicator progress;
+        bool endOfLocalList = false;
         bool endOfList = false;
+        private int offset = Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE;
         
         
         public TimeLine()
@@ -89,6 +91,13 @@ namespace Bagdad
             appBarButtonShot.IsEnabled = false;
             appBarButtonShot.Click += appBarShootButton_Click;
             ApplicationBar.Buttons.Add(appBarButtonShot);
+
+            ApplicationBarIconButton appBarButtonWatching =
+                new ApplicationBarIconButton(new
+                Uri("/Resources/icons/appbar.eye.png", UriKind.Relative));
+            appBarButtonWatching.Text = AppResources.ImWatching;
+            appBarButtonWatching.Click += appBarWatchingButton_Click;
+            ApplicationBar.Buttons.Add(appBarButtonWatching);
 
             ApplicationBarIconButton appBarButtonRefresh =
                 new ApplicationBarIconButton(new
@@ -171,6 +180,11 @@ namespace Bagdad
             endOfList = false;
         }
 
+        private void appBarWatchingButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("I'm Watching!");
+        }
+
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
@@ -238,16 +252,6 @@ namespace Bagdad
             MessageBox.Show("Info");
         }
 
-        private void ImWatching_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            //TODO: DELETE THIS: JUST TRYING THE IMAGEMANAGER SOURCE
-            //UserImageManager im = new UserImageManager();
-            ////im.SaveImageFromURL("http://s3-eu-west-1.amazonaws.com/bagdag/bender.jpg", 1);
-            //imageToShow.Source = im.GetUserImage(3);
-            //if (imageToShow.Source == null) imageToShow.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("http://s3-eu-west-1.amazonaws.com/bagdag/nixon.jpg", UriKind.Absolute));
-            MessageBox.Show("I'm Watching!");
-        }
-
         private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
 
@@ -263,32 +267,50 @@ namespace Bagdad
         }
         #endregion
 
-        private int offset = 0;
+        int charge = 0;
+        int scrollToChargue = 0;
+        ShotsViewModel svm = new ShotsViewModel();
 
         private async void MyShots_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            progress.IsVisible = true;
+
             ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(MyShots);
             // not feeling creative with my var names today...
             IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
+            scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
 
-            int scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
-
-            if (scrollInterface.VerticalScrollPercent >= scrollToChargue && !endOfList)
+            if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
             {
                 //Here is the place to call to older Shots
-                ShotsViewModel svm = new ShotsViewModel();
-
-                int charge = await svm.LoadOlderShots(offset);
-
-                offset += Constants.SERCOM_PARAM_OFFSET_PAG;
-
-                //if there is no more shots, don't need to charge it again
-                if (charge == 0)
+                if (!endOfLocalList)
                 {
-                    endOfList = true;
+                    charge = await svm.LoadOtherShots(offset);
+
+                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+
+                    if (charge == 0)
+                    {
+                        offset = 0;
+                        endOfLocalList = true;
+                    }
                 }
+                else if (!endOfList)
+                {
+                    charge = await svm.LoadOlderShots(offset);
+
+                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+
+                    //if there is no more shots, don't need to charge it again
+                    if (charge == 0)
+                    {
+                        endOfList = true;
+                    }
+                }
+                
             }
+            progress.IsVisible = false;
         }
 
         /// <summary>
@@ -305,6 +327,11 @@ namespace Bagdad
                 else progress.IsVisible = false;
                 RefreshData();
             }
+        }
+
+        private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            MyShots.ScrollIntoView(MyShots.Items.First());
         }       
         
     }

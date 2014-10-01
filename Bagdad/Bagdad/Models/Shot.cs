@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -147,8 +148,8 @@ namespace Bagdad.Models
                         }
 
                     }
-                    OldShots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
-                    OldShots.Reverse();
+                    //OldShots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
+                    //OldShots.Reverse();
                     App.ShotsVM.ParseShotsForPrinting(OldShots);
 
                 }
@@ -188,7 +189,7 @@ namespace Bagdad.Models
         }
 
 
-         public async Task<List<ShotModel>> getTimeLineShots()
+        public async Task<List<ShotModel>> getTimeLineShots()
         {
             try
             {
@@ -197,6 +198,8 @@ namespace Bagdad.Models
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineShots);
                 selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
+                selectStatement.BindIntParameterWithName("@limit", Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE);
+
                 while (await selectStatement.StepAsync())
                 {
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
@@ -209,6 +212,44 @@ namespace Bagdad.Models
                         shotTime = selectStatement.GetTextAt(5)
                     });
                 }
+                return shotList;
+            }
+            catch (Exception e)
+            {
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - getTimeLineShots: " + e.Message);
+            }
+        }
+
+        public async Task<List<ShotModel>> getTimeLineOtherShots(int offset)
+        {
+            try
+            {
+                int count = 0;
+                List<ShotModel> shotList = new List<ShotModel>();
+                Database database = await App.GetDatabaseAsync();
+
+                Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineOtherShots);
+                selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
+                selectStatement.BindIntParameterWithName("@offset", offset);
+                selectStatement.BindIntParameterWithName("@limit", Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG);
+
+                while (await selectStatement.StepAsync())
+                {
+                    //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
+                    shotList.Add(new ShotModel
+                    {
+                        shotId = selectStatement.GetIntAt(0),
+                        shotUserId = selectStatement.GetIntAt(1),
+                        shotMessage = selectStatement.GetTextAt(2),
+                        shotUserName = selectStatement.GetTextAt(3),
+                        shotUserImageURL = selectStatement.GetTextAt(4),
+                        shotTime = selectStatement.GetTextAt(5)
+                    });
+                    count++;
+                }
+
+                Debug.WriteLine("CARGADOS: " + count);
                 return shotList;
             }
             catch (Exception e)

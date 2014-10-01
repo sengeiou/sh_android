@@ -7,8 +7,5 @@
         <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas." shotTag="" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
         <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo." shotTag="Barcelona-Elche 16/12" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
         <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo." shotTag="Barcelona-Elche 16/12" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
-        <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecan ahorarr ahorarr está la cosa muy malar condemor va usté muy cargadoo." shotTag="Barcelona-Elche 16/12" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
-        <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas." shotTag="Barcelona-Elche 16/12" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
-        <vm:ShotViewModel shotMessage="Lorem fistrum hasta luego Lucas torpedo diodenoo benemeritaar apetecantá la cosa muy malar condemor va usté muy cargadoo." shotTag="Barcelona-Elche 16/12" shotTime="3m" shotUserImage="" shotUserName="Windows Phone"/>
     </vm:ShotsViewModel.Shots>
 </vm:ShotsViewModel>

@@ -112,5 +112,16 @@ namespace Bagdad.Utils
             }
         }
 
+        public async Task<double> CalculateTimeLapse()
+        {
+            ServiceCommunication sc = new ServiceCommunication();
+            double serverTime = double.Parse(await sc.getServerTime());
+
+            TimeSpan t = DateTime.Now - new DateTime(1970, 1, 1);
+            double localTime = t.TotalMilliseconds;
+
+            return serverTime - localTime;
+        }
+
     }
 }

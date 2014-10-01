@@ -3,6 +3,7 @@ using Bagdad.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,21 @@ namespace Bagdad.ViewModels
             }
         }
 
+        public async Task<int> LoadOtherShots(int offset)
+        {
+            try
+            {
+                Shot shotModel = new Shot();
+
+                return ParseShotsForPrinting(await shotModel.getTimeLineOtherShots(offset));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - LoadData: " + e.Message);
+                return 0;
+            }
+        }
+
         /// <summary>
         /// Adds to the Shot List the next X shots from the server.
         /// </summary>
@@ -66,12 +82,17 @@ namespace Bagdad.ViewModels
             try
             {
                 BitmapImage image;
+
+                if (shots.Count == 0) return 0;
+                int done = 0;
+
                 foreach (ShotModel shot in shots)
                 {
 
                     //time
                     String timeString = "";
-                    TimeSpan time = DateTime.Now - DateTime.Parse(shot.shotTime);
+                    TimeSpan time = DateTime.Now.AddMilliseconds(App.TIME_LAPSE) - DateTime.Parse(shot.shotTime);
+                    
                     if (time.Days != 0) timeString = time.Days + "d";
                     else if (time.Hours != 0) timeString = time.Hours + "h";
                     else if (time.Minutes != 0) timeString = time.Minutes + "m";
@@ -89,12 +110,13 @@ namespace Bagdad.ViewModels
                     //Message
                     String message = shot.shotMessage;
 
-                    Shots.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+                    App.ShotsVM.Shots.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+                    done++;
                 }
 
                 IsDataLoaded = true;
 
-                return 1;
+                return done;
             }
             catch (Exception e)
             {

@@ -187,6 +187,7 @@
     <Content Include="Resources\icons\appbar.quill.png" />
     <Content Include="Resources\icons\appbar.refresh.png" />
     <Content Include="Resources\icons\appbar.user.png" />
+    <Content Include="Resources\icons\basecircle.png" />
     <Content Include="Resources\start\Facebook.png" />
     <Content Include="Resources\start\start_free.png" />
     <Content Include="Resources\start\start_fun.png" />

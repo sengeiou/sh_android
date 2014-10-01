@@ -26,6 +26,8 @@ namespace Bagdad.Utils
 
         //PARAMS
         public const int SERCOM_PARAM_OFFSET_PAG = 100;
+        public const int SERCOM_PARAM_TIME_LINE_OFFSET_PAG = 20;
+        public const int SERCOM_PARAM_TIME_LINE_FIRST_CHARGE = 50;
 
         //SynchroTypes
         public const int ST_UPLOAD_ONLY = 0;

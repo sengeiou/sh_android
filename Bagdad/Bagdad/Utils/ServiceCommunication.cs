@@ -322,7 +322,7 @@ namespace Bagdad.Utils
                 {
                     String status = "\"status\":{\"message\":null,\"code\":null}";
                     String req = await GetREQ();
-                    String ops = GetOPS(translate(operation), translate(entity), searchParams, offset);
+                    String ops = GetOPS(translate(operation), entity, searchParams, offset);
 
                     json = "{" + status + "," + req + "," + ops + "}";
                 }
@@ -415,15 +415,19 @@ namespace Bagdad.Utils
                         break;
                     case Constants.SERCOM_TB_USER:
                         User user = new User();
-                        ops = user.ConstructOperation(OPS_DATA_USER, operation, searchParams, offset, 100);
+                        ops = user.ConstructOperation(OPS_DATA_USER, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
                         break;
                     case Constants.SERCOM_TB_FOLLOW:
                         Follow follow = new Follow();
-                        ops = follow.ConstructOperation(OPS_DATA_FOLLOW, operation, searchParams, offset, 100);
+                        ops = follow.ConstructOperation(OPS_DATA_FOLLOW, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
                         break;
                     case Constants.SERCOM_TB_SHOT:
                         Shot shot = new Shot();
-                        ops = shot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, 100);
+                        ops = shot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
+                        break;
+                    case Constants.SERCOM_TB_OLD_SHOTS:
+                        Shot oldShot = new Shot();
+                        ops = oldShot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG);
                         break;
                     default:
                         ops = "";
@@ -518,7 +522,7 @@ namespace Bagdad.Utils
             }
         }
 
-        private async Task<String> getServerTime()
+        public async Task<String> getServerTime()
         {
             try
             {
