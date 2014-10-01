@@ -39,13 +39,10 @@
 @property (weak, nonatomic) IBOutlet UIView *viewTextField;
 @property (nonatomic, assign) CGFloat lastContentOffset;
 @property (nonatomic, assign) CGRect originalFrame;
-@property (weak, nonatomic) IBOutlet UIImageView *line1;
-@property (weak, nonatomic) IBOutlet UIImageView *line2;
 @property (strong, nonatomic) UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
 @property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
 @property (nonatomic, strong) NSLayoutConstraint *bottomViewConstraint;
-@property (nonatomic, strong) NSTimer *mTimer;
 
 @end
 
@@ -76,6 +73,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
 
+    
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
@@ -83,14 +81,27 @@
     
     self.originalFrame = self.tabBarController.tabBar.frame;
     
-    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
-    btnSearch.tintColor = [Fav24Colors iosSevenBlue];
-    self.navigationItem.rightBarButtonItem = btnSearch;
-    
-//    [self.timelineTableView setContentInset:UIEdgeInsetsMake(0, 0, 37, 0)];
-    
+    [self setNavigationBarButtons];
     [self createConstraintForBottomView];
     
+}
+
+//------------------------------------------------------------------------------
+- (void)setNavigationBarButtons {
+    
+    //Search button
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
+    btnSearch.tintColor = [Fav24Colors iosSevenBlue];
+    self.navigationItem.leftBarButtonItem = btnSearch;
+    
+    //Info button
+    UIBarButtonItem *btnInfo = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStyleBordered target:self action:@selector(infoButton)];
+    
+    //Glasses button
+    UIBarButtonItem *btnWatch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(watching)];
+//    btnInfo.tintColor = [Fav24Colors iosSevenBlue];
+    
+    [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:btnInfo,btnWatch, nil]];
 }
 
 //------------------------------------------------------------------------------
@@ -114,6 +125,16 @@
 
 //------------------------------------------------------------------------------
 -(void) search{
+    
+}
+
+//------------------------------------------------------------------------------
+-(void) infoButton{
+    
+}
+
+//------------------------------------------------------------------------------
+-(void) watching{
     
 }
 
@@ -157,11 +178,10 @@
 }
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
-    
+
     [UIView animateWithDuration:0.25 animations:^{
         self.viewOptions.alpha = 0.0;
     }];
-    
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
@@ -182,11 +202,7 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (isVisible)
-        [UIView animateWithDuration:0.25 animations:^{
-            self.viewOptions.alpha = 1.0;
-        }];
+
     return self.arrayShots.count;
 
 }
@@ -348,14 +364,11 @@
          
          if (self.lastContentOffset > scrollView.contentOffset.y){
              [UIView animateWithDuration:0.25 animations:^{
-             
-             self.viewOptions.alpha = 1.0;
-             self.viewTextField.alpha = 1.0;
+                 self.viewTextField.alpha = 1.0;
              }];
          
          }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
              [UIView animateWithDuration:0.2 animations:^{
-                 self.viewOptions.alpha = 0.0;
                  self.viewTextField.alpha = 0.0;
              
              }];
@@ -384,10 +397,6 @@
    
     [self.timelineTableView addSubview:self.backgroundView];
     self.timelineTableView.scrollEnabled = NO;
-    
-    [UIView animateWithDuration:0.25f animations:^{
-        self.viewOptions.alpha = 0.0;
-    }];
 
     isVisible = YES;
 
@@ -408,11 +417,7 @@
 -(void)keyboardHide:(NSNotification*)notification{
     
     [self.backgroundView removeFromSuperview];
-    
-    [UIView animateWithDuration:0.25f animations:^{
-        self.viewOptions.alpha = 1.0;
-    }];
-    
+
     [self.timelineTableView setScrollsToTop:YES];
     self.timelineTableView.scrollEnabled = YES;
 
