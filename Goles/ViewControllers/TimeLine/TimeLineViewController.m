@@ -19,7 +19,7 @@
 #import "Fav24Colors.h"
 #import "AppDelegate.h"
 #import "Constants.h"
-
+#import "ProfileViewController.h"
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -241,6 +241,7 @@
    
     Shot *shot = self.arrayShots[indexPath.row];
     [cell configureBasicCellWithShot:shot];
+    [cell addTarget:self action:@selector(goProfile)];
     
     return cell;
  }
@@ -260,6 +261,15 @@
         // [[self timelineTableView]reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
+#pragma mark - Pass ViewController
+//------------------------------------------------------------------------------
+-(void)goProfile{
+    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    
+    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
 
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------

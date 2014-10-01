@@ -18,5 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 
 - (void)configureBasicCellWithShot:(Shot *)shot;
+- (void)addTarget:(id)target action:(SEL)action;
 
 @end

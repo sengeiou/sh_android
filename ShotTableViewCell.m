@@ -40,7 +40,12 @@
     self.lblName.text = shot.user.name;
     [self.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
     self.lblDate.text = [Utils getDateShot:shot.csys_birth];
+    
+}
 
+- (void)addTarget:(id)target action:(SEL)action
+{
+    [self.btnPhoto addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
