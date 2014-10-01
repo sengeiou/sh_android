@@ -34,6 +34,7 @@ public class ShotManager {
         } else {
             res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
+        insertShotInTableSync(db, shot.getCsys_modified());
     }
 
     public static List<Shot> retrieveOldOrNewTimeLineWithUsers(SQLiteDatabase db, List<Shot> shots) {
