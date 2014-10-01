@@ -125,17 +125,16 @@
         <attribute name="updatePriority" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="clubName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idTeam" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="isNationalTeam" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="nameShort" attributeType="String" syncable="YES"/>
-        <attribute name="order" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="urlImage" optional="YES" attributeType="String" defaultValueString="DefaultTeamShield.png" syncable="YES"/>
+        <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tlaName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
         <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
     </entity>
@@ -170,7 +169,7 @@
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="180"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
-        <element name="Team" positionX="169" positionY="77" width="128" height="240"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="225"/>
         <element name="User" positionX="-425" positionY="324" width="128" height="345"/>
     </elements>
 </model>

@@ -151,7 +151,10 @@ extern NSString *const kJSON_FOLLOW_IDUSERFOLLOWED;
 
 // TEAM
 extern NSString * const kJSON_TEAM_IDTEAM;
-extern NSString * const kJSON_TEAM_NAMESHORT;
+extern NSString * const kJSON_CLUB_NAME;
+extern NSString * const kJSON_OFICIAL_NAME;
+extern NSString * const kJSON_SHORT_NAME;
+extern NSString * const kJSON_TLA_NAME;
 
 // MATCH
 extern NSString * const kJSON_MATCHLIST;

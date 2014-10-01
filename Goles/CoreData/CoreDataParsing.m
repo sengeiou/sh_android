@@ -181,7 +181,11 @@ NSString *const kJSON_DATE_START                       = @"startDate";
 
 // TEAM
 NSString * const kJSON_TEAM_IDTEAM                      =@"idTeam";
-NSString * const kJSON_TEAM_NAMESHORT                   =@"nameShort";
+NSString * const kJSON_CLUB_NAME                        =@"clubName";
+NSString * const kJSON_OFICIAL_NAME                     =@"oficialName";
+NSString * const kJSON_SHORT_NAME                       =@"shortName";
+NSString * const kJSON_TLA_NAME                         =@"tlaName";
+
 
 //MESSAGE
 NSString *const kJSON_ID_MESSAGE                        = @"idMessage";

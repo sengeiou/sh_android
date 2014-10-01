@@ -4,17 +4,16 @@
 #import "_Team.h"
 
 const struct TeamAttributes TeamAttributes = {
+	.clubName = @"clubName",
 	.csys_birth = @"csys_birth",
 	.csys_deleted = @"csys_deleted",
 	.csys_modified = @"csys_modified",
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
 	.idTeam = @"idTeam",
-	.isNationalTeam = @"isNationalTeam",
-	.name = @"name",
-	.nameShort = @"nameShort",
-	.order = @"order",
-	.urlImage = @"urlImage",
+	.officialName = @"officialName",
+	.shortName = @"shortName",
+	.tlaName = @"tlaName",
 };
 
 const struct TeamRelationships TeamRelationships = {
@@ -76,19 +75,16 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"isNationalTeamValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"isNationalTeam"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
-	if ([key isEqualToString:@"orderValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"order"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic clubName;
+
+
 
 
 
@@ -230,73 +226,21 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 
 
 
-@dynamic isNationalTeam;
-
-
-
-- (BOOL)isNationalTeamValue {
-	NSNumber *result = [self isNationalTeam];
-	return [result boolValue];
-}
-
-- (void)setIsNationalTeamValue:(BOOL)value_ {
-	[self setIsNationalTeam:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveIsNationalTeamValue {
-	NSNumber *result = [self primitiveIsNationalTeam];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveIsNationalTeamValue:(BOOL)value_ {
-	[self setPrimitiveIsNationalTeam:[NSNumber numberWithBool:value_]];
-}
-
-
-
-
-
-@dynamic name;
+@dynamic officialName;
 
 
 
 
 
 
-@dynamic nameShort;
+@dynamic shortName;
 
 
 
 
 
 
-@dynamic order;
-
-
-
-- (int64_t)orderValue {
-	NSNumber *result = [self order];
-	return [result longLongValue];
-}
-
-- (void)setOrderValue:(int64_t)value_ {
-	[self setOrder:[NSNumber numberWithLongLong:value_]];
-}
-
-- (int64_t)primitiveOrderValue {
-	NSNumber *result = [self primitiveOrder];
-	return [result longLongValue];
-}
-
-- (void)setPrimitiveOrderValue:(int64_t)value_ {
-	[self setPrimitiveOrder:[NSNumber numberWithLongLong:value_]];
-}
-
-
-
-
-
-@dynamic urlImage;
+@dynamic tlaName;
 
 
 

@@ -30,17 +30,11 @@
 +(Team *)insertWithDictionary:(NSDictionary *)dict andIndex:(NSInteger)index{
     
     Team *team = [self insertWithDictionary:dict];
-    if ( team )        [team setOrderValue:index];
     return team;
 }
 
 //------------------------------------------------------------------------------
 +(Team *)updateWithDictionary:(NSDictionary *)dict {
-    return [self updateWithDictionary:dict withIndex:-1];
-}
-
-//------------------------------------------------------------------------------
-+(Team *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index{
     
     NSNumber *idTeam = [dict objectForKey:kJSON_TEAM_IDTEAM];
     
@@ -57,36 +51,11 @@
                 team = [Team insertWithDictionary:dict];      // insert new entity
         }
         
-//        if ( index > -1 )       [team setOrderValue:index];
-
         return team;
     }
     return nil;
 }
 
-#pragma mark - public methods
-
-//------------------------------------------------------------------------------
-+(Team *)createTemporaryTeam {
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:[[CoreDataManager singleton] getContext]];
-    Team *team = [[Team alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-    return team;
-}
-
-//------------------------------------------------------------------------------
-+(Team *)createTemporaryTeamWithTeam:(Team *)team {
-    
-    Team *newTeam = [self createTemporaryTeam];
-    
-    [newTeam setIdTeam:[team idTeam]];
-    [newTeam setIsNationalTeam:[team isNationalTeam]];
-    [newTeam setName:[team name]];
-    [newTeam setNameShort:[team nameShort]];
-    [newTeam setOrder:[team order]];
-    [newTeam setUrlImage:[team urlImage]];
-
-    return newTeam;
-}
 
 #pragma mark - private methods
 //------------------------------------------------------------------------------
@@ -100,16 +69,23 @@
     else
         return NO;
   
-    NSString *nameShort = [dict objectForKey:kJSON_TEAM_NAMESHORT];
-    NSString *name = [dict objectForKey:K_CD_NAME];
+    NSString *nameShort = [dict objectForKey:kJSON_SHORT_NAME];
+    if ( [nameShort isKindOfClass:[NSString class]] )
+        [self setShortName:nameShort];
     
-    if ( [nameShort isKindOfClass:[NSString class]] ){
-        [self setNameShort:nameShort];
-        if ( [name isKindOfClass:[NSString class]] )
-            [self setName:name];
-        else if ( ![self name] )
-            [self setName:nameShort];
-    }
+    NSString *clubName = [dict objectForKey:kJSON_CLUB_NAME];
+    if ( [clubName isKindOfClass:[NSString class]] )
+            [self setClubName:clubName];
+    
+    NSString *officialName = [dict objectForKey:kJSON_OFICIAL_NAME];
+    if ( [officialName isKindOfClass:[NSString class]] )
+        [self setOfficialName:officialName];
+    
+    NSString *tlaName = [dict objectForKey:kJSON_TLA_NAME];
+    if ( [tlaName isKindOfClass:[NSString class]] )
+        [self setTlaName:tlaName];
+
+    
 
     //SYNCRO  PROPERTIES
     

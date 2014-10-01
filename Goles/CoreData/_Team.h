@@ -5,17 +5,16 @@
 
 
 extern const struct TeamAttributes {
+	__unsafe_unretained NSString *clubName;
 	__unsafe_unretained NSString *csys_birth;
 	__unsafe_unretained NSString *csys_deleted;
 	__unsafe_unretained NSString *csys_modified;
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
 	__unsafe_unretained NSString *idTeam;
-	__unsafe_unretained NSString *isNationalTeam;
-	__unsafe_unretained NSString *name;
-	__unsafe_unretained NSString *nameShort;
-	__unsafe_unretained NSString *order;
-	__unsafe_unretained NSString *urlImage;
+	__unsafe_unretained NSString *officialName;
+	__unsafe_unretained NSString *shortName;
+	__unsafe_unretained NSString *tlaName;
 } TeamAttributes;
 
 extern const struct TeamRelationships {
@@ -40,7 +39,6 @@ extern const struct TeamFetchedProperties {
 
 
 
-
 @interface TeamID : NSManagedObjectID {}
 @end
 
@@ -49,6 +47,16 @@ extern const struct TeamFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (TeamID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSString* clubName;
+
+
+
+//- (BOOL)validateClubName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -134,59 +142,31 @@ extern const struct TeamFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* isNationalTeam;
+@property (nonatomic, strong) NSString* officialName;
 
 
 
-@property BOOL isNationalTeamValue;
-- (BOOL)isNationalTeamValue;
-- (void)setIsNationalTeamValue:(BOOL)value_;
-
-//- (BOOL)validateIsNationalTeam:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateOfficialName:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSString* name;
+@property (nonatomic, strong) NSString* shortName;
 
 
 
-//- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* nameShort;
-
-
-
-//- (BOOL)validateNameShort:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateShortName:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSNumber* order;
+@property (nonatomic, strong) NSString* tlaName;
 
 
 
-@property int64_t orderValue;
-- (int64_t)orderValue;
-- (void)setOrderValue:(int64_t)value_;
-
-//- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* urlImage;
-
-
-
-//- (BOOL)validateUrlImage:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateTlaName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -224,6 +204,12 @@ extern const struct TeamFetchedProperties {
 @end
 
 @interface _Team (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSString*)primitiveClubName;
+- (void)setPrimitiveClubName:(NSString*)value;
+
+
 
 
 - (NSNumber*)primitiveCsys_birth;
@@ -277,38 +263,20 @@ extern const struct TeamFetchedProperties {
 
 
 
-- (NSNumber*)primitiveIsNationalTeam;
-- (void)setPrimitiveIsNationalTeam:(NSNumber*)value;
-
-- (BOOL)primitiveIsNationalTeamValue;
-- (void)setPrimitiveIsNationalTeamValue:(BOOL)value_;
+- (NSString*)primitiveOfficialName;
+- (void)setPrimitiveOfficialName:(NSString*)value;
 
 
 
 
-- (NSString*)primitiveName;
-- (void)setPrimitiveName:(NSString*)value;
+- (NSString*)primitiveShortName;
+- (void)setPrimitiveShortName:(NSString*)value;
 
 
 
 
-- (NSString*)primitiveNameShort;
-- (void)setPrimitiveNameShort:(NSString*)value;
-
-
-
-
-- (NSNumber*)primitiveOrder;
-- (void)setPrimitiveOrder:(NSNumber*)value;
-
-- (int64_t)primitiveOrderValue;
-- (void)setPrimitiveOrderValue:(int64_t)value_;
-
-
-
-
-- (NSString*)primitiveUrlImage;
-- (void)setPrimitiveUrlImage:(NSString*)value;
+- (NSString*)primitiveTlaName;
+- (void)setPrimitiveTlaName:(NSString*)value;
 
 
 

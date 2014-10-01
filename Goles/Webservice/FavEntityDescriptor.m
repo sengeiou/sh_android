@@ -45,8 +45,11 @@
                  K_WS_OPS_UPDATE_DATE:[NSNull null],
                  K_WS_OPS_DELETE_DATE:[NSNull null],
                  K_CD_NAME:[NSNull null],
-                 kJSON_TEAM_NAMESHORT:[NSNull null],
-                 kJSON_TEAM_IDTEAM:[NSNull null]};
+                 kJSON_TEAM_IDTEAM:[NSNull null],
+                 kJSON_CLUB_NAME:[NSNull null],
+                 kJSON_OFICIAL_NAME:[NSNull null],
+                 kJSON_SHORT_NAME:[NSNull null],
+                 kJSON_TLA_NAME:[NSNull null]};
     }
     else if ([entityClass isSubclassOfClass:[SML class]]) {
         

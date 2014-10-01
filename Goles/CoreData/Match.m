@@ -28,29 +28,7 @@
 }
 
 //------------------------------------------------------------------------------
-+(Match *)createTemporaryMatch {
-    
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Match" inManagedObjectContext:[[CoreDataManager singleton] getContext]];
-    Match *match = [[Match alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-    return match;
-}
-
-//------------------------------------------------------------------------------
-+(Match *)createTemporaryMatchFromMatch:(Match *)match {
-    
-    Match *newMatch = [self createTemporaryMatch];
-    [newMatch copyFromMatch:match];
-
-    return newMatch;
-}
-
-//------------------------------------------------------------------------------
-+(Match *)updateWithDictionary:(NSDictionary *)dict {
-    return [self updateWithDictionary:dict withIndex:-1];
-}
-
-//------------------------------------------------------------------------------
-+(Match *)updateWithDictionary:(NSDictionary *)dict withIndex:(NSInteger)index{
++(Match *)updateWithDictionary:(NSDictionary *)dict{
     
     NSNumber *idMatch = [dict objectForKey:kJSON_ID_MATCH];
     
@@ -58,61 +36,10 @@
         Match *match = [[CoreDataManager singleton] getEntity:[Match class] withId:[idMatch integerValue]];
         if ( match )    [match setMatchValuesWithDictionary:dict];      // Update entity
         else            match = [self insertWithDictionary:dict];       // insert new entity    
-        [match setOrderValue:index];
         return match;
     }
     return nil;
 }
-
-//------------------------------------------------------------------------------
--(void)copyFromMatch:(Match *)match{
-    
-    [self setIdMatch:[match idMatch]];
-    
-    [self setLocalScore:[match localScore]];
-    [self setVisitorScore:[match visitorScore]];
-    
-    [self setMatchDate:[match matchDate]];
-    [self setElapsedMinutes:[match elapsedMinutes]];
-    [self setMatchState:[match matchState]];
-    [self setOrder:[match matchState]];
-    
-    [self setTeamLocal:[Team createTemporaryTeamWithTeam:match.teamLocal]];
-    [self setTeamVisitor:[Team createTemporaryTeamWithTeam:match.teamVisitor]];
-}
-
-#pragma marck - Public Methods
-//------------------------------------------------------------------------------
-+ (NSArray *)changeMatchesFormatToParse:(NSArray *)matchesToChange {
-  
-    NSMutableArray *finalMacthes = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary *match in matchesToChange) {
-        NSMutableDictionary *mutMatch = [match mutableCopy];
-        
-        NSNumber *localScore = [match objectForKey:kJSON_LOCAL_MATCH_SCORE];
-        if ( [localScore isKindOfClass:[NSNumber class]] )
-            [mutMatch setObject:localScore forKey:kJSON_SCORE_LOCAL];
-
-        NSNumber *visitorScore = [match objectForKey:kJSON_VISITOR_MATCH_SCORE];
-        if ( [visitorScore isKindOfClass:[NSNumber class]] )
-            [mutMatch setObject:visitorScore forKey:kJSON_SCORE_VISITOR];
-        
-        NSDictionary *localTeamDict = @{kJSON_TEAM_IDTEAM:[match objectForKey:@"idTeamLocal"],
-                                        kJSON_TEAM_NAMESHORT:[match objectForKey:@"localName"]};
-        
-        NSDictionary *visitorTeamDict = @{kJSON_TEAM_IDTEAM:[match objectForKey:@"idTeamVisitor"],
-                                          kJSON_TEAM_NAMESHORT:[match objectForKey:@"visitorName"]};
-        
-        [mutMatch addEntriesFromDictionary:@{@"matchDate":[match objectForKey:@"dateMatch"],
-                                             @"localTeamData":localTeamDict,
-                                             @"visitorTeamData":visitorTeamDict}];
-        
-        if (mutMatch)            [finalMacthes addObject:mutMatch];
-    }
-    return finalMacthes;
-}
-
 
 #pragma mark - Private Methods
 //------------------------------------------------------------------------------
@@ -129,7 +56,6 @@
     
     if ( [idMatch isKindOfClass:[NSNumber class]] &&
         [matchState isKindOfClass:[NSNumber class]] &&
-        [matchState intValue]>=kCoreDataMatchStateNotStarted && [matchState intValue]<=kCoreDataMatchStateFinished &&
         [idLocal isKindOfClass:[NSNumber class]] &&
         [idVisitor isKindOfClass:[NSNumber class]])
     {

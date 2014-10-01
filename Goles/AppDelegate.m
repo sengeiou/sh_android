@@ -283,7 +283,6 @@
                 NSInteger idMatch = [[zItems objectAtIndex:1] integerValue];
                 Match *pushMatch = [[CoreDataManager singleton] getEntity:[Match class] withId:idMatch];
                 if ( !pushMatch ){
-                    pushMatch = [Match createTemporaryMatch];
                     [pushMatch setIdMatchValue:idMatch];
                 }
 //                UINavigationController *nav = (UINavigationController *)self.tabBarController.selectedViewController;
