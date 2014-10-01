@@ -152,6 +152,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="btnPhoto" destination="LKJ-5Q-sCn" id="6Lf-Jl-F6P"/>
                                             <outlet property="imgPhoto" destination="ekn-Ro-Da9" id="eON-3w-oTu"/>
                                             <outlet property="lblDate" destination="2YE-xU-tH9" id="Hao-Xc-pk9"/>
                                             <outlet property="lblName" destination="XXk-Q8-LaK" id="mdU-Z5-YZZ"/>
