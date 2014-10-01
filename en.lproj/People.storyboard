@@ -237,6 +237,21 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="btnFollow" destination="OhP-mS-B4a" id="kJq-aQ-3w8"/>
+                        <outlet property="btnFollowers" destination="gbp-Fy-6o1" id="XbN-MV-hs2"/>
+                        <outlet property="btnFollowing" destination="mJK-z6-uXA" id="bxQ-bw-bAL"/>
+                        <outlet property="btnPoints" destination="Z0P-tN-fCY" id="ruL-dF-eac"/>
+                        <outlet property="imgPhoto" destination="TtO-05-4Rm" id="lxh-7f-jfY"/>
+                        <outlet property="lblFollowers" destination="C0l-iy-4qb" id="5Hr-d8-ysL"/>
+                        <outlet property="lblFollowing" destination="ajv-sv-kI8" id="CJx-Uz-zQw"/>
+                        <outlet property="lblName" destination="uad-8c-7oq" id="YWC-ZD-OHo"/>
+                        <outlet property="lblPoints" destination="y5p-tT-Y7j" id="NFN-rh-vVk"/>
+                        <outlet property="lblRank" destination="YMG-1h-rqk" id="ga4-Bh-9HI"/>
+                        <outlet property="lblTeamBio" destination="aQ4-I0-Ay4" id="cRv-g1-4BS"/>
+                        <outlet property="segmentedControl" destination="yAO-9V-L0h" id="vGD-xg-R5n"/>
+                        <outlet property="txtViewWebSite" destination="tWK-Y7-RNK" id="YT0-GG-SuO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dd5-14-dki" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

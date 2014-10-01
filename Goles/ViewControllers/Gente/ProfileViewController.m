@@ -10,6 +10,20 @@
 
 @interface ProfileViewController ()
 
+@property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
+@property (weak, nonatomic) IBOutlet UIButton *btnPoints;
+@property (weak, nonatomic) IBOutlet UILabel *lblPoints;
+@property (weak, nonatomic) IBOutlet UIButton *btnFollowing;
+@property (weak, nonatomic) IBOutlet UILabel *lblFollowing;
+@property (weak, nonatomic) IBOutlet UIButton *btnFollowers;
+@property (weak, nonatomic) IBOutlet UILabel *lblFollowers;
+@property (weak, nonatomic) IBOutlet UIButton *btnFollow;
+@property (weak, nonatomic) IBOutlet UILabel *lblName;
+@property (weak, nonatomic) IBOutlet UILabel *lblRank;
+@property (weak, nonatomic) IBOutlet UILabel *lblTeamBio;
+@property (weak, nonatomic) IBOutlet UITextView *txtViewWebSite;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+
 @end
 
 @implementation ProfileViewController
