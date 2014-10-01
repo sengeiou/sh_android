@@ -134,7 +134,12 @@ public class GMContract {
                 OFFICIAL_NAME,
                 CLUB_NAME,
                 SHORT_NAME,
-                TLA_NAME
+                TLA_NAME,
+                CSYS_BIRTH,
+                CSYS_MODIFIED,
+                CSYS_DELETED,
+                CSYS_REVISION,
+                CSYS_SYNCHRONIZED
         };
     }
 
