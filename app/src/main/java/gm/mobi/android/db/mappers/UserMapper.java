@@ -76,6 +76,25 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
+    public static ContentValues userToContentValues(User u, User currentUser){
+        ContentValues cv = new ContentValues();
+        cv.put(UserTable.ID, u.getIdUser());
+        cv.put(UserTable.FAVOURITE_TEAM_ID, u.getFavouriteTeamId());
+        cv.put(UserTable.SESSION_TOKEN, currentUser.getFavouriteTeamId());
+        cv.put(UserTable.USER_NAME, u.getUserName());
+        cv.put(UserTable.EMAIL, currentUser.getEmail());
+        cv.put(UserTable.NAME, u.getName());
+        cv.put(UserTable.PHOTO, u.getPhoto());
+        cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
+        cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
+        cv.put(UserTable.POINTS, u.getPoints());
+        cv.put(UserTable.RANK, u.getRank());
+        cv.put(UserTable.BIO, u.getBio());
+        cv.put(UserTable.WEBSITE, u.getWebsite());
+        setSynchronizedToContentValues(cv, u);
+        return cv;
+    }
+
     public static Map<String, Object> reqRestUsersToDto(User user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
