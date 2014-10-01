@@ -62,12 +62,12 @@ public class UserManager {
         if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
             res = deleteUser(db, user);
         } else {
-
-            if(getCurrentUser(db) != null && getCurrentUser(db).equals(user)){
-                Timber.e("Usuario propio, sólo hace update");
+            User currentUser = getUserByIdUser(db,user.getIdUser());
+            if(currentUser != null){
+                Timber.e("Sólo hace update porque ya existe");
                 res = db.update(UserTable.TABLE,contentValues,null,null);
             }else{
-                Timber.e("Reemplaza el usuario");
+                Timber.e("Inserta el usuario porque no existe");
                 res = db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
