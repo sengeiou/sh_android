@@ -58,7 +58,9 @@
     self.btnShoot.enabled = NO;
     self.txtField.delegate = self;
     
-   // [self setTimer];
+    //For Alpha version
+    self.viewOptions.hidden = YES;
+    
     
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
@@ -179,26 +181,28 @@
 //------------------------------------------------------------------------------
 - (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
 
-    [UIView animateWithDuration:0.25 animations:^{
-        self.viewOptions.alpha = 0.0;
-    }];
+    //For Beta version only in iphone 4
+//    [UIView animateWithDuration:0.25 animations:^{
+//        self.viewOptions.alpha = 0.0;
+//    }];
     [[Conection sharedInstance]getServerTimewithDelegate:self];
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return self.viewOptions.frame.size.height;
-}
-
-//------------------------------------------------------------------------------
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    
-    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewOptions.frame.size.height)];
-    header.backgroundColor = [UIColor clearColor];
-
-    return header;
-}
+//
+////------------------------------------------------------------------------------
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+//    return self.viewOptions.frame.size.height;
+//}
+//
+////------------------------------------------------------------------------------
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    
+//    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewOptions.frame.size.height)];
+//    header.backgroundColor = [UIColor clearColor];
+//
+//    return header;
+//}
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -324,15 +328,15 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-   
-    CGFloat currentOffset = scrollView.contentOffset.y;
-    
-   if (currentOffset == 0)
-        [UIView animateWithDuration:0.25 animations:^{
-            
-            self.viewOptions.alpha = 1.0;
-            self.viewTextField.alpha = 1.0;
-        }];
+    // For Beta version and only iphone 4
+
+//    CGFloat currentOffset = scrollView.contentOffset.y;
+//    
+//   if (currentOffset == 0)
+//        [UIView animateWithDuration:0.25 animations:^{
+//            self.viewOptions.alpha = 1.0;
+//            self.viewTextField.alpha = 1.0;
+//        }];
 }
 
 //------------------------------------------------------------------------------
@@ -343,11 +347,12 @@
     CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
    
     if (currentOffset < 0)
-        
-        [UIView animateWithDuration:0.2 animations:^{
-            self.viewOptions.alpha = 0.0;
-            self.viewTextField.alpha = 0.0;
-        }];
+        NSLog(@"");
+        // For Beta version and only iphone 4
+//        [UIView animateWithDuration:0.2 animations:^{
+//            self.viewOptions.alpha = 0.0;
+//            self.viewTextField.alpha = 0.0; // For Beta version and only iphone 4
+//        }];
     else{
        /* __block BOOL finish = NO;
         
@@ -361,18 +366,18 @@
         if (maximumOffset - currentOffset <= 200.0)
             [self addLoadMoreCell];
          
-         
-         if (self.lastContentOffset > scrollView.contentOffset.y){
-             [UIView animateWithDuration:0.25 animations:^{
-                 self.viewTextField.alpha = 1.0;
-             }];
-         
-         }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
-             [UIView animateWithDuration:0.2 animations:^{
-                 self.viewTextField.alpha = 0.0;
-             
-             }];
-         }
+// For Beta version and only iphone 4
+//         if (self.lastContentOffset > scrollView.contentOffset.y){
+//             [UIView animateWithDuration:0.25 animations:^{
+//                 self.viewTextField.alpha = 1.0;
+//             }];
+//         
+//         }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
+//             [UIView animateWithDuration:0.2 animations:^{
+//                 self.viewTextField.alpha = 0.0;
+//             
+//             }];
+//         }
     }
     
      self.lastContentOffset = scrollView.contentOffset.y;
