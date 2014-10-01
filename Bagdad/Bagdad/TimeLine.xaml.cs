@@ -103,13 +103,6 @@ namespace Bagdad
             appBarButtonWatching.Click += appBarWatchingButton_Click;
             ApplicationBar.Buttons.Add(appBarButtonWatching);
 
-            ApplicationBarIconButton appBarButtonRefresh =
-                new ApplicationBarIconButton(new
-                Uri("/Resources/icons/appbar.refresh.png", UriKind.Relative));
-            appBarButtonRefresh.Text = AppResources.Refresh;
-            appBarButtonRefresh.Click += appBarRefreshButton_Click;
-            ApplicationBar.Buttons.Add(appBarButtonRefresh);
-
             ApplicationBarIconButton appBarButtonSearch =
                 new ApplicationBarIconButton(new
                 Uri("/Resources/icons/appbar.magnify.png", UriKind.Relative));
@@ -175,13 +168,6 @@ namespace Bagdad
         }
 
         #region GESTURE EVENTS
-
-        private void appBarRefreshButton_Click(object sender, EventArgs e)
-        {
-            progress.IsVisible = true;
-            SynchronizeShots();
-            endOfList = false;
-        }
 
         private void appBarWatchingButton_Click(object sender, EventArgs e)
         {
