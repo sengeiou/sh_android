@@ -20,11 +20,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.dr;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import java.util.List;
 
@@ -92,10 +94,29 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         };
     }
 
+    public void pollingShots(final Activity a){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true){
+                    try{
+                        Thread.sleep(10000);
+                        User currentUser = GolesApplication.get(a).getCurrentUser();
+                        jobManager.addJobInBackground(new TimelineJob(a, currentUser, TimelineJob.RETRIEVE_NEWER));
+                    }catch(InterruptedException e){
+                        Timber.e("InterruptedException with message", e.getMessage());
+                    }
+                }
+
+            }
+        }).start();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         bus.register(this);
+        pollingShots(activity);
     }
 
     @Override
