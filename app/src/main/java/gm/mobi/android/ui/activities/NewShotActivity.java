@@ -1,6 +1,7 @@
 package gm.mobi.android.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
@@ -85,6 +86,13 @@ public class NewShotActivity extends BaseSignedInActivity {
 //        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
 //        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
 //        sendButton.setCompoundDrawables(null, null, icon, null);
+
+        setTextReceivedFromIntent();
+    }
+
+    private void setTextReceivedFromIntent() {
+        String sentText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        text.setText(sentText);
     }
 
     @OnTextChanged(R.id.new_shot_text)
