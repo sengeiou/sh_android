@@ -123,15 +123,27 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAM_BY_ID,  od);
     }
 
-    public GenericDto getTeamsByTeamIds(Set<Long> teamIds){
-        OperationDto od = new OperationDto();
-        FilterDto filter = getTeamsByIdTeams(teamIds);
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.TeamTable.TABLE, true,null,0L,1000L,filter);
-        od.setMetadata(md);
-        Map<String,Object>[] array = new HashMap[1];
-        array[0] = TeamMapper.toDto(null);
-        od.setData(array);
-        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS,od);
+    public GenericDto getTeamsByTeamIds(Set<Long> teamIds) {
+
+        FilterDto filter = and(
+            or(GMContract.TeamTable.ID_TEAM).isIn(teamIds),
+            orModifiedOrDeletedAfter(0L)
+        ).build();
+
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+            .entity(GMContract.TeamTable.TABLE)
+            .includeDeleted(false)
+            .totalItems(null)
+            .items((long) teamIds.size())
+            .filter(filter)
+            .build();
+
+        OperationDto od = new OperationDto.Builder()
+            .metadata(md)
+            .putData(TeamMapper.toDto(null))
+            .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS, od);
     }
 
     public GenericDto getUsersOperationDto(List<Long> userIds, Long offset, Long date) {
@@ -146,13 +158,6 @@ public class UserDtoFactory {
         od.setData(array);
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
-    }
-
-    public FilterDto getTeamsByIdTeams(Set<Long> teamIds){
-        return and(
-                or(GMContract.TeamTable.ID_TEAM).isIn(teamIds),
-                orModifiedOrDeletedAfter(0L)
-        ).build();
     }
 
     public FilterDto getFollowsByIdUserAndRelationship(Long userId, int relationship, Date lastModifiedDate) {

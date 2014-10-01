@@ -71,6 +71,7 @@ public class GetUserInfoJob extends Job {
         try {
             User consultedUserFromService = service.getUserByIdUser(userId);
             //TODO retrieve follows relations also
+            //TODO retrieve team
             //Store user in db
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             UserManager.saveUser(db, consultedUserFromService);

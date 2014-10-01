@@ -147,34 +147,12 @@ public class GetFollowingsJob extends CancellableJob{
 
     }
 
-    private Team getTeamByIdTeam(Long idTeam){
-        Team resTeam = null;
-        try{
-            resTeam= service.getTeamByIdTeam(idTeam);
-        }catch(ServerException e){
-            if (e.getErrorCode().equals(ServerException.G025)) {
-                sendCredentialError();
-            } else {
-                sendServerError(e);
-            }
-        } catch (IOException e) {
-            sendServerError(e);
-        }
-        return  resTeam;
-    }
-
     private List<Team> getTeamsByTeamIds(Set<Long> teamIds){
         List<Team> resTeams = null;
         Long modifiedTeams = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.TeamTable.TABLE);
         try{
             resTeams= service.getTeamsByIdTeams(teamIds, modifiedTeams);
-        }catch(ServerException e){
-            if (e.getErrorCode().equals(ServerException.G025)) {
-                sendCredentialError();
-            } else {
-                sendServerError(e);
-            }
-        } catch (IOException e) {
+        }catch(IOException e){
             sendServerError(e);
         }
         return  resTeams;
