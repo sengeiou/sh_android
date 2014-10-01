@@ -249,13 +249,7 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-            if (adapter != null) {
-                Shot latestShot = adapter.getItem(0);
-                //TODO stop job from being launched again and again. Cancell current or restrict
-                jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER, latestShot));
-            } else {
-                jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER, null));
-            }
+            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
         }
     }
 
@@ -266,13 +260,13 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER, oldestShot));
+            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER));
         }
     }
 
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
-        jobManager.addJobInBackground(new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL, null));
+        jobManager.addJobInBackground(new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL));
         swipeRefreshLayout.setRefreshing(true);
     }
 
