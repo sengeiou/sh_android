@@ -110,7 +110,7 @@ public class ProfileFragment extends BaseFragment {
         nameTextView.setText(user.getName());
         bioTextView.setText(user.getBio());
         websiteTextView.setText(user.getWebsite());
-        rankTextView.setVisibility(View.GONE);//TODO
+        rankTextView.setText(getString(R.string.profile_rank_format, String.valueOf(user.getRank())));
         picasso.load(user.getPhoto()).into(avatarImageView);
 
         pointsTextView.setText(String.valueOf(user.getPoints()));

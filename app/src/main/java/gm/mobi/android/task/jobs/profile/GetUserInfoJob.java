@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 public class GetUserInfoJob extends Job {
 
-    private static final int PRIORITY = 8; //TODO definir valores estáticos para determinados casos
+    private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
 
     @Inject SQLiteOpenHelper dbHelper;
@@ -76,6 +76,10 @@ public class GetUserInfoJob extends Job {
 
     @Override protected void onCancel() {
 
+    }
+
+    @Override protected int getRetryLimit() {
+        return RETRY_ATTEMPTS;
     }
 
     @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
