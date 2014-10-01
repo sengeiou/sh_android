@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#ce5043</color>
-    <color name="primary_dark">#ffb0120a</color>
+    <color name="primary">#f4842d</color>
+    <color name="primary_dark">#bf360c</color>
     <color name="primary_disabled">#ffe6a4a1</color>
-    <color name="primary_red">#ce5043</color>
-    <color name="primary_red_dark">#ffb0120a</color>
-    <color name="accent">#ce5043</color>
+    <color name="accent">#f4842d</color>
     <color name="links">#478ceb</color>
     <color name="facebook">#4c66a4</color>
     <color name="transparent">#00ffffff</color>
@@ -32,8 +30,16 @@
     <color name="refresh_3">#e51c23</color>
     <color name="refresh_4">#f69988</color>
 
+    <!-- Drawer -->
+    <color name="drawer_background">#ffffff</color>
+    <color name="drawer_indicator">#f4842d</color>
+    <color name="drawer_text">#ff727272</color>
+    <color name="drawer_text_category">#9D9D9D</color>
+
+
     <color name="new_shot_bottom">#09000000</color>
 
     <color name="error">#ffcc0000</color>
+
 
 </resources>

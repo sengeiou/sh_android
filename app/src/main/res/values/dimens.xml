@@ -13,4 +13,10 @@
     <!-- Profile -->
     <dimen name="profile_avatar_size">84dp</dimen>
     <dimen name="follow_button_radius">2dp</dimen>
+
+    <!-- Drawer -->
+    <dimen name="drawer_indicator_width">6dp</dimen>
+    <dimen name="drawer_width">260dp</dimen>
+    <dimen name="drawer_avatar_size">120dp</dimen>
+
 </resources>

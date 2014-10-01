@@ -15,6 +15,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ import static android.content.Context.MODE_PRIVATE;
                 GetUserInfoJob.class,
                 TimelineFragment.class,
                 ProfileFragment.class,
-                InitialSetupFragment.class,
+                InitialSetupFragment.class, DummyFragment.class,
                 GMSyncAdapter.class
 
         },

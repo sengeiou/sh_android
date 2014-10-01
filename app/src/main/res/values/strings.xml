@@ -66,7 +66,7 @@
     <string name="communication_error">Communication error</string>
 
     <!-- Watching status texts -->
-    <string name="watching_text_me_and_more">%d people watching</string>
+    <string name="watching_text_me_and_more">Sevilla-Lopera</string>
 
     <!--TimeUtils-->
     <string name="plural_days">days</string>
@@ -76,5 +76,7 @@
     <string name="hours">h</string>
     <string name="days">d</string>
     <string name="now">now</string>
+    <string name="drawer_open">Open menu</string>
+    <string name="drawer_close">Close menu</string>
 
 </resources>
