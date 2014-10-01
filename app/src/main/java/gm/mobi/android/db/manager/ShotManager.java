@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -133,6 +134,7 @@ public class ShotManager {
      */
     public static void saveShots(SQLiteDatabase db, List<Shot> shotList) {
         long res;
+        Collections.reverse(shotList);
         for (Shot shot : shotList) {
             ContentValues contentValues = ShotMapper.toContentValues(shot);
             if (contentValues.getAsLong(ShotTable.CSYS_DELETED) != null) {
