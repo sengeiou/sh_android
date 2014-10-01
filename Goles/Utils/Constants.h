@@ -19,8 +19,10 @@
 
 #define IS_GENERATING_DEFAULT_DATABASE      NO
 
-//Synchronization switchr
+
+//Synchronization switch
 #define SYNCHRO_ACTIVATED      YES
+
 
 //Syncro time process in seconds
 #define SYNCHRO_TIMER   10

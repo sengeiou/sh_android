@@ -23,7 +23,6 @@
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
-    BOOL isVisible;
     BOOL moreCells;
     BOOL refreshTable;
 }
@@ -58,7 +57,6 @@
     
     lengthTextField = 0;
    
-    
     [self initSpinner];
     
     self.arrayShots = [[NSArray alloc]init];
@@ -116,8 +114,9 @@
 //------------------------------------------------------------------------------
 - (void)setTextViewForShotCreation {
 
-    self.viewTextField.clipsToBounds = YES;
-    self.viewTextField.layer.cornerRadius = 14.0f;
+    self.txtField.clipsToBounds = YES;
+    self.txtField.layer.cornerRadius = 8.0f;
+
 }
 
 //------------------------------------------------------------------------------
@@ -211,11 +210,6 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (isVisible)
-        [UIView animateWithDuration:0.25 animations:^{
-            self.viewOptions.alpha = 1.0;
-        }];
     
     return self.arrayShots.count;
 }
@@ -317,7 +311,7 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
 
-    if (self.txtField.text.length >= 1) {
+    if (self.txtField.text.length >= 1 && ![self.txtField.text isEqualToString:@"What's Up?"]) {
         
         if ([[Conection sharedInstance] isConection]) {
             
@@ -336,6 +330,8 @@
     }
 }
 
+#pragma mark - Reload methods
+//------------------------------------------------------------------------------
 -(void)reloadData{
     [self.timelineTableView reloadData];
 }
@@ -353,8 +349,7 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        if (isVisible)
-            [self keyboardHide:nil];
+        [self keyboardHide:nil];
         [self reloadShotsTable:nil];
         [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
         [self.txtField setText:nil];
@@ -418,8 +413,9 @@
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height;
+//    -self.viewTextField.frame.size.height
+//    self.sizeKeyboard = keyboardFrameBeginRect.size.height;
+    self.sizeKeyboard = keyboardFrameBeginRect.origin.y;
     
     if (self.backgroundView == nil) {
         self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, 0, self.timelineTableView.frame.size.width, self.timelineTableView.frame.size.height)];
@@ -431,15 +427,14 @@
     [self.timelineTableView addSubview:self.backgroundView];
     self.timelineTableView.scrollEnabled = NO;
 
-    isVisible = YES;
-
     double animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
     [UIView animateWithDuration:animationDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         self.bottomViewConstraint.constant = - self.sizeKeyboard;
+                         self.bottomViewConstraint.constant += self.sizeKeyboard;
+
                          [self.view layoutIfNeeded];
                      } completion:NULL];
 
@@ -453,12 +448,8 @@
 
     [self.timelineTableView setScrollsToTop:YES];
     self.timelineTableView.scrollEnabled = YES;
-
-    isVisible = NO;
     
-    [self textFieldShouldReturn:self.txtField];
-    
-    self.bottomViewConstraint.constant = -47;
+    self.bottomViewConstraint.constant = 0.0f;
     
     [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
@@ -466,34 +457,24 @@
 
 }
 
-#pragma mark TextFieldDelegate
+#pragma mark TEXTVIEW
 
 //------------------------------------------------------------------------------
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    [textField resignFirstResponder];
-    return YES;
-}
-
-
-#pragma mark  UITextField response methods
-//------------------------------------------------------------------------------
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    lengthTextField = self.txtField.text.length - range.length + text.length;
     
-    lengthTextField = self.txtField.text.length - range.length + string.length;
-   
-    //self.txtField.text = [self.txtField.text stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
+    if ([text isEqualToString:@" "])
+        self.btnShoot.enabled = NO;
+    else if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "])
+        self.btnShoot.enabled = YES;
+    else
+        self.btnShoot.enabled = NO;
     
-        if ([string isEqualToString:@" "])
-            self.btnShoot.enabled = NO;
-        else if (lengthTextField >= 1 && ![textField.text isEqualToString:@"  "])
-            self.btnShoot.enabled = YES;
-        else
-            self.btnShoot.enabled = NO;
-
     NSLog(@"Caracteres que quedan= %lu", (unsigned long)[self countCharacters:lengthTextField]);
     
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
+
 }
 
 //------------------------------------------------------------------------------
