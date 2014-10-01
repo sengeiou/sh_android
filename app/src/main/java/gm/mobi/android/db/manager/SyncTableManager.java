@@ -4,6 +4,9 @@ import android.content.ContentValues;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import gm.mobi.android.constant.SyncConstants;
+import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.TablesSync;
 import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.util.TimeUtils;
@@ -28,9 +31,24 @@ public class SyncTableManager {
             }
             c.close();
         }
-
-
         return lastDateModified;
+    }
+
+    public static Long getFirstModifiedDate(SQLiteDatabase db, String entity){
+        Long firstDateModified = 0L;
+        if(GeneralManager.isTableEmpty(db,entity)){
+            firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+        }else{
+           String sql = "SELECT "+ GMContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + GMContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
+            Cursor c = db.rawQuery(sql, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                firstDateModified = c.getLong(c.getColumnIndex(GMContract.SyncColumns.CSYS_MODIFIED));
+            } else {
+                firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+            }
+        }
+        return firstDateModified;
     }
     public static long insertOrUpdateSyncTable(SQLiteDatabase db, TableSync tableSync){
         ContentValues contentValues = new ContentValues();
