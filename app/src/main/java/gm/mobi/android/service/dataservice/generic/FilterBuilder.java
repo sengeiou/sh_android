@@ -84,7 +84,7 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
-        public T isIn(List<?> values) {
+        public T isIn(Collection<?> values) {
             for (Object value : values) {
                 createAndAddItem(COMPARATOR_EQUAL, value);
             }
