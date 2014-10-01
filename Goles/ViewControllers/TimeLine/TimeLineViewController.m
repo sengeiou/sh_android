@@ -32,7 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnWatching;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
-@property (weak, nonatomic) IBOutlet UITextField *txtField;
+@property (weak, nonatomic) IBOutlet UITextView *txtField;
 @property (weak, nonatomic) IBOutlet UIButton *btnShoot;
 @property (weak, nonatomic) IBOutlet UIView *viewNotShots;
 @property (strong, nonatomic) NSArray *arrayShots;
@@ -43,8 +43,7 @@
 @property (nonatomic, assign) CGRect originalFrame;
 @property (strong, nonatomic) UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
-@property (weak, nonatomic) IBOutlet UITextField *txtViewWrite;
-@property (nonatomic, strong) NSLayoutConstraint *bottomViewConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewConstraint;
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
 
 
@@ -90,8 +89,9 @@
     
     self.originalFrame = self.tabBarController.tabBar.frame;
     
+    self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 84, 0);
     [self setNavigationBarButtons];
-    [self createConstraintForBottomView];
+    [self setTextViewForShotCreation];
     
 }
 
@@ -114,22 +114,17 @@
 }
 
 //------------------------------------------------------------------------------
+- (void)setTextViewForShotCreation {
+
+    self.viewTextField.clipsToBounds = YES;
+    self.viewTextField.layer.cornerRadius = 14.0f;
+}
+
+//------------------------------------------------------------------------------
 - (void)viewDidLayoutSubviews {
     
     [super viewDidLayoutSubviews];
     self.timelineTableView.backgroundColor = [UIColor clearColor];
-}
-
-//------------------------------------------------------------------------------
-- (void)createConstraintForBottomView {
-    
-    self.bottomViewConstraint = [NSLayoutConstraint constraintWithItem:self.viewTextField
-                                                             attribute:NSLayoutAttributeBottom
-                                                             relatedBy:NSLayoutRelationEqual
-                                                                toItem:self.view
-                                                             attribute:NSLayoutAttributeBottom
-                                                            multiplier:1.0f constant:-47.0f];
-    [self.view addConstraint:self.bottomViewConstraint];
 }
 
 //------------------------------------------------------------------------------
@@ -156,12 +151,6 @@
     
 }
 
-//------------------------------------------------------------------------------
--(void) loadTextField{
-    
-    self.txtViewWrite.backgroundColor = [UIColor whiteColor];
-    self.txtViewWrite.placeholder = @"what's Up?";
-}
 
 //------------------------------------------------------------------------------
 -(void)hiddenViewNotShots{
