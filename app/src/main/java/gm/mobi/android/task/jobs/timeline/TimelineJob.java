@@ -58,7 +58,6 @@ public class TimelineJob extends CancellableJob {
         super(new Params(PRIORITY));
         this.shotRetrieveType = retrieveType;
         this.currentUser = currentUser;
-
         GolesApplication.get(context).inject(this);
     }
 
