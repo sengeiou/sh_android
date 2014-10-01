@@ -285,7 +285,10 @@ namespace Bagdad
             // not feeling creative with my var names today...
             IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
+            if (MyShots.Items.Count() != 0)
+            {
+                scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
+            }
 
             if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
             {
