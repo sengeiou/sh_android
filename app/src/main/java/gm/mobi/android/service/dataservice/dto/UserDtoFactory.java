@@ -1,12 +1,14 @@
 package gm.mobi.android.service.dataservice.dto;
 
 
+import android.provider.SyncStateContract;
 import android.support.v4.util.ArrayMap;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,7 +16,9 @@ import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.generic.FilterBuilder;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
@@ -42,6 +46,8 @@ public class UserDtoFactory {
     private static final String ALIAS_GET_FOLLOWINGS = "GET_FOLLOWINGS";
     private static final String ALIAS_GET_USERS = "GET_USERS";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
+    private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
+    private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
 
     private UtilityDtoFactory utilityDtoFactory;
 
@@ -77,11 +83,11 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
-    public GenericDto getFollowOperationDto(Long idUser, Long offset, int relationship, Long date) {
+    public GenericDto getFollowOperationDto(Long userId, Long offset, int relationship, Long date) {
 
         OperationDto od = new OperationDto();
 
-        FilterDto filter = getFollowsByIdUserAndRelationship(idUser, relationship, new Date(date));
+        FilterDto filter = getFollowsByIdUserAndRelationship(userId, relationship, new Date(date));
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, true, null, 0l, 100L, filter);
         od.setMetadata(md);
 
@@ -105,11 +111,31 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
     }
 
+    public GenericDto getTeamByTeamId(Long teamId){
+        OperationDto od = new OperationDto();
+        Map<String,Object> key = new HashMap<>();
+        key.put(GMContract.TeamTable.ID_TEAM, teamId);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.TeamTable.TABLE, true,null,0L,1L,key);
+        od.setMetadata(md);
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = TeamMapper.toDto(null);
+        od.setData(array);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAM_BY_ID,  od);
+    }
+
+    public GenericDto getTeamsByTeamIds(Set<Long> teamIds){
+        OperationDto od = new OperationDto();
+        FilterDto filter = getTeamsByIdTeams(teamIds);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.TeamTable.TABLE, true,null,0L,1000L,filter);
+        od.setMetadata(md);
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = TeamMapper.toDto(null);
+        od.setData(array);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS,od);
+    }
 
     public GenericDto getUsersOperationDto(List<Long> userIds, Long offset, Long date) {
         OperationDto od = new OperationDto();
-
-
         FilterDto filter = getUsersByUserIds(userIds, new Date(date));
 
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, UserTable.TABLE, true, null, 0l, 100L, filter);
@@ -122,13 +148,20 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
     }
 
-    public FilterDto getFollowsByIdUserAndRelationship(Long idUser, int relationship, Date lastModifiedDate) {
+    public FilterDto getTeamsByIdTeams(Set<Long> teamIds){
+        return and(
+                or(GMContract.TeamTable.ID_TEAM).isIn(teamIds),
+                orModifiedOrDeletedAfter(0L)
+        ).build();
+    }
+
+    public FilterDto getFollowsByIdUserAndRelationship(Long userId, int relationship, Date lastModifiedDate) {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
                 filterDto = new FilterDto(Constants.NEXUS_AND,
                         new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
+                                new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
                                 new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, null)
                         }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
                 );
@@ -137,23 +170,23 @@ public class UserDtoFactory {
                 filterDto = new FilterDto(Constants.NEXUS_AND,
                         new FilterItemDto[]{
                                 new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, null),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
                         }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
                 );
                 break;
             case GET_ALL_FOLLOW:
                 filterDto = new FilterDto(Constants.NEXUS_AND,
                         new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
                         }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
                 );
                 break;
             case GET_JUST_BOTHFOLLOW:
                 filterDto = new FilterDto(Constants.NEXUS_AND,
                         new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, idUser),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, idUser)
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
                         }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
                 );
                 break;
