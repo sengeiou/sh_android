@@ -45,7 +45,7 @@
 @property (assign, nonatomic) int sizeKeyboard;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewConstraint;
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
-
+@property(nonatomic, strong) UILabel *lblFooter;
 
 @end
 
@@ -256,12 +256,14 @@
     if (!refreshTable){
         self.spinner.hidden = YES;
         
-        UILabel *lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
-        lblFooter.text = @"No more shots";
-        lblFooter.textColor = [Fav24Colors iosSevenGray];
-        lblFooter.textAlignment = NSTextAlignmentCenter;
-        self.timelineTableView.tableFooterView = lblFooter;
+        self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
+        self.lblFooter.text = @"No more shots";
+        self.lblFooter.textColor = [Fav24Colors iosSevenGray];
+        self.lblFooter.textAlignment = NSTextAlignmentCenter;
+        self.lblFooter.backgroundColor = [UIColor clearColor];
+        self.timelineTableView.tableFooterView = self.lblFooter;
         
+        // [[self timelineTableView]reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

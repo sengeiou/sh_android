@@ -44,7 +44,6 @@ static NSArray *cuotasToDelete;
             }
             completionBlock(YES,nil, YES);
         }else{
-            NSLog(@"NOO HAY MAS:::::::");
             completionBlock(NO,nil, NO);
         }
     }
