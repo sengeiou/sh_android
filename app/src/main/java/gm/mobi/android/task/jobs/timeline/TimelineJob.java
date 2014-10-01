@@ -143,8 +143,8 @@ public class TimelineJob extends CancellableJob {
     private void retrieveOlder() throws IOException, SQLException {
         if (!checkNetwork()) return;
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        Long lastModifiedDate = SyncTableManager.getLastModifiedDate(db, GMContract.ShotTable.TABLE);
-        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), lastModifiedDate);
+        Long firstModifiedDate = SyncTableManager.getFirstModifiedDate(db, GMContract.ShotTable.TABLE);
+        List<Shot> oldShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         if (oldShots != null) {
             ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
             List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), oldShots);
