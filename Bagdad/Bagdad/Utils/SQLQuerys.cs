@@ -21,6 +21,8 @@ namespace Bagdad.Utils
 
         public const String GetNameAndURL = "SELECT name, photo FROM User WHERE idUser = @idUser";
 
+        public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE idUser = @idUser";
+
         #endregion
 
         #region SHOT

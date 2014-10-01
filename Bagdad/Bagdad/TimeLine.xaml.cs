@@ -255,7 +255,7 @@ namespace Bagdad
         private void ShotUserProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             int shotUserId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotUserId;
-            MessageBox.Show("User #" + shotUserId);
+            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + shotUserId, UriKind.Relative));
         }
         #endregion
 

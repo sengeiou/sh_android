@@ -223,6 +223,33 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a FOLLOWERS.
+        /// </summary>
+        public static string MeFollowers {
+            get {
+                return ResourceManager.GetString("MeFollowers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a FOLLOWING.
+        /// </summary>
+        public static string MeFollowing {
+            get {
+                return ResourceManager.GetString("MeFollowing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a POINTS.
+        /// </summary>
+        public static string MePoints {
+            get {
+                return ResourceManager.GetString("MePoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a New.
         /// </summary>
         public static string New {

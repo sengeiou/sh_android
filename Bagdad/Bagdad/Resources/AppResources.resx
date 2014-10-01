@@ -298,4 +298,16 @@
     <value>Syncing...</value>
     <comment>TimeLine.xaml.cs</comment>
   </data>
+  <data name="MeFollowers" xml:space="preserve">
+    <value>FOLLOWERS</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="MeFollowing" xml:space="preserve">
+    <value>FOLLOWING</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="MePoints" xml:space="preserve">
+    <value>POINTS</value>
+    <comment>Me.xaml</comment>
+  </data>
 </root>

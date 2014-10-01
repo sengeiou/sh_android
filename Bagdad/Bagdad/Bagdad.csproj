@@ -136,6 +136,7 @@
     <Compile Include="Utils\ServiceCommunication.cs" />
     <Compile Include="Utils\Util.cs" />
     <Compile Include="ViewModels\ShotsViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ShotViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

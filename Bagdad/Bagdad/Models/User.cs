@@ -1,4 +1,5 @@
 ﻿using Bagdad.Utils;
+using Bagdad.ViewModels;
 using Newtonsoft.Json.Linq;
 using SQLiteWinRT;
 using System;
@@ -281,6 +282,36 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - User - GetNameAndImageURL: " + e.Message);
             }
             return userInfo;
+        }
+
+        public async Task<UserViewModel> GetProfileInfo(int idUser)
+        {
+            UserViewModel uvm = new UserViewModel();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUserProfileInfo);
+                st.BindIntParameterWithName("@idUser", idUser);
+
+                if (await st.StepAsync())
+                {
+                    uvm.userId = st.GetIntAt(0);
+                    uvm.userNickName = st.GetTextAt(1);
+                    uvm.userName = st.GetTextAt(2);
+                    uvm.userURLImage = st.GetTextAt(3);
+                    uvm.userBio = st.GetTextAt(4);
+                    uvm.points = st.GetIntAt(5);
+                    uvm.following = st.GetIntAt(6);
+                    uvm.followers = st.GetIntAt(7);
+                    uvm.userWebsite = st.GetTextAt(8);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - GetProfileInfo: " + e.Message);
+            }
+            return uvm;
         }
     }
 }

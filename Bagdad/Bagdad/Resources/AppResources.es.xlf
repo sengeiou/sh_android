@@ -148,6 +148,21 @@
           <target state="new">Syncing...</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml.cs</note>
         </trans-unit>
+        <trans-unit id="Resx/MePoints" translate="yes" xml:space="preserve">
+          <source>POINTS</source>
+          <target state="new">POINTS</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/MeFollowing" translate="yes" xml:space="preserve">
+          <source>FOLLOWING</source>
+          <target state="new">FOLLOWING</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/MeFollowers" translate="yes" xml:space="preserve">
+          <source>FOLLOWERS</source>
+          <target state="new">FOLLOWERS</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/CanConnect" translate="yes" xml:space="preserve">
           <source>Can't connect</source>
           <target state="new">Can't connect</target>
