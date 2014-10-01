@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
+		A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42619DC415900163841 /* PeopleTableViewController.m */; };
+		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
 		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
@@ -76,7 +78,6 @@
 		AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */; };
 		AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED91998D78600A942A9 /* LoginViewController.m */; };
 		AA623F111998F29D00A942A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623F131998F29D00A942A9 /* Localizable.strings */; };
-		AA623F171998F46E00A942A9 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F161998F46E00A942A9 /* PeopleTableViewController.m */; };
 		AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F1C1998F49700A942A9 /* MeContainerViewController.m */; };
 		AA72640619D03A510067A39D /* _Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640519D03A510067A39D /* _Shot.m */; };
 		AA72640919D03A6E0067A39D /* Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640819D03A6E0067A39D /* Shot.m */; };
@@ -122,6 +123,10 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
+		A52CE42519DC415900163841 /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
+		A52CE42619DC415900163841 /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
+		A52CE42819DC418000163841 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		A52CE42919DC418000163841 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		A53ACC0D19D96E26009421D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		A58DA83F19D02EA9003EE5CB /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
 		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
@@ -238,8 +243,6 @@
 		AA623ED91998D78600A942A9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		AA623F121998F29D00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA623F141998F2A000A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA623F151998F46E00A942A9 /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
-		AA623F161998F46E00A942A9 /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		AA623F1B1998F49700A942A9 /* MeContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeContainerViewController.h; sourceTree = "<group>"; };
 		AA623F1C1998F49700A942A9 /* MeContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeContainerViewController.m; sourceTree = "<group>"; };
 		AA72640419D03A510067A39D /* _Shot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Shot.h; sourceTree = "<group>"; };
@@ -645,8 +648,10 @@
 		AA623E871998D78600A942A9 /* People */ = {
 			isa = PBXGroup;
 			children = (
-				AA623F151998F46E00A942A9 /* PeopleTableViewController.h */,
-				AA623F161998F46E00A942A9 /* PeopleTableViewController.m */,
+				A52CE42519DC415900163841 /* PeopleTableViewController.h */,
+				A52CE42619DC415900163841 /* PeopleTableViewController.m */,
+				A52CE42819DC418000163841 /* ProfileViewController.h */,
+				A52CE42919DC418000163841 /* ProfileViewController.m */,
 			);
 			name = People;
 			path = ViewControllers/Gente;
@@ -889,6 +894,7 @@
 				AA72641519D422570067A39D /* CleanManager.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
+				A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
 				AA623E271998D17800A942A9 /* _Match.m in Sources */,
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
@@ -905,6 +911,7 @@
 				AA623E321998D17800A942A9 /* _SML.m in Sources */,
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,
 				AA623EDE1998D78600A942A9 /* Fav24ExtendedNavigationController.m in Sources */,
+				A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */,
 				A59EECDD19D1761500D011C5 /* ShotTableViewCell.m in Sources */,
 				AACA544619C057C000E39D94 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */,
@@ -918,7 +925,6 @@
 				AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,
 				AA72640F19D0506A0067A39D /* Follow.m in Sources */,
-				AA623F171998F46E00A942A9 /* PeopleTableViewController.m in Sources */,
 				A5E3E1FD1999158700322727 /* UIImage+ImageEffects.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
 				AACA544A19C057C000E39D94 /* UIProgressView+AFNetworking.m in Sources */,

@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblDate;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
+@property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 
 - (void)configureBasicCellWithShot:(Shot *)shot;
 
