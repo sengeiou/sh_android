@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 
-import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.SyncConstants;
 
 import static gm.mobi.android.constant.SyncConstants.AUTHORITY;
@@ -36,10 +35,14 @@ public class ShootrAccountGenerator {
             ContentResolver.setIsSyncable(mAccount,SyncConstants.AUTHORITY,1);
             ContentResolver.setSyncAutomatically(mAccount,SyncConstants.AUTHORITY,true);
 
+            //Remove shots
             Bundle params  = new Bundle();
-            params.putInt(SyncConstants.CALL_TYPE,SyncConstants.REMOVE_OLD_SHOTS);
-            ContentResolver.addPeriodicSync(mAccount, AUTHORITY, params,SyncConstants.SYNC_INTERVAL_SHOTS);
-
+            params.putInt(SyncConstants.CALL_TYPE,SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE);
+            ContentResolver.addPeriodicSync(mAccount, AUTHORITY, params,SyncConstants.SYNC_INTERVAL_FOR_REMOVE_SHOTS);
+            //Get followings
+            Bundle paramsFollowing = new Bundle();
+            paramsFollowing.putInt(SyncConstants.CALL_TYPE, SyncConstants.GET_FOLLOWINGS_CALLTYPE);
+            ContentResolver.addPeriodicSync(mAccount,AUTHORITY,paramsFollowing,SyncConstants.SYNC_INTERVAL_FOLLOWINGS);
         } else {
             /*
              * TODO The account exists or some other error occurred. Log this, report it,
