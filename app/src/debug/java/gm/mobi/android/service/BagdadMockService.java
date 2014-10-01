@@ -5,11 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import hugo.weaving.DebugLog;
 
@@ -68,6 +70,16 @@ public class BagdadMockService implements BagdadService {
 
     @Override
     public User getUserByIdUser(Long idUser) throws IOException {
+        return null;
+    }
+
+    @Override
+    public Team getTeamByIdTeam(Long idTeam) throws IOException {
+        return null;
+    }
+
+    @Override
+    public List<Team> getTeamsByIdTeams(Set<Long> teamIds, Long lastModifiedDate) throws IOException {
         return null;
     }
 
