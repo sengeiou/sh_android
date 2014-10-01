@@ -61,7 +61,7 @@ public class SQLiteUtils {
             + TablesSync.FREQUENCY+" INT NULL, " +
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
-    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+TablesSync.TABLE+" ("
+    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+TeamTable.TABLE+" ("
             + TeamTable.ID_TEAM+" INT NOT NULL,"
             + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
             + TeamTable.CLUB_NAME+" VARCHAR(255),"
