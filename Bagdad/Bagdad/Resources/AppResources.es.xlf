@@ -204,8 +204,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">All</note>
         </trans-unit>
         <trans-unit id="Resx/ImWatching" translate="yes" xml:space="preserve">
-          <source>I'm Watching</source>
-          <target state="new">I'm Watching</target>
+          <source>Watching</source>
+          <target state="new">Watching</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/SignWithFacebook" translate="yes" xml:space="preserve">

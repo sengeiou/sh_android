@@ -187,7 +187,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a I&apos;m Watching.
+        ///   Busca una cadena traducida similar a Watching.
         /// </summary>
         public static string ImWatching {
             get {

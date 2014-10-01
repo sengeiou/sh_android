@@ -163,7 +163,7 @@
     <comment>SignIn.xaml</comment>
   </data>
   <data name="ImWatching" xml:space="preserve">
-    <value>I'm Watching</value>
+    <value>Watching</value>
     <comment>TimeLine.xaml</comment>
   </data>
   <data name="Me" xml:space="preserve">

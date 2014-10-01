@@ -51,7 +51,7 @@
                     <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
                     <!--Row0.1-->
-                    <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.NoOneWatching, Source={StaticResource LocalizedStrings}}" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
+                    <TextBlock Grid.Row="1" Text="" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
 
                 </Grid>
 

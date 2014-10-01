@@ -35,7 +35,7 @@ namespace Bagdad.ViewModels
             {
                 Shot shotModel = new Shot();
 
-                return ParseShotsForPrinting(await shotModel.GetTimeLineShots());               
+                return ParseShotsForPrinting(await shotModel.getTimeLineShots());               
             }
             catch (Exception e)
             {
