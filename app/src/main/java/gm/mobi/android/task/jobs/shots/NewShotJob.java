@@ -57,7 +57,6 @@ public class NewShotJob extends CancellableJob{
         try {
             Shot postedShot = service.postNewShot(currentUser.getIdUser(), comment);
             if (postedShot != null) {
-                ShotManager.saveShot(mDbHelper.getWritableDatabase(), postedShot);
                 bus.post(new PostNewShotResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(postedShot));
             } else {
                 bus.post(new PostNewShotResultEvent(ResultEvent.STATUS_INVALID));
