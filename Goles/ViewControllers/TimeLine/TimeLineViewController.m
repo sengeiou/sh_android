@@ -373,9 +373,9 @@
     
     if (status && !error){
         [self keyboardHide:nil];
+        self.txtView.text = nil;
         [self reloadShotsTable:nil];
         [self.timelineTableView setScrollsToTop:YES];
-        [self.txtView setText:nil];
         self.btnShoot.enabled = NO;
     }
 }
@@ -433,13 +433,17 @@
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
     
-    self.txtView.text = nil;
     self.txtView.textColor = [UIColor blackColor];
 
+    if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
+        self.txtView.text = nil;
+    
     [self darkenBackgroundView];
     
+    if (lengthTextField > 0)
+         self.charactersLeft.hidden = NO;
+    
     self.timelineTableView.scrollEnabled = NO;
-
     [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
@@ -478,13 +482,14 @@
     [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.scrollEnabled = YES;
     
-    self.bottomViewHeightConstraint.constant = 60;
     [self.txtView resignFirstResponder];
     
-    self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+    if (self.txtView.text.length == 0)
+        self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+    
     self.txtView.textColor = [UIColor lightGrayColor];
     
-    //move writing field
+    self.bottomViewHeightConstraint.constant = 60;
     self.bottomViewPositionConstraint.constant = 0.0f;
     [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
