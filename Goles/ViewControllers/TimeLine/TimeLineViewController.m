@@ -47,6 +47,7 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
 @property(nonatomic, strong) UILabel *lblFooter;
+@property (weak, nonatomic) IBOutlet UIButton *startShootingFirstTime;
 
 @end
 

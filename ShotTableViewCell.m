@@ -34,7 +34,6 @@
     self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
     self.txvText.textColor = [UIColor blackColor];
     self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
-    //[self.txvText setUserInteractionEnabled:NO];
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
