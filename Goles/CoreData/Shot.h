@@ -5,4 +5,5 @@
 +(instancetype)insertWithDictionary:(NSDictionary *)dict;
 +(instancetype)updateWithDictionary:(NSDictionary *)dict;
 
+
 @end

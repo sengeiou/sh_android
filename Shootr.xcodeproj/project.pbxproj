@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
+		A526039419DD8A0200375FB1 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A526039319DD8A0200375FB1 /* TimelineViewController.m */; };
+		A526039719DDAAAB00375FB1 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A526039619DDAAAB00375FB1 /* TimeLineHelper.m */; };
 		A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42619DC415900163841 /* PeopleTableViewController.m */; };
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
@@ -60,7 +62,6 @@
 		AA623E611998D17800A942A9 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DDC1998D17700A942A9 /* Appirater.m */; };
 		AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */; };
 		AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DF91998D17800A942A9 /* CoreDataManager.m */; };
-		AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DFF1998D17800A942A9 /* NavigationManager.m */; };
 		AA623E711998D17800A942A9 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E031998D17800A942A9 /* UserManager.m */; };
 		AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E081998D17800A942A9 /* Fav24Colors.m */; };
 		AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E0A1998D17800A942A9 /* Fav24Fonts.m */; };
@@ -121,6 +122,9 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
+		A526039319DD8A0200375FB1 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		A526039519DDAAAB00375FB1 /* TimeLineHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineHelper.h; sourceTree = "<group>"; };
+		A526039619DDAAAB00375FB1 /* TimeLineHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineHelper.m; sourceTree = "<group>"; };
 		A52CE42519DC415900163841 /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		A52CE42619DC415900163841 /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		A52CE42819DC418000163841 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -205,8 +209,6 @@
 		AA623DDF1998D17700A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
 		AA623DF81998D17800A942A9 /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		AA623DF91998D17800A942A9 /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
-		AA623DFE1998D17800A942A9 /* NavigationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationManager.h; sourceTree = "<group>"; };
-		AA623DFF1998D17800A942A9 /* NavigationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationManager.m; sourceTree = "<group>"; };
 		AA623E021998D17800A942A9 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		AA623E031998D17800A942A9 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		AA623E061998D17800A942A9 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -337,6 +339,16 @@
 			name = Performance;
 			sourceTree = "<group>";
 		};
+		A526039219DD89C600375FB1 /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				A526039319DD8A0200375FB1 /* TimelineViewController.m */,
+				A526039519DDAAAB00375FB1 /* TimeLineHelper.h */,
+				A526039619DDAAAB00375FB1 /* TimeLineHelper.m */,
+			);
+			name = Timeline;
+			sourceTree = "<group>";
+		};
 		A59EECDA19D1759F00D011C5 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,6 +475,7 @@
 		AA623CFD1998A7F200A942A9 /* GolesTests */ = {
 			isa = PBXGroup;
 			children = (
+				A526039219DD89C600375FB1 /* Timeline */,
 				A526039119DD80ED00375FB1 /* Performance */,
 				A526039019DD7F9D00375FB1 /* Webservice */,
 				AA623D031998A7F200A942A9 /* GolesTests.m */,
@@ -572,8 +585,6 @@
 				AA623DF91998D17800A942A9 /* CoreDataManager.m */,
 				AA241F87199CFB6400897D6D /* SyncManager.h */,
 				AA241F88199CFB6400897D6D /* SyncManager.m */,
-				AA623DFE1998D17800A942A9 /* NavigationManager.h */,
-				AA623DFF1998D17800A942A9 /* NavigationManager.m */,
 				AA623E021998D17800A942A9 /* UserManager.h */,
 				AA623E031998D17800A942A9 /* UserManager.m */,
 				AA72641019D1C8280067A39D /* ShotManager.h */,
@@ -890,10 +901,10 @@
 				AA623E751998D17800A942A9 /* FavEntityDescriptor.m in Sources */,
 				AACA544119C057C000E39D94 /* AFURLConnectionOperation.m in Sources */,
 				AA623E771998D17800A942A9 /* FavRestConsumer.m in Sources */,
+				A526039719DDAAAB00375FB1 /* TimeLineHelper.m in Sources */,
 				AA623E351998D17800A942A9 /* _Team.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
-				AA623E6F1998D17800A942A9 /* NavigationManager.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				AA72641519D422570067A39D /* CleanManager.m in Sources */,
@@ -953,6 +964,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA623D041998A7F200A942A9 /* GolesTests.m in Sources */,
+				A526039419DD8A0200375FB1 /* TimelineViewController.m in Sources */,
 				AACA545919C3419600E39D94 /* PerformanceTests.m in Sources */,
 				AACA545719C33D7900E39D94 /* FavRestConsumerHelperTest.m in Sources */,
 			);

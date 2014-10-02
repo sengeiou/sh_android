@@ -300,16 +300,24 @@
 //------------------------------------------------------------------------------
 -(BOOL) controlRepeatedShot:(NSString *)texto{
     
-     self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
+    self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
     
-    for (Shot *shot in self.arrayShots) {
-        
-        if ([shot.comment isEqualToString:texto])
-            return YES;
-            
-    }
-
+    if ([self isShotMessageAlreadyInList:self.arrayShots withText:texto])
+        return YES;
+    
     return NO;
+}
+
+-(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text{
+    
+    for (Shot *shot in shots) {
+        
+        if ([shot.comment isEqualToString:text])
+            return YES;
+        
+    }
+    return NO;
+
 }
 
 #pragma mark - Webservice response methods

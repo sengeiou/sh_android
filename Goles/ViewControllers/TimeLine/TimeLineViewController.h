@@ -10,4 +10,7 @@
 
 @interface TimeLineViewController : UIViewController <UITextViewDelegate,UITableViewDataSource,UITableViewDelegate>
 
+-(BOOL) controlRepeatedShot:(NSString *)texto;
+-(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text;
+
 @end
