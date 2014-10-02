@@ -25,14 +25,16 @@ public class FollowManager {
      * Insert a Follow
      */
     public static void saveFollow(SQLiteDatabase db, Follow follow) throws SQLException {
-        long res;
-        ContentValues contentValues = FollowMapper.toContentValues(follow);
-        if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
-            res = deleteFollow(db, follow);
-        } else {
-            res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+
+        if(follow!=null){
+            ContentValues contentValues = FollowMapper.toContentValues(follow);
+            if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
+                deleteFollow(db, follow);
+            } else {
+                db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            insertFollowInTableSync(db);
         }
-        insertFollowInTableSync(db);
     }
 
     /**
