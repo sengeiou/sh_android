@@ -1,6 +1,7 @@
 package gm.mobi.android.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -30,4 +31,7 @@ public interface BagdadService {
     public Team getTeamByIdTeam(Long idTeam) throws  IOException;
 
     public List<Team> getTeamsByIdTeams(Set<Long> teamIds, Long lastModifiedDate) throws  IOException;
+
+    public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException;
+
 }
