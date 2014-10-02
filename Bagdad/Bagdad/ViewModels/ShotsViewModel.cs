@@ -151,7 +151,7 @@ namespace Bagdad.ViewModels
             Shot shot = new Shot();
             try
             {
-                shot.comment = text;
+                shot.comment = text.Replace("\r", "\\n");
                 shot.idUser = App.ID_USER;
                 shot.csys_birth = DateTime.Now.Ticks;
                 shot.csys_revision = 0;

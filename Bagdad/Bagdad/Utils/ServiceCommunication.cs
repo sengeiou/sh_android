@@ -400,12 +400,8 @@ namespace Bagdad.Utils
 
         private String GetOPS(String operation, String entity, String searchParams, int offset)
         {
-            BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
-            return model.ConstructOperation(operation, searchParams, offset,  Constants.SERCOM_PARAM_OFFSET_PAG);
-                 /*case Constants.SERCOM_TB_OLD_SHOTS:
-                        Shot oldShot = new Shot();
-                        ops = oldShot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG);
-                        break;*/
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(translate(entity));
+            return model.ConstructOperation(operation, searchParams, offset,  ((entity.Equals(Constants.SERCOM_TB_OLD_SHOTS)) ? Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG : Constants.SERCOM_PARAM_OFFSET_PAG));
         }
 
         private String ConstructOPS(String opsData, String operation, String entity, String searchParams, int offset, int nItems)
