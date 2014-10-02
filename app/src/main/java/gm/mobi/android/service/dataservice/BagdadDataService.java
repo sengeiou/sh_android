@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
@@ -98,7 +99,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException {
         List<User> users = new ArrayList<>();
-        GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds, 1000L,0L);
+        GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds, 1000L, 0L);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -247,6 +248,25 @@ public class BagdadDataService implements BagdadService {
         }
         return teams;
     }
+
+
+    @Override
+    public Follow getFollowRelationship(Long idUser, Long idCurrentUser,int typeFollow) throws IOException {
+    GenericDto requestDto = userDtoFactory.getFollowOperationForGettingRelationship(idUser, idCurrentUser, typeFollow);
+    GenericDto responseDto = postRequest(requestDto);
+    OperationDto[] ops = responseDto.getOps();
+    if(ops == null || ops.length<1){
+        Timber.e("Received 0 operations");
+        return null;
+    }
+    Long totalItems = ops[0].getMetadata().getTotalItems();
+     if(ops.length>0 && totalItems>0){
+         Map<String,Object> dataItem = ops[0].getData()[0];
+         return FollowMapper.fromDto(dataItem);
+     }
+        return null;
+    }
+
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
