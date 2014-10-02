@@ -5,10 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
-
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.GMContract.TeamTable;
+import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.Team;
 import timber.log.Timber;
@@ -20,14 +19,14 @@ public class TeamManager {
      * */
     public static void saveTeams(SQLiteDatabase db, List<Team> teams) {
         //Save teams
-
         for (Team team : teams) {
             ContentValues contentValues = TeamMapper.toContentValues(team);
-
-            if (contentValues.getAsLong(GMContract.SyncColumns.CSYS_DELETED) != null) {
+            String args = TeamTable.ID_TEAM+"=?";
+            String[] where = new String[]{String.valueOf(team.getIdTeam())};
+            if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
                 deleteTeam(db, team);
             } else {
-                GeneralManager.insertOrUpdate(db, GMContract.TeamTable.TABLE,contentValues, GMContract.TeamTable.PROJECTION, GMContract.TeamTable.ID_TEAM+"=?",new String[]{String.valueOf(team.getIdTeam())});
+                GeneralManager.insertOrUpdate(db, TeamTable.TABLE,contentValues, TeamTable.PROJECTION, args,where);
                 Timber.i("Team inserted ", team.getClubName());
             }
         }
@@ -39,12 +38,12 @@ public class TeamManager {
      * */
     public static Team getTeamByIdTeam(SQLiteDatabase db, Long teamId){
         Team resTeam = new Team();
-        String args = GMContract.TeamTable.ID_TEAM+"=?";
+        String args = TeamTable.ID_TEAM+"=?";
         String[] argsString = new String[]{String.valueOf(teamId)};
-        if(GeneralManager.isTableEmpty(db, GMContract.TeamTable.TABLE)){
-            Timber.e("La tabla %s está vacia", GMContract.TeamTable.TABLE);
+        if(GeneralManager.isTableEmpty(db, TeamTable.TABLE)){
+            Timber.e("La tabla %s está vacia", TeamTable.TABLE);
         }
-        Cursor c = db.query(GMContract.TeamTable.TABLE, GMContract.TeamTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor c = db.query(TeamTable.TABLE, TeamTable.PROJECTION,args,argsString,null,null,null,null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             resTeam = TeamMapper.fromCursor(c);
@@ -54,15 +53,25 @@ public class TeamManager {
     }
 
     /**
+     * Insert a single item in table
+     * */
+    public static void insertTeam(SQLiteDatabase db, Team team){
+        String args = TeamTable.ID_TEAM+"=?";
+        String[] where = new String[]{String.valueOf(team.getIdTeam())};
+        ContentValues contentValues = TeamMapper.toContentValues(team);
+        GeneralManager.insertOrUpdate(db, TeamTable.TABLE,contentValues, TeamTable.PROJECTION, args,where);
+    }
+
+    /**
      * Delete one Follow
      */
     public static long deleteTeam(SQLiteDatabase db, Team team) {
         long res = 0;
-        String args = GMContract.TeamTable.ID_TEAM + "=?";
+        String args = TeamTable.ID_TEAM + "=?";
         String[] stringArgs = new String[]{String.valueOf(team.getIdTeam())};
-        Cursor c = db.query(GMContract.TeamTable.TABLE, GMContract.TeamTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = db.query(TeamTable.TABLE, TeamTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(GMContract.TeamTable.TABLE, GMContract.TeamTable.ID_TEAM + "=?",
+            res = db.delete(TeamTable.TABLE, TeamTable.ID_TEAM + "=?",
                     new String[]{String.valueOf(team.getIdTeam())});
         }
         c.close();
@@ -76,14 +85,11 @@ public class TeamManager {
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(4); // It's the second data type the application insert in database
         tablesSync.setDirection("BOTH");
-        tablesSync.setEntity(GMContract.TeamTable.TABLE);
+        tablesSync.setEntity(TeamTable.TABLE);
         tablesSync.setMax_timestamp(System.currentTimeMillis());
-        if(GeneralManager.isTableEmpty(db, GMContract.TeamTable.TABLE)){
+        if(GeneralManager.isTableEmpty(db, TeamTable.TABLE)){
             tablesSync.setMin_timestamp(System.currentTimeMillis());
         }
-        //We don't have this information already
-//        tablesSync.setMaxRows();
-//        tablesSync.setMinRows();
 
         return SyncTableManager.insertOrUpdateSyncTable(db,tablesSync);
     }
