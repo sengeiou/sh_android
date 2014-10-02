@@ -55,7 +55,7 @@ public class TeamManager {
     /**
      * Insert a single item in table
      * */
-    public static void insertTeam(SQLiteDatabase db, Team team){
+    public static void insertOrUpdateTeam(SQLiteDatabase db, Team team){
         String args = TeamTable.ID_TEAM+"=?";
         String[] where = new String[]{String.valueOf(team.getIdTeam())};
         ContentValues contentValues = TeamMapper.toContentValues(team);
