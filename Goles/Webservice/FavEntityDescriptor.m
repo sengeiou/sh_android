@@ -134,8 +134,17 @@
                  kJSON_SHOT_IDSHOT:[NSNull null],
                  kJSON_SHOT_COMMENT:[NSNull null]};
     }
+    else if ([entityClass isSubclassOfClass:[Team class]]) {
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_TEAM_IDTEAM:[NSNull null],
+                 kJSON_CLUB_NAME:[NSNull null],
+                 kJSON_SHORT_NAME:[NSNull null],
+                 kJSON_TLA_NAME:[NSNull null]};
 
-
+    }
 
   
     return nil;

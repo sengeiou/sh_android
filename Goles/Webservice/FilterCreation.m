@@ -14,6 +14,7 @@
 #import "Follow.h"
 #import "User.h"
 #import "SyncManager.h"
+#import "Team.h"
 
 @implementation FilterCreation
 
@@ -46,6 +47,14 @@
     }
     
     if ([entity isSubclassOfClass:[Shot class]]){
+        
+        NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
+                             @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
+        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
+        return filter;
+    }
+    
+    if ([entity isSubclassOfClass:[Team class]]){
         
         NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
                              @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];

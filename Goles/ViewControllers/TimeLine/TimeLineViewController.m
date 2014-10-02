@@ -275,6 +275,7 @@
     
     profileVC.selectedUser = selectedShot.user;
     
+    
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import "FavRestConsumer.h"
 
 @interface ProfileViewController ()
 
@@ -31,20 +32,57 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+   
+    [self customView];
+
     [self dataFillView];
+    
+    
+    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+}
+
+-(void)customView{
+    self.navigationController.navigationBar.topItem.title = @"";
+
+    self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
+    self.btnFollow.clipsToBounds = YES;
 }
 
 -(void) dataFillView{
-    self.title = self.selectedUser.name;
-    self.navigationController.navigationBar.topItem.title = @"";
-    self.imgPhoto.image = self.imgSelectedUser;
+    self.title = self.selectedUser.userName;
+    
+    [self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
+    [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
+    [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
+    
+    self.lblName.text = self.selectedUser.name;
+    self.lblRank.text = [NSString stringWithFormat:@"rank %@", self.selectedUser.rank];
+    self.lblTeamBio.text = self.selectedUser.bio;
+    self.txtViewWebSite.text = self.selectedUser.website;
+    
+    
+    //self.imgPhoto.image = self.imgSelectedUser;
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Webservice response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
+  
+    if (status){
+        
+        if (status && [entityClass isSubclassOfClass:[User class]]){
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+        }
+    }else if (refresh){
+        
+         [self dataFillView];
+    }
 }
 
 /*

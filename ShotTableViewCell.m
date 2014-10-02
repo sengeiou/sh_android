@@ -11,6 +11,7 @@
 #import "Utils.h"
 #import "NSString+CleanLinks.h"
 #import "UIImageView+AFNetworking.h"
+#import "UIButton+AFNetworking.h"
 
 @implementation ShotTableViewCell
 
@@ -37,6 +38,7 @@
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
+  
     //shot.user.imgUser = [UIImage imageNamed:@"ball"];
     
     [self.imgPhoto setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -46,6 +48,19 @@
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
         NSLog(@"%@", error);
     }];
+    
+    //[self.btnPhoto setImageForState:UIControlStateNormal withURL:[NSURL URLWithString:shot.user.photo]];
+  /*  [self.btnPhoto setImageForState:UIControlStateNormal withURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+       
+        //[self.btnPhoto setImage:image forState:UIControlStateNormal];
+        
+        self.btnPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
+        self.btnPhoto.clipsToBounds = YES;
+
+    } failure:^(NSError *error) {
+         NSLog(@"%@", error);
+    }];*/
+    
     
     self.lblDate.text = [Utils getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;

@@ -272,6 +272,11 @@
         if (status && [entityClass isSubclassOfClass:[Follow class]]){
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
         }
+        
+#pragma mark TODO:   //[[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Team class] withDelegate:self];
+
+        
+        
         else if (status && [entityClass isSubclassOfClass:[User class]]){
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
         }
