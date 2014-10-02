@@ -338,13 +338,14 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="backgroundView" destination="Jf2-bW-Lse" id="JAd-hk-o4Q"/>
-                        <outlet property="bottomViewConstraint" destination="Cfi-LK-l7y" id="72m-Md-rxe"/>
+                        <outlet property="bottomViewHeightConstraint" destination="fxF-sH-uaZ" id="ZNi-ez-RgK"/>
+                        <outlet property="bottomViewPositionConstraint" destination="Cfi-LK-l7y" id="fDB-b5-KXg"/>
                         <outlet property="btnInfo" destination="qN5-Nb-Req" id="Csh-an-UL1"/>
                         <outlet property="btnShoot" destination="41t-je-TRg" id="KtR-gA-HMn"/>
                         <outlet property="btnWatching" destination="lha-vI-5wj" id="EXj-Zw-0tJ"/>
                         <outlet property="charactersLeft" destination="OCp-RM-5b3" id="cyY-Vx-Ywl"/>
                         <outlet property="timelineTableView" destination="cfX-1I-iII" id="Z50-EZ-goo"/>
-                        <outlet property="txtField" destination="zPp-71-7UU" id="ls4-3A-INs"/>
+                        <outlet property="txtView" destination="zPp-71-7UU" id="GhD-aY-fpt"/>
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
                         <outlet property="viewOptions" destination="hAK-0x-gdD" id="2pE-52-jOg"/>
                         <outlet property="viewTextField" destination="HR5-eu-cfc" id="cZd-QG-Qcf"/>
@@ -352,7 +353,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oxw-qx-bzr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-6920" y="594"/>
+            <point key="canvasLocation" x="-3832" y="626"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RSl-Oj-MTN">
@@ -370,7 +371,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e2R-Yc-IZe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="78.75" y="396.12676056338023"/>
+            <point key="canvasLocation" x="-4762" y="626"/>
         </scene>
     </scenes>
     <resources>

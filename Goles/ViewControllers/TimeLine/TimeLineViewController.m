@@ -31,7 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnWatching;
 @property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
-@property (weak, nonatomic) IBOutlet UITextView *txtField;
+@property (weak, nonatomic) IBOutlet UITextView *txtView;
 @property (weak, nonatomic) IBOutlet UIButton *btnShoot;
 @property (weak, nonatomic) IBOutlet UILabel *charactersLeft;
 @property (weak, nonatomic) IBOutlet UIView *viewNotShots;
@@ -43,7 +43,8 @@
 @property (nonatomic, assign) CGRect originalFrame;
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewPositionConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
 @property(nonatomic, strong) UILabel *lblFooter;
 
@@ -62,14 +63,14 @@
     
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
-    self.txtField.delegate = self;
+    self.txtView.delegate = self;
 
     //For Alpha version
     self.viewOptions.hidden = YES;
 
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
-    //Get shots from server
+    //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES];
     
     //Get shots from CoreData
@@ -115,8 +116,8 @@
 //------------------------------------------------------------------------------
 - (void)setTextViewForShotCreation {
 
-    self.txtField.clipsToBounds = YES;
-    self.txtField.layer.cornerRadius = 8.0f;
+    self.txtView.clipsToBounds = YES;
+    self.txtView.layer.cornerRadius = 8.0f;
 
 }
 
@@ -224,14 +225,6 @@
     return [Utils heightForShot:shot.comment];
 }
 
-//------------------------------------------------------------------------------
-- (void)addLoadMoreCell{
-    self.timelineTableView.tableFooterView = self.spinner;
-
-    moreCells = NO;
-    [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
-
-}
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -261,6 +254,15 @@
         
         // [[self timelineTableView]reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+//------------------------------------------------------------------------------
+- (void)addLoadMoreCell{
+    self.timelineTableView.tableFooterView = self.spinner;
+    
+    moreCells = NO;
+    [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
+    
 }
 #pragma mark - Pass ViewController
 //------------------------------------------------------------------------------
@@ -322,12 +324,12 @@
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
 
-    if (self.txtField.text.length >= 1 && ![self.txtField.text isEqualToString:@"What's Up?"]) {
+    if (self.txtView.text.length >= 1 && ![self.txtView.text isEqualToString:@"What's Up?"]) {
         
         if ([[Conection sharedInstance] isConection]) {
             
-            if (![self controlRepeatedShot:self.txtField.text])
-                [[ShotManager singleton] createShotWithComment:self.txtField.text andDelegate:self];
+            if (![self controlRepeatedShot:self.txtView.text])
+                [[ShotManager singleton] createShotWithComment:self.txtView.text andDelegate:self];
             else{
                 
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
@@ -363,7 +365,7 @@
         [self keyboardHide:nil];
         [self reloadShotsTable:nil];
         [self.timelineTableView setScrollsToTop:YES];
-        [self.txtField setText:nil];
+        [self.txtView setText:nil];
         self.btnShoot.enabled = NO;
     }
 }
@@ -421,7 +423,7 @@
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
     
-    self.txtField.text = nil;
+    self.txtView.text = nil;
     NSDictionary* keyboardInfo = [notification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
@@ -440,7 +442,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         self.bottomViewConstraint.constant = self.sizeKeyboard;
+                         self.bottomViewPositionConstraint.constant = self.sizeKeyboard;
 
                          [self.view layoutIfNeeded];
                      } completion:NULL];
@@ -455,9 +457,10 @@
     [self.timelineTableView setScrollsToTop:YES];
     self.timelineTableView.scrollEnabled = YES;
     
+    [self.txtView resignFirstResponder];
     
     //move writing field
-    self.bottomViewConstraint.constant = 0.0f;
+    self.bottomViewPositionConstraint.constant = 0.0f;
     [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
     }];
@@ -469,7 +472,7 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    lengthTextField = self.txtField.text.length - range.length + text.length;
+    lengthTextField = self.txtView.text.length - range.length + text.length;
     
     if ([text isEqualToString:@" "])
         self.btnShoot.enabled = NO;
@@ -486,6 +489,7 @@
 }
 
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
+    
     
 }
 
