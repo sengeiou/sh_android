@@ -104,13 +104,10 @@
     self.navigationItem.leftBarButtonItem = btnSearch;
     
     //Info button
-    UIBarButtonItem *btnInfo = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStyleBordered target:self action:@selector(infoButton)];
-    
-    //Glasses button
-    UIBarButtonItem *btnWatch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(watching)];
-//    btnInfo.tintColor = [Fav24Colors iosSevenBlue];
-    
-    [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:btnInfo,btnWatch, nil]];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoLight];
+    [button addTarget:self action:@selector(infoButton) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *infoButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem = infoButton;
 }
 
 //------------------------------------------------------------------------------
@@ -502,7 +499,7 @@
         self.btnShoot.enabled = NO;
     
     
-    if ([text isEqualToString:@"\n"])
+//    if ([text isEqualToString:@"\n"])
         [self adaptViewSizeWhenWriting:textView];
     
     self.charactersLeft.text = [self countCharacters:lengthTextField];
@@ -515,8 +512,8 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-    if (textView.contentSize.height > self.viewTextField.frame.size.height) {
-        self.bottomViewHeightConstraint.constant = textView.contentSize.height+25;
+    if (textView.contentSize.height > self.viewTextField.frame.size.height-10) {
+        self.bottomViewHeightConstraint.constant = textView.contentSize.height+10;
         [UIView animateWithDuration:0.25f animations:^{
             [self.view layoutIfNeeded];
         }];
