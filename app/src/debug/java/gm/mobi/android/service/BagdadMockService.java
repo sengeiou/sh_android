@@ -83,6 +83,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override
+    public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException {
+        return null;
+    }
 
     public long getDelay() {
         return delay;
