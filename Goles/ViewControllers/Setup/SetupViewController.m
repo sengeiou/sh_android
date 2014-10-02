@@ -219,7 +219,7 @@
 
 - (IBAction)passEnter:(id)sender {
 
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
 }
 
 #pragma mark - Conection response methods

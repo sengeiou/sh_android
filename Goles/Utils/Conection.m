@@ -27,7 +27,7 @@
     return sharedConection;
 }
 
-- (void)getServerTimewithDelegate:(id)delegate andRefresh:(BOOL) refresh {
+- (void)getServerTimewithDelegate:(id)delegate andRefresh:(BOOL) refresh withShot:(BOOL)isShot{
     
     self.timeToCheck += 1;
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -44,7 +44,7 @@
                 if (!error){
                     
                     self.isConection = YES;
-                    [delegate conectionResponseForStatus:YES andRefresh:refresh];
+                    [delegate conectionResponseForStatus:YES andRefresh:refresh withShot:isShot];
                     
                     [self conectionOkToContinue];
                
@@ -87,7 +87,7 @@
             });
         }
     
-    [delegate conectionResponseForStatus:NO andRefresh:NO];
+    [delegate conectionResponseForStatus:NO andRefresh:NO withShot:NO];
     
     //}
 }

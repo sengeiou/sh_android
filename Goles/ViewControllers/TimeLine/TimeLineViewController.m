@@ -71,7 +71,7 @@
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
     //Get ping from server
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
@@ -191,7 +191,7 @@
 //    [UIView animateWithDuration:0.25 animations:^{
 //        self.viewOptions.alpha = 0.0;
 //    }];
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
 }
 
 #pragma mark - UITableViewDelegate
@@ -289,7 +289,7 @@
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
 
 //------------------------------------------------------------------------------
@@ -322,25 +322,28 @@
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
 
-    if (self.txtView.text.length >= 1 && ![self.txtView.text isEqualToString:@"What's Up?"]) {
-        
-        if ([[Conection sharedInstance] isConection]) {
-            
-            if (![self controlRepeatedShot:self.txtView.text])
-                [[ShotManager singleton] createShotWithComment:self.txtView.text andDelegate:self];
-            else{
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
-            }
-        }
-    }else if(refresh){
+    if (isShot)
+        [self shotCreated];
+    else if(refresh)
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    }else{
+    else
         [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
+    
+}
+
+//------------------------------------------------------------------------------
+- (void)shotCreated {
+    
+    if (![self controlRepeatedShot:self.txtView.text])
+        [[ShotManager singleton] createShotWithComment:self.txtView.text andDelegate:self];
+    else{
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
     }
+
 }
 
 #pragma mark - Reload methods
@@ -424,40 +427,54 @@
 -(void)keyboardShow:(NSNotification*)notification{
     
     self.txtView.text = nil;
-    NSDictionary* keyboardInfo = [notification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height-50;
-    
-    //Darken background view
-    self.backgroundView.hidden = NO;
-    UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-    [self.backgroundView addGestureRecognizer:tapTapRecognizer];
+    self.txtView.textColor = [UIColor blackColor];
+
+    [self darkenBackgroundView];
     
     self.timelineTableView.scrollEnabled = NO;
 
-    double animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-
-    [UIView animateWithDuration:animationDuration
+    [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
-                         self.bottomViewPositionConstraint.constant = self.sizeKeyboard;
-
+                         self.bottomViewPositionConstraint.constant = [self getKeyboardHeight:notification];
                          [self.view layoutIfNeeded];
                      } completion:NULL];
 
 }
 
+//------------------------------------------------------------------------------
+- (int)getKeyboardHeight:(NSNotification *)notification {
+    
+    NSDictionary* keyboardInfo = [notification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    self.sizeKeyboard = keyboardFrameBeginRect.size.height-50;
+
+    return self.sizeKeyboard;
+}
+
+//------------------------------------------------------------------------------
+- (void)darkenBackgroundView {
+    
+    self.backgroundView.hidden = NO;
+    UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    [self.backgroundView addGestureRecognizer:tapTapRecognizer];
+
+}
 
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
     
     self.backgroundView.hidden = YES;
-    [self.timelineTableView setScrollsToTop:YES];
+    [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.scrollEnabled = YES;
     
+    self.bottomViewHeightConstraint.constant = 60;
     [self.txtView resignFirstResponder];
+    
+    self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+    self.txtView.textColor = [UIColor lightGrayColor];
     
     //move writing field
     self.bottomViewPositionConstraint.constant = 0.0f;
@@ -481,16 +498,26 @@
     else
         self.btnShoot.enabled = NO;
     
+    
+    if ([text isEqualToString:@"\n"])
+        [self adaptViewSizeWhenWriting:textView];
+    
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
     
-    [self adaptViewSizeWhenWriting:textView];
+    
 
 }
 
+//------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
-    
-    
+
+    if (textView.contentSize.height > self.viewTextField.frame.size.height) {
+        self.bottomViewHeightConstraint.constant = textView.contentSize.height+25;
+        [UIView animateWithDuration:0.25f animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
 
 //------------------------------------------------------------------------------
