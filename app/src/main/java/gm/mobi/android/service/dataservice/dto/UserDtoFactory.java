@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Filter;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.service.dataservice.generic.FilterBuilder;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.FilterItemDto;
@@ -48,6 +50,7 @@ public class UserDtoFactory {
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
     private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
+    private static final String ALIAS_GETFOLLOWRELATIONSHIP = "GET_FOLLOWRELATIONSHIP";
 
     private UtilityDtoFactory utilityDtoFactory;
 
@@ -87,7 +90,7 @@ public class UserDtoFactory {
 
         OperationDto od = new OperationDto();
 
-        FilterDto filter = getFollowsByIdUserAndRelationship(userId, relationship, new Date(date));
+        FilterDto filter = getFollowsByIdUserAndRelationship(userId, relationship, date);
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, true, null, 0l, 100L, filter);
         od.setMetadata(md);
 
@@ -97,6 +100,16 @@ public class UserDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
     }
+
+    public GenericDto getFollowOperationForGettingRelationship(Long userId,Long currentUserId,int typeFollow){
+        OperationDto od = new OperationDto();
+        FilterDto filter = getFollowsRelationshipBetween2Users(userId,currentUserId,typeFollow);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, true, null, 0L, 20L,filter);
+        od.setMetadata(md);
+        od.setData(getDataForFollow());
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETFOLLOWRELATIONSHIP, od);
+    }
+
 
 
     public GenericDto getUserByUserId(Long userId){
@@ -160,7 +173,41 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
     }
 
-    public FilterDto getFollowsByIdUserAndRelationship(Long userId, int relationship, Date lastModifiedDate) {
+
+    public FilterDto getFollowsRelationship(Long userId, Long currentUserId, Long lastModifiedDate){
+        FilterDto shotsFilter =
+                and(FollowTable.ID_FOLLOWED_USER).isEqualTo(userId).and(FollowTable.ID_USER).isEqualTo(currentUserId)
+                .and(FollowTable.ID_FOLLOWED_USER).isEqualTo(currentUserId).and(FollowTable.ID_USER).isEqualTo(userId)
+                .and(FollowTable.CSYS_DELETED).isEqualTo(null)
+                .and(FollowTable.CSYS_MODIFIED).greaterThan(0L)
+                .build();
+        return shotsFilter;
+    }
+
+    public FilterDto getFollowsRelationshipBetween2Users(Long userId, Long currentUserID,int relationship){
+        FilterDto filterDto = null;
+        switch (relationship) {
+            case GET_FOLLOWERS:
+                filterDto = new FilterDto(Constants.NEXUS_AND,
+                        new FilterItemDto[]{
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, currentUserID),
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
+                        }, utilityDtoFactory.getTimeFilterDto(0l)
+                );
+                break;
+            case GET_FOLLOWING:
+                filterDto = new FilterDto(Constants.NEXUS_AND,
+                        new FilterItemDto[]{
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
+                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, currentUserID)
+                        }, utilityDtoFactory.getTimeFilterDto(0l)
+                );
+                break;
+        }
+        return filterDto;
+    }
+
+    public FilterDto getFollowsByIdUserAndRelationship(Long userId, int relationship, Long lastModifiedDate) {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
@@ -206,5 +253,10 @@ public class UserDtoFactory {
         ).build();
     }
 
+    public Map<String,Object>[] getDataForFollow(){
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = FollowMapper.toDto(null);
+        return array;
+    }
 
 }
