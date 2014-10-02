@@ -47,10 +47,9 @@ public class GetFollowingsJob extends CancellableJob{
 
     private User currentUser;
 
-    public GetFollowingsJob(Context context, User currentUser){
+    public GetFollowingsJob(Context context, User user){
         super(new Params(PRIORITY));
-        this.currentUser = currentUser;
-
+        this.currentUser = user;
         GolesApplication.get(context).inject(this);
     }
 
