@@ -321,6 +321,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A526039019DD7F9D00375FB1 /* Webservice */ = {
+			isa = PBXGroup;
+			children = (
+				AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */,
+			);
+			name = Webservice;
+			sourceTree = "<group>";
+		};
+		A526039119DD80ED00375FB1 /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				AACA545819C3419600E39D94 /* PerformanceTests.m */,
+			);
+			name = Performance;
+			sourceTree = "<group>";
+		};
 		A59EECDA19D1759F00D011C5 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,8 +463,8 @@
 		AA623CFD1998A7F200A942A9 /* GolesTests */ = {
 			isa = PBXGroup;
 			children = (
-				AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */,
-				AACA545819C3419600E39D94 /* PerformanceTests.m */,
+				A526039119DD80ED00375FB1 /* Performance */,
+				A526039019DD7F9D00375FB1 /* Webservice */,
 				AA623D031998A7F200A942A9 /* GolesTests.m */,
 				AA623CFE1998A7F200A942A9 /* Supporting Files */,
 			);

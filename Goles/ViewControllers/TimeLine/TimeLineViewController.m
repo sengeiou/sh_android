@@ -13,7 +13,6 @@
 #import "Shot.h"
 #import "CoreDataManager.h"
 #import "ShotTableViewCell.h"
-#import "UIImageView+FadeIn.h"
 #import "Utils.h"
 #import "Conection.h"
 #import "Fav24Colors.h"
