@@ -28,7 +28,7 @@ namespace Bagdad.Utils
 
                     isDatabaseExisting = true;
                 }
-                catch (Exception ef)
+                catch
                 {
                     isDatabaseExisting = false;
                 }

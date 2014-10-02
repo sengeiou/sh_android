@@ -12,71 +12,57 @@ namespace Bagdad.Models
     public class Follow : BaseModelJsonConstructor
     {
 
-        public async Task<int> saveData(JObject job)
+        public int idUser { get; set; }
+        public int idUserFollowed { get; set; }
+        public Double csys_birth { get; set; }
+        public Double csys_modified { get; set; }
+        public Double csys_deleted { get; set; }
+        public int csys_revision { get; set; }
+        public char csys_synchronized { get; set; }
+        private String ops_data = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+
+        public override async Task<int> SaveData(List<BaseModelJsonConstructor> follows)
         {
             int done = 0;
             Database database;
 
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertFollowData))
                 {
-                    database = await App.GetDatabaseAsync();
+                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
 
-                    using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertFollowData))
+                    foreach (Follow follow in follows)
                     {
-                        await database.ExecuteStatementAsync("BEGIN TRANSACTION");
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        custstmt.Reset();
 
-                        foreach (JToken follow in job["ops"][0]["data"])
-                        {
-                            //idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                            custstmt.Reset();
+                        custstmt.BindIntParameterWithName("@idUser", follow.idUser);
+                        custstmt.BindIntParameterWithName("@idUserFollowed", follow.idUserFollowed);
+                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(follow.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(follow.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                        if (follow.csys_deleted == 0)
+                            custstmt.BindNullParameterWithName("@csys_deleted");
+                        else
+                            custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(follow.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@csys_revision", follow.csys_revision);
+                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
-                            if (follow["idUser"] == null || String.IsNullOrEmpty(follow["idUser"].ToString()))
-                                custstmt.BindNullParameterWithName("@idUser");
-                            else
-                                custstmt.BindIntParameterWithName("@idUser", int.Parse(follow["idUser"].ToString()));
 
-                            if (follow["idFollowedUser"] == null || String.IsNullOrEmpty(follow["idFollowedUser"].ToString()))
-                                custstmt.BindNullParameterWithName("@idUserFollowed");
-                            else
-                                custstmt.BindIntParameterWithName("@idUserFollowed", int.Parse(follow["idFollowedUser"].ToString()));
-
-                            if (follow["birth"] == null || String.IsNullOrEmpty(follow["birth"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_birth");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(follow["birth"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (follow["modified"] == null || String.IsNullOrEmpty(follow["modified"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_modified");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(follow["modified"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (follow["deleted"] == null || String.IsNullOrEmpty(follow["deleted"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_deleted");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(follow["deleted"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (follow["revision"] == null || String.IsNullOrEmpty(follow["revision"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_revision");
-                            else
-                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(follow["revision"].ToString()));
-
-                            custstmt.BindTextParameterWithName("@csys_synchronized", "S");
-
-                            await custstmt.StepAsync().AsTask().ConfigureAwait(false);
-                            done++;
-                        }
-                        await database.ExecuteStatementAsync("COMMIT TRANSACTION");
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
                     }
+                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
                 App.DBLoaded.Set();
-
             }
             catch (Exception e)
             {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
                 App.DBLoaded.Set();
-                throw new Exception("E R R O R - User - saveDataFollow: " + e.Message);
+                throw new Exception("E R R O R - Follow - SaveData: " + sError + " / " + e.Message);
             }
             return done;
         }
@@ -112,10 +98,44 @@ namespace Bagdad.Models
 
         protected override String GetEntityName() { return Constants.SERCOM_TB_FOLLOW; }
 
+        protected override String GetOps() { return ops_data; }
+
         public override async Task<string> ConstructFilter(string conditionDate)
         {
             return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
         }
 
+        public override List<BaseModelJsonConstructor> ParseJson(JObject job)
+        {
+            List<BaseModelJsonConstructor> follows = new List<BaseModelJsonConstructor>();
+
+            try
+            {
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken follow in job["ops"][0]["data"])
+                    {
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        Follow followParse = new Follow();
+
+                        followParse.idUser = int.Parse(follow["idUser"].ToString());
+                        followParse.idUserFollowed = int.Parse(follow["idFollowedUser"].ToString());
+                        followParse.csys_birth = Double.Parse(follow["birth"].ToString());
+                        followParse.csys_modified = Double.Parse(follow["modified"].ToString());
+                        Double deleted; if (Double.TryParse(follow["deleted"].ToString(), out deleted))
+                            followParse.csys_deleted = deleted;
+                        followParse.csys_revision = int.Parse(follow["revision"].ToString());
+                        followParse.csys_synchronized = 'S';
+                        follows.Add(followParse);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("E R R O R - Shot - ParseJson: " + e.Message);
+            }
+            return follows;
+        }
     }
 }

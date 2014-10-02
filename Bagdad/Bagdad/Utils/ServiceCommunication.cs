@@ -38,12 +38,6 @@ namespace Bagdad.Utils
         private ObservableCollection<String> listTables;
         private ObservableCollection<String> listTablesSynchronized;
 
-        #region OPS
-        private String OPS_DATA_USER = "\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        private String OPS_DATA_LOGIN = "\"idUser\": null,\"idFavouriteTeam\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        private String OPS_DATA_SHOT = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        private String OPS_DATA_FOLLOW = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        #endregion
 
         public ServiceCommunication()
         {
@@ -266,7 +260,6 @@ namespace Bagdad.Utils
             sFilterModifyDelete = "\"filter\":{" + await model.ConstructFilter(sFilterModifyDelete) + "}";
 
             return sFilterModifyDelete;
-
         }
 
         private static BaseModelJsonConstructor CreateModelJsonConstructor(string entity)
@@ -274,6 +267,9 @@ namespace Bagdad.Utils
             BaseModelJsonConstructor model = null;
             switch (entity)
             {
+                case Constants.SERCOM_TB_LOGIN:
+                    model = new Login();
+                    break;
                 case Constants.SERCOM_TB_USER:
                     model = new User();
                     break;
@@ -368,7 +364,7 @@ namespace Bagdad.Utils
                 }
                 else
                 {
-                    //if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
+                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
                     //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                     if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         totalDone = 1;
@@ -404,41 +400,12 @@ namespace Bagdad.Utils
 
         private String GetOPS(String operation, String entity, String searchParams, int offset)
         {
-            String ops;
-            try
-            {
-                switch (entity)
-                {
-                    case Constants.SERCOM_TB_LOGIN:
-                        ops = ConstructOPS(OPS_DATA_LOGIN, operation, entity, searchParams, offset, 1);
-                        break;
-                    case Constants.SERCOM_TB_USER:
-                        User user = new User();
-                        ops = user.ConstructOperation(OPS_DATA_USER, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
-                        break;
-                    case Constants.SERCOM_TB_FOLLOW:
-                        Follow follow = new Follow();
-                        ops = follow.ConstructOperation(OPS_DATA_FOLLOW, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
-                        break;
-                    case Constants.SERCOM_TB_SHOT:
-                        Shot shot = new Shot();
-                        ops = shot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, Constants.SERCOM_PARAM_OFFSET_PAG);
-                        break;
-                    case Constants.SERCOM_TB_OLD_SHOTS:
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
+            return model.ConstructOperation(operation, searchParams, offset,  Constants.SERCOM_PARAM_OFFSET_PAG);
+                 /*case Constants.SERCOM_TB_OLD_SHOTS:
                         Shot oldShot = new Shot();
                         ops = oldShot.ConstructOperation(OPS_DATA_SHOT, operation, searchParams, offset, Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG);
-                        break;
-                    default:
-                        ops = "";
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ServiceCommunication - GetOPS: " + entity.ToString() + " " + e.Message, e);
-            }
-            return ops;
-
+                        break;*/
         }
 
         private String ConstructOPS(String opsData, String operation, String entity, String searchParams, int offset, int nItems)
@@ -447,43 +414,11 @@ namespace Bagdad.Utils
             return "\"ops\":[{\"data\":[{" + opsData + "}],\"metadata\":{\"items\": " + nItems + ((offset != 0)?",\"offset\":" + offset : "") + ",\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
         }
 
-        private async Task<int> saveData(String entity, JObject response)
+        private async Task<int> saveData(string entity, JObject response)
         {
-            int changes = 0;
-            try
-            {
-                switch (entity)
-                {
-                    case Constants.SERCOM_TB_LOGIN:
-                        User user = new User();
-                        changes = await user.saveData(response);
-                        break;
-                    case Constants.SERCOM_TB_USER:
-                        User people = new User();
-                        changes = await people.saveDataPeople(response);
-                        break;
-                    case Constants.SERCOM_TB_FOLLOW:
-                        Follow follow = new Follow();
-                        changes = await follow.saveData(response);
-                        break;
-                    case Constants.SERCOM_TB_SHOT:
-                        Shot shot = new Shot();
-                        changes = await shot.SaveData(response);
-                        break;
-                    case Constants.SERCOM_TB_OLD_SHOTS:
-                        Shot oldShots = new Shot();
-                        changes = await oldShots.AddOlderShotsToTimeLine(response);
-                        break;
-                    default:
-
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ServiceCommunication - SaveData: " + entity.ToString() + " " + e.Message, e);
-            }
-            return changes;
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
+            int result = await model.SaveData(model.ParseJson(response));
+            return result;
         }
 
         private async Task<String> makeRequest(String json)

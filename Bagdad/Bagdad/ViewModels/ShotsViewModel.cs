@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.ComponentModel;
 
 namespace Bagdad.ViewModels
 {
@@ -78,7 +77,27 @@ namespace Bagdad.ViewModels
             }
         }
 
-        public int ParseShotsForPrinting(List<ShotModel> shots)
+        private string extractTime(string shotTime)
+        {
+            String timeString = "";
+            try
+            {
+                //time
+                TimeSpan time = DateTime.Now.AddMilliseconds(App.TIME_LAPSE) - DateTime.Parse(shotTime);
+
+                if (time.Days != 0) timeString = time.Days + "d";
+                else if (time.Hours != 0) timeString = time.Hours + "h";
+                else if (time.Minutes != 0) timeString = time.Minutes + "m";
+                else if (time.Seconds != 0) timeString = time.Seconds + "s";
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - extractTime: " + e.Message);
+            }
+            return timeString;
+        }
+
+        public int ParseShotsForPrinting(List<ShotViewModel> shots)
         {
             try
             {
@@ -89,24 +108,18 @@ namespace Bagdad.ViewModels
                 if (shots.Count == 0) return 0;
                 int done = 0;
 
-                foreach (ShotModel shot in shots)
+                foreach (ShotViewModel shot in shots)
                 {
 
                     //time
-                    String timeString = "";
-                    TimeSpan time = DateTime.Now.AddMilliseconds(App.TIME_LAPSE) - DateTime.Parse(shot.shotTime);
-                    
-                    if (time.Days != 0) timeString = time.Days + "d";
-                    else if (time.Hours != 0) timeString = time.Hours + "h";
-                    else if (time.Minutes != 0) timeString = time.Minutes + "m";
-                    else if (time.Seconds != 0) timeString = time.Seconds + "s";
+                    String timeString = extractTime(shot.shotTime);
 
                     //image
                     image = userImageManager.GetUserImage(shot.shotUserId);
                     if (image == null) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(shot.shotUserImageURL, UriKind.Absolute));
 
                     //Tag
-                    String tag = "";
+                    String tag = "";        //TODO: Partidos que tendrán asociadas las publicaciones
                     String tagIsVisible = "Visible";
                     if (tag.Equals("")) tagIsVisible = "Collapsed";
 
@@ -140,12 +153,13 @@ namespace Bagdad.ViewModels
             {
                 shot.comment = text;
                 shot.idUser = App.ID_USER;
+                shot.csys_birth = DateTime.Now.Ticks;
                 shot.csys_revision = 0;
                 shot.csys_synchronized = 'N';
                 await shot.SynchronizeShot();
-                List<ShotModel> oneShot = new List<ShotModel>();
+                List<ShotViewModel> oneShot = new List<ShotViewModel>();
                 UserImageManager userImage = new UserImageManager();
-                oneShot.Add(new ShotModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = shot.csys_birth.ToShortDateString(), shotUserImageURL = userImage.GetUserImagename(shot.idUser) });
+                oneShot.Add(new ShotViewModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = shot.csys_birth.ToString(), shotUserImageURL = userImage.GetUserImagename(shot.idUser) });
                 ParseShotsForPrinting(oneShot);
                 NotifyPropertyChanged("Shots");
             }

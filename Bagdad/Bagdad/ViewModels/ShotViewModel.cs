@@ -13,6 +13,7 @@ namespace Bagdad.ViewModels
         public int shotUserId { get; set; }
         public String shotUserName { get; set; }
         public BitmapImage shotUserImage { get; set; }
+        public String shotUserImageURL { get; set; }
         public String shotTag { get; set; }
         public String tagVisibility { get; set; }
         public String shotMessage { get; set; }

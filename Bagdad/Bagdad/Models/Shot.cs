@@ -16,80 +16,42 @@ namespace Bagdad.Models
         public int idShot { get; set; }
         public int idUser { get; set; }
         public string comment  { get; set; }
-        public DateTime csys_birth { get; set; }
-        public DateTime csys_modified { get; set; }
-        public DateTime csys_deleted { get; set; }
+        public Double csys_birth { get; set; }
+        public Double csys_modified { get; set; }
+        public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        private String ops_data = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
-        public async Task<int> SaveData(JObject job)
+
+
+        public override async Task<int> SaveData(List<BaseModelJsonConstructor> shots)
         {
             int done = 0;
-            Database database;
 
+            List<BaseModelJsonConstructor> shotsToUpdate;
+            List<BaseModelJsonConstructor> shotsToInsert;
+            List<BaseModelJsonConstructor> shotsToDelete;
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                shotsToUpdate = new List<BaseModelJsonConstructor>();
+                shotsToInsert = new List<BaseModelJsonConstructor>();
+                shotsToDelete = new List<BaseModelJsonConstructor>();
+
+                foreach (Shot shot in shots)
                 {
-                    database = await App.GetDatabaseAsync();
-                    using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertShotData))
-                    {
-                        await database.ExecuteStatementAsync("BEGIN TRANSACTION");
-
-                        foreach (JToken shot in job["ops"][0]["data"])
-                        {
-                            //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                            custstmt.Reset();
-
-                            if (shot["idShot"] == null || String.IsNullOrEmpty(shot["idShot"].ToString()))
-                                custstmt.BindNullParameterWithName("@idShot");
-                            else
-                                custstmt.BindIntParameterWithName("@idShot", int.Parse(shot["idShot"].ToString()));
-
-                            if (shot["idUser"] == null || String.IsNullOrEmpty(shot["idUser"].ToString()))
-                                custstmt.BindNullParameterWithName("@idUser");
-                            else
-                                custstmt.BindIntParameterWithName("@idUser", int.Parse(shot["idUser"].ToString()));
-
-                            if (shot["comment"] == null || String.IsNullOrEmpty(shot["comment"].ToString()))
-                                custstmt.BindNullParameterWithName("@comment");
-                            else
-                                custstmt.BindTextParameterWithName("@comment", shot["comment"].ToString());
-
-                            if (shot["birth"] == null || String.IsNullOrEmpty(shot["birth"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_birth");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(shot["birth"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (shot["modified"] == null || String.IsNullOrEmpty(shot["modified"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_modified");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(shot["modified"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (shot["deleted"] == null || String.IsNullOrEmpty(shot["deleted"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_deleted");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(shot["deleted"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (shot["revision"] == null || String.IsNullOrEmpty(shot["revision"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_revision");
-                            else
-                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(shot["revision"].ToString()));
-
-                            custstmt.BindTextParameterWithName("@csys_synchronized", "S");
-
-                            await custstmt.StepAsync().AsTask().ConfigureAwait(false);
-                            done++;
-                        }
-                        await database.ExecuteStatementAsync("COMMIT TRANSACTION");
-                    }
+                    if (shot.csys_deleted != 0) shotsToDelete.Add(shot);
+                    else if (await ExistShot(shot.idShot) != 0)
+                        shotsToUpdate.Add(shot);
+                    else
+                        shotsToInsert.Add(shot);
                 }
-                App.DBLoaded.Set();
+                if (shotsToInsert.Count > 0) done = await InsertData(shotsToInsert);
+                if (shotsToUpdate.Count > 0) done += await UpdateData(shotsToUpdate);
+                if (shotsToDelete.Count > 0) done += await DeleteData(shotsToDelete);
             }
             catch (Exception e)
             {
-                string sError = Database.GetSqliteErrorCode(e.HResult).ToString(); 
-                App.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - SaveData: " + e.Message);
             }
             return done;
@@ -106,7 +68,7 @@ namespace Bagdad.Models
             string shotDate = "";
             User user = new User();
             List<String> userData = null;
-            List<ShotModel> OldShots = new List<ShotModel>();
+            List<ShotViewModel> OldShots = new List<ShotViewModel>();
 
             try
             {
@@ -144,7 +106,7 @@ namespace Bagdad.Models
 
                         if (add)
                         {
-                            OldShots.Add( new ShotModel() { shotId = idShot, shotMessage = comment, shotTime = shotDate, shotUserId = idUser, shotUserImageURL = userData[1], shotUserName = userData[0] });
+                            OldShots.Add(new ShotViewModel() { shotId = idShot, shotMessage = comment, shotTime = shotDate, shotUserId = idUser, shotUserImageURL = userData[1], shotUserName = userData[0] });
                             done++;
                         }
 
@@ -189,12 +151,161 @@ namespace Bagdad.Models
             }
         }
 
+        public async Task<int> InsertData(List<BaseModelJsonConstructor> shots)
+        {
+            int done = 0;
+            Database database;
 
-        public async Task<List<ShotModel>> getTimeLineShots()
+            try
+            {
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertShotData))
+                {
+                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
+
+                    foreach (Shot shot in shots)
+                    {
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        custstmt.Reset();
+
+                        custstmt.BindIntParameterWithName("@idShot", shot.idShot);
+                        custstmt.BindIntParameterWithName("@idUser", shot.idUser);
+                        custstmt.BindTextParameterWithName("@comment", shot.comment);
+                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(shot.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(shot.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                        if (shot.csys_deleted == 0)
+                            custstmt.BindNullParameterWithName("@csys_deleted");
+                        else
+                            custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(shot.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@csys_revision", shot.csys_revision);
+                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
+                    }
+                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
+                }
+                App.DBLoaded.Set();
+                Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros añadidos\n");
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - InsertData: " + e.Message);
+            }
+            return done;
+        }
+
+        private async Task<int> UpdateData(List<BaseModelJsonConstructor> shots)
+        {
+            int done = 0;
+            Database database;
+
+            try
+            {
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.UpdateShotData))
+                {
+                    foreach (Shot shot in shots)
+                    {
+                        custstmt.Reset();
+
+                        custstmt.BindIntParameterWithName("@idShot", shot.idShot);
+                        custstmt.BindTextParameterWithName("@comment", shot.comment);
+                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(shot.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(shot.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@csys_revision", shot.csys_revision);
+                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
+                    }
+                    Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros actualizados\n");
+                }
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - SaveData: " + e.Message);
+            }
+            return done;
+        }
+
+        public async Task<int> DeleteData(List<BaseModelJsonConstructor> shots)
+        {
+            int done = 0;
+            Database database;
+            List<BaseModelJsonConstructor> shotsToUpdate;
+            try
+            {
+                shotsToUpdate = new List<BaseModelJsonConstructor>();
+
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.DeleteShotData))
+                {
+                    foreach (Shot shot in shots)
+                    {
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        custstmt.Reset();
+
+                        custstmt.BindIntParameterWithName("@idShot", shot.idShot);
+
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
+                    }
+                }
+                App.DBLoaded.Set();
+                Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros borrados\n");
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
+            }
+            return done;
+        }
+
+        public async Task<int> ExistShot(int idShot)
+        {
+            int done = 0;
+            Database database;
+
+            try
+            {
+            
+
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.getShotById))
+                {
+                    custstmt.Reset();
+
+                    custstmt.BindIntParameterWithName("@idShot", idShot);
+
+                    if (await custstmt.StepAsync())
+                    {
+                        done = custstmt.GetIntAt(0);
+                    }
+                }
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
+            }
+            return done;
+        }
+
+        public async Task<List<ShotViewModel>> getTimeLineShots()
         {
             try
             {
-                List<ShotModel> shotList = new List<ShotModel>();
+                List<ShotViewModel> shotList = new List<ShotViewModel>();
                 Database database = await App.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineShots);
@@ -204,7 +315,7 @@ namespace Bagdad.Models
                 while (await selectStatement.StepAsync())
                 {
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new ShotModel
+                    shotList.Add(new ShotViewModel
                     {
                         shotId = selectStatement.GetIntAt(0),
                         shotUserId = selectStatement.GetIntAt(1),
@@ -223,12 +334,12 @@ namespace Bagdad.Models
             }
         }
 
-        public async Task<List<ShotModel>> getTimeLineOtherShots(int offset)
+        public async Task<List<ShotViewModel>> getTimeLineOtherShots(int offset)
         {
             try
             {
                 int count = 0;
-                List<ShotModel> shotList = new List<ShotModel>();
+                List<ShotViewModel> shotList = new List<ShotViewModel>();
                 Database database = await App.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineOtherShots);
@@ -239,7 +350,7 @@ namespace Bagdad.Models
                 while (await selectStatement.StepAsync())
                 {
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new ShotModel
+                    shotList.Add(new ShotViewModel
                     {
                         shotId = selectStatement.GetIntAt(0),
                         shotUserId = selectStatement.GetIntAt(1),
@@ -262,6 +373,8 @@ namespace Bagdad.Models
         }
 
         protected override String GetEntityName() { return Constants.SERCOM_TB_SHOT; }
+
+        protected override String GetOps() { return ops_data; }
 
         public override async Task<string> ConstructFilter(string conditionDate)
         {
@@ -378,6 +491,40 @@ namespace Bagdad.Models
             {
                 throw new Exception("Shot - GetOlderShotDate: " + e.Message, e);
             }
+        }
+
+        public override List<BaseModelJsonConstructor> ParseJson(JObject job)
+        {
+            List<BaseModelJsonConstructor> shots = new List<BaseModelJsonConstructor>();
+
+            try
+            {
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken shot in job["ops"][0]["data"])
+                    {
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        Shot shotParse = new Shot();
+
+                        shotParse.idShot = int.Parse(shot["idShot"].ToString());
+                        shotParse.idUser = int.Parse(shot["idUser"].ToString());
+                        shotParse.comment = shot["comment"].ToString();
+                        shotParse.csys_birth = Double.Parse(shot["birth"].ToString());
+                        shotParse.csys_modified = Double.Parse(shot["modified"].ToString());
+                        Double deleted; if (Double.TryParse(shot["deleted"].ToString(), out deleted))
+                            shotParse.csys_deleted = deleted;
+                        shotParse.csys_revision = int.Parse(shot["revision"].ToString());
+                        shotParse.csys_synchronized = 'S';
+                        shots.Add(shotParse);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("E R R O R - Shot - ParseJson: " + e.Message);
+            }
+            return shots;
         }
 
     }

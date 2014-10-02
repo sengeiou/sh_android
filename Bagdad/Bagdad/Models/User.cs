@@ -12,192 +12,94 @@ namespace Bagdad.Models
 {
     public class User : BaseModelJsonConstructor
     {
+        public int idUser { get; set; }
+        public int idFavouriteTeam{ get; set; }
+        public string userName{ get; set; }
+        public string name{ get; set; }
+        public string photo{ get; set; }
+        public string bio { get; set; }
+        public string website { get; set; }
+        public int numFollowers { get; set; }
+        public int numFollowing { get; set; }
+        public int points { get; set; }
+        public Double csys_birth { get; set; }
+        public Double csys_modified { get; set; }
+        public Double csys_deleted { get; set; }
+        public int csys_revision { get; set; }
+        public char csys_synchronized { get; set; }
 
-        
-        public async Task<int> saveData(JObject job)
+        private String ops_data = "\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+
+        public override async Task<int> SaveData(List<BaseModelJsonConstructor> users)
         {
             int done = 0;
             Database database;
-            UserImageManager userImageManager = new UserImageManager();
 
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertUserData))
                 {
-                    database = await App.GetDatabaseAsync();
-                    using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertLoginData))
+                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
+
+                    foreach (User user in users)
                     {
-                        await database.ExecuteStatementAsync("BEGIN TRANSACTION");
+                        //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        custstmt.Reset();
 
-                        foreach (JToken userLogin in job["ops"][0]["data"])
-                        {
-                            //idUser, idFavouriteTeam, sessionToken, userName, email, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                            custstmt.Reset();
+                        custstmt.BindIntParameterWithName("@idUser", user.idUser);
 
-                            if (userLogin["idUser"] == null || String.IsNullOrEmpty(userLogin["idUser"].ToString()))
-                                custstmt.BindNullParameterWithName("@idUser");
-                            else
-                            {
-                                custstmt.BindIntParameterWithName("@idUser", int.Parse(userLogin["idUser"].ToString()));
-                                App.ID_USER = int.Parse(userLogin["idUser"].ToString());
-                            }
+                        if(user.idFavouriteTeam == 0)
+                            custstmt.BindNullParameterWithName("@idFavouriteTeam");
+                        else
+                            custstmt.BindIntParameterWithName("@idFavouriteTeam", user.idFavouriteTeam);
 
-                            if (userLogin["idFavouriteTeam"] == null || String.IsNullOrEmpty(userLogin["idFavouriteTeam"].ToString()))
-                                custstmt.BindNullParameterWithName("@idFavouriteTeam");
-                            else
-                                custstmt.BindIntParameterWithName("@idFavouriteTeam", int.Parse(userLogin["idFavouriteTeam"].ToString()));
+                        custstmt.BindTextParameterWithName("@userName", user.userName);
+                        custstmt.BindTextParameterWithName("@name", user.name);
+                        custstmt.BindTextParameterWithName("@photo", user.userName);
 
-                            if (userLogin["sessionToken"] == null || String.IsNullOrEmpty(userLogin["sessionToken"].ToString()))
-                                custstmt.BindNullParameterWithName("@sessionToken");
-                            else
-                                custstmt.BindTextParameterWithName("@sessionToken", userLogin["sessionToken"].ToString());
+                        if (String.IsNullOrEmpty(user.bio))
+                            custstmt.BindNullParameterWithName("@bio");
+                        else
+                            custstmt.BindTextParameterWithName("@bio", user.bio);
 
-                            if (userLogin["userName"] == null || String.IsNullOrEmpty(userLogin["userName"].ToString()))
-                                custstmt.BindNullParameterWithName("@userName");
-                            else
-                                custstmt.BindTextParameterWithName("@userName", userLogin["userName"].ToString());
+                        if (String.IsNullOrEmpty(user.website))
+                            custstmt.BindNullParameterWithName("@website");
+                        else
+                            custstmt.BindTextParameterWithName("@website", user.website);
 
-                            if (userLogin["email"] == null || String.IsNullOrEmpty(userLogin["email"].ToString()))
-                                custstmt.BindNullParameterWithName("@email");
-                            else
-                                custstmt.BindTextParameterWithName("@email", userLogin["email"].ToString());
+                        if(user.numFollowing == 0)
+                            custstmt.BindNullParameterWithName("@numFollowings");
+                        else
+                            custstmt.BindInt64ParameterWithName("@numFollowings", user.numFollowing);
 
-                            if (userLogin["name"] == null || String.IsNullOrEmpty(userLogin["name"].ToString()))
-                                custstmt.BindNullParameterWithName("@name");
-                            else
-                                custstmt.BindTextParameterWithName("@name", userLogin["name"].ToString());
+                        if (user.numFollowers == 0)
+                            custstmt.BindNullParameterWithName("@numFollowers");
+                        else
+                            custstmt.BindInt64ParameterWithName("@numFollowers", user.numFollowers);
 
-                            if (userLogin["photo"] == null || String.IsNullOrEmpty(userLogin["photo"].ToString()))
-                                custstmt.BindNullParameterWithName("@photo");
-                            else
-                            {
-                                custstmt.BindTextParameterWithName("@photo", userLogin["photo"].ToString());
-                                userImageManager.SaveImageFromURL(userLogin["photo"].ToString(), int.Parse(userLogin["idUser"].ToString()));
-                            }
+                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(user.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(user.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                        if (user.csys_deleted == 0)
+                            custstmt.BindNullParameterWithName("@csys_deleted");
+                        else
+                            custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(user.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@csys_revision", user.csys_revision);
+                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
 
-                            if (userLogin["birth"] == null || String.IsNullOrEmpty(userLogin["birth"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_birth");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(userLogin["birth"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userLogin["modified"] == null || String.IsNullOrEmpty(userLogin["modified"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_modified");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(userLogin["modified"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userLogin["deleted"] == null || String.IsNullOrEmpty(userLogin["deleted"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_deleted");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(userLogin["deleted"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userLogin["revision"] == null || String.IsNullOrEmpty(userLogin["revision"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_revision");
-                            else
-                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userLogin["revision"].ToString()));
-
-                            custstmt.BindTextParameterWithName("@csys_synchronized", "S");
-                            
-                            await custstmt.StepAsync().AsTask().ConfigureAwait(false);
-                            done++;
-                        }
-                        await database.ExecuteStatementAsync("COMMIT TRANSACTION");
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
                     }
+                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
                 App.DBLoaded.Set();
-                
             }
             catch (Exception e)
             {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
                 App.DBLoaded.Set();
                 throw new Exception("E R R O R - User - SaveData: " + e.Message);
-            }
-            return done;
-        }
-
-        public async Task<int> saveDataPeople(JObject job)
-        {
-            int done = 0;
-            Database database;
-            UserImageManager userImageManager = new UserImageManager();
-
-            try
-            {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
-                {
-                    database = await App.GetDatabaseAsync();
-                    using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertUserData))
-                    {
-                        await database.ExecuteStatementAsync("BEGIN TRANSACTION");
-
-                        foreach (JToken userFollowing in job["ops"][0]["data"])
-                        {
-                            //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                            custstmt.Reset();
-
-                            if (userFollowing["idUser"] == null || String.IsNullOrEmpty(userFollowing["idUser"].ToString()))
-                                custstmt.BindNullParameterWithName("@idUser");
-                            else
-                                custstmt.BindIntParameterWithName("@idUser", int.Parse(userFollowing["idUser"].ToString()));
-
-                            if (userFollowing["idFavouriteTeam"] == null || String.IsNullOrEmpty(userFollowing["idFavouriteTeam"].ToString()))
-                                custstmt.BindNullParameterWithName("@idFavouriteTeam");
-                            else
-                                custstmt.BindIntParameterWithName("@idFavouriteTeam", int.Parse(userFollowing["idFavouriteTeam"].ToString()));
-
-                            if (userFollowing["userName"] == null || String.IsNullOrEmpty(userFollowing["userName"].ToString()))
-                                custstmt.BindNullParameterWithName("@userName");
-                            else
-                                custstmt.BindTextParameterWithName("@userName", userFollowing["userName"].ToString());
-
-                            if (userFollowing["name"] == null || String.IsNullOrEmpty(userFollowing["name"].ToString()))
-                                custstmt.BindNullParameterWithName("@name");
-                            else
-                                custstmt.BindTextParameterWithName("@name", userFollowing["name"].ToString());
-
-                            if (userFollowing["photo"] == null || String.IsNullOrEmpty(userFollowing["photo"].ToString()))
-                                custstmt.BindNullParameterWithName("@photo");
-                            else
-                            {
-                                custstmt.BindTextParameterWithName("@photo", userFollowing["photo"].ToString());
-                                //Store image in local
-                                userImageManager.Enqueue(userFollowing["idUser"].ToString() + "♠" + userFollowing["photo"].ToString());
-                            }
-
-                            if (userFollowing["birth"] == null || String.IsNullOrEmpty(userFollowing["birth"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_birth");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(userFollowing["birth"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userFollowing["modified"] == null || String.IsNullOrEmpty(userFollowing["modified"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_modified");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(userFollowing["modified"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userFollowing["deleted"] == null || String.IsNullOrEmpty(userFollowing["deleted"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_deleted");
-                            else
-                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(userFollowing["deleted"].ToString()).ToString("s").Replace('T', ' '));
-
-                            if (userFollowing["revision"] == null || String.IsNullOrEmpty(userFollowing["revision"].ToString()))
-                                custstmt.BindNullParameterWithName("@csys_revision");
-                            else
-                                custstmt.BindIntParameterWithName("@csys_revision", int.Parse(userFollowing["revision"].ToString()));
-
-                            custstmt.BindTextParameterWithName("@csys_synchronized", "S");
-
-                            await custstmt.StepAsync().AsTask().ConfigureAwait(false);
-                            done++;
-                        }
-                        await database.ExecuteStatementAsync("COMMIT TRANSACTION");
-                    }
-                }
-                App.DBLoaded.Set();
-                userImageManager.SaveMultipleImages();
-            }
-            catch (Exception e)
-            {
-                App.DBLoaded.Set();
-                throw new Exception("E R R O R - User - saveDataPeople: " + e.Message);
             }
             return done;
         }
@@ -228,6 +130,8 @@ namespace Bagdad.Models
         }
 
         protected override String GetEntityName() { return Constants.SERCOM_TB_USER; }
+        
+        protected override String GetOps() { return ops_data; }
 
         /// <summary>
         /// Construimos el filtro 
@@ -282,6 +186,52 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - User - GetNameAndImageURL: " + e.Message);
             }
             return userInfo;
+        }
+
+        public override List<BaseModelJsonConstructor> ParseJson(JObject job)
+        {
+            List<BaseModelJsonConstructor> users = new List<BaseModelJsonConstructor>();
+            UserImageManager userImageManager = new UserImageManager();
+
+            try
+            {
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken user in job["ops"][0]["data"])
+                    {
+                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        User userParse = new User();
+
+                        userParse.idUser = int.Parse(user["idUser"].ToString());
+                        userParse.idFavouriteTeam = int.Parse(user["idFavouriteTeam"].ToString());
+                        userParse.userName = user["userName"].ToString();
+                        userParse.name = user["name"].ToString();
+                        userParse.photo = user["photo"].ToString();
+                        userParse.bio = user["bio"].ToString();
+                        userParse.website = user["website"].ToString();
+                        userParse.points = int.Parse(user["points"].ToString());
+                        userParse.numFollowing = int.Parse(user["numFollowings"].ToString());
+                        userParse.numFollowers = int.Parse(user["numFollowers"].ToString());
+                        userParse.csys_birth = Double.Parse(user["birth"].ToString());
+                        userParse.csys_modified = Double.Parse(user["modified"].ToString());
+                        Double deleted; if (Double.TryParse(user["deleted"].ToString(), out deleted))
+                            userParse.csys_deleted = deleted;
+                        userParse.csys_revision = int.Parse(user["revision"].ToString());
+                        userParse.csys_synchronized = 'S';
+
+                        userImageManager.Enqueue(userParse.idUser.ToString() + "♠" + userParse.photo);
+
+                        users.Add(userParse);
+                    }
+                }
+                userImageManager.SaveMultipleImages();
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("E R R O R - Shot - ParseJson: " + e.Message);
+            }
+            return users;
         }
 
         public async Task<UserViewModel> GetProfileInfo(int idUser)

@@ -79,7 +79,7 @@ namespace Bagdad
                     MessageBox.Show(AppResources.NoInternet, AppResources.CanConnect, MessageBoxButton.OK);
                 }
             }
-            catch (Exception ef)
+            catch
             {
                 //ServerError
                 MessageBox.Show(AppResources.GeneralLoginError);

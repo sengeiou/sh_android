@@ -108,8 +108,8 @@
     <Compile Include="Models\BaseModelJsonConstructor.cs" />
     <Compile Include="Models\Follow.cs" />
     <Compile Include="Models\GenericModel.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Shot.cs" />
-    <Compile Include="Models\ShotModel.cs" />
     <Compile Include="Models\SynchroTableInfo.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="SignIn.xaml.cs">

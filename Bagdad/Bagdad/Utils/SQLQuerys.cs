@@ -11,9 +11,15 @@ namespace Bagdad.Utils
 
         #region USER
 
-        public const String InsertLoginData = "INSERT INTO User (idUser, idFavouriteTeam, sessionToken, userName, email, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @sessionToken, @userName, @email, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertLoginData = "INSERT INTO User (idUser, idFavouriteTeam, sessionToken, userName, email, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @sessionToken, @userName, @email, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @userName, @name, @photo, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavouriteTeam, userName, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavouriteTeam, @userName, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+
+        public const String UpdateUserData = "UPDATE User SET idFavouriteTeam = @idFavouriteTeam, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized WHERE idUser = @idUser";
+
+        public const String DeleteUserData = "DELETE FROM User WHERE idUser = @idUser";
+
+        public const String getUserById = "SELECT idUser FROM User WHERE idUser = @idUser";
 
         public const String GetSessionToken = "SELECT sessionToken, idUser FROM User WHERE sessionToken IS NOT NULL";
 
@@ -29,6 +35,10 @@ namespace Bagdad.Utils
 
         public const String InsertShotData = "INSERT INTO Shot (idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idShot, @idUser, @comment, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
+        public const String UpdateShotData = "UPDATE Shot SET comment = @comment, csys_birth = @csys_birth, csys_modified = @csys_modified, csys_revision = @csys_revision, csys_synchronized = @csys_synchronized WHERE idShot = @idShot";
+
+        public const String DeleteShotData = "DELETE FROM Shot WHERE idShot = @idShot";
+        
         public const String GetTimeLineShots = "SELECT s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth FROM Shot s JOIN User u ON s.idUser = u.idUser JOIN Follow f ON s.idUser = f.idUserFollowed OR s.idUser = f.idUser WHERE f.idUser = @idUser GROUP BY s.idShot ORDER BY s.csys_birth DESC LIMIT @limit;";
 
         public const String GetTimeLineOtherShots = "SELECT s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth FROM Shot s JOIN User u ON s.idUser = u.idUser JOIN Follow f ON s.idUser = f.idUserFollowed OR s.idUser = f.idUser WHERE f.idUser = @idUser GROUP BY s.idShot ORDER BY s.csys_birth DESC LIMIT @offset, @limit;";
@@ -45,7 +55,13 @@ namespace Bagdad.Utils
 
         public const String InsertFollowData = "INSERT INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
+        public const String UpdateFollowData = "UPDATE Follow SET csys_modified =  @csys_modified, csys_revision = @csys_revision,csys_synchronized = @csys_synchronized WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
+
+        public const String DeleteFollowData = "DELETE FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
+
         public const String SelectIdUserFollowing = "SELECT idUserFollowed from Follow where idUser = @idUser";
+
+        public const String getFollowByIdUserAndIdUserFollowed = "SELECT idUser, idUserFollowed FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
 
         #endregion
 
