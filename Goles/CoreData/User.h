@@ -2,7 +2,10 @@
 
 @interface User : _User {}
 
-+ (User *)getUser;
+@property (nonatomic, strong) UIImage *imgUser;
+
+
+
 
 +(instancetype)insertWithDictionary:(NSDictionary *)dict;
 +(instancetype)updateWithDictionary:(NSDictionary *)dict;

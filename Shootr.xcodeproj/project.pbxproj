@@ -16,8 +16,6 @@
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
 		A59EECDD19D1761500D011C5 /* ShotTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */; };
-		A59EECE419D17BA300D011C5 /* UIImageView+FadeIn.m in Sources */ = {isa = PBXBuildFile; fileRef = A59EECE319D17BA300D011C5 /* UIImageView+FadeIn.m */; };
-		A59EECEA19D17BF400D011C5 /* UIImage+CircularClip.m in Sources */ = {isa = PBXBuildFile; fileRef = A59EECE919D17BF400D011C5 /* UIImage+CircularClip.m */; };
 		A5A678A419C71FC200DEEA51 /* People.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678A619C71FC200DEEA51 /* People.storyboard */; };
 		A5A678AA19C7243500DEEA51 /* Timeline.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678AC19C7243500DEEA51 /* Timeline.storyboard */; };
 		A5A678B019C7249000DEEA51 /* Me.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678B219C7249000DEEA51 /* Me.storyboard */; };
@@ -135,10 +133,6 @@
 		A58F910C19A4A5830076AA1E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A59EECDB19D1761500D011C5 /* ShotTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShotTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShotTableViewCell.m; sourceTree = SOURCE_ROOT; };
-		A59EECE219D17BA300D011C5 /* UIImageView+FadeIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+FadeIn.h"; sourceTree = "<group>"; };
-		A59EECE319D17BA300D011C5 /* UIImageView+FadeIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+FadeIn.m"; sourceTree = "<group>"; };
-		A59EECE819D17BF400D011C5 /* UIImage+CircularClip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CircularClip.h"; sourceTree = "<group>"; };
-		A59EECE919D17BF400D011C5 /* UIImage+CircularClip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CircularClip.m"; sourceTree = "<group>"; };
 		A5A678A519C71FC200DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/People.storyboard; sourceTree = "<group>"; };
 		A5A678AB19C7243500DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Timeline.storyboard; sourceTree = "<group>"; };
 		A5A678B119C7249000DEEA51 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Me.storyboard; sourceTree = "<group>"; };
@@ -593,10 +587,6 @@
 				A50CCD8319C8889B005369E6 /* Conection.m */,
 				A50CCD8519C898A5005369E6 /* Encryption.h */,
 				A50CCD8619C898A5005369E6 /* Encryption.m */,
-				A59EECE219D17BA300D011C5 /* UIImageView+FadeIn.h */,
-				A59EECE319D17BA300D011C5 /* UIImageView+FadeIn.m */,
-				A59EECE819D17BF400D011C5 /* UIImage+CircularClip.h */,
-				A59EECE919D17BF400D011C5 /* UIImage+CircularClip.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -879,7 +869,6 @@
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
-				A59EECEA19D17BF400D011C5 /* UIImage+CircularClip.m in Sources */,
 				AACA544819C057C000E39D94 /* UIButton+AFNetworking.m in Sources */,
 				AA623E3D1998D17800A942A9 /* Device.m in Sources */,
 				AA623E751998D17800A942A9 /* FavEntityDescriptor.m in Sources */,
@@ -919,7 +908,6 @@
 				AACA544519C057C000E39D94 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				AA623EDC1998D78600A942A9 /* AppAdviceViewController.m in Sources */,
 				A58DA84419D02EB8003EE5CB /* User.m in Sources */,
-				A59EECE419D17BA300D011C5 /* UIImageView+FadeIn.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */,

@@ -143,10 +143,4 @@
     return result;
 }
 
-+ (User *)getUser {
-    User *user = [[UserManager singleton] getActiveUser];
-    
-    return user;
-}
-
 @end

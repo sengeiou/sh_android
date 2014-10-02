@@ -9,8 +9,8 @@
 #import "ShotTableViewCell.h"
 #import "User.h"
 #import "Utils.h"
-#import "UIImageView+FadeIn.h"
 #import "NSString+CleanLinks.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation ShotTableViewCell
 
@@ -37,7 +37,16 @@
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
-    [self.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
+    //shot.user.imgUser = [UIImage imageNamed:@"ball"];
+    
+    [self.imgPhoto setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        self.imgPhoto.image = image;
+        self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
+        self.imgPhoto.clipsToBounds = YES;
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+    
     self.lblDate.text = [Utils getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;
 }

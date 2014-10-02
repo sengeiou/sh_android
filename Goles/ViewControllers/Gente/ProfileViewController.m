@@ -38,7 +38,7 @@
 -(void) dataFillView{
     self.title = self.selectedUser.name;
     self.navigationController.navigationBar.topItem.title = @"";
-    
+    self.imgPhoto.image = self.imgSelectedUser;
     
 }
 
