@@ -232,8 +232,8 @@
    
    
     Shot *shot = self.arrayShots[indexPath.row];
-    [cell configureBasicCellWithShot:shot];
-    [cell addTarget:self action:@selector(goProfile)];
+    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+    [cell addTarget:self action:@selector(goProfile:)];
     
     return cell;
  }
@@ -264,10 +264,19 @@
 }
 #pragma mark - Pass ViewController
 //------------------------------------------------------------------------------
--(void)goProfile{
+-(void)goProfile:(id)sender{
+    
+    UIButton *btn = (UIButton *) sender;
+    
     AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    
+    Shot *selectedShot = self.arrayShots[btn.tag];
+    
+    profileVC.selectedUser = selectedShot.user;
+    
+    
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 

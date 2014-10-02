@@ -29,7 +29,7 @@
     return self;
 }
 
-- (void)configureBasicCellWithShot:(Shot *)shot {
+- (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row {
 
     self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
     self.txvText.textColor = [UIColor blackColor];
@@ -39,7 +39,7 @@
     self.lblName.text = shot.user.name;
     [self.imgPhoto fadeInFromURL:[NSURL URLWithString:shot.user.photo] withOuterMatte:NO andInnerBorder:NO];
     self.lblDate.text = [Utils getDateShot:shot.csys_birth];
-    
+    self.btnPhoto.tag = row;
 }
 
 - (void)addTarget:(id)target action:(SEL)action

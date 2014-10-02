@@ -31,6 +31,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self dataFillView];
+}
+
+-(void) dataFillView{
+    self.title = self.selectedUser.name;
+    self.navigationController.navigationBar.topItem.title = @"";
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

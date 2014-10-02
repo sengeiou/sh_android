@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 
-- (void)configureBasicCellWithShot:(Shot *)shot;
+- (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row;
 - (void)addTarget:(id)target action:(SEL)action;
 
 @end

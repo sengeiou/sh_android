@@ -224,7 +224,7 @@
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh{
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
     
     if (status && (lengthName > 2 && lengthPwd >  5)){
         NSString *result =  [[Encryption sharedInstance] getPassword:txtFieldPwd.text];
