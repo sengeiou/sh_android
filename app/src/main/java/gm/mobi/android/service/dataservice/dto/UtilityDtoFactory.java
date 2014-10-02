@@ -30,7 +30,7 @@ public class UtilityDtoFactory {
         return generic;
     }
 
-    public FilterDto[] getTimeFilterDto(Date lastModifiedDate) {
+    public FilterDto[] getTimeFilterDto(Long lastModifiedDate) {
         return new FilterDto[]{
                 new FilterDto(Constants.NEXUS_OR,
                         new FilterItemDto[]{
