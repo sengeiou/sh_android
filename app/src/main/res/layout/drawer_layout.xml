@@ -13,8 +13,8 @@
     <RelativeLayout
         android:id="@+id/menu_drawer_profile"
         android:clickable="true"
-        android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="104dp"
         android:layout_alignParentTop="true"
         >
 
@@ -24,7 +24,6 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="#ff8c8c8c"
-            tools:src="@drawable/profile_background"
             />
 
         <!--<ImageView-->
@@ -32,8 +31,8 @@
             android:id="@+id/menu_drawer_profile_avatar"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="8dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"

@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MenuDrawer.Widget.Title"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<gm.mobi.android.ui.widgets.CheckedLinearLayout
+  style="@style/MenuDrawer.Widget.Title"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/drawer_menu_indicator"
-        android:layout_width="@dimen/drawer_indicator_width"
-        android:layout_height="match_parent"
-        android:background="@color/drawer_indicator"
-        android:layout_marginRight="8dp"
-         />
+    <gm.mobi.android.ui.widgets.CheckableImageView
+      android:id="@+id/drawer_item_icon"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="32dp"
+      android:src="@drawable/ic_drawer_timeline"
+       />
+    <!--android:tint="@color/drawer_text"-->
 
-    <ImageView
-        android:id="@+id/drawer_item_icon"
-        android:layout_width="28dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginRight="8dp" />
-        <!--android:tint="@color/drawer_text"-->
+    <CheckedTextView
+      android:id="@+id/drawer_item_text"
+      style="@style/MenuDrawer.Widget.TitleText"
+      android:layout_width="match_parent"
+      android:layout_height="60dp"
+      android:ellipsize="end"
+      android:gravity="center_vertical"
+      android:singleLine="true"
+      tools:text="Example item" />
 
-    <TextView
-        android:id="@+id/drawer_item_text"
-        style="@style/MenuDrawer.Widget.TitleText"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:layout_marginLeft="8dp"
-        android:gravity="center_vertical"
-        tools:text="Example item" />
-
-</LinearLayout>
+</gm.mobi.android.ui.widgets.CheckedLinearLayout>

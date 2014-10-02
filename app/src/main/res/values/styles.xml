@@ -107,20 +107,7 @@
 
     <style name="MenuDrawer.Widget"/>
 
-    <style name="MenuDrawer.Widget.Category">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/drawer_text_category</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">16dp</item>
-        <!--<item name="android:background">@drawable/drawer_category_background</item>-->
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
     <style name="MenuDrawer.Widget.Title">
-        <!--<item name="android:background">@drawable/selectable_background_cocinillas</item>-->
         <item name="android:textAppearance">?android:attr/textAppearance</item>
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="android:textSize">18sp</item>
@@ -131,16 +118,15 @@
     </style>
 
     <style name="MenuDrawer.Widget.TitleText">
-        <item name="android:textColor">@color/drawer_text</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/drawer_text_selector</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="MenuDrawer.Widget.TitleText.Selected">
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/primary</item>
     </style>
 
 

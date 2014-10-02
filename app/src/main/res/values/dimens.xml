@@ -16,7 +16,7 @@
 
     <!-- Drawer -->
     <dimen name="drawer_indicator_width">6dp</dimen>
-    <dimen name="drawer_width">260dp</dimen>
+    <dimen name="drawer_width">304dp</dimen>
     <dimen name="drawer_avatar_size">120dp</dimen>
 
 </resources>

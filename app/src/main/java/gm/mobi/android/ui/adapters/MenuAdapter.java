@@ -74,23 +74,18 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
                 TitleAndIconMenuItem menuItem = (TitleAndIconMenuItem) listItem;
                 TextView itemTitle = findById(view, R.id.drawer_item_text);
                 ImageView itemIcon = findById(view, R.id.drawer_item_icon);
-                View itemIndicator = findById(view, R.id.drawer_menu_indicator);
-
                 itemTitle.setText(menuItem.title);
-                //icon
-                setSelectedStateToItem(position == mSelectedPosition, itemTitle, itemIndicator);
+                //itemIcon.setImageResource(menuItem.icon);
+                //setSelectedStateToItem(position == mSelectedPosition, itemTitle);
                 break;
         }
     }
 
-    private void setSelectedStateToItem(boolean selectedStateEnabled, TextView titleView,
-        View indicatorView) {
+    private void setSelectedStateToItem(boolean selectedStateEnabled, TextView titleView) {
         if (selectedStateEnabled) {
             titleView.setTextAppearance(getContext(), R.style.MenuDrawer_Widget_TitleText_Selected);
-            indicatorView.setVisibility(View.VISIBLE);
         } else {
             titleView.setTextAppearance(getContext(), R.style.MenuDrawer_Widget_TitleText);
-            indicatorView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -110,11 +105,11 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
 
     public static class TitleAndIconMenuItem implements MenuItem {
         public String title;
-        int mIconRes;
+        int icon;
 
         public TitleAndIconMenuItem(String title, int iconRes) {
             this.title = title;
-            mIconRes = iconRes;
+            icon = iconRes;
         }
     }
 

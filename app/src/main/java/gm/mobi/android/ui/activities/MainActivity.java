@@ -151,7 +151,8 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void setActiveDrawerPosition(int position) {
         currentSelectedDrawerPosition = position;
-        menuAdapter.setSelectedPosition(position);
+        //menuAdapter.setSelectedPosition(position);
+        drawerList.setItemChecked(position, true);
     }
 
     private void replaceShownFragment(Class fragmentClass, Bundle fragmentArguments) {
@@ -205,6 +206,7 @@ public class MainActivity extends BaseSignedInActivity {
 
         menuAdapter = new MenuAdapter(this, getDrawerMenu());
         drawerList.setAdapter(menuAdapter);
+        drawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         setUserInfoInMenu();
     }
@@ -233,9 +235,9 @@ public class MainActivity extends BaseSignedInActivity {
 
     private List<MenuAdapter.MenuItem> getDrawerMenu() {
         MenuAdapter.MenuItem[] menuItems = {
-            new MenuAdapter.FragmentMenuItem("Timeline", 0, TimelineFragment.class),
-            new MenuAdapter.FragmentMenuItem("People", 0, DummyFragment.class),
-            new MenuAdapter.FragmentMenuItem("Watching", 0, DummyFragment.class),
+            new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
+            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_timeline, DummyFragment.class),
+            new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
         };
         return Arrays.asList(menuItems);
     }
