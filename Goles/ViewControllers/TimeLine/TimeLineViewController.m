@@ -467,6 +467,7 @@
 -(void)keyboardHide:(NSNotification*)notification{
     
     self.backgroundView.hidden = YES;
+    self.charactersLeft.hidden = YES;
     [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.scrollEnabled = YES;
     
@@ -493,8 +494,10 @@
     
     if ([text isEqualToString:@" "])
         self.btnShoot.enabled = NO;
-    else if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "])
+    else if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
         self.btnShoot.enabled = YES;
+        self.charactersLeft.hidden = NO;
+    }
     else
         self.btnShoot.enabled = NO;
     
