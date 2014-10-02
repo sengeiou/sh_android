@@ -28,13 +28,12 @@ import gm.mobi.android.R;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.sync.SyncConfigurator;
 import gm.mobi.android.ui.adapters.MenuAdapter;
-import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
-import hugo.weaving.DebugLog;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -52,6 +51,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @Inject Bus bus;
     @Inject Picasso picasso;
+    @Inject SyncConfigurator syncConfigurator;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -83,9 +83,7 @@ public class MainActivity extends BaseSignedInActivity {
         actionBar = getSupportActionBar();
         currentUser = GolesApplication.get(this).getCurrentUser();
 
-        //mContentResolver = getContentResolver();
-        //mAccount = ShootrAccountGenerator.createSyncAccount(getApplicationContext());
-
+        setupSyncing();
         setupNavigationDrawer();
         if (needsSetup()) {
             initialSetup();
@@ -128,6 +126,10 @@ public class MainActivity extends BaseSignedInActivity {
             // Y el item seleccionado del Drawer
             setActiveDrawerPosition(savedInstanceState.getInt(EXTRA_DRAWER_POSITION, -1));
         }
+    }
+
+    private void setupSyncing() {
+        syncConfigurator.setupDefaultSyncing();
     }
 
     @OnItemClick(R.id.menu_drawer_list)

@@ -24,15 +24,14 @@ import timber.log.Timber;
 
 public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    ContentResolver mContentResolver;
-    @Inject
-    SQLiteOpenHelper mDbHelper;
+    @Inject SQLiteOpenHelper mDbHelper;
     @Inject JobManager jobManager;
+
     /**
      * Compatibility with versions previous to 3.0
      */
-    public GMSyncAdapter(Context context, boolean autoInitialize){
-        super(context,autoInitialize);
+    public GMSyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
         setup(context);
     }
 
@@ -47,45 +46,48 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Any initial setup tasks
      */
-    public void setup(Context context){
+    public void setup(Context context) {
         /* no-op */
-        mContentResolver = context.getContentResolver();
         GolesApplication.get(context).inject(this);
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    public void onPerformSync(Account account, Bundle extras, String authority,
+        ContentProviderClient provider, SyncResult syncResult) {
         // Big boys stuff
         User currentUser;
         Timber.e("Entra en onPerformSync");
-        try{
-            synchronized (this){
+        try {
+            synchronized (this) {
                 int callType = extras.getInt(SyncConstants.CALL_TYPE);
-                if(callType == 0) return;
-                switch(callType){
+                if (callType == 0) return;
+                switch (callType) {
                     case SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE:
                         Timber.e("Entra en la sincro para hacer el remove");
                         RemoveUtils.removeOldShots(mDbHelper.getReadableDatabase());
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",callType);
+                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
+                            callType);
                         break;
                     case SyncConstants.GET_NEW_SHOTS_CALLTYPE:
                         Timber.e("Entra en la sincro para obtener nuevos shots");
                         currentUser = UserManager.getCurrentUser(mDbHelper.getReadableDatabase());
-                        jobManager.addJobInBackground(new TimelineJob(getContext(), currentUser, TimelineJob.RETRIEVE_NEWER));
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",callType);
+                        jobManager.addJobInBackground(
+                            new TimelineJob(getContext(), currentUser, TimelineJob.RETRIEVE_NEWER));
+                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
+                            callType);
                         break;
                     case SyncConstants.GET_FOLLOWINGS_CALLTYPE:
                         Timber.e("Entra en la sincro para hacer actualizar los followings");
                         currentUser = UserManager.getCurrentUser(mDbHelper.getReadableDatabase());
-                        jobManager.addJobInBackground(new GetFollowingsJob(getContext(),currentUser));
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",callType);
+                        jobManager.addJobInBackground(
+                            new GetFollowingsJob(getContext(), currentUser));
+                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
+                            callType);
                         break;
-
                 }
             }
-        }catch(IllegalStateException e){
-            Timber.e("Exception onPerformSync",e.getMessage());
+        } catch (IllegalStateException e) {
+            Timber.e("Exception onPerformSync", e.getMessage());
         }
-
     }
 }
