@@ -49,7 +49,6 @@ namespace Bagdad
 
             if (uvm.userId != App.ID_USER)
             {
-                ProfileTitle.Text = uvm.userNickName;
                 if (await uvm.ImFollowing())
                 {
                     headButton.Content = AppResources.ProfileButtonFollowing + "  ";
@@ -63,6 +62,8 @@ namespace Bagdad
                     isFollowing = false;
                 }
             }
+
+            ProfileTitle.Text = uvm.userNickName.ToUpper();
             points.Text = uvm.points.ToString();
             following.Text = uvm.following.ToString();
             followers.Text = uvm.followers.ToString();
@@ -93,7 +94,7 @@ namespace Bagdad
 
         private void followingGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            MessageBox.Show(AppResources.Following);
+            NavigationService.Navigate(new Uri("/Following.xaml?idUser=" + idUser, UriKind.Relative));
         }
 
         private void headButton_Click(object sender, RoutedEventArgs e)

@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Following.xaml.cs">
+      <DependentUpon>Following.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="LoginOrRegister.xaml.cs">
       <DependentUpon>LoginOrRegister.xaml</DependentUpon>
@@ -135,7 +138,9 @@
     <Compile Include="Utils\SQLQuerys.cs" />
     <Compile Include="Utils\ServiceCommunication.cs" />
     <Compile Include="Utils\Util.cs" />
+    <Compile Include="ViewModels\FollowingsViewModel.cs" />
     <Compile Include="ViewModels\ShotsViewModel.cs" />
+    <Compile Include="ViewModels\FollowingViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ShotViewModel.cs" />
   </ItemGroup>
@@ -144,6 +149,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Following.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginOrRegister.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,6 +164,10 @@
     <Page Include="Me.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleData\FollowingSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SampleData\ShotsSampleData.xaml">
       <SubType>Designer</SubType>

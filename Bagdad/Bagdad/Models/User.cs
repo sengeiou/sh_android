@@ -57,7 +57,7 @@ namespace Bagdad.Models
 
                         custstmt.BindTextParameterWithName("@userName", user.userName);
                         custstmt.BindTextParameterWithName("@name", user.name);
-                        custstmt.BindTextParameterWithName("@photo", user.userName);
+                        custstmt.BindTextParameterWithName("@photo", user.photo);
 
                         if (String.IsNullOrEmpty(user.bio))
                             custstmt.BindNullParameterWithName("@bio");

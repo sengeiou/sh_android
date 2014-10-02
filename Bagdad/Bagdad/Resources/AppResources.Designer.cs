@@ -214,7 +214,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Me.
+        ///   Busca una cadena traducida similar a ME.
         /// </summary>
         public static string Me {
             get {

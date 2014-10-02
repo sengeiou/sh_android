@@ -63,6 +63,8 @@ namespace Bagdad.Utils
 
         public const String GetFollowByIdUserAndIdUserFollowed = "SELECT idUser, idUserFollowed FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
 
+        public const String GetAllInfoFromFollowings = "SELECT u.idUser, u.userName, u.name, u.photo FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser";
+
         #endregion
 
         #region Generic

@@ -1,4 +1,5 @@
 ﻿using Bagdad.Utils;
+using Bagdad.ViewModels;
 using Newtonsoft.Json.Linq;
 using SQLiteWinRT;
 using System;
@@ -166,5 +167,27 @@ namespace Bagdad.Models
 
             return imFollowing;
         }
+
+        public async Task<List<FollowingViewModel>> GetUserFollowingLocalData(int idUser)
+        {
+            List<FollowingViewModel> followings = new List<FollowingViewModel>();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetAllInfoFromFollowings);
+                st.BindIntParameterWithName("@idUser", idUser);
+
+                while (await st.StepAsync())
+                {
+                    followings.Add(new FollowingViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userImageURL = st.GetTextAt(3) });
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+            }
+            return followings;
+        }
+
     }
 }

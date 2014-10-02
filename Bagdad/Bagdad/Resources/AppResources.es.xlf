@@ -229,8 +229,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">All</note>
         </trans-unit>
         <trans-unit id="Resx/Me" translate="yes" xml:space="preserve">
-          <source>Me</source>
-          <target state="new">Me</target>
+          <source>ME</source>
+          <target state="new">ME</target>
           <note from="MultilingualBuild" annotates="source" priority="2">All</note>
         </trans-unit>
         <trans-unit id="Resx/ImWatching" translate="yes" xml:space="preserve">
