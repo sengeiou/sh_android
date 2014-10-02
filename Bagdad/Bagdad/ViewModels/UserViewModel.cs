@@ -47,5 +47,20 @@ namespace Bagdad.ViewModels
             }
             return true;
         }
+
+        public async Task<bool> ImFollowing()
+        {
+            try
+            {
+                Follow follow = new Follow();
+                return await follow.ImFollowing(userId);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R - UserViewModel - GetUserProfileInfo: " + e.Message);
+                return false;
+            }
+            return true;
+        }
     }
 }

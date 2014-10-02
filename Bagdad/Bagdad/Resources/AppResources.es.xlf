@@ -153,6 +153,21 @@
           <target state="new">POINTS</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/ProfileButtonFollowing" translate="yes" xml:space="preserve">
+          <source>✔ FOLLOWING</source>
+          <target state="new">✔ FOLLOWING</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/ProfileButtonFollow" translate="yes" xml:space="preserve">
+          <source>+ FOLLOW</source>
+          <target state="new">+ FOLLOW</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/ProfileButtonEdit" translate="yes" xml:space="preserve">
+          <source>EDIT PROFILE</source>
+          <target state="new">EDIT PROFILE</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/MeFollowing" translate="yes" xml:space="preserve">
           <source>FOLLOWING</source>
           <target state="new">FOLLOWING</target>

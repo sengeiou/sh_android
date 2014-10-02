@@ -340,6 +340,33 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a EDIT PROFILE.
+        /// </summary>
+        public static string ProfileButtonEdit {
+            get {
+                return ResourceManager.GetString("ProfileButtonEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a + FOLLOW.
+        /// </summary>
+        public static string ProfileButtonFollow {
+            get {
+                return ResourceManager.GetString("ProfileButtonFollow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ✔ FOLLOWING.
+        /// </summary>
+        public static string ProfileButtonFollowing {
+            get {
+                return ResourceManager.GetString("ProfileButtonFollowing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Refresh.
         /// </summary>
         public static string Refresh {

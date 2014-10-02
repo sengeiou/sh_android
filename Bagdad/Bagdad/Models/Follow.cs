@@ -137,5 +137,34 @@ namespace Bagdad.Models
             }
             return follows;
         }
+
+        public async Task<bool> ImFollowing(int idUser)
+        {
+            bool imFollowing = false;
+            try
+            {
+
+                Database database = await App.GetDatabaseAsync();
+
+                Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetFollowByIdUserAndIdUserFollowed);
+
+                selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
+                selectStatement.BindIntParameterWithName("@idUserFollowed", idUser);
+
+                if (await selectStatement.StepAsync() && selectStatement.GetIntAt(0) == App.ID_USER && selectStatement.GetIntAt(1) == idUser)
+                {
+                    imFollowing = true;
+                }
+
+                App.DBLoaded.Set();
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - ImFollowing: " + e.Message, e);
+            }
+
+            return imFollowing;
+        }
     }
 }

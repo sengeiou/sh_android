@@ -67,7 +67,7 @@
                     </Grid>
 
                     <!--Column1-->
-                    <Grid Grid.Column="1" Margin="12,0">
+                    <Grid x:Name="followingGrid" Grid.Column="1" Margin="12,0" Tap="followingGrid_Tap">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -82,7 +82,7 @@
                     </Grid>
 
                     <!--Column2-->
-                    <Grid Grid.Column="2">
+                    <Grid x:Name="followersGrid" Grid.Column="2" Tap="followersGrid_Tap">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -99,7 +99,7 @@
                 </Grid>
                 
                 <!--Row1-->
-                <Button x:Name="headButton" Grid.Row="1" Content="EDIT" Foreground="White" Background="{StaticResource PhoneAccentBrush}" BorderThickness="0"/>
+                <Button x:Name="headButton" Grid.Row="1" Content="{Binding LocalizedResources.ProfileButtonEdit ,Source={StaticResource LocalizedStrings}}" Foreground="white" Background="{StaticResource PhoneAccentBrush}" BorderThickness="2" BorderBrush="{StaticResource PhoneAccentBrush}" Click="headButton_Click"/>
                 
             </Grid>
 
@@ -132,7 +132,7 @@
             <TextBlock x:Name="userBio" Grid.Row="1" Margin="12,0,0,0" TextWrapping="Wrap" Text="" Style="{StaticResource PhoneTextSubtleStyle}"/>
 
             <!--Row2-->
-            <TextBlock x:Name="userWebsite" Grid.Row="2" Margin="12,0,0,0" Text="" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneAccentBrush}"/>
+            <TextBlock x:Name="userWebsite" Grid.Row="2" Margin="12,0,0,0" Text="" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneAccentBrush}" Tap="userWebsite_Tap"/>
 
         </Grid>
 
