@@ -99,6 +99,7 @@
 
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
+    self.title = @"Timeline";
     
     //Search button
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
@@ -161,14 +162,6 @@
     self.viewNotShots.hidden = YES;
     self.timelineTableView.delegate = self;
     self.timelineTableView.dataSource = self;
-}
-
-//------------------------------------------------------------------------------
--(void)viewWillAppear:(BOOL)animated{
-    
-    [super viewWillAppear:animated];
-    
-    self.title = @"Timeline";
 }
 
 //------------------------------------------------------------------------------

@@ -12,6 +12,5 @@
 @interface ProfileViewController : UIViewController
 
 @property (nonatomic, strong) User *selectedUser;
-@property (nonatomic, strong) UIImage *imgSelectedUser;
 
 @end

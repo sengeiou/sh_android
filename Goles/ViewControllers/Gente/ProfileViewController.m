@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "FavRestConsumer.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ProfileViewController ()
 
@@ -56,14 +57,43 @@
     [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
     
     self.lblName.text = self.selectedUser.name;
-    self.lblName.sizeToFit;
-    self.lblRank.text = [NSString stringWithFormat:@"rank %@", self.selectedUser.rank];
-    self.lblTeamBio.text = self.selectedUser.bio;
-    self.txtViewWebSite.text = self.selectedUser.website;
+    [self.lblName sizeToFit];
     
+    self.lblRank.text = [NSString stringWithFormat:@"rank %@", self.selectedUser.rank];
+    [self.lblRank sizeToFit];
+    
+    self.lblTeamBio.text = self.selectedUser.bio;
+    [self.lblTeamBio sizeToFit];
+    
+    self.txtViewWebSite.text = self.selectedUser.website;
+    [self.txtViewWebSite sizeToFit];
     
     //self.imgPhoto.image = self.imgSelectedUser;
+    [self receivedImage];
     
+}
+
+-(void)receivedImage{
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.selectedUser.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
+    UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
+    
+    if (image == nil) {
+        
+        [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            self.imgPhoto.image = image;
+            self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
+            self.imgPhoto.clipsToBounds = YES;
+            [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
+            
+            NSLog(@"success: %@", NSStringFromCGSize([image size]));
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            NSLog(@"%@", response);
+        }];
+    }else{
+        self.imgPhoto.image = image;
+        self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
+        self.imgPhoto.clipsToBounds = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
