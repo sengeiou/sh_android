@@ -111,8 +111,8 @@ namespace Bagdad.Utils
                                     {
                                         Debug.WriteLine("DESCARGANDO: " + Table.Entity);
                                         double date = await gm.getMaxModificationDateOf(Table.Entity);
-                                        string sParams = await getParamsForSync(Table.Entity, date);
-                                        total = int.Parse(await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0));
+                                        string sParams = await GetParamsForSync(Table.Entity, date);
+                                        total = await DoRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
                                         nChanges += total;      //Solo tiene en cuenta la sincro estandard
                                         Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
                                     }
@@ -146,8 +146,8 @@ namespace Bagdad.Utils
             Debug.WriteLine("DESCARGANDO: OLD " + Constants.SERCOM_TB_SHOT);
             Shot shot = new Shot();
             double date = await shot.GetOlderShotDate();
-            string sParams = await getParamsForPaging(Constants.SERCOM_TB_SHOT, date);
-            int total = int.Parse(await doRequest(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET, Constants.SERCOM_TB_OLD_SHOTS, sParams, offset));
+            string sParams = await GetParamsForPaging(Constants.SERCOM_TB_SHOT, date);
+            int total = await DoRequest(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET, Constants.SERCOM_TB_OLD_SHOTS, sParams, offset);
             Debug.WriteLine("\tOLD " + Constants.SERCOM_TB_SHOT + " acabado con un total de: " + total + "\n");
             return total;
         }
@@ -175,7 +175,7 @@ namespace Bagdad.Utils
                         break;
                 }
 
-                if(!String.IsNullOrEmpty(json)) sendDataToServer(entity, json);
+                if(!String.IsNullOrEmpty(json)) SendDataToServer(entity, json);
                 return result;
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace Bagdad.Utils
         /// </summary>
         /// <param name="entity">Entity to synchro</param>
         /// <param name="json">json to send to the server</param>
-        public async void sendDataToServer(String entity, String json)
+        public async void SendDataToServer(String entity, String json)
         {
             int tryCount = 0, done = 0;
             try
@@ -199,7 +199,7 @@ namespace Bagdad.Utils
                     TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
                     double epochDate = t.TotalMilliseconds;
 
-                    done = int.Parse(await doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, entity, json, 0));
+                    done = await DoRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, entity, json, 0);
                     tryCount++;
                     if (tryCount == 5) break;
 
@@ -245,17 +245,17 @@ namespace Bagdad.Utils
             }
         }
 
-        public async Task<string> getParamsForSync(string entity, double date)
+        public async Task<string> GetParamsForSync(string entity, double date)
         {
-            return await getParams(entity, date, false);
+            return await GetParams(entity, date, false);
         }
 
-        public async Task<string> getParamsForPaging(string entity, double date)
+        public async Task<string> GetParamsForPaging(string entity, double date)
         {
-            return await getParams(entity, date, true);
+            return await GetParams(entity, date, true);
         }
 
-        private static async Task<string> getParams(string entity, double date, Boolean getOlder)
+        private static async Task<string> GetParams(string entity, double date, Boolean getOlder)
         {
             string sFilterModifyDelete = ConstructFilterModifyDelete(date, getOlder);
             BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
@@ -301,7 +301,7 @@ namespace Bagdad.Utils
         /// <param name="searchParams"></param>
         /// <param name="offset">offset of the page</param>
         /// <returns></returns>
-        public async Task<String> doRequest(String operation, String entity, String searchParams, int offset)
+        public async Task<int> DoRequest(String operation, String entity, String searchParams, int offset)
         {
             String sErrorJSON = "";
             try
@@ -319,19 +319,16 @@ namespace Bagdad.Utils
                 {
                     String status = "\"status\":{\"message\":null,\"code\":null}";
                     String req = await GetREQ();
-                    String ops = GetOPS(translate(operation), entity, searchParams, offset);
+                    String ops = GetOPS(Translate(operation), entity, searchParams, offset);
 
                     json = "{" + status + "," + req + "," + ops + "}";
                 }
 
-                String response = await makeRequest(json);
-
-                if (operation.Equals(Constants.SERCOM_OP_MANUAL_JSON_REQUEST)) return response;
-                
+                String response = await MakeRequest(json);
                 JObject job = JObject.Parse(response);
-
+               
                 //Llamamos al retrieve
-                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET)) 
+                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
                 {
                     //Any ERRORs?
                     if (job["status"].ToString().Equals("No Server Available"))
@@ -342,13 +339,13 @@ namespace Bagdad.Utils
                     else if (job["status"]["code"].ToString().Equals("OK"))
                     {
                         //Save data on DB
-                        totalDone += await saveData(entity, job);
+                        totalDone += await SaveData(entity, job);
                         
                         //If there is offset
                         if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
                         {
                             //Recursively get all the items
-                            totalDone += int.Parse(await doRequest(operation, entity, searchParams, offset + Constants.SERCOM_PARAM_OFFSET_PAG));
+                            totalDone += await DoRequest(operation, entity, searchParams, offset + Constants.SERCOM_PARAM_OFFSET_PAG);
                         }
                     }
                     else
@@ -369,14 +366,14 @@ namespace Bagdad.Utils
                 }
                 else
                 {
-                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await saveData(entity, job);
+                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await SaveData(entity, job);
                     //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                     if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         totalDone = 1;
                     else totalDone = 0;
                 }
 
-                return totalDone.ToString();
+                return totalDone;
             }
             catch (Exception e)
             {
@@ -384,7 +381,7 @@ namespace Bagdad.Utils
             }
         }
 
-        private string translate(string text)
+        private string Translate(string text)
         {
             switch (text)
             {
@@ -405,7 +402,7 @@ namespace Bagdad.Utils
 
         private String GetOPS(String operation, String entity, String searchParams, int offset)
         {
-            BaseModelJsonConstructor model = CreateModelJsonConstructor(translate(entity));
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(Translate(entity));
             return model.ConstructOperation(operation, searchParams, offset,  ((entity.Equals(Constants.SERCOM_TB_OLD_SHOTS)) ? Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG : Constants.SERCOM_PARAM_OFFSET_PAG));
         }
 
@@ -415,14 +412,19 @@ namespace Bagdad.Utils
             return "\"ops\":[{\"data\":[{" + opsData + "}],\"metadata\":{\"items\": " + nItems + ((offset != 0)?",\"offset\":" + offset : "") + ",\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + entity + "\"}}]";
         }
 
-        private async Task<int> saveData(string entity, JObject response)
+        private async Task<int> SaveData(string entity, JObject response)
         {
             BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
             int result = await model.SaveData(model.ParseJson(response));
             return result;
         }
 
-        private async Task<String> makeRequest(String json)
+        public async Task<String> MakeRequestToMemory(String json)
+        {
+            return await MakeRequest(json);
+        }
+
+        private async Task<String> MakeRequest(String json)
         {
             try
             {

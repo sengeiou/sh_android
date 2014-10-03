@@ -484,7 +484,7 @@ namespace Bagdad.Models
                 json = json.Replace("@Data", Data);
 
                 ServiceCommunication serviceCom = new ServiceCommunication();
-                serviceCom.sendDataToServer(Constants.SERCOM_TB_SHOT, json);
+                serviceCom.SendDataToServer(Constants.SERCOM_TB_SHOT, json);
 
                 return json;
             }

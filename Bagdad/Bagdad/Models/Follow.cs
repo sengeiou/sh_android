@@ -202,7 +202,7 @@ namespace Bagdad.Models
 
                 String jsonUser = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"userName\": null,\"name\": null,\"photo\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [";
 
-                JObject responseFollow = JObject.Parse(await sc.doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, "", jsonFollow, 0));
+                JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
                 int count = 0;
 
@@ -219,7 +219,7 @@ namespace Bagdad.Models
 
                     jsonUser += "],\"filters\": [],\"nexus\": \"or\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
 
-                    JObject responseUser = JObject.Parse(await sc.doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, "", jsonUser, 0));
+                    JObject responseUser = JObject.Parse(await sc.MakeRequestToMemory(jsonUser));
 
 
                     if (responseUser["status"]["code"].ToString().Equals("OK") && !responseUser["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))

@@ -112,7 +112,7 @@ namespace Bagdad.ViewModels
                 int done = 0;
 
                 shots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
-                shots.Reverse();
+                if (insertAtTale) shots.Reverse();
 
                 foreach (ShotViewModel shot in shots)
                 {

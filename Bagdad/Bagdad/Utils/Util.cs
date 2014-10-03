@@ -87,7 +87,7 @@ namespace Bagdad.Utils
             try
             {
                 ServiceCommunication sercom = new ServiceCommunication();
-                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + email + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
+                await sercom.DoRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + email + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
                 return true;
             }
             catch (Exception e)
@@ -102,7 +102,7 @@ namespace Bagdad.Utils
             try
             {
                 ServiceCommunication sercom = new ServiceCommunication();
-                await sercom.doRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + userName + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
+                await sercom.DoRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + userName + "\",\"password\" : \"" + encryptPassword(password) + "\"}", 0);
                 return true;
             }
             catch (Exception e)
