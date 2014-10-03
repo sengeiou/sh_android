@@ -63,7 +63,7 @@ public class GetFollowingsJob extends CancellableJob{
         List<Follow> followingsIds = new ArrayList<>();
         Long modifiedFollows = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.FollowTable.TABLE);
         try{
-            followingsIds = service.getFollows(currentUser.getIdUser(), modifiedFollows, UserDtoFactory.GET_FOLLOWING);
+            followingsIds = service.getFollows(currentUser.getIdUser(), modifiedFollows, UserDtoFactory.GET_FOLLOWING, true);
 
         }catch(ServerException e){
             if (e.getErrorCode().equals(ServerException.G025)) {

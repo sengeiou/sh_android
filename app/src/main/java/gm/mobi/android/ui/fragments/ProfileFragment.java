@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.OnClick;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.path.android.jobqueue.JobManager;
@@ -21,7 +22,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
-import hugo.weaving.DebugLog;
+import gm.mobi.android.ui.activities.FollowingUsersActivity;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -30,7 +31,6 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
-import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
 
@@ -46,7 +46,7 @@ public class ProfileFragment extends BaseFragment {
 
     @InjectView(R.id.profile_marks_points) TextView pointsTextView;
     @InjectView(R.id.profile_marks_followers) TextView followersTextView;
-    @InjectView(R.id.profile_marks_following) TextView followingTextView;
+    @InjectView(R.id.profile_marks_following_text) TextView followingTextView;
 
     @InjectView(R.id.profile_follow_button) View followButton;
     @InjectView(R.id.profile_following_button) View followingButton;
@@ -56,6 +56,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject JobManager jobManager;
 
     @Arg Long userId;
+    User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,8 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
-        setUserInfo(event.getUser(), event.getRelationship(), event.getFavouriteTeam().getClubName());
+        user = event.getUser();
+        setUserInfo(user, event.getRelationship(), event.getFavouriteTeam().getClubName());
 
     }
 
@@ -124,5 +126,11 @@ public class ProfileFragment extends BaseFragment {
             || relationshipWithUser == Follow.RELATIONSHIP_BOTH;
         followingButton.setVisibility(iAmFollowing ? View.VISIBLE : View.GONE);
         followButton.setVisibility(iAmFollowing ? View.GONE : View.VISIBLE);
+    }
+
+    @OnClick(R.id.profile_marks_following_box)
+    public void openFollowingList() {
+        if(user==null) return;
+        startActivity(FollowingUsersActivity.getIntent(getActivity(), userId, user.getName()));
     }
 }

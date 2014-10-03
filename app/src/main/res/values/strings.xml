@@ -49,6 +49,8 @@
 
     <string name="activity_timeline_new_text">What\'s Up?</string>
 
+    <string name="activity_following_title">Users followed by %s</string>
+
     <string name="no_more_shots">No more shots</string>
 
     <string name="new_shoot_action">Shoot</string>

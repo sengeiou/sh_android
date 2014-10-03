@@ -32,7 +32,7 @@ public class SyncConfigurator {
             setSyncAutomatically(true);
             // Recommend a schedule for automatic synchronization. The system may modify this based
             // on other scheduled syncs and network utilization.
-            addPeriodicSyncs();
+            //TODO addPeriodicSyncs();
         }
     }
 

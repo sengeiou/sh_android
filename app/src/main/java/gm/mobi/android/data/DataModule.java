@@ -14,7 +14,9 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import gm.mobi.android.ui.activities.FollowingUsersActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import java.io.File;
@@ -44,9 +46,10 @@ import static android.content.Context.MODE_PRIVATE;
         injects = {
                 MainActivity.class,
                 LoginUserJob.class,
+                FollowingUsersActivity.class,
                 TimelineJob.class,
                 NewShotJob.class,
-                GetUserInfoJob.class,
+                GetUserInfoJob.class, GetUsersFollowingJob.class,
                 TimelineFragment.class,
                 ProfileFragment.class,
                 InitialSetupFragment.class, DummyFragment.class,

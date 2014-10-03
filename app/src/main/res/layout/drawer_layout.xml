@@ -23,9 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="#ff8c8c8c"
+            android:src="@drawable/drawer_background_3"
             />
 
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/shadow_drawer_profile"
+            />
         <!--<ImageView-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/menu_drawer_profile_avatar"
@@ -36,6 +41,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            tools:src="@drawable/sample_avatar"
             app:border_color="#FFFFFF"
             app:border_width="1dp"
             />
@@ -47,6 +53,10 @@
             android:layout_alignTop="@id/menu_drawer_profile_avatar"
             android:layout_toRightOf="@id/menu_drawer_profile_avatar"
             android:text="Sign in"
+          android:shadowColor="@color/material_black"
+          android:shadowDx="1"
+          android:shadowDy="1"
+          android:shadowRadius="1"
             android:textColor="#eeeeee"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -60,7 +70,10 @@
             android:layout_alignBottom="@id/menu_drawer_profile_avatar"
             android:layout_marginBottom="4dp"
             android:layout_toRightOf="@+id/menu_drawer_profile_avatar"
-            android:text="Log in with your account"
+          android:shadowColor="@color/material_black"
+          android:shadowDx="1"
+          android:shadowDy="1"
+          android:shadowRadius="1"
             android:textColor="#eeeeee"
             android:textSize="13sp"
             tools:text="rafa.vazsan@gmail.com"

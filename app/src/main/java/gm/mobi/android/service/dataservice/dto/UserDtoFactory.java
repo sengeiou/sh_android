@@ -86,12 +86,12 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
-    public GenericDto getFollowOperationDto(Long userId, Long offset, int relationship, Long date) {
+    public GenericDto getFollowOperationDto(Long userId, Long offset, int relationship, Long date, boolean includeDeleted) {
 
         OperationDto od = new OperationDto();
 
         FilterDto filter = getFollowsByIdUserAndRelationship(userId, relationship, date);
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, true, null, 0l, 100L, filter);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, includeDeleted, null, 0l, 100L, filter);
         od.setMetadata(md);
 
         Map<String, Object>[] array = new HashMap[1];

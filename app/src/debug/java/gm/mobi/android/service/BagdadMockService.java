@@ -43,8 +43,8 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
-    @Override
-    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow) throws IOException {
+    @Override public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow,
+        boolean includeDeleted) throws IOException {
         return null;
     }
 

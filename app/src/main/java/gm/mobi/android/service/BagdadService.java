@@ -14,7 +14,7 @@ public interface BagdadService {
 
     public User login(String id, String password) throws IOException;
 
-    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow) throws IOException;
+    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted) throws IOException;
 
     public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException;
 
