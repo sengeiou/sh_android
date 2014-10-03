@@ -26,14 +26,13 @@
     
     self.actionButton.layer.cornerRadius = 6.0f;
     if ([self checkIfImFollowingUser:user]){
-        self.actionButton.titleLabel.text = @"Unfollow";
-        self.actionButton.backgroundColor = [UIColor redColor];
+        [self.actionButton setTitle:@"Unfollow" forState:UIControlStateNormal];
+        self.actionButton.backgroundColor = [UIColor orangeColor];
     }
     else {
-        self.actionButton.titleLabel.text = @"Follow";
-    }
+        [self.actionButton setTitle:@"Follow" forState:UIControlStateNormal];
         self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
-    
+    }
     
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
