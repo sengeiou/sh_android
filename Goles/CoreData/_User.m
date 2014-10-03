@@ -27,6 +27,7 @@ const struct UserAttributes UserAttributes = {
 const struct UserRelationships UserRelationships = {
 	.device = @"device",
 	.shots = @"shots",
+	.team = @"team",
 };
 
 const struct UserFetchedProperties UserFetchedProperties = {
@@ -446,6 +447,10 @@ const struct UserFetchedProperties UserFetchedProperties = {
 	[self didAccessValueForKey:@"shots"];
 	return result;
 }
+	
+
+@dynamic team;
+
 	
 
 

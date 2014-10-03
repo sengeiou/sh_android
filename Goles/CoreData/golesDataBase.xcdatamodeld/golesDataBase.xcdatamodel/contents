@@ -81,8 +81,8 @@
         <attribute name="twitterLocal" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="twitterVisitor" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsLocal" inverseEntity="Team" syncable="YES"/>
-        <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchesAsVisitor" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" syncable="YES"/>
+        <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES">
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -135,8 +135,7 @@
         <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tlaName" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="matchesAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
-        <relationship name="matchesAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
+        <relationship name="user" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="team" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
@@ -159,6 +158,7 @@
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
         <relationship name="shots" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Shot" inverseName="user" inverseEntity="Shot" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="user" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
@@ -169,7 +169,7 @@
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="180"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
-        <element name="Team" positionX="169" positionY="77" width="128" height="225"/>
-        <element name="User" positionX="-425" positionY="324" width="128" height="345"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="208"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="358"/>
     </elements>
 </model>

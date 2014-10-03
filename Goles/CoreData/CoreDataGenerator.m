@@ -45,7 +45,7 @@
     
     [[CoreDataManager singleton] eraseCoreData];
     [self createSynchroTableData];
-//    [self createTestingData];
+//    [self createData];
 }
 
 #pragma mark - For testing purposes
@@ -75,10 +75,10 @@
 
 #pragma mark - For testing purposes
 //------------------------------------------------------------------------------
--(void)createTestingData {
+-(void)createData {
 
     //Download needed entities
-    NSArray *entitiesToDownload = @[[Team class],[Match class]];
+    NSArray *entitiesToDownload = @[[Team class]];
     [entitiesToDownload enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:obj withDelegate:self];
     }];

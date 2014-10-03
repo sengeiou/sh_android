@@ -209,7 +209,7 @@
                                             <constraint firstAttribute="height" constant="37" id="7qX-ex-3Xs"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="I'm not Watching">
+                                        <state key="normal" title="Ignore">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>

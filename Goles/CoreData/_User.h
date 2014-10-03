@@ -28,6 +28,7 @@ extern const struct UserAttributes {
 extern const struct UserRelationships {
 	__unsafe_unretained NSString *device;
 	__unsafe_unretained NSString *shots;
+	__unsafe_unretained NSString *team;
 } UserRelationships;
 
 extern const struct UserFetchedProperties {
@@ -35,6 +36,7 @@ extern const struct UserFetchedProperties {
 
 @class Device;
 @class Shot;
+@class Team;
 
 
 
@@ -302,6 +304,13 @@ extern const struct UserFetchedProperties {
 
 
 
+@property (nonatomic, strong) Team *team;
+
+//- (BOOL)validateTeam:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 @end
 
@@ -463,6 +472,11 @@ extern const struct UserFetchedProperties {
 
 - (NSMutableSet*)primitiveShots;
 - (void)setPrimitiveShots:(NSMutableSet*)value;
+
+
+
+- (Team*)primitiveTeam;
+- (void)setPrimitiveTeam:(Team*)value;
 
 
 @end
