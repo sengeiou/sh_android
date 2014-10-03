@@ -1,4 +1,4 @@
-//
+          //
 //  ShotTableViewCell.m
 //  Goles
 //
@@ -12,6 +12,7 @@
 #import "NSString+CleanLinks.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIButton+AFNetworking.h"
+#import "AFHTTPRequestOperation.h"
 
 @implementation ShotTableViewCell
 
@@ -38,29 +39,26 @@
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
-  
-    //shot.user.imgUser = [UIImage imageNamed:@"ball"];
     
-    [self.imgPhoto setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        self.imgPhoto.image = image;
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
+    UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
+    
+    if (image == nil) {
+        
+        [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            self.imgPhoto.image = image;
+            self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
+            self.imgPhoto.clipsToBounds = YES;
+            [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
+            NSLog(@"success: %@", NSStringFromCGSize([image size]));
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            NSLog(@"%@", response);
+        }];
+    }else{
+         self.imgPhoto.image = image;
         self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
         self.imgPhoto.clipsToBounds = YES;
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        NSLog(@"%@", error);
-    }];
-    
-    //[self.btnPhoto setImageForState:UIControlStateNormal withURL:[NSURL URLWithString:shot.user.photo]];
-  /*  [self.btnPhoto setImageForState:UIControlStateNormal withURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo]] placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-       
-        //[self.btnPhoto setImage:image forState:UIControlStateNormal];
-        
-        self.btnPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
-        self.btnPhoto.clipsToBounds = YES;
-
-    } failure:^(NSError *error) {
-         NSLog(@"%@", error);
-    }];*/
-    
+    }
     
     self.lblDate.text = [Utils getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;

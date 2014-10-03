@@ -51,6 +51,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
+    
+    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 1024
+                                                            diskCapacity:100 * 1024 * 1024
+                                                                diskPath:nil];
+    [NSURLCache setSharedURLCache:sharedCache];
+    
     if ( IS_GENERATING_DEFAULT_DATABASE ) {
         golesBaseURL = K_ENDPOINT_PRODUCTION;
         [[CoreDataGenerator singleton] generateDefaultCoreDataBase];

@@ -19,6 +19,7 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "ProfileViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -164,6 +165,9 @@
 
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
     self.title = @"Timeline";
 }
 
@@ -234,7 +238,7 @@
     Shot *shot = self.arrayShots[indexPath.row];
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
-    
+  
     return cell;
  }
 
