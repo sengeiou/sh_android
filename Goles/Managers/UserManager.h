@@ -23,5 +23,6 @@
 - (void)setIdDevice:(NSNumber *)idDevice;
 - (NSString *)getUserSessionToken;
 - (NSArray *)getActiveUsersIDs;
+- (NSArray *)getFollowingUsersOfUser:(User *)user;
 
 @end
