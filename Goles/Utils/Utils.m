@@ -471,7 +471,7 @@
     else if(seconds)
         timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds];
     
-    if (seconds < 0)
+    if (seconds < 0 || seconds == 0)
         timeLeft = @"Now";
 
     //timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];

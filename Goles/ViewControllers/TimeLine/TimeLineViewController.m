@@ -40,7 +40,6 @@
 @property (weak, nonatomic) IBOutlet UIView *viewOptions;
 @property (weak, nonatomic) IBOutlet UIView *viewTextField;
 @property (nonatomic, assign) CGFloat lastContentOffset;
-@property (nonatomic, assign) CGRect originalFrame;
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
 @property (assign, nonatomic) int sizeKeyboard;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewPositionConstraint;
@@ -91,8 +90,6 @@
     else
         [self hiddenViewNotShots];
     
-    self.originalFrame = self.tabBarController.tabBar.frame;
-    
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
 
     [self setNavigationBarButtons];
@@ -134,11 +131,11 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)viewDidLayoutSubviews {
-    
-    [super viewDidLayoutSubviews];
-    self.timelineTableView.backgroundColor = [UIColor clearColor];
-}
+//- (void)viewDidLayoutSubviews {
+//    
+//    [super viewDidLayoutSubviews];
+//    self.timelineTableView.backgroundColor = [UIColor clearColor];
+//}
 
 //------------------------------------------------------------------------------
 -(void) search{
@@ -248,6 +245,9 @@
    
    
     Shot *shot = self.arrayShots[indexPath.row];
+    
+    NSLog(@"CELL SHOT: %@", shot);
+    
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
   
@@ -306,10 +306,8 @@
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
-    if (self.arrayShots.count > 0) {
-        [self hiddenViewNotShots];
-        [self.timelineTableView reloadData];
-    }
+    if (self.arrayShots.count > 0)
+        [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark - Send shot
@@ -370,18 +368,14 @@
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     [self controlCharactersShot];
-    
-    if (![self controlRepeatedShot:self.textComment]){
-        
-        //[self performSelectorOnMainThread:@selector(controlCharactersShot) withObject:nil waitUntilDone:NO];
-        
-        NSLog(@"Comment---------- %@", self.textComment);
+
+    if (![self controlRepeatedShot:self.textComment])
         
         [[ShotManager singleton] createShotWithComment:self.textComment andDelegate:self];
-    }else{
+    else
         [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];
       
-    }
+    
 }
 
 -(void)showAlert{
@@ -405,7 +399,7 @@
 
 #pragma mark - Reload methods
 //------------------------------------------------------------------------------
--(void)reloadData{
+-(void)reloadTimeline{
     [self.timelineTableView reloadData];
 }
 
@@ -554,9 +548,7 @@
     
     lengthTextField = self.txtView.text.length - range.length + text.length;
     
-    if ([text isEqualToString:@" "])
-        self.btnShoot.enabled = NO;
-    else if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
+    if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
         self.btnShoot.enabled = YES;
         self.charactersLeft.hidden = NO;
     }

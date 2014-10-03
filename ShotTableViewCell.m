@@ -39,7 +39,7 @@
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
-    
+    //NSLog(@"%@", shot);
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     
@@ -50,7 +50,7 @@
             self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
             self.imgPhoto.clipsToBounds = YES;
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
-            NSLog(@"success: %@", NSStringFromCGSize([image size]));
+            //NSLog(@"success: %@", NSStringFromCGSize([image size]));
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"%@", response);
         }];
