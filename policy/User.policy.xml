@@ -35,7 +35,11 @@
 
             <Filters>
                 <Filter>
-                    <Attribute Alias="idUser">idUser</Attribute>
+                    <Attribute Alias="modified">csys_modified</Attribute>
+                    <Attribute Alias="deleted">csys_deleted</Attribute>
+                </Filter>
+                <Filter>
+                <Attribute Alias="idUser">idUser</Attribute>
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
                 </Filter>

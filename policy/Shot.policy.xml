@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <AccessPolicy Version="1.0.0" Description="Políticas de acceso a las entidades de la aplicación Shooter">
     <Entities Name="Entidades Base">
-        <Entity AllowedOperations="Retrieve CreateUpdate UpdateCreate Delete" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
-            <Name Alias="Shot">Shot</Name>
+        <Entity AllowedOperations="Retrieve CreateUpdate UpdateCreate Delete" Hooks="InsertShot" OnlyByKey="false"
+                OnlySpecifiedFilters="true" MaxPageSize="1000">
+        <Name Alias="Shot">Shot</Name>
             <Data>
                 <!-- User -->
                 <Attribute Alias="idShot" Direction="Output" Description="Shot identifier">idShot</Attribute>
