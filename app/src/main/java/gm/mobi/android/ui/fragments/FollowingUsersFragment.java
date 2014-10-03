@@ -38,6 +38,7 @@ public class FollowingUsersFragment extends BaseFragment {
 
     @InjectView(R.id.userlist_list) ListView userlistListView;
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
+    @InjectView(R.id.userlist_empty) View emptyView;
 
     @Arg String screenTitle;
     @Arg Long userId;
@@ -69,18 +70,23 @@ public class FollowingUsersFragment extends BaseFragment {
     private void retrieveUsers(Long userId) {
         jobManager.addJobInBackground(new GetUsersFollowingJob(getActivity(), userId));
         setLoadingView(true);
+        setEmpty(false);
     }
 
     @Subscribe
     public void showUserList(FollowsResultEvent event) {
-        List<User> users = event.getFollows();
-        if (userListAdapter == null) {
-            userListAdapter = new UserListAdapter(getActivity(), picasso, users);
-            userlistListView.setAdapter(userListAdapter);
-        } else {
-            userListAdapter.setItems(users);
-        }
         setLoadingView(false);
+        List<User> users = event.getFollows();
+        if (users.size() == 0) {
+            setEmpty(true);
+        } else {
+            if (userListAdapter == null) {
+                userListAdapter = new UserListAdapter(getActivity(), picasso, users);
+                userlistListView.setAdapter(userListAdapter);
+            } else {
+                userListAdapter.setItems(users);
+            }
+        }
     }
 
     @OnItemClick(R.id.userlist_list)
@@ -106,5 +112,9 @@ public class FollowingUsersFragment extends BaseFragment {
     private void setLoadingView(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.INVISIBLE);
         userlistListView.setVisibility(loading ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void setEmpty(boolean empty) {
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 }

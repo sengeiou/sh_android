@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-    >
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
     <es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay
-        android:id="@+id/timeline_swipe_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/new_shot_height"
-        >
+      android:id="@+id/timeline_swipe_refresh"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="@dimen/new_shot_height">
 
-        <gm.mobi.android.ui.widgets.ScrollListView
-            android:id="@+id/timeline_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_list_shot"
-            />
+            <gm.mobi.android.ui.widgets.ScrollListView
+              android:id="@+id/timeline_list"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:listitem="@layout/item_list_shot"
+              tools:visibility="gone" />
+
 
     </es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay>
 
@@ -38,96 +37,90 @@
         app:fab_shadow="true"/>-->
 
     <RelativeLayout
-        android:id="@+id/timeline_watching_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/watching_bar_height"
-        android:background="@color/primary"
-        android:padding="16dp"
-        >
+      android:id="@+id/timeline_watching_container"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/watching_bar_height"
+      android:background="@color/primary"
+      android:padding="16dp"
+      android:visibility="visible">
 
         <TextView
-            android:id="@+id/timeline_watching_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:text="@string/watching_text_me_and_more"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            />
+          android:id="@+id/timeline_watching_title"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_centerVertical="true"
+          android:clickable="true"
+          android:gravity="center_vertical"
+          android:text="@string/watching_text_me_and_more"
+          android:textColor="@color/white"
+          android:textSize="16sp" />
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@+id/timeline_watching_action"
-            android:background="@color/white"
-            />
+          android:layout_width="1dp"
+          android:layout_height="match_parent"
+          android:layout_marginRight="16dp"
+          android:layout_toLeftOf="@+id/timeline_watching_action"
+          android:background="@color/white" />
 
         <TextView
-            android:id="@+id/timeline_watching_action"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:text="I'm Watching"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            />
+          android:id="@+id/timeline_watching_action"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginTop="8dp"
+          android:clickable="true"
+          android:gravity="center_vertical"
+          android:text="I'm Watching"
+          android:textColor="@color/white"
+          android:textSize="16sp" />
     </RelativeLayout>
 
 
     <LinearLayout
-        android:id="@+id/timeline_new"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        >
+      android:id="@+id/timeline_new"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:animateLayoutChanges="true"
+      android:orientation="vertical">
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/shadow_down_top"/>
+          android:layout_width="match_parent"
+          android:layout_height="4dp"
+          android:layout_gravity="bottom"
+          android:background="@drawable/shadow_down_top" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/new_shot_height"
-            android:background="@color/white"
-            android:clickable="true"
-            >
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/new_shot_height"
+          android:background="@color/white"
+          android:clickable="true">
 
             <TextView
-                android:id="@+id/timeline_new_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_toLeftOf="@+id/timeline_new_pronostic"
-                android:background="@drawable/textfield_multiline_default_holo_light"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/activity_timeline_new_text"
-                android:textColor="@color/gray_60"
-                android:textSize="16sp"
-                />
+              android:id="@+id/timeline_new_text"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="8dp"
+              android:layout_toLeftOf="@+id/timeline_new_pronostic"
+              android:background="@drawable/textfield_multiline_default_holo_light"
+              android:fontFamily="sans-serif-light"
+              android:text="@string/activity_timeline_new_text"
+              android:textColor="@color/gray_60"
+              android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/timeline_new_pronostic"
-                android:layout_alignParentRight="true"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:scaleType="center"
-                android:src="@drawable/ic_crosshair"/>
+              android:id="@+id/timeline_new_pronostic"
+              android:layout_width="48dp"
+              android:layout_height="48dp"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:background="?android:selectableItemBackground"
+              android:clickable="true"
+              android:scaleType="center"
+              android:src="@drawable/ic_crosshair" />
         </RelativeLayout>
 
     </LinearLayout>

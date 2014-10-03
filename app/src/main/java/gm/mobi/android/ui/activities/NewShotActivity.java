@@ -162,7 +162,11 @@ public class NewShotActivity extends BaseSignedInActivity {
 
     private String filteredText(String originalText) {
         //TODO definir criterio de filtrado de caracteres
-        return originalText.trim();
+        String trimmed = originalText.trim();
+        while (trimmed.contains("\n\n\n")) {
+            trimmed = trimmed.replace("\n\n\n", "\n\n");
+        }
+        return trimmed;
     }
 
     private boolean isValidComment(String text) {
