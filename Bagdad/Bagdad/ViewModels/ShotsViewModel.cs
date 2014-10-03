@@ -15,12 +15,15 @@ namespace Bagdad.ViewModels
 {
     public class ShotsViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ShotViewModel> Shots { get; private set; }
+        public ObservableCollection<ShotViewModel> shotsList { get; private set; }
+        public List<BaseModelJsonConstructor> shotsModel;
+
 
         public ShotsViewModel()
         {
             IsDataLoaded = false;
-            this.Shots = new ObservableCollection<ShotViewModel>();
+            this.shotsList = new ObservableCollection<ShotViewModel>();
+            this.shotsModel = new List<BaseModelJsonConstructor>();
         }
 
         public bool IsDataLoaded
@@ -34,7 +37,7 @@ namespace Bagdad.ViewModels
             {
                 Shot shotModel = new Shot();
 
-                return ParseShotsForPrinting(await shotModel.getTimeLineShots());               
+                return ParseShotsForPrinting(await shotModel.getTimeLineShots(), true);
             }
             catch (Exception e)
             {
@@ -49,7 +52,7 @@ namespace Bagdad.ViewModels
             {
                 Shot shotModel = new Shot();
 
-                return ParseShotsForPrinting(await shotModel.getTimeLineOtherShots(offset));
+                return ParseShotsForPrinting(await shotModel.getTimeLineOtherShots(offset), true);
             }
             catch (Exception e)
             {
@@ -97,7 +100,7 @@ namespace Bagdad.ViewModels
             return timeString;
         }
 
-        public int ParseShotsForPrinting(List<ShotViewModel> shots)
+        public int ParseShotsForPrinting(List<ShotViewModel> shots, bool isFirstCharge)
         {
             try
             {
@@ -126,7 +129,9 @@ namespace Bagdad.ViewModels
                     //Message
                     String message = shot.shotMessage;
 
-                    App.ShotsVM.Shots.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+
+                    if (isFirstCharge) shotsList.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+                    else shotsList.Insert(0, new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
                     done++;
                 }
 
@@ -153,20 +158,43 @@ namespace Bagdad.ViewModels
             {
                 shot.comment = text.Replace("\r", "\\n");
                 shot.idUser = App.ID_USER;
-                shot.csys_birth = DateTime.Now.Ticks;
-                shot.csys_revision = 0;
-                shot.csys_synchronized = 'N';
                 await shot.SynchronizeShot();
-                List<ShotViewModel> oneShot = new List<ShotViewModel>();
-                UserImageManager userImage = new UserImageManager();
-                oneShot.Add(new ShotViewModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = shot.csys_birth.ToString(), shotUserImageURL = userImage.GetUserImagename(shot.idUser) });
-                ParseShotsForPrinting(oneShot);
-                NotifyPropertyChanged("Shots");
             }
             catch (Exception e)
             {
                 Debug.WriteLine("E R R O R : ShotsViewModel - SendShot: " + e.Message);
             }
+        }
+        public void SetShotsOnScreenToUpdate(List<BaseModelJsonConstructor> _shotsModel)
+        {
+            shotsModel = _shotsModel;
+            shotsModel.Reverse();
+        }
+
+        public async Task<int> UpdateShotsOnScreen()
+        {
+            try {
+                List<ShotViewModel> shotsViewModel = new List<ShotViewModel>();
+                foreach (Shot shot in shotsModel)
+                {
+                    User user = new User();
+                    List<String> userinfo = await user.GetNameAndImageURL(shot.idUser);
+                    String _shotUserName = String.Empty, _shotImageURL = String.Empty;
+                    if(userinfo.Count > 0) 
+                    {
+                        _shotUserName = userinfo[0];
+                        if (userinfo.Count > 1) _shotImageURL = userinfo[1];
+                    }
+                    shotsViewModel.Add(new ShotViewModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = Util.FromUnixTime(shot.csys_birth.ToString()).ToString("s").Replace('T', ' '), shotUserImageURL = _shotImageURL, shotUserName = _shotUserName });
+                }
+                ParseShotsForPrinting(shotsViewModel, false);
+                shotsModel.Clear();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : UpdateShotsOnScreen - SendShot: " + e.Message);
+            }
+            return 1;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

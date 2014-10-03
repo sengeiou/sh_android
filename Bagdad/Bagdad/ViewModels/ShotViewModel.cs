@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,9 +8,24 @@ using System.Windows.Media.Imaging;
 
 namespace Bagdad.ViewModels
 {
-    public class ShotViewModel
+    public class ShotViewModel : INotifyPropertyChanged
     {
-        public int shotId { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        private int _shotId;
+
+        public int shotId
+        { 
+            get{
+            return _shotId;}
+            set 
+            {
+                _shotId = value;
+                NotifyPropertyChanged("_shotID");
+            }
+        }
+
         public int shotUserId { get; set; }
         public String shotUserName { get; set; }
         public BitmapImage shotUserImage { get; set; }
@@ -20,5 +36,16 @@ namespace Bagdad.ViewModels
         public String shotTime { get; set; }
 
         public ShotViewModel() { }
+
+        // NotifyPropertyChanged will raise the PropertyChanged event, 
+        // passing the source property that is being updated.
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this,
+                    new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

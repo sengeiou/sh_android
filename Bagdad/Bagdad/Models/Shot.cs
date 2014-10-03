@@ -46,9 +46,15 @@ namespace Bagdad.Models
                     else
                         shotsToInsert.Add(shot);
                 }
-                if (shotsToInsert.Count > 0) done = await InsertData(shotsToInsert);
+                if (shotsToInsert.Count > 0)
+                {                    
+                    done = await InsertData(shotsToInsert);
+                    App.ShotsVM.SetShotsOnScreenToUpdate(shotsToInsert);
+                }
                 if (shotsToUpdate.Count > 0) done += await UpdateData(shotsToUpdate);
                 if (shotsToDelete.Count > 0) done += await DeleteData(shotsToDelete);
+                
+                
             }
             catch (Exception e)
             {
@@ -113,7 +119,7 @@ namespace Bagdad.Models
                     }
                     //OldShots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
                     //OldShots.Reverse();
-                    App.ShotsVM.ParseShotsForPrinting(OldShots);
+                    App.ShotsVM.ParseShotsForPrinting(OldShots, true);
 
                 }
             }

@@ -83,7 +83,7 @@
         <!--Row2-->
 
         <!--Row3-->
-        <ListBox x:Name="MyShots" Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding Shots}" MouseEnter="MyShots_MouseEnter">
+        <ListBox x:Name="myShots" Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter">
             <ListBox.Resources>
                 <Style x:Key="TimeLineListBox" TargetType="ListBox">
                     <Setter Property="Background" Value="Transparent"/>

@@ -59,12 +59,12 @@ namespace Bagdad
 
                 if (!App.ShotsVM.IsDataLoaded)
                 {
-                    App.ShotsVM.Shots.Clear();
+                    App.ShotsVM.shotsList.Clear();
                     await App.ShotsVM.LoadData();
                 }
                 else
                 {
-                    if (App.ShotsVM.Shots.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
+                    if (App.ShotsVM.shotsList.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 }
             }
             catch(Exception ex)
@@ -143,11 +143,7 @@ namespace Bagdad
         {
             try
             {
-
-                App.ShotsVM.Shots.Clear();
-                await App.ShotsVM.LoadData();
-
-                if (App.ShotsVM.Shots.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
+                if (App.ShotsVM.shotsList.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 timer.Interval = new TimeSpan(0, 0, 0, 10);
                 timer.Start();
@@ -247,14 +243,14 @@ namespace Bagdad
         private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
 
-            int shotId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotId;
-            MyShots.SelectedIndex = -1;
+            int shotId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotId;
+            myShots.SelectedIndex = -1;
             MessageBox.Show("Shot #" + shotId);
         }
 
         private void ShotUserProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            int shotUserId = ((Bagdad.ViewModels.ShotViewModel)MyShots.SelectedItem).shotUserId;
+            int shotUserId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotUserId;
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + shotUserId, UriKind.Relative));
         }
         #endregion
@@ -267,13 +263,13 @@ namespace Bagdad
         {
             progress.IsVisible = true;
 
-            ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(MyShots);
+            ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
             // not feeling creative with my var names today...
             IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            if (MyShots.Items.Count() != 0)
+            if (myShots.Items.Count() != 0)
             {
-                scrollToChargue = 100 - (15 * 100 / MyShots.Items.Count());
+                scrollToChargue = 100 - (15 * 100 / myShots.Items.Count());
             }
 
             if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
@@ -317,6 +313,7 @@ namespace Bagdad
         {
             if (!App.isSynchroRunning())
             {
+                App.ShotsVM.UpdateShotsOnScreen();
                 timer.Stop();
                 if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 10))) SynchronizeShots();
                 else progress.IsVisible = false;
@@ -326,7 +323,7 @@ namespace Bagdad
 
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            MyShots.ScrollIntoView(MyShots.Items.First());
+            myShots.ScrollIntoView(myShots.Items.First());
         }       
         
     }
