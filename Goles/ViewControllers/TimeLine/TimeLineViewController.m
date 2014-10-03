@@ -108,7 +108,6 @@
 }
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
-    self.title = @"Timeline";
     
     //Search button
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
@@ -333,10 +332,8 @@
         
         if ([shot.comment isEqualToString:text])
             return YES;
-        
     }
     return NO;
-
 }
 
 #pragma mark - Webservice response methods
@@ -374,7 +371,6 @@
         [[ShotManager singleton] createShotWithComment:self.textComment andDelegate:self];
     else
         [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];
-      
     
 }
 
@@ -561,8 +557,6 @@
     
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
-    
-    
 
 }
 
