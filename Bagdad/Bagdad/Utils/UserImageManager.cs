@@ -42,6 +42,7 @@ namespace Bagdad.Utils
                         webClientImg.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
                         webClientImg.OpenReadAsync(new Uri(url, UriKind.Absolute));
                     }
+                    else SaveMultipleImages();
                 }
             }
             catch(Exception e)

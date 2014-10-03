@@ -352,8 +352,8 @@ namespace Bagdad
                 {
                     timer.Interval = new TimeSpan(0, 0, 0, 10);
                     timer.Start();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (TimerTick)");
                 }
-                System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (TimerTick)");
             }
         }
 

@@ -80,7 +80,7 @@ namespace Bagdad.ViewModels
             }
         }
 
-        private string extractTime(string shotTime)
+        private string ExtractTime(string shotTime)
         {
             String timeString = "";
             try
@@ -118,7 +118,7 @@ namespace Bagdad.ViewModels
                 {
 
                     //time
-                    String timeString = extractTime(shot.shotTime);
+                    String timeString = ExtractTime(shot.shotTime);
 
                     //image
                     image = userImageManager.GetUserImage(shot.shotUserId);
