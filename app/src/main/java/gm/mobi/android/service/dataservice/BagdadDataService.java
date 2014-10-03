@@ -10,16 +10,11 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
-
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.SyncTableManager;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;

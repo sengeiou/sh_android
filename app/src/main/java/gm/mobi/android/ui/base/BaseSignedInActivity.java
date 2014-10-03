@@ -15,6 +15,7 @@ import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 public class BaseSignedInActivity extends BaseActivity {
 
     @Inject UserManager userManager;
+    @Inject SQLiteOpenHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,15 @@ public class BaseSignedInActivity extends BaseActivity {
      * @return true if there is a user signed in, false if there is not and will open the login screen.
      */
     public boolean restoreSessionOrLogin() {
+
         GolesApplication app = GolesApplication.get(this);
         if (app.getCurrentUser() != null) {
             return true;
         } else {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            userManager.setDataBase(db);
             User currentUser = userManager.getCurrentUser();
+            db.close();
             if (currentUser != null) {
                 app.setCurrentUser(currentUser);
                 return true;

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import butterknife.ButterKnife;
+
 import gm.mobi.android.R;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.FollowingUsersFragment;
 import gm.mobi.android.ui.fragments.FollowingUsersFragmentBuilder;
-import gm.mobi.android.ui.fragments.ProfileFragment;
-import gm.mobi.android.ui.fragments.ProfileFragmentBuilder;
 import timber.log.Timber;
 
 public class FollowingUsersActivity extends BaseSignedInActivity {

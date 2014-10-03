@@ -21,15 +21,12 @@ import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.TableSync;
 import timber.log.Timber;
 
-public class FollowManager {
-
-
-    SQLiteOpenHelper dbHelper;
+public class FollowManager extends AbstractManager{
 
     @Inject
-    public FollowManager(SQLiteOpenHelper dbHelper){
-        this.dbHelper = dbHelper;
+    public FollowManager(){
     }
+
 
     /**
      * Insert a Follow
@@ -38,13 +35,13 @@ public class FollowManager {
 
         if(follow!=null){
             ContentValues contentValues = FollowMapper.toContentValues(follow);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
             if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
-                deleteFollow(db, follow);
+                deleteFollow(follow);
             } else {
                 db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
-            insertFollowInTableSync(db);
+            insertFollowInTableSync();
         }
     }
 
@@ -52,30 +49,30 @@ public class FollowManager {
      * Insert a Follow list
      * *
      */
-    public static void saveFollows(SQLiteDatabase db, List<Follow> followList) {
+    public void saveFollows(List<Follow> followList) {
         long res;
         for (Follow follow : followList) {
             ContentValues contentValues = FollowMapper.toContentValues(follow);
 
             if (contentValues.getAsLong(GMContract.SyncColumns.CSYS_DELETED) != null) {
-                res = deleteFollow(db, follow);
+                res = deleteFollow(follow);
             } else {
                 res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.i("Follow inserted ",follow.getIdUser());
             }
         }
-        insertFollowInTableSync(db);
+        insertFollowInTableSync();
     }
 
     /**
      * Retrieve a Following User
      */
-    public static List<Long> getUserFollowingIds(SQLiteDatabase db, Long idUser) throws SQLException {
+    public  List<Long> getUserFollowingIds(Long idUser) throws SQLException {
         List<Long> userIds = new ArrayList<>();
         db.beginTransaction();
         String args = GMContract.FollowTable.ID_USER+"=?";
         String[] argsString = new String[]{String.valueOf(idUser)};
-        if(GeneralManager.isTableEmpty(db, GMContract.FollowTable.TABLE)){
+        if(isTableEmpty(GMContract.FollowTable.TABLE)){
             Timber.e("La tabla follow está vacia");
         }
         Cursor c = db.query(GMContract.FollowTable.TABLE, new String[]{GMContract.FollowTable.ID_FOLLOWED_USER},args,argsString,null,null,null,null);
@@ -106,7 +103,6 @@ public class FollowManager {
             + "=? and "
             + FollowTable.ID_FOLLOWED_USER
             + "=?)";
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor queryResults = db.query(FollowTable.TABLE, FollowTable.PROJECTION, selection,
             new String[] {
                 fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument
@@ -143,10 +139,11 @@ public class FollowManager {
     /**
      * Delete one Follow
      */
-    public static long deleteFollow(SQLiteDatabase db, Follow follow) {
+    public long deleteFollow(Follow follow) {
         long res = 0;
         String args = GMContract.FollowTable.ID_FOLLOWED_USER + "=? AND " + GMContract.FollowTable.ID_USER + "=?";
         String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
+
         Cursor c = db.query(GMContract.FollowTable.TABLE, GMContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
             res = db.delete(GMContract.FollowTable.TABLE, GMContract.FollowTable.ID_FOLLOWED_USER + "=? AND " + GMContract.FollowTable.ID_USER + "=?",
@@ -156,19 +153,20 @@ public class FollowManager {
         return res;
     }
 
-    public static long insertFollowInTableSync(SQLiteDatabase db){
+    public long insertFollowInTableSync(){
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(2); // It's the second data type the application insert in database
         tablesSync.setDirection("BOTH");
         tablesSync.setEntity(GMContract.FollowTable.TABLE);
         tablesSync.setMax_timestamp(System.currentTimeMillis());
-        if(GeneralManager.isTableEmpty(db, GMContract.FollowTable.TABLE)){
+
+        if(isTableEmpty(GMContract.FollowTable.TABLE)){
             tablesSync.setMin_timestamp(System.currentTimeMillis());
         }
         //We don't have this information already
 //        tablesSync.setMaxRows();
 //        tablesSync.setMinRows();
 
-        return SyncTableManager.insertOrUpdateSyncTable(db,tablesSync);
+        return insertOrUpdateSyncTable(tablesSync);
     }
 }

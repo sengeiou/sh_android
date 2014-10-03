@@ -62,7 +62,7 @@ import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.db.manager.GeneralManager;
+import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.service.BagdadMockService;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.LogReaderActivity;
@@ -101,7 +101,6 @@ public class DebugAppContainer implements AppContainer {
 
     Activity activity;
     Context drawerContext;
-
     @Inject
     public DebugAppContainer(OkHttpClient client, Picasso picasso,
                              @ApiEndpoint StringPreference networkEndpoint,
@@ -499,7 +498,7 @@ public class DebugAppContainer implements AppContainer {
 
     @OnClick(R.id.debug_device_database_delete)
     public void deleteDatabase() {
-        GeneralManager.deleteDatabase(drawerContext);
+        //.deleteDatabase(drawerContext);
         initialSetupCompleted.delete();
         Toast.makeText(drawerContext, "Database deleted. Restart app.", Toast.LENGTH_LONG).show();
         relaunch();

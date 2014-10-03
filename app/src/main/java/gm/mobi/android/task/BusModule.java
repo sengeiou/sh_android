@@ -17,6 +17,7 @@ import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
+import gm.mobi.android.ui.base.BaseSignedInActivity;
 
 @Module(
         injects = {

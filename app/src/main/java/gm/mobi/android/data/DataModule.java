@@ -14,6 +14,10 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.db.manager.AbstractManager;
+import gm.mobi.android.db.manager.ShotManager;
+import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
@@ -21,6 +25,7 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.task.jobs.JobModule;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.FollowingUsersActivity;
+import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.FollowingUsersFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
@@ -51,17 +56,25 @@ import static android.content.Context.MODE_PRIVATE;
         injects = {
                 MainActivity.class,
                 LoginUserJob.class,
+                FollowingUsersActivity.class,
                 TimelineJob.class,
                 NewShotJob.class,
-                GetUserInfoJob.class, GetUsersFollowingJob.class,
+                GetUserInfoJob.class,
+                GetUsersFollowingJob.class,
                 TimelineFragment.class,
                 ProfileFragment.class,
-                InitialSetupFragment.class, DummyFragment.class,
+                InitialSetupFragment.class,
+                DummyFragment.class,
                 GMSyncAdapter.class,
                 UserManager.class,
                 FollowManager.class,
+                TeamManager.class,
+                CancellableJob.class,
+                BaseSignedInActivity.class,
                 FollowingUsersFragment.class,
-                TeamManager.class
+                TeamManager.class,
+                GetFollowingsJob.class,
+                ShotManager.class
 
         },
         includes = {
@@ -81,17 +94,22 @@ public class DataModule {
         return new OpenHelper(application.getApplicationContext());
     }
 
-    @Provides @Singleton UserManager provideUserManager(SQLiteOpenHelper sqLiteOpenHelper){
-        return new UserManager(sqLiteOpenHelper);
+    @Provides  UserManager provideUserManager(){
+        return new UserManager();
     }
 
-    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper sqLiteOpenHelper){
-        return new FollowManager(sqLiteOpenHelper);
+    @Provides FollowManager provideFollowManager(){
+        return new FollowManager();
     }
 
-    @Provides @Singleton
-    TeamManager provideTeamManager(SQLiteOpenHelper sqLiteOpenHelper){
-        return new TeamManager(sqLiteOpenHelper);
+    @Provides
+    ShotManager provideShotManager(){
+        return new ShotManager();
+    }
+
+    @Provides
+    TeamManager provideTeamManager(){
+        return new TeamManager();
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
