@@ -90,6 +90,7 @@
     self.originalFrame = self.tabBarController.tabBar.frame;
     
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 84, 0);
+
     [self setNavigationBarButtons];
     [self setTextViewForShotCreation];
     

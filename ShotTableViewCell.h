@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Shot.h"
+#import "CustomTextView.h"
 
 @interface ShotTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UITextView *txvText;
+@property (weak, nonatomic) IBOutlet CustomTextView *txvText;
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblDate;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
