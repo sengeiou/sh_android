@@ -9,6 +9,8 @@
 #import "ProfileViewController.h"
 #import "FavRestConsumer.h"
 #import "UIImageView+AFNetworking.h"
+#import "FollowingTableViewController.h"
+#import "Follow.h"
 
 @interface ProfileViewController ()
 
@@ -103,19 +105,28 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
   
-    if (refresh)
+    if (status){
+        
+        if (status && [entityClass isSubclassOfClass:[User class]]){
+//            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+        }
+    }else if (refresh){
         
          [self dataFillView];
+    }
 }
 
-/*
+
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+//------------------------------------------------------------------------------
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:@"toFollowers"]) {
+        FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
+        [followingTVC setSelectedUser:self.selectedUser];
+    }
+    
 }
-*/
+
 
 @end
