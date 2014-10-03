@@ -37,6 +37,9 @@
 }
 
 
+- (BOOL) shouldAutorotate {
+    return NO;
+}
 
 - (void)viewDidLoad {
     
@@ -45,9 +48,10 @@
     [self adjustFrame];
 }
 
+
 -(void)viewWillAppear:(BOOL)animated{
-     [super viewWillAppear:animated];
-    
+    [super viewWillAppear:animated];
+
     self.navigationController.navigationBarHidden = YES;
 }
 

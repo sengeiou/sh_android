@@ -122,10 +122,14 @@
     txtFieldPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
 }
 
+- (BOOL) shouldAutorotate {
+    return NO;
+}
+
 -(void)viewWillAppear:(BOOL)animated{
    
     [super viewWillAppear:animated];
-    
+
     [self modifyNavigationBar];
     
     if (self.view.frame.size.height == 480)
@@ -163,6 +167,7 @@
                                  forState:UIControlStateNormal];
 }
 -(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
 

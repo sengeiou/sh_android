@@ -94,7 +94,7 @@
 
 + (UIView *)setNavigationBarTitle:(NSString *)title andSubtitle:(NSString *)subtitle forLoadingMode:(BOOL)loadingMode forMaximumLenght:(NSNumber *)lenghtView{
     
-    int lengthOfString = [title length];
+    int lengthOfString = [title length] ;
     
     if (lenghtView > 0)
         lengthOfString = [lenghtView integerValue];

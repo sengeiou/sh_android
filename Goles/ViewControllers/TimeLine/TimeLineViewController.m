@@ -90,13 +90,22 @@
     
     self.originalFrame = self.tabBarController.tabBar.frame;
     
-    self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 84, 0);
+    self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
 
     [self setNavigationBarButtons];
     [self setTextViewForShotCreation];
     
 }
 
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return  UIInterfaceOrientationMaskPortrait;
+    
+}
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
     self.title = @"Timeline";
@@ -165,9 +174,16 @@
 }
 
 //------------------------------------------------------------------------------
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.title = @"Timeline";
+}
+
+//------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
 
 #pragma mark - Pull to refresh
 //------------------------------------------------------------------------------
@@ -232,6 +248,9 @@
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
   
+    cell.layer.shouldRasterize = YES;
+    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    
     return cell;
  }
 
