@@ -49,6 +49,8 @@ namespace Bagdad.Utils
 
         public const String getShotById = "SELECT idShot FROM Shot WHERE idShot = @idShot";
 
+        public const String getShotByComment24Hours = "SELECT idShot FROM Shot WHERE comment = @comment and idUser = @idUser and csys_modified > @yesterday";
+
         #endregion
 
         #region FOLLOW

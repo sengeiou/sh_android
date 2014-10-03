@@ -286,7 +286,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a There is no Internet connection, please try again later..
+        ///   Busca una cadena traducida similar a The network connection was lost.
         /// </summary>
         public static string NoInternetConnection {
             get {
@@ -448,6 +448,24 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Whoops! You already shot that..
+        /// </summary>
+        public static string ShootRepeated {
+            get {
+                return ResourceManager.GetString("ShootRepeated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Shot not posted.
+        /// </summary>
+        public static string ShotNotPosted {
+            get {
+                return ResourceManager.GetString("ShotNotPosted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Shots.
         /// </summary>
         public static string Shots {
@@ -498,6 +516,15 @@ namespace Bagdad.Resources {
         public static string TimeLine {
             get {
                 return ResourceManager.GetString("TimeLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The request timed out..
+        /// </summary>
+        public static string TimeOut {
+            get {
+                return ResourceManager.GetString("TimeOut", resourceCulture);
             }
         }
         

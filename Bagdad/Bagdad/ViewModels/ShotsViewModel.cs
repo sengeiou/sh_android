@@ -100,7 +100,7 @@ namespace Bagdad.ViewModels
             return timeString;
         }
 
-        public int ParseShotsForPrinting(List<ShotViewModel> shots, bool isFirstCharge)
+        public int ParseShotsForPrinting(List<ShotViewModel> shots, bool insertAtTale)
         {
             try
             {
@@ -110,6 +110,9 @@ namespace Bagdad.ViewModels
 
                 if (shots.Count == 0) return 0;
                 int done = 0;
+
+                shots.Sort((x, y) => x.shotTime.CompareTo(y.shotTime));
+                shots.Reverse();
 
                 foreach (ShotViewModel shot in shots)
                 {
@@ -130,7 +133,7 @@ namespace Bagdad.ViewModels
                     String message = shot.shotMessage;
 
 
-                    if (isFirstCharge) shotsList.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
+                    if (insertAtTale) shotsList.Add(new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
                     else shotsList.Insert(0, new ShotViewModel { shotId = shot.shotId, shotUserId = shot.shotUserId, shotMessage = message, shotTag = tag, tagVisibility = tagIsVisible, shotTime = timeString, shotUserImage = image, shotUserName = shot.shotUserName });
                     done++;
                 }
@@ -151,32 +154,53 @@ namespace Bagdad.ViewModels
         /// Envía un shot al servidor
         /// </summary>
         /// <param name="text"></param>
-        public async void SendShot(string text)
+        public async Task<int> SendShot(string text)
         {
             Shot shot = new Shot();
             try
             {
                 shot.comment = text.Replace("\r", "\\n");
                 shot.idUser = App.ID_USER;
+                if (await shot.isShotRepeatedIn24h()) return 0;
+                int n = 0;
+                while ((shotsModel.Count > 0) || (App.isSynchroRunning()))
+                {
+                    if (n == 0)
+                    {
+                        n++;
+                        Debug.WriteLine("            -------------------         Esperando a que se actualice un shot de synchro            -------------------         ");
+                    }
+                    
+                }
+                if (n > 0) Debug.WriteLine("            -------------------         Espera finalizada            -------------------         ");
                 await shot.SynchronizeShot();
+                return 1;
+            }
+            catch (TimeoutException timeExc)
+            {
+                Debug.WriteLine("E R R O R : ShotsViewModel - SendShot: " + timeExc.Message);
+                return 2;
             }
             catch (Exception e)
             {
                 Debug.WriteLine("E R R O R : ShotsViewModel - SendShot: " + e.Message);
+                return 0;
             }
         }
         public void SetShotsOnScreenToUpdate(List<BaseModelJsonConstructor> _shotsModel)
         {
             shotsModel = _shotsModel;
-            shotsModel.Reverse();
         }
 
         public async Task<int> UpdateShotsOnScreen()
         {
+            int retorn = 0;
             try {
                 List<ShotViewModel> shotsViewModel = new List<ShotViewModel>();
+                
                 foreach (Shot shot in shotsModel)
                 {
+                    retorn = 1;
                     User user = new User();
                     List<String> userinfo = await user.GetNameAndImageURL(shot.idUser);
                     String _shotUserName = String.Empty, _shotImageURL = String.Empty;
@@ -194,7 +218,7 @@ namespace Bagdad.ViewModels
             {
                 Debug.WriteLine("E R R O R : UpdateShotsOnScreen - SendShot: " + e.Message);
             }
-            return 1;
+            return retorn;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

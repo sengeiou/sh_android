@@ -44,8 +44,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">All</note>
         </trans-unit>
         <trans-unit id="Resx/NoInternetConnection" translate="yes" xml:space="preserve">
-          <source>There is no Internet connection, please try again later.</source>
-          <target state="new">There is no Internet connection, please try again later.</target>
+          <source>The network connection was lost</source>
+          <target state="new">The network connection was lost</target>
           <note from="MultilingualBuild" annotates="source" priority="2">SignIn.xaml.cs</note>
         </trans-unit>
         <trans-unit id="Resx/InvalidUserOrEmail" translate="yes" xml:space="preserve">
@@ -157,6 +157,21 @@
           <source>✔ FOLLOWING</source>
           <target state="new">✔ FOLLOWING</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/ShotNotPosted" translate="yes" xml:space="preserve">
+          <source>Shot not posted</source>
+          <target state="new">Shot not posted</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/TimeOut" translate="yes" xml:space="preserve">
+          <source>The request timed out.</source>
+          <target state="new">The request timed out.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
+          <source>Whoops! You already shot that.</source>
+          <target state="new">Whoops! You already shot that.</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/ProfileButtonFollow" translate="yes" xml:space="preserve">
           <source>+ FOLLOW</source>

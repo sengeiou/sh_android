@@ -54,13 +54,19 @@ namespace Bagdad
             {
                 Util util = new Util();
                 var synchroLogin = await util.isUserAlreadyLoged();
-                if (synchroLogin) timer.Start();
+                if (synchroLogin)
+                {
+                    timer.Start();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (OnNavigatedTo)");
+                }
 
 
                 if (!App.ShotsVM.IsDataLoaded)
                 {
                     App.ShotsVM.shotsList.Clear();
                     await App.ShotsVM.LoadData();
+                    if (App.ShotsVM.shotsList.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
+                    else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 }
                 else
                 {
@@ -130,8 +136,12 @@ namespace Bagdad
             try
             {
                 App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.SHOTS);
-                timer.Interval = new TimeSpan(0, 0, 0, 1);
-                timer.Start();
+                if (timer.IsEnabled)
+                {
+                    timer.Interval = new TimeSpan(0, 0, 0, 1);
+                    timer.Start();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (1 seg) (SynchronizeShots)");
+                }
             }
             catch (Exception e)
             {
@@ -139,18 +149,39 @@ namespace Bagdad
             }
         }
 
-        private async void RefreshData()
+        private async void SendShot()
         {
             try
             {
-                if (App.ShotsVM.shotsList.Count > 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
-                else NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
-                timer.Interval = new TimeSpan(0, 0, 0, 10);
-                timer.Start();
+                progress.IsVisible = true;
+                if (!App.isInternetAvailable)
+                {
+                    MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
+                }
+                else
+                {
+                    extraChars.Visibility = System.Windows.Visibility.Collapsed;
+                    var res = await App.ShotsVM.SendShot(newShot.Text);
+                    if(res == 2)
+                        MessageBox.Show(AppResources.TimeOut, AppResources.ShotNotPosted, MessageBoxButton.OK);
+                    else if(res != 1)
+                        MessageBox.Show(AppResources.ShootRepeated, AppResources.ShotNotPosted, MessageBoxButton.OK);
+                    timer.Stop();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (SendShot)");
+                    timer.Interval = new TimeSpan(0, 0, 0, 1);
+                    timer.Start();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start to 1 seg (SendShot)");
+                    extraChars.Text = "140";
+                    newShot.Text = "";
+                    Focus();
+
+                    if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                progress.IsVisible = false;
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("E R R O R :  Timeline.xaml.cs - RefreshData: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("E R R O R :  Timeline.xaml.cs - SendShot: " + e.Message);
             }
         }
 
@@ -177,19 +208,7 @@ namespace Bagdad
 
         private void appBarShootButton_Click(object sender, EventArgs e)
         {
-            timer.Stop();
-            extraChars.Visibility = System.Windows.Visibility.Collapsed;
-            App.ShotsVM.SendShot(newShot.Text);
-            timer.Interval = new TimeSpan(0, 0, 0, 1);
-            extraChars.Text = "140";
-            newShot.Text = "";
-            Focus();
-
-            if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible)
-            {
-                NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
-            }
-            timer.Start();
+            SendShot();
         }
 
         private void ChatBubbleTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -309,15 +328,32 @@ namespace Bagdad
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void timer_Tick(object sender, EventArgs e)
+        async void timer_Tick(object sender, EventArgs e)
         {
             if (!App.isSynchroRunning())
             {
-                App.ShotsVM.UpdateShotsOnScreen();
-                timer.Stop();
+                if (!timer.Interval.Equals(new TimeSpan(0, 0, 0, 1)))
+                {
+                    timer.Stop();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 10 seg) (TimerTick)");
+                }
+                var hasNewShot = await App.ShotsVM.UpdateShotsOnScreen();
                 if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 10))) SynchronizeShots();
-                else progress.IsVisible = false;
-                RefreshData();
+                else if (progress.IsVisible) progress.IsVisible = false;
+                if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 1)))
+                {
+                    if (hasNewShot == 1)
+                    {
+                        timer.Stop();
+                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 1 seg) (TimerTick)");
+                    }
+                }
+                if (!timer.IsEnabled)
+                {
+                    timer.Interval = new TimeSpan(0, 0, 0, 10);
+                    timer.Start();
+                }
+                System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (TimerTick)");
             }
         }
 

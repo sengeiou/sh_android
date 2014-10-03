@@ -282,8 +282,6 @@ namespace Bagdad.Models
 
             try
             {
-            
-
                 database = await App.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.getShotById))
                 {
@@ -305,6 +303,39 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
             }
             return done;
+        }
+
+        public async Task<bool> isShotRepeatedIn24h()
+        {
+            Database database;
+            bool retorn = false;
+
+            try
+            {
+                database = await App.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.getShotByComment24Hours))
+                {
+                    custstmt.Reset();
+
+                    DateTime yesterday = DateTime.Now.AddHours(-24d);
+                    custstmt.BindTextParameterWithName("@comment", this.comment);
+                    custstmt.BindIntParameterWithName("@idUser", this.idUser);
+                    custstmt.BindTextParameterWithName("@yesterday", yesterday.ToString("s").Replace('T', ' '));
+
+                    if (await custstmt.StepAsync())
+                    {
+                        retorn = true;
+                    }
+                }
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
+            }
+            return retorn;
         }
 
         public async Task<List<ShotViewModel>> getTimeLineShots()
@@ -452,19 +483,14 @@ namespace Bagdad.Models
                 json = json.Replace("@Operation", Constants.SERCOM_OP_UPDATECREATE);
                 json = json.Replace("@Data", Data);
 
-
-                if (this.csys_synchronized.Equals('D'))
-                {
-                    //TODO: NOT IMPLEMENTED YET DELETE SHOT
-                }
-                else
-                {
-                    ServiceCommunication serviceCom = new ServiceCommunication();
-                    serviceCom.sendDataToServer(Constants.SERCOM_TB_SHOT, json);
-                    //await synchronized();
-                }
+                ServiceCommunication serviceCom = new ServiceCommunication();
+                serviceCom.sendDataToServer(Constants.SERCOM_TB_SHOT, json);
 
                 return json;
+            }
+            catch (TimeoutException timeEx)
+            {
+                throw timeEx;
             }
             catch (Exception e)
             {

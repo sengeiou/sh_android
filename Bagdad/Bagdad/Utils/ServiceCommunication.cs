@@ -211,7 +211,9 @@ namespace Bagdad.Utils
             }
             catch (Exception ex)
             {
-                throw new Exception("ServiceCommunication - UpdateServer: " + ex.Message, ex);
+                if(ex.Message.Contains("Timeout"))
+                    throw new TimeoutException();
+                throw new Exception("ServiceCommunication - sendDataToServer: " + ex.Message, ex);
             }
         }
 
