@@ -85,6 +85,8 @@
 		AA72641219D1C8280067A39D /* ShotManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641119D1C8280067A39D /* ShotManager.m */; };
 		AA72641519D422570067A39D /* CleanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72641419D422570067A39D /* CleanManager.m */; };
 		AA74B3D119DD7EE800EF90D5 /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA74B3D019DD7EE800EF90D5 /* CustomTextView.m */; };
+		AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */; };
+		AA74B40C19DEA3EC00EF90D5 /* FollowingCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */; };
 		AA9D039B19D95ABD00E59C83 /* NSString+CleanLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */; };
 		AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541819C057C000E39D94 /* AFHTTPRequestOperation.m */; };
 		AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA541A19C057C000E39D94 /* AFHTTPRequestOperationManager.m */; };
@@ -256,6 +258,10 @@
 		AA72641419D422570067A39D /* CleanManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CleanManager.m; sourceTree = "<group>"; };
 		AA74B3CF19DD7EE800EF90D5 /* CustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextView.h; sourceTree = "<group>"; };
 		AA74B3D019DD7EE800EF90D5 /* CustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextView.m; sourceTree = "<group>"; };
+		AA74B40719DEA33400EF90D5 /* FollowingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowingTableViewController.h; sourceTree = "<group>"; };
+		AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowingTableViewController.m; sourceTree = "<group>"; };
+		AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowingCustomCell.h; sourceTree = "<group>"; };
+		AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowingCustomCell.m; sourceTree = "<group>"; };
 		AA9D039919D95ABD00E59C83 /* NSString+CleanLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CleanLinks.h"; sourceTree = "<group>"; };
 		AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CleanLinks.m"; sourceTree = "<group>"; };
 		AACA541719C057C000E39D94 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -674,6 +680,10 @@
 				A52CE42619DC415900163841 /* PeopleTableViewController.m */,
 				A52CE42819DC418000163841 /* ProfileViewController.h */,
 				A52CE42919DC418000163841 /* ProfileViewController.m */,
+				AA74B40719DEA33400EF90D5 /* FollowingTableViewController.h */,
+				AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */,
+				AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */,
+				AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */,
 			);
 			name = People;
 			path = ViewControllers/Gente;
@@ -898,6 +908,7 @@
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
+				AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
@@ -913,6 +924,7 @@
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				AA72641519D422570067A39D /* CleanManager.m in Sources */,
+				AA74B40C19DEA3EC00EF90D5 /* FollowingCustomCell.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
 				A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */,

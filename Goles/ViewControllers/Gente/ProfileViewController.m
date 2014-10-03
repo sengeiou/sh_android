@@ -105,7 +105,7 @@
     if (status){
         
         if (status && [entityClass isSubclassOfClass:[User class]]){
-//            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         }
     }else if (refresh){
         
