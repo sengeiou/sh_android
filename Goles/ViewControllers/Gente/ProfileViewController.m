@@ -57,10 +57,8 @@
     [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
     
     self.lblName.text = self.selectedUser.name;
-    [self.lblName sizeToFit];
     
     self.lblRank.text = [NSString stringWithFormat:@"rank %@", self.selectedUser.rank];
-    [self.lblRank sizeToFit];
     
     self.lblTeamBio.text = self.selectedUser.bio;
     [self.lblTeamBio sizeToFit];
