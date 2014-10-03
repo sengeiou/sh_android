@@ -3,7 +3,7 @@ package gm.mobi.android.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentResolver;
+
 import android.content.Context;
 import android.content.SyncResult;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,8 +18,6 @@ import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
-import gm.mobi.android.util.RemoveUtils;
 import timber.log.Timber;
 
 public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -65,7 +63,8 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
                 switch (callType) {
                     case SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE:
                         Timber.e("Entra en la sincro para hacer el remove");
-                        RemoveUtils.removeOldShots(mDbHelper.getReadableDatabase());
+                        //TODO REMOVE OLD SHOTS
+                        // removeOldShots(mDbHelper.getReadableDatabase());
                         Timber.e("Entra en la sincronización para el tipo de llamada : %d",
                             callType);
                         break;

@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -39,28 +39,31 @@ public class TimelineJob extends CancellableJob {
     private static final int PRIORITY = 4;
     private static final int RETRY_ATTEMPTS = 3;
 
-    @Inject
     Application app;
-    @Inject
     NetworkUtil mNetworkUtil;
-    @Inject
     Bus bus;
-    @Inject
-    SQLiteOpenHelper mDbHelper;
-    @Inject
     BagdadService service;
-
+    ShotManager shotManager;
+    FollowManager followManager;
     public int shotRetrieveType;
 
+    SQLiteDatabase db;
     private User currentUser;
 
-    public TimelineJob(Context context, User currentUser, int retrieveType) {
+    public TimelineJob(Application context,Bus bus, BagdadService service, NetworkUtil mNetworkUtil, ShotManager shotManager,FollowManager followManager) {
         super(new Params(PRIORITY));
-        this.shotRetrieveType = retrieveType;
-        this.currentUser = currentUser;
-        GolesApplication.get(context).inject(this);
+        this.app = context;
+        this.bus = bus;
+        this.service = service;
+        this.shotManager = shotManager;
+        this.followManager = followManager;
+        this.mNetworkUtil = mNetworkUtil;
     }
 
+    public void init(User currentUser, int retrieveType) {
+        this.shotRetrieveType = retrieveType;
+        this.currentUser = currentUser;
+    }
 
     @Override
     public void onAdded() {
@@ -68,7 +71,18 @@ public class TimelineJob extends CancellableJob {
     }
 
     @Override
-    public void onRun() throws Throwable {
+    protected void createDatabase() {
+        createWritableDb();
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        followManager.setDataBase(db);
+        shotManager.setDataBase(db);
+    }
+
+    @Override
+    protected void run() throws SQLException, IOException {
         if (isCancelled()) return;
         try {
             switch (shotRetrieveType) {
@@ -97,7 +111,7 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveInitial() throws IOException, SQLException {
         // Try to get timeline from database
-        List<Shot> localShots = ShotManager.retrieveTimelineWithUsers(mDbHelper.getReadableDatabase());
+        List<Shot> localShots = shotManager.retrieveTimelineWithUsers();
         if (localShots != null && localShots.size() > 0) {
             // Got them already :)
             bus.post(new ShotsResultEvent(ShotsResultEvent.STATUS_SUCCESS).setSuccessful(localShots));
@@ -108,9 +122,9 @@ public class TimelineJob extends CancellableJob {
         if (!checkNetwork()) return;
         List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
         if (remoteShots != null) {
-            ShotManager.saveShots(mDbHelper.getWritableDatabase(), remoteShots);
+            shotManager.saveShots(remoteShots);
             // Retrieve from db because we need the user objects associated to the shots
-            List<Shot> shotsWithUsers = ShotManager.retrieveTimelineWithUsers(mDbHelper.getReadableDatabase());
+            List<Shot> shotsWithUsers = shotManager.retrieveTimelineWithUsers();
             bus.post(new ShotsResultEvent(ShotsResultEvent.STATUS_SUCCESS).setSuccessful(shotsWithUsers));
         } else {
             sendServerError(RETRIEVE_INITIAL, null);
@@ -120,12 +134,12 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveNewer() throws IOException, SQLException {
         if (!checkNetwork()) return;
-        Long lastModifiedDate = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.ShotTable.TABLE);
+        Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
         List<Shot> newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
 
         if (newShots != null) {
-            ShotManager.saveShots(mDbHelper.getWritableDatabase(), newShots);
-            List<Shot> updatedTimeline = ShotManager.retrieveTimelineWithUsers(mDbHelper.getReadableDatabase());
+            shotManager.saveShots(newShots);
+            List<Shot> updatedTimeline = shotManager.retrieveTimelineWithUsers();
             NewShotsReceivedEvent resultEvent = new NewShotsReceivedEvent(NewShotsReceivedEvent.STATUS_SUCCESS);
             resultEvent.setSuccessful(updatedTimeline);
             resultEvent.setNewShotsCount(newShots.size());
@@ -137,12 +151,11 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveOlder() throws IOException, SQLException {
         if (!checkNetwork()) return;
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        Long firstModifiedDate = SyncTableManager.getFirstModifiedDate(db, GMContract.ShotTable.TABLE);
+        Long firstModifiedDate = shotManager.getFirstModifiedDate(GMContract.ShotTable.TABLE);
         List<Shot> oldShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         if (oldShots != null) {
-            ShotManager.saveShots(mDbHelper.getWritableDatabase(), oldShots);
-            List<Shot> shotsWithUsers = ShotManager.retrieveOldOrNewTimeLineWithUsers(mDbHelper.getReadableDatabase(), oldShots);
+            shotManager.saveShots(oldShots);
+            List<Shot> shotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(oldShots);
             bus.post(new OldShotsReceivedEvent(OldShotsReceivedEvent.STATUS_SUCCESS).setSuccessful(shotsWithUsers));
         } else {
             sendServerError(RETRIEVE_OLDER, null);
@@ -151,7 +164,7 @@ public class TimelineJob extends CancellableJob {
 
 
     private List<Long> getFollowingIds() throws SQLException {
-        return FollowManager.getUserFollowingIds(mDbHelper.getReadableDatabase(), currentUser.getIdUser());
+        return followManager.getUserFollowingIds(currentUser.getIdUser());
     }
 
     @Override

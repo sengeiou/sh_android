@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.GMContract.ShotTable;
@@ -20,25 +22,30 @@ import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.User;
 import timber.log.Timber;
 
-public class ShotManager {
+public class ShotManager extends  AbstractManager{
 
     private static final String TIMELINE_LIMIT = "200";
+
+    @Inject
+    public ShotManager(){
+
+    }
 
     /**
      * Insert a Shot
      */
-    public static void saveShot(SQLiteDatabase db, Shot shot) throws SQLException {
-        long res;
+    public void saveShot(Shot shot) throws SQLException {
+
         ContentValues contentValues = ShotMapper.toContentValues(shot);
         if (contentValues.getAsLong(ShotTable.CSYS_DELETED) != null) {
-            res = deleteShot(db, shot);
+            deleteShot(shot);
         } else {
-            res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
-        insertShotInTableSync(db, shot.getCsys_modified());
+        insertShotInTableSync(shot.getCsys_modified());
     }
 
-    public static List<Shot> retrieveOldOrNewTimeLineWithUsers(SQLiteDatabase db, List<Shot> shots) {
+    public List<Shot> retrieveOldOrNewTimeLineWithUsers(List<Shot> shots) {
         String idShots = "(";
         String idUsers = "(";
         for (Shot shot : shots) {
@@ -86,7 +93,7 @@ public class ShotManager {
         return shotList;
     }
 
-    public static List<Shot> retrieveTimelineWithUsers(SQLiteDatabase db) {
+    public List<Shot> retrieveTimelineWithUsers() {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
                 + ShotTable.COMMENT +
@@ -107,6 +114,7 @@ public class ShotManager {
                 " ORDER BY a." + ShotTable.CSYS_BIRTH + " DESC;";
         Timber.d("Executing query: %s", query);
         Cursor cursor = db.rawQuery(query, null);
+
 
         int count = cursor.getCount();
         if (count == 0) {
@@ -132,25 +140,25 @@ public class ShotManager {
     /**
      * Insert a shot list
      */
-    public static void saveShots(SQLiteDatabase db, List<Shot> shotList) {
+    public void saveShots(List<Shot> shotList) {
         long res;
         Collections.reverse(shotList);
         for (Shot shot : shotList) {
             ContentValues contentValues = ShotMapper.toContentValues(shot);
             if (contentValues.getAsLong(ShotTable.CSYS_DELETED) != null) {
-                res = deleteShot(db, shot);
+                res = deleteShot(shot);
             } else {
                 res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
-            insertShotInTableSync(db, shot.getCsys_modified());
+            insertShotInTableSync(shot.getCsys_modified());
         }
     }
 
     /**
      * Delete a shot
      */
-    public static long deleteShot(SQLiteDatabase db, Shot shot) {
+    public long deleteShot(Shot shot) {
         long res = 0;
         String args = GMContract.ShotTable.ID_SHOT + "=?";
         String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
@@ -162,18 +170,18 @@ public class ShotManager {
         return res;
     }
 
-    public static long insertShotInTableSync(SQLiteDatabase db, Date dateModified) {
+    public long insertShotInTableSync(Date dateModified) {
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(3); // It's the third data type the application insert in database
         tablesSync.setDirection("BOTH");
         tablesSync.setEntity(GMContract.ShotTable.TABLE);
         tablesSync.setMax_timestamp(dateModified.getTime());
-        if (GeneralManager.isTableEmpty(db, GMContract.ShotTable.TABLE)) {
+        if (isTableEmpty(GMContract.ShotTable.TABLE)) {
             tablesSync.setMin_timestamp(dateModified.getTime());
         }
         tablesSync.setMaxRows(1000);
         tablesSync.setMinRows(0);
-        return SyncTableManager.insertOrUpdateSyncTable(db, tablesSync);
+        return insertOrUpdateSyncTable(tablesSync);
     }
 
     public static Shot retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
@@ -187,4 +195,20 @@ public class ShotManager {
         return null;
     }
 
+
+    public boolean removeOldShots(SQLiteDatabase db){
+        boolean res = true;
+        long number;
+        int maxNumRows = getNumMaxOfRowsByEntity(GMContract.ShotTable.TABLE);
+        long currentNumRows = numberOfRows( GMContract.ShotTable.TABLE);
+        if(maxNumRows<currentNumRows){
+            //We have to delete the older ones
+            number = currentNumRows-maxNumRows;
+            int resRemoved = deleteRows(number);
+            Timber.e("Borrar los más antiguos. Borrados: %d",resRemoved);
+        }else{
+            Timber.e("El numero de filas en la tabla Shot es menor que el número máximo");
+        }
+        return res;
+    }
 }

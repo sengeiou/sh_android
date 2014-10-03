@@ -115,7 +115,7 @@ public class TimelineFragment extends BaseFragment
                     if(!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
-                        jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
+                        startJob(context, TimelineJob.RETRIEVE_NEWER);
                     }
                     pollShots();
                 }
@@ -301,9 +301,15 @@ public class TimelineFragment extends BaseFragment
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-            jobManager.addJobInBackground(
-                new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
+
+            startJob(context, TimelineJob.RETRIEVE_NEWER);
         }
+    }
+
+    private void startJob(Context context,int typeRetrieve){
+        TimelineJob job = GolesApplication.get(context).getObjectGraph().get(TimelineJob.class);
+        job.init(currentUser,typeRetrieve);
+        jobManager.addJobInBackground(job);
     }
 
     //TODO parameter: last shot as offset
@@ -313,15 +319,13 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            jobManager.addJobInBackground(
-                new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER));
+            startJob(context, TimelineJob.RETRIEVE_OLDER);
         }
     }
 
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
-        jobManager.addJobInBackground(
-            new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL));
+        startJob(getActivity().getApplicationContext(), TimelineJob.RETRIEVE_INITIAL);
         swipeRefreshLayout.setRefreshing(true);
     }
 

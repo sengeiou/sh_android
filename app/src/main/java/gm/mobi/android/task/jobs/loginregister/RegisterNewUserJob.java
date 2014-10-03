@@ -5,6 +5,9 @@ import android.content.Context;
 import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
@@ -29,7 +32,17 @@ public class RegisterNewUserJob extends CancellableJob {
     }
 
     @Override
-    public void onRun() throws Throwable {
+    protected void createDatabase() {
+        /* no-op */
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        /* no-op */
+    }
+
+    @Override
+    protected void run() throws SQLException, IOException {
         if (isCancelled()) return;
         bus.post(new RegistrationCompletedEvent());
     }

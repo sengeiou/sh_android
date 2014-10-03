@@ -4,7 +4,6 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.SQLException;
 
@@ -20,23 +19,20 @@ import gm.mobi.android.db.objects.User;
 
 
 
-public class UserManager {
+public class UserManager extends AbstractManager{
 
-    SQLiteOpenHelper dbHelper;
 
     @Inject
-    public UserManager(SQLiteOpenHelper dbHelper){
-        this.dbHelper = dbHelper;
-    }
+    public UserManager(){
 
+    }
     /**
      * Retrieve currentUser
      * *
      */
     public User getCurrentUser() {
         User user = null;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        if(!GeneralManager.isTableEmpty(db,UserTable.TABLE)) {
+        if(!isTableEmpty(UserTable.TABLE)) {
              Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
             if (c.getCount() > 0) {
                 c.moveToFirst();
@@ -52,16 +48,17 @@ public class UserManager {
      */
     public void saveUsers(List<User> userList) throws SQLException {
         long res;
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
         for (User user : userList) {
             ContentValues contentValues = UserMapper.toContentValues(user);
             if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
-                res = deleteUser(db, user);
+                res = deleteUser(user);
             } else {
                 res = db.insertWithOnConflict(GMContract.UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
-            insertOrUpdateUserInTableSync(db);
+            insertOrUpdateUserInTableSync();
         }
+
         //TODO error handling if(res<0)
     }
 
@@ -77,21 +74,19 @@ public class UserManager {
         contentValues = currentUser!=null ? UserMapper.userToContentValues(user,currentUser) : UserMapper.toContentValues(user);
         String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
         String[] args = {userId};
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
-             deleteUser(db, user);
+             deleteUser(user);
         }else{
-            GeneralManager.insertOrUpdate(db, UserTable.TABLE,contentValues,projection,where,args);
+            insertOrUpdate(UserTable.TABLE,contentValues,projection,where,args);
         }
-        insertOrUpdateUserInTableSync(db);
+        insertOrUpdateUserInTableSync();
         //TODO error handling? if(res<0)
     }
 
     /**
      * Delete a user
      */
-    public static long deleteUser(SQLiteDatabase db, User user) {
+    public long deleteUser( User user) {
         long res = 0;
         String args = GMContract.UserTable.ID+"=?";
         String[] stringArgs = new String[]{String.valueOf(user.getIdUser())};
@@ -106,16 +101,17 @@ public class UserManager {
     /**
      * Insert or Update the entry in sync table
      * **/
-     public static long insertOrUpdateUserInTableSync(SQLiteDatabase db){
+     public long insertOrUpdateUserInTableSync(){
         TableSync tablesSync = new TableSync();
         tablesSync.setOrder(1); // It's the first table we add in this table, because it's the first data type the application insert in database
         tablesSync.setDirection("OUTPUT");
         tablesSync.setEntity(UserTable.TABLE);
         tablesSync.setMax_timestamp(System.currentTimeMillis());
-        if(GeneralManager.isTableEmpty(db, UserTable.TABLE)){
+
+        if(isTableEmpty(UserTable.TABLE)){
             tablesSync.setMin_timestamp(System.currentTimeMillis());
         }
-        return SyncTableManager.insertOrUpdateSyncTable(db,tablesSync);
+        return insertOrUpdateSyncTable(tablesSync);
     }
 
     /**
@@ -125,7 +121,7 @@ public class UserManager {
        User resUser = null;
        String args = UserTable.ID+"=?";
        String[] argsString =  new String[]{String.valueOf(idUser)};
-       SQLiteDatabase db = dbHelper.getReadableDatabase();
+
        Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION,args,argsString,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();

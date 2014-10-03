@@ -9,6 +9,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.inject.Inject;
 
@@ -29,7 +30,6 @@ public class NewShotJob extends CancellableJob{
     @Inject Application app;
     @Inject NetworkUtil networkUtil;
     @Inject Bus bus;
-    @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
     private User currentUser;
     private String comment;
@@ -48,7 +48,17 @@ public class NewShotJob extends CancellableJob{
     }
 
     @Override
-    public void onRun() throws Throwable {
+    protected void createDatabase() {
+        /* no-op */
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        /* no-op */
+    }
+
+    @Override
+    protected void run() throws SQLException, IOException {
         if (isCancelled()) return;
         if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());

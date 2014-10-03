@@ -11,6 +11,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.inject.Inject;
 
@@ -33,9 +34,9 @@ public class LoginUserJob extends CancellableJob {
     @Inject Application app;
     @Inject NetworkUtil networkUtil;
     @Inject Bus bus;
-    @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
     @Inject UserManager userManager;
+
 
     public LoginUserJob(Context context, String usernameEmail, String password) {
         super(new Params(PRIORITY));
@@ -50,9 +51,21 @@ public class LoginUserJob extends CancellableJob {
         /* no-op */
     }
 
+
+
     @Override
-    public void onRun() throws Throwable {
-        if (isCancelled()) return;
+    protected void createDatabase() {
+       createWritableDb();
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        userManager.setDataBase(db);
+    }
+
+    @Override
+    protected void run() throws SQLException, IOException {
+       if (isCancelled()) return;
         if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return;
@@ -61,7 +74,7 @@ public class LoginUserJob extends CancellableJob {
             User user = service.login(usernameEmail, password);
             if (user != null) {
                 // Store user in database
-                userManager.saveUser( user);
+                userManager.saveUser(user);
                 bus.post(LoginResultEvent.successful(user));
             } else {
                 sendServerError(null);

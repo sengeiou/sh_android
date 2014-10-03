@@ -2,7 +2,6 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.path.android.jobqueue.Params;
@@ -10,6 +9,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Follow;
@@ -45,6 +44,8 @@ public class GetFollowingsJob extends CancellableJob{
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
     @Inject UserManager userManager;
+    @Inject FollowManager followManager;
+    @Inject TeamManager teamManager;
     private User currentUser;
 
     public GetFollowingsJob(Context context, User user){
@@ -61,7 +62,8 @@ public class GetFollowingsJob extends CancellableJob{
 
     private List<Follow> getFollowingsIdsFromServer(){
         List<Follow> followingsIds = new ArrayList<>();
-        Long modifiedFollows = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.FollowTable.TABLE);
+
+        Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
         try{
             followingsIds = service.getFollows(currentUser.getIdUser(), modifiedFollows, UserDtoFactory.GET_FOLLOWING, true);
 
@@ -94,7 +96,20 @@ public class GetFollowingsJob extends CancellableJob{
     }
 
     @Override
-    public void onRun() throws Throwable {
+    protected void createDatabase() {
+        createWritableDb();
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        userManager.setDataBase(db);
+        followManager.setDataBase(db);
+        teamManager.setDataBase(db);
+
+    }
+
+    @Override
+    protected void run() throws  SQLException{
         if (isCancelled()) return;
         if (!checkConnection()) return;
 
@@ -137,18 +152,16 @@ public class GetFollowingsJob extends CancellableJob{
             if (isCancelled()) return;
 
             // Save and send result
-            SQLiteDatabase db = mDbHelper.getWritableDatabase();
-            FollowManager.saveFollows(db, followings);
+            followManager.saveFollows(followings);
             userManager.saveUsers(usersFollowing);
-            TeamManager.saveTeams(db, teams);
-            db.close();
+            teamManager.saveTeams(teams);
             sendSucces(usersFollowing);
 
     }
 
     private List<Team> getTeamsByTeamIds(Set<Long> teamIds){
         List<Team> resTeams = null;
-        Long modifiedTeams = SyncTableManager.getLastModifiedDate(mDbHelper.getReadableDatabase(), GMContract.TeamTable.TABLE);
+        Long modifiedTeams = teamManager.getLastModifiedDate(GMContract.TeamTable.TABLE);
         try{
             resTeams= service.getTeamsByIdTeams(teamIds, modifiedTeams);
         }catch(IOException e){

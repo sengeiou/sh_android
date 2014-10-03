@@ -4,37 +4,30 @@ import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
-import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.SyncTableManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.inject.Inject;
 
-import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.CancellableJob;
 import timber.log.Timber;
 
-public class GetUserInfoJob extends Job {
+public class GetUserInfoJob extends CancellableJob {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
@@ -42,6 +35,7 @@ public class GetUserInfoJob extends Job {
     Context context;
 
     SQLiteOpenHelper dbHelper;
+    SQLiteDatabase db;
     Bus bus;
     BagdadService service;
 
@@ -61,7 +55,6 @@ public class GetUserInfoJob extends Job {
     @Inject public GetUserInfoJob(Application context,Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service, NetworkUtil mNetworkUtil,
                                   UserManager userManager, FollowManager followManager, TeamManager teamManager) {
         super(new Params(PRIORITY));
-
         this.context = context;
         this.bus = bus;
         this.dbHelper = mDbHelper;
@@ -81,6 +74,17 @@ public class GetUserInfoJob extends Job {
         /* noop */
     }
 
+    @Override
+    protected void createDatabase(){
+        createWritableDb();
+    }
+
+    @Override
+    protected void setDatabaseToManagers() {
+        followManager.setDataBase(db);
+        teamManager.setDataBase(db);
+        userManager.setDataBase(db);
+    }
 
     public void retrieveDataFromDatabase(){
         Team favTeam = null;
@@ -105,31 +109,24 @@ public class GetUserInfoJob extends Job {
 
         followManager.saveFollow(getFollowerRelationshipBetweenMeAndUser);
         followManager.saveFollow(getFollowingRelationshipBetweenMeAndUser);
-        resFollowRelationship = followManager.getFollowRelationship( currentUser,consultedUserFromService);
+        resFollowRelationship = followManager.getFollowRelationship(currentUser,consultedUserFromService);
         return resFollowRelationship;
     }
 
-    @Override public void onRun() throws Throwable {
-        //We make this for a speed screen update
-        retrieveDataFromDatabase();
-        // Refresh anyways
-        try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+    @Override public void run() throws  SQLException, IOException{
+            //We make this for a speed screen update
+            retrieveDataFromDatabase();
+            // Refresh anyways
             User consultedUserFromService = service.getUserByIdUser(userId);
             int followRelationship = getFollowRelationship(consultedUserFromService);
 
             Team team = service.getTeamByIdTeam(consultedUserFromService.getFavouriteTeamId());
             //Store user and team in db
-            userManager.saveUser( consultedUserFromService);
-            TeamManager.insertOrUpdateTeam(db,team);
-            db.close();
-
+            userManager.saveUser(consultedUserFromService);
+            teamManager.insertOrUpdateTeam(team);
             UserInfoResultEvent result = new UserInfoResultEvent(consultedUserFromService,followRelationship, team);
             bus.post(result);
-        } catch (IOException e) {
-            //TODO server error
-            Timber.e("Error consulting user info from service. User id: %d", userId);
-        }
+
     }
 
     @Override protected void onCancel() {
