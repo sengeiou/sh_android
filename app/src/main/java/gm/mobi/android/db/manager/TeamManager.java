@@ -3,8 +3,12 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
+
+import javax.inject.Inject;
+
 import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.mappers.TeamMapper;
@@ -13,6 +17,16 @@ import gm.mobi.android.db.objects.Team;
 import timber.log.Timber;
 
 public class TeamManager {
+
+
+    SQLiteOpenHelper dbHelper;
+
+    @Inject
+    public TeamManager(SQLiteOpenHelper dbHelper){
+        this.dbHelper = dbHelper;
+    }
+
+
 
     /**
      * Insert in database a list of teams
@@ -36,10 +50,11 @@ public class TeamManager {
     /**
      * Retrieve a team by its identifier
      * */
-    public static Team getTeamByIdTeam(SQLiteDatabase db, Long teamId){
+    public Team getTeamByIdTeam( Long teamId){
         Team resTeam = new Team();
         String args = TeamTable.ID_TEAM+"=?";
         String[] argsString = new String[]{String.valueOf(teamId)};
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if(GeneralManager.isTableEmpty(db, TeamTable.TABLE)){
             Timber.e("La tabla %s está vacia", TeamTable.TABLE);
         }

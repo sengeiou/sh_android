@@ -93,7 +93,10 @@ public class ProfileFragment extends BaseFragment {
     private void retrieveUserInfo() {
         Context context = getActivity();
         User currentUser = GolesApplication.get(context).getCurrentUser();
-        jobManager.addJobInBackground(new GetUserInfoJob(context, userId, currentUser));
+
+        GetUserInfoJob job = GolesApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
+        job.init(userId,currentUser);
+        jobManager.addJobInBackground(job);
         //TODO loading
     }
 

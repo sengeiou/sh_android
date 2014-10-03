@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import gm.mobi.android.db.objects.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract;
@@ -21,13 +24,21 @@ import timber.log.Timber;
 public class FollowManager {
 
 
+    SQLiteOpenHelper dbHelper;
+
+    @Inject
+    public FollowManager(SQLiteOpenHelper dbHelper){
+        this.dbHelper = dbHelper;
+    }
+
     /**
      * Insert a Follow
      */
-    public static void saveFollow(SQLiteDatabase db, Follow follow) throws SQLException {
+    public void saveFollow(Follow follow) throws SQLException {
 
         if(follow!=null){
             ContentValues contentValues = FollowMapper.toContentValues(follow);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
             if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
                 deleteFollow(db, follow);
             } else {
@@ -81,7 +92,7 @@ public class FollowManager {
         return userIds;
     }
 
-    public static int getFollowRelationship(SQLiteDatabase db, User fromUser, User toUser) {
+    public int getFollowRelationship( User fromUser, User toUser) {
         int resultRelationship = Follow.RELATIONSHIP_NONE;
         String fromUserIdArgument = String.valueOf(fromUser.getIdUser());
         String toUserIdArgument = String.valueOf(toUser.getIdUser());
@@ -95,7 +106,7 @@ public class FollowManager {
             + "=? and "
             + FollowTable.ID_FOLLOWED_USER
             + "=?)";
-
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor queryResults = db.query(FollowTable.TABLE, FollowTable.PROJECTION, selection,
             new String[] {
                 fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument

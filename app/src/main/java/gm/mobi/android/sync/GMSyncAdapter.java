@@ -26,6 +26,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject JobManager jobManager;
+    @Inject UserManager userManager;
 
     /**
      * Compatibility with versions previous to 3.0
@@ -68,17 +69,11 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
                         Timber.e("Entra en la sincronización para el tipo de llamada : %d",
                             callType);
                         break;
-                    case SyncConstants.GET_NEW_SHOTS_CALLTYPE:
-                        Timber.e("Entra en la sincro para obtener nuevos shots");
-                        currentUser = UserManager.getCurrentUser(mDbHelper.getReadableDatabase());
-                        jobManager.addJobInBackground(
-                            new TimelineJob(getContext(), currentUser, TimelineJob.RETRIEVE_NEWER));
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
-                            callType);
-                        break;
+
                     case SyncConstants.GET_FOLLOWINGS_CALLTYPE:
                         Timber.e("Entra en la sincro para hacer actualizar los followings");
-                        currentUser = UserManager.getCurrentUser(mDbHelper.getReadableDatabase());
+                        currentUser = userManager.getCurrentUser();
+
                         jobManager.addJobInBackground(
                             new GetFollowingsJob(getContext(), currentUser));
                         Timber.e("Entra en la sincronización para el tipo de llamada : %d",

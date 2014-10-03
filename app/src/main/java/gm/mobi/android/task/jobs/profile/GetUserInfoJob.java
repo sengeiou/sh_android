@@ -39,22 +39,42 @@ public class GetUserInfoJob extends Job {
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
 
-    @Inject SQLiteOpenHelper mDbHelper;
-    @Inject Bus bus;
-    @Inject BagdadService service;
-    @Inject
-    NetworkUtil mNetworkUtil;
-    @Inject
+    Context context;
+
+    SQLiteOpenHelper dbHelper;
+    Bus bus;
+    BagdadService service;
+
+    NetworkUtil networkUtil;
+
     Application app;
+    UserManager userManager;
+    FollowManager followManager;
+    TeamManager teamManager;
 
     private Long userId;
     private User currentUser;
 
-    public GetUserInfoJob(Context context, Long userId, User currentUser) {
+
+
+
+    @Inject public GetUserInfoJob(Application context,Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service, NetworkUtil mNetworkUtil,
+                                  UserManager userManager, FollowManager followManager, TeamManager teamManager) {
         super(new Params(PRIORITY));
+
+        this.context = context;
+        this.bus = bus;
+        this.dbHelper = mDbHelper;
+        this.service = service;
+        this.networkUtil = mNetworkUtil;
+        this.userManager = userManager;
+        this.followManager = followManager;
+        this.teamManager = teamManager;
+    }
+
+    public void init(Long userId, User currentUser){
         this.userId = userId;
         this.currentUser = currentUser;
-        GolesApplication.get(context).inject(this);
     }
 
     @Override public void onAdded() {
@@ -64,12 +84,12 @@ public class GetUserInfoJob extends Job {
 
     public void retrieveDataFromDatabase(){
         Team favTeam = null;
-        User consultedUser = UserManager.getUserByIdUser(mDbHelper.getReadableDatabase(), userId);
+        User consultedUser = userManager.getUserByIdUser(userId);
         if (consultedUser != null) {
             // Get relationship
-            int followRelationship =FollowManager.getFollowRelationship(mDbHelper.getReadableDatabase(), currentUser,consultedUser);
+            int followRelationship =followManager.getFollowRelationship( currentUser,consultedUser);
             Long idTeamFav = consultedUser.getFavouriteTeamId();
-            if(idTeamFav!=null) favTeam = TeamManager.getTeamByIdTeam(mDbHelper.getReadableDatabase(),idTeamFav);
+            if(idTeamFav!=null) favTeam = teamManager.getTeamByIdTeam(idTeamFav);
             UserInfoResultEvent result = new UserInfoResultEvent(consultedUser, followRelationship, favTeam);
             bus.post(result);
             //TODO control de errores
@@ -78,13 +98,14 @@ public class GetUserInfoJob extends Job {
         }
     }
 
-    public int getFollowRelationship(SQLiteDatabase db, User consultedUserFromService) throws IOException, SQLException {
+    public int getFollowRelationship( User consultedUserFromService) throws IOException, SQLException {
         int resFollowRelationship;
         Follow getFollowingRelationshipBetweenMeAndUser = service.getFollowRelationship(consultedUserFromService.getIdUser(), currentUser.getIdUser(), UserDtoFactory.GET_FOLLOWING);
         Follow getFollowerRelationshipBetweenMeAndUser = service.getFollowRelationship(consultedUserFromService.getIdUser(), currentUser.getIdUser(), UserDtoFactory.GET_FOLLOWERS);
-        FollowManager.saveFollow(db,getFollowerRelationshipBetweenMeAndUser);
-        FollowManager.saveFollow(db,getFollowingRelationshipBetweenMeAndUser);
-        resFollowRelationship = FollowManager.getFollowRelationship(db, currentUser,consultedUserFromService);
+
+        followManager.saveFollow(getFollowerRelationshipBetweenMeAndUser);
+        followManager.saveFollow(getFollowingRelationshipBetweenMeAndUser);
+        resFollowRelationship = followManager.getFollowRelationship( currentUser,consultedUserFromService);
         return resFollowRelationship;
     }
 
@@ -93,13 +114,13 @@ public class GetUserInfoJob extends Job {
         retrieveDataFromDatabase();
         // Refresh anyways
         try {
-            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
             User consultedUserFromService = service.getUserByIdUser(userId);
-            int followRelationship = getFollowRelationship(db, consultedUserFromService);
+            int followRelationship = getFollowRelationship(consultedUserFromService);
 
             Team team = service.getTeamByIdTeam(consultedUserFromService.getFavouriteTeamId());
             //Store user and team in db
-            UserManager.saveUser(db, consultedUserFromService);
+            userManager.saveUser( consultedUserFromService);
             TeamManager.insertOrUpdateTeam(db,team);
             db.close();
 
@@ -126,7 +147,7 @@ public class GetUserInfoJob extends Job {
 
 
     private boolean checkNetwork() {
-        if (!mNetworkUtil.isConnected(app)) {
+        if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return false;
         }

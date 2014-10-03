@@ -44,7 +44,7 @@ public class GetFollowingsJob extends CancellableJob{
     @Inject Bus bus;
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
-
+    @Inject UserManager userManager;
     private User currentUser;
 
     public GetFollowingsJob(Context context, User user){
@@ -139,7 +139,7 @@ public class GetFollowingsJob extends CancellableJob{
             // Save and send result
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             FollowManager.saveFollows(db, followings);
-            UserManager.saveUsers(db, usersFollowing);
+            userManager.saveUsers(usersFollowing);
             TeamManager.saveTeams(db, teams);
             db.close();
             sendSucces(usersFollowing);

@@ -33,27 +33,27 @@ public class ShotDtoFactoryTest {
     }
     @Test(expected = IllegalArgumentException.class)
     public void newShotFailsWhenIdUserZero() {
-        shotDtoFactory.getNewShotOperationDto(0, "");
+        shotDtoFactory.getNewShotOperationDto(0L, "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void newShotFailsWhenIdUserNegative() {
-        shotDtoFactory.getNewShotOperationDto(-5, "");
+        shotDtoFactory.getNewShotOperationDto(-5L, "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void newShotFailsWhenCommentNull() {
-        shotDtoFactory.getNewShotOperationDto(5, null);
+        shotDtoFactory.getNewShotOperationDto(5L, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void newShotFailsWhenCommentEmpty() {
-        shotDtoFactory.getNewShotOperationDto(5, "    \n");
+        shotDtoFactory.getNewShotOperationDto(5L, "    \n");
     }
 
     @Test
     public void newShotDontHaveId() {
-        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5, "Mock comment");
+        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5L, "Mock comment");
         Map<String, Object> key = newShotOperationDto.getOps()[0].getMetadata().getKey();
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
 
@@ -66,7 +66,7 @@ public class ShotDtoFactoryTest {
     @Test
     public void newShotContainsComment() {
         String comment = "Spiderpig";
-        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5, comment);
+        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5L, comment);
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
         assertThat(data.containsKey(GMContract.ShotTable.COMMENT));
         assertThat(data.get(GMContract.ShotTable.COMMENT)).isEqualTo(comment);
@@ -74,7 +74,7 @@ public class ShotDtoFactoryTest {
 
     @Test
     public void newShotContainsUser() {
-        int idUser = 5;
+        Long idUser = 5L;
         GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(idUser, "Mock comment");
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
         assertThat(data.containsKey(GMContract.ShotTable.ID_USER));

@@ -35,6 +35,7 @@ public class LoginUserJob extends CancellableJob {
     @Inject Bus bus;
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject BagdadService service;
+    @Inject UserManager userManager;
 
     public LoginUserJob(Context context, String usernameEmail, String password) {
         super(new Params(PRIORITY));
@@ -60,9 +61,7 @@ public class LoginUserJob extends CancellableJob {
             User user = service.login(usernameEmail, password);
             if (user != null) {
                 // Store user in database
-                SQLiteDatabase wdb = mDbHelper.getWritableDatabase();
-                UserManager.saveUser(wdb, user);
-                wdb.close();
+                userManager.saveUser( user);
                 bus.post(LoginResultEvent.successful(user));
             } else {
                 sendServerError(null);

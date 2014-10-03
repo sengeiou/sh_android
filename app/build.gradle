@@ -31,7 +31,10 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'robolectric'
 
 
+
+
 repositories {
+    jcenter()
     maven { url 'https://github.com/Goddchen/mvn-repo/raw/master/' }
     mavenCentral()
     mavenLocal()
@@ -143,6 +146,8 @@ dependencies {
 
     compile project(':ext-libs:SwipeRefreshLayoutOverlay:library')
 
+
+    androidTestCompile "org.mockito:mockito-core:1.+"
     androidTestCompile 'org.robolectric:robolectric:2.3'
     androidTestCompile 'junit:junit:4.11'
     androidTestCompile 'com.squareup.assertj:assertj-android:1.0.0'

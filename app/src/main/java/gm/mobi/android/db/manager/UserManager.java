@@ -4,27 +4,38 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.*;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.User;
-import timber.log.Timber;
+
 
 
 public class UserManager {
+
+    SQLiteOpenHelper dbHelper;
+
+    @Inject
+    public UserManager(SQLiteOpenHelper dbHelper){
+        this.dbHelper = dbHelper;
+    }
 
     /**
      * Retrieve currentUser
      * *
      */
-    public static User getCurrentUser(SQLiteDatabase db) {
+    public User getCurrentUser() {
         User user = null;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if(!GeneralManager.isTableEmpty(db,UserTable.TABLE)) {
              Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null, null, null, "1");
             if (c.getCount() > 0) {
@@ -39,8 +50,9 @@ public class UserManager {
     /**
      * Insert User list
      */
-    public static void saveUsers(SQLiteDatabase db, List<User> userList) throws SQLException {
+    public void saveUsers(List<User> userList) throws SQLException {
         long res;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         for (User user : userList) {
             ContentValues contentValues = UserMapper.toContentValues(user);
             if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
@@ -56,8 +68,9 @@ public class UserManager {
     /**
      * Insert a user
      */
-    public static void saveUser(SQLiteDatabase db, User user) throws SQLException {
-        User currentUser = getCurrentUser(db);
+    public void saveUser( User user) throws SQLException {
+
+        User currentUser = getCurrentUser();
         ContentValues contentValues = null;
         String[] projection = UserTable.PROJECTION;
         String where = UserTable.ID+"=?";
@@ -65,6 +78,7 @@ public class UserManager {
         String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
         String[] args = {userId};
 
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
              deleteUser(db, user);
         }else{
@@ -107,10 +121,11 @@ public class UserManager {
     /**
      * Retrieve User by idUser
      * */
-    public static User getUserByIdUser(SQLiteDatabase db, Long idUser){
+    public User getUserByIdUser( Long idUser){
        User resUser = null;
        String args = UserTable.ID+"=?";
        String[] argsString =  new String[]{String.valueOf(idUser)};
+       SQLiteDatabase db = dbHelper.getReadableDatabase();
        Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION,args,argsString,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();

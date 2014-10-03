@@ -1,7 +1,6 @@
 package gm.mobi.android.service.dataservice.dto;
 
 
-import android.provider.SyncStateContract;
 import android.support.v4.util.ArrayMap;
 
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Filter;
 
 import javax.inject.Inject;
 
@@ -17,12 +15,9 @@ import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.service.dataservice.generic.FilterBuilder;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -109,8 +104,6 @@ public class UserDtoFactory {
         od.setData(getDataForFollow());
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETFOLLOWRELATIONSHIP, od);
     }
-
-
 
     public GenericDto getUserByUserId(Long userId){
         OperationDto od  = new OperationDto();

@@ -15,6 +15,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.manager.TeamManager;
+import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.task.jobs.JobModule;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.FollowingUsersActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
@@ -53,11 +57,15 @@ import static android.content.Context.MODE_PRIVATE;
                 TimelineFragment.class,
                 ProfileFragment.class,
                 InitialSetupFragment.class, DummyFragment.class,
-                GMSyncAdapter.class
+                GMSyncAdapter.class,
+                UserManager.class,
+                FollowManager.class,
+                TeamManager.class
 
         },
         includes = {
                 ApiModule.class,
+                JobModule.class,
                 PreferenceModule.class
         },
         complete = false,
@@ -72,6 +80,18 @@ public class DataModule {
         return new OpenHelper(application.getApplicationContext());
     }
 
+    @Provides @Singleton UserManager provideUserManager(SQLiteOpenHelper sqLiteOpenHelper){
+        return new UserManager(sqLiteOpenHelper);
+    }
+
+    @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper sqLiteOpenHelper){
+        return new FollowManager(sqLiteOpenHelper);
+    }
+
+    @Provides @Singleton
+    TeamManager provideTeamManager(SQLiteOpenHelper sqLiteOpenHelper){
+        return new TeamManager(sqLiteOpenHelper);
+    }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
         return app.getSharedPreferences("bagdad", MODE_PRIVATE);
