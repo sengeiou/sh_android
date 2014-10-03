@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
@@ -53,9 +54,11 @@ import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import timber.log.Timber;
 
-public class TimelineFragment extends BaseFragment implements SwipeRefreshLayoutOverlay.OnRefreshListener {
+public class TimelineFragment extends BaseFragment
+    implements SwipeRefreshLayoutOverlay.OnRefreshListener {
 
     public static final int REQUEST_NEW_SHOT = 1;
+    private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
@@ -77,6 +80,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     private int watchingHeight;
     private boolean moreShots = true;
     private List<Shot> shots;
+    private boolean shouldPoll;
+    private User currentUser;
 
 
      /* ---- Lifecycle methods ---- */
@@ -94,29 +99,34 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         };
     }
 
-    public void pollingShots(final Activity a){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true){
-                    try{
-                        Thread.sleep(10000);
-                        User currentUser = GolesApplication.get(a).getCurrentUser();
-                        jobManager.addJobInBackground(new TimelineJob(a, currentUser, TimelineJob.RETRIEVE_NEWER));
-                    }catch(InterruptedException e){
-                        Timber.e("InterruptedException with message", e.getMessage());
-                    }
-                }
-
-            }
-        }).start();
+    private void startPollingShots() {
+        shouldPoll = true;
+        pollShots();
     }
 
+    private void stopPollingShots() {
+        shouldPoll = false;
+    }
+
+    private void pollShots() {
+        if(shouldPoll) {
+            new Handler().postDelayed(new Runnable() {
+                @Override public void run() {
+                    if(!shouldPoll) return;
+                    Context context = getActivity();
+                    if (context != null) {
+                        jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
+                    }
+                    pollShots();
+                }
+            }, REFRESH_INTERVAL_MILLISECONDS);
+        }
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         bus.register(this);
-        pollingShots(activity);
+        currentUser = GolesApplication.get(activity).getCurrentUser();
     }
 
     @Override
@@ -128,6 +138,13 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onResume() {
         super.onResume();
+        startPollingShots();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopPollingShots();
     }
 
     @Subscribe
@@ -139,7 +156,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline, container, false);
     }
 
@@ -150,14 +168,16 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
         //TODO change by drawerLayout, not the fragment itself
         try {
-            ((BaseActivity)getActivity()).getSupportActionBar().setTitle("Timeline");
+            ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Timeline");
         } catch (NullPointerException e) {
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
         // Header and footer
-        headerView = LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
-        footerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+        headerView =
+            LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
+        footerView =
+            LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
         footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
@@ -167,39 +187,49 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3, R.color.refresh_4);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
+            R.color.refresh_3, R.color.refresh_4);
         swipeRefreshLayout.setTopMargin(watchingHeight);
 
         // List scroll stuff
-        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
+        new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
+            new ListViewScrollObserver.OnListViewScrollListener() {
+                public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
-            @Override
-            public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                // delta negativo: scoll abajo
-                if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
-                    watchingContainer.animate().setInterpolator(mInterpolator).setDuration(200).translationY(-watchingHeight);
-                } else if (delta > 10) { // Show
-                    watchingContainer.animate().setInterpolator(mInterpolator).setDuration(200).translationY(0).start();
-                }
-            }
-
-            @Override
-            public void onScrollIdle() {
-                int lastVisiblePosition = listView.getLastVisiblePosition();
-                if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
-                    Context context = getActivity();
-                    if (context != null) {
-                        startLoadMoreShots(context);
+                @Override
+                public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                    // delta negativo: scoll abajo
+                    if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
+                        watchingContainer.animate()
+                            .setInterpolator(mInterpolator)
+                            .setDuration(200)
+                            .translationY(-watchingHeight);
+                    } else if (delta > 10) { // Show
+                        watchingContainer.animate()
+                            .setInterpolator(mInterpolator)
+                            .setDuration(200)
+                            .translationY(0)
+                            .start();
                     }
                 }
-            }
-        });
+
+                @Override
+                public void onScrollIdle() {
+                    int lastVisiblePosition = listView.getLastVisiblePosition();
+                    if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
+                        Context context = getActivity();
+                        if (context != null) {
+                            startLoadMoreShots(context);
+                        }
+                    }
+                }
+            });
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        currentUser = GolesApplication.get(getActivity()).getCurrentUser();
         loadInitialTimeline();
     }
 
@@ -209,7 +239,6 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         // Little hack for ActionBarCompat
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -239,11 +268,13 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
-        Bundle anim = ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(), newShotView.getHeight()).toBundle();
+        Bundle anim =
+            ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
+                newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), NewShotActivity.class);
         intent.putExtras(anim);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
-//        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
+        //        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
     @OnItemClick(R.id.timeline_list)
@@ -252,7 +283,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         Shot shot = adapter.getItem(position - 1);
         User user = shot.getUser();
 
-        Toast.makeText(getActivity(), "Shot " + user.toString()+"---"+shot.getUser().getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Shot " + user.toString() + "---" + shot.getUser().getName(),
+            Toast.LENGTH_SHORT).show();
 
         Timber.d("Clicked shot %d", position);
     }
@@ -261,7 +293,6 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
         User user = adapter.getItem(position).getUser();
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user.getIdUser());
         startActivity(profileIntent);
-
     }
 
     public void startRefreshing(Context context) {
@@ -270,7 +301,8 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
+            jobManager.addJobInBackground(
+                new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_NEWER));
         }
     }
 
@@ -281,13 +313,15 @@ public class TimelineFragment extends BaseFragment implements SwipeRefreshLayout
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            jobManager.addJobInBackground(new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER));
+            jobManager.addJobInBackground(
+                new TimelineJob(context, currentUser, TimelineJob.RETRIEVE_OLDER));
         }
     }
 
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
-        jobManager.addJobInBackground(new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL));
+        jobManager.addJobInBackground(
+            new TimelineJob(getActivity(), currentUser, TimelineJob.RETRIEVE_INITIAL));
         swipeRefreshLayout.setRefreshing(true);
     }
 
