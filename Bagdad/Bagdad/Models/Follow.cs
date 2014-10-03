@@ -179,7 +179,7 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    followings.Add(new FollowingViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userImageURL = st.GetTextAt(3) });
+                    followings.Add(new FollowingViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userImageURL = st.GetTextAt(3), isFollowed = true });
                 }
             }
             catch (Exception e)
@@ -189,5 +189,57 @@ namespace Bagdad.Models
             return followings;
         }
 
+        public async Task<List<FollowingViewModel>> GetUserFollowingFromServer(int idUser, int offset)
+        {
+            List<int> myFollowings = await getidUserFollowing();
+
+            List<FollowingViewModel> followings = new List<FollowingViewModel>();
+            try
+            {
+                ServiceCommunication sc = new ServiceCommunication();
+
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idFollowedUser\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "},{\"comparator\": \"ne\",\"name\": \"idFollowedUser\",\"value\": null}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Follow\"}}]}";
+
+                String jsonUser = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"userName\": null,\"name\": null,\"photo\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [";
+
+                JObject responseFollow = JObject.Parse(await sc.doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, "", jsonFollow, 0));
+
+                int count = 0;
+
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken follow in responseFollow["ops"][0]["data"])
+                    {
+                        if (count != 0) jsonUser += ",";
+
+                        jsonUser += "{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + follow["idFollowedUser"].ToString() + "}";
+
+                        count++;
+                    }
+
+                    jsonUser += "],\"filters\": [],\"nexus\": \"or\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
+
+                    JObject responseUser = JObject.Parse(await sc.doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, "", jsonUser, 0));
+
+
+                    if (responseUser["status"]["code"].ToString().Equals("OK") && !responseUser["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                    {
+                        foreach (JToken user in responseUser["ops"][0]["data"])
+                        {
+                            bool iFollow = false;
+
+                            if (myFollowings.Contains(int.Parse(user["idUser"].ToString()))) iFollow = true;
+
+                            followings.Add(new FollowingViewModel() { idUser = int.Parse(user["idUser"].ToString()), userNickName = user["userName"].ToString(), userName = user["name"].ToString(), userImageURL = user["photo"].ToString(), isFollowed = iFollow });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+            }
+            return followings;
+        }
     }
 }

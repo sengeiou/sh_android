@@ -263,5 +263,38 @@ namespace Bagdad.Models
             }
             return uvm;
         }
+
+        public async Task<UserViewModel> GetProfilInfoFromServer(int idUser)
+        {
+            UserViewModel uvm = new UserViewModel();
+            try
+            {
+                ServiceCommunication sc = new ServiceCommunication();
+
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
+
+                JObject responseFollow = JObject.Parse(await sc.doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, "", jsonFollow, 0));
+
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    JToken userProfileInfo = responseFollow["ops"][0]["data"][0];
+
+                    uvm.userId = int.Parse(userProfileInfo["idUser"].ToString());
+                    uvm.userNickName = userProfileInfo["userName"].ToString();
+                    uvm.userName = userProfileInfo["name"].ToString();
+                    uvm.userURLImage = userProfileInfo["photo"].ToString();
+                    uvm.userBio = userProfileInfo["bio"].ToString();
+                    uvm.points = int.Parse(userProfileInfo["points"].ToString());
+                    uvm.following = int.Parse(userProfileInfo["numFollowings"].ToString());
+                    uvm.followers = int.Parse(userProfileInfo["numFollowers"].ToString());
+                    uvm.userWebsite = userProfileInfo["website"].ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - GetProfileInfo: " + e.Message);
+            }
+            return uvm;
+        }
     }
 }

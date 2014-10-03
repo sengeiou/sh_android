@@ -322,6 +322,10 @@
     <value>✔ FOLLOWING</value>
     <comment>Me.xaml</comment>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>There's a problem retriving data, please try again later.</value>
+    <comment>All</comment>
+  </data>
   <data name="ShootRepeated" xml:space="preserve">
     <value>Whoops! You already shot that.</value>
     <comment>TimeLine.xaml</comment>

@@ -21,12 +21,22 @@ namespace Bagdad
         bool isFollowing;
         UserImageManager uim;
         UserViewModel uvm;
+        public ProgressIndicator progress;
 
         public Me()
         {
             InitializeComponent();
             uim = new UserImageManager();
             uvm = new UserViewModel();
+            BuildLocalizedApplicationBar();
+            progress = new ProgressIndicator()
+            {
+                Text = AppResources.Synchroning,
+                IsIndeterminate = true,
+                IsVisible = false
+
+            };
+            SystemTray.SetProgressIndicator(this, progress);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -45,6 +55,7 @@ namespace Bagdad
 
         private async void LoadUserData()
         {
+            progress.IsVisible = true;
             await uvm.GetUserProfileInfo(idUser);
 
             if (uvm.userId != App.ID_USER)
@@ -72,6 +83,39 @@ namespace Bagdad
             userWebsite.Text = uvm.userWebsite;
 
             LoadImage();
+            progress.IsVisible = false;
+        }
+
+        private void BuildLocalizedApplicationBar()
+        {
+
+            // Set the page's ApplicationBar to a new instance of ApplicationBar.
+            ApplicationBar = new ApplicationBar();
+
+            ApplicationBar.Mode = ApplicationBarMode.Minimized;
+
+            ApplicationBarMenuItem appBarMenuItemPeople =
+                new ApplicationBarMenuItem(AppResources.People);
+            ApplicationBar.MenuItems.Add(appBarMenuItemPeople);
+
+            ApplicationBarMenuItem appBarMenuItemTimeLine =
+                new ApplicationBarMenuItem(AppResources.TimeLine);
+            appBarMenuItemTimeLine.Click += appBarMenuItemTimeLine_Click;
+            ApplicationBar.MenuItems.Add(appBarMenuItemTimeLine);
+
+            ApplicationBarMenuItem appBarMenuItemMe =
+                new ApplicationBarMenuItem(AppResources.Me);
+            appBarMenuItemMe.Click += appBarMenuItemMe_Click;
+            ApplicationBar.MenuItems.Add(appBarMenuItemMe);
+        }
+        private void appBarMenuItemMe_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
+        }
+
+        private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
         }
 
         private void LoadImage()

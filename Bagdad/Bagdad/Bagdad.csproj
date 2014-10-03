@@ -247,6 +247,7 @@
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +276,7 @@
     <XliffResource Include="Resources\AppResources.es.xlf">
       <Generator>XliffResxGenerator</Generator>
       <LastGenOutput>AppResources.es.resx</LastGenOutput>
+      <SubType>Designer</SubType>
     </XliffResource>
   </ItemGroup>
   <ItemGroup>

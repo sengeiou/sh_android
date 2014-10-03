@@ -112,7 +112,7 @@ namespace Bagdad.Utils
                                         Debug.WriteLine("DESCARGANDO: " + Table.Entity);
                                         double date = await gm.getMaxModificationDateOf(Table.Entity);
                                         string sParams = await getParamsForSync(Table.Entity, date);
-                                        total = await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0);
+                                        total = int.Parse(await doRequest(Constants.SERCOM_OP_RETRIEVE, Table.Entity, sParams, 0));
                                         nChanges += total;      //Solo tiene en cuenta la sincro estandard
                                         Debug.WriteLine("\t" + Table.Entity + " acabado con un total de: " + total + "\n");
                                     }
@@ -147,7 +147,7 @@ namespace Bagdad.Utils
             Shot shot = new Shot();
             double date = await shot.GetOlderShotDate();
             string sParams = await getParamsForPaging(Constants.SERCOM_TB_SHOT, date);
-            int total = await doRequest(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET, Constants.SERCOM_TB_OLD_SHOTS, sParams, offset);
+            int total = int.Parse(await doRequest(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET, Constants.SERCOM_TB_OLD_SHOTS, sParams, offset));
             Debug.WriteLine("\tOLD " + Constants.SERCOM_TB_SHOT + " acabado con un total de: " + total + "\n");
             return total;
         }
@@ -199,7 +199,7 @@ namespace Bagdad.Utils
                     TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
                     double epochDate = t.TotalMilliseconds;
 
-                    done = await doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, entity, json, 0);
+                    done = int.Parse(await doRequest(Constants.SERCOM_OP_MANUAL_JSON_REQUEST, entity, json, 0));
                     tryCount++;
                     if (tryCount == 5) break;
 
@@ -301,7 +301,7 @@ namespace Bagdad.Utils
         /// <param name="searchParams"></param>
         /// <param name="offset">offset of the page</param>
         /// <returns></returns>
-        public async Task<int> doRequest(String operation, String entity, String searchParams, int offset)
+        public async Task<String> doRequest(String operation, String entity, String searchParams, int offset)
         {
             String sErrorJSON = "";
             try
@@ -325,10 +325,13 @@ namespace Bagdad.Utils
                 }
 
                 String response = await makeRequest(json);
+
+                if (operation.Equals(Constants.SERCOM_OP_MANUAL_JSON_REQUEST)) return response;
+                
                 JObject job = JObject.Parse(response);
-               
+
                 //Llamamos al retrieve
-                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
+                if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET)) 
                 {
                     //Any ERRORs?
                     if (job["status"].ToString().Equals("No Server Available"))
@@ -345,7 +348,7 @@ namespace Bagdad.Utils
                         if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
                         {
                             //Recursively get all the items
-                            totalDone += await doRequest(operation, entity, searchParams, offset + Constants.SERCOM_PARAM_OFFSET_PAG);
+                            totalDone += int.Parse(await doRequest(operation, entity, searchParams, offset + Constants.SERCOM_PARAM_OFFSET_PAG));
                         }
                     }
                     else
@@ -373,7 +376,7 @@ namespace Bagdad.Utils
                     else totalDone = 0;
                 }
 
-                return totalDone;
+                return totalDone.ToString();
             }
             catch (Exception e)
             {
@@ -394,7 +397,7 @@ namespace Bagdad.Utils
             }
         }
 
-        private async Task<String> GetREQ()
+        public async Task<String> GetREQ()
         {
             String req = "\"req\":[" + App.ID_DEVICE + "," + App.ID_USER + "," + App.PLATFORM_ID + "," + App.appVersionInt() + "," + await getServerTime() + "]";
             return req;

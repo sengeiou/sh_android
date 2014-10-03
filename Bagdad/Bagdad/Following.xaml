@@ -58,7 +58,7 @@
                         </Grid>
 
                         <!--Column2-->
-                        <Button Grid.Column="2" Width="222" Content="{Binding buttonText}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2"/>
+                        <Button Grid.Column="2" Width="222" Visibility="{Binding buttonVisible}" Content="{Binding buttonText}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2"/>
 
                     </Grid>
                 </DataTemplate>
@@ -66,5 +66,4 @@
         </ListBox>
         
     </Grid>
-
 </phone:PhoneApplicationPage>

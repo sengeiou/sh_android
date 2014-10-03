@@ -27,8 +27,19 @@ namespace Bagdad.ViewModels
         {
             try
             {
+
+                Follow follow = new Follow();
                 User user = new User();
-                UserViewModel uvm = await user.GetProfileInfo(idUser);
+                UserViewModel uvm;
+
+                if (await follow.ImFollowing(idUser) || idUser == App.ID_USER)
+                { 
+                    uvm = await user.GetProfileInfo(idUser);
+                }
+                else
+                {
+                    uvm = await user.GetProfilInfoFromServer(idUser);
+                }
 
                 userId = uvm.userId;
                 points = uvm.points;
