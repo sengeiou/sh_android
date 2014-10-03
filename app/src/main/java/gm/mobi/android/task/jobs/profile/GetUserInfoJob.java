@@ -85,7 +85,6 @@ public class GetUserInfoJob extends Job {
         FollowManager.saveFollow(db,getFollowerRelationshipBetweenMeAndUser);
         FollowManager.saveFollow(db,getFollowingRelationshipBetweenMeAndUser);
         resFollowRelationship = FollowManager.getFollowRelationship(db, currentUser,consultedUserFromService);
-        db.close();
         return resFollowRelationship;
     }
 
