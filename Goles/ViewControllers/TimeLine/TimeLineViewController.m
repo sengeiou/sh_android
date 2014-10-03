@@ -48,6 +48,7 @@
 @property(nonatomic, strong) UIActivityIndicatorView *spinner;
 @property(nonatomic, strong) UILabel *lblFooter;
 @property (weak, nonatomic) IBOutlet UIButton *startShootingFirstTime;
+@property (strong, nonatomic) NSString *textComment;
 
 @end
 
@@ -368,18 +369,38 @@
 
 //------------------------------------------------------------------------------
 - (void)shotCreated {
+    [self controlCharactersShot];
     
-    if (![self controlRepeatedShot:self.txtView.text]){
+    if (![self controlRepeatedShot:self.textComment]){
         
-        NSLog(@"Comment---------- %@", self.txtView.text);
+        //[self performSelectorOnMainThread:@selector(controlCharactersShot) withObject:nil waitUntilDone:NO];
         
-        [[ShotManager singleton] createShotWithComment:self.txtView.text andDelegate:self];
+        NSLog(@"Comment---------- %@", self.textComment);
+        
+        [[ShotManager singleton] createShotWithComment:self.textComment andDelegate:self];
     }else{
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
+        [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];
+      
     }
+}
 
+-(void)showAlert{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    [alert show];
+}
+
+-(void)controlCharactersShot{
+    
+    //self.textComment = [self.txtView.text stringByReplacingOccurrencesOfString:@"\\n" withString:@""];
+  //  self.textComment =[self.txtView.text stringByReplacingOccurrencesOfString:@"\r\n" withString:@""];
+   self.textComment = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+   // [self.txtView.text stringByReplacingOccurrencesOfString:@"\n\n" withString:@"\n"];
+  // self.txtView.text = [[self.txtView.text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@""];
+
+    
+    /*self.txtView.text = [self.txtView.text stringByReplacingOccurrencesOfString:@"\n"
+                                                                     withString:@"\u202B\n"];*/
 }
 
 #pragma mark - Reload methods
@@ -556,11 +577,17 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-    if (textView.contentSize.height > self.viewTextField.frame.size.height-10) {
-        self.bottomViewHeightConstraint.constant = textView.contentSize.height+10;
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view layoutIfNeeded];
-        }];
+    if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height+20) {
+        if(textView.contentSize.height != self.viewTextField.frame.size.height-10){
+            
+            if (textView.contentSize.height > self.viewTextField.frame.size.height-10) {
+                self.bottomViewHeightConstraint.constant = textView.contentSize.height+10;
+                [UIView animateWithDuration:0.25f animations:^{
+                    [self.view layoutIfNeeded];
+                }];
+            }
+        }
+
     }
 }
 

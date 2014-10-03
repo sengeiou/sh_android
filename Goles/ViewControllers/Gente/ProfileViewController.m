@@ -40,7 +40,6 @@
 
     [self dataFillView];
     
-    
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
 }
 
@@ -68,9 +67,7 @@
     self.txtViewWebSite.text = self.selectedUser.website;
     [self.txtViewWebSite sizeToFit];
     
-    //self.imgPhoto.image = self.imgSelectedUser;
     [self receivedImage];
-    
 }
 
 -(void)receivedImage{
