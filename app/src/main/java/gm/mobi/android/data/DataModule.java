@@ -22,6 +22,7 @@ import gm.mobi.android.task.jobs.JobModule;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.FollowingUsersActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
+import gm.mobi.android.ui.fragments.FollowingUsersFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +51,6 @@ import static android.content.Context.MODE_PRIVATE;
         injects = {
                 MainActivity.class,
                 LoginUserJob.class,
-                FollowingUsersActivity.class,
                 TimelineJob.class,
                 NewShotJob.class,
                 GetUserInfoJob.class, GetUsersFollowingJob.class,
@@ -60,6 +60,7 @@ import static android.content.Context.MODE_PRIVATE;
                 GMSyncAdapter.class,
                 UserManager.class,
                 FollowManager.class,
+                FollowingUsersFragment.class,
                 TeamManager.class
 
         },
