@@ -41,6 +41,7 @@
     [self dataFillView];
     
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+    [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:nil];
 }
 
 -(void)customView{

@@ -34,6 +34,10 @@
         self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     }
     
+    
+    if (user.idUser == [[UserManager singleton] getUserId])
+        self.actionButton.hidden = YES;
+    
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     

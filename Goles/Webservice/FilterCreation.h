@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User.h"
 
 @interface FilterCreation : NSObject
 
 + (NSDictionary *)getFilterForEntity:(Class)entity;
 + (NSDictionary *)getFilterForOldShots;
++ (NSDictionary *)getFilterForFollowingsOfUser:(User *)user;
+
 @end
