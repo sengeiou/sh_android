@@ -10,6 +10,7 @@
 #import "UserManager.h"
 #import "CoreDataManager.h"
 #import "Utils.h"
+#import "AppDelegate.h"
 
 @interface LoginViewController ()
 
@@ -44,7 +45,9 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-   
+
+    [self restrictRotation:YES];
+    
     [self adjustFrame];
 }
 
@@ -129,4 +132,13 @@
 
 - (IBAction)registerEmail:(id)sender {
 }
+
+
+#pragma mark - Webservice response methods
+-(void) restrictRotation:(BOOL) restriction
+{
+    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    appDelegate.restrictRotation = restriction;
+}
+
 @end

@@ -19,7 +19,7 @@
 @property (strong, nonatomic) UIStoryboard *meSB;
 @property (strong, nonatomic) UIStoryboard *setupSB;
 @property (strong, nonatomic) NSArray *request;
-
+@property (assign, nonatomic) BOOL restrictRotation;
 
 + (void)removeAllCache;
 - (void)registerAPNS;

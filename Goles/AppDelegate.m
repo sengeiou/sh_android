@@ -99,6 +99,14 @@
     return YES;
 }
 
+-(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if(self.restrictRotation)
+        return UIInterfaceOrientationMaskPortrait;
+    else
+        return UIInterfaceOrientationMaskAll;
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
    [[[SyncManager singleton] synchroTimer] invalidate];

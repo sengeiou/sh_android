@@ -103,15 +103,9 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
   
-    if (status){
-        
-        if (status && [entityClass isSubclassOfClass:[User class]]){
-            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-        }
-    }else if (refresh){
+    if (refresh)
         
          [self dataFillView];
-    }
 }
 
 /*

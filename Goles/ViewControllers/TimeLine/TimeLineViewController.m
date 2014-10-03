@@ -58,6 +58,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self restrictRotation:NO];
+    
     lengthTextField = 0;
    
     [self initSpinner];
@@ -367,9 +369,12 @@
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     
-    if (![self controlRepeatedShot:self.txtView.text])
+    if (![self controlRepeatedShot:self.txtView.text]){
+        
+        NSLog(@"Comment---------- %@", self.txtView.text);
+        
         [[ShotManager singleton] createShotWithComment:self.txtView.text andDelegate:self];
-    else{
+    }else{
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
@@ -574,5 +579,13 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+#pragma mark - Webservice response methods
+-(void) restrictRotation:(BOOL) restriction
+{
+    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    appDelegate.restrictRotation = restriction;
+}
+
 
 @end
