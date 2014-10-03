@@ -162,17 +162,6 @@ namespace Bagdad.ViewModels
                 shot.comment = text.Replace("\r", "\\n");
                 shot.idUser = App.ID_USER;
                 if (await shot.isShotRepeatedIn24h()) return 0;
-                int n = 0;
-                while ((shotsModel.Count > 0) || (App.isSynchroRunning()))
-                {
-                    if (n == 0)
-                    {
-                        n++;
-                        Debug.WriteLine("            -------------------         Esperando a que se actualice un shot de synchro            -------------------         ");
-                    }
-                    
-                }
-                if (n > 0) Debug.WriteLine("            -------------------         Espera finalizada            -------------------         ");
                 await shot.SynchronizeShot();
                 return 1;
             }
