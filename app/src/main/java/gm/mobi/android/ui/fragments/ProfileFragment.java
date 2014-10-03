@@ -31,6 +31,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
 
@@ -71,13 +72,13 @@ public class ProfileFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onResume() {
+        super.onResume();
         bus.register(this);
     }
 
     @Override
-    public void onDetach() {
+    public void onPause() {
         super.onDetach();
         bus.unregister(this);
     }
