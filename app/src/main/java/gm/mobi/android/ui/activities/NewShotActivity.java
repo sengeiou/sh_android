@@ -1,9 +1,12 @@
 package gm.mobi.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -80,12 +83,13 @@ public class NewShotActivity extends BaseSignedInActivity {
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
 
-        previousShot = ShotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(), GolesApplication.get(this).getCurrentUser().getIdUser());
+        previousShot = ShotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
+            GolesApplication.get(this).getCurrentUser().getIdUser());
 
         // Compound drawable hack
-//        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
-//        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-//        sendButton.setCompoundDrawables(null, null, icon, null);
+        //        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
+        //        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        //        sendButton.setCompoundDrawables(null, null, icon, null);
 
         setTextReceivedFromIntent();
     }
@@ -116,8 +120,8 @@ public class NewShotActivity extends BaseSignedInActivity {
     @OnClick(R.id.new_shot_send_button)
     public void sendShot() {
         String comment = filteredText(text.getText().toString());
-        InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        im.hideSoftInputFromWindow(text.getWindowToken(),0);
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
         if (isCommentRepeated(comment)) {
             Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
@@ -129,7 +133,6 @@ public class NewShotActivity extends BaseSignedInActivity {
         } else {
             Timber.i("Comment invalid: \"%s\"", comment);
             Toast.makeText(this, "Invalid text", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -173,6 +176,7 @@ public class NewShotActivity extends BaseSignedInActivity {
             return false;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -183,5 +187,22 @@ public class NewShotActivity extends BaseSignedInActivity {
     protected void onPause() {
         super.onPause();
         bus.unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (TextUtils.isEmpty(text.getText().toString().trim())) {
+            super.onBackPressed();
+        } else {
+            new AlertDialog.Builder(this).setMessage("Discard shot?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .create()
+                .show();
+        }
     }
 }
