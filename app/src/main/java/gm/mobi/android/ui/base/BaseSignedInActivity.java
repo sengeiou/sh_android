@@ -14,7 +14,7 @@ import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 
 public class BaseSignedInActivity extends BaseActivity {
 
-    @Inject SQLiteOpenHelper dbHelper;
+    @Inject UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,7 @@ public class BaseSignedInActivity extends BaseActivity {
         if (app.getCurrentUser() != null) {
             return true;
         } else {
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            User currentUser = UserManager.getCurrentUser(db);
+            User currentUser = userManager.getCurrentUser();
             if (currentUser != null) {
                 app.setCurrentUser(currentUser);
                 return true;
