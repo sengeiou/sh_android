@@ -12,5 +12,6 @@
 @interface FollowingTableViewController : UITableViewController
 
 @property (nonatomic,strong)    User *selectedUser;
+@property (nonatomic,strong)	NSNumber	*viewSelected;
 
 @end

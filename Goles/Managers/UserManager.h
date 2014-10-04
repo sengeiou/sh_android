@@ -24,5 +24,6 @@
 - (NSString *)getUserSessionToken;
 - (NSArray *)getActiveUsersIDs;
 - (NSArray *)getFollowingUsersOfUser:(User *)user;
+- (NSArray *)getFollowersOfUser:(User *)user;
 
 @end

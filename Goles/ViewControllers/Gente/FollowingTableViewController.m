@@ -11,10 +11,11 @@
 #import "UserManager.h"
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
+#import "Constants.h"
 
 @interface FollowingTableViewController ()
 
-@property (nonatomic,strong) NSArray *followingUsers;
+@property (nonatomic,strong) NSArray *usersList;
 
 @end
 
@@ -22,8 +23,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
-    self.title = @"Following";
+	
+	if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
+	else
+		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
+	
+	if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+		self.title = @"Following";
+	else
+		self.title = @"Followers";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,14 +42,14 @@
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.followingUsers.count;
+    return self.usersList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"followingCell";    
     FollowingCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    User *user = [self.followingUsers objectAtIndex:indexPath.row];
+    User *user = [self.usersList objectAtIndex:indexPath.row];
     [cell configureCellWithUser:user inRow:indexPath];
     [cell addTarget:self action:@selector(goProfile:)];
 	
@@ -55,7 +64,7 @@
 	UIButton *btn = (UIButton *) sender;
 	AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
 	ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
-	User *selectedUser = self.followingUsers[btn.tag];
+	User *selectedUser = self.usersList[btn.tag];
 	profileVC.selectedUser = selectedUser;
 	[self.navigationController pushViewController:profileVC animated:YES];
 }

@@ -33,6 +33,10 @@
 //Syncro time process in seconds
 #define CREATE_SHOT_PLACEHOLDER   @"What's Up?"
 
+//Profile selection
+#define FOLLOWING_SELECTED   @1
+#define FOLLOWERS_SELECTED   @2
+
 #endif  
 
 #ifdef DEBUG

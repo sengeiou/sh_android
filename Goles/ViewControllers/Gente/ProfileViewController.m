@@ -12,6 +12,7 @@
 #import "FollowingTableViewController.h"
 #import "Follow.h"
 #import "AppDelegate.h"
+#import "Constants.h"
 
 @interface ProfileViewController ()
 
@@ -122,11 +123,17 @@
 //------------------------------------------------------------------------------
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString:@"toFollowers"]) {
+    if ([segue.identifier isEqualToString:@"toFollowing"]) {
         FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
         [followingTVC setSelectedUser:self.selectedUser];
+		[followingTVC setViewSelected:FOLLOWING_SELECTED];
     }
-    
+	if ([segue.identifier isEqualToString:@"toFollowers"]) {
+		FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
+		[followingTVC setSelectedUser:self.selectedUser];
+		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
+	}
+
 }
 
 #pragma mark - Webservice response methods
