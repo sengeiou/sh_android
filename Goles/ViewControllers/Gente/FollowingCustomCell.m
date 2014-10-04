@@ -58,6 +58,11 @@
 
 }
 
+- (void)addTarget:(id)target action:(SEL)action {
+	
+	[self.photobutton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
 - (void)configureFollowButton {
 
 	[self.actionButton setTitle:@"+ Follow" forState:UIControlStateNormal];

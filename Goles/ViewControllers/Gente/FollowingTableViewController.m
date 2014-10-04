@@ -9,6 +9,8 @@
 #import "FollowingTableViewController.h"
 #import "FollowingCustomCell.h"
 #import "UserManager.h"
+#import "ProfileViewController.h"
+#import "AppDelegate.h"
 
 @interface FollowingTableViewController ()
 
@@ -40,17 +42,22 @@
     FollowingCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
     [cell configureCellWithUser:user];
-    
+    [cell addTarget:self action:@selector(goProfile:)];
+	
     return cell;
 }
 
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+//------------------------------------------------------------------------------
+-(void)goProfile:(id)sender{
+	
+	UIButton *btn = (UIButton *) sender;
+	AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+	ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+	User *selectedUser = self.followingUsers[btn.tag];
+	profileVC.selectedUser = selectedUser;
+	[self.navigationController pushViewController:profileVC animated:YES];
 }
 
 

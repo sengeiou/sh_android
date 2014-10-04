@@ -357,14 +357,18 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uvh-e6-f3G">
-                                            <rect key="frame" x="20" y="9" width="38" height="38"/>
+                                            <rect key="frame" x="20" y="11" width="38" height="38"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="38" id="5OP-IW-3m9"/>
                                                 <constraint firstAttribute="width" constant="38" id="JIz-y7-dwc"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOk-cS-Nsp">
-                                            <rect key="frame" x="0.0" y="-1" width="63" height="61"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOk-cS-Nsp">
+                                            <rect key="frame" x="0.0" y="0.0" width="70" height="60"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="70" id="d0r-zS-vcF"/>
+                                                <constraint firstAttribute="height" constant="60" id="vlO-mu-fPV"/>
+                                            </constraints>
                                             <state key="normal">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -401,9 +405,11 @@
                                         </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="jOk-cS-Nsp" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-8" id="1gY-wR-Rau"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="trailing" secondItem="yZH-QS-KQQ" secondAttribute="trailingMargin" constant="-3" id="Ibn-kR-mUb"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="7" id="KNW-gE-cjM"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="69" id="LUG-vP-J9I"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="Uvh-e6-f3G" secondAttribute="trailing" constant="13" id="TzG-h4-Q7y"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="1" id="cuu-Bd-De3"/>
@@ -411,12 +417,14 @@
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="12" id="faJ-ai-Lsd"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="TBy-mi-FaP" secondAttribute="trailing" constant="10" id="fyM-ce-M0p"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="leading" secondItem="Uvh-e6-f3G" secondAttribute="trailing" constant="13" id="j7U-eI-Cy6"/>
+                                        <constraint firstItem="jOk-cS-Nsp" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="-8" id="w6e-zQ-QlG"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="actionButton" destination="6RI-lt-Kek" id="V2r-4j-ibM"/>
                                     <outlet property="imgPhoto" destination="Uvh-e6-f3G" id="QbD-W2-dz3"/>
                                     <outlet property="nickName" destination="fHl-cH-0HG" id="Fb9-BF-I8s"/>
+                                    <outlet property="photobutton" destination="jOk-cS-Nsp" id="UeL-D3-7n9"/>
                                     <outlet property="userName" destination="TBy-mi-FaP" id="0B9-mJ-EiV"/>
                                 </connections>
                             </tableViewCell>
@@ -429,7 +437,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o9R-5f-ldD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1929" y="115"/>
+            <point key="canvasLocation" x="1929" y="114"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="E2o-rB-AS2">

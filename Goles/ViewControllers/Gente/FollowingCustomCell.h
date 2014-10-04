@@ -15,7 +15,9 @@
 @property (nonatomic,weak) IBOutlet UILabel *nickName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (nonatomic,weak) IBOutlet UIButton *photobutton;
 
 -(void)configureCellWithUser:(User *)user;
+-(void)addTarget:(id)target action:(SEL)action;
 
 @end
