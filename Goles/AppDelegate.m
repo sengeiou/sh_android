@@ -99,8 +99,8 @@
     return YES;
 }
 
--(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-{
+-(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+	
     if(self.restrictRotation)
         return UIInterfaceOrientationMaskPortrait;
     else
@@ -115,7 +115,8 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-
+	if (SYNCHRO_ACTIVATED)
+		[[SyncManager singleton] startSyncProcess];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
