@@ -20,7 +20,7 @@
     // Initialization code
 }
 
--(void)configureCellWithUser:(User *)user {
+-(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
 
     self.userName.text = user.name;
     self.nickName.text = user.userName;
@@ -56,6 +56,7 @@
         self.imgPhoto.clipsToBounds = YES;
     }
 
+	self.photobutton.tag = indexPath.row;
 }
 
 - (void)addTarget:(id)target action:(SEL)action {

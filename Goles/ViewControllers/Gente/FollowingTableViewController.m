@@ -41,7 +41,7 @@
     static NSString *CellIdentifier = @"followingCell";    
     FollowingCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
-    [cell configureCellWithUser:user];
+    [cell configureCellWithUser:user inRow:indexPath];
     [cell addTarget:self action:@selector(goProfile:)];
 	
     return cell;

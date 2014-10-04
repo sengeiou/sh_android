@@ -115,7 +115,7 @@
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
     self.navigationItem.leftBarButtonItem = btnSearch;
-    
+	
     //Info button
     UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [button addTarget:self action:@selector(infoButton) forControlEvents:UIControlEventTouchUpInside];
