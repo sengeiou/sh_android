@@ -32,6 +32,9 @@
 - (void)viewDidLoad{
 	
     [super viewDidLoad];
+    [self restrictRotation:YES];
+
+    
     self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
 
 }
@@ -70,4 +73,12 @@
 	profileVC.selectedUser = selectedUser;
 	[self.navigationController pushViewController:profileVC animated:YES];
 }
+
+#pragma mark - Webservice response methods
+-(void) restrictRotation:(BOOL) restriction
+{
+    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    appDelegate.restrictRotation = restriction;
+}
+
 @end

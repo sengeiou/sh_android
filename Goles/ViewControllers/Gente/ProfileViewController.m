@@ -11,6 +11,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "FollowingTableViewController.h"
 #import "Follow.h"
+#import "AppDelegate.h"
 
 @interface ProfileViewController ()
 
@@ -35,7 +36,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    
+    [self restrictRotation:YES];
+
     [self customView];
 
     [self dataFillView];
@@ -126,5 +129,11 @@
     
 }
 
+#pragma mark - Webservice response methods
+-(void) restrictRotation:(BOOL) restriction
+{
+    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    appDelegate.restrictRotation = restriction;
+}
 
 @end
