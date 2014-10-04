@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -46,7 +47,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGe-Mz-EQv">
-                                            <rect key="frame" x="71" y="28" width="329" height="21"/>
+                                            <rect key="frame" x="71" y="28" width="388" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="VXq-9t-Jiw"/>
                                             </constraints>
@@ -76,7 +77,7 @@
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="leading" secondItem="drq-bX-CxN" secondAttribute="trailing" constant="13" id="IQH-cd-ZtU"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="top" secondItem="1dO-mc-LvY" secondAttribute="bottom" constant="-2" id="IQO-Ci-Nn6"/>
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="1" id="PA9-vI-QFg"/>
-                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="leading" secondItem="EGe-Mz-EQv" secondAttribute="trailing" constant="69" id="QTl-yz-iBt"/>
+                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="leading" secondItem="EGe-Mz-EQv" secondAttribute="trailing" priority="500" constant="10" id="QTl-yz-iBt"/>
                                         <constraint firstItem="3VV-Hp-5NY" firstAttribute="leading" secondItem="1dO-mc-LvY" secondAttribute="trailing" constant="10" id="Wg8-l5-ycI"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="leading" secondItem="drq-bX-CxN" secondAttribute="trailing" constant="13" id="Ykt-qf-Fgx"/>
                                         <constraint firstItem="VzF-Nx-7Z9" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="-8" id="ei3-a8-CPK"/>
@@ -371,7 +372,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHl-cH-0HG">
-                                            <rect key="frame" x="71" y="28" width="329" height="21"/>
+                                            <rect key="frame" x="71" y="28" width="388" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="EdJ-aT-s02"/>
                                             </constraints>
@@ -398,7 +399,7 @@
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="7" id="KNW-gE-cjM"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
-                                        <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="69" id="LUG-vP-J9I"/>
+                                        <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="Uvh-e6-f3G" secondAttribute="trailing" constant="13" id="TzG-h4-Q7y"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="1" id="cuu-Bd-De3"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="2" id="daY-28-9ld"/>
