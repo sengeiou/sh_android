@@ -27,13 +27,6 @@
 }
 
 //------------------------------------------------------------------------------
-+(Team *)insertWithDictionary:(NSDictionary *)dict andIndex:(NSInteger)index{
-    
-    Team *team = [self insertWithDictionary:dict];
-    return team;
-}
-
-//------------------------------------------------------------------------------
 +(Team *)updateWithDictionary:(NSDictionary *)dict {
     
     NSNumber *idTeam = [dict objectForKey:kJSON_TEAM_IDTEAM];

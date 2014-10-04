@@ -27,6 +27,7 @@
 #import "FavRestConsumerHelper.h"
 #import "Conection.h"
 #import "User.h"
+#import "Shot.h"
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -114,9 +115,12 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
+	
+	[[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:nil];
+	
 	if (SYNCHRO_ACTIVATED)
 		[[SyncManager singleton] startSyncProcess];
+	
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -125,6 +129,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 
+	[[[SyncManager singleton] synchroTimer] invalidate];
 }
 
 #pragma mark - Private methods

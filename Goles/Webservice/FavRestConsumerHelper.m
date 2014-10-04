@@ -77,7 +77,7 @@
         [req addObject:@0];
     
     [req addObject:idPlatform];
-    [req addObject:[NSNumber numberWithInt:appVersion]];
+    [req addObject:[NSNumber numberWithInteger:appVersion]];
     [req addObject:[NSNumber numberWithLongLong:epochTime]];
     
 //    if (sessionToken != nil)

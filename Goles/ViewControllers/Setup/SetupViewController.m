@@ -26,9 +26,8 @@
      UITextField *txtFieldName;
      UITextField *txtFieldPwd;
     
-    int lengthName;
-    
-    int lengthPwd;
+    NSInteger lengthName;
+    NSInteger lengthPwd;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *mtableView;

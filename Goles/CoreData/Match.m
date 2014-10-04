@@ -63,27 +63,10 @@
         Team *localTeam = [[CoreDataManager sharedInstance] getEntity:[Team class] withId:[[dict objectForKey:kJSON_ID_TEAM_LOCAL] integerValue]];
         Team *visitorTeam = [[CoreDataManager sharedInstance] getEntity:[Team class] withId:[[dict objectForKey:kJSON_ID_TEAM_VISITOR] integerValue]];
 
-        if (localTeam && visitorTeam) {
-            [self setTeamLocal:localTeam];
-            [self setTeamVisitor:visitorTeam];
-        }
-        
         [self setIdMatch:idMatch];
         [self setMatchState:matchState];
         
-        NSNumber *localScore = [dict objectForKey:kJSON_SCORE_LOCAL];
-        if ( [localScore isKindOfClass:[NSNumber class]] )
-            [self setLocalScore:localScore];
-        
-        NSNumber *visitorScore = [dict objectForKey:kJSON_SCORE_VISITOR];
-        if ( [visitorScore isKindOfClass:[NSNumber class]] )
-            [self setVisitorScore:visitorScore];
-        
-        NSString *elapsedMin = [dict objectForKey:kJSON_ELAPSED_MINUTES];
-        if ( [elapsedMin isKindOfClass:[NSString class]] )
-            [self setElapsedMinutes:@([elapsedMin integerValue])];
-        
-        NSNumber *matchDate = [dict objectForKey:kJSON_DATE_MATCH];
+              NSNumber *matchDate = [dict objectForKey:kJSON_DATE_MATCH];
         if ( [matchDate isKindOfClass:[NSNumber class]] )
             [self setMatchDate:matchDate];
         
@@ -92,20 +75,9 @@
             [self setMatchType:matchType];
         
         NSNumber *matchSubstate = [dict objectForKey:@"matchSubstate"];
-        if ([matchSubstate isKindOfClass:[NSNumber class]])                     [self setMatchSubstate:matchSubstate];
-        
-        NSString *matchTVList = [dict objectForKey:@"listTV"];
-        if ([matchTVList isKindOfClass:[NSString class]])                       [self setListTV:matchTVList];
-        
-        NSString *matchPreviousScore = [dict objectForKey:@"previousMatchScore"];
-        if ([matchPreviousScore isKindOfClass:[NSString class]])                [self setPreviousMatchScore:matchPreviousScore];
-        
-        NSNumber *matchIdTeamWinner = [dict objectForKey:@"idTeamWinner"];
-        if ([matchIdTeamWinner isKindOfClass:[NSNumber class]])                 [self setIdWinnerTeam:matchIdTeamWinner];
-        
-        NSNumber *dateMatchNotConfirmed = [dict objectForKey:@"dateMatchNotConfirmed"];
-        if ([dateMatchNotConfirmed isKindOfClass:[NSNumber class]])             [self setNotConfirmedMatchDate:dateMatchNotConfirmed];
-        
+        if ([matchSubstate isKindOfClass:[NSNumber class]])
+			[self setMatchSubstate:matchSubstate];
+		
         //SYNCRO  PROPERTIES
         
         NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];

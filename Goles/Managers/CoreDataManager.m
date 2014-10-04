@@ -230,48 +230,6 @@
     return result;
 }
 
-//------------------------------------------------------------------------------
-- (NSArray *)insertEntities:(Class)entityClass WithOrderedArray:(NSArray *)dataArray {
-    
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    
-    if ( [entityClass respondsToSelector:@selector(insertWithDictionary:andIndex:)] )
-    {
-        if ( [dataArray isKindOfClass:[NSArray class]] && [dataArray count]>0 ){
-            for (NSInteger index = 0; index < [dataArray count]; ++index){
-                NSDictionary *entityDict = [dataArray objectAtIndex:index];
-                id entity = [entityClass insertWithDictionary:entityDict andIndex:index];
-                if ( entity )
-                    [result addObject:entity];
-            }            
-        }
-    } else {
-        DLog(@"[GOLES MESSENGER ERROR]: Se esta intentando actualizar la entidad de Core Data '%@' que no responde al evento insertEntities:withIndex:", entityClass);
-    }
-    
-    return result;
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *)updateEntities:(Class)entityClass WithOrderedArray:(NSArray *)dataArray {
-    
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    
-    if ( [dataArray isKindOfClass:[NSArray class]] &&
-        [entityClass respondsToSelector:@selector(updateWithDictionary:withIndex:)])
-    {
-        for (NSInteger index = 0; index < [dataArray count]; ++index){
-            NSDictionary *entityDict = [dataArray objectAtIndex:index];
-            id entity = [entityClass updateWithDictionary:entityDict withIndex:index];
-            if ( entity )
-                [result addObject:entity];
-        }
-    } else {
-        DLog(@"[GOLES MESSENGER ERROR]: Se esta intentando actualizar la entidad de Core Data '%@' que no responde al evento updateWithDictionary:withIndex:", entityClass);
-    }
-    
-    return result;
-}
 
 //------------------------------------------------------------------------------
 - (NSArray *)updateEntities:(Class)entityClass WithArray:(NSArray *)dataArray {

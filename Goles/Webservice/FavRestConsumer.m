@@ -170,14 +170,15 @@
         NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
-            if (!error && delegateRespondsToProtocol)
+            if (!error)
                 [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                    
-                    if (!error && status)
+                    if (!error && status && delegateRespondsToProtocol)
                        [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
-                    else
+                    else if (delegateRespondsToProtocol)
                        [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
                 }];
+			
             else if (delegateRespondsToProtocol){
                 
                 [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:NO];

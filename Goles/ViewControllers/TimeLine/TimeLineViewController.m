@@ -580,11 +580,11 @@
     }
     else
         self.btnShoot.enabled = NO;
-    
-    
-//    if ([text isEqualToString:@"\n"])
-        [self adaptViewSizeWhenWriting:textView];
-    
+	
+	if ([text isEqualToString:@"\n"])
+		[self adaptViewSizeWhenWriting:textView];
+	
+
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 
@@ -593,19 +593,12 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-    if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height+20) {
-        if(textView.contentSize.height != self.viewTextField.frame.size.height-10){
-            
-            if (textView.contentSize.height > self.viewTextField.frame.size.height-10) {
-                self.bottomViewHeightConstraint.constant = textView.contentSize.height+10;
-                [UIView animateWithDuration:0.25f animations:^{
-                    [self.view layoutIfNeeded];
-                }];
-            }
-        }
-
-    }
-}
+	if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height+20) {
+		self.bottomViewHeightConstraint.constant += 20;
+		[UIView animateWithDuration:0.25f animations:^{
+			[self.view layoutIfNeeded];
+		}];
+	}}
 
 //------------------------------------------------------------------------------
 -(NSString *) countCharacters:(NSUInteger) lenght{

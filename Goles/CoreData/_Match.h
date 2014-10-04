@@ -38,15 +38,11 @@ extern const struct MatchAttributes {
 } MatchAttributes;
 
 extern const struct MatchRelationships {
-	__unsafe_unretained NSString *teamLocal;
-	__unsafe_unretained NSString *teamVisitor;
 } MatchRelationships;
 
 extern const struct MatchFetchedProperties {
 } MatchFetchedProperties;
 
-@class Team;
-@class Team;
 
 
 
@@ -500,20 +496,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) Team *teamLocal;
-
-//- (BOOL)validateTeamLocal:(id*)value_ error:(NSError**)error_;
-
-
-
-
-@property (nonatomic, strong) Team *teamVisitor;
-
-//- (BOOL)validateTeamVisitor:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @end
 
@@ -783,16 +765,6 @@ extern const struct MatchFetchedProperties {
 - (void)setPrimitiveVisitorScoreValue:(int16_t)value_;
 
 
-
-
-
-- (Team*)primitiveTeamLocal;
-- (void)setPrimitiveTeamLocal:(Team*)value;
-
-
-
-- (Team*)primitiveTeamVisitor;
-- (void)setPrimitiveTeamVisitor:(Team*)value;
 
 
 @end

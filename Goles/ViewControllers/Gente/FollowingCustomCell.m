@@ -12,6 +12,7 @@
 #import "UserManager.h"
 #import "CoreDataManager.h"
 #import "Follow.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation FollowingCustomCell
 
@@ -23,18 +24,15 @@
 
     self.userName.text = user.name;
     self.nickName.text = user.userName;
-    
-    self.actionButton.layer.cornerRadius = 6.0f;
-    if ([self checkIfImFollowingUser:user]){
-        [self.actionButton setTitle:@"Unfollow" forState:UIControlStateNormal];
-        self.actionButton.backgroundColor = [UIColor orangeColor];
-    }
-    else {
-        [self.actionButton setTitle:@"Follow" forState:UIControlStateNormal];
-        self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
-    }
-    
-    
+	
+    self.actionButton.layer.cornerRadius = 5.0f;
+	
+    if ([self checkIfImFollowingUser:user])
+		[self configureFollowingButton];
+		
+    else
+		[self configureFollowButton];
+	
     if (user.idUser == [[UserManager singleton] getUserId])
         self.actionButton.hidden = YES;
     
@@ -58,6 +56,22 @@
         self.imgPhoto.clipsToBounds = YES;
     }
 
+}
+
+- (void)configureFollowButton {
+
+	[self.actionButton setTitle:@"+ Follow" forState:UIControlStateNormal];
+	self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
+}
+
+- (void)configureFollowingButton {
+	
+	[self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+	[self.actionButton setTitle:@"Following" forState:UIControlStateNormal];
+	self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+	self.actionButton.backgroundColor = [UIColor whiteColor];
+	self.actionButton.layer.borderWidth = 1.5f;
+	self.actionButton.layer.masksToBounds = YES;
 }
 
 - (BOOL)checkIfImFollowingUser:(User *)user {

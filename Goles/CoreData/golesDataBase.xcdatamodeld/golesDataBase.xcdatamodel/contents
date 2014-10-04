@@ -81,8 +81,6 @@
         <attribute name="twitterLocal" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="twitterVisitor" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" syncable="YES"/>
-        <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES">
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -164,7 +162,7 @@
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
         <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
         <element name="Follow" positionX="-693" positionY="135" width="128" height="150"/>
-        <element name="Match" positionX="-45" positionY="-27" width="128" height="525"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="495"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="180"/>

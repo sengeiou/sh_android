@@ -37,8 +37,6 @@ const struct MatchAttributes MatchAttributes = {
 };
 
 const struct MatchRelationships MatchRelationships = {
-	.teamLocal = @"teamLocal",
-	.teamVisitor = @"teamVisitor",
 };
 
 const struct MatchFetchedProperties MatchFetchedProperties = {
@@ -934,14 +932,6 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 
 
-
-@dynamic teamLocal;
-
-	
-
-@dynamic teamVisitor;
-
-	
 
 
 
