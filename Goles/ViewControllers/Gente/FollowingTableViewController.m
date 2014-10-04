@@ -16,6 +16,7 @@
 @interface FollowingTableViewController ()
 
 @property (nonatomic,strong) NSArray *usersList;
+@property (nonatomic,weak) IBOutlet UITableView *usersTable;
 
 @end
 
@@ -23,6 +24,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	
 	if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
 	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
@@ -33,10 +36,6 @@
 		self.title = @"Following";
 	else
 		self.title = @"Followers";
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source

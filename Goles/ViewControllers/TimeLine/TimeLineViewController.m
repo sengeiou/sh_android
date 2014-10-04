@@ -559,7 +559,7 @@
     
     self.txtView.textColor = [UIColor lightGrayColor];
     
-    self.bottomViewHeightConstraint.constant = 60;
+    self.bottomViewHeightConstraint.constant = 75;
     self.bottomViewPositionConstraint.constant = 0.0f;
     [UIView animateWithDuration:0.25f animations:^{
         [self.view layoutIfNeeded];
@@ -584,6 +584,8 @@
 	if ([text isEqualToString:@"\n"])
 		[self adaptViewSizeWhenWriting:textView];
 	
+	if (lengthTextField == 0)
+		self.bottomViewHeightConstraint.constant = 75;
 
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;

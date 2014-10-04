@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -13,6 +14,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="70" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="60" id="4lB-3y-FTm" customClass="FollowingCustomCell">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -103,6 +105,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="searchDisplayController" destination="eFX-Sn-lTn" id="o3D-I9-r9k"/>
+                        <outlet property="usersTable" destination="PqB-su-d3v" id="iT2-lO-cCr"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wYI-9x-B0G" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -431,6 +434,9 @@
                             <outlet property="delegate" destination="2wB-pv-vTi" id="haG-AY-4FS"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="usersTable" destination="tkz-d8-1Fo" id="GWS-Iw-J1k"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o9R-5f-ldD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

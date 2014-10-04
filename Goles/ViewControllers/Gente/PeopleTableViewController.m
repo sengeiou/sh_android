@@ -15,6 +15,7 @@
 @interface PeopleTableViewController ()
 
 @property (nonatomic,strong) NSArray *followingUsers;
+@property (nonatomic,strong) IBOutlet UITableView *usersTable;
 
 @end
 
@@ -34,7 +35,7 @@
     [super viewDidLoad];
     [self restrictRotation:YES];
 
-    
+	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
 
 }
