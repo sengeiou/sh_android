@@ -21,7 +21,7 @@
 #import "ProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
 
-@interface TimeLineViewController ()<ConectionProtocol, UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
+@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
     BOOL moreCells;
     BOOL refreshTable;
@@ -91,7 +91,9 @@
         [self hiddenViewNotShots];
     
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
-
+	self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
+	self.timelineTableView.estimatedRowHeight = 80.0f;
+	
     [self setNavigationBarButtons];
     [self setTextViewForShotCreation];
     
@@ -228,12 +230,42 @@
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-   
+	
     Shot *shot = self.arrayShots[indexPath.row];
 
     return [Utils heightForShot:shot.comment];
+	
+//	return [self heightForBasicCellAtIndexPath:indexPath];
 }
+
+
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//	return 80.0f;
+//}
+
+//- (CGFloat)heightForBasicCellAtIndexPath:(NSIndexPath *)indexPath {
+//	static ShotTableViewCell *shotCell = nil;
+//	static dispatch_once_t onceToken;
+//	dispatch_once(&onceToken, ^{
+//		static NSString *CellIdentifier = @"shootCell";
+//		shotCell = [self.timelineTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//	});
+// 
+//	Shot *shot = self.arrayShots[indexPath.row];
+//	
+//	[shotCell configureBasicCellWithShot:shot andRow:indexPath.row];
+//	
+//	return [self calculateHeightForConfiguredSizingCell:shotCell];
+//}
+//
+//- (CGFloat)calculateHeightForConfiguredSizingCell:(ShotTableViewCell *)shotCell {
+//	
+//	[shotCell setNeedsLayout];
+//	[shotCell layoutIfNeeded];
+// 
+//	CGSize size = [shotCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+//	return size.height;
+//}
 
 
 //------------------------------------------------------------------------------
@@ -241,23 +273,21 @@
     
     static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-   
-   
+	
     Shot *shot = self.arrayShots[indexPath.row];
-    
-    NSLog(@"CELL SHOT: %@", shot);
-    
+	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
   
-    cell.layer.shouldRasterize = YES;
-    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    
+//    cell.layer.shouldRasterize = YES;
+//    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+	
     return cell;
  }
 
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	
     if (!refreshTable){
         self.spinner.hidden = YES;
         
