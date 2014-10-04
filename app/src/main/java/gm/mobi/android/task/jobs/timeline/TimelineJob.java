@@ -21,6 +21,7 @@ import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
+import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -40,24 +41,27 @@ public class TimelineJob extends CancellableJob {
     private static final int RETRY_ATTEMPTS = 3;
 
     Application app;
-    NetworkUtil mNetworkUtil;
+    NetworkUtil networkUtil;
     Bus bus;
     BagdadService service;
     ShotManager shotManager;
     FollowManager followManager;
     public int shotRetrieveType;
-
+    SQLiteOpenHelper dbHelper;
     SQLiteDatabase db;
     private User currentUser;
 
-    public TimelineJob(Application context,Bus bus, BagdadService service, NetworkUtil mNetworkUtil, ShotManager shotManager,FollowManager followManager) {
+    @Inject
+    public TimelineJob(Application context,Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager,FollowManager followManager, SQLiteOpenHelper dbHelper, SQLiteDatabase db) {
         super(new Params(PRIORITY));
         this.app = context;
         this.bus = bus;
+        this.dbHelper = dbHelper;
         this.service = service;
         this.shotManager = shotManager;
         this.followManager = followManager;
-        this.mNetworkUtil = mNetworkUtil;
+        this.networkUtil = networkUtil;
+        this.db = db;
     }
 
     public void init(User currentUser, int retrieveType) {
@@ -102,7 +106,7 @@ public class TimelineJob extends CancellableJob {
     }
 
     private boolean checkNetwork() {
-        if (!mNetworkUtil.isConnected(app)) {
+        if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return false;
         }
@@ -111,6 +115,7 @@ public class TimelineJob extends CancellableJob {
 
     private void retrieveInitial() throws IOException, SQLException {
         // Try to get timeline from database
+
         List<Shot> localShots = shotManager.retrieveTimelineWithUsers();
         if (localShots != null && localShots.size() > 0) {
             // Got them already :)
@@ -173,7 +178,7 @@ public class TimelineJob extends CancellableJob {
     }
 
     private boolean checkConnection() {
-        if (!mNetworkUtil.isConnected(app)) {
+        if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return false;
         } else {

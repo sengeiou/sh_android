@@ -13,7 +13,7 @@ import timber.log.Timber;
 
 public abstract class AbstractManager {
 
-    public static int NUMDAYS = 15;
+    public static int NUMDAYS = 30;
     protected SQLiteDatabase db;
 
 
@@ -127,7 +127,7 @@ public abstract class AbstractManager {
     public Long getLastModifiedDate(String entity) {
         Long lastDateModified;
         if(isTableEmpty(entity)){
-            lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+            lastDateModified = 0L;
         }else{
             String sql = "SELECT "+ GMContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + GMContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
             Cursor c = db.rawQuery(sql, null);

@@ -24,7 +24,6 @@ import timber.log.Timber;
 
 public class ShotManager extends  AbstractManager{
 
-    private static final String TIMELINE_LIMIT = "200";
 
     @Inject
     public ShotManager(){

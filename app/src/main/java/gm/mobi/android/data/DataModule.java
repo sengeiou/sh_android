@@ -2,6 +2,7 @@ package gm.mobi.android.data;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
@@ -54,28 +55,38 @@ import static android.content.Context.MODE_PRIVATE;
 
 @Module(
         injects = {
-                MainActivity.class,
-                LoginUserJob.class,
+                BaseSignedInActivity.class,
+
+                CancellableJob.class,
+
+                DummyFragment.class,
+
+                FollowManager.class,
                 FollowingUsersActivity.class,
-                TimelineJob.class,
-                NewShotJob.class,
+                FollowingUsersFragment.class,
+
+                GetFollowingsJob.class,
+                GMSyncAdapter.class,
                 GetUserInfoJob.class,
                 GetUsersFollowingJob.class,
-                TimelineFragment.class,
-                ProfileFragment.class,
-                InitialSetupFragment.class,
-                DummyFragment.class,
-                GMSyncAdapter.class,
-                UserManager.class,
-                FollowManager.class,
-                TeamManager.class,
-                CancellableJob.class,
-                BaseSignedInActivity.class,
-                FollowingUsersFragment.class,
-                TeamManager.class,
-                GetFollowingsJob.class,
-                ShotManager.class
 
+                InitialSetupFragment.class,
+
+                LoginUserJob.class,
+
+                MainActivity.class,
+
+                NewShotJob.class,
+
+                ShotManager.class,
+
+                TimelineJob.class,
+                TimelineFragment.class,
+                TeamManager.class,
+
+                ProfileFragment.class,
+
+                UserManager.class,
         },
         includes = {
                 ApiModule.class,
@@ -92,6 +103,11 @@ public class DataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new OpenHelper(application.getApplicationContext());
+    }
+
+    @Provides
+    SQLiteDatabase provideDatabase(Application app){
+        return provideSQLiteOpenHelper(app).getWritableDatabase();
     }
 
     @Provides  UserManager provideUserManager(){

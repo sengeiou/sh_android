@@ -21,7 +21,7 @@ public abstract class CancellableJob extends Job {
 
     @Inject
     SQLiteOpenHelper dbHelper;
-    protected SQLiteDatabase db;
+    @Inject protected SQLiteDatabase db;
 
 
     protected CancellableJob(Params params) {
@@ -57,7 +57,7 @@ public abstract class CancellableJob extends Job {
             Timber.e("SQLException Message: %s, Stacktrace : %s", e.getMessage(), e.getStackTrace());
         }catch(IOException e){
             Timber.e("IOException Message: %s, Stacktrace: %s", e.getMessage(), e.getStackTrace());
-        }finally {
+        }finally{
             closeDb();
         }
     }
