@@ -119,6 +119,8 @@
 
     self.txtView.clipsToBounds = YES;
     self.txtView.layer.cornerRadius = 8.0f;
+	self.txtView.layer.borderWidth = 0.3;
+	self.txtView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
 
 }
 
@@ -582,19 +584,22 @@
     
     if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
         self.btnShoot.enabled = YES;
-        self.charactersLeft.hidden = NO;
+		float rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+		if (rows >= 3)
+			self.charactersLeft.hidden = NO;
     }
     else
         self.btnShoot.enabled = NO;
 	
-	if ([text isEqualToString:@"\n"])
-		[self adaptViewSizeWhenWriting:textView];
-    if ([text isEqualToString:@""])
-        //[self adaptViewSizeWhenWriting2:textView];
+	
+	[self adaptViewSizeWhenWriting:textView];
 
     if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
         self.charactersLeft.hidden = YES;
+		[UIView animateWithDuration:0.25f animations:^{
+			[self.view layoutIfNeeded];
+		}];
     }
 
     self.charactersLeft.text = [self countCharacters:lengthTextField];
@@ -605,12 +610,14 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-	if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height+20) {
-		self.bottomViewHeightConstraint.constant += 20;
+	float rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+	if (rows > 1) {
+		self.bottomViewHeightConstraint.constant = (rows*18)+75;
 		[UIView animateWithDuration:0.25f animations:^{
 			[self.view layoutIfNeeded];
 		}];
 	}
+
 }
 
 //------------------------------------------------------------------------------

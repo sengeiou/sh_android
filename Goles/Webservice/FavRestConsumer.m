@@ -311,7 +311,7 @@
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_FOLLOW
-                                                                     withItems:@100
+                                                                     withItems:@300
                                                                     withOffSet:@0
                                                                      andFilter:[FilterCreation getFilterForFollowingsOfUser:user]];
     

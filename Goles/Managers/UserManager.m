@@ -159,4 +159,17 @@
 	return nil;
 }
 
+//------------------------------------------------------------------------------
+- (BOOL)isLoggedUserFollowing:(User *)user {
+
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[self getUserId]];
+	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+	for (Follow *followedUser in follows) {
+		if (followedUser.idUserFollowed == user.idUser)
+			return YES;
+	}
+	
+	return NO;
+}
+
 @end

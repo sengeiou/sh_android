@@ -13,6 +13,8 @@
 #import "Follow.h"
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "UserManager.h"
+#import "Fav24Colors.h"
 
 @interface ProfileViewController ()
 
@@ -31,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @end
 
 @implementation ProfileViewController
@@ -39,23 +42,21 @@
     [super viewDidLoad];
     
     [self restrictRotation:YES];
-
     [self customView];
-
     [self dataFillView];
     
     [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-    [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:nil];
+    [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
 }
 
--(void)customView{
+- (void)customView{
     self.navigationController.navigationBar.topItem.title = @"";
 
     self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
     self.btnFollow.clipsToBounds = YES;
 }
 
--(void) dataFillView{
+- (void)dataFillView{
     self.title = self.selectedUser.userName;
     
     [self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
@@ -71,11 +72,37 @@
     
     self.txtViewWebSite.text = self.selectedUser.website;
     [self.txtViewWebSite sizeToFit];
-    
+	
+	[self configureFollowButton];
+	
     [self receivedImage];
 }
 
--(void)receivedImage{
+- (void)configureFollowButton {
+	
+	if ([[UserManager singleton] isLoggedUserFollowing:self.selectedUser])
+		[self setFollowToYes];
+	else
+		[self setFollowToNo];
+}
+
+- (void)setFollowToNo {
+	
+	[self.btnFollow setTitle:@"+ FOLLOW" forState:UIControlStateNormal];
+	self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
+}
+
+- (void)setFollowToYes {
+	
+	[self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+	[self.btnFollow setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+	self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+	self.btnFollow.backgroundColor = [UIColor whiteColor];
+	self.btnFollow.layer.borderWidth = 1.5f;
+	self.btnFollow.layer.masksToBounds = YES;
+}
+
+- (void)receivedImage{
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.selectedUser.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     
@@ -112,6 +139,9 @@
         if (status && [entityClass isSubclassOfClass:[User class]]){
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         }
+		else if (status && [entityClass isSubclassOfClass:[Follow class]]){
+			[[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:nil];
+		}
     }else if (refresh){
         
          [self dataFillView];

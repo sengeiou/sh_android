@@ -36,13 +36,13 @@
 
     
     if ([entity isSubclassOfClass:[User class]]){
-        
-        NSArray *users = [[CoreDataManager singleton] getAllEntities:[User class]];
-        NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:users.count];
-        
-        for (User *userItem in users) {
-            [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userItem.idUser}];
-        }
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+		NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+		NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+		for (Follow *followedUser in follows) {
+			[usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:followedUser.idUserFollowed}];
+		}
         
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_OR,K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:@[filterDate]}};
         return filter;
@@ -139,15 +139,19 @@
 
 //-----------------------------------------------------------------------------
 + (NSArray *)composeUsersToFilter {
-    
-    NSArray *users = [[CoreDataManager singleton] getAllEntities:[User class]];
-    NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:users.count];
-    
-    for (User *userItem in users) {
-        [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userItem.idUser}];
-    }
-    
-    return [usersArray copy];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+	NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count+1];
+	for (Follow *obj in follows) {
+		[idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:obj.idUserFollowed}];
+	}
+	
+	if (idUsersArray.count > 0)
+		return idUsersArray.copy;
+	
+	return nil;
+
 }
 
 @end
