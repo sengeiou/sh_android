@@ -26,6 +26,7 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.task.jobs.JobModule;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.FollowingUsersActivity;
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.FollowingUsersFragment;
@@ -78,6 +79,7 @@ import static android.content.Context.MODE_PRIVATE;
 
                 NewShotJob.class,
 
+                ProfileFragment.class,
                 ShotManager.class,
 
                 TimelineJob.class,

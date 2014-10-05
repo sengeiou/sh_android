@@ -13,19 +13,25 @@ import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
+import gm.mobi.android.ui.fragments.ProfileFragment;
 
 @Module(
         injects = {
                 GetFacebookProfileJob.class,
                 LoginUserJob.class,
                 TimelineJob.class,
+                GetUserInfoJob.class,
                 GetFollowingsJob.class,
                 RegisterNewUserJob.class,
+                ProfileFragment.class,
+                ProfileContainerActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class

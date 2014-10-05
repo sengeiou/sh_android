@@ -35,7 +35,6 @@ public class GetUserInfoJob extends CancellableJob {
     Context context;
 
     SQLiteOpenHelper dbHelper;
-    SQLiteDatabase db;
     Bus bus;
     BagdadService service;
 
@@ -48,12 +47,13 @@ public class GetUserInfoJob extends CancellableJob {
 
     private Long userId;
     private User currentUser;
+    SQLiteDatabase db;
 
 
 
 
     @Inject public GetUserInfoJob(Application context,Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service, NetworkUtil mNetworkUtil,
-                                  UserManager userManager, FollowManager followManager, TeamManager teamManager) {
+                                  UserManager userManager, FollowManager followManager, TeamManager teamManager, SQLiteDatabase db) {
         super(new Params(PRIORITY));
         this.context = context;
         this.bus = bus;
@@ -63,6 +63,7 @@ public class GetUserInfoJob extends CancellableJob {
         this.userManager = userManager;
         this.followManager = followManager;
         this.teamManager = teamManager;
+        this.db = db;
     }
 
     public void init(Long userId, User currentUser){
