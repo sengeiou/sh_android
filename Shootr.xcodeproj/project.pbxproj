@@ -789,7 +789,7 @@
 			dependencies = (
 			);
 			name = Shootr;
-			productName = Goles;
+			productName = Shootr;
 			productReference = AA623CDB1998A7F200A942A9 /* Shootr.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -1142,6 +1142,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Shootr-Info.plist";
@@ -1164,6 +1165,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Shootr-Info.plist";
