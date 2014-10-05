@@ -168,8 +168,12 @@
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.title = @"Timeline";
+    //self.title = @"Timeline";
+    self.navigationController.navigationBar.topItem.title = @"Timeline";
+
+    //self.navigationItem.title = @"Timeline";
 }
+
 
 //------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
@@ -323,7 +327,7 @@
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
 - (void)reloadShotsTable:(id)sender {
-    
+
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
     if (self.arrayShots.count > 0)
@@ -333,6 +337,7 @@
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
+    self.btnShoot.enabled = NO;
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
 
@@ -360,7 +365,8 @@
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
-    
+    self.btnShoot.enabled = YES;
+
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
          [self reloadShotsTable:nil];
         moreCells = YES;
@@ -433,6 +439,8 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
+        self.btnShoot.enabled = YES;
+
         [self keyboardHide:nil];
         self.txtView.text = nil;
         [self reloadShotsTable:nil];
@@ -563,6 +571,13 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
+//    NSLog(@"%lu", (unsigned long)lengthTextField);
+//    NSLog(@"%lu", self.txtView.text.length - range.length + text.length);
+    
+//    if (lengthTextField < self.txtView.text.length - range.length + text.length ) {
+//        [self adaptViewSizeWhenWriting:textView];
+//    }
+    
     lengthTextField = self.txtView.text.length - range.length + text.length;
     
     if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
@@ -574,9 +589,13 @@
 	
 	if ([text isEqualToString:@"\n"])
 		[self adaptViewSizeWhenWriting:textView];
-	
-	if (lengthTextField == 0)
+    if ([text isEqualToString:@""])
+        //[self adaptViewSizeWhenWriting2:textView];
+
+    if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
+        self.charactersLeft.hidden = YES;
+    }
 
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
@@ -591,7 +610,8 @@
 		[UIView animateWithDuration:0.25f animations:^{
 			[self.view layoutIfNeeded];
 		}];
-	}}
+	}
+}
 
 //------------------------------------------------------------------------------
 -(NSString *) countCharacters:(NSUInteger) lenght{
