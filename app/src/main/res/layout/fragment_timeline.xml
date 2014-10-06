@@ -17,7 +17,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               tools:listitem="@layout/item_list_shot"
-              tools:visibility="gone" />
+              tools:visibility="visible" />
 
 
     </es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay>
