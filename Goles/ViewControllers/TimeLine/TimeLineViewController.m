@@ -405,17 +405,8 @@
 }
 
 -(void)controlCharactersShot{
-    
-    //self.textComment = [self.txtView.text stringByReplacingOccurrencesOfString:@"\\n" withString:@""];
-  //  self.textComment =[self.txtView.text stringByReplacingOccurrencesOfString:@"\r\n" withString:@""];
-   self.textComment = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-   // [self.txtView.text stringByReplacingOccurrencesOfString:@"\n\n" withString:@"\n"];
-  // self.txtView.text = [[self.txtView.text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@""];
-
-    
-    /*self.txtView.text = [self.txtView.text stringByReplacingOccurrencesOfString:@"\n"
-                                                                     withString:@"\u202B\n"];*/
+    self.textComment = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    self.textComment = [self.textComment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 #pragma mark - Reload methods
@@ -437,8 +428,6 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        self.btnShoot.enabled = YES;
-
         [self keyboardHide:nil];
         self.txtView.text = nil;
         [self reloadShotsTable:nil];
@@ -571,7 +560,9 @@
 
     lengthTextField = self.txtView.text.length - range.length + text.length;
     
-    if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
+    NSString* result = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
 		float rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
 		if (rows >= 3)

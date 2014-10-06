@@ -68,10 +68,10 @@
 - (void)beginEntitiesProcessing:(NSTimer *)timer {
 
     //First step in syncro, send all entities with csys_syncrhonized != S
-    [self performSelectorInBackground:@selector(star) withObject:nil];
+    [self performSelectorInBackground:@selector(start) withObject:nil];
 }
 
--(void)star{
+-(void)start{
     [self sendUpdatesToServerWithDelegate:self];
 
 }
