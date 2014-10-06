@@ -46,8 +46,8 @@ public class MainActivity extends BaseSignedInActivity {
     private static final String EXTRA_DRAWER_POSITION = "position";
 
     private static final int DRAWER_POSITION_TIMELINE = 0;
-    private static final int DRAWER_POSITION_PEOPLE = 0;
-    private static final int DRAWER_POSITION_WATCHING = 0;
+    private static final int DRAWER_POSITION_PEOPLE = 1;
+    private static final int DRAWER_POSITION_WATCHING = 2;
     private static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
 
     @Inject Bus bus;
@@ -304,5 +304,13 @@ public class MainActivity extends BaseSignedInActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
+        if (f instanceof TimelineFragment || f instanceof InitialSetupFragment) {
+            super.onBackPressed();
+        } else {
+            selectDrawerItem(0);
+        }
+    }
 }
