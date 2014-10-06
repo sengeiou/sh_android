@@ -14,6 +14,7 @@
 #import "Constants.h"
 #import "FavRestConsumer.h"
 #import "Follow.h"
+#import "Conection.h"
 
 @interface FollowingTableViewController ()
 
@@ -28,16 +29,18 @@
     [super viewDidLoad];
 	
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-	
+    //Get ping from server
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
     if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
         self.title = @"Following";
 	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
-        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+        //[[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
     }
     else {
         self.title = @"Followers";
 		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
-        [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
+       // [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
     }
 
 }
@@ -95,6 +98,18 @@
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]])
             [self reloadDataAndTable];
+    }
+}
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+
+    if (status){
+        if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+            [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+        
+        else
+            [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
     }
 }
 

@@ -600,7 +600,6 @@
 			[self.view layoutIfNeeded];
 		}];
     }
-
     
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
@@ -613,29 +612,39 @@
     
     if (currentRect.origin.y < previousRect.origin.y){
         //new line reached, write your code
+        [self adaptViewSizeWhenDeleting];
+    }
+    previousRect = currentRect;
+    
+}
+
+//------------------------------------------------------------------------------
+- (void)adaptViewSizeWhenWriting:(UITextView *)textView {
+
+	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+
+    if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
         if (rows > 1) {
-            rows = rows-1;
             self.bottomViewHeightConstraint.constant = (rows*18)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
         }
     }
-    previousRect = currentRect;
-    
 }
+
 //------------------------------------------------------------------------------
-- (void)adaptViewSizeWhenWriting:(UITextView *)textView {
-
-	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
-
-	if (rows > 1) {
-		self.bottomViewHeightConstraint.constant = (rows*18)+75;
-		[UIView animateWithDuration:0.25f animations:^{
-			[self.view layoutIfNeeded];
-		}];
-	}
+- (void)adaptViewSizeWhenDeleting{
+    
+    if (rows > 1) {
+        rows = rows-1;
+        self.bottomViewHeightConstraint.constant = (rows*18)+75;
+        [UIView animateWithDuration:0.25f animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
+
 
 //------------------------------------------------------------------------------
 -(NSString *)countCharacters:(NSUInteger) lenght{
