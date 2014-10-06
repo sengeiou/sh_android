@@ -79,6 +79,10 @@
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
 
+    //Disable keyboard intro key
+    if (self.textComment.length == 0)
+        self.txtView.enablesReturnKeyAutomatically = YES;
+  
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -390,7 +394,7 @@
 
 //------------------------------------------------------------------------------
 - (void)shotCreated {
-    [self controlCharactersShot];
+    [self controlCharactersShot:self.txtView.text];
 
     if (![self controlRepeatedShot:self.textComment])
         
@@ -407,9 +411,10 @@
     self.btnShoot.enabled = YES;
 }
 
--(NSString *)controlCharactersShot{
-    self.textComment = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    self.textComment = [self.textComment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+-(NSString *)controlCharactersShot:(NSString *)text{
+    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     return self.textComment;
 }
@@ -494,7 +499,7 @@
 #pragma mark - KEYBOARD
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
-    
+   
     self.txtView.textColor = [UIColor blackColor];
 
     if (rows >= 3)
@@ -504,7 +509,7 @@
     
     if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
         self.txtView.text = nil;
-    
+
     [self darkenBackgroundView];
     
     
@@ -570,9 +575,11 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
    
-    NSString* result = [self controlCharactersShot];
+    NSString *allText = [NSString stringWithFormat:@"%@%@", textView.text, text];
+    
+    NSString* result = [self controlCharactersShot:allText];
 
-    lengthTextField = result.length - range.length + text.length;
+    lengthTextField = textView.text.length - range.length + text.length;
     
 
     if (![result isEqualToString:@""] && lengthTextField >= 1){
@@ -584,7 +591,6 @@
     else
         self.btnShoot.enabled = NO;
 	
-	
 	[self adaptViewSizeWhenWriting:textView];
 
     if (lengthTextField == 0){
@@ -595,8 +601,9 @@
 		}];
     }
 
+    
     self.charactersLeft.text = [self countCharacters:lengthTextField];
-    return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
+     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 
 }
 
