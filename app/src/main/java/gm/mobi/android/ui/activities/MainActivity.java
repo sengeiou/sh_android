@@ -129,7 +129,8 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setupSyncing() {
-        syncConfigurator.setupDefaultSyncing();
+        //TODO no sync for now
+        //syncConfigurator.setupDefaultSyncing();
     }
 
     @OnItemClick(R.id.menu_drawer_list)
