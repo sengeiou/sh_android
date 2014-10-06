@@ -169,6 +169,8 @@
     [super viewWillAppear:animated];
      self.title = @"Timeline";
      [self restrictRotation:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+
 }
 
 
@@ -669,5 +671,13 @@
     appDelegate.restrictRotation = restriction;
 }
 
+- (void)orientationChanged:(NSNotification *)notification{
+    [self restrictRotation:NO];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+
+}
 
 @end

@@ -102,10 +102,14 @@
 
 -(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
 	
-    if(self.restrictRotation)
+   
+    if(self.restrictRotation){
+        NSLog(@"SOLOOOOOOOO");
         return UIInterfaceOrientationMaskPortrait;
-    else
+    }else{
+         NSLog(@"TODAS");
         return UIInterfaceOrientationMaskAll;
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
