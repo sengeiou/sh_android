@@ -12,7 +12,6 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,14 +25,14 @@ public class GetUsersFollowingJob extends CancellableJob {
     private static final int PRIORITY = 5;
     private Long idUserToRetrieveFollowsFrom;
 
-    @Inject public GetUsersFollowingJob(Application context ,Bus bus, BagdadService service) {
+    @Inject public GetUsersFollowingJob(Application context, Bus bus, BagdadService service) {
         super(new Params(PRIORITY));
         this.app = context;
         this.service = service;
         this.bus = bus;
     }
 
-    public void init(Long userId){
+    public void init(Long userId) {
         this.idUserToRetrieveFollowsFrom = userId;
     }
 
@@ -52,17 +51,42 @@ public class GetUsersFollowingJob extends CancellableJob {
     }
 
     @Override
-    protected void run() throws SQLException, IOException {
+    protected void run() throws IOException {
+        try {
+            List<Long> followingIds = getFollowingIdsFromService();
+            List<User> users = getFollowingUsersFromServiceByIds(followingIds);
+            sendSuccessfulResult(users);
+        } catch (IOException e) {
+            sendCommunicationError();
+            throw e;
+        }
+    }
+
+    private List<Long> getFollowingIdsFromService() throws IOException {
         List<Follow> followings =
-                service.getFollows(idUserToRetrieveFollowsFrom, 0L, UserDtoFactory.GET_FOLLOWING, false);
+            service.getFollows(idUserToRetrieveFollowsFrom, 0L, UserDtoFactory.GET_FOLLOWING,
+                false);
 
         List<Long> followingsIds = new ArrayList<>(followings.size());
         for (Follow follow : followings) {
             followingsIds.add(follow.getFollowedUser());
         }
-        List<User> users = service.getUsersByUserIdList(followingsIds);
 
-        bus.post(new FollowsResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(users));
+        return followingsIds;
+    }
+
+    private List<User> getFollowingUsersFromServiceByIds(List<Long> followingIds)
+        throws IOException {
+        return service.getUsersByUserIdList(followingIds);
+    }
+
+    private void sendSuccessfulResult(List<User> followingUsers) {
+        bus.post(new FollowsResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(followingUsers));
+    }
+
+    private void sendCommunicationError() {
+        //TODO abstraer evento de CommunicationError y hacerlo general para los jobs
+        bus.post(new FollowsResultEvent(ResultEvent.STATUS_INVALID));
     }
 
     @Override protected void onCancel() {
