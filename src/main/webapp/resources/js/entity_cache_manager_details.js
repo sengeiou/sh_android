@@ -1,9 +1,9 @@
 //Tamaño de heap de la caché, respecto a nu manager. 
-var cachesHeapSizeChartOptions = clone(radarChartOptions);
-cachesHeapSizeChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
-cachesHeapSizeChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
+var cachesHeapDiskChartOptions = clone(radarChartOptions);
+cachesHeapDiskChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cachesHeapDiskChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
-var cachesHeapSizeChartData = {
+var cachesHeapDiskChartData = {
 
 		labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
 		datasets: [
@@ -31,11 +31,11 @@ var cachesHeapSizeChartData = {
 };
 
 //Tamaño de disco de la caché, respecto a su manager. 
-var cachesDiskSizeChartOptions = clone(radarChartOptions);
-cachesDiskSizeChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
-cachesDiskSizeChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
+var cachesHitAddChartOptions = clone(radarChartOptions);
+cachesHitAddChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cachesHitAddChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
-var cachesDiskSizeChartData = {
+var cachesHitAddChartData = {
 		labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
 		datasets: [
 		           {
@@ -62,26 +62,25 @@ var cachesDiskSizeChartData = {
 };
 
 /**
- * Pinta en pantalla los gráficos de las dimensiones relativas de las cachés,
- * respecto a su gestor.
+ * Pinta en pantalla los gráficos de uso relativo de las cachés, respecto a su gestor.
  * 
  * @param cacheManager Nombre del gestor de cachés.
- * @param cachesHeapSize Nombre del gráfico de distribución de usa a nivel de memoria.
+ * @param cachesHeapDisk Nombre del gráfico de distribución de uso a nivel de memoria y disco.
  * @param managerMaxBytesLocalHeap Tamaño en memoria definido para el gestor de cachés.
- * @param cachesDiskSize Nombre del gráfico de distribución de usa a nivel de disco.
  * @param managerMaxBytesLocalDisk Tamaño en disco definido para el gestor de cachés.
+ * @param cachesHitAdd Nombre del gráfico de distribución de efectividad.
  */
-function drawCachesSizeDistribution(cacheManager,
-		cachesHeapSize, managerMaxBytesLocalHeap,
-		cachesDiskSize, managerMaxBytesLocalDisk) {
+function drawCachesUseDistribution(cacheManager,
+		cachesHeapDisk, managerMaxBytesLocalHeap, managerMaxBytesLocalDisk,
+		cachesHitAdd) {
 
-	// Heap
-	var cacheHeapSizeChart = ChartHelper(cachesHeapSize);
+	// HeapDisk
+	var cachesHeapDiskChart = ChartHelper(cachesHeapDisk);
 
-	cacheHeapSizeChart.createChart("radar", cachesHeapSizeChartOptions, cachesHeapSizeChartData);
+	cachesHeapDiskChart.createChart("radar", cachesHeapDiskChartOptions, cachesHeapDiskChartData);
 
-	// Disk
-	var cacheDiskSizeChart = ChartHelper(cachesDiskSize);
+	// HitAdd
+	var cacheHitAddChart = ChartHelper(cachesHitAdd);
 
-	cacheDiskSizeChart.createChart("radar", cachesDiskSizeChartOptions, cachesDiskSizeChartData);
+	cacheHitAddChart.createChart("radar", cachesHitAddChartOptions, cachesHitAddChartData);
 }

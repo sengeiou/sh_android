@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fav24.dataservices.controller.rest.BaseRestController;
 import com.fav24.dataservices.dto.system.SystemMonitorInfoDto;
 import com.fav24.dataservices.exception.ServerException;
+import com.fav24.dataservices.monitoring.Meter;
 import com.fav24.dataservices.monitoring.MonitorSample;
 import com.fav24.dataservices.monitoring.meter.CacheMeter;
 import com.fav24.dataservices.monitoring.meter.CpuMeter;
@@ -140,6 +141,10 @@ public class SystemMonitorController extends BaseRestController {
 				systemMonitorInfo.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemoryData);
 				systemMonitorInfo.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemoryData);
 			}
+			else {
+				systemMonitorInfo.setData(null);
+			}
+
 		}
 		else {
 
@@ -180,6 +185,9 @@ public class SystemMonitorController extends BaseRestController {
 					systemMonitorInfo.getData().put(MemoryMeter.TOTAL_USED_MEMORY, totalUsedMemoryData);
 					systemMonitorInfo.getData().put(MemoryMeter.USED_HEAP_MEMORY, UsedHeapMemoryData);
 					systemMonitorInfo.getData().put(MemoryMeter.USED_NONHEAP_MEMORY, UsedNonHeapMemoryData);
+				}
+				else {
+					systemMonitorInfo.setData(null);
 				}
 
 			} catch (ServerException e) {
@@ -248,6 +256,10 @@ public class SystemMonitorController extends BaseRestController {
 				systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
 				systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
 			}
+			else {
+				systemMonitorInfo.setData(null);
+			}
+
 		}
 		else {
 
@@ -295,6 +307,10 @@ public class SystemMonitorController extends BaseRestController {
 					systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
 
 				}
+				else {
+					systemMonitorInfo.setData(null);
+				}
+
 			} catch (ServerException e) {
 
 				e.log(logger, false);
@@ -373,6 +389,10 @@ public class SystemMonitorController extends BaseRestController {
 				systemMonitorInfo.getData().put(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS, totalSubsystemOperationsData);
 				systemMonitorInfo.getData().put(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO, totalSubsystemOpertionsKoData);
 			}
+			else {
+				systemMonitorInfo.setData(null);
+			}
+
 		}
 		else {
 
@@ -455,6 +475,10 @@ public class SystemMonitorController extends BaseRestController {
 					systemMonitorInfo.getData().put(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS, totalSubsystemOperationsData);
 					systemMonitorInfo.getData().put(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO, totalSubsystemOpertionsKoData);
 				}
+				else {
+					systemMonitorInfo.setData(null);
+				}
+
 			} catch (ServerException e) {
 
 				e.log(logger, false);
@@ -580,7 +604,7 @@ public class SystemMonitorController extends BaseRestController {
 						i++;
 					}
 
-					systemMonitorInfo.getData().put("Timestamp", totalHeapHitData);
+					systemMonitorInfo.getData().put(Meter.TIMESTAMP, totalHeapHitData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT, totalHeapHitData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_MISS, totalHeapMissData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT_RATIO, heapHitRatioData);

@@ -7,8 +7,8 @@
 <div id="entityDetails">
 	<!-- Detalles de la entidad -->
 	<div class="panel panel-info">
-		<button onClick='showAvailableCacheManagers();' type='button' class='btn btn-default btn-sm pull-right'>
-   			<span class='glyphicon glyphicon-th-list'></span>
+		<button onClick="showAvailableCacheManagers();" type="button" class="btn btn-default btn-sm pull-right">
+   			<span class="glyphicon glyphicon-th-list"></span>
    		</button>
 		<div class="panel-heading"><h3>${cacheManager}</h3></div>
 		<!-- Lista de entidades -->
@@ -79,11 +79,11 @@
 											<td class="text-right">${cf:fromBytesToString(cacheConfiguration.getMaxBytesLocalDisk())}</td>
 											<td class="text-right">${maxBytesLocalDisk}</td>
 											<td class="text-center">
-												<button onClick='showCacheMonitor("${cacheManagerConfiguration.getName()}", "${cacheConfiguration.getAlias()}");' type='button' class='btn btn-default btn-sm'>
-										   			<span class='glyphicon glyphicon-stats'></span>
+												<button onClick="showCacheMonitor('${cacheManagerConfiguration.getName()}', '${cacheConfiguration.getAlias()}');" type="button" class="btn btn-default btn-sm">
+										   			<span class="glyphicon glyphicon-stats"></span>
 										   		</button>
-												<button onClick='resetCache("${cacheManagerConfiguration.getName()}", "${cacheConfiguration.getAlias()}");' type='button' class='btn btn-default btn-sm'>
-										   			<span class='glyphicon glyphicon-repeat'></span>
+												<button onClick="resetCache('${cacheManagerConfiguration.getName()}', '${cacheConfiguration.getAlias()}');" type="button" class="btn btn-default btn-sm">
+										   			<span class="glyphicon glyphicon-repeat"></span>
 										   		</button>
 											</td>
 										</tr>
@@ -92,17 +92,16 @@
 							</table>
 							<!-- Comparativa de tamaños entre las cachés de este manager. -->
 							<div class="row-fluid">
-								<div class="col-sx-6 col-md-6">
-									<div id="cachesHeap">
-										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
-										<div class="chart-legend"></div>
-									</div>
+								<button onClick="reloadCacheManagerInfo('${cacheManager}');" type="button" class="btn btn-default btn-sm pull-left">
+						   			<span class="glyphicon glyphicon-repeat"></span>
+						   		</button>
+								<div id="cachesHeapDisk" class="col-sx-6 col-md-6">
+									<canvas style="width: 100%; height: 300px;" width="300px" height="300px"></canvas>
+									<div class="chart-legend"></div>
 								</div>
-								<div class="col-sx-6 col-md-6">
-									<div id="cachesDisk" >
-										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
-	                                    <div class="chart-legend"></div>
-									</div>
+								<div id="cachesHitAdd" class="col-sx-6 col-md-6">
+									<canvas style="width: 100%; height: 300px;" width="300px" height="300px"></canvas>
+									<div class="chart-legend"></div>
 								</div>
 							</div>
 						</c:otherwise>
@@ -114,8 +113,7 @@
 </div>
 
 <script type="text/javascript">
-drawCachesSizeDistribution('${cacheManager}',
-		'cachesHeap', ${cacheManagerConfiguration.getMaxBytesLocalHeap()},
-		'cachesDisk', ${cacheManagerConfiguration.getMaxBytesLocalDisk()}
-);
+drawCachesUseDistribution('${cacheManager}',
+		'cachesHeapDisk', ${cacheManagerConfiguration.getMaxBytesLocalHeap()}, ${cacheManagerConfiguration.getMaxBytesLocalDisk()},
+		'cachesHitAdd');
 </script>

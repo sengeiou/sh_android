@@ -18,7 +18,7 @@ public class Cache
 	private String description;
 	private CacheManagerConfiguration defaultCacheManagerConfiguration;
 	private AbstractList<EntityCacheManager> entityCacheManagers;
-	private Map<String, EntityCacheManager> cacheCacheManager;
+	private Map<String, EntityCacheManager> cacheCacheManagers;
 
 	/**
 	 * Constructor por defecto.
@@ -29,7 +29,7 @@ public class Cache
 		this.description = null;
 		this.defaultCacheManagerConfiguration = null;
 		this.entityCacheManagers = new ArrayList<EntityCacheManager>();
-		this.cacheCacheManager = new HashMap<String, EntityCacheManager>(); 
+		this.cacheCacheManagers = new HashMap<String, EntityCacheManager>(); 
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class Cache
 		this.description = description;
 		this.defaultCacheManagerConfiguration = null;
 		this.entityCacheManagers = new ArrayList<EntityCacheManager>();
-		this.cacheCacheManager = new HashMap<String, EntityCacheManager>(); 
+		this.cacheCacheManagers = new HashMap<String, EntityCacheManager>(); 
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class Cache
 		boolean result = entityCacheManagers.add(entityCacheManager);
 
 		for (EntityCache entityCache : entityCacheManager.getEntitiesCacheConfigurations()) {
-			cacheCacheManager.put(entityCache.getAlias(), entityCacheManager);
+			cacheCacheManagers.put(entityCache.getAlias(), entityCacheManager);
 		}
 
 		return result;
@@ -159,7 +159,7 @@ public class Cache
 	 * @return el gestor de caché que contiene la caché de alias el indicado.
 	 */
 	public EntityCacheManager getCacheManager(String cacheAlias) {
-		return cacheCacheManager.get(cacheAlias);
+		return cacheCacheManagers.get(cacheAlias);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class Cache
 	 */
 	public net.sf.ehcache.Cache getCache(String cacheAlias) {
 
-		EntityCacheManager entityCacheManager = cacheCacheManager.get(cacheAlias);
+		EntityCacheManager entityCacheManager = cacheCacheManagers.get(cacheAlias);
 
 		if (entityCacheManager != null) {
 			return entityCacheManager.getCache(cacheAlias);

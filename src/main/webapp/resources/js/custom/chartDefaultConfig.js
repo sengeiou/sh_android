@@ -114,6 +114,12 @@ var doughnutChartOptions = {
 //Opciones globales por defecto de los gráficos kiviat (Radar).
 var radarChartOptions = {
 
+		// Boolean - whether or not the chart should be responsive and resize when the browser does.
+		responsive : true,
+
+		// Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+		maintainAspectRatio: false,
+
 		//Boolean - Whether to show lines for each scale point
 		scaleShowLine : true,
 
@@ -133,7 +139,7 @@ var radarChartOptions = {
 		angleLineWidth : 1,
 
 		//String - Point label font declaration
-		pointLabelFontFamily : "'Arial'",
+		pointLabelFontFamily : "Arial",
 
 		//String - Point label font weight
 		pointLabelFontStyle : "normal",

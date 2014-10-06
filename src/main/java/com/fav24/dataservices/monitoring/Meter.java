@@ -6,6 +6,8 @@ package com.fav24.dataservices.monitoring;
  */
 public abstract class Meter
 {
+	public static final String TIMESTAMP = "Timestamp"; //Marca temporal.
+	
 	/**
 	 * Retorna el nombre del medidor.
 	 *  

@@ -35,6 +35,6 @@
     <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/goles-data-services-home-wphone" override="false"/>
     <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/fcb-data-services-home" override="false"/>
     -->
-    <Parameter name="dataservices.home" value="/home/carlos/Documents/workspace/shooter-data-services-home" override="false"/>
+    <Parameter name="dataservices.home" value="/Users/jmvera/development/workspaces/backend/goles-data-services-home" override="false"/>
 </Context>
 

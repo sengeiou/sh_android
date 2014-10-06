@@ -27,7 +27,9 @@ public class BaseRestController {
 	private static final Logger logger = LoggerFactory.getLogger(BaseRestController.class);
 
 	public final static String OK = "OK";
-	public final static String ERROR_GLOBAL_001 = "GLOBAL_001";
+	public final static String OK_MESSAGE = "Petición resuelta con éxito.";
+	public final static String ERROR_CONTENT_TYPE_NOT_SUPPORTED = "BASE001";
+	public final static String ERROR_CONTENT_TYPE_NOT_SUPPORTED_MESSAGE = "El tipo de contenido, no está soportado.";
 
 	/**
 	 * Vista en formato JSON que se usará para el envío de los mensajes de error.
@@ -98,7 +100,7 @@ public class BaseRestController {
 		// -----------------------------------------------
 		// Based on http://www.tuicool.com/articles/Vzea2y
 		// -----------------------------------------------
-		ExceptionDto exceptionTo = new ExceptionDto(ERROR_GLOBAL_001, null, exception.getMessage());
+		ExceptionDto exceptionTo = new ExceptionDto(ERROR_CONTENT_TYPE_NOT_SUPPORTED, ERROR_CONTENT_TYPE_NOT_SUPPORTED_MESSAGE, exception.getMessage());
 
 		if (logger.isWarnEnabled()) {
 
