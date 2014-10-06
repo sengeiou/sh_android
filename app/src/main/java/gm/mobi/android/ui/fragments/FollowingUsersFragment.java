@@ -89,10 +89,10 @@ public class FollowingUsersFragment extends BaseFragment {
         } else {
             if (userListAdapter == null) {
                 userListAdapter = new UserListAdapter(getActivity(), picasso, users);
-                userlistListView.setAdapter(userListAdapter);
             } else {
                 userListAdapter.setItems(users);
             }
+            userlistListView.setAdapter(userListAdapter);
         }
     }
 
@@ -123,5 +123,11 @@ public class FollowingUsersFragment extends BaseFragment {
 
     private void setEmpty(boolean empty) {
         emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 }
