@@ -123,7 +123,7 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
             this.fragmentClass = fragmentClass;
         }
 
-        FragmentMenuItem(String title, int iconRes, Class fragmentClass, Bundle extras) {
+        public FragmentMenuItem(String title, int iconRes, Class fragmentClass, Bundle extras) {
             this(title, iconRes, fragmentClass);
             this.extras = extras;
         }

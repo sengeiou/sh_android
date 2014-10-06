@@ -45,6 +45,13 @@ public class FollowingUsersFragment extends BaseFragment {
 
     private UserListAdapter userListAdapter;
 
+    public static Bundle getArguments(Long userId, String screenTitle) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("userId", userId);
+        bundle.putString("screenTitle", screenTitle);
+        return bundle;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
