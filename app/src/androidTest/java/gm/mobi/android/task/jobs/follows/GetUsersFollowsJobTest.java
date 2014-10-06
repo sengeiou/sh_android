@@ -1,6 +1,5 @@
 package gm.mobi.android.task.jobs.follows;
 
-import android.app.Application;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -25,13 +24,12 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18) @RunWith(RobolectricTestRunner.class)
-public class GetUsersFollowingJobTest {
+public class GetUsersFollowsJobTest {
 
     private GolesApplication application;
     private ObjectGraph objectGraph;
@@ -59,11 +57,11 @@ public class GetUsersFollowingJobTest {
         NetworkUtil mockNetworkUtil = mock(NetworkUtil.class);
         when(mockNetworkUtil.isConnected(any(Context.class))).thenReturn(true);
 
-        GetUsersFollowingJob getUsersFollowingJob =
-            new GetUsersFollowingJob(application, mockBus, mockService, mockNetworkUtil);
-        getUsersFollowingJob.init(1L);
+        GetUsersFollowsJob getUsersFollowsJob =
+            new GetUsersFollowsJob(application, mockBus, mockService, mockNetworkUtil);
+        getUsersFollowsJob.init(1L);
         try {
-            getUsersFollowingJob.run();
+            getUsersFollowsJob.run();
         } catch (Exception e) {
         }
 

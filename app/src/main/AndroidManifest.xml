@@ -73,7 +73,7 @@
             android:value="gm.mobi.android.ui.activities.MainActivity" />
       </activity>
 
-      <activity android:name=".ui.activities.FollowingUsersActivity" >
+      <activity android:name=".ui.activities.UserFollowsContainerActivity" >
           <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="gm.mobi.android.ui.activities.MainActivity" />

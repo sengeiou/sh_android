@@ -76,7 +76,7 @@ public class BagdadDataService implements BagdadService {
       throws IOException {
         List<Follow> follows = new ArrayList<>();
         GenericDto requestDto =
-          userDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate, includeDeleted);
+          userDtoFactory.getFollowOperationDto(idUser, 0L, typeFollow, lastModifiedDate, includeDeleted);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

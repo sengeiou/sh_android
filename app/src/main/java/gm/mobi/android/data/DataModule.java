@@ -2,7 +2,6 @@ package gm.mobi.android.data;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
@@ -19,15 +18,15 @@ import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.task.jobs.CancellableJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
-import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
-import gm.mobi.android.ui.activities.FollowingUsersActivity;
+import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
-import gm.mobi.android.ui.fragments.FollowingUsersFragment;
+import gm.mobi.android.ui.fragments.UserFollowsFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import java.io.File;
 import java.io.IOException;
@@ -63,13 +62,13 @@ import static android.content.Context.MODE_PRIVATE;
                 DummyFragment.class,
 
                 FollowManager.class,
-                FollowingUsersActivity.class,
-                FollowingUsersFragment.class,
+                UserFollowsContainerActivity.class,
+                UserFollowsFragment.class,
 
                 GetFollowingsJob.class,
                 GMSyncAdapter.class,
                 GetUserInfoJob.class,
-                GetUsersFollowingJob.class,
+                GetUsersFollowsJob.class,
 
                 InitialSetupFragment.class,
 

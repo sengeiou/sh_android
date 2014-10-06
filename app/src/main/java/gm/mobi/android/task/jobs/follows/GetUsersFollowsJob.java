@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetUsersFollowingJob extends CancellableJob {
+public class GetUsersFollowsJob extends CancellableJob {
 
     Application app;
     Bus bus;
@@ -27,8 +27,9 @@ public class GetUsersFollowingJob extends CancellableJob {
 
     private static final int PRIORITY = 5;
     private Long idUserToRetrieveFollowsFrom;
+    private int followType;
 
-    @Inject public GetUsersFollowingJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil) {
+    @Inject public GetUsersFollowsJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil) {
         super(new Params(PRIORITY));
         this.app = context;
         this.service = service;
@@ -36,8 +37,9 @@ public class GetUsersFollowingJob extends CancellableJob {
         this.networkUtil = networkUtil;
     }
 
-    public void init(Long userId) {
+    public void init(Long userId, int followType) {
         this.idUserToRetrieveFollowsFrom = userId;
+        this.followType = followType;
     }
 
     @Override public void onAdded() {
@@ -56,10 +58,10 @@ public class GetUsersFollowingJob extends CancellableJob {
 
     @Override
     protected void run() throws IOException {
-        if(!checkNetwork()) return;
+        if (!checkNetwork()) return;
         try {
-            List<Long> followingIds = getFollowingIdsFromService();
-            List<User> users = getFollowingUsersFromServiceByIds(followingIds);
+            List<Long> followingIds = getFollowsIdsFromService();
+            List<User> users = getFollowsUsersFromServiceByIds(followingIds);
             sendSuccessfulResult(users);
         } catch (IOException e) {
             sendCommunicationError();
@@ -67,21 +69,25 @@ public class GetUsersFollowingJob extends CancellableJob {
         }
     }
 
-    private List<Long> getFollowingIdsFromService() throws IOException {
-        List<Follow> followings =
-            service.getFollows(idUserToRetrieveFollowsFrom, 0L, UserDtoFactory.GET_FOLLOWING,
-                false);
-
-        List<Long> followingsIds = new ArrayList<>(followings.size());
-        for (Follow follow : followings) {
-            followingsIds.add(follow.getFollowedUser());
-        }
-
-        return followingsIds;
+    private List<Long> getFollowsIdsFromService() throws IOException {
+        List<Follow> follows = service.getFollows(idUserToRetrieveFollowsFrom, 0L, followType, false);
+        return getIdsFromFollows(follows);
     }
 
-    private List<User> getFollowingUsersFromServiceByIds(List<Long> followingIds)
-        throws IOException {
+    private List<Long> getIdsFromFollows(List<Follow> follows) {
+        List<Long> followsIds = new ArrayList<>(follows.size());
+        for (Follow follow : follows) {
+            if (followType == UserDtoFactory.GET_FOLLOWING) {
+                followsIds.add(follow.getFollowedUser());
+            } else {
+                followsIds.add(follow.getIdUser());
+            }
+
+        }
+        return followsIds;
+    }
+
+    private List<User> getFollowsUsersFromServiceByIds(List<Long> followingIds) throws IOException {
         return service.getUsersByUserIdList(followingIds);
     }
 

@@ -5,11 +5,11 @@ import android.os.Looper;
 
 import com.squareup.otto.Bus;
 
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
@@ -20,7 +20,6 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
-import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 
 @Module(
@@ -29,7 +28,7 @@ import gm.mobi.android.ui.fragments.ProfileFragment;
                 EmailRegistrationActivity.class,
                 FacebookRegistroActivity.class,
 
-                GetUsersFollowingJob.class,
+                GetUsersFollowsJob.class,
                 GetFacebookProfileJob.class,
                 GetUserInfoJob.class,
                 GetFollowingsJob.class,

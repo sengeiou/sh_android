@@ -1,6 +1,5 @@
 package gm.mobi.android.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,7 +21,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
-import gm.mobi.android.ui.activities.FollowingUsersActivity;
+import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -31,7 +30,6 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
-import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
 
@@ -142,7 +140,16 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.profile_marks_following_box)
     public void openFollowingList() {
+        openUserFollowsList(UserFollowsFragment.FOLLOWING);
+    }
+
+    @OnClick(R.id.profile_marks_followers_box)
+    public void openFollowersList() {
+        openUserFollowsList(UserFollowsFragment.FOLLOWERS);
+    }
+
+    private void openUserFollowsList(int followType) {
         if(user==null) return;
-        startActivity(FollowingUsersActivity.getIntent(getActivity(), user.getIdUser(), user.getName()));
+        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), user.getIdUser(), user.getName(), followType));
     }
 }

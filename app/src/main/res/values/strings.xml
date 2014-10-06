@@ -52,6 +52,7 @@
     <string name="activity_timeline_empty_title">No Shots</string>
 
     <string name="activity_following_title">Followed by %s</string>
+    <string name="activity_followers_title">Following %s</string>
     <string name="following_list_empty">Not following anyone</string>
 
     <string name="no_more_shots">No more shots</string>

@@ -21,22 +21,23 @@ import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
-public class FollowingUsersFragment extends BaseFragment {
+public class UserFollowsFragment extends BaseFragment {
 
-    public static final String TAG = "following";
+    public static final String TAG = "follows";
+    public static final int FOLLOWING = UserDtoFactory.GET_FOLLOWING;
+    public static final int FOLLOWERS = UserDtoFactory.GET_FOLLOWERS;
 
     @Inject Picasso picasso;
     @Inject Bus bus;
@@ -46,15 +47,15 @@ public class FollowingUsersFragment extends BaseFragment {
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
     @InjectView(R.id.userlist_empty) View emptyView;
 
-    @Arg String screenTitle;
     @Arg Long userId;
+    @Arg Integer followType;
 
     private UserListAdapter userListAdapter;
 
-    public static Bundle getArguments(Long userId, String screenTitle) {
+    public static Bundle getArguments(Long userId, int followType) {
         Bundle bundle = new Bundle();
         bundle.putLong("userId", userId);
-        bundle.putString("screenTitle", screenTitle);
+        bundle.putInt("followType", followType);
         return bundle;
     }
 
@@ -77,7 +78,6 @@ public class FollowingUsersFragment extends BaseFragment {
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         retrieveUsers(userId);
-        setScreenTitle();
     }
 
     private void retrieveUsers(Long userId) {
@@ -87,10 +87,9 @@ public class FollowingUsersFragment extends BaseFragment {
     }
 
     public void startJob(Long userId){
-        GetUsersFollowingJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowingJob.class);
-        job.init(userId);
+        GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
+        job.init(userId, followType);
         jobManager.addJobInBackground(job);
-
     }
 
     @Subscribe
@@ -127,10 +126,6 @@ public class FollowingUsersFragment extends BaseFragment {
     public void openUserProfile(int position) {
         User user = userListAdapter.getItem(position);
         startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
-    }
-
-    private void setScreenTitle() {
-        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(screenTitle);
     }
 
     @Override public void onResume() {

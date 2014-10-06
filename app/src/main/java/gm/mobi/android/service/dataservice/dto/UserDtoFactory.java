@@ -35,8 +35,6 @@ public class UserDtoFactory {
 
     public static final int GET_FOLLOWERS = 0;
     public static final int GET_FOLLOWING = 1;
-    public static final int GET_ALL_FOLLOW = 2;
-    public static final int GET_JUST_BOTHFOLLOW = 3;
 
     private static final String ENTITY_LOGIN = "Login";
     private static final String ALIAS_LOGIN = "Login";
@@ -86,7 +84,7 @@ public class UserDtoFactory {
         OperationDto od = new OperationDto();
 
         FilterDto filter = getFollowsByIdUserAndRelationship(userId, relationship, date);
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, includeDeleted, null, 0l, 100L, filter);
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, FollowTable.TABLE, includeDeleted, null, null, null, filter);
         od.setMetadata(md);
 
         Map<String, Object>[] array = new HashMap[1];
@@ -204,36 +202,16 @@ public class UserDtoFactory {
         FilterDto filterDto = null;
         switch (relationship) {
             case GET_FOLLOWERS:
-                filterDto = new FilterDto(Constants.NEXUS_AND,
-                        new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, null)
-                        }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
-                );
+                filterDto = and(FollowTable.ID_FOLLOWED_USER).isEqualTo(userId)
+                  .and(FollowTable.ID_USER).isNotEqualTo(null)
+                  .and(orModifiedOrDeletedAfter(lastModifiedDate))
+                  .build();
                 break;
             case GET_FOLLOWING:
-                filterDto = new FilterDto(Constants.NEXUS_AND,
-                        new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_NOT_EQUAL, FollowTable.ID_FOLLOWED_USER, null),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
-                        }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
-                );
-                break;
-            case GET_ALL_FOLLOW:
-                filterDto = new FilterDto(Constants.NEXUS_AND,
-                        new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
-                        }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
-                );
-                break;
-            case GET_JUST_BOTHFOLLOW:
-                filterDto = new FilterDto(Constants.NEXUS_AND,
-                        new FilterItemDto[]{
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_FOLLOWED_USER, userId),
-                                new FilterItemDto(Constants.COMPARATOR_EQUAL, FollowTable.ID_USER, userId)
-                        }, utilityDtoFactory.getTimeFilterDto(lastModifiedDate)
-                );
+                filterDto = and(FollowTable.ID_USER).isEqualTo(userId)
+                  .and(FollowTable.ID_FOLLOWED_USER).isNotEqualTo(null)
+                  .and(orModifiedOrDeletedAfter(lastModifiedDate))
+                  .build();
                 break;
         }
         return filterDto;
