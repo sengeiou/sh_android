@@ -54,7 +54,7 @@ public class SamplesRegister {
 	private static final long HOUR_IN_MILLISECONDS = MINUTE_IN_MILLISECONDS * 60;
 	private static final long DAY_IN_MILLISECONDS = HOUR_IN_MILLISECONDS * 24;
 
-	private static final long SAMPLE_FILES_RETENTION_DAYS = 7; // Retención máxima de los ficheros de muestras en días.
+	private static final long SAMPLE_FILES_RETENTION_DAYS = 7*2; // Retención máxima de los ficheros de muestras en días.
 
 
 	/**
