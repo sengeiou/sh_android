@@ -2,11 +2,13 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
 import com.path.android.jobqueue.Params;
+import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
@@ -20,16 +22,18 @@ public class GetUsersFollowingJob extends CancellableJob {
 
     Application app;
     Bus bus;
+    NetworkUtil networkUtil;
     BagdadService service;
 
     private static final int PRIORITY = 5;
     private Long idUserToRetrieveFollowsFrom;
 
-    @Inject public GetUsersFollowingJob(Application context, Bus bus, BagdadService service) {
+    @Inject public GetUsersFollowingJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil) {
         super(new Params(PRIORITY));
         this.app = context;
         this.service = service;
         this.bus = bus;
+        this.networkUtil = networkUtil;
     }
 
     public void init(Long userId) {
@@ -52,6 +56,7 @@ public class GetUsersFollowingJob extends CancellableJob {
 
     @Override
     protected void run() throws IOException {
+        if(!checkNetwork()) return;
         try {
             List<Long> followingIds = getFollowingIdsFromService();
             List<User> users = getFollowingUsersFromServiceByIds(followingIds);
@@ -87,6 +92,14 @@ public class GetUsersFollowingJob extends CancellableJob {
     private void sendCommunicationError() {
         //TODO abstraer evento de CommunicationError y hacerlo general para los jobs
         bus.post(new FollowsResultEvent(ResultEvent.STATUS_INVALID));
+    }
+
+    private boolean checkNetwork() {
+        if (!networkUtil.isConnected(app)) {
+            bus.post(new ConnectionNotAvailableEvent());
+            return false;
+        }
+        return true;
     }
 
     @Override protected void onCancel() {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -20,6 +21,8 @@ import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
+import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
@@ -93,6 +96,10 @@ public class FollowingUsersFragment extends BaseFragment {
     @Subscribe
     public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
+        if (event.getStatus() == ResultEvent.STATUS_INVALID) {
+            onCommunicationError();
+            return;
+        }
         List<User> users = event.getFollows();
         if (users.size() == 0) {
             setEmpty(true);
@@ -104,6 +111,16 @@ public class FollowingUsersFragment extends BaseFragment {
             }
             userlistListView.setAdapter(userListAdapter);
         }
+    }
+
+    public void onCommunicationError() {
+        Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        setLoadingView(false);
     }
 
     @OnItemClick(R.id.userlist_list)
