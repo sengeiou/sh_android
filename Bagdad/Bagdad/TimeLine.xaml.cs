@@ -360,7 +360,7 @@ namespace Bagdad
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             myShots.ScrollIntoView(myShots.Items.First());
-        }       
+        } 
         
     }
 }

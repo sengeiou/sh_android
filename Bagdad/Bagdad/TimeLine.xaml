@@ -22,6 +22,48 @@
                 <TextBlock Height="35" Text="{Binding}" Style="{StaticResource PhoneTextTitle3Style}"/>
             </Grid>
         </DataTemplate>
+        <ControlTemplate x:Key="ChatBubbleTextBoxControlTemplate1" TargetType="c4ftk:ChatBubbleTextBox">
+            <c4ftk:ChatBubble x:Name="chatBubble" 
+        		BorderBrush="{TemplateBinding BorderBrush}" 
+        		BorderThickness="{TemplateBinding BorderThickness}" 
+        		Background="{TemplateBinding Background}" 
+        		Height="{TemplateBinding Height}"
+        		Width="{TemplateBinding Width}"
+        		ChatBubbleDirection="{TemplateBinding ChatBubbleDirection}"
+                >
+        		<VisualStateManager.VisualStateGroups>
+        			<VisualStateGroup x:Name="FocusStates">
+        				<VisualState x:Name="Unfocused"/>
+        				<VisualState x:Name="Focused">
+        					<Storyboard>
+        						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.BorderBrush)" Storyboard.TargetName="chatBubble">
+        							<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+        						</ObjectAnimationUsingKeyFrames>
+        					</Storyboard>
+        				</VisualState>
+        			</VisualStateGroup>
+        		</VisualStateManager.VisualStateGroups>
+        		<Grid HorizontalAlignment="Stretch" Width="{TemplateBinding Width}">
+        			<ContentControl
+        				x:Name="HintContentElement"
+        				BorderThickness="0" 
+        				Background="Transparent"
+        				Foreground="Gray"
+        				HorizontalContentAlignment="Stretch"
+        				VerticalContentAlignment="Stretch"
+        				Content="{TemplateBinding Hint}" />
+        			<ScrollViewer 
+        				x:Name="ContentElement" 
+        				MaxHeight="169"
+        				Width="400"
+        				BorderThickness="0" 
+        				Background="Transparent"
+        				HorizontalContentAlignment="Stretch"
+        				VerticalContentAlignment="Stretch"
+        				ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+        		</Grid>
+        	</c4ftk:ChatBubble>
+        </ControlTemplate>
     </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
@@ -72,12 +114,12 @@
 
         <!--Row1-->
         <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" Grid.Row="1" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
-        <c4ftk:ChatBubbleTextBox x:Name="newShot" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" >
-        <TextBox.InputScope>
-            <InputScope>
-                <InputScopeName NameValue="Chat" />
-            </InputScope>
-        </TextBox.InputScope>
+        <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplate1}" >
+            <TextBox.InputScope>
+                <InputScope>
+                    <InputScopeName NameValue="Chat" />
+                </InputScope>
+            </TextBox.InputScope>
         </c4ftk:ChatBubbleTextBox>
 
         <!--Row2-->
