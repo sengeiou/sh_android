@@ -12,7 +12,7 @@
       android:layout_height="24dp"
       android:layout_marginLeft="16dp"
       android:layout_marginRight="32dp"
-      android:src="@drawable/ic_drawer_timeline"
+      tools:src="@drawable/ic_drawer_timeline"
        />
     <!--android:tint="@color/drawer_text"-->
 

@@ -75,17 +75,8 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
                 TextView itemTitle = findById(view, R.id.drawer_item_text);
                 ImageView itemIcon = findById(view, R.id.drawer_item_icon);
                 itemTitle.setText(menuItem.title);
-                //itemIcon.setImageResource(menuItem.icon);
-                //setSelectedStateToItem(position == mSelectedPosition, itemTitle);
+                itemIcon.setImageResource(menuItem.icon);
                 break;
-        }
-    }
-
-    private void setSelectedStateToItem(boolean selectedStateEnabled, TextView titleView) {
-        if (selectedStateEnabled) {
-            titleView.setTextAppearance(getContext(), R.style.MenuDrawer_Widget_TitleText_Selected);
-        } else {
-            titleView.setTextAppearance(getContext(), R.style.MenuDrawer_Widget_TitleText);
         }
     }
 

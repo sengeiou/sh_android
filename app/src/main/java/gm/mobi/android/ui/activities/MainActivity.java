@@ -238,7 +238,7 @@ public class MainActivity extends BaseSignedInActivity {
     private List<MenuAdapter.MenuItem> getDrawerMenu() {
         MenuAdapter.MenuItem[] menuItems = {
             new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
-            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_timeline, FollowingUsersFragment.class, FollowingUsersFragment.getArguments(currentUser.getIdUser(), "People")),
+            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, FollowingUsersFragment.class, FollowingUsersFragment.getArguments(currentUser.getIdUser(), "People")),
             new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
         };
         return Arrays.asList(menuItems);
