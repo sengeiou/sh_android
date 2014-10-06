@@ -129,13 +129,6 @@
 }
 
 //------------------------------------------------------------------------------
-//- (void)viewDidLayoutSubviews {
-//    
-//    [super viewDidLayoutSubviews];
-//    self.timelineTableView.backgroundColor = [UIColor clearColor];
-//}
-
-//------------------------------------------------------------------------------
 -(void) search{
     
 }
@@ -276,9 +269,6 @@
 	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
-  
-//    cell.layer.shouldRasterize = YES;
-//    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
 	
     return cell;
  }
@@ -296,7 +286,6 @@
         self.lblFooter.backgroundColor = [UIColor clearColor];
         self.timelineTableView.tableFooterView = self.lblFooter;
         
-        // [[self timelineTableView]reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -591,7 +580,7 @@
     else
         self.btnShoot.enabled = NO;
 	
-	[self adaptViewSizeWhenWriting:textView];
+    [self adaptViewSizeWhenWriting:textView];
 
     if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
@@ -622,7 +611,7 @@
 }
 
 //------------------------------------------------------------------------------
--(NSString *) countCharacters:(NSUInteger) lenght{
+-(NSString *)countCharacters:(NSUInteger) lenght{
     
     if (lenght <= CHARACTERS_SHOT){
         NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];

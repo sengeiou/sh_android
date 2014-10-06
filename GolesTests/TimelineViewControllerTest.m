@@ -16,13 +16,13 @@
 #import "UserManager.h"
 #import <math.h>
 
-@interface TimelineViewController : XCTestCase
+@interface TimelineViewControllerTest : XCTestCase
 
 @property(nonatomic, strong) TimeLineViewController *tlcv;
 
 @end
 
-@implementation TimelineViewController
+@implementation TimelineViewControllerTest
 
 - (void)setUp {
     [super setUp];
@@ -62,6 +62,10 @@
 
 }
 
+-(void)testCharactersCounterLeft {
+    
+    XCTAssertEqual ([self.tlcv countCharacters:2],138);
+}
 
 
 

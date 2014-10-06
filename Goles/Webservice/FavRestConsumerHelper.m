@@ -63,7 +63,7 @@
     
     NSNumber *idDevice = [[UserManager singleton] getIdDevice];
     NSNumber *idPlayer = [[UserManager singleton] getUserId];
-   // NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
+    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
     
     NSNumber *idPlatform = @1;
     NSInteger appVersion = [self getAppVersion];
@@ -71,6 +71,8 @@
     
     if (idDevice)
         [req addObject:idDevice];
+    else
+        [req addObject:@0];
     if (idPlayer)
         [req addObject:idPlayer];
     else
@@ -80,8 +82,8 @@
     [req addObject:[NSNumber numberWithInteger:appVersion]];
     [req addObject:[NSNumber numberWithLongLong:epochTime]];
     
-//    if (sessionToken != nil)
-//        [req addObject:sessionToken];
+    if (sessionToken != nil)
+        [req addObject:sessionToken];
     
     return [req copy];
 }

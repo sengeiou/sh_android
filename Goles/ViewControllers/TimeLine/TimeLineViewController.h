@@ -12,5 +12,6 @@
 
 -(BOOL) controlRepeatedShot:(NSString *)texto;
 -(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text;
+-(NSString *)countCharacters:(NSUInteger) lenght;
 
 @end
