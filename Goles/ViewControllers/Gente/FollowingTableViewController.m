@@ -12,6 +12,8 @@
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "FavRestConsumer.h"
+#import "Follow.h"
 
 @interface FollowingTableViewController ()
 
@@ -27,15 +29,17 @@
 	
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	
-	if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
+        self.title = @"Following";
 	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
-	else
+        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+    }
+    else {
+        self.title = @"Followers";
 		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
-	
-	if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
-		self.title = @"Following";
-	else
-		self.title = @"Followers";
+        [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
+    }
+
 }
 
 #pragma mark - Table view data source
@@ -55,6 +59,19 @@
     return cell;
 }
 
+#pragma mark - Reload methods
+//------------------------------------------------------------------------------
+- (void)reloadDataAndTable {
+    
+    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
+        self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
+        [self.usersTable reloadData];
+    }
+    else {
+        self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
+        [self.usersTable reloadData];
+    }
+}
 
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
@@ -68,5 +85,17 @@
 	[self.navigationController pushViewController:profileVC animated:YES];
 }
 
+#pragma mark - Webservice response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
+    
+    if (status && !error){
+        
+        if ([entityClass isSubclassOfClass:[Follow class]])
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+        if ([entityClass isSubclassOfClass:[User class]])
+            [self reloadDataAndTable];
+    }
+}
 
 @end

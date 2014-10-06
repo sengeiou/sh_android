@@ -64,6 +64,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 - (void)getOldShotsWithDelegate:(id)delegate;
 - (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate;
 - (void)getFollowingUsersOfUser:(User *)user withDelegate:(id)delegate;
+- (void)getFollowersOfUser:(User *)user withDelegate:(id)delegate;
 
 //Special request methods
 

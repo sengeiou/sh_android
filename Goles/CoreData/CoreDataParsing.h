@@ -103,6 +103,7 @@ extern NSString *const kALIAS_GET_ALL_TEAMS;
 extern NSString *const kALIAS_REGISTER_DEVICE;
 extern NSString *const kALIAS_LOGIN;
 extern NSString *const kALIAS_FOLLOW;
+extern NSString *const kALIAS_FOLLOWERS;
 extern NSString *const kALIAS_SHOT;
 extern NSString *const kALIAS_OLDER_SHOTS;
 extern NSString *const kALIAS_USER;

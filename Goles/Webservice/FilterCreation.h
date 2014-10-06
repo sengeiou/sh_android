@@ -14,5 +14,6 @@
 + (NSDictionary *)getFilterForEntity:(Class)entity;
 + (NSDictionary *)getFilterForOldShots;
 + (NSDictionary *)getFilterForFollowingsOfUser:(User *)user;
++ (NSDictionary *)getFilterForFollowersOfUser:(User *)user;
 
 @end

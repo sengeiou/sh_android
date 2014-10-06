@@ -7,7 +7,6 @@
 //
 
 #import "ProfileViewController.h"
-#import "FavRestConsumer.h"
 #import "UIImageView+AFNetworking.h"
 #import "FollowingTableViewController.h"
 #import "Follow.h"
@@ -57,9 +56,7 @@
     [self restrictRotation:YES];
     [self customView];
     [self dataFillView];
-    
-    [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-    [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+
 }
 
 - (void)customView{
@@ -118,7 +115,7 @@
 	[self.btnFollow setTitle:@"FOLLOWING" forState:UIControlStateNormal];
 	self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
 	self.btnFollow.backgroundColor = [UIColor whiteColor];
-	self.btnFollow.layer.borderWidth = 1.5f;
+	self.btnFollow.layer.borderWidth = 1.0f;
 	self.btnFollow.layer.masksToBounds = YES;
    
     [self.btnFollow setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
@@ -152,24 +149,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Webservice response methods
-//------------------------------------------------------------------------------
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
-  
-    if (status){
-        
-        if (status && [entityClass isSubclassOfClass:[User class]]){
-            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
-        }
-		else if (status && [entityClass isSubclassOfClass:[Follow class]]){
-			[[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:nil];
-		}
-    }else if (refresh){
-        
-         [self dataFillView];
-    }
 }
 
 

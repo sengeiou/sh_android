@@ -127,14 +127,14 @@
 - (NSArray *)getFollowingUsersOfUser:(User *)user {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
-    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:YES withPredicate:predicate];
     NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
     for (Follow *obj in follows) {
         User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
         if (user)
             [idUsersArray addObject:user];
     }
-    
+
     if (idUsersArray.count > 0)
         return idUsersArray;
     

@@ -43,8 +43,9 @@
 		for (Follow *followedUser in follows) {
 			[usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:followedUser.idUserFollowed}];
 		}
+        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[@{K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS: K_WS_OPS_OR},filterDate]}};
         
-        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_OR,K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:@[filterDate]}};
+//        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:@[filterDate]}};
         return filter;
     }
     
@@ -88,6 +89,20 @@
     
     NSArray *filterItemsFollow = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:user.idUser},
                                    @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_FOLLOW_IDUSERFOLLOWED,K_CD_VALUE:[NSNull null]}];
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsFollow,K_WS_FILTERS:@[filterDate]}};
+    return filter;
+}
+
+//-----------------------------------------------------------------------------
++ (NSDictionary *)getFilterForFollowersOfUser:(User *)user {
+    
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSArray *filterItemsFollow = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:[NSNull null]},
+                                   @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_FOLLOW_IDUSERFOLLOWED,K_CD_VALUE:user.idUser}];
     NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsFollow,K_WS_FILTERS:@[filterDate]}};
     return filter;
 }
@@ -147,7 +162,10 @@
 		[idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:obj.idUserFollowed}];
 	}
 	
-	if (idUsersArray.count > 0)
+    NSNumber *userID = [[UserManager singleton] getUserId];
+    [idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
+	
+                              if (idUsersArray.count > 0)
 		return idUsersArray.copy;
 	
 	return nil;

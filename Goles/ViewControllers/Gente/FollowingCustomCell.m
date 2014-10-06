@@ -75,7 +75,7 @@
 	[self.actionButton setTitle:@"Following" forState:UIControlStateNormal];
 	self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
 	self.actionButton.backgroundColor = [UIColor whiteColor];
-	self.actionButton.layer.borderWidth = 1.5f;
+	self.actionButton.layer.borderWidth = 1.0f;
 	self.actionButton.layer.masksToBounds = YES;
     
     [self.actionButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
