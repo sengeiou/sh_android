@@ -65,14 +65,14 @@
 
 - (void)configureFollowButton {
 
-	[self.actionButton setTitle:@"+ Follow" forState:UIControlStateNormal];
+	[self.actionButton setTitle:@"+ FOLLOW" forState:UIControlStateNormal];
 	self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
 }
 
 - (void)configureFollowingButton {
 	
 	[self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-	[self.actionButton setTitle:@"Following" forState:UIControlStateNormal];
+	[self.actionButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
 	self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
 	self.actionButton.backgroundColor = [UIColor whiteColor];
 	self.actionButton.layer.borderWidth = 1.0f;
