@@ -20,6 +20,7 @@
     // Initialization code
 }
 
+//------------------------------------------------------------------------------
 -(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
 
     self.userName.text = user.name;
@@ -59,11 +60,13 @@
 	self.photobutton.tag = indexPath.row;
 }
 
+//------------------------------------------------------------------------------
 - (void)addTarget:(id)target action:(SEL)action {
 	
 	[self.photobutton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
 
+//------------------------------------------------------------------------------
 - (void)configureFollowButton {
 
     [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
@@ -72,9 +75,9 @@
     self.actionButton.backgroundColor = [UIColor whiteColor];
     self.actionButton.layer.borderWidth = 1.0f;
     self.actionButton.layer.masksToBounds = YES;
-    
 }
 
+//------------------------------------------------------------------------------
 - (void)configureFollowingButton {
 
     [self.actionButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
@@ -83,10 +86,9 @@
     
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
     [self.actionButton setContentEdgeInsets:contentInsets];
-
-
 }
 
+//------------------------------------------------------------------------------
 - (BOOL)checkIfImFollowingUser:(User *)user {
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];

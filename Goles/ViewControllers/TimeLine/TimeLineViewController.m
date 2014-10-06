@@ -89,8 +89,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 
-    
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
@@ -104,6 +104,7 @@
     [self setTextViewForShotCreation];
     
 }
+
 
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
@@ -407,8 +408,13 @@
 }
 
 -(NSString *)controlCharactersShot:(NSString *)text{
+    
+    NSRange range = [text rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
+    text = [text stringByReplacingCharactersInRange:range withString:@""];
+    //NSLog(@"mystring %@, length %lu",text, (unsigned long)text.length);
+    
+    
     self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
     self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     return self.textComment;
@@ -434,6 +440,7 @@
     
     if (status && !error){
         rows = 0;
+        self.orientation = NO;
         [self keyboardHide:nil];
         self.txtView.text = nil;
         [self reloadShotsTable:nil];
@@ -516,7 +523,9 @@
                          animations:^{
                              self.bottomViewPositionConstraint.constant = [self getKeyboardHeight:notification];
                              [self.view layoutIfNeeded];
-                         } completion:NULL];
+                         }completion:^(BOOL finished) {
+                            
+                         }];
 
 }
 
@@ -542,12 +551,18 @@
         self.orientation = NO;
     }
 }
+
+//------------------------------------------------------------------------------
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint firstTouch = [touch locationInView:self.view];
     self.orientation = NO;
-   
 }
+
+//------------------------------------------------------------------------------
+-(void)keyboardWillHide
+{
+    [self keyboardHide:nil];
+}
+
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
 
@@ -590,9 +605,9 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
    
-    NSString *allText = [NSString stringWithFormat:@"%@%@", textView.text, text];
+    //NSString *allText = [NSString stringWithFormat:@"%@%@", textView.text, text];
     
-    NSString* result = [self controlCharactersShot:allText];
+    NSString* result = [self controlCharactersShot:self.txtView.text];
 
     lengthTextField = textView.text.length - range.length + text.length;
     
@@ -621,6 +636,7 @@
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 }
 
+//------------------------------------------------------------------------------
 - (void)textViewDidChange:(UITextView *)textView{
     
     UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
@@ -641,7 +657,7 @@
 
     if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
         if (rows > 1) {
-            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            self.bottomViewHeightConstraint.constant = (rows*17.5)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
@@ -661,7 +677,6 @@
     }
 }
 
-
 //------------------------------------------------------------------------------
 -(NSString *)countCharacters:(NSUInteger) lenght{
     
@@ -679,20 +694,24 @@
 }
 
 #pragma mark - Orientation methods
+
+//------------------------------------------------------------------------------
 -(void) restrictRotation:(BOOL) restriction
 {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     appDelegate.restrictRotation = restriction;
+    self.orientation = YES;
 }
 
+//------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
     [self restrictRotation:NO];
     self.orientation = YES;
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillDisappear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-
 }
 
 @end

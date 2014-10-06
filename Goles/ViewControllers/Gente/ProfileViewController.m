@@ -56,9 +56,9 @@
     [self restrictRotation:YES];
     [self customView];
     [self dataFillView];
-
 }
 
+//------------------------------------------------------------------------------
 - (void)customView{
     
     UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
@@ -73,6 +73,7 @@
     self.btnFollow.clipsToBounds = YES;
 }
 
+//------------------------------------------------------------------------------
 - (void)dataFillView{
     self.title = self.selectedUser.userName;
     
@@ -95,6 +96,7 @@
     [self receivedImage];
 }
 
+//------------------------------------------------------------------------------
 - (void)configureFollowButton {
     
     if ([self.selectedUser isEqual:[[UserManager sharedInstance] getActiveUser]]) {
@@ -105,6 +107,7 @@
 		[self setFollowToNo];
 }
 
+//------------------------------------------------------------------------------
 - (void)setEditProfile {
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
     [self.btnFollow setTitle:@"EDIT PROFILE" forState:UIControlStateNormal];
@@ -115,6 +118,7 @@
     self.btnFollow.layer.masksToBounds = YES;
 }
 
+//------------------------------------------------------------------------------
 - (void)setFollowToNo {
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
@@ -123,10 +127,9 @@
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
     self.btnFollow.layer.masksToBounds = YES;
-
-    
 }
 
+//------------------------------------------------------------------------------
 - (void)setFollowToYes {
 	
     [self.btnFollow setTitle:@"FOLLOWING" forState:UIControlStateNormal];
@@ -134,9 +137,9 @@
     [self.btnFollow setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -15.0f, 0.0f, 0.0f);
     [self.btnFollow setContentEdgeInsets:contentInsets];
-
 }
 
+//------------------------------------------------------------------------------
 - (void)receivedImage{
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.selectedUser.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
@@ -183,6 +186,7 @@
 }
 
 #pragma mark - Orientation methods
+//------------------------------------------------------------------------------
 -(void) restrictRotation:(BOOL) restriction
 {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;

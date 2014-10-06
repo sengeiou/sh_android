@@ -17,6 +17,7 @@
     // Initialization code
 }
 
+//------------------------------------------------------------------------------
 -(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
     
     self.userName.text = user.name;

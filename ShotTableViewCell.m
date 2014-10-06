@@ -39,7 +39,7 @@
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
-    //NSLog(@"%@", shot);
+
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     

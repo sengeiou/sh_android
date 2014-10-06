@@ -453,6 +453,11 @@
     
     NSInteger seconds = [today timeIntervalSinceDate:refDate];
     
+    if (seconds == 0) {
+        NSLog(@"SEGUNDOOOS: %ld", (long)seconds);
+    }
+
+    
     NSInteger days = (int) (floor(seconds / (3600 * 24)));
     if(days) seconds -= days * 3600 * 24;
     
@@ -471,8 +476,11 @@
     else if(seconds)
         timeLeft = [NSString stringWithFormat: @"%lds", (long)seconds];
     
-    if (seconds < 0 || seconds == 0)
-        timeLeft = @"Now";
+    if (days == 0 && hours == 0 && minutes == 0) {
+        if (seconds < 0 || seconds == 0 )
+            timeLeft = @"Now";
+    }
+    
 
     //timeLeft = [timeLeft stringByReplacingOccurrencesOfString:@"-" withString:@""];
     

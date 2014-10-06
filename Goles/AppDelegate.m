@@ -175,7 +175,6 @@
 
 }
 
-
 //------------------------------------------------------------------------------
 -(void)setApiraterSettings {
     
@@ -329,14 +328,15 @@
 }
 
 #pragma mark - Orientation methods
+//------------------------------------------------------------------------------
 -(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
     if(self.restrictRotation){
         
-        NSLog(@"SOLOOOOOOOO");
+        //NSLog(@"SOLOOOOOOOO");
         return UIInterfaceOrientationMaskPortrait;
     }else{
-        NSLog(@"TODAS");
+        //NSLog(@"TODAS");
         self.timelineVC.orientation = YES;
         return UIInterfaceOrientationMaskAll;
     }
