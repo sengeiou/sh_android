@@ -15,7 +15,7 @@
       android:id="@+id/profile_avatar"
       android:layout_width="@dimen/profile_avatar_size"
       android:layout_height="@dimen/profile_avatar_size"
-      android:src="@drawable/sample_avatar" />
+      tools:src="@drawable/sample_avatar" />
 
     <LinearLayout
       android:id="@+id/profile_scores_bar"
@@ -40,8 +40,8 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-
-          android:text="3201" />
+          android:text="-"
+          tools:text="3201" />
 
         <TextView
           style="@style/ProfileMarkTitle"
@@ -50,7 +50,7 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-          android:text="points" />
+          android:text="@string/profile_marks_points" />
       </LinearLayout>
 
       <LinearLayout
@@ -69,7 +69,8 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-          android:text="44" />
+          android:text="-"
+          tools:text="44" />
 
         <TextView
           style="@style/ProfileMarkTitle"
@@ -78,7 +79,7 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-          android:text="following" />
+          android:text="@string/profile_marks_following" />
       </LinearLayout>
 
       <LinearLayout
@@ -95,7 +96,8 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-          android:text="23" />
+          android:text="-"
+          tools:text="23" />
 
         <TextView
           style="@style/ProfileMarkTitle"
@@ -104,7 +106,7 @@
           android:layout_gravity="center"
           android:layout_weight="1"
           android:gravity="center"
-          android:text="followers" />
+          android:text="@string/profile_marks_followers" />
       </LinearLayout>
 
     </LinearLayout>
@@ -156,7 +158,7 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/profile_avatar"
       android:layout_marginTop="16dp"
-      android:text="Ignasi"
+      tools:text="Ignasi"
       android:textSize="20sp"
       android:textStyle="bold" />
 
@@ -168,7 +170,7 @@
       android:layout_alignBaseline="@+id/profile_name"
       android:layout_marginLeft="8dp"
       android:layout_toRightOf="@+id/profile_name"
-      android:text="rank 34k"
+      tools:text="rank 34k"
       android:textColor="@color/gray_60" />
 
     <TextView
@@ -178,7 +180,7 @@
       android:layout_alignLeft="@+id/profile_name"
       android:layout_below="@+id/profile_name"
       android:layout_marginTop="4dp"
-      android:text="Sevilla FC. Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really."
+      tools:text="Sevilla FC. Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really."
       android:textColor="@color/gray_60" />
 
     <TextView
@@ -186,7 +188,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_below="@+id/profile_bio"
-      android:text="sevibus.sloydev.com"
+      tools:text="sevibus.sloydev.com"
       android:autoLink="web"
       android:textColor="@color/links" />
 

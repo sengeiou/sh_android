@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import gm.mobi.android.R;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import gm.mobi.android.ui.fragments.ProfileFragmentBuilder;
@@ -15,11 +16,11 @@ import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
-    private static final String EXTRA_USER_ID = "userid";
+    private static final String EXTRA_USER = "user";
 
-    public static Intent getIntent(Context context, Long userId) {
+    public static Intent getIntent(Context context, User user) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
-        i.putExtra(EXTRA_USER_ID, userId);
+        i.putExtra(EXTRA_USER, user);
         return i;
     }
 
@@ -32,12 +33,12 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setupActionBar();
 
         if (savedInstanceState == null) {
-            Long userId = getIntent().getLongExtra(EXTRA_USER_ID, 0);
-            if (userId < 1) {
-                Timber.e("Se intentó abrir la pantalla de perfil con id inválido: %d", userId);
+            User user = (User) getIntent().getSerializableExtra(EXTRA_USER);
+            if (user == null) {
+                Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();
             }
-            ProfileFragment profileFragment = ProfileFragmentBuilder.newProfileFragment(userId);
+            ProfileFragment profileFragment = ProfileFragmentBuilder.newProfileFragment(user);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //TODO check que no hubiera ya uno? necesario?
             transaction.add(R.id.container, profileFragment, ProfileFragment.TAG);

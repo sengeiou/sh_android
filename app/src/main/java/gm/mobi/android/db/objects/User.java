@@ -1,6 +1,8 @@
 package gm.mobi.android.db.objects;
 
-public class User extends Synchronized {
+import java.io.Serializable;
+
+public class User extends Synchronized implements Serializable{
 
     private Long mIdUser;
     private Long mFavouriteTeamId;

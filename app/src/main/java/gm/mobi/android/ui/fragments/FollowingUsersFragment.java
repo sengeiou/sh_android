@@ -99,7 +99,7 @@ public class FollowingUsersFragment extends BaseFragment {
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
         User user = userListAdapter.getItem(position);
-        startActivity(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()));
+        startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
     }
 
     private void setScreenTitle() {

@@ -56,8 +56,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
 
-    @Arg Long userId;
-    User user;
+    @Arg User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +86,12 @@ public class ProfileFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setBasicUserInfo(user);
         retrieveUserInfo();
     }
 
@@ -95,7 +100,7 @@ public class ProfileFragment extends BaseFragment {
         User currentUser = GolesApplication.get(context).getCurrentUser();
 
         GetUserInfoJob job = GolesApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(userId,currentUser);
+        job.init(user.getIdUser(),currentUser);
         jobManager.addJobInBackground(job);
         //TODO loading
     }
@@ -111,17 +116,20 @@ public class ProfileFragment extends BaseFragment {
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
-    private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
+    private void setBasicUserInfo(User user) {
         setTitle(user.getUserName());
         nameTextView.setText(user.getName());
-        bioTextView.setText(favTeamName+". "+user.getBio());
         websiteTextView.setText(user.getWebsite());
         rankTextView.setText(getString(R.string.profile_rank_format, String.valueOf(user.getRank())));
         picasso.load(user.getPhoto()).into(avatarImageView);
         pointsTextView.setText(String.valueOf(user.getPoints()));
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
+    }
 
+    private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
+        setBasicUserInfo(user);
+        bioTextView.setText(favTeamName+". "+user.getBio());
         setMainButtonStatus(relationshipWithUser);
     }
 
@@ -135,6 +143,6 @@ public class ProfileFragment extends BaseFragment {
     @OnClick(R.id.profile_marks_following_box)
     public void openFollowingList() {
         if(user==null) return;
-        startActivity(FollowingUsersActivity.getIntent(getActivity(), userId, user.getName()));
+        startActivity(FollowingUsersActivity.getIntent(getActivity(), user.getIdUser(), user.getName()));
     }
 }

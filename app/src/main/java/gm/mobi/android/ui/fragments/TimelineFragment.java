@@ -291,7 +291,7 @@ public class TimelineFragment extends BaseFragment
 
     public void openProfile(int position) {
         User user = adapter.getItem(position).getUser();
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user.getIdUser());
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user);
         startActivity(profileIntent);
     }
 

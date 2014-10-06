@@ -227,7 +227,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @OnClick(R.id.menu_drawer_profile)
     public void openProfileFromDrawer() {
-        startActivity(ProfileContainerActivity.getIntent(this, currentUser.getIdUser()));
+        startActivity(ProfileContainerActivity.getIntent(this, currentUser));
     }
 
     private void setScreenTitle(String title) {

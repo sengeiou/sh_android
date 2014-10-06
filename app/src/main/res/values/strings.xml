@@ -62,6 +62,9 @@
     <string name="profile_following">Following</string>
     <string name="profile_follow">Follow</string>
     <string name="profile_rank_format">rank %s</string>
+    <string name="profile_marks_points">points</string>
+    <string name="profile_marks_following">following</string>
+    <string name="profile_marks_followers">followers</string>
 
     <!-- Menu names -->
     <string name="menu_info">Info</string>
