@@ -21,7 +21,7 @@ public abstract class CancellableJob extends Job {
 
     @Inject
     SQLiteOpenHelper dbHelper;
-    @Inject protected SQLiteDatabase db;
+    protected SQLiteDatabase db;
 
 
     protected CancellableJob(Params params) {
@@ -33,8 +33,8 @@ public abstract class CancellableJob extends Job {
         db = dbHelper.getReadableDatabase();
     }
 
-    protected void createWritableDb(){
-        db = dbHelper.getWritableDatabase();
+    protected SQLiteDatabase createWritableDb(){
+        return dbHelper.getWritableDatabase();
     }
 
     protected void configureManagers(){

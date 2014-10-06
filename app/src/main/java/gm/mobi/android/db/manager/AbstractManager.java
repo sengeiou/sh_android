@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import javax.inject.Inject;
+
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.db.objects.TableSync;
@@ -14,7 +18,10 @@ import timber.log.Timber;
 public abstract class AbstractManager {
 
     public static int NUMDAYS = 30;
-    protected SQLiteDatabase db;
+    @Inject protected SQLiteOpenHelper dbHelper;
+    SQLiteDatabase db;
+
+
 
 
     public void setDataBase(SQLiteDatabase db){

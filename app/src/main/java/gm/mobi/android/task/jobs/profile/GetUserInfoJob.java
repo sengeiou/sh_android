@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -53,7 +52,7 @@ public class GetUserInfoJob extends CancellableJob {
 
 
     @Inject public GetUserInfoJob(Application context,Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service, NetworkUtil mNetworkUtil,
-                                  UserManager userManager, FollowManager followManager, TeamManager teamManager, SQLiteDatabase db) {
+                                  UserManager userManager, FollowManager followManager, TeamManager teamManager) {
         super(new Params(PRIORITY));
         this.context = context;
         this.bus = bus;
@@ -63,7 +62,6 @@ public class GetUserInfoJob extends CancellableJob {
         this.userManager = userManager;
         this.followManager = followManager;
         this.teamManager = teamManager;
-        this.db = db;
     }
 
     public void init(Long userId, User currentUser){
@@ -77,7 +75,7 @@ public class GetUserInfoJob extends CancellableJob {
 
     @Override
     protected void createDatabase(){
-        createWritableDb();
+        db = createWritableDb();
     }
 
     @Override

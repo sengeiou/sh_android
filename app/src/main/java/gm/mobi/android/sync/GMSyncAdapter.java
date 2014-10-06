@@ -18,6 +18,7 @@ import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import timber.log.Timber;
 
 public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -64,24 +65,16 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
                     case SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE:
                         Timber.e("Entra en la sincro para hacer el remove");
                         //TODO REMOVE OLD SHOTS
-                        // removeOldShots(mDbHelper.getReadableDatabase());
+//                         removeOldShots(mDbHelper.getReadableDatabase());
                         Timber.e("Entra en la sincronización para el tipo de llamada : %d",
                             callType);
                         break;
 
-                    case SyncConstants.GET_FOLLOWINGS_CALLTYPE:
-                        Timber.e("Entra en la sincro para hacer actualizar los followings");
-                        currentUser = userManager.getCurrentUser();
-
-                        jobManager.addJobInBackground(
-                            new GetFollowingsJob(getContext(), currentUser));
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
-                            callType);
-                        break;
                 }
             }
         } catch (IllegalStateException e) {
             Timber.e("Exception onPerformSync", e.getMessage());
         }
     }
+
 }

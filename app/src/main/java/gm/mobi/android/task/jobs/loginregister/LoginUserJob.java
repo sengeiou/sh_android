@@ -31,19 +31,20 @@ public class LoginUserJob extends CancellableJob {
     private String usernameEmail;
     private String password;
 
-    @Inject Application app;
-    @Inject NetworkUtil networkUtil;
-    @Inject Bus bus;
-    @Inject BagdadService service;
-    @Inject UserManager userManager;
+    Application app;
+    NetworkUtil networkUtil;
+    Bus bus;
+    BagdadService service;
+    UserManager userManager;
+    SQLiteDatabase db;
 
-
-    public LoginUserJob(Context context, String usernameEmail, String password) {
+    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, BagdadService service, UserManager userManager) {
         super(new Params(PRIORITY));
-        this.usernameEmail = usernameEmail;
-        this.password = password;
-
-        GolesApplication.get(context).inject(this);
+        this.app = context;
+        this.networkUtil = networkUtil;
+        this.bus = bus;
+        this.service = service;
+        this.userManager = userManager;
     }
 
     @Override
@@ -51,11 +52,16 @@ public class LoginUserJob extends CancellableJob {
         /* no-op */
     }
 
+    public void init( String usernameEmail, String password){
+        this.usernameEmail = usernameEmail;
+        this.password = password;
+    }
+
 
 
     @Override
     protected void createDatabase() {
-       createWritableDb();
+       db = createWritableDb();
     }
 
     @Override

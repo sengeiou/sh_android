@@ -2,6 +2,7 @@ package gm.mobi.android.ui.activities.registro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -36,6 +37,7 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 import timber.log.Timber;
@@ -53,7 +55,7 @@ public class EmailLoginActivity extends BaseActivity {
     @InjectView(R.id.email_login_password) EditText mPassword;
     @InjectView(R.id.email_login_button) CircularProgressButton mLoginButton;
 
-    private LoginUserJob currentLoginJob;
+//    private LoginUserJob currentLoginJob = GolesApplication.get(this).getObjectGraph().get(LoginUserJob.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class EmailLoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
-        currentLoginJob = null;
+//        currentLoginJob = null;
         User user = event.getSignedUser();
         if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS && user !=null) {
             // Yey!
@@ -126,14 +128,16 @@ public class EmailLoginActivity extends BaseActivity {
         String emailUsername = mEmailUsername.getText().toString();
         String password = mPassword.getText().toString();
         //TODO validar formato primero, maybe
-
-        if (currentLoginJob != null) {
-            currentLoginJob.cancelJob();
-        }
-        currentLoginJob = new LoginUserJob(this, emailUsername, password);
-        jobManager.addJobInBackground(currentLoginJob);
+        startJob(emailUsername,password);
         setLoading(true);
     }
+
+    public void startJob(String emailUsername, String password){
+        LoginUserJob currentLoginJob = GolesApplication.get(this).getObjectGraph().get(LoginUserJob.class);
+        currentLoginJob.init(emailUsername, password);
+        jobManager.addJobInBackground(currentLoginJob);
+    }
+
 
     /**
      * Retrieves Gmail accounts from the phone.
@@ -167,9 +171,9 @@ public class EmailLoginActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (currentLoginJob != null) {
-            currentLoginJob.cancelJob();
-        }
+//        if (currentLoginJob != null) {
+//            currentLoginJob.cancelJob();
+//        }
     }
 
     @Override

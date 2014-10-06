@@ -1,8 +1,7 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
-import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
@@ -17,7 +16,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
@@ -33,25 +31,35 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import timber.log.Timber;
 
-public class GetFollowingsJob extends CancellableJob{
+public class GetFollowingsJob extends CancellableJob {
 
     private static final int PRIORITY = 6; //TODO Define next values for our queue
     private static final int RETRY_ATTEMPTS = 3;
 
-    @Inject Application app;
-    @Inject NetworkUtil networkUtil;
-    @Inject Bus bus;
-    @Inject SQLiteOpenHelper mDbHelper;
-    @Inject BagdadService service;
-    @Inject UserManager userManager;
-    @Inject FollowManager followManager;
-    @Inject TeamManager teamManager;
+    Application app;
+    NetworkUtil networkUtil;
+    Bus bus;
+    BagdadService service;
+    UserManager userManager;
+    FollowManager followManager;
+    TeamManager teamManager;
     private User currentUser;
+    SQLiteDatabase db;
 
-    public GetFollowingsJob(Context context, User user){
+    @Inject
+    public GetFollowingsJob(Application context, NetworkUtil networkUtil, Bus bus, BagdadService service, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
         super(new Params(PRIORITY));
-        this.currentUser = user;
-        GolesApplication.get(context).inject(this);
+        this.app = context;
+        this.networkUtil = networkUtil;
+        this.bus = bus;
+        this.service = service;
+        this.userManager = userManager;
+        this.followManager = followManager;
+        this.teamManager = teamManager;
+    }
+
+    public void init(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     @Override
@@ -60,14 +68,14 @@ public class GetFollowingsJob extends CancellableJob{
     }
 
 
-    private List<Follow> getFollowingsIdsFromServer(){
+    private List<Follow> getFollowingsIdsFromServer() {
         List<Follow> followingsIds = new ArrayList<>();
 
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
-        try{
+        try {
             followingsIds = service.getFollows(currentUser.getIdUser(), modifiedFollows, UserDtoFactory.GET_FOLLOWING, true);
 
-        }catch(ServerException e){
+        } catch (ServerException e) {
             if (e.getErrorCode().equals(ServerException.G025)) {
                 sendCredentialError();
             } else {
@@ -79,11 +87,11 @@ public class GetFollowingsJob extends CancellableJob{
         return followingsIds;
     }
 
-    private List<User> getUsersByFollowingIdsFromServer(List<Long> followingsIds){
+    private List<User> getUsersByFollowingIdsFromServer(List<Long> followingsIds) {
         List<User> users = null;
-        try{
+        try {
             users = service.getUsersByUserIdList(followingsIds);
-        }catch(ServerException e){
+        } catch (ServerException e) {
             if (e.getErrorCode().equals(ServerException.G025)) {
                 sendCredentialError();
             } else {
@@ -97,7 +105,7 @@ public class GetFollowingsJob extends CancellableJob{
 
     @Override
     protected void createDatabase() {
-        createWritableDb();
+        db = createWritableDb();
     }
 
     @Override
@@ -109,65 +117,65 @@ public class GetFollowingsJob extends CancellableJob{
     }
 
     @Override
-    protected void run() throws  SQLException{
+    protected void run() throws SQLException {
         if (isCancelled()) return;
         if (!checkConnection()) return;
 
-            // 1. Download followings ids
-            List<Follow> followings = getFollowingsIdsFromServer();
-            if (followings == null) {
-                sendServerError(null);
-                Timber.e("Unknown error downloading followings list");
-                return;
-            }
-            Timber.d("Downloaded %d following relations", followings.size());
+        // 1. Download followings ids
+        List<Follow> followings = getFollowingsIdsFromServer();
+        if (followings == null) {
+            sendServerError(null);
+            Timber.e("Unknown error downloading followings list");
+            return;
+        }
+        Timber.d("Downloaded %d following relations", followings.size());
 
-            List<Long> followingIds = new ArrayList<>(followings.size());
-            for (Follow following : followings) {
-                followingIds.add(following.getFollowedUser());
-            }
+        List<Long> followingIds = new ArrayList<>(followings.size());
+        for (Follow following : followings) {
+            followingIds.add(following.getFollowedUser());
+        }
 
-            if (followings.size() == 0) {
-                sendSucces(null);
-                return;
+        if (followings.size() == 0) {
+            sendSucces(null);
+            return;
+        }
+        // 2. Download users from those followings
+        List<User> usersFollowing = getUsersByFollowingIdsFromServer(followingIds);
+        if (usersFollowing == null) {
+            sendServerError(null);
+            Timber.e("Unknown error downloading followings' users");
+            return;
+        }
+        List<Team> teams;
+        Set<Long> idTeams = new HashSet<>();
+        for (User user : usersFollowing) {
+            if (user.getFavouriteTeamId() != null) {
+                idTeams.add(user.getFavouriteTeamId());
             }
-            // 2. Download users from those followings
-            List<User> usersFollowing = getUsersByFollowingIdsFromServer(followingIds);
-            if (usersFollowing == null) {
-                sendServerError(null);
-                Timber.e("Unknown error downloading followings' users");
-                return;
-            }
-            List<Team> teams ;
-            Set<Long> idTeams = new HashSet<>();
-            for (User user : usersFollowing) {
-                if (user.getFavouriteTeamId() != null) {
-                    idTeams.add(user.getFavouriteTeamId());
-                }
-            }
-            teams = getTeamsByTeamIds(idTeams);
-            Timber.d("Downloaded %d followings' users", usersFollowing.size());
-            Timber.d("Downloaded %d teams' users", teams.size());
+        }
+        teams = getTeamsByTeamIds(idTeams);
+        Timber.d("Downloaded %d followings' users", usersFollowing.size());
+        Timber.d("Downloaded %d teams' users", teams.size());
 
-            if (isCancelled()) return;
+        if (isCancelled()) return;
 
-            // Save and send result
-            followManager.saveFollows(followings);
-            userManager.saveUsers(usersFollowing);
-            teamManager.saveTeams(teams);
-            sendSucces(usersFollowing);
+        // Save and send result
+        followManager.saveFollows(followings);
+        userManager.saveUsers(usersFollowing);
+        teamManager.saveTeams(teams);
+        sendSucces(usersFollowing);
 
     }
 
-    private List<Team> getTeamsByTeamIds(Set<Long> teamIds){
+    private List<Team> getTeamsByTeamIds(Set<Long> teamIds) {
         List<Team> resTeams = null;
         Long modifiedTeams = teamManager.getLastModifiedDate(GMContract.TeamTable.TABLE);
-        try{
-            resTeams= service.getTeamsByIdTeams(teamIds, modifiedTeams);
-        }catch(IOException e){
+        try {
+            resTeams = service.getTeamsByIdTeams(teamIds, modifiedTeams);
+        } catch (IOException e) {
             sendServerError(e);
         }
-        return  resTeams;
+        return resTeams;
     }
 
     private boolean checkConnection() {

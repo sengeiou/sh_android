@@ -16,10 +16,13 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
@@ -75,9 +78,16 @@ public class FollowingUsersFragment extends BaseFragment {
     }
 
     private void retrieveUsers(Long userId) {
-        jobManager.addJobInBackground(new GetUsersFollowingJob(getActivity(), userId));
+        startJob(userId);
         setLoadingView(true);
         setEmpty(false);
+    }
+
+    public void startJob(Long userId){
+        GetUsersFollowingJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowingJob.class);
+        job.init(userId);
+        jobManager.addJobInBackground(job);
+
     }
 
     @Subscribe

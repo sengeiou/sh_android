@@ -1,10 +1,8 @@
 package gm.mobi.android.task.jobs.follows;
 
-import android.content.Context;
-import com.path.android.jobqueue.Job;
+import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -21,16 +19,22 @@ import javax.inject.Inject;
 
 public class GetUsersFollowingJob extends CancellableJob {
 
-    @Inject Bus bus;
-    @Inject BagdadService service;
+    Application app;
+    Bus bus;
+    BagdadService service;
 
     private static final int PRIORITY = 5;
     private Long idUserToRetrieveFollowsFrom;
 
-    public GetUsersFollowingJob(Context context, Long idUserToRetrieveFollowsFrom) {
+    @Inject public GetUsersFollowingJob(Application context ,Bus bus, BagdadService service) {
         super(new Params(PRIORITY));
-        this.idUserToRetrieveFollowsFrom = idUserToRetrieveFollowsFrom;
-        GolesApplication.get(context).inject(this);
+        this.app = context;
+        this.service = service;
+        this.bus = bus;
+    }
+
+    public void init(Long userId){
+        this.idUserToRetrieveFollowsFrom = userId;
     }
 
     @Override public void onAdded() {

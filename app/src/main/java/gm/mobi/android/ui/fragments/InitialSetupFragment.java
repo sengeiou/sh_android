@@ -1,6 +1,7 @@
 package gm.mobi.android.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.base.BaseFragment;
 import timber.log.Timber;
 
@@ -43,8 +46,16 @@ public class InitialSetupFragment extends BaseFragment {
      * - Downloading and storing the user's following, if any.
      */
     private void performInitialSetup() {
-        jobManager.addJobInBackground(new GetFollowingsJob(getActivity(), GolesApplication.get(getActivity()).getCurrentUser()));
+        User currentUser = ((GolesApplication)getActivity().getApplication()).getCurrentUser();
+        startJob(getActivity(), currentUser);
     }
+
+    private void startJob(Context context,User currentUser){
+        GetFollowingsJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowingsJob.class);
+        job.init(currentUser);
+        jobManager.addJobInBackground(job);
+    }
+
 
     @Subscribe
     public void followingsReceived(FollowsResultEvent event) {

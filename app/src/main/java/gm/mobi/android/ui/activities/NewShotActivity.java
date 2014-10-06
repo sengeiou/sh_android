@@ -129,12 +129,18 @@ public class NewShotActivity extends BaseSignedInActivity {
             return;
         }
         if (isValidComment(comment)) {
-            jobManager.addJobInBackground(new NewShotJob(this, currentUser, comment));
+            startJob(currentUser,comment);
             setProgressUI(true);
         } else {
             Timber.i("Comment invalid: \"%s\"", comment);
             Toast.makeText(this, "Invalid editTextView", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void startJob(User currentUser, String comment){
+        NewShotJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(NewShotJob.class);
+        job.init(currentUser, comment);
+        jobManager.addJobInBackground(job);
     }
 
     @Subscribe

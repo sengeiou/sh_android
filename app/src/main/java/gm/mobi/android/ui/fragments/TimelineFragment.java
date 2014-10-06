@@ -21,14 +21,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.internal.dr;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,18 +54,25 @@ import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-    implements SwipeRefreshLayoutOverlay.OnRefreshListener {
+        implements SwipeRefreshLayoutOverlay.OnRefreshListener {
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-    @Inject Picasso picasso;
-    @Inject Bus bus;
-    @Inject JobManager jobManager;
+    @Inject
+    Picasso picasso;
+    @Inject
+    Bus bus;
+    @Inject
+    JobManager jobManager;
 
-    @InjectView(R.id.timeline_list) ListView listView;
-    @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_watching_container) View watchingContainer;
-    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @InjectView(R.id.timeline_list)
+    ListView listView;
+    @InjectView(R.id.timeline_new)
+    View newShotView;
+    @InjectView(R.id.timeline_watching_container)
+    View watchingContainer;
+    @InjectView(R.id.timeline_swipe_refresh)
+    SwipeRefreshLayoutOverlay swipeRefreshLayout;
 
     private View headerView;
     private View footerView;
@@ -92,7 +98,8 @@ public class TimelineFragment extends BaseFragment
         setHasOptionsMenu(true);
 
         avatarClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
                 openProfile(position);
             }
@@ -109,10 +116,11 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void pollShots() {
-        if(shouldPoll) {
+        if (shouldPoll) {
             new Handler().postDelayed(new Runnable() {
-                @Override public void run() {
-                    if(!shouldPoll) return;
+                @Override
+                public void run() {
+                    if (!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
                         startJob(context, TimelineJob.RETRIEVE_NEWER);
@@ -122,6 +130,7 @@ public class TimelineFragment extends BaseFragment
             }, REFRESH_INTERVAL_MILLISECONDS);
         }
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -157,7 +166,7 @@ public class TimelineFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline, container, false);
     }
 
@@ -175,9 +184,9 @@ public class TimelineFragment extends BaseFragment
 
         // Header and footer
         headerView =
-            LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
+                LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
         footerView =
-            LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
+                LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
         footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
@@ -188,42 +197,42 @@ public class TimelineFragment extends BaseFragment
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
-            R.color.refresh_3, R.color.refresh_4);
+                R.color.refresh_3, R.color.refresh_4);
         swipeRefreshLayout.setTopMargin(watchingHeight);
 
         // List scroll stuff
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
-            new ListViewScrollObserver.OnListViewScrollListener() {
-                public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
+                new ListViewScrollObserver.OnListViewScrollListener() {
+                    public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
-                @Override
-                public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                    // delta negativo: scoll abajo
-                    if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
-                        watchingContainer.animate()
-                            .setInterpolator(mInterpolator)
-                            .setDuration(200)
-                            .translationY(-watchingHeight);
-                    } else if (delta > 10) { // Show
-                        watchingContainer.animate()
-                            .setInterpolator(mInterpolator)
-                            .setDuration(200)
-                            .translationY(0)
-                            .start();
-                    }
-                }
-
-                @Override
-                public void onScrollIdle() {
-                    int lastVisiblePosition = listView.getLastVisiblePosition();
-                    if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
-                        Context context = getActivity();
-                        if (context != null) {
-                            startLoadMoreShots(context);
+                    @Override
+                    public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                        // delta negativo: scoll abajo
+                        if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
+                            watchingContainer.animate()
+                                    .setInterpolator(mInterpolator)
+                                    .setDuration(200)
+                                    .translationY(-watchingHeight);
+                        } else if (delta > 10) { // Show
+                            watchingContainer.animate()
+                                    .setInterpolator(mInterpolator)
+                                    .setDuration(200)
+                                    .translationY(0)
+                                    .start();
                         }
                     }
-                }
-            });
+
+                    @Override
+                    public void onScrollIdle() {
+                        int lastVisiblePosition = listView.getLastVisiblePosition();
+                        if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
+                            Context context = getActivity();
+                            if (context != null) {
+                                startLoadMoreShots(context);
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -269,8 +278,8 @@ public class TimelineFragment extends BaseFragment
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
         Bundle anim =
-            ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
-                newShotView.getHeight()).toBundle();
+                ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
+                        newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), NewShotActivity.class);
         intent.putExtras(anim);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
@@ -284,7 +293,7 @@ public class TimelineFragment extends BaseFragment
         User user = shot.getUser();
 
         Toast.makeText(getActivity(), "Shot " + user.toString() + "---" + shot.getUser().getName(),
-            Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();
 
         Timber.d("Clicked shot %d", position);
     }
@@ -306,9 +315,9 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void startJob(Context context,int typeRetrieve){
+    private void startJob(Context context, int typeRetrieve) {
         TimelineJob job = GolesApplication.get(context).getObjectGraph().get(TimelineJob.class);
-        job.init(currentUser,typeRetrieve);
+        job.init(currentUser, typeRetrieve);
         jobManager.addJobInBackground(job);
     }
 

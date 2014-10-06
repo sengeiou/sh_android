@@ -23,10 +23,8 @@ import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.task.jobs.JobModule;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.FollowingUsersActivity;
-import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.FollowingUsersFragment;
@@ -56,6 +54,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 @Module(
         injects = {
+                AbstractManager.class,
+
                 BaseSignedInActivity.class,
 
                 CancellableJob.class,
@@ -92,7 +92,6 @@ import static android.content.Context.MODE_PRIVATE;
         },
         includes = {
                 ApiModule.class,
-                JobModule.class,
                 PreferenceModule.class
         },
         complete = false,
@@ -105,11 +104,6 @@ public class DataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new OpenHelper(application.getApplicationContext());
-    }
-
-    @Provides
-    SQLiteDatabase provideDatabase(Application app){
-        return provideSQLiteOpenHelper(app).getWritableDatabase();
     }
 
     @Provides  UserManager provideUserManager(){

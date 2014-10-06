@@ -1,8 +1,6 @@
 package gm.mobi.android.task.jobs.shots;
 
 import android.app.Application;
-import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
@@ -14,7 +12,6 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
-import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -27,19 +24,24 @@ public class NewShotJob extends CancellableJob{
 
     private static final int PRIORITY = 5;
 
-    @Inject Application app;
-    @Inject NetworkUtil networkUtil;
-    @Inject Bus bus;
-    @Inject BagdadService service;
+    Application app;
+    NetworkUtil networkUtil;
+    Bus bus;
+    BagdadService service;
     private User currentUser;
     private String comment;
 
-    public NewShotJob(Context context, User currentUser, String comment) {
+    @Inject public NewShotJob(Application context, NetworkUtil networkUtil, Bus bus, BagdadService service) {
         super(new Params(PRIORITY));
+        this.app = context;
+        this.networkUtil = networkUtil;
+        this.bus = bus;
+        this.service = service;
+    }
+
+    public void init(User currentUser, String comment){
         this.currentUser = currentUser;
         this.comment = comment;
-
-        GolesApplication.get(context).inject(this);
     }
 
     @Override

@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowingJob;
 import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
@@ -24,17 +25,23 @@ import gm.mobi.android.ui.fragments.ProfileFragment;
 
 @Module(
         injects = {
-                GetFacebookProfileJob.class,
-                LoginUserJob.class,
-                TimelineJob.class,
-                GetUserInfoJob.class,
-                GetFollowingsJob.class,
-                RegisterNewUserJob.class,
-                ProfileFragment.class,
-                ProfileContainerActivity.class,
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
-                FacebookRegistroActivity.class
+                FacebookRegistroActivity.class,
+
+                GetUsersFollowingJob.class,
+                GetFacebookProfileJob.class,
+                GetUserInfoJob.class,
+                GetFollowingsJob.class,
+
+                LoginUserJob.class,
+
+                ProfileFragment.class,
+                ProfileContainerActivity.class,
+
+                RegisterNewUserJob.class,
+
+                TimelineJob.class,
         },
         complete = false
 )

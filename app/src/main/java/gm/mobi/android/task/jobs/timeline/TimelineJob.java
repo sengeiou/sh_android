@@ -52,7 +52,7 @@ public class TimelineJob extends CancellableJob {
     private User currentUser;
 
     @Inject
-    public TimelineJob(Application context,Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager,FollowManager followManager, SQLiteOpenHelper dbHelper, SQLiteDatabase db) {
+    public TimelineJob(Application context,Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager,FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(new Params(PRIORITY));
         this.app = context;
         this.bus = bus;
@@ -61,7 +61,6 @@ public class TimelineJob extends CancellableJob {
         this.shotManager = shotManager;
         this.followManager = followManager;
         this.networkUtil = networkUtil;
-        this.db = db;
     }
 
     public void init(User currentUser, int retrieveType) {
@@ -76,7 +75,7 @@ public class TimelineJob extends CancellableJob {
 
     @Override
     protected void createDatabase() {
-        createWritableDb();
+        db = createWritableDb();
     }
 
     @Override
