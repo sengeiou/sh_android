@@ -137,6 +137,7 @@ public class MainActivity extends BaseSignedInActivity {
     @OnItemClick(R.id.menu_drawer_list)
     public void selectDrawerItem(int position) {
         if (currentSelectedDrawerPosition == position) {
+            showDrawer(false);
             return;
         }
         MenuAdapter.MenuItem selectedItem = menuAdapter.getItem(position);
@@ -235,6 +236,14 @@ public class MainActivity extends BaseSignedInActivity {
         currentTitle = title;
     }
 
+    private void showDrawer(boolean show) {
+        if (show) {
+            drawerLayout.openDrawer(Gravity.LEFT);
+        } else {
+            drawerLayout.closeDrawer(Gravity.LEFT);
+        }
+    }
+
     private List<MenuAdapter.MenuItem> getDrawerMenu() {
         MenuAdapter.MenuItem[] menuItems = {
             new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
@@ -307,11 +316,16 @@ public class MainActivity extends BaseSignedInActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
-        if (f instanceof TimelineFragment || f instanceof InitialSetupFragment) {
-            super.onBackPressed();
-        } else {
-            selectDrawerItem(0);
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            showDrawer(false);
+        }else{
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
+            if (f instanceof TimelineFragment || f instanceof InitialSetupFragment) {
+                super.onBackPressed();
+            } else {
+                selectDrawerItem(0);
+            }
         }
     }
+
 }
