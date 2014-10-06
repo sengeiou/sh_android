@@ -1,6 +1,8 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
+import android.content.Context;
+import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
@@ -19,6 +21,7 @@ import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
@@ -53,9 +56,11 @@ public class GetUsersFollowingJobTest {
         assertThat(mockService).isNotNull();
 
         Bus mockBus = mock(Bus.class);
+        NetworkUtil mockNetworkUtil = mock(NetworkUtil.class);
+        when(mockNetworkUtil.isConnected(any(Context.class))).thenReturn(true);
 
         GetUsersFollowingJob getUsersFollowingJob =
-            new GetUsersFollowingJob(application, mockBus, mockService);
+            new GetUsersFollowingJob(application, mockBus, mockService, mockNetworkUtil);
         getUsersFollowingJob.init(1L);
         try {
             getUsersFollowingJob.run();
