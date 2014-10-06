@@ -28,7 +28,12 @@ public class EntityCacheManagerToEntityCacheManagerDto extends Mapper<EntityCach
 		
 		int i=0;
 		for (EntityCache entityCache : origin.getEntitiesCacheConfigurations()) {
-			caches[i++] = (EntityCacheDto)Mapper.Map(entityCache);
+			
+			EntityCacheDto entityCacheDto = (EntityCacheDto)Mapper.Map(entityCache);
+			
+			entityCacheDto.setManagerName(origin.getName());
+			
+			caches[i++] = entityCacheDto;
 		}
 		
 		entityCacheManager.setCaches(caches);
