@@ -27,6 +27,7 @@
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
+     
     if ([self checkIfImFollowingUser:user])
 		[self configureFollowingButton];
 		

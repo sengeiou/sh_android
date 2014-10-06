@@ -96,11 +96,23 @@
 }
 
 - (void)configureFollowButton {
-	
-	if ([[UserManager singleton] isLoggedUserFollowing:self.selectedUser])
+    
+    if ([self.selectedUser isEqual:[[UserManager sharedInstance] getActiveUser]]) {
+        [self setEditProfile];
+    }else if ([[UserManager singleton] isLoggedUserFollowing:self.selectedUser])
 		[self setFollowToYes];
 	else
 		[self setFollowToNo];
+}
+
+- (void)setEditProfile {
+    [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+    [self.btnFollow setTitle:@"EDIT PROFILE" forState:UIControlStateNormal];
+    self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
+    self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+    self.btnFollow.backgroundColor = [UIColor whiteColor];
+    self.btnFollow.layer.borderWidth = 1.0f;
+    self.btnFollow.layer.masksToBounds = YES;
 }
 
 - (void)setFollowToNo {
