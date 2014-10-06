@@ -80,7 +80,7 @@
     
     [self.actionButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -15.0f, 0.0f, 0.0f);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
     [self.actionButton setContentEdgeInsets:contentInsets];
 
 }
