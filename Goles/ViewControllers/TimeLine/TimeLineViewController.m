@@ -27,6 +27,8 @@
     BOOL refreshTable;
     float rows;
     CGRect previousRect;
+
+    UITapGestureRecognizer *tapTapRecognizer;
 }
 
 @property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
@@ -492,9 +494,9 @@
 #pragma mark - KEYBOARD
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
-   
+    
     self.txtView.textColor = [UIColor blackColor];
-
+    
     if (rows >= 3)
         self.charactersLeft.hidden = NO;
     else
@@ -502,18 +504,19 @@
     
     if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
         self.txtView.text = nil;
-
+    
     [self darkenBackgroundView];
-    
-    
+
+
     self.timelineTableView.scrollEnabled = NO;
+
     [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-                         self.bottomViewPositionConstraint.constant = [self getKeyboardHeight:notification];
-                         [self.view layoutIfNeeded];
-                     } completion:NULL];
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseIn
+                         animations:^{
+                             self.bottomViewPositionConstraint.constant = [self getKeyboardHeight:notification];
+                             [self.view layoutIfNeeded];
+                         } completion:NULL];
 
 }
 
@@ -532,42 +535,53 @@
 - (void)darkenBackgroundView {
     
     self.backgroundView.hidden = NO;
-    UITapGestureRecognizer *tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-    [self.backgroundView addGestureRecognizer:tapTapRecognizer];
-
+    
+    if (tapTapRecognizer == nil){
+        tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+        [self.backgroundView addGestureRecognizer:tapTapRecognizer];
+        self.orientation = NO;
+    }
 }
-
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    UITouch *touch = [touches anyObject];
+//    CGPoint firstTouch = [touch locationInView:self.view];
+    self.orientation = NO;
+   
+}
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
-    
-    self.backgroundView.hidden = YES;
-    
-    
-    [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
-    self.timelineTableView.scrollEnabled = YES;
-    
-    [self.txtView resignFirstResponder];
-    
-    if (self.textComment.length == 0){
-        self.txtView.text = CREATE_SHOT_PLACEHOLDER;
-        rows = 0;
-    }
-    
-    self.txtView.textColor = [UIColor lightGrayColor];
-    
-    if (rows == 0 || rows == 1) {
-        self.bottomViewHeightConstraint.constant = 75;
-        self.bottomViewPositionConstraint.constant = 0.0f;
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view layoutIfNeeded];
-        }];
-    }else{
-        self.bottomViewHeightConstraint.constant = (rows*18)+75;
-        self.bottomViewPositionConstraint.constant = 0.0f;
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view layoutIfNeeded];
-        }];
-    
+
+    if (!self.orientation){
+
+        self.backgroundView.hidden = YES;
+        
+        
+        [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        self.timelineTableView.scrollEnabled = YES;
+        
+        [self.txtView resignFirstResponder];
+        
+        if (self.textComment.length == 0){
+            self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+            rows = 0;
+        }
+        
+        self.txtView.textColor = [UIColor lightGrayColor];
+        
+        if (rows == 0 || rows == 1) {
+            self.bottomViewHeightConstraint.constant = 75;
+            self.bottomViewPositionConstraint.constant = 0.0f;
+            [UIView animateWithDuration:0.25f animations:^{
+                [self.view layoutIfNeeded];
+            }];
+        }else{
+            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            self.bottomViewPositionConstraint.constant = 0.0f;
+            [UIView animateWithDuration:0.25f animations:^{
+                [self.view layoutIfNeeded];
+            }];
+        
+        }
     }
 }
 
@@ -664,7 +678,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - Webservice response methods
+#pragma mark - Orientation methods
 -(void) restrictRotation:(BOOL) restriction
 {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -673,6 +687,7 @@
 
 - (void)orientationChanged:(NSNotification *)notification{
     [self restrictRotation:NO];
+    self.orientation = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

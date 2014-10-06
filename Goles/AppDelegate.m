@@ -43,6 +43,7 @@
 @property (nonatomic,strong)      UITabBarItem            *tabBarMe;
 @property (nonatomic,strong)      UITabBarController      *tabBarController;
 @property (nonatomic)             BOOL                    waitingForAPNS;
+@property (nonatomic, strong)     TimeLineViewController *timelineVC;
 
 @end
 
@@ -100,18 +101,6 @@
     return YES;
 }
 
--(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-	
-   
-    if(self.restrictRotation){
-        NSLog(@"SOLOOOOOOOO");
-        return UIInterfaceOrientationMaskPortrait;
-    }else{
-         NSLog(@"TODAS");
-        return UIInterfaceOrientationMaskAll;
-    }
-}
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
    [[[SyncManager singleton] synchroTimer] invalidate];
@@ -163,8 +152,8 @@
     UINavigationController *navPeopleVC = [[UINavigationController alloc]initWithRootViewController:peopleVC];
 
     self.timelineSB = [UIStoryboard storyboardWithName:@"Timeline" bundle:nil];
-    TimeLineViewController *timelineVC = [self.timelineSB instantiateViewControllerWithIdentifier:@"timelineVC"];
-    UINavigationController *navTimelineVC = [[UINavigationController alloc]initWithRootViewController:timelineVC];
+    self.timelineVC = [self.timelineSB instantiateViewControllerWithIdentifier:@"timelineVC"];
+    UINavigationController *navTimelineVC = [[UINavigationController alloc]initWithRootViewController:self.timelineVC];
 
     
     self.meSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
@@ -174,7 +163,7 @@
     
     navPeopleVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PeopleTabTitle", nil) image:[UIImage imageNamed:@"Icon_People_OFF"] selectedImage:[UIImage imageNamed:@"Icon_People_ON"]];
     
-    timelineVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"TimelineTabTitle", nil) image:[UIImage imageNamed:@"Icon_Timeline_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Timeline_ON"]];
+    self.timelineVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"TimelineTabTitle", nil) image:[UIImage imageNamed:@"Icon_Timeline_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Timeline_ON"]];
     
     navMeVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"MeTabTitle", nil) image:[UIImage imageNamed:@"Icon_Me_OFF"] selectedImage:[UIImage imageNamed:@"Icon_Me_ON"]];
     
@@ -337,6 +326,20 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh {
     
+}
+
+#pragma mark - Orientation methods
+-(NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if(self.restrictRotation){
+        
+        NSLog(@"SOLOOOOOOOO");
+        return UIInterfaceOrientationMaskPortrait;
+    }else{
+        NSLog(@"TODAS");
+        self.timelineVC.orientation = YES;
+        return UIInterfaceOrientationMaskAll;
+    }
 }
 
 

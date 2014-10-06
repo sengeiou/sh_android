@@ -113,7 +113,7 @@
     }
 }
 
-#pragma mark - Rotation
+#pragma mark - Orientation methods
 //------------------------------------------------------------------------------
 -(void) restrictRotation:(BOOL) restriction {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
