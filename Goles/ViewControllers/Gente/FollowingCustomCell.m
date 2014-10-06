@@ -66,23 +66,24 @@
 
 - (void)configureFollowButton {
 
-	[self.actionButton setTitle:@"+ FOLLOW" forState:UIControlStateNormal];
-	self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
+    [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+    [self.actionButton setTitle:@"+ FOLLOW" forState:UIControlStateNormal];
+    self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+    self.actionButton.backgroundColor = [UIColor whiteColor];
+    self.actionButton.layer.borderWidth = 1.0f;
+    self.actionButton.layer.masksToBounds = YES;
+    
 }
 
 - (void)configureFollowingButton {
-	
-	[self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-	[self.actionButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
-	self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-	self.actionButton.backgroundColor = [UIColor whiteColor];
-	self.actionButton.layer.borderWidth = 1.0f;
-	self.actionButton.layer.masksToBounds = YES;
-    
+
+    [self.actionButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
     
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
     [self.actionButton setContentEdgeInsets:contentInsets];
+
 
 }
 
