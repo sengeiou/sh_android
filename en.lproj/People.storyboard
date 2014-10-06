@@ -15,7 +15,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="70" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="60" id="4lB-3y-FTm" customClass="FollowingCustomCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="peopleCell" rowHeight="60" id="4lB-3y-FTm" customClass="PeopleCustomCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4lB-3y-FTm" id="YPB-aX-N7p">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -37,7 +37,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1dO-mc-LvY">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1dO-mc-LvY">
                                             <rect key="frame" x="71" y="9" width="388" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="5hU-HJ-kW0"/>
@@ -46,7 +46,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGe-Mz-EQv">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGe-Mz-EQv">
                                             <rect key="frame" x="71" y="28" width="388" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="VXq-9t-Jiw"/>
@@ -55,21 +55,8 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3VV-Hp-5NY">
-                                            <rect key="frame" x="469" y="15" width="120" height="28"/>
-                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="120" id="HIO-vW-bQD"/>
-                                                <constraint firstAttribute="height" constant="28" id="mDa-Dc-fO2"/>
-                                            </constraints>
-                                            <state key="normal" title="Following">
-                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="trailing" secondItem="YPB-aX-N7p" secondAttribute="trailingMargin" constant="-3" id="2DD-9s-t1b"/>
                                         <constraint firstItem="drq-bX-CxN" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="12" id="2uA-CY-wyl"/>
                                         <constraint firstItem="VzF-Nx-7Z9" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="-8" id="4g3-Fa-B2w"/>
                                         <constraint firstItem="drq-bX-CxN" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="2" id="AAE-kn-Vks"/>
@@ -77,15 +64,11 @@
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="leading" secondItem="drq-bX-CxN" secondAttribute="trailing" constant="13" id="IQH-cd-ZtU"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="top" secondItem="1dO-mc-LvY" secondAttribute="bottom" constant="-2" id="IQO-Ci-Nn6"/>
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="1" id="PA9-vI-QFg"/>
-                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="leading" secondItem="EGe-Mz-EQv" secondAttribute="trailing" priority="500" constant="10" id="QTl-yz-iBt"/>
-                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="leading" secondItem="1dO-mc-LvY" secondAttribute="trailing" constant="10" id="Wg8-l5-ycI"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="leading" secondItem="drq-bX-CxN" secondAttribute="trailing" constant="13" id="Ykt-qf-Fgx"/>
                                         <constraint firstItem="VzF-Nx-7Z9" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="-8" id="ei3-a8-CPK"/>
-                                        <constraint firstItem="3VV-Hp-5NY" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="7" id="k76-8R-9Hi"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="actionButton" destination="3VV-Hp-5NY" id="gub-KU-uYh"/>
                                     <outlet property="imgPhoto" destination="drq-bX-CxN" id="uyG-uY-1v0"/>
                                     <outlet property="nickName" destination="EGe-Mz-EQv" id="HJ6-bW-kua"/>
                                     <outlet property="photobutton" destination="VzF-Nx-7Z9" id="8wf-ji-z8t"/>

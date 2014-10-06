@@ -8,7 +8,7 @@
 
 #import "PeopleTableViewController.h"
 #import "UserManager.h"
-#import "FollowingCustomCell.h"
+#import "PeopleCustomCell.h"
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
 #import "Conection.h"
@@ -58,11 +58,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	static NSString *CellIdentifier = @"followingCell";
-	FollowingCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+	static NSString *CellIdentifier = @"peopleCell";
+	PeopleCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	User *user = [self.followingUsers objectAtIndex:indexPath.row];
 	[cell configureCellWithUser:user inRow:indexPath];
-	[cell addTarget:self action:@selector(goProfile:)];
 	
 	return cell;
 }

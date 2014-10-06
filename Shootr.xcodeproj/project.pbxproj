@@ -27,6 +27,7 @@
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
+		AA16C88819E2E9D600B86625 /* PeopleCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */; };
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
@@ -152,6 +153,8 @@
 		A5E3E2081999206C00322727 /* defaultDataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultDataBase.sqlite; sourceTree = "<group>"; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
 		AA05ADFD199A6E320046EB6F /* FilterCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCreation.m; sourceTree = "<group>"; };
+		AA16C88619E2E9D600B86625 /* PeopleCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleCustomCell.h; sourceTree = "<group>"; };
+		AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleCustomCell.m; sourceTree = "<group>"; };
 		AA241F81199CFB4900897D6D /* SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncControl.h; sourceTree = "<group>"; };
 		AA241F82199CFB4900897D6D /* SyncControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncControl.m; sourceTree = "<group>"; };
 		AA241F84199CFB5200897D6D /* _SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SyncControl.h; sourceTree = "<group>"; };
@@ -684,6 +687,8 @@
 				AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */,
 				AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */,
 				AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */,
+				AA16C88619E2E9D600B86625 /* PeopleCustomCell.h */,
+				AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */,
 			);
 			name = People;
 			path = ViewControllers/Gente;
@@ -906,6 +911,7 @@
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
 				AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */,
+				AA16C88819E2E9D600B86625 /* PeopleCustomCell.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
