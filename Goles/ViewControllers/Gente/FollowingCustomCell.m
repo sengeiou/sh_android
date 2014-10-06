@@ -78,6 +78,12 @@
 	self.actionButton.backgroundColor = [UIColor whiteColor];
 	self.actionButton.layer.borderWidth = 1.5f;
 	self.actionButton.layer.masksToBounds = YES;
+    
+    [self.actionButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -15.0f, 0.0f, 0.0f);
+    [self.actionButton setContentEdgeInsets:contentInsets];
+
 }
 
 - (BOOL)checkIfImFollowingUser:(User *)user {

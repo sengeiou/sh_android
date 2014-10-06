@@ -38,9 +38,22 @@
 
 @implementation ProfileViewController
 
+//- (id)initWithCoder:(NSCoder*)aDecoder
+//{
+//    if(self = [super initWithCoder:aDecoder]) {
+//        UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
+//                                    initWithTitle:@" "
+//                                    style:UIBarButtonItemStylePlain
+//                                    target:self
+//                                    action:nil];
+//        self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
+//    }
+//    return self;
+//}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+   
     [self restrictRotation:YES];
     [self customView];
     [self dataFillView];
@@ -50,8 +63,15 @@
 }
 
 - (void)customView{
-    self.navigationController.navigationBar.topItem.title = @"";
+    
+    UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
+                                initWithTitle:@" "
+                                style:UIBarButtonItemStylePlain
+                                target:self
+                                action:nil];
+    self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
 
+    
     self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
     self.btnFollow.clipsToBounds = YES;
 }
@@ -100,6 +120,11 @@
 	self.btnFollow.backgroundColor = [UIColor whiteColor];
 	self.btnFollow.layer.borderWidth = 1.5f;
 	self.btnFollow.layer.masksToBounds = YES;
+   
+    [self.btnFollow setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -15.0f, 0.0f, 0.0f);
+    [self.btnFollow setContentEdgeInsets:contentInsets];
 }
 
 - (void)receivedImage{

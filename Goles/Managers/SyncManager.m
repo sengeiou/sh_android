@@ -68,8 +68,12 @@
 - (void)beginEntitiesProcessing:(NSTimer *)timer {
 
     //First step in syncro, send all entities with csys_syncrhonized != S
+    [self performSelectorInBackground:@selector(star) withObject:nil];
+}
+
+-(void)star{
     [self sendUpdatesToServerWithDelegate:self];
-    
+
 }
 
 #pragma mark - Upload data request

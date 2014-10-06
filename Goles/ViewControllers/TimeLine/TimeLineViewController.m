@@ -170,10 +170,7 @@
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //self.title = @"Timeline";
-    self.navigationController.navigationBar.topItem.title = @"Timeline";
-
-    //self.navigationItem.title = @"Timeline";
+     self.title = @"Timeline";
 }
 
 
