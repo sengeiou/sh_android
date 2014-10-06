@@ -24,6 +24,7 @@
 - (NSString *)getUserSessionToken;
 - (NSArray *)getActiveUsersIDs;
 - (NSArray *)getFollowingUsersOfUser:(User *)user;
+- (NSArray *)getFollowingPeopleForMe;
 - (NSArray *)getFollowersOfUser:(User *)user;
 - (BOOL)isLoggedUserFollowing:(User *)user;
 

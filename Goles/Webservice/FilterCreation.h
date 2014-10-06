@@ -15,5 +15,6 @@
 + (NSDictionary *)getFilterForOldShots;
 + (NSDictionary *)getFilterForFollowingsOfUser:(User *)user;
 + (NSDictionary *)getFilterForFollowersOfUser:(User *)user;
++ (NSDictionary *)getFilterForUser:(User *)user;
 
 @end

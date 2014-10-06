@@ -95,7 +95,7 @@
     if (status && !error){
         
         if ([entityClass isSubclassOfClass:[Follow class]])
-            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+            [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]])
             [self reloadDataAndTable];
     }

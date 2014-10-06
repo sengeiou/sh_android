@@ -142,6 +142,28 @@
 }
 
 //------------------------------------------------------------------------------
+- (NSArray *)getFollowingPeopleForMe {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+    for (Follow *obj in follows) {
+        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
+        if (user)
+            [idUsersArray addObject:user];
+    }
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    NSArray *sortedArray = [idUsersArray sortedArrayUsingDescriptors:descriptors];
+    
+    if (sortedArray.count > 0)
+        return sortedArray;
+    
+    return nil;
+}
+
+//------------------------------------------------------------------------------
 - (NSArray *)getFollowersOfUser:(User *)user {
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@",user.idUser];

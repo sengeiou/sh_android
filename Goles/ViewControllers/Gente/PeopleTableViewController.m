@@ -41,7 +41,7 @@
 
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
+    self.followingUsers = [[UserManager singleton] getFollowingPeopleForMe];
     
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
@@ -87,7 +87,7 @@
 //------------------------------------------------------------------------------
 - (void)reloadDataAndTable {
     
-    self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
+    self.followingUsers = [[UserManager singleton] getFollowingPeopleForMe];
     [self.usersTable reloadData];
 }
 

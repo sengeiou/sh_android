@@ -45,7 +45,6 @@
 		}
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[@{K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS: K_WS_OPS_OR},filterDate]}};
         
-//        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:@[filterDate]}};
         return filter;
     }
     
@@ -66,6 +65,25 @@
     }
     
     return @{};
+}
+
++ (NSDictionary *)getFilterForUser:(User *)user {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+    for (Follow *followedUser in follows) {
+        [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:followedUser.idUserFollowed}];
+    }
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:@0},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_GE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:@0}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[@{K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS: K_WS_OPS_OR},filterDate]}};
+    
+    return filter;
+
 }
 
 //-----------------------------------------------------------------------------
