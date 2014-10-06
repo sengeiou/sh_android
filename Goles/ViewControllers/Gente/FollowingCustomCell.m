@@ -46,7 +46,6 @@
             self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
             self.imgPhoto.clipsToBounds = YES;
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
-            NSLog(@"success: %@", NSStringFromCGSize([image size]));
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             NSLog(@"%@", response);
         }];
