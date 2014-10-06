@@ -604,7 +604,7 @@
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
 	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
-    NSLog(@"rowwws: %f", rows);
+    
 	if (rows > 1) {
 		self.bottomViewHeightConstraint.constant = (rows*18)+75;
 		[UIView animateWithDuration:0.25f animations:^{
