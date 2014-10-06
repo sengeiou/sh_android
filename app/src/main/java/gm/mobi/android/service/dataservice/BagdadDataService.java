@@ -154,7 +154,7 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<Shot> shots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, 1000l);
+        GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
