@@ -45,7 +45,7 @@ public class NewShotActivity extends BaseSignedInActivity {
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
     @InjectView(R.id.new_shot_subtitle) TextView username;
-    @InjectView(R.id.new_shot_text) EditText text;
+    @InjectView(R.id.new_shot_text) EditText editTextView;
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
     @InjectView(R.id.new_shot_send_button) TextView sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
@@ -96,32 +96,33 @@ public class NewShotActivity extends BaseSignedInActivity {
 
     private void setTextReceivedFromIntent() {
         String sentText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        text.setText(sentText);
+        editTextView.setText(sentText);
     }
 
     @OnTextChanged(R.id.new_shot_text)
     public void textChanged() {
-        // We don't trim or filter the text for character checking, so the user doesn't see incoherences.
-        String text = this.text.getText().toString();
-        int textLength = text.length();
-        // Send button disabled when no text
-        sendButton.setEnabled(isValidComment(text));
-        // Set remaining characters
-        int remainingLength = MAX_LENGTH - textLength;
-        charCounter.setText(String.valueOf(remainingLength));
-
-        setCharCounterStatus(remainingLength > 0);
+        String filteredText = getFilteredText();
+        setCharCounterStatus(filteredText);
+        setSendButtonIsEnabled(filteredText);
     }
 
-    private void setCharCounterStatus(boolean valid) {
-        charCounter.setTextColor(valid ? charCounterColorNormal : charCounterColorError);
+    private void setSendButtonIsEnabled(String currentText) {
+        sendButton.setEnabled(isValidComment(currentText));
+    }
+
+    private void setCharCounterStatus(String currentText) {
+        int remainingLength = MAX_LENGTH - currentText.length();
+        charCounter.setText(String.valueOf(remainingLength));
+
+        boolean isValidLenght = remainingLength > 0;
+        charCounter.setTextColor(isValidLenght ? charCounterColorNormal : charCounterColorError);
     }
 
     @OnClick(R.id.new_shot_send_button)
     public void sendShot() {
-        String comment = filteredText(text.getText().toString());
+        String comment = filterText(editTextView.getText().toString());
         InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        im.hideSoftInputFromWindow(text.getWindowToken(), 0);
+        im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
 
         if (isCommentRepeated(comment)) {
             Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
@@ -132,7 +133,7 @@ public class NewShotActivity extends BaseSignedInActivity {
             setProgressUI(true);
         } else {
             Timber.i("Comment invalid: \"%s\"", comment);
-            Toast.makeText(this, "Invalid text", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid editTextView", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -160,8 +161,11 @@ public class NewShotActivity extends BaseSignedInActivity {
         sendButton.setVisibility(showProgress ? View.GONE : View.VISIBLE);
     }
 
-    private String filteredText(String originalText) {
-        //TODO definir criterio de filtrado de caracteres
+    private String getFilteredText() {
+        return filterText(editTextView.getText().toString());
+    }
+
+    private String filterText(String originalText) {
         String trimmed = originalText.trim();
         while (trimmed.contains("\n\n\n")) {
             trimmed = trimmed.replace("\n\n\n", "\n\n");
@@ -195,7 +199,7 @@ public class NewShotActivity extends BaseSignedInActivity {
 
     @Override
     public void onBackPressed() {
-        if (TextUtils.isEmpty(text.getText().toString().trim())) {
+        if (TextUtils.isEmpty(editTextView.getText().toString().trim())) {
             super.onBackPressed();
         } else {
             new AlertDialog.Builder(this).setMessage("Discard shot?")
