@@ -30,7 +30,6 @@
 
 @property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
 @property (weak, nonatomic) IBOutlet UIButton *btnWatching;
-@property (weak, nonatomic) IBOutlet UIButton *btnSearch;
 @property (weak, nonatomic) IBOutlet UIButton *btnInfo;
 @property (weak, nonatomic) IBOutlet UITextView *txtView;
 @property (weak, nonatomic) IBOutlet UIButton *btnShoot;
@@ -544,15 +543,17 @@
 -(void)keyboardHide:(NSNotification*)notification{
     
     self.backgroundView.hidden = YES;
-    self.charactersLeft.hidden = YES;
+    
     
     [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.scrollEnabled = YES;
     
     [self.txtView resignFirstResponder];
     
-    if (self.txtView.text.length == 0)
+    if (self.textComment.length == 0){
         self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+        rows = 0;
+    }
     
     self.txtView.textColor = [UIColor lightGrayColor];
     
@@ -568,10 +569,11 @@
 
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-
-    lengthTextField = self.txtView.text.length - range.length + text.length;
-    
+   
     NSString* result = [self controlCharactersShot];
+
+    lengthTextField = result.length - range.length + text.length;
+    
 
     if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
@@ -602,6 +604,7 @@
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
 	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+    NSLog(@"rowwws: %f", rows);
 	if (rows > 1) {
 		self.bottomViewHeightConstraint.constant = (rows*18)+75;
 		[UIView animateWithDuration:0.25f animations:^{
