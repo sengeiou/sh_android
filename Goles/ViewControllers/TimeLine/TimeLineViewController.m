@@ -25,6 +25,7 @@
     NSUInteger lengthTextField;
     BOOL moreCells;
     BOOL refreshTable;
+    float rows;
 }
 
 @property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
@@ -103,7 +104,7 @@
 - (void)setNavigationBarButtons {
     
     //Search button
-    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStyleBordered target:self action:@selector(search)];
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStylePlain target:self action:@selector(search)];
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
     self.navigationItem.leftBarButtonItem = btnSearch;
 	
@@ -337,6 +338,7 @@
 //------------------------------------------------------------------------------
 - (void)sendShot{
     self.btnShoot.enabled = NO;
+    
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
 
@@ -402,11 +404,15 @@
 -(void)showAlert{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alert show];
+    
+    self.btnShoot.enabled = YES;
 }
 
--(void)controlCharactersShot{
+-(NSString *)controlCharactersShot{
     self.textComment = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     self.textComment = [self.textComment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    return self.textComment;
 }
 
 #pragma mark - Reload methods
@@ -428,6 +434,7 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
+        rows = 0;
         [self keyboardHide:nil];
         self.txtView.text = nil;
         [self reloadShotsTable:nil];
@@ -491,13 +498,16 @@
     
     self.txtView.textColor = [UIColor blackColor];
 
+    if (rows >= 3)
+        self.charactersLeft.hidden = NO;
+    else
+        self.charactersLeft.hidden = YES;
+    
     if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
         self.txtView.text = nil;
     
     [self darkenBackgroundView];
     
-    if (lengthTextField > 0)
-         self.charactersLeft.hidden = NO;
     
     self.timelineTableView.scrollEnabled = NO;
     [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
@@ -535,6 +545,7 @@
     
     self.backgroundView.hidden = YES;
     self.charactersLeft.hidden = YES;
+    
     [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.scrollEnabled = YES;
     
@@ -560,11 +571,11 @@
 
     lengthTextField = self.txtView.text.length - range.length + text.length;
     
-    NSString* result = [self.txtView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString* result = [self controlCharactersShot];
 
     if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
-		float rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+		rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
 		if (rows >= 3)
 			self.charactersLeft.hidden = NO;
     }
@@ -590,7 +601,7 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-	float rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
 	if (rows > 1) {
 		self.bottomViewHeightConstraint.constant = (rows*18)+75;
 		[UIView animateWithDuration:0.25f animations:^{
