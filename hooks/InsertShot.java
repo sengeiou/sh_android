@@ -79,6 +79,7 @@ public class InsertShot implements GenericServiceHook {
                             while (text.contains("\n\n\n")) {
                                 text = text.replaceAll("\n\n\n", "\n\n");
                             }
+                            text = text.trim();
                             entry.setValue(text);
                         }
 
