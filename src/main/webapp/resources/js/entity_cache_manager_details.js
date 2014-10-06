@@ -62,14 +62,13 @@ var cachesDiskSizeChartData = {
 };
 
 /**
- * Pinta en pantalla los gráficos de las dimensiones relativas de esta caché,
+ * Pinta en pantalla los gráficos de las dimensiones relativas de las cachés,
  * respecto a su gestor.
  * 
- * 
  * @param cacheManager Nombre del gestor de cachés.
- * @param cachesHeapSize Nombre del gráfico histórico de Hits y Adds a nivel de memoria.
+ * @param cachesHeapSize Nombre del gráfico de distribución de usa a nivel de memoria.
  * @param managerMaxBytesLocalHeap Tamaño en memoria definido para el gestor de cachés.
- * @param cacheDisk Nombre del gráfico de Hits y Adds a nivel de memoria.
+ * @param cachesDiskSize Nombre del gráfico de distribución de usa a nivel de disco.
  * @param managerMaxBytesLocalDisk Tamaño en disco definido para el gestor de cachés.
  */
 function drawCachesSizeDistribution(cacheManager,

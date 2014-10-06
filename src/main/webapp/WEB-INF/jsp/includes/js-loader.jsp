@@ -80,6 +80,8 @@
 			'<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>',
 			// system_cache_monitor.jsp dependency.
 			'<c:url value="/resources/js/system_monitor/cache_monitor.js"/>',
+			// entity_cache_manager_details.jsp dependency.
+			'<c:url value="/resources/js/entity_cache_manager_details.js"/>',
 			// entity_cache_details.jsp dependency.
 			'<c:url value="/resources/js/entity_cache_details.js"/>'
         ],

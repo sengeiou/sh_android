@@ -41,6 +41,9 @@ function ChartHelper(chartId) {
 		else if (this.chartType == "pie") { 
 			this.chart = new Chart(this.canvasContext).Pie(data, options);
 		}
+		else if (this.chartType == "radar") { 
+			this.chart = new Chart(this.canvasContext).Radar(data, options);
+		}
 
 		this.legendContainer.innerHTML = this.chart.generateLegend();
 	}
