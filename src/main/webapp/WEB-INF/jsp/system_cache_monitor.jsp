@@ -95,7 +95,7 @@
 						<div class="col-sx-6 col-md-8">
 							<div class="form-control-group">
 								<div id="cacheHAHeapHistory">
-									<canvas style="width: 100%; height: 100px;" class="form-control" width="" height="100px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" width="" height="200px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
@@ -103,7 +103,7 @@
 						<div class="col-sx-6 col-md-4">
 							<div class="form-control-group">
 								<div id="cacheHAHeap" >
-									<canvas style="width: 100%; height: 209px;" class="form-control" width="" height="209px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" width="" height="200px"></canvas>
                                     <div class="chart-legend"></div>
 								</div>
 							</div>
@@ -119,7 +119,7 @@
 						<div class="col-sx-6 col-md-8">
 							<div class="form-control-group">
 								<div id="cacheHADiskHistory">
-									<canvas style="width: 100%; height: 100px;" class="form-control" id="" width="" height="100px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
@@ -127,7 +127,7 @@
 						<div class="col-sx-6 col-md-4">
 							<div class="form-control-group">
 								<div id="cacheHADisk" >
-									<canvas style="width: 100%; height: 209px;" class="form-control" id="" width="" height="209px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
                                     <div class="chart-legend"></div>
 								</div>
 							</div>
@@ -143,7 +143,7 @@
 						<div class="col-sx-6 col-md-8">
 							<div class="form-control-group">
 								<div id="cacheHeapHistory">
-									<canvas style="width: 100%; height: 100px;" class="form-control" id="" width="" height="100px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
@@ -151,7 +151,7 @@
 						<div class="col-sx-6 col-md-4">
 							<div class="form-control-group">
 								<div id="cacheHeap" >
-									<canvas style="width: 100%; height: 209px;" class="form-control" id="" width="" height="209px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
                                     <div class="chart-legend"></div>
 								</div>
 							</div>
@@ -167,7 +167,7 @@
 						<div class="col-sx-6 col-md-8">
 							<div class="form-control-group">
 								<div id="cacheDiskHistory">
-									<canvas style="width: 100%; height: 100px;" class="form-control" id="" width="" height="100px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
@@ -175,7 +175,7 @@
 						<div class="col-sx-6 col-md-4">
 							<div class="form-control-group">
 								<div id="cacheDisk" >
-									<canvas style="width: 100%; height: 209px;" class="form-control" id="" width="" height="209px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
                                     <div class="chart-legend"></div>
 								</div>
 							</div>

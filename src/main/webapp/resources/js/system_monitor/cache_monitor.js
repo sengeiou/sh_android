@@ -42,7 +42,7 @@ function initCacheMonitor(maxBytesLocalHeap, maxBytesLocalDisk,
 
 	maxLocalHeap = maxBytesLocalHeap;
 	maxLocalDisk = maxBytesLocalDisk;
-	
+
 	cacheHAHeapHistoryChart = ChartHelper(cacheHAHeapHistory);
 	cacheHAHeapChart = ChartHelper(cacheHAHeap);
 
@@ -80,275 +80,215 @@ function monitorRequestWindow(cacheMonitorWindow, isRefresh) {
 	// Lectura de la respuesta.
 	var jsonResponse = JSON.parse(xhr.responseText);
 
-	if (isRefresh == null || !isRefresh) {
+	if (jsonResponse["data"] != null) {
 
-		// Accesos a memoria.
-		if (cacheHAHeapHistoryChart != null) {
+		if (isRefresh == null || !isRefresh) {
+
+			var responseTimestamps = jsonResponse["data"]["Timestamp"];
+			var labels = new Array(responseTimestamps.length);
 
 			var totalHeapHits = 0;
 			var totalHeapMisses = 0;
+			var totalDiskHits = 0;
+			var totalDiskMisses = 0;
+			var totalUsedHeapSpace = 0;
+			var totalUsedDiskSpace = 0;
 
 			var responseTotalHeapHit = jsonResponse["data"]["TotalHeapHit"];
 			var responseTotalHeapMiss = jsonResponse["data"]["TotalHeapMiss"];
-
-			var length = responseTotalHeapHit.length < responseTotalHeapMiss.length ? responseTotalHeapHit.length : responseTotalHeapMiss.length;
-
-			var totalHeapHit = new Array(length);
-			var totalHeapMiss = new Array(length);
-			var labels = new Array(length);
-
-			for (var i=0; i<length; i++) {
-
-				var date = new Date(responseTotalHeapHit[i][0]);
-
-				labels[i] = date.toLocaleString();
-				heapHits = responseTotalHeapHit[i][1];
-				heapMisses = responseTotalHeapMiss[i][1];
-
-				totalHeapHit[i] = heapHits;
-				totalHeapMiss[i] = heapMisses;
-
-				totalHeapHits += heapHits; 
-				totalHeapMisses += heapMisses; 
-			}
-
-			cacheHAHeapHistoryChartData.labels = labels;
-			cacheHAHeapHistoryChartData.datasets[0].data = totalHeapHit;
-			cacheHAHeapHistoryChartData.datasets[1].data = totalHeapMiss;
-
-			cacheHAHeapHistoryChart.createChart("line", cacheHAHeapHistoryChartOptions, cacheHAHeapHistoryChartData);
-
-			if (cacheHAHeapChart != null) {
-
-				cacheHAHeapChartData[0].value = totalHeapHits;
-				cacheHAHeapChartData[1].value = totalHeapMisses;
-
-				cacheHAHeapChart.createChart("pie", cacheHAHeapChartOptions, cacheHAHeapChartData);
-			}
-		}
-		
-		// Accesos a disco.
-		if (cacheHADiskHistoryChart != null) {
-			
-			var totalDiskHits = 0;
-			var totalDiskMisses = 0;
-			
 			var responseTotalDiskHit = jsonResponse["data"]["TotalDiskHit"];
 			var responseTotalDiskMiss = jsonResponse["data"]["TotalDiskMiss"];
-			
-			var length = responseTotalDiskHit.length < responseTotalDiskMiss.length ? responseTotalDiskHit.length : responseTotalDiskMiss.length;
-			
-			var totalDiskHit = new Array(length);
-			var totalDiskMiss = new Array(length);
-			var labels = new Array(length);
-			
-			for (var i=0; i<length; i++) {
-				
-				var date = new Date(responseTotalDiskHit[i][0]);
-				
+			var responseUsedHeapSpace = jsonResponse["data"]["UsedHeapSpace"];
+			var responseUsedDiskSpace = jsonResponse["data"]["UsedDiskSpace"];
+
+			for (var i=0; i<responseTimestamps.length; i++) {
+
+				var date = new Date(responseTimestamps[i]);
 				labels[i] = date.toLocaleString();
-				diskHits = responseTotalDiskHit[i][1];
-				diskMisses = responseTotalDiskMiss[i][1];
-				
-				totalDiskHit[i] = diskHits;
-				totalDiskMiss[i] = diskMisses;
-				
-				totalDiskHits += diskHits; 
-				totalDiskMisses += diskMisses; 
-			}
-			
-			cacheHADiskHistoryChartData.labels = labels;
-			cacheHADiskHistoryChartData.datasets[0].data = totalDiskHit;
-			cacheHADiskHistoryChartData.datasets[1].data = totalDiskMiss;
-			
-			cacheHADiskHistoryChart.createChart("line", cacheHADiskHistoryChartOptions, cacheHADiskHistoryChartData);
-			
-			if (cacheHADiskChart != null) {
-				
-				cacheHADiskChartData[0].value = totalDiskHits;
-				cacheHADiskChartData[1].value = totalDiskMisses;
-				
-				cacheHADiskChart.createChart("pie", cacheHADiskChartOptions, cacheHADiskChartData);
-			}
-		}
-		
-		// Uso de memoria.
-		if (cacheHeapHistoryChart != null) {
-			
-			var responseTotalHeapSpace = jsonResponse["data"]["TotalHeapSpace"];
-			
-			var length = responseTotalHeapSpace.length;
-			var totalHeapSpace = new Array(length);
-			var labels = new Array(length);
-			
-			cacheHeapHistoryChartData.heapSpaceUseSummatory = 0;
-			for (var i=0; i<length; i++) {
-				
-				var date = new Date(responseTotalHeapSpace[i][0]);
-				var heapSpace = responseTotalHeapSpace[i][1];
-				
-				labels[i] = date.toLocaleString();
-				totalHeapSpace[i] = heapSpace;
-				
-				cacheHeapHistoryChartData.heapSpaceUseSummatory += heapSpace; 
-			}
-			cacheHeapHistoryChartData.heapSpaceUseSamples = length; 
-			
-			cacheHeapHistoryChartData.labels = labels;
-			cacheHeapHistoryChartData.datasets[0].data = totalHeapSpace;
-			
-			cacheHeapHistoryChart.createChart("line", cacheHeapHistoryChartOptions, cacheHeapHistoryChartData);
-			
-			if (cacheHeapChart != null) {
-				
-				var avgHeapSpaceUse = cacheHeapHistoryChartData.heapSpaceUseSummatory / cacheHeapHistoryChartData.heapSpaceUseSamples;
-				var freeHeapSpace = maxLocalHeap - avgHeapSpaceUse
-				
-				if (freeHeapSpace < 0) {
-					freeHeapSpace = 0;
-				}
-				
-				cacheHeapChartData[0].value = avgHeapSpaceUse;
-				cacheHeapChartData[1].value = freeHeapSpace;
-				
-				cacheHeapChart.createChart("pie", cacheHeapChartOptions, cacheHeapChartData);
-			}
-		}
-		
-		// Uso de disco.
-		if (cacheDiskHistoryChart != null) {
-			
-			var responseTotalDiskSpace = jsonResponse["data"]["TotalDiskSpace"];
-			
-			var length = responseTotalDiskSpace.length;
-			var totalDiskSpace = new Array(length);
-			var labels = new Array(length);
-			
-			cacheDiskHistoryChartData.diskSpaceUseSummatory = 0;
-			for (var i=0; i<length; i++) {
-				
-				var date = new Date(responseTotalDiskSpace[i][0]);
-				var diskSpace = responseTotalDiskSpace[i][1];
-				
-				labels[i] = date.toLocaleString();
-				totalDiskSpace[i] = diskSpace;
-				
-				cacheDiskHistoryChartData.diskSpaceUseSummatory += diskSpace; 
-			}
-			cacheDiskHistoryChartData.diskSpaceUseSamples = length; 
-			
-			cacheDiskHistoryChartData.labels = labels;
-			cacheDiskHistoryChartData.datasets[0].data = totalDiskSpace;
-			
-			cacheDiskHistoryChart.createChart("line", cacheDiskHistoryChartOptions, cacheDiskHistoryChartData);
-			
-			if (cacheDiskChart != null) {
-				
-				var avgDiskSpaceUse = cacheDiskHistoryChartData.diskSpaceUseSummatory / cacheDiskHistoryChartData.diskSpaceUseSamples;
-				var freeDiskSpace = maxLocalDisk - avgDiskSpaceUse
-				
-				if (freeDiskSpace < 0) {
-					freeDiskSpace = 0;
-				}
-				
-				cacheDiskChartData[0].value = avgDiskSpaceUse;
-				cacheDiskChartData[1].value = freeDiskSpace;
-				
-				cacheDiskChart.createChart("pie", cacheDiskChartOptions, cacheDiskChartData);
-			}
-		}
-	}
-	else {
 
-		// Accesos a memoria.
-		if (cacheHAHeapHistoryChart != null && jsonResponse["data"]["TotalHeapHit"].length > 0) {
+				totalHeapHits += responseTotalHeapHit[i]; 
+				totalHeapMisses += responseTotalHeapMiss[i]; 
+				totalDiskHits += responseTotalDiskHit[i];
+				totalDiskMisses += responseTotalDiskMiss[i];
+				totalUsedHeapSpace += responseUsedHeapSpace[i];
+				totalUsedDiskSpace += responseUsedDiskSpace[i];
+			}
 
-			var data = [jsonResponse["data"]["TotalHeapHit"][0][1], jsonResponse["data"]["TotalHeapMiss"][0][1]];
-			var date = new Date(jsonResponse["data"]["TotalHeapHit"][0][0]);
+			// Accesos a memoria.
+			if (cacheHAHeapHistoryChart != null) {
+
+				cacheHAHeapHistoryChartData.labels = labels;
+				cacheHAHeapHistoryChartData.datasets[0].data = responseTotalHeapHit;
+				cacheHAHeapHistoryChartData.datasets[1].data = responseTotalHeapMiss;
+
+				cacheHAHeapHistoryChart.createChart("line", cacheHAHeapHistoryChartOptions, cacheHAHeapHistoryChartData);
+
+				if (cacheHAHeapChart != null) {
+
+					cacheHAHeapChartData[0].value = totalHeapHits;
+					cacheHAHeapChartData[1].value = totalHeapMisses;
+
+					cacheHAHeapChart.createChart("pie", cacheHAHeapChartOptions, cacheHAHeapChartData);
+				}
+			}
+
+			// Accesos a disco.
+			if (cacheHADiskHistoryChart != null) {
+
+				cacheHADiskHistoryChartData.labels = labels;
+				cacheHADiskHistoryChartData.datasets[0].data = responseTotalDiskHit;
+				cacheHADiskHistoryChartData.datasets[1].data = responseTotalDiskMiss;
+
+				cacheHADiskHistoryChart.createChart("line", cacheHADiskHistoryChartOptions, cacheHADiskHistoryChartData);
+
+				if (cacheHADiskChart != null) {
+
+					cacheHADiskChartData[0].value = totalDiskHits;
+					cacheHADiskChartData[1].value = totalDiskMisses;
+
+					cacheHADiskChart.createChart("pie", cacheHADiskChartOptions, cacheHADiskChartData);
+				}
+			}
+
+			// Uso de memoria.
+			if (cacheHeapHistoryChart != null) {
+
+				cacheHeapHistoryChartData.heapSpaceUseSummatory = totalUsedHeapSpace; 
+				cacheHeapHistoryChartData.heapSpaceUseSamples = labels.length; 
+				cacheHeapHistoryChartData.labels = labels;
+				cacheHeapHistoryChartData.datasets[0].data = responseUsedHeapSpace;
+
+				cacheHeapHistoryChart.createChart("line", cacheHeapHistoryChartOptions, cacheHeapHistoryChartData);
+
+				if (cacheHeapChart != null) {
+
+					var avgHeapSpaceUse = cacheHeapHistoryChartData.heapSpaceUseSummatory / cacheHeapHistoryChartData.heapSpaceUseSamples;
+					var freeHeapSpace = maxLocalHeap - avgHeapSpaceUse
+
+					if (freeHeapSpace < 0) {
+						freeHeapSpace = 0;
+					}
+
+					cacheHeapChartData[0].value = avgHeapSpaceUse;
+					cacheHeapChartData[1].value = freeHeapSpace;
+
+					cacheHeapChart.createChart("pie", cacheHeapChartOptions, cacheHeapChartData);
+				}
+			}
+
+			// Uso de disco.
+			if (cacheDiskHistoryChart != null) {
+
+				cacheDiskHistoryChartData.diskSpaceUseSummatory = totalUsedDiskSpace; 
+				cacheDiskHistoryChartData.diskSpaceUseSamples = labels.length; 
+				cacheDiskHistoryChartData.labels = labels;
+				cacheDiskHistoryChartData.datasets[0].data = responseUsedDiskSpace;
+
+				cacheDiskHistoryChart.createChart("line", cacheDiskHistoryChartOptions, cacheDiskHistoryChartData);
+
+				if (cacheDiskChart != null) {
+
+					var avgDiskSpaceUse = cacheDiskHistoryChartData.diskSpaceUseSummatory / cacheDiskHistoryChartData.diskSpaceUseSamples;
+					var freeDiskSpace = maxLocalDisk - avgDiskSpaceUse
+
+					if (freeDiskSpace < 0) {
+						freeDiskSpace = 0;
+					}
+
+					cacheDiskChartData[0].value = avgDiskSpaceUse;
+					cacheDiskChartData[1].value = freeDiskSpace;
+
+					cacheDiskChart.createChart("pie", cacheDiskChartOptions, cacheDiskChartData);
+				}
+			}
+		}
+		else if (jsonResponse["data"]["Timestamp"].length > 0) {
+
+			var date = new Date(jsonResponse["data"]["Timestamp"][0]);
 			var label = date.toLocaleString();
 
-			cacheHAHeapHistoryChart.chart.options.animation = false;
-			var removedData = cacheHAHeapHistoryChart.setData(label, data, true);
+			// Accesos a memoria.
+			if (cacheHAHeapHistoryChart != null) {
 
-			if (cacheHAHeapChart != null) {
+				var data = [jsonResponse["data"]["TotalHeapHit"][0], jsonResponse["data"]["TotalHeapMiss"][0]];
 
-				var totalHeapHits = cacheHAHeapChartData[0].value - removedData[0] + data[0];
-				var totalHeapMisses = cacheHAHeapChartData[1].value - removedData[1] + data[1];
+				cacheHAHeapHistoryChart.chart.options.animation = false;
+				var removedData = cacheHAHeapHistoryChart.setData(label, data, true);
 
-				cacheHAHeapChart.chart.options.animation = false;
-				cacheHAHeapChart.setData(null, [totalHeapHits, totalHeapMisses], true);
-			}
-		}
-		
-		// Accesos a disco.
-		if (cacheHADiskHistoryChart != null && jsonResponse["data"]["TotalDiskHit"].length > 0) {
-			
-			var data = [jsonResponse["data"]["TotalDiskHit"][0][1], jsonResponse["data"]["TotalDiskMiss"][0][1]];
-			var date = new Date(jsonResponse["data"]["TotalDiskHit"][0][0]);
-			var label = date.toLocaleString();
-			
-			cacheHADiskHistoryChart.chart.options.animation = false;
-			var removedData = cacheHADiskHistoryChart.setData(label, data, true);
-			
-			if (cacheHADiskChart != null) {
-				
-				var totalDiskHits = cacheHADiskChartData[0].value - removedData[0] + data[0];
-				var totalDiskMisses = cacheHADiskChartData[1].value - removedData[1] + data[1];
-				
-				cacheHADiskChart.chart.options.animation = false;
-				cacheHADiskChart.setData(null, [totalDiskHits, totalDiskMisses], true);
-			}
-		}
+				if (cacheHAHeapChart != null) {
 
-		// Uso de memoria.
-		if (cacheHeapHistoryChart != null && jsonResponse["data"]["TotalHeapSpace"].length > 0) {
-			
-			var data = [jsonResponse["data"]["TotalHeapSpace"][0][1]];
-			var date = new Date(jsonResponse["data"]["TotalHeapSpace"][0][0]);
-			var label = date.toLocaleString();
-			
-			cacheHeapHistoryChart.chart.options.animation = false;
-			var removedData = cacheHeapHistoryChart.setData(label, data, true);
-			
-			cacheHeapHistoryChartData.heapSpaceUseSummatory += data - removedData[0];
-				
-			if (cacheHeapChart != null) {
-				
-				cacheHeapChart.chart.options.animation = false;
-				var avgHeapSpaceUse = cacheHeapHistoryChartData.heapSpaceUseSummatory / cacheHeapHistoryChartData.heapSpaceUseSamples;
-				var freeHeapSpace = maxLocalHeap - avgHeapSpaceUse
-				
-				if (freeHeapSpace < 0) {
-					freeHeapSpace = 0;
+					var totalHeapHits = cacheHAHeapChartData[0].value - removedData[0] + data[0];
+					var totalHeapMisses = cacheHAHeapChartData[1].value - removedData[1] + data[1];
+
+					cacheHAHeapChart.chart.options.animation = false;
+					cacheHAHeapChart.setData(null, [totalHeapHits, totalHeapMisses], true);
 				}
-				
-				cacheHeapChart.setData(null, [avgHeapSpaceUse, freeHeapSpace], true);
 			}
-		}
-		
-		// Uso de disco.
-		if (cacheDiskHistoryChart != null && jsonResponse["data"]["TotalDiskSpace"].length > 0) {
-			
-			var data = [jsonResponse["data"]["TotalDiskSpace"][0][1]];
-			var date = new Date(jsonResponse["data"]["TotalDiskSpace"][0][0]);
-			var label = date.toLocaleString();
-			
-			cacheDiskHistoryChart.chart.options.animation = false;
-			var removedData = cacheDiskHistoryChart.setData(label, data, true);
-			
-			cacheDiskHistoryChartData.diskSpaceUseSummatory += data - removedData[0];
-			
-			if (cacheDiskChart != null) {
-				
-				cacheDiskChart.chart.options.animation = false;
-				var avgDiskSpaceUse = cacheDiskHistoryChartData.diskSpaceUseSummatory / cacheDiskHistoryChartData.diskSpaceUseSamples;
-				var freeDiskSpace = maxLocalDisk - avgDiskSpaceUse
-				
-				if (freeDiskSpace < 0) {
-					freeDiskSpace = 0;
+
+			// Accesos a disco.
+			if (cacheHADiskHistoryChart != null) {
+
+				var data = [jsonResponse["data"]["TotalDiskHit"][0], jsonResponse["data"]["TotalDiskMiss"][0]];
+
+				cacheHADiskHistoryChart.chart.options.animation = false;
+				var removedData = cacheHADiskHistoryChart.setData(label, data, true);
+
+				if (cacheHADiskChart != null) {
+
+					var totalDiskHits = cacheHADiskChartData[0].value - removedData[0] + data[0];
+					var totalDiskMisses = cacheHADiskChartData[1].value - removedData[1] + data[1];
+
+					cacheHADiskChart.chart.options.animation = false;
+					cacheHADiskChart.setData(null, [totalDiskHits, totalDiskMisses], true);
 				}
-				
-				cacheDiskChart.setData(null, [avgDiskSpaceUse, freeDiskSpace], true);
+			}
+
+			// Uso de memoria.
+			if (cacheHeapHistoryChart != null) {
+
+				var data = [jsonResponse["data"]["UsedHeapSpace"][0]];
+
+				cacheHeapHistoryChart.chart.options.animation = false;
+				var removedData = cacheHeapHistoryChart.setData(label, data, true);
+
+				cacheHeapHistoryChartData.heapSpaceUseSummatory += data - removedData[0];
+
+				if (cacheHeapChart != null) {
+
+					cacheHeapChart.chart.options.animation = false;
+					var avgHeapSpaceUse = cacheHeapHistoryChartData.heapSpaceUseSummatory / cacheHeapHistoryChartData.heapSpaceUseSamples;
+					var freeHeapSpace = maxLocalHeap - avgHeapSpaceUse
+
+					if (freeHeapSpace < 0) {
+						freeHeapSpace = 0;
+					}
+
+					cacheHeapChart.setData(null, [avgHeapSpaceUse, freeHeapSpace], true);
+				}
+			}
+
+			// Uso de disco.
+			if (cacheDiskHistoryChart != null) {
+
+				var data = [jsonResponse["data"]["UsedDiskSpace"][0]];
+
+				cacheDiskHistoryChart.chart.options.animation = false;
+				var removedData = cacheDiskHistoryChart.setData(label, data, true);
+
+				cacheDiskHistoryChartData.diskSpaceUseSummatory += data - removedData[0];
+
+				if (cacheDiskChart != null) {
+
+					cacheDiskChart.chart.options.animation = false;
+					var avgDiskSpaceUse = cacheDiskHistoryChartData.diskSpaceUseSummatory / cacheDiskHistoryChartData.diskSpaceUseSamples;
+					var freeDiskSpace = maxLocalDisk - avgDiskSpaceUse
+
+					if (freeDiskSpace < 0) {
+						freeDiskSpace = 0;
+					}
+
+					cacheDiskChart.setData(null, [avgDiskSpaceUse, freeDiskSpace], true);
+				}
 			}
 		}
 	}

@@ -90,6 +90,30 @@
 									</c:forEach>
 								</tbody>
 							</table>
+							<!-- Índices de aciertos entre la cachés de este mánager. -->
+							<div class="row-fluid">
+								<div class="col-sx-12 col-md-12">
+									<div id="cachesHits" >
+										<canvas style="width: 100%; height: 300px;" width="" height="300px"></canvas>
+	                                    <div class="chart-legend"></div>
+									</div>
+								</div>
+							</div>
+							<!-- Comparativa de tamaños entre las cachés de este manager. -->
+							<div class="row-fluid">
+								<div class="col-sx-6 col-md-6">
+									<div id="cachesHeap">
+										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
+										<div class="chart-legend"></div>
+									</div>
+								</div>
+								<div class="col-sx-6 col-md-6">
+									<div id="cachesDisk" >
+										<canvas style="width: 100%; height: 150px;" width="" height="150px"></canvas>
+	                                    <div class="chart-legend"></div>
+									</div>
+								</div>
+							</div>
 						</c:otherwise>
 					</c:choose>
 				</c:otherwise>
@@ -97,3 +121,10 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+drawCacheSizes('${cacheManager}', '${cache}',
+		'cacheHeap', ${cacheConfiguration.getMaxBytesLocalHeap()}, ${cacheManagerConfiguration.getMaxBytesLocalHeap()},
+		'cacheDisk', ${cacheConfiguration.getMaxBytesLocalDisk()}, ${cacheManagerConfiguration.getMaxBytesLocalDisk()}
+);
+</script>

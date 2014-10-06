@@ -1,49 +1,5 @@
-// Histórico de accesos a memoria.
-var cacheHAHeapHistoryChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		 //Number - Radius of each point dot in pixels
-	    pointDotRadius : 3,
-
-	    //Number - Pixel width of point dot stroke
-	    pointDotStrokeWidth : 1,
-
-	    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-	    pointHitDetectionRadius : 6,
-	    
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		scaleShowLabels: false,
-		
-		//Interpolated JS string - can access value
-		scaleLabel : "<%=value%>",
-		
-		//Number - Scale label font size in pixels	
-		scaleFontSize : 0,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+//Histórico de accesos a memoria.
+var cacheHAHeapHistoryChartOptions = clone(lineChartOptions);
 
 var cacheHAHeapHistoryChartData = {
 		labels: [],
@@ -72,96 +28,25 @@ var cacheHAHeapHistoryChartData = {
 };
 
 //Acumulado de accesos a memoria.
-var cacheHAHeapChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheHAHeapChartOptions = clone(doughnutChartOptions);
 
 var cacheHAHeapChartData = [
-        {
-        	value: 10,
-        	color:"rgba(220,220,220,1)",
-        	highlight: "rgba(220,220,220,0.2)",
-        	label: "Hits"
-        },
-        {
-        	value: 50,
-        	color: "rgba(151,187,205,1)",
-        	highlight: "rgba(151,187,205,0.2)",
-        	label: "Adds"
-        }
-];
+                            {
+                            	value: 10,
+                            	color:"rgba(220,220,220,1)",
+                            	highlight: "rgba(220,220,220,0.2)",
+                            	label: "Hits"
+                            },
+                            {
+                            	value: 50,
+                            	color: "rgba(151,187,205,1)",
+                            	highlight: "rgba(151,187,205,0.2)",
+                            	label: "Adds"
+                            }
+                            ];
 
-// Histórico de accesos a disco.
-var cacheHADiskHistoryChartOptions = {
-		
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		 //Number - Radius of each point dot in pixels
-	    pointDotRadius : 3,
-
-	    //Number - Pixel width of point dot stroke
-	    pointDotStrokeWidth : 1,
-
-	    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-	    pointHitDetectionRadius : 6,
-	    
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		scaleShowLabels: false,
-		
-		//Interpolated JS string - can access value
-		scaleLabel : "<%=value%>",
-		
-		//Number - Scale label font size in pixels	
-		scaleFontSize : 0,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+//Histórico de accesos a disco.
+var cacheHADiskHistoryChartOptions = clone(lineChartOptions);
 
 var cacheHADiskHistoryChartData = {
 		labels: [],
@@ -189,35 +74,8 @@ var cacheHADiskHistoryChartData = {
 		           ]
 };
 
-//Acumulado de accesos a memoria.
-var cacheHADiskChartOptions = {
-		
-		responsive : true,
-		
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-		
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-		
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-		
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-		
-		//Number - Amount of animation steps
-		animationSteps : 50,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-		
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-		
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+//Acumulado de accesos a disco.
+var cacheHADiskChartOptions = clone(doughnutChartOptions);
 
 var cacheHADiskChartData = [
                             {
@@ -236,51 +94,10 @@ var cacheHADiskChartData = [
 
 
 //Histórico de uso de memoria.
-var cacheHeapHistoryChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		 //Number - Radius of each point dot in pixels
-	    pointDotRadius : 3,
-
-	    //Number - Pixel width of point dot stroke
-	    pointDotStrokeWidth : 1,
-
-	    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-	    pointHitDetectionRadius : 6,
-	    
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		scaleShowLabels: false,
-		
-		//Interpolated JS string - can access value
-		scaleLabel : "<%=value%>",
-		
-		//Number - Scale label font size in pixels	
-		scaleFontSize : 0,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheHeapHistoryChartOptions = clone(lineChartOptions);
+cacheHeapHistoryChartOptions.scaleLabel = "<%= bytesFormatter(Number(value))%>";
+cacheHeapHistoryChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheHeapHistoryChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
 var cacheHeapHistoryChartData = {
 		labels: [],
@@ -299,97 +116,31 @@ var cacheHeapHistoryChartData = {
 };
 
 //Media de uso de memoria.
-var cacheHeapChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheHeapChartOptions = clone(doughnutChartOptions);
+cacheHeapChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheHeapChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
 var cacheHeapChartData = [
-        {
-        	value: 10,
-        	color:"rgba(220,220,220,1)",
-        	highlight: "rgba(220,220,220,0.2)",
-        	label: "En uso"
-        },
-        {
-        	value: 50,
-        	color: "rgba(151,187,205,1)",
-        	highlight: "rgba(151,187,205,0.2)",
-        	label: "Disponible"
-        }
-];
+                          {
+                        	  value: 10,
+                        	  color:"rgba(220,220,220,1)",
+                        	  highlight: "rgba(220,220,220,0.2)",
+                        	  label: "En uso"
+                          },
+                          {
+                        	  value: 50,
+                        	  color: "rgba(151,187,205,1)",
+                        	  highlight: "rgba(151,187,205,0.2)",
+                        	  label: "Disponible"
+                          }
+                          ];
 
 
 //Histórico de uso de disco.
-var cacheDiskHistoryChartOptions = {
-		
-		responsive : true,
-		
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-		
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-		
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-		
-		//Number - Radius of each point dot in pixels
-		pointDotRadius : 3,
-		
-		//Number - Pixel width of point dot stroke
-		pointDotStrokeWidth : 1,
-		
-		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-		pointHitDetectionRadius : 6,
-		
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-		
-		//Number - Amount of animation steps
-		animationSteps : 50,
-		
-		scaleShowLabels: false,
-		
-		//Interpolated JS string - can access value
-		scaleLabel : "<%=value%>",
-		
-		//Number - Scale label font size in pixels	
-		scaleFontSize : 0,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-		
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-		
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheDiskHistoryChartOptions = clone(lineChartOptions);
+cacheDiskHistoryChartOptions.scaleLabel = "<%= bytesFormatter(Number(value)) %>";
+cacheDiskHistoryChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheDiskHistoryChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
 var cacheDiskHistoryChartData = {
 		labels: [],
@@ -408,35 +159,10 @@ var cacheDiskHistoryChartData = {
 };
 
 //Media de uso de disco.
-var cacheDiskChartOptions = {
-		
-		responsive : true,
-		
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-		
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-		
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-		
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-		
-		//Number - Amount of animation steps
-		animationSteps : 50,
-		
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-		
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-		
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
-
+var cacheDiskChartOptions = clone(doughnutChartOptions);
+cacheDiskChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheDiskChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
+	
 var cacheDiskChartData = [
                           {
                         	  value: 10,

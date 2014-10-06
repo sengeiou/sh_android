@@ -26,8 +26,17 @@ function ChartHelper(chartId) {
 			this.chart.destroy();
 		}
 
-		if (this.chartType == "line") { 
+		if (this.chartType == "line") {
 			this.chart = new Chart(this.canvasContext).Line(data, options);
+			
+			if (!options.showXLabels) {
+				this.chart.scale.xLabels = new Array(this.chart.scale.xLabels.length);
+				
+				for (var i=0; i<this.chart.scale.xLabels.length; i++) {
+					this.chart.scale.xLabels[i] = "";
+				}
+				this.chart.update();
+			}
 		}
 		else if (this.chartType == "pie") { 
 			this.chart = new Chart(this.canvasContext).Pie(data, options);
@@ -48,8 +57,14 @@ function ChartHelper(chartId) {
 	var setData = function(label, data, removeFirst) {
 
 		if (this.chartType == "line") {
+			
+			if (this.chart.options.showXLabels) {
+				this.chart.scale.xLabels.push(label);
+			}
+			else {
+				this.chart.scale.xLabels.push("");
+			}
 
-			this.chart.scale.xLabels.push(label);
 			if (removeFirst != undefined && removeFirst) {
 				this.chart.scale.xLabels.shift();
 			}

@@ -538,6 +538,10 @@ public class SystemMonitorController extends BaseRestController {
 				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT_RATIO, diskHitRatioData);
 				systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_SPACE, diskUsedSpaceData);
 			}
+			else {
+				systemMonitorInfo.setData(null);
+			}
+
 		}
 		else {
 
@@ -548,50 +552,49 @@ public class SystemMonitorController extends BaseRestController {
 
 				if (systemCacheStatus != null) {
 
-					Object[][] totalHeapHitData = new Object[systemCacheStatus.size()][2];
-					Object[][] totalHeapMissData = new Object[systemCacheStatus.size()][2];
-					Object[][] heapHitRatioData = new Object[systemCacheStatus.size()][2];
-					Object[][] heapUsedSpaceData = new Object[systemCacheStatus.size()][2];
+					Object[] timestamp = new Object[systemCacheStatus.size()];
+					Object[] totalHeapHitData = new Object[systemCacheStatus.size()];
+					Object[] totalHeapMissData = new Object[systemCacheStatus.size()];
+					Object[] heapHitRatioData = new Object[systemCacheStatus.size()];
+					Object[] heapUsedSpaceData = new Object[systemCacheStatus.size()];
 
-					Object[][] totalDiskHitData = new Object[systemCacheStatus.size()][2];
-					Object[][] totalDiskMissData = new Object[systemCacheStatus.size()][2];
-					Object[][] diskHitRatioData = new Object[systemCacheStatus.size()][2];
-					Object[][] diskUsedSpaceData = new Object[systemCacheStatus.size()][2];
+					Object[] totalDiskHitData = new Object[systemCacheStatus.size()];
+					Object[] totalDiskMissData = new Object[systemCacheStatus.size()];
+					Object[] diskHitRatioData = new Object[systemCacheStatus.size()];
+					Object[] diskUsedSpaceData = new Object[systemCacheStatus.size()];
 
 					int i = 0;
 					for (MonitorSample monitorSample : systemCacheStatus) {
 
-						totalHeapHitData[i][0] = monitorSample.getTime();
-						totalHeapHitData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT);
-						totalHeapMissData[i][0] = monitorSample.getTime();
-						totalHeapMissData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_MISS);
-						heapHitRatioData[i][0] = monitorSample.getTime();
-						heapHitRatioData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT_RATIO);
-						heapUsedSpaceData[i][0] = monitorSample.getTime();
-						heapUsedSpaceData[i][1] = monitorSample.getData(CacheMeter.TOTAL_HEAP_SPACE);
+						timestamp[i] = monitorSample.getTime();
+						totalHeapHitData[i] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT);
+						totalHeapMissData[i] = monitorSample.getData(CacheMeter.TOTAL_HEAP_MISS);
+						heapHitRatioData[i] = monitorSample.getData(CacheMeter.TOTAL_HEAP_HIT_RATIO);
+						heapUsedSpaceData[i] = monitorSample.getData(CacheMeter.HEAP_USED_SPACE);
 
-						totalDiskHitData[i][0] = monitorSample.getTime();
-						totalDiskHitData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT);
-						totalDiskMissData[i][0] = monitorSample.getTime();
-						totalDiskMissData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_MISS);
-						diskHitRatioData[i][0] = monitorSample.getTime();
-						diskHitRatioData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT_RATIO);
-						diskUsedSpaceData[i][0] = monitorSample.getTime();
-						diskUsedSpaceData[i][1] = monitorSample.getData(CacheMeter.TOTAL_DISK_SPACE);
+						totalDiskHitData[i] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT);
+						totalDiskMissData[i] = monitorSample.getData(CacheMeter.TOTAL_DISK_MISS);
+						diskHitRatioData[i] = monitorSample.getData(CacheMeter.TOTAL_DISK_HIT_RATIO);
+						diskUsedSpaceData[i] = monitorSample.getData(CacheMeter.DISK_USED_SPACE);
 
 						i++;
 					}
 
+					systemMonitorInfo.getData().put("Timestamp", totalHeapHitData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT, totalHeapHitData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_MISS, totalHeapMissData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_HIT_RATIO, heapHitRatioData);
-					systemMonitorInfo.getData().put(CacheMeter.TOTAL_HEAP_SPACE, heapUsedSpaceData);
+					systemMonitorInfo.getData().put(CacheMeter.HEAP_USED_SPACE, heapUsedSpaceData);
 
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT, totalDiskHitData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_MISS, totalDiskMissData);
 					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_HIT_RATIO, diskHitRatioData);
-					systemMonitorInfo.getData().put(CacheMeter.TOTAL_DISK_SPACE, diskUsedSpaceData);
+					systemMonitorInfo.getData().put(CacheMeter.DISK_USED_SPACE, diskUsedSpaceData);
 				}
+				else {
+					systemMonitorInfo.setData(null);
+				}
+
 			} catch (ServerException e) {
 
 				e.log(logger, false);

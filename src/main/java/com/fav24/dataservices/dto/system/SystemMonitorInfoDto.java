@@ -25,7 +25,7 @@ public class SystemMonitorInfoDto implements Serializable {
 	private Long timeRange;
 	private Long period;
 	private String name;
-	private NavigableMap <String, Object[][]> data;
+	private NavigableMap <String, Object[]> data;
 
 
 	/**
@@ -37,7 +37,7 @@ public class SystemMonitorInfoDto implements Serializable {
 		this.timeRange = null;
 		this.period = null;
 		this.name = null;
-		this.data = new TreeMap<String, Object[][]>();
+		this.data = new TreeMap<String, Object[]>();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class SystemMonitorInfoDto implements Serializable {
 	 * 
 	 * @return la información asociada a esta gráfica.
 	 */
-	public NavigableMap<String, Object[][]> getData() {
+	public NavigableMap<String, Object[]> getData() {
 		return data;
 	}
 
@@ -126,7 +126,7 @@ public class SystemMonitorInfoDto implements Serializable {
 	 * 
 	 * @param data La información a asignar.
 	 */
-	public void setData(NavigableMap<String, Object[][]> data) {
+	public void setData(NavigableMap<String, Object[]> data) {
 		this.data = data;
 	}
 }

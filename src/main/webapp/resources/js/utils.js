@@ -76,6 +76,47 @@ function clone(obj) {
 }
 
 /**
+ * Retorna el valor de tamaño en bytes formateado, con el fin de facilitar sulectura.
+ * 
+ * @param value Valor a formatear.
+ */
+var KILO = 1024;
+var MEGA = 1000 * KILO;
+var GIGA = 1000 * MEGA;
+function bytesFormatter(value) {
+	
+    if (typeof value == 'number') {
+    	
+    	if (!value) {
+
+    		return "";
+    	}
+
+    	if (value < KILO) {
+    		return String.sprintf("%d", value);
+    	}
+    	else {
+
+    		if (value < MEGA) {
+    			value = value / KILO;
+   				return String.sprintf("%.2fK", value);
+    		}
+    		else if (value < GIGA) {
+    			value = value / MEGA;
+   				return String.sprintf("%.2fM", value);
+    		}
+    		else {
+    			value = value / GIGA;
+   				return String.sprintf("%.2fG", value);
+    		}
+    	}        
+    }
+    else {
+        return String(value);
+    }
+}
+
+/**
  * Función que retorna el contenido del objeto indicado, 
  * en forma de cadena de texto.
  * 

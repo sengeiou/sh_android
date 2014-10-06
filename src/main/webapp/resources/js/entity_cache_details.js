@@ -1,32 +1,7 @@
 //Tamaño de heap de la caché, respecto a nu manager. 
-var cacheHeapSizeChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheHeapSizeChartOptions = clone(lineChartOptions);
+cacheHeapSizeChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheHeapSizeChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
 var cacheHeapSizeChartData = [
                               {
@@ -44,34 +19,9 @@ var cacheHeapSizeChartData = [
                               ];
 
 //Tamaño de disco de la caché, respecto a su manager. 
-var cacheDiskSizeChartOptions = {
-
-		responsive : true,
-
-		//Boolean - Whether we should show a stroke on each segment
-		segmentShowStroke : true,
-
-		//String - The colour of each segment stroke
-		segmentStrokeColor : "#fff",
-
-		//Number - The width of each segment stroke
-		segmentStrokeWidth : 2,
-
-		//Number - The percentage of the chart that we cut out of the middle
-		percentageInnerCutout : 50, // This is 0 for Pie charts
-
-		//Number - Amount of animation steps
-		animationSteps : 50,
-
-		//String - Animation easing effect
-		animationEasing : "easeOutBounce",
-
-		//Boolean - Whether we animate the rotation of the Doughnut
-		animateRotate : true,
-
-		//Boolean - Whether we animate scaling the Doughnut from the centre
-		animateScale : true
-};
+var cacheDiskSizeChartOptions = clone(lineChartOptions);
+cacheDiskSizeChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+cacheDiskSizeChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
 
 var cacheDiskSizeChartData = [
                               {

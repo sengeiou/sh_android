@@ -46,6 +46,7 @@
 			// system_monitor.jsp dependency.
 			'<c:url value="/resources/js/chart/Chart.js"/>',
 			'<c:url value="/resources/js/custom/chartHelper.js"/>',
+			'<c:url value="/resources/js/custom/chartDefaultConfig.js"/>',
 			
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',
