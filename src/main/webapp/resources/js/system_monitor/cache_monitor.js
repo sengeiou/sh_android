@@ -66,8 +66,6 @@ function initCacheMonitor(maxBytesLocalHeap, maxBytesLocalDisk,
  */
 function monitorRequestWindow(cacheMonitorWindow, isRefresh) {
 
-	delete data;
-
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 

@@ -92,15 +92,12 @@
 							</table>
 							<!-- Comparativa de tamaños entre las cachés de este manager. -->
 							<div class="row-fluid">
-								<button onClick="reloadCacheManagerInfo('${cacheManager}');" type="button" class="btn btn-default btn-sm pull-left">
-						   			<span class="glyphicon glyphicon-repeat"></span>
-						   		</button>
 								<div id="cachesHeapDisk" class="col-sx-6 col-md-6">
-									<canvas style="width: 100%; height: 300px;" width="300px" height="300px"></canvas>
+									<canvas width="300px" height="300px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 								<div id="cachesHitAdd" class="col-sx-6 col-md-6">
-									<canvas style="width: 100%; height: 300px;" width="300px" height="300px"></canvas>
+									<canvas width="300px" height="300px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
@@ -113,7 +110,5 @@
 </div>
 
 <script type="text/javascript">
-drawCachesUseDistribution('${cacheManager}',
-		'cachesHeapDisk', ${cacheManagerConfiguration.getMaxBytesLocalHeap()}, ${cacheManagerConfiguration.getMaxBytesLocalDisk()},
-		'cachesHitAdd');
+drawCachesUseDistribution('${cacheManager}', 'cachesHeapDisk', 'cachesHitAdd');
 </script>
