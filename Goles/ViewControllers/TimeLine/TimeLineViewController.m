@@ -26,6 +26,7 @@
     BOOL moreCells;
     BOOL refreshTable;
     float rows;
+    CGRect previousRect;
 }
 
 @property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
@@ -61,7 +62,8 @@
     [self restrictRotation:NO];
     
     lengthTextField = 0;
-   
+    previousRect = CGRectZero;
+    
     [self initSpinner];
     
     self.arrayShots = [[NSArray alloc]init];
@@ -551,12 +553,20 @@
     
     self.txtView.textColor = [UIColor lightGrayColor];
     
-    self.bottomViewHeightConstraint.constant = 75;
-    self.bottomViewPositionConstraint.constant = 0.0f;
-    [UIView animateWithDuration:0.25f animations:^{
-        [self.view layoutIfNeeded];
-    }];
-
+    if (rows == 0 || rows == 1) {
+        self.bottomViewHeightConstraint.constant = 75;
+        self.bottomViewPositionConstraint.constant = 0.0f;
+        [UIView animateWithDuration:0.25f animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }else{
+        self.bottomViewHeightConstraint.constant = (rows*18)+75;
+        self.bottomViewPositionConstraint.constant = 0.0f;
+        [UIView animateWithDuration:0.25f animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    
+    }
 }
 
 #pragma mark TEXTVIEW
@@ -573,14 +583,15 @@
 
     if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
-		rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
-		if (rows >= 3)
+		
+        if (rows >= 3)
 			self.charactersLeft.hidden = NO;
     }
     else
         self.btnShoot.enabled = NO;
-	
-    [self adaptViewSizeWhenWriting:textView];
+
+    if ([text isEqualToString:@"\n"])
+        [self adaptViewSizeWhenWriting:textView];
 
     if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
@@ -592,22 +603,38 @@
 
     
     self.charactersLeft.text = [self countCharacters:lengthTextField];
-     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
-
+    return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 }
 
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
+    CGRect currentRect = [textView caretRectForPosition:pos];
+    
+    if (currentRect.origin.y < previousRect.origin.y){
+        //new line reached, write your code
+        if (rows > 1) {
+            rows = rows-1;
+            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            [UIView animateWithDuration:0.25f animations:^{
+                [self.view layoutIfNeeded];
+            }];
+        }
+    }
+    previousRect = currentRect;
+    
+}
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
 	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
-    
+
 	if (rows > 1) {
 		self.bottomViewHeightConstraint.constant = (rows*18)+75;
 		[UIView animateWithDuration:0.25f animations:^{
 			[self.view layoutIfNeeded];
 		}];
 	}
-
 }
 
 //------------------------------------------------------------------------------
