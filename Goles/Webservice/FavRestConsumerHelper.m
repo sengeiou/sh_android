@@ -82,8 +82,8 @@
     [req addObject:[NSNumber numberWithInteger:appVersion]];
     [req addObject:[NSNumber numberWithLongLong:epochTime]];
     
-    if (sessionToken != nil)
-        [req addObject:sessionToken];
+//    if (sessionToken != nil)
+//        [req addObject:sessionToken];
     
     return [req copy];
 }

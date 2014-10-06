@@ -59,8 +59,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self restrictRotation:NO];
-    
     lengthTextField = 0;
     previousRect = CGRectZero;
     
@@ -170,6 +168,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
      self.title = @"Timeline";
+     [self restrictRotation:NO];
 }
 
 
