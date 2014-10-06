@@ -48,7 +48,8 @@ public class BagdadDataService implements BagdadService {
     private ShotDtoFactory shotDtoFactory;
 
     @Inject
-    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory, TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory) {
+    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
+      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -71,19 +72,21 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted) throws IOException{
+    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted)
+      throws IOException {
         List<Follow> follows = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate, includeDeleted);
+        GenericDto requestDto =
+          userDtoFactory.getFollowOperationDto(idUser, 1000L, typeFollow, lastModifiedDate, includeDeleted);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
 
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for(int i=0;i<data.length;i++){
+            for (int i = 0; i < data.length; i++) {
                 Follow f = FollowMapper.fromDto(data[i]);
                 follows.add(f);
             }
@@ -97,13 +100,13 @@ public class BagdadDataService implements BagdadService {
         GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds, 1000L, 0L);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for(int i=0;i<data.length;i++){
+            for (int i = 0; i < data.length; i++) {
                 User user = UserMapper.fromDto(data[i]);
                 users.add(user);
             }
@@ -114,16 +117,17 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         List<Shot> newerShots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, newestShotDate, DEFAULT_LIMIT);
+        GenericDto genericDto =
+          timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, newestShotDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        if( ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
-            Map<String,Object>[] data = ops[0].getData();
-            for(int i = 0; i<data.length;i++){
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object>[] data = ops[0].getData();
+            for (int i = 0; i < data.length; i++) {
                 Shot shot = ShotMapper.fromDto(data[i]);
                 newerShots.add(shot);
             }
@@ -134,16 +138,17 @@ public class BagdadDataService implements BagdadService {
     @Override
     public List<Shot> getOlderShots(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         List<Shot> olderShots = new ArrayList<>();
-        GenericDto genericDto = timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
+        GenericDto genericDto =
+          timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
-            Map<String,Object>[] data = ops[0].getData();
-            for(int i = 0; i<data.length;i++){
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object>[] data = ops[0].getData();
+            for (int i = 0; i < data.length; i++) {
                 Shot shot = ShotMapper.fromDto(data[i]);
                 olderShots.add(shot);
             }
@@ -157,13 +162,13 @@ public class BagdadDataService implements BagdadService {
         GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for(int i=0;i<data.length;i++){
+            for (int i = 0; i < data.length; i++) {
                 Shot shot = ShotMapper.fromDto(data[i]);
                 shots.add(shot);
             }
@@ -176,7 +181,7 @@ public class BagdadDataService implements BagdadService {
         GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
@@ -193,14 +198,14 @@ public class BagdadDataService implements BagdadService {
         GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops==null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
-            Map<String,Object> dataItem = ops[0].getData()[0];
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object> dataItem = ops[0].getData()[0];
             return UserMapper.fromDto(dataItem);
-        }else{
+        } else {
             return null;
         }
     }
@@ -210,14 +215,14 @@ public class BagdadDataService implements BagdadService {
         GenericDto requestDto = userDtoFactory.getTeamByTeamId(idTeam);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null ||ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operation");
             return null;
         }
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
-            Map<String,Object> dataItem = ops[0].getData()[0];
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object> dataItem = ops[0].getData()[0];
             return TeamMapper.fromDto(dataItem);
-        }else{
+        } else {
             return null;
         }
     }
@@ -228,50 +233,46 @@ public class BagdadDataService implements BagdadService {
         GenericDto requestDto = userDtoFactory.getTeamsByTeamIds(teamIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null ||ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operation");
             return null;
         }
 
-        if(ops.length>0 && ops[0].getMetadata().getTotalItems()>0){
-            for(int i = 0; i<ops[0].getMetadata().getTotalItems(); i++){
-                Map<String,Object> dataItem = ops[0].getData()[i];
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            for (int i = 0; i < ops[0].getMetadata().getTotalItems(); i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
                 teams.add(TeamMapper.fromDto(dataItem));
             }
-        }else{
+        } else {
             return null;
         }
         return teams;
     }
 
-
     @Override
-    public Follow getFollowRelationship(Long idUser, Long idCurrentUser,int typeFollow) throws IOException {
-    GenericDto requestDto = userDtoFactory.getFollowOperationForGettingRelationship(idUser, idCurrentUser, typeFollow);
-    GenericDto responseDto = postRequest(requestDto);
-    OperationDto[] ops = responseDto.getOps();
-    if(ops == null || ops.length<1){
-        Timber.e("Received 0 operations");
+    public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException {
+        GenericDto requestDto =
+          userDtoFactory.getFollowOperationForGettingRelationship(idUser, idCurrentUser, typeFollow);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Long totalItems = ops[0].getMetadata().getTotalItems();
+        if (ops.length > 0 && totalItems > 0) {
+            Map<String, Object> dataItem = ops[0].getData()[0];
+            return FollowMapper.fromDto(dataItem);
+        }
         return null;
     }
-    Long totalItems = ops[0].getMetadata().getTotalItems();
-     if(ops.length>0 && totalItems>0){
-         Map<String,Object> dataItem = ops[0].getData()[0];
-         return FollowMapper.fromDto(dataItem);
-     }
-        return null;
-    }
-
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);
         Timber.d("Executing request: %s", requestJson);
         RequestBody body = RequestBody.create(JSON, requestJson);
-        Request request = new Request.Builder()
-                .url(endpoint.getUrl())
-                .post(body)
-                .build();
+        Request request = new Request.Builder().url(endpoint.getUrl()).post(body).build();
 
         // Execute request
         Response response;
@@ -307,7 +308,6 @@ public class BagdadDataService implements BagdadService {
             throw new ServerException(ServerException.V999);
         }
     }
-
 }
 
 
