@@ -820,9 +820,6 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Fav24;
 				TargetAttributes = {
-					AA623CDA1998A7F200A942A9 = {
-						DevelopmentTeam = C7YMPN4A4Y;
-					};
 					AA623CF51998A7F200A942A9 = {
 						TestTargetID = AA623CDA1998A7F200A942A9;
 					};

@@ -367,7 +367,6 @@
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
-    self.btnShoot.enabled = YES;
 
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
          [self reloadShotsTable:nil];
@@ -572,14 +571,7 @@
 
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
-//    NSLog(@"%lu", (unsigned long)lengthTextField);
-//    NSLog(@"%lu", self.txtView.text.length - range.length + text.length);
-    
-//    if (lengthTextField < self.txtView.text.length - range.length + text.length ) {
-//        [self adaptViewSizeWhenWriting:textView];
-//    }
-    
+
     lengthTextField = self.txtView.text.length - range.length + text.length;
     
     if (lengthTextField >= 1 && ![textView.text isEqualToString:@"  "]){
