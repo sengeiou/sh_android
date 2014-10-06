@@ -63,7 +63,7 @@
     
     NSNumber *idDevice = [[UserManager singleton] getIdDevice];
     NSNumber *idPlayer = [[UserManager singleton] getUserId];
-    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
+//    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
     
     NSNumber *idPlatform = @1;
     NSInteger appVersion = [self getAppVersion];

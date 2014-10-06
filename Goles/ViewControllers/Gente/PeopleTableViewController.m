@@ -11,6 +11,10 @@
 #import "FollowingCustomCell.h"
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
+#import "Conection.h"
+#import "FavRestConsumer.h"
+#import "User.h"
+#import "Follow.h"
 
 @interface PeopleTableViewController ()
 
@@ -36,7 +40,11 @@
     [self restrictRotation:YES];
 
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
+    
+    //Get ping from server
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 
 }
 
@@ -75,9 +83,40 @@
 	[self.navigationController pushViewController:profileVC animated:YES];
 }
 
+#pragma mark - Reload methods
+//------------------------------------------------------------------------------
+- (void)reloadDataAndTable {
+    
+    self.followingUsers = [[UserManager singleton] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser]];
+    [self.usersTable reloadData];
+}
+
+
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+    
+    if (status)
+        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser] withDelegate:self];
+
+}
+
 #pragma mark - Webservice response methods
--(void) restrictRotation:(BOOL) restriction
-{
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
+    
+    if (status && !error){
+        
+        if ([entityClass isSubclassOfClass:[Follow class]])
+            [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
+        if ([entityClass isSubclassOfClass:[User class]])
+            [self reloadDataAndTable];
+    }
+}
+
+#pragma mark - Rotation
+//------------------------------------------------------------------------------
+-(void) restrictRotation:(BOOL) restriction {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     appDelegate.restrictRotation = restriction;
 }

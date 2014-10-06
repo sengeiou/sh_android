@@ -74,7 +74,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXk-Q8-LaK">
-                                                    <rect key="frame" x="82" y="13" width="44" height="26"/>
+                                                    <rect key="frame" x="82" y="15" width="44" height="26"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="26" id="Nlo-Xn-dNm"/>
@@ -86,7 +86,7 @@
                                                     </variation>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ekn-Ro-Da9">
-                                                    <rect key="frame" x="20" y="16" width="48" height="48"/>
+                                                    <rect key="frame" x="24" y="20" width="48" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="48" id="Kh9-eE-mkf"/>
                                                         <constraint firstAttribute="height" constant="48" id="shO-6H-era"/>
@@ -109,7 +109,7 @@
                                                     </state>
                                                 </button>
                                                 <textView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLo-GY-onO" customClass="CustomTextView">
-                                                    <rect key="frame" x="77" y="28" width="502" height="125"/>
+                                                    <rect key="frame" x="77" y="28" width="501" height="125"/>
                                                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -122,7 +122,7 @@
                                                     </variation>
                                                 </textView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="38" placeholderIntrinsicHeight="21" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YE-xU-tH9">
-                                                    <rect key="frame" x="546" y="17" width="38" height="21"/>
+                                                    <rect key="frame" x="546" y="19" width="38" height="21"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="kpc-wB-e5s"/>
@@ -141,18 +141,19 @@
                                             <constraints>
                                                 <constraint firstItem="LKJ-5Q-sCn" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="8" id="8Vo-XE-UUP"/>
                                                 <constraint firstItem="2YE-xU-tH9" firstAttribute="baseline" secondItem="XXk-Q8-LaK" secondAttribute="baseline" id="Fb1-Jo-XiU"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="dLo-GY-onO" secondAttribute="trailing" constant="15" id="MUF-2e-Kg4"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="dLo-GY-onO" secondAttribute="trailing" constant="16" id="MUF-2e-Kg4"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="20" id="NOH-uj-RRh"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="bottom" secondItem="2EL-DM-I0W" secondAttribute="bottomMargin" priority="800" constant="20" id="c5q-u7-IUH"/>
                                                 <constraint firstItem="XXk-Q8-LaK" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="74" id="d20-1t-v77"/>
-                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="5" id="gQA-DB-9qo"/>
+                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="7" id="gQA-DB-9qo"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="69" id="iod-YH-LWO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="2YE-xU-tH9" secondAttribute="trailing" constant="10" id="mcK-PJ-EH1"/>
                                                 <constraint firstItem="LKJ-5Q-sCn" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" id="oIF-WS-IS8"/>
-                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="8" id="oSv-sU-DEU"/>
-                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="12" id="p5U-eH-sKe"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="12" id="oSv-sU-DEU"/>
+                                                <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="16" id="p5U-eH-sKe"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="btnPhoto" destination="LKJ-5Q-sCn" id="6Lf-Jl-F6P"/>
                                             <outlet property="imgPhoto" destination="ekn-Ro-Da9" id="eON-3w-oTu"/>

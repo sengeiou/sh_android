@@ -382,6 +382,7 @@
     
 }
 
+#pragma mark - Shot creation
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     [self controlCharactersShot:self.txtView.text];
@@ -643,7 +644,7 @@
         NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
         return charLeft;
     }
-    return 0;
+    return @"0";
 }
 
 //------------------------------------------------------------------------------
