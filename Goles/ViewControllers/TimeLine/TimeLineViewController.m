@@ -617,8 +617,7 @@
 		
         if (rows >= 3)
 			self.charactersLeft.hidden = NO;
-    }
-    else
+    }else
         self.btnShoot.enabled = NO;
 
     if ([text isEqualToString:@"\n"])
@@ -646,6 +645,9 @@
         //new line reached, write your code
         [self adaptViewSizeWhenDeleting];
     }
+//    }else
+//        [self adaptViewSizeWhenWriting:textView];
+    
     previousRect = currentRect;
     
 }
@@ -653,11 +655,11 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView {
 
-	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight );
+	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight);
 
     if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
         if (rows > 1) {
-            self.bottomViewHeightConstraint.constant = (rows*17.5)+75;
+            self.bottomViewHeightConstraint.constant = (rows*18)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
