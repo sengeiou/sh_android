@@ -14,16 +14,13 @@ import timber.log.Timber;
 public class UserFollowsContainerActivity extends BaseSignedInActivity {
 
     private static final String EXTRA_USER_ID = "userid";
-    private static final String EXTRA_USERNAME = "title";
     private static final String EXTRA_FOLLOW_TYPE = "followtype";
     private Integer followType;
     private Long userId;
-    private String userName;
 
-    public static Intent getIntent(Context context, Long userId, String userName, Integer followType) {
+    public static Intent getIntent(Context context, Long userId, Integer followType) {
         Intent i = new Intent(context, UserFollowsContainerActivity.class);
         i.putExtra(EXTRA_USER_ID, userId);
-        i.putExtra(EXTRA_USERNAME, userName);
         i.putExtra(EXTRA_FOLLOW_TYPE, followType);
         return i;
     }
@@ -46,7 +43,6 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
 
     private void getIntentExtras() {
         followType = getIntent().getIntExtra(EXTRA_FOLLOW_TYPE, -1);
-        userName = getIntent().getStringExtra(EXTRA_USERNAME);
         userId = getIntent().getLongExtra(EXTRA_USER_ID, 0L);
         if (userId == 0L) {
             Timber.e("Consulted following list of user id %d", userId);
@@ -66,10 +62,10 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         String title = null;
         switch (followType) {
             case UserFollowsFragment.FOLLOWERS:
-                title = getString(R.string.activity_followers_title, userName);
+                title = getString(R.string.activity_followers_title);
                 break;
             case UserFollowsFragment.FOLLOWING:
-                title = getString(R.string.activity_following_title, userName);
+                title = getString(R.string.activity_following_title);
                 break;
         }
         getSupportActionBar().setTitle(title);
