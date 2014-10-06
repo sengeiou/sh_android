@@ -640,7 +640,10 @@
     
     UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
     CGRect currentRect = [textView caretRectForPosition:pos];
-    
+
+
+    //NSLog(@"currentRectYY %f", currentRect.origin.y);
+
     if (currentRect.origin.y < previousRect.origin.y){
         //new line reached, write your code
         [self adaptViewSizeWhenDeleting];
