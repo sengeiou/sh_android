@@ -28,5 +28,7 @@
       android:text="@string/following_list_empty"
       android:textColor="@color/gray_50"
       android:textSize="20sp"
-      android:visibility="gone" />
+      android:visibility="gone"
+      tools:visibility="visible"
+      />
 </FrameLayout>
