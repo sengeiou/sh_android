@@ -157,6 +157,7 @@ namespace Bagdad
         {
             try
             {
+                myShots.ScrollIntoView(myShots.Items.First());
                 progress.IsVisible = true;
                 if (!App.isInternetAvailable)
                 {
@@ -178,10 +179,8 @@ namespace Bagdad
                     extraChars.Text = "140";
                     newShot.Text = "";
                     Focus();
-                    myShots.ScrollIntoView(myShots.Items.First());
                     if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 }
-                progress.IsVisible = false;
             }
             catch (Exception e)
             {
@@ -348,6 +347,7 @@ namespace Bagdad
                 {
                     if (hasNewShot == 1)
                     {
+                        progress.IsVisible = false;
                         timer.Stop();
                         System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 1 seg) (TimerTick)");
                     }
