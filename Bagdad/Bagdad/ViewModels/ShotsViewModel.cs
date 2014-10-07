@@ -17,6 +17,7 @@ namespace Bagdad.ViewModels
     {
         public ObservableCollection<ShotViewModel> shotsList { get; private set; }
         public List<BaseModelJsonConstructor> shotsModel;
+        public List<BaseModelJsonConstructor> shotsModelFromScroll;
 
 
         public ShotsViewModel()
@@ -24,6 +25,7 @@ namespace Bagdad.ViewModels
             IsDataLoaded = false;
             this.shotsList = new ObservableCollection<ShotViewModel>();
             this.shotsModel = new List<BaseModelJsonConstructor>();
+            this.shotsModelFromScroll = new List<BaseModelJsonConstructor>();
         }
 
         public bool IsDataLoaded
@@ -51,8 +53,9 @@ namespace Bagdad.ViewModels
             try
             {
                 Shot shotModel = new Shot();
+                await shotModel.getTimeLineOtherShots(offset);
 
-                return ParseShotsForPrinting(await shotModel.getTimeLineOtherShots(offset), true);
+                return 1;
             }
             catch (Exception e)
             {
@@ -176,9 +179,11 @@ namespace Bagdad.ViewModels
                 return 0;
             }
         }
-        public void SetShotsOnScreenToUpdate(List<BaseModelJsonConstructor> _shotsModel)
+
+        public void SetShotsOnScreenToUpdate(List<BaseModelJsonConstructor> _shotsModel, bool fromScroll)
         {
-            shotsModel = _shotsModel;
+            if(!fromScroll) shotsModel = _shotsModel;
+            else shotsModelFromScroll = _shotsModel;
         }
 
         public async Task<int> UpdateShotsOnScreen()
@@ -209,6 +214,37 @@ namespace Bagdad.ViewModels
             }
             return retorn;
         }
+
+        public async Task<int> UpdateShotsOnScreenFromScroll()
+        {
+            int retorn = 0;
+            try
+            {
+                List<ShotViewModel> shotsViewModel = new List<ShotViewModel>();
+
+                foreach (Shot shot in shotsModelFromScroll)
+                {
+                    retorn = 1;
+                    User user = new User();
+                    List<String> userinfo = await user.GetNameAndImageURL(shot.idUser);
+                    String _shotUserName = String.Empty, _shotImageURL = String.Empty;
+                    if (userinfo.Count > 0)
+                    {
+                        _shotUserName = userinfo[0];
+                        if (userinfo.Count > 1) _shotImageURL = userinfo[1];
+                    }
+                    shotsViewModel.Add(new ShotViewModel { shotId = shot.idShot, shotMessage = shot.comment, shotUserId = shot.idUser, shotTime = Util.FromUnixTime(shot.csys_birth.ToString()).ToString("s").Replace('T', ' '), shotUserImageURL = _shotImageURL, shotUserName = _shotUserName });
+                }
+                ParseShotsForPrinting(shotsViewModel, true);
+                shotsModelFromScroll.Clear();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : UpdateShotsOnScreen - SendShot: " + e.Message);
+            }
+            return retorn;
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

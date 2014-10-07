@@ -16,6 +16,7 @@ using System.Windows.Automation.Provider;
 using Bagdad.ViewModels;
 using System.Windows.Threading;
 using Bagdad.Utils;
+using System.Windows.Media.Animation;
 
 namespace Bagdad
 {
@@ -177,7 +178,7 @@ namespace Bagdad
                     extraChars.Text = "140";
                     newShot.Text = "";
                     Focus();
-
+                    myShots.ScrollIntoView(myShots.Items.First());
                     if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 }
                 progress.IsVisible = false;
@@ -256,15 +257,11 @@ namespace Bagdad
 
         private void Info_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            //TODO: DELETE THIS: JUST TRYING THE IMAGEMANAGER SOURCE
-            //UserImageManager im = new UserImageManager();
-            //imageToShow.Source = im.GetUserImage(2);
             MessageBox.Show("Info");
         }
 
         private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-
             int shotId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotId;
             myShots.SelectedIndex = -1;
             MessageBox.Show("Shot #" + shotId);
@@ -321,7 +318,7 @@ namespace Bagdad
                         endOfList = true;
                     }
                 }
-                
+                await App.ShotsVM.UpdateShotsOnScreenFromScroll();
             }
             progress.IsVisible = false;
         }
@@ -341,8 +338,10 @@ namespace Bagdad
                     System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 10 seg) (TimerTick)");
                 }
                 var hasNewShot = await App.ShotsVM.UpdateShotsOnScreen();
+
                 if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 10))) SynchronizeShots();
                 else if (progress.IsVisible) progress.IsVisible = false;
+                
                 if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 1)))
                 {
                     if (hasNewShot == 1)
@@ -372,6 +371,7 @@ namespace Bagdad
             myShots.ItemsSource = null;
             myShots.ItemsSource = App.ShotsVM.shotsList;
         }
+        
         
     }
 }

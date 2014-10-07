@@ -17,6 +17,12 @@ namespace Bagdad.Utils
             return epoch.AddMilliseconds(Convert.ToDouble(unixTime));
         }
 
+        public static Double DateToDouble(DateTime dt)
+        { 
+            TimeSpan span = (dt - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            return Math.Floor(span.TotalMilliseconds);
+        }
+
         public bool isAnEmail(String email)
         {
             // Return true if email is in valid e-mail format.

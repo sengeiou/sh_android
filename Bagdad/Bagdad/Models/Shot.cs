@@ -49,7 +49,7 @@ namespace Bagdad.Models
                 if (shotsToInsert.Count > 0)
                 {                    
                     done = await InsertData(shotsToInsert);
-                    App.ShotsVM.SetShotsOnScreenToUpdate(shotsToInsert);
+                    App.ShotsVM.SetShotsOnScreenToUpdate(shotsToInsert, false);
                 }
                 if (shotsToUpdate.Count > 0) done += await UpdateData(shotsToUpdate);
                 if (shotsToDelete.Count > 0) done += await DeleteData(shotsToDelete);
@@ -371,12 +371,14 @@ namespace Bagdad.Models
             }
         }
 
-        public async Task<List<ShotViewModel>> getTimeLineOtherShots(int offset)
+        public async Task<List<BaseModelJsonConstructor>> getTimeLineOtherShots(int offset)
         {
+            string pattern = "yyyy-MM-dd HH':'mm':'ss";
+            DateTime parsedDate;
             try
             {
                 int count = 0;
-                List<ShotViewModel> shotList = new List<ShotViewModel>();
+                List<BaseModelJsonConstructor> shotList = new List<BaseModelJsonConstructor>();
                 Database database = await App.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineOtherShots);
@@ -386,19 +388,18 @@ namespace Bagdad.Models
 
                 while (await selectStatement.StepAsync())
                 {
+                    DateTime.TryParseExact(selectStatement.GetTextAt(5), pattern, null, System.Globalization.DateTimeStyles.None, out parsedDate);
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new ShotViewModel
+                    shotList.Add(new Shot
                     {
-                        shotId = selectStatement.GetIntAt(0),
-                        shotUserId = selectStatement.GetIntAt(1),
-                        shotMessage = selectStatement.GetTextAt(2),
-                        shotUserName = selectStatement.GetTextAt(3),
-                        shotUserImageURL = selectStatement.GetTextAt(4),
-                        shotTime = selectStatement.GetTextAt(5)
+                        idShot = selectStatement.GetIntAt(0),
+                        idUser = selectStatement.GetIntAt(1),
+                        comment = selectStatement.GetTextAt(2),
+                        csys_birth = Util.DateToDouble(parsedDate)
                     });
                     count++;
                 }
-
+                App.ShotsVM.SetShotsOnScreenToUpdate(shotList, true);
                 Debug.WriteLine("CARGADOS: " + count);
                 return shotList;
             }
