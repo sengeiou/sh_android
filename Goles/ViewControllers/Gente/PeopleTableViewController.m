@@ -49,11 +49,14 @@
 
 #pragma mark - Table view data source
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	
     return self.followingUsers.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
@@ -65,20 +68,13 @@
 	return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 50;
-}
-
-#pragma mark - Navigation
-//------------------------------------------------------------------------------
--(void)goProfile:(id)sender{
-	
-	UIButton *btn = (UIButton *) sender;
-	AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-	ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
-	User *selectedUser = self.followingUsers[btn.tag];
-	profileVC.selectedUser = selectedUser;
-	[self.navigationController pushViewController:profileVC animated:YES];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+ 
+    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    User *selectedUser = self.followingUsers[indexPath.row];
+    profileVC.selectedUser = selectedUser;
+    [self.navigationController pushViewController:profileVC animated:YES];
 }
 
 #pragma mark - Reload methods

@@ -59,4 +59,10 @@
 
 + (int)getIphone: (CGFloat) height;
 
++(UIImage*) drawText:(NSString*) text
+             inImage:(UIImage*)  image
+             atPoint:(CGPoint)   point;
+
++(CGPoint) centerTextInImage:(UIImageView *)imageView;
+
 @end

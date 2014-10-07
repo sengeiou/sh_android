@@ -614,7 +614,7 @@
     if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
 		
-        if (rows >= 3)
+        if (rows >= 2)
 			self.charactersLeft.hidden = NO;
     }else
         self.btnShoot.enabled = NO;

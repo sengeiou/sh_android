@@ -126,7 +126,7 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                             </textView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="Shootr" translatesAutoresizingMaskIntoConstraints="NO" id="TtO-05-4Rm">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TtO-05-4Rm">
                                                 <rect key="frame" x="18" y="23" width="70" height="70"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="Xju-af-JQM"/>
@@ -446,9 +446,6 @@
             <point key="canvasLocation" x="-247.5" y="119.36619718309858"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="Shootr" width="149" height="149"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Jiv-24-1Pe"/>
     </inferredMetricsTieBreakers>

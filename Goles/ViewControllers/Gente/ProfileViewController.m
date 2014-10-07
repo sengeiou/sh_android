@@ -17,6 +17,7 @@
 #import "Conection.h"
 #import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
+#import "Utils.h"
 
 @interface ProfileViewController ()
 
@@ -127,11 +128,28 @@
 - (void)setFollowToNo {
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setTitle:@"+ FOLLOW" forState:UIControlStateNormal];
+    [self.btnFollow setTitle:[NSString stringWithFormat:@"%@", [self formatTitle]] forState:UIControlStateNormal];
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
     self.btnFollow.layer.masksToBounds = YES;
+}
+
+-(NSMutableAttributedString *) formatTitle{
+    
+    NSString *yourString = @"+ FOLLOW";
+    NSRange boldedRange = NSMakeRange(0, 1);
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:yourString];
+    
+    [attrString beginEditing];
+    [attrString addAttribute:NSFontAttributeName
+                       value:[UIFont boldSystemFontOfSize:15]
+                       range:boldedRange];
+    
+    [attrString endEditing];
+    
+    return attrString;
 }
 
 //------------------------------------------------------------------------------
@@ -151,13 +169,24 @@
     
     if (image == nil) {
         
-        [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             self.imgPhoto.image = image;
             self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
             self.imgPhoto.clipsToBounds = YES;
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
             
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            
+            UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
+            
+            UIImage *img = [Utils drawText:[self.selectedUser.name substringToIndex:1]
+                                   inImage:imageDefault
+                                   atPoint:[Utils centerTextInImage:self.imgPhoto]];
+            
+            self.imgPhoto.image = img;
+            NSLog(@"%@", response);
+
+            
             NSLog(@"%@", response);
         }];
     }else{
