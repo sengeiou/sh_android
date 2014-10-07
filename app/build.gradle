@@ -141,9 +141,6 @@ dependencies {
         transitive = true
     }
 
-    compile 'com.hannesdorfmann.fragmentargs:annotation:1.0.3'
-    apt 'com.hannesdorfmann.fragmentargs:processor:1.0.3'
-
     compile project(':ext-libs:SwipeRefreshLayoutOverlay:library')
 
 

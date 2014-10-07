@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.UserFollowsFragment;
-import gm.mobi.android.ui.fragments.UserFollowsFragmentBuilder;
 import timber.log.Timber;
 
 public class UserFollowsContainerActivity extends BaseSignedInActivity {
@@ -51,7 +50,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setUserListFragment() {
-        UserFollowsFragment userFollowsFragment = UserFollowsFragmentBuilder.newUserFollowsFragment(followType, userId);
+        UserFollowsFragment userFollowsFragment = UserFollowsFragment.newInstance(userId, followType);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //TODO check que no hubiera ya uno? necesario?
         transaction.add(R.id.container, userFollowsFragment, UserFollowsFragment.TAG);

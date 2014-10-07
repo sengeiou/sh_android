@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.OnClick;
-import com.hannesdorfmann.fragmentargs.FragmentArgs;
-import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 
@@ -33,7 +31,7 @@ import gm.mobi.android.ui.base.BaseFragment;
 
 public class ProfileFragment extends BaseFragment {
 
-
+    public static final String ARGUMENT_USER = "user";
 
     public static final String TAG = "profile";
 
@@ -54,12 +52,26 @@ public class ProfileFragment extends BaseFragment {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
 
-    @Arg User user;
+    // Args
+    User user;
+
+    public static ProfileFragment newInstance(User user) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ARGUMENT_USER, user);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentArgs.inject(this);
+        injectArguments();
+    }
+
+    private void injectArguments() {
+        Bundle arguments = getArguments();
+        user = (User) arguments.getSerializable(ARGUMENT_USER);
     }
 
     @Override

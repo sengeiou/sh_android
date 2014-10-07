@@ -87,7 +87,9 @@
     <string name="now">now</string>
     <string name="drawer_open">Open menu</string>
     <string name="drawer_close">Close menu</string>
+    <string name="activity_find_friends_title">Find Friends</string>
 
 
     <string name="no_match_profiles">Not match profiles</string>
+    <string name="activity_find_friends_hint">Find friends...</string>
 </resources>

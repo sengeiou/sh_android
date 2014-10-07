@@ -11,7 +11,6 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
-import gm.mobi.android.ui.fragments.ProfileFragmentBuilder;
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
@@ -38,7 +37,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();
             }
-            ProfileFragment profileFragment = ProfileFragmentBuilder.newProfileFragment(user);
+            ProfileFragment profileFragment = ProfileFragment.newInstance(user);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //TODO check que no hubiera ya uno? necesario?
             transaction.add(R.id.container, profileFragment, ProfileFragment.TAG);

@@ -11,8 +11,6 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
-import com.hannesdorfmann.fragmentargs.FragmentArgs;
-import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -28,16 +26,19 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
-import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment {
 
     public static final String TAG = "follows";
     public static final int FOLLOWING = UserDtoFactory.GET_FOLLOWING;
     public static final int FOLLOWERS = UserDtoFactory.GET_FOLLOWERS;
+
+    private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
+    private static final String ARGUMENT_USER_ID = "userId";
 
     @Inject Picasso picasso;
     @Inject Bus bus;
@@ -47,12 +48,19 @@ public class UserFollowsFragment extends BaseFragment {
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
     @InjectView(R.id.userlist_empty) View emptyView;
 
-    @Arg Long userId;
-    @Arg Integer followType;
+    // Args
+    Long userId;
+    Integer followType;
 
     private UserListAdapter userListAdapter;
 
-    public static Bundle getArguments(Long userId, int followType) {
+    public static UserFollowsFragment newInstance(Long userId, int followType) {
+        UserFollowsFragment fragment = new UserFollowsFragment();
+        fragment.setArguments(createArguments(userId, followType));
+        return fragment;
+    }
+
+    public static Bundle createArguments(Long userId, int followType) {
         Bundle bundle = new Bundle();
         bundle.putLong("userId", userId);
         bundle.putInt("followType", followType);
@@ -62,7 +70,17 @@ public class UserFollowsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentArgs.inject(this);
+        injectArguments();
+    }
+
+    public void injectArguments() {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            userId = arguments.getLong(ARGUMENT_USER_ID);
+            followType = arguments.getInt(ARGUMENT_FOLLOW_TYPE);
+        } else {
+            Timber.w("UserFollowsFragment has null arguments, which might cause a NullPointerException");
+        }
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
