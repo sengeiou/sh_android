@@ -1,8 +1,7 @@
  //
 //  UserManager.m
-//  Goles Messenger
 //
-//  Created by Delfín Pereiro on 17/07/13.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2013 Fav24. All rights reserved.
 //
 
@@ -59,7 +58,7 @@
     if ( usersWithProfile.count == 1 )
         return [usersWithProfile firstObject];
     else if ( usersWithProfile.count > 1 )
-        DLog(@"[GOLES MESSENGER ERROR]: Existe más de un player en CoreData con Profile activo!!!");
+        DLog(@"[SHOOTR ERROR]: Existe más de un player en CoreData con Profile activo!!!");
     
     return nil;
 }

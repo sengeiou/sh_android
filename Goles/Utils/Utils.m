@@ -1,8 +1,7 @@
 //
 //  Utils.m
-//  Goles Messenger
 //
-//  Created by Marçal Albert on 26/11/12.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2012 Fav24. All rights reserved.
 //
 
@@ -12,7 +11,6 @@
 #import "Fav24Fonts.h"
 #import "Fav24Colors.h"
 #import "Constants.h"
-//#import <CommonCrypto/CommonDigest.h>
 
 @implementation Utils
 

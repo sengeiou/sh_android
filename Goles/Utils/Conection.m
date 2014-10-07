@@ -1,6 +1,5 @@
 //
 //  Conection.m
-//  Goles
 //
 //  Created by Maria Teresa Bañuls on 16/09/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.

@@ -1,6 +1,5 @@
 //
 //  Fav24Fonts.h
-//  Goles Messenger
 //
 //  Created by Christian Cabarrocas on 22/08/13.
 //  Copyright (c) 2013 Fav24. All rights reserved.

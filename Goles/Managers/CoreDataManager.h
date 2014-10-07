@@ -1,8 +1,7 @@
 //
 //  CoreDataManager.h
-//  Goles Messenger
 //
-//  Created by Delfín Pereiro on 21/06/13.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2013 Fav24. All rights reserved.
 //
 

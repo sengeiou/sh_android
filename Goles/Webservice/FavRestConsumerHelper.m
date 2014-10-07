@@ -1,6 +1,5 @@
 //
 //  FavRestConsumerHelper.m
-//  Goles Messenger
 //
 //  Created by Christian Cabarrocas on 19/02/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.

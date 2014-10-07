@@ -1,8 +1,7 @@
 //
 //  Fav24ExtendedNavigationController.m
-//  Goles Messenger
 //
-//  Created by Delfín Pereiro on 03/09/13.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2013 Fav24. All rights reserved.
 //
 

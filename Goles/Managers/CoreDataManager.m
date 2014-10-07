@@ -1,9 +1,8 @@
 
 //
 //  CoreDataManager.m
-//  Goles Messenger
 //
-//  Created by Delfín Pereiro on 21/06/13.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2013 Fav24. All rights reserved.
 //
 
@@ -96,7 +95,7 @@
 //------------------------------------------------------------------------------
 - (id)getEntity:(Class)entityClass withId:(NSInteger)entityId{
     
-    NSAssert( (entityClass != [NSNull class] && entityClass),@"[GOLES MESSENGER ERROR]: Error trying to find entity of class '%@'",NSStringFromClass(entityClass));
+    NSAssert( (entityClass != [NSNull class] && entityClass),@"[SHOOTR MESSENGER ERROR]: Error trying to find entity of class '%@'",NSStringFromClass(entityClass));
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %li",NSStringFromClass(entityClass),(long)entityId]];
     NSArray *result = [self getAllEntities:entityClass withPredicate:predicate];
@@ -224,7 +223,7 @@
             }
         }
     } else {
-        DLog(@"[GOLES MESSENGER ERROR]: Se esta intentando actualizar la entidad de Core Data '%@' que no responde al evento insertEntities", entityClass);
+        DLog(@"[SHOOTR ERROR]: Se esta intentando actualizar la entidad de Core Data '%@' que no responde al evento insertEntities", entityClass);
     }
     
     return result;

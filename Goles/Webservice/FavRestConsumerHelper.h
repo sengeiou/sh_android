@@ -1,6 +1,5 @@
 //
 //  FavRestConsumerHelper.h
-//  Goles Messenger
 //
 //  Created by Christian Cabarrocas on 19/02/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.
@@ -72,8 +71,7 @@
  @params totalItems (not needed): not needed to inform in the request, must be null. The server returns the total items in the table, not in the response.
  @params items (optional): the number of the items that we want to be informed in the response. The size limit is defined in the data service policies.
  @params offset (optional): The first item to get from the server. Usefull for pagination purposes.
- @params filter (required): The filter to execute in the request. For full information abour filters, check confluence documentation in http://desarrollo.golesmessenger.com/confluence/pages/viewpage.action?pageId=1802694
- Used in FavRestConsumer.
+ @params filter (required): The filter to execute in the request. For full information abour filter.
  
  @returns An NSDictionary with metada block.
  */

@@ -1,7 +1,6 @@
 
 //
 //  CoreDataGenerator.m
-//  Goles Messenger
 //
 //  Copyright (c) 2013 Fav24. All rights reserved.
 //

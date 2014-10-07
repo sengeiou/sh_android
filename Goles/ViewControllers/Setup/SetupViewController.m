@@ -1,6 +1,5 @@
 //
 //  SetupViewController.m
-//  Goles
 //
 //  Created by Maria Teresa Bañuls on 15/09/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.

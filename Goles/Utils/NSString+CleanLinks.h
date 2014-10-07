@@ -1,6 +1,5 @@
 //
 //  NSString+CleanLinks.h
-//  Goles
 //
 //  Created by Christian Cabarrocas on 29/09/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.

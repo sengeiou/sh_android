@@ -1,6 +1,5 @@
  //
 //  FavRestConsumer.m
-//  Goles Messenger
 //
 //  Created by Christian Cabarrocas on 13/01/14.
 //  Copyright (c) 2014 Fav24. All rights reserved.
@@ -70,7 +69,7 @@
     [self setRequestSerializer:[AFJSONRequestSerializer serializer]];
     
     //SSL setup
-    self.securityPolicy = [self GolesSecurityPolicy];
+    self.securityPolicy = [self ShootrSecurityPolicy];
  
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -78,7 +77,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (AFSecurityPolicy *)GolesSecurityPolicy {
+- (AFSecurityPolicy *)ShootrSecurityPolicy {
     
     AFSecurityPolicy *securityPolicy = [[AFSecurityPolicy alloc] init];
     [securityPolicy setAllowInvalidCertificates:YES];

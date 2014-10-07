@@ -2,7 +2,7 @@
 //  Services.h
 //  ProjectUnitTest
 //
-//  Created by Marçal Albert Castellví on 11/06/12.
+//  Created by Christian Cabarrocas on 10/09/14.
 //  Copyright (c) 2012 Fav24. All rights reserved.
 //
 
@@ -36,6 +36,6 @@ NSString *golesBaseURL;
 
 #define K_DEVICE_TOKEN_SIMULATOR        @"Christian&MariSimulator0001"
 
-#define K_TWITTER_MENTION               @"@GolesMessenger"
+#define K_TWITTER_MENTION               @"@Shootr"
 
 #endif
