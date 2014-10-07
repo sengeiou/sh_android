@@ -304,6 +304,18 @@
         [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
 }
 
+//------------------------------------------------------------------------------
+- (void)reloadShotsTableWithAnimation:(id)sender {
+    
+    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
+    
+    if (self.arrayShots.count > 0){
+        NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
+//        [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
+}
+
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
@@ -417,7 +429,8 @@
         self.charactersLeft.hidden = YES;
         [self keyboardHide:nil];
         self.txtView.text = nil;
-        [self reloadShotsTable:nil];
+//        [self reloadShotsTable:nil];
+        [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
     }
