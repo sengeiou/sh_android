@@ -493,14 +493,13 @@
     NSInteger MAX_HEIGHT = 2000;
     UITextView * textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 26, 320, MAX_HEIGHT)];
     textView.text = text;
-    textView.font = [UIFont boldSystemFontOfSize:18];
+    textView.font = [UIFont systemFontOfSize:17];
     [textView sizeToFit];
-
-    if (textView.frame.size.height <= 44)
-        return textView.frame.size.height+40;
     
-    return textView.frame.size.height+20;
-
+    if(textView.frame.size.height <= 36.5)
+        return textView.frame.size.height+35;
+    
+    return textView.frame.size.height+22;
 }
 
 
@@ -573,18 +572,11 @@
 
 
 +(NSMutableAttributedString *) formatTitle:(NSString *)text{
-    
-    NSRange boldedRange = NSMakeRange(0, 1);
-    
+
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text];
-    
-    [attrString beginEditing];
-    [attrString addAttribute:NSFontAttributeName
-                       value:[UIFont boldSystemFontOfSize:15]
-                       range:boldedRange];
-    
-    [attrString endEditing];
-    
+    [attrString addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(0, 1)];
+    [attrString addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(1, text.length-1)];
+
     return attrString;
 }
 

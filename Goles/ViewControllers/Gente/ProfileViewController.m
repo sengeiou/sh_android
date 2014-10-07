@@ -128,7 +128,7 @@
 - (void)setFollowToNo {
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setTitle:[NSString stringWithFormat:@"%@", [Utils formatTitle:@"+ FOLLOW"]] forState:UIControlStateNormal];
+    [self.btnFollow setAttributedTitle:[Utils formatTitle:@"+ FOLLOW"] forState:UIControlStateNormal];
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
