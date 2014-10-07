@@ -26,6 +26,7 @@
     BOOL moreCells;
     BOOL refreshTable;
     float rows;
+    float rowsOLD;
     CGRect previousRect;
 
     UITapGestureRecognizer *tapTapRecognizer;
@@ -430,7 +431,6 @@
         self.charactersLeft.hidden = YES;
         [self keyboardHide:nil];
         self.txtView.text = nil;
-//        [self reloadShotsTable:nil];
         [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
@@ -492,10 +492,10 @@
     
     self.txtView.textColor = [UIColor blackColor];
     
-    if (rows >= 3)
-        self.charactersLeft.hidden = NO;
-    else
-        self.charactersLeft.hidden = YES;
+//    if (rows >= 3)
+//        self.charactersLeft.hidden = NO;
+//    else
+//        self.charactersLeft.hidden = YES;
     
     if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
         self.txtView.text = nil;
@@ -558,15 +558,15 @@
 
         self.backgroundView.hidden = YES;
         
-        
         [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
         self.timelineTableView.scrollEnabled = YES;
         
         [self.txtView resignFirstResponder];
         
-        if (self.textComment.length == 0){
+        if (lengthTextField == 0){
             self.txtView.text = CREATE_SHOT_PLACEHOLDER;
             rows = 0;
+            self.charactersLeft.hidden = YES;
         }
         
         self.txtView.textColor = [UIColor lightGrayColor];
@@ -596,22 +596,22 @@
     NSString* result = [self controlCharactersShot:self.txtView.text];
 
     lengthTextField = textView.text.length - range.length + text.length;
-    
+    self.charactersLeft.hidden = NO;
 
     if (![result isEqualToString:@""] && lengthTextField >= 1){
         self.btnShoot.enabled = YES;
 		
-        if (rows >= 2)
-			self.charactersLeft.hidden = NO;
+//        if (rows >= 2)
+			//self.charactersLeft.hidden = NO;
     }else
         self.btnShoot.enabled = NO;
 
-    if ([text isEqualToString:@"\n"])
-        [self adaptViewSizeWhenWriting:textView];
+   // if ([text isEqualToString:@"\n"] || rows > rowsOLD)
+    [self adaptViewSizeWhenWriting:textView withCharacter:text];
 
     if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
-        self.charactersLeft.hidden = YES;
+        //self.charactersLeft.hidden = YES;
 		[UIView animateWithDuration:0.25f animations:^{
 			[self.view layoutIfNeeded];
 		}];
@@ -629,18 +629,23 @@
 
     if (currentRect.origin.y < previousRect.origin.y)
         [self adaptViewSizeWhenDeleting:textView];
-    
+   
     previousRect = currentRect;
     
 }
 
 //------------------------------------------------------------------------------
-- (void)adaptViewSizeWhenWriting:(UITextView *)textView {
+- (void)adaptViewSizeWhenWriting:(UITextView *)textView withCharacter:(NSString *)character{
 
 	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight);
 
     if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
-        if (rows > 1) {
+        if (rows > 2 && ![character isEqualToString:@"\n"] && ![character isEqualToString:@""]) {
+            self.bottomViewHeightConstraint.constant = ((rows-2)*textView.font.lineHeight)+75;
+            [UIView animateWithDuration:0.25f animations:^{
+                [self.view layoutIfNeeded];
+            }];
+        }else if(rows > 1 && [character isEqualToString:@"\n"]){
             self.bottomViewHeightConstraint.constant = ((rows-1)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
@@ -652,8 +657,8 @@
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenDeleting:(UITextView *)textView{
     
-    if (rows > 1) {
-        rows = rows-1;
+    if (rows > 2) {
+        rows = rows-3;
         self.bottomViewHeightConstraint.constant = (rows*textView.font.lineHeight)+75;
         [UIView animateWithDuration:0.25f animations:^{
             [self.view layoutIfNeeded];

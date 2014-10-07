@@ -189,12 +189,18 @@
 }
 
 //------------------------------------------------------------------------------
-- (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray {
+- (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray withId:(NSString *) idClass{
     
     NSArray *toDelete = nil;
-    
+ 
     if ( [dataArray isKindOfClass:[NSArray class]] ){
-        NSString *entityId = [NSString stringWithFormat:@"id%@",NSStringFromClass(entityClass)];
+        NSString *entityId;
+        
+        if (idClass != nil)
+            entityId = [NSString stringWithFormat:@"%@",idClass];
+        else
+            entityId = [NSString stringWithFormat:@"id%@",NSStringFromClass(entityClass)];
+
         
         // Get all objects ids
         NSArray *idsArray = [dataArray valueForKey:entityId];

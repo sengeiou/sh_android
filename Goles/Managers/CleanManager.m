@@ -8,8 +8,11 @@
 #import "CleanManager.h"
 #import "CoreDataParsing.h"
 #import "CoreDataManager.h"
+#import "UserManager.h"
 
 #import "Shot.h"
+#import "Follow.h"
+#import "User.h"
 
 @implementation CleanManager
 
@@ -70,29 +73,44 @@
     }
 }
 
-#pragma mark - GET THE SHOTS TO BE DELETED
+#pragma mark - GET THE SHOTS, USERS, FOLLOWS TO BE DELETED
 
 //Check if we have more than X shots in DB
 //------------------------------------------------------------------------------
 - (void)beginCleanProcessOnCompletion:(booleanReturnBlock)completion{
     
     NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class]];
-    
+
     if (shotsArray.count > 1000){
         
         [self deleteOldShotsOnCompletion:^(BOOL success, NSError *error) {
-            if (success)
+            if (success) {
+                [self deleteUsersAndFollowIfNeeded];
                 completion(YES, nil);
-            else{
+            }else{
+                [self deleteUsersAndFollowIfNeeded];
                 completion(YES, nil);
-                 if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
+            
+                if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
             }
+            
         }];
-        
+
     }else{
-        if (completion)
+        if (completion){
+            [self deleteUsersAndFollowIfNeeded];
             completion(YES, nil);
+        }
     }
+    
+}
+
+- (void)deleteUsersAndFollowIfNeeded {
+    
+    NSArray *usersArray = [[CoreDataManager singleton] getAllEntities:[User class]];
+
+    if (usersArray.count > 450)
+        [self deleteUserAndFollowNotInMy];
 }
 
 #pragma mark - DELETE OLD SHOTS
@@ -105,7 +123,7 @@
     NSArray *shotsToDelete;
     
     if (newShots > 0)
-        shotsToDelete = [[CoreDataManager singleton] deleteEntities:[Shot class] NotIn:newShots];
+        shotsToDelete = [[CoreDataManager singleton] deleteEntities:[Shot class] NotIn:newShots withId:nil];
     
     if (shotsToDelete.count > 0){
         [[CoreDataManager singleton] saveContext];
@@ -118,6 +136,51 @@
     }else{
            completion(YES, nil);
     }
+}
+
+#pragma mark - DELETE OLD SHOTS
+
+//Get the shots to be deleted
+//------------------------------------------------------------------------------
+-(void)deleteUserAndFollowNotInMy{
+   
+    NSPredicate *predicateMyFollowings = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager sharedInstance]getUserId]];
+    NSArray *myFollowings = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicateMyFollowings];
+ 
+    NSMutableArray *arrayID = [[NSMutableArray alloc]init];
+    
+    for (Follow *obj in myFollowings) {
+        [arrayID addObject:obj.idUserFollowed];
+    }
+    
+    
+    NSPredicate *predicateUser= [NSPredicate predicateWithFormat:@"idUser != %@ && NOT (idUserFollowed IN %@)",[[UserManager sharedInstance]getUserId], arrayID];
+
+    NSArray *arrayFollows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicateUser];
+
+    if (arrayFollows > 0) {
+    
+        for (Follow *obj in arrayFollows) {
+            
+            if (obj.idUserFollowed != [[UserManager sharedInstance]getUserId]) {
+                User *user = [[CoreDataManager singleton] getEntity:[User class] withId:[obj.idUserFollowed integerValue]];
+                [[CoreDataManager singleton]deleteObject:user];
+            } 
+        }
+    }
+    
+    NSPredicate *predicateFollow = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager sharedInstance]getUserId]];
+    
+    NSArray *newFollow = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicateFollow];
+    
+    if (newFollow > 0)
+        newFollow = [[CoreDataManager singleton] deleteEntities:[Follow class] NotIn:newFollow withId:@"idUser"];
+    
+    
+    if (arrayFollows > 0 || newFollow >0)
+        [[CoreDataManager singleton] saveContext];
+    
+    
 }
 
 @end

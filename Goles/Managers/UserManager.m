@@ -66,6 +66,7 @@
 
 //------------------------------------------------------------------------------
 -(NSNumber *)getUserId {
+    
     return [[self getActiveUser] idUser];
 }
 

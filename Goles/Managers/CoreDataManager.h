@@ -46,7 +46,7 @@
 - (void) deleteObject:(NSManagedObject *)object;
 - (void) deleteAllEntities:(Class)entityClass;
 - (void) deleteEntitiesIn:(NSArray *)entitiesArray;
-- (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray;
+- (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray withId:(NSString *) idClass;
 
 - (NSNumber *) getMaxModifiedValueForEntity:(NSString *)entityClass;
 

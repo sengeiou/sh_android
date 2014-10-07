@@ -19,6 +19,7 @@
 
 @property (nonatomic,strong) NSArray *followingUsers;
 @property (nonatomic,strong) IBOutlet UITableView *usersTable;
+@property (nonatomic, strong)       NSIndexPath         *indexToShow;
 
 @end
 
@@ -43,6 +44,13 @@
     
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 
 }
 
@@ -73,6 +81,8 @@
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
     User *selectedUser = self.followingUsers[indexPath.row];
     profileVC.selectedUser = selectedUser;
+    
+    self.indexToShow = indexPath;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
