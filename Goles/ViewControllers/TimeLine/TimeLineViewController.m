@@ -171,7 +171,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
      self.title = @"Timeline";
-     [self restrictRotation:NO];
+
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 
 }

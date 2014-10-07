@@ -194,4 +194,15 @@
 	return NO;
 }
 
+
+//------------------------------------------------------------------------------
+- (User *)getUserForId:(NSInteger )idUser {
+    
+    User *user = [[CoreDataManager singleton] getEntity:[User class] withId:idUser];
+    if (user)
+        return user;
+    
+    return nil;
+}
+
 @end

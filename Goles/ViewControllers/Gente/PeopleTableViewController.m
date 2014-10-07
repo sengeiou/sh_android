@@ -37,7 +37,6 @@
 - (void)viewDidLoad{
 	
     [super viewDidLoad];
-    [self restrictRotation:YES];
 
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -113,11 +112,5 @@
     }
 }
 
-#pragma mark - Orientation methods
-//------------------------------------------------------------------------------
--(void) restrictRotation:(BOOL) restriction {
-    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    appDelegate.restrictRotation = restriction;
-}
 
 @end

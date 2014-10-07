@@ -14,6 +14,9 @@
 #import "Constants.h"
 #import "UserManager.h"
 #import "Fav24Colors.h"
+#import "Conection.h"
+#import "FavRestConsumer.h"
+#import "CoreDataParsing.h"
 
 @interface ProfileViewController ()
 
@@ -53,9 +56,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    
-    [self restrictRotation:YES];
     [self customView];
     [self dataFillView];
+    
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
 }
 
 //------------------------------------------------------------------------------
@@ -185,12 +190,27 @@
 
 }
 
-#pragma mark - Orientation methods
+#pragma mark - Conection response methods
 //------------------------------------------------------------------------------
--(void) restrictRotation:(BOOL) restriction
-{
-    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    appDelegate.restrictRotation = restriction;
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+    
+    if(refresh)
+        [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
+    
+    
 }
+
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
+    
+    if (status && !error){
+        if ([entityClass isSubclassOfClass:[User class]]){
+            self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
+            [self dataFillView];
+        }
+
+    }
+}
+
 
 @end

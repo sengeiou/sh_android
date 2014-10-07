@@ -27,5 +27,6 @@
 - (NSArray *)getFollowingPeopleForMe;
 - (NSArray *)getFollowersOfUser:(User *)user;
 - (BOOL)isLoggedUserFollowing:(User *)user;
+- (User *)getUserForId:(NSInteger )idUser;
 
 @end
