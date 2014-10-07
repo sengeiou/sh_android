@@ -166,7 +166,7 @@ public class MainActivity extends BaseSignedInActivity {
         // Quita el actual
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.main_content);
         if (currentFragment != null) {
-            transaction.detach(currentFragment);
+            transaction.remove(currentFragment);
         }
 
         // Pone el nuevo. Attach si existe, add si no.
@@ -176,7 +176,8 @@ public class MainActivity extends BaseSignedInActivity {
             recycledOrNewFragment = Fragment.instantiate(this, newFragmentName, fragmentArguments);
             transaction.add(R.id.main_content, recycledOrNewFragment, newFragmentName);
         } else {
-            transaction.attach(recycledOrNewFragment);
+            transaction.add(R.id.main_content, recycledOrNewFragment, newFragmentName);
+            //transaction.attach(recycledOrNewFragment);
         }
 
         transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
