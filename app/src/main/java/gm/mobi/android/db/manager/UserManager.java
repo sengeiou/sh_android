@@ -141,4 +141,21 @@ public class UserManager extends AbstractManager {
         }
         return result;
     }
+
+    public List<User> searchUsers(String s){
+          List<User> users = new ArrayList<>();
+          String args = UserTable.USER_NAME+" LIKE '%?%' OR "+UserTable.NAME+" LIKE '%?%'";
+          String argsString[] = new String[]{s,s};
+          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,argsString,null,null,null);
+          if(c.getCount()>0){
+            c.moveToFirst();
+              do {
+                  User user = userMapper.fromCursor(c);
+                  if (user != null) {
+                      users.add(user);
+                  }
+              }while(c.moveToNext());
+          }
+        return users;
+    }
 }
