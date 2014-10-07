@@ -48,9 +48,6 @@ public class GetUserInfoJob extends CancellableJob {
     private User currentUser;
     SQLiteDatabase db;
 
-
-
-
     @Inject public GetUserInfoJob(Application context,Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service, NetworkUtil mNetworkUtil,
                                   UserManager userManager, FollowManager followManager, TeamManager teamManager) {
         super(new Params(PRIORITY));

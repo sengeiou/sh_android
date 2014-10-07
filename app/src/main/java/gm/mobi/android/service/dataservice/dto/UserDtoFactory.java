@@ -46,9 +46,15 @@ public class UserDtoFactory {
     private static final String ALIAS_GETFOLLOWRELATIONSHIP = "GET_FOLLOWRELATIONSHIP";
 
     private UtilityDtoFactory utilityDtoFactory;
+    UserMapper userMapper;
+    TeamMapper teamMapper;
+    FollowMapper followMapper;
 
-    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory) {
+    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, TeamMapper teamMapper, FollowMapper followMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
+        this.userMapper = userMapper;
+        this.teamMapper = teamMapper;
+        this.followMapper = followMapper;
     }
 
     public GenericDto getLoginOperationDto(String id, String password) {
@@ -73,7 +79,7 @@ public class UserDtoFactory {
         op.setMetadata(md);
 
         Map<String, Object>[] data = new HashMap[1];
-        data[0] = UserMapper.toDto(null);
+        data[0] = userMapper.toDto(null);
         op.setData(data);
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
@@ -88,7 +94,7 @@ public class UserDtoFactory {
         od.setMetadata(md);
 
         Map<String, Object>[] array = new HashMap[1];
-        array[0] = FollowMapper.toDto(null);
+        array[0] = followMapper.toDto(null);
         od.setData(array);
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
@@ -110,7 +116,7 @@ public class UserDtoFactory {
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE,true,null,0L,1L,key);
         od.setMetadata(md);
         Map<String,Object>[] array = new HashMap[1];
-        array[0] = UserMapper.reqRestUsersToDto(null);
+        array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GETUSERBYID, od);
     }
@@ -122,7 +128,7 @@ public class UserDtoFactory {
         MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE, GMContract.TeamTable.TABLE, true,null,0L,1L,key);
         od.setMetadata(md);
         Map<String,Object>[] array = new HashMap[1];
-        array[0] = TeamMapper.toDto(null);
+        array[0] = teamMapper.toDto(null);
         od.setData(array);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAM_BY_ID,  od);
     }
@@ -144,7 +150,7 @@ public class UserDtoFactory {
 
         OperationDto od = new OperationDto.Builder()
             .metadata(md)
-            .putData(TeamMapper.toDto(null))
+            .putData(teamMapper.toDto(null))
             .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS, od);
@@ -158,7 +164,7 @@ public class UserDtoFactory {
         od.setMetadata(md);
 
         Map<String, Object>[] array = new HashMap[1];
-        array[0] = UserMapper.reqRestUsersToDto(null);
+        array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_USERS, od);
@@ -226,7 +232,7 @@ public class UserDtoFactory {
 
     public Map<String,Object>[] getDataForFollow(){
         Map<String,Object>[] array = new HashMap[1];
-        array[0] = FollowMapper.toDto(null);
+        array[0] = followMapper.toDto(null);
         return array;
     }
 

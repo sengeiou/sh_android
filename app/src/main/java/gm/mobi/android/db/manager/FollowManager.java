@@ -3,9 +3,6 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
 
 import gm.mobi.android.db.objects.User;
 import java.sql.SQLException;
@@ -18,30 +15,36 @@ import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.TableSync;
 import timber.log.Timber;
 
 public class FollowManager extends AbstractManager{
 
-    @Inject
-    public FollowManager(){
-    }
 
+    FollowMapper followMapper;
+    private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
+    private static final String FOLLOW_TABLE = FollowTable.TABLE;
+    private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
+    private static final String ID_USER = FollowTable.ID_USER;
+
+
+    @Inject
+    public FollowManager(FollowMapper followMapper){
+        this.followMapper = followMapper;
+    }
 
     /**
      * Insert a Follow
      */
     public void saveFollow(Follow follow) throws SQLException {
-
         if(follow!=null){
-            ContentValues contentValues = FollowMapper.toContentValues(follow);
+            ContentValues contentValues = followMapper.toContentValues(follow);
 
-            if (contentValues.get(GMContract.SyncColumns.CSYS_DELETED) != null) {
+            if (contentValues.get(CSYS_DELETED) != null) {
                 deleteFollow(follow);
             } else {
-                db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
-            insertFollowInTableSync();
+            insertInSync();
         }
     }
 
@@ -50,18 +53,17 @@ public class FollowManager extends AbstractManager{
      * *
      */
     public void saveFollows(List<Follow> followList) {
-        long res;
         for (Follow follow : followList) {
-            ContentValues contentValues = FollowMapper.toContentValues(follow);
+            ContentValues contentValues = followMapper.toContentValues(follow);
 
-            if (contentValues.getAsLong(GMContract.SyncColumns.CSYS_DELETED) != null) {
-                res = deleteFollow(follow);
+            if (contentValues.getAsLong(CSYS_DELETED) != null) {
+                 deleteFollow(follow);
             } else {
-                res = db.insertWithOnConflict(GMContract.FollowTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.i("Follow inserted ",follow.getIdUser());
             }
         }
-        insertFollowInTableSync();
+       insertInSync();
     }
 
     /**
@@ -70,12 +72,12 @@ public class FollowManager extends AbstractManager{
     public  List<Long> getUserFollowingIds(Long idUser) throws SQLException {
         List<Long> userIds = new ArrayList<>();
         db.beginTransaction();
-        String args = GMContract.FollowTable.ID_USER+"=?";
+        String args = ID_USER+"=?";
         String[] argsString = new String[]{String.valueOf(idUser)};
-        if(isTableEmpty(GMContract.FollowTable.TABLE)){
+        if(isTableEmpty(FOLLOW_TABLE)){
             Timber.e("La tabla follow está vacia");
         }
-        Cursor c = db.query(GMContract.FollowTable.TABLE, new String[]{GMContract.FollowTable.ID_FOLLOWED_USER},args,argsString,null,null,null,null);
+        Cursor c = db.query(GMContract.FollowTable.TABLE, new String[]{ID_FOLLOWED_USER},args,argsString,null,null,null,null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
@@ -95,15 +97,15 @@ public class FollowManager extends AbstractManager{
         String toUserIdArgument = String.valueOf(toUser.getIdUser());
 
         String selection = "("
-            + FollowTable.ID_USER
+            + ID_USER
             + "=? and "
-            + FollowTable.ID_FOLLOWED_USER
+            + ID_FOLLOWED_USER
             + "=?) OR ("
-            + FollowTable.ID_USER
+            + ID_USER
             + "=? and "
-            + FollowTable.ID_FOLLOWED_USER
+            + ID_FOLLOWED_USER
             + "=?)";
-        Cursor queryResults = db.query(FollowTable.TABLE, FollowTable.PROJECTION, selection,
+        Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
             new String[] {
                 fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument
             }, null, null, null, null);
@@ -113,7 +115,7 @@ public class FollowManager extends AbstractManager{
             boolean iFollowHim = false;
             boolean heFollowsMe = false;
             do {
-                Follow follow = FollowMapper.fromCursor(queryResults);
+                Follow follow = followMapper.fromCursor(queryResults);
                 if (follow != null) {
                     if (follow.getIdUser().equals(fromUser.getIdUser()) && follow.getFollowedUser()
                         .equals(toUser.getIdUser())) {
@@ -141,32 +143,20 @@ public class FollowManager extends AbstractManager{
      */
     public long deleteFollow(Follow follow) {
         long res = 0;
-        String args = GMContract.FollowTable.ID_FOLLOWED_USER + "=? AND " + GMContract.FollowTable.ID_USER + "=?";
+        String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
 
-        Cursor c = db.query(GMContract.FollowTable.TABLE, GMContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = db.query(FOLLOW_TABLE, GMContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(GMContract.FollowTable.TABLE, GMContract.FollowTable.ID_FOLLOWED_USER + "=? AND " + GMContract.FollowTable.ID_USER + "=?",
+            res = db.delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
                     new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});
         }
         c.close();
         return res;
     }
 
-    public long insertFollowInTableSync(){
-        TableSync tablesSync = new TableSync();
-        tablesSync.setOrder(2); // It's the second data type the application insert in database
-        tablesSync.setDirection("BOTH");
-        tablesSync.setEntity(GMContract.FollowTable.TABLE);
-        tablesSync.setMax_timestamp(System.currentTimeMillis());
-
-        if(isTableEmpty(GMContract.FollowTable.TABLE)){
-            tablesSync.setMin_timestamp(System.currentTimeMillis());
-        }
-        //We don't have this information already
-//        tablesSync.setMaxRows();
-//        tablesSync.setMinRows();
-
-        return insertOrUpdateSyncTable(tablesSync);
+    public void insertInSync(){
+        insertInTableSync(FOLLOW_TABLE, 2,0,0);
     }
+
 }

@@ -155,7 +155,7 @@ public class GetFollowingsJob extends CancellableJob {
         }
         teams = getTeamsByTeamIds(idTeams);
         Timber.d("Downloaded %d followings' users", usersFollowing.size());
-        Timber.d("Downloaded %d teams' users", teams.size());
+        //Timber.d("Downloaded %d teams' users", teams.size());
 
         if (isCancelled()) return;
 

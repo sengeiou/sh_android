@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import gm.mobi.android.db.GMContract;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +19,10 @@ import timber.log.Timber;
 
 public class TeamManager extends AbstractManager{
 
+    private static final String TEAM_TABLE = TeamTable.TABLE;
+
+    @Inject TeamMapper teamMapper;
+
     @Inject
     public TeamManager(){
 
@@ -29,7 +34,7 @@ public class TeamManager extends AbstractManager{
     public void saveTeams( List<Team> teams) {
         //Save teams
         for (Team team : teams) {
-            ContentValues contentValues = TeamMapper.toContentValues(team);
+            ContentValues contentValues = teamMapper.toContentValues(team);
             String args = TeamTable.ID_TEAM+"=?";
             String[] where = new String[]{String.valueOf(team.getIdTeam())};
             if (contentValues.getAsLong(SyncColumns.CSYS_DELETED) != null) {
@@ -39,7 +44,7 @@ public class TeamManager extends AbstractManager{
                 Timber.i("Team inserted ", team.getClubName());
             }
         }
-        insertTeamInTableSync();
+        insertInSync();
     }
 
     /**
@@ -51,12 +56,12 @@ public class TeamManager extends AbstractManager{
         String[] argsString = new String[]{String.valueOf(teamId)};
 
         if(isTableEmpty(TeamTable.TABLE)){
-            Timber.e("La tabla %s está vacia", TeamTable.TABLE);
+            Timber.e("La tabla %s está vacia", TEAM_TABLE);
         }
-        Cursor c = db.query(TeamTable.TABLE, TeamTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor c = db.query(TEAM_TABLE, TeamTable.PROJECTION,args,argsString,null,null,null,null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            resTeam = TeamMapper.fromCursor(c);
+            resTeam = teamMapper.fromCursor(c);
             }
         c.close();
         return resTeam;
@@ -68,8 +73,8 @@ public class TeamManager extends AbstractManager{
     public void insertOrUpdateTeam(Team team){
         String args = TeamTable.ID_TEAM+"=?";
         String[] where = new String[]{String.valueOf(team.getIdTeam())};
-        ContentValues contentValues = TeamMapper.toContentValues(team);
-        insertOrUpdate(TeamTable.TABLE,contentValues, TeamTable.PROJECTION, args,where);
+        ContentValues contentValues = teamMapper.toContentValues(team);
+        insertOrUpdate(TEAM_TABLE,contentValues, TeamTable.PROJECTION, args,where);
     }
 
     /**
@@ -80,29 +85,18 @@ public class TeamManager extends AbstractManager{
         String args = TeamTable.ID_TEAM + "=?";
         String[] stringArgs = new String[]{String.valueOf(team.getIdTeam())};
 
-        Cursor c = db.query(TeamTable.TABLE, TeamTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = db.query(TEAM_TABLE, TeamTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(TeamTable.TABLE, TeamTable.ID_TEAM + "=?",
+            res = db.delete(TEAM_TABLE, TeamTable.ID_TEAM + "=?",
                     new String[]{String.valueOf(team.getIdTeam())});
         }
         c.close();
         return res;
     }
 
-    /**
-     * Insert team in syncTable
-     * */
-    private long insertTeamInTableSync(){
-        TableSync tablesSync = new TableSync();
-        tablesSync.setOrder(4); // It's the second data type the application insert in database
-        tablesSync.setDirection("BOTH");
-        tablesSync.setEntity(TeamTable.TABLE);
-        tablesSync.setMax_timestamp(System.currentTimeMillis());
 
-        if(isTableEmpty( TeamTable.TABLE)){
-            tablesSync.setMin_timestamp(System.currentTimeMillis());
-        }
+   public void insertInSync(){
+        insertInTableSync(TEAM_TABLE,4,0,0);
+   }
 
-        return insertOrUpdateSyncTable(tablesSync);
-    }
 }

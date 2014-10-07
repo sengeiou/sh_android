@@ -24,9 +24,11 @@ public class TimelineDtoFactory {
     public static final String ALIAS_GET_OLDER_SHOTS = "GET_OLDER_SHOTS";
 
     private UtilityDtoFactory utilityDtoFactory;
+    ShotMapper shotMapper;
 
-    @Inject public TimelineDtoFactory(UtilityDtoFactory utilityDtoFactory) {
+    @Inject public TimelineDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
+        this.shotMapper = shotMapper;
     }
 
     public GenericDto getAllShotsOperationDto(List<Long> usersIds, Long limit) {
@@ -47,7 +49,7 @@ public class TimelineDtoFactory {
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(ShotMapper.toDto(null))
+                .putData(shotMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOTS, op);
@@ -73,16 +75,14 @@ public class TimelineDtoFactory {
         // Build the operation
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(ShotMapper.toDto(null))
+                .putData(shotMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEWER_SHOTS, op);
     }
 
     public GenericDto getOlderShotsOperationDto(List<Long> usersIds, Long referenceDate, Long limit) {
-        FilterDto oldShotsFilter = and(
-                or(ShotTable.ID_USER).isIn(usersIds)
-        )
+        FilterDto oldShotsFilter = and(or(ShotTable.ID_USER).isIn(usersIds))
                 .and(ShotTable.CSYS_MODIFIED).lessThan(referenceDate) //TODO antiguos por fecha de modificación o de creación?
                 .and(ShotTable.CSYS_DELETED).isEqualTo(null)
                 .build();
@@ -96,7 +96,7 @@ public class TimelineDtoFactory {
 
         OperationDto op = new Builder()
                 .metadata(md)
-                .putData(ShotMapper.toDto(null))
+                .putData(shotMapper.toDto(null))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_OLDER_SHOTS, op);

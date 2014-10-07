@@ -54,7 +54,7 @@ public class NewShotActivity extends BaseSignedInActivity {
     @Inject JobManager jobManager;
     @Inject Bus bus;
     @Inject SQLiteOpenHelper dbHelper;
-
+    @Inject ShotManager shotManager;
     private User currentUser;
 
     private int charCounterColorError;
@@ -83,7 +83,7 @@ public class NewShotActivity extends BaseSignedInActivity {
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
 
-        previousShot = ShotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
+        previousShot = shotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
             GolesApplication.get(this).getCurrentUser().getIdUser());
 
         // Compound drawable hack

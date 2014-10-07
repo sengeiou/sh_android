@@ -11,6 +11,8 @@ public abstract class Synchronized {
     protected Integer csys_revision;
     protected String csys_synchronized;
 
+    public Synchronized(){}
+
     public Date getCsys_birth() {
         return csys_birth;
     }

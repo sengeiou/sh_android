@@ -13,7 +13,6 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import timber.log.Timber;
 import timber.log.Timber.Tree;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.squareup.otto.Bus;
@@ -70,15 +69,18 @@ public class GetUserInfoJobTest {
 
         TeamManager teamManager = mock(TeamManager.class);
 
-        SQLiteOpenHelper db = mock(SQLiteOpenHelper.class);
+        SQLiteOpenHelper dbHelper = mock(SQLiteOpenHelper.class);
 
         Bus bus = mock(Bus.class);
 
-        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,db,null,null, userManager,followManager,teamManager);
+        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null, userManager,followManager,teamManager);
         getUserInfoJob.init(1L,null);
         getUserInfoJob.retrieveDataFromDatabase();
-
         verify(bus).post(anyObject());
     }
+
+
+
+
 
 }

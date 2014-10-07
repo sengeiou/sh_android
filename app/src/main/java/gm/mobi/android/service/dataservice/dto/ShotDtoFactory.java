@@ -21,9 +21,12 @@ public class ShotDtoFactory {
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
 
     private UtilityDtoFactory utilityDtoFactory;
+    ShotMapper shotMapper;
 
-    @Inject public ShotDtoFactory(UtilityDtoFactory utilityDtoFactory) {
+    @Inject public ShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
+        this.shotMapper = shotMapper;
+
     }
 
     public GenericDto getNewShotOperationDto(Long idUser, String comment) {
@@ -54,7 +57,7 @@ public class ShotDtoFactory {
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)
-                .putData(ShotMapper.toDto(shotTemplate))
+                .putData(shotMapper.toDto(shotTemplate))
                 .build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_NEW_SHOT, op);

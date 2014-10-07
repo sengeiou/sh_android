@@ -7,6 +7,8 @@ public class Team extends Synchronized{
     String mShortName;
     String mTlaName;
 
+    public Team(){}
+
     public Long getIdTeam() {
         return mIdTeam;
     }

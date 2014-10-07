@@ -18,6 +18,38 @@ public class User extends Synchronized implements Serializable{
     private String mWebsite;
     private String mBio;
 
+    public User(){}
+
+    public User(Long idUser, Long favouriteTeamId, String sessionToken, String userName, String email, String name, String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
+        mIdUser = idUser;
+        mFavouriteTeamId = favouriteTeamId;
+        mSessionToken = sessionToken;
+        mUserName = userName;
+        mEmail = email;
+        mName = name;
+        mPhoto = photo;
+        mPoints = points;
+        mNumFollowings = numFollowings;
+        mNumFollowers = numFollowers;
+        mRank = rank;
+        mWebsite = website;
+        mBio = bio;
+    }
+
+    public User(Long idUser, Long favouriteTeamId, String userName, String name, String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
+        mIdUser = idUser;
+        mFavouriteTeamId = favouriteTeamId;
+        mUserName = userName;
+        mName = name;
+        mPhoto = photo;
+        mPoints = points;
+        mNumFollowings = numFollowings;
+        mNumFollowers = numFollowers;
+        mRank = rank;
+        mWebsite = website;
+        mBio = bio;
+    }
+
     public Long getIdUser() {
         return mIdUser;
     }

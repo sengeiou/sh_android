@@ -16,6 +16,10 @@ import com.squareup.picasso.Picasso;
 
 import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.ShotManager;
+import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.mappers.ShotMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
+import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.task.jobs.CancellableJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
@@ -89,25 +93,34 @@ import static android.content.Context.MODE_PRIVATE;
   complete = false,
   library = true)
 public class DataModule {
-
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT = 10; // 10 seconds
+
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new OpenHelper(application.getApplicationContext());
     }
 
-    @Provides UserManager provideUserManager() {
-        return new UserManager();
+    @Provides  UserManager provideUserManager(){
+        return new UserManager(provideUserMapper());
     }
 
-    @Provides FollowManager provideFollowManager() {
-        return new FollowManager();
+    @Provides FollowManager provideFollowManager(){
+        return new FollowManager(provideFollowMapper());
     }
 
     @Provides ShotManager provideShotManager() {
         return new ShotManager();
     }
+
+    @Provides FollowMapper provideFollowMapper() { return new FollowMapper();}
+
+    @Provides TeamMapper providerTeamMapper(){ return new TeamMapper();}
+
+    @Provides
+    ShotMapper provideShotMapper(){ return new ShotMapper();}
+
+    @Provides UserMapper provideUserMapper(){ return new UserMapper();}
 
     @Provides TeamManager provideTeamManager() {
         return new TeamManager();

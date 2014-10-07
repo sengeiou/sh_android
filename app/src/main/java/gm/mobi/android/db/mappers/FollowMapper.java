@@ -11,35 +11,40 @@ import gm.mobi.android.db.objects.Follow;
 
 public class FollowMapper extends GenericMapper {
 
-    public static Follow fromCursor(Cursor c) {
+    public static final String ID_USER = GMContract.FollowTable.ID_USER;
+    public static final String ID_FOLLOWED_USER = GMContract.FollowTable.ID_FOLLOWED_USER;
+
+    public  Follow fromCursor(Cursor c) {
         Follow follow = new Follow();
-        follow.setIdUser(c.getLong(c.getColumnIndex(GMContract.FollowTable.ID_USER)));
-        follow.setFollowedUser(c.getLong(c.getColumnIndex(GMContract.FollowTable.ID_FOLLOWED_USER)));
-        setSynchronizedFromCursor(c, follow);
+        follow.setIdUser(c.getLong(c.getColumnIndex(ID_USER)));
+        follow.setFollowedUser(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER)));
+        setSynchronizedfromCursor(c,follow);
         return follow;
     }
 
-    public static ContentValues toContentValues(Follow follow) {
+    public ContentValues toContentValues(Follow f) {
         ContentValues cv = new ContentValues();
-        cv.put(GMContract.FollowTable.ID_USER, follow.getIdUser());
-        cv.put(GMContract.FollowTable.ID_FOLLOWED_USER, follow.getFollowedUser());
-        setSynchronizedToContentValues(cv, follow);
+        cv.put(ID_USER, f.getIdUser());
+        cv.put(ID_FOLLOWED_USER, f.getFollowedUser());
+        setSynchronizedtoContentValues(f,cv);
         return cv;
     }
 
-    public static Follow fromDto(Map<String, Object> dto) {
+
+    public  Follow fromDto(Map<String, Object> dto) {
         Follow follow = new Follow();
-        follow.setIdUser(((Number) dto.get(GMContract.FollowTable.ID_USER)).longValue());
-        follow.setFollowedUser(((Number) dto.get(GMContract.FollowTable.ID_FOLLOWED_USER)).longValue());
-        setSynchronizedFromDto(dto, follow);
+        follow.setIdUser(((Number) dto.get(ID_USER)).longValue());
+        follow.setFollowedUser(((Number) dto.get(ID_FOLLOWED_USER)).longValue());
+        setSynchronizedfromDto(dto,follow);
         return follow;
     }
 
-    public static Map<String, Object> toDto(Follow follow) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(GMContract.FollowTable.ID_USER, follow == null ? null : follow.getIdUser());
-        dto.put(GMContract.FollowTable.ID_FOLLOWED_USER, follow == null ? null : follow.getFollowedUser());
-        setSynchronizedToDto(dto, follow);
+    public  Map<String, Object> toDto(Follow follow) {
+        Map<String,Object> dto = new HashMap<>();
+        dto.put(ID_USER, follow == null ? null : follow.getIdUser());
+        dto.put(ID_FOLLOWED_USER, follow == null ? null : follow.getFollowedUser());
+        setSynchronizedtoDto(follow,dto);
         return dto;
     }
+
 }
