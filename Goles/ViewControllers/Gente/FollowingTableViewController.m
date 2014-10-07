@@ -36,7 +36,7 @@
         self.title = @"Following";
 	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
     }
-    else {
+    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED]){
         self.title = @"Followers";
 		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
     }
@@ -68,7 +68,7 @@
         self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
         [self.usersTable reloadData];
     }
-    else {
+    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED]){
         self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
         [self.usersTable reloadData];
     }
@@ -106,7 +106,7 @@
         if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
             [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
         
-        else
+        else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
             [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
     }
 }

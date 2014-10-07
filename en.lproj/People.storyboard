@@ -188,7 +188,11 @@
                                                 </connections>
                                             </button>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="yAO-9V-L0h">
-                                                <rect key="frame" x="18" y="185" width="564" height="29"/>
+                                                <rect key="frame" x="18" y="185" width="250" height="29"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="2xr-ve-uU3"/>
+                                                    <constraint firstAttribute="width" constant="250" id="vSx-0n-jMP"/>
+                                                </constraints>
                                                 <segments>
                                                     <segment title="Shots"/>
                                                     <segment title="Predictions"/>
@@ -278,7 +282,6 @@
                                             <constraint firstItem="tWK-Y7-RNK" firstAttribute="top" secondItem="aQ4-I0-Ay4" secondAttribute="bottom" constant="-5" id="eHP-Wd-eD4"/>
                                             <constraint firstItem="C0l-iy-4qb" firstAttribute="top" secondItem="hzD-5B-NPo" secondAttribute="top" constant="40" id="f4G-3W-kjy"/>
                                             <constraint firstItem="aQ4-I0-Ay4" firstAttribute="top" secondItem="OhP-mS-B4a" secondAttribute="bottom" constant="20" id="kC6-Up-rTL"/>
-                                            <constraint firstItem="yAO-9V-L0h" firstAttribute="leading" secondItem="hzD-5B-NPo" secondAttribute="leading" constant="18" id="kHT-oR-jGy"/>
                                             <constraint firstItem="OhP-mS-B4a" firstAttribute="top" secondItem="hzD-5B-NPo" secondAttribute="top" constant="69" id="ngQ-sK-vxX"/>
                                             <constraint firstAttribute="height" constant="221" id="pE2-Tz-PjF"/>
                                             <constraint firstItem="TtO-05-4Rm" firstAttribute="leading" secondItem="hzD-5B-NPo" secondAttribute="leading" constant="18" id="reP-Bf-FcZ"/>
