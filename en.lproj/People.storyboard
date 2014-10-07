@@ -394,7 +394,6 @@
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="AXX-kg-k9G"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="trailing" secondItem="yZH-QS-KQQ" secondAttribute="trailingMargin" constant="-3" id="Ibn-kR-mUb"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
-                                        <constraint firstItem="6RI-lt-Kek" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="7" id="KNW-gE-cjM"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="aqE-cJ-1eP"/>
@@ -402,6 +401,7 @@
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-2" id="daY-28-9ld"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="6" id="faJ-ai-Lsd"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="TBy-mi-FaP" secondAttribute="trailing" constant="10" id="fyM-ce-M0p"/>
+                                        <constraint firstAttribute="centerY" secondItem="6RI-lt-Kek" secondAttribute="centerY" constant="-4.5" id="tfu-Bz-zVi"/>
                                         <constraint firstItem="jOk-cS-Nsp" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="-8" id="w6e-zQ-QlG"/>
                                     </constraints>
                                 </tableViewCellContentView>
