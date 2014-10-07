@@ -11,7 +11,7 @@
       android:id="@+id/user_avatar"
       android:layout_width="@dimen/userlist_avatar_size"
       android:layout_height="@dimen/userlist_avatar_size"
-      tools:src="@drawable/sample_avatar" />
+      android:src="@drawable/ic_contact_picture_default" />
 
     <TextView
       android:id="@+id/user_name"

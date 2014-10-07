@@ -119,10 +119,13 @@ public class ProfileFragment extends BaseFragment {
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
         rankTextView.setText(getString(R.string.profile_rank_format, String.valueOf(user.getRank())));
-        picasso.load(user.getPhoto()).into(avatarImageView);
         pointsTextView.setText(String.valueOf(user.getPoints()));
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
+        String photo = user.getPhoto();
+        if(photo !=null && !photo.isEmpty()){
+            picasso.load(photo).into(avatarImageView);
+        }
     }
 
     private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
@@ -150,6 +153,6 @@ public class ProfileFragment extends BaseFragment {
 
     private void openUserFollowsList(int followType) {
         if(user==null) return;
-        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), user.getIdUser(), user.getName(), followType));
+        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), user.getIdUser(), followType));
     }
 }

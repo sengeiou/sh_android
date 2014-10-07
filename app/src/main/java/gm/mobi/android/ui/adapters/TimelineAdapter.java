@@ -99,8 +99,13 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
                 long timestamp = item.getCsys_birth().getTime();
                 vh.timestamp.setText(TimeUtils.getElapsedTime(getContext(), timestamp));
 
-                picasso.load(item.getUser().getPhoto()).into(vh.avatar);
-
+                String photo = item.getUser().getPhoto();
+                boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
+                if (isValidPhotoUrl) {
+                    picasso.load(photo).into(vh.avatar);
+                } else {
+                    picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
+                }
                 vh.avatar.setTag(vh);
                 break;
         }

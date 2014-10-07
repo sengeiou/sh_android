@@ -15,7 +15,7 @@
       android:id="@+id/profile_avatar"
       android:layout_width="@dimen/profile_avatar_size"
       android:layout_height="@dimen/profile_avatar_size"
-      tools:src="@drawable/sample_avatar" />
+      android:src="@drawable/ic_contact_picture_default" />
 
     <LinearLayout
       android:id="@+id/profile_scores_bar"

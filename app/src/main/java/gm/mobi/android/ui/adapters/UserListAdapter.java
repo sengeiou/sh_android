@@ -52,7 +52,10 @@ public class UserListAdapter extends BindableAdapter<User> {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.name.setText(item.getName());
         viewHolder.username.setText(item.getUserName());
-        picasso.load(item.getPhoto()).into(viewHolder.avatar);
+        String photo = item.getPhoto();
+        if (photo != null && !photo.isEmpty()) {
+            picasso.load(photo).into(viewHolder.avatar);
+        }
     }
 
     public static class ViewHolder {
