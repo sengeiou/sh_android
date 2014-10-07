@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
 import javax.inject.Inject;
 
 import gm.mobi.android.db.GMContract;
@@ -160,5 +161,18 @@ public abstract class AbstractManager {
         tablesSync.setMaxRows(maxRows);
         tablesSync.setMinRows(minRows);
         return insertOrUpdateSyncTable(tablesSync);
+    }
+    public String createListPlaceholders(int length) {
+        if (length < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("At least one placeholder must be created, otherwise this method is useless.");
+        } else {
+            StringBuilder sb = new StringBuilder(length * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < length; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
     }
 }
