@@ -337,6 +337,7 @@
 //------------------------------------------------------------------------------
 - (void)sendShot{
     self.btnShoot.enabled = NO;
+     self.charactersLeft.hidden = YES;
     
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
