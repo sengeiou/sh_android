@@ -81,10 +81,10 @@
                         </Grid.RowDefinitions>
 
                         <!--Row0-->
-                        <TextBlock x:Name="points" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
+                        <TextBlock x:Name="points" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
                     
                         <!--Row1-->
-                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MePoints ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MePoints ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneDisabledBrush}"/>
                     
                     </Grid>
 
@@ -96,10 +96,10 @@
                         </Grid.RowDefinitions>
 
                         <!--Row0-->
-                        <TextBlock x:Name="following" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
+                        <TextBlock x:Name="following" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
 
                         <!--Row1-->
-                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MeFollowing ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MeFollowing ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneDisabledBrush}"/>
 
                     </Grid>
 
@@ -111,10 +111,10 @@
                         </Grid.RowDefinitions>
 
                         <!--Row0-->
-                        <TextBlock x:Name="followers" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
+                        <TextBlock x:Name="followers" Grid.Row="0" Text="0" FontSize="{StaticResource PhoneFontSizeMediumLarge}" FontWeight="Light" Foreground="{StaticResource PhoneAccentBrush}"/>
 
                         <!--Row1-->
-                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MeFollowers ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding LocalizedResources.MeFollowers ,Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneDisabledBrush}"/>
 
                     </Grid>
 

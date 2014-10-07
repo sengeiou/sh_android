@@ -135,8 +135,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/WhatsUp" translate="yes" xml:space="preserve">
-          <source>What's Up?</source>
-          <target state="new">What's Up?</target>
+          <source>what's up?</source>
+          <target state="new">what's up?</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/NoInternet" translate="yes" xml:space="preserve">

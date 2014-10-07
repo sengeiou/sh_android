@@ -58,7 +58,7 @@
                     <ScrollViewer 
         				x:Name="ContentElement" 
         				MaxHeight="169"
-        				Width="400"
+        				Width="350"
         				BorderThickness="0" 
         				Background="Transparent"
         				HorizontalContentAlignment="Stretch"
@@ -248,8 +248,8 @@
 
         <!--Row1-->
         <Grid x:Name="newShotRow" Grid.Row="1">
-            <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
-            <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,0,10,0" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplatePortrait}" >
+            <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="60,0,0,17" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
+            <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="99,0,10,0" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplatePortrait}" >
                 <c4ftk:ChatBubbleTextBox.InputScope>
                     <InputScope>
                         <InputScopeName NameValue="Chat" />
@@ -258,7 +258,7 @@
             </c4ftk:ChatBubbleTextBox>
         </Grid>
         <!--Row3-->
-        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter">
+        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.Resources>
                 <Style x:Key="TimeLineListBox" TargetType="ListBox">
                     <Setter Property="Background" Value="Transparent"/>
