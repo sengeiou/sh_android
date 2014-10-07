@@ -32,6 +32,7 @@ import gm.mobi.android.sync.SyncConfigurator;
 import gm.mobi.android.ui.adapters.MenuAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
+import gm.mobi.android.ui.fragments.PeopleFragment;
 import gm.mobi.android.ui.fragments.UserFollowsFragment;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
@@ -248,8 +249,7 @@ public class MainActivity extends BaseSignedInActivity {
     private List<MenuAdapter.MenuItem> getDrawerMenu() {
         MenuAdapter.MenuItem[] menuItems = {
             new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
-            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, UserFollowsFragment.class, UserFollowsFragment
-              .getArguments(currentUser.getIdUser(), UserFollowsFragment.FOLLOWING)),
+            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, PeopleFragment.class),
             new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
         };
         return Arrays.asList(menuItems);

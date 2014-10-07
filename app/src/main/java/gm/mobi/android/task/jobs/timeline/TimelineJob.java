@@ -40,15 +40,15 @@ public class TimelineJob extends CancellableJob {
     private static final int PRIORITY = 4;
     private static final int RETRY_ATTEMPTS = 3;
 
-    Application app;
-    NetworkUtil networkUtil;
-    Bus bus;
-    BagdadService service;
-    ShotManager shotManager;
-    FollowManager followManager;
-    public int shotRetrieveType;
-    SQLiteOpenHelper dbHelper;
-    SQLiteDatabase db;
+    private Application app;
+    private NetworkUtil networkUtil;
+    private Bus bus;
+    private BagdadService service;
+    private ShotManager shotManager;
+    private FollowManager followManager;
+    private SQLiteOpenHelper dbHelper;
+    private SQLiteDatabase db;
+    private int shotRetrieveType;
     private User currentUser;
 
     @Inject

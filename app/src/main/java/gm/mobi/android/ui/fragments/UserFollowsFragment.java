@@ -77,16 +77,16 @@ public class UserFollowsFragment extends BaseFragment {
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        retrieveUsers(userId);
+        retrieveUsers();
     }
 
-    private void retrieveUsers(Long userId) {
-        startJob(userId);
+    private void retrieveUsers() {
+        startJob();
         setLoadingView(true);
         setEmpty(false);
     }
 
-    public void startJob(Long userId){
+    public void startJob(){
         GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
         job.init(userId, followType);
         jobManager.addJobInBackground(job);

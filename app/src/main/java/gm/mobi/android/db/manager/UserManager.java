@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -131,5 +132,25 @@ public class UserManager extends AbstractManager{
         return resUser;
     }
 
+    public List<User> getUsersByIds(List<Long> usersIds) {
+        List<User> result = new ArrayList<>(usersIds.size());
+        String[] selectionArguments = new String[usersIds.size()];
+        for (int i = 0; i < usersIds.size(); i++) {
+            selectionArguments[i] = String.valueOf(usersIds.get(i));
+        }
+        Cursor queryResults = db.query(UserTable.TABLE, UserTable.PROJECTION,
+          UserTable.ID + " IN (" + createListPlaceholders(usersIds.size()) + ")", selectionArguments, null, null,
+          UserTable.NAME);
 
+        if (queryResults.getCount() > 0) {
+            queryResults.moveToFirst();
+            do {
+                User user = UserMapper.fromCursor(queryResults);
+                if (user != null) {
+                    result.add(user);
+                }
+            } while (queryResults.moveToNext());
+        }
+        return result;
+    }
 }

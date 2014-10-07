@@ -14,6 +14,7 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -57,7 +58,7 @@ public class GetUsersFollowsJob extends CancellableJob {
     }
 
     @Override
-    protected void run() throws IOException {
+    protected void run() throws IOException, SQLException {
         if (!checkNetwork()) return;
         try {
             List<Long> followingIds = getFollowsIdsFromService();
@@ -91,7 +92,7 @@ public class GetUsersFollowsJob extends CancellableJob {
         return service.getUsersByUserIdList(followingIds);
     }
 
-    private void sendSuccessfulResult(List<User> followingUsers) {
+    protected void sendSuccessfulResult(List<User> followingUsers) {
         bus.post(new FollowsResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(followingUsers));
     }
 
