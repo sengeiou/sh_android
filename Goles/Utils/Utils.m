@@ -495,7 +495,11 @@
     textView.text = text;
     textView.font = [UIFont boldSystemFontOfSize:18];
     [textView sizeToFit];
-    return textView.frame.size.height+44;
+    
+    if (textView.frame.size.height <= 44)
+        return textView.frame.size.height+40;
+    
+    return textView.frame.size.height+20;
 }
 
 
@@ -534,6 +538,23 @@
 +(CGPoint) centerTextInImage:(UIImageView *)imageView{
 
     return CGPointMake((imageView.frame.size.width / 2) + 12, (imageView.frame.size.width / 2) - 10);
+}
+
+
++(NSMutableAttributedString *) formatTitle:(NSString *)text{
+    
+    NSRange boldedRange = NSMakeRange(0, 1);
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    [attrString beginEditing];
+    [attrString addAttribute:NSFontAttributeName
+                       value:[UIFont boldSystemFontOfSize:15]
+                       range:boldedRange];
+    
+    [attrString endEditing];
+    
+    return attrString;
 }
 
 @end

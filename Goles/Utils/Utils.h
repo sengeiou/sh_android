@@ -65,4 +65,6 @@
 
 +(CGPoint) centerTextInImage:(UIImageView *)imageView;
 
++(NSMutableAttributedString *) formatTitle:(NSString *)text;
+
 @end

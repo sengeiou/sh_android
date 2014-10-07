@@ -128,28 +128,11 @@
 - (void)setFollowToNo {
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setTitle:[NSString stringWithFormat:@"%@", [self formatTitle]] forState:UIControlStateNormal];
+    [self.btnFollow setTitle:[NSString stringWithFormat:@"%@", [Utils formatTitle:@"+ FOLLOW"]] forState:UIControlStateNormal];
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
     self.btnFollow.layer.masksToBounds = YES;
-}
-
--(NSMutableAttributedString *) formatTitle{
-    
-    NSString *yourString = @"+ FOLLOW";
-    NSRange boldedRange = NSMakeRange(0, 1);
-    
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:yourString];
-    
-    [attrString beginEditing];
-    [attrString addAttribute:NSFontAttributeName
-                       value:[UIFont boldSystemFontOfSize:15]
-                       range:boldedRange];
-    
-    [attrString endEditing];
-    
-    return attrString;
 }
 
 //------------------------------------------------------------------------------
