@@ -14,7 +14,6 @@
                 <Attribute Alias="deleted" Direction="Both" Description="It's initialized by null to the creation. Must be updated at current_time when is marked as deleted when is not yet synchronized">csys_deleted</Attribute>
             </Data>
 
-
             <Keys>
                 <Key>
                     <Attribute Alias="idUser">idUser</Attribute>
@@ -36,6 +35,9 @@
                     <Attribute Alias="idFollowedUser">idUserFollowed</Attribute>
                 </Filter>
             </Filters>
+            <Ordination>
+                <Attribute Alias="modified" Order="Descending">csys_modified</Attribute>
+            </Ordination>
         </Entity>
     </Entities>
 </AccessPolicy>

@@ -10,15 +10,12 @@
                 <Attribute Alias="userName" Direction="Output" Description="User nick It is not modifiable">userName</Attribute>
                 <Attribute Alias="name" Direction="Output" Description="User name. It is modifiable">name</Attribute>
                 <Attribute Alias="photo" Direction="Output" Description="User photo url">photo</Attribute>
-
-                <Attribute Alias="bio" Direction="Output" Description="User's bio">bio</Attribute>
-                <Attribute Alias="website" Direction="Output" Description="User's website">website</Attribute>
-
-                <Attribute Alias="rank" Direction="Output" Description="User's rank position">rank</Attribute>
-                <Attribute Alias="points" Direction="Output" Description="User's points">points</Attribute>
-
                 <Attribute Alias="numFollowings" Direction="Output" Description="User's following number">numFollowings</Attribute>
                 <Attribute Alias="numFollowers" Direction="Output" Description="User's follower number">numFollowers</Attribute>
+                <Attribute Alias="points" Direction="Output" Description="User's points">points</Attribute>
+                <Attribute Alias="bio" Direction="Output" Description="User's bio">bio</Attribute>
+                <Attribute Alias="website" Direction="Output" Description="User's website">website</Attribute>
+                <Attribute Alias="rank" Direction="Output" Description="Ranking user's position">rank</Attribute>
 
                 <!-- Información de auditoría -->
                 <Attribute Alias="revision" Direction="Output" Description="It's initialized by 0 to the creation. Must be increased by 1 in each modification ">csys_revision</Attribute>
@@ -35,11 +32,14 @@
 
             <Filters>
                 <Filter>
+                    <Attribute Alias="userName">userName</Attribute>
+                    <Attribute Alias="name">name</Attribute>
+                    <Attribute Alias="email">email</Attribute>
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
                 </Filter>
                 <Filter>
-                <Attribute Alias="idUser">idUser</Attribute>
+                    <Attribute Alias="idUser">idUser</Attribute>
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
                 </Filter>

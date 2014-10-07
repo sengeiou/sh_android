@@ -1,30 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <AccessPolicy Version="1.0.0" Description="Políticas de acceso a las entidades de la aplicación Shooter">
     <Entities Name="Entidades Base">
-        <Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
+        <Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000" >
             <Name Alias="Language">Language</Name>
             <Data>
                 <!-- User -->
-                <Attribute Alias="idLanguage" Direction="Output" Description="Language identifier">idLanguage
-                </Attribute>
+                <Attribute Alias="idLanguage" Direction="Output" Description="Language identifier">idLanguage</Attribute>
                 <Attribute Alias="name" Direction="Both" Description="Language name">name</Attribute>
                 <!-- Información de auditoría -->
-                <Attribute Alias="revision" Direction="Both"
-                           Description="It's initialized by 0 to the creation. Must be increased by 1 in each modification ">
-                    csys_revision
-                </Attribute>
-                <Attribute Alias="birth" Direction="Both"
-                           Description="It's initialized by current_time to the creation. Only should be modified in the return backend updates">
-                    csys_birth
-                </Attribute>
-                <Attribute Alias="modified" Direction="Both"
-                           Description="It's initialized by current_time to the creation. Must be updated at each modification or in the return backend updates">
-                    csys_modified
-                </Attribute>
-                <Attribute Alias="deleted" Direction="Both"
-                           Description="It's initialized by null to the creation. Must be updated at current_time when is marked as deleted when is not yet synchronized">
-                    csys_deleted
-                </Attribute>
+                <Attribute Alias="revision" Direction="Both" Description="It's initialized by 0 to the creation. Must be increased by 1 in each modification ">csys_revision</Attribute>
+                <Attribute Alias="birth" Direction="Both" Description="It's initialized by current_time to the creation. Only should be modified in the return backend updates">csys_birth</Attribute>
+                <Attribute Alias="modified" Direction="Both" Description="It's initialized by current_time to the creation. Must be updated at each modification or in the return backend updates">csys_modified</Attribute>
+                <Attribute Alias="deleted" Direction="Both" Description="It's initialized by null to the creation. Must be updated at current_time when is marked as deleted when is not yet synchronized">csys_deleted</Attribute>
             </Data>
 
             <Keys>
@@ -39,7 +26,6 @@
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
                 </Filter>
-
             </Filters>
         </Entity>
     </Entities>
