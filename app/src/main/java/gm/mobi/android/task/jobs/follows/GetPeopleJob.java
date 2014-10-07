@@ -6,7 +6,6 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -17,10 +16,10 @@ import javax.inject.Inject;
 
 public class GetPeopleJob extends GetUsersFollowsJob {
 
-    private final Application context;
-    private final Bus bus;
-    private final BagdadService service;
-    private final NetworkUtil networkUtil;
+    Application context;
+    Bus bus;
+    BagdadService service;
+    NetworkUtil networkUtil;
     private Long userId;
     private UserManager userManager;
     private FollowManager followManager;
@@ -33,7 +32,6 @@ public class GetPeopleJob extends GetUsersFollowsJob {
         this.networkUtil = networkUtil;
         this.userManager = userManager;
         this.followManager = followManager;
-        userId = GolesApplication.get(context).getCurrentUser().getIdUser();
     }
 
     @Override
@@ -52,6 +50,7 @@ public class GetPeopleJob extends GetUsersFollowsJob {
     }
 
     public void init() {
+        userId = GolesApplication.get(context).getCurrentUser().getIdUser();
         super.init(userId, UserDtoFactory.GET_FOLLOWING);
     }
 
