@@ -56,7 +56,7 @@ public class ServerException extends Exception {
 
 		this.setErrorCode(errorCode);
 		this.setMessage(message);
-		this.setExplanation(null);
+		this.setExplanation(throwable.getCause() != null ? throwable.getCause().getMessage() : null);
 		this.setStackTrace(throwable.getStackTrace());
 	}
 

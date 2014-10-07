@@ -256,7 +256,7 @@ public class GenericServiceJDBCHelper {
 				throw new ServerException(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), key.getName()));
 			}
 
-			resultingKey = scapeColumn(new StringBuilder(), column).append('=').append('?');
+			resultingKey = scapeColumn(new StringBuilder(), column).append("=?");
 
 			if (columns != null) {
 				columns.add(column);
@@ -291,7 +291,7 @@ public class GenericServiceJDBCHelper {
 					throw new ServerException(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE, String.format(GenericService.ERROR_INVALID_REQUEST_KEY_ATTRIBUTE_MESSAGE, entityAccessPolicy.getName().getAlias(), key.getName()));
 				}
 
-				scapeColumn(resultingKey, column).append('=').append('?');
+				scapeColumn(resultingKey, column).append("=?");
 
 				if (columns != null) {
 					columns.add(column);
@@ -310,13 +310,14 @@ public class GenericServiceJDBCHelper {
 	 * Retorna una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 * 
 	 * @param entityAccessPolicy Políticas de acceso de la entidad a la que pertenece la lista de campos filtrado.
+	 * @param entityInformation Información de la entidad en el subsistema.
 	 * @param filterSet Conjunto de filtros a resolver.
-	 * @param columns Lista en donde se retornará el conjunto de columnas de filtrado en el mismo orden de resolución.
-	 * @param values Lista en donde se retornará el conjunto de valores de las columnas clave en el mismo orden de resolución.
+	 * @param columns Lista en donde se retornará el conjunto de columnas de filtrado en el mismo orden de resolución. No puede ser <code>null</code>.
+	 * @param values Lista en donde se retornará el conjunto de valores de las columnas clave en el mismo orden de resolución. No puede ser <code>null</code>.
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	public static StringBuilder getFilterString(EntityAccessPolicy entityAccessPolicy, FilterItem filter, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
+	public static StringBuilder getFilterString(EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, FilterItem filter, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		String column = entityAccessPolicy.getAttributeName(filter.getName());
 
@@ -330,9 +331,15 @@ public class GenericServiceJDBCHelper {
 
 			switch(filter.getComparator()) {
 
+			case CONTAINS:
+			case STARTS:
+			case ENDS:
 			case EQ:
 				resultingFilter.append(" IS NULL");
 				break;
+			case NOTCONTAINS:
+			case NOTSTARTS:
+			case NOTENDS:
 			case NE:
 				resultingFilter.append(" IS NOT NULL");
 				break;
@@ -345,7 +352,7 @@ public class GenericServiceJDBCHelper {
 			case LT:
 				resultingFilter.append(" < NULL");
 				break;
-			case LE:
+			case LE:			
 				resultingFilter.append(" <= NULL");
 				break;
 			}
@@ -355,34 +362,104 @@ public class GenericServiceJDBCHelper {
 			switch(filter.getComparator()) {
 
 			case EQ:
-				resultingFilter.append(" = ");
+				resultingFilter.append("=?");
+				values.add(filter.getValue());
 				break;
 			case NE:
-				resultingFilter.append(" <> ");
+				resultingFilter.append("<>?");
+				values.add(filter.getValue());
 				break;
 			case GT:
-				resultingFilter.append(" > ");
+				resultingFilter.append(">?");
+				values.add(filter.getValue());
 				break;
 			case GE:
-				resultingFilter.append(" >= ");
+				resultingFilter.append(">=?");
+				values.add(filter.getValue());
 				break;
 			case LT:
-				resultingFilter.append(" < ");
+				resultingFilter.append("<?");
+				values.add(filter.getValue());
 				break;
 			case LE:
-				resultingFilter.append(" <= ");
+				resultingFilter.append("<=?");
+				values.add(filter.getValue());
+				break;
+			case CONTAINS:
+				resultingFilter.append(" LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add("%" + value.toString() + "%");
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
+				break;
+			case STARTS:
+				resultingFilter.append(" LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add(value.toString() + "%");
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
+				break;
+			case ENDS:
+				resultingFilter.append(" LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add("%" + value.toString());
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
+				break;
+			case NOTCONTAINS:
+				resultingFilter.append(" NOT LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add("%" + value.toString() + "%");
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
+				break;
+			case NOTSTARTS:
+				resultingFilter.append(" NOT LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add(value.toString() + "%");
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
+				break;
+			case NOTENDS:
+				resultingFilter.append(" NOT LIKE ?");
+				
+				try {
+					CharSequence value = (CharSequence)filter.getValue();
+					
+					values.add("%" + value.toString());
+				}
+				catch(Throwable t) {
+					values.add(filter.getValue());
+				}
 				break;
 			}
 
-			resultingFilter.append('?');
-
-			if (columns != null) {
-				columns.add(column);
-			}
-
-			if (values != null) {
-				values.add(filter.getValue());
-			}
+			columns.add(column);
 		}
 
 		return resultingFilter;
@@ -392,13 +469,14 @@ public class GenericServiceJDBCHelper {
 	 * Retorna una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 * 
 	 * @param entityAccessPolicy Políticas de acceso de la entidad a la que pertenece la lista de campos filtrado.
+	 * @param entityInformation Información de la entidad en el subsistema.
 	 * @param filterSet Conjunto de filtros a resolver.
 	 * @param columns Lista en donde se retornará el conjunto de columnas de filtrado en el mismo orden de resolución.
 	 * @param values Lista en donde se retornará el conjunto de valores de las columnas clave en el mismo orden de resolución.
 	 * 
 	 * @return una cadena de texto con el conjunto de campos de filtrado de la entidad indicada en FN parentizada.
 	 */
-	public static StringBuilder getFilterSetString(EntityAccessPolicy entityAccessPolicy, Filter filterSet, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
+	public static StringBuilder getFilterSetString(EntityAccessPolicy entityAccessPolicy, EntityDataSourceInfo entityInformation, Filter filterSet, AbstractList<String> columns, AbstractList<Object> values) throws ServerException {
 
 		if ((filterSet.getFilterItems() == null || filterSet.getFilterItems().size() == 0) &&
 				(filterSet.getFilters() == null || filterSet.getFilters().size() == 0)) {
@@ -417,13 +495,13 @@ public class GenericServiceJDBCHelper {
 
 			FilterItem currentFilter = filterSet.getFilterItems().get(0);
 
-			resultingFilterSet.append(getFilterString(entityAccessPolicy, currentFilter, columns, values));
+			resultingFilterSet.append(getFilterString(entityAccessPolicy, entityInformation, currentFilter, columns, values));
 			for (int i=1; i<filterSet.getFilterItems().size(); i++) {
 
 				currentFilter = filterSet.getFilterItems().get(i);
 
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
-				resultingFilterSet.append(getFilterString(entityAccessPolicy, currentFilter, columns, values));
+				resultingFilterSet.append(getFilterString(entityAccessPolicy, entityInformation, currentFilter, columns, values));
 
 			}
 		}
@@ -436,12 +514,12 @@ public class GenericServiceJDBCHelper {
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
 			}
 			Filter currentFilterSet = filterSet.getFilters().get(0);
-			resultingFilterSet.append(getFilterSetString(entityAccessPolicy, currentFilterSet, columns, values));
+			resultingFilterSet.append(getFilterSetString(entityAccessPolicy, entityInformation, currentFilterSet, columns, values));
 			for (int i=1; i<filterSet.getFilters().size(); i++) {
 
 				currentFilterSet = filterSet.getFilters().get(i);
 				resultingFilterSet.append(filterSet.getNexus() == Filter.NexusType.AND ? " AND " : " OR ");
-				resultingFilterSet.append(getFilterSetString(entityAccessPolicy, currentFilterSet, columns, values));
+				resultingFilterSet.append(getFilterSetString(entityAccessPolicy, entityInformation, currentFilterSet, columns, values));
 
 			}
 		}
@@ -934,7 +1012,7 @@ public class GenericServiceJDBCHelper {
 			JDBCUtils.CloseQuietly(resultSet);
 			JDBCUtils.CloseQuietly(preparedStatement);
 		}
-		
+
 		return true;
 	}
 

@@ -56,6 +56,7 @@ public class MainController extends BaseJspController {
 
 			model.getModel().put("errorCode", e.getErrorCode());
 			model.getModel().put("message", e.getMessage());
+			model.getModel().put("explanation", e.getExplanation());
 		}
 
 		return model;

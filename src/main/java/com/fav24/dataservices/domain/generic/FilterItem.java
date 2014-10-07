@@ -22,7 +22,13 @@ public class FilterItem implements Organizable, Comparable<FilterItem>, Serializ
 		GT("gt"),
 		GE("ge"),
 		LT("lt"),
-		LE("le");
+		LE("le"),
+		CONTAINS("ct"),
+		NOTCONTAINS("nct"),
+		STARTS("st"),
+		NOTSTARTS("nst"),
+		ENDS("en"),
+		NOTENDS("nen");
 
 		private final String comparatorType;
 

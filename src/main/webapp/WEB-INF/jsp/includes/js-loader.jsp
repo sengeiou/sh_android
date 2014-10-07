@@ -31,6 +31,7 @@
         main: [
             '<c:url value="/resources/js/bootstrap.min.js"/>',
 			'<c:url value="/resources/js/moment/moment-with-locales.min.js"/>',
+			'<c:url value="/resources/js/chart/Chart.js"/>',
 			'<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>',
 			'<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>',
 			'<c:url value="/resources/js/requests.js"/>',
@@ -44,9 +45,9 @@
 			'<c:url value="/resources/js/combobox/bootstrap-combobox.js"/>',
 
 			// system_monitor.jsp dependency.
-			'<c:url value="/resources/js/chart/Chart.js"/>',
-			'<c:url value="/resources/js/custom/chartHelper.js"/>',
-			'<c:url value="/resources/js/custom/chartDefaultConfig.js"/>',
+			'<c:url value="/resources/js/chart/plugins/Chart.StackedBar.js"/>',
+			'<c:url value="/resources/js/chart/custom/chartHelper.js"/>',
+			'<c:url value="/resources/js/chart/custom/chartDefaultConfig.js"/>',
 			
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
 			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',

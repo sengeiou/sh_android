@@ -16,7 +16,7 @@ public interface DataSourcesService {
 	public static final Logger logger = LoggerFactory.getLogger(DataSourcesService.class);
 
 	public static final String ERROR_DATASOURCE_GET_INFO_FAILED = "G000";
-	public static final String ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos.";
+	public static final String ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos, debido a: %s";
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED = "G001";
 	public static final String ERROR_STATS_DATASOURCE_GET_INFO_FAILED_MESSAGE = "Error al obtener la información de la fuente de datos de uso.";
 	public static final String ERROR_DATASOURCE_GET_TIMESTAMP_FAILED = "G002";

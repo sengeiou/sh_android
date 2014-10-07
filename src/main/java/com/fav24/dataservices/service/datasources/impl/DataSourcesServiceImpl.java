@@ -46,7 +46,7 @@ public class DataSourcesServiceImpl implements DataSourcesService {
 
 		} catch (Throwable t) {
 
-			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE + " (" + t.getMessage() + ")");
+			throw new ServerException(ERROR_DATASOURCE_GET_INFO_FAILED, String.format(ERROR_DATASOURCE_GET_INFO_FAILED_MESSAGE, t.getMessage()), t);
 		}
 	}
 

@@ -62,19 +62,20 @@ public class EntityOrderAttribute extends EntityAttribute {
 	 * Constructor por defecto.
 	 */
 	public EntityOrderAttribute() {
-		this(null, null);
+		this(null, null, null);
 	}
 	
 	/**
 	 * Constructor por defecto.
 	 * 
 	 * @param alias El alias de este atributo.
+	 * @param name El nombre de este atributo.
 	 * @param order Sentido de ordenación.
 	 */
-	public EntityOrderAttribute(String alias, Order order) {
+	public EntityOrderAttribute(String alias, String name, Order order) {
 		
-		super(alias, null);
-
+		super(alias, name);
+		
 		this.order = order;
 	}
 
@@ -85,7 +86,7 @@ public class EntityOrderAttribute extends EntityAttribute {
 	 */
 	public EntityOrderAttribute(EntityOrderAttribute entityOrderAttribute) {
 		
-		this(entityOrderAttribute.getAlias(), entityOrderAttribute.order);
+		this(entityOrderAttribute.getAlias(), entityOrderAttribute.getName(), entityOrderAttribute.getOrder());
 	}
 	
 	/**

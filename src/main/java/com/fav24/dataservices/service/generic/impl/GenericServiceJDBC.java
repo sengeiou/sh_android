@@ -159,7 +159,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			filterColumns = new ArrayList<String>();
 			filterValues = new ArrayList<Object>();
 
-			StringBuilder filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, operation.getMetadata().getFilter(), filterColumns, filterValues);
+			StringBuilder filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, entityInformation, operation.getMetadata().getFilter(), filterColumns, filterValues);
 
 			if (filter != null && filter.length() > 0) {
 
@@ -559,7 +559,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		else if (operation.getMetadata().getFilter() != null) {
 
 			filterTypes = entityInformation.filterFields;
-			filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, operation.getMetadata().getFilter(), filterColumns, filterValues);
+			filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, entityInformation, operation.getMetadata().getFilter(), filterColumns, filterValues);
 		}
 		else {
 			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
@@ -757,7 +757,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		queryFrom.append(" FROM ").append(entityAccessPolicy.getName().getName());
 
 		queryDelete.append(queryFrom);
-		
+
 		/*
 		 * Especificación del filtro.
 		 */
@@ -777,7 +777,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		else if (operation.getMetadata().getFilter() != null) {
 
 			filterTypes = entityInformation.filterFields;
-			filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, operation.getMetadata().getFilter(), filterColumns, filterValues);
+			filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, entityInformation, operation.getMetadata().getFilter(), filterColumns, filterValues);
 		}
 		else {
 			throw new ServerException(ERROR_UNCOMPLETE_KEY_FILTER_REQUEST, ERROR_UNCOMPLETE_KEY_FILTER_REQUEST_MESSAGE);
@@ -931,7 +931,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		}
 		else if (operation.getMetadata().getFilter() != null) {
 
-			StringBuilder filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, operation.getMetadata().getFilter(), columns, values);
+			StringBuilder filter = GenericServiceJDBCHelper.getFilterSetString(entityAccessPolicy, entityInformation, operation.getMetadata().getFilter(), columns, values);
 
 			queryWhere.append(filter);
 		}
