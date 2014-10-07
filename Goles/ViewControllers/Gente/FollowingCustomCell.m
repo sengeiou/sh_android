@@ -80,9 +80,9 @@
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
 
-    [self.actionButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [self.actionButton setTitle:@" FOLLOWING" forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
-    [self.actionButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
     [self.actionButton setContentEdgeInsets:contentInsets];

@@ -139,7 +139,7 @@
 	
     [self.btnFollow setTitle:@"FOLLOWING" forState:UIControlStateNormal];
     self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
-    [self.btnFollow setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -15.0f, 0.0f, 0.0f);
     [self.btnFollow setContentEdgeInsets:contentInsets];
 }
