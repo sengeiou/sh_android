@@ -8,6 +8,9 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:editTextBackground">@drawable/edit_text_background</item>
         <item name="android:textColorLink">@color/links</item>
+
+        <item name="searchViewEditQueryBackground">@drawable/edit_text_background</item>
+        <item name="searchViewSearchIcon">@drawable/ic_person_add</item>
     </style>
 
     <style name="GolesTheme.NoActionBar">

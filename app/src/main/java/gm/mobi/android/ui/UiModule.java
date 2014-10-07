@@ -1,5 +1,6 @@
 package gm.mobi.android.ui;
 
+import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import javax.inject.Singleton;
@@ -25,7 +26,8 @@ import gm.mobi.android.ui.base.BaseActivity;
                 FacebookRegistroActivity.class,
                 NewShotActivity.class,
                 ProfileContainerActivity.class,
-                UserFollowsContainerActivity.class
+                UserFollowsContainerActivity.class,
+                FindFriendsActivity.class,
 
         },
         complete = false
