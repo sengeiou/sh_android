@@ -38,7 +38,6 @@
 		AA623CF91998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CFA1998A7F200A942A9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE21998A7F200A942A9 /* UIKit.framework */; };
 		AA623D021998A7F200A942A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623D001998A7F200A942A9 /* InfoPlist.strings */; };
-		AA623D041998A7F200A942A9 /* GolesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D031998A7F200A942A9 /* GolesTests.m */; };
 		AA623D3F1998CF4B00A942A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623D381998CF4B00A942A9 /* InfoPlist.strings */; };
 		AA623D401998CF4B00A942A9 /* golesMogen.sh in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3A1998CF4B00A942A9 /* golesMogen.sh */; };
 		AA623D411998CF4B00A942A9 /* a.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AA623D3C1998CF4B00A942A9 /* a.aiff */; };
@@ -105,7 +104,6 @@
 		AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543919C057C000E39D94 /* UIRefreshControl+AFNetworking.m */; };
 		AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */; };
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
-		AACA545719C33D7900E39D94 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */; };
 		AAE0EF5719E424DA00F32FF7 /* TimelineViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */; };
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
@@ -170,9 +168,7 @@
 		AA623CEE1998A7F200A942A9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		AA623CF61998A7F200A942A9 /* ShootrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShootrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CF71998A7F200A942A9 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		AA623CFF1998A7F200A942A9 /* ShootrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ShootrTests-Info.plist"; sourceTree = "<group>"; };
 		AA623D011998A7F200A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		AA623D031998A7F200A942A9 /* GolesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GolesTests.m; sourceTree = "<group>"; };
 		AA623D371998CE6B00A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AA623D381998CF4B00A942A9 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		AA623D3A1998CF4B00A942A9 /* golesMogen.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = golesMogen.sh; sourceTree = "<group>"; };
@@ -303,12 +299,12 @@
 		AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		AACA545319C08E4A00E39D94 /* TimeLineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineViewController.h; path = Goles/ViewControllers/TimeLine/TimeLineViewController.h; sourceTree = SOURCE_ROOT; };
 		AACA545419C08E4A00E39D94 /* TimeLineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineViewController.m; path = Goles/ViewControllers/TimeLine/TimeLineViewController.m; sourceTree = SOURCE_ROOT; };
-		AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavRestConsumerHelperTest.m; sourceTree = "<group>"; };
 		AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimelineViewControllerTest.m; path = Tests/TimelineViewControllerTest.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5819E4253C00F32FF7 /* TimeLineHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineHelper.h; path = Tests/TimeLineHelper.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineHelper.m; path = Tests/TimeLineHelper.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PerformanceTests.m; path = Tests/PerformanceTests.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavRestConsumerHelperTest.m; path = Tests/FavRestConsumerHelperTest.m; sourceTree = SOURCE_ROOT; };
+		AAE0EF5F19E4258200F32FF7 /* ShootrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShootrTests-Info.plist"; path = "Tests/ShootrTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,7 +337,6 @@
 			isa = PBXGroup;
 			children = (
 				AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */,
-				AACA545619C33D7900E39D94 /* FavRestConsumerHelperTest.m */,
 			);
 			name = Webservice;
 			sourceTree = "<group>";
@@ -493,7 +488,6 @@
 				A526039219DD89C600375FB1 /* Timeline */,
 				A526039119DD80ED00375FB1 /* Performance */,
 				A526039019DD7F9D00375FB1 /* Webservice */,
-				AA623D031998A7F200A942A9 /* GolesTests.m */,
 				AA623CFE1998A7F200A942A9 /* Supporting Files */,
 			);
 			name = Tests;
@@ -503,7 +497,7 @@
 		AA623CFE1998A7F200A942A9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AA623CFF1998A7F200A942A9 /* ShootrTests-Info.plist */,
+				AAE0EF5F19E4258200F32FF7 /* ShootrTests-Info.plist */,
 				AA623D001998A7F200A942A9 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -989,10 +983,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA623D041998A7F200A942A9 /* GolesTests.m in Sources */,
 				AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */,
 				AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */,
-				AACA545719C33D7900E39D94 /* FavRestConsumerHelperTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
