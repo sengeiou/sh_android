@@ -68,16 +68,16 @@ public class SearchPeopleJob extends CancellableJob {
             return;
         }
 
-        try {
-            List<User> users = service.searchUsersByNameOrNickName(searchString);
-            if (users != null && users.size()>0) {
-                bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(users));
-            } else {
-                bus.post(new SearchPeopleEvent(ResultEvent.STATUS_INVALID));
-            }
-        } catch (IOException e) {
-            bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
-        }
+        //try {
+        //    List<User> users = service.searchUsersByNameOrNickName(searchString);
+        //    if (users != null && users.size()>0) {
+        //        bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(users));
+        //    } else {
+        //        bus.post(new SearchPeopleEvent(ResultEvent.STATUS_INVALID));
+        //    }
+        //} catch (IOException e) {
+        //    bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
+        //}
 
     }
 
