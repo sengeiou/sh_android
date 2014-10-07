@@ -17,11 +17,9 @@ import timber.log.Timber;
 
 public abstract class AbstractManager {
 
-    public static int NUMDAYS = 30;
+    public static int NUMDAYS = 60;
     @Inject protected SQLiteOpenHelper dbHelper;
     SQLiteDatabase db;
-
-
 
 
     public void setDataBase(SQLiteDatabase db){
@@ -95,7 +93,6 @@ public abstract class AbstractManager {
             c.moveToFirst();
             numRows = c.getInt(0);
         }
-
         c.close();
         return numRows;
     }
@@ -149,4 +146,19 @@ public abstract class AbstractManager {
         return lastDateModified;
     }
 
+
+    public long insertInTableSync(String tableName, int order, int maxRows, int minRows){
+        TableSync tablesSync = new TableSync();
+        tablesSync.setOrder(order); // It's the second data type the application insert in database
+        tablesSync.setDirection("BOTH");
+        tablesSync.setEntity(tableName);
+        tablesSync.setMax_timestamp(System.currentTimeMillis());
+
+        if(isTableEmpty(tableName)){
+            tablesSync.setMin_timestamp(System.currentTimeMillis());
+        }
+        tablesSync.setMaxRows(maxRows);
+        tablesSync.setMinRows(minRows);
+        return insertOrUpdateSyncTable(tablesSync);
+    }
 }
