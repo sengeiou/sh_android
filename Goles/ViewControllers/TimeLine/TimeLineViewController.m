@@ -309,11 +309,13 @@
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
-    if (self.arrayShots.count > 0){
-        NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
-    }
-//        [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
+    if (self.arrayShots.count > 0)
+        [self performSelectorOnMainThread:@selector(animationInsertShot) withObject:nil waitUntilDone:NO];
+}
+
+-(void)animationInsertShot{
+    NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 #pragma mark - Send shot
