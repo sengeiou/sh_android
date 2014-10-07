@@ -21,6 +21,7 @@ public class FilterBuilder {
     public static String COMPARATOR_GREAT_EQUAL_THAN = "ge";
     public static String COMPARATOR_LESS_THAN = "lt";
     public static String COMPARATOR_LESS_EQUAL_THAN = "le";
+    public static String COMPARATOR_CONTAINS = "ct";
 
     public static ItemField<AndItem> and(String field) {
         AndItem andItem = new AndItem();
@@ -116,10 +117,15 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
+        private T contains(String query) {
+            createAndAddItem(COMPARATOR_CONTAINS, query);
+            return nexusItemReference;
+        }
         private void createAndAddItem(String comparator, Object value) {
             FilterItemDto item = new FilterItemDto(comparator, fieldName, value);
             nexusItemReference.addItem(item);
         }
+
 
         @Override
         @Deprecated
