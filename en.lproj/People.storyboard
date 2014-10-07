@@ -113,7 +113,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pn0-5T-r2b">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pn0-5T-r2b">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hzD-5B-NPo" userLabel="Main View">
@@ -291,14 +291,13 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="hzD-5B-NPo" firstAttribute="top" secondItem="pn0-5T-r2b" secondAttribute="top" id="5Ip-AQ-eJe"/>
-                                    <constraint firstAttribute="trailing" secondItem="hzD-5B-NPo" secondAttribute="trailing" id="8Ct-i5-k7H"/>
-                                    <constraint firstItem="hzD-5B-NPo" firstAttribute="leading" secondItem="pn0-5T-r2b" secondAttribute="leading" id="VQf-TD-yLf"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="hzD-5B-NPo" secondAttribute="width" id="PCT-5S-Jea"/>
+                            <constraint firstItem="pn0-5T-r2b" firstAttribute="width" secondItem="6I7-Nj-aKP" secondAttribute="width" id="bLK-kt-W9X"/>
+                            <constraint firstItem="hzD-5B-NPo" firstAttribute="width" secondItem="6I7-Nj-aKP" secondAttribute="width" id="c6C-JJ-skC"/>
                             <constraint firstItem="7lY-ap-KUg" firstAttribute="top" secondItem="pn0-5T-r2b" secondAttribute="bottom" id="kb5-BN-D7q"/>
                             <constraint firstItem="pn0-5T-r2b" firstAttribute="top" secondItem="6I7-Nj-aKP" secondAttribute="topMargin" id="kgI-XE-Vdk"/>
                         </constraints>
