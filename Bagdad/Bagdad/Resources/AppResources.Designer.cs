@@ -61,6 +61,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Your phone is in airplane mode..
+        /// </summary>
+        public static string AirplaneMode {
+            get {
+                return ResourceManager.GetString("AirplaneMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a agregar.
         /// </summary>
         public static string AppBarButtonText {

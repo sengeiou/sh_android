@@ -161,7 +161,9 @@ namespace Bagdad
                 progress.IsVisible = true;
                 if (!App.isInternetAvailable)
                 {
-                    MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
+                    if (App.IsAirplaneMode()) MessageBox.Show(AppResources.AirplaneMode, AppResources.CanConnect, MessageBoxButton.OK);
+                    else MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
+                    progress.IsVisible = false;
                 }
                 else
                 {

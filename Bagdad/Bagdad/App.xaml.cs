@@ -260,6 +260,16 @@ namespace Bagdad
             ShowConnectionInfo();
         }
 
+
+        public static bool IsAirplaneMode()
+        {
+            bool[] networks = new bool[4] { DeviceNetworkInformation.IsNetworkAvailable, DeviceNetworkInformation.IsCellularDataEnabled, DeviceNetworkInformation.IsCellularDataRoamingEnabled, DeviceNetworkInformation.IsWiFiEnabled };
+            if (networks[0] == false && networks[1] == false && networks[3]  == false)
+                return true;
+            else return false;
+        }
+
+
         #endregion
 
         #region SYNCHRO
