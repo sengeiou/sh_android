@@ -108,6 +108,7 @@
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
 		AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */; };
+		AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,6 +306,7 @@
 		AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PerformanceTests.m; path = Tests/PerformanceTests.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavRestConsumerHelperTest.m; path = Tests/FavRestConsumerHelperTest.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5F19E4258200F32FF7 /* ShootrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShootrTests-Info.plist"; path = "Tests/ShootrTests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralTests.m; path = Tests/GeneralTests.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -485,6 +487,7 @@
 		AA623CFD1998A7F200A942A9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */,
 				A526039219DD89C600375FB1 /* Timeline */,
 				A526039119DD80ED00375FB1 /* Performance */,
 				A526039019DD7F9D00375FB1 /* Webservice */,
@@ -983,6 +986,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */,
 				AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */,
 				AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */,
 			);
