@@ -20,6 +20,7 @@
 #import "Constants.h"
 #import "ProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
+#import <CoreText/CoreText.h>
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -604,8 +605,6 @@
 
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-   
-    //NSString *allText = [NSString stringWithFormat:@"%@%@", textView.text, text];
     
     NSString* result = [self controlCharactersShot:self.txtView.text];
 
@@ -641,15 +640,8 @@
     UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
     CGRect currentRect = [textView caretRectForPosition:pos];
 
-
-    //NSLog(@"currentRectYY %f", currentRect.origin.y);
-
-    if (currentRect.origin.y < previousRect.origin.y){
-        //new line reached, write your code
-        [self adaptViewSizeWhenDeleting];
-    }
-//    }else
-//        [self adaptViewSizeWhenWriting:textView];
+    if (currentRect.origin.y < previousRect.origin.y)
+        [self adaptViewSizeWhenDeleting:textView];
     
     previousRect = currentRect;
     
@@ -662,7 +654,7 @@
 
     if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
         if (rows > 1) {
-            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            self.bottomViewHeightConstraint.constant = ((rows-1)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
@@ -671,11 +663,11 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)adaptViewSizeWhenDeleting{
+- (void)adaptViewSizeWhenDeleting:(UITextView *)textView{
     
     if (rows > 1) {
         rows = rows-1;
-        self.bottomViewHeightConstraint.constant = (rows*18)+75;
+        self.bottomViewHeightConstraint.constant = (rows*textView.font.lineHeight)+75;
         [UIView animateWithDuration:0.25f animations:^{
             [self.view layoutIfNeeded];
         }];

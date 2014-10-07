@@ -825,6 +825,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Fav24;
 				TargetAttributes = {
+					AA623CDA1998A7F200A942A9 = {
+						DevelopmentTeam = C7YMPN4A4Y;
+					};
 					AA623CF51998A7F200A942A9 = {
 						TestTargetID = AA623CDA1998A7F200A942A9;
 					};
@@ -1080,8 +1083,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: World Tour Platforms SL (C7YMPN4A4Y)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ignasi Elias de Gispert (S72NGS2PDN)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1099,7 +1102,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "540EF90D-8336-488E-B1A6-D92703625F7F";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1120,8 +1123,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: World Tour Platforms SL (C7YMPN4A4Y)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ignasi Elias de Gispert (S72NGS2PDN)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1132,7 +1135,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "540EF90D-8336-488E-B1A6-D92703625F7F";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
