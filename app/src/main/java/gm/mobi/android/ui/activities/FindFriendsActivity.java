@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -112,7 +113,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     public void getSearchResult(SearchPeopleEvent event) {
         setLoading(false);
         List<User> results = event.getSearchUsers();
-        if (results.size() > 0) {
+        if (results != null && results.size() > 0) {
             setListContent(results);
         } else {
             setEmpty(true);
@@ -134,5 +135,6 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
     private void setEmpty(boolean empty) {
         //TODO
+        Toast.makeText(this,"Devuelve vacío",Toast.LENGTH_LONG).show();
     }
 }

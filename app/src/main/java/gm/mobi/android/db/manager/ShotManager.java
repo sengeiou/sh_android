@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,7 +17,6 @@ import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.User;
 import timber.log.Timber;
 
@@ -31,9 +29,10 @@ public class ShotManager extends  AbstractManager{
     private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
     private static final String CSYS_BIRTH = GMContract.SyncColumns.CSYS_BIRTH;
 
-
-    public ShotManager(){
-
+    @Inject
+    public ShotManager(ShotMapper shotMapper, UserMapper userMapper){
+        this.shotMapper = shotMapper;
+        this.userMapper = userMapper;
     }
 
     /**

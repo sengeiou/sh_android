@@ -113,7 +113,7 @@ public class DataModule {
     }
 
     @Provides ShotManager provideShotManager() {
-        return new ShotManager();
+        return new ShotManager(provideShotMapper(), provideUserMapper());
     }
 
     @Provides FollowMapper provideFollowMapper() { return new FollowMapper();}
@@ -126,7 +126,7 @@ public class DataModule {
     @Provides UserMapper provideUserMapper(){ return new UserMapper();}
 
     @Provides TeamManager provideTeamManager() {
-        return new TeamManager();
+        return new TeamManager(providerTeamMapper());
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {

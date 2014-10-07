@@ -117,7 +117,7 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
-        private T contains(String query) {
+        public T contains(String query) {
             createAndAddItem(COMPARATOR_CONTAINS, query);
             return nexusItemReference;
         }

@@ -44,6 +44,7 @@ public class UserDtoFactory {
     private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
     private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
     private static final String ALIAS_GETFOLLOWRELATIONSHIP = "GET_FOLLOWRELATIONSHIP";
+    private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -157,7 +158,16 @@ public class UserDtoFactory {
     }
 
     public GenericDto searchUserOperation(String searchString){
-        return null;
+        OperationDto od = new OperationDto();
+        FilterDto filter = and(orModifiedOrDeletedAfter(0L), or(UserTable.NAME).contains(searchString).or(UserTable.USER_NAME).contains(searchString).or(UserTable.EMAIL).contains(searchString)).build();
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE, false,null,0L,100L,filter);
+        od.setMetadata(md);
+
+        Map<String,Object>[] array = new HashMap[1];
+        array[0] = userMapper.reqRestUsersToDto(null);
+        od.setData(array);
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_USERS, od);
     }
 
     public GenericDto getUsersOperationDto(List<Long> userIds, Long offset, Long date) {

@@ -24,8 +24,8 @@ public class TeamManager extends AbstractManager{
     @Inject TeamMapper teamMapper;
 
     @Inject
-    public TeamManager(){
-
+    public TeamManager(TeamMapper teamMapper){
+        this.teamMapper = teamMapper;
     }
 
     /**
