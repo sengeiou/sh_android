@@ -35,9 +35,11 @@ public class AreaDAOImpl extends BaseDAOImpl implements com.fav24.shootr.dao.Are
         PreparedStatementCreatorFactory factory = new PreparedStatementCreatorFactory(query);
         factory.setGeneratedKeysColumnNames(new String[]{"idArea"});
         factory.addParameter(new SqlParameter(Types.VARCHAR));//name
+        factory.addParameter(new SqlParameter(Types.NUMERIC));//idAreaOpta
 
         Object[] params = new Object[]{
-              area.getName()
+              area.getName(),
+              area.getIdAreaOpta()
         };
 
         PreparedStatementCreator psc = factory.newPreparedStatementCreator(params);
@@ -50,7 +52,7 @@ public class AreaDAOImpl extends BaseDAOImpl implements com.fav24.shootr.dao.Are
     @Override
     public long updateArea(Area area)  {
         String query = PropertiesManager.getProperty("area.update");
-        return getJdbcTemplate().update(query, area.getName(), area.getIdArea());
+        return getJdbcTemplate().update(query, area.getName(), area.getIdAreaOpta(), area.getIdArea());
     }
 
 

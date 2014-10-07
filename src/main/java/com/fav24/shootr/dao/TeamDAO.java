@@ -26,6 +26,13 @@ public interface TeamDAO extends BaseDAO {
      * @return generated idTeam of the inserted team
      */
     Long insertTeam(Team team);
+    
+    /**
+     * Insert multiple teams.
+     * @param teams
+     * @return
+     */
+    int batchInsertTeam(final List<Team> teams);
 
     /**
      * Given an Team Object, this method update it into DataBase and returns the number of the updated rows
@@ -33,4 +40,11 @@ public interface TeamDAO extends BaseDAO {
      * @return number of the updated rows
      */
     long updateTeam(Team team);
+
+    /**
+     * Given an idArea, return all its teams.
+     * @param idArea area identifier.
+     * @return teams of the area.
+     */
+	List<Team> getAllTeamsByAreaId(Long idArea);
 }

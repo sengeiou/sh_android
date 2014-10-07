@@ -4,10 +4,12 @@ public class Team extends Synchronized {
 
 	private Long idTeam;
 	private Long idTeamOpta;
+	private Long idArea;
 	private String clubName;
 	private String officialName;
 	private String shortName;
 	private String tlaName;
+	private String type;
 
 	public Long getIdTeam() {
 		return idTeam;
@@ -23,6 +25,14 @@ public class Team extends Synchronized {
 
 	public void setIdTeamOpta(Long idTeamOpta) {
 		this.idTeamOpta = idTeamOpta;
+	}
+
+	public Long getIdArea() {
+		return idArea;
+	}
+
+	public void setIdArea(Long idArea) {
+		this.idArea = idArea;
 	}
 
 	public String getClubName() {
@@ -57,11 +67,19 @@ public class Team extends Synchronized {
 		this.tlaName = tlaName;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Team [idTeam=").append(idTeam).append(", idTeamOpta=").append(idTeamOpta).append(", clubName=").append(clubName).append(", officialName=").append(officialName)
-				.append(", shortName=").append(shortName).append(", tlaName=").append(tlaName).append("]");
+		builder.append("Team [idTeam=").append(idTeam).append(", idTeamOpta=").append(idTeamOpta).append(", idArea=").append(idArea).append(", clubName=").append(clubName).append(", officialName=")
+				.append(officialName).append(", shortName=").append(shortName).append(", tlaName=").append(tlaName).append(", type=").append(type).append("]");
 		return builder.toString();
 	}
 
