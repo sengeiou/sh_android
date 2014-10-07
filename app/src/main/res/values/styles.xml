@@ -15,7 +15,6 @@
         <item name="android:windowTitleSize">0dp</item>
     </style>
 
-
     <style name="GolesTheme.NoActionBar.Floating">
         <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowIsFloating">true</item>-->
@@ -23,14 +22,12 @@
         <item name="android:windowBackground">@color/transparent</item>
     </style>
 
-
     <!-- Styles -->
     <style name="ActionBar.Solid.Goles" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <!--<item name="android:background">@drawable/ab_solid_goles</item>-->
         <item name="android:background">@color/primary</item>
         <item name="android:icon">@drawable/ic_ab_icon</item>
     </style>
-
 
     <style name="TextAppearance.FloatLabel" parent="android:TextAppearance.Small">
         <item name="android:textColor">@color/gray_60</item>
@@ -79,7 +76,7 @@
     </style>
 
     <style name="ProfileFollowButtonText">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:drawableLeft">@drawable/ic_person_add</item>
         <item name="android:drawablePadding">4dp</item>
@@ -93,9 +90,9 @@
     </style>
 
     <style name="ProfileFollowButtonText.Checked">
-        <item name="android:textColor">@color/gray_10</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableLeft">@drawable/ic_check_primary</item>
+        <item name="android:drawableLeft">@drawable/ic_check</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center</item>
         <item name="android:text">@string/profile_following</item>
@@ -103,9 +100,9 @@
 
     <!-- Menú drawer -->
 
-    <style name="MenuDrawer"/>
+    <style name="MenuDrawer" />
 
-    <style name="MenuDrawer.Widget"/>
+    <style name="MenuDrawer.Widget" />
 
     <style name="MenuDrawer.Widget.Title">
         <item name="android:textAppearance">?android:attr/textAppearance</item>
