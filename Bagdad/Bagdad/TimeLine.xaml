@@ -14,37 +14,40 @@
     d:DataContext="{d:DesignData SampleData/ShotsSampleData.xaml}"
     SupportedOrientations="PortraitOrLandscape"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
-    OrientationChanged="phoneApplicationPage_OrientationChanged">
+    OrientationChanged="phoneApplicationPage_OrientationChanged" RenderTransformOrigin="0.5,0.5">
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="PanoramaTitle">
-        	<Grid Margin="0,50,0,0">
-        		<TextBlock Height="35" Text="{Binding}" Style="{StaticResource PhoneTextTitle3Style}"/>
-        	</Grid>
+            <Grid Margin="0,50,0,0">
+                <TextBlock Height="35" Text="{Binding}" Style="{StaticResource PhoneTextTitle3Style}"/>
+            </Grid>
         </DataTemplate>
-        <ControlTemplate x:Key="ChatBubbleTextBoxControlTemplate1" TargetType="c4ftk:ChatBubbleTextBox">
-        	<c4ftk:ChatBubble x:Name="chatBubble" 
+        <ControlTemplate x:Key="ChatBubbleTextBoxControlTemplatePortrait" TargetType="c4ftk:ChatBubbleTextBox">
+            <c4ftk:ChatBubble x:Name="chatBubble" 
         		BorderBrush="{TemplateBinding BorderBrush}" 
         		BorderThickness="{TemplateBinding BorderThickness}" 
         		Background="{TemplateBinding Background}" 
-        		Height="{TemplateBinding Height}"
         		Width="{TemplateBinding Width}"
         		ChatBubbleDirection="{TemplateBinding ChatBubbleDirection}"
+                Margin="0,0"
                 >
-        		<VisualStateManager.VisualStateGroups>
-        			<VisualStateGroup x:Name="FocusStates">
-        				<VisualState x:Name="Unfocused"/>
-        				<VisualState x:Name="Focused">
-        					<Storyboard>
-        						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.BorderBrush)" Storyboard.TargetName="chatBubble">
-        							<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
-        						</ObjectAnimationUsingKeyFrames>
-        					</Storyboard>
-        				</VisualState>
-        			</VisualStateGroup>
-        		</VisualStateManager.VisualStateGroups>
-        		<Grid HorizontalAlignment="Stretch" Width="{TemplateBinding Width}">
-        			<ContentControl
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="FocusStates">
+                        <VisualState x:Name="Unfocused"/>
+                        <VisualState x:Name="Focused">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.BorderBrush)" Storyboard.TargetName="chatBubble">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.Background)" Storyboard.TargetName="chatBubble">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                <Grid HorizontalAlignment="Stretch" Width="{TemplateBinding Width}">
+                    <ContentControl
         				x:Name="HintContentElement"
         				BorderThickness="0" 
         				Background="Transparent"
@@ -52,7 +55,7 @@
         				HorizontalContentAlignment="Stretch"
         				VerticalContentAlignment="Stretch"
         				Content="{TemplateBinding Hint}" />
-        			<ScrollViewer 
+                    <ScrollViewer 
         				x:Name="ContentElement" 
         				MaxHeight="169"
         				Width="400"
@@ -61,66 +64,118 @@
         				HorizontalContentAlignment="Stretch"
         				VerticalContentAlignment="Stretch"
         				ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-        		</Grid>
-        	</c4ftk:ChatBubble>
+                </Grid>
+            </c4ftk:ChatBubble>
         </ControlTemplate>
+        
+<!--
+        <ControlTemplate x:Key="ChatBubbleTextBoxControlTemplateLandscape" TargetType="c4ftk:ChatBubbleTextBox">
+            <c4ftk:ChatBubble x:Name="chatBubble" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}" 
+                Background="{TemplateBinding Background}" 
+                Width="{TemplateBinding Width}"
+                ChatBubbleDirection="{TemplateBinding ChatBubbleDirection}"
+                Margin="0,0"
+                >
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="FocusStates">
+                        <VisualState x:Name="Unfocused"/>
+                        <VisualState x:Name="Focused">
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.BorderBrush)" Storyboard.TargetName="chatBubble">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.Background)" Storyboard.TargetName="chatBubble">
+                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                <Grid HorizontalAlignment="Stretch" Width="{TemplateBinding Width}">
+                    <ContentControl
+                        x:Name="HintContentElement"
+                        BorderThickness="0" 
+                        Background="Transparent"
+                        Foreground="Gray"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        Content="{TemplateBinding Hint}" />
+                    <ScrollViewer 
+                        x:Name="ContentElement" 
+                        MaxHeight="100"
+                        Width="625"
+                        BorderThickness="0" 
+                        Background="Transparent"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                </Grid>
+            </c4ftk:ChatBubble>
+        </ControlTemplate>
+-->
+        
         <DataTemplate x:Key="PortaitItemTemplate" >
-        	<Grid x:Name="itemGrid" Margin="0,0,0,48" Width="{Binding ActualWidth, ElementName=myShots}">
-        		<Grid.ColumnDefinitions>
-        			<ColumnDefinition Width="Auto"/>
-        			<ColumnDefinition Width="*"/>
-        		</Grid.ColumnDefinitions>
+            <Grid x:Name="itemGrid" Margin="0,0,0,48" Width="{Binding ActualWidth, ElementName=myShots}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                            <!--Column0-->
-        		<Grid VerticalAlignment="Top" Grid.Column="0" Tap="ShotUserProfile_Tap">
-        			<Rectangle Fill="{StaticResource PhoneChromeBrush}" Width="75" Height="75"/>
-        			<Image x:Name="image" Source="{Binding shotUserImage}" Width="75" Height="75"/>
-        		</Grid>
-                            <!--Column1-->
-        		<Grid Grid.Column="1" Margin="12,0,24,0" Tap="Shot_Tap">
-        			<Grid.RowDefinitions>
-        				<RowDefinition Height="Auto"/>
-        				<RowDefinition Height="Auto"/>
-        				<RowDefinition Height="*"/>
-        			</Grid.RowDefinitions>
+                <!--Column0-->
+                <Grid VerticalAlignment="Top" Grid.Column="0" Tap="ShotUserProfile_Tap">
+                    <Rectangle Fill="{StaticResource PhoneChromeBrush}" Width="75" Height="75"/>
+                    <Image x:Name="image" Source="{Binding shotUserImage}" Width="75" Height="75"/>
+                </Grid>
+                <!--Column1-->
+                <Grid Grid.Column="1" Margin="12,0,24,0" Tap="Shot_Tap">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                                <!--Row0-->
-        			<Grid Grid.Row="0">
-        				<Grid.ColumnDefinitions>
-        					<ColumnDefinition Width="Auto"/>
-        					<ColumnDefinition Width="*"/>
-        				</Grid.ColumnDefinitions>
+                    <!--Row0-->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                                    <!--Column0-->
-        				<TextBlock Grid.Column="0" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneForegroundBrush}" FontWeight="Bold" Text="{Binding shotUserName}"/>
+                        <!--Column0-->
+                        <TextBlock Grid.Column="0" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneForegroundBrush}" FontWeight="Bold" Text="{Binding shotUserName}"/>
 
-                                    <!--Column1-->
-        				<TextBlock Grid.Column="1" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneDisabledBrush}" FontWeight="Thin" HorizontalAlignment="Right" Text="{Binding shotTime}"/>
+                        <!--Column1-->
+                        <TextBlock Grid.Column="1" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneDisabledBrush}" FontWeight="Thin" HorizontalAlignment="Right" Text="{Binding shotTime}"/>
 
-        			</Grid>
+                    </Grid>
 
-                                <!--Row1-->
-        			<TextBlock Grid.Row="1" Visibility="{Binding tagVisibility}" Foreground="{StaticResource PhoneForegroundBrush}" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="{Binding shotTag}"/>
+                    <!--Row1-->
+                    <TextBlock Grid.Row="1" Visibility="{Binding tagVisibility}" Foreground="{StaticResource PhoneForegroundBrush}" FontSize="{StaticResource PhoneFontSizeNormal}" FontWeight="Medium" Text="{Binding shotTag}"/>
 
-                                <!--Row2-->
-        			<TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneForegroundBrush}" FontWeight="Light" TextWrapping="Wrap" Text="{Binding shotMessage}"/>
+                    <!--Row2-->
+                    <TextBlock Grid.Row="2" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="{StaticResource PhoneForegroundBrush}" FontWeight="Light" TextWrapping="Wrap" Text="{Binding shotMessage}"/>
 
-        		</Grid>
-        	</Grid>
+                </Grid>
+            </Grid>
 
         </DataTemplate>
-		
-    </phone:PhoneApplicationPage.Resources>
 
-	<phone:PhoneApplicationPage.FontFamily>
-		<StaticResource ResourceKey="PhoneFontFamilyNormal"/>
-	</phone:PhoneApplicationPage.FontFamily>
-	<phone:PhoneApplicationPage.FontSize>
-		<StaticResource ResourceKey="PhoneFontSizeNormal"/>
-	</phone:PhoneApplicationPage.FontSize>
-	<phone:PhoneApplicationPage.Foreground>
-		<StaticResource ResourceKey="PhoneForegroundBrush"/>
-	</phone:PhoneApplicationPage.Foreground>
+    </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.RenderTransform>
+        <CompositeTransform/>
+    </phone:PhoneApplicationPage.RenderTransform>
+
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush"/>
+    </phone:PhoneApplicationPage.Foreground>
 
     <tk:TransitionService.NavigationInTransition>
         <tk:NavigationInTransition>
@@ -144,119 +199,120 @@
     </tk:TransitionService.NavigationOutTransition>
 
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
-	<!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
-	<Grid x:Name="LayoutRoot">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<!--Row2-->
-		<!--Row0-->
-		<ListBoxItem Grid.Row="0" Background="{StaticResource PhoneBackgroundBrush}" tk:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
+    <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
+    <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--Row2-->
+        <!--Row0-->
+        <ListBoxItem Grid.Row="0" Background="{StaticResource PhoneBackgroundBrush}" tk:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
             <Grid x:Name="titleGrid" Width="480">
                 <Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-				<!--Column0-->
-				<Grid Grid.Column="0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="*"/>
-					</Grid.RowDefinitions>
+                <!--Column0-->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-					<!--Row0.0-->
-					<TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                    <!--Row0.0-->
+                    <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
-					<!--Row0.1-->
-					<TextBlock Grid.Row="1" Text="" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
+                    <!--Row0.1-->
+                    <TextBlock Grid.Row="1" Text="" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
 
-				</Grid>
+                </Grid>
 
-				<!--Column1-->
-				<Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
-					<Rectangle.OpacityMask>
-						<ImageBrush ImageSource="/Resources/icons/appbar.information.png"/>
-					</Rectangle.OpacityMask>
-				</Rectangle>
-				<Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
-					<Rectangle.OpacityMask>
-						<ImageBrush ImageSource="/Resources/icons/basecircle.png"/>
-					</Rectangle.OpacityMask>
-				</Rectangle>
+                <!--Column1-->
+                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
+                    <Rectangle.OpacityMask>
+                        <ImageBrush ImageSource="/Resources/icons/appbar.information.png"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
+                    <Rectangle.OpacityMask>
+                        <ImageBrush ImageSource="/Resources/icons/basecircle.png"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
 
-			</Grid>
-		</ListBoxItem>
+            </Grid>
+        </ListBoxItem>
 
-		<!--Row1-->
-		<TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" Grid.Row="1" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
-		<c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" Grid.Row="1" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,5,10,5" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplate1}" >
-			<c4ftk:ChatBubbleTextBox.InputScope>
-				<InputScope>
-					<InputScopeName NameValue="Chat" />
-				</InputScope>
-			</c4ftk:ChatBubbleTextBox.InputScope>
-		</c4ftk:ChatBubbleTextBox>
-
-		<!--Row3-->
-		<ListBox x:Name="myShots" Grid.Row="3" Margin="12,12,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter">
-			<ListBox.Resources>
-				<Style x:Key="TimeLineListBox" TargetType="ListBox">
-					<Setter Property="Background" Value="Transparent"/>
-					<Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
-					<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-					<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-					<Setter Property="BorderThickness" Value="0"/>
-					<Setter Property="BorderBrush" Value="Transparent"/>
-					<Setter Property="Padding" Value="0"/>
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="ListBox">
-								<ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
-									<StackPanel>
-										<ItemsPresenter/>
-										<Grid VerticalAlignment="Bottom" Height="75" Margin="0,25">
-											<Rectangle Fill="{StaticResource PhoneChromeBrush}" HorizontalAlignment="Center" Width="75" Height="75" Tap="Rectangle_Tap">
-												<Rectangle.OpacityMask>
-													<ImageBrush ImageSource="/Assets/Tiles/FlipCycleTileMedium.png"/>
-												</Rectangle.OpacityMask>
-											</Rectangle>
-										</Grid>
-									</StackPanel>
-								</ScrollViewer>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</ListBox.Resources>
+        <!--Row1-->
+        <Grid x:Name="newShotRow" Grid.Row="1">
+            <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10,0,0,17" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
+            <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="47,0,10,0" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplatePortrait}" >
+                <c4ftk:ChatBubbleTextBox.InputScope>
+                    <InputScope>
+                        <InputScopeName NameValue="Chat" />
+                    </InputScope>
+                </c4ftk:ChatBubbleTextBox.InputScope>
+            </c4ftk:ChatBubbleTextBox>
+        </Grid>
+        <!--Row3-->
+        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter">
+            <ListBox.Resources>
+                <Style x:Key="TimeLineListBox" TargetType="ListBox">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBox">
+                                <ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
+                                    <StackPanel>
+                                        <ItemsPresenter/>
+                                        <Grid VerticalAlignment="Bottom" Height="75" Margin="0,25">
+                                            <Rectangle Fill="{StaticResource PhoneChromeBrush}" HorizontalAlignment="Center" Width="75" Height="75" Tap="Rectangle_Tap">
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush ImageSource="/Assets/Tiles/FlipCycleTileMedium.png"/>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </Grid>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Resources>
             <ListBox.Style>
                 <StaticResource ResourceKey="TimeLineListBox"/>
             </ListBox.Style>
             <ListBox.ItemTemplate>
-            	<StaticResource ResourceKey="PortaitItemTemplate"/>
-                </ListBox.ItemTemplate>
+                <StaticResource ResourceKey="PortaitItemTemplate"/>
+            </ListBox.ItemTemplate>
         </ListBox>
 
-		<Grid Grid.Row="3" x:Name="NoShootsAdvice" Visibility="Collapsed" Background="{StaticResource PhoneBackgroundBrush}">
-			<Grid HorizontalAlignment="Left" VerticalAlignment="Top">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
+        <Grid Grid.Row="3" x:Name="NoShootsAdvice" Visibility="Collapsed" Background="{StaticResource PhoneBackgroundBrush}">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-				<!--Row0-->
-				<TextBlock Grid.Row="0"  Text="{Binding LocalizedResources.NoShoots, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle1Style}"/>
+                <!--Row0-->
+                <TextBlock Grid.Row="0"  Text="{Binding LocalizedResources.NoShoots, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle1Style}"/>
 
-				<!--Row1-->
-				<TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding LocalizedResources.NoShootsSubtitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                <!--Row1-->
+                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding LocalizedResources.NoShootsSubtitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
 
-				<!--Row2-->
-				<TextBlock Grid.Row="2" Text="{Binding LocalizedResources.StartShooting, Source={StaticResource LocalizedStrings}}" Style="{StaticResource LongListSelectorGroupHeaderStyle}" Tap="StartShooting_Tap"/>
-			</Grid>
-		</Grid>
-	</Grid>
+                <!--Row2-->
+                <TextBlock Grid.Row="2" Text="{Binding LocalizedResources.StartShooting, Source={StaticResource LocalizedStrings}}" Style="{StaticResource LongListSelectorGroupHeaderStyle}" Tap="StartShooting_Tap"/>
+            </Grid>
+        </Grid>
+    </Grid>
 </phone:PhoneApplicationPage>

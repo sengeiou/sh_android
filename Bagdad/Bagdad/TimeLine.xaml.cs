@@ -239,6 +239,7 @@ namespace Bagdad
         private void newShot_GotFocus(object sender, RoutedEventArgs e)
         {
             extraChars.Visibility = System.Windows.Visibility.Visible;
+            newShot.Hint = "";
         }
 
         private void newShot_LostFocus(object sender, RoutedEventArgs e)
@@ -247,6 +248,7 @@ namespace Bagdad
             {
                 extraChars.Text = "140";
                 extraChars.Visibility = System.Windows.Visibility.Collapsed;
+                newShot.Hint = AppResources.WhatsUp;
             }
         }
 
@@ -366,10 +368,20 @@ namespace Bagdad
 
         private void phoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
         {
+            LayoutRoot.InvalidateMeasure();
             titleGrid.Width = phoneApplicationPage.ActualWidth;
 
             myShots.ItemsSource = null;
             myShots.ItemsSource = App.ShotsVM.shotsList;
+
+            /*if (e.Orientation == PageOrientation.Landscape || e.Orientation == PageOrientation.LandscapeLeft || e.Orientation == PageOrientation.LandscapeRight)
+            {
+                newShot.Template = (ControlTemplate)this.Resources["ChatBubbleTextBoxControlTemplateLandscape"];
+            }
+            else
+            {
+                newShot.Template = (ControlTemplate)this.Resources["ChatBubbleTextBoxControlTemplatePortrait"];
+            }*/
         }
         
         
