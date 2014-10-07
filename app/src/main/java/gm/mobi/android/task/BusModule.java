@@ -6,6 +6,7 @@ import android.os.Looper;
 import com.squareup.otto.Bus;
 
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
+import gm.mobi.android.ui.activities.FindFriendsActivity;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -26,7 +27,9 @@ import gm.mobi.android.ui.fragments.ProfileFragment;
         injects = {
                 EmailLoginActivity.class,
                 EmailRegistrationActivity.class,
+
                 FacebookRegistroActivity.class,
+                FindFriendsActivity.class,
 
                 GetUsersFollowsJob.class,
                 GetFacebookProfileJob.class,
@@ -34,7 +37,7 @@ import gm.mobi.android.ui.fragments.ProfileFragment;
                 GetFollowingsJob.class,
 
                 LoginUserJob.class,
-
+          
                 ProfileFragment.class,
                 ProfileContainerActivity.class,
 

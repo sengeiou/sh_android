@@ -12,9 +12,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.follows.SearchPeopleEvent;
+import gm.mobi.android.task.jobs.follows.SearchPeopleJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import java.util.List;
@@ -24,6 +30,8 @@ import timber.log.Timber;
 public class FindFriendsActivity extends BaseSignedInActivity {
 
     @Inject Picasso picasso;
+    @Inject JobManager jobManager;
+    @Inject Bus bus;
 
     private SearchView searchView;
 
@@ -41,6 +49,17 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
         setContainerContent(R.layout.activity_search);
         ButterKnife.inject(this);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        bus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        bus.unregister(this);
     }
 
     @Override
@@ -75,12 +94,24 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         setLoading(true);
         setEmpty(false);
         //TODO lanzar job de búsqueda
+        startJob(query);
         Timber.d("Searching \"%s\", dude", query);
     }
 
+
+    public void startJob(String searchString){
+        SearchPeopleJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(SearchPeopleJob.class);
+        job.init(searchString);
+        jobManager.addJobInBackground(job);
+    }
+
+
+
     //TODO llamar desde evento de resultado
-    public void showResults(List<User> results) {
+    @Subscribe
+    public void getSearchResult(SearchPeopleEvent event) {
         setLoading(false);
+        List<User> results = event.getSearchUsers();
         if (results.size() > 0) {
             setListContent(results);
         } else {

@@ -34,4 +34,6 @@ public interface BagdadService {
 
     public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException;
 
+    public List<User> searchUsersByNameOrNickName(String searchString) throws IOException;
+
 }

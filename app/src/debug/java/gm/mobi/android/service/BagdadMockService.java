@@ -88,6 +88,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public List<User> searchUsersByNameOrNickName(String searchString) throws IOException {
+        return null;
+    }
+
     public long getDelay() {
         return delay;
     }

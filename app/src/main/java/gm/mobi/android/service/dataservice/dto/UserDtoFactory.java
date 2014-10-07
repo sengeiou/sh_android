@@ -156,6 +156,10 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS, od);
     }
 
+    public GenericDto searchUserOperation(String searchString){
+        return null;
+    }
+
     public GenericDto getUsersOperationDto(List<Long> userIds, Long offset, Long date) {
         OperationDto od = new OperationDto();
         FilterDto filter = getUsersByUserIds(userIds, new Date(date));

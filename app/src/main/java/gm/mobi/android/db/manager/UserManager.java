@@ -144,9 +144,8 @@ public class UserManager extends AbstractManager {
 
     public List<User> searchUsers(String s){
           List<User> users = new ArrayList<>();
-          String args = UserTable.USER_NAME+" LIKE '%?%' OR "+UserTable.NAME+" LIKE '%?%'";
-          String argsString[] = new String[]{s,s};
-          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,argsString,null,null,null);
+          String args = UserTable.USER_NAME+" LIKE '%"+s+"%' OR "+UserTable.NAME+" LIKE '%"+s+"%'";
+          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,null);
           if(c.getCount()>0){
             c.moveToFirst();
               do {
