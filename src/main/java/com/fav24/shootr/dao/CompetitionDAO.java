@@ -21,6 +21,13 @@ public interface CompetitionDAO extends BaseDAO {
     Competition getCompetitionByID(Long idCompetition);
 
     /**
+     * Given an idCompetitionOpta, returns the Competition that match with idCompetitionOpta
+     * @param idCompetitionOpta Competition identifier opta
+     * @return Competition that match with given idCompetitionOpta
+     */
+    Competition getCompetitionByOptaId(Long idCompetitionOpta);
+    
+    /**
      * Given an Competition Object, this method insert it into DataBase and returns the generated idCompetition
      * @param Competition object to insert
      * @return generated idCompetition of the inserted Competition

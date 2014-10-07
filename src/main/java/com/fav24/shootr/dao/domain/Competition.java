@@ -1,6 +1,6 @@
 package com.fav24.shootr.dao.domain;
 
-public class Competition {
+public class Competition extends Synchronized {
 
 	private Long idCompetition;
 	private Long idCompetitionOpta;

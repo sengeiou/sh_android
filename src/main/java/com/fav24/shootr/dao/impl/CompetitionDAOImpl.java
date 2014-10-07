@@ -18,20 +18,27 @@ import com.fav24.shootr.dao.utils.PropertiesManager;
 
 public class CompetitionDAOImpl extends BaseDAOImpl implements CompetitionDAO {
 
-	@Override
+	/** {@inheritDoc} */
 	public List<Competition> getAllCompetitions() {
 		String query = PropertiesManager.getProperty("competition.select.all");
 		return getJdbcTemplate().query(query, new Object[] {}, new BeanPropertyRowMapper<Competition>(Competition.class));
 	}
 
-	@Override
+	/** {@inheritDoc} */
 	public Competition getCompetitionByID(Long idCompetition) {
 		String query = PropertiesManager.getProperty("competition.select.one.byid");
 		List<Competition> list = getJdbcTemplate().query(query, new Object[] { idCompetition }, new BeanPropertyRowMapper<Competition>(Competition.class));
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
+	
+	/** {@inheritDoc} */
+	public Competition getCompetitionByOptaId(Long idCompetitionOpta) {
+		String query = PropertiesManager.getProperty("competition.select.one.byidOpta");
+		List<Competition> list = getJdbcTemplate().query(query, new Object[] { idCompetitionOpta }, new BeanPropertyRowMapper<Competition>(Competition.class));
+		return (list != null && !list.isEmpty()) ? list.get(0) : null;
+	}
 
-	@Override
+	/** {@inheritDoc} */
 	public Long insertCompetition(Competition competition) {
 		//INSERT INTO `Competition` (`idArea`, `idCompetitionOpta`, `name`, `format`, `displayOrder`, `type`, `csys_birth`, `csys_modified`, `csys_revision`) VALUES (?, ?, ?, ?, ?, ?, now(), now(), 0)
 
@@ -76,7 +83,7 @@ public class CompetitionDAOImpl extends BaseDAOImpl implements CompetitionDAO {
 		return Competitions.size();
 	}
 	
-	@Override
+	/** {@inheritDoc} */
 	public List<Competition> getAllCompetitionsByAreaId(Long idArea) {
 		String query = PropertiesManager.getProperty("competition.select.byidArea");
 		return getJdbcTemplate().query(query, new Object[] { idArea }, new BeanPropertyRowMapper<Competition>(Competition.class));
