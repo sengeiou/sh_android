@@ -60,7 +60,7 @@
 
 +(UIImage*) drawText:(NSString*) text
              inImage:(UIImage*)  image
-             atPoint:(CGPoint)   point;
+             atPoint:(CGPoint)   point andSizeFont:(CGFloat) sizeFont;
 
 +(CGPoint) centerTextInImage:(UIImageView *)imageView;
 

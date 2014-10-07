@@ -518,43 +518,29 @@
 
 +(UIImage*) drawText:(NSString*) text
              inImage:(UIImage*)  image
-             atPoint:(CGPoint)   point
-{
+             atPoint:(CGPoint)   point andSizeFont:(CGFloat) sizeFont;
+{ 
+     UIFont *font = [UIFont systemFontOfSize:sizeFont];
     
-  /*  UIFont *font = [UIFont systemFontOfSize:40];
-    UIGraphicsBeginImageContext(image.size);
-    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
-    CGRect rect = CGRectMake(point.x, point.y, image.size.width, image.size.height);
-    [[UIColor whiteColor] set];
-    [text drawInRect:CGRectIntegral(rect) withFont:font];*/
-  
-    
-     UIFont *font = [UIFont systemFontOfSize:80];
-    
-    UIGraphicsBeginImageContext(image.size);
-    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
+    //UIGraphicsBeginImageContext(image.size);
+    UIGraphicsBeginImageContext(CGSizeMake(210, 210));
+    //[image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
+    [image drawInRect:CGRectMake(0,0,210,210)];
+
     UITextView *myText = [[UITextView alloc] init];
-    //myText.font = font;
-    //myText.textColor = [UIColor whiteColor];
     myText.text = text;
     myText.backgroundColor = [UIColor clearColor];
     
-    CGSize maximumLabelSize = CGSizeMake(image.size.width,image.size.height);
-    /*CGSize expectedLabelSize = [myText.text sizeWithFont:myText.font
-                                       constrainedToSize:maximumLabelSize
-                                           lineBreakMode:NSLineBreakByWordWrapping];*/
+    CGSize maximumLabelSize = CGSizeMake(210,210);
     
     CGRect expectedLabelSize =[myText.text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil];
     
-    myText.frame = CGRectMake((image.size.width / 2) - (expectedLabelSize.size.width / 2),
-                              (image.size.height / 2) - (expectedLabelSize.size.height / 2),
-                              image.size.width,
-                              image.size.height);
-    
-    //[[UIColor whiteColor] set];
-    //[myText.text drawInRect:myText.frame withFont:myText.font];
+    myText.frame = CGRectMake((210 / 2) - (expectedLabelSize.size.width / 2),
+                              (210 / 2) - (expectedLabelSize.size.height / 2),
+                              210,
+                              210);
+
     [myText.text drawInRect:myText.frame withAttributes:@{NSFontAttributeName:font, NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    
     
     
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();

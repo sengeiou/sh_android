@@ -55,7 +55,7 @@
             
             UIImage *img = [Utils drawText:[shot.user.name substringToIndex:1]
                                         inImage:imageDefault
-                                   atPoint:[Utils centerTextInImage:self.imgPhoto]];
+                                   atPoint:[Utils centerTextInImage:self.imgPhoto]andSizeFont:80];
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);
