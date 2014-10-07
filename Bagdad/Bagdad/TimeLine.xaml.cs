@@ -28,6 +28,7 @@ namespace Bagdad
         bool endOfLocalList = false;
         bool endOfList = false;
         private int offset = Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE;
+        PageOrientation lastOrientation;
         
         
         public TimeLine()
@@ -46,6 +47,8 @@ namespace Bagdad
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 10);
+
+            lastOrientation = this.Orientation;
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -360,7 +363,15 @@ namespace Bagdad
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             myShots.ScrollIntoView(myShots.Items.First());
-        } 
+        }
+
+        private void phoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        {
+            titleGrid.Width = phoneApplicationPage.ActualWidth;
+
+            myShots.ItemsSource = null;
+            myShots.ItemsSource = App.ShotsVM.shotsList;
+        }
         
     }
 }

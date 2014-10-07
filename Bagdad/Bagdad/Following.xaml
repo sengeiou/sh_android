@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Bagdad"
+    xmlns:tk="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     d:DataContext="{d:DesignData SampleData/FollowingSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -14,6 +15,27 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
+
+    <tk:TransitionService.NavigationInTransition>
+        <tk:NavigationInTransition>
+            <tk:NavigationInTransition.Backward>
+                <tk:TurnstileTransition Mode="BackwardIn"/>
+            </tk:NavigationInTransition.Backward>
+            <tk:NavigationInTransition.Forward>
+                <tk:TurnstileTransition Mode="ForwardIn"/>
+            </tk:NavigationInTransition.Forward>
+        </tk:NavigationInTransition>
+    </tk:TransitionService.NavigationInTransition>
+    <tk:TransitionService.NavigationOutTransition>
+        <tk:NavigationOutTransition>
+            <tk:NavigationOutTransition.Backward>
+                <tk:TurnstileTransition Mode="BackwardOut"/>
+            </tk:NavigationOutTransition.Backward>
+            <tk:NavigationOutTransition.Forward>
+                <tk:TurnstileTransition Mode="ForwardOut"/>
+            </tk:NavigationOutTransition.Forward>
+        </tk:NavigationOutTransition>
+    </tk:TransitionService.NavigationOutTransition>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
     <Grid x:Name="LayoutRoot" Background="Transparent" Margin="12,0">

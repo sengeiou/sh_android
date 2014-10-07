@@ -198,41 +198,23 @@ namespace Bagdad.Models
             {
                 ServiceCommunication sc = new ServiceCommunication();
 
-                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idFollowedUser\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "},{\"comparator\": \"ne\",\"name\": \"idFollowedUser\",\"value\": null}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Follow\"}}]}";
-
-                String jsonUser = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"userName\": null,\"name\": null,\"photo\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [";
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"idFollowedUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "},{\"comparator\": \"ne\",\"name\": \"idFollowedUser\",\"value\": null}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Following\"}}]}";
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
-                int count = 0;
+                bool iFollow;
 
                 if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        if (count != 0) jsonUser += ",";
+                        iFollow = false;
 
-                        jsonUser += "{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + follow["idFollowedUser"].ToString() + "}";
+                        if (myFollowings.Contains(int.Parse(follow["idFollowedUser"].ToString()))) iFollow = true;
 
-                        count++;
+                        followings.Add(new FollowingViewModel() { idUser = int.Parse(follow["idFollowedUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userImageURL = follow["photo"].ToString(), isFollowed = iFollow });
                     }
 
-                    jsonUser += "],\"filters\": [],\"nexus\": \"or\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
-
-                    JObject responseUser = JObject.Parse(await sc.MakeRequestToMemory(jsonUser));
-
-
-                    if (responseUser["status"]["code"].ToString().Equals("OK") && !responseUser["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
-                    {
-                        foreach (JToken user in responseUser["ops"][0]["data"])
-                        {
-                            bool iFollow = false;
-
-                            if (myFollowings.Contains(int.Parse(user["idUser"].ToString()))) iFollow = true;
-
-                            followings.Add(new FollowingViewModel() { idUser = int.Parse(user["idUser"].ToString()), userNickName = user["userName"].ToString(), userName = user["name"].ToString(), userImageURL = user["photo"].ToString(), isFollowed = iFollow });
-                        }
-                    }
                 }
             }
             catch (Exception e)
