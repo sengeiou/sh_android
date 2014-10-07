@@ -54,6 +54,7 @@
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
     <string name="following_list_empty">Not following anyone</string>
+    <string name="follower_list_empty">Nobody following</string>
 
     <string name="no_more_shots">No more shots</string>
 
@@ -69,7 +70,8 @@
 
     <!-- Menu names -->
     <string name="menu_info">Info</string>
-    <string name="menu_search">Search timeline</string>
+    <string name="menu_search_timeline">Search Timeline</string>
+    <string name="menu_search_people">Find People</string>
 
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
@@ -92,4 +94,5 @@
 
     <string name="no_match_profiles">Not match profiles</string>
     <string name="activity_find_friends_hint">Find friends...</string>
+    <string name="activity_find_friends_empty_message">No results found</string>
 </resources>

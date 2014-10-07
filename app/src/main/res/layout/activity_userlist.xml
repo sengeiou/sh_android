@@ -25,10 +25,9 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:gravity="center"
-      android:text="@string/following_list_empty"
       android:textColor="@color/gray_50"
       android:textSize="20sp"
       android:visibility="gone"
-      tools:visibility="visible"
-      />
+      tools:text="@string/following_list_empty"
+      tools:visibility="visible" />
 </FrameLayout>

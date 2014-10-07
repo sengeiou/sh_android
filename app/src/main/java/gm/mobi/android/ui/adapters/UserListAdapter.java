@@ -55,6 +55,8 @@ public class UserListAdapter extends BindableAdapter<User> {
         String photo = item.getPhoto();
         if (photo != null && !photo.isEmpty()) {
             picasso.load(photo).into(viewHolder.avatar);
+        } else {
+            picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
     }
 

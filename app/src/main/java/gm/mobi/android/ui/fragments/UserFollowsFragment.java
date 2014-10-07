@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,7 +47,7 @@ public class UserFollowsFragment extends BaseFragment {
 
     @InjectView(R.id.userlist_list) ListView userlistListView;
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
-    @InjectView(R.id.userlist_empty) View emptyView;
+    @InjectView(R.id.userlist_empty) TextView emptyTextView;
 
     // Args
     Long userId;
@@ -95,6 +96,7 @@ public class UserFollowsFragment extends BaseFragment {
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setEmptyMessage();
         retrieveUsers();
     }
 
@@ -108,6 +110,19 @@ public class UserFollowsFragment extends BaseFragment {
         GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
         job.init(userId, followType);
         jobManager.addJobInBackground(job);
+    }
+
+    private void setEmptyMessage() {
+        int emptyStringRes = 0;
+        switch (followType) {
+            case FOLLOWERS:
+                emptyStringRes = R.string.follower_list_empty;
+                break;
+            case FOLLOWING:
+                emptyStringRes = R.string.following_list_empty;
+                break;
+        }
+        emptyTextView.setText(emptyStringRes);
     }
 
     @Subscribe
@@ -162,7 +177,7 @@ public class UserFollowsFragment extends BaseFragment {
     }
 
     private void setEmpty(boolean empty) {
-        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 
     @Override

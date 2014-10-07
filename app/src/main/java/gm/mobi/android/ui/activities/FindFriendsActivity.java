@@ -1,11 +1,13 @@
 package gm.mobi.android.ui.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -38,6 +40,8 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     private SearchView searchView;
 
     @InjectView(R.id.search_results_list) ListView resultsList;
+    @InjectView(R.id.search_results_empty) View emptyView;
+    @InjectView(R.id.search_results_progress) View progressView;
 
     private UserListAdapter adapter;
 
@@ -78,6 +82,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
                 startSearch(queryText);
+                hideKeyboard();
                 return true;
             }
 
@@ -105,12 +110,14 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     @Subscribe
-    public void getSearchResult(SearchPeopleEvent event) {
+    public void receivedResult(SearchPeopleEvent event) {
         setLoading(false);
         List<User> results = event.getSearchUsers();
         if (results != null && results.size() > 0) {
+            Timber.d("Received %d results", results.size());
             setListContent(results);
         } else {
+            Timber.d("Received no results");
             setEmpty(true);
         }
     }
@@ -125,11 +132,16 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     private void setLoading(boolean loading) {
-        //TODO
+        progressView.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
     private void setEmpty(boolean empty) {
-        //TODO
-        Toast.makeText(this, "Devuelve vacío", Toast.LENGTH_LONG).show();
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        resultsList.setVisibility(empty ? View.GONE : View.VISIBLE);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 }
