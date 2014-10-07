@@ -495,11 +495,12 @@
     textView.text = text;
     textView.font = [UIFont boldSystemFontOfSize:18];
     [textView sizeToFit];
-    
+
     if (textView.frame.size.height <= 44)
         return textView.frame.size.height+40;
     
     return textView.frame.size.height+20;
+
 }
 
 

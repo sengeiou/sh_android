@@ -233,37 +233,8 @@
 
     return [Utils heightForShot:shot.comment];
 	
-//	return [self heightForBasicCellAtIndexPath:indexPath];
 }
 
-
-//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//	return 80.0f;
-//}
-
-//- (CGFloat)heightForBasicCellAtIndexPath:(NSIndexPath *)indexPath {
-//	static ShotTableViewCell *shotCell = nil;
-//	static dispatch_once_t onceToken;
-//	dispatch_once(&onceToken, ^{
-//		static NSString *CellIdentifier = @"shootCell";
-//		shotCell = [self.timelineTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//	});
-// 
-//	Shot *shot = self.arrayShots[indexPath.row];
-//	
-//	[shotCell configureBasicCellWithShot:shot andRow:indexPath.row];
-//	
-//	return [self calculateHeightForConfiguredSizingCell:shotCell];
-//}
-//
-//- (CGFloat)calculateHeightForConfiguredSizingCell:(ShotTableViewCell *)shotCell {
-//	
-//	[shotCell setNeedsLayout];
-//	[shotCell layoutIfNeeded];
-// 
-//	CGSize size = [shotCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-//	return size.height;
-//}
 
 
 //------------------------------------------------------------------------------
@@ -443,6 +414,7 @@
     if (status && !error){
         rows = 0;
         self.orientation = NO;
+        self.charactersLeft.hidden = YES;
         [self keyboardHide:nil];
         self.txtView.text = nil;
         [self reloadShotsTable:nil];
