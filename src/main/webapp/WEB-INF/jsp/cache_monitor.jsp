@@ -36,17 +36,17 @@
 			            </div>
 						<div class="col-sm-3 col-md-3">
 							<select class="form-control" id="segment" required="required">
-								<option value="30">Últimos 30 segundos</option>
-								<option value="60">Último minuto</option>
-								<option value="300">Últimos 5 minutos</option>
-								<option selected="selected" value="3600">Última hora</option>
-								<option value="10800">Últimas 3 horas</option>
-								<option value="21600">Últimas 6 horas</option>
-								<option value="43200">Últimas 12 horas</option>
-								<option value="86400">Últimas 24 horas</option>
-								<option value="259200">Últimas 3 días</option>
-								<option value="604800">Última semana</option>
-								<option value="1209600">Últimas 2 semanas</option>
+								<option value="30">&Uacute;ltimos 30 segundos</option>
+								<option value="60">&Uacute;ltimo minuto</option>
+								<option value="300">&Uacute;ltimos 5 minutos</option>
+								<option selected="selected" value="3600">&Uacute;ltima hora</option>
+								<option value="10800">&Uacute;ltimas 3 horas</option>
+								<option value="21600">&Uacute;ltimas 6 horas</option>
+								<option value="43200">&Uacute;ltimas 12 horas</option>
+								<option value="86400">&Uacute;ltimas 24 horas</option>
+								<option value="259200">&Uacute;ltimas 3 d&iacute;as</option>
+								<option value="604800">&Uacute;ltima semana</option>
+								<option value="1209600">&Uacute;ltimas 2 semanas</option>
 								<option value="-1">Entre fechas</option>
 							</select>
 						</div>
@@ -188,7 +188,7 @@
 </div>
 
 <script type="text/javascript">
-initSystemCacheMonitor('${cacheManager}', '${cache}', ${maxBytesLocalHeap}, ${maxBytesLocalDisk},
+initCacheMonitor('${cacheManager}', '${cache}', ${maxBytesLocalHeap}, ${maxBytesLocalDisk},
 		'period', 'segment', 'datetimePickerAccessFrom', 'datetimePickerAccessTo', 'applyTimeWindowButton', 
 		'cacheHAHeapHistory', 'cacheHAHeap', 
 		'cacheHADiskHistory', 'cacheHADisk', 
