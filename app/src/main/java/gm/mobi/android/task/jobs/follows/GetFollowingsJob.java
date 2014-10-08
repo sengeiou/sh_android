@@ -21,6 +21,8 @@ import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,25 +103,6 @@ public class GetFollowingsJob extends CancellableJob {
         }
         return following;
     }
-
-
-
-
-    //private List<User> getUsersByFollowingIdsFromServer(List<Long> followingsIds) {
-    //    List<User> users = null;
-    //    try {
-    //        users = service.getUsersByUserIdList(followingsIds);
-    //    } catch (ServerException e) {
-    //        if (e.getErrorCode().equals(ServerException.G025)) {
-    //            sendCredentialError();
-    //        } else {
-    //            sendServerError(e);
-    //        }
-    //    } catch (IOException e) {
-    //        sendServerError(e);
-    //    }
-    //    return users;
-    //}
 
     @Override
     protected void createDatabase() {

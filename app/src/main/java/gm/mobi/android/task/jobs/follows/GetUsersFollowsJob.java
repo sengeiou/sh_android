@@ -68,7 +68,6 @@ public class GetUsersFollowsJob extends CancellableJob {
 
     private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {
         List<User> users = service.getFollowings(idUser, lastModifiedDate);
-        Collections.sort(users,new NameComparator());
         return users;
     }
 
@@ -99,11 +98,4 @@ public class GetUsersFollowsJob extends CancellableJob {
     }
 
 
-    class NameComparator implements Comparator<User> {
-
-        @Override public int compare(User user1, User user2) {
-            return user1.getName().compareTo(user2.getName());
-        }
-
-    }
 }
