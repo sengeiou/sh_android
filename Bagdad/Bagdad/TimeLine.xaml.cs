@@ -193,6 +193,7 @@ namespace Bagdad
                         System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start to 1 seg (SendShot)");
                         extraChars.Text = "140";
                         newShot.Text = "";
+                        newShot.Hint = AppResources.WhatsUp;
                         Focus();
                         newShotFocused = false;
                     }
