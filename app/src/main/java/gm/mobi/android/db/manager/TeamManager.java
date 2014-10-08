@@ -51,20 +51,23 @@ public class TeamManager extends AbstractManager{
      * Retrieve a team by its identifier
      * */
     public Team getTeamByIdTeam( Long teamId){
-        Team resTeam = new Team();
+        Team  resTeam = null;
         String args = TeamTable.ID_TEAM+"=?";
         String[] argsString = new String[]{String.valueOf(teamId)};
 
         if(isTableEmpty(TeamTable.TABLE)){
             Timber.e("La tabla %s está vacia", TEAM_TABLE);
-        }
-        Cursor c = db.query(TEAM_TABLE, TeamTable.PROJECTION,args,argsString,null,null,null,null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            resTeam = teamMapper.fromCursor(c);
+        }else{
+            Cursor c = db.query(TEAM_TABLE, TeamTable.PROJECTION,args,argsString,null,null,null,null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                resTeam = teamMapper.fromCursor(c);
             }
-        c.close();
-        return resTeam;
+            c.close();
+            return resTeam;
+        }
+
+        return null;
     }
 
     /**

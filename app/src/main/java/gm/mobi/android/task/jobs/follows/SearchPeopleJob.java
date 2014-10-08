@@ -15,6 +15,7 @@ import gm.mobi.android.task.events.follows.SearchPeopleEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -82,6 +83,7 @@ public class SearchPeopleJob extends CancellableJob {
     }
 
     public void retrieveDataFromDataBase(){
+
         List<User> users = userManager.searchUsers(searchString);
         if(users!=null && users.size()>0) {
             SearchPeopleEvent result = new SearchPeopleEvent(ResultEvent.STATUS_SUCCESS);

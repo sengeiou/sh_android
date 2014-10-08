@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,10 +143,13 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
-    public List<User> searchUsers(String s){
-          List<User> users = new ArrayList<>();
-          String args = UserTable.USER_NAME+" LIKE '%"+s+"%' OR "+UserTable.NAME+" LIKE '%"+s+"%'";
-          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,null);
+    public List<User> searchUsers(String searchString){
+        List<User> users = new ArrayList<>();
+        String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)
+          .replaceAll("[^\\p{ASCII}]", "");
+        String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
+          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
+
           if(c.getCount()>0){
             c.moveToFirst();
               do {

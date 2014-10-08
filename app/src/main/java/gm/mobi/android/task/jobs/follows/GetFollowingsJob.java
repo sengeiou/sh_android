@@ -67,8 +67,7 @@ public class GetFollowingsJob extends CancellableJob {
         /* no-op */
     }
 
-
-    private List<Follow> getFollowingsIdsFromServer() {
+    private List<Follow> getFollowsFromServer() {
         List<Follow> followingsIds = new ArrayList<>();
 
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
@@ -87,10 +86,14 @@ public class GetFollowingsJob extends CancellableJob {
         return followingsIds;
     }
 
-    private List<User> getUsersByFollowingIdsFromServer(List<Long> followingsIds) {
-        List<User> users = null;
+
+    private List<User> getFollowingsFromServer() {
+        List<User> following = new ArrayList<>();
+
+        Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
         try {
-            users = service.getUsersByUserIdList(followingsIds);
+            following = service.getFollowings(currentUser.getIdUser(), modifiedFollows);
+
         } catch (ServerException e) {
             if (e.getErrorCode().equals(ServerException.G025)) {
                 sendCredentialError();
@@ -100,8 +103,27 @@ public class GetFollowingsJob extends CancellableJob {
         } catch (IOException e) {
             sendServerError(e);
         }
-        return users;
+        return following;
     }
+
+
+
+
+    //private List<User> getUsersByFollowingIdsFromServer(List<Long> followingsIds) {
+    //    List<User> users = null;
+    //    try {
+    //        users = service.getUsersByUserIdList(followingsIds);
+    //    } catch (ServerException e) {
+    //        if (e.getErrorCode().equals(ServerException.G025)) {
+    //            sendCredentialError();
+    //        } else {
+    //            sendServerError(e);
+    //        }
+    //    } catch (IOException e) {
+    //        sendServerError(e);
+    //    }
+    //    return users;
+    //}
 
     @Override
     protected void createDatabase() {
@@ -122,48 +144,33 @@ public class GetFollowingsJob extends CancellableJob {
         if (!checkConnection()) return;
 
         // 1. Download followings ids
-        List<Follow> followings = getFollowingsIdsFromServer();
+        List<User> followings = getFollowingsFromServer();
+        List<Follow> follows = getFollowsFromServer();
         if (followings == null) {
             sendServerError(null);
             Timber.e("Unknown error downloading followings list");
             return;
         }
         Timber.d("Downloaded %d following relations", followings.size());
-
-        List<Long> followingIds = new ArrayList<>(followings.size());
-        for (Follow following : followings) {
-            followingIds.add(following.getFollowedUser());
-        }
-
-        if (followings.size() == 0) {
-            sendSucces(null);
-            return;
-        }
         // 2. Download users from those followings
-        List<User> usersFollowing = getUsersByFollowingIdsFromServer(followingIds);
-        if (usersFollowing == null) {
-            sendServerError(null);
-            Timber.e("Unknown error downloading followings' users");
-            return;
-        }
         List<Team> teams;
         Set<Long> idTeams = new HashSet<>();
-        for (User user : usersFollowing) {
+        for (User user : followings) {
             if (user.getFavouriteTeamId() != null) {
                 idTeams.add(user.getFavouriteTeamId());
             }
         }
         teams = getTeamsByTeamIds(idTeams);
-        Timber.d("Downloaded %d followings' users", usersFollowing.size());
-        //Timber.d("Downloaded %d teams' users", teams.size());
+        Timber.d("Downloaded %d followings' users", followings.size());
+        Timber.d("Downloaded %d teams' users", teams.size());
 
         if (isCancelled()) return;
 
         // Save and send result
-        followManager.saveFollows(followings);
-        userManager.saveUsers(usersFollowing);
-        teamManager.saveTeams(teams);
-        sendSucces(usersFollowing);
+        userManager.saveUsers(followings);
+        if(teams.size()>0) teamManager.saveTeams(teams);
+        followManager.saveFollows(follows);
+        sendSucces(followings);
 
     }
 

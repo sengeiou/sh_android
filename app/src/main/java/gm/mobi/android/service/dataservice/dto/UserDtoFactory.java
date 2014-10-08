@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.logging.Filter;
 import javax.inject.Inject;
 
 import gm.mobi.android.constant.Constants;
@@ -51,6 +52,8 @@ public class UserDtoFactory {
     TeamMapper teamMapper;
     FollowMapper followMapper;
 
+    public static final String ID_USER_FOLLOWING = "idUserFollowing";
+
     @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, TeamMapper teamMapper, FollowMapper followMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
@@ -86,6 +89,22 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
+    public GenericDto getFollowingsOperationDto(Long idUserFollowing, Long offset,Long date, boolean includeDeleted) {
+
+        OperationDto od = new OperationDto();
+        FilterDto filter = and(orModifiedOrDeletedAfter(date), or(ID_USER_FOLLOWING).isEqualTo(idUserFollowing)).build();
+
+        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,"Following", includeDeleted, null, null, null, filter);
+        od.setMetadata(md);
+
+        Map<String, Object>[] array = new HashMap[1];
+        array[0] = userMapper.reqRestUsersToDto(null);
+        od.setData(array);
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
+    }
+
+
     public GenericDto getFollowOperationDto(Long userId, Long offset, int relationship, Long date, boolean includeDeleted) {
 
         OperationDto od = new OperationDto();
@@ -100,6 +119,7 @@ public class UserDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWINGS, od);
     }
+
 
     public GenericDto getFollowOperationForGettingRelationship(Long userId,Long currentUserId,int typeFollow){
         OperationDto od = new OperationDto();
@@ -186,13 +206,13 @@ public class UserDtoFactory {
 
 
     public FilterDto getFollowsRelationship(Long userId, Long currentUserId, Long lastModifiedDate){
-        FilterDto shotsFilter =
+        FilterDto followFilter =
                 and(FollowTable.ID_FOLLOWED_USER).isEqualTo(userId).and(FollowTable.ID_USER).isEqualTo(currentUserId)
                 .and(FollowTable.ID_FOLLOWED_USER).isEqualTo(currentUserId).and(FollowTable.ID_USER).isEqualTo(userId)
                 .and(FollowTable.CSYS_DELETED).isEqualTo(null)
                 .and(FollowTable.CSYS_MODIFIED).greaterThan(0L)
                 .build();
-        return shotsFilter;
+        return followFilter;
     }
 
     public FilterDto getFollowsRelationshipBetween2Users(Long userId, Long currentUserID,int relationship){

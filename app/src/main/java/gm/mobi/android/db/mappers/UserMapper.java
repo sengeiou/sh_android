@@ -4,6 +4,7 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.objects.Synchronized;
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +47,10 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.RANK, u.getRank());
         cv.put(UserTable.BIO, u.getBio());
         cv.put(UserTable.WEBSITE, u.getWebsite());
-        setSynchronizedtoContentValues(u,cv);
+        cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
+        cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
+        cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
+        setSynchronizedtoContentValues(u, cv);
         return cv;
     }
 
@@ -65,6 +69,9 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.RANK, u.getRank());
         cv.put(UserTable.BIO, u.getBio());
         cv.put(UserTable.WEBSITE, u.getWebsite());
+        cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
+        cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
+        cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
         setSynchronizedtoContentValues(u,cv);
         return cv;
     }
@@ -105,6 +112,8 @@ public class UserMapper extends GenericMapper {
         return user;
     }
 
+
+
     public  Map<String, Object> toDto(User user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
@@ -139,6 +148,17 @@ public class UserMapper extends GenericMapper {
         user.setRank(c.getLong(c.getColumnIndex(UserTable.RANK)));
         user.setWebsite(c.getString(c.getColumnIndex(UserTable.WEBSITE)));
         return user;
+    }
+
+
+    public String normalizedText(String s){
+        if(s!=null){
+            return Normalizer.normalize(s, Normalizer.Form.NFD)
+              .replaceAll("[^\\p{ASCII}]", "");
+        }else{
+            return null;
+        }
+
     }
 
 }

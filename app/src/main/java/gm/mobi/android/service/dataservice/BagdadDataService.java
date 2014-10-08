@@ -1,7 +1,6 @@
 package gm.mobi.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -80,6 +79,27 @@ public class BagdadDataService implements BagdadService {
         return userMapper.fromDto(data[0]);
     }
 
+    @Override public List<User> getFollowings(Long idUser, Long lastModifiedDate) throws IOException {
+            List<User> followings = new ArrayList<>();
+            GenericDto requestDto =
+              userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, false);
+            GenericDto responseDto = postRequest(requestDto);
+            OperationDto[] ops = responseDto.getOps();
+            if (ops == null || ops.length < 1) {
+                Timber.e("Received 0 operations");
+                return null;
+            }
+
+            if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+                Map<String, Object>[] data = ops[0].getData();
+                for (int i = 0; i < data.length; i++) {
+                    User user = userMapper.fromDto(data[i]);
+                    followings.add(user);
+                }
+            }
+            return followings;
+        }
+
     @Override
     public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted)
       throws IOException {
@@ -103,25 +123,6 @@ public class BagdadDataService implements BagdadService {
         return follows;
     }
 
-    @Override
-    public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException {
-        List<User> users = new ArrayList<>();
-        GenericDto genericDto = userDtoFactory.getUsersOperationDto(userIds, 1000L, 0L);
-        GenericDto responseDto = postRequest(genericDto);
-        OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
-            Map<String, Object>[] data = ops[0].getData();
-            for (int i = 0; i < data.length; i++) {
-                User user = userMapper.fromDto(data[i]);
-                users.add(user);
-            }
-        }
-        return users;
-    }
 
     @Override
     public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
@@ -281,8 +282,7 @@ public class BagdadDataService implements BagdadService {
 
     @Override
     public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException {
-        GenericDto requestDto =
-          userDtoFactory.getFollowOperationForGettingRelationship(idUser, idCurrentUser, typeFollow);
+        GenericDto requestDto = userDtoFactory.getFollowOperationForGettingRelationship(idUser, idCurrentUser, typeFollow);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {

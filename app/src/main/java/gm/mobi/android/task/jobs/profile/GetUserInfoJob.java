@@ -119,7 +119,7 @@ public class GetUserInfoJob extends CancellableJob {
             Team team = service.getTeamByIdTeam(consultedUserFromService.getFavouriteTeamId());
             //Store user and team in db
             userManager.saveUser(consultedUserFromService);
-            teamManager.insertOrUpdateTeam(team);
+            if(team!=null)teamManager.insertOrUpdateTeam(team);
             UserInfoResultEvent result = new UserInfoResultEvent(consultedUserFromService,followRelationship, team);
             bus.post(result);
 

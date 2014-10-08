@@ -16,7 +16,7 @@ public interface BagdadService {
 
     public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted) throws IOException;
 
-    public List<User> getUsersByUserIdList(List<Long> userIds) throws IOException;
+    public List<User> getFollowings(Long idUser, Long lastModifiedDate) throws IOException;
 
     public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 

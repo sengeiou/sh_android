@@ -62,6 +62,9 @@ public class GMContract {
         public static final String WEBSITE = "website";
         public static final String BIO = "bio";
         public static final String RANK = "rank";
+        public static final String NAME_NORMALIZED = "nameNormalized";
+        public static final String USER_NAME_NORMALIZED = "userNameNormalized";
+        public static final String EMAIL_NORMALIZED = "emailNormalized";
 
         public static final String[] PROJECTION = {
                 ID,

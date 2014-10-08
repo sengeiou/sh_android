@@ -61,8 +61,7 @@ public class GetUsersFollowsJob extends CancellableJob {
     protected void run() throws IOException, SQLException {
         if (!checkNetwork()) return;
         try {
-            List<Long> followingIds = getFollowsIdsFromService();
-            List<User> users = getFollowsUsersFromServiceByIds(followingIds);
+            List<User> users = getFollowsUsersFromService(idUserToRetrieveFollowsFrom, 0L);
             sendSuccessfulResult(users);
         } catch (IOException e) {
             sendCommunicationError();
@@ -70,26 +69,8 @@ public class GetUsersFollowsJob extends CancellableJob {
         }
     }
 
-    private List<Long> getFollowsIdsFromService() throws IOException {
-        List<Follow> follows = service.getFollows(idUserToRetrieveFollowsFrom, 0L, followType, false);
-        return getIdsFromFollows(follows);
-    }
-
-    private List<Long> getIdsFromFollows(List<Follow> follows) {
-        List<Long> followsIds = new ArrayList<>(follows.size());
-        for (Follow follow : follows) {
-            if (followType == UserDtoFactory.GET_FOLLOWING) {
-                followsIds.add(follow.getFollowedUser());
-            } else {
-                followsIds.add(follow.getIdUser());
-            }
-
-        }
-        return followsIds;
-    }
-
-    private List<User> getFollowsUsersFromServiceByIds(List<Long> followingIds) throws IOException {
-        return service.getUsersByUserIdList(followingIds);
+    private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {
+        return service.getFollowings(idUser, lastModifiedDate);
     }
 
     protected void sendSuccessfulResult(List<User> followingUsers) {
@@ -106,6 +87,7 @@ public class GetUsersFollowsJob extends CancellableJob {
             bus.post(new ConnectionNotAvailableEvent());
             return false;
         }
+
         return true;
     }
 

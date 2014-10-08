@@ -67,6 +67,7 @@
     <string name="profile_marks_points">points</string>
     <string name="profile_marks_following">following</string>
     <string name="profile_marks_followers">followers</string>
+    <string name="profile_bio_format">%1$s. %2$s</string>
 
     <!-- Menu names -->
     <string name="menu_info">Info</string>

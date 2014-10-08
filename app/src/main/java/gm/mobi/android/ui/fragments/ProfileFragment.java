@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Follow;
+import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
@@ -118,7 +119,8 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         user = event.getUser();
-        setUserInfo(user, event.getRelationship(), event.getFavouriteTeam().getClubName());
+        Team team = event.getFavouriteTeam();
+        setUserInfo(user, event.getRelationship(), team!=null ? team.getClubName() : null);
 
     }
 
@@ -142,7 +144,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
         setBasicUserInfo(user);
-        bioTextView.setText(favTeamName+". "+user.getBio());
+        bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
         setMainButtonStatus(relationshipWithUser);
     }
 
