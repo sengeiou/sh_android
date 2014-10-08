@@ -1,11 +1,9 @@
 package gm.mobi.android.ui;
 
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.ui.debug.DebugAppContainer;
+import javax.inject.Singleton;
 
 @Module(
     injects = DebugAppContainer.class,

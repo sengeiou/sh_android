@@ -16,22 +16,18 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.Session;
-import com.squareup.otto.Bus;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.facebook.Session;
+import com.squareup.otto.Bus;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.adapters.WelcomePagerAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.widgets.WelcomeIndicator;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class WelcomeLoginActivity extends BaseActivity {

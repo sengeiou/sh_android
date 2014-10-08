@@ -3,16 +3,12 @@ package gm.mobi.android.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
-import android.text.format.Time;
-
+import gm.mobi.android.R;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
-import gm.mobi.android.BuildConfig;
-import gm.mobi.android.R;
 
 
 public class TimeUtils {

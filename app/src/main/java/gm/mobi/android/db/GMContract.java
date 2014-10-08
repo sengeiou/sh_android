@@ -2,8 +2,6 @@ package gm.mobi.android.db;
 
 import android.provider.BaseColumns;
 
-import gm.mobi.android.constant.SyncConstants;
-
 public class GMContract {
 
     public static interface SyncColumns extends BaseColumns {

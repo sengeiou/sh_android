@@ -7,21 +7,17 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.base.BaseFragment;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class InitialSetupFragment extends BaseFragment {

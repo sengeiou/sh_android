@@ -2,7 +2,7 @@ package gm.mobi.android.util;
 
 import android.os.Environment;
 import android.util.Log;
-
+import gm.mobi.android.BuildConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,8 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import gm.mobi.android.BuildConfig;
 import timber.log.Timber;
 
 public class FileLogger {

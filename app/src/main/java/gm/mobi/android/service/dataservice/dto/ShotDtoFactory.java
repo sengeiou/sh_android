@@ -1,13 +1,5 @@
 package gm.mobi.android.service.dataservice.dto;
 
-import android.support.v4.util.ArrayMap;
-
-import com.google.android.gms.drive.query.internal.Operator;
-
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.ShotMapper;
@@ -15,6 +7,7 @@ import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
+import javax.inject.Inject;
 
 public class ShotDtoFactory {
 

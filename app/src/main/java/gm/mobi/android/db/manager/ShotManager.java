@@ -3,21 +3,18 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.GMContract.ShotTable;
+import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShotManager extends  AbstractManager{

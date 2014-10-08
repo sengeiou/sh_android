@@ -23,30 +23,12 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jakewharton.scalpel.ScalpelFrameLayout;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.StatsSnapshot;
-
-import java.lang.reflect.Method;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.SocketAddress;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.StatsSnapshot;
 import gm.mobi.android.BuildConfig;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -62,11 +44,23 @@ import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.service.BagdadMockService;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.LogReaderActivity;
 import gm.mobi.android.ui.activities.MainActivity;
+import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.SocketAddress;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
+import java.util.TimeZone;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;

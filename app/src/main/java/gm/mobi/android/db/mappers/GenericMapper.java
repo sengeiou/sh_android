@@ -2,12 +2,10 @@ package gm.mobi.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
-import java.util.Date;
-import java.util.Map;
-
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.objects.Synchronized;
+import java.util.Date;
+import java.util.Map;
 
 public abstract class GenericMapper {
 

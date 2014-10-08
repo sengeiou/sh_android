@@ -2,14 +2,10 @@ package gm.mobi.android.data;
 
 import android.app.Application;
 import android.content.Context;
-
 import com.path.android.jobqueue.network.NetworkUtilImpl;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.StringPreference;
-import hugo.weaving.DebugLog;
+import javax.inject.Inject;
 
 
 public class DebugNetworkUtil extends NetworkUtilImpl {

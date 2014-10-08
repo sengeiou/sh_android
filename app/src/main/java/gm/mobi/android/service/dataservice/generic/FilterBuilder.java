@@ -1,13 +1,10 @@
 package gm.mobi.android.service.dataservice.generic;
 
+import gm.mobi.android.db.GMContract.SyncColumns;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import gm.mobi.android.db.GMContract.SyncColumns;
-
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;
 
 public class FilterBuilder {
 

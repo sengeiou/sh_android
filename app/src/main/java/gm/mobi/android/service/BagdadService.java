@@ -1,14 +1,12 @@
 package gm.mobi.android.service;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 public interface BagdadService {
 

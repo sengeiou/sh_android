@@ -1,15 +1,12 @@
 package gm.mobi.android;
 
-
 import android.app.Application;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.data.DataModule;
 import gm.mobi.android.task.BusModule;
 import gm.mobi.android.ui.UiModule;
+import javax.inject.Singleton;
 
 @Module(
         includes = {

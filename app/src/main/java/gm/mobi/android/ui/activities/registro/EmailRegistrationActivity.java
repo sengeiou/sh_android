@@ -12,22 +12,18 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.util.Gravatar;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseActivity {
 

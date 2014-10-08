@@ -1,10 +1,5 @@
 package gm.mobi.android.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.data.ApiEndpoint;
@@ -12,6 +7,7 @@ import gm.mobi.android.data.IsMockMode;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.service.dataservice.BagdadDataService;
 import hugo.weaving.DebugLog;
+import javax.inject.Singleton;
 
 @Module(
         complete = false,

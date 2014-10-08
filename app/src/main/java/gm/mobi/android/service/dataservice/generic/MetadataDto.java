@@ -1,11 +1,9 @@
 package gm.mobi.android.service.dataservice.generic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.android.gms.drive.Metadata;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

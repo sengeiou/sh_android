@@ -3,18 +3,15 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
+import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.GMContract.FollowTable;
+import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import gm.mobi.android.db.GMContract.FollowTable;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.objects.Follow;
 import timber.log.Timber;
 
 public class FollowManager extends AbstractManager{

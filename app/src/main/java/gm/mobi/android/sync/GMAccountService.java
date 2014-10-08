@@ -1,17 +1,14 @@
 package gm.mobi.android.sync;
 
+import android.accounts.AbstractAccountAuthenticator;
+import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.NetworkErrorException;
 import android.app.Service;
-
-import android.accounts.Account;
-import android.accounts.AbstractAccountAuthenticator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-
-import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.SyncConstants;
 
 public class GMAccountService  extends Service{

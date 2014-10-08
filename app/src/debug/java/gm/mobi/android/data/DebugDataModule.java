@@ -1,11 +1,7 @@
 package gm.mobi.android.data;
 
 import android.content.SharedPreferences;
-
 import com.path.android.jobqueue.network.NetworkUtil;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.data.prefs.BooleanPreference;
@@ -13,6 +9,7 @@ import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.service.DebugApiModule;
 import gm.mobi.android.ui.debug.NetworkProxy;
+import javax.inject.Singleton;
 
 @Module(
         includes = DebugApiModule.class,

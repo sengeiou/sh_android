@@ -14,18 +14,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.manager.ShotManager;
@@ -36,6 +32,7 @@ import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
 import gm.mobi.android.task.jobs.shots.NewShotJob;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class NewShotActivity extends BaseSignedInActivity {

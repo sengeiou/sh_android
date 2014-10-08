@@ -1,19 +1,14 @@
 package gm.mobi.android.service;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import hugo.weaving.DebugLog;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import javax.inject.Inject;
 
 public class BagdadMockService implements BagdadService {
 

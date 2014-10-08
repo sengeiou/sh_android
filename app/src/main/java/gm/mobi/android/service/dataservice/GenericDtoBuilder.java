@@ -1,7 +1,6 @@
 package gm.mobi.android.service.dataservice;
 
 import android.content.Context;
-
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;

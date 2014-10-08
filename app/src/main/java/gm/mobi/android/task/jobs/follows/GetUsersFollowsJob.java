@@ -4,18 +4,14 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
-
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,7 +24,6 @@ public class GetUsersFollowsJob extends CancellableJob {
 
     private static final int PRIORITY = 5;
     private Long idUserToRetrieveFollowsFrom;
-    private int followType;
 
     @Inject public GetUsersFollowsJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil) {
         super(new Params(PRIORITY));
@@ -38,9 +33,8 @@ public class GetUsersFollowsJob extends CancellableJob {
         this.networkUtil = networkUtil;
     }
 
-    public void init(Long userId, int followType) {
+    public void init(Long userId) {
         this.idUserToRetrieveFollowsFrom = userId;
-        this.followType = followType;
     }
 
     @Override public void onAdded() {

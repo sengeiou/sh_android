@@ -1,27 +1,15 @@
 package gm.mobi.android.task.jobs.timeline;
 
 import android.app.Application;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -30,6 +18,10 @@ import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TimelineJob extends CancellableJob {
 

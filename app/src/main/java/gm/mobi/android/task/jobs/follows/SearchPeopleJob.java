@@ -15,7 +15,6 @@ import gm.mobi.android.task.events.follows.SearchPeopleEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.Normalizer;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;

@@ -1,18 +1,14 @@
 package gm.mobi.android.task.jobs.loginregister;
 
 import android.content.Context;
-
 import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
-
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.inject.Inject;
 
 public class RegisterNewUserJob extends CancellableJob {
     private static final int PRIORITY = 1;

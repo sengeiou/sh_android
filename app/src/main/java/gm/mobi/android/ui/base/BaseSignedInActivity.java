@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
+import javax.inject.Inject;
 
 public class BaseSignedInActivity extends BaseActivity {
 

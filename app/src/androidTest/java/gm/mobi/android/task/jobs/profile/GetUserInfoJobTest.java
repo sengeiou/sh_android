@@ -1,21 +1,18 @@
 package gm.mobi.android.task.jobs.profile;
 
-
+import android.database.sqlite.SQLiteOpenHelper;
+import com.squareup.otto.Bus;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.manager.TeamManager;
+import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.objects.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.TeamManager;
-import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
 import timber.log.Timber;
 import timber.log.Timber.Tree;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import com.squareup.otto.Bus;
 
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyLong;
@@ -78,6 +75,8 @@ public class GetUserInfoJobTest {
         getUserInfoJob.retrieveDataFromDatabase();
         verify(bus).post(anyObject());
     }
+
+
 
 
 

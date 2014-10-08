@@ -3,7 +3,7 @@ package gm.mobi.android.db.objects;
 
 import java.util.Date;
 
-public abstract class Synchronized {
+public class Synchronized {
 
     protected Date csys_birth;
     protected Date csys_modified;

@@ -12,20 +12,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-
-import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import gm.mobi.android.R;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.ui.base.BaseActivity;
+import javax.inject.Inject;
 
 public class FacebookRegistroActivity extends BaseActivity {
 

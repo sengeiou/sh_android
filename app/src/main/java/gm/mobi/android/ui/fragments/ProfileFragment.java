@@ -8,27 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
-
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Team;
+import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
-import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {
 

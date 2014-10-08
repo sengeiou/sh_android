@@ -2,7 +2,6 @@ package gm.mobi.android.ui.activities.registro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,33 +12,26 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.dd.CircularProgressButton;
-import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import com.dd.CircularProgressButton;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.base.BaseActivity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class EmailLoginActivity extends BaseActivity {

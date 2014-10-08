@@ -1,7 +1,5 @@
 package gm.mobi.android.service.dataservice.dto;
 
-import java.util.Date;
-
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.service.dataservice.generic.FilterDto;

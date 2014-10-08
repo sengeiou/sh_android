@@ -2,26 +2,23 @@ package gm.mobi.android.task;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.squareup.otto.Bus;
-
-import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
-import gm.mobi.android.ui.activities.FindFriendsActivity;
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
-import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
 import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
 import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
+import javax.inject.Singleton;
 
 @Module(
         injects = {

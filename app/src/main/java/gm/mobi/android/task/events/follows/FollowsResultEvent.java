@@ -1,9 +1,8 @@
 package gm.mobi.android.task.events.follows;
 
-import java.util.List;
-
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ResultEvent;
+import java.util.List;
 
 public class FollowsResultEvent extends ResultEvent<List<User>> {
 

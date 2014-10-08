@@ -1,9 +1,5 @@
 package gm.mobi.android.service.dataservice.dto;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
@@ -12,10 +8,12 @@ import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto.Builder;
+import java.util.List;
+import javax.inject.Inject;
 
 import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;
+import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class TimelineDtoFactory {
 

@@ -1,15 +1,13 @@
 package gm.mobi.android.service.dataservice.dto;
 
+import gm.mobi.android.db.GMContract;
+import gm.mobi.android.service.dataservice.generic.GenericDto;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.Map;
-
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

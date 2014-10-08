@@ -1,15 +1,12 @@
 package gm.mobi.android.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.service.dataservice.BagdadDataService;
 import gm.mobi.android.service.dataservice.DataServiceModule;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import javax.inject.Singleton;
 
 @Module(
         injects = {

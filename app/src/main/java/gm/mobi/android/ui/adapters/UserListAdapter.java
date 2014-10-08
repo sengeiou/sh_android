@@ -10,7 +10,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import java.util.List;
 

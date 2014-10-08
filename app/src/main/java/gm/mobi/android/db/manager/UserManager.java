@@ -1,22 +1,18 @@
 package gm.mobi.android.db.manager;
 
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
+import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.GMContract.SyncColumns;
+import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.User;
 import java.sql.SQLException;
-
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.*;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.User;
 
 public class UserManager extends AbstractManager {
 

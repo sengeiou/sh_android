@@ -4,7 +4,6 @@ import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -20,22 +19,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-
-import gm.mobi.android.ui.activities.ProfileContainerActivity;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -47,10 +38,13 @@ import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.NewShotActivity;
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -283,18 +277,13 @@ public class TimelineFragment extends BaseFragment
         Intent intent = new Intent(getActivity(), NewShotActivity.class);
         intent.putExtras(anim);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
-        //        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
+        // ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
         //TODO Shot detail
-        Shot shot = adapter.getItem(position - 1);
-        User user = shot.getUser();
-
-        Toast.makeText(getActivity(), "Shot " + user.toString() + "---" + shot.getUser().getName(),
-                Toast.LENGTH_SHORT).show();
-
+        //Shot shot = adapter.getItem(position - 1);
         Timber.d("Clicked shot %d", position);
     }
 

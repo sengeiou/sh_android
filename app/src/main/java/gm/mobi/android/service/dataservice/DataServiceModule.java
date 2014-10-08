@@ -1,7 +1,5 @@
 package gm.mobi.android.service.dataservice;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.db.mappers.FollowMapper;
@@ -12,6 +10,7 @@ import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UtilityDtoFactory;
+import javax.inject.Singleton;
 
 @Module(
         injects = {

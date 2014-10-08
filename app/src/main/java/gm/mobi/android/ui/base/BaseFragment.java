@@ -2,7 +2,6 @@ package gm.mobi.android.ui.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-
 import gm.mobi.android.GolesApplication;
 
 public class BaseFragment extends Fragment {

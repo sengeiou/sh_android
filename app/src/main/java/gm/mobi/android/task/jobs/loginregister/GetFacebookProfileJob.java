@@ -1,7 +1,6 @@
 package gm.mobi.android.task.jobs.loginregister;
 
 import android.content.Context;
-
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -9,12 +8,10 @@ import com.facebook.model.GraphUser;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.exception.FacebookException;
 import gm.mobi.android.task.events.loginregister.FacebookProfileEvent;
+import javax.inject.Inject;
 
 public class GetFacebookProfileJob extends Job {
 

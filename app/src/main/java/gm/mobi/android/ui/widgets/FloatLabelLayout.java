@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import gm.mobi.android.R;
 
 

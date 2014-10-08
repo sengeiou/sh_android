@@ -2,15 +2,7 @@ package gm.mobi.android;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.path.android.jobqueue.JobManager;
-import com.path.android.jobqueue.config.Configuration;
-import com.path.android.jobqueue.log.CustomLogger;
-
 import dagger.ObjectGraph;
-import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.util.FileLogger;
 import timber.log.Timber;

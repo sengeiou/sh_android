@@ -1,17 +1,12 @@
 package gm.mobi.android.task.jobs;
 
-
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
-
 import java.io.IOException;
 import java.sql.SQLException;
-
 import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public abstract class CancellableJob extends Job {

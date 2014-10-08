@@ -1,17 +1,9 @@
 package gm.mobi.android.task.jobs.shots;
 
 import android.app.Application;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.inject.Inject;
-
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -19,6 +11,9 @@ import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.inject.Inject;
 
 public class NewShotJob extends CancellableJob{
 

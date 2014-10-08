@@ -8,7 +8,6 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -44,14 +43,9 @@ public class GetPeopleJob extends GetUsersFollowsJob {
         super.run();
     }
 
-    @Override @Deprecated
-    public void init(Long userId, int followType) {
-        super.init(userId, followType);
-    }
-
     public void init() {
         userId = GolesApplication.get(context).getCurrentUser().getIdUser();
-        super.init(userId, UserDtoFactory.GET_FOLLOWING);
+        super.init(userId);
     }
 
     @Override

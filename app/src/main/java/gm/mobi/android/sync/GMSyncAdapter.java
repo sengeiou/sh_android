@@ -3,22 +3,16 @@ package gm.mobi.android.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-
 import android.content.Context;
 import android.content.SyncResult;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-
 import com.path.android.jobqueue.JobManager;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class GMSyncAdapter extends AbstractThreadedSyncAdapter {

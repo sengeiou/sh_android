@@ -1,20 +1,10 @@
 package gm.mobi.android.service.dataservice.dto;
 
-
 import android.support.v4.util.ArrayMap;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import java.util.logging.Filter;
-import javax.inject.Inject;
-
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
@@ -24,7 +14,12 @@ import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
-import gm.mobi.android.db.GMContract.FollowTable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.inject.Inject;
 
 import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
 import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;

@@ -3,7 +3,6 @@ package gm.mobi.android.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-
 import gm.mobi.android.BuildConfig;
 import timber.log.Timber;
 

@@ -3,12 +3,10 @@ package gm.mobi.android.ui.base;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ViewGroup;
-
-import javax.inject.Inject;
-
 import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.ui.AppContainer;
+import javax.inject.Inject;
 
 public class BaseActivity extends ActionBarActivity {
 

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -18,12 +17,10 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
+import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
-
 import javax.inject.Inject;
-
-import gm.mobi.android.task.jobs.CancellableJob;
 import timber.log.Timber;
 
 public class GetUserInfoJob extends CancellableJob {

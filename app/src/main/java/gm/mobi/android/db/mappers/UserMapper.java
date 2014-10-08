@@ -1,15 +1,12 @@
 package gm.mobi.android.db.mappers;
 
-
 import android.content.ContentValues;
 import android.database.Cursor;
-import gm.mobi.android.db.objects.Synchronized;
+import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.objects.User;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
-
-import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.objects.User;
 
 public class UserMapper extends GenericMapper {
 
@@ -27,7 +24,7 @@ public class UserMapper extends GenericMapper {
         if (emailTokenIndex >= 0) {
             user.setEmail(c.getString(emailTokenIndex));
         }
-        setSynchronizedfromCursor(c, user);
+        setSynchronizedfromCursor(c,user);
         return user;
     }
 

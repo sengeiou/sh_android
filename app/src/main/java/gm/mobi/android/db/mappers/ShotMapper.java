@@ -2,12 +2,10 @@ package gm.mobi.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.objects.Shot;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShotMapper extends GenericMapper {
 

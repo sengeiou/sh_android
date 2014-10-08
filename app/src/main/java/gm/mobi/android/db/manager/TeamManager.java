@@ -2,19 +2,12 @@ package gm.mobi.android.db.manager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import gm.mobi.android.db.GMContract;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.GMContract.SyncColumns;
+import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.db.objects.Team;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TeamManager extends AbstractManager{
