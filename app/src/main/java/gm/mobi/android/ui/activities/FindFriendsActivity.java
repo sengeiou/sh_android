@@ -116,6 +116,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         if (results != null && results.size() > 0) {
             Timber.d("Received %d results", results.size());
             setListContent(results);
+            setEmpty(false);
         } else {
             Timber.d("Received no results");
             setEmpty(true);
