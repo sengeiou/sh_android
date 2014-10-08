@@ -34,7 +34,7 @@ var lineChartOptions = {
 		pointDotStrokeWidth : 1,
 
 		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-		pointHitDetectionRadius : 6,
+		pointHitDetectionRadius : 4,
 
 		//Number - The percentage of the chart that we cut out of the middle
 		percentageInnerCutout : 50, // This is 0 for Pie charts

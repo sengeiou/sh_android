@@ -250,7 +250,7 @@ public class CacheConfigurationController extends BaseJspController {
 	@RequestMapping(value = "/monitor", method = { RequestMethod.GET })
 	public ModelAndView cacheMonitor(@RequestParam(value="cacheManager", required=true) String cacheManager, @RequestParam(value="cache", required=true) String cache) {
 
-		ModelAndView model = new ModelAndView("system_cache_monitor");
+		ModelAndView model = new ModelAndView("cache_monitor");
 
 		EntityCache entityCache = cacheConfigurationService.getCacheConfiguration(cacheManager, cache);
 

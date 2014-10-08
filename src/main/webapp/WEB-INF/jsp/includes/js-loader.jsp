@@ -31,8 +31,7 @@
         main: [
             '<c:url value="/resources/js/bootstrap.min.js"/>',
 			'<c:url value="/resources/js/moment/moment-with-locales.min.js"/>',
-			'<c:url value="/resources/js/chart/Chart.js"/>',
-			'<c:url value="/resources/js/jqplot/jquery.jqplot.min.js"/>',
+			'<c:url value="/resources/js/chart/Chart.min.js"/>',
 			'<c:url value="/resources/js/syntaxhighlighter/shCore.min.js"/>',
 			'<c:url value="/resources/js/requests.js"/>',
             '<c:url value="/resources/js/main.js"/>'
@@ -41,7 +40,7 @@
         plugins: [
 
             // Complementos de boostrap.
-			'<c:url value="/resources/js/datetimepicker/bootstrap-datetimepicker.js"/>',
+			'<c:url value="/resources/js/datetimepicker/bootstrap-datetimepicker.min.js"/>',
 			'<c:url value="/resources/js/combobox/bootstrap-combobox.js"/>',
 
 			// system_monitor.jsp dependency.
@@ -49,27 +48,16 @@
 			'<c:url value="/resources/js/chart/custom/chartHelper.js"/>',
 			'<c:url value="/resources/js/chart/custom/chartDefaultConfig.js"/>',
 			
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.cursor.min.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.barRenderer.min.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.pieRenderer.min.js"/>',
-			
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"/>',
-			
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"/>',
-			'<c:url value="/resources/js/jqplot/custom/jqplot.bytesTickFormatter.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"/>',
-			'<c:url value="/resources/js/jqplot/plugins/jqplot.canvasTextRenderer.min.js"/>',
-			
 			// system_context.jsp dependency.
 			'<c:url value="/resources/js/custom/tree.js"/>',
 			
 			// hook_details.jsp dependency.
 			'<c:url value="/resources/js/syntaxhighlighter/shAutoloader.min.js"/>',
 			
-			// Configuraciones de las graficas del monitor de cachés. 
-			'<c:url value="/resources/js/system_monitor/cache_monitor_config.js"/>'
+			// Configuraciones de las graficas del monitorización. 
+			'<c:url value="/resources/js/monitors/system_monitor_config.js"/>',
+			'<c:url value="/resources/js/monitors/cache_monitor_config.js"/>'
+
         ],
         custom_L1: [
 
@@ -77,10 +65,10 @@
 			'<c:url value="/resources/js/system_workload.js"/>',
           
 			// system_monitor.jsp dependency.
-			'<c:url value="/resources/js/system_monitor/memory_monitor.js"/>',
-			'<c:url value="/resources/js/system_monitor/cpu_monitor.js"/>',
-			// system_cache_monitor.jsp dependency.
-			'<c:url value="/resources/js/system_monitor/cache_monitor.js"/>',
+			//'<c:url value="/resources/js/monitors/memory_monitor.js"/>',
+			'<c:url value="/resources/js/monitors/system_monitor.js"/>',
+			// cache_monitor.jsp dependency.
+			'<c:url value="/resources/js/monitors/cache_monitor.js"/>',
 			// entity_cache_manager_details.jsp dependency.
 			'<c:url value="/resources/js/entity_cache_manager_details.js"/>',
 			// entity_cache_details.jsp dependency.
@@ -88,7 +76,7 @@
         ],
         custom_L2: [
 			'<c:url value="/resources/js/system_monitor.js"/>',
-			'<c:url value="/resources/js/system_cache_monitor.js"/>'
+			'<c:url value="/resources/js/cache_monitor.js"/>'
         ]
     };
 

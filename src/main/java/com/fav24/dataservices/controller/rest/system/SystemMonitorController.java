@@ -321,6 +321,125 @@ public class SystemMonitorController extends BaseRestController {
 
 		return systemMonitorInfo;
 	}
+	
+	/**
+	 * Procesa una petición de información de la actividad de la CPU del sistema.
+	 * 
+	 * @param parameters Mapa de parámetros del que se obtienen el nombre, periodo y el corte temporal.
+	 * 
+	 * Nota: en caso de no indicar rango temporal o periodo, se informa únicamente con la última muestra recogida por el monitor.
+	 *  
+	 * @return el resultado del procesado de la petición.
+	 */
+	@RequestMapping(value = "/cpu_new", method = { RequestMethod.POST })
+	public @ResponseBody SystemMonitorInfoDto getCPU_new(@RequestBody final Map<String, Object> parameters) {
+		
+		long threadId = Thread.currentThread().getId();
+		
+		cpuMeter.excludeThread(threadId);
+		
+		Number offset = (Number) parameters.get("offset");
+		Number period = (Number) parameters.get("period");
+		Number timeRange = (Number) parameters.get("timeRange");
+		
+		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
+		
+		systemMonitorInfo.setName(CPU_MONITOR);
+		if (offset != null) {
+			systemMonitorInfo.setOffset(offset.longValue());
+		}
+		if (period != null) {
+			systemMonitorInfo.setPeriod(period.longValue());
+		}
+		if (timeRange != null) {
+			systemMonitorInfo.setTimeRange(timeRange.longValue());
+		}
+		
+		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
+			
+			MonitorSample cpuMonitorSample = systemService.getSystemCpuActivity();
+			
+			if (cpuMonitorSample != null) {
+				
+				Object[] timestamp = {cpuMonitorSample.getTime()};
+				Object[] peakThreadCountData = {cpuMonitorSample.getData(CpuMeter.PEAK_THREAD_COUNT)};
+				Object[] totalStartedThreadCountData = {cpuMonitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT)};
+				Object[] daemonThreadCountData = {cpuMonitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT)};
+				Object[] numberOfThreadsData = {cpuMonitorSample.getData(CpuMeter.NUMBER_OF_THREADS)};
+				Object[] totalCpuLoadData = {cpuMonitorSample.getData(CpuMeter.CPU_LOAD)};
+				Object[] applicationCpuLoadData = {cpuMonitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD)};
+				Object[] systemCpuLoadData = {cpuMonitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD)};
+				
+				systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
+				systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
+				systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
+				systemMonitorInfo.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
+				systemMonitorInfo.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
+				systemMonitorInfo.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
+				systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
+				systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
+			}
+			else {
+				systemMonitorInfo.setData(null);
+			}
+			
+		}
+		else {
+			
+			try {
+				
+				AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(systemMonitorInfo.getOffset(), systemMonitorInfo.getTimeRange(), systemMonitorInfo.getPeriod());
+				
+				if (systemCPUActivity != null) {
+					
+					Object[] timestamp = new Object[systemCPUActivity.size()];
+					Object[] peakThreadCountData = new Object[systemCPUActivity.size()];
+					Object[] totalStartedThreadCountData = new Object[systemCPUActivity.size()];
+					Object[] daemonThreadCountData = new Object[systemCPUActivity.size()];
+					Object[] numberOfThreadsData = new Object[systemCPUActivity.size()];
+					Object[] totalCpuLoadData = new Object[systemCPUActivity.size()];
+					Object[] applicationCpuLoadData = new Object[systemCPUActivity.size()];
+					Object[] systemCpuLoadData = new Object[systemCPUActivity.size()];
+					
+					int i = 0;
+					for (MonitorSample monitorSample : systemCPUActivity) {
+						
+						timestamp[i] = monitorSample.getTime();
+						peakThreadCountData[i] = monitorSample.getData(CpuMeter.PEAK_THREAD_COUNT);
+						totalStartedThreadCountData[i] = monitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT);
+						daemonThreadCountData[i] = monitorSample.getData(CpuMeter.TOTAL_DEAMON_THREAD_COUNT);
+						numberOfThreadsData[i] = monitorSample.getData(CpuMeter.NUMBER_OF_THREADS);
+						totalCpuLoadData[i] = monitorSample.getData(CpuMeter.CPU_LOAD);
+						applicationCpuLoadData[i] = monitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD);
+						systemCpuLoadData[i] = monitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD);
+						
+						i++;
+					}
+					
+					systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
+					systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
+					systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
+					systemMonitorInfo.getData().put(CpuMeter.TOTAL_DEAMON_THREAD_COUNT, daemonThreadCountData);
+					systemMonitorInfo.getData().put(CpuMeter.NUMBER_OF_THREADS, numberOfThreadsData);
+					systemMonitorInfo.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
+					systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
+					systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
+					
+				}
+				else {
+					systemMonitorInfo.setData(null);
+				}
+				
+			} catch (ServerException e) {
+				
+				e.log(logger, false);
+			}
+		}
+		
+		cpuMeter.includeThread(threadId);
+		
+		return systemMonitorInfo;
+	}
 
 	/**
 	 * Procesa una petición de información de la actividad de la CPU del sistema.
