@@ -35,6 +35,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.data.AnimationSpeed;
 import gm.mobi.android.data.ApiEndpoint;
 import gm.mobi.android.data.ApiEndpoints;
+import gm.mobi.android.data.CustomEndpoint;
 import gm.mobi.android.data.NetworkEnabled;
 import gm.mobi.android.data.PicassoDebugging;
 import gm.mobi.android.data.ScalpelEnabled;
@@ -89,6 +90,7 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference seenDebugDrawer;
     private BooleanPreference initialSetupCompleted;
+    private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
     private final BagdadMockService mockBagdadService;
     private final Application app;
@@ -106,6 +108,7 @@ public class DebugAppContainer implements AppContainer {
                              @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
                              @SeenDebugDrawer BooleanPreference seenDebugDrawer,
                              @InitialSetupCompleted BooleanPreference initialSetupCompleted,
+                             @CustomEndpoint StringPreference customEndpoint,
                              BagdadMockService mockBagdadService,
                              Application app) {
         this.client = client;
@@ -119,6 +122,7 @@ public class DebugAppContainer implements AppContainer {
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
         this.initialSetupCompleted = initialSetupCompleted;
+        this.customEndpoint = customEndpoint;
         this.mockBagdadService = mockBagdadService;
         this.app = app;
     }
@@ -232,7 +236,8 @@ public class DebugAppContainer implements AppContainer {
         if (selected != currentEndpoint) {
           if (selected == ApiEndpoints.CUSTOM) {
             Timber.d("Custom network endpoint selected. Prompting for URL.");
-            showCustomEndpointDialog(currentEndpoint.ordinal(), "http://");
+
+            showCustomEndpointDialog(currentEndpoint.ordinal(), customEndpoint.get());
           } else {
             setEndpointAndRelaunch(selected.url);
           }
@@ -314,7 +319,7 @@ public class DebugAppContainer implements AppContainer {
       }
     });
 
-    int currentProxyPosition = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
+    int currentProxyPosition = client.getProxy()!=null ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
     final ProxyAdapter proxyAdapter = new ProxyAdapter(activity, networkProxy);
     networkProxyView.setAdapter(proxyAdapter);
     networkProxyView.setSelection(currentProxyPosition);
@@ -322,11 +327,12 @@ public class DebugAppContainer implements AppContainer {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         if (position == ProxyAdapter.NONE) {
-          Timber.d("Clearing network proxy");
-          networkProxy.delete();
+          Timber.d("Disabling network proxy");
+          //networkProxy.delete();
           client.setProxy(null);
         } else if (networkProxy.isSet() && position == ProxyAdapter.PROXY) {
-          Timber.d("Ignoring re-selection of network proxy %s", networkProxy.get());
+            setProxy(networkProxy.get());
+          Timber.d("Setting previous proxy %s", networkProxy.get());
         } else {
           Timber.d("New network proxy selected. Prompting for host.");
           showNewNetworkProxyDialog(proxyAdapter);
@@ -372,11 +378,11 @@ public class DebugAppContainer implements AppContainer {
     });*/
     }
 
- /* @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
+  @OnClick(R.id.debug_network_endpoint_edit) void onEditEndpointClicked() {
 //    Timber.d("Prompting to edit custom endpoint URL.");
     // Pass in the currently selected position since we are merely editing.
     showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
-  }*/
+  }
 
     private void setupUserInterfaceSection() {
     final AnimationSpeedAdapter speedAdapter = new AnimationSpeedAdapter(activity);
@@ -573,7 +579,7 @@ public class DebugAppContainer implements AppContainer {
   private void showNewNetworkProxyDialog(final ProxyAdapter proxyAdapter) {
     final int originalSelection = networkProxy.isSet() ? ProxyAdapter.PROXY : ProxyAdapter.NONE;
 
-    View view = LayoutInflater.from(app).inflate(R.layout.debug_drawer_network_proxy, null);
+    View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_proxy, null);
     final EditText host = findById(view, R.id.debug_drawer_network_proxy_host);
 
     new AlertDialog.Builder(activity) //
@@ -589,15 +595,13 @@ public class DebugAppContainer implements AppContainer {
           @Override public void onClick(DialogInterface dialog, int i) {
             String theHost = host.getText().toString();
             if (!TextUtils.isEmpty(theHost)) {
-              String[] parts = theHost.split(":", 2);
-              SocketAddress address =
-                  InetSocketAddress.createUnresolved(parts[0], Integer.parseInt(parts[1]));
-
-              networkProxy.set(theHost); // Persist across restarts.
-              proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
-              networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
-
-              client.setProxy(new Proxy(Proxy.Type.HTTP, address));
+                if (setProxy(theHost)) {
+                    proxyAdapter.notifyDataSetChanged(); // Tell the spinner to update.
+                    networkProxy.set(theHost); // Persist across restarts.
+                    networkProxyView.setSelection(ProxyAdapter.PROXY); // And show the proxy.
+                } else {
+                    Toast.makeText(activity, "Wrong proxy format", Toast.LENGTH_SHORT).show();
+                }
             } else {
               networkProxyView.setSelection(originalSelection);
             }
@@ -612,7 +616,7 @@ public class DebugAppContainer implements AppContainer {
   }
 
   private void showCustomEndpointDialog(final int originalSelection, String defaultUrl) {
-    View view = LayoutInflater.from(app).inflate(R.layout.debug_drawer_network_endpoint, null);
+    View view = LayoutInflater.from(activity).inflate(R.layout.debug_drawer_network_endpoint, null);
     final EditText url = findById(view, R.id.debug_drawer_network_endpoint_url);
     url.setText(defaultUrl);
     url.setSelection(url.length());
@@ -630,6 +634,7 @@ public class DebugAppContainer implements AppContainer {
           @Override public void onClick(DialogInterface dialog, int i) {
             String theUrl = url.getText().toString();
             if (!TextUtils.isEmpty(theUrl)) {
+              customEndpoint.set(theUrl);
               setEndpointAndRelaunch(theUrl);
             } else {
               endpointView.setSelection(originalSelection);
@@ -650,6 +655,18 @@ public class DebugAppContainer implements AppContainer {
 
       relaunch();
   }
+
+    private boolean setProxy(String theHost) {
+        try {
+            String[] parts = theHost.split(":", 2);
+            SocketAddress address = InetSocketAddress.createUnresolved(parts[0], Integer.parseInt(parts[1]));
+            client.setProxy(new Proxy(Proxy.Type.HTTP, address));
+            return true;
+        } catch (Exception e) {
+            Timber.w(e, "Wrong proxy format %s", theHost);
+            return false;
+        }
+    }
 
     private void relaunch() {
         Intent newApp = new Intent(app, MainActivity.class);

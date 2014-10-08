@@ -7,6 +7,7 @@ import dagger.Provides;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
+import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.service.DebugApiModule;
 import gm.mobi.android.ui.debug.NetworkProxy;
 import javax.inject.Singleton;
@@ -64,6 +65,10 @@ public class DebugDataModule {
     @Provides @Singleton @ScalpelWireframeEnabled BooleanPreference provideScalpelWireframeEnabled(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_scalpel_wireframe_drawer",
                 DEFAULT_SCALPEL_WIREFRAME_ENABLED);
+    }
+
+    @Provides @Singleton @CustomEndpoint StringPreference provideCustomEndpoint(SharedPreferences preferences) {
+        return new StringPreference(preferences, "debug_custom_endpoint", ApiModule.PRODUCTION_API_URL);
     }
 
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {
