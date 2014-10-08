@@ -58,6 +58,7 @@ namespace Bagdad
             LoadUserData();
         }
 
+        #region METHODS
         private async void LoadUserData()
         {
             progress.IsVisible = true;
@@ -126,9 +127,22 @@ namespace Bagdad
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
         }
 
-        private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
+        private void updateButton()
         {
-            NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+            if (!isFollowing)
+            {
+                headButton.Content = AppResources.ProfileButtonFollowing + "  ";
+                headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                isFollowing = true;
+            }
+            else
+            {
+                headButton.Content = AppResources.ProfileButtonFollow + "  ";
+                headButton.Background = Resources["PhoneAccentBrush"] as SolidColorBrush;
+                headButton.Foreground = new System.Windows.Media.SolidColorBrush(Colors.White);
+                isFollowing = false;
+            }
         }
 
         private void LoadImage()
@@ -136,7 +150,9 @@ namespace Bagdad
             profileImage.Source = uim.GetUserImage(idUser);
             if(profileImage.Source == null) profileImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(uvm.userURLImage, UriKind.Absolute));
         }
+        #endregion
 
+        #region EVENTS
         private void userWebsite_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             WebBrowserTask wbt = new WebBrowserTask();
@@ -166,22 +182,16 @@ namespace Bagdad
             }
         }
 
-        private void updateButton()
+        private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
-            if (!isFollowing)
-            {
-                headButton.Content = AppResources.ProfileButtonFollowing + "  ";
-                headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                isFollowing = true;
-            }
-            else
-            {
-                headButton.Content = AppResources.ProfileButtonFollow + "  ";
-                headButton.Background = Resources["PhoneAccentBrush"] as SolidColorBrush;
-                headButton.Foreground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                isFollowing = false;
-            }
+            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
         }
+
+        private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+        }
+        #endregion
+
     }
 }
