@@ -129,10 +129,7 @@ namespace Bagdad
 
         private void goToProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            UserViewModel user = ((FollowViewModel)followingList.SelectedItem).userInfo;
-            int userId = user.idUser;
-
-            PhoneApplicationService.Current.State["user"] = user;
+            int userId = ((FollowViewModel)followingList.SelectedItem).userInfo.idUser;
             
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + userId, UriKind.Relative));
         }

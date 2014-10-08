@@ -50,11 +50,6 @@ namespace Bagdad
                 idUser = App.ID_USER;
             }
 
-            if (PhoneApplicationService.Current.State.Keys.Contains("user"))
-            {
-                uvm = PhoneApplicationService.Current.State["user"] as UserViewModel;
-            }
-
             LoadUserData();
         }
 
@@ -180,11 +175,6 @@ namespace Bagdad
             {
                 MessageBox.Show("Edit");
             }
-        }
-
-        private void appBarMenuItemMe_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
         }
 
         private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
