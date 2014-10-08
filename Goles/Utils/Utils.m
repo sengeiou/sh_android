@@ -494,10 +494,10 @@
     textView.font = [UIFont systemFontOfSize:17];
     [textView sizeToFit];
     
-    if(textView.frame.size.height <= 36.5)
+    //if(textView.frame.size.height <= 36.5)
         return textView.frame.size.height+35;
     
-    return textView.frame.size.height+22;
+    //return textView.frame.size.height+22;
 }
 
 
