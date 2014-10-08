@@ -60,7 +60,7 @@
     User *user = [self.usersList objectAtIndex:indexPath.row];
     [cell configureCellWithUser:user inRow:indexPath];
     [cell addTarget:self action:@selector(goProfile:)];
-	
+
     return cell;
 }
 

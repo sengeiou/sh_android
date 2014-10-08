@@ -17,5 +17,6 @@
 @property (nonatomic,weak) IBOutlet UIButton *photobutton;
 
 -(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath;
+- (void)addTarget:(id)target action:(SEL)action;
 
 @end

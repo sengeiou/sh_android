@@ -71,7 +71,8 @@
 	PeopleCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	User *user = [self.followingUsers objectAtIndex:indexPath.row];
 	[cell configureCellWithUser:user inRow:indexPath];
-	
+    [cell addTarget:self action:@selector(goProfile:)];
+
 	return cell;
 }
 
@@ -83,6 +84,18 @@
     profileVC.selectedUser = selectedUser;
     
     self.indexToShow = indexPath;
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
+#pragma mark - Navigation
+//------------------------------------------------------------------------------
+-(void)goProfile:(id)sender{
+    
+    UIButton *btn = (UIButton *) sender;
+    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    User *selectedUser = self.followingUsers[btn.tag];
+    profileVC.selectedUser = selectedUser;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 

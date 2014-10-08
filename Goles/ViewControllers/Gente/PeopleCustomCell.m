@@ -55,6 +55,14 @@
         self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
         self.imgPhoto.clipsToBounds = YES;
     }
+    
+    self.photobutton.tag = indexPath.row;
+
+}
+//------------------------------------------------------------------------------
+- (void)addTarget:(id)target action:(SEL)action {
+    
+    [self.photobutton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
 
 @end
