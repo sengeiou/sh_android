@@ -24,12 +24,13 @@ namespace Bagdad
         private int scrollToChargue = 0;
         private bool endOfList = false;
         private int charge = 0;
-        FollowingsViewModel followings;
+        FollowsViewModel followings;
         public ProgressIndicator progress;
+
         public Following()
         {
             InitializeComponent();
-            followings = new FollowingsViewModel();
+            followings = new FollowsViewModel();
             DataContext = followings;
             BuildLocalizedApplicationBar();
             progress = new ProgressIndicator()
@@ -54,6 +55,11 @@ namespace Bagdad
                 idUser = App.ID_USER;
             }
 
+            if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["userName"].Equals("") && !Title.Text.Contains(this.NavigationContext.QueryString["userName"]))
+            {
+                Title.Text = this.NavigationContext.QueryString["userName"] + " " + Title.Text;
+            }
+
             if(followings.Followings.Count == 0) await LoadFollowingsData();
             progress.IsVisible = false;
         }
@@ -64,7 +70,7 @@ namespace Bagdad
             {
                 if (App.isInternetAvailable)
                 {
-                    int returned = await followings.LoadData(idUser, offset);
+                    int returned = await followings.LoadData(idUser, offset, Constants.CONST_FOLLOWING);
                     offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
                     return returned;
                 }
@@ -117,7 +123,11 @@ namespace Bagdad
 
         private void goToProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            int userId = ((FollowingViewModel)followingList.SelectedItem).idUser;
+            UserViewModel user = ((FollowViewModel)followingList.SelectedItem).userInfo;
+            int userId = user.idUser;
+
+            PhoneApplicationService.Current.State["user"] = user;
+            
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + userId, UriKind.Relative));
         }
 

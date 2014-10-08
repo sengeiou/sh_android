@@ -1,12 +1,28 @@
-﻿<vm:FollowingsViewModel
+﻿<vm:FollowsViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:Bagdad.ViewModels">
 
-    <vm:FollowingsViewModel.Followings>
-        <vm:FollowingViewModel idUser="1" isFollowed="1" userName="Prueba1" userNickName="prb1" buttonText="✔ FOLLOWING"/>
-        <vm:FollowingViewModel idUser="2" isFollowed="1" userName="Prueba2" userNickName="prb2" buttonText="✔ FOLLOWING"/>
-        <vm:FollowingViewModel idUser="3" isFollowed="1" userName="Prueba3" userNickName="prb3" buttonText="✔ FOLLOWING"/>
-        <vm:FollowingViewModel idUser="4" isFollowed="1" userName="Prueba4" userNickName="prb4" buttonText="✔ FOLLOWING"/>
-    </vm:FollowingsViewModel.Followings>
-</vm:FollowingsViewModel>
+    <vm:FollowsViewModel.Followings>
+        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+            <vm:FollowViewModel.userInfo>
+                <vm:UserViewModel idUser="1" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+            </vm:FollowViewModel.userInfo>
+        </vm:FollowViewModel>
+        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+            <vm:FollowViewModel.userInfo>
+                <vm:UserViewModel idUser="2" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+            </vm:FollowViewModel.userInfo>
+        </vm:FollowViewModel>
+        <vm:FollowViewModel buttonText="+ FOLLOW">
+            <vm:FollowViewModel.userInfo>
+                <vm:UserViewModel idUser="3" isFollowed="False" userName="Prueba1" userNickName="prb1"/>
+            </vm:FollowViewModel.userInfo>
+        </vm:FollowViewModel>
+        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+            <vm:FollowViewModel.userInfo>
+                <vm:UserViewModel idUser="4" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+            </vm:FollowViewModel.userInfo>
+        </vm:FollowViewModel>
+    </vm:FollowsViewModel.Followings>
+</vm:FollowsViewModel>

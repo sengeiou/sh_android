@@ -246,7 +246,7 @@ namespace Bagdad.Models
 
                 if (await st.StepAsync())
                 {
-                    uvm.userId = st.GetIntAt(0);
+                    uvm.idUser = st.GetIntAt(0);
                     uvm.userNickName = st.GetTextAt(1);
                     uvm.userName = st.GetTextAt(2);
                     uvm.userURLImage = st.GetTextAt(3);
@@ -279,7 +279,7 @@ namespace Bagdad.Models
                 {
                     JToken userProfileInfo = responseFollow["ops"][0]["data"][0];
 
-                    uvm.userId = int.Parse(userProfileInfo["idUser"].ToString());
+                    uvm.idUser = int.Parse(userProfileInfo["idUser"].ToString());
                     uvm.userNickName = userProfileInfo["userName"].ToString();
                     uvm.userName = userProfileInfo["name"].ToString();
                     uvm.userURLImage = userProfileInfo["photo"].ToString();

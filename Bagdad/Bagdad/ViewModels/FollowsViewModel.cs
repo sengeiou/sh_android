@@ -15,14 +15,14 @@ using System.Windows.Media.Imaging;
 
 namespace Bagdad.ViewModels
 {
-    public class FollowingsViewModel : INotifyPropertyChanged
+    public class FollowsViewModel : INotifyPropertyChanged
     {
-         public ObservableCollection<FollowingViewModel> Followings { get; private set; }
+         public ObservableCollection<FollowViewModel> Followings { get; private set; }
 
-        public FollowingsViewModel()
+        public FollowsViewModel()
         {
             IsDataLoaded = false;
-            this.Followings = new ObservableCollection<FollowingViewModel>();
+            this.Followings = new ObservableCollection<FollowViewModel>();
         }
 
         public bool IsDataLoaded
@@ -31,12 +31,12 @@ namespace Bagdad.ViewModels
             private set;
         }
 
-        public async Task<int> LoadData(int idUser, int offset)
+        public async Task<int> LoadData(int idUser, int offset, String type)
         {
             try
             {
-                if (idUser == App.ID_USER) return await LocalDataLoad(idUser);
-                else return  await ServerDataLoad(idUser, offset);
+                if (idUser == App.ID_USER && type.Equals(Constants.CONST_FOLLOWING)) return await LocalDataLoad(idUser);
+                else return  await ServerDataLoad(idUser, offset, type);
             }
             catch (Exception e)
             {
@@ -50,11 +50,11 @@ namespace Bagdad.ViewModels
 
             UserImageManager userImageManager = new UserImageManager();
             Follow follow = new Follow();
-            foreach (FollowingViewModel following in await follow.GetUserFollowingLocalData(idUser))
+            foreach (FollowViewModel following in await follow.GetUserFollowingLocalData(idUser))
             {
                 //image
-                following.userImage = userImageManager.GetUserImage(following.idUser);
-                if (following.userImage == null) following.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userImageURL, UriKind.Absolute));
+                following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
+                if (following.userInfo.userImage == null) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
 
                 //Default Button
                 following.buttonVisible = Visibility.Visible;
@@ -69,19 +69,27 @@ namespace Bagdad.ViewModels
             return done;
         }
 
-        private async Task<int> ServerDataLoad(int idUser, int offset)
+        private async Task<int> ServerDataLoad(int idUser, int offset, String type)
         {
             int done = 0;
 
             UserImageManager userImageManager = new UserImageManager();
             Follow follow = new Follow();
-            foreach (FollowingViewModel following in await follow.GetUserFollowingFromServer(idUser, offset))
+
+            List<FollowViewModel> follows;
+
+            if (type.Equals(Constants.CONST_FOLLOWING))
+                follows = await follow.GetUserFollowingFromServer(idUser, offset);
+            else
+                follows = await follow.GetUserFollowersFromServer(idUser, offset);
+
+            foreach (FollowViewModel following in follows)
             {
                 //image
-                following.userImage = userImageManager.GetUserImage(following.idUser);
-                if (following.userImage == null) following.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userImageURL, UriKind.Absolute));
+                following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
+                if (following.userInfo.userImage == null) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
 
-                if (following.idUser == App.ID_USER)
+                if (following.userInfo.idUser == App.ID_USER)
                 {
                     //Don't Show The Button
                     following.buttonVisible = Visibility.Collapsed;
@@ -89,7 +97,7 @@ namespace Bagdad.ViewModels
                 else
                 {
                     //Default Button
-                    if (following.isFollowed)
+                    if (following.userInfo.isFollowed)
                     {
                         following.buttonVisible = Visibility.Visible;
                         following.buttonText = AppResources.ProfileButtonFollowing + "  ";

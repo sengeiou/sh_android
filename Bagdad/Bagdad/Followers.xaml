@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="Bagdad.Following"
+    x:Class="Bagdad.Followers"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -45,7 +45,7 @@
         </Grid.RowDefinitions>
 
         <!--Row0-->
-        <TextBlock x:Name="Title" Grid.Row="0" Margin="0,12,0,24" Text="{Binding LocalizedResources.MeFollowing, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        <TextBlock x:Name="Title" Grid.Row="0" Margin="0,12,0,24" Text="{Binding LocalizedResources.MeFollowers, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
         <!--Row1-->
         <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding Followings}">

@@ -11,7 +11,7 @@ namespace Bagdad.ViewModels
 {
     public class UserViewModel
     {
-        public int userId { get; set; }
+        public int idUser { get; set; }
         public int points { get; set; }
         public int following { get; set; }
         public int followers { get; set; }
@@ -20,6 +20,8 @@ namespace Bagdad.ViewModels
         public String userURLImage { get; set; }
         public String userBio { get; set; }
         public String userWebsite { get; set; }
+        public bool isFollowed { get; set; }
+        public BitmapImage userImage { get; set; }
         
         public UserViewModel() { }
 
@@ -41,7 +43,7 @@ namespace Bagdad.ViewModels
                     uvm = await user.GetProfilInfoFromServer(idUser);
                 }
 
-                userId = uvm.userId;
+                idUser = uvm.idUser;
                 points = uvm.points;
                 followers = uvm.followers;
                 following = uvm.following;
@@ -50,6 +52,8 @@ namespace Bagdad.ViewModels
                 userURLImage = uvm.userURLImage;
                 userBio = uvm.userBio;
                 userWebsite = uvm.userWebsite;
+
+                isFollowed = await uvm.ImFollowing();
             }
             catch (Exception e)
             {
@@ -64,7 +68,7 @@ namespace Bagdad.ViewModels
             try
             {
                 Follow follow = new Follow();
-                return await follow.ImFollowing(userId);
+                return await follow.ImFollowing(idUser);
             }
             catch (Exception e)
             {

@@ -36,5 +36,7 @@ namespace Bagdad.Utils
 
         #endregion
 
+        public const String CONST_FOLLOWING = "following";
+        public const String CONST_FOLLOWERS = "followers";
     }
 }

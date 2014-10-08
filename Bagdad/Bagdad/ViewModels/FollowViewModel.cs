@@ -9,20 +9,16 @@ using System.Windows.Media.Imaging;
 
 namespace Bagdad.ViewModels
 {
-    public class FollowingViewModel
+    public class FollowViewModel
     {
-        public int idUser { get; set; }
-        public bool isFollowed { get; set; }
-        public String userName { get; set; }
-        public String userNickName { get; set; }
-        public BitmapImage userImage { get; set; }
-        public String userImageURL { get; set; }
+        
+        public UserViewModel userInfo { get; set; }
         public String buttonText { get; set; }
         public SolidColorBrush buttonBackgorund { get; set; }
         public SolidColorBrush buttonForeground { get; set; }
         public Visibility buttonVisible { get; set; }
         
 
-        public FollowingViewModel() { }
+        public FollowViewModel() { }
     }
 }

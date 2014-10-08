@@ -39,7 +39,7 @@ namespace Bagdad
             SystemTray.SetProgressIndicator(this, progress);
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["idUser"].Equals(""))
             {
@@ -50,17 +50,23 @@ namespace Bagdad
                 idUser = App.ID_USER;
             }
 
+            if (PhoneApplicationService.Current.State.Keys.Contains("user"))
+            {
+                uvm = PhoneApplicationService.Current.State["user"] as UserViewModel;
+            }
+
             LoadUserData();
         }
 
         private async void LoadUserData()
         {
             progress.IsVisible = true;
-            await uvm.GetUserProfileInfo(idUser);
 
-            if (uvm.userId != App.ID_USER)
+            if(uvm.idUser != idUser) await uvm.GetUserProfileInfo(idUser);
+
+            if (uvm.idUser != App.ID_USER)
             {
-                if (await uvm.ImFollowing())
+                if (uvm.isFollowed)
                 {
                     headButton.Content = AppResources.ProfileButtonFollowing + "  ";
                     headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
@@ -133,17 +139,17 @@ namespace Bagdad
 
         private void followersGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            MessageBox.Show(AppResources.Followers);
+            NavigationService.Navigate(new Uri("/Followers.xaml?idUser=" + idUser + "&userName=" + uvm.userNickName.ToUpper(), UriKind.Relative));
         }
 
         private void followingGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Following.xaml?idUser=" + idUser, UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Following.xaml?idUser=" + idUser + "&userName=" + uvm.userNickName.ToUpper(), UriKind.Relative));
         }
 
         private void headButton_Click(object sender, RoutedEventArgs e)
         {
-            if (uvm.userId != App.ID_USER)
+            if (uvm.idUser != App.ID_USER)
             {
                 updateButton();    
             }

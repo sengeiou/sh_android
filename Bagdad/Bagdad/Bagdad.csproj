@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Followers.xaml.cs">
+      <DependentUpon>Followers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Following.xaml.cs">
       <DependentUpon>Following.xaml</DependentUpon>
     </Compile>
@@ -138,9 +141,9 @@
     <Compile Include="Utils\SQLQuerys.cs" />
     <Compile Include="Utils\ServiceCommunication.cs" />
     <Compile Include="Utils\Util.cs" />
-    <Compile Include="ViewModels\FollowingsViewModel.cs" />
+    <Compile Include="ViewModels\FollowsViewModel.cs" />
     <Compile Include="ViewModels\ShotsViewModel.cs" />
-    <Compile Include="ViewModels\FollowingViewModel.cs" />
+    <Compile Include="ViewModels\FollowViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ShotViewModel.cs" />
   </ItemGroup>
@@ -149,6 +152,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Followers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Following.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

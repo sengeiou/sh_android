@@ -168,9 +168,9 @@ namespace Bagdad.Models
             return imFollowing;
         }
 
-        public async Task<List<FollowingViewModel>> GetUserFollowingLocalData(int idUser)
+        public async Task<List<FollowViewModel>> GetUserFollowingLocalData(int idUser)
         {
-            List<FollowingViewModel> followings = new List<FollowingViewModel>();
+            List<FollowViewModel> followings = new List<FollowViewModel>();
             try
             {
                 Database db = await App.GetDatabaseAsync();
@@ -179,7 +179,7 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    followings.Add(new FollowingViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userImageURL = st.GetTextAt(3), isFollowed = true });
+                    followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userURLImage = st.GetTextAt(3), isFollowed = true } });
                 }
             }
             catch (Exception e)
@@ -189,16 +189,16 @@ namespace Bagdad.Models
             return followings;
         }
 
-        public async Task<List<FollowingViewModel>> GetUserFollowingFromServer(int idUser, int offset)
+        public async Task<List<FollowViewModel>> GetUserFollowingFromServer(int idUser, int offset)
         {
             List<int> myFollowings = await getidUserFollowing();
 
-            List<FollowingViewModel> followings = new List<FollowingViewModel>();
+            List<FollowViewModel> followings = new List<FollowViewModel>();
             try
             {
                 ServiceCommunication sc = new ServiceCommunication();
 
-                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"idFollowedUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "},{\"comparator\": \"ne\",\"name\": \"idFollowedUser\",\"value\": null}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Following\"}}]}";
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUserFollowing\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Following\"}}]}";
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
@@ -210,9 +210,44 @@ namespace Bagdad.Models
                     {
                         iFollow = false;
 
-                        if (myFollowings.Contains(int.Parse(follow["idFollowedUser"].ToString()))) iFollow = true;
+                        if (myFollowings.Contains(int.Parse(follow["idUser"].ToString()))) iFollow = true;
 
-                        followings.Add(new FollowingViewModel() { idUser = int.Parse(follow["idFollowedUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userImageURL = follow["photo"].ToString(), isFollowed = iFollow });
+                        followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(follow["idUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userURLImage = follow["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(follow["numFollowers"].ToString()), following = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), userBio = follow["bio"].ToString(), userWebsite = follow["website"].ToString() } });
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+            }
+            return followings;
+        }
+
+        public async Task<List<FollowViewModel>> GetUserFollowersFromServer(int idUser, int offset)
+        {
+            List<int> myFollowings = await getidUserFollowing();
+
+            List<FollowViewModel> followings = new List<FollowViewModel>();
+            try
+            {
+                ServiceCommunication sc = new ServiceCommunication();
+
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUserFollowed\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Followers\"}}]}";
+
+                JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
+
+                bool iFollow;
+
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken follow in responseFollow["ops"][0]["data"])
+                    {
+                        iFollow = false;
+
+                        if (myFollowings.Contains(int.Parse(follow["idUser"].ToString()))) iFollow = true;
+
+                        followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(follow["idUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userURLImage = follow["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(follow["numFollowers"].ToString()), following = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), userBio = follow["bio"].ToString(), userWebsite = follow["website"].ToString() } });
                     }
 
                 }
