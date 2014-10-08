@@ -112,16 +112,6 @@ namespace Bagdad
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
         }
 
-        private void appBarMenuItemPeople_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
-        }
-
-        private void appBarMenuItemMe_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
-        }
-
         private void updateButton()
         {
             if (!isFollowing)
@@ -180,6 +170,16 @@ namespace Bagdad
         private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+        }
+
+        private void appBarMenuItemPeople_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
+        }
+
+        private void appBarMenuItemMe_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
         }
         #endregion
 

@@ -60,7 +60,11 @@ namespace Bagdad
                 Title.Text = this.NavigationContext.QueryString["userName"] + " " + Title.Text;
             }
 
-            if (followers.Followings.Count == 0) await LoadFollowersData();
+            if (followers.Followings.Count == 0)
+            {
+                var res = await LoadFollowersData();
+                if (res == -1) NavigationService.GoBack();
+            }
             progress.IsVisible = false;
         }
 
@@ -76,7 +80,8 @@ namespace Bagdad
                 }
                 else
                 {
-                    MessageBox.Show(AppResources.NoInternet);
+                    if (App.IsAirplaneMode()) MessageBox.Show(AppResources.AirplaneMode, AppResources.CanConnect, MessageBoxButton.OK);
+                    else MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
                     return -1;
                 }
             }

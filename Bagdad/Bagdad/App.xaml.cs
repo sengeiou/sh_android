@@ -27,7 +27,7 @@ namespace Bagdad
 
         public static int ID_DEVICE = 0;
         public static int ID_USER = 2;
-        public static double TIME_LAPSE = 0;
+        public static double TIME_LAPSE = -7167518.431640625;
         public const int PLATFORM_ID = 2;
 
         #endregion
@@ -198,7 +198,7 @@ namespace Bagdad
             {
                 Util util = new Util();
 
-                TIME_LAPSE = await util.CalculateTimeLapse();
+                if(isInternetAvailable) TIME_LAPSE = await util.CalculateTimeLapse();
 
                 var synchroLogin = await util.isUserAlreadyLoged();
                 if (synchroLogin)
