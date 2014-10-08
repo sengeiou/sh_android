@@ -170,6 +170,8 @@ namespace Bagdad
                 }
                 else
                 {
+                    newShot.IsEnabled = false;
+                    appBarButtonShot.IsEnabled = false;
                     extraChars.Visibility = System.Windows.Visibility.Collapsed;
                     var res = await App.ShotsVM.SendShot(newShot.Text);
                     if (res == 2)
@@ -194,7 +196,8 @@ namespace Bagdad
                         Focus();
                         newShotFocused = false;
                     }
-                    
+                    newShot.IsEnabled = true;
+                    appBarButtonShot.IsEnabled = true;
                     if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 }
             }

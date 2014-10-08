@@ -159,7 +159,7 @@ namespace Bagdad
         private void LoadImage()
         {
             profileImage.Source = uim.GetUserImage(idUser);
-            if(profileImage.Source == null) profileImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(uvm.userURLImage, UriKind.Absolute));
+            if (profileImage.Source == null && !String.IsNullOrEmpty(uvm.userURLImage)) profileImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(uvm.userURLImage, UriKind.Absolute));
         }
         #endregion
 

@@ -88,7 +88,7 @@ namespace Bagdad
             catch (Exception e)
             {
                 Debug.WriteLine("E R R O R - Following.xaml.cs - LoadFollowingsData: " + e.Message);
-                MessageBox.Show(AppResources.ServerError);
+                MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
                 return -1;
             }
         }

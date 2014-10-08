@@ -54,7 +54,7 @@ namespace Bagdad.ViewModels
             {
                 //image
                 following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
-                if (following.userInfo.userImage == null) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
+                if (following.userInfo.userImage == null && !String.IsNullOrEmpty(following.userInfo.userURLImage)) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
 
                 //LOCALS ARE ONLY FOLLOWINGS, SO DOESN'T NEED BUTTON
                 following.buttonVisible = Visibility.Collapsed;
@@ -83,7 +83,7 @@ namespace Bagdad.ViewModels
             {
                 //image
                 following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
-                if (following.userInfo.userImage == null) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
+                if (following.userInfo.userImage == null && !String.IsNullOrEmpty(following.userInfo.userURLImage)) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
 
                 if (following.userInfo.idUser == App.ID_USER)
                 {
