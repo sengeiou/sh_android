@@ -434,6 +434,7 @@
         [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
+        [self keyboardHide:nil];
         //self.txtView.userInteractionEnabled = YES;
     }else if (error){
         [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];
