@@ -10,4 +10,16 @@ import UIKit
 
 class SearchManager: NSObject {
    
+    class var singleton : SearchManager {
+        
+    struct Static {
+        static let instance : SearchManager = SearchManager()
+        }
+        
+        return Static.instance
+    }
+    
+    func searchPeopleInLocalDatabase () {
+        
+    }
 }
