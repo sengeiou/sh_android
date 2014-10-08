@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -22,6 +23,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.PaginatedResult;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
@@ -209,6 +211,13 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         } else {
             Timber.d("No local results. Waiting for remote results");
         }
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        setLoading(false);
+        isLoadingRemoteData = false;
     }
 
     private void incrementOffset(int newItems) {

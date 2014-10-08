@@ -57,8 +57,7 @@ public class SearchPeopleRemoteJob extends CancellableJob {
     }
 
     @Override protected void run() throws SQLException, IOException {
-        if (!networkUtil.isConnected(app)) {
-            bus.post(new ConnectionNotAvailableEvent());
+        if (!checkConnection()) {
             return;
         }
 
