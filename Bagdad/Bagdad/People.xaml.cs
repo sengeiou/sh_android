@@ -17,21 +17,21 @@ using System.Diagnostics;
 
 namespace Bagdad
 {
-    public partial class Followers : PhoneApplicationPage
+    public partial class People : PhoneApplicationPage
     {
         int idUser = 0;
         int offset = 0;
         private int scrollToChargue = 0;
         private bool endOfList = false;
         private int charge = 0;
-        FollowsViewModel followers;
+        FollowsViewModel followings;
         public ProgressIndicator progress;
 
-        public Followers()
+        public People()
         {
             InitializeComponent();
-            followers = new FollowsViewModel();
-            DataContext = followers;
+            followings = new FollowsViewModel();
+            DataContext = followings;
             BuildLocalizedApplicationBar();
             progress = new ProgressIndicator()
             {
@@ -45,32 +45,19 @@ namespace Bagdad
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            progress.IsVisible = true;
-            if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["idUser"].Equals(""))
-            {
-                idUser = int.Parse(this.NavigationContext.QueryString["idUser"]);
-            }
-            else if (idUser == 0)
-            {
-                idUser = App.ID_USER;
-            }
+            idUser = App.ID_USER;
 
-            if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["userName"].Equals("") && !Title.Text.Contains(this.NavigationContext.QueryString["userName"]))
-            {
-                Title.Text = this.NavigationContext.QueryString["userName"] + " " + Title.Text;
-            }
-
-            if (followers.Followings.Count == 0) await LoadFollowersData();
+            if(followings.Followings.Count == 0) await LoadFollowingsData();
             progress.IsVisible = false;
         }
 
-        private async Task<int> LoadFollowersData()
+        private async Task<int> LoadFollowingsData()
         {
             try
             {
                 if (App.isInternetAvailable)
                 {
-                    int returned = await followers.LoadData(idUser, offset, Constants.CONST_FOLLOWERS);
+                    int returned = await followings.LoadData(idUser, offset, Constants.CONST_FOLLOWING);
                     offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
                     return returned;
                 }
@@ -98,7 +85,7 @@ namespace Bagdad
             
             ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
-            appBarMenuItemPeople.Click += appBarMenuItemPeople_Click;
+            appBarMenuItemPeople.IsEnabled = false;
             ApplicationBar.MenuItems.Add(appBarMenuItemPeople);
 
             ApplicationBarMenuItem appBarMenuItemTimeLine =
@@ -110,11 +97,6 @@ namespace Bagdad
                 new ApplicationBarMenuItem(AppResources.Me);
             appBarMenuItemMe.Click += appBarMenuItemMe_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
-        }
-
-        private void appBarMenuItemPeople_Click(object sender, EventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
         }
 
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
@@ -154,7 +136,7 @@ namespace Bagdad
             {
                 if (!endOfList)
                 {
-                    charge = await LoadFollowersData();
+                    charge = await LoadFollowingsData();
 
                     //if there is no more shots, don't need to charge it again
                     if (charge == 0)

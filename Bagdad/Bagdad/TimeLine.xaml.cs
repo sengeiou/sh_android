@@ -123,6 +123,7 @@ namespace Bagdad
             // Create a new menu item with the localized string from AppResources.
             ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
+            appBarMenuItemPeople.Click += appBarMenuItemPeople_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemPeople);
 
             ApplicationBarMenuItem appBarMenuItemTimeLine =
@@ -216,6 +217,11 @@ namespace Bagdad
         {
             NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
             timer.Stop();
+        }
+
+        private void appBarMenuItemPeople_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
         }
 
         private void appBarShootButton_Click(object sender, EventArgs e)

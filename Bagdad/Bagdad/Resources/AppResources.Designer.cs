@@ -250,6 +250,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a PEOPLE.
+        /// </summary>
+        public static string MePeople {
+            get {
+                return ResourceManager.GetString("MePeople", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a POINTS.
         /// </summary>
         public static string MePoints {

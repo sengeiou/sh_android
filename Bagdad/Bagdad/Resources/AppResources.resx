@@ -342,4 +342,8 @@
     <value>Your phone is in airplane mode.</value>
     <comment>TimeLine.xaml</comment>
   </data>
+  <data name="MePeople" xml:space="preserve">
+    <value>PEOPLE</value>
+    <comment>People.xaml</comment>
+  </data>
 </root>

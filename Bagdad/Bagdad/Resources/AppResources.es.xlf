@@ -179,6 +179,11 @@
           <target state="new">Your phone is in airplane mode.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/MePeople" translate="yes" xml:space="preserve">
+          <source>PEOPLE</source>
+          <target state="new">PEOPLE</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">People.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
           <source>Whoops! You already shot that.</source>
           <target state="new">Whoops! You already shot that.</target>

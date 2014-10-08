@@ -102,6 +102,7 @@ namespace Bagdad
 
             ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
+            appBarMenuItemPeople.Click += appBarMenuItemPeople_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemPeople);
 
             ApplicationBarMenuItem appBarMenuItemTimeLine =
@@ -114,6 +115,12 @@ namespace Bagdad
             appBarMenuItemMe.Click += appBarMenuItemMe_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
         }
+
+        private void appBarMenuItemPeople_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
+        }
+
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
