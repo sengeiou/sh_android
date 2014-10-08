@@ -158,6 +158,7 @@ namespace Bagdad
         {
             try
             {
+                myShots.SelectedItem =myShots.Items.First();
                 myShots.ScrollIntoView(myShots.Items.First());
                 progress.IsVisible = true;
                 if (!App.isInternetAvailable)
@@ -170,15 +171,18 @@ namespace Bagdad
                 {
                     extraChars.Visibility = System.Windows.Visibility.Collapsed;
                     var res = await App.ShotsVM.SendShot(newShot.Text);
-                    if(res == 2)
+                    if (res == 2)
                         MessageBox.Show(AppResources.TimeOut, AppResources.ShotNotPosted, MessageBoxButton.OK);
-                    else if(res != 1)
+                    else if (res != 1)
                         MessageBox.Show(AppResources.ShootRepeated, AppResources.ShotNotPosted, MessageBoxButton.OK);
-                    timer.Stop();
-                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (SendShot)");
-                    timer.Interval = new TimeSpan(0, 0, 0, 1);
-                    timer.Start();
-                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start to 1 seg (SendShot)");
+                    else
+                    {
+                        timer.Stop();
+                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (SendShot)");
+                        timer.Interval = new TimeSpan(0, 0, 0, 1);
+                        timer.Start();
+                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start to 1 seg (SendShot)");
+                    }
                     extraChars.Text = "140";
                     newShot.Text = "";
                     Focus();

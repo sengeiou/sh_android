@@ -414,8 +414,14 @@ namespace Bagdad.Utils
 
         private async Task<int> SaveData(string entity, JObject response)
         {
-            BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
-            int result = await model.SaveData(model.ParseJson(response));
+            int result = -1;
+            try
+            {
+                BaseModelJsonConstructor model = CreateModelJsonConstructor(entity);
+                result = await model.SaveData(model.ParseJson(response));
+            }
+            catch (Exception e)
+            { throw e; }
             return result;
         }
 

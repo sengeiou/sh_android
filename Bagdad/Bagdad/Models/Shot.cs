@@ -554,7 +554,6 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-
                 throw new Exception("E R R O R - Shot - ParseJson: " + e.Message);
             }
             return shots;
