@@ -52,9 +52,12 @@
 //------------------------------------------------------------------------------
 - (User *)getActiveUser {
     
+#warning For testing purposes, to see all the users in DB
+    NSArray *users = [[CoreDataManager singleton] getAllEntities:[User class]];
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sessionToken != nil"];
     NSArray *usersWithProfile = [[CoreDataManager singleton] getAllEntities:[User class] withPredicate:predicate];
-    
+
     if ( usersWithProfile.count == 1 )
         return [usersWithProfile firstObject];
     else if ( usersWithProfile.count > 1 )
