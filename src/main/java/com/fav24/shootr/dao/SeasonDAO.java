@@ -48,6 +48,14 @@ public interface SeasonDAO extends BaseDAO {
      */
 	List<Season> getAllSeasonsByCompetitionId(Long idCompetition);
 
+
+    /**
+     * Given an idArea, return all its Seasons.
+     * @param idArea area identifier.
+     * @return Seasons of the area.
+     */
+	List<Season> getAllSeasonsByAreaId(Long idArea);
+	
 	/**
 	 * Update season.
 	 * @param season

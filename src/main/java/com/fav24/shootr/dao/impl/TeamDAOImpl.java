@@ -64,7 +64,7 @@ public class TeamDAOImpl extends BaseDAOImpl implements TeamDAO {
 				ps.setString(3, b.getClubName());
 				ps.setString(4, b.getOfficialName());
 				ps.setString(5, b.getShortName());
-				ps.setString(6, b.getShortName());
+				ps.setString(6, b.getTlaName());
 			}
 			public int getBatchSize() {
 				return teams.size();

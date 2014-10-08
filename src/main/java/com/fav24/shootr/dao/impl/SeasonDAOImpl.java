@@ -96,4 +96,10 @@ public class SeasonDAOImpl extends BaseDAOImpl implements SeasonDAO {
 		return getJdbcTemplate().update(query, season.getName(), season.getStartDate(), season.getEndDate(), season.getLastUpdated(), season.getIdSeason());
 	}
 
+	@Override
+	public List<Season> getAllSeasonsByAreaId(Long idArea) {
+		String query = PropertiesManager.getProperty("season.select.byidArea");
+		return getJdbcTemplate().query(query, new Object[] { idArea }, new BeanPropertyRowMapper<Season>(Season.class));
+	}
+
 }
