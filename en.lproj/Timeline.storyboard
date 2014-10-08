@@ -74,7 +74,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXk-Q8-LaK">
-                                                    <rect key="frame" x="78" y="8" width="44" height="26"/>
+                                                    <rect key="frame" x="78" y="6" width="44" height="26"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="26" id="Nlo-Xn-dNm"/>
@@ -122,7 +122,7 @@
                                                     </variation>
                                                 </textView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="38" placeholderIntrinsicHeight="21" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2YE-xU-tH9">
-                                                    <rect key="frame" x="544" y="12" width="38" height="21"/>
+                                                    <rect key="frame" x="544" y="10" width="38" height="21"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="kpc-wB-e5s"/>
@@ -145,7 +145,7 @@
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="15" id="NOH-uj-RRh"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="bottom" secondItem="2EL-DM-I0W" secondAttribute="bottomMargin" priority="800" id="c5q-u7-IUH"/>
                                                 <constraint firstItem="XXk-Q8-LaK" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="70" id="d20-1t-v77"/>
-                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" id="gQA-DB-9qo"/>
+                                                <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="-2" id="gQA-DB-9qo"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="65" id="iod-YH-LWO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="2YE-xU-tH9" secondAttribute="trailing" constant="12" id="mcK-PJ-EH1"/>
                                                 <constraint firstItem="LKJ-5Q-sCn" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" id="oIF-WS-IS8"/>

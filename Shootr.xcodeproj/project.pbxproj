@@ -110,6 +110,7 @@
 		AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */; };
 		AAE0EF6D19E427A700F32FF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAE0EF6B19E427A700F32FF7 /* InfoPlist.strings */; };
 		AAE0EF7019E5172900F32FF7 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */; };
+		AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -309,6 +310,8 @@
 		AAE0EF6C19E427A700F32FF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Tests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		AAE0EF6E19E5172900F32FF7 /* Shootr-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shootr-Bridging-Header.h"; sourceTree = "<group>"; };
 		AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
+		AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineUtilities.h; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.h; sourceTree = SOURCE_ROOT; };
+		AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineUtilities.m; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -706,6 +709,8 @@
 				A59EECDA19D1759F00D011C5 /* CustomCells */,
 				AACA545319C08E4A00E39D94 /* TimeLineViewController.h */,
 				AACA545419C08E4A00E39D94 /* TimeLineViewController.m */,
+				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
+				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
 			);
 			name = Timeline;
 			path = ViewControllers/Partidos;
@@ -944,6 +949,7 @@
 				AA9D039B19D95ABD00E59C83 /* NSString+CleanLinks.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
+				AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
 				AA72640C19D0505A0067A39D /* _Follow.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,

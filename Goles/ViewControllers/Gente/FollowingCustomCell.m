@@ -31,7 +31,7 @@
 	
      
     if ([self checkIfImFollowingUser:user])
-		[self configureFollowingButton];
+        self.actionButton.hidden = YES;
 		
     else
 		[self configureFollowButton];

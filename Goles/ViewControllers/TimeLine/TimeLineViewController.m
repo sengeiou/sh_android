@@ -20,6 +20,7 @@
 #import "ProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import <CoreText/CoreText.h>
+#import "TimeLineUtilities.h"
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -323,9 +324,10 @@
 - (void)sendShot{
     self.btnShoot.enabled = NO;
      self.charactersLeft.hidden = YES;
-    
+    self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
+
 
 //------------------------------------------------------------------------------
 -(BOOL) controlRepeatedShot:(NSString *)texto{
@@ -377,6 +379,7 @@
 #pragma mark - Shot creation
 //------------------------------------------------------------------------------
 - (void)shotCreated {
+    
     [self controlCharactersShot:self.txtView.text];
 
     if (![self controlRepeatedShot:self.textComment])
@@ -387,6 +390,7 @@
     
 }
 
+//------------------------------------------------------------------------------
 -(void)showAlert{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alert show];
@@ -394,12 +398,11 @@
     self.btnShoot.enabled = YES;
 }
 
+//------------------------------------------------------------------------------
 -(NSString *)controlCharactersShot:(NSString *)text{
     
     NSRange range = [text rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
     text = [text stringByReplacingCharactersInRange:range withString:@""];
-    //NSLog(@"mystring %@, length %lu",text, (unsigned long)text.length);
-    
     
     self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
@@ -426,6 +429,7 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
+        self.title = @"Timeline";
         rows = 0;
         self.orientation = NO;
         self.charactersLeft.hidden = YES;
@@ -598,15 +602,12 @@
     lengthTextField = textView.text.length - range.length + text.length;
     self.charactersLeft.hidden = NO;
 
-    if (![result isEqualToString:@""] && lengthTextField >= 1){
+//    if (![result isEqualToString:@""] && lengthTextField >= 1)
+    if (lengthTextField >= 1)
         self.btnShoot.enabled = YES;
-		
-//        if (rows >= 2)
-			//self.charactersLeft.hidden = NO;
-    }else
+    else
         self.btnShoot.enabled = NO;
 
-   // if ([text isEqualToString:@"\n"] || rows > rowsOLD)
     [self adaptViewSizeWhenWriting:textView withCharacter:text];
 
     if (lengthTextField == 0){

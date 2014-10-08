@@ -180,7 +180,7 @@
                                                     <constraint firstAttribute="width" constant="46" id="IH0-39-Kkc"/>
                                                     <constraint firstAttribute="height" constant="44" id="Xg1-0B-Q3a"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <state key="normal" title="44">
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -214,7 +214,7 @@
                                                     <constraint firstAttribute="height" constant="44" id="Rw6-ST-ZrD"/>
                                                     <constraint firstAttribute="width" constant="46" id="v0z-pa-Tsw"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <state key="normal" title="23">
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -238,7 +238,7 @@
                                                     <constraint firstAttribute="height" constant="44" id="Eid-94-OPA"/>
                                                     <constraint firstAttribute="width" constant="46" id="p1W-QL-Z5Q"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <state key="normal" title="3201">
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -358,7 +358,7 @@
                                             </state>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBy-mi-FaP">
-                                            <rect key="frame" x="68" y="7" width="391" height="21"/>
+                                            <rect key="frame" x="68" y="3" width="421" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="rzw-op-pjn"/>
                                             </constraints>
@@ -367,7 +367,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHl-cH-0HG">
-                                            <rect key="frame" x="68" y="26" width="391" height="21"/>
+                                            <rect key="frame" x="68" y="22" width="421" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="EdJ-aT-s02"/>
                                             </constraints>
@@ -376,11 +376,11 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6RI-lt-Kek">
-                                            <rect key="frame" x="469" y="11" width="120" height="28"/>
+                                            <rect key="frame" x="499" y="11" width="90" height="28"/>
                                             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="28" id="6sj-aQ-rqT"/>
-                                                <constraint firstAttribute="width" constant="120" id="fnw-E7-0KJ"/>
+                                                <constraint firstAttribute="width" constant="90" id="fnw-E7-0KJ"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                             <state key="normal" title="Following">
@@ -397,7 +397,7 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="aqE-cJ-1eP"/>
-                                        <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-1" id="cuu-Bd-De3"/>
+                                        <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-5" id="cuu-Bd-De3"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-2" id="daY-28-9ld"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="6" id="faJ-ai-Lsd"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="TBy-mi-FaP" secondAttribute="trailing" constant="10" id="fyM-ce-M0p"/>
