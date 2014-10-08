@@ -180,9 +180,10 @@
 	}
 	
     NSNumber *userID = [[UserManager singleton] getUserId];
-    [idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
+    if (userID != nil)
+        [idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
 	
-                              if (idUsersArray.count > 0)
+    if (idUsersArray.count > 0)
 		return idUsersArray.copy;
 	
 	return nil;
