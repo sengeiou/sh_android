@@ -32,7 +32,8 @@ import gm.mobi.android.task.jobs.CancellableJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
-import gm.mobi.android.task.jobs.follows.SearchPeopleJob;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
+import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.shots.NewShotJob;
@@ -78,7 +79,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
 
-    ShotManager.class, SearchPeopleJob.class,
+    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
     TimelineJob.class, TimelineFragment.class, TeamManager.class,
 
@@ -164,7 +165,7 @@ public class DataModule {
 
               @Override
               public void d(String text, Object... args) {
-                  Timber.d(text, args);
+                  Timber.v(text, args);
               }
 
               @Override

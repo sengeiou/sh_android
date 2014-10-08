@@ -219,7 +219,7 @@ public class TimelineFragment extends BaseFragment
                     @Override
                     public void onScrollIdle() {
                         int lastVisiblePosition = listView.getLastVisiblePosition();
-                        if (lastVisiblePosition >= adapter.getCount() + 1 /*footer*/) {
+                        if (lastVisiblePosition >= listView.getAdapter().getCount()) {
                             Context context = getActivity();
                             if (context != null) {
                                 startLoadMoreShots(context);

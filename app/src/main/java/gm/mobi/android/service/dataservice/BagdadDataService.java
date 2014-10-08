@@ -17,10 +17,12 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
+import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
+import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.util.SecurityUtils;
 import java.io.IOException;
@@ -35,6 +37,7 @@ public class BagdadDataService implements BagdadService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 10L;
+    private static final Integer SEARCH_PAGE_LIMIT = 8;
 
     private OkHttpClient client;
     private Endpoint endpoint;
@@ -257,25 +260,30 @@ public class BagdadDataService implements BagdadService {
         return teams;
     }
 
-    public List<User> searchUsersByNameOrNickName(String searchString) throws IOException{
+    @Override
+    public PaginatedResult<List<User>> searchUsersByNameOrNickNamePaginated(String searchQuery,
+      int pageOffset) throws IOException{
         List<User> users = new ArrayList<>();
-        GenericDto requestDto = userDtoFactory.searchUserOperation(searchString);
+        GenericDto requestDto = userDtoFactory.searchUserOperation(searchQuery, SEARCH_PAGE_LIMIT, pageOffset);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;
         }
-        Long totalItems = ops[0].getMetadata().getTotalItems();
-        if (ops.length > 0 && totalItems > 0) {
-            for (int i = 0; i < totalItems; i++) {
+        MetadataDto metadata = ops[0].getMetadata();
+        Long items = metadata.getItems();
+        if (ops.length > 0) {
+            for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 users.add(userMapper.fromDto(dataItem));
             }
         } else {
             return null;
         }
-        return users;
+
+        int totalItems = metadata.getTotalItems().intValue();
+        return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT).setPageOffset(pageOffset).setTotalItems(totalItems);
     }
 
     @Override

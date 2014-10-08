@@ -29,6 +29,11 @@ public class UserListAdapter extends BindableAdapter<User> {
         notifyDataSetChanged();
     }
 
+    public void addItems(List<User> users) {
+        this.users.addAll(users);
+        notifyDataSetChanged();
+    }
+
     @Override public int getCount() {
         return users.size();
     }

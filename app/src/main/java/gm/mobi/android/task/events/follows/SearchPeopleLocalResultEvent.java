@@ -4,11 +4,11 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.ResultEvent;
 import java.util.List;
 
-public class SearchPeopleEvent extends ResultEvent<List<User>> {
+public class SearchPeopleLocalResultEvent extends ResultEvent<List<User>> {
 
     private List<User> users;
 
-    public SearchPeopleEvent(int status) {
+    public SearchPeopleLocalResultEvent(int status) {
         super(status);
     }
 

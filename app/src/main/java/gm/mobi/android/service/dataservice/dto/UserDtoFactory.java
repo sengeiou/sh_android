@@ -172,15 +172,25 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS, od);
     }
 
-    public GenericDto searchUserOperation(String searchString){
-        OperationDto od = new OperationDto();
-        FilterDto filter = and(orModifiedOrDeletedAfter(0L), or(UserTable.NAME).contains(searchString).or(UserTable.USER_NAME).contains(searchString).or(UserTable.EMAIL).contains(searchString)).build();
-        MetadataDto md = new MetadataDto(Constants.OPERATION_RETRIEVE,UserTable.TABLE, false,null,0L,100L,filter);
-        od.setMetadata(md);
+    public GenericDto searchUserOperation(String searchString, Integer pageLimit, Integer pageOffset) {
+        FilterDto filter = and(
+          orModifiedOrDeletedAfter(0L),
+          or(UserTable.NAME).contains(searchString)
+          .or(UserTable.USER_NAME)
+          .contains(searchString)
+          .or(UserTable.EMAIL)
+          .contains(searchString)).build();
 
-        Map<String,Object>[] array = new HashMap[1];
-        array[0] = userMapper.reqRestUsersToDto(null);
-        od.setData(array);
+        //FilterDto filter = and(orModifiedOrDeletedAfter(0L)).and(UserTable.ID).isNotEqualTo(666).build();
+
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+          .entity(UserTable.TABLE)
+          .items(pageLimit)
+          .offset(pageOffset)
+          .filter(filter)
+          .build();
+
+        OperationDto od = new OperationDto.Builder().metadata(md).putData(userMapper.reqRestUsersToDto(null)).build();
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_USERS, od);
     }

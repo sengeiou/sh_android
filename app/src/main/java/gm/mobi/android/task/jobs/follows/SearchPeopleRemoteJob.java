@@ -9,9 +9,11 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
-import gm.mobi.android.task.events.follows.SearchPeopleEvent;
+import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
+import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,79 +21,68 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SearchPeopleJob extends CancellableJob {
+public class SearchPeopleRemoteJob extends CancellableJob {
 
     private static final int PRIORITY = 4;
     private static final int RETRY_ATTEMPTS = 3;
+
+    public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
+
     Application app;
     Bus bus;
     NetworkUtil networkUtil;
     BagdadService service;
-    private SQLiteDatabase db;
-    private UserManager userManager;
-    private FollowManager followManager;
+
     private String searchString;
+    private int pageOffset;
 
     @Inject
-    public SearchPeopleJob(Application app, Bus bus, BagdadService service, NetworkUtil networkUtil,
-      UserManager userManager, FollowManager followManager) {
-        super(new Params(PRIORITY));
+    public SearchPeopleRemoteJob(Application app, Bus bus, BagdadService service, NetworkUtil networkUtil) {
+        super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP));
         this.app = app;
         this.bus = bus;
         this.networkUtil = networkUtil;
         this.service = service;
-        this.userManager = userManager;
-        this.followManager = followManager;
     }
 
-    public void init(String searchString) {
+    public void init(String searchString, int pageOffset) {
         this.searchString = searchString;
+        this.pageOffset = pageOffset;
     }
 
     @Override protected void createDatabase() {
-        db = createWritableDb();
     }
 
     @Override protected void setDatabaseToManagers() {
-        userManager.setDataBase(db);
-        followManager.setDataBase(db);
     }
 
     @Override protected void run() throws SQLException, IOException {
-        if (isCancelled()) return;
-        //At first we search in database
-        retrieveDataFromDataBase();
-
-        //After looking in Database we look in server
-        if(!networkUtil.isConnected(app)){
+        if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return;
         }
 
         try {
-            List<User> users = service.searchUsersByNameOrNickName(searchString);
-            if (users != null && users.size()>0) {
-                bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(users));
+            PaginatedResult<List<User>> searchResults = getSearchFromServer();
+            List<User> users = searchResults.getResult();
+            if (users != null) {
+                sendSuccess(searchResults);
             } else {
-                bus.post(new SearchPeopleEvent(ResultEvent.STATUS_INVALID));
+                bus.post(new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_INVALID));
             }
         } catch (IOException e) {
-            bus.post(new SearchPeopleEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
+            bus.post(new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
         }
-
     }
 
-    public void retrieveDataFromDataBase(){
+    private void sendSuccess(PaginatedResult<List<User>> result) {
+        SearchPeopleRemoteResultEvent event = new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_SUCCESS);
+        event.setSuccessful(result);
+        bus.post(event);
+    }
 
-        List<User> users = userManager.searchUsers(searchString);
-        if(users!=null && users.size()>0) {
-            SearchPeopleEvent result = new SearchPeopleEvent(ResultEvent.STATUS_SUCCESS);
-            result.setSuccessful(users);
-            bus.post(result);
-        }else{
-            bus.post(new SearchPeopleEvent(ResultEvent.STATUS_INVALID));
-            Timber.i("Users with nick or name as %s  not found in local database. Retrieving from the service...", searchString);
-        }
+    private PaginatedResult<List<User>> getSearchFromServer() throws IOException {
+        return service.searchUsersByNameOrNickNamePaginated(searchString, pageOffset);
     }
 
     @Override public void onAdded() {

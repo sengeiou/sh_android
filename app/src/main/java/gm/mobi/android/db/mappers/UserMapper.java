@@ -73,6 +73,7 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
+    //TODO bad smell: nombre de método ofuscado
     public  Map<String, Object> reqRestUsersToDto(User user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
