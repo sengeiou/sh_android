@@ -64,6 +64,17 @@
     return cell;
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    User *selectedUser = self.usersList[indexPath.row];
+    profileVC.selectedUser = selectedUser;
+    
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
 #pragma mark - Reload methods
 //------------------------------------------------------------------------------
 - (void)reloadDataAndTable {
