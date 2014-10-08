@@ -18,7 +18,12 @@ public class FilterBuilder {
     public static String COMPARATOR_GREAT_EQUAL_THAN = "ge";
     public static String COMPARATOR_LESS_THAN = "lt";
     public static String COMPARATOR_LESS_EQUAL_THAN = "le";
+    public static String COMPARATOR_STARTS_WITH = "st";
+    public static String COMPARATOR_NOT_STARTS_WITH = "nst";
     public static String COMPARATOR_CONTAINS = "ct";
+    public static String COMPARATOR_NOT_CONTAINS = "nct";
+    public static String COMPARATOR_ENDS_WITH = "en";
+    public static String COMPARATOR_NOT_ENDS_WITH = "nen";
 
     public static ItemField<AndItem> and(String field) {
         AndItem andItem = new AndItem();
@@ -114,10 +119,37 @@ public class FilterBuilder {
             return nexusItemReference;
         }
 
-        public T contains(String query) {
-            createAndAddItem(COMPARATOR_CONTAINS, query);
+        public T startsWith(String textValue) {
+            createAndAddItem(COMPARATOR_STARTS_WITH, textValue);
             return nexusItemReference;
         }
+
+        public T notStartsWith(String textValue) {
+            createAndAddItem(COMPARATOR_NOT_STARTS_WITH, textValue);
+            return nexusItemReference;
+        }
+
+        public T contains(String textValue) {
+            createAndAddItem(COMPARATOR_CONTAINS, textValue);
+            return nexusItemReference;
+        }
+
+        public T notContains(String textValue) {
+            createAndAddItem(COMPARATOR_NOT_CONTAINS, textValue);
+            return nexusItemReference;
+        }
+
+        public T endsWith(String textValue) {
+            createAndAddItem(COMPARATOR_ENDS_WITH, textValue);
+            return nexusItemReference;
+        }
+
+        public T notEndsWith(String textValue) {
+            createAndAddItem(COMPARATOR_NOT_ENDS_WITH, textValue);
+            return nexusItemReference;
+        }
+
+
         private void createAndAddItem(String comparator, Object value) {
             FilterItemDto item = new FilterItemDto(comparator, fieldName, value);
             nexusItemReference.addItem(item);
