@@ -315,11 +315,11 @@
     <comment>Me.xaml</comment>
   </data>
   <data name="ProfileButtonFollow" xml:space="preserve">
-    <value>+ FOLLOW</value>
+    <value>FOLLOW</value>
     <comment>Me.xaml</comment>
   </data>
   <data name="ProfileButtonFollowing" xml:space="preserve">
-    <value>✔ FOLLOWING</value>
+    <value>FOLLOWING</value>
     <comment>Me.xaml</comment>
   </data>
   <data name="ServerError" xml:space="preserve">

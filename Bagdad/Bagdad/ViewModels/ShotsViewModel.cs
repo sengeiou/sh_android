@@ -125,7 +125,7 @@ namespace Bagdad.ViewModels
 
                     //image
                     image = userImageManager.GetUserImage(shot.shotUserId);
-                    if (image == null) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(shot.shotUserImageURL, UriKind.Absolute));
+                    if (image == null && !String.IsNullOrEmpty(shot.shotUserImageURL)) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(shot.shotUserImageURL, UriKind.Absolute));
 
                     //Tag
                     String tag = "";        //TODO: Partidos que tendrán asociadas las publicaciones

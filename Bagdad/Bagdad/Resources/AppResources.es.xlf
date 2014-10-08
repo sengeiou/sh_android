@@ -155,8 +155,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/ProfileButtonFollowing" translate="yes" xml:space="preserve">
-          <source>✔ FOLLOWING</source>
-          <target state="new">✔ FOLLOWING</target>
+          <source>FOLLOWING</source>
+          <target state="new">FOLLOWING</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/ServerError" translate="yes" xml:space="preserve">
@@ -190,8 +190,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/ProfileButtonFollow" translate="yes" xml:space="preserve">
-          <source>+ FOLLOW</source>
-          <target state="new">+ FOLLOW</target>
+          <source>FOLLOW</source>
+          <target state="new">FOLLOW</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Me.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/ProfileButtonEdit" translate="yes" xml:space="preserve">

@@ -147,21 +147,24 @@ namespace Bagdad.Utils
 
             try
             {
-                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                if (IsolatedStorageFile.GetUserStoreForApplication().FileExists(idUser + ".jpg"))
                 {
-                    using (IsolatedStorageFileStream isfs = isf.OpenFile(userID + ".jpg", FileMode.Open, FileAccess.Read))
+                    using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
                     {
-                        data = new byte[isfs.Length];
-                        isfs.Read(data, 0, data.Length);
-                        isfs.Close();
+                        using (IsolatedStorageFileStream isfs = isf.OpenFile(userID + ".jpg", FileMode.Open, FileAccess.Read))
+                        {
+                            data = new byte[isfs.Length];
+                            isfs.Read(data, 0, data.Length);
+                            isfs.Close();
+                        }
                     }
+                    MemoryStream ms = new MemoryStream(data);
+                    BitmapImage bi = new BitmapImage();
+                    bi.SetSource(ms);
+                    return bi;
                 }
-                MemoryStream ms = new MemoryStream(data);
-                BitmapImage bi = new BitmapImage();
-                bi.SetSource(ms);
-                return bi;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine("E R R O R : GetUserImage: " + e.Message);
             }

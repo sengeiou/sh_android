@@ -43,17 +43,17 @@ namespace Bagdad.ViewModels
                     uvm = await user.GetProfilInfoFromServer(idUser);
                 }
 
-                idUser = uvm.idUser;
-                points = uvm.points;
-                followers = uvm.followers;
-                following = uvm.following;
-                userNickName = uvm.userNickName;
-                userName = uvm.userName;
-                userURLImage = uvm.userURLImage;
-                userBio = uvm.userBio;
-                userWebsite = uvm.userWebsite;
+                this.idUser = uvm.idUser;
+                this.points = uvm.points;
+                this.followers = uvm.followers;
+                this.following = uvm.following;
+                this.userNickName = uvm.userNickName;
+                this.userName = uvm.userName;
+                this.userURLImage = uvm.userURLImage;
+                this.userBio = uvm.userBio;
+                this.userWebsite = uvm.userWebsite;
 
-                isFollowed = await uvm.ImFollowing();
+                this.isFollowed = await uvm.ImFollowing();
             }
             catch (Exception e)
             {

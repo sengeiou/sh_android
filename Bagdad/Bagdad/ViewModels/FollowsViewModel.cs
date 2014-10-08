@@ -56,12 +56,8 @@ namespace Bagdad.ViewModels
                 following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
                 if (following.userInfo.userImage == null) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
 
-                //Default Button
-                following.buttonVisible = Visibility.Visible;
-                following.buttonText = AppResources.ProfileButtonFollowing + "  ";
-                following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                following.buttonForeground = Application.Current.Resources["PhoneForegroundBrush"] as SolidColorBrush;
-
+                //LOCALS ARE ONLY FOLLOWINGS, SO DOESN'T NEED BUTTON
+                following.buttonVisible = Visibility.Collapsed;
 
                 Followings.Add(following);
             }
@@ -99,17 +95,17 @@ namespace Bagdad.ViewModels
                     //Default Button
                     if (following.userInfo.isFollowed)
                     {
-                        following.buttonVisible = Visibility.Visible;
-                        following.buttonText = AppResources.ProfileButtonFollowing + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        following.buttonForeground = Application.Current.Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                        following.buttonVisible = Visibility.Collapsed;
+                        
                     }
                     else
                     {
                         following.buttonVisible = Visibility.Visible;
                         following.buttonText = AppResources.ProfileButtonFollow + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        following.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
+                        following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                        following.buttonForeground = Application.Current.Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
+                        following.buttonIconVisible = System.Windows.Visibility.Visible;
                     }
                 }
                 Followings.Add(following);

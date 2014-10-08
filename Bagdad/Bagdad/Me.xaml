@@ -121,7 +121,27 @@
                 </Grid>
                 
                 <!--Row1-->
-                <Button x:Name="headButton" Grid.Row="1" Content="{Binding LocalizedResources.ProfileButtonEdit ,Source={StaticResource LocalizedStrings}}" Foreground="white" Background="{StaticResource PhoneAccentBrush}" BorderThickness="2" BorderBrush="{StaticResource PhoneAccentBrush}" Click="headButton_Click"/>
+                <Button x:Name="headButton" Grid.Row="1" Foreground="white" Background="{StaticResource PhoneAccentBrush}" BorderThickness="2" BorderBrush="{StaticResource PhoneAccentBrush}" Click="headButton_Click">
+                    <Button.Content>
+                        <Grid Width="260" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Column0-->
+                            <Rectangle x:Name="headButtonIconVisible" Grid.Column="0" Fill="White" Height="30" Width="30" Margin="0" HorizontalAlignment="Right">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush x:Name="headButtonIcon" ImageSource="/Resources/icons/appbar.check.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <!--Column0-->
+                            <TextBlock x:Name="headButtonText" Margin="0" Grid.Column="1" Text="{Binding LocalizedResources.ProfileButtonEdit ,Source={StaticResource LocalizedStrings}}"/>
+                            
+                        </Grid>
+                    </Button.Content>
+                </Button>
                 
             </Grid>
 

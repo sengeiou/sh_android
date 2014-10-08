@@ -367,7 +367,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a + FOLLOW.
+        ///   Busca una cadena traducida similar a FOLLOW.
         /// </summary>
         public static string ProfileButtonFollow {
             get {
@@ -376,7 +376,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a ✔ FOLLOWING.
+        ///   Busca una cadena traducida similar a FOLLOWING.
         /// </summary>
         public static string ProfileButtonFollowing {
             get {
