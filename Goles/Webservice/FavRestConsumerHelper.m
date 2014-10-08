@@ -122,9 +122,14 @@
     NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
     [metadata addEntriesFromDictionary:@{K_WS_OPS_INCLUDE_DELETED:K_WS_TRUE}];
-    [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
-    [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
-    [metadata addEntriesFromDictionary:filter];
+    
+    if ([items isKindOfClass:[NSNumber class]])
+        [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
+    
+    if ([offset isKindOfClass:[NSNumber class]])
+        [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
+    if ([filter isKindOfClass:[NSDictionary class]])
+        [metadata addEntriesFromDictionary:filter];
 
     
     return metadata;

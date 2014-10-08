@@ -24,8 +24,11 @@
     
     if ([entity isSubclassOfClass:[Follow class]]){
         
+        //Security check
         NSNumber *userID = [[UserManager singleton] getUserId];
-
+        if (![userID isKindOfClass:[NSNumber class]])
+            return @{};
+        
         NSArray *filterItemsFollow = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID},
                                        @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_FOLLOW_IDUSERFOLLOWED,K_CD_VALUE:[NSNull null]}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:filterItemsFollow,K_WS_FILTERS:@[filterDate]}};
@@ -36,7 +39,12 @@
     
     if ([entity isSubclassOfClass:[User class]]){
 		
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+        //Security check
+        NSNumber *userID = [[UserManager singleton] getUserId];
+        if (![userID isKindOfClass:[NSNumber class]])
+            return @{};
+        
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",userID];
 		NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
 		NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
 		for (Follow *followedUser in follows) {
@@ -172,14 +180,18 @@
 //-----------------------------------------------------------------------------
 + (NSArray *)composeUsersToFilter {
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+    //Security check
+    NSNumber *userID = [[UserManager singleton] getUserId];
+    if (![userID isKindOfClass:[NSNumber class]])
+        return @[];
+    
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",userID];
 	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
 	NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count+1];
 	for (Follow *obj in follows) {
 		[idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:obj.idUserFollowed}];
 	}
 	
-    NSNumber *userID = [[UserManager singleton] getUserId];
     if (userID != nil)
         [idUsersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
 	
