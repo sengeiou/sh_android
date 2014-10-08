@@ -1,5 +1,7 @@
 package com.fav24.shootr.dao.domain;
 
+import java.util.Date;
+
 public class Season extends Synchronized {
 
 	private Long idSeason;
@@ -7,10 +9,9 @@ public class Season extends Synchronized {
 	private Long idCompetition;
 	private String name;
 
-	private String startDate;
-	private String endDate;
-
-	private String lastUpdated;
+	private Date startDate;
+	private Date endDate;
+	private Date lastUpdated;
 
 	public Long getIdSeason() {
 		return idSeason;
@@ -44,27 +45,27 @@ public class Season extends Synchronized {
 		this.name = name;
 	}
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
-	public String getLastUpdated() {
+	public Date getLastUpdated() {
 		return lastUpdated;
 	}
 
-	public void setLastUpdated(String lastUpdated) {
+	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
 
