@@ -31,7 +31,7 @@
 	
      
     if ([self checkIfImFollowingUser:user])
-        self.actionButton.hidden = YES;
+        [self configureFollowingButton];
 		
     else
 		[self configureFollowButton];
@@ -81,6 +81,7 @@
 
     [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
     [self.actionButton setAttributedTitle:[Utils formatTitle:@"+ FOLLOW"] forState:UIControlStateNormal];
+    [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(-1, 0, 0, 0)];
     self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.actionButton.backgroundColor = [UIColor whiteColor];
     self.actionButton.layer.borderWidth = 1.0f;

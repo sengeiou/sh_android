@@ -22,7 +22,7 @@
 #import <CoreText/CoreText.h>
 #import "TimeLineUtilities.h"
 
-@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
+@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol, UIAlertViewDelegate>{
     NSUInteger lengthTextField;
     BOOL moreCells;
     BOOL refreshTable;
@@ -62,7 +62,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     lengthTextField = 0;
     previousRect = CGRectZero;
     
@@ -76,12 +76,13 @@
     self.viewOptions.hidden = YES;
 
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
-    
+   
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
     
     //Listen for show conecting process
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConectando) name:kUPDATE_CONECTANDO object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
     
 
     //Get shots from CoreData
@@ -116,19 +117,12 @@
     [self setTextViewForShotCreation];
     
 }
+-(void)returnBackground{
 
-//------------------------------------------------------------------------------
-- (void)showConectando {
+    //Get ping from server
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
-    
-    [self performSelector:@selector(change) withObject:nil afterDelay:1];
 }
-
-//------------------------------------------------------------------------------
-- (void)change {
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-}
-
 
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
@@ -321,6 +315,8 @@
 //------------------------------------------------------------------------------
 - (void)reloadShotsTable:(id)sender {
 
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
     if (self.arrayShots.count > 0)
@@ -337,15 +333,23 @@
 }
 
 -(void)animationInsertShot{
+    [self.timelineTableView beginUpdates];
     NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
+    [self.timelineTableView endUpdates];
 }
 
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
+    self.txtView.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
+    [self.txtView setTextColor:[UIColor redColor]];
     self.btnShoot.enabled = NO;
-     self.charactersLeft.hidden = YES;
+    //self.txtView.userInteractionEnabled= NO;
+    [self.txtView resignFirstResponder];
+    self.orientation = NO;
+    [self keyboardHide:nil];
+    self.charactersLeft.hidden = YES;
     self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
@@ -372,29 +376,81 @@
     return NO;
 }
 
+#pragma mark - Change NavigationBar
+-(void)changeStateViewNavBar{
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+
+}
+-(void)changeStateActualizandoViewNavBar{
+    self.navigationItem.titleView = [TimeLineUtilities createActualizandoTitleView];
+}
+
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
-
+    
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
-         [self reloadShotsTable:nil];
+        [self reloadShotsTable:nil];
         moreCells = YES;
     }else if (!refresh){
         moreCells = NO;
         refreshTable = NO;
     }
+    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
 }
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
 
-    if (isShot)
+    if (status & !isShot)
+        [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
+
+    
+    if (isShot){
+        self.orientation = NO;
         [self shotCreated];
-    else if(refresh)
+    }else if(refresh)
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    else
-        [self performSelectorOnMainThread:@selector(showOptions) withObject:nil waitUntilDone:YES];
+    else if(!status && !refresh && !isShot){
+//        self.orientation = NO;
+//        [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
+    } else
+        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
+    
+}
+
+#pragma mark - ShotCreationProtocol response
+//------------------------------------------------------------------------------
+- (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
+    
+    if (status && !error){
+        self.txtView.backgroundColor = [UIColor whiteColor];
+        self.txtView.textColor = [UIColor blackColor];
+        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+        rows = 0;
+        self.charactersLeft.hidden = YES;
+        self.txtView.text = nil;
+        [self reloadShotsTableWithAnimation:nil];
+        [self.timelineTableView setScrollsToTop:YES];
+        self.btnShoot.enabled = NO;
+        //self.txtView.userInteractionEnabled = YES;
+    }else if (error){
+        [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];
+    }
+}
+
+-(void)showAlertcanNotCreateShot{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Connection Timed Out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+    [alertView show];
+    
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+}
+
+-(void)cleanViewWhenNotConnection{
+    
+    [self keyboardHide:nil];
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     
 }
 
@@ -414,11 +470,12 @@
 
 //------------------------------------------------------------------------------
 -(void)showAlert{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot not posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alert show];
     
     self.btnShoot.enabled = YES;
 }
+
 
 //------------------------------------------------------------------------------
 -(NSString *)controlCharactersShot:(NSString *)text{
@@ -439,27 +496,31 @@
 }
 
 //------------------------------------------------------------------------------
--(void) showOptions{
+-(void) removePullToRefresh{
     
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
 }
 
 
-#pragma mark - ShotCreationProtocol response
-//------------------------------------------------------------------------------
-- (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    if (status && !error){
-        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-        rows = 0;
-        self.orientation = NO;
-        self.charactersLeft.hidden = YES;
-        [self keyboardHide:nil];
-        self.txtView.text = nil;
-        [self reloadShotsTableWithAnimation:nil];
-        [self.timelineTableView setScrollsToTop:YES];
-        self.btnShoot.enabled = NO;
+    switch (buttonIndex) {
+        case 0:{
+            self.btnShoot.enabled = YES;
+            //self.txtView.userInteractionEnabled = YES;
+            self.orientation = NO;
+            [self keyboardHide:nil];
+            break;
+        }
+        case 1:
+            [self sendShot];
+
+            break;
+        default:
+            break;
     }
 }
 
@@ -580,22 +641,25 @@
 //------------------------------------------------------------------------------
 -(void)keyboardHide:(NSNotification*)notification{
 
+    
     if (!self.orientation){
 
+        [self.txtView resignFirstResponder];
+
+        
         self.backgroundView.hidden = YES;
         
         [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
         self.timelineTableView.scrollEnabled = YES;
-        
-        [self.txtView resignFirstResponder];
-        
+            
         if (lengthTextField == 0){
             self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+            self.txtView.textColor = [UIColor lightGrayColor];
+
             rows = 0;
             self.charactersLeft.hidden = YES;
-        }
-        
-        self.txtView.textColor = [UIColor lightGrayColor];
+        }else
+            self.txtView.textColor = [UIColor blackColor];
         
         if (rows == 0 || rows == 1) {
             self.bottomViewHeightConstraint.constant = 75;
@@ -643,7 +707,6 @@
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 }
-
 //------------------------------------------------------------------------------
 - (void)textViewDidChange:(UITextView *)textView{
     
@@ -717,8 +780,8 @@
 
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
+   // self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     [self restrictRotation:NO];
-    self.orientation = YES;
 }
 
 //------------------------------------------------------------------------------

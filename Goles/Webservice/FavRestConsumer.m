@@ -44,7 +44,7 @@
         // Session configuration setup
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
 
-        [sessionConfiguration setTimeoutIntervalForRequest:6.0];
+        [sessionConfiguration setTimeoutIntervalForRequest:12.0];
         [sessionConfiguration setTimeoutIntervalForResource:8.0];
         
         // Initialize the Consumer
@@ -487,6 +487,10 @@
                 }];
             else {
                 DLog(@"Request error:%@",error);
+                if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
+                    [delegate createShotResponseWithStatus:NO andError:error];
+
+                
             }
         }];
     }else

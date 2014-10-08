@@ -15,15 +15,19 @@
 //------------------------------------------------------------------------------
 + (UIView *)createEnviandoTitleView {
     
-    return [self createTitleViewWithTitle:@"Enviando..."];
+    return [self createTitleViewWithTitle:@"Shooting..."];
 }
 
 //------------------------------------------------------------------------------
 + (UIView *)createConectandoTitleView {
     
-    return [self createTitleViewWithTitle:@"Conectando..."];
+    return [self createTitleViewWithTitle:@"Conecting..."];
 }
-
+//------------------------------------------------------------------------------
++ (UIView *)createActualizandoTitleView {
+    
+    return [self createTitleViewWithTitle:@"Updating..."];
+}
 //------------------------------------------------------------------------------
 + (UIView *)createTimelineTitleView {
 

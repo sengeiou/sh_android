@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
-		A52B9A0B19E5315E007D8A67 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A52B9A0A19E5315E007D8A67 /* Reachability.m */; };
 		A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42619DC415900163841 /* PeopleTableViewController.m */; };
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
@@ -129,8 +128,6 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
-		A52B9A0919E5315E007D8A67 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		A52B9A0A19E5315E007D8A67 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		A52CE42519DC415900163841 /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		A52CE42619DC415900163841 /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		A52CE42819DC418000163841 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -369,15 +366,6 @@
 			name = Timeline;
 			sourceTree = "<group>";
 		};
-		A52B9A0819E53149007D8A67 /* Reachibility */ = {
-			isa = PBXGroup;
-			children = (
-				A52B9A0919E5315E007D8A67 /* Reachability.h */,
-				A52B9A0A19E5315E007D8A67 /* Reachability.m */,
-			);
-			name = Reachibility;
-			sourceTree = "<group>";
-		};
 		A59EECDA19D1759F00D011C5 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,7 +570,6 @@
 		AA623DC51998D17700A942A9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				A52B9A0819E53149007D8A67 /* Reachibility */,
 				AACA541619C057C000E39D94 /* AFNetworking */,
 				AACA542A19C057C000E39D94 /* UIKit+AFNetworking */,
 				AA623E791998D19000A942A9 /* FacebookSDK.framework */,
@@ -978,7 +965,6 @@
 				AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */,
 				AACA544219C057C000E39D94 /* AFURLRequestSerialization.m in Sources */,
 				AACA544519C057C000E39D94 /* AFNetworkActivityIndicatorManager.m in Sources */,
-				A52B9A0B19E5315E007D8A67 /* Reachability.m in Sources */,
 				AA623EDC1998D78600A942A9 /* AppAdviceViewController.m in Sources */,
 				A58DA84419D02EB8003EE5CB /* User.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,

@@ -108,22 +108,25 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	
-	[[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:nil];
-
     User *userCurrent = [[UserManager sharedInstance] getActiveUser];
+    
     if (userCurrent){
-        
-        NSNumber *lastSync = [[CoreDataManager singleton] getLastSyncroTime];
-        double lastTime = [lastSync doubleValue];
-        NSDate* date = [[NSDate dateWithTimeIntervalSince1970:lastTime] dateByAddingTimeInterval:2];
-        if ([date compare:[NSDate date]] == NSOrderedAscending)
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUPDATE_CONECTANDO object:nil];
-        
+            [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_BACKGROUND object:nil];
+    
         if (SYNCHRO_ACTIVATED)
             [[SyncManager singleton] startSyncProcess];
-        
-       
     }
+
+//    User *userCurrent = [[UserManager sharedInstance] getActiveUser];
+//   
+//    if (userCurrent){
+//        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:nil];
+//
+//        [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+//
+//        if (SYNCHRO_ACTIVATED)
+//            [[SyncManager singleton] startSyncProcess];
+//    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

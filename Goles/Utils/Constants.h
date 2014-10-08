@@ -20,7 +20,7 @@
 
 
 //Synchronization switch
-#define SYNCHRO_ACTIVATED      YES
+#define SYNCHRO_ACTIVATED      NO
 
 
 //Syncro time process in seconds

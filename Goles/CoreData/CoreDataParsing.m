@@ -21,7 +21,7 @@ NSString *const kJSON_SYNCRO_NEW                        = @"n";
 NSString *const kJSON_SYNCRO_UPDATED                    = @"u";
 NSString *const kJSON_SYNCRO_DELETED                    = @"d";
 NSString *const kJSON_SYNCRO_SYNCRONIZED                = @"s";
-NSString * const kUPDATE_CONECTANDO                     = @"Conectando";
+
 
 //SYNC_CONTROL
 NSString *const k_SYNC_NAME_ENTITY                     = @"nameEntity";
@@ -32,10 +32,10 @@ NSString *const k_SYNC_ALIAS                           = @"aliasView";
 
 
 #pragma mark - INTERNAL NOTIFICATIONS
-NSString *const K_NOTIF_SHOT_END                           = @"shots_synchro_end";
+NSString *const K_NOTIF_SHOT_END                       = @"shots_synchro_end";
+NSString *const k_NOTIF_BACKGROUND                     = @"ReturnForBackground";
 
 #pragma mark - REQUEST CREATION
-
 //Operation Types
 NSString *const K_OP_RETREAVE                           = @"retrieve";
 NSString *const K_OP_INSERT                             = @"create";

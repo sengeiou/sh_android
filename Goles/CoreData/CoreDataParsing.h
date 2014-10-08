@@ -21,7 +21,6 @@ extern NSString * const kJSON_SYNCRO_NEW;
 extern NSString * const kJSON_SYNCRO_UPDATED;
 extern NSString * const kJSON_SYNCRO_DELETED;
 extern NSString * const kJSON_SYNCRO_SYNCRONIZED;
-extern NSString * const kUPDATE_CONECTANDO;
 
 //SYNC_CONTROL
 extern NSString *const k_SYNC_NAME_ENTITY;
@@ -32,9 +31,10 @@ extern NSString *const k_SYNC_ALIAS;
 
 #pragma mark - INTERNAL NOTIFICATIONS
 extern NSString *const K_NOTIF_SHOT_END;
+extern NSString *const k_NOTIF_BACKGROUND;
+
 
 #pragma mark - REQUEST CREATION
-
 //Operation Types
 extern NSString *const K_OP_RETREAVE;
 extern NSString *const K_OP_INSERT;

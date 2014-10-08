@@ -16,8 +16,6 @@
 
 @interface Conection : NSObject <UIAlertViewDelegate>
 
-@property (nonatomic) int timeToCheck;
-@property (nonatomic) int   retryCounter;
 @property (nonatomic,strong) NSDate *requestDate;
 @property (nonatomic, assign) BOOL isConection;
 

@@ -558,7 +558,7 @@
 +(NSMutableAttributedString *) formatTitle:(NSString *)text{
 
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text];
-    [attrString addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(0, 1)];
+    [attrString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(0, 1)];
     [attrString addAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(1, text.length-1)];
 
     return attrString;
