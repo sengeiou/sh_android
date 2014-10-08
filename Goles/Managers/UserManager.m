@@ -115,7 +115,9 @@
     for (Follow *obj in follows) {
         [idUsersArray addObject:obj.idUserFollowed];
     }
-    [idUsersArray addObject:[self getUserId]];
+    
+    if ([self getUserId] != nil)
+        [idUsersArray addObject:[self getUserId]];
     
     if (idUsersArray.count > 0)
         return idUsersArray;
