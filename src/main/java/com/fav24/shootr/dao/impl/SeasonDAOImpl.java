@@ -1,5 +1,6 @@
 package com.fav24.shootr.dao.impl;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -51,9 +52,9 @@ public class SeasonDAOImpl extends BaseDAOImpl implements SeasonDAO {
 		factory.addParameter(new SqlParameter(Types.VARCHAR));// name
 		factory.addParameter(new SqlParameter(Types.DATE));// startDate
 		factory.addParameter(new SqlParameter(Types.DATE));// endDate
-		factory.addParameter(new SqlParameter(Types.DATE));// lastUpdate
+		factory.addParameter(new SqlParameter(Types.TIME));// lastUpdate
 
-		Object[] params = new Object[] { season.getIdSeasonOpta(), season.getIdCompetition(), season.getName(), season.getStartDate(), season.getEndDate(), season.getLastUpdated() };
+		Object[] params = new Object[] { season.getIdSeasonOpta(), season.getIdCompetition(), season.getName(), season.getStartDate(), season.getEndDate(), new Date(season.getLastUpdated().getTime()) };
 
 		PreparedStatementCreator psc = factory.newPreparedStatementCreator(params);
 		GeneratedKeyHolder gkf = new GeneratedKeyHolder();
