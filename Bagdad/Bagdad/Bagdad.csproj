@@ -206,6 +206,7 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Assets\Tiles\FlipCycleTileEnd.png" />
     <Content Include="Resources\icons\appbar.eye.hide.png" />
     <Content Include="Resources\icons\appbar.eye.png" />
     <Content Include="Resources\icons\appbar.information.png" />

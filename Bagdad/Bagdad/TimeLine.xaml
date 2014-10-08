@@ -277,7 +277,7 @@
                                         <Grid VerticalAlignment="Bottom" Height="75" Margin="0,25">
                                             <Rectangle Fill="{StaticResource PhoneChromeBrush}" HorizontalAlignment="Center" Width="75" Height="75" Tap="Rectangle_Tap">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="/Assets/Tiles/FlipCycleTileMedium.png"/>
+                                                    <ImageBrush ImageSource="/Assets/Tiles/FlipCycleTileEnd.png"/>
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Grid>
