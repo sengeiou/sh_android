@@ -28,6 +28,7 @@ namespace Bagdad
         public ProgressIndicator progress;
         bool endOfLocalList = false;
         bool endOfList = false;
+        bool newShotFocused = false;
         private int offset = Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE;
         PageOrientation lastOrientation;
         
@@ -181,6 +182,7 @@ namespace Bagdad
                     extraChars.Text = "140";
                     newShot.Text = "";
                     Focus();
+                    newShotFocused = false;
                     if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
                 }
             }
@@ -241,6 +243,7 @@ namespace Bagdad
         {
             extraChars.Visibility = System.Windows.Visibility.Visible;
             newShot.Hint = "";
+            newShotFocused = true;
         }
 
         private void newShot_LostFocus(object sender, RoutedEventArgs e)
@@ -251,6 +254,7 @@ namespace Bagdad
                 extraChars.Visibility = System.Windows.Visibility.Collapsed;
                 newShot.Hint = AppResources.WhatsUp;
             }
+            newShotFocused = false;
         }
 
         private void StartShooting_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -265,9 +269,12 @@ namespace Bagdad
 
         private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            int shotId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotId;
-            myShots.SelectedIndex = -1;
-            MessageBox.Show("Shot #" + shotId);
+            if (!newShotFocused)
+            {
+                int shotId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotId;
+                myShots.SelectedIndex = -1;
+                MessageBox.Show("Shot #" + shotId);
+            }
         }
 
         private void ShotUserProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)

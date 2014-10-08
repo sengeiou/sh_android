@@ -203,13 +203,13 @@
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="56"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <!--Row2-->
         <!--Row0-->
-        <ListBoxItem Grid.Row="0" Background="{StaticResource PhoneBackgroundBrush}" tk:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
+        <ListBoxItem Grid.Row="0" Margin="0,12,0,0" Background="{StaticResource PhoneBackgroundBrush}" tk:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
             <Grid x:Name="titleGrid" Width="480">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -232,12 +232,12 @@
                 </Grid>
 
                 <!--Column1-->
-                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
+                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
                     <Rectangle.OpacityMask>
                         <ImageBrush ImageSource="/Resources/icons/appbar.information.png"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
-                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}">
+                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
                     <Rectangle.OpacityMask>
                         <ImageBrush ImageSource="/Resources/icons/basecircle.png"/>
                     </Rectangle.OpacityMask>

@@ -175,8 +175,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/AirplaneMode" translate="yes" xml:space="preserve">
-          <source>We can't connect to the Server right now. Your phone is in airplane mode.</source>
-          <target state="new">We can't connect to the Server right now. Your phone is in airplane mode.</target>
+          <source>Your phone is in airplane mode.</source>
+          <target state="new">Your phone is in airplane mode.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
