@@ -21,7 +21,7 @@ NSString *const kJSON_SYNCRO_NEW                        = @"n";
 NSString *const kJSON_SYNCRO_UPDATED                    = @"u";
 NSString *const kJSON_SYNCRO_DELETED                    = @"d";
 NSString *const kJSON_SYNCRO_SYNCRONIZED                = @"s";
-NSString * const kUPDATE_CONECTANDO                     = @"Conecting...";
+NSString * const kUPDATE_CONECTANDO                     = @"Conectando";
 
 //SYNC_CONTROL
 NSString *const k_SYNC_NAME_ENTITY                     = @"nameEntity";

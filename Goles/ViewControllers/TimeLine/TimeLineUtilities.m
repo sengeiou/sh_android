@@ -48,7 +48,7 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 50)];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 100, 30)];
     title.font = [UIFont boldSystemFontOfSize:17];
-    title.text = kUPDATE_CONECTANDO;
+    title.text = @"Conecting...";
     
     UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     activity.frame = CGRectMake(40, 10, 30, 30);
