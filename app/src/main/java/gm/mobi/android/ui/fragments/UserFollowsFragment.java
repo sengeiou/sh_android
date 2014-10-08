@@ -107,7 +107,7 @@ public class UserFollowsFragment extends BaseFragment {
 
     public void startJob(){
         GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(userId, followType);
+        job.init(userId);
         jobManager.addJobInBackground(job);
     }
 

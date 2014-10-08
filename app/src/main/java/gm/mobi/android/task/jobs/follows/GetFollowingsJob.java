@@ -158,20 +158,20 @@ public class GetFollowingsJob extends CancellableJob {
         }
         teams = getTeamsByTeamIds(idTeams);
         Timber.d("Downloaded %d followings' users", followings.size());
-        Timber.d("Downloaded %d teams' users", teams.size());
+        Timber.d("Downloaded %d teams' users", teams!=null ? teams.size() : null);
 
         if (isCancelled()) return;
 
         // Save and send result
         userManager.saveUsers(followings);
-        if(teams.size()>0) teamManager.saveTeams(teams);
+        if(teams!=null) teamManager.saveTeams(teams);
         followManager.saveFollows(follows);
         sendSucces(followings);
 
     }
 
     private List<Team> getTeamsByTeamIds(Set<Long> teamIds) {
-        List<Team> resTeams = null;
+        List<Team> resTeams = new ArrayList<>();
         Long modifiedTeams = teamManager.getLastModifiedDate(GMContract.TeamTable.TABLE);
         try {
             resTeams = service.getTeamsByIdTeams(teamIds, modifiedTeams);
