@@ -1,6 +1,9 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
+import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import java.util.Map;
 import org.junit.Before;
@@ -19,11 +22,14 @@ public class UserDtoFactoryTest {
 
     UtilityDtoFactory utilityDtoFactory;
     UserDtoFactory userDtoFactory;
+    UserMapper userMapper;
+    TeamMapper teamMapper;
+    FollowMapper followMapper;
 
     @Before
     public void setup() {
         utilityDtoFactory = new UtilityDtoFactory();
-        userDtoFactory = new UserDtoFactory(utilityDtoFactory);
+        userDtoFactory = new UserDtoFactory(utilityDtoFactory, userMapper,teamMapper, followMapper);
     }
 
     @Test(expected = IllegalArgumentException.class)

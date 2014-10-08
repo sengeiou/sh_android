@@ -1,6 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import java.util.Map;
 import org.junit.Before;
@@ -18,11 +19,12 @@ public class ShotDtoFactoryTest {
 
     ShotDtoFactory shotDtoFactory;
     UtilityDtoFactory utilityDtoFactory;
+    ShotMapper shotMapper;
 
     @Before
     public void setup() {
         utilityDtoFactory = new UtilityDtoFactory();
-        shotDtoFactory = new ShotDtoFactory(utilityDtoFactory);
+        shotDtoFactory = new ShotDtoFactory(utilityDtoFactory, shotMapper);
     }
 
     @Test(expected = IllegalArgumentException.class)
