@@ -315,7 +315,7 @@
 
 -(void)animationInsertShot{
     NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationRight];
+    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 #pragma mark - Send shot

@@ -109,6 +109,7 @@
 		AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */; };
 		AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */; };
 		AAE0EF6D19E427A700F32FF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAE0EF6B19E427A700F32FF7 /* InfoPlist.strings */; };
+		AAE0EF7019E5172900F32FF7 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -306,6 +307,8 @@
 		AAE0EF5F19E4258200F32FF7 /* ShootrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShootrTests-Info.plist"; path = "Tests/ShootrTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralTests.m; path = Tests/GeneralTests.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF6C19E427A700F32FF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Tests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		AAE0EF6E19E5172900F32FF7 /* Shootr-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shootr-Bridging-Header.h"; sourceTree = "<group>"; };
+		AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,7 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				AA623D171998CAE100A942A9 /* Storyboards */,
-				AA623CE41998A7F200A942A9 /* Goles */,
+				AA623CE41998A7F200A942A9 /* Shootr */,
 				AA623CFD1998A7F200A942A9 /* Tests */,
 				AA623CDD1998A7F200A942A9 /* Frameworks */,
 				AA623CDC1998A7F200A942A9 /* Products */,
@@ -455,7 +458,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		AA623CE41998A7F200A942A9 /* Goles */ = {
+		AA623CE41998A7F200A942A9 /* Shootr */ = {
 			isa = PBXGroup;
 			children = (
 				A5A678C919C731AE00DEEA51 /* Images.xcassets */,
@@ -470,6 +473,7 @@
 				AA623D181998CDC200A942A9 /* Resources */,
 				AA623CE51998A7F200A942A9 /* Supporting Files */,
 			);
+			name = Shootr;
 			path = Goles;
 			sourceTree = "<group>";
 		};
@@ -603,6 +607,8 @@
 				AA72641119D1C8280067A39D /* ShotManager.m */,
 				AA72641319D422570067A39D /* CleanManager.h */,
 				AA72641419D422570067A39D /* CleanManager.m */,
+				AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */,
+				AAE0EF6E19E5172900F32FF7 /* Shootr-Bridging-Header.h */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -977,6 +983,7 @@
 				AACA544919C057C000E39D94 /* UIImageView+AFNetworking.m in Sources */,
 				AA623CEB1998A7F200A942A9 /* main.m in Sources */,
 				AA72640919D03A6E0067A39D /* Shot.m in Sources */,
+				AAE0EF7019E5172900F32FF7 /* SearchManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1142,6 +1149,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1152,9 +1160,12 @@
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Shootr-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1164,6 +1175,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1174,9 +1186,11 @@
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Shootr-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
