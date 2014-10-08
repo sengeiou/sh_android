@@ -189,7 +189,7 @@ namespace Bagdad.Utils
         /// </summary>
         /// <param name="entity">Entity to synchro</param>
         /// <param name="json">json to send to the server</param>
-        public async void SendDataToServer(String entity, String json)
+        public async Task<int> SendDataToServer(String entity, String json)
         {
             int tryCount = 0, done = 0;
             try
@@ -211,10 +211,11 @@ namespace Bagdad.Utils
             }
             catch (Exception ex)
             {
-                if(ex.Message.Contains("Timeout"))
+                if (ex.Message.Contains("Timeout") || ex.Message.Contains("No Server Available"))
                     throw new TimeoutException();
                 throw new Exception("ServiceCommunication - sendDataToServer: " + ex.Message, ex);
             }
+            return 1;
         }
 
         /// <summary>
@@ -366,11 +367,20 @@ namespace Bagdad.Utils
                 }
                 else
                 {
-                    if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await SaveData(entity, job);
-                    //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
-                    if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
-                        totalDone = 1;
-                    else totalDone = 0;
+                    //Any ERRORs?
+                    if (job["status"].ToString().Equals("No Server Available"))
+                    {
+                        sErrorJSON = "No Server Available";
+                        throw new Exception();
+                    }
+                    else
+                    {
+                        if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await SaveData(entity, job);
+                        //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
+                        if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
+                            totalDone = 1;
+                        else totalDone = 0;
+                    }
                 }
 
                 return totalDone;
@@ -456,7 +466,7 @@ namespace Bagdad.Utils
                         return responseString;
                     }
                 }
-                else return "{\"e\":\"No Server Available\"}";
+                else return "{\"status\":\"No Server Available\"}";
             }
             catch (Exception e)
             {
