@@ -35,7 +35,7 @@ function systemMonitorRequestWindow(systemMonitorWindow, isRefresh) {
 	var ret = null;
 	var xhr = new XMLHttpRequest();
 
-	xhr.open("POST", App.servicesURL + "/system/cpu_new", false);
+	xhr.open("POST", App.servicesURL + "/system/cpu", false);
 	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 	// Envío.
