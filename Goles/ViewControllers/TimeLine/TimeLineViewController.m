@@ -342,14 +342,14 @@
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-    self.txtView.backgroundColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1];
-    [self.txtView setTextColor:[UIColor redColor]];
-    self.btnShoot.enabled = NO;
+    self.txtView.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1];
+
     //self.txtView.userInteractionEnabled= NO;
     [self.txtView resignFirstResponder];
     self.orientation = NO;
     [self keyboardHide:nil];
     self.charactersLeft.hidden = YES;
+    self.btnShoot.enabled = NO;
     self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
@@ -441,7 +441,8 @@
 }
 
 -(void)showAlertcanNotCreateShot{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Connection Timed Out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Connection timed out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+    alertView.tag = 18;
     [alertView show];
     
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
@@ -472,8 +473,6 @@
 -(void)showAlert{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alert show];
-    
-    self.btnShoot.enabled = YES;
 }
 
 
@@ -506,21 +505,31 @@
 #pragma mark - UIAlertViewDelegate
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    switch (buttonIndex) {
-        case 0:{
-            self.btnShoot.enabled = YES;
-            //self.txtView.userInteractionEnabled = YES;
-            self.orientation = NO;
-            [self keyboardHide:nil];
-            break;
+    if (alertView.tag == 18) {
+        switch (buttonIndex) {
+            case 0:{
+                self.btnShoot.enabled = YES;
+                self.txtView.backgroundColor = [UIColor whiteColor];
+                self.txtView.textColor = [UIColor blackColor];
+                //self.txtView.userInteractionEnabled = YES;
+                self.orientation = NO;
+                [self keyboardHide:nil];
+                
+                break;
+            }
+            case 1:
+                [self sendShot];
+                
+                break;
+            default:
+                break;
         }
-        case 1:
-            [self sendShot];
 
-            break;
-        default:
-            break;
+    }else{
+        self.txtView.backgroundColor = [UIColor whiteColor];
+        self.txtView.textColor = [UIColor blackColor];
+        self.btnShoot.enabled = YES;
+
     }
 }
 
@@ -578,6 +587,7 @@
 -(void)keyboardShow:(NSNotification*)notification{
     
     self.txtView.textColor = [UIColor blackColor];
+    self.txtView.backgroundColor = [UIColor whiteColor];
     
 //    if (rows >= 3)
 //        self.charactersLeft.hidden = NO;
@@ -655,11 +665,11 @@
         if (lengthTextField == 0){
             self.txtView.text = CREATE_SHOT_PLACEHOLDER;
             self.txtView.textColor = [UIColor lightGrayColor];
-
+            
             rows = 0;
             self.charactersLeft.hidden = YES;
         }else
-            self.txtView.textColor = [UIColor blackColor];
+            self.txtView.textColor = [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
         
         if (rows == 0 || rows == 1) {
             self.bottomViewHeightConstraint.constant = 75;
