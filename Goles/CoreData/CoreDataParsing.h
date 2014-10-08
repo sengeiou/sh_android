@@ -21,6 +21,7 @@ extern NSString * const kJSON_SYNCRO_NEW;
 extern NSString * const kJSON_SYNCRO_UPDATED;
 extern NSString * const kJSON_SYNCRO_DELETED;
 extern NSString * const kJSON_SYNCRO_SYNCRONIZED;
+extern NSString * const kUPDATE_CONECTANDO;
 
 //SYNC_CONTROL
 extern NSString *const k_SYNC_NAME_ENTITY;

@@ -49,5 +49,7 @@
 - (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray withId:(NSString *) idClass;
 
 - (NSNumber *) getMaxModifiedValueForEntity:(NSString *)entityClass;
+//------------------------------------------------------------------------------
+- (NSNumber *)getLastSyncroTime;
 
-@end
+  @end

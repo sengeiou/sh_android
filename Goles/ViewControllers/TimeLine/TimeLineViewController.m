@@ -80,6 +80,10 @@
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
+    //Listen for show conecting process
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showConectando) name:kUPDATE_CONECTANDO object:nil];
+    
+
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
 
@@ -89,10 +93,16 @@
   
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
+    
+     //Listen for keyboard process open
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
+   
+    //Listen for keyboard process close
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 
+   
+    
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
     else
@@ -105,6 +115,18 @@
     [self setNavigationBarButtons];
     [self setTextViewForShotCreation];
     
+}
+
+//------------------------------------------------------------------------------
+- (void)showConectando {
+    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+    
+    [self performSelector:@selector(change) withObject:nil afterDelay:1];
+}
+
+//------------------------------------------------------------------------------
+- (void)change {
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
 
 

@@ -12,5 +12,6 @@
 
 + (UIView *)createEnviandoTitleView;
 + (UIView *)createTimelineTitleView;
++ (UIView *)createConectandoTitleView;
 
 @end

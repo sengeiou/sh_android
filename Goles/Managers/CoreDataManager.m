@@ -11,6 +11,8 @@
 #import "Constants.h"
 #import "Team.h"
 #import "UserManager.h"
+#import "SyncManager.h"
+#import "SyncControl.h"
 
 @interface CoreDataManager()
 {
@@ -408,7 +410,19 @@
     return url;
 }
 
-
+//------------------------------------------------------------------------------
+- (NSNumber *)getLastSyncroTime {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:K_CDENTITY_SYNC_CONTROL orderedByKey:k_SYNC_LASTCALL ascending:NO];
+    request.fetchLimit = 1;
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] )
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    return [[result firstObject] lastCall];
+}
 
 #pragma mark - Singleton overwritten methods
 //------------------------------------------------------------------------------
