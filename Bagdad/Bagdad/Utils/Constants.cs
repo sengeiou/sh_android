@@ -38,5 +38,6 @@ namespace Bagdad.Utils
 
         public const String CONST_FOLLOWING = "following";
         public const String CONST_FOLLOWERS = "followers";
+        public const String CONST_PEOPLE = "people";
     }
 }

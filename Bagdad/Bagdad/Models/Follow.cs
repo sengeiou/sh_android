@@ -168,13 +168,17 @@ namespace Bagdad.Models
             return imFollowing;
         }
 
-        public async Task<List<FollowViewModel>> GetUserFollowingLocalData(int idUser)
+        public async Task<List<FollowViewModel>> GetUserFollowingLocalData(int idUser, String type)
         {
+            String query;
+            if (type.Equals(Constants.CONST_FOLLOWING)) query = SQLQuerys.GetAllInfoFromFollowings;
+            else query = SQLQuerys.GetAllInfoFromPeople;
+
             List<FollowViewModel> followings = new List<FollowViewModel>();
             try
             {
                 Database db = await App.GetDatabaseAsync();
-                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetAllInfoFromFollowings);
+                Statement st = await db.PrepareStatementAsync(query);
                 st.BindIntParameterWithName("@idUser", idUser);
 
                 while (await st.StepAsync())

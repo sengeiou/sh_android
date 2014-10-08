@@ -57,7 +57,7 @@ namespace Bagdad
             {
                 if (App.isInternetAvailable)
                 {
-                    int returned = await followings.LoadData(idUser, offset, Constants.CONST_FOLLOWING);
+                    int returned = await followings.LoadData(idUser, offset, Constants.CONST_PEOPLE);
                     offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
                     return returned;
                 }

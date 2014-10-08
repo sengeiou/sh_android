@@ -35,7 +35,7 @@ namespace Bagdad.ViewModels
         {
             try
             {
-                if (idUser == App.ID_USER && type.Equals(Constants.CONST_FOLLOWING)) return await LocalDataLoad(idUser);
+                if (idUser == App.ID_USER && !type.Equals(Constants.CONST_FOLLOWERS)) return await LocalDataLoad(idUser, type);
                 else return  await ServerDataLoad(idUser, offset, type);
             }
             catch (Exception e)
@@ -44,13 +44,13 @@ namespace Bagdad.ViewModels
             }
         }
 
-        private async Task<int> LocalDataLoad(int idUser)
+        private async Task<int> LocalDataLoad(int idUser, String type)
         {
             int done = 0;
 
             UserImageManager userImageManager = new UserImageManager();
             Follow follow = new Follow();
-            foreach (FollowViewModel following in await follow.GetUserFollowingLocalData(idUser))
+            foreach (FollowViewModel following in await follow.GetUserFollowingLocalData(idUser, type))
             {
                 //image
                 following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
