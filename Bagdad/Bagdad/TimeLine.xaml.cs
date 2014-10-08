@@ -215,6 +215,7 @@ namespace Bagdad
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
+            timer.Stop();
         }
 
         private void appBarShootButton_Click(object sender, EventArgs e)
@@ -285,6 +286,7 @@ namespace Bagdad
         {
             int shotUserId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotUserId;
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + shotUserId, UriKind.Relative));
+            timer.Stop();
         }
         #endregion
 
@@ -386,15 +388,6 @@ namespace Bagdad
 
             myShots.ItemsSource = null;
             myShots.ItemsSource = App.ShotsVM.shotsList;
-
-            /*if (e.Orientation == PageOrientation.Landscape || e.Orientation == PageOrientation.LandscapeLeft || e.Orientation == PageOrientation.LandscapeRight)
-            {
-                newShot.Template = (ControlTemplate)this.Resources["ChatBubbleTextBoxControlTemplateLandscape"];
-            }
-            else
-            {
-                newShot.Template = (ControlTemplate)this.Resources["ChatBubbleTextBoxControlTemplatePortrait"];
-            }*/
         }
         
         
