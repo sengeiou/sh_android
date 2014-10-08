@@ -429,7 +429,7 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        self.title = @"Timeline";
+        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
         rows = 0;
         self.orientation = NO;
         self.charactersLeft.hidden = YES;

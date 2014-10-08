@@ -11,5 +11,6 @@
 @interface TimeLineUtilities : NSObject
 
 + (UIView *)createEnviandoTitleView;
++ (UIView *)createTimelineTitleView;
 
 @end

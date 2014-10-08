@@ -15,6 +15,7 @@
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 50)];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 100, 30)];
+    title.font = [UIFont boldSystemFontOfSize:17];
     title.text = @"Enviando...";
     
     UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -27,4 +28,16 @@
     return titleView;
 }
 
+//------------------------------------------------------------------------------
++ (UIView *)createTimelineTitleView {
+    
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 50)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 100, 30)];
+    title.font = [UIFont boldSystemFontOfSize:17];
+    title.text = @"Timeline";
+
+    [titleView addSubview:title];
+    
+    return titleView;
+}
 @end
