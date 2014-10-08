@@ -33,26 +33,26 @@
     UITapGestureRecognizer *tapTapRecognizer;
 }
 
-@property (nonatomic,weak) IBOutlet UITableView    *timelineTableView;
-@property (weak, nonatomic) IBOutlet UIButton *btnWatching;
-@property (weak, nonatomic) IBOutlet UIButton *btnInfo;
-@property (weak, nonatomic) IBOutlet UITextView *txtView;
-@property (weak, nonatomic) IBOutlet UIButton *btnShoot;
-@property (weak, nonatomic) IBOutlet UILabel *charactersLeft;
-@property (weak, nonatomic) IBOutlet UIView *viewNotShots;
-@property (strong, nonatomic) NSArray *arrayShots;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
-@property (weak, nonatomic) IBOutlet UIView *viewOptions;
-@property (weak, nonatomic) IBOutlet UIView *viewTextField;
-@property (nonatomic, assign) CGFloat lastContentOffset;
-@property (strong, nonatomic) IBOutlet UIView *backgroundView;
-@property (assign, nonatomic) int sizeKeyboard;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewPositionConstraint;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
-@property(nonatomic, strong) UIActivityIndicatorView *spinner;
-@property(nonatomic, strong) UILabel *lblFooter;
-@property (weak, nonatomic) IBOutlet UIButton *startShootingFirstTime;
-@property (strong, nonatomic) NSString *textComment;
+@property (nonatomic,weak)      IBOutlet    UITableView                 *timelineTableView;
+@property (nonatomic,weak)      IBOutlet    UIButton                    *btnWatching;
+@property (nonatomic,weak)      IBOutlet    UIButton                    *btnInfo;
+@property (nonatomic,weak)      IBOutlet    UITextView                  *txtView;
+@property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
+@property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
+@property (nonatomic,weak)      IBOutlet    UIView                      *viewNotShots;
+@property (nonatomic,weak)      IBOutlet    UIView                      *viewOptions;
+@property (nonatomic,weak)      IBOutlet    UIView                      *viewTextField;
+@property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
+@property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewPositionConstraint;
+@property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewHeightConstraint;
+@property (nonatomic,weak)      IBOutlet    UIButton                    *startShootingFirstTime;
+@property (nonatomic,strong)                NSArray                     *arrayShots;
+@property (nonatomic,strong)                UIRefreshControl            *refreshControl;
+@property (nonatomic, assign)               CGFloat                     lastContentOffset;
+@property (nonatomic, assign)               int                         sizeKeyboard;
+@property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
+@property (nonatomic,strong)                UILabel                     *lblFooter;
+@property (nonatomic,strong)                NSString                    *textComment;
 
 @end
 
@@ -63,46 +63,72 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    //For Alpha version
+    self.viewOptions.hidden = YES;
+    
+    //Set titleView
+    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+    
+    [self miscelaneousSetup];
+    
+    [self setNavigationBarButtons];
+    [self setTextViewForShotCreation];
+    [self setLocalNotificationObservers];
+ 
+    //Get ping from server
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
+    [self setupTimeLineTableView];
+}
+
+//------------------------------------------------------------------------------
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+#warning This notification needs to be here or in the ViewDidLoad?
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    
+}
+
+#warning Really neede if remove all observer in dealloc?
+//------------------------------------------------------------------------------
+- (void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+//------------------------------------------------------------------------------
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//------------------------------------------------------------------------------
+- (void)returnBackground{
+
+    //Get ping from server
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+}
+
+#pragma mark - General setup on ViewDidLoad
+//------------------------------------------------------------------------------
+- (void)miscelaneousSetup {
+    
     lengthTextField = 0;
     previousRect = CGRectZero;
+    
+    [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
     [self initSpinner];
     
     self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
-    self.txtView.delegate = self;
+}
 
-    //For Alpha version
-    self.viewOptions.hidden = YES;
-
-    [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
-   
-    //Get ping from server
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+//------------------------------------------------------------------------------
+- (void)setupTimeLineTableView {
     
-    //Listen for show conecting process
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
-    
-
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-
-    //Disable keyboard intro key
-    if (self.textComment.length == 0)
-        self.txtView.enablesReturnKeyAutomatically = YES;
-  
-    //Listen for synchro process end
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
-    
-     //Listen for keyboard process open
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
-   
-    //Listen for keyboard process close
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
-
-   
     
     if (self.arrayShots.count == 0)
         self.timelineTableView.hidden = YES;
@@ -110,18 +136,27 @@
         [self hiddenViewNotShots];
     
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
-	self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-	self.timelineTableView.estimatedRowHeight = 80.0f;
-	
-    [self setNavigationBarButtons];
-    [self setTextViewForShotCreation];
-    
-}
--(void)returnBackground{
+    self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
+    self.timelineTableView.estimatedRowHeight = 80.0f;
 
-    //Get ping from server
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+}
+
+//------------------------------------------------------------------------------
+- (void)setLocalNotificationObservers {
+    
+    //Listen for show conecting process
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
+    
+    //Listen for synchro process end
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
+    
+    //Listen for keyboard process open
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    //Listen for keyboard process close
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+
 }
 
 //------------------------------------------------------------------------------
@@ -131,7 +166,7 @@
     UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStylePlain target:self action:@selector(search)];
     btnSearch.tintColor = [Fav24Colors iosSevenBlue];
     self.navigationItem.leftBarButtonItem = btnSearch;
-	
+    
     //Info button
     UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [button addTarget:self action:@selector(infoButton) forControlEvents:UIControlEventTouchUpInside];
@@ -142,19 +177,20 @@
 //------------------------------------------------------------------------------
 - (void)setTextViewForShotCreation {
 
+    self.txtView.delegate = self;
+    
     self.txtView.clipsToBounds = YES;
     self.txtView.layer.cornerRadius = 8.0f;
 	self.txtView.layer.borderWidth = 0.3;
 	self.txtView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
 
+    //Disable keyboard intro key
+    if (self.textComment.length == 0)
+        self.txtView.enablesReturnKeyAutomatically = YES;
 }
 
 //------------------------------------------------------------------------------
--(void) search{
-    
-}
-
--(void)initSpinner{
+- (void)initSpinner{
     moreCells = YES;
     refreshTable = YES;
     
@@ -162,17 +198,6 @@
     [self.spinner startAnimating];
     self.spinner.frame = CGRectMake(0, 0, 320, 44);
 }
-
-//------------------------------------------------------------------------------
--(void) infoButton{
-    
-}
-
-//------------------------------------------------------------------------------
--(void) watching{
-    
-}
-
 
 //------------------------------------------------------------------------------
 -(void)hiddenViewNotShots{
@@ -185,25 +210,26 @@
     self.timelineTableView.dataSource = self;
 }
 
+#pragma mark - FUTURE METHODS
 //------------------------------------------------------------------------------
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-     self.title = @"Timeline";
-
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
-
+- (void) search{
+    
 }
 
+//------------------------------------------------------------------------------
+- (void) infoButton{
+    
+}
 
 //------------------------------------------------------------------------------
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void) watching{
+    
 }
 
 
 #pragma mark - Pull to refresh
 //------------------------------------------------------------------------------
--(void)addPullToRefresh{
+- (void)addPullToRefresh{
     // Config pull to refresh
     if (self.refreshControl == nil) {
         self.refreshControl = [[UIRefreshControl alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y+100, 40, 40)];
@@ -269,7 +295,7 @@
  }
 
 
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     if (!refreshTable){
         self.spinner.hidden = YES;
@@ -292,9 +318,10 @@
     [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
     
 }
-#pragma mark - Pass ViewController
+
+#pragma mark - Button to Profile ViewController
 //------------------------------------------------------------------------------
--(void)goProfile:(id)sender{
+- (void)goProfile:(id)sender{
     
     UIButton *btn = (UIButton *) sender;
     
@@ -332,7 +359,8 @@
         [self performSelectorOnMainThread:@selector(animationInsertShot) withObject:nil waitUntilDone:NO];
 }
 
--(void)animationInsertShot{
+//------------------------------------------------------------------------------
+- (void)animationInsertShot{
     [self.timelineTableView beginUpdates];
     NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
@@ -356,7 +384,7 @@
 
 
 //------------------------------------------------------------------------------
--(BOOL) controlRepeatedShot:(NSString *)texto{
+- (BOOL) controlRepeatedShot:(NSString *)texto{
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
     
@@ -366,6 +394,7 @@
     return NO;
 }
 
+//------------------------------------------------------------------------------
 -(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text{
     
     for (Shot *shot in shots) {
@@ -377,12 +406,37 @@
 }
 
 #pragma mark - Change NavigationBar
+//------------------------------------------------------------------------------
 -(void)changeStateViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 
 }
+//------------------------------------------------------------------------------
 -(void)changeStateActualizandoViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createActualizandoTitleView];
+}
+
+#pragma mark - RESPONSE METHODS
+#pragma mark -
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+    
+    if (status & !isShot)
+        [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
+    
+    
+    if (isShot){
+        self.orientation = NO;
+        [self shotCreated];
+    }else if(refresh)
+        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
+    else if(!status && !refresh && !isShot){
+        //        self.orientation = NO;
+        //        [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
+    } else
+        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
+    
 }
 
 #pragma mark - Webservice response methods
@@ -399,26 +453,6 @@
     [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
 }
 
-#pragma mark - Conection response methods
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
-
-    if (status & !isShot)
-        [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
-
-    
-    if (isShot){
-        self.orientation = NO;
-        [self shotCreated];
-    }else if(refresh)
-        [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    else if(!status && !refresh && !isShot){
-//        self.orientation = NO;
-//        [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
-    } else
-        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
-    
-}
 
 #pragma mark - ShotCreationProtocol response
 //------------------------------------------------------------------------------
@@ -441,6 +475,8 @@
     }
 }
 
+#pragma mark - Response utilities methods
+//------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Connection timed out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
     alertView.tag = 18;
@@ -449,7 +485,8 @@
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
 
--(void)cleanViewWhenNotConnection{
+//------------------------------------------------------------------------------
+- (void)cleanViewWhenNotConnection{
     
     [self keyboardHide:nil];
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
@@ -471,14 +508,14 @@
 }
 
 //------------------------------------------------------------------------------
--(void)showAlert{
+- (void)showAlert{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alert show];
 }
 
 
 //------------------------------------------------------------------------------
--(NSString *)controlCharactersShot:(NSString *)text{
+- (NSString *)controlCharactersShot:(NSString *)text{
     
     NSRange range = [text rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
     text = [text stringByReplacingCharactersInRange:range withString:@""];
@@ -504,7 +541,7 @@
 
 
 #pragma mark - UIAlertViewDelegate
-
+//------------------------------------------------------------------------------
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (alertView.tag == 18) {
         switch (buttonIndex) {
@@ -535,8 +572,8 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+//------------------------------------------------------------------------------
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     // For Beta version and only iphone 4
 
 //    CGFloat currentOffset = scrollView.contentOffset.y;
@@ -549,7 +586,7 @@
 }
 
 //------------------------------------------------------------------------------
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
  
     
     CGFloat currentOffset = scrollView.contentOffset.y;
@@ -644,13 +681,13 @@
 }
 
 //------------------------------------------------------------------------------
--(void)keyboardWillHide
-{
+- (void)keyboardWillHide {
+    
     [self keyboardHide:nil];
 }
 
 //------------------------------------------------------------------------------
--(void)keyboardHide:(NSNotification*)notification{
+- (void)keyboardHide:(NSNotification*)notification{
 
     
     if (!self.orientation){
@@ -689,7 +726,7 @@
     }
 }
 
-#pragma mark TEXTVIEW
+#pragma mark - TEXTVIEW
 
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -764,7 +801,7 @@
 }
 
 //------------------------------------------------------------------------------
--(NSString *)countCharacters:(NSUInteger) lenght{
+- (NSString *)countCharacters:(NSUInteger) lenght{
     
     if (lenght <= CHARACTERS_SHOT){
         NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
@@ -773,17 +810,11 @@
     return @"0";
 }
 
-//------------------------------------------------------------------------------
-- (void)dealloc {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark - Orientation methods
 
 //------------------------------------------------------------------------------
--(void) restrictRotation:(BOOL) restriction
-{
+- (void)restrictRotation:(BOOL) restriction {
+    
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     appDelegate.restrictRotation = restriction;
     self.orientation = YES;
@@ -793,11 +824,6 @@
 - (void)orientationChanged:(NSNotification *)notification{
    // self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     [self restrictRotation:NO];
-}
-
-//------------------------------------------------------------------------------
--(void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 @end
