@@ -7,13 +7,20 @@
 
 #import "Conection.h"
 #import "Services.pch"
+#import "Reachability.h"
+
+
+@interface Conection ()
+
+@property (nonatomic) Reachability *internetReachability;
+
+@end
+
+
 
 @implementation Conection
 
 #define kNUMBER_OF_RETRIES  1
-
-
-
 //------------------------------------------------------------------------------
 //Conection singleton instance shared across application
 + (Conection *)sharedInstance
@@ -26,7 +33,33 @@
     return sharedConection;
 }
 
+-(void)getAirplaneMode{
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    [self.internetReachability startNotifier];
+    [self updateInterfaceWithReachability:self.internetReachability];
+
+}
+- (void)updateInterfaceWithReachability:(Reachability *)reachability
+{
+    
+     if ([[Reachability reachabilityForLocalWiFi] currentReachabilityStatus] == ReachableViaWiFi) {
+      
+         NSLog(@"WIFI");
+     }else
+   
+    if (reachability == self.internetReachability)
+    {
+        NSLog(@"%ld", [reachability currentReachabilityStatus]);
+         BOOL connection = [reachability connectionRequired];
+        
+        NSLog(@"%@", connection);
+        
+    }
+}
+
 - (void)getServerTimewithDelegate:(id)delegate andRefresh:(BOOL) refresh withShot:(BOOL)isShot{
+    
+    [self getAirplaneMode];
     
     self.timeToCheck += 1;
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
