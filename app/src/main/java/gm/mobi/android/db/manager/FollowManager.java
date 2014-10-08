@@ -84,6 +84,11 @@ public class FollowManager extends AbstractManager{
         }
         db.endTransaction();
         c.close();
+        return userIds;
+    }
+
+    public List<Long> getUserFollowingIdsWithOwnUser(Long idUser) throws SQLException{
+        List<Long> userIds = getUserFollowingIds(idUser);
         userIds.add(idUser);
         return userIds;
     }

@@ -5,6 +5,8 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.mappers.TeamMapper;
+import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +78,18 @@ public class GetUserInfoJobTest {
         verify(bus).post(anyObject());
     }
 
+
+    @Test
+    public void postNullWhenTeamIsNotFoundInDataBase(){
+        TeamManager teamManager = mock(TeamManager.class);
+        when(teamManager.getTeamByIdTeam(anyLong())).thenReturn(new Team());
+
+        //GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null,null,null,teamManager);
+        //getUserInfoJob.init(1L,null);
+        //getUserInfoJob.retrieveDataFromDatabase();
+        verify(teamManager);
+
+    }
 
 
 

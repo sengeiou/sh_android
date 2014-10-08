@@ -117,6 +117,7 @@ public class UserManager extends AbstractManager {
     public void insertInSync(){
         insertInTableSync(USER_TABLE,1,0,0);
     }
+
     public List<User> getUsersByIds(List<Long> usersIds) {
         List<User> result = new ArrayList<>(usersIds.size());
         String[] selectionArguments = new String[usersIds.size()];

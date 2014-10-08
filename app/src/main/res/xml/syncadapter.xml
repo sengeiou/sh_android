@@ -2,7 +2,7 @@
 <sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:contentAuthority="gm.mobi.android.db.provider"
-    android:accountType="shootr.mobi.android"
+    android:accountType="gm.mobi.android"
     android:userVisible="true"
     android:supportsUploading="true"
     android:allowParallelSyncs="true"

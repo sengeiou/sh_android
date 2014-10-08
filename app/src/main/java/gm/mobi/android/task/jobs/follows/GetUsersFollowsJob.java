@@ -12,6 +12,9 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -64,7 +67,9 @@ public class GetUsersFollowsJob extends CancellableJob {
     }
 
     private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {
-        return service.getFollowings(idUser, lastModifiedDate);
+        List<User> users = service.getFollowings(idUser, lastModifiedDate);
+        Collections.sort(users,new NameComparator());
+        return users;
     }
 
     protected void sendSuccessfulResult(List<User> followingUsers) {
@@ -91,5 +96,14 @@ public class GetUsersFollowsJob extends CancellableJob {
 
     @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
         return false;
+    }
+
+
+    class NameComparator implements Comparator<User> {
+
+        @Override public int compare(User user1, User user2) {
+            return user1.getName().compareTo(user2.getName());
+        }
+
     }
 }

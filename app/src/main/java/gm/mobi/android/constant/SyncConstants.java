@@ -7,7 +7,7 @@ public class SyncConstants {
     public static final String AUTHORITY = "gm.mobi.android.db.provider";
 
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "shootr.mobi.android";
+    public static final String ACCOUNT_TYPE = "gm.mobi.android";
 
     // The account name
 
