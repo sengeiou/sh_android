@@ -509,11 +509,11 @@
         switch (buttonIndex) {
             case 0:{
                 self.btnShoot.enabled = YES;
-                self.txtView.backgroundColor = [UIColor whiteColor];
-                self.txtView.textColor = [UIColor blackColor];
                 //self.txtView.userInteractionEnabled = YES;
                 self.orientation = NO;
                 [self keyboardHide:nil];
+                self.txtView.backgroundColor = [UIColor whiteColor];
+                self.txtView.textColor = [UIColor blackColor];
                 
                 break;
             }
