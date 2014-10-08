@@ -49,7 +49,7 @@
 			</Expiry>
 			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
 			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
-			<DiskExpiryThreadIntervalSeconds>300</DiskExpiryThreadIntervalSeconds>
+			<DiskExpiryThreadIntervalSeconds>30</DiskExpiryThreadIntervalSeconds>
 			<MemoryStoreEvictionPolicy>LRU</MemoryStoreEvictionPolicy>
 			<Persistence Active="true"/>
 		</EntityCache>

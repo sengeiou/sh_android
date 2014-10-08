@@ -45,6 +45,10 @@
                 </Filter>
             </Filters>
 
+            <Ordination>
+                <Attribute Alias="name" Order="Ascending">name</Attribute>
+            </Ordination>
+
         </Entity>
     </Entities>
 </AccessPolicy>
