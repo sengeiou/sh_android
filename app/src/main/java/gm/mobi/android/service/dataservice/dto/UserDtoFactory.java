@@ -181,8 +181,6 @@ public class UserDtoFactory {
           .or(UserTable.EMAIL)
           .contains(searchString)).build();
 
-        //FilterDto filter = and(orModifiedOrDeletedAfter(0L)).and(UserTable.ID).isNotEqualTo(666).build();
-
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
           .entity(UserTable.TABLE)
           .items(pageLimit)
