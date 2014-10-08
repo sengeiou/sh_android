@@ -55,23 +55,23 @@
 //------------------------------------------------------------------------------
 - (void)retryConnectionWithError:(NSError *)error andDelegate:(id)delegate{
 
-    if (![delegate isKindOfClass:[TimeLineViewController class]]) {
-        if (error.code < 400) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"The network connection was lost" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
-            });
-        }
-        else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We are working to fix it as soon as possible" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
-            });
-        }
-
-    }else{
-        
-    }
+//    if (![delegate isKindOfClass:[TimeLineViewController class]]) {
+//        if (error.code < 400) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"The network connection was lost" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+//                [alert show];
+//            });
+//        }
+//        else {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We are working to fix it as soon as possible" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+//                [alert show];
+//            });
+//        }
+//
+//    }else{
+//        
+//    }
  
     [delegate conectionResponseForStatus:NO andRefresh:NO withShot:NO];
 }
