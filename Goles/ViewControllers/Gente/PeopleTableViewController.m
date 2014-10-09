@@ -14,12 +14,18 @@
 #import "FavRestConsumer.h"
 #import "User.h"
 #import "Follow.h"
+#import "FindFriendsTableViewController.h"
 
 @interface PeopleTableViewController ()
 
 @property (nonatomic,strong) NSArray *followingUsers;
 @property (nonatomic,strong) IBOutlet UITableView *usersTable;
 @property (nonatomic, strong)       NSIndexPath         *indexToShow;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnAddFriends;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnSearchFriends;
+
+- (IBAction)addFriends:(id)sender;
+- (IBAction)searchFriends:(id)sender;
 
 @end
 
@@ -52,6 +58,8 @@
     
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 
+}
+- (IBAction)addPeople:(id)sender {
 }
 
 #pragma mark - Table view data source
@@ -131,4 +139,16 @@
 }
 
 
+- (IBAction)addFriends:(id)sender {
+}
+
+- (IBAction)searchFriends:(id)sender {
+    
+    FindFriendsTableViewController *findFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"findFriendsVC"];
+    findFriendsVC.followingArray = self.followingUsers;
+    
+    [self presentViewController:findFriendsVC animated:YES completion:^{
+        NSLog(@"a buscaaar");
+    }];
+}
 @end

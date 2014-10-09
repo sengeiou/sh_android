@@ -82,10 +82,20 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="People" id="ZJK-dK-nSn">
-                        <barButtonItem key="leftBarButtonItem" systemItem="search" id="eQT-Io-HyI"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="l75-RH-hxz"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="search" id="eQT-Io-HyI">
+                            <connections>
+                                <action selector="searchFriends:" destination="OO5-Se-I6b" id="eWT-Vm-vHT"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="l75-RH-hxz">
+                            <connections>
+                                <action selector="addFriends:" destination="OO5-Se-I6b" id="EIr-aq-EVV"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnAddFriends" destination="l75-RH-hxz" id="aIb-ov-3h8"/>
+                        <outlet property="btnSearchFriends" destination="eQT-Io-HyI" id="Eib-Dc-NKu"/>
                         <outlet property="searchDisplayController" destination="eFX-Sn-lTn" id="o3D-I9-r9k"/>
                         <outlet property="usersTable" destination="PqB-su-d3v" id="iT2-lO-cCr"/>
                     </connections>
@@ -427,6 +437,114 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o9R-5f-ldD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2079" y="119"/>
+        </scene>
+        <!--Find Friends Table View Controller-->
+        <scene sceneID="p3S-97-DUK">
+            <objects>
+                <tableViewController storyboardIdentifier="findFriendsVC" id="juD-7o-cE4" customClass="FindFriendsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nY1-jI-Xry">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" id="wLd-Ia-3n9">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="juD-7o-cE4" id="l5X-xD-MLg"/>
+                            </connections>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="50" id="YBO-vz-Mqz" customClass="FollowingCustomCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YBO-vz-Mqz" id="bFg-Ji-eiA">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mdM-ng-JG1">
+                                            <rect key="frame" x="0.0" y="0.0" width="42" height="42"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="42" id="d0s-vQ-EOe"/>
+                                                <constraint firstAttribute="height" constant="42" id="wBG-sy-zlF"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lj0-Pw-Mh8">
+                                            <rect key="frame" x="0.0" y="0.0" width="60" height="70"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="70" id="E3y-oq-QfG"/>
+                                                <constraint firstAttribute="height" constant="60" id="kwf-bm-9iB"/>
+                                            </constraints>
+                                            <state key="normal">
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KSz-47-JPn">
+                                            <rect key="frame" x="99" y="8" width="401" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="5oO-Xv-xWZ"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HsI-BE-luw">
+                                            <rect key="frame" x="99" y="24" width="401" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="W4C-iX-aeh"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJe-NN-KZI">
+                                            <rect key="frame" x="475" y="11" width="110" height="28"/>
+                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="110" id="IZy-Sr-qpe"/>
+                                                <constraint firstAttribute="height" constant="28" id="xUx-Uc-eCf"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                            <state key="normal" title="Following">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="HsI-BE-luw" firstAttribute="top" secondItem="KSz-47-JPn" secondAttribute="bottom" constant="-2" id="S4n-sx-ZR6"/>
+                                        <constraint firstItem="zJe-NN-KZI" firstAttribute="leading" secondItem="KSz-47-JPn" secondAttribute="trailing" constant="10" id="hu0-uj-X5C"/>
+                                        <constraint firstItem="zJe-NN-KZI" firstAttribute="leading" secondItem="HsI-BE-luw" secondAttribute="trailing" constant="10" id="vqY-by-AcX"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="actionButton" destination="zJe-NN-KZI" id="FhK-ZF-sLE"/>
+                                    <outlet property="imgPhoto" destination="mdM-ng-JG1" id="LV9-0Q-7NJ"/>
+                                    <outlet property="nickName" destination="HsI-BE-luw" id="2Yi-yF-RHu"/>
+                                    <outlet property="photobutton" destination="Lj0-Pw-Mh8" id="Mrq-Jc-tUM"/>
+                                    <outlet property="userName" destination="KSz-47-JPn" id="FhE-7d-aV4"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="juD-7o-cE4" id="7zA-zo-5A0"/>
+                            <outlet property="delegate" destination="juD-7o-cE4" id="3pp-fv-qlI"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="saO-JO-qdE" id="Vlq-bf-PgC"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bM0-hW-65S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="saO-JO-qdE">
+                    <connections>
+                        <outlet property="delegate" destination="juD-7o-cE4" id="PIk-pt-Loz"/>
+                        <outlet property="searchBar" destination="wLd-Ia-3n9" id="pF3-pW-5YX"/>
+                        <outlet property="searchContentsController" destination="juD-7o-cE4" id="e9Y-5U-dZX"/>
+                        <outlet property="searchResultsDataSource" destination="juD-7o-cE4" id="NZr-Yk-TRG"/>
+                        <outlet property="searchResultsDelegate" destination="juD-7o-cE4" id="KXn-c1-r0p"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="2738" y="119"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="E2o-rB-AS2">

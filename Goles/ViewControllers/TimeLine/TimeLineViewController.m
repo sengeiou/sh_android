@@ -870,7 +870,9 @@
 
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
-//    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+
+    //self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    
     [self restrictRotation:NO];
 }
 
