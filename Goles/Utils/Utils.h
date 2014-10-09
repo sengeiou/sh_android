@@ -56,4 +56,6 @@
 
 +(NSMutableAttributedString *) formatTitle:(NSString *)text;
 
++ (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL;
+
 @end

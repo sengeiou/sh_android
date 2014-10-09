@@ -19,6 +19,7 @@
 #import "AppDelegate.h"
 #import "ShotManager.h"
 #import "Follow.h"
+#import "Shot.h"
 
 @interface FavRestConsumer ()
 
@@ -169,14 +170,31 @@
         NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
-            if (!error)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
-                   
-                    if (!error && status && delegateRespondsToProtocol)
-                       [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
-                    else if (delegateRespondsToProtocol)
-                       [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
-                }];
+            if (!error){
+                if ([entityClass isSubclassOfClass:[Shot class]]) {
+                    [FavGeneralDAO shotParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if (!error && status && delegateRespondsToProtocol)
+                            [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
+                        else if (delegateRespondsToProtocol)
+                            [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
+                    }];
+                }else{
+                    [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if (!error && status && delegateRespondsToProtocol)
+                            [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
+                        else if (delegateRespondsToProtocol)
+                            [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
+                    }];
+                }
+
+            }
+//                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
+//                   
+//                    if (!error && status && delegateRespondsToProtocol)
+//                       [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
+//                    else if (delegateRespondsToProtocol)
+//                       [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
+//                }];
 			
             else if (delegateRespondsToProtocol){
                 
@@ -274,7 +292,8 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
+
+                [FavGeneralDAO shotParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
                     
                     if (!error && status)
                         [delegate parserResponseForClass:NSClassFromString(K_COREDATA_SHOT) status:YES andError:nil andRefresh:refresh];
@@ -480,17 +499,23 @@
         
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
-            if (!error)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
-                    if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
-                        [delegate createShotResponseWithStatus:YES andError:nil];
-                }];
-            else {
+            if (!error){
+                
+                if ([entity isEqualToString:K_COREDATA_SHOT]) {
+                    [FavGeneralDAO shotParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
+                            [delegate createShotResponseWithStatus:YES andError:nil];
+                    }];
+                }else{
+                    [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
+                            [delegate createShotResponseWithStatus:YES andError:nil];
+                    }];
+                }
+            }else {
                 DLog(@"Request error:%@",error);
                 if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
                     [delegate createShotResponseWithStatus:NO andError:error];
-
-                
             }
         }];
     }else

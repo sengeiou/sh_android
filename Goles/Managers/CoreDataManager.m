@@ -13,17 +13,22 @@
 #import "UserManager.h"
 #import "SyncManager.h"
 #import "SyncControl.h"
+#import "Utils.h"
+#import "Shot.h"
 
 @interface CoreDataManager()
 {
     NSManagedObjectModel            *managedObjectModel;
     NSPersistentStoreCoordinator    *persistentStoreCoordinator;
     NSManagedObjectContext          *managedObjectContext;
+    NSManagedObjectContext          *managedObjectInsertContext;
+
 }
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel            *managedObjectModel;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
 @property (nonatomic, retain, readonly) NSManagedObjectContext          *managedObjectContext;
+@property (nonatomic, retain, readonly) NSManagedObjectContext          *managedObjectInsertContext;
 
 -(NSFetchRequest *)createFetchRequestForEntityNamed:(NSString *)entityName
                                        orderedByKey:(NSString *)key
@@ -50,6 +55,36 @@
 + (CoreDataManager *)sharedInstance
 {
     return [CoreDataManager singleton];
+}
+//------------------------------------------------------------------------------
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+//------------------------------------------------------------------------------
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        // Setting Core Data context
+        [self managedObjectContext];
+        [self managedObjectInsertContext];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(contextDidSaveBackgroundContext:)
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:[self managedObjectInsertContext]];
+    }
+    return self;
+}
+
+//------------------------------------------------------------------------------
+- (void)contextDidSaveBackgroundContext:(NSNotification *)notification {
+    
+    @synchronized(self) {
+        [managedObjectContext performBlock:^{
+            [managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+            [managedObjectContext save:nil];
+        }];
+    }
 }
 
 #pragma mark - Public methods
@@ -86,9 +121,23 @@
 }
 
 //------------------------------------------------------------------------------
+- (NSManagedObjectContext *)getInsertContext {
+    
+    return managedObjectInsertContext;
+}
+//------------------------------------------------------------------------------
 - (BOOL)saveContext {
     NSError *error;
     if (![managedObjectContext save:&error]) {
+        DLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return NO;
+    }
+    return YES;
+}
+//------------------------------------------------------------------------------
+- (BOOL)saveInsertContext {
+    NSError *error;
+    if (![managedObjectInsertContext save:&error]) {
         DLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
         return NO;
     }
@@ -104,10 +153,27 @@
     
     if ( [result count]>0 )     return [result objectAtIndex:0];
     else                        return nil;
-    
-    
-    
 }
+
+//------------------------------------------------------------------------------
+- (id)getEntityInInsertContext:(Class)entityClass withId:(NSInteger)entityId{
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamedInsertContext:NSStringFromClass(entityClass) orderedByKey:nil ascending:YES];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %li",NSStringFromClass(entityClass),(long)entityId]];
+    [request setPredicate:predicate];
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectInsertContext executeFetchRequest:request error:&error];
+    }
+    if (result.count > 0)
+        return [result firstObject];
+    
+    return nil;
+
+}
+
 
 //------------------------------------------------------------------------------
 - (NSArray *) getAllEntities:(Class)entityClass {
@@ -176,6 +242,10 @@
     if (object) [managedObjectContext deleteObject:object];
 }
 
+//------------------------------------------------------------------------------
+- (void) deleteObjectInInsertContext:(NSManagedObject *)object{
+    if (object) [managedObjectInsertContext deleteObject:object];
+}
 //------------------------------------------------------------------------------
 - (void) deleteAllEntities:(Class) entityClass {
     
@@ -282,7 +352,24 @@
     
     NSFetchRequest *request= [[NSFetchRequest alloc] init];
     [request setEntity: [NSEntityDescription entityForName:entityName inManagedObjectContext:managedObjectContext]];
-    [request setIncludesPropertyValues:YES]; //only fetch the managedObjectID
+//    [request setIncludesPropertyValues:YES]; //only fetch the managedObjectID
+    
+    if ( key ){
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:key ascending:ascending];
+        [request setSortDescriptors:[NSArray arrayWithObject:sort]];
+    }
+    
+    return request;
+}
+
+//------------------------------------------------------------------------------
+-(NSFetchRequest *)createFetchRequestForEntityNamedInsertContext:(NSString *)entityName
+                                                    orderedByKey:(NSString *)key
+                                                       ascending:(BOOL)ascending{
+    
+    NSFetchRequest *request= [[NSFetchRequest alloc] init];
+    [request setEntity: [NSEntityDescription entityForName:entityName inManagedObjectContext:managedObjectInsertContext]];
+//    [request setIncludesPropertyValues:YES]; //only fetch the managedObjectID
     
     if ( key ){
         NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:key ascending:ascending];
@@ -303,10 +390,27 @@
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if ( coordinator != nil) {
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
     return managedObjectContext;
+}
+
+//------------------------------------------------------------------------------
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+
+- (NSManagedObjectContext *)managedObjectInsertContext {
+    
+    if (managedObjectInsertContext != nil)
+        return managedObjectInsertContext;
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if ( coordinator != nil) {
+        managedObjectInsertContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        managedObjectInsertContext.parentContext = managedObjectContext;
+    }
+    return managedObjectInsertContext;
 }
 
 //------------------------------------------------------------------------------
@@ -407,6 +511,10 @@
         }
     
     NSURL *url = [NSURL fileURLWithPath:path isDirectory:isDirectory];
+    
+    [Utils addSkipBackupAttributeToItemAtURL:url];
+
+    
     return url;
 }
 
@@ -424,21 +532,7 @@
     return [[result firstObject] lastCall];
 }
 
-#pragma mark - Singleton overwritten methods
-//------------------------------------------------------------------------------
-- (id)init {
-	self = [super init];
-	if (self != nil) {
-        // Setting Core Data context
-        [self managedObjectContext];
-	}
-	return self;
-}
 
-//------------------------------------------------------------------------------
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
+
 
 @end

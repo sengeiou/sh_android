@@ -12,6 +12,7 @@
 #import "CoreDataManager.h"
 #import "FavRestConsumerHelper.h"
 #import "SyncManager.h"
+#import "Shot.h"
 
 static NSArray *cuotasToDelete;
 
@@ -53,6 +54,39 @@ static NSArray *cuotasToDelete;
         completionBlock(NO,error, NO);
     }
 }
+
+//------------------------------------------------------------------------------
++(void)shotParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock {
+    
+    BOOL statusOK = [[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_CODE] isEqualToString:K_WS_STATUS_OK];
+    NSArray *ops = [dict objectForKey:K_WS_OPS];
+    BOOL returnedItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ITEMS] integerValue] > 0;
+    
+    if (dict && statusOK) {
+        
+        NSArray *dataArray = [[ops objectAtIndex:0] objectForKey:K_WS_OPS_DATA];
+        if (returnedItems) {
+            
+            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:[Shot class] WithArray:dataArray];
+            if (insertedArray.count > 0){
+                if ([[CoreDataManager singleton] saveInsertContext]){
+                    NSNumber *value = [[CoreDataManager singleton] getMaxModifiedValueForEntity:NSStringFromClass([Shot class])];
+                    [[SyncManager singleton] setSyncData:dict withValue:value];
+                }
+            }
+            completionBlock(YES,nil, YES);
+        }else{
+            completionBlock(NO,nil, NO);
+        }
+    }
+    else if (!statusOK){
+        
+        DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
+        NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];
+        completionBlock(NO,error, NO);
+    }
+}
+
 
 //------------------------------------------------------------------------------
 /**

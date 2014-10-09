@@ -1,4 +1,4 @@
-#import "Shot.h"
+ #import "Shot.h"
 #import "CoreDataManager.h"
 #import "User.h"
 
@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 +(Shot *)insertWithDictionary:(NSDictionary *)dict {
     
-    NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
+    NSManagedObjectContext *context = [[CoreDataManager singleton] getInsertContext];
     Shot *shot = [NSEntityDescription insertNewObjectForEntityForName:@"Shot"
                                                inManagedObjectContext:context];
     
@@ -26,10 +26,10 @@
     NSNumber *idNumber = [dict objectForKey:identifier];
     
     if ( idNumber ){
-        id objectInstance = [[CoreDataManager singleton] getEntity:[self class] withId:[idNumber integerValue]];
+        id objectInstance = [[CoreDataManager singleton] getEntityInInsertContext:[self class] withId:[idNumber integerValue]];
         
         if (objectInstance && (![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE])) {
-            [[CoreDataManager singleton] deleteObject:objectInstance];
+            [[CoreDataManager singleton] deleteObjectInInsertContext:objectInstance];
             return nil;
         }
         else if ((![[dict objectForKey:K_WS_OPS_DELETE_DATE] isKindOfClass:[NSNull class]] || ![dict objectForKey:K_WS_OPS_DELETE_DATE]))
@@ -51,7 +51,7 @@
     
     NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
     if ( [idUser isKindOfClass:[NSNumber class]] ){
-        User *currentUser = [[CoreDataManager singleton] getEntity:[User class] withId:[idUser integerValue]];
+        User *currentUser = [[CoreDataManager singleton] getEntityInInsertContext:[User class] withId:[idUser integerValue]];
         if (currentUser)
             [self setUser:currentUser];
         else

@@ -20,6 +20,7 @@
 // If the context doesn't already exist, it is created and bound
 // to the persistent store coordinator for the application.
 - (NSManagedObjectContext *)getContext;
+- (NSManagedObjectContext *)getInsertContext;
 
 // Get Core Data directory path
 + (NSURL *)applicationPrivateDocumentsDirectory;
@@ -27,11 +28,13 @@
 //Saves the Data Model onto the DB
 // returs YES if context saved corretly, NO otherway
 - (BOOL)saveContext;
+- (BOOL)saveInsertContext;
 
 // Remove all core data entries and files
 - (BOOL)eraseCoreData;
 
 - (id) getEntity:(Class)entityClass withId:(NSInteger)entityId;
+- (id)getEntityInInsertContext:(Class)entityClass withId:(NSInteger)entityId;
 
 - (NSArray *) getAllEntities:(Class)entityClass;
 - (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate;
@@ -44,6 +47,7 @@
 - (NSArray *)updateEntities:(Class)entityClass WithArray:(NSArray *)dataArray;
 
 - (void) deleteObject:(NSManagedObject *)object;
+- (void) deleteObjectInInsertContext:(NSManagedObject *)object;
 - (void) deleteAllEntities:(Class)entityClass;
 - (void) deleteEntitiesIn:(NSArray *)entitiesArray;
 - (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray withId:(NSString *) idClass;

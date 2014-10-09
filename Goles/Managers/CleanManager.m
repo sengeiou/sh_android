@@ -57,7 +57,7 @@
     NSDate *previousDate =[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_DELETE_DATE];
     if (previousDate && [previousDate isKindOfClass:[NSDate class]]) {
         NSDate *nowDate = [NSDate date];
-        if ([nowDate timeIntervalSinceDate:previousDate] > 5){			// > 1 day 60*60*24
+        if ([nowDate timeIntervalSinceDate:previousDate] > 60*60*24){			// > 1 day 60*60*24
             [self beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
                 updateUserDefaultsDate = YES;
 

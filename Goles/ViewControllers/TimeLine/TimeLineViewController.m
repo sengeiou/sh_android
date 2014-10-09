@@ -379,11 +379,12 @@
 //------------------------------------------------------------------------------
 - (void)animationInsertShot{
     
-    [self.timelineTableView beginUpdates];
-
-    NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
-   [self.timelineTableView endUpdates];
+    [self.timelineTableView reloadData];
+    
+//    [self.timelineTableView beginUpdates];
+//    NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
+//    [self.timelineTableView endUpdates];
 }
 
 #pragma mark - Send shot
