@@ -72,6 +72,8 @@ var lineChartOptions = {
 		//Boolean - Whether we animate scaling the Doughnut from the centre
 		animateScale : true,
 
+		 animation : false,
+		 
 		/** Atributos custom **/
 		//Booelan - Muestra u oculta las etiquetas del eje x de la gráfica.
 		showXLabels : false 
