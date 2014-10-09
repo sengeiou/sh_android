@@ -16,6 +16,7 @@ namespace Bagdad.ViewModels
         public String buttonText { get; set; }
         public SolidColorBrush buttonBackgorund { get; set; }
         public SolidColorBrush buttonForeground { get; set; }
+        public SolidColorBrush buttonBorderColor { get; set; }
         public BitmapImage buttonIcon { get; set; }
         public Visibility buttonVisible { get; set; }
         public Visibility buttonIconVisible { get; set; }

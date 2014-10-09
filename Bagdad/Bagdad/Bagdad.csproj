@@ -224,6 +224,8 @@
     <Content Include="Resources\icons\appbar.message.send.png" />
     <Content Include="Resources\icons\appbar.quill.png" />
     <Content Include="Resources\icons\appbar.refresh.png" />
+    <Content Include="Resources\icons\appbar.user.add.png" />
+    <Content Include="Resources\icons\appbar.user.added.png" />
     <Content Include="Resources\icons\appbar.user.png" />
     <Content Include="Resources\icons\basecircle.png" />
     <Content Include="Resources\start\Facebook.png" />

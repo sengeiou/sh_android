@@ -99,7 +99,8 @@ namespace Bagdad.ViewModels
                         following.buttonText = AppResources.ProfileButtonFollowing + "  ";
                         following.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
                         following.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.check.png", UriKind.RelativeOrAbsolute));
+                        following.buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
                         following.buttonIconVisible = System.Windows.Visibility.Visible;
                         
                     }
@@ -108,8 +109,9 @@ namespace Bagdad.ViewModels
                         following.buttonVisible = Visibility.Visible;
                         following.buttonText = AppResources.ProfileButtonFollow + "  ";
                         following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        following.buttonForeground = Application.Current.Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
+                        following.buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                        following.buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
                         following.buttonIconVisible = System.Windows.Visibility.Visible;
                     }
                 }
