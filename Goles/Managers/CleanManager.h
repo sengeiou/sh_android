@@ -15,5 +15,6 @@ typedef void(^booleanReturnBlock)(BOOL success, NSError *error);
 + (CleanManager *)sharedInstance;
 
 - (void)beginCleanProcessOnCompletion:(booleanReturnBlock)completion;
+-(void) cleanProcess;
 
 @end

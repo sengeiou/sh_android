@@ -51,13 +51,13 @@
 
 //Check for the last clean process date
 //------------------------------------------------------------------------------
--(void) updateLastActiveDate{
+-(void) cleanProcess{
     __block BOOL updateUserDefaultsDate = NO;
     
     NSDate *previousDate =[[NSUserDefaults standardUserDefaults] objectForKey:UD_LAST_DELETE_DATE];
     if (previousDate && [previousDate isKindOfClass:[NSDate class]]) {
         NSDate *nowDate = [NSDate date];
-        if ([nowDate timeIntervalSinceDate:previousDate] > 60*60*24){			// > 1 day 60*60*24
+        if ([nowDate timeIntervalSinceDate:previousDate] > 5){			// > 1 day 60*60*24
             [self beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
                 updateUserDefaultsDate = YES;
 
@@ -81,6 +81,8 @@
     
     NSArray *shotsArray = [[CoreDataManager singleton] getAllEntities:[Shot class]];
 
+    NSLog(@"numero de shots: %lu", (unsigned long)shotsArray.count);
+    
     if (shotsArray.count > 1000){
         
         [self deleteOldShotsOnCompletion:^(BOOL success, NSError *error) {
@@ -124,6 +126,8 @@
     
     if (newShots > 0)
         shotsToDelete = [[CoreDataManager singleton] deleteEntities:[Shot class] NotIn:newShots withId:nil];
+    
+    NSLog(@"Shots borrados: %lu", (unsigned long)shotsToDelete.count);
     
     if (shotsToDelete.count > 0){
         [[CoreDataManager singleton] saveContext];

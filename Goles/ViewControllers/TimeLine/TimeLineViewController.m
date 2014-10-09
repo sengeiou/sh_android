@@ -68,7 +68,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+        
     //For Alpha version
     self.viewOptions.hidden = YES;
     
@@ -168,6 +168,7 @@
     
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
+
     
     //Listen for keyboard process open
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -175,7 +176,6 @@
     //Listen for keyboard process close
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
-
 }
 
 //------------------------------------------------------------------------------
@@ -354,7 +354,6 @@
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
-
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
 - (void)reloadShotsTable:(id)sender {
@@ -374,14 +373,17 @@
     
     if (self.arrayShots.count > 0)
         [self performSelectorOnMainThread:@selector(animationInsertShot) withObject:nil waitUntilDone:NO];
+    
 }
 
 //------------------------------------------------------------------------------
 - (void)animationInsertShot{
+    
     [self.timelineTableView beginUpdates];
+
     NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
-    [self.timelineTableView endUpdates];
+   [self.timelineTableView endUpdates];
 }
 
 #pragma mark - Send shot
@@ -468,6 +470,7 @@
         refreshTable = NO;
     }
     [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
+
 }
 
 
@@ -546,6 +549,7 @@
 #pragma mark - Reload methods
 //------------------------------------------------------------------------------
 -(void)reloadTimeline{
+   
     [self.timelineTableView reloadData];
 }
 

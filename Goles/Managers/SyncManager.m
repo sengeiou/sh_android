@@ -140,17 +140,22 @@
     [self synchroEntityWithCompletion:^(BOOL status,NSError *error){
         
         if (!error && status){
+
             NSLog(@"SYNC ENDED");
             
-            [[CleanManager singleton] beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    if (![self.synchroTimer isValid])
-                        [self performSelectorOnMainThread:@selector(startSyncProcess) withObject:nil waitUntilDone:NO];
-                }else{
-                    if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
-                   
-                }
-            }];
+            if (![self.synchroTimer isValid])
+                [self performSelectorOnMainThread:@selector(startSyncProcess) withObject:nil waitUntilDone:NO];
+
+            
+//            [[CleanManager singleton] beginCleanProcessOnCompletion:^(BOOL success, NSError *error) {
+//                if (success) {
+//                    if (![self.synchroTimer isValid])
+//                        [self performSelectorOnMainThread:@selector(startSyncProcess) withObject:nil waitUntilDone:NO];
+//                }else{
+//                    if (error) NSLog(@"%s %@",__PRETTY_FUNCTION__,error);
+//                   
+//                }
+//            }];
         }
         else
             if (error) NSLog(@"Sync error: %s %@",__PRETTY_FUNCTION__,error);

@@ -27,6 +27,7 @@
 #import "Conection.h"
 #import "User.h"
 #import "Shot.h"
+#import "CleanManager.h"
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -102,8 +103,14 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
-   [[[SyncManager singleton] synchroTimer] invalidate];
-
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+        [app endBackgroundTask:bgTask];
+       
+    }];
+    [[CleanManager sharedInstance] cleanProcess];
+    [[[SyncManager singleton] synchroTimer] invalidate];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
