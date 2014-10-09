@@ -27,6 +27,7 @@ import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.ApiModule;
+import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.sync.GMSyncAdapter;
 import gm.mobi.android.task.jobs.CancellableJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;

@@ -15,7 +15,7 @@ import javax.inject.Singleton;
                 BusModule.class,
         },
         injects = {
-                GolesApplication.class
+                GolesApplication.class,
         }
 )
 public final class GolesModule {
