@@ -15,18 +15,18 @@
 //------------------------------------------------------------------------------
 + (UIView *)createEnviandoTitleView {
     
-    return [self createTitleViewWithTitle:@"Shooting..."];
+    return [self createTitleViewWithTitle:NSLocalizedString (@"Shooting...", nil)];
 }
 
 //------------------------------------------------------------------------------
 + (UIView *)createConectandoTitleView {
     
-    return [self createTitleViewWithTitle:@"Conecting..."];
+    return [self createTitleViewWithTitle:NSLocalizedString (@"Conecting...", nil)];
 }
 //------------------------------------------------------------------------------
 + (UIView *)createActualizandoTitleView {
     
-    return [self createTitleViewWithTitle:@"Updating..."];
+    return [self createTitleViewWithTitle:NSLocalizedString (@"Updating...", nil)];
 }
 
 //------------------------------------------------------------------------------
@@ -87,7 +87,7 @@
     
     if (days == 0 && hours == 0 && minutes == 0) {
         if (seconds < 0 || seconds == 0 )
-            timeLeft = @"Now";
+            timeLeft = NSLocalizedString (@"Now", nil);
     }
     
     
@@ -163,7 +163,7 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(screenRect.origin.x, screenRect.origin.y, screenRect.size.width, 50)];
     UILabel *titlelabel = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.width/2)-85, 10, 100, 30)];
     titlelabel.font = [UIFont boldSystemFontOfSize:17];
-    titlelabel.text = @"Timeline";
+    titlelabel.text = NSLocalizedString (@"Timeline", nil);
 
     [titleView addSubview:titlelabel];
     

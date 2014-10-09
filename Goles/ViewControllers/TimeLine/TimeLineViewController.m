@@ -35,7 +35,7 @@
 
 @property (nonatomic,weak)      IBOutlet    UITableView                 *timelineTableView;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnWatching;
-@property (nonatomic,weak)      IBOutlet    UIButton                    *btnInfo;
+@property (nonatomic,weak)      IBOutlet    UIButton                    *btnIgnore;
 @property (nonatomic,weak)      IBOutlet    UITextView                  *txtView;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
@@ -53,6 +53,10 @@
 @property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
 @property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                NSString                    *textComment;
+@property (weak, nonatomic) IBOutlet UILabel *lblMatch;
+@property (weak, nonatomic) IBOutlet UILabel *lblNowPlaying;
+@property (weak, nonatomic) IBOutlet UILabel *lblNoShots;
+@property (weak, nonatomic) IBOutlet UILabel *lblShare;
 
 @end
 
@@ -65,6 +69,8 @@
 
     //For Alpha version
     self.viewOptions.hidden = YES;
+    
+    [self textLocalizable];
     
     //Set titleView
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
@@ -81,6 +87,17 @@
     [self setupTimeLineTableView];
 }
 
+#pragma mark - Localizable Strings
+-(void)textLocalizable{
+    
+    [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
+    [self.btnWatching setTitle:NSLocalizedString(@"I'm Watching", nil) forState:UIControlStateNormal];
+    [self.btnIgnore setTitle:NSLocalizedString(@"Ignore", nil) forState:UIControlStateNormal];
+    self.lblNowPlaying.text = NSLocalizedString(@"Now Playing", nil);
+    [self.startShootingFirstTime setTitle:NSLocalizedString(@"Start Shooting", nil) forState:UIControlStateNormal];
+    self.lblNoShots.text =  NSLocalizedString(@"No Shots", nil);
+    self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
+}
 //------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -279,10 +296,7 @@
         return commentHeight + 25;
     
     return commentHeight+5;
-	
 }
-
-
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -305,12 +319,11 @@
         self.spinner.hidden = YES;
         
         self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
-        self.lblFooter.text = @"No more shots";
+        self.lblFooter.text = NSLocalizedString(@"No more shots", nil);
         self.lblFooter.textColor = [Fav24Colors iosSevenGray];
         self.lblFooter.textAlignment = NSTextAlignmentCenter;
         self.lblFooter.backgroundColor = [UIColor clearColor];
         self.timelineTableView.tableFooterView = self.lblFooter;
-        
     }
 }
 
@@ -482,7 +495,7 @@
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Connection timed out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Retry", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Shot Not Posted", nil) message:NSLocalizedString(@"Connection timed out.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Retry", nil), nil];
     alertView.tag = 18;
     [alertView show];
     
@@ -513,7 +526,7 @@
 
 //------------------------------------------------------------------------------
 - (void)showAlert{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shot Not Posted" message:@"Whoops! You already shot that." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Shot Not Posted", nil) message:NSLocalizedString(@"Whoops! You already shot that.", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     [alert show];
 }
 
@@ -738,7 +751,7 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    NSString* result = [self controlCharactersShot:self.txtView.text];
+    //NSString* result = [self controlCharactersShot:self.txtView.text];
 
     lengthTextField = textView.text.length - range.length + text.length;
     self.charactersLeft.hidden = NO;

@@ -157,7 +157,6 @@
                                    atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
-            NSLog(@"%@", response);
         }];
     }else{
         self.imgPhoto.image = image;

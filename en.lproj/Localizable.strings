@@ -57,12 +57,19 @@
 "No Shots" = "No Shots";
 "Share with friends about football." = "Share with friends about football.";
 "Start Shooting" = "Start Shooting";
+"Shoot" = "Shoot";
 /************codigo ***************/
-
-
-
-
-
+"No more shots" = "No more shots";
+"Shooting..." = "Shooting...";
+"Conecting..." = "Conecting...";
+"Updating..." = "Updating...";
+"Now" = "Now";
+/************Alertas ***************/
+"Shot Not Posted" = "Shot Not Posted";
+"Connection timed out." = "Connection timed out.";
+"Cancel" = "Cancel";
+"Whoops! You already shot that." = "Whoops! You already shot that.";
+"Retry" = "Retry";
 
 
 
