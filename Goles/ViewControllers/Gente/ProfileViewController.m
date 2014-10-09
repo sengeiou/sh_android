@@ -128,7 +128,7 @@
 //------------------------------------------------------------------------------
 - (void)setFollowToYes {
 	
-    [self.btnFollow setTitle:NSLocalizedString(@"FOLLOWING", nil) forState:UIControlStateNormal];
+    [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
     self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);

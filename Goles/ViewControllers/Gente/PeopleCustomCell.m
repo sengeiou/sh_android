@@ -28,9 +28,7 @@
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     
     if (image == nil) {
-        
-        
-        
+
         [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             self.imgPhoto.image = image;
             self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
@@ -45,7 +43,6 @@
                                    atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
-            NSLog(@"%@", response);
         }];
     }else{
         self.imgPhoto.image = image;

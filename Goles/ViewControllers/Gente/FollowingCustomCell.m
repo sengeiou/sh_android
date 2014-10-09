@@ -90,7 +90,7 @@
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
 
-    [self.actionButton setTitle:NSLocalizedString(@"FOLLOWING", nil) forState:UIControlStateNormal];
+    [self.actionButton setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     
