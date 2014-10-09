@@ -274,7 +274,7 @@
 	
     Shot *shot = self.arrayShots[indexPath.row];
 
-    return [Utils heightForShot:shot.comment];
+    return [TimeLineUtilities heightForShot:shot.comment];
 	
 }
 
@@ -625,6 +625,7 @@
 -(void)keyboardShow:(NSNotification*)notification{
     
     self.txtView.textColor = [UIColor blackColor];
+
     self.txtView.backgroundColor = [UIColor whiteColor];
     
 //    if (rows >= 3)
@@ -632,6 +633,7 @@
 //    else
 //        self.charactersLeft.hidden = YES;
     
+
     if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
         self.txtView.text = nil;
     
@@ -709,14 +711,15 @@
         }else
             self.txtView.textColor = [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
         
-        if (rows == 0 || rows == 1) {
+        if (rows <= 2) {
             self.bottomViewHeightConstraint.constant = 75;
             self.bottomViewPositionConstraint.constant = 0.0f;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
         }else{
-            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            self.bottomViewHeightConstraint.constant = ((rows-2)*self.txtView.font.lineHeight)+75;
+//            self.bottomViewHeightConstraint.constant = (rows*18)+75;
             self.bottomViewPositionConstraint.constant = 0.0f;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
@@ -746,7 +749,6 @@
 
     if (lengthTextField == 0){
 		self.bottomViewHeightConstraint.constant = 75;
-        //self.charactersLeft.hidden = YES;
 		[UIView animateWithDuration:0.25f animations:^{
 			[self.view layoutIfNeeded];
 		}];

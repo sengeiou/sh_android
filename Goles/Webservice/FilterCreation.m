@@ -74,7 +74,12 @@
     return @{};
 }
 
+//-----------------------------------------------------------------------------
 + (NSDictionary *)getFilterForUser:(User *)user {
+    
+    //Security check
+    if (!user)
+        return @{};
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
@@ -107,6 +112,10 @@
 //-----------------------------------------------------------------------------
 + (NSDictionary *)getFilterForFollowingsOfUser:(User *)user {
     
+    //Security check
+    if (!user)
+        return @{};
+    
     NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
                                                     @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}],
                                  K_WS_FILTERS:[NSNull null],
@@ -120,6 +129,10 @@
 
 //-----------------------------------------------------------------------------
 + (NSDictionary *)getFilterForFollowersOfUser:(User *)user {
+    
+    //Security check
+    if (!user)
+        return @{};
     
     NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:[NSNull null]},
                                                     @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}],
