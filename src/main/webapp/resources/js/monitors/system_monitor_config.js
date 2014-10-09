@@ -1,8 +1,8 @@
 //Histórico carga de CPU.
 var cpuHistoryChartOptions = clone(lineChartOptions);
-cpuHistoryChartOptions.scaleLabel = "<%= Math.floor(Number(value)).toFixed(2).toLocaleString() + '%'%>";
-cpuHistoryChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Math.floor(Number(value)).toFixed(2).toLocaleString() + '%' %>";
-cpuHistoryChartOptions.multiTooltipTemplate = "<%= Math.floor(Number(value)).toFixed(2).toLocaleString() + '%' %>";
+cpuHistoryChartOptions.scaleLabel = "<%= Number(value).toFixed(2).toLocaleString() + '%' %>";
+cpuHistoryChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Number(value).toFixed(2).toLocaleString() + '%' %>";
+cpuHistoryChartOptions.multiTooltipTemplate = "<%= Number(value).toFixed(2).toLocaleString() + '%' %>";
 
 var cpuHistoryChartData = {
 		labels: [],

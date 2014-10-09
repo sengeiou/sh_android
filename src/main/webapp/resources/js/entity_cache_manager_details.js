@@ -1,7 +1,7 @@
 //Tamaño de heap de la caché, respecto a nu manager. 
 var cachesHeapDiskChartOptions = clone(radarChartOptions);
-cachesHeapDiskChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Math.floor(value).toFixed(2).toLocaleString() + '%' %>";
-cachesHeapDiskChartOptions.multiTooltipTemplate = "<%= Math.floor(value).toFixed(2).toLocaleString() +'%' %>";
+cachesHeapDiskChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Number(value).toFixed(2).toLocaleString() + '%' %>";
+cachesHeapDiskChartOptions.multiTooltipTemplate = "<%= Number(value).toFixed(2).toLocaleString() +'%' %>";
 
 var cachesHeapDiskChartData = {
 
@@ -32,8 +32,8 @@ var cachesHeapDiskChartData = {
 
 //Tamaño de disco de la caché, respecto a su manager. 
 var cachesHitAddChartOptions = clone(radarChartOptions);
-cachesHitAddChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Math.floor(value).toFixed(2).toLocaleString() + '%' %>";
-cachesHitAddChartOptions.multiTooltipTemplate = "<%= Math.floor(value).toFixed(2).toLocaleString() +'%' %>";
+cachesHitAddChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= Number(value).toFixed(2).toLocaleString() + '%' %>";
+cachesHitAddChartOptions.multiTooltipTemplate = "<%= Number(value).toFixed(2).toLocaleString() +'%' %>";
 
 var cachesHitAddChartData = {
 		labels: [],

@@ -61,9 +61,9 @@ function drawCacheSizes(cacheManager, cache,
 	
 	var cachePercent = (cacheMaxBytesLocalHeap * 100)/managerMaxBytesLocalHeap;
 	cacheHeapSizeChartData[0].value = cacheMaxBytesLocalHeap;
-	cacheHeapSizeChartData[0].label = cache + ' ' + Math.floor(cachePercent).toFixed(2).toLocaleString() + '%';
+	cacheHeapSizeChartData[0].label = cache + ' ' + Number(cachePercent).toFixed(2).toLocaleString() + '%';
 	cacheHeapSizeChartData[1].value = managerMaxBytesLocalHeap;
-	cacheHeapSizeChartData[1].label = cacheManager + ' ' + Math.floor(100 - cachePercent).toFixed(2).toLocaleString() + '%';
+	cacheHeapSizeChartData[1].label = cacheManager + ' ' + Number(100 - cachePercent).toFixed(2).toLocaleString() + '%';
 	
 	cacheHeapSizeChart.createChart("pie", cacheHeapSizeChartOptions, cacheHeapSizeChartData);
 	
@@ -72,9 +72,9 @@ function drawCacheSizes(cacheManager, cache,
 	
 	cachePercent = (cacheMaxBytesLocalDisk * 100)/managerMaxBytesLocalDisk;
 	cacheDiskSizeChartData[0].value = cacheMaxBytesLocalDisk;
-	cacheDiskSizeChartData[0].label = cache + ' ' + Math.floor(cachePercent).toFixed(2).toLocaleString() + '%';
+	cacheDiskSizeChartData[0].label = cache + ' ' + Number(cachePercent).toFixed(2).toLocaleString() + '%';
 	cacheDiskSizeChartData[1].value = managerMaxBytesLocalDisk;
-	cacheDiskSizeChartData[1].label = cacheManager + ' ' + Math.floor(100 - cachePercent).toFixed(2).toLocaleString() + '%';
+	cacheDiskSizeChartData[1].label = cacheManager + ' ' + Number(100 - cachePercent).toFixed(2).toLocaleString() + '%';
 	
 	cacheDiskSizeChart.createChart("pie", cacheDiskSizeChartOptions, cacheDiskSizeChartData);
 }
