@@ -18,6 +18,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:gravity="center"
+      android:padding="16dp"
       android:text="@string/activity_find_friends_empty_message"
       android:textColor="@color/gray_50"
       android:textSize="20sp"

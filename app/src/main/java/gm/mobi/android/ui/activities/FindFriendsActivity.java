@@ -2,6 +2,7 @@ package gm.mobi.android.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,6 +33,7 @@ import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -39,6 +42,12 @@ import timber.log.Timber;
 public class FindFriendsActivity extends BaseSignedInActivity {
 
     public static final int NO_OFFSET = 0;
+    private static final String EXTRA_RESULTS = "results";
+    private static final String EXTRA_SEARCH_TEXT = "search";
+    private static final String EXTRA_SEARCH_OFFSET = "offset";
+    private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
+    private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
+
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
@@ -46,7 +55,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     private SearchView searchView;
 
     @InjectView(R.id.search_results_list) ListView resultsListView;
-    @InjectView(R.id.search_results_empty) View emptyView;
+    @InjectView(R.id.search_results_empty) TextView emptyOrErrorView;
     View progressViewContent;
     View progressView;
 
@@ -55,8 +64,8 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
     private String currentSearchQuery;
     private int currentResultOffset;
-    private boolean isLoadingRemoteData;
     private boolean hasMoreItemsToLoad;
+    private boolean isLoadingRemoteData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,9 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     private void setupViews() {
-        adapter = new UserListAdapter(this, picasso, new ArrayList<User>(0));
+        if (adapter == null) {
+            adapter = new UserListAdapter(this, picasso, new ArrayList<User>(0));
+        }
         resultsListView.setAdapter(adapter);
 
         progressView = getLoadingView();
@@ -139,6 +150,11 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         searchView.setQueryHint(getString(R.string.activity_find_friends_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
+
+        if (currentSearchQuery != null) {
+            searchView.setQuery(currentSearchQuery, false);
+            searchView.clearFocus();
+        }
         return true;
     }
 
@@ -218,6 +234,9 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
         setLoading(false);
         isLoadingRemoteData = false;
+        if (adapter.getCount() == 0) {
+            setCantLoadMessage();
+        }
     }
 
     private void incrementOffset(int newItems) {
@@ -237,17 +256,49 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     private void setEmpty(boolean empty) {
-        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        emptyOrErrorView.setVisibility(empty ? View.VISIBLE : View.GONE);
         resultsListView.setVisibility(empty ? View.GONE : View.VISIBLE);
+        if (empty) {
+            emptyOrErrorView.setText(R.string.activity_find_friends_empty_message);
+        }
     }
 
+    private void setCantLoadMessage() {
+        emptyOrErrorView.setText(R.string.activity_find_friends_cant_load_message);
+        emptyOrErrorView.setVisibility(View.VISIBLE);
+    }
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     private void clearResults() {
-        adapter.setItems(new ArrayList<User>());
+        adapter.setItems(new ArrayList<User>(0));
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_RESULTS, (Serializable) adapter.getItems());
+        outState.putString(EXTRA_SEARCH_TEXT, currentSearchQuery);
+        outState.putInt(EXTRA_SEARCH_OFFSET, currentResultOffset);
+        outState.putBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, hasMoreItemsToLoad);
+        outState.putBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, isLoadingRemoteData);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentSearchQuery = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
+        currentResultOffset = savedInstanceState.getInt(EXTRA_SEARCH_OFFSET, 0);
+        hasMoreItemsToLoad = savedInstanceState.getBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, false);
+        isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
+        List<User> restoredResults = (List<User>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        if (restoredResults != null && restoredResults.size() > 0) {
+            setListContent(restoredResults, currentResultOffset);
+            setEmpty(false);
+            setLoading(hasMoreItemsToLoad);
+        }
     }
 }

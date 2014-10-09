@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import java.io.Serializable;
 import java.util.List;
 
 public class UserListAdapter extends BindableAdapter<User> {
@@ -62,6 +63,10 @@ public class UserListAdapter extends BindableAdapter<User> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
+    }
+
+    public List<User> getItems() {
+        return users;
     }
 
     public static class ViewHolder {
