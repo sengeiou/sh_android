@@ -34,7 +34,6 @@
                 <Filter>
                     <Attribute Alias="userName">userName</Attribute>
                     <Attribute Alias="name">name</Attribute>
-                    <Attribute Alias="email">email</Attribute>
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
                 </Filter>
