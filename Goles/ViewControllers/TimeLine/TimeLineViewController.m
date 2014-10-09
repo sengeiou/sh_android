@@ -398,6 +398,7 @@
     [self.txtView resignFirstResponder];
     self.orientation = NO;
     [self keyboardHide:nil];
+    self.txtView.textColor = [Fav24Colors textTextViewSendShot];
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
     self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
@@ -501,7 +502,7 @@
 -(void)addPlaceHolder{
     NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
     self.txtView.text = placeHolder;
-    self.txtView.textColor = [UIColor blackColor];
+    self.txtView.textColor = [UIColor lightGrayColor];
     self.txtView.backgroundColor = [UIColor whiteColor];
 
 }
@@ -713,12 +714,19 @@
 
 //------------------------------------------------------------------------------
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    NSLog(@"%lu", (unsigned long)self.txtView.text.length);
+    NSLog(@"%lu", (unsigned long)lengthTextField);
+
+    if (lengthTextField == 0){
+         [self addPlaceHolder];
+    }
     self.orientation = NO;
 }
 
 //------------------------------------------------------------------------------
 - (void)keyboardWillHide {
-    
+
     [self keyboardHide:nil];
 }
 
@@ -737,16 +745,13 @@
         self.timelineTableView.scrollEnabled = YES;
             
         if (lengthTextField == 0){
-            NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
-
-            self.txtView.text = placeHolder;
-            self.txtView.textColor = [UIColor lightGrayColor];
+            [self addPlaceHolder];
             
             rows = 0;
             self.charactersLeft.hidden = YES;
         }else
-            self.txtView.textColor = [Fav24Colors textTextViewSendShot];
-        
+            self.txtView.textColor = [UIColor blackColor];
+
         if (rows <= 2) {
             self.bottomViewHeightConstraint.constant = 75;
             self.bottomViewPositionConstraint.constant = 0.0f;
