@@ -21,7 +21,7 @@
 //------------------------------------------------------------------------------
 + (UIView *)createConectandoTitleView {
     
-    return [self createTitleViewWithTitle:NSLocalizedString (@"Conecting...", nil)];
+    return [self createTitleViewWithTitle:NSLocalizedString (@"Connecting...", nil)];
 }
 //------------------------------------------------------------------------------
 + (UIView *)createActualizandoTitleView {
