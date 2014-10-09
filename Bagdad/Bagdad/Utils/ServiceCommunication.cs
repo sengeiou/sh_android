@@ -77,13 +77,13 @@ namespace Bagdad.Utils
             {
                 if (App.isInternetAvailable && !App.isSynchroRunning())
                 {
+                    GenericModel gm = new GenericModel();
                     if (await ExistAndSetServer())
                     {
                         listTablesSynchronized.Clear();
                         App.lockSynchro();
                             App.changesOnSynchro = 0;
 
-                        GenericModel gm = new GenericModel();
                         List<SynchroTableInfo> Tables = await gm.GetSynchronizationTables();
 
                         int total = 0;
@@ -128,8 +128,12 @@ namespace Bagdad.Utils
                     App.changesOnSynchro = nChanges;
                     Debug.WriteLine("Cambios totales en la sincronización: " + nChanges.ToString());
                     Debug.WriteLine("______________________________________________________________________________________ \n");
-
-                }
+                    if (!App.hasDeletedMaxShots)
+                    {
+                        await gm.deleteShotsOlderThanMax();
+                        App.hasDeletedMaxShots = true;
+                    }
+                    }
                 else
                 {
                     Debug.WriteLine("Sin internet no es posible la sincronización general");

@@ -152,5 +152,30 @@ namespace Bagdad.Models
             }
         }
 
+        public async Task<bool> deleteShotsOlderThanMax()
+        {
+            try
+            {
+                Database database = await App.GetDatabaseAsync();
+
+                string selectQuery = SQLQuerys.deleteShotsOlderThanMax;
+
+                Statement selectStatement = await database.PrepareStatementAsync(selectQuery);
+
+                selectStatement.BindIntParameterWithName("@limit", Constants.SHOTS_LIMIT);
+
+                await selectStatement.StepAsync();
+
+                App.DBLoaded.Set();
+                System.Diagnostics.Debug.WriteLine("- - - Borrados los shots inferiores a " + Constants.SHOTS_LIMIT.ToString() + " correctamente.");
+                return true;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R : GenericModel - deleteShotsOlderThanMax: " + e.Message, e);
+                return false;
+            }
+        }
+
     }
 }

@@ -10,6 +10,8 @@ namespace Bagdad.Utils
     {
 
         #region SERVICE_COMMUNICATION
+        //LIMIT SHOTS TO STORE IN DB
+        public const int SHOTS_LIMIT = 1000;
 
         //OPERATIONS
         public const String SERCOM_OP_MANUAL_JSON_REQUEST = "#OMJR";

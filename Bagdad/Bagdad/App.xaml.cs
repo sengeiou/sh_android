@@ -29,6 +29,7 @@ namespace Bagdad
         public static int ID_USER = 2;
         public static double TIME_LAPSE = -7167518.431640625;
         public const int PLATFORM_ID = 2;
+        public static bool hasDeletedMaxShots = false;
 
         #endregion
 

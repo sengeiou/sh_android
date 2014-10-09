@@ -29,6 +29,8 @@ namespace Bagdad.Utils
 
         public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE idUser = @idUser";
 
+        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE usernName like @userName OR name LIKE @name";
+
         #endregion
 
         #region SHOT
@@ -50,6 +52,8 @@ namespace Bagdad.Utils
         public const String getShotById = "SELECT idShot FROM Shot WHERE idShot = @idShot";
 
         public const String getShotByComment24Hours = "SELECT idShot FROM Shot WHERE comment = @comment and idUser = @idUser and csys_modified > @yesterday";
+
+        public const String deleteShotsOlderThanMax = "SELECT min(idShot) FROM (Select idshot from Shot order by csys_modified DESC LIMIT @limit)";
 
         #endregion
 
