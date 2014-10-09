@@ -33,11 +33,11 @@
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
     if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
-        self.title = @"Following";
+        self.title = NSLocalizedString(@"Following", nil);
 	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
     }
     else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED]){
-        self.title = @"Followers";
+        self.title = NSLocalizedString(@"Followers", nil);
 		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
     }
 

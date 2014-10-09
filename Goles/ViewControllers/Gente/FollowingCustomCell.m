@@ -58,7 +58,6 @@
                                    atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
-
         }];
     }else{
         self.imgPhoto.image = image;
@@ -79,7 +78,7 @@
 - (void)configureFollowButton {
 
     [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.actionButton setAttributedTitle:[Utils formatTitle:@"+ FOLLOW"] forState:UIControlStateNormal];
+    [self.actionButton setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
     [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(-1, 0, 0, 0)];
     self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.actionButton.backgroundColor = [UIColor whiteColor];
@@ -91,7 +90,7 @@
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
 
-    [self.actionButton setTitle:@" FOLLOWING" forState:UIControlStateNormal];
+    [self.actionButton setTitle:NSLocalizedString(@"FOLLOWING", nil) forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     

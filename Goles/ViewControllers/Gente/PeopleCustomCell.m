@@ -46,9 +46,6 @@
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);
-
-            
-            NSLog(@"%@", response);
         }];
     }else{
         self.imgPhoto.image = image;
