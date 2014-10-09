@@ -552,6 +552,7 @@
 //------------------------------------------------------------------------------
 -(void) removePullToRefresh{
     
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
 }
