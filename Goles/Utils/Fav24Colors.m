@@ -54,4 +54,12 @@
     return [UIColor colorWithRed:247.0f/255.0f green:247.0f/255.0f blue:247.0f/255.0f alpha:1.0];
 }
 
++(UIColor *)backgroundTextViewSendShot{
+    return [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1];
+}
+
++(UIColor *)textTextViewSendShot{
+    return [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
+}
+
 @end

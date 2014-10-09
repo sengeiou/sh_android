@@ -387,7 +387,7 @@
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-    self.txtView.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1];
+    self.txtView.backgroundColor = [Fav24Colors backgroundTextViewSendShot];
 
     //self.txtView.userInteractionEnabled= NO;
     [self.txtView resignFirstResponder];
@@ -729,7 +729,7 @@
             rows = 0;
             self.charactersLeft.hidden = YES;
         }else
-            self.txtView.textColor = [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
+            self.txtView.textColor = [Fav24Colors textTextViewSendShot];
         
         if (rows <= 2) {
             self.bottomViewHeightConstraint.constant = 75;

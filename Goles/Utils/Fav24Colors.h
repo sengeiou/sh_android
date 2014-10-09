@@ -20,5 +20,7 @@
 +(UIColor *)tableFooters;
 +(UIColor *)iosSevenGray;
 +(UIColor *)iosNavigationBar;
++(UIColor *)backgroundTextViewSendShot;
++(UIColor *)textTextViewSendShot;
 
 @end
