@@ -53,10 +53,12 @@
 @property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
 @property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                NSString                    *textComment;
+
 @property (weak, nonatomic) IBOutlet UILabel *lblMatch;
 @property (weak, nonatomic) IBOutlet UILabel *lblNowPlaying;
 @property (weak, nonatomic) IBOutlet UILabel *lblNoShots;
 @property (weak, nonatomic) IBOutlet UILabel *lblShare;
+
 
 @end
 
@@ -154,7 +156,7 @@
     
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 80.0f;
+    self.timelineTableView.estimatedRowHeight = 60.0f;
 
 }
 
@@ -290,12 +292,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-    
-    CGFloat commentHeight = [TimeLineUtilities heightForShot:shot.comment];
-    if (commentHeight <= 50)
-        return commentHeight + 25;
-    
-    return commentHeight+5;
+
+    return [TimeLineUtilities heightForShot:shot.comment];
+
 }
 
 //------------------------------------------------------------------------------
@@ -308,11 +307,12 @@
 	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
-	
+
+    
     return cell;
  }
 
-
+//------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	
     if (!refreshTable){

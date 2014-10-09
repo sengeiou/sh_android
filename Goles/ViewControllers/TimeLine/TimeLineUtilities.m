@@ -36,20 +36,21 @@
 }
 
 //------------------------------------------------------------------------------
-+ (CGFloat)heightForShot: (NSString *) text{
++ (CGFloat)heightForShot:(NSString *)shotText{
     
     NSInteger MAX_HEIGHT = 2000;
-    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 26, 320, MAX_HEIGHT)];
-    textView.text = text;
-    textView.font = [UIFont systemFontOfSize:17];
-    [textView sizeToFit];
+    NSInteger MAX_WIDTH = 500;
+    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT)];
+    textView.text = shotText;
+    textView.font = [UIFont systemFontOfSize:15];
+    CGSize size = [textView sizeThatFits:CGSizeMake(MAX_WIDTH, FLT_MAX)];
 
-    return textView.frame.size.height;
+    if (size.height <= 34)
+        return size.height + 48;
     
-//    if(textView.frame.size.height <= 36.5)
-//        return textView.frame.size.height+47;
-//    
-//    return textView.frame.size.height+22;
+    return size.height+30;
+
+
 }
 
 //------------------------------------------------------------------------------

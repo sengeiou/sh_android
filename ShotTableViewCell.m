@@ -36,9 +36,9 @@
     self.txvText.textColor = [UIColor blackColor];
     self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [TimeLineUtilities heightForShot:shot.comment]);
     self.txvText.scrollEnabled = NO;
-    
-    self.lblName.text = shot.user.name;
 
+    self.lblName.text = shot.user.name;
+    
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:shot.user.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     
