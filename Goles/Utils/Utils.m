@@ -34,57 +34,7 @@
 + (UIView *)setNavigationBarTitle:(NSString *)title andSubtitle:(NSString *)subtitle forMaximumLenght:(NSNumber *)lenghtView {
     return [Utils setNavigationBarTitle:title andSubtitle:subtitle forLoadingMode:NO forMaximumLenght:lenghtView];
 }
-+ (UIImage *)imageFromText:(NSString *)text font:(UIFont *)font {
-    
-    UILabel * addCustomLabel =
-    [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 62, 25)];
-    addCustomLabel.text = text;
-    addCustomLabel.textColor = [UIColor whiteColor];
-    addCustomLabel.font = font; //[UIFont boldSystemFontOfSize:10];
-    addCustomLabel.numberOfLines = 2;
-    addCustomLabel.backgroundColor = [UIColor clearColor];
-    addCustomLabel.textAlignment = NSTextAlignmentCenter;
-    addCustomLabel.shadowColor = [UIColor colorWithRed:66/255.0 green:89/255.0 blue:147/255.0 alpha:1.0];
-    //[UIColor blackColor];
 
-    addCustomLabel.shadowOffset = CGSizeMake(0,-1);
-    
-    CGSize size = addCustomLabel.bounds.size;
-    
-    static CGFloat scale = -1.0;
-    
-    UIScreen *screen = [UIScreen mainScreen];
-    scale = [screen scale];
-    
-    if (scale > 0.0) {
-        UIGraphicsBeginImageContextWithOptions(size, NO, scale);
-    } else {
-        UIGraphicsBeginImageContext(size);
-    }
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [addCustomLabel.layer renderInContext: context];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    //CGContextRelease(context);
-    
-    return img;
-}
-
-+ (UIImage *)imageFromText:(NSString *)text {
-    return [self imageFromText:text font:[UIFont boldSystemFontOfSize:12]];
-}
-
-+ (UIImage *) imageFromColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0, 0, 1, 1);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    //  [[UIColor colorWithRed:222./255 green:227./255 blue: 229./255 alpha:1] CGColor]) ;
-    CGContextFillRect(context, rect);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
 
 + (UIView *)setNavigationBarTitle:(NSString *)title andSubtitle:(NSString *)subtitle{
     return [Utils setNavigationBarTitle:title andSubtitle:subtitle forLoadingMode:NO forMaximumLenght:nil];

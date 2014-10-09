@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
+		A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A52B9A0D19E688A6007D8A67 /* DownloadImage.m */; };
 		A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42619DC415900163841 /* PeopleTableViewController.m */; };
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
@@ -124,6 +125,8 @@
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
 		A50CCD8619C898A5005369E6 /* Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encryption.m; sourceTree = "<group>"; };
+		A52B9A0C19E688A6007D8A67 /* DownloadImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadImage.h; sourceTree = "<group>"; };
+		A52B9A0D19E688A6007D8A67 /* DownloadImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadImage.m; sourceTree = "<group>"; };
 		A52CE42519DC415900163841 /* PeopleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleTableViewController.h; sourceTree = "<group>"; };
 		A52CE42619DC415900163841 /* PeopleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleTableViewController.m; sourceTree = "<group>"; };
 		A52CE42819DC418000163841 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -622,6 +625,8 @@
 				A50CCD8319C8889B005369E6 /* Conection.m */,
 				A50CCD8519C898A5005369E6 /* Encryption.h */,
 				A50CCD8619C898A5005369E6 /* Encryption.m */,
+				A52B9A0C19E688A6007D8A67 /* DownloadImage.h */,
+				A52B9A0D19E688A6007D8A67 /* DownloadImage.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -964,6 +969,7 @@
 				A50CCD8419C8889B005369E6 /* Conection.m in Sources */,
 				AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */,
 				AA623E531998D17800A942A9 /* SML.m in Sources */,
+				A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */,
 				AACA544919C057C000E39D94 /* UIImageView+AFNetworking.m in Sources */,
 				AA623CEB1998A7F200A942A9 /* main.m in Sources */,
 				AA72640919D03A6E0067A39D /* Shot.m in Sources */,

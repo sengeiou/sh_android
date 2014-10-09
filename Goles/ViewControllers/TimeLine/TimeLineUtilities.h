@@ -20,4 +20,5 @@
 + (UIImage*)drawText:(NSString*)text inImage:(UIImage*)image atPoint:(CGPoint)point andSizeFont:(CGFloat)sizeFont;
 + (CGPoint)centerTextInImage:(UIImageView *)imageView;
 
+
 @end

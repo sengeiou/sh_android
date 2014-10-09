@@ -19,6 +19,7 @@
 #import "CoreDataParsing.h"
 #import "Utils.h"
 #import "TimeLineUtilities.h"
+#import "DownloadImage.h"
 
 @interface ProfileViewController ()
 
@@ -89,7 +90,7 @@
 	
 	[self configureFollowButton];
 	
-    [self receivedImage];
+    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:self.selectedUser.photo] andUIimageView:self.imgPhoto andText:[self.selectedUser.name substringToIndex:1]];
 }
 
 //------------------------------------------------------------------------------
@@ -133,36 +134,6 @@
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
     [self.btnFollow setContentEdgeInsets:contentInsets];
-}
-
-//------------------------------------------------------------------------------
-- (void)receivedImage{
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.selectedUser.photo] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
-    UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
-    
-    if (image == nil) {
-        
-        [self.imgPhoto setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            self.imgPhoto.image = image;
-            self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
-            self.imgPhoto.clipsToBounds = YES;
-            [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
-            
-        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            
-            UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
-            
-            UIImage *img = [TimeLineUtilities drawText:[self.selectedUser.name substringToIndex:1]
-                                   inImage:imageDefault
-                                   atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
-            
-            self.imgPhoto.image = img;
-        }];
-    }else{
-        self.imgPhoto.image = image;
-        self.imgPhoto.layer.cornerRadius = self.imgPhoto.frame.size.width / 2;
-        self.imgPhoto.clipsToBounds = YES;
-    }
 }
 
 - (void)didReceiveMemoryWarning {
