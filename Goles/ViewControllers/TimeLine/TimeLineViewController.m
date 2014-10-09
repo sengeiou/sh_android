@@ -274,11 +274,11 @@
 	
     Shot *shot = self.arrayShots[indexPath.row];
     
-    CGFloat
-    if ([TimeLineUtilities heightForShot:shot.comment] <= 50)
-        return 60;
+    CGFloat commentHeight = [TimeLineUtilities heightForShot:shot.comment];
+    if (commentHeight <= 50)
+        return commentHeight + 25;
     
-    return [TimeLineUtilities heightForShot:shot.comment];
+    return commentHeight+5;
 	
 }
 
