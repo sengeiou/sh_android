@@ -58,13 +58,13 @@
 //    if (![delegate isKindOfClass:[TimeLineViewController class]]) {
 //        if (error.code < 400) {
 //            dispatch_async(dispatch_get_main_queue(), ^{
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"The network connection was lost" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"The network connection was lost",nil) message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
 //                [alert show];
 //            });
 //        }
 //        else {
 //            dispatch_async(dispatch_get_main_queue(), ^{
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We are working to fix it as soon as possible" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"We are working to fix it as soon as possible", nil) message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
 //                [alert show];
 //            });
 //        }

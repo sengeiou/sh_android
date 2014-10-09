@@ -650,8 +650,9 @@
 //    else
 //        self.charactersLeft.hidden = YES;
     
-
-    if ([self.txtView.text isEqualToString:CREATE_SHOT_PLACEHOLDER])
+    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
+    
+    if ([self.txtView.text isEqualToString:placeHolder])
         self.txtView.text = nil;
     
     [self darkenBackgroundView];
@@ -720,7 +721,9 @@
         self.timelineTableView.scrollEnabled = YES;
             
         if (lengthTextField == 0){
-            self.txtView.text = CREATE_SHOT_PLACEHOLDER;
+            NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
+
+            self.txtView.text = placeHolder;
             self.txtView.textColor = [UIColor lightGrayColor];
             
             rows = 0;
