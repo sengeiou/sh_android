@@ -133,12 +133,13 @@ function applySystemMonitorChange(periodSelector, segmentSelector, datetimeFrom,
  * @param threadsHistory Nombre del elemento en el que se renderiza el histórico de hilos de ejecución.
  * @param threadsInstant Nombre del elemento en el que se renderiza el instante más reciente de hilos de ejecución.
  * @param memoryHistory Nombre del elemento en el que se renderiza el histórico de memoria.
- * @param memoryInstant Nombre del elemento en el que se renderiza el instante más reciente de memoria.
+ * @param memoryInstantCommitedCommited Nombre del elemento en el que se renderiza el instante más reciente de memoria comprometida.
+ * @param memoryInstantCommitedUsed Nombre del elemento en el que se renderiza el instante más reciente de memoria usada.
  */
 function initSystemMonitor(periodSelector, segmentSelector, datetimePickerAccessFrom, datetimePickerAccessTo, applyTimeWindowButton,
 		cpuHistory, cpuInstant,
 		threadsHistory, threadsInstant,
-		memoryHistory, memoryInstant)
+		memoryHistory, memoryInstantCommited, memoryInstantCommitedUsed)
 {
 	systemMonitorWindow = SystemMonitorWindow();
 
@@ -244,7 +245,7 @@ function initSystemMonitor(periodSelector, segmentSelector, datetimePickerAccess
 	});
 
 	initSystemMonitorMonitor(cpuHistory, cpuInstant,
-			threadsHistory, threadsInstant, memoryHistory, memoryInstant);
+			threadsHistory, threadsInstant, memoryHistory, memoryInstantCommited, memoryInstantCommitedUsed);
 
 	// Asignación de la función de destrución de los procesos activos.
 	App.destructionFunction = destroySystemMonitor;

@@ -151,7 +151,7 @@ var memoryHistoryChartData = {
 		        	   data: []
 		           },
 		           {
-		        	   label: "Reservada",
+		        	   label: "Comprometida",
 		        	   fillColor: "rgba(151,287,205,0.2)",
 		        	   strokeColor: "rgba(151,287,205,1)",
 		        	   pointColor: "rgba(151,287,205,1)",
@@ -191,4 +191,66 @@ var memoryHistoryChartData = {
 		        	   data: []
 		           }
 		           ]
+};
+
+//Memoria comprometida en el instante más reciente.
+var memoryInstantCommitedChartOptions = clone(stackedBarChartOptions);
+memoryInstantCommitedChartOptions.scaleLabel = "<%= bytesFormatter(Number(value))%>";
+memoryInstantCommitedChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+memoryInstantCommitedChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
+
+var memoryInstantCommitedChartData = {
+		labels : [""],
+		datasets : [
+		            {
+		            	fillColor : "rgba(251,187,205,0)",
+		            	strokeColor : "rgba(251,187,205,1)",
+		            	highlightFill: "rgba(251,187,205,0)",
+		            	highlightStroke: "rgba(251,187,205,1)",
+		            	data : [0]
+		            },
+		            {
+		            	fillColor: "rgba(151,287,205,0.8)",
+		            	strokeColor: "rgba(151,287,205,1)",
+		            	highlightFill : "rgba(151,287,205,0.8)",
+		            	highlightStroke : "rgba(151,287,205,1)",
+		            	data : [0]
+		            }
+		            ]
+};
+
+//Uso de memoria en el instante más reciente.
+var memoryInstantUsedChartOptions = clone(stackedBarChartOptions);
+memoryInstantUsedChartOptions.scaleLabel = "<%= bytesFormatter(Number(value))%>";
+memoryInstantUsedChartOptions.tooltipTemplate = "<%if (label){%><%=label%>: <%}%><%= bytesFormatter(Number(value)) %>";
+memoryInstantUsedChartOptions.multiTooltipTemplate = "<%= bytesFormatter(Number(value)) %>";
+
+var memoryInstantUsedChartData = {
+		labels : [""],
+		datasets : [
+		            {
+		            	// Comprometida.
+		            	fillColor: "rgba(151,287,205,0)",
+		            	strokeColor: "rgba(151,287,205,1)",
+		            	highlightFill : "rgba(151,287,205,0)",
+		            	highlightStroke : "rgba(151,287,205,1)",
+		            	data : [0]
+		            },
+		            {
+		            	// Heap.
+		            	fillColor : "rgba(255,109,58,0.8)",
+		            	strokeColor : "rgba(255,109,58,1)",
+		            	highlightFill: "rgba(255,109,58,0.8)",
+		            	highlightStroke: "rgba(255,109,58,1)",
+		            	data : [0]
+		            },
+		            {
+		            	// Non heap.
+		            	fillColor: "rgba(251,287,205,0.8)",
+		            	strokeColor: "rgba(251,287,205,1)",
+		            	highlightFill : "rgba(251,287,205,0.8)",
+		            	highlightStroke : "rgba(251,287,205,1)",
+		            	data : [0]
+		            }
+		            ]
 };

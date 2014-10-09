@@ -44,6 +44,9 @@ function ChartHelper(chartId) {
 		else if (this.chartType == "radar") { 
 			this.chart = new Chart(this.canvasContext).Radar(data, options);
 		}
+		else if (this.chartType == "stackedBar") {
+			this.chart = new Chart(this.canvasContext).StackedBar(data, options);
+		}
 
 		this.legendContainer.innerHTML = this.chart.generateLegend();
 	}
@@ -113,6 +116,26 @@ function ChartHelper(chartId) {
 
 				previousData[i] = this.chart.segments[i].value; 
 				this.chart.segments[i].value = data[i];
+			}
+
+			this.chart.update();
+
+			return previousData;
+		}
+		else if (this.chartType == "stackedBar") {
+			
+			var previousData = new Array(data.length);
+
+			for (var i=0; i<data.length; i++) {
+
+				var dataset = new Array(data[i].length);
+
+				for (var j=0; j<data[i].length; j++) {
+				
+					this.chart.datasets[i].bars[j].value = data[i][j];
+				}
+				
+				previousData[i] = dataset;
 			}
 
 			this.chart.update();

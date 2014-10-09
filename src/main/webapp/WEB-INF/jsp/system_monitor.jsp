@@ -140,15 +140,23 @@
 						<div class="col-sx-6 col-md-8">
 							<div class="form-control-group">
 								<div id="memoryHistory">
-									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="300px"></canvas>
 									<div class="chart-legend"></div>
 								</div>
 							</div>
 						</div>
-						<div class="col-sx-6 col-md-4">
+						<div class="col-sx-3 col-md-2">
 							<div class="form-control-group">
-								<div id="memoryInstant" >
-									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="200px"></canvas>
+								<div id="memoryInstantCommited" >
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="300px"></canvas>
+                                    <div class="chart-legend"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sx-3 col-md-2">
+							<div class="form-control-group">
+								<div id="memoryInstantUsed" >
+									<canvas style="width: 100%; height: 200px;" class="form-control" id="" width="" height="300px"></canvas>
                                     <div class="chart-legend"></div>
 								</div>
 							</div>
@@ -163,5 +171,5 @@
 initSystemMonitor('period', 'segment', 'datetimePickerAccessFrom', 'datetimePickerAccessTo', 'applyTimeWindowButton',
 			'cpuHistory', 'cpuInstant',
 			'threadsHistory', 'threadsInstant', 
-			'memoryHistory', 'memoryInstant');
+			'memoryHistory', 'memoryInstantCommited', 'memoryInstantUsed');
 </script>

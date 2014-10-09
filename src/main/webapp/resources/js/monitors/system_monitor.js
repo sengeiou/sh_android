@@ -6,7 +6,8 @@ var cpuInstantChart;
 var threadsHistoryChart;
 var threadsInstantChart;
 var memoryHistoryChart;
-var memoryInstantChart;
+var memoryInstantCommitedChart;
+var memoryInstantUsedChart;
 
 
 /**
@@ -17,16 +18,18 @@ var memoryInstantChart;
  * @param threadsHistory Nombre del gráfico histórico de hilos de ejecución.
  * @param threadsInstant Nombre del gráfico de hilos de ejecución en el instante más reciente.
  * @param memoryHistory Nombre del elemento en el que se renderiza el histórico de memoria.
- * @param memoryInstant Nombre del elemento en el que se renderiza el instante más reciente de memoria.
+ * @param memoryInstantCommited Nombre del elemento en el que se renderiza el instante más reciente de memoria comprometida.
+ * @param memoryInstantUsed Nombre del elemento en el que se renderiza el instante más reciente de memoria usada.
  */
-function initSystemMonitorMonitor(cpuHistory, cpuInstant, threadsHistory, threadsInstant, memoryHistory, memoryInstant) {
+function initSystemMonitorMonitor(cpuHistory, cpuInstant, threadsHistory, threadsInstant, memoryHistory, memoryInstantCommited, memoryInstantUsed) {
 
 	cpuHistoryChart = ChartHelper(cpuHistory);
 	cpuInstantChart = ChartHelper(cpuInstant);
 	threadsHistoryChart = ChartHelper(threadsHistory);
 	threadsInstantChart = ChartHelper(threadsInstant);
 	memoryHistoryChart = ChartHelper(memoryHistory);
-	memoryInstantChart = ChartHelper(memoryInstant);
+	memoryInstantCommitedChart = ChartHelper(memoryInstantCommited);
+	memoryInstantUsedChart = ChartHelper(memoryInstantUsed);
 }
 
 /**
@@ -220,17 +223,24 @@ function systemMemoryMonitorRequestWindow(systemMonitorWindow, isRefresh) {
 				memoryHistoryChart.createChart("line", memoryHistoryChartOptions, memoryHistoryChartData);
 			}
 
-			// Uso de memoria en el instante más reciente.
-			/*
-			if (memoryInstantChart != null) {
+			// Memoria comprometida en el instante más reciente.
+			if (memoryInstantCommitedChart != null) {
 
-				memoryInstantChartData[0].value = 100 - responseCPULoad[responseCPULoad.length-1];
-				memoryInstantChartData[1].value = responseSystemCPULoad[responseSystemCPULoad.length-1];
-				memoryInstantChartData[2].value = responseApplicationCPULoad[responseApplicationCPULoad.length-1];
-
-				memoryInstantChart.createChart("pie", memoryInstantChartOptions, memoryInstantChartData);
+				memoryInstantCommitedChartData.datasets[0].data[0] = responseTotalMaxMemory[responseTotalMaxMemory.length-1] - responseTotalCommitted[responseTotalCommitted.length-1];
+				memoryInstantCommitedChartData.datasets[1].data[0] = responseTotalCommitted[responseTotalCommitted.length-1];
+				
+				memoryInstantCommitedChart.createChart("stackedBar", memoryInstantCommitedChartOptions, memoryInstantCommitedChartData);
 			}
-			 */
+			
+			// Uso de memoria en el instante más reciente.
+			if (memoryInstantUsedChart != null) {
+				
+				memoryInstantUsedChartData.datasets[0].data[0] = responseTotalCommitted[responseTotalCommitted.length-1] - responseUsedHeapMemory[responseUsedHeapMemory.length-1] - responseUsedNonHeapMemory[responseUsedNonHeapMemory.length-1];
+				memoryInstantUsedChartData.datasets[1].data[0] = responseUsedHeapMemory[responseUsedHeapMemory.length-1];
+				memoryInstantUsedChartData.datasets[2].data[0] = responseUsedNonHeapMemory[responseUsedNonHeapMemory.length-1];
+				
+				memoryInstantUsedChart.createChart("stackedBar", memoryInstantUsedChartOptions, memoryInstantUsedChartData);
+			}
 		}
 		else if (jsonResponse["data"]["Timestamp"].length > 0) {
 
@@ -261,18 +271,24 @@ function systemMemoryMonitorRequestWindow(systemMonitorWindow, isRefresh) {
 				memoryHistoryChart.setData(label, data, true);
 			}
 
-			// Uso de memoria en el instante más reciente.
-			/*
-			if (cpuInstantChart != null) {
+			// Memoria comprometida en el instante más reciente.
+			if (memoryInstantCommitedChart != null) {
 
-				var cpuLoad = 100 - jsonResponse["data"]["CPULoad"][0];
-				var systemCPULoad = jsonResponse["data"]["SystemCPULoad"][0];
-				var applicationCPULoad = jsonResponse["data"]["ApplicationCPULoad"][0];
-
-				cpuInstantChart.chart.options.animation = false;
-				cpuInstantChart.setData(null, [cpuLoad, systemCPULoad, applicationCPULoad], true);
+				var totalMaxMemory = jsonResponse["data"]["TotalMaxMemory"][0];
+				var totalCommitted = jsonResponse["data"]["TotalCommitted"][0];
+				
+				memoryInstantCommitedChart.setData(null, [[totalMaxMemory - totalCommitted], [totalCommitted]], true);
 			}
-			 */
+			
+			// Uso de memoria en el instante más reciente.
+			if (memoryInstantUsedChart != null) {
+				
+				var totalCommitted = jsonResponse["data"]["TotalCommitted"][0];
+				var usedHeapMemory = jsonResponse["data"]["UsedHeapMemory"][0];
+				var usedNonHeapMemory = jsonResponse["data"]["UsedNonHeapMemory"][0];
+				
+				memoryInstantUsedChart.setData(null, [[totalCommitted - usedHeapMemory - usedNonHeapMemory], [usedHeapMemory], [usedNonHeapMemory]], true);
+			}
 		}
 	}
 }
