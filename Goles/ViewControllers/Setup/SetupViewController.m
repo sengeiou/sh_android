@@ -57,15 +57,14 @@
     [self.view addGestureRecognizer:tap];
   
     [self addTextFields];
+    
+    [self textLocalizable];
 }
 
 -(void)adjustFrame{
    
     self.mtableView.frame = CGRectMake(self.mtableView.frame.origin.x, 0, self.view.frame.size.width, self.mtableView.frame.size.height);
     
-    /*if ([Utils getIphone:self.view.frame.size.height] == 6 || [Utils getIphone:self.view.frame.size.height] == 7)
-        self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-15, self.lblNote.frame.size.width, self.lblNote.frame.size.height);*/
-   
     if ([Utils getIphone:self.view.frame.size.height] == 7)
         self.lblNote.frame = CGRectMake(self.lblNote.frame.origin.x, self.lblNote.frame.origin.y-8, self.lblNote.frame.size.width, self.lblNote.frame.size.height);
 
@@ -108,16 +107,26 @@
     txtFieldName.delegate = self;
     txtFieldName.clearButtonMode = YES;
     [txtFieldName setReturnKeyType:UIReturnKeyNext];
-    txtFieldName.placeholder = @"Required";
+    txtFieldName.placeholder = NSLocalizedString(@"Required", nil);
     txtFieldName.autocapitalizationType = UITextAutocapitalizationTypeNone;
 
     txtFieldPwd = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
     txtFieldPwd.delegate = self;
     txtFieldPwd.clearButtonMode = YES;
     [txtFieldPwd setReturnKeyType:UIReturnKeyGo];
-    txtFieldPwd.placeholder = @"Required";
+    txtFieldPwd.placeholder = NSLocalizedString(@"Required", nil);
     txtFieldPwd.secureTextEntry = YES;
     txtFieldPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
+}
+
+#pragma mark - Localizable Strings
+-(void)textLocalizable{
+    
+    [self.btnForgotPwd setTitle: NSLocalizedString(@"Forgot Password?", nil) forState:UIControlStateNormal];
+    [self.btnCreateCount setTitle:NSLocalizedString(@"Create New Account", nil) forState:UIControlStateNormal];
+    [self.btnSignIn setTitle:NSLocalizedString(@"Sign In with Facebook", nil) forState:UIControlStateNormal];
+    [self.btnEnter setTitle:NSLocalizedString(@"Enter", nil)];
+    self.lblNote.text = NSLocalizedString(@"Shootr will never post without your permission.", nil);
 }
 
 - (BOOL) shouldAutorotate {
@@ -136,7 +145,7 @@
 
 -(void)modifyNavigationBar{
     
-    self.navigationItem.backBarButtonItem.title = @"Back";
+    self.navigationItem.backBarButtonItem.title = NSLocalizedString(@"Back", nil);
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
                                                   forBarMetrics:UIBarMetricsDefault];
@@ -200,7 +209,7 @@
      switch (indexPath.row) {
          case 0:
          {
-            cell.textLabel.text = @"Email or Username";
+            cell.textLabel.text = NSLocalizedString(@"Email or Username", nil);
 
              txtFieldName.frame = CGRectMake(177,3,self.view.frame.size.width-180,40);
             [cell addSubview:txtFieldName];
@@ -208,7 +217,7 @@
              break;
          case 1:
          {
-             cell.textLabel.text = @"Password";
+             cell.textLabel.text = NSLocalizedString(@"Password", nil);
              txtFieldPwd.frame = CGRectMake(177,3,self.view.frame.size.width-180,40);
 
              [cell addSubview:txtFieldPwd];
@@ -248,16 +257,18 @@
     }else  if (status && (lengthName < 3 || lengthPwd <  6)){
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-            [alert show];
-
+         
+            [self showAlertBadText];
         });
     }
 }
 
+-(void)showAlertBadText{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Id or Password are not valid", nil) message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+    [alert show];
+}
 
 #pragma mark - Webservice response methods
-
 //------------------------------------------------------------------------------
 - (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error {
     
@@ -288,13 +299,14 @@
         }
         
     }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self showAlertBadText];
+        });
     }
 }
 
 #pragma mark - UITextField response methods
-
 //------------------------------------------------------------------------------
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
     
@@ -342,23 +354,12 @@
       if (lengthName > 2 && lengthPwd >  5)
         [self passEnter:nil];
       else{
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Id or Password are not valid" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-          [alert show];
+          [self showAlertBadText];
       }
     }
     
     return true;
 }
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 
 @end

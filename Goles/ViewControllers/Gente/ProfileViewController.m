@@ -42,27 +42,15 @@
 
 @implementation ProfileViewController
 
-//- (id)initWithCoder:(NSCoder*)aDecoder
-//{
-//    if(self = [super initWithCoder:aDecoder]) {
-//        UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
-//                                    initWithTitle:@" "
-//                                    style:UIBarButtonItemStylePlain
-//                                    target:self
-//                                    action:nil];
-//        self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
-//    }
-//    return self;
-//}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
    
     [self customView];
+    [self textLocalizable];
+
     [self dataFillView];
     
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    
 }
 
 //------------------------------------------------------------------------------
@@ -90,7 +78,8 @@
     
     self.lblName.text = self.selectedUser.name;
     
-    self.lblRank.text = [NSString stringWithFormat:@"rank %@", self.selectedUser.rank];
+    NSString *rank =  NSLocalizedString(@"rank", nil);
+    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
     
     self.lblTeamBio.text = self.selectedUser.bio;
     [self.lblTeamBio sizeToFit];
@@ -117,7 +106,7 @@
 //------------------------------------------------------------------------------
 - (void)setEditProfile {
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setTitle:@"EDIT PROFILE" forState:UIControlStateNormal];
+    [self.btnFollow setTitle:NSLocalizedString(@"EDIT PROFILE", nil) forState:UIControlStateNormal];
     self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
@@ -129,7 +118,7 @@
 - (void)setFollowToNo {
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setAttributedTitle:[Utils formatTitle:@"+ FOLLOW"] forState:UIControlStateNormal];
+    [self.btnFollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
@@ -139,7 +128,7 @@
 //------------------------------------------------------------------------------
 - (void)setFollowToYes {
 	
-    [self.btnFollow setTitle:@" FOLLOWING" forState:UIControlStateNormal];
+    [self.btnFollow setTitle:NSLocalizedString(@"FOLLOWING", nil) forState:UIControlStateNormal];
     self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
@@ -169,9 +158,6 @@
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);
-
-            
-            NSLog(@"%@", response);
         }];
     }else{
         self.imgPhoto.image = image;
@@ -186,6 +172,28 @@
 }
 
 
+#pragma mark - Localizable Strings
+-(void)textLocalizable{
+    
+    self.lblPoints.text = NSLocalizedString(@"Points", nil);
+    self.lblFollowing.text = NSLocalizedString(@"Following", nil);
+    self.lblFollowers.text = NSLocalizedString(@"Followers", nil);
+
+    [self setSegments];
+}
+
+- (void)setSegments
+{
+    while(self.segmentedControl.numberOfSegments > 0) {
+        [self.segmentedControl removeSegmentAtIndex:0 animated:NO];
+    }
+    
+    [self.segmentedControl insertSegmentWithTitle:NSLocalizedString(@"Shots", nil) atIndex:0 animated:NO];
+    [self.segmentedControl insertSegmentWithTitle:NSLocalizedString(@"Predictions", nil) atIndex:1 animated:NO];
+    
+    self.segmentedControl.selectedSegmentIndex = 0;
+
+}
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -209,8 +217,6 @@
     
     if(refresh)
         [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
-    
-    
 }
 
 //------------------------------------------------------------------------------
@@ -221,7 +227,6 @@
             self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
             [self dataFillView];
         }
-
     }
 }
 

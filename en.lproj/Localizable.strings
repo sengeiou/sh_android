@@ -15,3 +15,55 @@
 "PeopleTabTitle" = "People";
 "TimelineTabTitle" = "Timeline";
 
+
+//SETUP
+
+/************storyboard ***************/
+"Register with Email" = "Register with Email";
+"Sign In" = "Sign In";
+"Sign In with Facebook" = "Sign In with Facebook";
+"Forgot Password?"= "Forgot Password?";
+"Shootr will never post without your permission." = "Shootr will never post without your permission.";
+"Create New Account" = "Create New Account";
+"Enter" = "Enter";
+/************codigo ***************/
+"Required" = "Required";
+"Back" = "Back";
+"Email or Username" = "Email or Username";
+"Password" = "Password";
+/************Alertas ***************/
+"Id or Password are not valid" = "Id or Password are not valid";
+"OK" = "OK";
+
+//PEOPLE
+/************storyboard ***************/
+"Points" = "Points";
+"Following" = "Following";
+"Followers" = "Followers";
+"Shots" = "Shots";
+"Predictions" = "Predictions";
+/************codigo ***************/
+"rank" = "rank";
+"EDIT PROFILE" = "EDIT PROFILE";
+ "FOLLOWING" = " FOLLOWING";
+"+ FOLLOW" = "+ FOLLOW";
+
+
+//TIMELINE
+/************storyboard ***************/
+"Now Playing" = "Now Playing";
+"Ignore" = "Ignore";
+"I'm Watching" = "I'm Watching";
+"No Shots" = "No Shots";
+"Share with friends about football." = "Share with friends about football.";
+"Start Shooting" = "Start Shooting";
+/************codigo ***************/
+
+
+
+
+
+
+
+
+

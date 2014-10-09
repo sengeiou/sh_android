@@ -116,6 +116,16 @@
         self.btnRegister.frame = CGRectMake(self.btnRegister.frame.origin.x, self.btnRegister.frame.origin.y, self.btnRegister.frame.size.width, self.btnRegister.frame.size.height);
 
     }
+    
+    [self textLocalizable];
+}
+
+#pragma mark - Localizable Strings
+-(void)textLocalizable{
+    
+    [self.btnRegister setTitle: NSLocalizedString(@"Register with Email", nil) forState:UIControlStateNormal];
+    [self.btnSignIn setTitle:NSLocalizedString(@"Sign In", nil) forState:UIControlStateNormal];
+    [self.btnFacebook setTitle:NSLocalizedString(@"Sign In with Facebook", nil) forState:UIControlStateNormal];
 }
 
 -(BOOL)prefersStatusBarHidden {
