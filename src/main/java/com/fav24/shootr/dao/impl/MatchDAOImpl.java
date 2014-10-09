@@ -147,4 +147,10 @@ public class MatchDAOImpl extends BaseDAOImpl implements MatchDAO {
 		return getJdbcTemplate().query(query, new Object[] { idSeason }, new BeanPropertyRowMapper<Match>(Match.class));
 	}
 
+	@Override
+	public List<Match> getAllMatchesBySeasonOptaId(Long idSeasonOpta) {
+		String query = PropertiesManager.getProperty("match.select.byidSeasonOpta");
+		return getJdbcTemplate().query(query, new Object[] { idSeasonOpta }, new BeanPropertyRowMapper<Match>(Match.class));
+	}
+
 }

@@ -48,4 +48,11 @@ public interface MatchDAO extends BaseDAO {
      * @return Matchs of the season.
      */
 	List<Match> getAllMatchesBySeasonId(Long idSeason);
+	
+	/**
+     * Given an idSeasonOpta, return all its Matchs.
+     * @param idSeasonOpta opta season identifier.
+     * @return Matchs of the opta season.
+     */
+	List<Match> getAllMatchesBySeasonOptaId(Long idSeasonOpta);
 }
