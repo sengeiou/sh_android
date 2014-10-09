@@ -94,6 +94,6 @@
 
     <string name="activity_find_friends_title">Find People</string>
     <string name="activity_find_friends_hint">Find People</string>
-    <string name="activity_find_friends_empty_message">No results found</string>
+    <string name="activity_find_friends_empty_message">No results.</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 </resources>
