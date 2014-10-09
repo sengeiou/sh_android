@@ -81,7 +81,12 @@ namespace Bagdad
             // Set the page's ApplicationBar to a new instance of ApplicationBar.
             ApplicationBar = new ApplicationBar();
 
-            ApplicationBar.Mode = ApplicationBarMode.Minimized;
+            ApplicationBarIconButton appBarButtonSearch =
+                new ApplicationBarIconButton(new
+                Uri("/Resources/icons/appbar.magnify.png", UriKind.Relative));
+            appBarButtonSearch.Text = AppResources.FindFriends;
+            appBarButtonSearch.Click += appBarButtonSearch_Click;
+            ApplicationBar.Buttons.Add(appBarButtonSearch);
             
             ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
@@ -97,6 +102,11 @@ namespace Bagdad
                 new ApplicationBarMenuItem(AppResources.Me);
             appBarMenuItemMe.Click += appBarMenuItemMe_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
+        }
+
+        private void appBarButtonSearch_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/FindFriends.xaml", UriKind.Relative));
         }
 
         private void appBarMenuItemMe_Click(object sender, EventArgs e)

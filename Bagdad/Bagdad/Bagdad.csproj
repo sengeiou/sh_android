@@ -98,6 +98,9 @@
     <Compile Include="Followers.xaml.cs">
       <DependentUpon>Followers.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FindFriends.xaml.cs">
+      <DependentUpon>FindFriends.xaml</DependentUpon>
+    </Compile>
     <Compile Include="People.xaml.cs">
       <DependentUpon>People.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Followers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FindFriends.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

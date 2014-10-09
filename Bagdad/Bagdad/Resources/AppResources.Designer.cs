@@ -124,6 +124,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a FIND FRIENDS.
+        /// </summary>
+        public static string FindFriends {
+            get {
+                return ResourceManager.GetString("FindFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Followers.
         /// </summary>
         public static string Followers {

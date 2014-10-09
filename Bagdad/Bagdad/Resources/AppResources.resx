@@ -346,4 +346,8 @@
     <value>PEOPLE</value>
     <comment>People.xaml</comment>
   </data>
+  <data name="FindFriends" xml:space="preserve">
+    <value>FIND FRIENDS</value>
+    <comment>People.xaml, FindFriends.xaml</comment>
+  </data>
 </root>
