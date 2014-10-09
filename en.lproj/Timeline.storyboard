@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -100,10 +100,11 @@
                                                     </variation>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LKJ-5Q-sCn">
-                                                    <rect key="frame" x="8" y="16" width="65" height="60"/>
+                                                    <rect key="frame" x="8" y="8" width="65" height="52"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="65" id="Xyh-ND-SO6"/>
-                                                        <constraint firstAttribute="height" constant="60" id="edM-Ye-PCi"/>
+                                                        <constraint firstAttribute="height" constant="52" id="edM-Ye-PCi"/>
                                                     </constraints>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -140,18 +141,19 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="LKJ-5Q-sCn" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="8" id="8Vo-XE-UUP"/>
                                                 <constraint firstItem="2YE-xU-tH9" firstAttribute="baseline" secondItem="XXk-Q8-LaK" secondAttribute="baseline" id="Fb1-Jo-XiU"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dLo-GY-onO" secondAttribute="trailing" constant="12" id="MUF-2e-Kg4"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="15" id="NOH-uj-RRh"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="bottom" secondItem="2EL-DM-I0W" secondAttribute="bottomMargin" priority="800" id="c5q-u7-IUH"/>
                                                 <constraint firstItem="XXk-Q8-LaK" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="70" id="d20-1t-v77"/>
+                                                <constraint firstItem="LKJ-5Q-sCn" firstAttribute="centerX" secondItem="ekn-Ro-Da9" secondAttribute="centerX" constant="0.5" id="fUF-0Z-VhU"/>
                                                 <constraint firstItem="XXk-Q8-LaK" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="-2" id="gQA-DB-9qo"/>
                                                 <constraint firstItem="dLo-GY-onO" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="65" id="iod-YH-LWO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="2YE-xU-tH9" secondAttribute="trailing" constant="12" id="mcK-PJ-EH1"/>
-                                                <constraint firstItem="LKJ-5Q-sCn" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" id="oIF-WS-IS8"/>
+                                                <constraint firstItem="LKJ-5Q-sCn" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="-3" id="oIF-WS-IS8"/>
                                                 <constraint firstItem="ekn-Ro-Da9" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" constant="3" id="oSv-sU-DEU"/>
                                                 <constraint firstItem="ekn-Ro-Da9" firstAttribute="leading" secondItem="2EL-DM-I0W" secondAttribute="leadingMargin" constant="8" id="p5U-eH-sKe"/>
+                                                <constraint firstItem="LKJ-5Q-sCn" firstAttribute="top" secondItem="2EL-DM-I0W" secondAttribute="topMargin" id="uUF-Qv-baB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>

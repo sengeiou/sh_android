@@ -7,7 +7,7 @@
 
 #import "ShotTableViewCell.h"
 #import "User.h"
-#import "Utils.h"
+#import "TimeLineUtilities.h"
 #import "NSString+CleanLinks.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIButton+AFNetworking.h"
@@ -34,7 +34,7 @@
 
     self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
     self.txvText.textColor = [UIColor blackColor];
-    self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [Utils heightForShot:shot.comment]);
+    self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [TimeLineUtilities heightForShot:shot.comment]);
     self.txvText.scrollEnabled = NO;
     
     self.lblName.text = shot.user.name;
@@ -53,9 +53,9 @@
             
             UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
             
-            UIImage *img = [Utils drawText:[shot.user.name substringToIndex:1]
+            UIImage *img = [TimeLineUtilities drawText:[shot.user.name substringToIndex:1]
                                         inImage:imageDefault
-                                   atPoint:[Utils centerTextInImage:self.imgPhoto]andSizeFont:80];
+                                   atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto]andSizeFont:80];
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);
@@ -66,7 +66,7 @@
         self.imgPhoto.clipsToBounds = YES;
     }
     
-    self.lblDate.text = [Utils getDateShot:shot.csys_birth];
+    self.lblDate.text = [TimeLineUtilities getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;
 }
 

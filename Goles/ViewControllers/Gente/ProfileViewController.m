@@ -18,6 +18,7 @@
 #import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
 #import "Utils.h"
+#import "TimeLineUtilities.h"
 
 @interface ProfileViewController ()
 
@@ -162,9 +163,9 @@
             
             UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
             
-            UIImage *img = [Utils drawText:[self.selectedUser.name substringToIndex:1]
+            UIImage *img = [TimeLineUtilities drawText:[self.selectedUser.name substringToIndex:1]
                                    inImage:imageDefault
-                                   atPoint:[Utils centerTextInImage:self.imgPhoto] andSizeFont:80];
+                                   atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);

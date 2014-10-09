@@ -10,7 +10,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "Fav24Colors.h"
 #import <QuartzCore/QuartzCore.h>
-#import "Utils.h"
+#import "TimeLineUtilities.h"
 
 @implementation PeopleCustomCell
 
@@ -40,9 +40,9 @@
             
             UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
             
-            UIImage *img = [Utils drawText:[user.name substringToIndex:1]
+            UIImage *img = [TimeLineUtilities drawText:[user.name substringToIndex:1]
                                    inImage:imageDefault
-                                   atPoint:[Utils centerTextInImage:self.imgPhoto] andSizeFont:80];
+                                   atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
             NSLog(@"%@", response);

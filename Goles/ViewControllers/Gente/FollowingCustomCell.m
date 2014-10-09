@@ -13,6 +13,7 @@
 #import "CoreDataManager.h"
 #import "Follow.h"
 #import <QuartzCore/QuartzCore.h>
+#import "TimeLineUtilities.h"
 #import "Utils.h"
 
 @implementation FollowingCustomCell
@@ -52,14 +53,12 @@
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
             
-            UIImage *img = [Utils drawText:[user.name substringToIndex:1]
+            UIImage *img = [TimeLineUtilities drawText:[user.name substringToIndex:1]
                                    inImage:imageDefault
-                                   atPoint:[Utils centerTextInImage:self.imgPhoto] andSizeFont:80];
+                                   atPoint:[TimeLineUtilities centerTextInImage:self.imgPhoto] andSizeFont:80];
             
             self.imgPhoto.image = img;
-            NSLog(@"%@", response);
 
-            NSLog(@"%@", response);
         }];
     }else{
         self.imgPhoto.image = image;

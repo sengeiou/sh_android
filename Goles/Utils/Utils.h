@@ -52,17 +52,7 @@
 
 + (BOOL) NSStringIsValidEmail:(NSString *)checkString;
 
-+(NSString *)getDateShot:(NSNumber *) dateShot;
-
-+ (CGFloat)heightForShot: (NSString *) text;
-
 + (int)getIphone: (CGFloat) height;
-
-+(UIImage*) drawText:(NSString*) text
-             inImage:(UIImage*)  image
-             atPoint:(CGPoint)   point andSizeFont:(CGFloat) sizeFont;
-
-+(CGPoint) centerTextInImage:(UIImageView *)imageView;
 
 +(NSMutableAttributedString *) formatTitle:(NSString *)text;
 

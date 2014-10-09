@@ -273,7 +273,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-
+    
+    CGFloat
+    if ([TimeLineUtilities heightForShot:shot.comment] <= 50)
+        return 60;
+    
     return [TimeLineUtilities heightForShot:shot.comment];
 	
 }
