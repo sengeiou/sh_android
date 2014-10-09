@@ -319,6 +319,12 @@
                                     <constraint firstAttribute="bottom" secondItem="zPp-71-7UU" secondAttribute="bottom" constant="8" id="xPN-m9-fLe"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Kp-9S-nop">
+                                <rect key="frame" x="0.0" y="481" width="600" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="yMb-1r-lBc"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -329,8 +335,11 @@
                             <constraint firstAttribute="trailingMargin" secondItem="HR5-eu-cfc" secondAttribute="trailing" constant="-20" id="IIt-1S-DOZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hAK-0x-gdD" secondAttribute="trailing" constant="-20" id="MyE-TD-7uU"/>
                             <constraint firstItem="HR5-eu-cfc" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="N7k-Sj-Bps"/>
+                            <constraint firstAttribute="width" secondItem="6Kp-9S-nop" secondAttribute="width" id="eYc-yY-VIg"/>
+                            <constraint firstItem="6Kp-9S-nop" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="lXs-qS-41k"/>
                             <constraint firstAttribute="trailingMargin" secondItem="VYB-IF-QLU" secondAttribute="trailing" constant="-16" id="lZH-Tr-gdk"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="nDk-BC-SGd"/>
+                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="6Kp-9S-nop" secondAttribute="bottom" id="oKz-9h-4Mu"/>
                             <constraint firstItem="VYB-IF-QLU" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" constant="163" id="snv-sK-PKB"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="u5c-J4-z3W"/>
                             <constraint firstItem="cfX-1I-iII" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="w2p-sj-d3E"/>
@@ -361,6 +370,7 @@
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
                         <outlet property="viewOptions" destination="hAK-0x-gdD" id="2pE-52-jOg"/>
                         <outlet property="viewTextField" destination="HR5-eu-cfc" id="cZd-QG-Qcf"/>
+                        <outlet property="viewToDisableTextField" destination="6Kp-9S-nop" id="4R7-l1-kZQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oxw-qx-bzr" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -40,6 +40,7 @@
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewNotShots;
+@property (nonatomic,weak)      IBOutlet    UIView                      *viewToDisableTextField;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewOptions;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewTextField;
 @property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
