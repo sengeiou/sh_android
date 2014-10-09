@@ -108,7 +108,8 @@ function applySystemMonitorChange(periodSelector, segmentSelector, datetimeFrom,
 	if (to != null && from != null) {
 
 		systemMonitorWindow.updateSystenMonitorWindow(period, from, to);
-		systemMonitorRequestWindow(systemMonitorWindow, false);
+		systemCpuMonitorRequestWindow(systemMonitorWindow, false);
+		systemMemoryMonitorRequestWindow(systemMonitorWindow, false);
 
 		if (segment != -1) {
 			startSystemMonitor(systemMonitorWindow);
@@ -131,10 +132,13 @@ function applySystemMonitorChange(periodSelector, segmentSelector, datetimeFrom,
  * @param cpuInstant Nombre del elemento en el que se renderiza el instante más reciente de CPU.
  * @param threadsHistory Nombre del elemento en el que se renderiza el histórico de hilos de ejecución.
  * @param threadsInstant Nombre del elemento en el que se renderiza el instante más reciente de hilos de ejecución.
+ * @param memoryHistory Nombre del elemento en el que se renderiza el histórico de memoria.
+ * @param memoryInstant Nombre del elemento en el que se renderiza el instante más reciente de memoria.
  */
 function initSystemMonitor(periodSelector, segmentSelector, datetimePickerAccessFrom, datetimePickerAccessTo, applyTimeWindowButton,
 		cpuHistory, cpuInstant,
-		threadsHistory, threadsInstant)
+		threadsHistory, threadsInstant,
+		memoryHistory, memoryInstant)
 {
 	systemMonitorWindow = SystemMonitorWindow();
 
@@ -240,7 +244,7 @@ function initSystemMonitor(periodSelector, segmentSelector, datetimePickerAccess
 	});
 
 	initSystemMonitorMonitor(cpuHistory, cpuInstant,
-			threadsHistory, threadsInstant);
+			threadsHistory, threadsInstant, memoryHistory, memoryInstant);
 
 	// Asignación de la función de destrución de los procesos activos.
 	App.destructionFunction = destroySystemMonitor;

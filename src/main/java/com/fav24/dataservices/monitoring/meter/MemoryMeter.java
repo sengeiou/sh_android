@@ -39,9 +39,9 @@ import com.fav24.dataservices.monitoring.Meter;
  *         |---------------|
  *                used
  *         |---------------------------|
- *                    max
+ *                    committed
  *         |----------------------------------------------|
- *                                committed
+ *                                max
  * </pre>
  */
 public final class MemoryMeter extends Meter {

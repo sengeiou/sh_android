@@ -110,7 +110,7 @@
 			</div>
 			<!-- Histórico de threads -->
 			<div class="panel panel-info">
-				<div class="panel-heading">Volumen de hilos de ejecuci&oacute;</div>
+				<div class="panel-heading">Volumen de hilos de ejecuci&oacute;n</div>
 				<div class="panel-body">
 					<div class="row-fluid">
 						<div class="col-sx-6 col-md-8">
@@ -162,5 +162,6 @@
 <script type="text/javascript">
 initSystemMonitor('period', 'segment', 'datetimePickerAccessFrom', 'datetimePickerAccessTo', 'applyTimeWindowButton',
 			'cpuHistory', 'cpuInstant',
-			'threadsHistory', 'threadsInstant');
+			'threadsHistory', 'threadsInstant', 
+			'memoryHistory', 'memoryInstant');
 </script>

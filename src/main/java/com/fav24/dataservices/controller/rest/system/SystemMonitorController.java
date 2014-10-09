@@ -127,13 +127,15 @@ public class SystemMonitorController extends BaseRestController {
 
 			if (memoryMonitorSample != null) {
 
-				Object[][] totalInitMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY)}};
-				Object[][] totalMaxMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY)}};
-				Object[][] totalCommittedMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY)}};
-				Object[][] totalUsedMemoryData = {{memoryMonitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY)}};
-				Object[][] UsedHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_HEAP_MEMORY)}};
-				Object[][] UsedNonHeapMemoryData = {{memoryMonitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY)}};
+				Object[] timestamp = {memoryMonitorSample.getTime()};
+				Object[] totalInitMemoryData = {memoryMonitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY)};
+				Object[] totalMaxMemoryData = {memoryMonitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY)};
+				Object[] totalCommittedMemoryData = {memoryMonitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY)};
+				Object[] totalUsedMemoryData = {memoryMonitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY)};
+				Object[] UsedHeapMemoryData = {memoryMonitorSample.getData(MemoryMeter.USED_HEAP_MEMORY)};
+				Object[] UsedNonHeapMemoryData = {memoryMonitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY)};
 
+				systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 				systemMonitorInfo.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemoryData);
 				systemMonitorInfo.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemoryData);
 				systemMonitorInfo.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemoryData);
@@ -153,32 +155,29 @@ public class SystemMonitorController extends BaseRestController {
 
 				if (systemMemoryStatus != null) {
 
-					Object[][] totalInitMemoryData = new Object[systemMemoryStatus.size()][2];
-					Object[][] totalMaxMemoryData = new Object[systemMemoryStatus.size()][2];
-					Object[][] totalCommittedMemoryData = new Object[systemMemoryStatus.size()][2];
-					Object[][] totalUsedMemoryData = new Object[systemMemoryStatus.size()][2];
-					Object[][] UsedHeapMemoryData = new Object[systemMemoryStatus.size()][2];
-					Object[][] UsedNonHeapMemoryData = new Object[systemMemoryStatus.size()][2];
+					Object[] timestamp = new Object[systemMemoryStatus.size()];
+					Object[] totalInitMemoryData = new Object[systemMemoryStatus.size()];
+					Object[] totalMaxMemoryData = new Object[systemMemoryStatus.size()];
+					Object[] totalCommittedMemoryData = new Object[systemMemoryStatus.size()];
+					Object[] totalUsedMemoryData = new Object[systemMemoryStatus.size()];
+					Object[] UsedHeapMemoryData = new Object[systemMemoryStatus.size()];
+					Object[] UsedNonHeapMemoryData = new Object[systemMemoryStatus.size()];
 
 					int i = 0;
 					for (MonitorSample monitorSample : systemMemoryStatus) {
 
-						totalInitMemoryData[i][0] = monitorSample.getTime();
-						totalInitMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY);
-						totalMaxMemoryData[i][0] = monitorSample.getTime();
-						totalMaxMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY);
-						totalCommittedMemoryData[i][0] = monitorSample.getTime();
-						totalCommittedMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY);
-						totalUsedMemoryData[i][0] = monitorSample.getTime();
-						totalUsedMemoryData[i][1] = monitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY);
-						UsedHeapMemoryData[i][0] = monitorSample.getTime();
-						UsedHeapMemoryData[i][1] = monitorSample.getData(MemoryMeter.USED_HEAP_MEMORY);
-						UsedNonHeapMemoryData[i][0] = monitorSample.getTime();
-						UsedNonHeapMemoryData[i][1] = monitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY);
+						timestamp[i] = monitorSample.getTime();
+						totalInitMemoryData[i] = monitorSample.getData(MemoryMeter.TOTAL_INIT_MEMORY);
+						totalMaxMemoryData[i] = monitorSample.getData(MemoryMeter.TOTAL_MAX_MEMORY);
+						totalCommittedMemoryData[i] = monitorSample.getData(MemoryMeter.TOTAL_COMMITTED_MEMORY);
+						totalUsedMemoryData[i] = monitorSample.getData(MemoryMeter.TOTAL_USED_MEMORY);
+						UsedHeapMemoryData[i] = monitorSample.getData(MemoryMeter.USED_HEAP_MEMORY);
+						UsedNonHeapMemoryData[i] = monitorSample.getData(MemoryMeter.USED_NONHEAP_MEMORY);
 
 						i++;
 					}
 
+					systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 					systemMonitorInfo.getData().put(MemoryMeter.TOTAL_INIT_MEMORY, totalInitMemoryData);
 					systemMonitorInfo.getData().put(MemoryMeter.TOTAL_MAX_MEMORY, totalMaxMemoryData);
 					systemMonitorInfo.getData().put(MemoryMeter.TOTAL_COMMITTED_MEMORY, totalCommittedMemoryData);
@@ -212,17 +211,17 @@ public class SystemMonitorController extends BaseRestController {
 	 */
 	@RequestMapping(value = "/cpu", method = { RequestMethod.POST })
 	public @ResponseBody SystemMonitorInfoDto getCPU(@RequestBody final Map<String, Object> parameters) {
-		
+
 		long threadId = Thread.currentThread().getId();
-		
+
 		cpuMeter.excludeThread(threadId);
-		
+
 		Number offset = (Number) parameters.get("offset");
 		Number period = (Number) parameters.get("period");
 		Number timeRange = (Number) parameters.get("timeRange");
-		
+
 		SystemMonitorInfoDto systemMonitorInfo = new SystemMonitorInfoDto();
-		
+
 		systemMonitorInfo.setName(CPU_MONITOR);
 		if (offset != null) {
 			systemMonitorInfo.setOffset(offset.longValue());
@@ -233,13 +232,13 @@ public class SystemMonitorController extends BaseRestController {
 		if (timeRange != null) {
 			systemMonitorInfo.setTimeRange(timeRange.longValue());
 		}
-		
+
 		if (systemMonitorInfo.getPeriod() == null || systemMonitorInfo.getTimeRange() == null) {
-			
+
 			MonitorSample cpuMonitorSample = systemService.getSystemCpuActivity();
-			
+
 			if (cpuMonitorSample != null) {
-				
+
 				Object[] timestamp = {cpuMonitorSample.getTime()};
 				Object[] peakThreadCountData = {cpuMonitorSample.getData(CpuMeter.PEAK_THREAD_COUNT)};
 				Object[] totalStartedThreadCountData = {cpuMonitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT)};
@@ -248,7 +247,7 @@ public class SystemMonitorController extends BaseRestController {
 				Object[] totalCpuLoadData = {cpuMonitorSample.getData(CpuMeter.CPU_LOAD)};
 				Object[] applicationCpuLoadData = {cpuMonitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD)};
 				Object[] systemCpuLoadData = {cpuMonitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD)};
-				
+
 				systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 				systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
 				systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
@@ -261,16 +260,16 @@ public class SystemMonitorController extends BaseRestController {
 			else {
 				systemMonitorInfo.setData(null);
 			}
-			
+
 		}
 		else {
-			
+
 			try {
-				
+
 				AbstractList<MonitorSample> systemCPUActivity = systemService.getSystemCpuActivity(systemMonitorInfo.getOffset(), systemMonitorInfo.getTimeRange(), systemMonitorInfo.getPeriod());
-				
+
 				if (systemCPUActivity != null) {
-					
+
 					Object[] timestamp = new Object[systemCPUActivity.size()];
 					Object[] peakThreadCountData = new Object[systemCPUActivity.size()];
 					Object[] totalStartedThreadCountData = new Object[systemCPUActivity.size()];
@@ -279,10 +278,10 @@ public class SystemMonitorController extends BaseRestController {
 					Object[] totalCpuLoadData = new Object[systemCPUActivity.size()];
 					Object[] applicationCpuLoadData = new Object[systemCPUActivity.size()];
 					Object[] systemCpuLoadData = new Object[systemCPUActivity.size()];
-					
+
 					int i = 0;
 					for (MonitorSample monitorSample : systemCPUActivity) {
-						
+
 						timestamp[i] = monitorSample.getTime();
 						peakThreadCountData[i] = monitorSample.getData(CpuMeter.PEAK_THREAD_COUNT);
 						totalStartedThreadCountData[i] = monitorSample.getData(CpuMeter.TOTAL_STARTED_THREAD_COUNT);
@@ -291,10 +290,10 @@ public class SystemMonitorController extends BaseRestController {
 						totalCpuLoadData[i] = monitorSample.getData(CpuMeter.CPU_LOAD);
 						applicationCpuLoadData[i] = monitorSample.getData(CpuMeter.APPLICATION_CPU_LOAD);
 						systemCpuLoadData[i] = monitorSample.getData(CpuMeter.SYSTEM_CPU_LOAD);
-						
+
 						i++;
 					}
-					
+
 					systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 					systemMonitorInfo.getData().put(CpuMeter.PEAK_THREAD_COUNT, peakThreadCountData);
 					systemMonitorInfo.getData().put(CpuMeter.TOTAL_STARTED_THREAD_COUNT, totalStartedThreadCountData);
@@ -303,20 +302,20 @@ public class SystemMonitorController extends BaseRestController {
 					systemMonitorInfo.getData().put(CpuMeter.CPU_LOAD, totalCpuLoadData);
 					systemMonitorInfo.getData().put(CpuMeter.APPLICATION_CPU_LOAD, applicationCpuLoadData);
 					systemMonitorInfo.getData().put(CpuMeter.SYSTEM_CPU_LOAD, systemCpuLoadData);
-					
+
 				}
 				else {
 					systemMonitorInfo.setData(null);
 				}
-				
+
 			} catch (ServerException e) {
-				
+
 				e.log(logger, false);
 			}
 		}
-		
+
 		cpuMeter.includeThread(threadId);
-		
+
 		return systemMonitorInfo;
 	}
 
