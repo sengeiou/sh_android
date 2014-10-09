@@ -42,8 +42,9 @@ public class TeamDAOImpl extends BaseDAOImpl implements TeamDAO {
 		factory.addParameter(new SqlParameter(Types.VARCHAR));// officialName
 		factory.addParameter(new SqlParameter(Types.VARCHAR));// shortName
 		factory.addParameter(new SqlParameter(Types.VARCHAR));// tlatName
+		factory.addParameter(new SqlParameter(Types.VARCHAR));// type
 
-		Object[] params = new Object[] {team.getIdTeamOpta(), team.getIdArea(), team.getClubName(), team.getOfficialName(), team.getShortName(), team.getTlaName()};
+		Object[] params = new Object[] {team.getIdTeamOpta(), team.getIdArea(), team.getClubName(), team.getOfficialName(), team.getShortName(), team.getTlaName(), team.getType()};
 
 		PreparedStatementCreator psc = factory.newPreparedStatementCreator(params);
 		GeneratedKeyHolder gkf = new GeneratedKeyHolder();
@@ -65,6 +66,7 @@ public class TeamDAOImpl extends BaseDAOImpl implements TeamDAO {
 				ps.setString(4, b.getOfficialName());
 				ps.setString(5, b.getShortName());
 				ps.setString(6, b.getTlaName());
+				ps.setString(7, b.getType());
 			}
 			public int getBatchSize() {
 				return teams.size();
