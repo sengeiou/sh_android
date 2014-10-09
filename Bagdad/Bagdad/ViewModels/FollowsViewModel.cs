@@ -95,7 +95,12 @@ namespace Bagdad.ViewModels
                     //Default Button
                     if (following.userInfo.isFollowed)
                     {
-                        following.buttonVisible = Visibility.Collapsed;
+                        following.buttonVisible = Visibility.Visible;
+                        following.buttonText = AppResources.ProfileButtonFollowing + "  ";
+                        following.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                        following.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
+                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.check.png", UriKind.RelativeOrAbsolute));
+                        following.buttonIconVisible = System.Windows.Visibility.Visible;
                         
                     }
                     else

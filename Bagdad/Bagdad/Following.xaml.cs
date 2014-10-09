@@ -55,9 +55,9 @@ namespace Bagdad
                 idUser = App.ID_USER;
             }
 
-            if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["userName"].Equals("") && !Title.Text.Contains(this.NavigationContext.QueryString["userName"]))
+            if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["userName"].Equals("") && Title.Text.Equals(""))
             {
-                Title.Text = this.NavigationContext.QueryString["userName"] + " " + Title.Text;
+                Title.Text = this.NavigationContext.QueryString["userName"];
             }
 
             if (followings.Followings.Count == 0)
