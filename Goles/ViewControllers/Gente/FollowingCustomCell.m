@@ -31,13 +31,14 @@
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
-     
-    if ([self checkIfImFollowingUser:user])
+   
+    if ([self checkIfImFollowingUser:user]){
+         NSLog(@"nameeeFOLLOWING :%@ ", user.name);
         [self configureFollowingButton];
-		
-    else
+    }else{
+         NSLog(@"nameeeFOLLERS :%@ ", user.name);
 		[self configureFollowButton];
-	
+    }
     if (user.idUser == [[UserManager singleton] getUserId])
         self.actionButton.hidden = YES;
     
@@ -70,9 +71,6 @@
     [self.actionButton setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
-    [self.actionButton setContentEdgeInsets:contentInsets];
 }
 
 //------------------------------------------------------------------------------

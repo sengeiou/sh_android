@@ -107,6 +107,7 @@
 #warning This notification needs to be here or in the ViewDidLoad?
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
     
+    self.viewToDisableTextField.hidden = YES;
 }
 
 #warning Really neede if remove all observer in dealloc?
@@ -452,6 +453,7 @@
     if (isShot){
         self.orientation = NO;
         [self shotCreated];
+        [self performSelectorOnMainThread:@selector(changecolortextview) withObject:nil waitUntilDone:NO];
     }else if(refresh)
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     else if(!status && !refresh && !isShot){
@@ -476,7 +478,9 @@
     [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
 
 }
-
+-(void)changecolortextview{
+    self.txtView.textColor = [UIColor lightGrayColor];
+}
 
 #pragma mark - ShotCreationProtocol response
 //------------------------------------------------------------------------------
@@ -484,6 +488,7 @@
     
     if (status && !error){
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+        lengthTextField = 0;
         [self addPlaceHolder];
         rows = 0;
         self.charactersLeft.hidden = YES;
@@ -865,7 +870,7 @@
 
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+//    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     [self restrictRotation:NO];
 }
 

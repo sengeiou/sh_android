@@ -20,6 +20,7 @@
 
 @property (nonatomic,strong) NSArray *usersList;
 @property (nonatomic,weak) IBOutlet UITableView *usersTable;
+@property (nonatomic, strong)       NSIndexPath         *indexToShow;
 
 @end
 
@@ -41,6 +42,12 @@
 		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
     }
 
+}
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 }
 
 #pragma mark - Table view data source
@@ -72,6 +79,8 @@
     User *selectedUser = self.usersList[indexPath.row];
     profileVC.selectedUser = selectedUser;
     
+    self.indexToShow = indexPath;
+
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
@@ -110,7 +119,7 @@
         if ([entityClass isSubclassOfClass:[Follow class]])
             [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]])
-            [self reloadDataAndTable];
+            [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }
 }
 #pragma mark - Conection response methods
