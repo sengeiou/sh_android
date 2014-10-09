@@ -2,15 +2,25 @@ package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.ShotMapper;
+import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
+import gm.mobi.android.service.dataservice.generic.OperationDto;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
@@ -23,7 +33,8 @@ public class ShotDtoFactoryTest {
 
     @Before
     public void setup() {
-        utilityDtoFactory = new UtilityDtoFactory();
+        utilityDtoFactory = mock(UtilityDtoFactory.class);
+        shotMapper = mock(ShotMapper.class);
         shotDtoFactory = new ShotDtoFactory(utilityDtoFactory, shotMapper);
     }
 
@@ -52,32 +63,24 @@ public class ShotDtoFactoryTest {
     }
 
     @Test
-    public void newShotDontHaveId() {
-        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5L, "Mock comment");
-        Map<String, Object> key = newShotOperationDto.getOps()[0].getMetadata().getKey();
-        Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
+    public void operationDtoIsConstructedWithDataFromShotMapper() {
+        String comment = "comment";
+        Map<String, Object> mockedData = new HashMap<>();
+        mockedData.put(GMContract.ShotTable.COMMENT, comment);
+        when(shotMapper.toDto(any(Shot.class))).thenReturn(mockedData);
 
-        assertThat(key).containsKey(GMContract.ShotTable.ID_SHOT);
-        assertThat(key.get(GMContract.ShotTable.ID_SHOT)).isNull();
-        assertThat(data).containsKey(GMContract.ShotTable.ID_SHOT);
-        assertThat(data.get(GMContract.ShotTable.ID_SHOT)).isNull();
-    }
+        GenericDto genericDto = new GenericDto();
+        ArgumentCaptor<OperationDto> operationDtoArgumentCaptor = ArgumentCaptor.forClass(OperationDto.class);
+        when(
+          utilityDtoFactory.getGenericDtoFromOperation(anyString(), operationDtoArgumentCaptor.capture())).thenReturn(
+          genericDto);
 
-    @Test
-    public void newShotContainsComment() {
-        String comment = "Spiderpig";
-        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5L, comment);
-        Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
-        assertThat(data.containsKey(GMContract.ShotTable.COMMENT));
-        assertThat(data.get(GMContract.ShotTable.COMMENT)).isEqualTo(comment);
-    }
+        shotDtoFactory.getNewShotOperationDto(5L, comment);
 
-    @Test
-    public void newShotContainsUser() {
-        Long idUser = 5L;
-        GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(idUser, "Mock comment");
-        Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
-        assertThat(data.containsKey(GMContract.ShotTable.ID_USER));
-        assertThat(data.get(GMContract.ShotTable.ID_USER)).isEqualTo(idUser);
+        OperationDto operationDto = operationDtoArgumentCaptor.getValue();
+        Map<String, Object> buildedData = operationDto.getData()[0];
+        System.out.println(buildedData);
+        assertThat(buildedData).isNotNull();
+        assertThat(buildedData).containsEntry(GMContract.ShotTable.COMMENT, comment);
     }
 }

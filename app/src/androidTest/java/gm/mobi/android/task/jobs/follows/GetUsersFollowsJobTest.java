@@ -41,11 +41,11 @@ public class GetUsersFollowsJobTest {
     }
 
     @Test
-    public void postCommunicationErrorWhenExceptionThrownRetrievingIds() {
+    public void postCommunicationErrorWhenExceptionThrownRetrievingFollowing() {
         BagdadService mockService = null;
         try {
             mockService = mock(BagdadService.class);
-            when(mockService.getFollows(anyLong(), anyLong(), anyInt(), anyBoolean())).thenThrow(
+            when(mockService.getFollowings(anyLong(),anyLong())).thenThrow(
                 ServerException.class);
         } catch (IOException e) {
             e.printStackTrace();

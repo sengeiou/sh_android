@@ -5,16 +5,23 @@ import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
+import gm.mobi.android.service.dataservice.generic.MetadataDto;
+import gm.mobi.android.service.dataservice.generic.OperationDto;
+import java.util.HashMap;
 import java.util.Map;
+import org.apache.maven.artifact.ant.shaded.cli.Commandline;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
@@ -28,8 +35,9 @@ public class UserDtoFactoryTest {
 
     @Before
     public void setup() {
-        utilityDtoFactory = new UtilityDtoFactory();
-        userDtoFactory = new UserDtoFactory(utilityDtoFactory, userMapper,teamMapper, followMapper);
+        utilityDtoFactory = mock(UtilityDtoFactory.class);
+        userMapper = mock(UserMapper.class);
+        userDtoFactory = new UserDtoFactory(utilityDtoFactory, userMapper, teamMapper, followMapper);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -43,35 +51,25 @@ public class UserDtoFactoryTest {
         userDtoFactory.getLoginOperationDto("", null);
     }
 
-
     @Test
-    public void loginWithEmailFillsEmailField() {
-        String email = "mock@fav24.com";
+    public void metadataDtoIsConstructedWithCorrectUserName() {
+        String userName = "userName";
+        String password = "password";
 
-        GenericDto dto = userDtoFactory.getLoginOperationDto(email, "nananana");
-        Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.EMAIL);
-        assertThat(keys).doesNotContainKey(GMContract.UserTable.USER_NAME);
-        assertEquals(email, keys.get(GMContract.UserTable.EMAIL));
+
+        ArgumentCaptor<OperationDto> operationDtoArgumentCaptor = ArgumentCaptor.forClass(OperationDto.class);
+
+
+        when(utilityDtoFactory.getGenericDtoFromOperation(anyString(),operationDtoArgumentCaptor.capture())).thenReturn(new GenericDto());
+
+        userDtoFactory.getLoginOperationDto(userName,password);
+
+        OperationDto operationDtoValue = operationDtoArgumentCaptor.getValue();
+
+        MetadataDto metadataDto = operationDtoValue.getMetadata();
+        Map<String, Object> key = metadataDto.getKey();
+
+        assertThat(key).containsEntry(GMContract.UserTable.USER_NAME,userName);
     }
 
-    @Test
-    public void loginWithUsernameFillsUsernameField() {
-        String username = "mock";
-
-        GenericDto dto = userDtoFactory.getLoginOperationDto(username, "nananana");
-        Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.USER_NAME);
-        assertThat(keys).doesNotContainKey(GMContract.UserTable.EMAIL);
-        assertEquals(username, keys.get(GMContract.UserTable.USER_NAME));
-    }
-
-    @Test
-    public void loginFillsPasswordField() {
-        String pass = "nananana";
-        GenericDto dto = userDtoFactory.getLoginOperationDto("mock", pass);
-        Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.PASSWORD);
-        assertEquals(pass, keys.get(GMContract.UserTable.PASSWORD));
-    }
 }

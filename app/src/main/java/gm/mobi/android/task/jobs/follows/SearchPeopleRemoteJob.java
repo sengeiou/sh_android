@@ -1,25 +1,20 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
-import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import gm.mobi.android.task.jobs.CancellableJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class SearchPeopleRemoteJob extends CancellableJob {
 
@@ -57,7 +52,7 @@ public class SearchPeopleRemoteJob extends CancellableJob {
     }
 
     @Override protected void run() throws SQLException, IOException {
-        if (!checkConnection()) {
+        if (!checkConnectionAndPostIfNotConnected()) {
             return;
         }
 
@@ -102,7 +97,7 @@ public class SearchPeopleRemoteJob extends CancellableJob {
         return RETRY_ATTEMPTS;
     }
 
-    private boolean checkConnection() {
+    private boolean checkConnectionAndPostIfNotConnected() {
         if (!networkUtil.isConnected(app)) {
             bus.post(new ConnectionNotAvailableEvent());
             return false;

@@ -17,6 +17,7 @@ import timber.log.Timber;
 import timber.log.Timber.Tree;
 
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -27,11 +28,16 @@ import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-
 public class GetUserInfoJobTest {
+
+    private Bus bus;
+    private SQLiteOpenHelper dbHelper;
 
     @org.junit.Before
     public void setup() {
+        dbHelper = mock(SQLiteOpenHelper.class);
+
+        bus = mock(Bus.class);
 
     }
 
@@ -62,38 +68,19 @@ public class GetUserInfoJobTest {
     @Test
     public void postResultInBusWhenUserIsFoundInDataBase(){
         UserManager userManager = mock(UserManager.class);
+
         when(userManager.getUserByIdUser(anyLong())).thenReturn(new User());
 
         FollowManager followManager = mock(FollowManager.class);
 
         TeamManager teamManager = mock(TeamManager.class);
 
-        SQLiteOpenHelper dbHelper = mock(SQLiteOpenHelper.class);
 
-        Bus bus = mock(Bus.class);
 
         GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null, userManager,followManager,teamManager);
         getUserInfoJob.init(1L,null);
         getUserInfoJob.retrieveDataFromDatabase();
         verify(bus).post(anyObject());
     }
-
-
-    @Test
-    public void postNullWhenTeamIsNotFoundInDataBase(){
-        TeamManager teamManager = mock(TeamManager.class);
-        when(teamManager.getTeamByIdTeam(anyLong())).thenReturn(new Team());
-
-        //GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null,null,null,teamManager);
-        //getUserInfoJob.init(1L,null);
-        //getUserInfoJob.retrieveDataFromDatabase();
-        verify(teamManager);
-
-    }
-
-
-
-
-
 
 }
