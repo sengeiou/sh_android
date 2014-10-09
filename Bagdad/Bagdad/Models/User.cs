@@ -296,5 +296,41 @@ namespace Bagdad.Models
             }
             return uvm;
         }
+
+        public async Task<List<FollowViewModel>> FindUsersInServer(String searchString, int offset)
+        {
+            Follow follow = new Follow();
+            List<int> myFollowings = await follow.getidUserFollowing();
+
+            List<FollowViewModel> users = new List<FollowViewModel>();
+            try
+            {
+                ServiceCommunication sc = new ServiceCommunication();
+
+                String json = "{\"alias\":\"FINDFRIENDS\"," + await sc.GetREQ() + ",\"status\":{\"code\":null,\"message\":null},\"ops\":[{\"data\":[{" + ops_data + "}],\"metadata\":{\"entity\":\"User\",\"filter\":{\"filterItems\":[],\"filters\":[{\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"deleted\",\"value\": null},{\"comparator\":\"ne\",\"name\":\"modified\",\"value\": null}],\"filters\":[],\"nexus\":\"or\"},{\"filterItems\":[{\"comparator\":\"ct\",\"name\":\"name\",\"value\":\"" + searchString + "\"},{\"comparator\":\"ct\",\"name\":\"userName\",\"value\":\"" + searchString + "\"}],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"},\"includeDeleted\":false,\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"key\":null,\"offset\": " + offset + ",\"operation\":\"retrieve\",\"totalItems\":null}}]}";
+
+                JObject response = JObject.Parse(await sc.MakeRequestToMemory(json));
+
+                bool iFollow;
+
+                if (response["status"]["code"].ToString().Equals("OK") && !response["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                {
+                    foreach (JToken user in response["ops"][0]["data"])
+                    {
+                        iFollow = false;
+
+                        if (myFollowings.Contains(int.Parse(user["idUser"].ToString()))) iFollow = true;
+
+                        users.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(user["idUser"].ToString()), userNickName = user["userName"].ToString(), userName = user["name"].ToString(), userURLImage = user["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(user["numFollowers"].ToString()), following = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), userBio = user["bio"].ToString(), userWebsite = user["website"].ToString() } });
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+            }
+            return users;
+        }
     }
 }

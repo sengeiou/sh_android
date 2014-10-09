@@ -9,7 +9,6 @@
     xmlns:local="clr-namespace:Bagdad"
     xmlns:tk="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignData SampleData/FollowingSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -54,7 +53,7 @@
         <TextBox x:Name="SearchBar" InputScope="Search" Grid.Row="1" Margin="0,0,0,24" AcceptsReturn="False" Loaded="SearchBar_Loaded" KeyDown="SearchBar_KeyDown"/>
 
         <!--Row2-->
-        <ListBox x:Name="followingList" Grid.Row="2" ItemsSource="{Binding Followings}" tk:TiltEffect.IsTiltEnabled="True">
+        <ListBox x:Name="findList" Grid.Row="2" ItemsSource="{Binding}" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="456" Margin="0,0,12,48">

@@ -25,13 +25,15 @@ namespace Bagdad
         private int scrollToChargue = 0;
         private bool endOfList = false;
         private int charge = 0;
-        FollowsViewModel searchedFriends;
+        List<FollowViewModel> searchedFriends;
+        UserViewModel uvm;
         public ProgressIndicator progress;
 
         public FindFriends()
         {
             InitializeComponent();
-            searchedFriends = new FollowsViewModel();
+            uvm = new UserViewModel();
+            searchedFriends = new List<FollowViewModel>();
             DataContext = searchedFriends;
             BuildLocalizedApplicationBar();
             progress = new ProgressIndicator()
@@ -92,7 +94,7 @@ namespace Bagdad
         private void goToProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
 
-            int userId = ((FollowViewModel)followingList.SelectedItem).userInfo.idUser;
+            int userId = ((FollowViewModel)findList.SelectedItem).userInfo.idUser;
             
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + userId, UriKind.Relative));
         }
@@ -102,11 +104,16 @@ namespace Bagdad
             SearchBar.Focus();
         }
 
-        private void SearchBar_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private async void SearchBar_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                //Do Search
+                if (SearchBar.Text.Length > 2)
+                {
+                    DataContext = await uvm.FindUsersInServer(SearchBar.Text, 0);
+                }
+
+                if(findList.Items.Count > 0) Focus();
             }
         }
 
