@@ -480,12 +480,10 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        self.txtView.backgroundColor = [UIColor whiteColor];
-        self.txtView.textColor = [UIColor blackColor];
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+        [self addPlaceHolder];
         rows = 0;
         self.charactersLeft.hidden = YES;
-        self.txtView.text = nil;
         [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
@@ -496,6 +494,13 @@
     }
 }
 
+-(void)addPlaceHolder{
+    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
+    self.txtView.text = placeHolder;
+    self.txtView.textColor = [UIColor blackColor];
+    self.txtView.backgroundColor = [UIColor whiteColor];
+
+}
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
