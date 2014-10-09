@@ -392,6 +392,7 @@
 //------------------------------------------------------------------------------
 - (void)sendShot{
     self.txtView.backgroundColor = [Fav24Colors backgroundTextViewSendShot];
+    self.viewToDisableTextField.hidden = NO;
 
     //self.txtView.userInteractionEnabled= NO;
     [self.txtView resignFirstResponder];
@@ -490,6 +491,8 @@
         self.btnShoot.enabled = NO;
         [self keyboardHide:nil];
         //self.txtView.userInteractionEnabled = YES;
+        self.viewToDisableTextField.hidden = YES;
+
     }else if (error){
         [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];
     }
@@ -577,6 +580,7 @@
             case 0:{
                 self.btnShoot.enabled = YES;
                 //self.txtView.userInteractionEnabled = YES;
+                self.viewToDisableTextField.hidden = YES;
                 self.orientation = NO;
                 [self keyboardHide:nil];
                 self.txtView.backgroundColor = [UIColor whiteColor];
