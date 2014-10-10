@@ -10,6 +10,7 @@ import com.fav24.dataservices.service.hook.GenericServiceHook;
 public class InsertShot implements GenericServiceHook {
 
 
+	private static final String ENTITY_SHOT = "Shot";
 	private static final String ATTR_COMMENT = "comment";
 
 	/**
@@ -77,7 +78,7 @@ public class InsertShot implements GenericServiceHook {
 	@Override
 	public <T> HookMethodOutput operationBegin(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) {
 
-		if (isOperationMod(operation.getMetadata().getOperation())) {
+		if (isOperationMod(operation.getMetadata().getOperation()) && ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
 			
 			int numberOfDataItems = operation.getData().size();
 			
@@ -93,7 +94,6 @@ public class InsertShot implements GenericServiceHook {
 						text = text.trim();
 						entry.setValue(text);
 					}
-
 				}
 			}
 		}
