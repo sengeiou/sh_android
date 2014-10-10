@@ -14,6 +14,7 @@
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
 		A5754FBC19E6FCEA00D20267 /* FindFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5754FBB19E6FCEA00D20267 /* FindFriendsTableViewController.m */; };
+		A5754FC019E7DB7900D20267 /* PeopleLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */; };
 		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
@@ -135,6 +136,8 @@
 		A53ACC0D19D96E26009421D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		A5754FBA19E6FCEA00D20267 /* FindFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindFriendsTableViewController.h; sourceTree = "<group>"; };
 		A5754FBB19E6FCEA00D20267 /* FindFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindFriendsTableViewController.m; sourceTree = "<group>"; };
+		A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleLineUtilities.h; sourceTree = "<group>"; };
+		A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleLineUtilities.m; sourceTree = "<group>"; };
 		A58DA83F19D02EA9003EE5CB /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
 		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
 		A58DA84219D02EB8003EE5CB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -690,6 +693,8 @@
 				AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */,
 				A5754FBA19E6FCEA00D20267 /* FindFriendsTableViewController.h */,
 				A5754FBB19E6FCEA00D20267 /* FindFriendsTableViewController.m */,
+				A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */,
+				A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */,
 			);
 			name = People;
 			path = ViewControllers/Gente;
@@ -918,6 +923,7 @@
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
 				AACA544819C057C000E39D94 /* UIButton+AFNetworking.m in Sources */,
+				A5754FC019E7DB7900D20267 /* PeopleLineUtilities.m in Sources */,
 				AA623E3D1998D17800A942A9 /* Device.m in Sources */,
 				AA623E751998D17800A942A9 /* FavEntityDescriptor.m in Sources */,
 				AACA544119C057C000E39D94 /* AFURLConnectionOperation.m in Sources */,
