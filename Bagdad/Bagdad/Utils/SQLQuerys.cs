@@ -53,7 +53,9 @@ namespace Bagdad.Utils
 
         public const String getShotByComment24Hours = "SELECT idShot FROM Shot WHERE comment = @comment and idUser = @idUser and csys_modified > @yesterday";
 
-        public const String deleteShotsOlderThanMax = "SELECT min(idShot) FROM (Select idshot from Shot order by csys_modified DESC LIMIT @limit)";
+        public const String getMinIdShotOlderThanMax = "SELECT min(idShot) FROM (Select idshot from Shot order by csys_modified DESC LIMIT @limit)";
+
+        public const String deleteShotsOlderThanMax = "DELETE FROM Shot where idShot < @idShot";
 
         #endregion
 

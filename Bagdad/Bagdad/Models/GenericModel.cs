@@ -154,26 +154,57 @@ namespace Bagdad.Models
 
         public async Task<bool> deleteShotsOlderThanMax()
         {
+            int idShot = -1;
             try
             {
-                Database database = await App.GetDatabaseAsync();
+                idShot = await getOlderShotToDelete();
 
+                Database database = await App.GetDatabaseAsync();
+                
                 string selectQuery = SQLQuerys.deleteShotsOlderThanMax;
 
                 Statement selectStatement = await database.PrepareStatementAsync(selectQuery);
 
-                selectStatement.BindIntParameterWithName("@limit", Constants.SHOTS_LIMIT);
+                selectStatement.BindIntParameterWithName("@idShot", idShot);
 
                 await selectStatement.StepAsync();
 
                 App.DBLoaded.Set();
-                System.Diagnostics.Debug.WriteLine("- - - Borrados los shots inferiores a " + Constants.SHOTS_LIMIT.ToString() + " correctamente.");
+                System.Diagnostics.Debug.WriteLine("- - - Borrados los " + Constants.SHOTS_LIMIT.ToString() + " shots inferiores a " + idShot.ToString()  + " correctamente.");
                 return true;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("E R R O R : GenericModel - deleteShotsOlderThanMax: " + e.Message, e);
                 return false;
+            }
+        }
+
+        private async Task<int> getOlderShotToDelete()
+        {
+            int retorn = -1;
+            try
+            {
+                Database database = await App.GetDatabaseAsync();
+
+                string selectQuery = SQLQuerys.getMinIdShotOlderThanMax;
+
+                Statement selectStatement = await database.PrepareStatementAsync(selectQuery);
+
+                selectStatement.BindIntParameterWithName("@limit", Constants.SHOTS_LIMIT);
+
+                if (await selectStatement.StepAsync())
+                {
+                    retorn = selectStatement.GetIntAt(0);
+                }
+
+                App.DBLoaded.Set();
+                return retorn;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R : GenericModel - getOlderShotToDelete: " + e.Message, e);
+                return -1;
             }
         }
 
