@@ -99,13 +99,14 @@ static NSArray *cuotasToDelete;
         
         NSArray *dataArray = [[ops objectAtIndex:0] objectForKey:K_WS_OPS_DATA];
         if (returnedItems) {
-            NSMutableArray *usersArray;
+            NSMutableArray *usersArray = [[NSMutableArray alloc] init];
             for (NSDictionary *dict in dataArray) {
                 User *currentUser = [[UserManager singleton] createUserFromDict:dict];
                 if (currentUser)
                     [usersArray addObject:currentUser];
                 
             }
+            NSLog(@"Users:%lu",(unsigned long)usersArray.count);
             completionBlock(YES,nil, usersArray);
         }else{
             completionBlock(YES,nil, nil);

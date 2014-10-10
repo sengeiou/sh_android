@@ -146,20 +146,19 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)getFilterForPeopleSearch {
++ (NSDictionary *)getFilterForPeopleSearch:(NSString *)textTosearch {
     
     NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_GT,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:@0},
                                                     @{K_WS_COMPARATOR: K_WS_OPS_GT,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:@0}],
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_OR};
     
-    NSDictionary *filterName = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_CT,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:K_WS_OPS_CA},
-                                                    @{K_WS_COMPARATOR: K_WS_OPS_CT,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:K_WS_OPS_CA}],
+    NSDictionary *filterName = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_CT,K_CD_NAME:kJSON_USERNAME,K_CD_VALUE:textTosearch},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_CT,K_CD_NAME:kJSON_NAME,K_CD_VALUE:textTosearch}],
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_OR};
     
-    NSArray *filters = @[filterDate,filterName];
-    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filters]}};
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate,filterName]}};
     
     return filter;
 }

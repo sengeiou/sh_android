@@ -24,7 +24,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 
 - (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error;
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error;
-- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error;
+- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray;
 
 @end
 
@@ -72,5 +72,5 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate;
 - (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate;
 - (void)userLoginWithKey:(NSDictionary *)key withDelegate:(id)delegate;
-
+- (void)searchPeopleWithName:(NSString *)textToSearch withDelegate:(id)delegate;
 @end

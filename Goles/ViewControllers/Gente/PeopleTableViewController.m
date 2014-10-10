@@ -15,6 +15,7 @@
 #import "User.h"
 #import "Follow.h"
 #import "FindFriendsTableViewController.h"
+#import "SearchManager.h"
 
 @interface PeopleTableViewController ()
 
@@ -50,6 +51,10 @@
     
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
+#warning TESTING PURPOSES
+    [[FavRestConsumer sharedInstance] searchPeopleWithName:@"A" withDelegate:self];
+    
 
 }
 
@@ -138,6 +143,12 @@
     }
 }
 
+- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray {
+    
+    if (usersArray.count > 0) {
+        
+    }
+}
 
 - (IBAction)addFriends:(id)sender {
 }

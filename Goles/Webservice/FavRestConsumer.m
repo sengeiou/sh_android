@@ -639,7 +639,7 @@
                                                                      andEntity:K_COREDATA_USER
                                                                      withItems:@100
                                                                     withOffSet:@0
-                                                                     andFilter:[FilterCreation getFilterForPeopleSearch]];
+                                                                     andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
     
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[User class]]]};
@@ -648,7 +648,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(searchResponseWithStatus:andError:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(searchResponseWithStatus:andError:andUsers:)];
     
     //Create full data structure
     if (req && ops) {
@@ -656,22 +656,22 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
+                [FavGeneralDAO searchParser:data onCompletion:^(BOOL status, NSError *error, NSArray *data) {
                     
-                    if (!error && status)
-                        [delegate searchResponseWithStatus:YES andError:nil];
+                    if (!error && status && data.count > 0)
+                        [delegate searchResponseWithStatus:YES andError:nil andUsers:data];
                     else
-                        [delegate searchResponseWithStatus:NO andError:error];
+                        [delegate searchResponseWithStatus:YES andError:error andUsers:nil];
                 }];
             else if (delegateRespondsToProtocol){
-                [delegate searchResponseWithStatus:NO andError:error];
+                [delegate searchResponseWithStatus:NO andError:error andUsers:nil];
                 DLog(@"Request error:%@",error);
             }
         }];
     }else if (delegateRespondsToProtocol){
         
         NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
-        [delegate searchResponseWithStatus:NO andError:reqError];
+        [delegate searchResponseWithStatus:NO andError:reqError andUsers:nil];
         DLog(@"No valid req structure created");
     }
     

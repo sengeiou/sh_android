@@ -73,7 +73,6 @@ NSString *const K_WS_OPS_NE                             = @"ne";
 NSString *const K_WS_OPS_GT                             = @"gt";
 NSString *const K_WS_OPS_GE                             = @"ge";
 NSString *const K_WS_OPS_LT                             = @"lt";
-NSString *const K_WS_OPS_CA                             = @"ca";
 NSString *const K_WS_OPS_CT                             = @"ct";
 NSString *const K_WS_FILTERITEMS                        = @"filterItems";
 NSString *const K_WS_COMPARATOR                         = @"comparator";
