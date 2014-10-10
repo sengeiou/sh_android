@@ -68,54 +68,6 @@
             </c4ftk:ChatBubble>
         </ControlTemplate>
         
-<!--
-        <ControlTemplate x:Key="ChatBubbleTextBoxControlTemplateLandscape" TargetType="c4ftk:ChatBubbleTextBox">
-            <c4ftk:ChatBubble x:Name="chatBubble" 
-                BorderBrush="{TemplateBinding BorderBrush}" 
-                BorderThickness="{TemplateBinding BorderThickness}" 
-                Background="{TemplateBinding Background}" 
-                Width="{TemplateBinding Width}"
-                ChatBubbleDirection="{TemplateBinding ChatBubbleDirection}"
-                Margin="0,0"
-                >
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="FocusStates">
-                        <VisualState x:Name="Unfocused"/>
-                        <VisualState x:Name="Focused">
-                            <Storyboard>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.BorderBrush)" Storyboard.TargetName="chatBubble">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneAccentBrush}"/>
-                                </ObjectAnimationUsingKeyFrames>
-                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.Background)" Storyboard.TargetName="chatBubble">
-                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
-                                </ObjectAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-                <Grid HorizontalAlignment="Stretch" Width="{TemplateBinding Width}">
-                    <ContentControl
-                        x:Name="HintContentElement"
-                        BorderThickness="0" 
-                        Background="Transparent"
-                        Foreground="Gray"
-                        HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
-                        Content="{TemplateBinding Hint}" />
-                    <ScrollViewer 
-                        x:Name="ContentElement" 
-                        MaxHeight="100"
-                        Width="625"
-                        BorderThickness="0" 
-                        Background="Transparent"
-                        HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
-                        ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-                </Grid>
-            </c4ftk:ChatBubble>
-        </ControlTemplate>
--->
-        
         <DataTemplate x:Key="PortaitItemTemplate" >
             <Grid x:Name="itemGrid" Margin="0,0,0,48" Width="{Binding ActualWidth, ElementName=myShots}">
                 <Grid.ColumnDefinitions>
