@@ -51,6 +51,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         
                         <!--Column0-->
@@ -74,6 +75,21 @@
 
                         </Grid>
 
+                        <!--Column2-->
+                        <Button Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2">
+                            <Button.Content>
+                                <Grid HorizontalAlignment="Center">
+
+                                    <Rectangle Visibility="{Binding buttonIconVisible}" Fill="{Binding buttonForeground}" Width="45" Height="45" Margin="-12" HorizontalAlignment="Right">
+                                        <Rectangle.OpacityMask>
+                                            <ImageBrush ImageSource="{Binding buttonIcon}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+
+                                </Grid>
+                            </Button.Content>
+                        </Button>
+                        
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
