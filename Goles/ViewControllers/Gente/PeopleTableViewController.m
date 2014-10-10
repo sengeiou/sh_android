@@ -15,15 +15,23 @@
 #import "User.h"
 #import "Follow.h"
 #import "FindFriendsTableViewController.h"
+#import "PeopleLineUtilities.h"
 #import "SearchManager.h"
 
-@interface PeopleTableViewController ()
+
+@interface PeopleTableViewController ()<UISearchBarDelegate, UISearchDisplayDelegate>{
+    
+    UISearchBar *mySearchBar;
+}
 
 @property (nonatomic,strong) NSArray *followingUsers;
 @property (nonatomic,strong) IBOutlet UITableView *usersTable;
 @property (nonatomic, strong)       NSIndexPath         *indexToShow;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnAddFriends;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnSearchFriends;
+@property (nonatomic, strong)       NSArray             *searchResults;
+@property (nonatomic, strong) UISearchDisplayController *searchDisplay;
+@property (nonatomic, strong) UITableView *searchTableView;
 
 - (IBAction)addFriends:(id)sender;
 - (IBAction)searchFriends:(id)sender;
@@ -74,7 +82,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	
+    
+    if (tableView == self.searchDisplay.searchResultsTableView)
+        return [self.searchResults count];
+    
     return self.followingUsers.count;
 }
 
@@ -82,7 +93,16 @@
 	
 	static NSString *CellIdentifier = @"peopleCell";
 	PeopleCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-	User *user = [self.followingUsers objectAtIndex:indexPath.row];
+    
+    User *user;
+    
+    if (tableView == self.searchDisplay.searchResultsTableView)
+        user = [self.searchResults objectAtIndex:indexPath.row];
+
+    else
+        user = [self.followingUsers objectAtIndex:indexPath.row];
+
+
 	[cell configureCellWithUser:user inRow:indexPath];
     [cell addTarget:self action:@selector(goProfile:)];
 
@@ -154,12 +174,58 @@
 }
 
 - (IBAction)searchFriends:(id)sender {
+  
+    self.navigationItem.rightBarButtonItem = nil;
     
-    FindFriendsTableViewController *findFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"findFriendsVC"];
-    findFriendsVC.followingArray = self.followingUsers;
-    
-    [self presentViewController:findFriendsVC animated:YES completion:^{
-        NSLog(@"a buscaaar");
-    }];
+    mySearchBar = [PeopleLineUtilities createSearchNavBar];
+    mySearchBar.delegate = self;
+    [self.navigationController.navigationBar addSubview:mySearchBar];
+    self.searchDisplay =  [[UISearchDisplayController alloc] initWithSearchBar:mySearchBar contentsController:self];
+
+    //[self setSearchDisplayController:searchDisplay];
+    [self.searchDisplay setDelegate:self];
+    self.searchDisplay.searchResultsDelegate = self;
+    self.searchDisplay.searchResultsDataSource = self;
+    [self.searchDisplay setSearchResultsDataSource:self];
 }
+#pragma mark - UISearchDisplayControllerDelegate
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    
+    self.searchResults = [SearchManager searchPeopleLocal:searchString];
+    
+//    [self filterContentForSearchText:searchString
+//                               scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
+//                                     objectAtIndex:[self.searchDisplayController.searchBar
+//                                                     selectedScopeButtonIndex]]];
+    
+    return YES;
+}
+- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView{
+    
+    self.searchTableView = self.usersTable;
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
+    //When the user taps the search bar, this means that the controller will begin searching.
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
+    //When the user taps the Cancel Button, or anywhere aside from the view.
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption{
+   
+    self.searchResults = [SearchManager searchPeopleLocal:[self.searchDisplay.searchBar text]];
+
+    return YES;
+}
+
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    self.navigationController.navigationBarHidden = NO;
+    [mySearchBar setAlpha:0.0];
+}
+
 @end
