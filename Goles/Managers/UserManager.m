@@ -210,4 +210,71 @@
     return nil;
 }
 
+
+//------------------------------------------------------------------------------
+- (User *)createUserFromDict:(NSDictionary *)dict {
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:[[CoreDataManager singleton] getContext]];
+    User *user = [[User alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+
+    NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
+    if ( [idUser isKindOfClass:[NSNumber class]] )
+        [user setIdUser:idUser];
+    else
+        return nil;
+    
+    NSString *userName = [dict objectForKey:kJSON_USERNAME ];
+    if ([userName isKindOfClass:[NSString class]])
+        [user setUserName:userName];
+    else
+        return nil;
+    
+    NSNumber *idFavouriteTeam = [dict objectForKey:kJSON_ID_FAVOURITE_TEAM ];
+    if ([idFavouriteTeam isKindOfClass:[NSNumber class]])
+        [user setIdFavouriteTeam:idFavouriteTeam];
+    
+    NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
+    if ([sessionToken isKindOfClass:[NSString class]])
+        [user setSessionToken:sessionToken];
+    
+    
+    NSString *email = [dict objectForKey:kJSON_EMAIL ];
+    if ([email isKindOfClass:[NSString class]])
+        [user setEMail:email];
+    
+    NSString *name = [dict objectForKey:kJSON_NAME ];
+    if ([name isKindOfClass:[NSString class]])
+        [user setName:name];
+    
+    NSString *photo = [dict objectForKey:kJSON_PHOTO ];
+    if ([photo isKindOfClass:[NSString class]])
+        [user setPhoto:photo];
+    
+    NSString *bio = [dict objectForKey:kJSON_BIO ];
+    if ([bio isKindOfClass:[NSString class]])
+        [user setBio:bio];
+    
+    NSString *website = [dict objectForKey:kJSON_WEBSITE ];
+    if ([website isKindOfClass:[NSString class]])
+        [user setWebsite:website];
+    
+    NSNumber *points = [dict objectForKey:kJSON_POINTS ];
+    if ([points isKindOfClass:[NSNumber class]])
+        [user setPoints:points];
+    
+    NSNumber *numFollowing = [dict objectForKey:kJSON_NUMFOLLOWING ];
+    if ([numFollowing isKindOfClass:[NSNumber class]])
+        [user setNumFollowing:numFollowing];
+    
+    NSNumber *numFollowers = [dict objectForKey:kJSON_NUMFOLLOWERS ];
+    if ([numFollowers isKindOfClass:[NSNumber class]])
+        [user setNumFollowers:numFollowers];
+    
+    NSNumber *rank = [dict objectForKey:kJSON_RANK ];
+    if ([rank isKindOfClass:[NSNumber class]])
+        [user setRank:rank];
+
+    return user;
+}
+
 @end

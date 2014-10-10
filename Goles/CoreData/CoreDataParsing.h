@@ -109,6 +109,7 @@ extern NSString *const kALIAS_FOLLOWERS;
 extern NSString *const kALIAS_SHOT;
 extern NSString *const kALIAS_OLDER_SHOTS;
 extern NSString *const kALIAS_USER;
+extern NSString *const kALIAS_FIND_FRIENDS;
 
 #pragma mark - CORE DATA ENTITY NAMES
 

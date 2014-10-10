@@ -111,6 +111,7 @@ NSString *const kALIAS_FOLLOWERS                       = @"GET_FOLLOWERS";
 NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
 NSString *const kALIAS_OLDER_SHOTS                     = @"GET_OLDER_SHOTS";
 NSString *const kALIAS_USER                            = @"GET_USERS";
+NSString *const kALIAS_FIND_FRIENDS                    = @"FINDFIRENDS";
 
 #pragma mark - CORE DATA ENTITY NAMES
 

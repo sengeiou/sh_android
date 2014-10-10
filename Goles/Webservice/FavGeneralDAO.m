@@ -12,6 +12,7 @@
 #import "CoreDataManager.h"
 #import "FavRestConsumerHelper.h"
 #import "SyncManager.h"
+#import "UserManager.h"
 #import "Shot.h"
 
 static NSArray *cuotasToDelete;
@@ -87,6 +88,36 @@ static NSArray *cuotasToDelete;
     }
 }
 
+//------------------------------------------------------------------------------
++(void)searchParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error,NSArray *data))completionBlock {
+    
+    BOOL statusOK = [[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_CODE] isEqualToString:K_WS_STATUS_OK];
+    NSArray *ops = [dict objectForKey:K_WS_OPS];
+    BOOL returnedItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ITEMS] integerValue] > 0;
+    
+    if (dict && statusOK) {
+        
+        NSArray *dataArray = [[ops objectAtIndex:0] objectForKey:K_WS_OPS_DATA];
+        if (returnedItems) {
+            NSMutableArray *usersArray;
+            for (NSDictionary *dict in dataArray) {
+                User *currentUser = [[UserManager singleton] createUserFromDict:dict];
+                if (currentUser)
+                    [usersArray addObject:currentUser];
+                
+            }
+            completionBlock(YES,nil, usersArray);
+        }else{
+            completionBlock(YES,nil, nil);
+        }
+    }
+    else if (!statusOK){
+        
+        DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
+        NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];
+        completionBlock(NO,error, nil);
+    }
+}
 
 //------------------------------------------------------------------------------
 /**

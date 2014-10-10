@@ -27,5 +27,5 @@
 - (NSArray *)getFollowersOfUser:(User *)user;
 - (BOOL)isLoggedUserFollowing:(User *)user;
 - (User *)getUserForId:(NSInteger )idUser;
-
+- (User *)createUserFromDict:(NSDictionary *)dict;
 @end
