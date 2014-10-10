@@ -58,10 +58,6 @@
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
-#warning TESTING PURPOSES
-    [[FavRestConsumer sharedInstance] searchPeopleWithName:@"A" withDelegate:self];
-    
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -90,7 +86,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	static NSString *CellIdentifier = @"peopleCell";
-	PeopleCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+	PeopleCustomCell *cell = (id) [self.usersTable dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     User *user;
     
@@ -173,18 +169,17 @@
 
 - (IBAction)searchFriends:(id)sender {
   
-    self.navigationItem.rightBarButtonItem = nil;
-    
+//    self.navigationItem.rightBarButtonItem = nil;
+
    // self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
     //self.mySearchBar.delegate = self;
-    [self.navigationController.navigationBar addSubview:self.searchDisplayController.searchBar];
+//    [self.navigationController.navigationBar addSubview:self.searchDisplayController.searchBar];
   //  self.searchDisplay =  [[UISearchDisplayController alloc] initWithSearchBar:self.mySearchBar contentsController:self];
 
    // [self setSearchDisplayController:searchDisplay];
 //    [self.searchDisplay setDelegate:self];
 //    self.searchDisplay.searchResultsDelegate = self;
 //    self.searchDisplay.searchResultsDataSource = self;
-
 }
 
 //-(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
@@ -216,12 +211,13 @@
 //}
 
 
+
 #pragma mark - UISearchDisplayControllerDelegate
+
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
   
     [self.searchResults removeAllObjects]; // First clear the filtered array.
-    
     
     self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchText]];
 }
@@ -240,11 +236,20 @@
     return YES;
 }
 
+//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+//    [self.searchResults removeAllObjects]; // First clear the filtered array.
+//    
+//    self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
+//    [self.usersTable reloadData];
+//
+//}
+
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
-    [controller setSearchResultsDelegate:self.tableView.delegate];
+    [controller setSearchResultsDelegate:self.usersTable.delegate];
 }
 
 - (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller {
+
 }
 
 

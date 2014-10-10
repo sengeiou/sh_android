@@ -32,13 +32,11 @@
     self.actionButton.layer.cornerRadius = 5.0f;
 	
    
-    if ([self checkIfImFollowingUser:user]){
-         NSLog(@"nameeeFOLLOWING :%@ ", user.name);
+    if ([self checkIfImFollowingUser:user])
         [self configureFollowingButton];
-    }else{
-         NSLog(@"nameeeFOLLERS :%@ ", user.name);
+    else
 		[self configureFollowButton];
-    }
+    
     if (user.idUser == [[UserManager singleton] getUserId])
         self.actionButton.hidden = YES;
     
