@@ -109,11 +109,9 @@ namespace Bagdad
             if (e.Key == Key.Enter)
             {
                 progress.IsVisible = true;
-                if (SearchBar.Text.Length > 2)
-                {
-                    DataContext = await uvm.FindUsersInServer(SearchBar.Text, 0);
-                }
-
+                
+                DataContext = await uvm.FindUsersInServer(SearchBar.Text, 0);
+                
                 if(findList.Items.Count > 0) Focus();
 
                 progress.IsVisible = false;
