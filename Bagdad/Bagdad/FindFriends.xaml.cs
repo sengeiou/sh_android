@@ -110,13 +110,60 @@ namespace Bagdad
             {
                 progress.IsVisible = true;
                 
-                DataContext = await uvm.FindUsersInServer(SearchBar.Text, 0);
-                
-                if(findList.Items.Count > 0) Focus();
+                if (findList.Items.Count > 0) findList.ScrollIntoView(findList.Items.First());
+
+                searchedFriends = await uvm.FindUsersInServer(SearchBar.Text, 0);
+
+                DataContext = searchedFriends;
+
+                if (findList.Items.Count > 0)
+                {
+                    Focus();
+                    endOfList = false;
+                    offset = searchedFriends.Count;
+                }
 
                 progress.IsVisible = false;
             }
         }
 
+        private async void findList_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            progress.IsVisible = true;
+
+            ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(findList);
+            // not feeling creative with my var names today...
+            IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+
+            if (findList.Items.Count() != 0)
+            {
+                scrollToChargue = 100 - (15 * 100 / findList.Items.Count());
+            }
+
+            if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
+            {
+                if (!endOfList)
+                {
+                    charge = searchedFriends.Count();
+                    foreach (FollowViewModel user in await uvm.FindUsersInServer(SearchBar.Text, offset))
+                    {
+                        searchedFriends.Add(user);
+                    }
+
+                    DataContext = null;
+                    DataContext = searchedFriends;
+
+                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+
+                    //if there is no more shots, don't need to charge it again
+                    if (findList.Items.Count() - charge < Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG)
+                    {
+                        endOfList = true;
+                    }
+                }
+
+            }
+            progress.IsVisible = false;
+        }
     }
 }

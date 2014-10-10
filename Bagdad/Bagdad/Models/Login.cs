@@ -202,7 +202,7 @@ namespace Bagdad.Models
             UserImageManager userImageManager = new UserImageManager();
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken login in job["ops"][0]["data"])
                     {

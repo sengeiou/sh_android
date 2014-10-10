@@ -112,7 +112,7 @@ namespace Bagdad.Models
 
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in job["ops"][0]["data"])
                     {
@@ -208,7 +208,7 @@ namespace Bagdad.Models
 
                 bool iFollow;
 
-                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
@@ -243,7 +243,7 @@ namespace Bagdad.Models
 
                 bool iFollow;
 
-                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {

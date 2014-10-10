@@ -195,7 +195,7 @@ namespace Bagdad.Models
 
             try
             {
-                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken user in job["ops"][0]["data"])
                     {
@@ -275,7 +275,7 @@ namespace Bagdad.Models
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
-                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     JToken userProfileInfo = responseFollow["ops"][0]["data"][0];
 
@@ -313,7 +313,7 @@ namespace Bagdad.Models
 
                 bool iFollow;
 
-                if (response["status"]["code"].ToString().Equals("OK") && !response["ops"][0]["metadata"]["totalItems"].ToString().Equals("0"))
+                if (response["status"]["code"].ToString().Equals("OK") && !response["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken user in response["ops"][0]["data"])
                     {
