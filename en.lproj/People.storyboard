@@ -95,19 +95,28 @@
                     <connections>
                         <outlet property="btnAddFriends" destination="l75-RH-hxz" id="aIb-ov-3h8"/>
                         <outlet property="btnSearchFriends" destination="eQT-Io-HyI" id="Eib-Dc-NKu"/>
-                        <outlet property="searchDisplayController" destination="eFX-Sn-lTn" id="o3D-I9-r9k"/>
+                        <outlet property="searchDisplayController" destination="Tgy-0g-5zw" id="2mr-RV-McG"/>
                         <outlet property="usersTable" destination="PqB-su-d3v" id="iT2-lO-cCr"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wYI-9x-B0G" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="eFX-Sn-lTn">
+                <searchDisplayController id="Tgy-0g-5zw">
                     <connections>
-                        <outlet property="delegate" destination="OO5-Se-I6b" id="TJj-Ny-4qA"/>
-                        <outlet property="searchContentsController" destination="OO5-Se-I6b" id="ufU-yA-xJa"/>
-                        <outlet property="searchResultsDataSource" destination="OO5-Se-I6b" id="r7L-RT-kCO"/>
-                        <outlet property="searchResultsDelegate" destination="OO5-Se-I6b" id="gxe-fK-ISy"/>
+                        <outlet property="delegate" destination="OO5-Se-I6b" id="6dT-Ja-Zqi"/>
+                        <outlet property="searchBar" destination="iZO-AN-B0v" id="Nfl-vb-81r"/>
+                        <outlet property="searchContentsController" destination="OO5-Se-I6b" id="Utd-Lu-iv6"/>
+                        <outlet property="searchResultsDataSource" destination="OO5-Se-I6b" id="eOO-cE-hn9"/>
+                        <outlet property="searchResultsDelegate" destination="OO5-Se-I6b" id="5Yb-ZU-BVF"/>
                     </connections>
                 </searchDisplayController>
+                <searchBar contentMode="redraw" id="iZO-AN-B0v">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="OO5-Se-I6b" id="3Vk-SH-6kc"/>
+                    </connections>
+                </searchBar>
             </objects>
             <point key="canvasLocation" x="508.125" y="119.36619718309858"/>
         </scene>

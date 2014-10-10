@@ -11,9 +11,10 @@
 
 - (NSString *)cleanStringfromLinks:(NSString *)string {
     
-    if ([string containsString:@"http://"])
+    
+    if ([string rangeOfString:@"http://"].location != NSNotFound)
         return [string stringByReplacingOccurrencesOfString:@"http://" withString:@""];
-    else if ([string containsString:@"https://"])
+    else if ( [string rangeOfString:@"https://"].location != NSNotFound)
         return [string stringByReplacingOccurrencesOfString:@"https://" withString:@""];
     
     return string;
