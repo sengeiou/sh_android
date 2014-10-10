@@ -34,6 +34,13 @@ public interface MatchDAO extends BaseDAO {
      * @return number of the updated rows
      */
     long updateMatch(Match Match);
+    
+   /**
+    * Update multiple matches.
+    * @param Matches
+    * @return
+    */
+    int batchUpdateMatch(final List<Match> Matches);
 
     /**
      * Given an idArea, return all its Matchs.

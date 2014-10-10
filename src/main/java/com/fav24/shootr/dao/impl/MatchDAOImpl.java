@@ -3,6 +3,7 @@ package com.fav24.shootr.dao.impl;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
@@ -29,7 +30,6 @@ public class MatchDAOImpl extends BaseDAOImpl implements MatchDAO {
 	@Override
 	public Long insertMatch(Match match) {
 		String query = PropertiesManager.getProperty("match.insert");
-//		INSERT INTO `Matches` (`idMatchOpta`, `idSeason`, `dateMatch`, `idTeamA`, `teamAName`, `idTeamB`, `teamBName`, `status`, `gameweek`, `winner`, `fsA`, `fsB`, `htsA`, `htsB`, `etsA`, `etsB`, `psA`, `psB`, `lastUpdated`, `minute`, `minuteExtra`, `matchPeriod`, `csys_birth`, `csys_modified`, `csys_revision`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now(), 0)
 
 		PreparedStatementCreatorFactory factory = new PreparedStatementCreatorFactory(query);
 		factory.setGeneratedKeysColumnNames(new String[] { "idMatch" });
@@ -55,31 +55,11 @@ public class MatchDAOImpl extends BaseDAOImpl implements MatchDAO {
 		factory.addParameter(new SqlParameter(Types.NUMERIC));// minute
 		factory.addParameter(new SqlParameter(Types.NUMERIC));// minuteExtra
 		factory.addParameter(new SqlParameter(Types.VARCHAR));// matchPeriod
-		
-		Object[] params = new Object[] { 
-				match.getIdMatchOpta(), 
-				match.getIdSeason(),
-				new Date(match.getDateMatch().getTime()),
-				match.getIdTeamA(),
-				match.getTeamAName(),
-				match.getIdTeamB(),
-				match.getTeamBName(),
-				match.getStatus(),
-				match.getGameweek(),
-				match.getWinner(),
-				match.getFsA(),
-				match.getFsB(),
-				match.getHtsA(),
-				match.getHtsB(),
-				match.getEtsA(),
-				match.getEtsB(),
-				match.getPsA(),
-				match.getPsB(),
-				new Date(match.getLastUpdated().getTime()),
-				match.getMinute(),
-				match.getMinuteExtra(),
-				match.getMatchPeriod()
-			};
+
+		Object[] params = new Object[] { match.getIdMatchOpta(), match.getIdSeason(), (match.getDateMatch() != null) ? new Date(match.getDateMatch().getTime()) : null, match.getIdTeamA(),
+				match.getTeamAName(), match.getIdTeamB(), match.getTeamBName(), match.getStatus(), match.getGameweek(), match.getWinner(), match.getFsA(), match.getFsB(), match.getHtsA(),
+				match.getHtsB(), match.getEtsA(), match.getEtsB(), match.getPsA(), match.getPsB(), (match.getLastUpdated() != null) ? new Date(match.getLastUpdated().getTime()) : null,
+				match.getMinute(), match.getMinuteExtra(), match.getMatchPeriod() };
 
 		PreparedStatementCreator psc = factory.newPreparedStatementCreator(params);
 		GeneratedKeyHolder gkf = new GeneratedKeyHolder();
@@ -94,45 +74,80 @@ public class MatchDAOImpl extends BaseDAOImpl implements MatchDAO {
 		getJdbcTemplate().batchUpdate(query, new BatchPreparedStatementSetter() {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Match m = matches.get(i);
-				ps.setLong(1, m.getIdMatchOpta());
-				ps.setLong(2, m.getIdSeason());
-				ps.setDate(3, new Date(m.getDateMatch().getTime()));
-				ps.setLong(4,  m.getIdTeamA());
-				ps.setString(5, m.getTeamAName());
-				ps.setLong(6,  m.getIdTeamB());
-				ps.setString(7, m.getTeamBName());
-				ps.setString(8, m.getStatus());
-				ps.setLong(9,  m.getGameweek());
-				ps.setString(10, m.getWinner());
-				ps.setLong(11,  m.getFsA());
-				ps.setLong(12,  m.getFsB());
-				ps.setLong(13,  m.getHtsA());
-				ps.setLong(14,  m.getHtsB());
-				ps.setLong(15,  m.getEtsA());
-				ps.setLong(16,  m.getEtsB());
-				ps.setLong(17,  m.getPsA());
-				ps.setLong(18,  m.getPsB());
-				ps.setDate(19, new Date(m.getLastUpdated().getTime()));
-				ps.setLong(20,  m.getMinute());
-				ps.setLong(21,  m.getMinuteExtra());
-				ps.setString(22, m.getMatchPeriod());
+				ps.setObject(1, m.getIdMatchOpta(), Types.NUMERIC);
+				ps.setObject(2, m.getIdSeason(), Types.VARCHAR);
+				ps.setObject(3, m.getDateMatch()!= null ? new Timestamp(m.getDateMatch().getTime()) : null, Types.TIMESTAMP);
+				ps.setObject(4, m.getIdTeamA(), Types.NUMERIC);
+				ps.setObject(5, m.getTeamAName(), Types.VARCHAR);
+				ps.setObject(6, m.getIdTeamB(), Types.NUMERIC);
+				ps.setObject(7, m.getTeamBName(), Types.VARCHAR);
+				ps.setObject(8, m.getStatus(), Types.VARCHAR);
+				ps.setObject(9, m.getGameweek(), Types.NUMERIC);
+				ps.setObject(10, m.getWinner(), Types.VARCHAR);
+				ps.setObject(11, m.getFsA(), Types.NUMERIC);
+				ps.setObject(12, m.getFsB(), Types.NUMERIC);
+				ps.setObject(13, m.getHtsA(), Types.NUMERIC);
+				ps.setObject(14, m.getHtsB(), Types.NUMERIC);
+				ps.setObject(15, m.getEtsA(), Types.NUMERIC);
+				ps.setObject(16, m.getEtsB(), Types.NUMERIC);
+				ps.setObject(17, m.getPsA(), Types.NUMERIC);
+				ps.setObject(18, m.getPsB(), Types.NUMERIC);
+				ps.setObject(19, m.getLastUpdated()!= null ? new Timestamp(m.getLastUpdated().getTime()) : null, Types.TIMESTAMP);
+				ps.setObject(20, m.getMinute(), Types.NUMERIC);
+				ps.setObject(21, m.getMinuteExtra(), Types.NUMERIC);
+				ps.setObject(22, m.getMatchPeriod(), Types.VARCHAR);
 			}
+
 			public int getBatchSize() {
 				return matches.size();
 			}
 		});
-		//TODO no retornar fakes
+		// TODO no retornar fakes
 		return matches.size();
 	}
-	
+
 	@Override
 	public long updateMatch(Match m) {
-		//UPDATE `Matches` SET `dateMatch` = ?, `idTeamA` = ?, `teamAName` = ?, `idTeamB` = ?, `teamBName` = ?, `status` = ?, `gameweek` = ?, `winner` = ?, `fsA` = ?, `fsB` = ?
-		//, `htsA` = ?, `htsB` = ?, `etsA` = ?, `etsB` = ?, `psA` = ?, `psB` = ?, `lastUpdated` = ?, `minute` = ?, `minuteExtra` = ?, `matchPeriod` = ?, `csys_modified` = now(), `csys_revision` = `csys_revision` = `csys_revision` + 1 WHERE `idMatch` = ?
 		String query = PropertiesManager.getProperty("match.update");
-		return getJdbcTemplate().update(query, m.getDateMatch(), m.getIdTeamA(), m.getTeamAName(),  m.getIdTeamB(), m.getTeamBName(), 
-				m.getStatus(), m.getGameweek(), m.getWinner(), m.getFsA(), m.getFsB(), m.getHtsA(), m.getHtsB(), m.getEtsA(), m.getEtsB(), m.getPsA(), m.getPsB(),
-				m.getLastUpdated(), m.getMinute(), m.getMinuteExtra(), m.getMatchPeriod(), m.getIdMatch());
+		return getJdbcTemplate().update(query, m.getDateMatch(), m.getIdTeamA(), m.getTeamAName(), m.getIdTeamB(), m.getTeamBName(), m.getStatus(), m.getGameweek(), m.getWinner(), m.getFsA(),
+				m.getFsB(), m.getHtsA(), m.getHtsB(), m.getEtsA(), m.getEtsB(), m.getPsA(), m.getPsB(), m.getLastUpdated(), m.getMinute(), m.getMinuteExtra(), m.getMatchPeriod(), m.getIdMatch());
+	}
+
+	/** {@inheritDoc} */
+	public int batchUpdateMatch(final List<Match> matches) {
+		String query = PropertiesManager.getProperty("match.update");
+		getJdbcTemplate().batchUpdate(query, new BatchPreparedStatementSetter() {
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				Match m = matches.get(i);
+				ps.setObject(1, (m.getDateMatch() != null) ? new Date(m.getDateMatch().getTime()) : null, Types.TIME);
+				ps.setObject(2, m.getIdTeamA(), Types.NUMERIC);
+				ps.setObject(3, m.getTeamAName(), Types.VARCHAR);
+				ps.setObject(4, m.getIdTeamB(), Types.NUMERIC);
+				ps.setObject(5, m.getTeamBName(), Types.VARCHAR);
+				ps.setObject(6, m.getStatus(), Types.VARCHAR);
+				ps.setObject(7, m.getGameweek(), Types.NUMERIC);
+				ps.setObject(8, m.getWinner(), Types.VARCHAR);
+				ps.setObject(9, m.getFsA(), Types.NUMERIC);
+				ps.setObject(10, m.getFsB(), Types.NUMERIC);
+				ps.setObject(11, m.getHtsA(), Types.NUMERIC);
+				ps.setObject(12, m.getHtsB(), Types.NUMERIC);
+				ps.setObject(13, m.getEtsA(), Types.NUMERIC);
+				ps.setObject(14, m.getEtsB(), Types.NUMERIC);
+				ps.setObject(15, m.getPsA(), Types.NUMERIC);
+				ps.setObject(16, m.getPsB(), Types.NUMERIC);
+				ps.setObject(17, m.getLastUpdated()!= null ? new Timestamp(m.getLastUpdated().getTime()) : null, Types.TIMESTAMP);
+				ps.setObject(18, m.getMinute(), Types.NUMERIC);
+				ps.setObject(19, m.getMinuteExtra(), Types.NUMERIC);
+				ps.setObject(20, m.getMatchPeriod(), Types.VARCHAR);
+				ps.setObject(21, m.getIdMatch(), Types.NUMERIC);
+			}
+
+			public int getBatchSize() {
+				return matches.size();
+			}
+		});
+		// TODO no retornar fakes
+		return matches.size();
 	}
 
 	@Override

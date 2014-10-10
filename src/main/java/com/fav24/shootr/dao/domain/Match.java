@@ -288,8 +288,7 @@ public class Match {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Match [idMatch=").append(idMatch).append(", idMatchOpta=").append(idMatchOpta).append(", idSeason=").append(idSeason).append(", dateMatch=").append(dateMatch)
 				.append(", idTeamA=").append(idTeamA).append(", teamAName=").append(teamAName).append(", idTeamB=").append(idTeamB).append(", teamBName=").append(teamBName).append(", status=")
-				.append(status).append("]");
+				.append(status).append(", lastUpdated=").append(lastUpdated).append("]");
 		return builder.toString();
 	}
-
 }
