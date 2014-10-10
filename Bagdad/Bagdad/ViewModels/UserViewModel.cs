@@ -129,5 +129,28 @@ namespace Bagdad.ViewModels
 
             return findUsers;
         }
+
+        public async Task<List<FollowViewModel>> FindUsersInLocal(String searchString)
+        {
+            List<FollowViewModel> findUsersToRetorn = new List<FollowViewModel>();
+            try
+            {
+                User users = new User();
+                UserImageManager userImageManager = new UserImageManager();
+
+                List<User> findUsers = await users.FindUsersInDB(searchString);
+                foreach (User user in findUsers)
+                {
+
+                }
+                //image
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R - UserViewModel - FindUsersInLocal: " + e.Message);
+            }
+            return findUsersToRetorn;
+        }
     }
 }

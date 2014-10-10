@@ -328,9 +328,42 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+                throw new Exception("User - FindUsersInServer: " + e.Message, e);
             }
             return users;
+        }
+
+        public async Task<List<User>> FindUsersInDB(String searchString)
+        {
+            List<User> usersResult = new List<User>();
+            try
+            {
+             Database db = await App.GetDatabaseAsync();
+
+             Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUsersByUserAndNick);
+                st.BindTextParameterWithName("@name", searchString);
+                st.BindTextParameterWithName("@userName", searchString);
+
+                if (await st.StepAsync())
+                {
+                    User user = new User();
+                    user.idUser = st.GetIntAt(0);
+                    user.userName = st.GetTextAt(1);
+                    user.name = st.GetTextAt(2);
+                    user.photo = st.GetTextAt(3);
+                    user.bio = st.GetTextAt(4);
+                    user.points = st.GetIntAt(5);
+                    user.numFollowing = st.GetIntAt(6);
+                    user.numFollowers = st.GetIntAt(7);
+                    user.website = st.GetTextAt(8);
+                    usersResult.Add(user);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("User - FindUsersInServer: " + e.Message, e);
+            }
+            return usersResult;
         }
     }
 }
