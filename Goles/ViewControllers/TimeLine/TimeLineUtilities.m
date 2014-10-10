@@ -36,6 +36,11 @@
 }
 
 //------------------------------------------------------------------------------
++ (UIView *)createTimelineTitleViewWithText:(NSString *)text {
+    return [self createTitleViewWithTitle:text];
+}
+
+//------------------------------------------------------------------------------
 + (CGFloat)heightForShot:(NSString *)shotText{
     
     NSInteger MAX_HEIGHT = 2000;

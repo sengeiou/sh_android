@@ -14,6 +14,7 @@
 + (UIView *)createTimelineTitleView;
 + (UIView *)createConectandoTitleView;
 + (UIView *)createActualizandoTitleView;
++ (UIView *)createTimelineTitleViewWithText:(NSString *)text;
 
 + (CGFloat)heightForShot:(NSString *)shotText;
 + (NSString *)getDateShot:(NSNumber *) dateShot;

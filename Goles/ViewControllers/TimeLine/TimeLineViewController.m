@@ -104,16 +104,7 @@
 //------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-#warning This notification needs to be here or in the ViewDidLoad?
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
-    
     self.viewToDisableTextField.hidden = YES;
-}
-
-#warning Really neede if remove all observer in dealloc?
-//------------------------------------------------------------------------------
-- (void)viewWillDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -171,6 +162,8 @@
     //Listen for synchro process end
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
 
+    //Listen to orientation changes
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     //Listen for keyboard process open
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -852,7 +845,7 @@
 - (NSString *)countCharacters:(NSUInteger) lenght{
     
     if (lenght <= CHARACTERS_SHOT){
-        NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
+        NSString *charLeft = [NSString stringWithFormat:@"%u",CHARACTERS_SHOT - lenght];
         return charLeft;
     }
     return @"0";
@@ -871,9 +864,21 @@
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
 
-    //self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    [self updateCurrentTitleView];
     
     [self restrictRotation:NO];
+}
+
+#pragma mark - Title View Get
+//------------------------------------------------------------------------------
+- (void)updateCurrentTitleView {
+
+    if (self.navigationItem.titleView.subviews.count > 1) {
+        UILabel *actualLabel = [self.navigationItem.titleView.subviews objectAtIndex:1];
+        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleViewWithText:actualLabel.text];
+    }else
+        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+
 }
 
 @end
