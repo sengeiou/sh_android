@@ -24,7 +24,7 @@ public class GolesApplication extends Application {
         plantTrees();
     }
 
-    private void plantTrees() {
+    public void plantTrees() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
             Timber.plant(new FileLogger.FileLogTree());

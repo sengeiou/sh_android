@@ -31,7 +31,7 @@ public class UserDtoFactoryTest {
     public void loginWithEmailFillsEmailField() {
         String email = "mock@fav24.com";
 
-        GenericDto dto = userDtoFactory.getLoginOperationDto(email, "nananana");
+        GenericDto dto = userDtoFactory.getLoginOperationDto(email, "password");
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
         assertThat(keys).containsKey(GMContract.UserTable.EMAIL);
         assertThat(keys).doesNotContainKey(GMContract.UserTable.USER_NAME);
@@ -42,7 +42,7 @@ public class UserDtoFactoryTest {
     public void loginWithUsernameFillsUsernameField() {
         String username = "mock";
 
-        GenericDto dto = userDtoFactory.getLoginOperationDto(username, "nananana");
+        GenericDto dto = userDtoFactory.getLoginOperationDto(username, "password");
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
         assertThat(keys).containsKey(GMContract.UserTable.USER_NAME);
         assertThat(keys).doesNotContainKey(GMContract.UserTable.EMAIL);
@@ -51,7 +51,7 @@ public class UserDtoFactoryTest {
 
     @Test
     public void loginFillsPasswordField() {
-        String pass = "nananana";
+        String pass = "password";
         GenericDto dto = userDtoFactory.getLoginOperationDto("mock", pass);
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
         assertThat(keys).containsKey(GMContract.UserTable.PASSWORD);
