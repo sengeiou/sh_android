@@ -85,22 +85,15 @@
                         </Grid>
 
                         <!--Column2-->
-                        <Button Grid.Column="2" Width="222" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2">
+                        <Button Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2">
                             <Button.Content>
                                 <Grid HorizontalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
 
-                                    <!--Column0-->
-                                    <Rectangle Grid.Column="0" Visibility="{Binding buttonIconVisible}" Fill="{Binding buttonForeground}" Height="30" Width="30" Margin="0" HorizontalAlignment="Right">
+                                    <Rectangle Visibility="{Binding buttonIconVisible}" Fill="{Binding buttonForeground}" Width="45" Height="45" Margin="-12" HorizontalAlignment="Right">
                                         <Rectangle.OpacityMask>
                                             <ImageBrush ImageSource="{Binding buttonIcon}"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
-                                    <!--Column0-->
-                                    <TextBlock x:Name="headButtonText" Margin="0" Grid.Column="1" Text="{Binding buttonText}"/>
 
                                 </Grid>
                             </Button.Content>

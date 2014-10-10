@@ -109,7 +109,8 @@ namespace Bagdad.ViewModels
                         user.buttonText = AppResources.ProfileButtonFollowing + "  ";
                         user.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
                         user.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.check.png", UriKind.RelativeOrAbsolute));
+                        user.buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
                         user.buttonIconVisible = System.Windows.Visibility.Visible;
 
                     }
@@ -118,8 +119,9 @@ namespace Bagdad.ViewModels
                         user.buttonVisible = Visibility.Visible;
                         user.buttonText = AppResources.ProfileButtonFollow + "  ";
                         user.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        user.buttonForeground = Application.Current.Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
+                        user.buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                        user.buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
                         user.buttonIconVisible = System.Windows.Visibility.Visible;
                     }
                 }
