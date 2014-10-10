@@ -14,6 +14,7 @@ using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using Bagdad.Resources;
 using System.Diagnostics;
+using Bagdad.Models;
 
 namespace Bagdad
 {
@@ -55,17 +56,11 @@ namespace Bagdad
         {
             try
             {
-                if (App.isInternetAvailable)
-                {
-                    int returned = await followings.LoadData(idUser, offset, Constants.CONST_PEOPLE);
-                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
-                    return returned;
-                }
-                else
-                {
-                    MessageBox.Show(AppResources.NoInternet);
-                    return -1;
-                }
+
+                int returned = await followings.LoadData(idUser, offset, Constants.CONST_PEOPLE);
+                offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+                return returned;
+
             }
             catch (Exception e)
             {
@@ -121,7 +116,7 @@ namespace Bagdad
 
         private void goToProfile_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            UserViewModel user = ((FollowViewModel)followingList.SelectedItem).userInfo;
+            User user = ((FollowViewModel)followingList.SelectedItem).userInfo;
             int userId = user.idUser;
 
             PhoneApplicationService.Current.State["user"] = user;

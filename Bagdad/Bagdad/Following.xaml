@@ -65,7 +65,7 @@
                         <!--Column0-->
                         <Grid x:Name="goToProfile" Grid.Column="0" Tap="goToProfile_Tap">
                             <Rectangle Fill="{StaticResource PhoneChromeBrush}" Width="75" Height="75"/>
-                            <Image Width="75" Height="75" Source="{Binding userInfo.userImage}"/>
+                            <Image Width="75" Height="75" Source="{Binding userImage}"/>
                         </Grid>
 
                         <!--Column1-->
@@ -76,10 +76,10 @@
                             </Grid.RowDefinitions>
                             
                             <!--Row0-->
-                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
+                            <TextBlock Grid.Row="0" Text="{Binding userInfo.name}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
 
                             <!--Row1-->
-                            <TextBlock Grid.Row="1" Text="{Binding userInfo.userNickName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                            <TextBlock Grid.Row="1" Text="{Binding userInfo.userName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
 
                         </Grid>
 

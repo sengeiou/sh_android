@@ -29,7 +29,7 @@ namespace Bagdad.Utils
 
         public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE idUser = @idUser";
 
-        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE usernName like @userName OR name LIKE @name";
+        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
 
         #endregion
 

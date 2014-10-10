@@ -82,57 +82,25 @@ namespace Bagdad.ViewModels
             return true;
         }
 
-        public async Task<List<FollowViewModel>> FindUsersInServer(String searchString, int offset)
+        public async Task<FollowsViewModel> FindUsersInServer(String searchString, int offset)
         {
             User users = new User();
-            UserImageManager userImageManager = new UserImageManager();
+            
+            List<User> findUsers = await users.FindUsersInServer(searchString, offset);
 
-            List<FollowViewModel> findUsers = await users.FindUsersInServer(searchString, offset);
+            FollowsViewModel findedUsers = new FollowsViewModel();
 
-            foreach (FollowViewModel user in findUsers)
+            foreach (User user in findUsers)
             {
-                //image
-                user.userInfo.userImage = userImageManager.GetUserImage(user.userInfo.idUser);
-                if (user.userInfo.userImage == null && !String.IsNullOrEmpty(user.userInfo.userURLImage)) user.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(user.userInfo.userURLImage, UriKind.Absolute));
-
-                if (user.userInfo.idUser == App.ID_USER)
-                {
-                    //Don't Show The Button
-                    user.buttonVisible = Visibility.Collapsed;
-                }
-                else
-                {
-                    //Default Button
-                    if (user.userInfo.isFollowed)
-                    {
-                        user.buttonVisible = Visibility.Visible;
-                        user.buttonText = AppResources.ProfileButtonFollowing + "  ";
-                        user.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        user.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                        user.buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
-                        user.buttonIconVisible = System.Windows.Visibility.Visible;
-
-                    }
-                    else
-                    {
-                        user.buttonVisible = Visibility.Visible;
-                        user.buttonText = AppResources.ProfileButtonFollow + "  ";
-                        user.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        user.buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        user.buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        user.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
-                        user.buttonIconVisible = System.Windows.Visibility.Visible;
-                    }
-                }
+                await findedUsers.AddUserToList(user);
             }
 
-            return findUsers;
+            return findedUsers;
         }
 
-        public async Task<List<FollowViewModel>> FindUsersInLocal(String searchString)
+        public async Task<FollowsViewModel> FindUsersInLocal(String searchString)
         {
-            List<FollowViewModel> findUsersToRetorn = new List<FollowViewModel>();
+            FollowsViewModel findedUsers = new FollowsViewModel();
             try
             {
                 User users = new User();
@@ -141,7 +109,7 @@ namespace Bagdad.ViewModels
                 List<User> findUsers = await users.FindUsersInDB(searchString);
                 foreach (User user in findUsers)
                 {
-
+                    await findedUsers.AddUserToList(user);
                 }
                 //image
 
@@ -150,7 +118,7 @@ namespace Bagdad.ViewModels
             {
                 Debug.WriteLine("E R R O R - UserViewModel - FindUsersInLocal: " + e.Message);
             }
-            return findUsersToRetorn;
+            return findedUsers;
         }
     }
 }

@@ -168,13 +168,13 @@ namespace Bagdad.Models
             return imFollowing;
         }
 
-        public async Task<List<FollowViewModel>> GetUserFollowingLocalData(int idUser, String type)
+        public async Task<List<User>> GetUserFollowingLocalData(int idUser, String type)
         {
             String query;
             if (type.Equals(Constants.CONST_FOLLOWING)) query = SQLQuerys.GetAllInfoFromFollowings;
             else query = SQLQuerys.GetAllInfoFromPeople;
 
-            List<FollowViewModel> followings = new List<FollowViewModel>();
+            List<User> followings = new List<User>();
             try
             {
                 Database db = await App.GetDatabaseAsync();
@@ -183,7 +183,7 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = st.GetIntAt(0), userNickName = st.GetTextAt(1), userName = st.GetTextAt(2), userURLImage = st.GetTextAt(3), isFollowed = true } });
+                    followings.Add(new User() { idUser = st.GetIntAt(0), userName = st.GetTextAt(1), name = st.GetTextAt(2), photo = st.GetTextAt(3)});
                 }
             }
             catch (Exception e)
@@ -193,11 +193,9 @@ namespace Bagdad.Models
             return followings;
         }
 
-        public async Task<List<FollowViewModel>> GetUserFollowingFromServer(int idUser, int offset)
+        public async Task<List<User>> GetUserFollowingFromServer(int idUser, int offset)
         {
-            List<int> myFollowings = await getidUserFollowing();
-
-            List<FollowViewModel> followings = new List<FollowViewModel>();
+            List<User> followings = new List<User>();
             try
             {
                 ServiceCommunication sc = new ServiceCommunication();
@@ -206,17 +204,11 @@ namespace Bagdad.Models
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
-                bool iFollow;
-
                 if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        iFollow = false;
-
-                        if (myFollowings.Contains(int.Parse(follow["idUser"].ToString()))) iFollow = true;
-
-                        followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(follow["idUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userURLImage = follow["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(follow["numFollowers"].ToString()), following = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), userBio = follow["bio"].ToString(), userWebsite = follow["website"].ToString() } });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString() });
                     }
 
                 }
@@ -228,11 +220,9 @@ namespace Bagdad.Models
             return followings;
         }
 
-        public async Task<List<FollowViewModel>> GetUserFollowersFromServer(int idUser, int offset)
+        public async Task<List<User>> GetUserFollowersFromServer(int idUser, int offset)
         {
-            List<int> myFollowings = await getidUserFollowing();
-
-            List<FollowViewModel> followings = new List<FollowViewModel>();
+            List<User> followings = new List<User>();
             try
             {
                 ServiceCommunication sc = new ServiceCommunication();
@@ -241,17 +231,12 @@ namespace Bagdad.Models
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
-                bool iFollow;
 
                 if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        iFollow = false;
-
-                        if (myFollowings.Contains(int.Parse(follow["idUser"].ToString()))) iFollow = true;
-
-                        followings.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(follow["idUser"].ToString()), userNickName = follow["userName"].ToString(), userName = follow["name"].ToString(), userURLImage = follow["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(follow["numFollowers"].ToString()), following = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), userBio = follow["bio"].ToString(), userWebsite = follow["website"].ToString() } });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString() });
                     }
 
                 }

@@ -209,6 +209,7 @@
                 </c4ftk:ChatBubbleTextBox.InputScope>
             </c4ftk:ChatBubbleTextBox>
         </Grid>
+        
         <!--Row3-->
         <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.Resources>

@@ -25,7 +25,8 @@ namespace Bagdad
         private int scrollToChargue = 0;
         private bool endOfList = false;
         private int charge = 0;
-        List<FollowViewModel> searchedFriends;
+        bool loadedFromServer = false;
+        FollowsViewModel searchedFriends;
         UserViewModel uvm;
         public ProgressIndicator progress;
 
@@ -33,7 +34,7 @@ namespace Bagdad
         {
             InitializeComponent();
             uvm = new UserViewModel();
-            searchedFriends = new List<FollowViewModel>();
+            searchedFriends = new FollowsViewModel();
             DataContext = searchedFriends;
             BuildLocalizedApplicationBar();
             progress = new ProgressIndicator()
@@ -106,13 +107,22 @@ namespace Bagdad
 
         private async void SearchBar_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && SearchBar.Text.Length > 0)
             {
                 progress.IsVisible = true;
-                
+
                 if (findList.Items.Count > 0) findList.ScrollIntoView(findList.Items.First());
 
-                searchedFriends = await uvm.FindUsersInServer(SearchBar.Text, 0);
+                if (App.isInternetAvailable)
+                {
+                    searchedFriends = await uvm.FindUsersInServer(SearchBar.Text, 0);
+                    loadedFromServer = true;
+                }
+                else
+                {
+                    searchedFriends = await uvm.FindUsersInLocal(SearchBar.Text);
+                    loadedFromServer = false;
+                }
 
                 DataContext = searchedFriends;
 
@@ -120,7 +130,7 @@ namespace Bagdad
                 {
                     Focus();
                     endOfList = false;
-                    offset = searchedFriends.Count;
+                    offset = searchedFriends.Followings.Count;
                 }
 
                 progress.IsVisible = false;
@@ -140,14 +150,14 @@ namespace Bagdad
                 scrollToChargue = 100 - (15 * 100 / findList.Items.Count());
             }
 
-            if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
+            if (scrollInterface.VerticalScrollPercent >= scrollToChargue && loadedFromServer)
             {
                 if (!endOfList)
                 {
-                    charge = searchedFriends.Count();
-                    foreach (FollowViewModel user in await uvm.FindUsersInServer(SearchBar.Text, offset))
+                    charge = searchedFriends.Followings.Count();
+                    foreach (FollowViewModel user in (await uvm.FindUsersInServer(SearchBar.Text, offset)).Followings)
                     {
-                        searchedFriends.Add(user);
+                        searchedFriends.Followings.Add(user);
                     }
 
                     DataContext = null;

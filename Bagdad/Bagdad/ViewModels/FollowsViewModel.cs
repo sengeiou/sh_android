@@ -47,47 +47,12 @@ namespace Bagdad.ViewModels
         private async Task<int> LocalDataLoad(int idUser, String type)
         {
             int done = 0;
-
-            UserImageManager userImageManager = new UserImageManager();
+            
             Follow follow = new Follow();
-            foreach (FollowViewModel following in await follow.GetUserFollowingLocalData(idUser, type))
+
+            foreach (User following in await follow.GetUserFollowingLocalData(idUser, type))
             {
-                //image
-                following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
-                if (following.userInfo.userImage == null && !String.IsNullOrEmpty(following.userInfo.userURLImage)) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
-
-                if (following.userInfo.idUser == App.ID_USER)
-                {
-                    //Don't Show The Button
-                    following.buttonVisible = Visibility.Collapsed;
-                }
-                else
-                {
-                    //Default Button
-                    if (following.userInfo.isFollowed)
-                    {
-                        following.buttonVisible = Visibility.Visible;
-                        following.buttonText = AppResources.ProfileButtonFollowing + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        following.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                        following.buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
-                        following.buttonIconVisible = System.Windows.Visibility.Visible;
-
-                    }
-                    else
-                    {
-                        following.buttonVisible = Visibility.Visible;
-                        following.buttonText = AppResources.ProfileButtonFollow + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        following.buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        following.buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
-                        following.buttonIconVisible = System.Windows.Visibility.Visible;
-                    }
-                }
-
-                Followings.Add(following);
+                done += await AddUserToList(following);
             }
 
             return done;
@@ -97,56 +62,93 @@ namespace Bagdad.ViewModels
         {
             int done = 0;
 
-            UserImageManager userImageManager = new UserImageManager();
             Follow follow = new Follow();
 
-            List<FollowViewModel> follows;
+            List<User> follows;
 
             if (type.Equals(Constants.CONST_FOLLOWING))
                 follows = await follow.GetUserFollowingFromServer(idUser, offset);
             else
                 follows = await follow.GetUserFollowersFromServer(idUser, offset);
 
-            foreach (FollowViewModel following in follows)
+            foreach (User following in follows)
             {
-                //image
-                following.userInfo.userImage = userImageManager.GetUserImage(following.userInfo.idUser);
-                if (following.userInfo.userImage == null && !String.IsNullOrEmpty(following.userInfo.userURLImage)) following.userInfo.userImage = new System.Windows.Media.Imaging.BitmapImage(new Uri(following.userInfo.userURLImage, UriKind.Absolute));
-
-                if (following.userInfo.idUser == App.ID_USER)
-                {
-                    //Don't Show The Button
-                    following.buttonVisible = Visibility.Collapsed;
-                }
-                else
-                {
-                    //Default Button
-                    if (following.userInfo.isFollowed)
-                    {
-                        following.buttonVisible = Visibility.Visible;
-                        following.buttonText = AppResources.ProfileButtonFollowing + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        following.buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                        following.buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
-                        following.buttonIconVisible = System.Windows.Visibility.Visible;
-                        
-                    }
-                    else
-                    {
-                        following.buttonVisible = Visibility.Visible;
-                        following.buttonText = AppResources.ProfileButtonFollow + "  ";
-                        following.buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                        following.buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        following.buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                        following.buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
-                        following.buttonIconVisible = System.Windows.Visibility.Visible;
-                    }
-                }
-                Followings.Add(following);
+                done += await AddUserToList(following);
             }
 
             return done;
+        }
+
+        public async Task<int> AddUserToList(User user)
+        {
+            //image
+            UserImageManager userImageManager = new UserImageManager();
+
+            BitmapImage image = userImageManager.GetUserImage(user.idUser);
+
+            if (image == null && !String.IsNullOrEmpty(user.photo)) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(user.photo, UriKind.Absolute));
+
+            //isFollowed
+            Follow follow = new Follow();
+            List<int> myFollowings = await follow.getidUserFollowing();
+
+            bool followed = false;
+
+            if (myFollowings.Contains(user.idUser)) followed = true;
+
+            //add user with button data
+
+            if (user.idUser == App.ID_USER)
+            {
+                //Don't Show The Button
+                Followings.Add(new FollowViewModel()
+                {
+                    userInfo = user,
+                    userImage = image,
+                    isFollowed = followed,
+                    buttonVisible = Visibility.Collapsed
+                });
+            }
+            else
+            {
+                //Default Button
+                if (followed)
+                {
+                    Followings.Add(new FollowViewModel()
+                    {
+                        userInfo = user,
+                        userImage = image,
+                        isFollowed = followed,
+                        buttonVisible = Visibility.Visible,
+                        buttonText = AppResources.ProfileButtonFollowing + "  ",
+                        buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush,
+                        buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White),
+                        buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush,
+                        buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute)),
+                        buttonIconVisible = System.Windows.Visibility.Visible
+                    });
+
+                }
+                else
+                {
+                    Followings.Add(new FollowViewModel()
+                    {
+                        userInfo = user,
+                        userImage = image,
+                        isFollowed = followed,
+                        buttonVisible = Visibility.Visible,
+                        buttonText = AppResources.ProfileButtonFollow + "  ",
+                        buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush,
+                        buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
+                        buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
+                        buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute)),
+                        buttonIconVisible = System.Windows.Visibility.Visible
+                    });
+                   
+                }
+            }
+
+            return 1;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

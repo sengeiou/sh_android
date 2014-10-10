@@ -297,12 +297,11 @@ namespace Bagdad.Models
             return uvm;
         }
 
-        public async Task<List<FollowViewModel>> FindUsersInServer(String searchString, int offset)
+        public async Task<List<User>> FindUsersInServer(String searchString, int offset)
         {
             Follow follow = new Follow();
-            List<int> myFollowings = await follow.getidUserFollowing();
 
-            List<FollowViewModel> users = new List<FollowViewModel>();
+            List<User> users = new List<User>();
             try
             {
                 ServiceCommunication sc = new ServiceCommunication();
@@ -311,17 +310,11 @@ namespace Bagdad.Models
 
                 JObject response = JObject.Parse(await sc.MakeRequestToMemory(json));
 
-                bool iFollow;
-
                 if (response["status"]["code"].ToString().Equals("OK") && !response["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     foreach (JToken user in response["ops"][0]["data"])
                     {
-                        iFollow = false;
-
-                        if (myFollowings.Contains(int.Parse(user["idUser"].ToString()))) iFollow = true;
-
-                        users.Add(new FollowViewModel() { userInfo = new UserViewModel() { idUser = int.Parse(user["idUser"].ToString()), userNickName = user["userName"].ToString(), userName = user["name"].ToString(), userURLImage = user["photo"].ToString(), isFollowed = iFollow, followers = int.Parse(user["numFollowers"].ToString()), following = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), userBio = user["bio"].ToString(), userWebsite = user["website"].ToString() } });
+                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString() });
                     }
 
                 }
@@ -341,10 +334,10 @@ namespace Bagdad.Models
              Database db = await App.GetDatabaseAsync();
 
              Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUsersByUserAndNick);
-                st.BindTextParameterWithName("@name", searchString);
-                st.BindTextParameterWithName("@userName", searchString);
+             st.BindTextParameterWithName("@name", "%" + searchString + "%");
+             st.BindTextParameterWithName("@userName", "%" + searchString + "%");
 
-                if (await st.StepAsync())
+                while (await st.StepAsync())
                 {
                     User user = new User();
                     user.idUser = st.GetIntAt(0);
