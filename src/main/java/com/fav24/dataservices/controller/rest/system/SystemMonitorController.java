@@ -358,20 +358,22 @@ public class SystemMonitorController extends BaseRestController {
 
 			if (workloadMonitorSample != null) {
 
-				Object[][] startTimeData = {{workloadMonitorSample.getData(WorkloadMeter.MEASURE_START_TIME)}};
-				Object[][] requestsRateData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE)}};
-				Object[][] requestsRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK)}};
-				Object[][] totalRequestsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS)}};
-				Object[][] totalRequestsKoData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO)}};
-				Object[][] operationRateData = {{workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE)}};
-				Object[][] operationRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE_PEAK)}};
-				Object[][] totalOperationsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS)}};
-				Object[][] totalOperationsKoData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS_KO)}};
-				Object[][] subsystemOperationRateData = {{workloadMonitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE)}};
-				Object[][] subsystemOperationRatePeakData = {{workloadMonitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE_PEAK)}};
-				Object[][] totalSubsystemOperationsData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS)}};
-				Object[][] totalSubsystemOpertionsKoData = {{workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO)}};
+				Object[] timestamp = {workloadMonitorSample.getTime()};
+				Object[] startTimeData = {workloadMonitorSample.getData(WorkloadMeter.MEASURE_START_TIME)};
+				Object[] requestsRateData = {workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE)};
+				Object[] requestsRatePeakData = {workloadMonitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK)};
+				Object[] totalRequestsData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS)};
+				Object[] totalRequestsKoData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO)};
+				Object[] operationRateData = {workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE)};
+				Object[] operationRatePeakData = {workloadMonitorSample.getData(WorkloadMeter.OPERATION_RATE_PEAK)};
+				Object[] totalOperationsData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS)};
+				Object[] totalOperationsKoData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS_KO)};
+				Object[] subsystemOperationRateData = {workloadMonitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE)};
+				Object[] subsystemOperationRatePeakData = {workloadMonitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE_PEAK)};
+				Object[] totalSubsystemOperationsData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS)};
+				Object[] totalSubsystemOpertionsKoData = {workloadMonitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO)};
 
+				systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 				systemMonitorInfo.getData().put(WorkloadMeter.MEASURE_START_TIME, startTimeData);
 				systemMonitorInfo.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 				systemMonitorInfo.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
@@ -399,65 +401,43 @@ public class SystemMonitorController extends BaseRestController {
 
 				if (systemWorkload != null) {
 
-					Object[][] startTimeData = new Object[systemWorkload.size()][2];
-					Object[][] requestsRateData = new Object[systemWorkload.size()][2];
-					Object[][] requestsRatePeakData = new Object[systemWorkload.size()][2];
-					Object[][] totalRequestsData = new Object[systemWorkload.size()][2];
-					Object[][] totalRequestsKoData = new Object[systemWorkload.size()][2];
-					Object[][] operationRateData = new Object[systemWorkload.size()][2];
-					Object[][] operationRatePeakData = new Object[systemWorkload.size()][2];
-					Object[][] totalOperationsData = new Object[systemWorkload.size()][2];
-					Object[][] totalOperationsKoData = new Object[systemWorkload.size()][2];
-					Object[][] subsystemOperationRateData = new Object[systemWorkload.size()][2];
-					Object[][] subsystemOperationRatePeakData = new Object[systemWorkload.size()][2];
-					Object[][] totalSubsystemOperationsData = new Object[systemWorkload.size()][2];
-					Object[][] totalSubsystemOpertionsKoData = new Object[systemWorkload.size()][2];
+					Object[] timestamp = new Object[systemWorkload.size()];
+					Object[] startTimeData = new Object[systemWorkload.size()];
+					Object[] requestsRateData = new Object[systemWorkload.size()];
+					Object[] requestsRatePeakData = new Object[systemWorkload.size()];
+					Object[] totalRequestsData = new Object[systemWorkload.size()];
+					Object[] totalRequestsKoData = new Object[systemWorkload.size()];
+					Object[] operationRateData = new Object[systemWorkload.size()];
+					Object[] operationRatePeakData = new Object[systemWorkload.size()];
+					Object[] totalOperationsData = new Object[systemWorkload.size()];
+					Object[] totalOperationsKoData = new Object[systemWorkload.size()];
+					Object[] subsystemOperationRateData = new Object[systemWorkload.size()];
+					Object[] subsystemOperationRatePeakData = new Object[systemWorkload.size()];
+					Object[] totalSubsystemOperationsData = new Object[systemWorkload.size()];
+					Object[] totalSubsystemOpertionsKoData = new Object[systemWorkload.size()];
 
 					int i = 0;
 					for (MonitorSample monitorSample : systemWorkload) {
 
-						startTimeData[i][0] = monitorSample.getTime();
-						startTimeData[i][1] = monitorSample.getData(WorkloadMeter.MEASURE_START_TIME);
-
-						requestsRateData[i][0] = monitorSample.getTime();
-						requestsRateData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE);
-
-						requestsRatePeakData[i][0] = monitorSample.getTime();
-						requestsRatePeakData[i][1] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK);
-
-						totalRequestsData[i][0] = monitorSample.getTime();
-						totalRequestsData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS);
-
-						totalRequestsKoData[i][0] = monitorSample.getTime();
-						totalRequestsKoData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO);
-
-						operationRateData[i][0] = monitorSample.getTime();
-						operationRateData[i][1] = monitorSample.getData(WorkloadMeter.OPERATION_RATE);
-
-						operationRatePeakData[i][0] = monitorSample.getTime();
-						operationRatePeakData[i][1] = monitorSample.getData(WorkloadMeter.OPERATION_RATE_PEAK);
-
-						totalOperationsData[i][0] = monitorSample.getTime();
-						totalOperationsData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS);
-
-						totalOperationsKoData[i][0] = monitorSample.getTime();
-						totalOperationsKoData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS_KO);
-
-						subsystemOperationRateData[i][0] = monitorSample.getTime();
-						subsystemOperationRateData[i][1] = monitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE);
-
-						subsystemOperationRatePeakData[i][0] = monitorSample.getTime();
-						subsystemOperationRatePeakData[i][1] = monitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE_PEAK);
-
-						totalSubsystemOperationsData[i][0] = monitorSample.getTime();
-						totalSubsystemOperationsData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS);
-
-						totalSubsystemOpertionsKoData[i][0] = monitorSample.getTime();
-						totalSubsystemOpertionsKoData[i][1] = monitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO);
+						timestamp[i] = monitorSample.getTime();
+						startTimeData[i] = monitorSample.getData(WorkloadMeter.MEASURE_START_TIME);
+						requestsRateData[i] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE);
+						requestsRatePeakData[i] = monitorSample.getData(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK);
+						totalRequestsData[i] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS);
+						totalRequestsKoData[i] = monitorSample.getData(WorkloadMeter.TOTAL_INCOMING_REQUESTS_KO);
+						operationRateData[i] = monitorSample.getData(WorkloadMeter.OPERATION_RATE);
+						operationRatePeakData[i] = monitorSample.getData(WorkloadMeter.OPERATION_RATE_PEAK);
+						totalOperationsData[i] = monitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS);
+						totalOperationsKoData[i] = monitorSample.getData(WorkloadMeter.TOTAL_OPERATIONS_KO);
+						subsystemOperationRateData[i] = monitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE);
+						subsystemOperationRatePeakData[i] = monitorSample.getData(WorkloadMeter.SUBSYSTEM_OPERATION_RATE_PEAK);
+						totalSubsystemOperationsData[i] = monitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS);
+						totalSubsystemOpertionsKoData[i] = monitorSample.getData(WorkloadMeter.TOTAL_SUBSYSTEM_OPERATIONS_KO);
 
 						i++;
 					}
 
+					systemMonitorInfo.getData().put(Meter.TIMESTAMP, timestamp);
 					systemMonitorInfo.getData().put(WorkloadMeter.MEASURE_START_TIME, startTimeData);
 					systemMonitorInfo.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE, requestsRateData);
 					systemMonitorInfo.getData().put(WorkloadMeter.INCOMING_REQUESTS_RATE_PEAK, requestsRatePeakData);
