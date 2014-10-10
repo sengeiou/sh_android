@@ -177,8 +177,6 @@ public class UserDtoFactory {
           orModifiedOrDeletedAfter(0L),
           or(UserTable.NAME).contains(searchString)
           .or(UserTable.USER_NAME)
-          .contains(searchString)
-          .or(UserTable.EMAIL)
           .contains(searchString)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
