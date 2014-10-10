@@ -30,6 +30,14 @@ public class GetPeopleJob extends CancellableJob {
     private UserManager userManager;
     private FollowManager followManager;
 
+    public void setBus(Bus bus) {
+        this.bus = bus;
+    }
+
+    public void setService(BagdadService service) {
+        this.service = service;
+    }
+
     @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY));
         this.context = context;
@@ -53,7 +61,9 @@ public class GetPeopleJob extends CancellableJob {
      }
 
     public void init() {
-        userId = GolesApplication.get(context).getCurrentUser().getIdUser();
+        GolesApplication golesApplication = GolesApplication.get(context);
+        User currentUser = golesApplication.getCurrentUser();
+        userId = currentUser.getIdUser();
 
     }
 
