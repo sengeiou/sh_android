@@ -23,7 +23,7 @@ import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJobBagdad;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
@@ -106,7 +106,7 @@ public class UserFollowsFragment extends BaseFragment {
     }
 
     public void startJob(){
-        GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
+        GetUsersFollowsJobBagdad job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJobBagdad.class);
         job.init(userId);
         jobManager.addJobInBackground(job);
     }

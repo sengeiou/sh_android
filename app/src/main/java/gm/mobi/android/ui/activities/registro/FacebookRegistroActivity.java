@@ -84,8 +84,8 @@ public class FacebookRegistroActivity extends BaseActivity {
         setLoading(true);
         //TODO validar localmente
         String username = mUsernameText.getText().toString();
+        //TODO comprobar si ya estaba ejecutándose, y decidir si debemos lanzar uno nuevo o ignorar
         if (currentRegisterJob != null) {
-            currentRegisterJob.cancelJob();
             currentRegisterJob = null;
         }
         currentRegisterJob = new RegisterNewUserJob(this, username, email, avatarUrl);

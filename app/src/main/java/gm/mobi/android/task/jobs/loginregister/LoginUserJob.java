@@ -11,12 +11,12 @@ import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class LoginUserJob extends CancellableJob {
+public class LoginUserJob extends BagdadBaseJob {
 
     private static final int PRIORITY = 8; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;

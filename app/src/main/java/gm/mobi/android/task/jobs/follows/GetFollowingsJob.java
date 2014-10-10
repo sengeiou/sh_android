@@ -17,19 +17,17 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetFollowingsJob extends CancellableJob {
+public class GetFollowingsJob extends BagdadBaseJob {
 
     private static final int PRIORITY = 6; //TODO Define next values for our queue
     private static final int RETRY_ATTEMPTS = 3;

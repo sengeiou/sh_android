@@ -17,13 +17,13 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetUserInfoJob extends CancellableJob {
+public class GetUserInfoJob extends BagdadBaseJob {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;

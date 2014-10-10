@@ -10,12 +10,12 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class NewShotJob extends CancellableJob{
+public class NewShotJob extends BagdadBaseJob {
 
     private static final int PRIORITY = 5;
 

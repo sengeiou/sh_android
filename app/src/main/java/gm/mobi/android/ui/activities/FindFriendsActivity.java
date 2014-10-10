@@ -28,8 +28,8 @@ import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
-import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
@@ -174,7 +174,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     public void makeLocalSearch() {
-        SearchPeopleLocalJob job = objectGraph.get(SearchPeopleLocalJob.class);
+        SearchPeopleLocalJobBagdad job = objectGraph.get(SearchPeopleLocalJobBagdad.class);
         job.init(currentSearchQuery);
         jobManager.addJobInBackground(job);
     }

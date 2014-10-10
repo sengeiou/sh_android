@@ -119,13 +119,17 @@ public class UserManager extends AbstractManager {
     }
 
     public List<User> getUsersByIds(List<Long> usersIds) {
-        List<User> result = new ArrayList<>(usersIds.size());
-        String[] selectionArguments = new String[usersIds.size()];
-        for (int i = 0; i < usersIds.size(); i++) {
+        int userIdsSize = usersIds.size();
+        List<User> result = new ArrayList<>(userIdsSize);
+        if (userIdsSize == 0) {
+            return result;
+        }
+        String[] selectionArguments = new String[userIdsSize];
+        for (int i = 0; i < userIdsSize; i++) {
             selectionArguments[i] = String.valueOf(usersIds.get(i));
         }
         Cursor queryResults = db.query(UserTable.TABLE, UserTable.PROJECTION,
-          UserTable.ID + " IN (" + createListPlaceholders(usersIds.size()) + ")", selectionArguments, null, null,
+          UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")", selectionArguments, null, null,
           UserTable.NAME);
 
         if (queryResults.getCount() > 0) {

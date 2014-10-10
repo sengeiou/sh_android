@@ -10,13 +10,13 @@ import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleRemoteJob extends CancellableJob {
+public class SearchPeopleRemoteJob extends BagdadBaseJob {
 
     private static final int PRIORITY = 4;
     private static final int RETRY_ATTEMPTS = 3;

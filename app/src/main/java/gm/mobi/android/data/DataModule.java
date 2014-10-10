@@ -27,19 +27,18 @@ import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.sync.GMSyncAdapter;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
-import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
-import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
-import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
+import gm.mobi.android.task.jobs.follows.GetUsersFollowsJobBagdad;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.shots.NewShotJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
-import gm.mobi.android.ui.activities.MainActivity;
+import gm.mobi.android.task.jobs.timeline.TimelineJobBagdad;
+import gm.mobi.android.task.jobs.timeline.TimelineJobBagdad;import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
@@ -62,13 +61,13 @@ import static android.content.Context.MODE_PRIVATE;
 
     BaseSignedInActivity.class,
 
-    CancellableJob.class,
+    BagdadBaseJob.class,
 
     DummyFragment.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
-    GetFollowingsJob.class, GMSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
+    GetFollowingsJob.class, GMSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJobBagdad.class, GetPeopleJob.class,
 
     InitialSetupFragment.class,
 
@@ -80,9 +79,9 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
 
-    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
+    ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJobBagdad.class,
 
-    TimelineJob.class, TimelineFragment.class, TeamManager.class,
+    TimelineJobBagdad.class, TimelineFragment.class, TeamManager.class,
 
     ProfileFragment.class,
 

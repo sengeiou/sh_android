@@ -5,12 +5,12 @@ import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class RegisterNewUserJob extends CancellableJob {
+public class RegisterNewUserJob extends BagdadBaseJob {
     private static final int PRIORITY = 1;
 
     @Inject Bus bus;

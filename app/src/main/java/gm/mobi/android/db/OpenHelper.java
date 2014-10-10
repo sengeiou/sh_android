@@ -13,6 +13,9 @@ public class OpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    public OpenHelper(Context context, String dbName) {
+        super(context, dbName, null, DATABASE_VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
