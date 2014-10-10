@@ -623,7 +623,7 @@
 
 #pragma mark - SEARCH
 //------------------------------------------------------------------------------
-- (void)searchPeopleWithName:(NSString *)textToSearch withDelegate:(id)delegate {
+- (void)searchPeopleWithName:(NSString *)textToSearch withOffset:(NSNumber *)offset withDelegate:(id)delegate {
     
     //Create Alias block
     NSString *alias = kALIAS_FIND_FRIENDS;
@@ -638,7 +638,7 @@
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_USER
                                                                      withItems:@100
-                                                                    withOffSet:@0
+                                                                    withOffSet:offset
                                                                      andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
     
     //Create playerProvider 'ops' block
