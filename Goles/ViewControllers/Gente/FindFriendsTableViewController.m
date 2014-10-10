@@ -43,7 +43,7 @@
     if (tableView == self.searchDisplayController.searchResultsTableView)
         return [self.searchResults count];
         
-    return self.followingArray.count;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -104,7 +104,9 @@
 //------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.viewToDisableTextField.hidden = YES;
+
+#warning This notification needs to be here or in the ViewDidLoad?
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -289,7 +291,6 @@
     Shot *shot = self.arrayShots[indexPath.row];
 
     return [TimeLineUtilities heightForShot:shot.comment];
-
 }
 
 //------------------------------------------------------------------------------
@@ -599,7 +600,7 @@
         self.txtView.backgroundColor = [UIColor whiteColor];
         self.txtView.textColor = [UIColor blackColor];
         self.btnShoot.enabled = YES;
-
+        self.viewToDisableTextField.hidden = YES;
     }
 }
 

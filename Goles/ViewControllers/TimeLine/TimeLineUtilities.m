@@ -45,17 +45,26 @@
     
     NSInteger MAX_HEIGHT = 2000;
     NSInteger MAX_WIDTH = 500;
-    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT)];
-    textView.text = shotText;
-    textView.font = [UIFont systemFontOfSize:15];
-    CGSize size = [textView sizeThatFits:CGSizeMake(MAX_WIDTH, FLT_MAX)];
-
-    if (size.height <= 34)
-        return size.height + 48;
+//    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT)];
+//    textView.text = shotText;
+//    textView.font = [UIFont systemFontOfSize:15];
+//    CGSize size = [textView sizeThatFits:CGSizeMake(MAX_WIDTH, FLT_MAX)];
+//    
+//
+//   if (size.height <= 34)
+//        return size.height + 75;
+//    else if (size.height >= 52)
+//        return size.height+30;
+//    
+//    return size.height+65;
     
-    return size.height+30;
-
-
+    CGSize constraint = CGSizeMake(MAX_WIDTH, MAX_HEIGHT);
+    
+    CGSize size = [shotText sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGFloat height = MAX(size.height+64, 44.0f);
+    
+    return height;
 }
 
 //------------------------------------------------------------------------------
