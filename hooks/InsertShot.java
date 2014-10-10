@@ -1,5 +1,4 @@
-import java.util.Map;
-
+import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.policy.AccessPolicy;
@@ -79,21 +78,18 @@ public class InsertShot implements GenericServiceHook {
 	public <T> HookMethodOutput operationBegin(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) {
 
 		if (isOperationMod(operation.getMetadata().getOperation()) && ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
-			
-			int numberOfDataItems = operation.getData().size();
-			
-			for (int j = 0; j < numberOfDataItems; j++) {
 
-				for (Map.Entry<String, Object> entry : operation.getData().get(j).getAttributes().entrySet()) {
+			for (DataItem dataItem : operation.getData()) {
 
-					if (ATTR_COMMENT.equals(entry.getKey())) {
-						String text = (String) entry.getValue();
-						while (text.contains("\n\n\n")) {
-							text = text.replaceAll("\n\n\n", "\n\n");
-						}
-						text = text.trim();
-						entry.setValue(text);
+				String text  = (String)dataItem.getAttributes().get(ATTR_COMMENT);
+
+				if (text != null) {
+
+					while (text.contains("\n\n\n")) {
+						text = text.replaceAll("\n\n\n", "\n\n");
 					}
+
+					dataItem.getAttributes().put(ATTR_COMMENT, text.trim());
 				}
 			}
 		}
