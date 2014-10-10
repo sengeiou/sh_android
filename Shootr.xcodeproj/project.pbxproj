@@ -107,8 +107,8 @@
 		AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */; };
 		AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */; };
 		AAE0EF6D19E427A700F32FF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAE0EF6B19E427A700F32FF7 /* InfoPlist.strings */; };
-		AAE0EF7019E5172900F32FF7 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */; };
 		AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */; };
+		AAFD7BCB19E7C36800535A35 /* SearchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFD7BCA19E7C36800535A35 /* SearchManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -303,10 +303,10 @@
 		AAE0EF5F19E4258200F32FF7 /* ShootrTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ShootrTests-Info.plist"; path = "Tests/ShootrTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralTests.m; path = Tests/GeneralTests.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF6C19E427A700F32FF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Tests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
-		AAE0EF6E19E5172900F32FF7 /* Shootr-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shootr-Bridging-Header.h"; sourceTree = "<group>"; };
-		AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineUtilities.h; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineUtilities.m; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.m; sourceTree = SOURCE_ROOT; };
+		AAFD7BC919E7C36800535A35 /* SearchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchManager.h; sourceTree = "<group>"; };
+		AAFD7BCA19E7C36800535A35 /* SearchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -605,8 +605,8 @@
 				AA72641119D1C8280067A39D /* ShotManager.m */,
 				AA72641319D422570067A39D /* CleanManager.h */,
 				AA72641419D422570067A39D /* CleanManager.m */,
-				AAE0EF6F19E5172900F32FF7 /* SearchManager.swift */,
-				AAE0EF6E19E5172900F32FF7 /* Shootr-Bridging-Header.h */,
+				AAFD7BC919E7C36800535A35 /* SearchManager.h */,
+				AAFD7BCA19E7C36800535A35 /* SearchManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -940,6 +940,7 @@
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
 				AA9D039B19D95ABD00E59C83 /* NSString+CleanLinks.m in Sources */,
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
+				AAFD7BCB19E7C36800535A35 /* SearchManager.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
 				AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
@@ -979,7 +980,6 @@
 				AACA544919C057C000E39D94 /* UIImageView+AFNetworking.m in Sources */,
 				AA623CEB1998A7F200A942A9 /* main.m in Sources */,
 				AA72640919D03A6E0067A39D /* Shot.m in Sources */,
-				AAE0EF7019E5172900F32FF7 /* SearchManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

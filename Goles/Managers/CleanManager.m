@@ -14,6 +14,7 @@
 #import "Follow.h"
 #import "User.h"
 
+
 @implementation CleanManager
 
 #pragma mark - SINGLETON
@@ -37,7 +38,7 @@
 - (id)init {
     self = [super init];
     if (self != nil) {
-        
+
     }
     return self;
 }
@@ -107,6 +108,7 @@
     
 }
 
+//------------------------------------------------------------------------------
 - (void)deleteUsersAndFollowIfNeeded {
     
     NSArray *usersArray = [[CoreDataManager singleton] getAllEntities:[User class]];

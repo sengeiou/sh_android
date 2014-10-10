@@ -72,6 +72,8 @@ extern NSString *const K_WS_OPS_GE;
 extern NSString *const K_WS_OPS_EQ;
 extern NSString *const K_WS_OPS_NE;
 extern NSString *const K_WS_OPS_LT;
+extern NSString *const K_WS_OPS_CA;
+extern NSString *const K_WS_OPS_CT;
 extern NSString *const K_WS_FILTERITEMS;
 extern NSString *const K_WS_COMPARATOR;
 extern NSString *const K_WS_FILTERS;
