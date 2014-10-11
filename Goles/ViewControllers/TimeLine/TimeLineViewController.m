@@ -21,6 +21,7 @@
 #import "UIImageView+AFNetworking.h"
 #import <CoreText/CoreText.h>
 #import "TimeLineUtilities.h"
+#import "InfoTableViewController.h"
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol, UIAlertViewDelegate>{
     NSUInteger lengthTextField;
@@ -91,6 +92,7 @@
 }
 
 #pragma mark - Localizable Strings
+//------------------------------------------------------------------------------
 -(void)textLocalizable{
     
     [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
@@ -100,13 +102,6 @@
     [self.startShootingFirstTime setTitle:NSLocalizedString(@"Start Shooting", nil) forState:UIControlStateNormal];
     self.lblNoShots.text =  NSLocalizedString(@"No Shots", nil);
     self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
-}
-//------------------------------------------------------------------------------
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-
-#warning This notification needs to be here or in the ViewDidLoad?
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -234,6 +229,9 @@
 
 //------------------------------------------------------------------------------
 - (void) infoButton{
+    
+//    InfoTableViewController *infoTVC = [[InfoTableViewController alloc] init];
+//    [self.navigationController pushViewController:infoTVC animated:YES];
     
 }
 

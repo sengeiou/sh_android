@@ -49,7 +49,7 @@
 //------------------------------------------------------------------------------
 + (NSArray *)searchPeopleLocal:(NSString *)stringToSearch {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains[c] %@ || userName contains[c] %@", stringToSearch,stringToSearch];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name contains[cd] %@ || userName contains[cd] %@", stringToSearch,stringToSearch];
     NSArray *peopleArray = [[CoreDataManager singleton] getAllEntities:[User class] orderedByKey:kJSON_NAME ascending:NO withPredicate:predicate];
     if (peopleArray.count > 0)
         return peopleArray;

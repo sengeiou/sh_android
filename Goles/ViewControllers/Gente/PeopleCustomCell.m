@@ -7,10 +7,10 @@
 //
 
 #import "PeopleCustomCell.h"
-#import "UIImageView+AFNetworking.h"
-#import "Fav24Colors.h"
-#import <QuartzCore/QuartzCore.h>
-#import "TimeLineUtilities.h"
+//#import "UIImageView+AFNetworking.h"
+//#import "Fav24Colors.h"
+//#import <QuartzCore/QuartzCore.h>
+//#import "TimeLineUtilities.h"
 #import "DownloadImage.h"
 
 @implementation PeopleCustomCell

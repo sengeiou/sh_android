@@ -7,6 +7,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PeopleTableViewController : UITableViewController
+@interface PeopleTableViewController : UITableViewController 
 
 @end

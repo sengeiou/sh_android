@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */; };
+		9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */; };
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
 		A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A52B9A0D19E688A6007D8A67 /* DownloadImage.m */; };
@@ -123,6 +125,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoTableViewController.h; path = Goles/ViewControllers/TimeLine/InfoTableViewController.h; sourceTree = SOURCE_ROOT; };
+		9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoTableViewController.m; path = Goles/ViewControllers/TimeLine/InfoTableViewController.m; sourceTree = SOURCE_ROOT; };
+		9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoCustomCell.h; path = Goles/ViewControllers/TimeLine/InfoCustomCell.h; sourceTree = SOURCE_ROOT; };
+		9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoCustomCell.m; path = Goles/ViewControllers/TimeLine/InfoCustomCell.m; sourceTree = SOURCE_ROOT; };
 		A50CCD8219C8889B005369E6 /* Conection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conection.h; sourceTree = "<group>"; };
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
@@ -369,6 +375,8 @@
 			children = (
 				A59EECDB19D1761500D011C5 /* ShotTableViewCell.h */,
 				A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */,
+				9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */,
+				9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -708,6 +716,8 @@
 				AACA545419C08E4A00E39D94 /* TimeLineViewController.m */,
 				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
 				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
+				9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */,
+				9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */,
 			);
 			name = Timeline;
 			path = ViewControllers/Partidos;
@@ -934,6 +944,7 @@
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
 				AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
+				9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */,
 				AA72641519D422570067A39D /* CleanManager.m in Sources */,
 				AA74B40C19DEA3EC00EF90D5 /* FollowingCustomCell.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
@@ -950,6 +961,7 @@
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
 				AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
+				9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */,
 				AA72640C19D0505A0067A39D /* _Follow.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,

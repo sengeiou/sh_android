@@ -17,19 +17,16 @@
 #import "FindFriendsTableViewController.h"
 #import "PeopleLineUtilities.h"
 #import "SearchManager.h"
+#import "CoreDataParsing.h"
 
+@interface PeopleTableViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@interface PeopleTableViewController ()<UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic,strong) NSArray *followingUsers;
-@property (nonatomic,strong) IBOutlet UITableView *usersTable;
-@property (nonatomic, strong)       NSIndexPath         *indexToShow;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnAddFriends;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnSearchFriends;
-@property (nonatomic, strong)       NSMutableArray             *searchResults;
-//@property (nonatomic, strong) IBOutlet UISearchDisplayController *searchDisplay;
-@property (nonatomic, strong) IBOutlet UISearchBar *mySearchBar;
-@property (nonatomic, strong) UITableView *searchTableView;
+@property (nonatomic,strong)                NSMutableArray  *followingUsers;
+@property (nonatomic,strong)    IBOutlet    UITableView     *usersTable;
+@property (nonatomic,strong)                NSIndexPath     *indexToShow;
+@property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnAddFriends;
+@property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnSearchFriends;
+@property (nonatomic,strong)                UISearchBar     *mySearchBar;
 
 - (IBAction)addFriends:(id)sender;
 - (IBAction)searchFriends:(id)sender;
@@ -38,6 +35,7 @@
 
 @implementation PeopleTableViewController
 
+//------------------------------------------------------------------------------
 - (id)initWithStyle:(UITableViewStyle)style {
 	
     self = [super initWithStyle:style];
@@ -47,55 +45,50 @@
     return self;
 }
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad{
 	
     [super viewDidLoad];
 
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.followingUsers = [[UserManager singleton] getFollowingPeopleForMe];
+    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
     
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
-
 }
+
+//------------------------------------------------------------------------------
 - (IBAction)addPeople:(id)sender {
 }
 
 #pragma mark - Table view data source
-
+//------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
 }
 
+//------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        return [self.searchResults count];
-    
+
     return self.followingUsers.count;
 }
 
+//------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	static NSString *CellIdentifier = @"peopleCell";
 	PeopleCustomCell *cell = (id) [self.usersTable dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    User *user;
-    
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        user = [self.searchResults objectAtIndex:indexPath.row];
-
-    else
-        user = [self.followingUsers objectAtIndex:indexPath.row];
-
+    User *user = [self.followingUsers objectAtIndex:indexPath.row];
 
 	[cell configureCellWithUser:user inRow:indexPath];
     [cell addTarget:self action:@selector(goProfile:)];
@@ -103,26 +96,30 @@
 	return cell;
 }
 
+//------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
  
-    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
-    User *selectedUser = self.followingUsers[indexPath.row];
-    profileVC.selectedUser = selectedUser;
-    
     self.indexToShow = indexPath;
-    [self.navigationController pushViewController:profileVC animated:YES];
+    [self pushToProfileUser:self.followingUsers[indexPath.row]];
+    
 }
 
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
--(void)goProfile:(id)sender{
+- (void)goProfile:(id)sender{
     
     UIButton *btn = (UIButton *) sender;
+    [self pushToProfileUser:self.followingUsers[btn.tag]];
+}
+
+//------------------------------------------------------------------------------
+- (void)pushToProfileUser:(User *)user {
+
+    [self restoreInitialStateView];
+
     AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
-    User *selectedUser = self.followingUsers[btn.tag];
-    profileVC.selectedUser = selectedUser;
+    profileVC.selectedUser = user;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
@@ -130,10 +127,24 @@
 //------------------------------------------------------------------------------
 - (void)reloadDataAndTable {
     
-    self.followingUsers = [[UserManager singleton] getFollowingPeopleForMe];
+    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
     [self.usersTable reloadData];
 }
 
+//------------------------------------------------------------------------------
+- (void)reloadTableWithAnimation {
+    
+    [UIView transitionWithView: self.tableView
+                      duration: 0.25f
+                       options: UIViewAnimationOptionTransitionCrossDissolve
+                    animations: ^(void)
+     {
+         [self.usersTable reloadData];
+     }
+                    completion: ^(BOOL isFinished)
+     {
+     }];
+}
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
@@ -157,149 +168,64 @@
     }
 }
 
+#pragma mark - Search Response method
+//------------------------------------------------------------------------------
 - (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray {
     
     if (usersArray.count > 0) {
+        [self.followingUsers removeAllObjects];
         
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
+        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+        NSArray *sortedArray = [usersArray sortedArrayUsingDescriptors:descriptors];
+        self.followingUsers = [sortedArray mutableCopy];
+//        [self.followingUsers addObjectsFromArray:usersArray]; //Option 2
+        [self reloadTableWithAnimation];
     }
 }
 
+//------------------------------------------------------------------------------
 - (IBAction)addFriends:(id)sender {
 }
 
+
+#pragma mark - Search methods
+//------------------------------------------------------------------------------
 - (IBAction)searchFriends:(id)sender {
   
-//    self.navigationItem.rightBarButtonItem = nil;
-
-   // self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
-    //self.mySearchBar.delegate = self;
-//    [self.navigationController.navigationBar addSubview:self.searchDisplayController.searchBar];
-  //  self.searchDisplay =  [[UISearchDisplayController alloc] initWithSearchBar:self.mySearchBar contentsController:self];
-
-   // [self setSearchDisplayController:searchDisplay];
-//    [self.searchDisplay setDelegate:self];
-//    self.searchDisplay.searchResultsDelegate = self;
-//    self.searchDisplay.searchResultsDataSource = self;
-}
-
-//-(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
-//{
-//    self.searchResults = [SearchManager searchPeopleLocal:text];
-//}
-//
-//-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-//    
-//    self.navigationController.navigationBarHidden = NO;
-//    [mySearchBar setAlpha:0.0];
-//
-//    [SearchManager searchPeopleLocal:@""];
-//    
-//    [mySearchBar resignFirstResponder];
-//    [mySearchBar setText:@""];
-//    [self.usersTable reloadData];
-//}
-//
-//- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
-//{
-//    
-//    [mySearchBar setShowsCancelButton:YES animated:YES];
-//}
-//
-//-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
-//{
-//    [mySearchBar setShowsCancelButton:NO animated:YES];
-//}
-
-
-
-#pragma mark - UISearchDisplayControllerDelegate
-
-
-- (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
-  
-    [self.searchResults removeAllObjects]; // First clear the filtered array.
+    self.navigationItem.rightBarButtonItem = nil;
     
-    self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchText]];
+    self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
+    self.mySearchBar.delegate = self;
+    [self.mySearchBar becomeFirstResponder];
+    [self.navigationController.navigationBar addSubview:self.mySearchBar];
 }
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    [self filterContentForSearchText:searchString scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    // Return YES to cause the search result table view to be reloaded.
-    return NO;
+//------------------------------------------------------------------------------
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    
+    [self restoreInitialStateView];
+    [self reloadTableWithAnimation];
 }
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
-    [self filterContentForSearchText:[self.searchDisplayController.searchBar text] scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
-
+//------------------------------------------------------------------------------
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchResults removeAllObjects]; // First clear the filtered array.
-    [self.searchDisplayController.searchBar resignFirstResponder];
-    self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
-    [self.usersTable reloadData];
+    [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
+    [self.followingUsers removeAllObjects]; // First clear the filtered array.
+//    [self.mySearchBar resignFirstResponder];
+    self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
+    [self reloadTableWithAnimation];
 
 }
 
-- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
-    [controller setSearchResultsDelegate:self.usersTable.delegate];
+//------------------------------------------------------------------------------
+- (void)restoreInitialStateView {
+
+    self.navigationItem.rightBarButtonItem = self.btnAddFriends;
+    [self.mySearchBar setAlpha:0.0];
+    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
+    [self.mySearchBar resignFirstResponder];
+    [self.mySearchBar setText:@""];
 }
-
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller {
-
-}
-
-
-//-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-//{
-//    
-////  [self.searchResults delete:<#(id)#>]
-//    self.searchResults = [SearchManager searchPeopleLocal:searchString];
-//    
-////    [self filterContentForSearchText:searchString
-////                               scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
-////                                     objectAtIndex:[self.searchDisplayController.searchBar
-////                                                     selectedScopeButtonIndex]]];
-//    
-//    return YES;
-//}
-
-- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView{
-    
-    self.searchTableView = self.usersTable;
-
-}
-
-//- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-//    //When the user taps the search bar, this means that the controller will begin searching.
-//}
-//
-//- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
-//    //When the user taps the Cancel Button, or anywhere aside from the view.
-//}
-//
-//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption{
-//   
-//    self.searchResults = [SearchManager searchPeopleLocal:[self.searchDisplay.searchBar text]];
-//
-//    return YES;
-//}
-//
-//- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-//    self.navigationItem.rightBarButtonItem = self.btnAddFriends;
-//
-//    self.navigationController.navigationBarHidden = NO;
-//    [self.mySearchBar setAlpha:0.0];
-//}
-//
-//-(void)viewWillDisappear:(BOOL)animated{
-//    self.navigationItem.rightBarButtonItem = self.btnAddFriends;
-//
-//    self.navigationController.navigationBarHidden = NO;
-//    [self.mySearchBar setAlpha:0.0];
-//}
 
 @end

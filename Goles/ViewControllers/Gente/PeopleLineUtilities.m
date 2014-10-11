@@ -15,7 +15,7 @@
 
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     
-    UISearchBar *searchBar  = [[UISearchBar alloc] initWithFrame:CGRectMake(screenRect.origin.x+3, 0, screenRect.size.width, 30)];
+    UISearchBar *searchBar  = [[UISearchBar alloc] initWithFrame:CGRectMake(screenRect.origin.x+12, 0, screenRect.size.width-15, 30)];
     searchBar.showsCancelButton = YES;
     [searchBar sizeToFit];
     [searchBar setShowsCancelButton:YES animated:YES];
