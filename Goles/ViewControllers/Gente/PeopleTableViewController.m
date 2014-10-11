@@ -226,7 +226,7 @@
     [self filterContentForSearchText:searchString scope:
      [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
     // Return YES to cause the search result table view to be reloaded.
-    return YES;
+    return NO;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
@@ -236,13 +236,13 @@
     return YES;
 }
 
-//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-//    [self.searchResults removeAllObjects]; // First clear the filtered array.
-//    
-//    self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
-//    [self.usersTable reloadData];
-//
-//}
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self.searchResults removeAllObjects]; // First clear the filtered array.
+    [self.searchDisplayController.searchBar resignFirstResponder];
+    self.searchResults = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
+    [self.usersTable reloadData];
+
+}
 
 - (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller {
     [controller setSearchResultsDelegate:self.usersTable.delegate];
@@ -266,12 +266,13 @@
 //    
 //    return YES;
 //}
-//- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView{
-//    
-//    self.searchTableView = self.usersTable;
-//
-//}
-//
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller didLoadSearchResultsTableView:(UITableView *)tableView{
+    
+    self.searchTableView = self.usersTable;
+
+}
+
 //- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
 //    //When the user taps the search bar, this means that the controller will begin searching.
 //}
