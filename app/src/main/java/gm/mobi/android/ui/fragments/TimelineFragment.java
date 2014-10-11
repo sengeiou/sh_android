@@ -19,14 +19,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
+
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -36,15 +42,13 @@ import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
-import gm.mobi.android.task.jobs.timeline.TimelineJobBagdad;
-import gm.mobi.android.task.jobs.timeline.TimelineJobBagdad;import gm.mobi.android.ui.activities.NewShotActivity;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.NewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import java.util.List;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -117,7 +121,7 @@ public class TimelineFragment extends BaseFragment
                     if (!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
-                        startJob(context, TimelineJobBagdad.RETRIEVE_NEWER);
+                        startJob(context, TimelineJob.RETRIEVE_NEWER);
                     }
                     pollShots();
                 }
@@ -300,12 +304,12 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
 
-            startJob(context, TimelineJobBagdad.RETRIEVE_NEWER);
+            startJob(context, TimelineJob.RETRIEVE_NEWER);
         }
     }
 
     private void startJob(Context context, int typeRetrieve) {
-        TimelineJobBagdad job = GolesApplication.get(context).getObjectGraph().get(TimelineJobBagdad.class);
+        TimelineJob job = GolesApplication.get(context).getObjectGraph().get(TimelineJob.class);
         job.init(currentUser, typeRetrieve);
         jobManager.addJobInBackground(job);
     }
@@ -317,13 +321,13 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            startJob(context, TimelineJobBagdad.RETRIEVE_OLDER);
+            startJob(context, TimelineJob.RETRIEVE_OLDER);
         }
     }
 
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
-        startJob(getActivity().getApplicationContext(), TimelineJobBagdad.RETRIEVE_INITIAL);
+        startJob(getActivity().getApplicationContext(), TimelineJob.RETRIEVE_INITIAL);
         swipeRefreshLayout.setRefreshing(true);
     }
 

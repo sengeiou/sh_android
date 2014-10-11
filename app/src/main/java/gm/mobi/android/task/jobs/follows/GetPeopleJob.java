@@ -43,6 +43,7 @@ public class GetPeopleJob extends BagdadBaseJob<List<User>> {
         this.networkUtil = networkUtil;
         this.userManager = userManager;
         this.followManager = followManager;
+        setOpenHelper(openHelper);
     }
 
     public void setBus(Bus bus) {
@@ -61,36 +62,18 @@ public class GetPeopleJob extends BagdadBaseJob<List<User>> {
     protected void run() throws IOException, SQLException {
         List<User> peopleFromDatabase = getPeopleFromDatabase();
         if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
-            sendSuccessfulResult(peopleFromDatabase);
+            postSuccessfulEvent(peopleFromDatabase);
         }
 
-        List<User> users = service.getFollowings(userId, 0l);
-        Collections.sort(users,new NameComparator());
-        sendSuccessfulResult(users);
-
-        postSuccessfulEvent(users);
+        List<User> peopleFromServer = service.getFollowings(userId, 0l);
+        Collections.sort(peopleFromServer, new NameComparator());
+        postSuccessfulEvent(peopleFromServer);
      }
 
     public void init() {
         GolesApplication golesApplication = GolesApplication.get(context);
         User currentUser = golesApplication.getCurrentUser();
         userId = currentUser.getIdUser();
-
-    }
-
-    protected void sendSuccessfulResult(List<User> followingUsers) {
-        bus.post(new FollowsResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(followingUsers));
-    }
-
-    @Override
-    protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        userManager.setDataBase(db);
     }
 
     private List<User> getPeopleFromDatabase() throws SQLException {
@@ -99,21 +82,22 @@ public class GetPeopleJob extends BagdadBaseJob<List<User>> {
         return usersFollowing;
     }
 
-    @Override public void onAdded() {
-
+    @Override
+    protected void createDatabase() {
+        createReadableDb();
     }
 
-    @Override protected void onCancel() {
-
+    @Override
+    protected void setDatabaseToManagers(SQLiteDatabase db) {
+        followManager.setDataBase(db);
+        userManager.setDataBase(db);
     }
 
-    @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
+    @Override protected boolean isNetworkRequired() {
         return false;
     }
 
-
-
-    class NameComparator implements Comparator<User> {
+    static class NameComparator implements Comparator<User> {
 
         @Override public int compare(User user1, User user2) {
             return user1.getName().compareTo(user2.getName());

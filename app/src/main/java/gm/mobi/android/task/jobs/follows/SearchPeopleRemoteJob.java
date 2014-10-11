@@ -1,6 +1,8 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -16,16 +18,11 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleRemoteJob extends BagdadBaseJob {
+public class SearchPeopleRemoteJob extends BagdadBaseJob<PaginatedResult<List<User>>> {
 
     private static final int PRIORITY = 4;
-    private static final int RETRY_ATTEMPTS = 3;
-
     public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
 
-    Application app;
-    Bus bus;
-    NetworkUtil networkUtil;
     BagdadService service;
 
     private String searchString;
@@ -33,10 +30,7 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob {
 
     @Inject
     public SearchPeopleRemoteJob(Application app, Bus bus, BagdadService service, NetworkUtil networkUtil) {
-        super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP));
-        this.app = app;
-        this.bus = bus;
-        this.networkUtil = networkUtil;
+        super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;
     }
 
@@ -45,64 +39,24 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob {
         this.pageOffset = pageOffset;
     }
 
-    @Override protected void createDatabase() {
-    }
-
-    @Override protected void setDatabaseToManagers() {
-    }
-
     @Override protected void run() throws SQLException, IOException {
-        if (!checkConnectionAndPostIfNotConnected()) {
-            return;
-        }
-
-        try {
-            PaginatedResult<List<User>> searchResults = getSearchFromServer();
-            List<User> users = searchResults.getResult();
-            if (users != null) {
-                sendSuccess(searchResults);
-            } else {
-                bus.post(new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_INVALID));
-            }
-        } catch (IOException e) {
-            bus.post(new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
-        }
-    }
-
-    private void sendSuccess(PaginatedResult<List<User>> result) {
-        SearchPeopleRemoteResultEvent event = new SearchPeopleRemoteResultEvent(ResultEvent.STATUS_SUCCESS);
-        event.setSuccessful(result);
-        bus.post(event);
+        PaginatedResult<List<User>> searchResults = getSearchFromServer();
+        postSuccessfulEvent(searchResults);
     }
 
     private PaginatedResult<List<User>> getSearchFromServer() throws IOException {
         return service.searchUsersByNameOrNickNamePaginated(searchString, pageOffset);
     }
 
-    @Override public void onAdded() {
-
+    @Override protected void createDatabase() {
+        /* no-op */
     }
 
-    @Override protected void onCancel() {
-        /*no-op*/
+    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
+        /* no-op */
     }
 
-    @Override
-    protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return true;
-    }
-
-    @Override
-    protected int getRetryLimit() {
-        return RETRY_ATTEMPTS;
-    }
-
-    private boolean checkConnectionAndPostIfNotConnected() {
-        if (!networkUtil.isConnected(app)) {
-            bus.post(new ConnectionNotAvailableEvent());
-            return false;
-        } else {
-            return true;
-        }
+    @Override protected boolean isNetworkRequired() {
+        return false;
     }
 }

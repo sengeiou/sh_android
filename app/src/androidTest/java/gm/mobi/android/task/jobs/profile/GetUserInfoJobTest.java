@@ -5,14 +5,16 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
 import timber.log.Timber;
 import timber.log.Timber.Tree;
 
@@ -38,11 +40,10 @@ public class GetUserInfoJobTest {
         dbHelper = mock(SQLiteOpenHelper.class);
 
         bus = mock(Bus.class);
-
     }
 
     @Test
-    public void logWhenUserIsNotFoundInDataBase() {
+    public void logWhenUserIsNotFoundInDataBase() throws IOException, SQLException {
         UserManager userManager = mock(UserManager.class);
         when(userManager.getUserByIdUser(anyLong())).thenReturn(null);
 
@@ -59,14 +60,14 @@ public class GetUserInfoJobTest {
 
         assertTrue(getUserInfoJob.userManager != null);
 
-        getUserInfoJob.retrieveDataFromDatabase();
+        getUserInfoJob.run();
 
         verify(mockTree).i(anyString(),anyObject());
     }
 
 
     @Test
-    public void postResultInBusWhenUserIsFoundInDataBase(){
+    public void postResultInBusWhenUserIsFoundInDataBase() throws IOException, SQLException {
         UserManager userManager = mock(UserManager.class);
 
         when(userManager.getUserByIdUser(anyLong())).thenReturn(new User());
@@ -79,7 +80,7 @@ public class GetUserInfoJobTest {
 
         GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null, userManager,followManager,teamManager);
         getUserInfoJob.init(1L,null);
-        getUserInfoJob.retrieveDataFromDatabase();
+        getUserInfoJob.run();
         verify(bus).post(anyObject());
     }
 

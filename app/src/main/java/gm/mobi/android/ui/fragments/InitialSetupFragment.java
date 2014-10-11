@@ -87,40 +87,6 @@ public class InitialSetupFragment extends BaseFragment {
         bus.unregister(this);
     }
 
-/*
-    @Subscribe
-    public void oçnGetFollowingResult(FollowsResultEvent event) {
-        mFollowingList = event.getFollows();
-        List<Integer> followingIds = event.getFollowingIds();
-        if (event.getStatus() == FollowsResultEvent.STATUS_SUCCESS && mFollowingList != null) {
-            //Aquí llamamos al siguiente Job, que será obtener los users objects de los followings que hemos retornado
-            jobManager.addJobInBackground(new Use GetUsersJobApplicationContext(), followingIds, db));
-        }
-
-    }
-
-    @Subscribe
-    public void onGetUsersFollowingResult(UsersResultEvent event){
-        mFollowingUserList = event.getUsers();
-        List<Integer> followingIds = event.getFollowingUserIds();
-        if(event.getStatus() == UsersResultEvent.STATUS_SUCCESS && mFollowingUserList != null){
-            //Aquí llamamos a obtener los shots
-            jobManager.addJobInBackground(new ShotsJob(getApplicationContext(), db));
-        }
-    }
-
-    @Subscribe
-    public void onGetShotsResult(ShotsResultEvent event){
-        mShotList = event.getAllShots();
-        if(event.getStatus() == ShotsResultEvent.STATUS_SUCCESS && mShotList!=null){
-            //Aquí deberíamos pintar el fragment del timeline
-            Toast.makeText(getApplicationContext(), "Ha descargado todos los shots", Toast.LENGTH_LONG).show();
-            android.support.v4.app.FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
-            ft.add(new TimelineFragment(),"TIME_LINE_FRAGMENT");
-            ft.commit();
-        }
-    }*/
-
     public static class InitialSetupCompletedEvent {
     }
 }

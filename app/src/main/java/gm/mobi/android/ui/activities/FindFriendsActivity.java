@@ -13,13 +13,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnItemClick;
+
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
 import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -28,15 +36,11 @@ import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;
-import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJobBagdad;import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
+import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
+import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 public class FindFriendsActivity extends BaseSignedInActivity {
@@ -174,7 +178,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     public void makeLocalSearch() {
-        SearchPeopleLocalJobBagdad job = objectGraph.get(SearchPeopleLocalJobBagdad.class);
+        SearchPeopleLocalJob job = objectGraph.get(SearchPeopleLocalJob.class);
         job.init(currentSearchQuery);
         jobManager.addJobInBackground(job);
     }

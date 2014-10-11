@@ -8,6 +8,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.exception.ServerException;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.DatabaseErrorEvent;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public abstract class BagdadBaseJob<T> extends Job {
     private NetworkUtil networkUtil;
     private SQLiteDatabase db;
 
-    @Inject protected BagdadBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
+    protected BagdadBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
         super(params);
         this.application = application;
         this.bus = bus;
@@ -50,10 +51,9 @@ public abstract class BagdadBaseJob<T> extends Job {
         } catch (SQLException e) {
             Timber.e(e, "SQLException executing job");
             postDatabaseErrorEvent();
-        } catch (ServerException e) {
-            Timber.e(e, "ServerException executing job");
-        } catch (IOException e) {
+        } catch (IOException e) { // includes ServerException
             Timber.e(e, "IOException executing job");
+            postCommunicationErrorEvent();
         } finally {
             closeDb();
         }
@@ -100,6 +100,14 @@ public abstract class BagdadBaseJob<T> extends Job {
 
     private void postDatabaseErrorEvent() {
         bus.post(new DatabaseErrorEvent());
+    }
+
+    private void postCommunicationErrorEvent() {
+        bus.post(new CommunicationErrorEvent());
+    }
+
+    protected void postCustomEvent(Object o) {
+        bus.post(o);
     }
 
     private void closeDb() {

@@ -11,10 +11,13 @@ import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
+import gm.mobi.android.task.jobs.BagdadBaseJob.SuccessEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
@@ -137,7 +140,7 @@ public class GetPeopleJobTest {
         getPeopleJob.onRun();
 
         //TODO check a flag saying that the results came from db instead (refactor needed)
-        verify(bus, times(2)).post(any(FollowsResultEvent.class));
+        verify(bus, times(2)).post(any(SuccessEvent.class));
     }
 
 

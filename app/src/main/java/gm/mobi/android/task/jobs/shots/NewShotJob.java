@@ -1,6 +1,8 @@
 package gm.mobi.android.task.jobs.shots;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -15,22 +17,17 @@ import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class NewShotJob extends BagdadBaseJob {
+public class NewShotJob extends BagdadBaseJob<Shot> {
 
     private static final int PRIORITY = 5;
 
-    Application app;
-    NetworkUtil networkUtil;
-    Bus bus;
     BagdadService service;
+
     private User currentUser;
     private String comment;
 
-    @Inject public NewShotJob(Application context, NetworkUtil networkUtil, Bus bus, BagdadService service) {
-        super(new Params(PRIORITY));
-        this.app = context;
-        this.networkUtil = networkUtil;
-        this.bus = bus;
+    @Inject public NewShotJob(Application application, NetworkUtil networkUtil, Bus bus, BagdadService service) {
+        super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
     }
 
@@ -40,46 +37,22 @@ public class NewShotJob extends BagdadBaseJob {
     }
 
     @Override
-    public void onAdded() {
-        /* no-op */
-    }
-
-    @Override
-    protected void createDatabase() {
-        /* no-op */
-    }
-
-    @Override
-    protected void setDatabaseToManagers() {
-        /* no-op */
-    }
-
-    @Override
     protected void run() throws SQLException, IOException {
-        if (isCancelled()) return;
-        if (!networkUtil.isConnected(app)) {
-            bus.post(new ConnectionNotAvailableEvent());
-            return;
-        }
-        try {
-            Shot postedShot = service.postNewShot(currentUser.getIdUser(), comment);
-            if (postedShot != null) {
-                bus.post(new PostNewShotResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(postedShot));
-            } else {
-                bus.post(new PostNewShotResultEvent(ResultEvent.STATUS_INVALID));
-            }
-        } catch (IOException e) {
-            bus.post(new PostNewShotResultEvent(ResultEvent.STATUS_SERVER_FAILURE).setServerError(e));
-        }
+        Shot postedShot = service.postNewShot(currentUser.getIdUser(), comment);
+        postSuccessfulEvent(postedShot);
+    }
+
+    @Override protected boolean isNetworkRequired() {
+        return true;
+    }
+
+    @Override protected void createDatabase() {
+        /* no-op */
     }
 
     @Override
-    protected void onCancel() {
-
+    protected void setDatabaseToManagers(SQLiteDatabase db) {
+        /* no-op */
     }
 
-    @Override
-    protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return false;
-    }
 }

@@ -1,7 +1,6 @@
 package gm.mobi.android.task.jobs.profile;
 
 import android.app.Application;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
@@ -15,47 +14,36 @@ import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetUserInfoJob extends BagdadBaseJob {
+public class GetUserInfoJob extends BagdadBaseJob<User> {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
 
-    Context context;
-
-    SQLiteOpenHelper dbHelper;
-    Bus bus;
     BagdadService service;
 
-    NetworkUtil networkUtil;
-
-    Application app;
     UserManager userManager;
     FollowManager followManager;
     TeamManager teamManager;
 
     private Long userId;
     private User currentUser;
-    SQLiteDatabase db;
 
-    @Inject public GetUserInfoJob(Application context, Bus bus, SQLiteOpenHelper mDbHelper, BagdadService service,
-      NetworkUtil mNetworkUtil, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
-        super(new Params(PRIORITY));
-        this.context = context;
-        this.bus = bus;
-        this.dbHelper = mDbHelper;
+    @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
+      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
+        super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
-        this.networkUtil = mNetworkUtil;
         this.userManager = userManager;
         this.followManager = followManager;
         this.teamManager = teamManager;
+        setOpenHelper(dbHelper);
     }
 
     public void init(Long userId, User currentUser) {
@@ -63,85 +51,45 @@ public class GetUserInfoJob extends BagdadBaseJob {
         this.currentUser = currentUser;
     }
 
-    @Override public void onAdded() {
-        /* noop */
+    @Override public void run() throws SQLException, IOException {
+        User userFromLocalDatabase = getUserFromDatabase();
+        if (userFromLocalDatabase != null) {
+            postSuccessfulEvent(userFromLocalDatabase);
+        } else {
+            Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
+        }
+
+        User userFromService = getUserFromService();
+        postSuccessfulEvent(userFromService);
+
+        if (userFromLocalDatabase != null) {
+            Timber.d("Obtained user from server found in database. Updating database.");
+            userManager.saveUser(userFromService);
+        }
+    }
+
+    @Override protected boolean isNetworkRequired() {
+        return false; //TODO qué hacemos aquí? La requiere para actualizar, pero no para mostrar los datos de un people
+    }
+
+    private User getUserFromDatabase() {
+        return userManager.getUserByIdUser(userId);
+    }
+
+    private User getUserFromService() throws IOException {
+        return service.getUserByIdUser(userId);
     }
 
     @Override
     protected void createDatabase() {
-        db = createWritableDb();
+        createWritableDb();
     }
 
     @Override
-    protected void setDatabaseToManagers() {
+    protected void setDatabaseToManagers(SQLiteDatabase db) {
         followManager.setDataBase(db);
         teamManager.setDataBase(db);
         userManager.setDataBase(db);
     }
 
-    public void retrieveDataFromDatabase() {
-        Team favTeam = null;
-        User consultedUser = userManager.getUserByIdUser(userId);
-        if (consultedUser != null) {
-            // Get relationship
-            int followRelationship = followManager.getFollowRelationship(currentUser, consultedUser);
-            Long idTeamFav = consultedUser.getFavouriteTeamId();
-            if (idTeamFav != null) favTeam = teamManager.getTeamByIdTeam(idTeamFav);
-            UserInfoResultEvent result = new UserInfoResultEvent(consultedUser, followRelationship, favTeam);
-            bus.post(result);
-            //TODO control de errores
-        } else {
-            Timber.i("User with id %d not found in local database. Retrieving from the service...", userId);
-        }
-    }
-
-    public int getFollowRelationship(User consultedUserFromService) throws IOException, SQLException {
-        int resFollowRelationship;
-        Follow getFollowingRelationshipBetweenMeAndUser =
-          service.getFollowRelationship(consultedUserFromService.getIdUser(), currentUser.getIdUser(),
-            UserDtoFactory.GET_FOLLOWING);
-        Follow getFollowerRelationshipBetweenMeAndUser =
-          service.getFollowRelationship(consultedUserFromService.getIdUser(), currentUser.getIdUser(),
-            UserDtoFactory.GET_FOLLOWERS);
-
-        followManager.saveFollow(getFollowerRelationshipBetweenMeAndUser);
-        followManager.saveFollow(getFollowingRelationshipBetweenMeAndUser);
-        resFollowRelationship = followManager.getFollowRelationship(currentUser, consultedUserFromService);
-        return resFollowRelationship;
-    }
-
-    @Override public void run() throws SQLException, IOException {
-        //We make this for a speed screen update
-        retrieveDataFromDatabase();
-        // Refresh anyways
-        User consultedUserFromService = service.getUserByIdUser(userId);
-        int followRelationship = getFollowRelationship(consultedUserFromService);
-
-        Team team = service.getTeamByIdTeam(consultedUserFromService.getFavouriteTeamId());
-        //Store user and team in db
-        userManager.saveUser(consultedUserFromService);
-        if (team != null) teamManager.insertOrUpdateTeam(team);
-        UserInfoResultEvent result = new UserInfoResultEvent(consultedUserFromService, followRelationship, team);
-        bus.post(result);
-    }
-
-    @Override protected void onCancel() {
-
-    }
-
-    @Override protected int getRetryLimit() {
-        return RETRY_ATTEMPTS;
-    }
-
-    @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
-        return true;
-    }
-
-    private boolean checkNetwork() {
-        if (!networkUtil.isConnected(app)) {
-            bus.post(new ConnectionNotAvailableEvent());
-            return false;
-        }
-        return true;
-    }
 }

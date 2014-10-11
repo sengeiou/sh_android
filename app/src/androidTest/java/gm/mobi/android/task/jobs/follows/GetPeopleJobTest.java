@@ -34,7 +34,7 @@ public class GetPeopleJobTest {
         BagdadService service = mock(BagdadService.class);
         when(service.getFollowings(anyLong(),anyLong())).thenThrow(new ServerException());
 
-        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, null, null, null);
+        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, null, null, null, null);
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
@@ -55,7 +55,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
 
-        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, networkUtil, null, null);
+        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, networkUtil, null, null, null);
 
         getPeopleJob.setNetworkUtil(networkUtil);
         getPeopleJob.setService(service);
