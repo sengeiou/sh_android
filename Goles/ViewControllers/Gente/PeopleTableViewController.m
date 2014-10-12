@@ -60,17 +60,26 @@
 }
 
 //------------------------------------------------------------------------------
--(void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
+#warning Used to force reload table when pushed from search
+    [self.usersTable reloadData];
 }
 
 //------------------------------------------------------------------------------
-- (IBAction)addPeople:(id)sender {
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self restoreInitialStateView];
 }
 
-#pragma mark - Table view data source
+#pragma mark - ADD PEOPLE
+
+//------------------------------------------------------------------------------
+- (IBAction)addFriends:(id)sender {
+}
+
+#pragma mark - TABLE VIEW
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
@@ -173,21 +182,18 @@
 - (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray {
     
     if (usersArray.count > 0) {
-        [self.followingUsers removeAllObjects];
         
+        [self.followingUsers removeAllObjects];
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         NSArray *sortedArray = [usersArray sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
+        
 //        [self.followingUsers addObjectsFromArray:usersArray]; //Option 2
+
         [self reloadTableWithAnimation];
     }
 }
-
-//------------------------------------------------------------------------------
-- (IBAction)addFriends:(id)sender {
-}
-
 
 #pragma mark - Search methods
 //------------------------------------------------------------------------------
@@ -199,6 +205,7 @@
     self.mySearchBar.delegate = self;
     [self.mySearchBar becomeFirstResponder];
     [self.navigationController.navigationBar addSubview:self.mySearchBar];
+
 }
 
 //------------------------------------------------------------------------------
@@ -218,6 +225,7 @@
 
 }
 
+#pragma mark - HELPER METHODS
 //------------------------------------------------------------------------------
 - (void)restoreInitialStateView {
 
