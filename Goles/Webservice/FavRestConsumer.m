@@ -508,8 +508,8 @@
                     }];
                 }else{
                     [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
-                        if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
-                            [delegate createShotResponseWithStatus:YES andError:nil];
+                        if ([delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)])
+                            [delegate parserResponseForClass:NSClassFromString(entity) status:YES andError:nil andRefresh:nil];
                     }];
                 }
             }else {

@@ -86,7 +86,7 @@
 #warning Move all process in this method to a block
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_USER];
+    NSArray *entitiesToSynchro = @[K_COREDATA_USER,K_COREDATA_FOLLOW];
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
@@ -94,7 +94,7 @@
         
         for (id updatedEntity in entityArray) {
             
-            if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
+            if  ([updatedEntity isKindOfClass:[User class]]){
                 
                  User *user = (User *)updatedEntity;
                 
@@ -117,7 +117,7 @@
                      [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate];
             }
             
-            if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
+            if  ([updatedEntity isKindOfClass:[Follow class]]){
                 
                 Follow *follow = (Follow *)updatedEntity;
                 NSArray *dataArray = @[[Follow createDictFromEntity:follow]];

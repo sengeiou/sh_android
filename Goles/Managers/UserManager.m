@@ -212,7 +212,7 @@
 
     User *userCheck = [self getUserForId:user.idUserValue];
     if (userCheck) {
-        NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,kJSON_MODIFIED:@0};
+        NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
         Follow *follow = [Follow updateWithDictionary:followDict];
         if (follow){
             [[CoreDataManager singleton] saveContext];
@@ -225,7 +225,7 @@
         User *newUser = [NSEntityDescription insertNewObjectForEntityForName:K_COREDATA_USER inManagedObjectContext:context];
         newUser = user;
         if (newUser){
-            NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,kJSON_MODIFIED:@0};
+            NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
             Follow *follow = [Follow updateWithDictionary:followDict];
             if (follow){
                 [[CoreDataManager singleton] saveContext];
@@ -235,6 +235,23 @@
     }
     
     return NO;
+}
+
+//------------------------------------------------------------------------------
+- (BOOL)stopFollowingUser:(User *)user {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && idUserFollowed == %@",[self getUserId] ,user.idUser];
+    Follow *follow = [[[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate] firstObject];
+    if (follow){
+        NSDate *date = [NSDate date];
+        NSTimeInterval timeInt = [date timeIntervalSince1970];
+        follow.csys_deleted = [NSNumber numberWithDouble:timeInt*1000];
+        [[CoreDataManager singleton] saveContext];
+        return YES;
+    }
+    
+    return NO;
+        
 }
 
 //------------------------------------------------------------------------------

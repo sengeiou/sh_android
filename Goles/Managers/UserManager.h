@@ -14,6 +14,7 @@
 //DataAccessLayer singleton instance shared across application
 + (UserManager *)singleton;
 + (UserManager *)sharedInstance;
+
 - (NSNumber *)getUserId;
 - (User *)getActiveUser;
 - (Device *)getDevice;
@@ -29,5 +30,6 @@
 - (User *)getUserForId:(NSInteger )idUser;
 - (User *)createUserFromDict:(NSDictionary *)dict;
 - (BOOL)startFollowingUser:(User *)user;
+- (BOOL)stopFollowingUser:(User *)user;
 
 @end
