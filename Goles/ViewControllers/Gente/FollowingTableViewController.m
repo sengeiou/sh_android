@@ -26,6 +26,7 @@
 
 @implementation FollowingTableViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
@@ -43,7 +44,9 @@
     }
 
 }
--(void)viewWillAppear:(BOOL)animated{
+
+//------------------------------------------------------------------------------
+- (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
     
@@ -51,15 +54,17 @@
 }
 
 #pragma mark - Table view data source
-
+//------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.usersList.count;
 }
 
+//------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
 }
 
+//------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"followingCell";    
@@ -71,7 +76,7 @@
     return cell;
 }
 
-
+//------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
@@ -122,6 +127,7 @@
             [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }
 }
+
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
 - (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{

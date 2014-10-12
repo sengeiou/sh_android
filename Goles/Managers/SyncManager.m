@@ -92,34 +92,37 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
         NSArray *entityArray = [[CoreDataManager singleton] getAllEntities:NSClassFromString(entity) withPredicate:predicate];
         
-            for (id updatedEntity in entityArray) {
+        for (id updatedEntity in entityArray) {
+            
+            if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
                 
-                if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
-                    
-                     User *user = (User *)updatedEntity;
-                    
-                     NSNumber *birth = user.csys_birth;
-                     NSNumber *modified = user.csys_modified;
-                     NSNumber *deleted = user.csys_deleted;
-                          
-                     NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,
-                                                                                                      kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,
-                                                                                                      kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,
-                                                                                                      kJSON_RANK:user.rank,
-                                                                                                      kJSON_BIRTH:birth,
-                                                                                                      kJSON_MODIFIED:modified}];
-                     
-                     if ([user.csys_syncronized isEqualToString:@"d"])
+                 User *user = (User *)updatedEntity;
+                
+                 NSNumber *birth = user.csys_birth;
+                 NSNumber *modified = user.csys_modified;
+                 NSNumber *deleted = user.csys_deleted;
+                      
+                 NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,kJSON_RANK:user.rank,kJSON_BIRTH:birth,kJSON_MODIFIED:modified}];
+                 
+                 if ([user.csys_syncronized isEqualToString:@"d"])
                      [mutDict addEntriesFromDictionary:@{kJSON_DELETED:deleted}];
-                     
-                     NSArray *dataArray = @[mutDict];
-                     
-                     NSDictionary *key = @{kJSON_ID_USER:user.idUser};
-                     
-                     if ([user.csys_syncronized isEqualToString:@"d"])
-                         [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_USER withKey:key andData:dataArray andDelegate:delegate];
-                     else
-                         [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate];
+                 
+                 NSArray *dataArray = @[mutDict];
+                 
+                 NSDictionary *key = @{kJSON_ID_USER:user.idUser};
+                 
+                 if ([user.csys_syncronized isEqualToString:@"d"])
+                     [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_USER withKey:key andData:dataArray andDelegate:delegate];
+                 else
+                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate];
+            }
+            
+            if  ([updatedEntity isKindOfClass:[K_COREDATA_USER class]]){
+                
+                Follow *follow = (Follow *)updatedEntity;
+                NSArray *dataArray = @[[Follow createDictFromEntity:follow]];
+                NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
+                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate];
             }
         }
     }

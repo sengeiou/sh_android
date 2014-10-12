@@ -43,6 +43,7 @@
 
 @implementation ProfileViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
    
@@ -124,6 +125,16 @@
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
     self.btnFollow.layer.masksToBounds = YES;
+    [self.btnFollow addTarget:self action:@selector(followUser) forControlEvents:UIControlEventTouchUpInside];
+}
+
+//------------------------------------------------------------------------------
+- (void)followUser {
+    
+    BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
+    if (followActionSuccess)
+        [self dataFillView];
+    
 }
 
 //------------------------------------------------------------------------------
@@ -136,13 +147,8 @@
     [self.btnFollow setContentEdgeInsets:contentInsets];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 #pragma mark - Localizable Strings
+//------------------------------------------------------------------------------
 -(void)textLocalizable{
     
     self.lblPoints.text = NSLocalizedString(@"Points", nil);
@@ -152,8 +158,9 @@
     [self setSegments];
 }
 
-- (void)setSegments
-{
+//------------------------------------------------------------------------------
+- (void)setSegments {
+    
     while(self.segmentedControl.numberOfSegments > 0) {
         [self.segmentedControl removeSegmentAtIndex:0 animated:NO];
     }

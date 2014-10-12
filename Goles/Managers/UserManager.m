@@ -207,11 +207,40 @@
     return nil;
 }
 
+//------------------------------------------------------------------------------
+- (BOOL)startFollowingUser:(User *)user {
+
+    User *userCheck = [self getUserForId:user.idUserValue];
+    if (userCheck) {
+        NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,kJSON_MODIFIED:@0};
+        Follow *follow = [Follow updateWithDictionary:followDict];
+        if (follow){
+            [[CoreDataManager singleton] saveContext];
+            return YES;
+        }
+        
+    }
+    else {
+        NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
+        User *newUser = [NSEntityDescription insertNewObjectForEntityForName:K_COREDATA_USER inManagedObjectContext:context];
+        newUser = user;
+        if (newUser){
+            NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,kJSON_MODIFIED:@0};
+            Follow *follow = [Follow updateWithDictionary:followDict];
+            if (follow){
+                [[CoreDataManager singleton] saveContext];
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
 
 //------------------------------------------------------------------------------
 - (User *)createUserFromDict:(NSDictionary *)dict {
     
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:[[CoreDataManager singleton] getContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:K_COREDATA_USER inManagedObjectContext:[[CoreDataManager singleton] getContext]];
     User *user = [[User alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
 
     NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];

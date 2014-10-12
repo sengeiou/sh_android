@@ -28,4 +28,6 @@
 - (BOOL)isLoggedUserFollowing:(User *)user;
 - (User *)getUserForId:(NSInteger )idUser;
 - (User *)createUserFromDict:(NSDictionary *)dict;
+- (BOOL)startFollowingUser:(User *)user;
+
 @end
