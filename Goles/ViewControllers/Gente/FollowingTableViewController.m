@@ -20,12 +20,13 @@
 
 @property (nonatomic,strong) NSArray *usersList;
 @property (nonatomic,weak) IBOutlet UITableView *usersTable;
-@property (nonatomic, strong)       NSIndexPath         *indexToShow;
+@property (nonatomic,strong)       NSIndexPath         *indexToShow;
 
 @end
 
 @implementation FollowingTableViewController
 
+#pragma mark - View Lifecycle
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,15 +35,8 @@
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
-    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
-        self.title = NSLocalizedString(@"Following", nil);
-	    self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
-    }
-    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED]){
-        self.title = NSLocalizedString(@"Followers", nil);
-		self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
-    }
-
+    [self loadLocalDataInArrays];
+    [self setNavigationBarTitle];
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +47,26 @@
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 }
 
-#pragma mark - Table view data source
+#pragma mark - HELPERS
+//------------------------------------------------------------------------------
+- (void)loadLocalDataInArrays {
+    
+    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+        self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
+    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
+        self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
+}
+
+//------------------------------------------------------------------------------
+- (void)setNavigationBarTitle {
+    
+    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+        self.title = NSLocalizedString(@"Following", nil);
+    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
+        self.title = NSLocalizedString(@"Followers", nil);
+}
+
+#pragma mark - TABLEVIEW
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.usersList.count;
@@ -89,21 +102,15 @@
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
-#pragma mark - Reload methods
+#pragma mark - RELOAD
 //------------------------------------------------------------------------------
 - (void)reloadDataAndTable {
     
-    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED]){
-        self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
-        [self.usersTable reloadData];
-    }
-    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED]){
-        self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
-        [self.usersTable reloadData];
-    }
+    [self loadLocalDataInArrays];
+    [self.usersTable reloadData];
 }
 
-#pragma mark - Navigation
+#pragma mark - NAVIGATION
 //------------------------------------------------------------------------------
 -(void)goProfile:(id)sender{
 	
@@ -115,7 +122,19 @@
 	[self.navigationController pushViewController:profileVC animated:YES];
 }
 
-#pragma mark - Webservice response methods
+#pragma mark - DATASERVICE RESPONSE
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+    
+    if (status){
+        if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+            [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+        
+        else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
+            [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
+    }
+}
+
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
@@ -125,19 +144,6 @@
             [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]])
             [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
-    }
-}
-
-#pragma mark - Conection response methods
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
-
-    if (status){
-        if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
-            [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
-        
-        else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
-            [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
     }
 }
 

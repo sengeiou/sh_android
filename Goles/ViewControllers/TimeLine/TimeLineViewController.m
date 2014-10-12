@@ -470,6 +470,7 @@
     [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
 
 }
+//------------------------------------------------------------------------------
 -(void)changecolortextview{
     self.txtView.textColor = [UIColor lightGrayColor];
 }
@@ -496,6 +497,7 @@
     }
 }
 
+//------------------------------------------------------------------------------
 -(void)addPlaceHolder{
     NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
     self.txtView.text = placeHolder;

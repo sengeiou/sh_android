@@ -217,6 +217,7 @@
 
 //------------------------------------------------------------------------------
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
     [self.followingUsers removeAllObjects]; // First clear the filtered array.
 //    [self.mySearchBar resignFirstResponder];
