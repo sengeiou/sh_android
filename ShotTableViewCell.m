@@ -14,6 +14,12 @@
 #import "AFHTTPRequestOperation.h"
 #import "DownloadImage.h"
 
+
+@interface ShotTableViewCell () <NSLayoutManagerDelegate>
+
+@end
+
+
 @implementation ShotTableViewCell
 
 - (void)awakeFromNib {
@@ -33,11 +39,25 @@
 
 - (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row {
 
-    self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 5;
+    NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
+    [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
+    
+    self.txvText.attributedText = attributedString;
     self.txvText.textColor = [UIColor blackColor];
-    self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [TimeLineUtilities heightForShot:shot.comment]);
     self.txvText.scrollEnabled = NO;
 
+    
+//    self.txvText.text = [shot.comment cleanStringfromLinks:shot.comment];
+//    self.txvText.textColor = [UIColor blackColor];
+//    self.txvText.frame = CGRectMake(self.txvText.frame.origin.x, self.txvText.frame.origin.y,self.txvText.frame.size.width, [TimeLineUtilities heightForShot:shot.comment]);
+//    self.txvText.scrollEnabled = NO;
+    
+    
+
+    
     self.lblName.text = shot.user.name;
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];

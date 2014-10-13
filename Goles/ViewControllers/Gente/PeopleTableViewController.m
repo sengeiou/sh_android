@@ -70,6 +70,7 @@
 //------------------------------------------------------------------------------
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
     [self restoreInitialStateView];
 }
 
@@ -110,7 +111,6 @@
  
     self.indexToShow = indexPath;
     [self pushToProfileUser:self.followingUsers[indexPath.row]];
-    
 }
 
 #pragma mark - Navigation
@@ -189,8 +189,6 @@
         NSArray *sortedArray = [usersArray sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
         
-//        [self.followingUsers addObjectsFromArray:usersArray]; //Option 2
-
         [self reloadTableWithAnimation];
     }
 }

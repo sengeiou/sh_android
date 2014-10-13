@@ -60,11 +60,21 @@
     
     CGSize constraint = CGSizeMake(MAX_WIDTH, MAX_HEIGHT);
     
-    CGSize size = [shotText sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-    
-    CGFloat height = MAX(size.height+64, 44.0f);
-    
-    return height;
+    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(MAX_WIDTH, CGFLOAT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
+    int l = shotText.length;
+//    if ([shotText rangeOfString:@"\n"].location != NSNotFound && rect.size.height > 400)
+//        return rect.size.height+300;
+//    else
+  
+    if (l < 120 && rect.size.height <= 35.79)
+        return MAX(rect.size.height +52, 44.0f);
+
+    else if (l > 120)
+        return MAX(rect.size.height + 130, 44.0f);
+
+    return MAX(rect.size.height+60 + 15, 44.0f);
 }
 
 //------------------------------------------------------------------------------

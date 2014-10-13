@@ -83,7 +83,6 @@
     
     [self setNavigationBarButtons];
     [self setTextViewForShotCreation];
-    [self setLocalNotificationObservers];
  
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
@@ -102,12 +101,6 @@
     [self.startShootingFirstTime setTitle:NSLocalizedString(@"Start Shooting", nil) forState:UIControlStateNormal];
     self.lblNoShots.text =  NSLocalizedString(@"No Shots", nil);
     self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
-}
-
-//------------------------------------------------------------------------------
-- (void)dealloc {
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 //------------------------------------------------------------------------------
@@ -170,12 +163,19 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self setLocalNotificationObservers];
+
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+}
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
-    
-    //Search button
-    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Icon_Magnifier"] style:UIBarButtonItemStylePlain target:self action:@selector(search)];
-    btnSearch.tintColor = [Fav24Colors iosSevenBlue];
+
+    UIBarButtonItem *btnSearch = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(search)];
     self.navigationItem.leftBarButtonItem = btnSearch;
     
     //Info button
@@ -287,7 +287,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-
     return [TimeLineUtilities heightForShot:shot.comment];
 }
 
