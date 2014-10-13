@@ -361,8 +361,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jdJ-xp-bO4">
-                                <rect key="frame" x="0.0" y="200" width="600" height="200"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdJ-xp-bO4">
+                                <rect key="frame" x="0.0" y="180" width="600" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="No people found" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAh-pO-fvl">
                                         <rect key="frame" x="174" y="90" width="252" height="46"/>
@@ -458,8 +458,8 @@
                             <constraint firstItem="jdJ-xp-bO4" firstAttribute="leading" secondItem="rXB-kE-Tpn" secondAttribute="leadingMargin" constant="-16" id="a4H-Jq-zOU"/>
                             <constraint firstAttribute="trailingMargin" secondItem="jdJ-xp-bO4" secondAttribute="trailing" constant="-16" id="hFH-PR-Dt7"/>
                             <constraint firstAttribute="bottomMargin" secondItem="cJS-FQ-TaX" secondAttribute="bottom" id="iJc-zG-pKX"/>
+                            <constraint firstAttribute="centerY" secondItem="jdJ-xp-bO4" secondAttribute="centerY" constant="70" id="peI-hK-TaL"/>
                             <constraint firstItem="cJS-FQ-TaX" firstAttribute="leading" secondItem="rXB-kE-Tpn" secondAttribute="leadingMargin" constant="-16" id="uyD-Mp-Jaz"/>
-                            <constraint firstItem="jdJ-xp-bO4" firstAttribute="top" secondItem="t5k-kh-eOd" secondAttribute="bottom" constant="136" id="yOc-Gq-6eG"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="net-x2-Ym5">
