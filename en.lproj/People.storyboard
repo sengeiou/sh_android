@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -385,7 +386,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="50" id="1qu-s4-Bqs" customClass="PeopleCustomCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="50" id="1qu-s4-Bqs" customClass="FollowingCustomCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1qu-s4-Bqs" id="upn-ZE-NPG">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -425,6 +426,19 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MF3-2u-oJr">
+                                                    <rect key="frame" x="482" y="11" width="110" height="28"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="7cn-WD-Z1b"/>
+                                                        <constraint firstAttribute="width" constant="110" id="fBh-b6-8Mn"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                    <state key="normal" title="Following">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Rlt-cB-Eav" firstAttribute="top" secondItem="upn-ZE-NPG" secondAttribute="topMargin" constant="-4" id="0sk-9T-H7h"/>
@@ -433,14 +447,18 @@
                                                 <constraint firstItem="3Vf-Fn-Zwy" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="60" id="Ngf-JD-WZt"/>
                                                 <constraint firstItem="REc-mc-x5c" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="60" id="Umw-0w-MwL"/>
                                                 <constraint firstItem="Rlt-cB-Eav" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="6" id="cYU-MF-4wN"/>
+                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="leading" secondItem="REc-mc-x5c" secondAttribute="trailing" constant="10" id="dcv-uX-QdP"/>
+                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="trailing" secondItem="upn-ZE-NPG" secondAttribute="trailingMargin" constant="-3" id="ezh-HM-6QT"/>
                                                 <constraint firstItem="rra-RM-YH3" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="-8" id="gKM-Tl-bZz"/>
+                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="leading" secondItem="3Vf-Fn-Zwy" secondAttribute="trailing" constant="10" id="rkQ-TT-rv8"/>
                                                 <constraint firstItem="rra-RM-YH3" firstAttribute="top" secondItem="upn-ZE-NPG" secondAttribute="topMargin" id="t88-VE-weJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="actionButton" destination="MF3-2u-oJr" id="Wuc-Vw-rrg"/>
                                             <outlet property="imgPhoto" destination="Rlt-cB-Eav" id="ASi-yX-iVg"/>
-                                            <outlet property="lblFavouriteTeamName" destination="3Vf-Fn-Zwy" id="OLQ-al-X2j"/>
                                             <outlet property="lblNickName" destination="REc-mc-x5c" id="uvg-bL-c8X"/>
+                                            <outlet property="lblfavouriteTeamName" destination="3Vf-Fn-Zwy" id="xdh-cz-qvJ"/>
                                             <outlet property="photobutton" destination="rra-RM-YH3" id="cJq-nS-9aK"/>
                                         </connections>
                                     </tableViewCell>

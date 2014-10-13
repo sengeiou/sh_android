@@ -90,12 +90,13 @@
 //------------------------------------------------------------------------------
 -(void)setDeviceToken:(NSString *)token {
     
-    if ( token )
-        [Device updateWithDictionary:@{kJSON_TOKEN:token}];
-    else
-        [[self getDevice] resetToken];
-    
-    [[CoreDataManager singleton] saveContext];
+    if ( token ){
+        if (![token isEqualToString:[self getDevice].token]) {
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_UPDATED}];
+            if (device)
+                [[CoreDataManager singleton] saveContext];
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

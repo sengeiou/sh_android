@@ -49,7 +49,7 @@
 
 
 @implementation AppDelegate
-
+//------------------------------------------------------------------------------
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
     
@@ -98,6 +98,7 @@
     return YES;
 }
 
+//------------------------------------------------------------------------------
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     UIApplication *app = [UIApplication sharedApplication];
@@ -110,6 +111,7 @@
     [[[SyncManager singleton] synchroTimer] invalidate];
 }
 
+//------------------------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	
     User *userCurrent = [[UserManager sharedInstance] getActiveUser];
@@ -133,10 +135,12 @@
 //    }
 }
 
+//------------------------------------------------------------------------------
 - (void)applicationDidBecomeActive:(UIApplication *)application {
    
 }
 
+//------------------------------------------------------------------------------
 - (void)applicationWillTerminate:(UIApplication *)application {
 
 	[[[SyncManager singleton] synchroTimer] invalidate];
@@ -222,9 +226,17 @@
 //------------------------------------------------------------------------------
 - (void)registerAPNS {
 
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                                                           UIRemoteNotificationTypeSound |
-                                                                           UIRemoteNotificationTypeAlert)];
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+        // iOS 8 Notifications
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else {
+        // iOS < 8 Notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert)];
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -241,15 +253,15 @@
 
 //------------------------------------------------------------------------------
 -(void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-	//DLog(@"Notifications are disabled for this application.");
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error de registro"
-                                                    message:@"No ha sido posible registrar este dispositivo. Verifica si tienes una conexión a internet y que el puerto 5223 TCP este abierto."
-                                                   delegate:self
-                                          cancelButtonTitle:nil
-                                          otherButtonTitles:@"Reintentar", nil];
-	
-	alert.tag = kAlertViewError;
-	[alert show];
+
+//	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error de registro"
+//                                                    message:@"No ha sido posible registrar este dispositivo. Verifica si tienes una conexión a internet y que el puerto 5223 TCP este abierto."
+//                                                   delegate:self
+//                                          cancelButtonTitle:nil
+//                                          otherButtonTitles:@"Reintentar", nil];
+//	
+//	alert.tag = kAlertViewError;
+//	[alert show];
 }
 
 //------------------------------------------------------------------------------
