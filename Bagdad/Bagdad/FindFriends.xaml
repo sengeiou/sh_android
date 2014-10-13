@@ -50,13 +50,13 @@
         </StackPanel>
         
         <!--Row1-->
-        <TextBox x:Name="SearchBar" InputScope="Search" Grid.Row="1" Margin="0,0,0,24" AcceptsReturn="False" Loaded="SearchBar_Loaded" KeyDown="SearchBar_KeyDown"/>
+        <TextBox x:Name="SearchBar" InputScope="Search" Grid.Row="1" Margin="-12,0,-12,24" AcceptsReturn="False" Loaded="SearchBar_Loaded" KeyDown="SearchBar_KeyDown"/>
 
         <!--Row2-->
         <ListBox x:Name="findList" Grid.Row="2" ItemsSource="{Binding Followings}" tk:TiltEffect.IsTiltEnabled="True" MouseEnter="findList_MouseEnter">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="456" Margin="0,0,12,48">
+                    <Grid Width="456" Margin="0,0,-12,48">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>

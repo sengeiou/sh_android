@@ -149,9 +149,8 @@
             </tk:NavigationOutTransition.Forward>
         </tk:NavigationOutTransition>
     </tk:TransitionService.NavigationOutTransition>
-
-    <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
-    <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
+    
+    <Grid> 
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -159,7 +158,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!--Row2-->
+        
         <!--Row0-->
         <ListBoxItem Grid.Row="0" Margin="0,12,0,0" Background="{StaticResource PhoneBackgroundBrush}" tk:TiltEffect.IsTiltEnabled="True" Tap="Info_Tap">
             <Grid x:Name="titleGrid" Width="480">
@@ -201,7 +200,7 @@
         <!--Row1-->
         <Grid x:Name="newShotRow" Grid.Row="1">
             <TextBlock x:Name="extraChars" Visibility="Collapsed" HorizontalAlignment="Left" Margin="60,0,0,17" TextWrapping="NoWrap" Text="140" VerticalAlignment="Bottom" Width="32" Style="{StaticResource PhoneTextSubtleStyle}"/>
-            <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="99,0,10,0" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplatePortrait}" >
+            <c4ftk:ChatBubbleTextBox x:Name="newShot" MaxLength="140" MaxHeight="250" ChatBubbleDirection="LowerRight" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="ChatBubbleTextBox_TextChanged" Margin="99,0,12,0" GotFocus="newShot_GotFocus" LostFocus="newShot_LostFocus" Hint="{Binding LocalizedResources.WhatsUp, Source={StaticResource LocalizedStrings}}" Template="{StaticResource ChatBubbleTextBoxControlTemplatePortrait}" >
                 <c4ftk:ChatBubbleTextBox.InputScope>
                     <InputScope>
                         <InputScopeName NameValue="Chat" />
@@ -211,7 +210,7 @@
         </Grid>
         
         <!--Row3-->
-        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True">
+        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True" MouseMove="myShots_MouseMove">
             <ListBox.Resources>
                 <Style x:Key="TimeLineListBox" TargetType="ListBox">
                     <Setter Property="Background" Value="Transparent"/>
@@ -266,6 +265,16 @@
                 <!--Row2-->
                 <TextBlock Grid.Row="2" Text="{Binding LocalizedResources.StartShooting, Source={StaticResource LocalizedStrings}}" Style="{StaticResource LongListSelectorGroupHeaderStyle}" Tap="StartShooting_Tap"/>
             </Grid>
+        </Grid>
+    </Grid>
+        
+        <Grid x:Name="GoToTopGrid" Visibility="Collapsed" Width="55" Height="55" Margin="0,180,12,0" HorizontalAlignment="Right" VerticalAlignment="Top" Tap="GoToTopGrid_Tap">
+            <Ellipse Width="55" Height="55" Fill="{StaticResource PhoneBackgroundBrush}" Stroke="{StaticResource PhoneDisabledBrush}" StrokeThickness="2"/>
+            <Rectangle Fill="{StaticResource PhoneDisabledBrush}">
+                <Rectangle.OpacityMask>
+                    <ImageBrush ImageSource="Resources/icons/appbar.arrow.up.png"/>
+                </Rectangle.OpacityMask>
+            </Rectangle>
         </Grid>
     </Grid>
 </phone:PhoneApplicationPage>

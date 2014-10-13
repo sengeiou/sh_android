@@ -31,7 +31,10 @@ namespace Bagdad
         bool newShotFocused = false;
         private int offset = Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE;
         PageOrientation lastOrientation;
-        
+
+        ListBoxAutomationPeer svAutomation;
+        // not feeling creative with my var names today...
+        IScrollProvider scrollInterface;
         
         public TimeLine()
         {      
@@ -51,6 +54,7 @@ namespace Bagdad
             timer.Interval = new TimeSpan(0, 0, 0, 10);
 
             lastOrientation = this.Orientation;
+
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -135,6 +139,7 @@ namespace Bagdad
                 new ApplicationBarMenuItem(AppResources.Me);
             appBarMenuItemMe.Click += appBarMenuItemMe_Click;
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
+
         }
 
         private void SynchronizeShots()
@@ -316,9 +321,8 @@ namespace Bagdad
         {
             progress.IsVisible = true;
 
-            ListBoxAutomationPeer svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
-            // not feeling creative with my var names today...
-            IScrollProvider scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+            svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
+            scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
             if (myShots.Items.Count() != 0)
             {
@@ -406,6 +410,23 @@ namespace Bagdad
 
             myShots.ItemsSource = null;
             myShots.ItemsSource = App.ShotsVM.shotsList;
+        }
+
+        private void GoToTopGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            myShots.ScrollIntoView(myShots.Items.First());
+            GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void myShots_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
+            scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+
+            if (scrollInterface.VerticalScrollPercent != 0)
+            {
+                GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
+            }
         }
         
         
