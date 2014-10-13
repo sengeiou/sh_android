@@ -197,7 +197,7 @@
 //------------------------------------------------------------------------------
 - (IBAction)searchFriends:(id)sender {
   
-    //self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = nil;
     
     self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
     self.mySearchBar.delegate = self;
