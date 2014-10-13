@@ -30,6 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="?android:selectableItemBackground"
         android:orientation="vertical">
 
         <TextView
@@ -45,7 +46,7 @@
 
         <TextView
           style="@style/ProfileMarkTitle"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="0dp"
           android:layout_gravity="center"
           android:layout_weight="1"
@@ -56,7 +57,8 @@
       <LinearLayout
         android:id="@+id/profile_marks_following_box"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?android:selectableItemBackground"
         android:layout_weight="1"
         android:clickable="true"
         android:orientation="vertical">
@@ -85,7 +87,8 @@
       <LinearLayout
         android:id="@+id/profile_marks_followers_box"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?android:selectableItemBackground"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -191,6 +194,7 @@
       android:layout_below="@+id/profile_bio"
       tools:text="sevibus.sloydev.com"
       android:autoLink="web"
+      android:background="?android:selectableItemBackground"
       android:textColor="@color/links" />
 
   </RelativeLayout>
