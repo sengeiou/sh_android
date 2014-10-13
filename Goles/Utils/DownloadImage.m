@@ -17,29 +17,29 @@
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
   
-    //__weak UIImageView* imgView = nil;
+    __weak UIImageView *img = imageView;
    
     if (image == nil) {
         
-        [imageView setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            imageView.image = image;
-            imageView.layer.cornerRadius = imageView.frame.size.width / 2;
-            imageView.clipsToBounds = YES;
+        [img setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            img.image = image;
+            img.layer.cornerRadius = imageView.frame.size.width / 2;
+            img.clipsToBounds = YES;
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             
             UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
             
-            UIImage *img = [TimeLineUtilities drawText:text
+            UIImage *imgageCreate = [TimeLineUtilities drawText:text
                                                inImage:imageDefault
                                                atPoint:[TimeLineUtilities centerTextInImage:imageView] andSizeFont:80];
             
-            imageView.image = img;
+            img.image = imgageCreate;
         }];
     }else{
-        imageView.image = image;
-        imageView.layer.cornerRadius = imageView.frame.size.width / 2;
-        imageView.clipsToBounds = YES;
+        img.image = image;
+        img.layer.cornerRadius = imageView.frame.size.width / 2;
+        img.clipsToBounds = YES;
     }
     
     return imageView;
