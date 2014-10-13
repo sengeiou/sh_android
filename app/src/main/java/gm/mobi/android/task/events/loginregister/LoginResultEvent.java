@@ -2,59 +2,11 @@ package gm.mobi.android.task.events.loginregister;
 
 
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 
-public class LoginResultEvent {
+public class LoginResultEvent extends BagdadBaseJob.SuccessEvent<User>{
 
-    public static final int STATUS_SUCCESS = 1;
-    public static final int STATUS_INVALID = 2;
-    public static final int STATUS_SERVER_FAILURE = 3;
-
-    private Exception error;
-    private int status;
-    private User signedUser;
-
-    // Private constructor, create through static methods
-    private LoginResultEvent(int status) {
-        this.status = status;
-    }
-
-    public static LoginResultEvent successful(User user) {
-        LoginResultEvent loginResultEvent = new LoginResultEvent(STATUS_SUCCESS);
-        loginResultEvent.setSignedUser(user);
-        return loginResultEvent;
-    }
-
-    public static LoginResultEvent invalid() {
-        return new LoginResultEvent(STATUS_INVALID);
-    }
-
-    public static LoginResultEvent serverError(Exception e) {
-        LoginResultEvent event = new LoginResultEvent(STATUS_SERVER_FAILURE);
-        event.setError(e);
-        return event;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public Exception getError() {
-        return error;
-    }
-
-    public void setError(Exception error) {
-        this.error = error;
-    }
-
-    public boolean hasError() {
-        return error != null;
-    }
-
-    public User getSignedUser() {
-        return signedUser;
-    }
-
-    public void setSignedUser(User signedUser) {
-        this.signedUser = signedUser;
+    public LoginResultEvent(User result) {
+        super(result);
     }
 }

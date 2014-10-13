@@ -10,7 +10,6 @@ import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
-import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.activities.registro.EmailLoginActivity;

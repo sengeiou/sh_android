@@ -3,27 +3,23 @@ package gm.mobi.android.task.jobs.timeline;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-
-import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
-import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
-import gm.mobi.android.task.events.timeline.ShotsResultEvent;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
+import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
+import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import javax.inject.Inject;
 
 public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
@@ -92,7 +88,7 @@ public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
         //TODO what if newshots is empty?
         shotManager.saveShots(newShots);
         List<Shot> updatedTimeline = shotManager.retrieveTimelineWithUsers();
-        postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline));
+        postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }
 
     private void retrieveOlder() throws IOException, SQLException {

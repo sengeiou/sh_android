@@ -1,6 +1,5 @@
 package gm.mobi.android.task.events.profile;
 
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 

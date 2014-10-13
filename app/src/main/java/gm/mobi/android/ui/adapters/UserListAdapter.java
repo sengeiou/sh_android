@@ -11,7 +11,6 @@ import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
-import java.io.Serializable;
 import java.util.List;
 
 public class UserListAdapter extends BindableAdapter<User> {

@@ -58,7 +58,7 @@
 
 
         <activity
-          android:name=".ui.activities.NewShotActivity"
+          android:name=".ui.activities.PostNewShotActivity"
           android:theme="@style/GolesTheme.NoActionBar.Floating">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

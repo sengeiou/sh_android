@@ -10,6 +10,7 @@ import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
@@ -34,8 +35,9 @@ public class PeopleFragment extends UserFollowsFragment {
 
     @Override
     public void startJob() {
-        GetPeopleJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetPeopleJob.class);
-        job.init();
+        GolesApplication golesApplication = GolesApplication.get(getActivity());
+        GetPeopleJob job = golesApplication.getObjectGraph().get(GetPeopleJob.class);
+        job.init(golesApplication.getCurrentUser().getIdUser());
         jobManager.addJobInBackground(job);
     }
 
@@ -54,13 +56,18 @@ public class PeopleFragment extends UserFollowsFragment {
     }
 
     @Subscribe @Override
+    public void showUserList(FollowsResultEvent event) {
+        super.showUserList(event);
+    }
+
+    @Subscribe @Override
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         super.onConnectionNotAvailable(event);
     }
 
     @Subscribe @Override
-    public void showUserList(FollowsResultEvent event) {
-        super.showUserList(event);
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        super.onCommunicationError(event);
     }
 
     @Override

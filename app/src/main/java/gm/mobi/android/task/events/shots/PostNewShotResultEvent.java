@@ -1,31 +1,11 @@
 package gm.mobi.android.task.events.shots;
 
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.task.events.ResultEvent;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 
-public class PostNewShotResultEvent extends ResultEvent<Shot>{
+public class PostNewShotResultEvent extends BagdadBaseJob.SuccessEvent<Shot> {
 
-
-    private Shot shot;
-
-    public PostNewShotResultEvent(int status) {
-        super(status);
-    }
-
-    @Override
-    public ResultEvent setSuccessful(Shot o) {
-        shot = o;
-        return this;
-    }
-
-    @Override
-    public ResultEvent setInvalid() {
-        return this;
-    }
-
-    @Override
-    public ResultEvent setServerError(Exception e) {
-        setError(e);
-        return this;
+    public PostNewShotResultEvent(Shot result) {
+        super(result);
     }
 }

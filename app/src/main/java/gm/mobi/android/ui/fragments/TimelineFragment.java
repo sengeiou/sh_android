@@ -19,21 +19,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-
-import gm.mobi.android.task.jobs.BagdadBaseJob;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -44,12 +37,14 @@ import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
-import gm.mobi.android.ui.activities.NewShotActivity;
+import gm.mobi.android.ui.activities.PostNewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
+import java.util.List;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
@@ -278,7 +273,7 @@ public class TimelineFragment extends BaseFragment
         Bundle anim =
                 ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
                         newShotView.getHeight()).toBundle();
-        Intent intent = new Intent(getActivity(), NewShotActivity.class);
+        Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtras(anim);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
         // ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);

@@ -7,7 +7,7 @@ import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.events.ResultEvent;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import java.io.IOException;
 import org.junit.Before;
@@ -21,8 +21,6 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -65,10 +63,7 @@ public class GetUsersFollowsJobTest {
         } catch (Exception e) {
         }
 
-        ArgumentCaptor<FollowsResultEvent> argument = ArgumentCaptor.forClass(FollowsResultEvent.class);
+        ArgumentCaptor<CommunicationErrorEvent> argument = ArgumentCaptor.forClass(CommunicationErrorEvent.class);
         verify(mockBus).post(argument.capture());
-
-        FollowsResultEvent eventPosted = argument.getValue();
-        assertThat(eventPosted.getStatus()).isEqualTo(ResultEvent.STATUS_INVALID);
     }
 }

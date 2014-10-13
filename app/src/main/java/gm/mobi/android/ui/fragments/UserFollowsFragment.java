@@ -20,8 +20,8 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -127,24 +127,21 @@ public class UserFollowsFragment extends BaseFragment {
     @Subscribe
     public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
-        if (event.getStatus() == ResultEvent.STATUS_INVALID) {
-            onCommunicationError();
-            return;
-        }
-        List<User> users = event.getFollows();
-        if (users.size() == 0) {
+        List<User> usersFollowing = event.getResult();
+        if (usersFollowing.size() == 0) {
             setEmpty(true);
         } else {
             if (userListAdapter == null) {
-                userListAdapter = new UserListAdapter(getActivity(), picasso, users);
+                userListAdapter = new UserListAdapter(getActivity(), picasso, usersFollowing);
             } else {
-                userListAdapter.setItems(users);
+                userListAdapter.setItems(usersFollowing);
             }
             userlistListView.setAdapter(userListAdapter);
         }
     }
 
-    public void onCommunicationError() {
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
         Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
 

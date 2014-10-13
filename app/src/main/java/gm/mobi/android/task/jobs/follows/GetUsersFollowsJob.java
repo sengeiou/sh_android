@@ -2,33 +2,23 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class GetUsersFollowsJob extends BagdadBaseJob<List<User>> {
+public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 5;
 
     BagdadService service;
-
     private Long idUserToRetrieveFollowsFrom;
 
     @Inject public GetUsersFollowsJob(Application application, Bus bus, BagdadService service, NetworkUtil networkUtil) {
@@ -43,7 +33,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<List<User>> {
     @Override
     protected void run() throws IOException, SQLException {
         List<User> users = getFollowsUsersFromService(idUserToRetrieveFollowsFrom, 0L);
-        postSuccessfulEvent(users);
+        postSuccessfulEvent(new FollowsResultEvent(users));
     }
 
     private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {

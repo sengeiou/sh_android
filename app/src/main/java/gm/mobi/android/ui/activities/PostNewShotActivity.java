@@ -27,15 +27,15 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
-import gm.mobi.android.task.jobs.shots.NewShotJob;
+import gm.mobi.android.task.jobs.shots.PostNewShotJob;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class NewShotActivity extends BaseSignedInActivity {
+public class PostNewShotActivity extends BaseSignedInActivity {
 
     public static final int MAX_LENGTH = 140;
 
@@ -135,28 +135,29 @@ public class NewShotActivity extends BaseSignedInActivity {
     }
 
     public void startJob(User currentUser, String comment){
-        NewShotJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(NewShotJob.class);
+        PostNewShotJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
         job.init(currentUser, comment);
         jobManager.addJobInBackground(job);
+    }
+
+    @Subscribe
+    public void shotSent(PostNewShotResultEvent event) {
+        Timber.d("Shot sent successfuly :D");
+        setResult(RESULT_OK);
+        finish(); //TODO animación hacia abjo
+    }
+
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+            Timber.e("Shot not sent successfuly :(");
+            setProgressUI(false);
+            Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         setProgressUI(false);
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void shotSent(PostNewShotResultEvent event) {
-        if (event.getStatus() == ResultEvent.STATUS_SUCCESS) {
-            Timber.d("Shot sent successfuly :D");
-            setResult(RESULT_OK);
-            finish(); //TODO animación hacia abjo
-        } else {
-            Timber.e("Shot not sent successfuly :(");
-            setProgressUI(false);
-            Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void setProgressUI(boolean showProgress) {

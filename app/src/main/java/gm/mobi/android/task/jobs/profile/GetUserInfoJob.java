@@ -9,14 +9,10 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;

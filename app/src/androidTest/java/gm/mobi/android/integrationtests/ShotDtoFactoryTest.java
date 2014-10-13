@@ -1,14 +1,8 @@
 package gm.mobi.android.integrationtests;
 
-import dagger.ObjectGraph;
-import gm.mobi.android.GolesApplication;
-import gm.mobi.android.GolesTestModule;
 import gm.mobi.android.TestGolesApplication;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
-import gm.mobi.android.service.dataservice.dto.UtilityDtoFactory;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +13,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)

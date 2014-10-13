@@ -12,11 +12,9 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +23,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.atMost;
@@ -87,7 +84,7 @@ public class GetPeopleJobTest {
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
-        getPeopleJob.init();
+        getPeopleJob.init(anyLong());
         getPeopleJob.onRun();
         verify(bus, atMost(1)).post(any(FollowsResultEvent.class));
     }
@@ -130,7 +127,7 @@ public class GetPeopleJobTest {
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
-        getPeopleJob.init();
+        getPeopleJob.init(anyLong());
 
         getPeopleJob.onRun();
 

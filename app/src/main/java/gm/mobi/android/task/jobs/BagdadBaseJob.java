@@ -7,13 +7,11 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.DatabaseErrorEvent;
 import java.io.IOException;
 import java.sql.SQLException;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 public abstract class BagdadBaseJob<T> extends Job {
@@ -40,7 +38,7 @@ public abstract class BagdadBaseJob<T> extends Job {
     @Override
     public void onRun() throws Throwable {
         if (!networkUtil.isConnected(application)) {
-            postNetworkNotAvailableEvent();
+            postConnectionNotAvailableEvent();
             if (isNetworkRequired()) {
                 return;
             }
@@ -95,7 +93,7 @@ public abstract class BagdadBaseJob<T> extends Job {
         bus.post(result);
     }
 
-    private void postNetworkNotAvailableEvent() {
+    private void postConnectionNotAvailableEvent() {
         bus.post(new ConnectionNotAvailableEvent());
     }
 
@@ -127,6 +125,14 @@ public abstract class BagdadBaseJob<T> extends Job {
 
     @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
         return false;
+    }
+
+    public void setBus(Bus bus) {
+        this.bus = bus;
+    }
+
+    public void setNetworkUtil(NetworkUtil networkUtil) {
+        this.networkUtil = networkUtil;
     }
 
     public static class SuccessEvent<T> {

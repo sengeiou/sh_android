@@ -2,23 +2,20 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.PaginatedResult;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleRemoteJob extends BagdadBaseJob<PaginatedResult<List<User>>> {
+public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResultEvent> {
 
     private static final int PRIORITY = 4;
     public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
@@ -41,7 +38,7 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<PaginatedResult<List<Us
 
     @Override protected void run() throws SQLException, IOException {
         PaginatedResult<List<User>> searchResults = getSearchFromServer();
-        postSuccessfulEvent(searchResults);
+        postSuccessfulEvent(new SearchPeopleRemoteResultEvent(searchResults));
     }
 
     private PaginatedResult<List<User>> getSearchFromServer() throws IOException {

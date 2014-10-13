@@ -72,10 +72,6 @@ public class BagdadDataService implements BagdadService {
         GenericDto loginDto = userDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
         GenericDto responseDto = postRequest(loginDto);
         OperationDto[] ops = responseDto.getOps();
-        if (ops == null || ops.length < 1) {
-            Timber.e("Received 0 operations");
-            return null;
-        }
         Map<String, Object>[] data = ops[0].getData();
         return userMapper.fromDto(data[0]);
     }
@@ -326,6 +322,7 @@ public class BagdadDataService implements BagdadService {
         }
 
         // Response received, check status and return value
+        // TODO check operations field is not empty
         if (response.isSuccessful()) {
             String responseBody = response.body().string();
             Timber.d("Response received: %s", responseBody);

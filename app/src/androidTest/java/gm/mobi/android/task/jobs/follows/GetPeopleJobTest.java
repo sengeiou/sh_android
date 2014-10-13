@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class GetPeopleJobTest {
 
+    public static final long CURRENT_USER_ID =1L;
+
     @Test
     public void postErrorWhenCallToServiceFails() throws Throwable{
 
@@ -35,10 +37,7 @@ public class GetPeopleJobTest {
         when(service.getFollowings(anyLong(),anyLong())).thenThrow(new ServerException());
 
         GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, null, null, null, null);
-
-        getPeopleJob.setBus(bus);
-        getPeopleJob.setService(service);
-        getPeopleJob.init();
+        getPeopleJob.init(CURRENT_USER_ID);
         getPeopleJob.onRun();
 
         verify(bus).post(any(CommunicationErrorEvent.class));
@@ -56,12 +55,7 @@ public class GetPeopleJobTest {
         Bus bus = mock(Bus.class);
 
         GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, networkUtil, null, null, null);
-
-        getPeopleJob.setNetworkUtil(networkUtil);
-        getPeopleJob.setService(service);
-        getPeopleJob.setBus(bus);
-
-        getPeopleJob.init();
+        getPeopleJob.init(CURRENT_USER_ID);
         getPeopleJob.onRun();
 
         ArgumentCaptor<ConnectionNotAvailableEvent> eventArgumentCaptor =

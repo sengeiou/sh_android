@@ -23,6 +23,7 @@ import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
@@ -68,23 +69,22 @@ public class EmailLoginActivity extends BaseActivity {
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
 //        currentLoginJob = null;
-        User user = event.getSignedUser();
-        if (event.getStatus() == LoginResultEvent.STATUS_SUCCESS && user !=null) {
-            // Yey!
-            Timber.d("Succesfuly logged in %s", user.getUserName());
-            // Store user in current session
-            GolesApplication.get(this).setCurrentUser(user);
-            // Launch main activity, and destroy the stack trace
-            finish();
-            Intent i = new Intent(this,MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        } else if(event.getStatus() == LoginResultEvent.STATUS_SERVER_FAILURE){
-            Toast.makeText(this,R.string.communication_error,Toast.LENGTH_LONG).show();
-        }else{
-            mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
-            mLoginButton.setProgress(BUTTON_ERROR);
-        }
+        User user = event.getResult();
+        // Yey!
+        Timber.d("Succesfuly logged in %s", user.getUserName());
+        // Store user in current session
+        GolesApplication.get(this).setCurrentUser(user);
+        // Launch main activity, and destroy the stack trace
+        finish();
+        Intent i = new Intent(this,MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+
+    }
+
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        Toast.makeText(this,R.string.communication_error,Toast.LENGTH_LONG).show();
     }
 
     @Subscribe
@@ -93,6 +93,11 @@ public class EmailLoginActivity extends BaseActivity {
         mLoginButton.setProgress(BUTTON_ERROR);
     }
 
+    @Subscribe
+    public void onCredentialError(LoginUserJob.CredentialErrorEvent event) {
+        mLoginButton.setErrorText(getString(R.string.activity_login_email_error_credentials));
+        mLoginButton.setProgress(BUTTON_ERROR);
+    }
 
     private void setLoading(boolean loading) {
         mLoginButton.setIndeterminateProgressMode(true);

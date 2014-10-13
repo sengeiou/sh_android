@@ -13,6 +13,7 @@ import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
@@ -55,14 +56,13 @@ public class InitialSetupFragment extends BaseFragment {
 
     @Subscribe
     public void followingsReceived(FollowsResultEvent event) {
-        // Did it go ok?
-        if (event.getStatus() == FollowsResultEvent.STATUS_SUCCESS) {
-            // Yey!
             setupFinished();
-        } else {
-            Timber.w("Setup invalid. Something went wrong...");
-            //TODO notificar al usuario y dar opción de retry
-        }
+    }
+
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        Timber.w("Setup invalid. Something went wrong...");
+        //TODO retry
     }
 
     @Subscribe

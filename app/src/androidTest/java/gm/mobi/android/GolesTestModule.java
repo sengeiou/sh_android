@@ -4,7 +4,6 @@ import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.integrationtests.GetPeopleJobTest;
 import gm.mobi.android.integrationtests.ShotDtoFactoryTest;
 import gm.mobi.android.integrationtests.TestOpenHelper;

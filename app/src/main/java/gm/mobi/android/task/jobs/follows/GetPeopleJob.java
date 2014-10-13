@@ -11,9 +11,8 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -21,14 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetPeopleJob extends BagdadBaseJob<List<User>> {
+public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
 
     public static final int PRIORITY = 5;
-    Application context;
-    Bus bus;
     BagdadService service;
-
-    NetworkUtil networkUtil;
 
     private Long userId;
     private UserManager userManager;
@@ -37,43 +32,31 @@ public class GetPeopleJob extends BagdadBaseJob<List<User>> {
 
     @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY),context,bus,networkUtil);
-        this.context = context;
-        this.bus = bus;
         this.service = service;
-        this.networkUtil = networkUtil;
         this.userManager = userManager;
         this.followManager = followManager;
         setOpenHelper(openHelper);
     }
 
-    public void setBus(Bus bus) {
-        this.bus = bus;
-    }
 
     public void setService(BagdadService service) {
         this.service = service;
-    }
-
-    public void setNetworkUtil(NetworkUtil networkUtil) {
-        this.networkUtil = networkUtil;
     }
 
     @Override
     protected void run() throws IOException, SQLException {
         List<User> peopleFromDatabase = getPeopleFromDatabase();
         if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
-            postSuccessfulEvent(peopleFromDatabase);
+            postSuccessfulEvent(new FollowsResultEvent(peopleFromDatabase));
         }
 
-        List<User> peopleFromServer = service.getFollowings(userId, 0l);
+        List<User> peopleFromServer = service.getFollowings(userId, 0L);
         Collections.sort(peopleFromServer, new NameComparator());
-        postSuccessfulEvent(peopleFromServer);
-     }
+        postSuccessfulEvent(new FollowsResultEvent(peopleFromServer));
+    }
 
-    public void init() {
-        GolesApplication golesApplication = GolesApplication.get(context);
-        User currentUser = golesApplication.getCurrentUser();
-        userId = currentUser.getIdUser();
+    public void init(long currentUserId) {
+        userId = currentUserId;
     }
 
     private List<User> getPeopleFromDatabase() throws SQLException {
