@@ -66,7 +66,7 @@
 //------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.title = @"People";
+    self.title = NSLocalizedString(@"People", nil);
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
     #warning Used to force reload table when pushed from search
     [self.usersTable reloadData];
