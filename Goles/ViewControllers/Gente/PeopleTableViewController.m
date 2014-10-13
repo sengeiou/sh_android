@@ -18,8 +18,14 @@
 #import "PeopleLineUtilities.h"
 #import "SearchManager.h"
 #import "CoreDataParsing.h"
+#import "Fav24Colors.h"
 
-@interface PeopleTableViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface PeopleTableViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+
+    BOOL moreCells;
+    BOOL refreshTable;
+
+}
 
 @property (nonatomic,strong)                NSMutableArray  *followingUsers;
 @property (nonatomic,strong)    IBOutlet    UITableView     *usersTable;
@@ -27,6 +33,9 @@
 @property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnAddFriends;
 @property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnSearchFriends;
 @property (nonatomic,strong)                UISearchBar     *mySearchBar;
+@property (nonatomic,strong)                UILabel         *lblFooter;
+@property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
+@property (nonatomic, assign)               CGFloat                     lastContentOffset;
 @property (nonatomic,weak)      IBOutlet    UIView  *viewNotPeople;
 @property (nonatomic,weak)      IBOutlet    UILabel  *lblNotPeople;
 
@@ -107,6 +116,30 @@
  
     self.indexToShow = indexPath;
     [self pushToProfileUser:self.followingUsers[indexPath.row]];
+}
+
+//------------------------------------------------------------------------------
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (!refreshTable){
+        self.spinner.hidden = YES;
+        
+        self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.usersTable.frame.size.width, 44)];
+        self.lblFooter.text = NSLocalizedString(@"No more people", nil);
+        self.lblFooter.textColor = [Fav24Colors iosSevenGray];
+        self.lblFooter.textAlignment = NSTextAlignmentCenter;
+        self.lblFooter.backgroundColor = [UIColor clearColor];
+        self.usersTable.tableFooterView = self.lblFooter;
+    }
+}
+
+//------------------------------------------------------------------------------
+- (void)addLoadMoreCell{
+    self.usersTable.tableFooterView = self.spinner;
+    
+    moreCells = NO;
+    [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInt:self.followingUsers.count+1] withDelegate:self];
+    
 }
 
 #pragma mark - Navigation
@@ -254,6 +287,33 @@
     else if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
         self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height-15, 30);
 
+}
+
+//------------------------------------------------------------------------------
+- (void)initSpinner{
+    moreCells = YES;
+    refreshTable = YES;
+    
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.spinner startAnimating];
+    self.spinner.frame = CGRectMake(0, 0, 320, 44);
+}
+
+//------------------------------------------------------------------------------
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGFloat currentOffset = scrollView.contentOffset.y;
+    CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+    
+    if (currentOffset < 0)
+        NSLog(@"");
+
+    else{
+        if (maximumOffset - currentOffset <= 200.0 && moreCells)
+            [self addLoadMoreCell];
+    }
+    
+    self.lastContentOffset = scrollView.contentOffset.y;
 }
 
 @end

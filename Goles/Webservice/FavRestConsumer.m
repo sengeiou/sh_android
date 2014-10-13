@@ -637,7 +637,7 @@
     //Create Provider 'metadata' block
     NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_USER
-                                                                     withItems:@100
+                                                                     withItems:@8
                                                                     withOffSet:offset
                                                                      andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
     
