@@ -233,6 +233,7 @@ namespace Bagdad
         private void appBarMenuItemPeople_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
+            timer.Stop();
         }
 
         private void appBarShootButton_Click(object sender, EventArgs e)
