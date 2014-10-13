@@ -15,7 +15,11 @@
 
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     
-    UISearchBar *searchBar  = [[UISearchBar alloc] initWithFrame:CGRectMake(screenRect.origin.x+12, 0, screenRect.size.width-15, 30)];
+    UISearchBar *searchBar  = [[UISearchBar alloc] init];
+    if (screenRect.size.width > screenRect.size.height)
+        searchBar.frame = CGRectMake(screenRect.origin.x+12, -5, screenRect.size.width-15, 30);
+    else
+        searchBar.frame = CGRectMake(screenRect.origin.x+12, 0, screenRect.size.width-15, 30);
     searchBar.showsCancelButton = YES;
     [searchBar sizeToFit];
     [searchBar setShowsCancelButton:YES animated:YES];
@@ -23,14 +27,6 @@
     
     return searchBar;
 
-    
-
-//    UISearchBar *searchBar = [UISearchBar new];
-//    searchBar.showsCancelButton = YES;
-//    [searchBar sizeToFit];
-//    UIView *barWrapper = [[UIView alloc]initWithFrame:searchBar.bounds];
-//    [barWrapper addSubview:searchBar];
-//    self.navigationItem.titleView = barWrapper;
 }
 
 @end

@@ -7,7 +7,7 @@
 
 #import "PeopleTableViewController.h"
 #import "UserManager.h"
-#import "PeopleCustomCell.h"
+#import "FollowingCustomCell.h"
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
 #import "Conection.h"
@@ -54,6 +54,9 @@
     
     self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
     
+    //Listen to orientation changes
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
+    
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
@@ -94,9 +97,9 @@
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	static NSString *CellIdentifier = @"peopleCell";
-	PeopleCustomCell *cell = (id) [self.usersTable dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+	 
+	static NSString *CellIdentifier = @"followingCell";
+	FollowingCustomCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
 
@@ -198,7 +201,8 @@
 - (IBAction)searchFriends:(id)sender {
   
     self.navigationItem.rightBarButtonItem = nil;
-    
+    self.navigationItem.leftBarButtonItem = nil;
+
     self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
     self.mySearchBar.delegate = self;
     [self.mySearchBar becomeFirstResponder];
@@ -212,6 +216,9 @@
     UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
 
+    UIBarButtonItem *findButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchFriends:)];
+    self.navigationItem.leftBarButtonItem = findButtonItem;
+    
     [self restoreInitialStateView];
     [self reloadTableWithAnimation];
 }
@@ -221,11 +228,11 @@
     
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
     [self.followingUsers removeAllObjects]; // First clear the filtered array.
-//    [self.mySearchBar resignFirstResponder];
     self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
     [self reloadTableWithAnimation];
 
 }
+
 
 #pragma mark - HELPER METHODS
 //------------------------------------------------------------------------------
@@ -236,6 +243,18 @@
     self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
     [self.mySearchBar resignFirstResponder];
     [self.mySearchBar setText:@""];
+}
+
+//------------------------------------------------------------------------------
+- (void)orientationChanged:(NSNotification *)notification{
+    
+    CGRect screenRect = self.usersTable.frame;
+
+    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height-15, 30);
+    else if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height-15, 30);
+
 }
 
 @end

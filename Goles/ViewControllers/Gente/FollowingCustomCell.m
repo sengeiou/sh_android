@@ -31,7 +31,6 @@
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
-   
     if ([self checkIfImFollowingUser:user])
         [self configureFollowingButton];
     else
@@ -67,6 +66,7 @@
 - (void)configureFollowingButton {
 
     [self.actionButton setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
+    [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 }

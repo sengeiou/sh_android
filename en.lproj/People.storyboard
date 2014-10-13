@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -15,7 +16,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="peopleCell" rowHeight="50" id="4lB-3y-FTm" customClass="PeopleCustomCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="50" id="4lB-3y-FTm" customClass="FollowingCustomCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4lB-3y-FTm" id="YPB-aX-N7p">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -38,7 +39,7 @@
                                             </state>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1dO-mc-LvY">
-                                            <rect key="frame" x="68" y="7" width="47" height="21"/>
+                                            <rect key="frame" x="68" y="7" width="401" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="5hU-HJ-kW0"/>
                                             </constraints>
@@ -47,7 +48,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EGe-Mz-EQv">
-                                            <rect key="frame" x="68" y="26" width="60" height="21"/>
+                                            <rect key="frame" x="68" y="26" width="421" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="VXq-9t-Jiw"/>
                                             </constraints>
@@ -55,19 +56,37 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UfR-cj-6Dd">
+                                            <rect key="frame" x="482" y="11" width="110" height="28"/>
+                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="28" id="Bz5-SH-dTc"/>
+                                                <constraint firstAttribute="width" constant="110" id="vpX-gg-x5w"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                            <state key="normal" title="Following">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="drq-bX-CxN" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="6" id="2uA-CY-wyl"/>
                                         <constraint firstItem="drq-bX-CxN" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="-4" id="AAE-kn-Vks"/>
+                                        <constraint firstItem="UfR-cj-6Dd" firstAttribute="trailing" secondItem="YPB-aX-N7p" secondAttribute="trailingMargin" constant="-3" id="EbS-WQ-zUd"/>
                                         <constraint firstItem="VzF-Nx-7Z9" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" id="F7R-iM-pcv"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="top" secondItem="1dO-mc-LvY" secondAttribute="bottom" constant="-2" id="IQO-Ci-Nn6"/>
+                                        <constraint firstItem="UfR-cj-6Dd" firstAttribute="leading" secondItem="1dO-mc-LvY" secondAttribute="trailing" constant="10" id="IWW-Cj-wk4"/>
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="top" secondItem="YPB-aX-N7p" secondAttribute="topMargin" constant="-1" id="PA9-vI-QFg"/>
+                                        <constraint firstItem="EGe-Mz-EQv" firstAttribute="trailing" secondItem="UfR-cj-6Dd" secondAttribute="leading" constant="10" id="QEZ-3f-fn3"/>
                                         <constraint firstItem="EGe-Mz-EQv" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="60" id="TOC-g1-Ix9"/>
                                         <constraint firstItem="1dO-mc-LvY" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="60" id="WlU-OY-flt"/>
+                                        <constraint firstAttribute="centerY" secondItem="UfR-cj-6Dd" secondAttribute="centerY" id="bZg-Yp-AGD"/>
                                         <constraint firstItem="VzF-Nx-7Z9" firstAttribute="leading" secondItem="YPB-aX-N7p" secondAttribute="leadingMargin" constant="-8" id="hFU-yv-RuF"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="actionButton" destination="UfR-cj-6Dd" id="C9R-XC-V3G"/>
                                     <outlet property="imgPhoto" destination="drq-bX-CxN" id="uyG-uY-1v0"/>
                                     <outlet property="nickName" destination="EGe-Mz-EQv" id="HJ6-bW-kua"/>
                                     <outlet property="photobutton" destination="VzF-Nx-7Z9" id="8wf-ji-z8t"/>
