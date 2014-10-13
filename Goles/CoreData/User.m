@@ -67,9 +67,9 @@
     else
         result = NO;
     
-    NSNumber *idFavouriteTeam = [dict objectForKey:kJSON_ID_FAVOURITE_TEAM ];
-    if ([idFavouriteTeam isKindOfClass:[NSNumber class]])
-        [self setIdFavouriteTeam:idFavouriteTeam];
+    NSNumber *idFavoriteTeam = [dict objectForKey:kJSON_ID_FAVORITE_TEAM ];
+    if ([idFavoriteTeam isKindOfClass:[NSNumber class]])
+        [self setIdFavoriteTeam:idFavoriteTeam];
     
     NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
     if ([sessionToken isKindOfClass:[NSString class]])
@@ -112,9 +112,9 @@
     if ([rank isKindOfClass:[NSNumber class]])
         [self setRank:rank];
 
-    NSString *favouriteTeamName = [dict objectForKey:kJSON_FAVOURITE_TEAM_NAME];
-    if ([favouriteTeamName isKindOfClass:[NSString class]])
-        [self setFavouriteTeamName:favouriteTeamName];
+    NSString *favoriteTeamName = [dict objectForKey:kJSON_FAVORITE_TEAM_NAME];
+    if ([favoriteTeamName isKindOfClass:[NSString class]])
+        [self setFavoriteTeamName:favoriteTeamName];
     
     //SYNCRO  PROPERTIES
     

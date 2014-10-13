@@ -12,8 +12,8 @@ extern const struct UserAttributes {
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
 	__unsafe_unretained NSString *eMail;
-	__unsafe_unretained NSString *favouriteTeamName;
-	__unsafe_unretained NSString *idFavouriteTeam;
+	__unsafe_unretained NSString *favoriteTeamName;
+	__unsafe_unretained NSString *idFavoriteTeam;
 	__unsafe_unretained NSString *idUser;
 	__unsafe_unretained NSString *name;
 	__unsafe_unretained NSString *numFollowers;
@@ -158,25 +158,25 @@ extern const struct UserFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* favouriteTeamName;
+@property (nonatomic, strong) NSString* favoriteTeamName;
 
 
 
-//- (BOOL)validateFavouriteTeamName:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateFavoriteTeamName:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSNumber* idFavouriteTeam;
+@property (nonatomic, strong) NSNumber* idFavoriteTeam;
 
 
 
-@property int64_t idFavouriteTeamValue;
-- (int64_t)idFavouriteTeamValue;
-- (void)setIdFavouriteTeamValue:(int64_t)value_;
+@property int64_t idFavoriteTeamValue;
+- (int64_t)idFavoriteTeamValue;
+- (void)setIdFavoriteTeamValue:(int64_t)value_;
 
-//- (BOOL)validateIdFavouriteTeam:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIdFavoriteTeam:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -392,17 +392,17 @@ extern const struct UserFetchedProperties {
 
 
 
-- (NSString*)primitiveFavouriteTeamName;
-- (void)setPrimitiveFavouriteTeamName:(NSString*)value;
+- (NSString*)primitiveFavoriteTeamName;
+- (void)setPrimitiveFavoriteTeamName:(NSString*)value;
 
 
 
 
-- (NSNumber*)primitiveIdFavouriteTeam;
-- (void)setPrimitiveIdFavouriteTeam:(NSNumber*)value;
+- (NSNumber*)primitiveIdFavoriteTeam;
+- (void)setPrimitiveIdFavoriteTeam:(NSNumber*)value;
 
-- (int64_t)primitiveIdFavouriteTeamValue;
-- (void)setPrimitiveIdFavouriteTeamValue:(int64_t)value_;
+- (int64_t)primitiveIdFavoriteTeamValue;
+- (void)setPrimitiveIdFavoriteTeamValue:(int64_t)value_;
 
 
 

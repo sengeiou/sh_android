@@ -102,7 +102,7 @@
                  K_WS_OPS_DELETE_DATE:[NSNull null],
                  kJSON_ID_USER:[NSNull null],
                  kJSON_USERNAME:[NSNull null],
-                 kJSON_ID_FAVOURITE_TEAM:[NSNull null],
+                 kJSON_ID_FAVORITE_TEAM:[NSNull null],
                  kJSON_NAME:[NSNull null],
                  kJSON_PHOTO:[NSNull null],
                  kJSON_BIO:[NSNull null],
@@ -111,7 +111,7 @@
                  kJSON_NUMFOLLOWING:[NSNull null],
                  kJSON_NUMFOLLOWERS:[NSNull null],
                  kJSON_RANK:[NSNull null],
-                 kJSON_FAVOURITE_TEAM_NAME:[NSNull null]};
+                 kJSON_FAVORITE_TEAM_NAME:[NSNull null]};
     }
     
     else if ([entityClass isSubclassOfClass:[Follow class]]) {
@@ -159,7 +159,7 @@
              K_WS_OPS_DELETE_DATE:[NSNull null],
              kJSON_ID_USER:[NSNull null],
              kJSON_USERNAME:[NSNull null],
-             kJSON_ID_FAVOURITE_TEAM:[NSNull null],
+             kJSON_ID_FAVORITE_TEAM:[NSNull null],
              kJSON_NAME:[NSNull null],
              kJSON_PHOTO:[NSNull null],
              kJSON_SESSIONTOKEN:[NSNull null],

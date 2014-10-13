@@ -199,7 +199,7 @@ NSString *const kJSON_MESSAGE_PLATFORM                  = @"platform";
 //USER
 NSString *const kJSON_ID_USER                          = @"idUser";
 NSString *const kJSON_USERNAME                         = @"userName";
-NSString *const kJSON_ID_FAVOURITE_TEAM                = @"idFavouriteTeam";
+NSString *const kJSON_ID_FAVORITE_TEAM                 = @"idFavoriteTeam";
 NSString *const kJSON_SESSIONTOKEN                     = @"sessionToken";
 NSString *const kJSON_EMAIL                            = @"email";
 NSString *const kJSON_NAME                             = @"name";
@@ -211,7 +211,7 @@ NSString *const kJSON_POINTS                           = @"points";
 NSString *const kJSON_NUMFOLLOWING                     = @"numFollowings";
 NSString *const kJSON_NUMFOLLOWERS                     = @"numFollowers";
 NSString *const kJSON_RANK                             = @"rank";
-NSString *const kJSON_FAVOURITE_TEAM_NAME              = @"favouriteTeamName";
+NSString *const kJSON_FAVORITE_TEAM_NAME               = @"favoriteTeamName";
 
 
 //SML

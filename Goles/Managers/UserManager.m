@@ -272,9 +272,9 @@
     else
         return nil;
     
-    NSNumber *idFavouriteTeam = [dict objectForKey:kJSON_ID_FAVOURITE_TEAM ];
-    if ([idFavouriteTeam isKindOfClass:[NSNumber class]])
-        [user setIdFavouriteTeam:idFavouriteTeam];
+    NSNumber *idFavoriteTeam = [dict objectForKey:kJSON_ID_FAVORITE_TEAM ];
+    if ([idFavoriteTeam isKindOfClass:[NSNumber class]])
+        [user setIdFavoriteTeam:idFavoriteTeam];
     
     NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
     if ([sessionToken isKindOfClass:[NSString class]])

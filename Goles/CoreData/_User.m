@@ -11,8 +11,8 @@ const struct UserAttributes UserAttributes = {
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
 	.eMail = @"eMail",
-	.favouriteTeamName = @"favouriteTeamName",
-	.idFavouriteTeam = @"idFavouriteTeam",
+	.favoriteTeamName = @"favoriteTeamName",
+	.idFavoriteTeam = @"idFavoriteTeam",
 	.idUser = @"idUser",
 	.name = @"name",
 	.numFollowers = @"numFollowers",
@@ -80,8 +80,8 @@ const struct UserFetchedProperties UserFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"idFavouriteTeamValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"idFavouriteTeam"];
+	if ([key isEqualToString:@"idFavoriteTeamValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"idFavoriteTeam"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -242,33 +242,33 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 
 
-@dynamic favouriteTeamName;
+@dynamic favoriteTeamName;
 
 
 
 
 
 
-@dynamic idFavouriteTeam;
+@dynamic idFavoriteTeam;
 
 
 
-- (int64_t)idFavouriteTeamValue {
-	NSNumber *result = [self idFavouriteTeam];
+- (int64_t)idFavoriteTeamValue {
+	NSNumber *result = [self idFavoriteTeam];
 	return [result longLongValue];
 }
 
-- (void)setIdFavouriteTeamValue:(int64_t)value_ {
-	[self setIdFavouriteTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setIdFavoriteTeamValue:(int64_t)value_ {
+	[self setIdFavoriteTeam:[NSNumber numberWithLongLong:value_]];
 }
 
-- (int64_t)primitiveIdFavouriteTeamValue {
-	NSNumber *result = [self primitiveIdFavouriteTeam];
+- (int64_t)primitiveIdFavoriteTeamValue {
+	NSNumber *result = [self primitiveIdFavoriteTeam];
 	return [result longLongValue];
 }
 
-- (void)setPrimitiveIdFavouriteTeamValue:(int64_t)value_ {
-	[self setPrimitiveIdFavouriteTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setPrimitiveIdFavoriteTeamValue:(int64_t)value_ {
+	[self setPrimitiveIdFavoriteTeam:[NSNumber numberWithLongLong:value_]];
 }
 
 

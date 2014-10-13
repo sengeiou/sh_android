@@ -11,8 +11,8 @@
 
 @interface PeopleCustomCell : UITableViewCell
 
-@property (nonatomic,weak) IBOutlet UILabel *userName;
-@property (nonatomic,weak) IBOutlet UILabel *nickName;
+@property (nonatomic,weak) IBOutlet UILabel *lblNickName;
+@property (nonatomic,weak) IBOutlet UILabel *lblFavouriteTeamName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (nonatomic,weak) IBOutlet UIButton *photobutton;
 

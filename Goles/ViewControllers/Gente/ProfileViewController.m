@@ -72,7 +72,7 @@
 
 //------------------------------------------------------------------------------
 - (void)dataFillView{
-    self.title = self.selectedUser.favouriteTeamName;
+    self.title = self.selectedUser.userName;
     
     [self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
     [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
@@ -83,7 +83,7 @@
     NSString *rank =  NSLocalizedString(@"rank", nil);
     self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
     
-    self.lblTeamBio.text = self.selectedUser.bio;
+    self.lblTeamBio.text = [NSString stringWithFormat:@"%@, %@",self.selectedUser.favoriteTeamName, self.selectedUser.bio];
     [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;

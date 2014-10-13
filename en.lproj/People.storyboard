@@ -261,7 +261,7 @@
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBy-mi-FaP">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nick" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBy-mi-FaP">
                                             <rect key="frame" x="68" y="7" width="401" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="rzw-op-pjn"/>
@@ -270,7 +270,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHl-cH-0HG">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FavouriteTeamName" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHl-cH-0HG">
                                             <rect key="frame" x="68" y="26" width="401" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="EdJ-aT-s02"/>
@@ -312,9 +312,9 @@
                                 <connections>
                                     <outlet property="actionButton" destination="6RI-lt-Kek" id="V2r-4j-ibM"/>
                                     <outlet property="imgPhoto" destination="Uvh-e6-f3G" id="QbD-W2-dz3"/>
-                                    <outlet property="nickName" destination="fHl-cH-0HG" id="Fb9-BF-I8s"/>
+                                    <outlet property="lblNickName" destination="TBy-mi-FaP" id="5m4-W7-cl0"/>
+                                    <outlet property="lblfavouriteTeamName" destination="fHl-cH-0HG" id="f40-cb-UW5"/>
                                     <outlet property="photobutton" destination="jOk-cS-Nsp" id="UeL-D3-7n9"/>
-                                    <outlet property="userName" destination="TBy-mi-FaP" id="0B9-mJ-EiV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -407,7 +407,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REc-mc-x5c">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Nick" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="REc-mc-x5c">
                                                     <rect key="frame" x="68" y="7" width="47" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="1Wc-3X-X0f"/>
@@ -416,7 +416,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Vf-Fn-Zwy">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="FavouriteTeamName" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Vf-Fn-Zwy">
                                                     <rect key="frame" x="68" y="26" width="60" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="4ok-TP-fPA"/>
@@ -439,9 +439,9 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="imgPhoto" destination="Rlt-cB-Eav" id="ASi-yX-iVg"/>
-                                            <outlet property="nickName" destination="3Vf-Fn-Zwy" id="feh-Bd-pM7"/>
+                                            <outlet property="lblFavouriteTeamName" destination="3Vf-Fn-Zwy" id="OLQ-al-X2j"/>
+                                            <outlet property="lblNickName" destination="REc-mc-x5c" id="uvg-bL-c8X"/>
                                             <outlet property="photobutton" destination="rra-RM-YH3" id="cJq-nS-9aK"/>
-                                            <outlet property="userName" destination="REc-mc-x5c" id="WUC-oT-de7"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

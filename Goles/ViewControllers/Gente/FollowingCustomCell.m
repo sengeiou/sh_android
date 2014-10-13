@@ -26,8 +26,8 @@
 //------------------------------------------------------------------------------
 -(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
 
-    self.userName.text = user.name;
-    self.nickName.text = user.favouriteTeamName;
+    self.lblNickName.text = user.name;
+    self.lblfavouriteTeamName.text = user.favoriteTeamName;
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	

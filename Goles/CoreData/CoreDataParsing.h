@@ -197,7 +197,7 @@ extern NSString *const kJSON_MESSAGE_PLATFORM;
 // USER
 extern NSString *const kJSON_ID_USER;
 extern NSString *const kJSON_USERNAME;
-extern NSString *const kJSON_ID_FAVOURITE_TEAM;
+extern NSString *const kJSON_ID_FAVORITE_TEAM;
 extern NSString *const kJSON_SESSIONTOKEN;
 extern NSString *const kJSON_EMAIL;
 extern NSString *const kJSON_NAME;
@@ -209,7 +209,7 @@ extern NSString *const kJSON_POINTS;
 extern NSString *const kJSON_NUMFOLLOWING;
 extern NSString *const kJSON_NUMFOLLOWERS;
 extern NSString *const kJSON_RANK;
-extern NSString *const kJSON_FAVOURITE_TEAM_NAME;
+extern NSString *const kJSON_FAVORITE_TEAM_NAME;
 
 // SML
 extern NSString * const kJSON_SML;
