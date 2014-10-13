@@ -57,6 +57,7 @@ namespace Bagdad.ViewModels
                 this.userURLImage = uvm.userURLImage;
                 this.userBio = uvm.userBio;
                 this.userWebsite = uvm.userWebsite;
+                this.favoriteTeamName = uvm.favoriteTeamName;
 
                 this.isFollowed = await uvm.ImFollowing();
             }
