@@ -119,7 +119,7 @@ public class MatchDAOImpl extends BaseDAOImpl implements MatchDAO {
 		getJdbcTemplate().batchUpdate(query, new BatchPreparedStatementSetter() {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Match m = matches.get(i);
-				ps.setObject(1, (m.getDateMatch() != null) ? new Date(m.getDateMatch().getTime()) : null, Types.TIME);
+				ps.setObject(1, (m.getDateMatch() != null) ? new Date(m.getDateMatch().getTime()) : null, Types.TIMESTAMP);
 				ps.setObject(2, m.getIdTeamA(), Types.NUMERIC);
 				ps.setObject(3, m.getTeamAName(), Types.VARCHAR);
 				ps.setObject(4, m.getIdTeamB(), Types.NUMERIC);
