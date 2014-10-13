@@ -17,12 +17,16 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.BuildConfig;
 import gm.mobi.android.data.prefs.PreferenceModule;
+import gm.mobi.android.db.ManagerModule;
+import gm.mobi.android.db.MapperModule;
 import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.db.manager.AbstractManager;
+import gm.mobi.android.db.manager.DeviceManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
@@ -89,10 +93,11 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
 
-    UserManager.class,
+    UserManager.class, DeviceManager.class,
+
   },
   includes = {
-    ApiModule.class, PreferenceModule.class
+    ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
   },
   complete = false,
   library = true)
@@ -103,31 +108,6 @@ public class DataModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new OpenHelper(application.getApplicationContext());
-    }
-
-    @Provides  UserManager provideUserManager(){
-        return new UserManager(provideUserMapper());
-    }
-
-    @Provides FollowManager provideFollowManager(){
-        return new FollowManager(provideFollowMapper());
-    }
-
-    @Provides ShotManager provideShotManager() {
-        return new ShotManager(provideShotMapper(), provideUserMapper());
-    }
-
-    @Provides FollowMapper provideFollowMapper() { return new FollowMapper();}
-
-    @Provides TeamMapper providerTeamMapper(){ return new TeamMapper();}
-
-    @Provides
-    ShotMapper provideShotMapper(){ return new ShotMapper();}
-
-    @Provides UserMapper provideUserMapper(){ return new UserMapper();}
-
-    @Provides TeamManager provideTeamManager() {
-        return new TeamManager(providerTeamMapper());
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
