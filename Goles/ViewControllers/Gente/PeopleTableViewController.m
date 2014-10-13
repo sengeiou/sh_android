@@ -143,11 +143,12 @@
 
 //------------------------------------------------------------------------------
 - (void)addLoadMoreCell{
-    self.usersTable.tableFooterView = self.spinner;
-    
-    moreCells = NO;
-    [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInt:self.followingUsers.count+1] withDelegate:self];
-    
+    if (search) {
+        self.usersTable.tableFooterView = self.spinner;
+        
+        moreCells = NO;
+        [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInt:self.followingUsers.count+1] withDelegate:self];
+    }
 }
 
 #pragma mark - Navigation
