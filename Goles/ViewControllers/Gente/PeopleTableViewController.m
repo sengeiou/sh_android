@@ -231,8 +231,8 @@
 //------------------------------------------------------------------------------
 - (void)restoreInitialStateView {
 
-    self.navigationItem.rightBarButtonItem = self.btnAddFriends;
     [self.mySearchBar setAlpha:0.0];
+    
     self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
     [self.mySearchBar resignFirstResponder];
     [self.mySearchBar setText:@""];
