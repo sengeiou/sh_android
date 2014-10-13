@@ -8,6 +8,9 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
+import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
+import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
+import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +25,7 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 
-public class TimelineJob extends BagdadBaseJob<List<Shot>> {
+public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
     public static final int RETRIEVE_INITIAL = 0;
     public static final int RETRIEVE_NEWER = 1;
@@ -72,14 +75,14 @@ public class TimelineJob extends BagdadBaseJob<List<Shot>> {
         List<Shot> localShots = shotManager.retrieveTimelineWithUsers();
         if (localShots != null && localShots.size() > 0) {
             // Got them already :)
-            postSuccessfulEvent(localShots);
+            postSuccessfulEvent(new ShotsResultEvent(localShots));
         } else {
             // If we don't have any, check the server
             List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
             shotManager.saveShots(remoteShots);
             // Retrieve from db because we need the user objects associated to the shots
-            List<Shot> shotsWithUsers = shotManager.retrieveTimelineWithUsers();
-            postSuccessfulEvent(shotsWithUsers);
+            List<Shot> shotsWithUsersFromServer = shotManager.retrieveTimelineWithUsers();
+            postSuccessfulEvent(new ShotsResultEvent(shotsWithUsersFromServer));
         }
     }
 
@@ -89,7 +92,7 @@ public class TimelineJob extends BagdadBaseJob<List<Shot>> {
         //TODO what if newshots is empty?
         shotManager.saveShots(newShots);
         List<Shot> updatedTimeline = shotManager.retrieveTimelineWithUsers();
-        postSuccessfulEvent(updatedTimeline);
+        postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline));
     }
 
     private void retrieveOlder() throws IOException, SQLException {
@@ -98,7 +101,7 @@ public class TimelineJob extends BagdadBaseJob<List<Shot>> {
         shotManager.saveShots(olderShots);
 
         List<Shot> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots);
-        postSuccessfulEvent(olderShotsWithUsers);
+        postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }
 
     private List<Long> getFollowingIds() throws SQLException {
@@ -121,4 +124,5 @@ public class TimelineJob extends BagdadBaseJob<List<Shot>> {
     @Override protected boolean isNetworkRequired() {
         return true;
     }
+
 }

@@ -90,8 +90,7 @@ public abstract class BagdadBaseJob<T> extends Job {
     protected abstract void run() throws SQLException, IOException;
 
     protected void postSuccessfulEvent(T result) {
-        SuccessEvent<T> successEvent = new SuccessEvent<>(result);
-        bus.post(successEvent);
+        bus.post(result);
     }
 
     private void postNetworkNotAvailableEvent() {
@@ -134,6 +133,10 @@ public abstract class BagdadBaseJob<T> extends Job {
 
         public SuccessEvent(T result) {
             this.result = result;
+        }
+
+        public T getResult() {
+            return result;
         }
     }
 

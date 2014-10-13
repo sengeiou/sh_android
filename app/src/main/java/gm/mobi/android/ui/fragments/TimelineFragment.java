@@ -25,6 +25,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -83,7 +84,6 @@ public class TimelineFragment extends BaseFragment
     private boolean isRefreshing;
     private int watchingHeight;
     private boolean moreShots = true;
-    private List<Shot> shots;
     private boolean shouldPoll;
     private User currentUser;
 
@@ -333,8 +333,8 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void showTimeline(ShotsResultEvent event) {
+        List<Shot> shots = event.getResult();
         swipeRefreshLayout.setRefreshing(false);
-        List<Shot> shots = event.getShots();
         if (shots != null && shots.size() > 0) {
             adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
             listView.setAdapter(adapter);
@@ -347,14 +347,9 @@ public class TimelineFragment extends BaseFragment
     public void displayNewShots(NewShotsReceivedEvent event) {
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
-        List<Shot> updatedTimeline = event.getAllShots();
         int newShotsCount = event.getNewShotsCount();
+        List<Shot> updatedTimeline = event.getResult();
 
-        if (updatedTimeline == null) {
-            //TODO mostrar error? Es posible esta situación? No debería
-            Timber.e("Null shot list received");
-            return;
-        }
         if (newShotsCount == 0) {
             Timber.i("No new shots");
             adapter.notifyDataSetChanged(); // Refresh time indicator
@@ -371,20 +366,16 @@ public class TimelineFragment extends BaseFragment
     @Subscribe
     public void displayOldShots(OldShotsReceivedEvent event) {
         isLoadingMore = false;
-        List<Shot> oldShots = event.getShots();
-        if (oldShots == null) {
-            //TODO mostrar error? Es posible esta situación? No debería
-            Timber.e("Null shot list received");
-            return;
-        }
-        if (oldShots.size() == 0) {
+        List<Shot> shots = event.getResult();
+        int olderShotsSize = shots.size();
+        if (olderShotsSize == 0) {
             footerProgress.setVisibility(View.INVISIBLE); // Maintain size
             footerText.setVisibility(View.VISIBLE);
             footerText.setText(R.string.no_more_shots);
             moreShots = false;
         } else {
-            Timber.d("Received %d old shots", oldShots.size());
-            adapter.addShotsBelow(oldShots);
+            Timber.d("Received %d old shots", olderShotsSize);
+            adapter.addShotsBelow(shots);
         }
     }
 }
