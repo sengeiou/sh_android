@@ -13,7 +13,7 @@ namespace Bagdad.Models
     public class User : BaseModelJsonConstructor
     {
         public int idUser { get; set; }
-        public int idFavouriteTeam{ get; set; }
+        public int idFavoriteTeam{ get; set; }
         public string userName{ get; set; }
         public string name{ get; set; }
         public string photo{ get; set; }
@@ -28,7 +28,7 @@ namespace Bagdad.Models
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
 
-        private String ops_data = "\"idUser\": null,\"idFavouriteTeam\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> users)
         {
@@ -50,10 +50,10 @@ namespace Bagdad.Models
 
                         custstmt.BindIntParameterWithName("@idUser", user.idUser);
 
-                        if(user.idFavouriteTeam == 0)
-                            custstmt.BindNullParameterWithName("@idFavouriteTeam");
+                        if(user.idFavoriteTeam == 0)
+                            custstmt.BindNullParameterWithName("@idFavoriteTeam");
                         else
-                            custstmt.BindIntParameterWithName("@idFavouriteTeam", user.idFavouriteTeam);
+                            custstmt.BindIntParameterWithName("@idFavoriteTeam", user.idFavoriteTeam);
 
                         custstmt.BindTextParameterWithName("@userName", user.userName);
                         custstmt.BindTextParameterWithName("@name", user.name);
@@ -203,7 +203,7 @@ namespace Bagdad.Models
                         User userParse = new User();
 
                         userParse.idUser = int.Parse(user["idUser"].ToString());
-                        userParse.idFavouriteTeam = int.Parse(user["idFavouriteTeam"].ToString());
+                        userParse.idFavoriteTeam = int.Parse(user["idFavoriteTeam"].ToString());
                         userParse.userName = user["userName"].ToString();
                         userParse.name = user["name"].ToString();
                         userParse.photo = user["photo"].ToString();

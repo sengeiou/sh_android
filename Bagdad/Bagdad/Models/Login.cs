@@ -12,7 +12,7 @@ namespace Bagdad.Models
     public class Login : BaseModelJsonConstructor
     {
         public int idUser { get; set; }
-        public int idFavouriteTeam { get; set; }
+        public int idFavoriteTeam { get; set; }
         public string userName { get; set; }
         public string name { get; set; }
         public string sessionToken { get; set; }
@@ -29,7 +29,7 @@ namespace Bagdad.Models
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
 
-        private String ops_data = "\"idUser\": null,\"idFavouriteTeam\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
         
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> logins)
         {
@@ -50,10 +50,10 @@ namespace Bagdad.Models
                         custstmt.Reset();
 
                         custstmt.BindIntParameterWithName("@idUser", login.idUser);
-                        if (login.idFavouriteTeam == 0)
-                            custstmt.BindNullParameterWithName("@idFavouriteTeam");
+                        if (login.idFavoriteTeam == 0)
+                            custstmt.BindNullParameterWithName("@idFavoriteTeam");
                         else
-                            custstmt.BindIntParameterWithName("@idFavouriteTeam", login.idFavouriteTeam);
+                            custstmt.BindIntParameterWithName("@idFavoriteTeam", login.idFavoriteTeam);
 
                         custstmt.BindTextParameterWithName("@sessionToken", login.sessionToken);
                         custstmt.BindTextParameterWithName("@email", login.email);
@@ -212,7 +212,7 @@ namespace Bagdad.Models
                         loginParse.idUser = int.Parse(login["idUser"].ToString());
                         loginParse.sessionToken = login["sessionToken"].ToString();
                         loginParse.email = login["email"].ToString();
-                        loginParse.idFavouriteTeam = int.Parse(login["idFavouriteTeam"].ToString());
+                        loginParse.idFavoriteTeam = int.Parse(login["idFavoriteTeam"].ToString());
                         loginParse.userName = login["userName"].ToString();
                         loginParse.name = login["name"].ToString();
                         loginParse.photo = login["photo"].ToString();
