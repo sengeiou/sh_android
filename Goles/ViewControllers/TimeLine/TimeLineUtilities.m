@@ -50,14 +50,17 @@
     textView.text = shotText;
     textView.font = [UIFont systemFontOfSize:15];
     CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-10, MAX_HEIGHT)];
-
+    CGRect rect      = textView.frame;
+    rect.size.height = textView.contentSize.height;
     
-    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(widthTextView, MAX_HEIGHT)
-                                options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
-                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
     
-    float numberOfLines = size.height / [UIFont systemFontOfSize:15].leading;
-
+//    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(widthTextView, MAX_HEIGHT)
+//                                options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+//                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
+//    
+//    float numberOfLines = size.height / [UIFont systemFontOfSize:15].leading;
+    
+    float numberOfLines = size.height / 21;
     float heightRows = numberOfLines * [UIFont systemFontOfSize:15].leading;
 
 //    if (numberOfLines >= 5)
@@ -67,7 +70,9 @@
 //        return heightRows + 80;
 //
 //    
-    return heightRows + 54;
+//    return heightRows + 54;
+    
+    return (numberOfLines * 28) + 25;
 }
 
 //------------------------------------------------------------------------------
