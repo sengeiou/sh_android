@@ -21,14 +21,14 @@ import com.fav24.dataservices.util.JDBCUtils;
 
 public class UserLogin implements GenericServiceHook {
 
-	private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam` , `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
+	private static final String SELECT_USER_BY_MAIL = "SELECT `idUser`, `sessionToken`, `idFavoriteTeam`, `favoriteTeamName`, `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
 			"`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
-			"FROM `shooter`.`UserView` " +
+			"FROM `shooter`.`User` " +
 			"WHERE `email` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
-	private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavouriteTeam`  , `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
+	private static final String SELECT_USER_BY_USERNAME = "SELECT `idUser`, `sessionToken`, `idFavoriteTeam`, `favoriteTeamName`, `userName` , `email` , `name` , `photo` ,`bio`, `website`, `rank`, `points` , `numFollowings` , `numFollowers` , " +
 			"`csys_birth` , `csys_modified` , `csys_revision` , `csys_deleted` " +
-			"FROM `shooter`.`UserView` " +
+			"FROM `shooter`.`User` " +
 			"WHERE `userName` = ? AND `password` = ? AND `csys_deleted` IS NULL";
 
 	private static final String ATTR_PASSWORD = "password";
@@ -36,7 +36,8 @@ public class UserLogin implements GenericServiceHook {
 	private static final String ATTR_MAIL = "email";
 
 	private static final String ATTR_IDUSER = "idUser";
-	private static final String ATTR_IDFAVOURITETEAM = "idFavouriteTeam";
+	private static final String ATTR_IDFAVORITETEAM = "idFavoriteTeam";
+	private static final String ATTR_FAVORITETEAMNAME = "favoriteTeamName";
 	private static final String ATTR_PHOTO = "photo";
 	private static final String ATTR_SESSIONTOKEN = "sessionToken";
 	private static final String ATTR_NAME = "name";
@@ -273,24 +274,25 @@ public class UserLogin implements GenericServiceHook {
 
 				attributes.put(ATTR_IDUSER, JDBCUtils.getObject(resultSet, 1, Long.class));
 				attributes.put(ATTR_SESSIONTOKEN, JDBCUtils.getObject(resultSet, 2, String.class));
-				attributes.put(ATTR_IDFAVOURITETEAM, JDBCUtils.getObject(resultSet, 3, Long.class));
+				attributes.put(ATTR_IDFAVORITETEAM, JDBCUtils.getObject(resultSet, 3, Long.class));
+				attributes.put(ATTR_FAVORITETEAMNAME, JDBCUtils.getObject(resultSet, 4, String.class));
 
-				attributes.put(ATTR_USERNAME, JDBCUtils.getObject(resultSet, 4, String.class));
-				attributes.put(ATTR_MAIL, JDBCUtils.getObject(resultSet, 5, String.class));
-				attributes.put(ATTR_NAME, JDBCUtils.getObject(resultSet, 6, String.class));
-				attributes.put(ATTR_PHOTO, JDBCUtils.getObject(resultSet, 7, String.class));
+				attributes.put(ATTR_USERNAME, JDBCUtils.getObject(resultSet, 5, String.class));
+				attributes.put(ATTR_MAIL, JDBCUtils.getObject(resultSet, 6, String.class));
+				attributes.put(ATTR_NAME, JDBCUtils.getObject(resultSet, 7, String.class));
+				attributes.put(ATTR_PHOTO, JDBCUtils.getObject(resultSet, 8, String.class));
 
-				attributes.put(ATTR_BIO, JDBCUtils.getObject(resultSet, 8, String.class));
-				attributes.put(ATTR_WEBSITE, JDBCUtils.getObject(resultSet, 9, String.class));
+				attributes.put(ATTR_BIO, JDBCUtils.getObject(resultSet, 9, String.class));
+				attributes.put(ATTR_WEBSITE, JDBCUtils.getObject(resultSet, 10, String.class));
 
-				attributes.put(ATTR_RANK, JDBCUtils.getObject(resultSet, 10, Long.class));
-				attributes.put(ATTR_POINTS, JDBCUtils.getObject(resultSet, 11, Long.class));
+				attributes.put(ATTR_RANK, JDBCUtils.getObject(resultSet, 11, Long.class));
+				attributes.put(ATTR_POINTS, JDBCUtils.getObject(resultSet, 12, Long.class));
 
-				attributes.put(ATTR_NUMFOLLOWINGS, JDBCUtils.getObject(resultSet, 12, Long.class));
-				attributes.put(ATTR_NUMFOLLOWERS, JDBCUtils.getObject(resultSet, 13, Long.class));
+				attributes.put(ATTR_NUMFOLLOWINGS, JDBCUtils.getObject(resultSet, 13, Long.class));
+				attributes.put(ATTR_NUMFOLLOWERS, JDBCUtils.getObject(resultSet, 14, Long.class));
 
 
-				Timestamp timestamp = JDBCUtils.getObject(resultSet, 14, Timestamp.class);
+				Timestamp timestamp = JDBCUtils.getObject(resultSet, 15, Timestamp.class);
 				if (timestamp == null) {
 					attributes.put(ATTR_BIRTH, null);
 				}
