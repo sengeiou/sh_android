@@ -27,6 +27,8 @@
 @property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnAddFriends;
 @property (nonatomic,weak)      IBOutlet    UIBarButtonItem *btnSearchFriends;
 @property (nonatomic,strong)                UISearchBar     *mySearchBar;
+@property (nonatomic,weak)      IBOutlet    UIView  *viewNotPeople;
+@property (nonatomic,weak)      IBOutlet    UILabel  *lblNotPeople;
 
 - (IBAction)addFriends:(id)sender;
 - (IBAction)searchFriends:(id)sender;
@@ -34,16 +36,6 @@
 @end
 
 @implementation PeopleTableViewController
-
-//------------------------------------------------------------------------------
-- (id)initWithStyle:(UITableViewStyle)style {
-	
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 //------------------------------------------------------------------------------
 - (void)viewDidLoad{
@@ -66,7 +58,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
-#warning Used to force reload table when pushed from search
+    #warning Used to force reload table when pushed from search
     [self.usersTable reloadData];
 }
 
@@ -146,7 +138,7 @@
 //------------------------------------------------------------------------------
 - (void)reloadTableWithAnimation {
     
-    [UIView transitionWithView: self.tableView
+    [UIView transitionWithView: self.usersTable
                       duration: 0.25f
                        options: UIViewAnimationOptionTransitionCrossDissolve
                     animations: ^(void)
@@ -193,6 +185,9 @@
         self.followingUsers = [sortedArray mutableCopy];
         
         [self reloadTableWithAnimation];
+    }else{
+        self.usersTable.hidden = YES;
+        self.viewNotPeople.hidden = NO;
     }
 }
 
@@ -213,6 +208,9 @@
 //------------------------------------------------------------------------------
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
    
+    self.usersTable.hidden = NO;
+    self.viewNotPeople.hidden = YES;
+    
     UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
 

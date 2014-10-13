@@ -49,7 +49,6 @@
     UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, widthTextView, MAX_HEIGHT)];
     textView.text = shotText;
     textView.font = [UIFont systemFontOfSize:15];
-
     CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-10, MAX_HEIGHT)];
 
     
@@ -57,9 +56,9 @@
                                 options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                              attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
     
-    float numberOfLines = size.height / [UIFont systemFontOfSize:15].lineHeight;
+    float numberOfLines = size.height / [UIFont systemFontOfSize:15].leading;
 
-    float heightRows = numberOfLines * [UIFont systemFontOfSize:15].lineHeight;
+    float heightRows = numberOfLines * [UIFont systemFontOfSize:15].leading;
 
 //    if (numberOfLines >= 5)
 //        return  heightRows + 95;
