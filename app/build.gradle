@@ -100,7 +100,7 @@ android {
             signingConfig signingConfigs.debug
 
             buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
-          testCoverageEnabled true
+            //testCoverageEnabled true
         }
     }
     compileOptions {
@@ -161,7 +161,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Google libraries
     compile 'com.android.support:appcompat-v7:20.0.0'
-    compile 'com.google.android.gms:play-services:5.2.08'
+    compile 'com.google.android.gms:play-services:6.1.11'
 
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.4'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.4'
