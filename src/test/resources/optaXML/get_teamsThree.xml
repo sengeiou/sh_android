@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gsmrs version="2.0" sport="soccer" lang="en" last_generated="2014-09-25 17:00:13">
+    <method method_id="7" name="get_teams">
+        <parameter name="detailed" value="no"/>
+        <parameter name="id" value="7"/>
+        <parameter name="lang" value="en"/>
+        <parameter name="type" value="area"/>
+    </method>
+    <team team_id="2016" ow_team_id="186" type="club" soccertype="default" teamtype="default" club_name="Real Madrid"
+          last_updated="2014-09-23 13:10:55" area_id="176" official_name="Real Madrid Club de Fútbol"
+          short_name="Real Madrid" tla_name="RMA" status="active" city="Madrid" country="Spain"
+          address="Avenida de Concha Espina 1, Chamartín" address_number="" address_extra="" address_zip="28036"
+          postal_address="Concha Espina 1, Madrid" postal_number="" postal_extra="" postal_zip="28036"
+          telephone="+34 (91) 398 4300" fax="+34 (91) 398 4382" url="http://www.realmadrid.com"
+          email="international@realmadrid.es" founded="1902" club_colors="" clothing="" sponsor="" details=""/>
+    <team team_id="2017" ow_team_id="178" type="club" soccertype="default" teamtype="default" club_name="Barcelona"
+          last_updated="2014-09-25 02:14:17" area_id="176" official_name="FC Barcelona" short_name="Barcelona"
+          tla_name="FCB" status="active" city="Barcelona" country="Spain" address="Avenida de Arístides Maillol"
+          address_number="" address_extra="" address_zip="08028" postal_address="Arístides Maillol, Barcelona"
+          postal_number="" postal_extra="" postal_zip="08028" telephone="+34 (902) 189 900" fax="+34 (93) 411 2219"
+          url="http://www.fcbarcelona.com" email="oab@club.fcbarcelona.com" founded="1899" club_colors="" clothing=""
+          sponsor="" details=""/>
+
+    <team team_id="662" ow_team_id="1" type="club" soccertype="default" teamtype="default" club_name="Manchester United"
+          last_updated="2014-09-18 14:21:43" area_id="68" official_name="Manchester United FC" short_name="Man Utd"
+          tla_name="MNU" status="active" city="Manchester" country="England" address="Sir Matt Busby Way"
+          address_number="" address_extra="" address_zip="M16 0RA" postal_address="Sir Matt Busby Way, Manchester"
+          postal_number="" postal_extra="" postal_zip="M16 0RA" telephone="+44 (870) 442 1994" fax="+44 (161) 868 8804"
+          url="http://www.manutd.com" email="enquiries@manutd.co.uk" founded="1878" club_colors="" clothing=""
+          sponsor="" details=""/>
+</gsmrs>
