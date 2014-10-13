@@ -283,9 +283,9 @@
     CGRect screenRect = self.usersTable.frame;
 
     if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height-15, 30);
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height+45, 30);
     else if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height-15, 30);
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height+20, 30);
 
 }
 
