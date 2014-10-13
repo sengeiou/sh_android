@@ -31,6 +31,10 @@ namespace Bagdad
         bool newShotFocused = false;
         private int offset = Constants.SERCOM_PARAM_TIME_LINE_FIRST_CHARGE;
         PageOrientation lastOrientation;
+        private double lastScrollPercent = 0;
+        private bool synchroWorking = false;
+        private int totalShots = 0;
+        private int extraShots = 0;
 
         ListBoxAutomationPeer svAutomation;
         // not feeling creative with my var names today...
@@ -81,6 +85,8 @@ namespace Bagdad
                 {
                     if (App.ShotsVM.shotsList.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                 }
+
+                totalShots = myShots.Items.Count;
             }
             catch(Exception ex)
             {
@@ -201,6 +207,7 @@ namespace Bagdad
                         newShot.Hint = AppResources.WhatsUp;
                         Focus();
                         newShotFocused = false;
+                        totalShots++;
                     }
                     newShot.IsEnabled = true;
                     appBarButtonShot.IsEnabled = true;
@@ -314,51 +321,15 @@ namespace Bagdad
         #endregion
 
         int charge = 0;
-        int scrollToChargue = 0;
+        double scrollToChargue = 0;
         ShotsViewModel svm = new ShotsViewModel();
 
-        private async void MyShots_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void MyShots_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            progress.IsVisible = true;
-
             svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
             scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            if (myShots.Items.Count() != 0)
-            {
-                scrollToChargue = 100 - (15 * 100 / myShots.Items.Count());
-            }
-
-            if (scrollInterface.VerticalScrollPercent >= scrollToChargue)
-            {
-                //Here is the place to call to older Shots
-                if (!endOfLocalList)
-                {
-                    charge = await svm.LoadOtherShots(offset);
-
-                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
-
-                    if (charge == 0)
-                    {
-                        offset = 0;
-                        endOfLocalList = true;
-                    }
-                }
-                else if (!endOfList)
-                {
-                    charge = await svm.LoadOlderShots(offset);
-
-                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
-
-                    //if there is no more shots, don't need to charge it again
-                    if (charge == 0)
-                    {
-                        endOfList = true;
-                    }
-                }
-                await App.ShotsVM.UpdateShotsOnScreenFromScroll();
-            }
-            progress.IsVisible = false;
+            lastScrollPercent = scrollInterface.VerticalScrollPercent;
         }
 
         /// <summary>
@@ -396,6 +367,21 @@ namespace Bagdad
                     System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (TimerTick)");
                 }
             }
+
+            extraShots = myShots.Items.Count - totalShots;
+            svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
+            scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
+
+            if (extraShots > 0 && scrollInterface.VerticalScrollPercent > 0)
+            {
+                if (extraShots > 10) GoToTopText.Text = "+10";
+                else GoToTopText.Text = extraShots.ToString();
+                GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeMedium"];
+                GoToTopText.Foreground = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                GoToTopEllipse.Stroke = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+
+                GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -416,19 +402,74 @@ namespace Bagdad
         {
             myShots.ScrollIntoView(myShots.Items.First());
             GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+            GoToTopText.Text = "↑";
+            GoToTopText.Foreground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+            GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeExtraLarge"];
+            GoToTopEllipse.Stroke = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+            extraShots = 0;
+            totalShots = myShots.Items.Count;
+            lastScrollPercent = 0;
         }
 
-        private void myShots_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private async void myShots_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            progress.IsVisible = true;
+
             svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
             scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            if (scrollInterface.VerticalScrollPercent != 0)
+            if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent < lastScrollPercent)
             {
                 GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
             }
+            else if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > lastScrollPercent && extraShots == 0)
+            {
+                GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+            }
+
+            //pagination
+            if (myShots.Items.Count() != 0)
+            {
+                scrollToChargue = 100 - (15 * 100 / myShots.Items.Count());
+            }
+            
+            if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > scrollToChargue && !synchroWorking)
+            {
+                synchroWorking = true;
+                extraShots = myShots.Items.Count - totalShots;
+
+                //Here is the place to call to older Shots
+                if (!endOfLocalList)
+                {
+                    charge = await svm.LoadOtherShots(offset);
+
+                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+
+                    if (charge == 0)
+                    {
+                        offset = 0;
+                        endOfLocalList = true;
+                    }
+                }
+                else if (!endOfList)
+                {
+                    charge = await svm.LoadOlderShots(offset);
+
+                    offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+
+                    //if there is no more shots, don't need to charge it again
+                    if (charge == 0)
+                    {
+                        endOfList = true;
+                    }
+                }
+                await App.ShotsVM.UpdateShotsOnScreenFromScroll();
+
+                synchroWorking = false;
+                totalShots = myShots.Items.Count - extraShots;
+            }
+            progress.IsVisible = false;
         }
-        
         
     }
 }

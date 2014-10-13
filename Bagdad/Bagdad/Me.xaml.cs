@@ -97,7 +97,7 @@ namespace Bagdad
             following.Text = uvm.following.ToString();
             followers.Text = uvm.followers.ToString();
             userName.Text = uvm.userName;
-            userBio.Text = uvm.userBio;
+            userBio.Text = uvm.favoriteTeamName + " - " + uvm.userBio;
             userWebsite.Text = uvm.userWebsite;
 
             LoadImage();

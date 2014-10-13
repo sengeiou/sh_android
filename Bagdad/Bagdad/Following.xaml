@@ -76,10 +76,10 @@
                             </Grid.RowDefinitions>
                             
                             <!--Row0-->
-                            <TextBlock Grid.Row="0" Text="{Binding userInfo.name}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
+                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
 
                             <!--Row1-->
-                            <TextBlock Grid.Row="1" Text="{Binding userInfo.userName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                            <TextBlock Grid.Row="1" Text="{Binding userInfo.favoriteTeamName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
 
                         </Grid>
 

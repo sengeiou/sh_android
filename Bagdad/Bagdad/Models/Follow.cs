@@ -183,7 +183,7 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    followings.Add(new User() { idUser = st.GetIntAt(0), userName = st.GetTextAt(1), name = st.GetTextAt(2), photo = st.GetTextAt(3)});
+                    followings.Add(new User() { idUser = st.GetIntAt(0), userName = st.GetTextAt(1), name = st.GetTextAt(2), photo = st.GetTextAt(3), favoriteTeamName = st.GetTextAt(4)});
                 }
             }
             catch (Exception e)
@@ -208,14 +208,14 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString() });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString() });
                     }
 
                 }
             }
             catch (Exception e)
             {
-                throw new Exception("Follow - GetUserFollowingLocalData: " + e.Message, e);
+                throw new Exception("Follow - GetUserFollowingFromServer: " + e.Message, e);
             }
             return followings;
         }
@@ -236,7 +236,7 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString() });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString() });
                     }
 
                 }

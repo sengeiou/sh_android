@@ -13,7 +13,7 @@ namespace Bagdad.Utils
 
         public const String InsertLoginData = "INSERT INTO User (idUser, idFavoriteTeam, sessionToken, userName, email, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @sessionToken, @userName, @email, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavoriteTeam, userName, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @userName, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavoriteTeam, favoriteTeamName, userName, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @favoriteTeamName, @userName, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
         public const String UpdateUserData = "UPDATE User SET idFavoriteTeam = @idFavoriteTeam, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized WHERE idUser = @idUser";
 
@@ -27,9 +27,9 @@ namespace Bagdad.Utils
 
         public const String GetNameAndURL = "SELECT name, photo FROM User WHERE idUser = @idUser";
 
-        public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE idUser = @idUser";
+        public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName FROM User WHERE idUser = @idUser";
 
-        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
+        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
 
         #endregion
 
@@ -71,9 +71,9 @@ namespace Bagdad.Utils
 
         public const String GetFollowByIdUserAndIdUserFollowed = "SELECT idUser, idUserFollowed FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
 
-        public const String GetAllInfoFromFollowings = "SELECT u.idUser, u.userName, u.name, u.photo FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY f.csys_modified DESC";
+        public const String GetAllInfoFromFollowings = "SELECT u.idUser, u.userName, u.name, u.photo, u.favoriteTeamName FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY f.csys_modified DESC";
 
-        public const String GetAllInfoFromPeople = "SELECT u.idUser, u.userName, u.name, u.photo FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY u.name ASC, u.userName ASC";
+        public const String GetAllInfoFromPeople = "SELECT u.idUser, u.userName, u.name, u.photo, u.favoriteTeamName FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY u.name ASC, u.userName ASC";
 
         #endregion
 

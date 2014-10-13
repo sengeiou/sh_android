@@ -24,6 +24,7 @@ namespace Bagdad.ViewModels
         public String userURLImage { get; set; }
         public String userBio { get; set; }
         public String userWebsite { get; set; }
+        public String favoriteTeamName { get; set; }
         public bool isFollowed { get; set; }
         public BitmapImage userImage { get; set; }
         

@@ -14,6 +14,7 @@ namespace Bagdad.Models
     {
         public int idUser { get; set; }
         public int idFavoriteTeam{ get; set; }
+        public string favoriteTeamName { get; set; }
         public string userName{ get; set; }
         public string name{ get; set; }
         public string photo{ get; set; }
@@ -28,7 +29,9 @@ namespace Bagdad.Models
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
 
+
         private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> users)
         {
@@ -45,7 +48,7 @@ namespace Bagdad.Models
 
                     foreach (User user in users)
                     {
-                        //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        //idUser, idFavoriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
                         custstmt.Reset();
 
                         custstmt.BindIntParameterWithName("@idUser", user.idUser);
@@ -55,6 +58,7 @@ namespace Bagdad.Models
                         else
                             custstmt.BindIntParameterWithName("@idFavoriteTeam", user.idFavoriteTeam);
 
+                        custstmt.BindTextParameterWithName("@favoriteTeamName", user.favoriteTeamName);
                         custstmt.BindTextParameterWithName("@userName", user.userName);
                         custstmt.BindTextParameterWithName("@name", user.name);
                         custstmt.BindTextParameterWithName("@photo", user.photo);
@@ -204,6 +208,7 @@ namespace Bagdad.Models
 
                         userParse.idUser = int.Parse(user["idUser"].ToString());
                         userParse.idFavoriteTeam = int.Parse(user["idFavoriteTeam"].ToString());
+                        userParse.favoriteTeamName = user["favoriteTeamName"].ToString();
                         userParse.userName = user["userName"].ToString();
                         userParse.name = user["name"].ToString();
                         userParse.photo = user["photo"].ToString();
@@ -255,6 +260,7 @@ namespace Bagdad.Models
                     uvm.following = st.GetIntAt(6);
                     uvm.followers = st.GetIntAt(7);
                     uvm.userWebsite = st.GetTextAt(8);
+                    uvm.favoriteTeamName = st.GetTextAt(9);
                 }
             }
             catch (Exception e)
@@ -288,6 +294,7 @@ namespace Bagdad.Models
                     uvm.following = int.Parse(userProfileInfo["numFollowings"].ToString());
                     uvm.followers = int.Parse(userProfileInfo["numFollowers"].ToString());
                     uvm.userWebsite = userProfileInfo["website"].ToString();
+                    uvm.favoriteTeamName = userProfileInfo["favoriteTeamName"].ToString();
                 }
             }
             catch (Exception e)
@@ -314,7 +321,7 @@ namespace Bagdad.Models
                 {
                     foreach (JToken user in response["ops"][0]["data"])
                     {
-                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString() });
+                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString(), favoriteTeamName = user["favoriteTeamName"].ToString() });
                     }
 
                 }
@@ -349,6 +356,7 @@ namespace Bagdad.Models
                     user.numFollowing = st.GetIntAt(6);
                     user.numFollowers = st.GetIntAt(7);
                     user.website = st.GetTextAt(8);
+                    user.favoriteTeamName = st.GetTextAt(9);
                     usersResult.Add(user);
                 }
             }

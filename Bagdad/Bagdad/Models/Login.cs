@@ -46,7 +46,7 @@ namespace Bagdad.Models
 
                     foreach (Login login in logins)
                     {
-                        //idUser, idFavouriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                        //idUser, idFavoriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
                         custstmt.Reset();
 
                         custstmt.BindIntParameterWithName("@idUser", login.idUser);

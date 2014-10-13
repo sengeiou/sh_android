@@ -210,7 +210,7 @@
         </Grid>
         
         <!--Row3-->
-        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True" MouseMove="myShots_MouseMove">
+        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True" MouseLeave="myShots_MouseMove">
             <ListBox.Resources>
                 <Style x:Key="TimeLineListBox" TargetType="ListBox">
                     <Setter Property="Background" Value="Transparent"/>
@@ -269,12 +269,13 @@
     </Grid>
         
         <Grid x:Name="GoToTopGrid" Visibility="Collapsed" Width="55" Height="55" Margin="0,180,12,0" HorizontalAlignment="Right" VerticalAlignment="Top" Tap="GoToTopGrid_Tap">
-            <Ellipse Width="55" Height="55" Fill="{StaticResource PhoneBackgroundBrush}" Stroke="{StaticResource PhoneDisabledBrush}" StrokeThickness="2"/>
-            <Rectangle Fill="{StaticResource PhoneDisabledBrush}">
+            <Ellipse x:Name="GoToTopEllipse"  Width="55" Height="55" Fill="{StaticResource PhoneBackgroundBrush}" Stroke="{StaticResource PhoneDisabledBrush}" StrokeThickness="2"/>
+            <TextBlock x:Name="GoToTopText" Text="↑" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <!--<Rectangle Fill="{StaticResource PhoneDisabledBrush}">
                 <Rectangle.OpacityMask>
                     <ImageBrush ImageSource="Resources/icons/appbar.arrow.up.png"/>
                 </Rectangle.OpacityMask>
-            </Rectangle>
+            </Rectangle>-->
         </Grid>
     </Grid>
 </phone:PhoneApplicationPage>
