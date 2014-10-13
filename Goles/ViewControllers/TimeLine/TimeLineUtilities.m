@@ -41,40 +41,34 @@
 }
 
 //------------------------------------------------------------------------------
-+ (CGFloat)heightForShot:(NSString *)shotText{
++ (CGFloat)heightForShot:(NSString *)shotText withTextViewWidth:(CGFloat) widthTextView{
     
     NSInteger MAX_HEIGHT = 2000;
-    NSInteger MAX_WIDTH = 500;
-//    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT)];
-//    textView.text = shotText;
-//    textView.font = [UIFont systemFontOfSize:15];
-//    CGSize size = [textView sizeThatFits:CGSizeMake(MAX_WIDTH, FLT_MAX)];
-//    
-//
-//   if (size.height <= 34)
-//        return size.height + 75;
-//    else if (size.height >= 52)
-//        return size.height+30;
-//    
-//    return size.height+65;
+    //NSInteger MAX_WIDTH = 500;
+   
+    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, widthTextView, MAX_HEIGHT)];
+    textView.text = shotText;
+    textView.font = [UIFont systemFontOfSize:15];
+
+    CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-10, MAX_HEIGHT)];
+
     
-    CGSize constraint = CGSizeMake(MAX_WIDTH, MAX_HEIGHT);
-    
-    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(MAX_WIDTH, CGFLOAT_MAX)
+    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(widthTextView, MAX_HEIGHT)
                                 options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                              attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
-    int l = shotText.length;
-//    if ([shotText rangeOfString:@"\n"].location != NSNotFound && rect.size.height > 400)
-//        return rect.size.height+300;
-//    else
-  
-    if (l < 120 && rect.size.height <= 35.79)
-        return MAX(rect.size.height +52, 44.0f);
+    
+    float numberOfLines = size.height / [UIFont systemFontOfSize:15].lineHeight;
 
-    else if (l > 120)
-        return MAX(rect.size.height + 130, 44.0f);
+    float heightRows = numberOfLines * [UIFont systemFontOfSize:15].lineHeight;
 
-    return MAX(rect.size.height+60 + 15, 44.0f);
+//    if (numberOfLines >= 5)
+//        return  heightRows + 95;
+
+//    if ([shotText rangeOfString:@"\n"].location != NSNotFound)
+//        return heightRows + 80;
+//
+//    
+    return heightRows + 54;
 }
 
 //------------------------------------------------------------------------------

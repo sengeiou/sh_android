@@ -16,7 +16,7 @@
 + (UIView *)createActualizandoTitleView;
 + (UIView *)createTimelineTitleViewWithText:(NSString *)text;
 
-+ (CGFloat)heightForShot:(NSString *)shotText;
++ (CGFloat)heightForShot:(NSString *)shotText withTextViewWidth:(CGFloat) widthTextView;
 + (NSString *)getDateShot:(NSNumber *) dateShot;
 + (UIImage*)drawText:(NSString*)text inImage:(UIImage*)image atPoint:(CGPoint)point andSizeFont:(CGFloat)sizeFont;
 + (CGPoint)centerTextInImage:(UIImageView *)imageView;

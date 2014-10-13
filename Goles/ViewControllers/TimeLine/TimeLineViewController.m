@@ -287,7 +287,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-    return [TimeLineUtilities heightForShot:shot.comment];
+    return [TimeLineUtilities heightForShot:shot.comment withTextViewWidth:self.txtView.frame.size.width];
 }
 
 //------------------------------------------------------------------------------

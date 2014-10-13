@@ -197,7 +197,7 @@
 //------------------------------------------------------------------------------
 - (IBAction)searchFriends:(id)sender {
   
-    self.navigationItem.rightBarButtonItem = nil;
+    //self.navigationItem.rightBarButtonItem = nil;
     
     self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
     self.mySearchBar.delegate = self;
@@ -208,7 +208,10 @@
 
 //------------------------------------------------------------------------------
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    
+   
+    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
+    self.navigationItem.rightBarButtonItem = addButtonItem;
+
     [self restoreInitialStateView];
     [self reloadTableWithAnimation];
 }
