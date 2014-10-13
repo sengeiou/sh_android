@@ -232,8 +232,8 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setUserInfoInMenu() {
-        currentUserName.setText(currentUser.getName());
-        currentUserUsername.setText("@"+currentUser.getUserName());
+        currentUserName.setText(currentUser.getUserName());
+        currentUserUsername.setText(currentUser.getFavoriteTeamName());
         picasso.load(currentUser.getPhoto()).into(currentUserAvatar);
     }
 

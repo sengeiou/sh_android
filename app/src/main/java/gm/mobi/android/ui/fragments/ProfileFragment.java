@@ -115,8 +115,7 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         user = event.getResult();
-        String team = event.getFavouriteTeam();
-        setUserInfo(user, event.getRelationship(), team);
+        setUserInfo(user, event.getRelationship(), user.getFavoriteTeamName());
 
     }
 

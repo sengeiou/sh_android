@@ -54,8 +54,8 @@ public class UserListAdapter extends BindableAdapter<User> {
 
     @Override public void bindView(User item, int position, View view) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.name.setText(item.getName());
-        viewHolder.username.setText(item.getUserName());
+        viewHolder.name.setText(item.getUserName());
+        viewHolder.username.setText(item.getFavoriteTeamName());
         String photo = item.getPhoto();
         if (photo != null && !photo.isEmpty()) {
             picasso.load(photo).into(viewHolder.avatar);
