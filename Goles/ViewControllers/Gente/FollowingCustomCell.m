@@ -31,16 +31,13 @@
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
-    if ([self checkIfImFollowingUser:user]){
-        NSLog(@"FOLLOWING: %@", user.userName);
+    if ([self checkIfImFollowingUser:user])
         [self configureFollowingButton];
-    }else if (user.idUser == [[UserManager singleton] getUserId]){
+    else if (user.idUser == [[UserManager singleton] getUserId])
         self.actionButton.hidden = YES;
-    }else{
-        NSLog(@"FOLLOWERS: %@", user.userName);
-
+    else
 		[self configureFollowButton];
-    }
+    
    
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
@@ -55,7 +52,7 @@
 
 //------------------------------------------------------------------------------
 - (void)configureFollowButton {
-
+    self.actionButton.hidden = NO;
     [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
     [self.actionButton setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
     [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(-1, 0, 0, 0)];
@@ -65,10 +62,9 @@
     self.actionButton.layer.masksToBounds = YES;
 }
 
-
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
-
+    self.actionButton.hidden = NO;
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
     [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
