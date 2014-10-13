@@ -153,9 +153,10 @@
 - (void)addLoadMoreCell{
     if (search) {
         self.usersTable.tableFooterView = self.spinner;
-        
+        NSLog(@"ofsset: %lu",  self.followingUsers.count+1);
         moreCells = NO;
         [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInt:self.followingUsers.count+1] withDelegate:self];
+        
     }
 }
 
@@ -232,6 +233,7 @@
 - (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray{
     
     if (usersArray.count > 0) {
+        
         refreshTable = YES;
         
         [self.usersSearch addObjectsFromArray:usersArray];
@@ -250,8 +252,12 @@
         NSLog(@"NUMERO TOTAL DE USUARIOS ORDENADOS: %lu", (unsigned long)self.followingUsers.count);
 
         [self reloadTableWithAnimation];
+        
+        [self addLoadMoreCell];
+
     }else if (error){
         refreshTable = NO;
+
         [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }else{
         refreshTable = NO;
@@ -309,12 +315,11 @@
     [self.usersSearch removeAllObjects];
     
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
-    [self.followingUsers removeAllObjects]; // First clear the filtered array.
+    //[self.followingUsers removeAllObjects]; // First clear the filtered array.
     self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
     [self reloadTableWithAnimation];
     
     [searchBar resignFirstResponder];
-    [self addLoadMoreCell];
 }
 
 
