@@ -89,8 +89,8 @@ public class BagdadDataService implements BagdadService {
 
             if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
                 Map<String, Object>[] data = ops[0].getData();
-                for (int i = 0; i < data.length; i++) {
-                    User user = userMapper.fromDto(data[i]);
+                for(Map<String,Object> d:data){
+                    User user = userMapper.fromDto(d);
                     followings.add(user);
                 }
             }

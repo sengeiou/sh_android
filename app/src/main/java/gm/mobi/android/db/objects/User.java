@@ -68,6 +68,14 @@ public class User extends Synchronized implements Serializable{
         this.favoriteTeamId = favoriteTeamId;
     }
 
+    public String getFavoriteTeamName() {
+        return favoriteTeamName;
+    }
+
+    public void setFavoriteTeamName(String favoriteTeamName) {
+        this.favoriteTeamName = favoriteTeamName;
+    }
+
     public String getSessionToken() {
         return sessionToken;
     }
@@ -89,7 +97,7 @@ public class User extends Synchronized implements Serializable{
     }
 
     public void setEmail(String email) {
-       this.email = email;
+        this.email = email;
     }
 
     public String getName() {
@@ -97,7 +105,7 @@ public class User extends Synchronized implements Serializable{
     }
 
     public void setName(String name) {
-        name = name;
+        this.name = name;
     }
 
     public String getPhoto() {
@@ -154,33 +162,5 @@ public class User extends Synchronized implements Serializable{
 
     public void setBio(String bio) {
         this.bio = bio;
-    }
-
-    public String getFavoriteTeamName() {
-        return favoriteTeamName;
-    }
-
-    public void setFavoriteTeamName(String favoriteTeamName) {
-        this.favoriteTeamName = favoriteTeamName;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "idUser=" + idUser +
-                ", favoriteTeamName=" + favoriteTeamName+
-                ", favouriteTeamId=" + favoriteTeamId +
-                ", sessionToken='" + sessionToken + '\'' +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", photo='" + photo + '\'' +
-                ", points=" + points +
-                ", numFollowings=" + numFollowings +
-                ", numFollowers=" + numFollowers +
-                ", rank=" + rank +
-                ", website='" + website + '\'' +
-                ", bio='" + bio + '\'' +
-                '}';
     }
 }

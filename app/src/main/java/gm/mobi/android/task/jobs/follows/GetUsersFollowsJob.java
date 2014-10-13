@@ -37,7 +37,8 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
     }
 
     private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {
-        return service.getFollowings(idUser, lastModifiedDate);
+        List<User> following = service.getFollowings(idUser, lastModifiedDate);
+        return following;
     }
 
     @Override protected boolean isNetworkRequired() {

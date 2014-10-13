@@ -97,21 +97,19 @@ public class UserMapper extends GenericMapper {
     public  User fromDto(Map<String, Object> dto) {
         User user = new User();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
-        user.setFavoriteTeamId(
-          dto.containsKey(UserTable.FAVORITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue()
-            : null);
+        user.setFavoriteTeamId(dto.containsKey(UserTable.FAVORITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue(): null);
         user.setFavoriteTeamName(dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
         user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
-        user.setUserName((String) dto.get(UserTable.USER_NAME));
+        user.setUserName(dto.containsKey(UserTable.USER_NAME) ? ((String) dto.get(UserTable.USER_NAME)) : null);
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
-        user.setName((String) dto.get(UserTable.NAME));
-        user.setPhoto((String) dto.get(UserTable.PHOTO));
-        user.setNumFollowers(((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue());
-        user.setNumFollowings(((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue());
-        user.setPoints(((Number) dto.get(UserTable.POINTS)).longValue());
-        user.setWebsite((String) dto.get(UserTable.WEBSITE));
-        user.setBio((String) dto.get(UserTable.BIO));
-        user.setRank(((Number) dto.get(UserTable.RANK)).longValue());
+        user.setName(dto.containsKey(UserTable.NAME) ? (String) dto.get(UserTable.NAME) : null);
+        user.setPhoto(dto.containsKey(UserTable.PHOTO) ? (String) dto.get(UserTable.PHOTO) : null);
+        user.setNumFollowers(dto.containsKey(UserTable.NUM_FOLLOWERS) ? ((Number) dto.get(UserTable.NUM_FOLLOWERS)).longValue() : null);
+        user.setNumFollowings(dto.containsKey(UserTable.NUM_FOLLOWINGS) ? ((Number) dto.get(UserTable.NUM_FOLLOWINGS)).longValue() : null);
+        user.setPoints(dto.containsKey(UserTable.POINTS) ? ((Number) dto.get(UserTable.POINTS)).longValue() : null);
+        user.setWebsite(dto.containsKey(UserTable.WEBSITE) ? ((String) dto.get(UserTable.WEBSITE)) : null);
+        user.setBio(dto.containsKey(UserTable.BIO) ? ((String) dto.get(UserTable.BIO)) : null);
+        user.setRank(dto.containsKey(UserTable.RANK) ? ((Number) dto.get(UserTable.RANK)).longValue() : null);
         setSynchronizedfromDto(dto,user);
         return user;
     }
