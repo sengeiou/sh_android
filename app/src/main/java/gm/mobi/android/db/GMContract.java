@@ -146,4 +146,29 @@ public class GMContract {
         };
     }
 
+    public static final class DeviceTable implements SyncColumns{
+
+        public static final String TABLE = "Device";
+        public static final String ID_DEVICE = "idDevice";
+        public static final String ID_USER = "idUser";
+        public static final String TOKEN = "token";
+        public static final String UNIQUE_DEVICE_ID = "uniqueDeviceID";
+        public static final String MODEL = "model";
+        public static final String OS_VERSION = "osVer";
+
+        public static final String[] PROJECTION = {
+          ID_DEVICE,
+          ID_USER,
+          TOKEN,
+          UNIQUE_DEVICE_ID,
+          MODEL,
+          OS_VERSION,
+          CSYS_BIRTH,
+          CSYS_MODIFIED,
+          CSYS_DELETED,
+          CSYS_REVISION,
+          CSYS_SYNCHRONIZED
+        } ;
+    }
+
 }

@@ -6,7 +6,8 @@ import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.TablesSync;
 import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.GMContract.UserTable;
-
+import gm.mobi.android.db.GMContract.DeviceTable;
+import gm.mobi.android.db.objects.Device;
 
 public class SQLiteUtils {
 
@@ -77,4 +78,18 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
             + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
+      + DeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"
+      + DeviceTable.ID_USER+" INT NOT NULL,"
+      + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
+      + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
+      + DeviceTable.MODEL+" VARCHAR(255) NULL,"
+      + DeviceTable.OS_VERSION+" VARCHAR(255),"
+      + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
+      + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
+      + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
+      + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
+      + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
+
 }

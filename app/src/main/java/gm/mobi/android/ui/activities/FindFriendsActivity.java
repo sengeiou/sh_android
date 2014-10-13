@@ -239,6 +239,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
         Timber.d("No local results. Waiting for remote results");
+        //TODO what?? This log isn't right
     }
 
     private void incrementOffset(int newItems) {
