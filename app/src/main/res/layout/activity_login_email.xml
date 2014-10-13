@@ -98,7 +98,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:text="@string/activity_login_email_forgot"
-            android:textColor="@color/accent"
+            android:textColor="@color/primary"
             />
 
         <!--<ProgressBar
@@ -120,7 +120,7 @@
             android:background="@color/transparent"
             android:gravity="left|center_vertical"
             android:text="@string/activity_login_register_facebook"
-            android:textColor="@color/accent"
+            android:textColor="@color/primary"
             android:textSize="14dp"/>
     </LinearLayout>
 </ScrollView>
