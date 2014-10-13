@@ -209,6 +209,7 @@ extern NSString *const kJSON_POINTS;
 extern NSString *const kJSON_NUMFOLLOWING;
 extern NSString *const kJSON_NUMFOLLOWERS;
 extern NSString *const kJSON_RANK;
+extern NSString *const kJSON_FAVOURITE_TEAM_NAME;
 
 // SML
 extern NSString * const kJSON_SML;

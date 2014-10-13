@@ -12,6 +12,7 @@ extern const struct UserAttributes {
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
 	__unsafe_unretained NSString *eMail;
+	__unsafe_unretained NSString *favouriteTeamName;
 	__unsafe_unretained NSString *idFavouriteTeam;
 	__unsafe_unretained NSString *idUser;
 	__unsafe_unretained NSString *name;
@@ -37,6 +38,7 @@ extern const struct UserFetchedProperties {
 @class Device;
 @class Shot;
 @class Team;
+
 
 
 
@@ -151,6 +153,16 @@ extern const struct UserFetchedProperties {
 
 
 //- (BOOL)validateEMail:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* favouriteTeamName;
+
+
+
+//- (BOOL)validateFavouriteTeamName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -376,6 +388,12 @@ extern const struct UserFetchedProperties {
 
 - (NSString*)primitiveEMail;
 - (void)setPrimitiveEMail:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveFavouriteTeamName;
+- (void)setPrimitiveFavouriteTeamName:(NSString*)value;
 
 
 

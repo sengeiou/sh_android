@@ -24,7 +24,7 @@
 
     BOOL moreCells;
     BOOL refreshTable;
-
+    BOOL search;
 }
 
 @property (nonatomic,strong)                NSMutableArray  *followingUsers;
@@ -38,6 +38,7 @@
 @property (nonatomic, assign)               CGFloat                     lastContentOffset;
 @property (nonatomic,weak)      IBOutlet    UIView  *viewNotPeople;
 @property (nonatomic,weak)      IBOutlet    UILabel  *lblNotPeople;
+@property (nonatomic, strong) NSMutableArray *usersSearch;
 
 - (IBAction)addFriends:(id)sender;
 - (IBAction)searchFriends:(id)sender;
@@ -50,7 +51,9 @@
 - (void)viewDidLoad{
 	
     [super viewDidLoad];
-
+    search = NO;
+    self.usersSearch = [[NSMutableArray alloc]init];
+    
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
@@ -67,6 +70,8 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.title = NSLocalizedString(@"People", nil);
+    self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
+    
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
     #warning Used to force reload table when pushed from search
     [self.usersTable reloadData];
@@ -94,6 +99,8 @@
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
+//    if (search) {
+    
     return self.followingUsers.count;
 }
 
@@ -121,7 +128,7 @@
 //------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (!refreshTable){
+    if (!refreshTable && search){
         self.spinner.hidden = YES;
         
         self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.usersTable.frame.size.width, 44)];
@@ -130,7 +137,8 @@
         self.lblFooter.textAlignment = NSTextAlignmentCenter;
         self.lblFooter.backgroundColor = [UIColor clearColor];
         self.usersTable.tableFooterView = self.lblFooter;
-    }
+    }else if (!search)
+         self.lblFooter.text = NSLocalizedString(@"", nil);
 }
 
 //------------------------------------------------------------------------------
@@ -201,8 +209,13 @@
         
         if ([entityClass isSubclassOfClass:[Follow class]])
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-        if ([entityClass isSubclassOfClass:[User class]])
-            [self reloadDataAndTable];
+        if ([entityClass isSubclassOfClass:[User class]]){
+            if (!search){
+                [self reloadDataAndTable];
+                moreCells = YES;
+            }
+        }
+
     }
 }
 
@@ -212,13 +225,19 @@
     
     if (usersArray.count > 0) {
         
+        [self.usersSearch addObjectsFromArray:usersArray];
         [self.followingUsers removeAllObjects];
+
+        [self.followingUsers addObjectsFromArray:self.usersSearch];
+        
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         NSArray *sortedArray = [usersArray sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
         
         [self reloadTableWithAnimation];
+    }else if (error){
+        [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }else{
         self.usersTable.hidden = YES;
         self.viewNotPeople.hidden = NO;
@@ -244,6 +263,7 @@
    
     self.usersTable.hidden = NO;
     self.viewNotPeople.hidden = YES;
+    [self.usersSearch removeAllObjects];
     
     UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
@@ -253,16 +273,20 @@
     
     [self restoreInitialStateView];
     [self reloadTableWithAnimation];
+    
+    search = NO;
 }
 
 //------------------------------------------------------------------------------
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    search = YES;
     
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
     [self.followingUsers removeAllObjects]; // First clear the filtered array.
     self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
     [self reloadTableWithAnimation];
-
+    
+    [searchBar resignFirstResponder];
 }
 
 

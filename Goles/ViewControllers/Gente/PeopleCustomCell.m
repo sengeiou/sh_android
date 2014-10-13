@@ -23,7 +23,7 @@
 -(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
     
     self.userName.text = user.name;
-    self.nickName.text = user.userName;
+    self.nickName.text = user.favouriteTeamName;
 
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
 

@@ -112,6 +112,9 @@
     if ([rank isKindOfClass:[NSNumber class]])
         [self setRank:rank];
 
+    NSString *favouriteTeamName = [dict objectForKey:kJSON_FAVOURITE_TEAM_NAME];
+    if ([favouriteTeamName isKindOfClass:[NSString class]])
+        [self setFavouriteTeamName:favouriteTeamName];
     
     //SYNCRO  PROPERTIES
     

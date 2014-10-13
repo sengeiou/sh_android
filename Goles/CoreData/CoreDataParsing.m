@@ -211,6 +211,7 @@ NSString *const kJSON_POINTS                           = @"points";
 NSString *const kJSON_NUMFOLLOWING                     = @"numFollowings";
 NSString *const kJSON_NUMFOLLOWERS                     = @"numFollowers";
 NSString *const kJSON_RANK                             = @"rank";
+NSString *const kJSON_FAVOURITE_TEAM_NAME              = @"favouriteTeamName";
 
 
 //SML

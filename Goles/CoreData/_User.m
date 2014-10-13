@@ -11,6 +11,7 @@ const struct UserAttributes UserAttributes = {
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
 	.eMail = @"eMail",
+	.favouriteTeamName = @"favouriteTeamName",
 	.idFavouriteTeam = @"idFavouriteTeam",
 	.idUser = @"idUser",
 	.name = @"name",
@@ -235,6 +236,13 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 
 @dynamic eMail;
+
+
+
+
+
+
+@dynamic favouriteTeamName;
 
 
 

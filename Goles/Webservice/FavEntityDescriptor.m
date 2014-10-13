@@ -110,7 +110,8 @@
                  kJSON_POINTS:[NSNull null],
                  kJSON_NUMFOLLOWING:[NSNull null],
                  kJSON_NUMFOLLOWERS:[NSNull null],
-                 kJSON_RANK:[NSNull null]};
+                 kJSON_RANK:[NSNull null],
+                 kJSON_FAVOURITE_TEAM_NAME:[NSNull null]};
     }
     
     else if ([entityClass isSubclassOfClass:[Follow class]]) {
