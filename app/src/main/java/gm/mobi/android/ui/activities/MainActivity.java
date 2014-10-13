@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -29,6 +30,7 @@ import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.sync.SyncConfigurator;
+import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.ui.adapters.MenuAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.DummyFragment;
@@ -53,6 +55,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject Bus bus;
     @Inject Picasso picasso;
     @Inject SyncConfigurator syncConfigurator;
+    @Inject JobManager jobManager;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -84,6 +87,7 @@ public class MainActivity extends BaseSignedInActivity {
         actionBar = getSupportActionBar();
         currentUser = GolesApplication.get(this).getCurrentUser();
 
+        startGCMRegistration();
         setupSyncing();
         setupNavigationDrawer();
         if (needsSetup()) {
@@ -91,6 +95,12 @@ public class MainActivity extends BaseSignedInActivity {
         } else {
             normalSetup(savedInstanceState);
         }
+    }
+
+    private void startGCMRegistration() {
+        GCMRegistrationJob job = GolesApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
+        job.init();
+        jobManager.addJobInBackground(job);
     }
 
     private boolean needsSetup() {

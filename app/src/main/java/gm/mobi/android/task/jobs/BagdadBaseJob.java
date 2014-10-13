@@ -1,6 +1,7 @@
 package gm.mobi.android.task.jobs;
 
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Job;
@@ -127,6 +128,9 @@ public abstract class BagdadBaseJob<T> extends Job {
         return false;
     }
 
+    protected Context getContext() {
+        return application;
+    }
     public void setBus(Bus bus) {
         this.bus = bus;
     }

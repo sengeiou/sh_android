@@ -44,10 +44,10 @@ public class InitialSetupFragment extends BaseFragment {
      */
     private void performInitialSetup() {
         User currentUser = ((GolesApplication)getActivity().getApplication()).getCurrentUser();
-        startJob(getActivity(), currentUser);
+        startGetFollowingJob(getActivity(), currentUser);
     }
 
-    private void startJob(Context context,User currentUser){
+    private void startGetFollowingJob(Context context, User currentUser){
         GetFollowingsJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowingsJob.class);
         job.init(currentUser);
         jobManager.addJobInBackground(job);

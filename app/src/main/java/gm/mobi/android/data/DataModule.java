@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
@@ -34,6 +35,7 @@ import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
+import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.shots.PostNewShotJob;
@@ -82,6 +84,8 @@ import static android.content.Context.MODE_PRIVATE;
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
     TimelineJob.class, TimelineFragment.class, TeamManager.class,
+
+    GCMRegistrationJob.class,
 
     ProfileFragment.class,
 
@@ -153,6 +157,9 @@ public class DataModule {
         return configureJobManager(app, networkUtil);
     }
 
+    @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
+        return GoogleCloudMessaging.getInstance(application);
+    }
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
         // Custom config: https://github.com/path/android-priority-jobqueue/wiki/Job-Manager-Configuration, https://github.com/path/android-priority-jobqueue/blob/master/examples/twitter/TwitterClient/src/com/path/android/jobqueue/examples/twitter/TwitterApplication.java
         Configuration configuration =
