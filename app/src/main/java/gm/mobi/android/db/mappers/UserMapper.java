@@ -32,7 +32,8 @@ public class UserMapper extends GenericMapper {
 
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
-        cv.put(UserTable.FAVOURITE_TEAM_ID, u.getFavouriteTeamId());
+        cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
+        cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
         cv.put(UserTable.SESSION_TOKEN, u.getSessionToken());
         cv.put(UserTable.USER_NAME, u.getUserName());
         cv.put(UserTable.EMAIL, u.getEmail());
@@ -54,8 +55,9 @@ public class UserMapper extends GenericMapper {
     public  ContentValues userToContentValues(User u, User currentUser){
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
-        cv.put(UserTable.FAVOURITE_TEAM_ID, u.getFavouriteTeamId());
-        cv.put(UserTable.SESSION_TOKEN, currentUser.getFavouriteTeamId());
+        cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
+        cv.put(UserTable.FAVORITE_TEAM_NAME, u.getFavoriteTeamName());
+        cv.put(UserTable.SESSION_TOKEN, currentUser.getSessionToken());
         cv.put(UserTable.USER_NAME, u.getUserName());
         cv.put(UserTable.EMAIL, currentUser.getEmail());
         cv.put(UserTable.NAME, u.getName());
@@ -77,7 +79,8 @@ public class UserMapper extends GenericMapper {
     public  Map<String, Object> reqRestUsersToDto(User user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
+        dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
+        dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
@@ -94,7 +97,10 @@ public class UserMapper extends GenericMapper {
     public  User fromDto(Map<String, Object> dto) {
         User user = new User();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
-        user.setFavouriteTeamId(dto.containsKey(UserTable.FAVOURITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVOURITE_TEAM_ID)).longValue() : null);
+        user.setFavoriteTeamId(
+          dto.containsKey(UserTable.FAVORITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue()
+            : null);
+        user.setFavoriteTeamName(dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
         user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName((String) dto.get(UserTable.USER_NAME));
         user.setEmail(dto.containsKey(UserTable.EMAIL) ? (String) dto.get(UserTable.EMAIL) : null);
@@ -115,7 +121,8 @@ public class UserMapper extends GenericMapper {
     public  Map<String, Object> toDto(User user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.FAVOURITE_TEAM_ID, user == null ? null : user.getFavouriteTeamId());
+        dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
+        dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
         dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
         dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
@@ -135,7 +142,8 @@ public class UserMapper extends GenericMapper {
     public User getUserByCursor(Cursor c){
         User user = new User();
         user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
-        user.setFavouriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVOURITE_TEAM_ID)));
+        user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
+        user.setFavoriteTeamName(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_NAME)));
         user.setUserName(c.getString(c.getColumnIndex(UserTable.USER_NAME)));
         user.setName(c.getString(c.getColumnIndex(UserTable.NAME)));
         user.setPhoto(c.getString(c.getColumnIndex(UserTable.PHOTO)));

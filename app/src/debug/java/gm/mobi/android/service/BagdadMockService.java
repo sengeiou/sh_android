@@ -31,7 +31,8 @@ public class BagdadMockService implements BagdadService {
             mockUser.setSessionToken("Nnananananananana");
             mockUser.setEmail("rafa.vazsan@gmail.com");
             mockUser.setUserName("rafavazsan");
-            mockUser.setFavouriteTeamId(1l);
+            mockUser.setFavoriteTeamId(1l);
+            mockUser.setFavoriteTeamName("Sevilla FC");
             mockUser.setPhoto("http://example.com");
             return mockUser;
         }

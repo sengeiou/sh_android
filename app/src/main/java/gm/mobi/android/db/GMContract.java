@@ -47,7 +47,8 @@ public class GMContract {
         public static final String TABLE = "User";
 
         public static final String ID = "idUser";
-        public static final String FAVOURITE_TEAM_ID = "idFavouriteTeam";
+        public static final String FAVORITE_TEAM_ID = "idFavoriteTeam";
+        public static final String FAVORITE_TEAM_NAME = "favoriteTeamName";
         public static final String SESSION_TOKEN = "sessionToken";
         public static final String USER_NAME = "userName";
         public static final String PASSWORD = "password"; // Only used for Login request, never in Database
@@ -66,7 +67,8 @@ public class GMContract {
 
         public static final String[] PROJECTION = {
                 ID,
-                FAVOURITE_TEAM_ID,
+                FAVORITE_TEAM_ID,
+                FAVORITE_TEAM_NAME,
                 SESSION_TOKEN,
                 USER_NAME,
                 EMAIL,
