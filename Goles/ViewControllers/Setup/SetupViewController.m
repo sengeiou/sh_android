@@ -275,6 +275,7 @@
     if (status) {
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         appDelegate.request = [FavRestConsumerHelper createREQ];
+        [appDelegate registerAPNS];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
     }
 }

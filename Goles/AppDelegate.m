@@ -42,8 +42,7 @@
 @property (nonatomic,strong)      UITabBarItem            *tabBarTimeline;
 @property (nonatomic,strong)      UITabBarItem            *tabBarMe;
 @property (nonatomic,strong)      UITabBarController      *tabBarController;
-@property (nonatomic)             BOOL                    waitingForAPNS;
-@property (nonatomic, strong)     TimeLineViewController *timelineVC;
+@property (nonatomic, strong)     TimeLineViewController  *timelineVC;
 
 @end
 
@@ -72,18 +71,16 @@
 
 
         // To handle push notification
-        if (launchOptions) {
-            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-            [self parsePayload:remoteNotif];
-        }
+//        if (launchOptions) {
+//            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+//            [self parsePayload:remoteNotif];
+//        }
         
         // Set Apirater settings
         [self setApiraterSettings];
 
         // Clear app icon notification badges
         [application setApplicationIconBadgeNumber:0];
-
-        self.waitingForAPNS = YES;
         
         [Appirater appLaunched:YES];
 
@@ -234,16 +231,12 @@
 -(void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     
     DLog(@"APNS Response with token %@",devToken);
-    BOOL disabledNotifications = [[NSUserDefaults standardUserDefaults] boolForKey:kWerePushNotificationsDisabled];
-    if ( disabledNotifications )
-        [Utils setValueToUserDefaults:@NO ToKey:kWerePushNotificationsDisabled];
-    
+
 	NSString *token = [[[[devToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""]
                         stringByReplacingOccurrencesOfString:@">" withString:@""]
                        stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     [[UserManager singleton] setDeviceToken:token];
-    self.waitingForAPNS = NO;
 }
 
 //------------------------------------------------------------------------------
@@ -262,40 +255,40 @@
 //------------------------------------------------------------------------------
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
-    if ( application.applicationState == UIApplicationStateActive ){
-        
-		NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
-		NSString *alert = [apsInfo objectForKey:@"alert"];
-        NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleNameKey];
-        
-		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:appName
-															message:alert
-														   delegate:self
-												  cancelButtonTitle:NSLocalizedString(@"_ok",nil)
-												  otherButtonTitles:nil];
-		alertView.tag = kAlertViewForeGround;
-		
-		[alertView show];
-        
-        //CACTUS - S'hauria de controlar l'arribada de noms d'arxiu d'audio diferents.
-        NSString *sound = [apsInfo valueForKey:@"sound"];
-        
-        if(!sound || (sound && [sound isEqualToString:@"default"]))
-            AudioServicesPlayAlertSound(1007);
-        else {
-            
-            SystemSoundID completeSound;
-            NSURL *audioPath = [[NSBundle mainBundle] URLForResource:sound withExtension:@""];
-            if(audioPath)
-            {
-                AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioPath, &completeSound);
-                AudioServicesPlaySystemSound (completeSound);
-            }
-        }
-		
-	} else {
-        [self parsePayload:userInfo];
-    }
+//    if ( application.applicationState == UIApplicationStateActive ){
+//        
+//		NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
+//		NSString *alert = [apsInfo objectForKey:@"alert"];
+//        NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleNameKey];
+//        
+//		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:appName
+//															message:alert
+//														   delegate:self
+//												  cancelButtonTitle:NSLocalizedString(@"_ok",nil)
+//												  otherButtonTitles:nil];
+//		alertView.tag = kAlertViewForeGround;
+//		
+//		[alertView show];
+//        
+//        //CACTUS - S'hauria de controlar l'arribada de noms d'arxiu d'audio diferents.
+//        NSString *sound = [apsInfo valueForKey:@"sound"];
+//        
+//        if(!sound || (sound && [sound isEqualToString:@"default"]))
+//            AudioServicesPlayAlertSound(1007);
+//        else {
+//            
+//            SystemSoundID completeSound;
+//            NSURL *audioPath = [[NSBundle mainBundle] URLForResource:sound withExtension:@""];
+//            if(audioPath)
+//            {
+//                AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioPath, &completeSound);
+//                AudioServicesPlaySystemSound (completeSound);
+//            }
+//        }
+//		
+//	} else {
+//        [self parsePayload:userInfo];
+//    }
 }
 
 //------------------------------------------------------------------------------
