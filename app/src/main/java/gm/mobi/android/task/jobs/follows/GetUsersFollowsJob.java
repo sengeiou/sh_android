@@ -1,100 +1,65 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
+
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.ResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import javax.inject.Inject;
 
-public class GetUsersFollowsJob extends CancellableJob {
-
-    Application app;
-    Bus bus;
-    NetworkUtil networkUtil;
-    BagdadService service;
+public class GetUsersFollowsJob extends BagdadBaseJob<List<User>> {
 
     private static final int PRIORITY = 5;
+
+    BagdadService service;
+
     private Long idUserToRetrieveFollowsFrom;
 
-    @Inject public GetUsersFollowsJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil) {
-        super(new Params(PRIORITY));
-        this.app = context;
+    @Inject public GetUsersFollowsJob(Application application, Bus bus, BagdadService service, NetworkUtil networkUtil) {
+        super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
-        this.bus = bus;
-        this.networkUtil = networkUtil;
     }
 
     public void init(Long userId) {
         this.idUserToRetrieveFollowsFrom = userId;
     }
 
-    @Override public void onAdded() {
-        /*no-op*/
-    }
-
-    @Override
-    protected void createDatabase() {
-        /*no-op*/
-    }
-
-    @Override
-    protected void setDatabaseToManagers() {
-        /*no-op*/
-    }
-
     @Override
     protected void run() throws IOException, SQLException {
-        if (!checkNetwork()) return;
-        try {
-            List<User> users = getFollowsUsersFromService(idUserToRetrieveFollowsFrom, 0L);
-            sendSuccessfulResult(users);
-        } catch (IOException e) {
-            sendCommunicationError();
-            throw e;
-        }
+        List<User> users = getFollowsUsersFromService(idUserToRetrieveFollowsFrom, 0L);
+        postSuccessfulEvent(users);
     }
 
     private List<User> getFollowsUsersFromService(Long idUser, Long lastModifiedDate) throws IOException {
-        List<User> users = service.getFollowings(idUser, lastModifiedDate);
-        return users;
+        return service.getFollowings(idUser, lastModifiedDate);
     }
 
-    protected void sendSuccessfulResult(List<User> followingUsers) {
-        bus.post(new FollowsResultEvent(ResultEvent.STATUS_SUCCESS).setSuccessful(followingUsers));
-    }
-
-    private void sendCommunicationError() {
-        //TODO abstraer evento de CommunicationError y hacerlo general para los jobs
-        bus.post(new FollowsResultEvent(ResultEvent.STATUS_INVALID));
-    }
-
-    private boolean checkNetwork() {
-        if (!networkUtil.isConnected(app)) {
-            bus.post(new ConnectionNotAvailableEvent());
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override protected void onCancel() {
-
-    }
-
-    @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
+    @Override protected boolean isNetworkRequired() {
         return false;
+    }
+
+    @Override protected void createDatabase() {
+        /* no-op */
+    }
+
+    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
+        /* no-op */
     }
 
 

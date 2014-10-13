@@ -27,9 +27,8 @@ import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.sync.GMSyncAdapter;
-import gm.mobi.android.task.jobs.CancellableJob;
+import gm.mobi.android.task.jobs.BagdadBaseJob;import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
@@ -62,7 +61,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     BaseSignedInActivity.class,
 
-    CancellableJob.class,
+    BagdadBaseJob.class,
 
     DummyFragment.class,
 

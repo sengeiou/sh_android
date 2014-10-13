@@ -20,7 +20,6 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.task.events.loginregister.RegistrationCompletedEvent;
-import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.ui.base.BaseActivity;
 import javax.inject.Inject;
 
@@ -40,7 +39,6 @@ public class FacebookRegistroActivity extends BaseActivity {
     private String email;
     private String usernameSuggestion;
     private String avatarUrl;
-    private RegisterNewUserJob currentRegisterJob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +82,9 @@ public class FacebookRegistroActivity extends BaseActivity {
         setLoading(true);
         //TODO validar localmente
         String username = mUsernameText.getText().toString();
-        if (currentRegisterJob != null) {
-            currentRegisterJob.cancelJob();
-            currentRegisterJob = null;
-        }
-        currentRegisterJob = new RegisterNewUserJob(this, username, email, avatarUrl);
-        jobManager.addJobInBackground(currentRegisterJob);
+        //TODO comprobar si ya estaba ejecutándose, y decidir si debemos lanzar uno nuevo o ignorar
+
+        //TODO launch some job
     }
 
     @Subscribe

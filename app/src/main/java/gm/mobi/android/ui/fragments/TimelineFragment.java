@@ -19,14 +19,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
+
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
@@ -43,8 +49,6 @@ import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import java.util.List;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment

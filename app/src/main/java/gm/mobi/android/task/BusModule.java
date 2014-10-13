@@ -7,10 +7,9 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
-import gm.mobi.android.task.jobs.loginregister.GetFacebookProfileJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
-import gm.mobi.android.task.jobs.loginregister.RegisterNewUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -29,7 +28,6 @@ import javax.inject.Singleton;
                 FindFriendsActivity.class,
 
                 GetUsersFollowsJob.class,
-                GetFacebookProfileJob.class,
                 GetUserInfoJob.class,
                 GetFollowingsJob.class,
 
@@ -37,8 +35,6 @@ import javax.inject.Singleton;
           
                 ProfileFragment.class,
                 ProfileContainerActivity.class,
-
-                RegisterNewUserJob.class,
 
                 TimelineJob.class,
         },
