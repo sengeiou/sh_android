@@ -72,11 +72,19 @@
     self.title = NSLocalizedString(@"People", nil);
     self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
     
+    [self addButtonsItem];
+    
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
     #warning Used to force reload table when pushed from search
     [self.usersTable reloadData];
 }
-
+-(void)addButtonsItem{
+    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
+    self.navigationItem.rightBarButtonItem = addButtonItem;
+    
+    UIBarButtonItem *findButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchFriends:)];
+    self.navigationItem.leftBarButtonItem = findButtonItem;
+}
 //------------------------------------------------------------------------------
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -100,7 +108,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
 //    if (search) {
-    
+    NSLog(@"CEldas a pintar: %lu", (unsigned long)self.followingUsers.count);
     return self.followingUsers.count;
 }
 
@@ -216,39 +224,55 @@
                 moreCells = YES;
             }
         }
-
     }
 }
 
 #pragma mark - Search Response method
 //------------------------------------------------------------------------------
-- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray {
+- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray{
     
     if (usersArray.count > 0) {
+        refreshTable = YES;
         
         [self.usersSearch addObjectsFromArray:usersArray];
+
         [self.followingUsers removeAllObjects];
 
         [self.followingUsers addObjectsFromArray:self.usersSearch];
+
         
+        NSLog(@"NUMERO TOTAL DE USUARIOS: %lu", (unsigned long)self.followingUsers.count);
+
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
-        NSArray *sortedArray = [usersArray sortedArrayUsingDescriptors:descriptors];
+        NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
-        
+        NSLog(@"NUMERO TOTAL DE USUARIOS ORDENADOS: %lu", (unsigned long)self.followingUsers.count);
+
         [self reloadTableWithAnimation];
     }else if (error){
+        refreshTable = NO;
         [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }else{
-        self.usersTable.hidden = YES;
-        self.viewNotPeople.hidden = NO;
+        refreshTable = NO;
+
+        if (self.followingUsers.count == 0){
+            self.usersTable.hidden = YES;
+            self.viewNotPeople.hidden = NO;
+        }else{
+            
+            self.usersTable.hidden = NO;
+            self.viewNotPeople.hidden = YES;
+            self.spinner.hidden = YES;
+        }
     }
 }
 
 #pragma mark - Search methods
 //------------------------------------------------------------------------------
 - (IBAction)searchFriends:(id)sender {
-  
+    [self initSpinner];
+
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = nil;
 
@@ -262,15 +286,16 @@
 //------------------------------------------------------------------------------
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
    
+  //  [self.usersSearch removeAllObjects];
+
+    
     self.usersTable.hidden = NO;
+    self.spinner.hidden = YES;
     self.viewNotPeople.hidden = YES;
     [self.usersSearch removeAllObjects];
     
-    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
-    self.navigationItem.rightBarButtonItem = addButtonItem;
+    [self addButtonsItem];
 
-    UIBarButtonItem *findButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchFriends:)];
-    self.navigationItem.leftBarButtonItem = findButtonItem;
     
     [self restoreInitialStateView];
     [self reloadTableWithAnimation];
@@ -281,6 +306,7 @@
 //------------------------------------------------------------------------------
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     search = YES;
+    [self.usersSearch removeAllObjects];
     
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
     [self.followingUsers removeAllObjects]; // First clear the filtered array.
@@ -288,6 +314,7 @@
     [self reloadTableWithAnimation];
     
     [searchBar resignFirstResponder];
+    [self addLoadMoreCell];
 }
 
 
@@ -336,6 +363,7 @@
     else{
         if (maximumOffset - currentOffset <= 200.0 && moreCells)
             [self addLoadMoreCell];
+        
     }
     
     self.lastContentOffset = scrollView.contentOffset.y;

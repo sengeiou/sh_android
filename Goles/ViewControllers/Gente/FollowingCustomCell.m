@@ -31,13 +31,17 @@
 	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
-    if ([self checkIfImFollowingUser:user])
+    if ([self checkIfImFollowingUser:user]){
+        NSLog(@"FOLLOWING: %@", user.userName);
         [self configureFollowingButton];
-    else
-		[self configureFollowButton];
-    
-    if (user.idUser == [[UserManager singleton] getUserId])
+    }else if (user.idUser == [[UserManager singleton] getUserId]){
         self.actionButton.hidden = YES;
+    }else{
+        NSLog(@"FOLLOWERS: %@", user.userName);
+
+		[self configureFollowButton];
+    }
+   
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;

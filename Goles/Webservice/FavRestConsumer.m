@@ -618,7 +618,6 @@
         [delegate parserResponseFromLoginWithStatus:NO andError:reqError];
         DLog(@"No valid req structure created");
     }
-
 }
 
 #pragma mark - SEARCH

@@ -29,7 +29,6 @@
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
-		AA16C88819E2E9D600B86625 /* PeopleCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */; };
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
@@ -161,8 +160,6 @@
 		A5E3E2081999206C00322727 /* defaultDataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultDataBase.sqlite; sourceTree = "<group>"; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
 		AA05ADFD199A6E320046EB6F /* FilterCreation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCreation.m; sourceTree = "<group>"; };
-		AA16C88619E2E9D600B86625 /* PeopleCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleCustomCell.h; sourceTree = "<group>"; };
-		AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleCustomCell.m; sourceTree = "<group>"; };
 		AA241F81199CFB4900897D6D /* SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncControl.h; sourceTree = "<group>"; };
 		AA241F82199CFB4900897D6D /* SyncControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncControl.m; sourceTree = "<group>"; };
 		AA241F84199CFB5200897D6D /* _SyncControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _SyncControl.h; sourceTree = "<group>"; };
@@ -697,8 +694,6 @@
 				AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */,
 				AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */,
 				AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */,
-				AA16C88619E2E9D600B86625 /* PeopleCustomCell.h */,
-				AA16C88719E2E9D600B86625 /* PeopleCustomCell.m */,
 				A5754FBA19E6FCEA00D20267 /* FindFriendsTableViewController.h */,
 				A5754FBB19E6FCEA00D20267 /* FindFriendsTableViewController.m */,
 				A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */,
@@ -931,7 +926,6 @@
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
 				AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */,
-				AA16C88819E2E9D600B86625 /* PeopleCustomCell.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
 				AACA544419C057C000E39D94 /* AFURLSessionManager.m in Sources */,
@@ -1104,7 +1098,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ignasi Elias de Gispert (G59N3Z6ZG6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ignasi Elias de Gispert (G59N3Z6ZG6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1122,7 +1116,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "97e81762-952f-40eb-9c91-010f34ad58e5";
+				PROVISIONING_PROFILE = "d69a6a1c-95af-47fb-a23c-07bae7443522";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1144,7 +1138,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ignasi Elias de Gispert (G59N3Z6ZG6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ignasi Elias de Gispert (G59N3Z6ZG6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1155,7 +1149,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "97e81762-952f-40eb-9c91-010f34ad58e5";
+				PROVISIONING_PROFILE = "d69a6a1c-95af-47fb-a23c-07bae7443522";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
