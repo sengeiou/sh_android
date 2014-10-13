@@ -57,6 +57,7 @@
 //------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.title = @"People";
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
     #warning Used to force reload table when pushed from search
     [self.usersTable reloadData];
