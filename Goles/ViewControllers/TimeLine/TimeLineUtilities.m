@@ -49,22 +49,18 @@
     UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, widthTextView, MAX_HEIGHT)];
     textView.text = shotText;
     textView.font = [UIFont systemFontOfSize:15];
-    CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-10, MAX_HEIGHT)];
-    CGRect rect      = textView.frame;
-    rect.size.height = textView.contentSize.height;
-    
-    
+    CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-8, MAX_HEIGHT)];
+
 //    CGRect rect = [shotText boundingRectWithSize:CGSizeMake(widthTextView, MAX_HEIGHT)
 //                                options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
 //                             attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15],NSFontAttributeName, nil] context:nil];
 //    
 //    float numberOfLines = size.height / [UIFont systemFontOfSize:15].leading;
     
-    float numberOfLines = size.height / 21;
+    int numberOfLines = (size.height / 20) +1;
     float heightRows = numberOfLines * [UIFont systemFontOfSize:15].leading;
-
-//    if (numberOfLines >= 5)
-//        return  heightRows + 95;
+    float lineHeight = [UIFont systemFontOfSize:15].leading;
+    
 
 //    if ([shotText rangeOfString:@"\n"].location != NSNotFound)
 //        return heightRows + 80;
@@ -72,7 +68,9 @@
 //    
 //    return heightRows + 54;
     
-    return (numberOfLines * 28) + 25;
+    return (numberOfLines * 26) + 25;
+
+//    return size.height + 30;
 }
 
 //------------------------------------------------------------------------------
