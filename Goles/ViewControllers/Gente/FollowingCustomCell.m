@@ -65,8 +65,10 @@
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
 
-    [self.actionButton setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+    [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
+    [self.actionButton setAttributedTitle:buttonString forState:UIControlStateNormal];
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 }
