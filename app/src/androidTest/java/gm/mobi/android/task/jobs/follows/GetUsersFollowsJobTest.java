@@ -40,30 +40,6 @@ public class GetUsersFollowsJobTest {
 
     @Test
     public void postCommunicationErrorWhenExceptionThrownRetrievingFollowing() {
-        BagdadService mockService = null;
-        try {
-            mockService = mock(BagdadService.class);
-            when(mockService.getFollowings(anyLong(),anyLong())).thenThrow(
-                ServerException.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail();
-        }
-        assertThat(mockService).isNotNull();
-
-        Bus mockBus = mock(Bus.class);
-        NetworkUtil mockNetworkUtil = mock(NetworkUtil.class);
-        when(mockNetworkUtil.isConnected(any(Context.class))).thenReturn(true);
-
-        GetUsersFollowsJob getUsersFollowsJob =
-            new GetUsersFollowsJob(application, mockBus, mockService, mockNetworkUtil);
-        getUsersFollowsJob.init(1L);
-        try {
-            getUsersFollowsJob.run();
-        } catch (Exception e) {
-        }
-
-        ArgumentCaptor<CommunicationErrorEvent> argument = ArgumentCaptor.forClass(CommunicationErrorEvent.class);
-        verify(mockBus).post(argument.capture());
+        //TODO Adrián, qué hacemos con estos tests repetidos?
     }
 }

@@ -1,11 +1,15 @@
 package gm.mobi.android.task.jobs.profile;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.service.BagdadService;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.junit.Test;
@@ -17,9 +21,11 @@ import timber.log.Timber;
 import timber.log.Timber.Tree;
 
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,6 +35,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class GetUserInfoJobTest {
 
+    private static final Long USER_ID = 1L;
     private Bus bus;
     private SQLiteOpenHelper dbHelper;
 
@@ -49,7 +56,13 @@ public class GetUserInfoJobTest {
         Tree mockTree = mock(Tree.class);
         Timber.plant(mockTree);
 
-        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,null,null,null, null,userManager,null,null);
+        NetworkUtil networkUtil = mock(NetworkUtil.class);
+        when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
+
+        BagdadService service = mock(BagdadService.class);
+        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
+
+        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,service, networkUtil,userManager,null,null);
 
         assertTrue(getUserInfoJob.userManager != null);
 
@@ -59,26 +72,32 @@ public class GetUserInfoJobTest {
 
         getUserInfoJob.run();
 
-        verify(mockTree).i(anyString(),anyObject());
+        verify(mockTree).d(anyString(),anyObject());
     }
 
 
     @Test
-    public void postResultInBusWhenUserIsFoundInDataBase() throws IOException, SQLException {
+    public void postResultInBusWhenUserIsFoundInDataBase() throws Throwable {
         UserManager userManager = mock(UserManager.class);
-
         when(userManager.getUserByIdUser(anyLong())).thenReturn(new User());
 
         FollowManager followManager = mock(FollowManager.class);
 
         TeamManager teamManager = mock(TeamManager.class);
 
+        NetworkUtil networkUtil = mock(NetworkUtil.class);
+        when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
 
+        BagdadService service = mock(BagdadService.class);
+        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
 
-        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,null,null, userManager,followManager,teamManager);
+        GetUserInfoJob getUserInfoJob =
+          new GetUserInfoJob(Robolectric.application, bus, dbHelper, service, networkUtil, userManager, followManager,
+            teamManager);
         getUserInfoJob.init(1L,null);
-        getUserInfoJob.run();
-        verify(bus).post(anyObject());
+        getUserInfoJob.onRun();
+        //TODO comprobar tipo de objeto posteado
+        verify(bus, atLeastOnce()).post(anyObject());
     }
 
 }

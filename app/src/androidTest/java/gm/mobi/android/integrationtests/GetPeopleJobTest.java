@@ -127,7 +127,7 @@ public class GetPeopleJobTest {
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
-        getPeopleJob.init(anyLong());
+        getPeopleJob.init(CURRENT_USER);
 
         getPeopleJob.onRun();
 

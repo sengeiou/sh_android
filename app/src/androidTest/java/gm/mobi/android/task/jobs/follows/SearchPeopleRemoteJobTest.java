@@ -22,14 +22,7 @@ public class SearchPeopleRemoteJobTest {
 
     @Test
     public void postEventOnConnectionNotAvailable() throws IOException, SQLException {
-        Application app = Robolectric.application;
-        Bus bus = mock(Bus.class);
-        NetworkUtil networkUtil = mock(NetworkUtil.class);
-
-        SearchPeopleRemoteJob job = new SearchPeopleRemoteJob(app, bus, null, networkUtil);
-        job.run();
-
-        verify(bus).post(any(ConnectionNotAvailableEvent.class));
+        //TODO adrián, otro test repetido
     }
 
 }
