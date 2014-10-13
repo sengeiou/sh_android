@@ -2,39 +2,24 @@ package gm.mobi.android.task.events.profile;
 
 import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
 
-public class UserInfoResultEvent {
-    private User user;
+public class UserInfoResultEvent extends BagdadBaseJob.SuccessEvent<User> {
+
     private int relationship;
-    private Team favouriteTeam;
+    private String favouriteTeam;
 
-    public UserInfoResultEvent(User user, int relationship, Team team) {
-        this.user = user;
+    public UserInfoResultEvent(User result, int relationship, String favouriteTeam) {
+        super(result);
         this.relationship = relationship;
-        this.favouriteTeam = team;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Team getFavouriteTeam(){
-        return favouriteTeam;
-    }
-
-    public void setFavouriteTeam(Team team){
-        this.favouriteTeam = team;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+        this.favouriteTeam = favouriteTeam;
     }
 
     public int getRelationship() {
         return relationship;
     }
 
-    public void setRelationship(int relationship) {
-        this.relationship = relationship;
+    public String getFavouriteTeam() {
+        return favouriteTeam;
     }
 }

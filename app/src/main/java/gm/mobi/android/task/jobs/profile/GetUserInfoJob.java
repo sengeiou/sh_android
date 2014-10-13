@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetUserInfoJob extends BagdadBaseJob<User> {
+public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
@@ -54,22 +54,18 @@ public class GetUserInfoJob extends BagdadBaseJob<User> {
     @Override public void run() throws SQLException, IOException {
         User userFromLocalDatabase = getUserFromDatabase();
         if (userFromLocalDatabase != null) {
-            postSuccessfulEvent(userFromLocalDatabase);
+            postSuccessfulEvent(new UserInfoResultEvent(userFromLocalDatabase, 0, "")); //TODO coger datos buenos: relationship y team
         } else {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
         }
 
         User userFromService = getUserFromService();
-        postSuccessfulEvent(userFromService);
+        postSuccessfulEvent(new UserInfoResultEvent(userFromService, 0, "")); //TODO coger datos buenos: relationship y team
 
         if (userFromLocalDatabase != null) {
             Timber.d("Obtained user from server found in database. Updating database.");
             userManager.saveUser(userFromService);
         }
-    }
-
-    @Override protected boolean isNetworkRequired() {
-        return false; //TODO qué hacemos aquí? La requiere para actualizar, pero no para mostrar los datos de un people
     }
 
     private User getUserFromDatabase() {
@@ -90,6 +86,10 @@ public class GetUserInfoJob extends BagdadBaseJob<User> {
         followManager.setDataBase(db);
         teamManager.setDataBase(db);
         userManager.setDataBase(db);
+    }
+
+    @Override protected boolean isNetworkRequired() {
+        return false;
     }
 
 }
