@@ -62,4 +62,11 @@ public interface SeasonDAO extends BaseDAO {
 	 * @return
 	 */
 	int updateSeason(Season season);
+	
+	/**
+	 * Update multiple seasons
+	 * @param seasons
+	 * @return
+	 */
+	int batchUpdateSeason(List<Season> seasons);
 }

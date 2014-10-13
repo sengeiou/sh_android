@@ -3,6 +3,7 @@ package com.fav24.shootr.dao.impl;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
@@ -69,12 +70,12 @@ public class SeasonDAOImpl extends BaseDAOImpl implements SeasonDAO {
 		getJdbcTemplate().batchUpdate(query, new BatchPreparedStatementSetter() {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Season b = seasons.get(i);
-				ps.setLong(1, b.getIdSeasonOpta());
-				ps.setLong(2, b.getIdCompetition());
-				ps.setString(3, b.getName());
-				ps.setDate(4, new java.sql.Date(b.getStartDate().getTime()));
-				ps.setDate(5, new java.sql.Date(b.getEndDate().getTime()));
-				ps.setDate(6, new java.sql.Date(b.getLastUpdated().getTime()));
+				ps.setObject(1, b.getIdSeasonOpta(), Types.NUMERIC);
+				ps.setObject(2, b.getIdCompetition(), Types.NUMERIC);
+				ps.setObject(3, b.getName(), Types.VARCHAR);
+				ps.setObject(4, (b.getStartDate() != null) ? new Timestamp(b.getStartDate().getTime()) : null);
+				ps.setObject(5, (b.getEndDate() != null) ? new Timestamp(b.getEndDate().getTime()) : null);
+				ps.setObject(6, (b.getLastUpdated() != null) ? new Timestamp(b.getLastUpdated().getTime()) : null);
 			}
 			public int getBatchSize() {
 				return seasons.size();
@@ -94,6 +95,26 @@ public class SeasonDAOImpl extends BaseDAOImpl implements SeasonDAO {
 	public int updateSeason(Season season) {
 		String query = PropertiesManager.getProperty("season.update");
 		return getJdbcTemplate().update(query, season.getName(), season.getStartDate(), season.getEndDate(), season.getLastUpdated(), season.getIdSeason());
+	}
+	
+	/** {@inheritDoc} */
+	public int batchUpdateSeason(final List<Season> seasons) {
+		String query = PropertiesManager.getProperty("season.update");
+		getJdbcTemplate().batchUpdate(query, new BatchPreparedStatementSetter() {
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				Season b = seasons.get(i);
+				ps.setObject(1, b.getName(), Types.VARCHAR);
+				ps.setObject(2, (b.getStartDate() != null) ? new Timestamp(b.getStartDate().getTime()) : null);
+				ps.setObject(3, (b.getEndDate() != null) ? new Timestamp(b.getEndDate().getTime()) : null);
+				ps.setObject(4, (b.getLastUpdated() != null) ? new Timestamp(b.getLastUpdated().getTime()) : null);
+				ps.setObject(5, b.getIdSeason(), Types.NUMERIC);
+			}
+			public int getBatchSize() {
+				return seasons.size();
+			}
+		});
+		//TODO no retornar fakes
+		return seasons.size();
 	}
 
 	@Override
