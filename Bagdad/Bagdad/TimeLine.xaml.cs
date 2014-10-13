@@ -382,6 +382,10 @@ namespace Bagdad
 
                 GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
             }
+            else
+            {
+                totalShots = myShots.Items.Count;
+            }
         }
 
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
