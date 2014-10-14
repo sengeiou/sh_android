@@ -65,6 +65,12 @@ namespace Bagdad
                 var res = await LoadFollowingsData();
                 if (res == -1) NavigationService.GoBack();
             }
+            else
+            {
+                followingList.ItemsSource = null;
+                followingList.ItemsSource = followings.Followings;
+            }
+
             progress.IsVisible = false;
         }
 

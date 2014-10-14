@@ -49,8 +49,6 @@ namespace Bagdad
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            
         }
 
         private void BuildLocalizedApplicationBar()

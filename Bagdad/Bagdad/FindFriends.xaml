@@ -110,8 +110,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding LocalizedResources.NoResults, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneDisabledBrush}"/>
-            <TextBlock Grid.Column="1" Text="{Binding Text, ElementName=SearchBar}" FontSize="{StaticResource PhoneFontSizeNormal}" Foreground="{StaticResource PhoneForegroundBrush}"/>
+            <TextBlock Grid.Column="0" Text="{Binding LocalizedResources.NoResults, Source={StaticResource LocalizedStrings}}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource PhoneDisabledBrush}"/>
+            <TextBlock Grid.Column="1" Text="{Binding Text, ElementName=SearchBar}" FontSize="{StaticResource PhoneFontSizeLarge}" Foreground="{StaticResource PhoneForegroundBrush}"/>
         </Grid>
     </Grid>
 </phone:PhoneApplicationPage>
