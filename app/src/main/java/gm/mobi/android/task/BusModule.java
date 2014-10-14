@@ -5,7 +5,6 @@ import android.os.Looper;
 import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.task.jobs.follows.GetFollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
@@ -30,7 +29,6 @@ import javax.inject.Singleton;
                 GetUsersFollowsJob.class,
                 GetUserInfoJob.class,
                 GetFollowingsJob.class,
-                GetFollowUserJob.class,
 
                 LoginUserJob.class,
           

@@ -29,7 +29,6 @@ import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import java.util.List;
 import javax.inject.Inject;
-import org.w3c.dom.UserDataHandler;
 import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment {
@@ -115,7 +114,8 @@ public class UserFollowsFragment extends BaseFragment {
     }
 
     private void setEmptyMessage() {
-        emptyTextView.setText(followType.equals(UserDtoFactory.GET_FOLLOWERS) ? R.string.follower_list_empty : R.string.following_list_empty);
+        emptyTextView.setText(followType.equals(UserDtoFactory.GET_FOLLOWERS) ? R.string.follower_list_empty
+          : R.string.following_list_empty);
     }
 
     @Subscribe

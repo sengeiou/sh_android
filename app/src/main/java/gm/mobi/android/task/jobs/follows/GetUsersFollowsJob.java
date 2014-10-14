@@ -7,8 +7,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;

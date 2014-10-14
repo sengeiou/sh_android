@@ -17,7 +17,6 @@ import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.adapters.PeopleAdapter;
 import gm.mobi.android.ui.adapters.UserListAdapter;
-import java.util.List;
 
 public class PeopleFragment extends UserFollowsFragment {
 

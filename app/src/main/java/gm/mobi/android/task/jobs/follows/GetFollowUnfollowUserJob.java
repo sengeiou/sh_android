@@ -11,6 +11,7 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import javax.inject.Inject;
 
-public class GetFollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
+public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
 
     private static final int PRIORITY = 6; //TODO Define next values for our queue
 
@@ -29,9 +30,11 @@ public class GetFollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
 
     private User currentUser;
     private Long idUser;
+    private int followUnfollowType;
 
     @Inject
-    public GetFollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager) {
+    public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
+      BagdadService service, UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
@@ -39,9 +42,10 @@ public class GetFollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
         this.setOpenHelper(openHelper);
     }
 
-    public void init(User currentUser, Long idUser){
+    public void init(User currentUser, Long idUser, int followUnfollowType){
         this.currentUser = currentUser;
         this.idUser = idUser;
+        this.followUnfollowType = followUnfollowType;
     }
 
     @Override protected void createDatabase() {
@@ -54,14 +58,35 @@ public class GetFollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
     }
 
     @Override protected void run() throws SQLException, IOException {
-        if(followManager.doIFollowHimRelationship(currentUser.getIdUser(),idUser)){
-                //It doesn't do nothing, We have to show some message in case we want to tell to the user, You are already following this user
-            return;
-        }else{
-            Follow followUser = followUser();
-            boolean doIFollowHim = followManager.doIFollowHimRelationship(currentUser.getIdUser(),idUser);
-            postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
+        Long idCurrentUser = currentUser.getIdUser();
+        switch (followUnfollowType){
+            case UserDtoFactory.FOLLOW_TYPE:
+                Follow followUser = followUser();
+                boolean doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser,idUser);
+                postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
+            break;
+            case UserDtoFactory.UNFOLLOW_TYPE:
+                if(followManager.doIFollowHimRelationship(idCurrentUser, idUser)){
+                    Follow follow = unfollowUser();
+                    boolean doIfollowHim = followManager.doIFollowHimRelationship(idCurrentUser,idUser);
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIfollowHim));
+                }else{
+                    //TODO. Check if we aren't in the good followType
+                    return;
+                }
+                break;
+            }
         }
+
+
+    public Follow unfollowUser() throws SQLException, IOException{
+        Follow follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
+        follow.setCsys_deleted(new Date());
+        Follow followReceived = service.unfollowUser(follow);
+        if(followReceived!=null){
+            followManager.saveFollow(followReceived);
+        }
+        return followReceived;
     }
 
     public Follow followUser() throws IOException, SQLException{

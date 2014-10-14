@@ -32,9 +32,9 @@ import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
-import gm.mobi.android.task.jobs.follows.GetUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
@@ -73,7 +73,7 @@ import static android.content.Context.MODE_PRIVATE;
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
 
     GetFollowingsJob.class, GMSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
-    GetUnfollowUserJob.class,
+    GetFollowUnfollowUserJob.class,
 
     InitialSetupFragment.class,
 

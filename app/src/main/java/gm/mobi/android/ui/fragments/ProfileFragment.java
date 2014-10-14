@@ -17,13 +17,11 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.task.jobs.follows.GetFollowUserJob;
-import gm.mobi.android.task.jobs.follows.GetUnfollowUserJob;
+import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
@@ -122,15 +120,9 @@ public class ProfileFragment extends BaseFragment {
         jobManager.addJobInBackground(job);
     }
 
-    public void startFollowUserJob(User currentUser, Context context){
-        GetFollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUserJob.class);
-        job.init(currentUser,user.getIdUser());
-        jobManager.addJobInBackground(job);
-    }
-
-    public void startUnFollowUserJob(User currentUser, Context context){
-        GetUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetUnfollowUserJob.class);
-        job.init(currentUser,user.getIdUser());
+    public void startFollowUnfollowUserJob(User currentUser, Context context, int followType){
+        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        job.init(currentUser,user.getIdUser(), followType);
         jobManager.addJobInBackground(job);
     }
 
@@ -194,11 +186,11 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.profile_follow_button)
     public void followUser(){
-        startFollowUserJob(currentUser, getActivity());
+        startFollowUnfollowUserJob(currentUser, getActivity(),UserDtoFactory.FOLLOW_TYPE);
     }
     @OnClick(R.id.profile_following_button)
     public void unfollowUser(){
-        startUnFollowUserJob(currentUser, getActivity());
+        startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
     }
 
     private void openUserFollowsList(int followType) {

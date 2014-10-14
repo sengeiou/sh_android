@@ -9,7 +9,6 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
@@ -51,7 +50,11 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     @Override public void run() throws SQLException, IOException {
         User userFromLocalDatabase = getUserFromDatabase();
-        boolean doIFollowHim = followManager.doIFollowHimRelationship(currentUser.getIdUser(),userId);
+        Long idCurrentUser = currentUser.getIdUser();
+        boolean doIFollowHim = false;
+        if(!idCurrentUser.equals(userId)) {
+          doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser, userId);
+        }
         if (userFromLocalDatabase != null) {
             postSuccessfulEvent(new UserInfoResultEvent(userFromLocalDatabase, doIFollowHim));
         } else {
@@ -59,9 +62,11 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         }
 
         User userFromService = getUserFromService();
-        Follow followFromService = getFolloFromService();
-        if(followFromService!=null) followManager.saveFollow(followFromService);
-        doIFollowHim = followManager.doIFollowHimRelationship(currentUser.getIdUser(),userId);
+        if(!idCurrentUser.equals(userId)){
+            Follow followFromService = getFolloFromService();
+            if(followFromService!=null) followManager.saveFollow(followFromService);
+            doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser,userId);
+        }
 
         postSuccessfulEvent(new UserInfoResultEvent(userFromService, doIFollowHim));
 

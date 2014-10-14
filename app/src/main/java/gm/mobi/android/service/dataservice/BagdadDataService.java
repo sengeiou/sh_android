@@ -1,7 +1,6 @@
 package gm.mobi.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -15,7 +14,6 @@ import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
@@ -30,11 +28,9 @@ import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.util.SecurityUtils;
 import java.io.IOException;
-import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 

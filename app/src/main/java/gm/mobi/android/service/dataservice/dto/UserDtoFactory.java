@@ -3,7 +3,6 @@ package gm.mobi.android.service.dataservice.dto;
 import android.support.v4.util.ArrayMap;
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
@@ -11,16 +10,11 @@ import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
-import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
 
 import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
@@ -33,6 +27,9 @@ public class UserDtoFactory {
 
     public static final Integer GET_FOLLOWERS = 0;
     public static final Integer GET_FOLLOWING = 1;
+
+    public static final int FOLLOW_TYPE = 0;
+    public static final int UNFOLLOW_TYPE = 1;
 
     private static final String ENTITY_LOGIN = "Login";
     private static final String ALIAS_LOGIN = "Login";

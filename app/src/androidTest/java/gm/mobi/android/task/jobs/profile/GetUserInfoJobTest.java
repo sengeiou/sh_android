@@ -1,7 +1,6 @@
 package gm.mobi.android.task.jobs.profile;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;

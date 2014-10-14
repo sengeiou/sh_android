@@ -2,11 +2,6 @@ package gm.mobi.android.db;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.db.manager.DeviceManager;
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.manager.TeamManager;
-import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
