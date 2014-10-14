@@ -4,6 +4,7 @@ import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,6 +33,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.gcm.BagdadNotificationManager;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
@@ -52,21 +54,16 @@ public class TimelineFragment extends BaseFragment
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-    @Inject
-    Picasso picasso;
-    @Inject
-    Bus bus;
-    @Inject
-    JobManager jobManager;
 
-    @InjectView(R.id.timeline_list)
-    ListView listView;
-    @InjectView(R.id.timeline_new)
-    View newShotView;
-    @InjectView(R.id.timeline_watching_container)
-    View watchingContainer;
-    @InjectView(R.id.timeline_swipe_refresh)
-    SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @Inject Picasso picasso;
+    @Inject Bus bus;
+    @Inject JobManager jobManager;
+    @Inject BagdadNotificationManager notificationManager;
+
+    @InjectView(R.id.timeline_list) ListView listView;
+    @InjectView(R.id.timeline_new) View newShotView;
+    @InjectView(R.id.timeline_watching_container) View watchingContainer;
+    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
 
     private View headerView;
     private View footerView;
@@ -141,6 +138,11 @@ public class TimelineFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         startPollingShots();
+        clearCurrentNotifications();
+    }
+
+    private void clearCurrentNotifications() {
+        //TODO should we? notificationManager.clearShotNotifications();
     }
 
     @Override
@@ -373,5 +375,16 @@ public class TimelineFragment extends BaseFragment
             adapter.addShotsBelow(shots);
         }
     }
+
+    @OnClick(R.id.timeline_new_pronostic)
+    public void debugNotification() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override protected Void doInBackground(Void... params) {
+                notificationManager.sendNewShotNotification((Shot) listView.getItemAtPosition(1));
+                return null;
+            }
+        }.execute();
+    }
+
 }
 

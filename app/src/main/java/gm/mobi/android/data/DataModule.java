@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.support.v4.app.NotificationManagerCompat;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
@@ -26,11 +27,8 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.gcm.BagdadNotificationManager;
+import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
@@ -95,6 +93,8 @@ import static android.content.Context.MODE_PRIVATE;
 
     UserManager.class, DeviceManager.class,
 
+    NotificationIntentReceiver.class,
+
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
@@ -140,6 +140,12 @@ public class DataModule {
     @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
         return GoogleCloudMessaging.getInstance(application);
     }
+
+    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, Picasso picasso) {
+        NotificationManagerCompat nm = NotificationManagerCompat.from(app);
+        return new BagdadNotificationManager(app, nm, picasso);
+    }
+
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
         // Custom config: https://github.com/path/android-priority-jobqueue/wiki/Job-Manager-Configuration, https://github.com/path/android-priority-jobqueue/blob/master/examples/twitter/TwitterClient/src/com/path/android/jobqueue/examples/twitter/TwitterApplication.java
         Configuration configuration =

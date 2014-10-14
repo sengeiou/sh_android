@@ -140,6 +140,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".gcm.NotificationIntentReceiver"
+          >
+            <intent-filter>
+                <action android:name="gm.mobi.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
+                <action android:name="gm.mobi.android.ACTION_OPEN_SHOT_NOTIFICATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
         <service
           android:name=".gcm.GcmIntentService"
           android:exported="false" />
