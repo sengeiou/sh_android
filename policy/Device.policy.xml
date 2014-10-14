@@ -24,6 +24,12 @@
                 <Key>
                     <Attribute Alias="idDevice">idDevice</Attribute>
                 </Key>
+                <Key>
+                    <Attribute Alias="uniqueDeviceID">uniqueDeviceID</Attribute>
+                </Key>
+                <Key>
+                    <Attribute Alias="token">token</Attribute>
+                </Key>
             </Keys>
             <Filters>
                 <Filter>
@@ -31,6 +37,10 @@
                 </Filter>
                 <Filter>
                     <Attribute Alias="idDevice">idDevice</Attribute>
+                </Filter>
+                <Filter>
+                    <Attribute Alias="uniqueDeviceID">uniqueDeviceID</Attribute>
+                    <Attribute Alias="token">token</Attribute>
                 </Filter>
                 <Filter>
                     <Attribute Alias="idDevice">idDevice</Attribute>
