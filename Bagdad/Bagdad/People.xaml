@@ -13,7 +13,8 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    OrientationChanged="PhoneApplicationPage_OrientationChanged"
     shell:SystemTray.IsVisible="True">
 
     <tk:TransitionService.NavigationInTransition>
@@ -47,7 +48,7 @@
         <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding Followings}" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="456" Margin="0,0,12,48" Tap="goToProfile_Tap">
+                    <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,12,48" Tap="goToProfile_Tap">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>

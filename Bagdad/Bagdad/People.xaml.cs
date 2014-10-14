@@ -153,5 +153,11 @@ namespace Bagdad
             }
             progress.IsVisible = false;
         }
+
+        private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        {
+            followingList.ItemsSource = null;
+            followingList.ItemsSource = followings.Followings;
+        }
     }
 }

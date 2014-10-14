@@ -101,6 +101,7 @@
     <Compile Include="FindFriends.xaml.cs">
       <DependentUpon>FindFriends.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Device.cs" />
     <Compile Include="People.xaml.cs">
       <DependentUpon>People.xaml</DependentUpon>
     </Compile>

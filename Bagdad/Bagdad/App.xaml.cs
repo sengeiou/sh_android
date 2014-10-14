@@ -460,6 +460,7 @@ namespace Bagdad
                 // Display the new URI for testing purposes.   Normally, the URI would be passed back to your web service at this point.
                 pushToken = e.ChannelUri.ToString();
                 System.Diagnostics.Debug.WriteLine(" - - - - Token: " + pushToken);
+                UpdateTokenOnServer();
             });
         }
 
@@ -554,6 +555,13 @@ namespace Bagdad
         {
             testVibrationDevice.Cancel();
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri(url, UriKind.RelativeOrAbsolute));
+        }
+
+        private async void UpdateTokenOnServer()
+        {
+            //we get the params on Local DB, if there are no device information, the same query will create a new one in server.
+
+
         }
 
         #endregion

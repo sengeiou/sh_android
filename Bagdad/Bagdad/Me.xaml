@@ -10,7 +10,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -69,7 +69,9 @@
                 <Grid Grid.Row="0" Margin="12,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
@@ -88,8 +90,8 @@
                     
                     </Grid>
 
-                    <!--Column1-->
-                    <Grid x:Name="followingGrid" Grid.Column="1" Margin="12,0" Tap="followingGrid_Tap">
+                    <!--Column2-->
+                    <Grid x:Name="followingGrid" Grid.Column="2" Margin="12,0" Tap="followingGrid_Tap">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -103,8 +105,8 @@
 
                     </Grid>
 
-                    <!--Column2-->
-                    <Grid x:Name="followersGrid" Grid.Column="2" Tap="followersGrid_Tap">
+                    <!--Column4-->
+                    <Grid x:Name="followersGrid" Grid.Column="4" Margin="0,0,12,0" Tap="followersGrid_Tap">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>

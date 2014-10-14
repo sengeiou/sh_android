@@ -1,27 +1,33 @@
 ﻿<vm:FollowsViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:Bagdad.ViewModels">
+    xmlns:vm="clr-namespace:Bagdad.ViewModels"
+    xmlns:m="clr-namespace:Bagdad.Models">
 
     <vm:FollowsViewModel.Followings>
-        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+        <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
             <vm:FollowViewModel.userInfo>
-                <vm:UserViewModel idUser="1" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+                <m:User idUser="1"  userName="Prueba1" />
             </vm:FollowViewModel.userInfo>
         </vm:FollowViewModel>
-        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+        <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
             <vm:FollowViewModel.userInfo>
-                <vm:UserViewModel idUser="2" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+                <m:User idUser="1"  userName="Prueba2" />
             </vm:FollowViewModel.userInfo>
         </vm:FollowViewModel>
-        <vm:FollowViewModel buttonText="+ FOLLOW">
+        <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
             <vm:FollowViewModel.userInfo>
-                <vm:UserViewModel idUser="3" isFollowed="False" userName="Prueba1" userNickName="prb1"/>
+                <m:User idUser="1"  userName="Prueba3" />
             </vm:FollowViewModel.userInfo>
         </vm:FollowViewModel>
-        <vm:FollowViewModel buttonText="✔ FOLLOWING">
+        <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
             <vm:FollowViewModel.userInfo>
-                <vm:UserViewModel idUser="4" isFollowed="True" userName="Prueba1" userNickName="prb1"/>
+                <m:User idUser="1"  userName="Prueba4" />
+            </vm:FollowViewModel.userInfo>
+        </vm:FollowViewModel>
+        <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
+            <vm:FollowViewModel.userInfo>
+                <m:User idUser="1"  userName="Prueba5" />
             </vm:FollowViewModel.userInfo>
         </vm:FollowViewModel>
     </vm:FollowsViewModel.Followings>

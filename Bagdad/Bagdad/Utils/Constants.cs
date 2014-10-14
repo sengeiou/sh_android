@@ -23,6 +23,7 @@ namespace Bagdad.Utils
         //TABLES
         public const String SERCOM_TB_LOGIN = "Login";
         public const String SERCOM_TB_USER = "User";
+        public const String SERCOM_TB_DEVICE = "Device";
         public const String SERCOM_TB_FOLLOW = "Follow";
         public const String SERCOM_TB_SHOT = "Shot";
         public const String SERCOM_TB_OLD_SHOTS = "OldShots";

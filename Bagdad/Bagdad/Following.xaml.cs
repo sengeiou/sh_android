@@ -99,7 +99,7 @@ namespace Bagdad
             // Set the page's ApplicationBar to a new instance of ApplicationBar.
             ApplicationBar = new ApplicationBar();
 
-            ApplicationBar.Mode = ApplicationBarMode.Minimized;
+            ApplicationBar.Mode = ApplicationBarMode.Default;
             
             ApplicationBarMenuItem appBarMenuItemPeople =
                 new ApplicationBarMenuItem(AppResources.People);
@@ -168,6 +168,12 @@ namespace Bagdad
 
             }
             progress.IsVisible = false;
+        }
+
+        private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        {
+            followingList.ItemsSource = null;
+            followingList.ItemsSource = followings.Followings;
         }
     }
 }
