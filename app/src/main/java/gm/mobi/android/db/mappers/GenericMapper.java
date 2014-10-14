@@ -17,13 +17,13 @@ public abstract class GenericMapper {
 
     protected void setSynchronizedfromCursor(Cursor c, Synchronized s) {
         long date = c.getLong(c.getColumnIndex(CSYS_BIRTH));
-        s.setCsys_birth(new Date(date));
+        s.setCsys_birth(date != 0L ? new Date(date) : null);
 
         date = c.getLong(c.getColumnIndex(CSYS_DELETED));
-        s.setCsys_deleted(new Date(date));
+        s.setCsys_deleted(date != 0L ? new Date(date) : null);
 
         date = c.getLong(c.getColumnIndex(CSYS_MODIFIED));
-        s.setCsys_modified(new Date(date));
+        s.setCsys_modified(date != 0L ? new Date(date) : null);
 
         s.setCsys_revision(c.getInt(c.getColumnIndex(CSYS_REVISION)));
         s.setCsys_synchronized(c.getString(c.getColumnIndex(CSYS_SYNCHRONIZED)));
@@ -31,27 +31,25 @@ public abstract class GenericMapper {
 
     protected void setSynchronizedtoContentValues(Synchronized s, ContentValues cv) {
         Date birth = s.getCsys_birth();
-        if (birth != null) cv.put(CSYS_BIRTH, birth.getTime());
+        cv.put(CSYS_BIRTH, birth!=null ? birth.getTime() : null);
         Date deleted = s.getCsys_deleted();
-        if (deleted != null) cv.put(CSYS_DELETED, deleted.getTime());
+        cv.put(CSYS_DELETED, deleted!=null ? deleted.getTime() : null);
         Date modified = s.getCsys_modified();
-        if (modified != null) cv.put(CSYS_MODIFIED, modified.getTime());
+        cv.put(CSYS_MODIFIED, modified!=null ? modified.getTime() : null);
 
         cv.put(CSYS_REVISION, s.getCsys_revision());
         cv.put(CSYS_SYNCHRONIZED, s.getCsys_synchronized());
     }
 
     protected void setSynchronizedfromDto(Map<String, Object> dto, Synchronized s) {
-        Long date = (Long) dto.get(CSYS_BIRTH);
-        if (date != null) s.setCsys_birth(new Date(date));
+        Long date =  (Long)dto.get(CSYS_BIRTH);
+        s.setCsys_birth(date != null ? new Date(date) : null);
 
         date = (Long) dto.get(CSYS_DELETED);
-        if (date != null) s.setCsys_deleted(new Date(date));
+        s.setCsys_deleted(date != null ? new Date(date) : null);
 
         date = (Long) dto.get(CSYS_MODIFIED);
-        if (date != null) {
-            s.setCsys_modified(new Date(date));
-        }
+        s.setCsys_modified(date != null ? new Date(date) : null);
 
         s.setCsys_revision((Integer) dto.get(CSYS_REVISION));
     }

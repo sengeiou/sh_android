@@ -52,7 +52,6 @@ public class FollowManager extends AbstractManager{
     public void saveFollows(List<Follow> followList) {
         for (Follow follow : followList) {
             ContentValues contentValues = followMapper.toContentValues(follow);
-
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                  deleteFollow(follow);
             } else {
@@ -93,10 +92,10 @@ public class FollowManager extends AbstractManager{
         return userIds;
     }
 
-    public int getFollowRelationship( User fromUser, User toUser) {
+    public int getFollowRelationship(Long idFromUser, Long idToUser) {
         int resultRelationship = Follow.RELATIONSHIP_NONE;
-        String fromUserIdArgument = String.valueOf(fromUser.getIdUser());
-        String toUserIdArgument = String.valueOf(toUser.getIdUser());
+        String fromUserIdArgument = String.valueOf(idFromUser);
+        String toUserIdArgument = String.valueOf(idToUser);
 
         String selection = "("
             + ID_USER
@@ -119,11 +118,11 @@ public class FollowManager extends AbstractManager{
             do {
                 Follow follow = followMapper.fromCursor(queryResults);
                 if (follow != null) {
-                    if (follow.getIdUser().equals(fromUser.getIdUser()) && follow.getFollowedUser()
-                        .equals(toUser.getIdUser())) {
+                    if (follow.getIdUser().equals(idFromUser) && follow.getFollowedUser()
+                        .equals(idToUser)) {
                         iFollowHim = true;
-                    } else if (follow.getIdUser().equals(toUser.getIdUser())
-                        && follow.getFollowedUser().equals(fromUser.getIdUser())) {
+                    } else if (follow.getIdUser().equals(idToUser)
+                        && follow.getFollowedUser().equals(idFromUser)) {
                         heFollowsMe = true;
                     }
 
@@ -136,6 +135,30 @@ public class FollowManager extends AbstractManager{
                     }
                 }
             } while (queryResults.moveToNext());
+        }
+        return resultRelationship;
+    }
+
+    public boolean doIFollowHimRelationship(Long idCurrentUser, Long idUser){
+        boolean resultRelationship = false;
+        String fromUserIdArgument = String.valueOf(idCurrentUser);
+        String toUserIdArgument = String.valueOf(idUser);
+        String selection = "("
+          + ID_USER
+          + "=? and "
+          + ID_FOLLOWED_USER
+          + "=?)";
+        Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
+          new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
+
+        if(queryResults.getCount()>0){
+            queryResults.moveToFirst();
+            do{
+                Follow follow = followMapper.fromCursor(queryResults);
+                if(follow!=null && follow.getCsys_deleted() == null){
+                     resultRelationship = true;
+                }
+            }while(queryResults.moveToNext());
         }
         return resultRelationship;
     }

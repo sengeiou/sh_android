@@ -78,9 +78,7 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
 
     private List<User> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
-        List<User> following;
-        following = service.getFollowing(currentUser.getIdUser(), modifiedFollows);
-        return following;
+        return service.getFollowing(currentUser.getIdUser(), modifiedFollows);
     }
 
     @Override protected void createDatabase() {
@@ -92,11 +90,9 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
         userManager.setDataBase(db);
         followManager.setDataBase(db);
         teamManager.setDataBase(db);
-
     }
 
     @Override protected boolean isNetworkRequired() {
         return true;
     }
-
 }

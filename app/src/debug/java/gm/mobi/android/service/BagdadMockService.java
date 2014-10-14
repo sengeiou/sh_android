@@ -3,12 +3,10 @@ package gm.mobi.android.service;
 import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import hugo.weaving.DebugLog;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 
 public class BagdadMockService implements BagdadService {
@@ -74,7 +72,15 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Follow getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws IOException {
+        return null;
+    }
+
     @Override public Device updateDevice(Device device) throws IOException {
+        return null;
+    }
+
+    @Override public Follow followUser(Follow follow) throws IOException {
         return null;
     }
 

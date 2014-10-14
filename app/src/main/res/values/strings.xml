@@ -63,6 +63,7 @@
 
     <string name="profile_following">Following</string>
     <string name="profile_follow">Follow</string>
+    <string name="profile_edit_profile">Edit Profile</string>
     <string name="profile_rank_format">rank %s</string>
     <string name="profile_marks_points">points</string>
     <string name="profile_marks_following">following</string>

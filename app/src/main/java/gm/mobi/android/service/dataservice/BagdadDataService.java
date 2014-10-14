@@ -1,6 +1,7 @@
 package gm.mobi.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -85,6 +86,8 @@ public class BagdadDataService implements BagdadService {
         return userMapper.fromDto(data[0]);
     }
 
+
+
     @Override public List<User> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
             List<User> following = new ArrayList<>();
             GenericDto requestDto =
@@ -107,6 +110,8 @@ public class BagdadDataService implements BagdadService {
             }
             return following;
         }
+
+
 
     @Override public List<User> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
         List<User> followers = new ArrayList<>();
@@ -253,6 +258,20 @@ public class BagdadDataService implements BagdadService {
         return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT).setPageOffset(pageOffset).setTotalItems(totalItems);
     }
 
+    @Override public Follow getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
+        GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser,idUser);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Map<String,Object> dataItem = ops[0].getData()[0];
+        Follow followReceived = followMapper.fromDto(dataItem);
+        return followReceived;
+    }
+
+
     @Override
     public Device updateDevice(Device device) throws IOException {
         GenericDto requestDto = deviceDtoFactory.getUpdateDeviceOperationDto(device);
@@ -267,7 +286,18 @@ public class BagdadDataService implements BagdadService {
         return deviceReceived;
     }
 
-
+    @Override public Follow followUser(Follow follow) throws IOException {
+        GenericDto requestDto = userDtoFactory.followUserDto(follow);
+        GenericDto reponseDto = postRequest(requestDto);
+        OperationDto[] ops = reponseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Map<String,Object> dataItem = ops[0].getData()[0];
+        Follow followReceived = followMapper.fromDto(dataItem);
+        return followReceived;
+    }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
@@ -312,5 +342,3 @@ public class BagdadDataService implements BagdadService {
         }
     }
 }
-
-

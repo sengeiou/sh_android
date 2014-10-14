@@ -9,6 +9,8 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
@@ -49,14 +51,19 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     @Override public void run() throws SQLException, IOException {
         User userFromLocalDatabase = getUserFromDatabase();
+        boolean doIFollowHim = followManager.doIFollowHimRelationship(currentUser.getIdUser(),userId);
         if (userFromLocalDatabase != null) {
-            postSuccessfulEvent(new UserInfoResultEvent(userFromLocalDatabase, 0, "")); //TODO coger datos buenos: relationship y team
+            postSuccessfulEvent(new UserInfoResultEvent(userFromLocalDatabase, doIFollowHim));
         } else {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
         }
 
         User userFromService = getUserFromService();
-        postSuccessfulEvent(new UserInfoResultEvent(userFromService, 0, "")); //TODO coger datos buenos: relationship y team
+        Follow followFromService = getFolloFromService();
+        if(followFromService!=null) followManager.saveFollow(followFromService);
+        doIFollowHim = followManager.doIFollowHimRelationship(currentUser.getIdUser(),userId);
+
+        postSuccessfulEvent(new UserInfoResultEvent(userFromService, doIFollowHim));
 
         if (userFromLocalDatabase != null) {
             Timber.d("Obtained user from server found in database. Updating database.");
@@ -64,6 +71,9 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         }
     }
 
+    private Follow getFolloFromService() throws IOException {
+        return service.getFollowByIdUserFollowed(currentUser.getIdUser(), userId);
+    }
     private User getUserFromDatabase() {
         return userManager.getUserByIdUser(userId);
     }

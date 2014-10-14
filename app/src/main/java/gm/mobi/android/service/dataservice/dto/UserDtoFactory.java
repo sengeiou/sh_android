@@ -9,6 +9,7 @@ import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.FilterItemDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -16,6 +17,7 @@ import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +39,7 @@ public class UserDtoFactory {
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_GET_USERS = "GET_USERS";
+    private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
     private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
@@ -86,6 +89,46 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_LOGIN, op);
     }
 
+
+    public GenericDto followUserDto(Follow follow){
+        if(follow.getIdUser() == null){
+            throw new IllegalArgumentException("IdUser who follow to, can't be null");
+        }
+        if(follow.getFollowedUser() == null){
+            throw new IllegalArgumentException("IdUser who is followed by, can't be null");
+        }
+        Map<String,Object> keys = new ArrayMap<>();
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_CREATE, "Follow",true,1L,0L,1L,keys);
+        OperationDto op = new OperationDto();
+        op.setMetadata(md);
+
+        Map<String,Object>[] data = new HashMap[1];
+        data[0] = followMapper.toDto(follow);
+        op.setData(data);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
+    }
+
+    public GenericDto getFollowUserDtoByIdUser(Long idFromUser, Long idToUser){
+        if(idFromUser == null){
+            throw new IllegalArgumentException("IdUser who follow to, can't be null");
+        }
+        if(idToUser == null){
+            throw new IllegalArgumentException("IdUser who is followed by, can't be null");
+        }
+        Map<String,Object> keys = new ArrayMap<>(2);
+        keys.put(FollowTable.ID_USER, idFromUser);
+        keys.put(FollowTable.ID_FOLLOWED_USER, idToUser);
+
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_RETRIEVE, "Follow",true,1L,0L,1L,keys);
+        OperationDto op = new OperationDto();
+        op.setMetadata(md);
+
+        Map<String,Object>[] data = new HashMap[1];
+        data[0] = followMapper.toDto(null);
+        op.setData(data);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
+    }
+
     public GenericDto getFollowingsOperationDto(Long idUserFollowing, Long offset,Long date, boolean includeDeleted) {
 
         OperationDto od = new OperationDto();
@@ -97,6 +140,7 @@ public class UserDtoFactory {
         Map<String, Object>[] array = new HashMap[1];
         array[0] = userMapper.reqRestUsersToDto(null);
         od.setData(array);
+
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_FOLLOWING, od);
     }

@@ -48,7 +48,6 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
     }
 
     @Override protected void run() throws SQLException, IOException {
-        //At first we search in database
         List<User> results = retrieveDataFromDatabase();
         postSuccessfulEvent(new SearchPeopleLocalResultEvent(results));
     }

@@ -5,15 +5,15 @@ import gm.mobi.android.task.jobs.BagdadBaseJob;
 
 public class UserInfoResultEvent extends BagdadBaseJob.SuccessEvent<User> {
 
-    private int relationship;
+    private boolean doIFollowHim;
 
-    public UserInfoResultEvent(User result, int relationship, String favouriteTeam) {
+    public UserInfoResultEvent(User result, boolean doIFollowHim) {
         super(result);
-        this.relationship = relationship;
+        this.doIFollowHim = doIFollowHim;
     }
 
-    public int getRelationship() {
-        return relationship;
+    public boolean doIFollowHim(){
+        return doIFollowHim;
     }
 
 }

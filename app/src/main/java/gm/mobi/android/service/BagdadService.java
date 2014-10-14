@@ -3,11 +3,9 @@ package gm.mobi.android.service;
 import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.Team;
 import gm.mobi.android.db.objects.User;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 public interface BagdadService {
 
@@ -30,5 +28,9 @@ public interface BagdadService {
     public PaginatedResult<List<User>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;
 
+    public Follow getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws  IOException;
+
     public Device updateDevice(Device device) throws IOException;
+
+    public Follow followUser(Follow follow) throws IOException;
 }

@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
+import gm.mobi.android.GolesApplication;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -22,16 +26,20 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
 
     BagdadService service;
     private Long idUserToRetrieveFollowsFrom;
+    FollowManager followManager;
     private Integer followType;
+    private User currentUser;
 
-    @Inject public GetUsersFollowsJob(Application application, Bus bus, BagdadService service, NetworkUtil networkUtil) {
+    @Inject public GetUsersFollowsJob(Application application, Bus bus, BagdadService service, NetworkUtil networkUtil, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
+        this.followManager = followManager;
     }
 
     public void init(Long userId, Integer followType) {
         this.idUserToRetrieveFollowsFrom = userId;
         this.followType = followType;
+        currentUser = GolesApplication.get(getContext()).getCurrentUser();
     }
 
     @Override

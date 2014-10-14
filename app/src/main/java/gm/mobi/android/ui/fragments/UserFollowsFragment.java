@@ -95,6 +95,7 @@ public class UserFollowsFragment extends BaseFragment {
         userlistListView.setAdapter(getAdapter());
     }
 
+
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setEmptyMessage();

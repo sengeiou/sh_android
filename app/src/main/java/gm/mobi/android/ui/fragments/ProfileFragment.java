@@ -19,7 +19,10 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.follows.GetFollowUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
@@ -44,6 +47,7 @@ public class ProfileFragment extends BaseFragment {
 
     @InjectView(R.id.profile_follow_button) View followButton;
     @InjectView(R.id.profile_following_button) View followingButton;
+    @InjectView(R.id.profile_edit_profile_button) View editProfileButton;
 
     @Inject Bus bus;
     @Inject Picasso picasso;
@@ -51,6 +55,8 @@ public class ProfileFragment extends BaseFragment {
 
     // Args
     User user;
+
+    User currentUser;
 
     public static ProfileFragment newInstance(User user) {
         ProfileFragment fragment = new ProfileFragment();
@@ -104,19 +110,32 @@ public class ProfileFragment extends BaseFragment {
 
     private void retrieveUserInfo() {
         Context context = getActivity();
-        User currentUser = GolesApplication.get(context).getCurrentUser();
+        currentUser = GolesApplication.get(context).getCurrentUser();
+        startGetUserInfoJob(currentUser,context);
+        //TODO loading
+    }
 
+    public void startGetUserInfoJob(User currentUser, Context context){
         GetUserInfoJob job = GolesApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
         job.init(user.getIdUser(),currentUser);
         jobManager.addJobInBackground(job);
-        //TODO loading
+    }
+
+    public void startFollowUserJob(User currentUser, Context context){
+        GetFollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUserJob.class);
+        job.init(currentUser,user.getIdUser());
+        jobManager.addJobInBackground(job);
     }
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         user = event.getResult();
-        setUserInfo(user, event.getRelationship(), user.getFavoriteTeamName());
+        setUserInfo(user, event.doIFollowHim(), user.getFavoriteTeamName());
+    }
 
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+        setUserInfo(user,event.isDoIFollowHim(),user.getFavoriteTeamName());
     }
 
     private void setTitle(String title) {
@@ -137,17 +156,23 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    private void setUserInfo(User user, int relationshipWithUser, String favTeamName) {
+    private void setUserInfo(User user, boolean doIFollowHim, String favTeamName) {
         setBasicUserInfo(user);
         bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
-        setMainButtonStatus(relationshipWithUser);
+        setMainButtonStatus(doIFollowHim);
     }
 
-    private void setMainButtonStatus(int relationshipWithUser) {
-        boolean iAmFollowing = relationshipWithUser == Follow.RELATIONSHIP_FOLLOWING
-            || relationshipWithUser == Follow.RELATIONSHIP_BOTH;
-        followingButton.setVisibility(iAmFollowing ? View.VISIBLE : View.GONE);
-        followButton.setVisibility(iAmFollowing ? View.GONE : View.VISIBLE);
+    private void setMainButtonStatus(boolean doIFollowHim) {
+        boolean isMe = user.getIdUser().equals(currentUser.getIdUser());
+        if(isMe){
+            followingButton.setVisibility(View.GONE);
+            followButton.setVisibility(View.GONE);
+            editProfileButton.setVisibility(View.VISIBLE);
+        }else{
+            editProfileButton.setVisibility(View.GONE);
+            followingButton.setVisibility(doIFollowHim ? View.VISIBLE : View.GONE);
+            followButton.setVisibility(doIFollowHim ? View.GONE : View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.profile_marks_following_box)
@@ -158,6 +183,15 @@ public class ProfileFragment extends BaseFragment {
     @OnClick(R.id.profile_marks_followers_box)
     public void openFollowersList() {
         openUserFollowsList(UserFollowsFragment.FOLLOWERS);
+    }
+
+    @OnClick(R.id.profile_follow_button)
+    public void followUser(){
+        startFollowUserJob(currentUser, getActivity());
+    }
+    @OnClick(R.id.profile_following_button)
+    public void unfollowUser(){
+
     }
 
     private void openUserFollowsList(int followType) {
