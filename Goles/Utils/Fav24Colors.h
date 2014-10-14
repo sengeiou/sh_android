@@ -23,5 +23,6 @@
 +(UIColor *)backgroundTextViewSendShot;
 +(UIColor *)textTextViewSendShot;
 +(UIColor *)textWhatsUpViewSendShot;
++(UIColor *)dateTimelime;
 
 @end

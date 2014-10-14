@@ -29,10 +29,6 @@
     return [UIColor colorWithRed:1.0 green:0.23137254901961 blue:0.18823529411765 alpha:1.0];   //RGB(255,59,48)
 }
 
-+(UIColor *)noTVLabel {
-    return [UIColor lightGrayColor];
-
-}
 
 +(UIColor *)cellLabelGray {
     return [UIColor colorWithRed:143.0f/255.0f green:143.0f/255.0f blue:143.0f/255.0f alpha:1];
@@ -66,4 +62,7 @@
     return [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:192.0/255.0 alpha:1];
 }
 
++(UIColor *)dateTimelime{
+    return [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:192.0/255.0 alpha:1];
+}
 @end

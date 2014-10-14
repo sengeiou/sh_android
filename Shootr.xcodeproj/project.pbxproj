@@ -109,6 +109,9 @@
 		AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */; };
 		AAE0EF6D19E427A700F32FF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAE0EF6B19E427A700F32FF7 /* InfoPlist.strings */; };
 		AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */; };
+		AAF77D5E19ED32A50020E2FB /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5619ED32A50020E2FB /* ALView+PureLayout.m */; };
+		AAF77D5F19ED32A50020E2FB /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5819ED32A50020E2FB /* NSArray+PureLayout.m */; };
+		AAF77D6019ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5A19ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m */; };
 		AAFD7BCB19E7C36800535A35 /* SearchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFD7BCA19E7C36800535A35 /* SearchManager.m */; };
 /* End PBXBuildFile section */
 
@@ -308,6 +311,15 @@
 		AAE0EF6C19E427A700F32FF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Tests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineUtilities.h; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineUtilities.m; path = Goles/ViewControllers/TimeLine/TimeLineUtilities.m; sourceTree = SOURCE_ROOT; };
+		AAF77D5519ED32A50020E2FB /* ALView+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALView+PureLayout.h"; sourceTree = "<group>"; };
+		AAF77D5619ED32A50020E2FB /* ALView+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALView+PureLayout.m"; sourceTree = "<group>"; };
+		AAF77D5719ED32A50020E2FB /* NSArray+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PureLayout.h"; sourceTree = "<group>"; };
+		AAF77D5819ED32A50020E2FB /* NSArray+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PureLayout.m"; sourceTree = "<group>"; };
+		AAF77D5919ED32A50020E2FB /* NSLayoutConstraint+PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+PureLayout.h"; sourceTree = "<group>"; };
+		AAF77D5A19ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+PureLayout.m"; sourceTree = "<group>"; };
+		AAF77D5B19ED32A50020E2FB /* PureLayout+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PureLayout+Internal.h"; sourceTree = "<group>"; };
+		AAF77D5C19ED32A50020E2FB /* PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayout.h; sourceTree = "<group>"; };
+		AAF77D5D19ED32A50020E2FB /* PureLayoutDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayoutDefines.h; sourceTree = "<group>"; };
 		AAFD7BC919E7C36800535A35 /* SearchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchManager.h; sourceTree = "<group>"; };
 		AAFD7BCA19E7C36800535A35 /* SearchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -570,6 +582,7 @@
 		AA623DC51998D17700A942A9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				AAF77D5419ED32A50020E2FB /* Source */,
 				AACA541619C057C000E39D94 /* AFNetworking */,
 				AACA542A19C057C000E39D94 /* UIKit+AFNetworking */,
 				AA623E791998D19000A942A9 /* FacebookSDK.framework */,
@@ -785,6 +798,22 @@
 			path = "UIKit+AFNetworking";
 			sourceTree = "<group>";
 		};
+		AAF77D5419ED32A50020E2FB /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				AAF77D5519ED32A50020E2FB /* ALView+PureLayout.h */,
+				AAF77D5619ED32A50020E2FB /* ALView+PureLayout.m */,
+				AAF77D5719ED32A50020E2FB /* NSArray+PureLayout.h */,
+				AAF77D5819ED32A50020E2FB /* NSArray+PureLayout.m */,
+				AAF77D5919ED32A50020E2FB /* NSLayoutConstraint+PureLayout.h */,
+				AAF77D5A19ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m */,
+				AAF77D5B19ED32A50020E2FB /* PureLayout+Internal.h */,
+				AAF77D5C19ED32A50020E2FB /* PureLayout.h */,
+				AAF77D5D19ED32A50020E2FB /* PureLayoutDefines.h */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -943,6 +972,7 @@
 				A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
 				AA623E271998D17800A942A9 /* _Match.m in Sources */,
+				AAF77D5E19ED32A50020E2FB /* ALView+PureLayout.m in Sources */,
 				AA623E3B1998D17800A942A9 /* CoreDataGenerator.m in Sources */,
 				AA623E761998D17800A942A9 /* FavGeneralDAO.m in Sources */,
 				AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */,
@@ -950,6 +980,7 @@
 				AA623E781998D17800A942A9 /* FavRestConsumerHelper.m in Sources */,
 				AAFD7BCB19E7C36800535A35 /* SearchManager.m in Sources */,
 				A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */,
+				AAF77D5F19ED32A50020E2FB /* NSArray+PureLayout.m in Sources */,
 				AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
 				9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */,
@@ -961,6 +992,7 @@
 				AA623E321998D17800A942A9 /* _SML.m in Sources */,
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,
 				A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */,
+				AAF77D6019ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m in Sources */,
 				A59EECDD19D1761500D011C5 /* ShotTableViewCell.m in Sources */,
 				AACA544619C057C000E39D94 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */,

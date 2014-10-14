@@ -27,6 +27,7 @@
     NSUInteger lengthTextField;
     BOOL moreCells;
     BOOL refreshTable;
+    BOOL returningFromBackground;
     float rows;
     float rowsOLD;
     CGRect previousRect;
@@ -61,8 +62,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblNoShots;
 @property (weak, nonatomic) IBOutlet UILabel *lblShare;
 
+@property (strong, nonatomic) NSMutableDictionary *offscreenCells;
 
 @end
+
+static NSString *CellIdentifier = @"shootCell";
 
 @implementation TimeLineViewController
 
@@ -87,6 +91,8 @@
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
+    self.offscreenCells = [NSMutableDictionary dictionary];
+    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     [self setupTimeLineTableView];
 }
 
@@ -107,6 +113,7 @@
 - (void)returnBackground{
 
     //Get ping from server
+    returningFromBackground = YES;
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
 }
@@ -286,15 +293,36 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-   
+//    return [TimeLineUtilities heightForShot:shot.comment withTextViewWidth:self.txtView.frame.size.width];
     
-    return [TimeLineUtilities heightForShot:shot.comment withTextViewWidth:self.txtView.frame.size.width];
+    NSString *reuseIdentifier = CellIdentifier;
+    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
+    if (!cell) {
+        cell = [[ShotTableViewCell alloc] init];
+        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
+    }
+    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+    [cell addTarget:self action:@selector(goProfile:)];
+
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    
+    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+ 
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    
+     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    
+    height += 1;
+    
+    return height;
+
 }
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"shootCell";
     ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
 	
     Shot *shot = self.arrayShots[indexPath.row];
@@ -302,8 +330,6 @@
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
 
-//    cell.layer.shouldRasterize = YES;
-//    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
     
@@ -445,18 +471,19 @@
     if (status & !isShot)
         [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
     
-    
     if (isShot){
         self.orientation = NO;
         [self shotCreated];
         [self performSelectorOnMainThread:@selector(changecolortextview) withObject:nil waitUntilDone:NO];
     }else if(refresh)
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    else if(!status && !refresh && !isShot){
+    else if(!status && !refresh && !isShot && !returningFromBackground){
         //        self.orientation = NO;
-        //        [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
+        [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
     } else
         [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
+    
+    returningFromBackground = NO;
     
 }
 
@@ -522,7 +549,8 @@
 //------------------------------------------------------------------------------
 - (void)cleanViewWhenNotConnection{
     
-    [self keyboardHide:nil];
+//    [self keyboardHide:nil];
+    [self setupUIWhenCancelOrNotConnection];
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     
 }
@@ -582,14 +610,7 @@
     if (alertView.tag == 18) {
         switch (buttonIndex) {
             case 0:{
-                self.btnShoot.enabled = YES;
-                //self.txtView.userInteractionEnabled = YES;
-                self.viewToDisableTextField.hidden = YES;
-                self.orientation = NO;
-                [self keyboardHide:nil];
-                self.txtView.backgroundColor = [UIColor whiteColor];
-                self.txtView.textColor = [UIColor blackColor];
-                
+                [self setupUIWhenCancelOrNotConnection];
                 break;
             }
             case 1:
@@ -606,6 +627,17 @@
         self.btnShoot.enabled = YES;
         self.viewToDisableTextField.hidden = YES;
     }
+}
+
+//------------------------------------------------------------------------------
+- (void)setupUIWhenCancelOrNotConnection {
+    self.btnShoot.enabled = YES;
+    self.viewToDisableTextField.hidden = YES;
+    self.orientation = NO;
+    //                [self keyboardHide:nil];
+    self.txtView.backgroundColor = [UIColor whiteColor];
+    self.txtView.textColor = [UIColor blackColor];
+
 }
 
 #pragma mark - UIScrollViewDelegate

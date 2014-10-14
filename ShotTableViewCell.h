@@ -11,11 +11,12 @@
 
 @interface ShotTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet CustomTextView *txvText;
-@property (weak, nonatomic) IBOutlet UILabel *lblName;
-@property (weak, nonatomic) IBOutlet UILabel *lblDate;
-@property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
-@property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
+//@property (retain, nonatomic) IBOutlet CustomTextView *txvText;
+@property (retain, nonatomic) IBOutlet UILabel *txvText;
+@property (retain, nonatomic) IBOutlet UILabel *lblName;
+@property (retain, nonatomic) IBOutlet UILabel *lblDate;
+@property (retain, nonatomic) IBOutlet UIImageView *imgPhoto;
+@property (retain, nonatomic) IBOutlet UIButton *btnPhoto;
 
 - (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row;
 - (void)addTarget:(id)target action:(SEL)action;
