@@ -155,6 +155,7 @@ public class GMContract {
         public static final String UNIQUE_DEVICE_ID = "uniqueDeviceID";
         public static final String MODEL = "model";
         public static final String OS_VERSION = "osVer";
+        public static final String PLATFORM = "platform";
 
         public static final String[] PROJECTION = {
           ID_DEVICE,
@@ -162,6 +163,7 @@ public class GMContract {
           TOKEN,
           UNIQUE_DEVICE_ID,
           MODEL,
+          PLATFORM,
           OS_VERSION,
           CSYS_BIRTH,
           CSYS_MODIFIED,

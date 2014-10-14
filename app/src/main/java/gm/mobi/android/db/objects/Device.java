@@ -4,6 +4,7 @@ public class Device extends Synchronized {
 
     private Long idDevice;
     private Long idUser;
+    private Integer platform;
     private String token;
     private String uniqueDevideID;
     private String model;
@@ -55,5 +56,13 @@ public class Device extends Synchronized {
 
     public void setOsVer(String osVer) {
         this.osVer = osVer;
+    }
+
+    public Integer getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(Integer platform) {
+        this.platform = platform;
     }
 }

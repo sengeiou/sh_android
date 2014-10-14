@@ -1,5 +1,6 @@
 package gm.mobi.android.service;
 
+import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.Team;
@@ -73,6 +74,9 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Device updateDevice(Device device) throws IOException {
+        return null;
+    }
 
     public long getDelay() {
         return delay;

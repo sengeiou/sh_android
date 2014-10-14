@@ -6,10 +6,12 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.Team;
@@ -18,6 +20,7 @@ import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
 import gm.mobi.android.service.PaginatedResult;
+import gm.mobi.android.service.dataservice.dto.DeviceDtoFactory;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -42,29 +45,35 @@ public class BagdadDataService implements BagdadService {
     private OkHttpClient client;
     private Endpoint endpoint;
     private ObjectMapper mapper;
-    private UserDtoFactory userDtoFactory;
 
+    private UserDtoFactory userDtoFactory;
     private TimelineDtoFactory timelineDtoFactory;
     private ShotDtoFactory shotDtoFactory;
+    private DeviceDtoFactory deviceDtoFactory;
+
     private UserMapper userMapper;
     private FollowMapper followMapper;
     private ShotMapper shotMapper;
     private TeamMapper teamMapper;
+    private DeviceMapper deviceMapper;
 
     @Inject
     public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
-      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, UserMapper userMapper,
-      FollowMapper followMapper, ShotMapper shotMapper, TeamMapper teamMapper) {
+      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
+      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, TeamMapper teamMapper,
+      DeviceMapper deviceMapper) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
+        this.deviceDtoFactory = deviceDtoFactory;
         this.userMapper = userMapper;
         this.followMapper = followMapper;
         this.shotMapper = shotMapper;
         this.teamMapper = teamMapper;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
@@ -243,6 +252,22 @@ public class BagdadDataService implements BagdadService {
         int totalItems = metadata.getTotalItems().intValue();
         return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT).setPageOffset(pageOffset).setTotalItems(totalItems);
     }
+
+    @Override
+    public Device updateDevice(Device device) throws IOException {
+        GenericDto requestDto = deviceDtoFactory.getUpdateDeviceOperationDto(device);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Map<String, Object> dataItem = ops[0].getData()[0];
+        Device deviceReceived = deviceMapper.fromDto(dataItem);
+        return deviceReceived;
+    }
+
+
 
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
