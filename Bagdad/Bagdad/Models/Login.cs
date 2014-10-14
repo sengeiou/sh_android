@@ -214,15 +214,15 @@ namespace Bagdad.Models
                         Login loginParse = new Login();
 
                         loginParse.idUser = int.Parse(login["idUser"].ToString());
-                        loginParse.sessionToken = login["sessionToken"].ToString();
-                        loginParse.email = login["email"].ToString();
+                        loginParse.sessionToken = (login["sessionToken"] != null) ? login["sessionToken"].ToString() : null;
+                        loginParse.email = (login["email"] != null) ? login["email"].ToString() : null;
                         loginParse.idFavoriteTeam = int.Parse(login["idFavoriteTeam"].ToString());
-                        loginParse.favoriteTeamName = login["favoriteTeamName"].ToString();
-                        loginParse.userName = login["userName"].ToString();
-                        loginParse.name = login["name"].ToString();
-                        loginParse.photo = login["photo"].ToString();
-                        loginParse.bio = login["bio"].ToString();
-                        loginParse.website = login["website"].ToString();
+                        loginParse.favoriteTeamName = (login["favoriteTeamName"] != null) ? login["favoriteTeamName"].ToString() : null;
+                        loginParse.userName = (login["userName"] != null) ? login["userName"].ToString() : null;
+                        loginParse.name = (login["name"] != null) ? login["name"].ToString() : null;
+                        loginParse.photo = (login["photo"] != null) ? login["photo"].ToString() : null;
+                        loginParse.bio = (login["bio"] != null) ? login["bio"].ToString() : null;
+                        loginParse.website = (login["website"] != null) ? login["website"].ToString() : null; 
                         loginParse.points = int.Parse(login["points"].ToString());
                         loginParse.numFollowing = int.Parse(login["numFollowings"].ToString());
                         loginParse.numFollowers = int.Parse(login["numFollowers"].ToString());

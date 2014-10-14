@@ -541,7 +541,7 @@ namespace Bagdad.Models
 
                         shotParse.idShot = int.Parse(shot["idShot"].ToString());
                         shotParse.idUser = int.Parse(shot["idUser"].ToString());
-                        shotParse.comment = shot["comment"].ToString();
+                        shotParse.comment = (shot["comment"] != null) ? shot["comment"].ToString() : null;
                         shotParse.csys_birth = Double.Parse(shot["birth"].ToString());
                         shotParse.csys_modified = Double.Parse(shot["modified"].ToString());
                         Double deleted; if (Double.TryParse(shot["deleted"].ToString(), out deleted))

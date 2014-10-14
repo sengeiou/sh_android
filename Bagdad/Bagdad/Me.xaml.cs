@@ -58,29 +58,33 @@ namespace Bagdad
         {
             progress.IsVisible = true;
 
-            if(uvm.idUser != idUser) await uvm.GetUserProfileInfo(idUser);
-
-            if (uvm.idUser != App.ID_USER)
+            if (uvm.idUser != idUser)
             {
-                if (uvm.isFollowed)
+                if (await uvm.GetUserProfileInfo(idUser))
                 {
-                    headButtonText.Text = AppResources.ProfileButtonFollowing;
-                    headButton.Background = Resources["PhoneAccentBrush"] as SolidColorBrush;
-                    headButton.Foreground = new System.Windows.Media.SolidColorBrush(Colors.White);
-                    headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.check.png", UriKind.RelativeOrAbsolute));
-                    headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
-                    headButtonIconVisible.Fill = new System.Windows.Media.SolidColorBrush(Colors.White);
-                    isFollowing = true;
-                }
-                else
-                {
-                    headButtonText.Text = AppResources.ProfileButtonFollow;
-                    headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                    headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                    headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
-                    headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
-                    headButtonIconVisible.Fill = Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                    isFollowing = false;
+                    if (uvm.idUser != App.ID_USER)
+                    {
+                        if (uvm.isFollowed)
+                        {
+                            headButtonText.Text = AppResources.ProfileButtonFollowing;
+                            headButton.Background = Resources["PhoneAccentBrush"] as SolidColorBrush;
+                            headButton.Foreground = new System.Windows.Media.SolidColorBrush(Colors.White);
+                            headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.check.png", UriKind.RelativeOrAbsolute));
+                            headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
+                            headButtonIconVisible.Fill = new System.Windows.Media.SolidColorBrush(Colors.White);
+                            isFollowing = true;
+                        }
+                        else
+                        {
+                            headButtonText.Text = AppResources.ProfileButtonFollow;
+                            headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                            headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                            headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
+                            headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
+                            headButtonIconVisible.Fill = Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                            isFollowing = false;
+                        }
+                    }
                 }
             }
             else

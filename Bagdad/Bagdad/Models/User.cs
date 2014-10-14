@@ -137,6 +137,8 @@ namespace Bagdad.Models
         
         protected override String GetOps() { return ops_data; }
 
+        public String GetUserOps() { return ops_data; }
+
         /// <summary>
         /// Construimos el filtro 
         /// </summary>
@@ -277,7 +279,7 @@ namespace Bagdad.Models
             {
                 ServiceCommunication sc = new ServiceCommunication();
 
-                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
+                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + ops_data + "}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
@@ -286,15 +288,15 @@ namespace Bagdad.Models
                     JToken userProfileInfo = responseFollow["ops"][0]["data"][0];
 
                     uvm.idUser = int.Parse(userProfileInfo["idUser"].ToString());
-                    uvm.userNickName = userProfileInfo["userName"].ToString();
-                    uvm.userName = userProfileInfo["name"].ToString();
-                    uvm.userURLImage = userProfileInfo["photo"].ToString();
-                    uvm.userBio = userProfileInfo["bio"].ToString();
+                    uvm.userNickName = (userProfileInfo["userName"] != null) ? userProfileInfo["userName"].ToString() : null;
+                    uvm.userName = (userProfileInfo["name"] != null) ? userProfileInfo["name"].ToString() : null;
+                    uvm.userURLImage = (userProfileInfo["photo"] != null) ? userProfileInfo["photo"].ToString() : null;
+                    uvm.userBio = (userProfileInfo["bio"] != null) ? userProfileInfo["bio"].ToString() : null; 
                     uvm.points = int.Parse(userProfileInfo["points"].ToString());
                     uvm.following = int.Parse(userProfileInfo["numFollowings"].ToString());
                     uvm.followers = int.Parse(userProfileInfo["numFollowers"].ToString());
-                    uvm.userWebsite = userProfileInfo["website"].ToString();
-                    uvm.favoriteTeamName = userProfileInfo["favoriteTeamName"].ToString();
+                    uvm.userWebsite = (userProfileInfo["website"] != null) ? userProfileInfo["website"].ToString() : null;
+                    uvm.favoriteTeamName = (userProfileInfo["favoriteTeamName"] != null) ? userProfileInfo["favoriteTeamName"].ToString() : null; 
                 }
             }
             catch (Exception e)
