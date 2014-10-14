@@ -359,25 +359,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdJ-xp-bO4">
-                                <rect key="frame" x="0.0" y="180" width="600" height="200"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="No people found" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAh-pO-fvl">
-                                        <rect key="frame" x="174" y="90" width="252" height="46"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="46" id="1ef-RK-bXC"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                        <color key="textColor" red="0.58039215690000001" green="0.58039215690000001" blue="0.58039215690000001" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="ZRI-Xc-bkT"/>
-                                    <constraint firstAttribute="centerX" secondItem="HAh-pO-fvl" secondAttribute="centerX" id="iai-ts-kYZ"/>
-                                </constraints>
-                            </view>
                             <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cJS-FQ-TaX">
                                 <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -423,19 +404,6 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MF3-2u-oJr">
-                                                    <rect key="frame" x="482" y="11" width="110" height="28"/>
-                                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="28" id="7cn-WD-Z1b"/>
-                                                        <constraint firstAttribute="width" constant="110" id="fBh-b6-8Mn"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                                    <state key="normal" title="Following">
-                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    </state>
-                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Rlt-cB-Eav" firstAttribute="top" secondItem="upn-ZE-NPG" secondAttribute="topMargin" constant="-4" id="0sk-9T-H7h"/>
@@ -444,15 +412,11 @@
                                                 <constraint firstItem="3Vf-Fn-Zwy" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="60" id="Ngf-JD-WZt"/>
                                                 <constraint firstItem="REc-mc-x5c" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="60" id="Umw-0w-MwL"/>
                                                 <constraint firstItem="Rlt-cB-Eav" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="6" id="cYU-MF-4wN"/>
-                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="leading" secondItem="REc-mc-x5c" secondAttribute="trailing" constant="10" id="dcv-uX-QdP"/>
-                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="trailing" secondItem="upn-ZE-NPG" secondAttribute="trailingMargin" constant="-3" id="ezh-HM-6QT"/>
                                                 <constraint firstItem="rra-RM-YH3" firstAttribute="leading" secondItem="upn-ZE-NPG" secondAttribute="leadingMargin" constant="-8" id="gKM-Tl-bZz"/>
-                                                <constraint firstItem="MF3-2u-oJr" firstAttribute="leading" secondItem="3Vf-Fn-Zwy" secondAttribute="trailing" constant="10" id="rkQ-TT-rv8"/>
                                                 <constraint firstItem="rra-RM-YH3" firstAttribute="top" secondItem="upn-ZE-NPG" secondAttribute="topMargin" id="t88-VE-weJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="actionButton" destination="MF3-2u-oJr" id="Wuc-Vw-rrg"/>
                                             <outlet property="imgPhoto" destination="Rlt-cB-Eav" id="ASi-yX-iVg"/>
                                             <outlet property="lblNickName" destination="REc-mc-x5c" id="uvg-bL-c8X"/>
                                             <outlet property="lblfavouriteTeamName" destination="3Vf-Fn-Zwy" id="xdh-cz-qvJ"/>
@@ -470,10 +434,7 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="cJS-FQ-TaX" secondAttribute="trailing" constant="-16" id="CuW-o3-zPn"/>
                             <constraint firstItem="cJS-FQ-TaX" firstAttribute="top" secondItem="t5k-kh-eOd" secondAttribute="bottom" id="Izk-i6-ArC"/>
-                            <constraint firstItem="jdJ-xp-bO4" firstAttribute="leading" secondItem="rXB-kE-Tpn" secondAttribute="leadingMargin" constant="-16" id="a4H-Jq-zOU"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="jdJ-xp-bO4" secondAttribute="trailing" constant="-16" id="hFH-PR-Dt7"/>
                             <constraint firstAttribute="bottomMargin" secondItem="cJS-FQ-TaX" secondAttribute="bottom" id="iJc-zG-pKX"/>
-                            <constraint firstAttribute="centerY" secondItem="jdJ-xp-bO4" secondAttribute="centerY" constant="70" id="peI-hK-TaL"/>
                             <constraint firstItem="cJS-FQ-TaX" firstAttribute="leading" secondItem="rXB-kE-Tpn" secondAttribute="leadingMargin" constant="-16" id="uyD-Mp-Jaz"/>
                         </constraints>
                     </view>
@@ -493,7 +454,6 @@
                         <outlet property="btnAddFriends" destination="RDC-sc-Yyr" id="nuB-fF-gzy"/>
                         <outlet property="btnSearchFriends" destination="NFd-5Y-uWP" id="l47-0d-whh"/>
                         <outlet property="usersTable" destination="cJS-FQ-TaX" id="8wz-Yc-VD9"/>
-                        <outlet property="viewNotPeople" destination="jdJ-xp-bO4" id="uJ1-O8-s5X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Ll-Cj-Ywz" userLabel="First Responder" sceneMemberID="firstResponder"/>
