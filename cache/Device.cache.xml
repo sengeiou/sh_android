@@ -42,7 +42,7 @@
 	<EntityCacheManager Name="General" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
 		<DiskStore Path="java.io.tmpdir"/>
 		
-		<EntityCache Alias="User">
+		<EntityCache Alias="Device">
 			<Expiry Eternal="false">
 				<TimeToIdleSeconds>10</TimeToIdleSeconds>
 				<TimeToLiveSeconds>10</TimeToLiveSeconds>

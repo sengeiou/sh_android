@@ -39,7 +39,7 @@
 	</DefaultCacheManager>
 
 	<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
-	<EntityCacheManager Name="Gerenal" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
+	<EntityCacheManager Name="General" MaxBytesLocalHeap="250M" MaxBytesLocalDisk="10G">
 		<DiskStore Path="java.io.tmpdir"/>
 		
 		<EntityCache Alias="Language">
