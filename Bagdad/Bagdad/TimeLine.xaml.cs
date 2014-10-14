@@ -25,6 +25,7 @@ namespace Bagdad
 
         ApplicationBarIconButton appBarButtonShot;
         private DispatcherTimer timer;
+        private DispatcherTimer timerToLoad;
         public ProgressIndicator progress;
         bool endOfLocalList = false;
         bool endOfList = false;
@@ -56,6 +57,10 @@ namespace Bagdad
             timer = new DispatcherTimer();
             timer.Tick += timer_Tick;
             timer.Interval = new TimeSpan(0, 0, 0, 10);
+
+            timerToLoad = new DispatcherTimer();
+            timerToLoad.Tick += timerToLoad_Tick;
+            timerToLoad.Interval = new TimeSpan(0, 0, 0, 2);
 
             lastOrientation = this.Orientation;
 
@@ -158,12 +163,6 @@ namespace Bagdad
             try
             {
                 App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.SHOTS);
-                if (timer.IsEnabled)
-                {
-                    timer.Interval = new TimeSpan(0, 0, 0, 1);
-                    timer.Start();
-                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (1 seg) (SynchronizeShots)");
-                }
             }
             catch (Exception e)
             {
@@ -175,7 +174,7 @@ namespace Bagdad
         {
             try
             {
-                myShots.SelectedItem =myShots.Items.First();
+                myShots.SelectedItem = myShots.Items.First();
                 myShots.ScrollIntoView(myShots.Items.First());
                 progress.IsVisible = true;
                 if (!App.isInternetAvailable)
@@ -186,6 +185,8 @@ namespace Bagdad
                 }
                 else
                 {
+                    timer.Stop();
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (SendShot)");
                     newShot.IsEnabled = false;
                     appBarButtonShot.IsEnabled = false;
                     extraChars.Visibility = System.Windows.Visibility.Collapsed;
@@ -202,11 +203,11 @@ namespace Bagdad
                     }
                     else
                     {
-                        timer.Stop();
-                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (SendShot)");
-                        timer.Interval = new TimeSpan(0, 0, 0, 1);
-                        timer.Start();
-                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start to 1 seg (SendShot)");
+                        if (!timerToLoad.IsEnabled)
+                        {
+                            timerToLoad.Interval = new TimeSpan(0, 0, 0, 1);
+                            timerToLoad.Start();
+                        }
                         extraChars.Text = "140";
                         newShot.Text = "";
                         newShot.Hint = AppResources.WhatsUp;
@@ -214,6 +215,7 @@ namespace Bagdad
                         newShotFocused = false;
                         totalShots++;
                     }
+                    if (!timer.IsEnabled) timer.Start();
                     newShot.IsEnabled = true;
                     appBarButtonShot.IsEnabled = true;
                     if (NoShootsAdvice.Visibility == System.Windows.Visibility.Visible) NoShootsAdvice.Visibility = System.Windows.Visibility.Collapsed;
@@ -337,6 +339,19 @@ namespace Bagdad
             lastScrollPercent = scrollInterface.VerticalScrollPercent;
         }
 
+        async void timerToLoad_Tick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("· · · · · · · · timerToLoad UpdatingShotsOnScreen");
+            var hasNewShot = await App.ShotsVM.UpdateShotsOnScreen();
+            if(hasNewShot == 1)
+            {
+                if (progress.IsVisible) progress.IsVisible = false;
+                timerToLoad.Stop();
+                timerToLoad.Interval = new TimeSpan(0, 0, 0, 2);
+                System.Diagnostics.Debug.WriteLine("· · · · · · · · timerToLoad Stop  (TimerToLoadTick)");
+            }
+        }
+
         /// <summary>
         /// Evento del timer
         /// </summary>
@@ -346,28 +361,15 @@ namespace Bagdad
         {
             if (!App.isSynchroRunning())
             {
-                if (!timer.Interval.Equals(new TimeSpan(0, 0, 0, 1)))
-                {
-                    timer.Stop();
-                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 10 seg) (TimerTick)");
-                }
-                var hasNewShot = await App.ShotsVM.UpdateShotsOnScreen();
+                SynchronizeShots();
 
-                if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 10))) SynchronizeShots();
-                else if (progress.IsVisible) progress.IsVisible = false;
-                
-                if (timer.Interval.Equals(new TimeSpan(0, 0, 0, 1)))
+                if (!timerToLoad.IsEnabled)
                 {
-                    if (hasNewShot == 1)
-                    {
-                        progress.IsVisible = false;
-                        timer.Stop();
-                        System.Diagnostics.Debug.WriteLine("· · · · · · · · timer stop (implica que es de 1 seg) (TimerTick)");
-                    }
+                    System.Diagnostics.Debug.WriteLine("· · · · · · · · timerToLoad start (1 seg) (TimerTick)");
+                    timerToLoad.Start();
                 }
                 if (!timer.IsEnabled)
                 {
-                    timer.Interval = new TimeSpan(0, 0, 0, 10);
                     timer.Start();
                     System.Diagnostics.Debug.WriteLine("· · · · · · · · timer start (10 seg) (TimerTick)");
                 }

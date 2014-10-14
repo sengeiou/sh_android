@@ -165,7 +165,9 @@ namespace Bagdad.ViewModels
                 shot.comment = text.Replace("\r", "\\n");
                 shot.idUser = App.ID_USER;
                 if (await shot.isShotRepeatedIn24h()) return 0;
+                App.lockSynchro();
                 await shot.SynchronizeShot();
+                App.releaseSynchro();
                 return 1;
             }
             catch (TimeoutException timeExc)
