@@ -78,12 +78,20 @@
 
 //------------------------------------------------------------------------------
 -(Device *)getDevice{
-    return [Device updateWithDictionary:nil];
+    Device *device = [[self getActiveUser] device];
+    if (device) {
+        return device;
+    }
+    return nil;
 }
 
 //------------------------------------------------------------------------------
 -(NSNumber *)getIdDevice{
-    return [[self getDevice] idDevice];
+    
+    if ([[self getDevice] isKindOfClass:[Device class]]) {
+        return [[self getDevice] idDevice];
+    }
+    return nil;
 }
 
 

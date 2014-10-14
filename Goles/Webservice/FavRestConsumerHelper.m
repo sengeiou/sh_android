@@ -68,14 +68,14 @@
     NSInteger appVersion = [self getAppVersion];
     NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
     
-    if (idDevice)
+    if ([idDevice isKindOfClass:[NSNumber class]])
         [req addObject:idDevice];
     else
-        [req addObject:@0];
-    if (idPlayer)
+        [req addObject:[NSNull null]];
+    if ([idPlayer isKindOfClass:[NSNumber class]])
         [req addObject:idPlayer];
     else
-        [req addObject:@0];
+        [req addObject:[NSNull null]];
     
     [req addObject:idPlatform];
     [req addObject:[NSNumber numberWithInteger:appVersion]];
