@@ -34,6 +34,10 @@ public class UserListAdapter extends BindableAdapter<User> {
         notifyDataSetChanged();
     }
 
+    public boolean isFollowButtonVisible() {
+        return true;
+    }
+
     @Override public int getCount() {
         return users.size();
     }
@@ -62,6 +66,9 @@ public class UserListAdapter extends BindableAdapter<User> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
+        if (!isFollowButtonVisible()) {
+            viewHolder.followButton.setVisibility(View.GONE);
+        }
     }
 
     public List<User> getItems() {
@@ -72,6 +79,8 @@ public class UserListAdapter extends BindableAdapter<User> {
         @InjectView(R.id.user_avatar) ImageView avatar;
         @InjectView(R.id.user_name) TextView name;
         @InjectView(R.id.user_username) TextView username;
+        @InjectView(R.id.profile_follow_button) View followButton;
+
         public int position;
 
         public ViewHolder(View view) {

@@ -15,8 +15,12 @@ import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
+import gm.mobi.android.ui.adapters.PeopleAdapter;
+import java.util.List;
 
 public class PeopleFragment extends UserFollowsFragment {
+
+    private PeopleAdapter peopleAdapter;
 
     //TODO este fragment será independiente con diferentes vistas y comportamiento del UserFollowsFragment
 
@@ -58,6 +62,16 @@ public class PeopleFragment extends UserFollowsFragment {
     @Subscribe @Override
     public void showUserList(FollowsResultEvent event) {
         super.showUserList(event);
+    }
+
+    @Override
+    protected void setListContent(List<User> usersFollowing) {
+        if (peopleAdapter == null) {
+            peopleAdapter = new PeopleAdapter(getActivity(), picasso, usersFollowing);
+            userlistListView.setAdapter(peopleAdapter);
+        } else {
+            peopleAdapter.setItems(usersFollowing);
+        }
     }
 
     @Subscribe @Override

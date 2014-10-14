@@ -131,12 +131,16 @@ public class UserFollowsFragment extends BaseFragment {
         if (usersFollowing.size() == 0) {
             setEmpty(true);
         } else {
-            if (userListAdapter == null) {
-                userListAdapter = new UserListAdapter(getActivity(), picasso, usersFollowing);
-            } else {
-                userListAdapter.setItems(usersFollowing);
-            }
+            setListContent(usersFollowing);
+        }
+    }
+
+    protected void setListContent(List<User> usersFollowing) {
+        if (userListAdapter == null) {
+            userListAdapter = new UserListAdapter(getActivity(), picasso, usersFollowing);
             userlistListView.setAdapter(userListAdapter);
+        } else {
+            userListAdapter.setItems(usersFollowing);
         }
     }
 
