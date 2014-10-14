@@ -51,7 +51,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <!--<ColumnDefinition Width="Auto"/>-->
                         </Grid.ColumnDefinitions>
                         
                         <!--Column0-->
@@ -76,7 +76,7 @@
                         </Grid>
 
                         <!--Column2-->
-                        <Button Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2">
+                        <!--<Button Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2">
                             <Button.Content>
                                 <Grid HorizontalAlignment="Center">
 
@@ -88,7 +88,7 @@
 
                                 </Grid>
                             </Button.Content>
-                        </Button>
+                        </Button>-->
                         
                     </Grid>
                 </DataTemplate>

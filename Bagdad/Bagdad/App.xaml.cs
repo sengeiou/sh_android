@@ -17,6 +17,11 @@ using System.Threading;
 using Bagdad.Utils;
 using System.ComponentModel;
 using Bagdad.ViewModels;
+using Windows.Phone.Devices.Notification;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Coding4Fun.Toolkit.Controls;
+using Microsoft.Phone.Notification;
 
 namespace Bagdad
 {
@@ -44,14 +49,17 @@ namespace Bagdad
         /// </summary>
         public App()
         {
+            //Initialize Push Notification Receiver
+            setNotificationChannel();
+
             //Initialize the Network Status Control
             NetworkControl();
 
             // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
-            // Inicialización XAML estándar
-            InitializeComponent();
+            // Inicialización XAML estándar :: WE CALL THIS INSIDE THE setNotificationChannel() FUNCTION!!!
+            //InitializeComponent();
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -384,6 +392,171 @@ namespace Bagdad
 
                 return shotsViewModel;
             }
+        }
+
+        #endregion
+
+        #region SECCIÓN DE PUSHES
+
+        public String pushToken;
+
+        // Funciones referentes a Notificaciones Toast:
+        private void setNotificationChannel()
+        {
+            try
+            {
+                /// Holds the push channel that is created or found.
+                HttpNotificationChannel pushChannel;
+
+                // The name of our push channel.
+                string channelName = "Shootr";
+
+                InitializeComponent();
+
+                // Try to find the push channel.
+                pushChannel = HttpNotificationChannel.Find(channelName);
+
+                // If the channel was not found, then create a new connection to the push service.
+                if (pushChannel == null)
+                {
+                    //pushChannel = new HttpNotificationChannel(channelName, "wp-gm");
+                    pushChannel = new HttpNotificationChannel(channelName);
+
+                    // Register for all the events before attempting to open the channel.
+                    pushChannel.ChannelUriUpdated += new EventHandler<NotificationChannelUriEventArgs>(PushChannel_ChannelUriUpdated);
+                    pushChannel.ErrorOccurred += new EventHandler<NotificationChannelErrorEventArgs>(PushChannel_ErrorOccurred);
+
+                    // Register for this notification only if you need to receive the notifications while your application is running.
+                    pushChannel.ShellToastNotificationReceived += new EventHandler<NotificationEventArgs>(PushChannel_ShellToastNotificationReceived);
+
+                    pushChannel.Open();
+
+                    // Bind this new channel for toast events.
+                    pushChannel.BindToShellToast();
+
+                    System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
+
+                }
+                else
+                {
+                    // The channel was already open, so just register for all the events.
+                    pushChannel.ChannelUriUpdated += new EventHandler<NotificationChannelUriEventArgs>(PushChannel_ChannelUriUpdated);
+                    pushChannel.ErrorOccurred += new EventHandler<NotificationChannelErrorEventArgs>(PushChannel_ErrorOccurred);
+
+                    // Register for this notification only if you need to receive the notifications while your application is running.
+                    pushChannel.ShellToastNotificationReceived += new EventHandler<NotificationEventArgs>(PushChannel_ShellToastNotificationReceived);
+                    pushToken = pushChannel.ChannelUri.ToString();
+                    // Display the URI for testing purposes. Normally, the URI would be passed back to your web service at this point.
+                    System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("E R R O R : setNotificationChannel " + e.Message);
+            }
+        }
+
+        void PushChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
+        {
+
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                // Display the new URI for testing purposes.   Normally, the URI would be passed back to your web service at this point.
+                pushToken = e.ChannelUri.ToString();
+            });
+        }
+
+        void PushChannel_ErrorOccurred(object sender, NotificationChannelErrorEventArgs e)
+        {
+            // Error handling logic for your particular application would be here.
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+                System.Diagnostics.Debug.WriteLine(String.Format("A push notification {0} error occurred.  {1} ({2}) {3}",
+                    e.ErrorType, e.Message, e.ErrorCode, e.ErrorAdditionalData))
+                    );
+        }
+
+        //Mostrar Pushes cuando la App está en marcha.
+        void PushChannel_ShellToastNotificationReceived(object sender, NotificationEventArgs e)
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+
+                ToastPrompt toast = new ToastPrompt();
+
+                if (e.Collection.ContainsKey("wp:Text1"))
+                    toast.Title = e.Collection["wp:Text1"];
+                else
+                    toast.Title = "";
+
+                if (e.Collection.ContainsKey("wp:Text2"))
+                    toast.Message = e.Collection["wp:Text2"];
+                else
+                    toast.Message = "";
+
+                if (e.Collection.ContainsKey("wp:Param"))
+                    url = e.Collection["wp:Param"];
+                else
+                    url = "";
+
+
+                System.Diagnostics.Debug.WriteLine("-------------------PUSH APP ABIERTA RECIBIDO----------------: App.xaml.cs - url: " + url);
+                toast.MillisecondsUntilHidden = 6000;
+
+                toast.ImageSource = new BitmapImage(new Uri("Assets/GolesMessengerIcon.png", UriKind.RelativeOrAbsolute));
+
+                toast.Stretch = Stretch.Fill;
+
+                toast.ImageHeight = 21;
+                toast.ImageWidth = 21;
+
+                toast.FontSize = 15;
+                toast.Tap += goToDetail;
+                //toast.NavigationUri = new Uri(e.Collection["wp:Param"], UriKind.Relative);
+
+                System.Windows.Thickness margin = new System.Windows.Thickness();
+
+                margin.Left = 0;
+                margin.Right = 0;
+                margin.Top = -8;
+                margin.Bottom = 0;
+
+                toast.Margin = margin;
+
+                toast.Height = 64;
+
+                toast.Completed += ShowSystemTray;
+
+                toast.TextWrapping = TextWrapping.NoWrap;
+
+                toast.Show();
+                //SystemTray.IsVisible = false;
+
+                SystemTray.Opacity = 0;
+
+                //TODO: "Cargando" de sistema
+                //SystemTray.ProgressIndicator = new ProgressIndicator() { Text = "Cargando...", IsIndeterminate = true, IsVisible = true };
+
+                //testVibrationDevice.Vibrate(TimeSpan.FromSeconds(0.25));
+
+            });
+            // Display a dialog of all the fields in the toast.
+            //Deployment.Current.Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
+
+        }
+
+        private void ShowSystemTray(object sender, EventArgs e)
+        {
+            SystemTray.Opacity = 1;
+        }
+
+        private VibrationDevice testVibrationDevice = VibrationDevice.GetDefault();
+
+        private String url;
+
+        private void goToDetail(object sender, EventArgs e)
+        {
+            testVibrationDevice.Cancel();
+            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(new Uri(url, UriKind.RelativeOrAbsolute));
         }
 
         #endregion
