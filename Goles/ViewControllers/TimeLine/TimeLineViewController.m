@@ -75,7 +75,7 @@
     self.viewOptions.hidden = YES;
     
     [self textLocalizable];
-    
+    [self addPlaceHolder];
     //Set titleView
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
     
@@ -502,7 +502,7 @@
 -(void)addPlaceHolder{
     NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
     self.txtView.text = placeHolder;
-    self.txtView.textColor = [UIColor lightGrayColor];
+    self.txtView.textColor = [Fav24Colors textWhatsUpViewSendShot];
     self.txtView.backgroundColor = [UIColor whiteColor];
 
 }

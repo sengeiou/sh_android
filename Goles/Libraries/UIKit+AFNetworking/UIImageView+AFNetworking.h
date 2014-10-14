@@ -129,6 +129,7 @@
  @return The cached image.
  */
 - (UIImage *)cachedImageForRequest:(NSURLRequest *)request;
+- (UIImage *)cachedImageForName:(NSString *)name;
 
 /**
  Caches a particular image for the specified request.
@@ -138,6 +139,9 @@
  */
 - (void)cacheImage:(UIImage *)image
         forRequest:(NSURLRequest *)request;
+
+- (void)cacheImage:(UIImage *)image forName:(NSString *)name;
+
 @end
 
 #endif

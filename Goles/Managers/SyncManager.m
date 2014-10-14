@@ -114,7 +114,7 @@
                  if ([user.csys_syncronized isEqualToString:@"d"])
                      [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_USER withKey:key andData:dataArray andDelegate:delegate];
                  else
-                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate];
+                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_UPDATE_CREATE];
             }
             
             if  ([updatedEntity isKindOfClass:[Follow class]]){
@@ -122,7 +122,7 @@
                 Follow *follow = (Follow *)updatedEntity;
                 NSArray *dataArray = @[[Follow createDictFromEntity:follow]];
                 NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
-                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate];
+                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_CREATE_UPDATE];
             }
         }
     }

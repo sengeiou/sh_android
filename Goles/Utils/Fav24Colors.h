@@ -22,5 +22,6 @@
 +(UIColor *)iosNavigationBar;
 +(UIColor *)backgroundTextViewSendShot;
 +(UIColor *)textTextViewSendShot;
++(UIColor *)textWhatsUpViewSendShot;
 
 @end

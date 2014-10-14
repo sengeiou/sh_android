@@ -62,4 +62,8 @@
     return [UIColor colorWithRed:137.0/255.0 green:137.0/255.0 blue:137.0/255.0 alpha:1];
 }
 
++(UIColor *)textWhatsUpViewSendShot{
+    return [UIColor colorWithRed:190.0/255.0 green:190.0/255.0 blue:192.0/255.0 alpha:1];
+}
+
 @end

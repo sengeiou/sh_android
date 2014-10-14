@@ -472,7 +472,7 @@
 
 #pragma mark - CREATE
 //------------------------------------------------------------------------------
-- (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate{
+- (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate withOperation:(NSString *)operation{
     
     //Create Alias block
     NSString *alias = [NSString stringWithFormat:@"CREATE_%@",entity.uppercaseString];
@@ -484,7 +484,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create 'metadata' block
-    NSDictionary *metadata = @{K_WS_OPS_OPERATION:K_OP_CREATE_UPDATE,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
     
     //Create 'ops' block
     NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:dictArray};

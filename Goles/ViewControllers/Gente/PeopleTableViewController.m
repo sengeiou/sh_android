@@ -106,8 +106,7 @@
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-//    if (search) {
-    NSLog(@"CEldas a pintar: %lu", (unsigned long)self.followingUsers.count);
+    //NSLog(@"CEldas a pintar: %lu", (unsigned long)self.followingUsers.count);
     return self.followingUsers.count;
 }
 
@@ -153,11 +152,11 @@
 
 //------------------------------------------------------------------------------
 - (void)addLoadMoreCell{
-    if (search) {
+    if (search) {       
         self.usersTable.tableFooterView = self.spinner;
-        NSLog(@"ofsset: %lu",  self.followingUsers.count+1);
+        //NSLog(@"ofsset: %lu",  (unsigned long)self.followingUsers.count);
         moreCells = NO;
-        [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInt:self.followingUsers.count+1] withDelegate:self];
+        [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInteger:self.followingUsers.count] withDelegate:self];
         
     }
 }
@@ -245,13 +244,13 @@
         [self.followingUsers addObjectsFromArray:self.usersSearch];
 
         
-        NSLog(@"NUMERO TOTAL DE USUARIOS: %lu", (unsigned long)self.followingUsers.count);
+        //NSLog(@"NUMERO TOTAL DE USUARIOS: %lu", (unsigned long)self.followingUsers.count);
 
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
-        NSLog(@"NUMERO TOTAL DE USUARIOS ORDENADOS: %lu", (unsigned long)self.followingUsers.count);
+        //NSLog(@"NUMERO TOTAL DE USUARIOS ORDENADOS: %lu", (unsigned long)self.followingUsers.count);
 
         [self reloadTableWithAnimation];
         

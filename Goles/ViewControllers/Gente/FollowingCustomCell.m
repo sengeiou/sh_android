@@ -38,8 +38,6 @@
     else
         [self configureFollowButton];
 
-   
-    
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;
 }

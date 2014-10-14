@@ -131,7 +131,7 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    return newImage;
+   return newImage;
 }
 
 //------------------------------------------------------------------------------

@@ -84,7 +84,7 @@
                                                                                kJSON_SHOT_IDSHOT:[NSNull null],
                                                                                kJSON_SHOT_COMMENT:comment}];
 
-    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_SHOT withData:@[sendData] andKey:key andDelegate:delegate];
+    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_SHOT withData:@[sendData] andKey:key andDelegate:delegate withOperation:K_OP_INSERT];
 
 }
 
