@@ -38,7 +38,6 @@
                 [[UIImageView sharedImageCache] cacheImage:imageCreate forName: text];
             }else{
                 img.image = imageCacheDefault;
-
             }
         }];
     }else{
