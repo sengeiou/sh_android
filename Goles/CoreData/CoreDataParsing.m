@@ -147,10 +147,11 @@ NSString *const kJSON_ADVICE_IDMESSAGE                  = @"idMessage";
 //DEVICE
 NSString *const kJSON_ID_DEVICE                        = @"idDevice";
 NSString *const kJSON_TOKEN                            = @"token";
-NSString *const kJSON_DEVICE_OSVERSION                 = @"osVersion";
+NSString *const kJSON_DEVICE_OSVERSION                 = @"osVer";
 NSString *const kJSON_DEVICE_MODEL                     = @"model";
 NSString *const kJSON_DEVICE_APPVERSION                = @"appVer";
 NSString *const kJSON_DEVICE_LOCALE                    = @"locale";
+NSString *const kJSON_DEVICE_PLATFORM                  = @"platform";
 
 //FOLLOW
 NSString *const kJSON_FOLLOW_IDUSERFOLLOWED            = @"idFollowedUser";

@@ -10,6 +10,7 @@
 #import "Follow.h"
 #import "User.h"
 #import "Shot.h"
+#import "UserManager.h"
 
 @interface SyncManager ()
 
@@ -86,7 +87,7 @@
 #warning Move all process in this method to a block
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_USER,K_COREDATA_FOLLOW];
+    NSArray *entitiesToSynchro = @[K_COREDATA_USER,K_COREDATA_FOLLOW, K_COREDATA_DEVICE];
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
@@ -127,14 +128,13 @@
             
             if  ([updatedEntity isKindOfClass:[Device class]]){
                 
-                Device *device = (Device *)updatedEntity;
+                Device *device = [[UserManager sharedInstance] getDevice];
                 
-                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_DEVICE_APPVERSION: device.appVer,kJSON_DEVICE_LOCALE: device.locale}];
+                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform}];
                 
                 NSArray *dataArray = @[mutDict];
 
-                NSDictionary *key = @{kJSON_ID_DEVICE:device.idDevice};
-                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_UPDATE_CREATE];
+                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andDelegate:self withOperation:K_OP_UPDATE_CREATE];
             }
         }
     }

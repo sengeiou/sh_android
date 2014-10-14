@@ -14,13 +14,13 @@
 #import "User.h"
 #import "SyncManager.h"
 #import "Team.h"
+#import "Device.h"
 
 @implementation FilterCreation
 
 //-----------------------------------------------------------------------------
 + (NSDictionary *)getFilterForEntity:(Class)entity {
     
-    NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
     
     if ([entity isSubclassOfClass:[Follow class]]){
         
@@ -28,6 +28,8 @@
         NSNumber *userID = [[UserManager singleton] getUserId];
         if (![userID isKindOfClass:[NSNumber class]])
             return @{};
+        
+        NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
         
         NSArray *filterItemsFollow = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID},
                                        @{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_FOLLOW_IDUSERFOLLOWED,K_CD_VALUE:[NSNull null]}];
@@ -44,6 +46,8 @@
         if (![userID isKindOfClass:[NSNumber class]])
             return @{};
         
+        NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
+        
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",userID];
 		NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
 		NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
@@ -57,6 +61,8 @@
     
     if ([entity isSubclassOfClass:[Shot class]]){
         
+        NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
+        
         NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
                              @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
@@ -65,9 +71,18 @@
     
     if ([entity isSubclassOfClass:[Team class]]){
         
+        NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
+        
         NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
                              @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
+        return filter;
+    }
+    
+    if ([entity isSubclassOfClass:[Device class]]) {
+        NSDictionary *filter = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:[[UserManager sharedInstance]getUserId]}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_AND};
         return filter;
     }
     
@@ -162,7 +177,6 @@
     
     return filter;
 }
-
 
 #pragma mark - Helper methods
 //-----------------------------------------------------------------------------

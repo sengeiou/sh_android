@@ -107,10 +107,7 @@
     
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
     
-    if (search)
-        [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
-    else
-        [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:NO];
+    [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
     [cell addTarget:self action:@selector(goProfile:)];
     
     return cell;
@@ -329,7 +326,7 @@
          if (self.lastContentOffset > scrollView.contentOffset.y){
              [UIView animateWithDuration:0.25 animations:^{
                  [self.mySearchBar resignFirstResponder];
-             }];
+            }];
          }
     }
     

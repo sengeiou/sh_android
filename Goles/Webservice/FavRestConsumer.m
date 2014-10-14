@@ -522,6 +522,59 @@
         DLog(@"No valid req structure created");
 }
 
+//------------------------------------------------------------------------------
+- (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andDelegate:(id)delegate withOperation:(NSString *)operation{
+    
+    //Create Alias block
+    NSString *alias = [NSString stringWithFormat:@"CREATE_%@",entity.uppercaseString];
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = self.appDelegate.request;
+    
+    //Create 'metadata' block
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_FILTER:[FilterCreation getFilterForEntity:NSClassFromString(entity)], K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
+    
+    //Create 'ops' block
+    NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:dictArray};
+    
+    //Join all 'ops' blocks
+    NSArray *ops = @[opsDictionary];
+    
+    //Create full data structure
+    if (req && ops.count > 0) {
+        
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        
+        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
+            
+            if (!error){
+                
+                if ([entity isEqualToString:K_COREDATA_SHOT]) {
+                    [FavGeneralDAO shotParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
+                            [delegate createShotResponseWithStatus:YES andError:nil];
+                    }];
+                }else{
+                    [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                        if ([delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)])
+                            [delegate parserResponseForClass:NSClassFromString(entity) status:YES andError:nil andRefresh:nil];
+                    }];
+                }
+            }else {
+                DLog(@"Request error:%@",error);
+                if ([delegate respondsToSelector:@selector(createShotResponseWithStatus:andError:)])
+                    [delegate createShotResponseWithStatus:NO andError:error];
+            }
+        }];
+    }else
+        DLog(@"No valid req structure created");
+}
+
+
+
 #pragma mark - DELETE
 //------------------------------------------------------------------------------
 - (void)deleteEntity:(NSString *)entity withKey:(NSDictionary *)key andData:(NSArray *)data andDelegate:(id)delegate{

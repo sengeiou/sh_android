@@ -149,6 +149,7 @@ extern NSString *const kJSON_DEVICE_OSVERSION;
 extern NSString *const kJSON_DEVICE_MODEL;
 extern NSString *const kJSON_DEVICE_APPVERSION;
 extern NSString *const kJSON_DEVICE_LOCALE;
+extern NSString *const kJSON_DEVICE_PLATFORM;
 
 //FOLLOW
 extern NSString *const kJSON_FOLLOW_IDUSERFOLLOWED;
