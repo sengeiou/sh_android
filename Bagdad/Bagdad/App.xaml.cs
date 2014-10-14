@@ -55,11 +55,11 @@ namespace Bagdad
             // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
-            // Inicialización XAML estándar
-            InitializeComponent();
-
             //Initialize Push Notification Receiver
             setNotificationChannel();
+
+            // Inicialización XAML estándar
+            InitializeComponent();
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -432,8 +432,6 @@ namespace Bagdad
                     // Bind this new channel for toast events.
                     pushChannel.BindToShellToast();
 
-                    if(pushChannel.ChannelUri != null) System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
-
                 }
                 else
                 {
@@ -461,6 +459,7 @@ namespace Bagdad
             {
                 // Display the new URI for testing purposes.   Normally, the URI would be passed back to your web service at this point.
                 pushToken = e.ChannelUri.ToString();
+                System.Diagnostics.Debug.WriteLine(" - - - - Token: " + pushToken);
             });
         }
 
