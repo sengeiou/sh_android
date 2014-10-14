@@ -18,6 +18,7 @@
 #import "SearchManager.h"
 #import "CoreDataParsing.h"
 #import "Fav24Colors.h"
+#import "FindFriendsViewController.h"
 
 @interface PeopleTableViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
 
@@ -280,13 +281,19 @@
 - (IBAction)searchFriends:(id)sender {
     [self initSpinner];
 
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = nil;
-
-    self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
-    self.mySearchBar.delegate = self;
-    [self.mySearchBar becomeFirstResponder];
-    [self.navigationController.navigationBar addSubview:self.mySearchBar];
+//    self.navigationItem.rightBarButtonItem = nil;
+//    self.navigationItem.leftBarButtonItem = nil;
+//
+//    self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
+//    self.mySearchBar.delegate = self;
+//    [self.mySearchBar becomeFirstResponder];
+//    [self.navigationController.navigationBar addSubview:self.mySearchBar];
+    
+    FindFriendsViewController *findFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"findFriendsVC"];
+    
+    [self presentViewController:findFriendsVC animated:YES completion:^{
+        NSLog(@"Paso");
+    }];
 
 }
 
