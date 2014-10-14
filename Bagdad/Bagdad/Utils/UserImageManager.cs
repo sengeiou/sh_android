@@ -34,7 +34,8 @@ namespace Bagdad.Utils
                     
                     idUser = int.Parse(dividedItem[0]);
                     string url = dividedItem[1];
-                    if (!IsolatedStorageFile.GetUserStoreForApplication().FileExists(idUser + ".jpg"))
+
+                    if (!IsolatedStorageFile.GetUserStoreForApplication().FileExists(idUser + ".jpg") && !String.IsNullOrEmpty(url))
                     {
                         Debug.WriteLine("SAVING IMAGE: " + url + " FOR idUser: " + idUser);
 
