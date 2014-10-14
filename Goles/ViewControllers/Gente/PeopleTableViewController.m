@@ -14,7 +14,6 @@
 #import "FavRestConsumer.h"
 #import "User.h"
 #import "Follow.h"
-#import "FindFriendsTableViewController.h"
 #import "PeopleLineUtilities.h"
 #import "SearchManager.h"
 #import "CoreDataParsing.h"
@@ -120,7 +119,10 @@
     
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
 
-	[cell configureCellWithUser:user inRow:indexPath];
+    if (search)
+        [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
+    else
+        [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:NO];
     [cell addTarget:self action:@selector(goProfile:)];
 
 	return cell;

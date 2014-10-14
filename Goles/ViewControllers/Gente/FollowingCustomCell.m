@@ -36,9 +36,33 @@
     else if (user.idUser == [[UserManager singleton] getUserId])
         self.actionButton.hidden = YES;
     else
-		[self configureFollowButton];
-    
+        [self configureFollowButton];
+
    
+    
+    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
+    self.photobutton.tag = indexPath.row;
+}
+
+//------------------------------------------------------------------------------
+-(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching{
+    
+    self.lblNickName.text = user.userName;
+    self.lblfavouriteTeamName.text = user.favoriteTeamName;
+    
+    self.actionButton.layer.cornerRadius = 5.0f;
+    
+    if  (searching){
+        if ([self checkIfImFollowingUser:user])
+            [self configureFollowingButton];
+        else if (user.idUser == [[UserManager singleton] getUserId])
+            self.actionButton.hidden = YES;
+        else
+            [self configureFollowButton];
+    }
+    else
+        self.actionButton.hidden = YES;
+    
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;
