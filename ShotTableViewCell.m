@@ -69,6 +69,8 @@
         [self.contentView addSubview:self.imgPhoto];
         [self.contentView addSubview:self.btnPhoto];
         [self.contentView addSubview:self.lblDate];
+        
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     return self;
@@ -100,7 +102,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
