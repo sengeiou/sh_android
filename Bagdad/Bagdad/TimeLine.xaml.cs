@@ -377,20 +377,20 @@ namespace Bagdad
             svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
             scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            if (extraShots > 0 && scrollInterface.VerticalScrollPercent > 0)
-            {
-                if (extraShots > 10) GoToTopText.Text = "+10";
-                else GoToTopText.Text = extraShots.ToString();
-                GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeMedium"];
-                GoToTopText.Foreground = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
-                GoToTopEllipse.Stroke = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+            //////////if (extraShots > 0 && scrollInterface.VerticalScrollPercent > 0)
+            //////////{
+            //////////    if (extraShots > 10) GoToTopText.Text = "+10";
+            //////////    else GoToTopText.Text = extraShots.ToString();
+            //////////    GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeMedium"];
+            //////////    GoToTopText.Foreground = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+            //////////    GoToTopEllipse.Stroke = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
 
-                GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-                totalShots = myShots.Items.Count;
-            }
+            //////////    GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
+            //////////}
+            //////////else
+            //////////{
+            //////////    totalShots = myShots.Items.Count;
+            //////////}
         }
 
         private void Rectangle_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -407,23 +407,23 @@ namespace Bagdad
             myShots.ItemsSource = App.ShotsVM.shotsList;
         }
 
-        private void GoToTopGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
-        {
-            GoToTopButtonAnimation.Begin();
-            GoToTopButtonAnimation.Completed += GoTopAndResetButton;
-        }
+        ////////////////////private void GoToTopGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        ////////////////////{
+        ////////////////////    GoToTopButtonAnimation.Begin();
+        ////////////////////    GoToTopButtonAnimation.Completed += GoTopAndResetButton;
+        ////////////////////}
 
-        private void GoTopAndResetButton(object sender, EventArgs e)
-        {
-            myShots.ScrollIntoView(myShots.Items.First());
-            GoToTopText.Text = "↑";
-            GoToTopText.Foreground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-            GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeExtraLarge"];
-            GoToTopEllipse.Stroke = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-            extraShots = 0;
-            totalShots = myShots.Items.Count;
-            lastScrollPercent = 0;
-        }
+        ////////////////////private void GoTopAndResetButton(object sender, EventArgs e)
+        ////////////////////{
+        ////////////////////    myShots.ScrollIntoView(myShots.Items.First());
+        ////////////////////    GoToTopText.Text = "↑";
+        ////////////////////    GoToTopText.Foreground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+        ////////////////////    GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeExtraLarge"];
+        ////////////////////    GoToTopEllipse.Stroke = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+        ////////////////////    extraShots = 0;
+        ////////////////////    totalShots = myShots.Items.Count;
+        ////////////////////    lastScrollPercent = 0;
+        ////////////////////}
 
         private async void myShots_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -432,14 +432,14 @@ namespace Bagdad
             svAutomation = (ListBoxAutomationPeer)ScrollViewerAutomationPeer.CreatePeerForElement(myShots);
             scrollInterface = (IScrollProvider)svAutomation.GetPattern(PatternInterface.Scroll);
 
-            if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent < lastScrollPercent)
-            {
-                GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
-            }
-            else if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > lastScrollPercent && extraShots == 0)
-            {
-                GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
-            }
+            ////////////if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent < lastScrollPercent)
+            ////////////{
+            ////////////    GoToTopGrid.Visibility = System.Windows.Visibility.Visible;
+            ////////////}
+            ////////////else if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > lastScrollPercent && extraShots == 0)
+            ////////////{
+            ////////////    GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+            ////////////}
 
             //pagination
             if (myShots.Items.Count() != 0)
@@ -447,7 +447,7 @@ namespace Bagdad
                 scrollToChargue = 100 - (15 * 100 / myShots.Items.Count());
             }
 
-            if (scrollInterface.VerticalScrollPercent == 0) GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+            //////////if (scrollInterface.VerticalScrollPercent == 0) GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
 
             if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > scrollToChargue && !synchroWorking)
             {
