@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
@@ -10,6 +13,9 @@ public class InsertShot implements GenericServiceHook {
 
 
 	private static final String ENTITY_SHOT = "Shot";
+
+	private static final String ATTR_IDSHOT = "idShot";
+	private static final String ATTR_IDUSER = "idUser";
 	private static final String ATTR_COMMENT = "comment";
 
 	/**
@@ -36,15 +42,6 @@ public class InsertShot implements GenericServiceHook {
 
 
 		return description.toString();
-	}
-
-	private boolean isOperationMod(EntityAccessPolicy.OperationType operationType) {
-
-		return (operationType.equals(EntityAccessPolicy.OperationType.CREATE))
-				|| (operationType.equals(EntityAccessPolicy.OperationType.CREATE_UPDATE))
-				|| (operationType.equals(EntityAccessPolicy.OperationType.UPDATE))
-				|| (operationType.equals(EntityAccessPolicy.OperationType.UPDATE_CREATE))
-				;
 	}
 
 	/**
@@ -77,7 +74,8 @@ public class InsertShot implements GenericServiceHook {
 	@Override
 	public <T> HookMethodOutput operationBegin(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) {
 
-		if (isOperationMod(operation.getMetadata().getOperation()) && ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
+		if (operation.getMetadata().getOperation().equals(EntityAccessPolicy.OperationType.CREATE) && 
+				ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
 
 			for (DataItem dataItem : operation.getData()) {
 
@@ -103,6 +101,21 @@ public class InsertShot implements GenericServiceHook {
 	 */
 	@Override
 	public <T> HookMethodOutput operationEnd(T connection, EntityAccessPolicy entityAccessPolicy, Operation operation) {
+
+		if (operation.getMetadata().getOperation().equals(EntityAccessPolicy.OperationType.CREATE) && 
+				ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
+
+			for (DataItem dataItem : operation.getData()) {
+
+				Map<String, Object> attrs = new HashMap<String, Object>();
+				
+				attrs.put(ATTR_IDSHOT, dataItem.getAttributes().get(ATTR_IDSHOT));
+				attrs.put(ATTR_IDUSER, dataItem.getAttributes().get(ATTR_IDUSER));
+				attrs.put(ATTR_COMMENT, dataItem.getAttributes().get(ATTR_COMMENT));
+				
+				// Envío an sistema de push.
+			}
+		}
 
 		return HookMethodOutput.CONTINUE;
 	}

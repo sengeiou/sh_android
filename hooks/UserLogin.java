@@ -137,8 +137,6 @@ public class UserLogin implements GenericServiceHook {
 				return new HookMethodOutput("This request must have as identifier  <b>email</b> or <b> userName </b>.");
 			}
 
-
-
 			if ( !ATTR_PASSWORD.equals(passwordName) ){
 				return new HookMethodOutput("No password was specified.");
 			}
