@@ -285,6 +285,10 @@
     if ([idFavoriteTeam isKindOfClass:[NSNumber class]])
         [user setIdFavoriteTeam:idFavoriteTeam];
     
+    NSString *favoriteTeamName = [dict objectForKey:kJSON_FAVORITE_TEAM_NAME ];
+    if ([favoriteTeamName isKindOfClass:[NSString class]])
+        [user setFavoriteTeamName:favoriteTeamName];
+    
     NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
     if ([sessionToken isKindOfClass:[NSString class]])
         [user setSessionToken:sessionToken];

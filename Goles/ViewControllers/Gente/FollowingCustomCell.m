@@ -28,7 +28,6 @@
 
     self.lblNickName.text = user.userName;
     self.lblfavouriteTeamName.text = user.favoriteTeamName;
-	
     self.actionButton.layer.cornerRadius = 5.0f;
 	
     if ([self checkIfImFollowingUser:user])
@@ -47,7 +46,6 @@
     
     self.lblNickName.text = user.userName;
     self.lblfavouriteTeamName.text = user.favoriteTeamName;
-    
     self.actionButton.layer.cornerRadius = 5.0f;
     
     if  (searching){
