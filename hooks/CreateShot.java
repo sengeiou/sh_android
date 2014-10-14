@@ -9,7 +9,7 @@ import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
 
 
-public class InsertShot implements GenericServiceHook {
+public class CreateShot implements GenericServiceHook {
 
 
 	private static final String ENTITY_SHOT = "Shot";
@@ -23,7 +23,7 @@ public class InsertShot implements GenericServiceHook {
 	 */
 	@Override
 	public String getAlias() {
-		return "InsertShot";
+		return "CreateShot";
 	}
 
 	/**
@@ -46,10 +46,6 @@ public class InsertShot implements GenericServiceHook {
 
 	/**
 	 * {@inheritDoc}
-	 * <p/>
-	 * Este metodo valida que se cumplen todas las precondiciones antes de empezar a resolver las operaciones.
-	 * <p/>
-	 * Si alguna precondicion no se cumple devuelve su respectivo error.
 	 */
 	@Override
 	public <T> HookMethodOutput requestBegin(T connection, AccessPolicy accessPolicy, Generic generic) {

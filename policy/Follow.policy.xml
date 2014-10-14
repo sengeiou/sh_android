@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <AccessPolicy Version="1.0.0" Description="Políticas de acceso a las entidades de la aplicación Shooter">
     <Entities Name="Entidades Base">
-        <Entity AllowedOperations="Retrieve CreateUpdate UpdateCreate Delete" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
+        <Entity AllowedOperations="Retrieve Create Delete" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
             <Name Alias="Follow">Follow</Name>
             <Data>
                 <!-- Follow -->

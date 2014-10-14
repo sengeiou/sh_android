@@ -117,7 +117,8 @@ public class UserLogin implements GenericServiceHook {
 			String passwordName = null;
 			String passwordValue = null;
 
-			for(int i = 0 ; i < 2 ; i++){
+			for (int i = 0 ; i < 2 ; i++) {
+
 				String tmp = generic.getOperations().get(0).getMetadata().getKey().get(i).getName();
 				if ( ATTR_USERNAME.equals(tmp)) {
 					identifierName = tmp;
