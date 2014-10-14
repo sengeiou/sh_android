@@ -40,6 +40,7 @@ NSString *const k_NOTIF_BACKGROUND                     = @"ReturnForBackground";
 NSString *const K_OP_RETREAVE                           = @"retrieve";
 NSString *const K_OP_INSERT                             = @"create";
 NSString *const K_OP_CREATE_UPDATE                      = @"createUpdate";
+NSString *const K_OP_UPDATE_CREATE                      = @"updateCreate";
 NSString *const K_OP_UPDATE                             = @"update";
 NSString *const K_OP_DELETE                             = @"delete";
 

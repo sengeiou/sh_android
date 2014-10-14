@@ -277,6 +277,7 @@
         appDelegate.request = [FavRestConsumerHelper createREQ];
         [appDelegate registerAPNS];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
+        
     }
 }
 

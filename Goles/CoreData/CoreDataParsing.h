@@ -41,6 +41,7 @@ extern NSString *const K_OP_INSERT;
 extern NSString *const K_OP_CREATE_UPDATE;
 extern NSString *const K_OP_UPDATE;
 extern NSString *const K_OP_DELETE;
+extern NSString *const K_OP_UPDATE_CREATE;
 
 //General blocks
 extern NSString *const K_WS_REQ;
