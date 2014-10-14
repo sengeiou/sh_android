@@ -387,10 +387,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case CONTAINS:
 				resultingFilter.append(" LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add("%" + value.toString() + "%");
 				}
 				catch(Throwable t) {
@@ -399,10 +399,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case STARTS:
 				resultingFilter.append(" LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add(value.toString() + "%");
 				}
 				catch(Throwable t) {
@@ -411,10 +411,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case ENDS:
 				resultingFilter.append(" LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add("%" + value.toString());
 				}
 				catch(Throwable t) {
@@ -423,10 +423,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case NOTCONTAINS:
 				resultingFilter.append(" NOT LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add("%" + value.toString() + "%");
 				}
 				catch(Throwable t) {
@@ -435,10 +435,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case NOTSTARTS:
 				resultingFilter.append(" NOT LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add(value.toString() + "%");
 				}
 				catch(Throwable t) {
@@ -447,10 +447,10 @@ public class GenericServiceJDBCHelper {
 				break;
 			case NOTENDS:
 				resultingFilter.append(" NOT LIKE ?");
-				
+
 				try {
 					CharSequence value = (CharSequence)filter.getValue();
-					
+
 					values.add("%" + value.toString());
 				}
 				catch(Throwable t) {
@@ -964,53 +964,57 @@ public class GenericServiceJDBCHelper {
 			}
 		}
 
-		recoveredQuery.append(" FROM ").append(entityAccessPolicy.getName().getName());
+		// En caso de necesitar recuperar alguna atributo de la key (sobretodo en caso de keys compuestas), se consulta el registro.
+		if (!firstField) {
+			
+			recoveredQuery.append(" FROM ").append(entityAccessPolicy.getName().getName());
 
-		recoveredQuery.append(" WHERE ").append(fndQuery);
+			recoveredQuery.append(" WHERE ").append(fndQuery);
 
-		ResultSet resultSet = null;
+			ResultSet resultSet = null;
 
-		try {
-			preparedStatement = connection.prepareStatement(recoveredQuery.toString());
+			try {
+				preparedStatement = connection.prepareStatement(recoveredQuery.toString());
 
-			for (int i=0; i<fndTypes.size(); i++) {
-				preparedStatement.setObject(i+1, fndParams.get(i), fndTypes.get(i));
-			}
+				for (int i=0; i<fndTypes.size(); i++) {
+					preparedStatement.setObject(i+1, fndParams.get(i), fndTypes.get(i));
+				}
 
-			resultSet = preparedStatement.executeQuery();
+				resultSet = preparedStatement.executeQuery();
 
-			if (resultSet.first()) {
+				if (resultSet.first()) {
 
-				int i=1;
-				for (String attributeAlias : attributes) {
+					int i=1;
+					for (String attributeAlias : attributes) {
 
-					Object value = resultSet.getObject(i++);
+						Object value = resultSet.getObject(i++);
 
-					if (resultSet.wasNull()) {
-						value = null;
+						if (resultSet.wasNull()) {
+							value = null;
+						}
+						else {
+
+							value = translateFromType(attributesType.get(i-1), value);
+						}
+
+						dataItem.getAttributes().put(attributeAlias, value);
 					}
-					else {
+				}
+				else {
+					throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+				}
 
-						value = translateFromType(attributesType.get(i-1), value);
-					}
-
-					dataItem.getAttributes().put(attributeAlias, value);
+				if (resultSet.next()) {
+					throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
 				}
 			}
-			else {
-				throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+			catch(SQLException e) {
+				throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
 			}
-
-			if (resultSet.next()) {
-				throw new ServerException(GenericService.ERROR_REFURBISHED_ROW_LOST, String.format(GenericService.ERROR_REFURBISHED_ROW_LOST_MESSAGE, "DML: " + recoveredQuery + ". Valores: " + params.toString()));
+			finally {
+				JDBCUtils.CloseQuietly(resultSet);
+				JDBCUtils.CloseQuietly(preparedStatement);
 			}
-		}
-		catch(SQLException e) {
-			throw new ServerException(GenericService.ERROR_REFURBISHING_ROW, String.format(GenericService.ERROR_REFURBISHING_ROW_MESSAGE, dataItem.toString(), e.getMessage()));
-		}
-		finally {
-			JDBCUtils.CloseQuietly(resultSet);
-			JDBCUtils.CloseQuietly(preparedStatement);
 		}
 
 		return true;

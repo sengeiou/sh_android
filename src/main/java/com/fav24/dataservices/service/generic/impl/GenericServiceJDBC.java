@@ -412,14 +412,15 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				for (String inAlias : inAliases) {
 
 					Object value = itemAttributes.get(inAlias);
-
+					String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
+					
 					if (value == null) {
 
-						preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+						preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
 					}
 					else {
 
-						preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+						preparedStatement.setObject(i, value, entityInformation.dataFields.get(columnName));
 					}
 
 					i++;
@@ -1144,14 +1145,15 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				for (String inAlias : inAliases) {
 
 					Object value = itemAttributes.get(inAlias);
-
+					String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
+					
 					if (value == null) {
 
-						preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+						preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
 					}
 					else {
 
-						preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+						preparedStatement.setObject(i, value, entityInformation.dataFields.get(columnName));
 					}
 
 					i++;
@@ -1368,14 +1370,15 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					for (String inAlias : inAliases) {
 
 						Object value = itemAttributes.get(inAlias);
-
+						String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
+						
 						if (value == null) {
 
-							preparedStatement.setNull(i, entityInformation.dataFields.get(inAlias));
+							preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
 						}
 						else {
 
-							preparedStatement.setObject(i, value, entityInformation.dataFields.get(inAlias));
+							preparedStatement.setObject(i, value, entityInformation.dataFields.get(columnName));
 						}
 
 						i++;
