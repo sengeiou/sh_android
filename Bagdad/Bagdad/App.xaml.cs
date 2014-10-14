@@ -49,17 +49,17 @@ namespace Bagdad
         /// </summary>
         public App()
         {
-            //Initialize Push Notification Receiver
-            setNotificationChannel();
-
             //Initialize the Network Status Control
             NetworkControl();
 
             // Controlador global para excepciones no detectadas.
             UnhandledException += Application_UnhandledException;
 
-            // Inicialización XAML estándar :: WE CALL THIS INSIDE THE setNotificationChannel() FUNCTION!!!
+            // Inicialización XAML estándar
             InitializeComponent();
+
+            //Initialize Push Notification Receiver
+            setNotificationChannel();
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -500,7 +500,7 @@ namespace Bagdad
                 System.Diagnostics.Debug.WriteLine("-------------------PUSH APP ABIERTA RECIBIDO----------------: App.xaml.cs - url: " + url);
                 toast.MillisecondsUntilHidden = 6000;
 
-                toast.ImageSource = new BitmapImage(new Uri("Assets/GolesMessengerIcon.png", UriKind.RelativeOrAbsolute));
+                toast.ImageSource = new BitmapImage(new Uri("Assets/Tiles/FlipCycleTileEnd.png", UriKind.RelativeOrAbsolute));
 
                 toast.Stretch = Stretch.Fill;
 
@@ -529,7 +529,7 @@ namespace Bagdad
                 toast.Show();
                 //SystemTray.IsVisible = false;
 
-                SystemTray.Opacity = 0;
+                //SystemTray.Opacity = 0;
 
                 //TODO: "Cargando" de sistema
                 //SystemTray.ProgressIndicator = new ProgressIndicator() { Text = "Cargando...", IsIndeterminate = true, IsVisible = true };
