@@ -363,7 +363,8 @@
     }else{
         //NSLog(@"TODAS");
         self.timelineVC.orientation = YES;
-        return UIInterfaceOrientationMaskAll;
+//        return UIInterfaceOrientationMaskAll;
+        return UIInterfaceOrientationMaskAllButUpsideDown;
     }
 }
 

@@ -338,12 +338,18 @@
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
     
-    CGRect screenRect = self.usersTable.frame;
-
-    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height+45, 30);
-    else if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height+20, 30);
+    CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+    
+    NSLog(@"Orientation:%d:",[[UIDevice currentDevice] orientation]);
+    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
+        if (screenRect.size.height > screenRect.size.width)
+            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
+        else
+            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
+    }
+    else if ([[UIDevice currentDevice] orientation] == 1){
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height-10, 30);
+    }
 
 }
 

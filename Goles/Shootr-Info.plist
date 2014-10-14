@@ -10,8 +10,6 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.fav24.goles5</string>
-	<key>SBUsesNetwork</key>
-	<true/>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -28,6 +26,8 @@
 	<string>161313233893784</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>SBUsesNetwork</key>
+	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>Setup2</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -37,7 +37,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
