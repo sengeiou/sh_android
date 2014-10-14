@@ -1,7 +1,6 @@
 package test.com.fav24.dataservices.xml.policy;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -12,16 +11,11 @@ import com.fav24.dataservices.xml.policy.AccessPolicyDOM;
 public class AccessPolicyDOMTest {
 	
 	@Test
-	public void loadPolicyExample() {
+	public void canLoadPolicyFile() throws ServerException {
 		
 		AccessPolicyDOM accessPolicy = null;
 		
-		try {
-			accessPolicy = new AccessPolicyDOM(getClass().getResource("gm-entidades-base.xml"));
-		} catch (ServerException e) {
-			fail(e.getMessage());
-		}
-		
+		accessPolicy = new AccessPolicyDOM(getClass().getResource("gm-entidades-base.xml"));
 		assertNotNull(accessPolicy);
 	}
 }

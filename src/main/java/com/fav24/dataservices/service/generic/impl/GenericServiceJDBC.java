@@ -367,6 +367,8 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			throw new ServerException(GenericService.ERROR_INVALID_READONLY_POLICY, String.format(GenericService.ERROR_INVALID_READONLY_POLICY_MESSAGE, operation.getMetadata().getEntity()));	
 		}
 
+		queryInsert.append(',').append(columnsToInsert);
+		
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 
 		for (int i=0; i<inColumns.size(); i++) {

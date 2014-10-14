@@ -549,7 +549,6 @@ public class SamplesRegister {
 		}
 	}
 
-
 	/**
 	 * Retorna la última muestra indexada de la estructura de muestras leídas, que entra dentro del segmento temporal indicado.
 	 * Completa la lista de muestras suministradas por parámetro.
@@ -765,7 +764,7 @@ public class SamplesRegister {
 				// Se purgan las muestras leídas no reutilizadas durante un cierto periodo de tiempo.
 				readenSamples.purgeOutOfDateSamples();
 
-				// ===== Lectura de los elementos ya leídos =====
+				// ===== Obtención de los elementos ya leídos =====
 				// Avance hasta la posición más cercana, y sin pasarse.
 				SampleIndex lastSampleIndex = getSampleTimeSegment(readenSamples, timeSegment, timeStartEdge, timeEndEdge, period);					
 
@@ -776,7 +775,7 @@ public class SamplesRegister {
 					}
 				}
 
-				// ===== Lectura des del fichero =====
+				// ===== Lectura desde el fichero =====
 				SeekableByteChannel channel = null;
 				try {
 					// Obtención del canal de lectura.
