@@ -84,7 +84,6 @@
     self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
     
     self.lblTeamBio.text = [NSString stringWithFormat:@"%@, %@",self.selectedUser.favoriteTeamName, self.selectedUser.bio];
-    [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;
     [self.txtViewWebSite sizeToFit];
