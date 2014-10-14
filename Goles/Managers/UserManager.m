@@ -99,21 +99,25 @@
 -(void)setDeviceToken:(NSString *)token {
     
     if ( token ){
-        if (![token isEqualToString:[self getDevice].token]) {
-            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_UPDATED}];
+        
+        Device *currentDBDevice = [self getDevice];
+        
+        //No Device on DB
+        if (![currentDBDevice isKindOfClass:[Device class]]) {
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:@0,kJSON_MODIFIED:@0}];
+            if (device)
+                [[CoreDataManager singleton] saveContext];
+
+        }
+        //Device exists
+        else if (![token isEqualToString:[self getDevice].token]) {
+            NSNumber *revision = [NSNumber numberWithLong:currentDBDevice.csys_revisionValue+1];
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_UPDATED,kJSON_REVISION:revision}];
             if (device)
                 [[CoreDataManager singleton] saveContext];
         }
     }
 }
-
-//------------------------------------------------------------------------------
--(void)setIdDevice:(NSNumber *)idDevice {
-    
-    [Device updateWithDictionary:@{kJSON_ID_DEVICE:idDevice}];
-    [[CoreDataManager singleton] saveContext];
-}
-
 
 //------------------------------------------------------------------------------
 - (NSArray *)getActiveUsersIDs {

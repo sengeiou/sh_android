@@ -3,6 +3,7 @@
 #import "CoreDataParsing.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#import "UserManager.h"
 
 @interface Device ()
 
@@ -43,24 +44,6 @@
         [device setDeviceValuesWithDictionary:dict];    // Update entity
     }
     return device;
-}
-
-//------------------------------------------------------------------------------
-+(Device *)createTemporaryDevice{
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Device" inManagedObjectContext:[[CoreDataManager singleton] getContext]];
-    return [[Device alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-}
-
-//------------------------------------------------------------------------------
-+(Device *)createTemporaryDeviceWithDevice:(Device *)device {
-    
-    Device *tempDevice = [self createTemporaryDevice];
-    [tempDevice setIdDevice:[device idDevice]];
-    [tempDevice setModel:[device model]];
-    [tempDevice setAppVer:[device appVer]];
-    [tempDevice setOsVer:[device osVer]];
-    
-    return tempDevice;
 }
 
 //------------------------------------------------------------------------------
@@ -124,7 +107,17 @@
 //------------------------------------------------------------------------------
 -(BOOL)setDeviceValuesWithDictionary:(NSDictionary *)dict {
     
+    self.model =                         [self platformString];
+    self.appVer =                       [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    self.osVer =                        [NSString stringWithFormat:@"iOS %@",[[UIDevice currentDevice] systemVersion]];
+    self.language =                         [self getDeviceLanguage];
+
+    User *user = [[UserManager singleton] getActiveUser];
+    if (user)
+        [self setUser:user];
+    
     if ( dict ){
+        
         NSNumber *idDevice = [dict objectForKey:kJSON_ID_DEVICE];
         if ([idDevice isKindOfClass:[NSNumber class]])
             [self setIdDevice:idDevice];
@@ -132,39 +125,34 @@
         NSString *token = [dict objectForKey:kJSON_TOKEN];
         if ([token isKindOfClass:[NSString class]])
             [self setToken:token];
-    }
+
+
+        //SYNCRO  PROPERTIES
         
-    self.model =                         [self platformString];
-    self.appVer =                       [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-    self.osVer =                        [NSString stringWithFormat:@"iOS %@",[[UIDevice currentDevice] systemVersion]];
-    self.language =                         [self getDeviceLanguage];
-    
-    
-    //SYNCRO  PROPERTIES
-    
-    NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
-    if ( [syncro isKindOfClass:[NSString class]] )
-        [self setCsys_syncronized:syncro];
-    else
-        [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
-    
-    NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
-    if ( [revision isKindOfClass:[NSNumber class]] )
-        [self setCsys_revision:revision];
-    
-    NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
-    if ([birth isKindOfClass:[NSNumber class]]) {
-        [self setCsys_birth:birth];
-    }
-    
-    NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
-    if ([modified isKindOfClass:[NSNumber class]]) {
-        [self setCsys_modified:modified];
-    }
-    
-    NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
-    if ([deleted isKindOfClass:[NSNumber class]]) {
-        [self setCsys_deleted:deleted];
+        NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
+        if ( [syncro isKindOfClass:[NSString class]] )
+            [self setCsys_syncronized:syncro];
+        else
+            [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
+        
+        NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
+        if ( [revision isKindOfClass:[NSNumber class]] )
+            [self setCsys_revision:revision];
+        
+        NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
+        if ([birth isKindOfClass:[NSNumber class]]) {
+            [self setCsys_birth:birth];
+        }
+        
+        NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
+        if ([modified isKindOfClass:[NSNumber class]]) {
+            [self setCsys_modified:modified];
+        }
+        
+        NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
+        if ([deleted isKindOfClass:[NSNumber class]]) {
+            [self setCsys_deleted:deleted];
+        }
     }
     
     return YES;
