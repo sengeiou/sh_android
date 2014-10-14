@@ -29,6 +29,7 @@ import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import java.util.List;
 import javax.inject.Inject;
+import org.w3c.dom.UserDataHandler;
 import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment {
@@ -54,16 +55,16 @@ public class UserFollowsFragment extends BaseFragment {
 
     private UserListAdapter userListAdapter;
 
-    public static UserFollowsFragment newInstance(Long userId, int followType) {
+    public static UserFollowsFragment newInstance(Long userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
         fragment.setArguments(createArguments(userId, followType));
         return fragment;
     }
 
-    public static Bundle createArguments(Long userId, int followType) {
+    public static Bundle createArguments(Long userId, Integer followType) {
         Bundle bundle = new Bundle();
-        bundle.putLong("userId", userId);
-        bundle.putInt("followType", followType);
+        bundle.putLong(ARGUMENT_USER_ID, userId);
+        bundle.putInt(ARGUMENT_FOLLOW_TYPE, followType);
         return bundle;
     }
 
@@ -107,21 +108,12 @@ public class UserFollowsFragment extends BaseFragment {
 
     public void startJob(){
         GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
-        job.init(userId);
+        job.init(userId, followType);
         jobManager.addJobInBackground(job);
     }
 
     private void setEmptyMessage() {
-        int emptyStringRes = 0;
-        switch (followType) {
-            case FOLLOWERS:
-                emptyStringRes = R.string.follower_list_empty;
-                break;
-            case FOLLOWING:
-                emptyStringRes = R.string.following_list_empty;
-                break;
-        }
-        emptyTextView.setText(emptyStringRes);
+        emptyTextView.setText(followType.equals(UserDtoFactory.GET_FOLLOWERS) ? R.string.follower_list_empty : R.string.following_list_empty);
     }
 
     @Subscribe

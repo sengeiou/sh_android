@@ -39,7 +39,7 @@ public class ShotDtoFactory {
         }
 
         MetadataDto md = new MetadataDto.Builder()
-                .operation(ServiceConstants.OPERATION_CREATE_UPDATE)
+                .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
                 .entity(GMContract.ShotTable.TABLE)
                 .putKey(GMContract.ShotTable.ID_SHOT, null)
                 .build();

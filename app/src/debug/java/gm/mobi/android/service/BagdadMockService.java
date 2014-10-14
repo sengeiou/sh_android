@@ -39,12 +39,11 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
-    @Override public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted)
-      throws IOException {
+    @Override public List<User> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override public List<User> getFollowings(Long idUser, Long lastModifiedDate) throws IOException {
+    @Override public List<User> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
         return null;
     }
 
@@ -66,21 +65,6 @@ public class BagdadMockService implements BagdadService {
 
     @Override
     public User getUserByIdUser(Long idUser) throws IOException {
-        return null;
-    }
-
-    @Override
-    public Team getTeamByIdTeam(Long idTeam) throws IOException {
-        return null;
-    }
-
-    @Override
-    public List<Team> getTeamsByIdTeams(Set<Long> teamIds, Long lastModifiedDate) throws IOException {
-        return null;
-    }
-
-    @Override
-    public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException {
         return null;
     }
 

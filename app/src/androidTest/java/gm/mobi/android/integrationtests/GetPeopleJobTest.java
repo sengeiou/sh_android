@@ -80,7 +80,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowings(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
@@ -122,7 +122,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowings(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
 
 
         getPeopleJob.setBus(bus);

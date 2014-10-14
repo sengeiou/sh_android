@@ -13,11 +13,11 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -47,29 +47,39 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
         this.currentUser = currentUser;
     }
 
-    @Override
-    protected void run() throws SQLException, IOException {
-        List<User> followings = getFollowingsFromServer();
-        Timber.d("Downloaded %d followings' users", followings.size());
-        //TODO EXTERMINATE this useless call
-        List<Follow> follows = getFollowsFromServer();
 
-        // Save and send result
-        userManager.saveUsers(followings);
-        followManager.saveFollows(follows);
-        postSuccessfulEvent(new FollowsResultEvent(followings));
-
+    public List<Follow> getFollowsByFollowing(List<User> following){
+        List<Follow> followsByFollowing = new ArrayList<>();
+        for(User u:following){
+            Follow f = new Follow();
+            f.setIdUser(currentUser.getIdUser());
+            f.setFollowedUser(u.getIdUser());
+            f.setCsys_birth(u.getCsys_birth());
+            f.setCsys_modified(u.getCsys_modified());
+            f.setCsys_revision(u.getCsys_revision());
+            f.setCsys_deleted(u.getCsys_deleted());
+            f.setCsys_synchronized(u.getCsys_synchronized());
+            followsByFollowing.add(f);
+        }
+        return followsByFollowing;
     }
 
-    private List<Follow> getFollowsFromServer() throws IOException {
-        Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
-        return service.getFollows(currentUser.getIdUser(), modifiedFollows, UserDtoFactory.GET_FOLLOWING, true);
+    @Override
+    protected void run() throws SQLException, IOException {
+        List<User> following = getFollowingsFromServer();
+        Timber.d("Downloaded %d followings' users", following.size());
+        List<Follow> followsByFollowing = getFollowsByFollowing(following);
+        // Save and send result
+        userManager.saveUsers(following);
+        followManager.saveFollows(followsByFollowing);
+        postSuccessfulEvent(new FollowsResultEvent(following));
+
     }
 
     private List<User> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
         List<User> following;
-        following = service.getFollowings(currentUser.getIdUser(), modifiedFollows);
+        following = service.getFollowing(currentUser.getIdUser(), modifiedFollows);
         return following;
     }
 

@@ -1,13 +1,11 @@
 package gm.mobi.android.task.jobs.follows;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
@@ -20,7 +18,6 @@ import org.mockito.ArgumentCaptor;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import timber.log.Timber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -41,7 +38,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowings(anyLong(),anyLong())).thenThrow(new ServerException());
+        when(service.getFollowing(anyLong(), anyLong())).thenThrow(new ServerException());
 
         NetworkUtil networkUtil = mock(NetworkUtil.class);
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
@@ -64,7 +61,7 @@ public class GetPeopleJobTest {
         when(networkUtil.isConnected(any(Context.class))).thenReturn(false);
 
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowings(anyLong(),anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
 
         Bus bus = mock(Bus.class);
 

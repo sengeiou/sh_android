@@ -12,10 +12,9 @@ public interface BagdadService {
 
     public User login(String id, String password) throws IOException;
 
-    public List<Follow> getFollows(Long idUser, Long lastModifiedDate, int typeFollow, boolean includeDeleted)
-      throws IOException;
+    public List<User> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws  IOException;
 
-    public List<User> getFollowings(Long idUser, Long lastModifiedDate) throws IOException;
+    public List<User> getFollowing(Long idUser, Long lastModifiedDate) throws IOException;
 
     public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException;
 
@@ -26,12 +25,6 @@ public interface BagdadService {
     public Shot postNewShot(Long idUser, String comment) throws IOException;
 
     public User getUserByIdUser(Long idUser) throws IOException;
-
-    public Team getTeamByIdTeam(Long idTeam) throws IOException;
-
-    public List<Team> getTeamsByIdTeams(Set<Long> teamIds, Long lastModifiedDate) throws IOException;
-
-    public Follow getFollowRelationship(Long idUser, Long idCurrentUser, int typeFollow) throws IOException;
 
     public PaginatedResult<List<User>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)
       throws IOException;

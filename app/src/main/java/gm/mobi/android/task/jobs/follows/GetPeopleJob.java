@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
@@ -50,7 +49,7 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
             postSuccessfulEvent(new FollowsResultEvent(peopleFromDatabase));
         }
 
-        List<User> peopleFromServer = service.getFollowings(userId, 0L);
+        List<User> peopleFromServer = service.getFollowing(userId, 0L);
         Collections.sort(peopleFromServer, new NameComparator());
         postSuccessfulEvent(new FollowsResultEvent(peopleFromServer));
     }

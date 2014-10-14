@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import gm.mobi.android.R;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
@@ -57,15 +58,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setScreenTitle() {
-        String title = null;
-        switch (followType) {
-            case UserFollowsFragment.FOLLOWERS:
-                title = getString(R.string.activity_followers_title);
-                break;
-            case UserFollowsFragment.FOLLOWING:
-                title = getString(R.string.activity_following_title);
-                break;
-        }
+        String title = followType.equals(UserDtoFactory.GET_FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(R.string.activity_following_title);
         getSupportActionBar().setTitle(title);
     }
 }
