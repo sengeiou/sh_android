@@ -16,6 +16,7 @@ import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
 import gm.mobi.android.ui.adapters.PeopleAdapter;
+import gm.mobi.android.ui.adapters.UserListAdapter;
 import java.util.List;
 
 public class PeopleFragment extends UserFollowsFragment {
@@ -64,14 +65,11 @@ public class PeopleFragment extends UserFollowsFragment {
         super.showUserList(event);
     }
 
-    @Override
-    protected void setListContent(List<User> usersFollowing) {
+    @Override public UserListAdapter getAdapter() {
         if (peopleAdapter == null) {
-            peopleAdapter = new PeopleAdapter(getActivity(), picasso, usersFollowing);
-            userlistListView.setAdapter(peopleAdapter);
-        } else {
-            peopleAdapter.setItems(usersFollowing);
+            peopleAdapter = new PeopleAdapter(getActivity(), picasso);
         }
+        return peopleAdapter;
     }
 
     @Subscribe @Override

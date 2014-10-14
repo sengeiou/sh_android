@@ -92,6 +92,7 @@ public class UserFollowsFragment extends BaseFragment {
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+        userlistListView.setAdapter(getAdapter());
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -128,12 +129,7 @@ public class UserFollowsFragment extends BaseFragment {
     }
 
     protected void setListContent(List<User> usersFollowing) {
-        if (userListAdapter == null) {
-            userListAdapter = new UserListAdapter(getActivity(), picasso, usersFollowing);
-            userlistListView.setAdapter(userListAdapter);
-        } else {
-            userListAdapter.setItems(usersFollowing);
-        }
+        getAdapter().setItems(usersFollowing);
     }
 
     @Subscribe
@@ -149,7 +145,7 @@ public class UserFollowsFragment extends BaseFragment {
 
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
-        User user = userListAdapter.getItem(position);
+        User user = getAdapter().getItem(position);
         startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
     }
 
@@ -176,5 +172,12 @@ public class UserFollowsFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    public UserListAdapter getAdapter() {
+        if (userListAdapter == null) {
+            userListAdapter = new UserListAdapter(getActivity(), picasso);
+        }
+        return userListAdapter;
     }
 }

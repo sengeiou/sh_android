@@ -84,7 +84,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
     private void setupViews() {
         if (adapter == null) {
-            adapter = new UserListAdapter(this, picasso, new ArrayList<User>(0));
+            adapter = new UserListAdapter(this, picasso);
         }
         resultsListView.setAdapter(adapter);
 

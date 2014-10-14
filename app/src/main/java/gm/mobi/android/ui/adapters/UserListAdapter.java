@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserListAdapter extends BindableAdapter<User> {
@@ -18,10 +19,10 @@ public class UserListAdapter extends BindableAdapter<User> {
     private List<User> users;
     private Picasso picasso;
 
-    public UserListAdapter(Context context, Picasso picasso, List<User> users) {
+    public UserListAdapter(Context context, Picasso picasso) {
         super(context);
         this.picasso = picasso;
-        this.users = users;
+        this.users = new ArrayList<>(0);
     }
 
     public void setItems(List<User> users) {
