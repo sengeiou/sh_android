@@ -326,6 +326,11 @@
         if (maximumOffset - currentOffset <= 200.0 && moreCells)
             [self addLoadMoreCell];
         
+         if (self.lastContentOffset > scrollView.contentOffset.y){
+             [UIView animateWithDuration:0.25 animations:^{
+                 [self.mySearchBar resignFirstResponder];
+             }];
+         }
     }
     
     self.lastContentOffset = scrollView.contentOffset.y;
