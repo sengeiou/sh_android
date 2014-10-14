@@ -124,6 +124,18 @@
                 NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
                 [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_CREATE_UPDATE];
             }
+            
+            if  ([updatedEntity isKindOfClass:[Device class]]){
+                
+                Device *device = (Device *)updatedEntity;
+                
+                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_DEVICE_APPVERSION: device.appVer,kJSON_DEVICE_LOCALE: device.locale}];
+                
+                NSArray *dataArray = @[mutDict];
+
+                NSDictionary *key = @{kJSON_ID_DEVICE:device.idDevice};
+                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_UPDATE_CREATE];
+            }
         }
     }
     [self downloadEntitiesProcessingWithDelegate:delegate];
