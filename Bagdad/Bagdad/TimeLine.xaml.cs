@@ -60,7 +60,7 @@ namespace Bagdad
 
             timerToLoad = new DispatcherTimer();
             timerToLoad.Tick += timerToLoad_Tick;
-            timerToLoad.Interval = new TimeSpan(0, 0, 0, 2);
+            timerToLoad.Interval = new TimeSpan(0, 0, 0, 1);
 
             lastOrientation = this.Orientation;
 
@@ -347,7 +347,7 @@ namespace Bagdad
             {
                 if (progress.IsVisible) progress.IsVisible = false;
                 timerToLoad.Stop();
-                timerToLoad.Interval = new TimeSpan(0, 0, 0, 2);
+                timerToLoad.Interval = new TimeSpan(0, 0, 0, 1);
                 System.Diagnostics.Debug.WriteLine("· · · · · · · · timerToLoad Stop  (TimerToLoadTick)");
             }
         }
