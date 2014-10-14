@@ -73,7 +73,6 @@
 		AA623EDF1998D78600A942A9 /* FAVFormContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623E831998D78600A942A9 /* FAVFormContainerViewController.m */; };
 		AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623ED91998D78600A942A9 /* LoginViewController.m */; };
 		AA623F111998F29D00A942A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623F131998F29D00A942A9 /* Localizable.strings */; };
-		AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623F1C1998F49700A942A9 /* MeContainerViewController.m */; };
 		AA72640619D03A510067A39D /* _Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640519D03A510067A39D /* _Shot.m */; };
 		AA72640919D03A6E0067A39D /* Shot.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640819D03A6E0067A39D /* Shot.m */; };
 		AA72640C19D0505A0067A39D /* _Follow.m in Sources */ = {isa = PBXBuildFile; fileRef = AA72640B19D0505A0067A39D /* _Follow.m */; };
@@ -241,8 +240,6 @@
 		AA623ED91998D78600A942A9 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		AA623F121998F29D00A942A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA623F141998F2A000A942A9 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA623F1B1998F49700A942A9 /* MeContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeContainerViewController.h; sourceTree = "<group>"; };
-		AA623F1C1998F49700A942A9 /* MeContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeContainerViewController.m; sourceTree = "<group>"; };
 		AA72640419D03A510067A39D /* _Shot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Shot.h; sourceTree = "<group>"; };
 		AA72640519D03A510067A39D /* _Shot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Shot.m; sourceTree = "<group>"; };
 		AA72640719D03A6E0067A39D /* Shot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shot.h; sourceTree = "<group>"; };
@@ -741,8 +738,6 @@
 		AA623EDB1998D78600A942A9 /* Me */ = {
 			isa = PBXGroup;
 			children = (
-				AA623F1B1998F49700A942A9 /* MeContainerViewController.h */,
-				AA623F1C1998F49700A942A9 /* MeContainerViewController.m */,
 			);
 			name = Me;
 			path = ViewControllers/Yo;
@@ -1001,7 +996,6 @@
 				A58DA84419D02EB8003EE5CB /* User.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
-				AA623F1D1998F49700A942A9 /* MeContainerViewController.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,
 				AA72640F19D0506A0067A39D /* Follow.m in Sources */,
 				AA74B3D119DD7EE800EF90D5 /* CustomTextView.m in Sources */,

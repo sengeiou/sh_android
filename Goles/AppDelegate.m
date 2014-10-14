@@ -13,7 +13,7 @@
 #import "CoreDataParsing.h"
 #import "PeopleTableViewController.h"
 #import "TimeLineViewController.h"
-#import "MeContainerViewController.h"
+#import "ProfileViewController.h"
 #import "FavRestConsumer.h"
 #import "LoginViewController.h"
 #import "UserManager.h"
@@ -177,9 +177,14 @@
     UINavigationController *navTimelineVC = [[UINavigationController alloc]initWithRootViewController:self.timelineVC];
 
     
-    self.meSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
-    MeContainerViewController *meVC = [self.meSB instantiateViewControllerWithIdentifier:@"meContainerVC"];
-    UINavigationController *navMeVC = [[UINavigationController alloc]initWithRootViewController:meVC];
+    //self.meSB = [UIStoryboard storyboardWithName:@"Me" bundle:nil];
+    
+    ProfileViewController *profileVC = [self.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    
+    if ([[UserManager singleton] getActiveUser] != nil)
+        profileVC.selectedUser = [[UserManager singleton] getActiveUser];
+
+    UINavigationController *navMeVC = [[UINavigationController alloc]initWithRootViewController:profileVC];
     
     
     navPeopleVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"PeopleTabTitle", nil) image:[UIImage imageNamed:@"Icon_People_OFF"] selectedImage:[UIImage imageNamed:@"Icon_People_ON"]];

@@ -78,7 +78,7 @@
     [self.usersTable reloadData];
 }
 -(void)addButtonsItem{
-    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addUser:)];
+    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addFriends:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
     
     UIBarButtonItem *findButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchFriends:)];

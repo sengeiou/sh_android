@@ -293,7 +293,6 @@ static NSString *CellIdentifier = @"shootCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 	
     Shot *shot = self.arrayShots[indexPath.row];
-//    return [TimeLineUtilities heightForShot:shot.comment withTextViewWidth:self.txtView.frame.size.width];
     
     NSString *reuseIdentifier = CellIdentifier;
     ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
@@ -643,6 +642,7 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - UIScrollViewDelegate
 //------------------------------------------------------------------------------
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+
     // For Beta version and only iphone 4
 
 //    CGFloat currentOffset = scrollView.contentOffset.y;

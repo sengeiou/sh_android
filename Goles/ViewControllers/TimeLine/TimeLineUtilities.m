@@ -41,22 +41,6 @@
 }
 
 //------------------------------------------------------------------------------
-+ (CGFloat)heightForShot:(NSString *)shotText withTextViewWidth:(CGFloat) widthTextView{
-    
-    NSInteger MAX_HEIGHT = 2000;
-   
-    UITextView *textView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, widthTextView, MAX_HEIGHT)];
-    textView.text = shotText;
-    textView.font = [UIFont systemFontOfSize:15];
-    CGSize size = [textView sizeThatFits:CGSizeMake(widthTextView-8, MAX_HEIGHT)];
-
-    int numberOfLines = (size.height / 20) +1;
-
-    return (numberOfLines * 26) + 20;
-
-}
-
-//------------------------------------------------------------------------------
 +(NSString *)getDateShot:(NSNumber *) dateShot{
     
     NSString *timeLeft;

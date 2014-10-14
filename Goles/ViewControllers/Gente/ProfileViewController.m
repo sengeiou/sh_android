@@ -50,7 +50,8 @@
     [self customView];
     [self textLocalizable];
 
-    [self dataFillView];
+    if (self.selectedUser != nil)
+        [self dataFillView];
     
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 }
