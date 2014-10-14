@@ -30,6 +30,7 @@ import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import gm.mobi.android.util.SecurityUtils;
 import java.io.IOException;
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -290,6 +291,19 @@ public class BagdadDataService implements BagdadService {
         GenericDto requestDto = userDtoFactory.followUserDto(follow);
         GenericDto reponseDto = postRequest(requestDto);
         OperationDto[] ops = reponseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Map<String,Object> dataItem = ops[0].getData()[0];
+        Follow followReceived = followMapper.fromDto(dataItem);
+        return followReceived;
+    }
+
+    @Override public Follow unfollowUser(Follow follow) throws IOException {
+        GenericDto requestDto = userDtoFactory.unfollowUserDto(follow);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
             return null;

@@ -23,6 +23,7 @@ import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUserJob;
+import gm.mobi.android.task.jobs.follows.GetUnfollowUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
@@ -127,6 +128,12 @@ public class ProfileFragment extends BaseFragment {
         jobManager.addJobInBackground(job);
     }
 
+    public void startUnFollowUserJob(User currentUser, Context context){
+        GetUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetUnfollowUserJob.class);
+        job.init(currentUser,user.getIdUser());
+        jobManager.addJobInBackground(job);
+    }
+
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         user = event.getResult();
@@ -191,7 +198,7 @@ public class ProfileFragment extends BaseFragment {
     }
     @OnClick(R.id.profile_following_button)
     public void unfollowUser(){
-
+        startUnFollowUserJob(currentUser, getActivity());
     }
 
     private void openUserFollowsList(int followType) {

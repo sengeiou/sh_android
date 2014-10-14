@@ -84,6 +84,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Follow unfollowUser(Follow follow) throws IOException {
+        return null;
+    }
+
     public long getDelay() {
         return delay;
     }

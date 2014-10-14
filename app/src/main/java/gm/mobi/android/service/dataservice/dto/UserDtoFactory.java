@@ -40,6 +40,7 @@ public class UserDtoFactory {
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
     private static final String ALIAS_GET_USERS = "GET_USERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
+    private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
     private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
@@ -106,6 +107,26 @@ public class UserDtoFactory {
         data[0] = followMapper.toDto(follow);
         op.setData(data);
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
+    }
+
+    public GenericDto unfollowUserDto(Follow follow){
+        if(follow.getIdUser() == null){
+            throw new IllegalArgumentException("IdUser who follow to, can't be null");
+        }
+        if(follow.getFollowedUser() == null){
+            throw new IllegalArgumentException("IdUser who is followed by, can't be null");
+        }
+        Map<String,Object> keys = new ArrayMap<>();
+        keys.put(FollowTable.ID_USER, follow.getIdUser());
+        keys.put(FollowTable.ID_FOLLOWED_USER,follow.getFollowedUser());
+        MetadataDto md = new MetadataDto(ServiceConstants.OPERATION_DELETE, "Follow",true,1L,0L,1L,keys);
+        OperationDto op = new OperationDto();
+        op.setMetadata(md);
+
+        Map<String,Object>[] data = new HashMap[1];
+        data[0] = followMapper.toDto(follow);
+        op.setData(data);
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UNFOLLOW_USER, op);
     }
 
     public GenericDto getFollowUserDtoByIdUser(Long idFromUser, Long idToUser){
