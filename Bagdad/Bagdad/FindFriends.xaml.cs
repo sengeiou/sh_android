@@ -131,10 +131,13 @@ namespace Bagdad
                     Focus();
                     endOfList = false;
                     offset = searchedFriends.Followings.Count;
+                    NoResults.Visibility = System.Windows.Visibility.Collapsed;
                 }
+                else NoResults.Visibility = System.Windows.Visibility.Visible;
 
                 progress.IsVisible = false;
             }
+            else NoResults.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         private async void findList_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

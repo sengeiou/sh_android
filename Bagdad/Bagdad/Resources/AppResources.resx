@@ -350,4 +350,8 @@
     <value>FIND FRIENDS</value>
     <comment>People.xaml, FindFriends.xaml</comment>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>no results for </value>
+    <comment>FindFriends.xaml</comment>
+  </data>
 </root>
