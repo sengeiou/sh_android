@@ -113,6 +113,50 @@
             </Grid>
 
         </DataTemplate>
+        <Storyboard x:Name="GoToTopButtonAnimation">
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GoToTopGrid">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="55"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="65"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="55"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GoToTopGrid">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="55"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="65"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="55"/>
+        	</DoubleAnimationUsingKeyFrames>		
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GoToTopEllipse">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="55"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="65"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="55"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GoToTopEllipse">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="55"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="65"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="55"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="GoToTopGrid">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="5"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="GoToTopGrid">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-5"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="GoToTopGrid">
+        		<DiscreteObjectKeyFrame KeyTime="0:0:0.3">
+        			<DiscreteObjectKeyFrame.Value>
+        				<Visibility>Visible</Visibility>
+        			</DiscreteObjectKeyFrame.Value>
+        		</DiscreteObjectKeyFrame>
+        		<DiscreteObjectKeyFrame KeyTime="0:0:0.5">
+        			<DiscreteObjectKeyFrame.Value>
+        				<Visibility>Collapsed</Visibility>
+        			</DiscreteObjectKeyFrame.Value>
+        		</DiscreteObjectKeyFrame>
+        	</ObjectAnimationUsingKeyFrames>
+        </Storyboard>
 
     </phone:PhoneApplicationPage.Resources>
     <phone:PhoneApplicationPage.RenderTransform>
@@ -268,14 +312,17 @@
         </Grid>
     </Grid>
         
-        <Grid x:Name="GoToTopGrid" Visibility="Collapsed" Width="55" Height="55" Margin="0,180,12,0" HorizontalAlignment="Right" VerticalAlignment="Top" Tap="GoToTopGrid_Tap">
-            <Ellipse x:Name="GoToTopEllipse"  Width="55" Height="55" Fill="{StaticResource PhoneBackgroundBrush}" Stroke="{StaticResource PhoneDisabledBrush}" StrokeThickness="2"/>
-            <TextBlock x:Name="GoToTopText" Text="↑" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <!--<Rectangle Fill="{StaticResource PhoneDisabledBrush}">
+    	<Grid x:Name="GoToTopGrid" Visibility="Collapsed" Width="55" Height="55" Margin="0,180,12,0" HorizontalAlignment="Right" VerticalAlignment="Top" Tap="GoToTopGrid_Tap" RenderTransformOrigin="0.5,0.5">
+    		<Grid.RenderTransform>
+    			<CompositeTransform/>
+    		</Grid.RenderTransform>
+    		<Ellipse x:Name="GoToTopEllipse"  Width="55" Height="55" Fill="{StaticResource PhoneBackgroundBrush}" Stroke="{StaticResource PhoneDisabledBrush}" StrokeThickness="2"/>
+    		<TextBlock x:Name="GoToTopText" Text="↑" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    		<!--<Rectangle Fill="{StaticResource PhoneDisabledBrush}">
                 <Rectangle.OpacityMask>
                     <ImageBrush ImageSource="Resources/icons/appbar.arrow.up.png"/>
                 </Rectangle.OpacityMask>
             </Rectangle>-->
-        </Grid>
+    	</Grid>
     </Grid>
 </phone:PhoneApplicationPage>

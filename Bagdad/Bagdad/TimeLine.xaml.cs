@@ -409,8 +409,13 @@ namespace Bagdad
 
         private void GoToTopGrid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            GoToTopButtonAnimation.Begin();
+            GoToTopButtonAnimation.Completed += GoTopAndResetButton;
+        }
+
+        private void GoTopAndResetButton(object sender, EventArgs e)
+        {
             myShots.ScrollIntoView(myShots.Items.First());
-            GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
             GoToTopText.Text = "↑";
             GoToTopText.Foreground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
             GoToTopText.FontSize = (double)Application.Current.Resources["PhoneFontSizeExtraLarge"];
@@ -441,7 +446,9 @@ namespace Bagdad
             {
                 scrollToChargue = 100 - (15 * 100 / myShots.Items.Count());
             }
-            
+
+            if (scrollInterface.VerticalScrollPercent == 0) GoToTopGrid.Visibility = System.Windows.Visibility.Collapsed;
+
             if (scrollInterface.VerticalScrollPercent != 0 && scrollInterface.VerticalScrollPercent > scrollToChargue && !synchroWorking)
             {
                 synchroWorking = true;
