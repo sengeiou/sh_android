@@ -47,8 +47,9 @@
 "EDIT PROFILE" = "EDIT PROFILE";
 " FOLLOWING" = " FOLLOWING";
 "+ FOLLOW" = "+ FOLLOW";
+"No more people" = "No more people";
 "No people found" = "No people found";
-
+"Search People" = "Search People";
 
 //TIMELINE
 /************storyboard ***************/

@@ -1,9 +1,10 @@
-/* 
-  Localizable.strings
+/*
+ Localizable.strings
+ 
+ Created by Administrador on 27/06/12.
+ Copyright (c) 2012 Fav24. All rights reserved.
+ */
 
-  Created by Christian Cabarrocas on 11/08/14.
-  Copyright (c) 2014 Fav24. All rights reserved.
-*/
 
 // GENERIC
 
@@ -14,4 +15,68 @@
 "PeopleTabTitle" = "People";
 "TimelineTabTitle" = "Timeline";
 
+
+//SETUP
+
+/************storyboard ***************/
+"Register with Email" = "Register with Email";
+"Sign In" = "Sign In";
+"Sign In with Facebook" = "Sign In with Facebook";
+"Forgot Password?"= "Forgot Password?";
+"Shootr will never post without your permission." = "Shootr will never post without your permission.";
+"Create New Account" = "Create New Account";
+"Enter" = "Enter";
+/************codigo ***************/
+"Required" = "Required";
+"Back" = "Back";
+"Email or Username" = "Email or Username";
+"Password" = "Password";
+/************Alertas ***************/
+"Id or Password are not valid" = "Id or Password are not valid";
+"OK" = "OK";
+
+//PEOPLE
+/************storyboard ***************/
+"Points" = "Points";
+"Following" = "Following";
+"Followers" = "Followers";
+"Shots" = "Shots";
+"Predictions" = "Predictions";
+/************codigo ***************/
+"rank" = "rank";
+"EDIT PROFILE" = "EDIT PROFILE";
+" FOLLOWING" = " FOLLOWING";
+"+ FOLLOW" = "+ FOLLOW";
+"No more people" = "No more people";
+"No people found" = "No people found";
+"Search People" = "Search People";
+
+//TIMELINE
+/************storyboard ***************/
+"Now Playing" = "Now Playing";
+"Ignore" = "Ignore";
+"I'm Watching" = "I'm Watching";
+"No Shots" = "No Shots";
+"Share with friends about football." = "Share with friends about football.";
+"Start Shooting" = "Start Shooting";
+"Shoot" = "Shoot";
+/************codigo ***************/
+"No more shots" = "No more shots";
+"Shooting..." = "Shooting...";
+"Connecting..." = "Connecting...";
+"Updating..." = "Updating...";
+"Now" = "Now";
+/************Alertas ***************/
+"Shot Not Posted" = "Shot Not Posted";
+"Connection timed out." = "Connection timed out.";
+"Cancel" = "Cancel";
+"Whoops! You already shot that." = "Whoops! You already shot that.";
+"Retry" = "Retry";
+
+//POST NEW MESSAGE
+"What's Up?" = "What's Up?";
+
+//CONNECTION
+"The network connection was lost" = "The network connection was lost";
+"We are working to fix it as soon as possible" = "We are working to fix it as soon as possible";
 
