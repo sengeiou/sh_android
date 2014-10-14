@@ -27,11 +27,17 @@
             </Keys>
             <Filters>
                 <Filter>
-                    <Attribute Alias="idDevice">idDevice</Attribute>
                     <Attribute Alias="idUser">idUser</Attribute>
                 </Filter>
                 <Filter>
                     <Attribute Alias="idDevice">idDevice</Attribute>
+                </Filter>
+                <Filter>
+                    <Attribute Alias="idDevice">idDevice</Attribute>
+                    <Attribute Alias="modified">csys_modified</Attribute>
+                    <Attribute Alias="deleted">csys_deleted</Attribute>
+                </Filter>
+                <Filter>
                     <Attribute Alias="idUser">idUser</Attribute>
                     <Attribute Alias="modified">csys_modified</Attribute>
                     <Attribute Alias="deleted">csys_deleted</Attribute>
