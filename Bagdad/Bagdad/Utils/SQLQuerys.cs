@@ -11,11 +11,11 @@ namespace Bagdad.Utils
 
         #region USER
 
-        public const String InsertLoginData = "INSERT INTO User (idUser, idFavoriteTeam, sessionToken, userName, email, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @sessionToken, @userName, @email, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertLoginData = "INSERT INTO User (idUser, idFavoriteTeam, favoriteTeamName, sessionToken, userName, email, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @favoriteTeamName, @sessionToken, @userName, @email, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
         public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavoriteTeam, favoriteTeamName, userName, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @favoriteTeamName, @userName, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String UpdateUserData = "UPDATE User SET idFavoriteTeam = @idFavoriteTeam, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized WHERE idUser = @idUser";
+        public const String UpdateUserData = "UPDATE User SET idFavoriteTeam = @idFavoriteTeam, favoriteTeamName = @favoriteTeamName, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized WHERE idUser = @idUser";
 
         public const String DeleteUserData = "DELETE FROM User WHERE idUser = @idUser";
 

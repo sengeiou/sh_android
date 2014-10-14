@@ -13,6 +13,7 @@ namespace Bagdad.Models
     {
         public int idUser { get; set; }
         public int idFavoriteTeam { get; set; }
+        public string favoriteTeamName { get; set; }
         public string userName { get; set; }
         public string name { get; set; }
         public string sessionToken { get; set; }
@@ -54,6 +55,9 @@ namespace Bagdad.Models
                             custstmt.BindNullParameterWithName("@idFavoriteTeam");
                         else
                             custstmt.BindIntParameterWithName("@idFavoriteTeam", login.idFavoriteTeam);
+
+                        if(!String.IsNullOrEmpty(login.favoriteTeamName)) custstmt.BindTextParameterWithName("@favoriteTeamName", login.favoriteTeamName);
+                        else custstmt.BindNullParameterWithName("@favoriteTeamName");
 
                         custstmt.BindTextParameterWithName("@sessionToken", login.sessionToken);
                         custstmt.BindTextParameterWithName("@email", login.email);
@@ -213,6 +217,7 @@ namespace Bagdad.Models
                         loginParse.sessionToken = login["sessionToken"].ToString();
                         loginParse.email = login["email"].ToString();
                         loginParse.idFavoriteTeam = int.Parse(login["idFavoriteTeam"].ToString());
+                        loginParse.favoriteTeamName = login["favoriteTeamName"].ToString();
                         loginParse.userName = login["userName"].ToString();
                         loginParse.name = login["name"].ToString();
                         loginParse.photo = login["photo"].ToString();

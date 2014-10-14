@@ -59,7 +59,7 @@ namespace Bagdad
             UnhandledException += Application_UnhandledException;
 
             // Inicialización XAML estándar :: WE CALL THIS INSIDE THE setNotificationChannel() FUNCTION!!!
-            //InitializeComponent();
+            InitializeComponent();
 
             // Inicialización especifica del teléfono
             InitializePhoneApplication();
@@ -411,8 +411,6 @@ namespace Bagdad
                 // The name of our push channel.
                 string channelName = "Shootr";
 
-                InitializeComponent();
-
                 // Try to find the push channel.
                 pushChannel = HttpNotificationChannel.Find(channelName);
 
@@ -434,7 +432,7 @@ namespace Bagdad
                     // Bind this new channel for toast events.
                     pushChannel.BindToShellToast();
 
-                    System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
+                    if(pushChannel.ChannelUri != null) System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
 
                 }
                 else
@@ -447,7 +445,7 @@ namespace Bagdad
                     pushChannel.ShellToastNotificationReceived += new EventHandler<NotificationEventArgs>(PushChannel_ShellToastNotificationReceived);
                     pushToken = pushChannel.ChannelUri.ToString();
                     // Display the URI for testing purposes. Normally, the URI would be passed back to your web service at this point.
-                    System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
+                    if (pushChannel.ChannelUri != null) System.Diagnostics.Debug.WriteLine(" - - - - Nuevo Token: " + pushChannel.ChannelUri.ToString());
                 }
             }
             catch (Exception e)
