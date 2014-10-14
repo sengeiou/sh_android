@@ -301,7 +301,7 @@ public class UserLogin implements GenericServiceHook {
 					attributes.put(ATTR_BIRTH, timestamp.getTime());
 				}
 
-				timestamp = JDBCUtils.getObject(resultSet, 15, Timestamp.class);
+				timestamp = JDBCUtils.getObject(resultSet, 16, Timestamp.class);
 				if (timestamp == null) {
 					attributes.put(ATTR_MODIFIED, null);
 				}
@@ -310,12 +310,12 @@ public class UserLogin implements GenericServiceHook {
 					attributes.put(ATTR_MODIFIED, timestamp.getTime());
 				}
 
-				attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 16, Long.class));
+				attributes.put(ATTR_REVISION, JDBCUtils.getObject(resultSet, 17, Long.class));
 				if (resultSet.wasNull()) {
 					attributes.put(ATTR_REVISION, null);
 				}
 
-				timestamp = JDBCUtils.getObject(resultSet, 17, Timestamp.class);
+				timestamp = JDBCUtils.getObject(resultSet, 18, Timestamp.class);
 				if (timestamp == null) {
 					attributes.put(ATTR_DELETED, null);
 				}
