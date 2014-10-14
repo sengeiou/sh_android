@@ -481,7 +481,7 @@ namespace Bagdad.Models
 
 
 
-                json = json.Replace("@Operation", Constants.SERCOM_OP_UPDATECREATE);
+                json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
                 json = json.Replace("@Data", Data);
 
                 ServiceCommunication serviceCom = new ServiceCommunication();
