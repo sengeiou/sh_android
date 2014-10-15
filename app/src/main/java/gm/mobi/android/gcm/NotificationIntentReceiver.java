@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.ui.activities.MainActivity;
 import javax.inject.Inject;
 

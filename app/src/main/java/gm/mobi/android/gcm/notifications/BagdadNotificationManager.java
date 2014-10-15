@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm;
+package gm.mobi.android.gcm.notifications;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.RingtoneManager;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.Spannable;
@@ -19,6 +20,8 @@ import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.gcm.NotificationIntentReceiver;
+import gm.mobi.android.ui.activities.MainActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +32,7 @@ import timber.log.Timber;
 public class BagdadNotificationManager {
 
     private static final int NOTIFICATION_SHOT = 1;
+
     private static final int REQUEST_DELETE = 1;
     private static final int REQUEST_OPEN = 2;
 
@@ -109,8 +113,13 @@ public class BagdadNotificationManager {
     }
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(context, REQUEST_OPEN,
-          new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), 0);
+        Bundle extras = new Bundle();
+        extras.putInt(MainActivity.EXTRA_SHOW_SECTION,
+          MainActivity.DRAWER_POSITION_TIMELINE);
+
+        return PendingIntent.getActivity(context, REQUEST_OPEN,
+          //new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), 0);
+          new Intent(context, MainActivity.class).putExtras(extras), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected Bitmap getUserPhoto(String url) {

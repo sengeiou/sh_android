@@ -33,7 +33,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.gcm.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
