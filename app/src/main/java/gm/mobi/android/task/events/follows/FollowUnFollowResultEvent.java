@@ -5,13 +5,13 @@ import gm.mobi.android.task.jobs.BagdadBaseJob;
 
 public class FollowUnFollowResultEvent extends BagdadBaseJob.SuccessEvent<Follow> {
 
-boolean doIFollowHim;
-public FollowUnFollowResultEvent(Follow result,boolean doIFollowHim) {
+int doIFollowHim;
+public FollowUnFollowResultEvent(Follow result,int doIFollowHim) {
     super(result);
     this.doIFollowHim = doIFollowHim;
   }
 
-public boolean isDoIFollowHim(){
+public int isDoIFollowHim(){
     return doIFollowHim;
 }
 

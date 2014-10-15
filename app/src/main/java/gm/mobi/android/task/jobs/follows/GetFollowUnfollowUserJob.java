@@ -31,6 +31,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     private User currentUser;
     private Long idUser;
     private int followUnfollowType;
+    private int doIFollowHim;
 
     @Inject
     public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
@@ -59,17 +60,18 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
+        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
                 Follow followUser = followUser();
-                boolean doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser,idUser);
+                doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
                 postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
             break;
             case UserDtoFactory.UNFOLLOW_TYPE:
-                if(followManager.doIFollowHimRelationship(idCurrentUser, idUser)){
+                if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
                     Follow follow = unfollowUser();
-                    boolean doIfollowHim = followManager.doIFollowHimRelationship(idCurrentUser,idUser);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIfollowHim));
+                    doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIFollowHim));
                 }else{
                     //TODO. Check if we aren't in the good followType
                     return;

@@ -32,6 +32,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     private Long userId;
     private User currentUser;
+    private int doIFollowHim;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
       NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
@@ -51,10 +52,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     @Override public void run() throws SQLException, IOException {
         User userFromLocalDatabase = getUserFromDatabase();
         Long idCurrentUser = currentUser.getIdUser();
-        boolean doIFollowHim = false;
-        if(!idCurrentUser.equals(userId)) {
-          doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser, userId);
-        }
+        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, userId);
         if (userFromLocalDatabase != null) {
             postSuccessfulEvent(new UserInfoResultEvent(userFromLocalDatabase, doIFollowHim));
         } else {
@@ -65,7 +63,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         if(!idCurrentUser.equals(userId)){
             Follow followFromService = getFolloFromService();
             if(followFromService!=null) followManager.saveFollow(followFromService);
-            doIFollowHim = followManager.doIFollowHimRelationship(idCurrentUser,userId);
+            doIFollowHim = followManager.doIFollowHimState(idCurrentUser, userId);
         }
 
         postSuccessfulEvent(new UserInfoResultEvent(userFromService, doIFollowHim));

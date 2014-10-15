@@ -150,26 +150,26 @@ public class FollowManager extends AbstractManager{
         return resultRelationship;
     }
 
-    public boolean doIFollowHimRelationship(Long idCurrentUser, Long idUser){
-        boolean resultRelationship = false;
-        String fromUserIdArgument = String.valueOf(idCurrentUser);
-        String toUserIdArgument = String.valueOf(idUser);
-        String selection = "("
-          + ID_USER
-          + "=? and "
-          + ID_FOLLOWED_USER
-          + "=?)";
-        Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
-          new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
-
-        if(queryResults.getCount()>0){
-            queryResults.moveToFirst();
-            do{
-                Follow follow = followMapper.fromCursor(queryResults);
-                if(follow!=null && follow.getCsys_deleted() == null){
-                     resultRelationship = true;
-                }
-            }while(queryResults.moveToNext());
+    public int doIFollowHimState(Long idCurrentUser, Long idUser){
+        int resultRelationship = Follow.RELATIONSHIP_NONE;
+        if(idCurrentUser.equals(idUser)){
+            return Follow.RELATIONSHIP_OWN;
+        }else {
+            String fromUserIdArgument = String.valueOf(idCurrentUser);
+            String toUserIdArgument = String.valueOf(idUser);
+            String selection = "(" + ID_USER + "=? and " + ID_FOLLOWED_USER + "=?)";
+            Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection, new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
+            if (queryResults.getCount() > 0) {
+                queryResults.moveToFirst();
+                do {
+                    Follow follow = followMapper.fromCursor(queryResults);
+                    if (follow != null && follow.getCsys_deleted() == null) {
+                        resultRelationship = Follow.RELATIONSHIP_FOLLOWING;
+                    }else if(follow!=null && follow.getCsys_deleted() !=null){
+                        resultRelationship = Follow.RELATIONSHIP_NONE;
+                    }
+                } while (queryResults.moveToNext());
+            }
         }
         return resultRelationship;
     }

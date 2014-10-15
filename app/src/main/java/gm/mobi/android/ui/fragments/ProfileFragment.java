@@ -17,6 +17,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
@@ -155,22 +156,21 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    private void setUserInfo(User user, boolean doIFollowHim, String favTeamName) {
+    private void setUserInfo(User user, int doIFollowHim, String favTeamName) {
         setBasicUserInfo(user);
         bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
         setMainButtonStatus(doIFollowHim);
     }
 
-    private void setMainButtonStatus(boolean doIFollowHim) {
-        boolean isMe = user.getIdUser().equals(currentUser.getIdUser());
-        if(isMe){
+    private void setMainButtonStatus(int doIFollowHim) {
+        if(doIFollowHim == Follow.RELATIONSHIP_OWN){
             followingButton.setVisibility(View.GONE);
             followButton.setVisibility(View.GONE);
             editProfileButton.setVisibility(View.VISIBLE);
         }else{
             editProfileButton.setVisibility(View.GONE);
-            followingButton.setVisibility(doIFollowHim ? View.VISIBLE : View.GONE);
-            followButton.setVisibility(doIFollowHim ? View.GONE : View.VISIBLE);
+            followingButton.setVisibility(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING ? View.VISIBLE : View.GONE);
+            followButton.setVisibility(doIFollowHim == Follow.RELATIONSHIP_NONE ? View.VISIBLE : View.GONE);
         }
     }
 
