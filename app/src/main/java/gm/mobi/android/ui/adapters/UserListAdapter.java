@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.model.UserVO;
 import java.util.ArrayList;
@@ -68,8 +69,15 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
-        if (!isFollowButtonVisible()) {
+        if(item.getRelationship() == Follow.RELATIONSHIP_FOLLOWING){
             viewHolder.followButton.setVisibility(View.GONE);
+            viewHolder.followingButton.setVisibility(View.VISIBLE);
+        }else if(item.getRelationship() == Follow.RELATIONSHIP_OWN){
+            viewHolder.followButton.setVisibility(View.GONE);
+            viewHolder.followingButton.setVisibility(View.GONE);
+        }else{
+            viewHolder.followButton.setVisibility(View.VISIBLE);
+            viewHolder.followingButton.setVisibility(View.GONE);
         }
     }
 
@@ -82,7 +90,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         @InjectView(R.id.user_name) TextView name;
         @InjectView(R.id.user_username) TextView username;
         @InjectView(R.id.profile_follow_button) View followButton;
-
+        @InjectView(R.id.profile_following_button) View followingButton;
         public int position;
 
         public ViewHolder(View view) {

@@ -56,7 +56,7 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResul
 
     @Override protected void run() throws SQLException, IOException {
         PaginatedResult<List<User>> searchResults = getSearchFromServer();
-        postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult()))));
+        postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
     }
 
     public List<UserVO> getUserVOs(List<User> users){
