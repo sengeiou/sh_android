@@ -11,6 +11,7 @@
 #import "User.h"
 #import "Shot.h"
 #import "UserManager.h"
+#import "Utils.h"
 
 @interface SyncManager ()
 
@@ -87,7 +88,7 @@
 #warning Move all process in this method to a block
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_USER,K_COREDATA_FOLLOW]; //K_COREDATA_DEVICE
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
@@ -105,14 +106,14 @@
                       
                  NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,kJSON_RANK:user.rank,kJSON_BIRTH:birth,kJSON_MODIFIED:modified,  kJSON_FAVORITE_TEAM_NAME: user.favoriteTeamName}];
                  
-                 if ([user.csys_syncronized isEqualToString:@"d"])
+                 if ([user.csys_syncronized isEqualToString:kJSON_SYNCRO_DELETED])
                      [mutDict addEntriesFromDictionary:@{kJSON_DELETED:deleted}];
                  
                  NSArray *dataArray = @[mutDict];
                  
                  NSDictionary *key = @{kJSON_ID_USER:user.idUser};
                  
-                 if ([user.csys_syncronized isEqualToString:@"d"])
+                 if ([user.csys_syncronized isEqualToString:kJSON_SYNCRO_DELETED])
                      [[FavRestConsumer sharedInstance] deleteEntity:K_COREDATA_USER withKey:key andData:dataArray andDelegate:delegate];
                  else
                      [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_USER withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_UPDATE_CREATE];
@@ -133,8 +134,23 @@
                 NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform}];
                 
                 NSArray *dataArray = @[mutDict];
+            
+                if ([Utils getValueFromUserDefaultsFromKey:kJSON_ID_DEVICE] != nil) {
+                    
+                    NSDictionary *key = @{kJSON_ID_DEVICE:[Utils getValueFromUserDefaultsFromKey:kJSON_ID_DEVICE]};
+                    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:self withOperation:K_OP_UPDATE_CREATE];
 
-                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andDelegate:self withOperation:K_OP_UPDATE_CREATE];
+                }else if ([device.csys_syncronized isEqualToString:kJSON_SYNCRO_NEW]){
+                    
+                    NSDictionary *key = @{kJSON_TOKEN:device.token};
+                    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:self withOperation:K_OP_UPDATE_CREATE];
+                
+                }else if ([device.csys_syncronized isEqualToString:kJSON_SYNCRO_UPDATED]){
+                    
+                    NSDictionary *key = @{kJSON_ID_DEVICE:device.idDevice};
+                    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_DEVICE withData:dataArray andKey:key andDelegate:self withOperation:K_OP_UPDATE_CREATE];
+
+                }
             }
         }
     }
@@ -270,6 +286,8 @@
     else if (status && [entityClass isSubclassOfClass:[Shot class]]){
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter postNotificationName:K_NOTIF_SHOT_END object:nil userInfo:nil];
+    }else if (status && [entityClass isSubclassOfClass:[Device class]]){
+         [Utils setValueToUserDefaults:[[UserManager sharedInstance] getIdDevice] ToKey:kJSON_ID_DEVICE];
     }
 }
 

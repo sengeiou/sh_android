@@ -19,6 +19,7 @@
 #import "Utils.h"
 #import "Constants.h"
 #import "Fav24Colors.h"
+#import "UserManager.h"
 
 @interface SetupViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ConectionProtocol>{
     
@@ -60,6 +61,7 @@
     
     [self textLocalizable];
 }
+
 
 -(void)adjustFrame{
    
@@ -297,6 +299,7 @@
         [appDelegate registerAPNS];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         
+        [Utils setValueToUserDefaults:[[UserManager sharedInstance] getUserId] ToKey:kJSON_ID_USER];
     }
 }
 
