@@ -1,22 +1,34 @@
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fav24.dataservices.domain.generic.DataItem;
 import com.fav24.dataservices.domain.generic.Generic;
 import com.fav24.dataservices.domain.generic.Operation;
 import com.fav24.dataservices.domain.policy.AccessPolicy;
 import com.fav24.dataservices.domain.policy.EntityAccessPolicy;
 import com.fav24.dataservices.service.hook.GenericServiceHook;
+import com.fav24.dataservices.util.FastHttpUtils;
 
 
 public class CreateShot implements GenericServiceHook {
 
+	private static final String SPECIAL_SERVICES_TEST_HOST = "54.75.245.130";
+	private static final String SPECIAL_SERVICES_LOCALHOST = "localhost";
+
+	private static final String SPECIAL_SERVICES_HOST = SPECIAL_SERVICES_LOCALHOST;
+	private static final Integer SPECIAL_SERVICES_PORT = 8085;
+
+	private static final String QUEUE_SHOT_URL = "http://" + SPECIAL_SERVICES_HOST + ":" + SPECIAL_SERVICES_PORT + "/shootr-services/rest/notification/shot";
 
 	private static final String ENTITY_SHOT = "Shot";
 
 	private static final String ATTR_IDSHOT = "idShot";
 	private static final String ATTR_IDUSER = "idUser";
 	private static final String ATTR_COMMENT = "comment";
+
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 
 	/**
 	 * {@inheritDoc}
@@ -101,15 +113,21 @@ public class CreateShot implements GenericServiceHook {
 		if (operation.getMetadata().getOperation().equals(EntityAccessPolicy.OperationType.CREATE) && 
 				ENTITY_SHOT.equals(operation.getMetadata().getEntity())) {
 
+			Map<String, Object> attrs = new HashMap<String, Object>();
+
 			for (DataItem dataItem : operation.getData()) {
 
-				Map<String, Object> attrs = new HashMap<String, Object>();
-				
 				attrs.put(ATTR_IDSHOT, dataItem.getAttributes().get(ATTR_IDSHOT));
 				attrs.put(ATTR_IDUSER, dataItem.getAttributes().get(ATTR_IDUSER));
 				attrs.put(ATTR_COMMENT, dataItem.getAttributes().get(ATTR_COMMENT));
-				
+
 				// Envío an sistema de push.
+				try {
+					
+					FastHttpUtils.sendPost(QUEUE_SHOT_URL, null, objectMapper.writeValueAsString(attrs), null);
+				} catch (Throwable t) {
+					return new HookMethodOutput(t.getMessage());
+				}
 			}
 		}
 
