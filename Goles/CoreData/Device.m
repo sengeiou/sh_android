@@ -79,6 +79,7 @@
     if ([platform isEqualToString:@"iPhone5,4"])    return @"iPhone 5c (Global)";
     if ([platform isEqualToString:@"iPhone6,1"])    return @"iPhone 5s (GSM)";
     if ([platform isEqualToString:@"iPhone6,2"])    return @"iPhone 5s (Global)";
+    if ([platform isEqualToString:@"iPhone7,1"])    return @"iPhone 6+";
     if ([platform isEqualToString:@"iPod3,1"])      return @"iPod Touch 3G";
     if ([platform isEqualToString:@"iPod4,1"])      return @"iPod Touch 4G";
     if ([platform isEqualToString:@"iPod5,1"])      return @"iPod Touch 5G";
@@ -136,21 +137,21 @@
         else
             [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
         
-        NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
+        NSNumber *revision = [dict objectForKey:kJSON_REVISION];
         if ( [revision isKindOfClass:[NSNumber class]] )
             [self setCsys_revision:revision];
         
-        NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
+        NSNumber *birth = [dict objectForKey:kJSON_BIRTH];
         if ([birth isKindOfClass:[NSNumber class]]) {
             [self setCsys_birth:birth];
         }
         
-        NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
+        NSNumber *modified = [dict objectForKey:kJSON_MODIFIED];
         if ([modified isKindOfClass:[NSNumber class]]) {
             [self setCsys_modified:modified];
         }
         
-        NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
+        NSNumber *deleted = [dict objectForKey:K_OP_DELETE];
         if ([deleted isKindOfClass:[NSNumber class]]) {
             [self setCsys_deleted:deleted];
         }
