@@ -104,7 +104,7 @@
                  NSNumber *modified = user.csys_modified;
                  NSNumber *deleted = user.csys_deleted;
                       
-                 NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,kJSON_RANK:user.rank,kJSON_BIRTH:birth,kJSON_MODIFIED:modified,  kJSON_FAVORITE_TEAM_NAME: user.favoriteTeamName}];
+                 NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_USER: user.idUser, kJSON_USERNAME: user.userName,kJSON_BIO:user.bio, kJSON_WEBSITE: user.website, kJSON_POINTS: user.points,kJSON_NUMFOLLOWING: user.numFollowing, kJSON_NUMFOLLOWERS:user.numFollowers,kJSON_RANK:user.rank,kJSON_BIRTH:birth,kJSON_MODIFIED:modified,  kJSON_FAVORITE_TEAM_NAME: user.favoriteTeamName, K_WS_OPS_DELETE_DATE: deleted}];
                  
                  if ([user.csys_syncronized isEqualToString:kJSON_SYNCRO_DELETED])
                      [mutDict addEntriesFromDictionary:@{kJSON_DELETED:deleted}];
@@ -136,7 +136,7 @@
                 
                 Device *device = [[UserManager sharedInstance] getDevice];
                 
-                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform}];
+                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform,  K_WS_OPS_DELETE_DATE: device.csys_deleted}];
                 
                 NSArray *dataArray = @[mutDict];
             

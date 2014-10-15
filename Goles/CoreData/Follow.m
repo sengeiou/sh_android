@@ -96,7 +96,7 @@
 //------------------------------------------------------------------------------
 + (NSDictionary *)createDictFromEntity:(Follow *)follow {
 
-    NSDictionary *followDict = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed,K_WS_OPS_BIRTH_DATE:follow.csys_birth,K_WS_OPS_UPDATE_DATE:follow.csys_modified,K_WS_OPS_REVISION:follow.csys_revision};
+    NSDictionary *followDict = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed,K_WS_OPS_BIRTH_DATE:follow.csys_birth,K_WS_OPS_UPDATE_DATE:follow.csys_modified,K_WS_OPS_REVISION:follow.csys_revision, K_WS_OPS_DELETE_DATE: follow.csys_deleted};
     return followDict;
 }
 

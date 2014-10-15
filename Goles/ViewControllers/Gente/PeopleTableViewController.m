@@ -38,8 +38,6 @@
 	
     [super viewDidLoad];
 
-    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
-    
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 }
@@ -51,10 +49,13 @@
     
     [self addButtonsItem];
     
+    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
+
+    [self.usersTable reloadData];
+
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
-//    #warning Used to force reload table when pushed from search
-//    [self.usersTable reloadData];
 }
+
 -(void)addButtonsItem{
     UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addFriends:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;

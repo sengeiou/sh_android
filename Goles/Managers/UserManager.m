@@ -159,7 +159,7 @@
 //------------------------------------------------------------------------------
 - (NSArray *)getFollowingPeopleForMe {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",[[UserManager singleton] getUserId], @"d"];
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
     NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
     for (Follow *obj in follows) {
