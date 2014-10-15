@@ -453,4 +453,18 @@
     return result == 0;
 }
 
++ (UIImage*)getUIImageFromUIView:(UIView *)targetView
+{
+    CGSize size = targetView.frame.size;
+    
+    UIGraphicsBeginImageContext(size);
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(c, 0, 0);
+    [targetView.layer renderInContext:c]; // view is the view you are grabbing the screen shot of. The view that is to be blurred.
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    //    return [image applyDarkEffect];
+    return image;
+}
+
 @end

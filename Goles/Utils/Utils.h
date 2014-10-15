@@ -57,5 +57,5 @@
 +(NSMutableAttributedString *) formatTitle:(NSString *)text;
 
 + (BOOL)addSkipBackupAttributeToItemAtURL:(NSURL *)URL;
-
++ (UIImage*)getUIImageFromUIView:(UIView *)targetView;
 @end

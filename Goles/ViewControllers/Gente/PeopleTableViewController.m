@@ -16,6 +16,7 @@
 #import "Follow.h"
 #import "PeopleLineUtilities.h"
 #import "FindFriendsViewController.h"
+#import "Utils.h"
 
 @interface PeopleTableViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -160,7 +161,7 @@
 
     FindFriendsViewController *findFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"findFriendsVC"];
     UINavigationController *navFindFriendsVC = [[UINavigationController alloc]initWithRootViewController:findFriendsVC];
-
+    findFriendsVC.backgroundImage = [Utils getUIImageFromUIView:self.view];
     [self presentViewController:navFindFriendsVC animated:YES completion:^{
         NSLog(@"Paso");
     }];

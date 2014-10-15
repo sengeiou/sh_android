@@ -102,6 +102,7 @@
 		AACA544B19C057C000E39D94 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543919C057C000E39D94 /* UIRefreshControl+AFNetworking.m */; };
 		AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */; };
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
+		AAD77D0219EE69C700A1B831 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */; };
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
 		AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */; };
@@ -301,6 +302,8 @@
 		AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		AACA545319C08E4A00E39D94 /* TimeLineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineViewController.h; path = Goles/ViewControllers/TimeLine/TimeLineViewController.h; sourceTree = SOURCE_ROOT; };
 		AACA545419C08E4A00E39D94 /* TimeLineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineViewController.m; path = Goles/ViewControllers/TimeLine/TimeLineViewController.m; sourceTree = SOURCE_ROOT; };
+		AAD77D0019EE69C700A1B831 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimelineViewControllerTest.m; path = Tests/TimelineViewControllerTest.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5819E4253C00F32FF7 /* TimeLineHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineHelper.h; path = Tests/TimeLineHelper.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineHelper.m; path = Tests/TimeLineHelper.m; sourceTree = SOURCE_ROOT; };
@@ -632,6 +635,8 @@
 		AA623E041998D17800A942A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AAD77D0019EE69C700A1B831 /* UIImage+ImageEffects.h */,
+				AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */,
 				AA9D039919D95ABD00E59C83 /* NSString+CleanLinks.h */,
 				AA9D039A19D95ABD00E59C83 /* NSString+CleanLinks.m */,
 				AA623E061998D17800A942A9 /* Constants.h */,
@@ -1000,6 +1005,7 @@
 				AACA544219C057C000E39D94 /* AFURLRequestSerialization.m in Sources */,
 				AACA544519C057C000E39D94 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				A58DA84419D02EB8003EE5CB /* User.m in Sources */,
+				AAD77D0219EE69C700A1B831 /* UIImage+ImageEffects.m in Sources */,
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,

@@ -18,6 +18,7 @@
 #import "SearchManager.h"
 #import "Conection.h"
 #import "Follow.h"
+#import "UIImage+ImageEffects.h"
 
 @interface FindFriendsViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>{
     BOOL search;
@@ -62,6 +63,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
+    //Background blur image under the modalview
+    self.usersTable.backgroundView = [[UIImageView alloc] initWithImage:[self.backgroundImage applyBlurWithRadius:20
+                                                                                                       tintColor:[UIColor colorWithWhite:1 alpha:0.5]
+                                                                                           saturationDeltaFactor:1.8
+                                                                                                       maskImage:nil]];
 }
 
 //------------------------------------------------------------------------------

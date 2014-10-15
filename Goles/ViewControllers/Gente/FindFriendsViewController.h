@@ -10,4 +10,6 @@
 
 @interface FindFriendsViewController : UIViewController
 
+@property (nonatomic,strong) UIImage *backgroundImage;
+
 @end
