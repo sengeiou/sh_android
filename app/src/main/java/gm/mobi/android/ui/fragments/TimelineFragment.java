@@ -69,6 +69,7 @@ public class TimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_watching_container) View watchingContainer;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @InjectView(R.id.timeline_empty) View emptyView;
 
     private View headerView;
     private View footerView;
@@ -368,9 +369,16 @@ public class TimelineFragment extends BaseFragment
         if (shots != null && shots.size() > 0) {
             adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
             listView.setAdapter(adapter);
+            setEmpty(false);
         } else {
-            Timber.w("No shots received");
+            setEmpty(true);
+            Timber.i("No shots received");
         }
+    }
+
+    private void setEmpty(boolean empty) {
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        swipeRefreshLayout.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
     @Subscribe

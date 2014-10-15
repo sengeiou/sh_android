@@ -5,11 +5,16 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-    <es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay
-      android:id="@+id/timeline_swipe_refresh"
+    <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="@dimen/new_shot_height">
+      android:layout_height="match_parent">
+
+        <es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay
+          android:id="@+id/timeline_swipe_refresh"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginBottom="@dimen/new_shot_height"
+          android:visibility="visible">
 
             <gm.mobi.android.ui.widgets.ScrollListView
               android:id="@+id/timeline_list"
@@ -18,22 +23,36 @@
               tools:listitem="@layout/item_list_shot"
               tools:visibility="visible" />
 
+        </es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay>
 
-    </es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay>
+        <LinearLayout
+          android:id="@+id/timeline_empty"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:orientation="vertical"
+          android:visibility="gone"
+          tools:visibility="visible">
 
-    <!--<com.melnykov.fab.FloatingActionButton
-        android:id="@+id/timeline_fab_watching"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_action_create_white"
-        app:fab_colorNormal="@color/primary_red"
-        app:fab_colorPressed="@color/primary_dark"
-        app:fab_shadow="true"/>-->
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/activity_timeline_empty_title"
+              android:textColor="@color/gray_50"
+              android:textSize="20sp" />
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:fontFamily="sans-serif-light"
+              android:gravity="center"
+              android:text="@string/activity_timeline_empty_message"
+              android:textColor="@color/gray_50"
+              android:textSize="16sp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <RelativeLayout
       android:id="@+id/timeline_watching_container"
@@ -74,7 +93,6 @@
           android:textColor="@color/white"
           android:textSize="16sp" />
     </RelativeLayout>
-
 
     <LinearLayout
       android:id="@+id/timeline_new"
