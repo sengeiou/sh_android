@@ -23,7 +23,7 @@ public class Notification {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("[t=").append(token).append(", pe=").append(idPushEngine).append("]");
+		builder.append("[pe=").append(idPushEngine).append(", t=").append(token).append("]");
 		return builder.toString();
 	}
 }
