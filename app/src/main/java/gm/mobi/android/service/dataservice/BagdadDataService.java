@@ -134,6 +134,23 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
+    public Shot getShotById(Long idShot) throws IOException {
+        GenericDto requestDto = shotDtoFactory.getSingleShotOperationDto(idShot);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+            Map<String, Object> data = ops[0].getData()[0];
+            return shotMapper.fromDto(data);
+        }else {
+            return null;
+        }
+    }
+
+    @Override
     public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         List<Shot> newerShots = new ArrayList<>();
         GenericDto genericDto =

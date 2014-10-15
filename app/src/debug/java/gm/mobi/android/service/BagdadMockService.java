@@ -46,6 +46,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Shot getShotById(Long idShot) throws IOException {
+        return null;
+    }
+
     @Override public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         return null;
     }

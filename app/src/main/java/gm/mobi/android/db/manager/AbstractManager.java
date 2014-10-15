@@ -17,6 +17,7 @@ public abstract class AbstractManager {
 
     public static int NUMDAYS = 60;
     @Inject protected SQLiteOpenHelper dbHelper;
+
     SQLiteDatabase db;
 
 

@@ -27,6 +27,7 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.gcm.GcmIntentService;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.service.ApiModule;
@@ -102,6 +103,8 @@ import static android.content.Context.MODE_PRIVATE;
     UserManager.class, DeviceManager.class,
 
     NotificationIntentReceiver.class,
+
+  GcmIntentService.class,
 
   },
   includes = {

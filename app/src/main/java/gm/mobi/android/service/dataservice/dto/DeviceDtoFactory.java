@@ -28,7 +28,7 @@ public class DeviceDtoFactory {
         MetadataDto md = new MetadataDto.Builder()
           .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
           .entity(DeviceTable.TABLE)
-          .putKey(DeviceTable.ID_DEVICE, device.getUniqueDevideID())
+          .putKey(DeviceTable.UNIQUE_DEVICE_ID, device.getUniqueDevideID())
           .build();
 
         OperationDto op = new OperationDto.Builder()

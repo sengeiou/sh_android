@@ -2,16 +2,19 @@ package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
+import gm.mobi.android.service.dataservice.generic.MetadataDto.Builder;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import javax.inject.Inject;
 
 public class ShotDtoFactory {
 
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
+    private static final String ALIAS_GET_SHOT = "GET_SHOT";
 
     private UtilityDtoFactory utilityDtoFactory;
     ShotMapper shotMapper;
@@ -20,6 +23,21 @@ public class ShotDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
         this.shotMapper = shotMapper;
 
+    }
+
+    public GenericDto getSingleShotOperationDto(Long idShot) {
+        MetadataDto md = new MetadataDto.Builder()
+                .operation(ServiceConstants.OPERATION_RETRIEVE)
+                .entity(ShotTable.TABLE)
+                .putKey(ShotTable.ID_SHOT, idShot)
+                .build();
+
+        OperationDto op = new OperationDto.Builder()
+                .metadata(md)
+                .putData(shotMapper.toDto(null))
+                .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOT, op);
     }
 
     public GenericDto getNewShotOperationDto(Long idUser, String comment) {
