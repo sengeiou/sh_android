@@ -502,6 +502,7 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="followingCell" rowHeight="50" id="GAY-Zh-uOK" customClass="FollowingCustomCell">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -573,6 +574,7 @@
                                                 <constraint firstItem="eeQ-O2-Me6" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="-8" id="uP8-MI-jrj"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="actionButton" destination="K3l-Kb-w84" id="BKf-1B-Fi9"/>
                                             <outlet property="imgPhoto" destination="I4N-nh-Rb4" id="zjY-t3-Zf3"/>

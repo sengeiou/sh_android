@@ -196,26 +196,18 @@
 //------------------------------------------------------------------------------
 - (void)restoreInitialStateView {
     
-        [self.mySearchBar setAlpha:0.0];
-    
-        self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
-        [self.mySearchBar resignFirstResponder];
-        [self.mySearchBar setText:@""];
+    [self.mySearchBar setAlpha:0.0];
+
+    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
+    [self.mySearchBar resignFirstResponder];
+    [self.mySearchBar setText:@""];
 }
 
 
 #pragma mark - Search methods
 //------------------------------------------------------------------------------
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
-    
-//    self.usersTable.hidden = NO;
-//    self.spinner.hidden = YES;
-//    self.viewNotPeople.hidden = YES;
-//    [self.usersSearch removeAllObjects];
-//    
-//    
-//    [self restoreInitialStateView];
-//    [self reloadTableWithAnimation];
+
     self.textInSearchBar = nil;
 
     [self dismissViewControllerAnimated:YES completion:^{
@@ -368,12 +360,17 @@
     
     //NSLog(@"Orientation:%d:",[[UIDevice currentDevice] orientation]);
     if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
-        if (screenRect.size.height > screenRect.size.width)
+        NSLog(@"Horizontal");
+        if (screenRect.size.height > screenRect.size.width){
+             NSLog(@"Horizontal >height");
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
-        else
+        }else{
+             NSLog(@"Horizontal >widht");
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
+        }
     }
     else if ([[UIDevice currentDevice] orientation] == 1){
+        NSLog(@"Vertical");
 //        if (screenRect.size.height > screenRect.size.width)
 //            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
 //        else
