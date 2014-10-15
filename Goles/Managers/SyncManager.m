@@ -88,7 +88,7 @@
 #warning Move all process in this method to a block
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW]; //K_COREDATA_USER - K_COREDATA_DEVICE
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
@@ -124,7 +124,10 @@
                 Follow *follow = (Follow *)updatedEntity;
                 NSArray *dataArray = @[[Follow createDictFromEntity:follow]];
                 NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
-                [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_CREATE_UPDATE];
+                if (follow.csys_syncronized == kJSON_SYNCRO_NEW)
+                    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_INSERT];
+                else if (follow.csys_syncronized == kJSON_SYNCRO_DELETED)
+                    [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_DELETE];
             }
             
             if  ([updatedEntity isKindOfClass:[Device class]]){

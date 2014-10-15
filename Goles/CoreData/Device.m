@@ -107,11 +107,11 @@
 //------------------------------------------------------------------------------
 -(BOOL)setDeviceValuesWithDictionary:(NSDictionary *)dict {
     
-    self.platform =                         [self platformString];
-    self.appVer =                       [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-    self.osVer =                        [NSString stringWithFormat:@"iOS %@",[[UIDevice currentDevice] systemVersion]];
-    self.language =                         [self getDeviceLanguage];
-    self.model =                        @"Mio";
+    self.platform = @1;
+    self.appVer = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    self.osVer = [NSString stringWithFormat:@"iOS %@",[[UIDevice currentDevice] systemVersion]];
+    self.language = [self getDeviceLanguage];
+    self.model = [self platformString];
 
     User *user = [[UserManager singleton] getActiveUser];
     if (user)

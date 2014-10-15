@@ -95,6 +95,7 @@
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:self.selectedUser.photo] andUIimageView:self.imgPhoto andText:[self.selectedUser.name substringToIndex:1]];
 }
 
+#pragma mark - FOLLOW BUTTONS
 //------------------------------------------------------------------------------
 - (void)configureFollowButton {
     
@@ -130,6 +131,18 @@
 }
 
 //------------------------------------------------------------------------------
+- (void)setFollowToYes {
+	
+    [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
+    self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
+    [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
+    [self.btnFollow setContentEdgeInsets:contentInsets];
+    [self.btnFollow addTarget:self action:@selector(unFollowUser) forControlEvents:UIControlEventTouchUpInside];
+}
+
+#pragma mark - FOLLOW AND UNFOLLOW ACTIONS
+//------------------------------------------------------------------------------
 - (void)followUser {
     
     BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
@@ -139,14 +152,15 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)setFollowToYes {
-	
-    [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
-    self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
-    [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
-    [self.btnFollow setContentEdgeInsets:contentInsets];
+- (void)unFollowUser {
+    
+    BOOL unfollowActionSuccess = [[UserManager singleton] stopFollowingUser:self.selectedUser];
+    if (unfollowActionSuccess)
+        [self configureFollowButton];
+    
 }
+
+//------------------------------------------------------------------------------
 
 #pragma mark - Localizable Strings
 //------------------------------------------------------------------------------

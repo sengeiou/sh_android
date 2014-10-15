@@ -206,9 +206,13 @@ extern const struct DeviceFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* platform;
+@property (nonatomic, strong) NSNumber* platform;
 
 
+
+@property int16_t platformValue;
+- (int16_t)platformValue;
+- (void)setPlatformValue:(int16_t)value_;
 
 //- (BOOL)validatePlatform:(id*)value_ error:(NSError**)error_;
 
@@ -357,8 +361,11 @@ extern const struct DeviceFetchedProperties {
 
 
 
-- (NSString*)primitivePlatform;
-- (void)setPrimitivePlatform:(NSString*)value;
+- (NSNumber*)primitivePlatform;
+- (void)setPrimitivePlatform:(NSNumber*)value;
+
+- (int16_t)primitivePlatformValue;
+- (void)setPrimitivePlatformValue:(int16_t)value_;
 
 
 

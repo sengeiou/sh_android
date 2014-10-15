@@ -104,7 +104,7 @@
         
         //No Device on DB
         if (![currentDBDevice isKindOfClass:[Device class]]) {
-            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:@0,kJSON_MODIFIED:@0}];
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:@0,kJSON_MODIFIED:@0,kJSON_DEVICE_PLATFORM:@1}];
             if (device)
                 [[CoreDataManager singleton] saveContext];
 
@@ -258,6 +258,7 @@
         NSDate *date = [NSDate date];
         NSTimeInterval timeInt = [date timeIntervalSince1970];
         follow.csys_deleted = [NSNumber numberWithDouble:timeInt*1000];
+        follow.csys_syncronized = kJSON_SYNCRO_DELETED;
         [[CoreDataManager singleton] saveContext];
         return YES;
     }

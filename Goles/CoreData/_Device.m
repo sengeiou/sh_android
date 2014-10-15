@@ -85,6 +85,11 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
+	if ([key isEqualToString:@"platformValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"platform"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"statusValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"status"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -297,6 +302,25 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 
 @dynamic platform;
 
+
+
+- (int16_t)platformValue {
+	NSNumber *result = [self platform];
+	return [result shortValue];
+}
+
+- (void)setPlatformValue:(int16_t)value_ {
+	[self setPlatform:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitivePlatformValue {
+	NSNumber *result = [self primitivePlatform];
+	return [result shortValue];
+}
+
+- (void)setPrimitivePlatformValue:(int16_t)value_ {
+	[self setPrimitivePlatform:[NSNumber numberWithShort:value_]];
+}
 
 
 
