@@ -29,6 +29,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.sync.SyncConfigurator;
 import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.ui.adapters.MenuAdapter;
@@ -44,13 +45,15 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseSignedInActivity {
 
+    public static final String EXTRA_SHOW_SECTION = "section";
+
     private static final String EXTRA_CURRENT_TITLE = "title";
     private static final String EXTRA_DRAWER_POSITION = "position";
 
-    private static final int DRAWER_POSITION_TIMELINE = 0;
-    private static final int DRAWER_POSITION_PEOPLE = 1;
-    private static final int DRAWER_POSITION_WATCHING = 2;
-    private static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
+    public static final int DRAWER_POSITION_TIMELINE = 0;
+    public static final int DRAWER_POSITION_PEOPLE = 1;
+    public static final int DRAWER_POSITION_WATCHING = 2;
+    public static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
 
     @Inject Bus bus;
     @Inject Picasso picasso;
@@ -90,6 +93,7 @@ public class MainActivity extends BaseSignedInActivity {
         startGCMRegistration();
         setupSyncing();
         setupNavigationDrawer();
+
         if (needsSetup()) {
             initialSetup();
         } else {
