@@ -44,9 +44,10 @@ static NSArray *cuotasToDelete;
                 }
             }
             completionBlock(YES,nil, YES);
-        }else{
-            completionBlock(NO,nil, NO);
         }
+//        }else{
+//            completionBlock(NO,nil, NO);
+//        }
     }
     else if (!statusOK){
         

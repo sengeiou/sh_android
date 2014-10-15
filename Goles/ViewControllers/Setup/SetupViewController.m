@@ -297,6 +297,11 @@
         [appDelegate registerAPNS];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         
+        if (SYNCHRO_ACTIVATED)
+            [[SyncManager singleton] startSyncProcess];
+       
+        [appDelegate setTabBarItems];
+        
     }
 }
 
@@ -305,31 +310,17 @@
     
     if (status){
 
-        if (status && [entityClass isSubclassOfClass:[Follow class]]){
+        if (status && [entityClass isSubclassOfClass:[Follow class]])
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-        }
-        else if (status && [entityClass isSubclassOfClass:[User class]]){
+        else if (status && [entityClass isSubclassOfClass:[User class]])
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-        }
-        else if (status && [entityClass isSubclassOfClass:[Shot class]]){
-            //Turn on synchro process
-            if (SYNCHRO_ACTIVATED)
-                [[SyncManager singleton] startSyncProcess];
-            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [appDelegate setTabBarItems];
-        }
-        
+     
     }else if(error){
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [self showAlertTimeout];
         });
 
-    }else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self showAlertBadText];
-        });
     }
 }
 

@@ -15,7 +15,8 @@
 +(UIImageView *) downloadImageWithUrl:(NSURL *) url andUIimageView:(UIImageView *)imageView andText:(NSString *)text{
     
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
-    UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
+//    UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
+    UIImage *image = [[UIImageView sharedImageCache] cachedImageForName:[NSString stringWithFormat:@"%@", url]];
     UIImage *imageCacheDefault = [[UIImageView sharedImageCache] cachedImageForName:text];
 
     __weak UIImageView *img = imageView;
@@ -26,7 +27,9 @@
             img.image = image;
             img.layer.cornerRadius = imageView.frame.size.width / 2;
             img.clipsToBounds = YES;
-            [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
+            //[[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
+            [[UIImageView sharedImageCache] cacheImage:image forName: [NSString stringWithFormat:@"%@", url]];
+
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             if (imageCacheDefault == nil) {
                 UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];

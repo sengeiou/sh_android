@@ -64,6 +64,8 @@
 
 @property (strong, nonatomic) NSMutableDictionary *offscreenCells;
 
+-(IBAction)startSendShot:(id)sender;
+
 @end
 
 static NSString *CellIdentifier = @"shootCell";
@@ -338,7 +340,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-    if (!refreshTable){
+    if (!refreshTable && !moreCells){
         self.spinner.hidden = YES;
         
         self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
@@ -347,6 +349,8 @@ static NSString *CellIdentifier = @"shootCell";
         self.lblFooter.textAlignment = NSTextAlignmentCenter;
         self.lblFooter.backgroundColor = [UIColor clearColor];
         self.timelineTableView.tableFooterView = self.lblFooter;
+    }else{
+        self.lblFooter.hidden = YES;
     }
 }
 
@@ -392,6 +396,12 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)reloadShotsTableWithAnimation:(id)sender {
     
+    //PAra la primera vez
+    self.viewNotShots.hidden = YES;
+    self.timelineTableView.hidden = NO;
+    self.timelineTableView.dataSource = self;
+    self.timelineTableView.delegate = self;
+    
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
     if (self.arrayShots.count > 0)
@@ -427,6 +437,14 @@ static NSString *CellIdentifier = @"shootCell";
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
 }
 
+#pragma mark - Start Send Shot
+//------------------------------------------------------------------------------
+-(IBAction)startSendShot:(id)sender{
+    
+    [self keyboardShow:nil];
+    [self.txtView becomeFirstResponder];
+}
+
 
 //------------------------------------------------------------------------------
 - (BOOL) controlRepeatedShot:(NSString *)texto{
@@ -454,11 +472,13 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 -(void)changeStateViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    self.lblFooter.hidden = YES;
 
 }
 //------------------------------------------------------------------------------
 -(void)changeStateActualizandoViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createActualizandoTitleView];
+    self.lblFooter.hidden = YES;
 }
 
 #pragma mark - RESPONSE METHODS
