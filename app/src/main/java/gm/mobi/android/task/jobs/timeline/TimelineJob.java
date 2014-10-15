@@ -21,11 +21,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
-
-    public static final int RETRIEVE_INITIAL = 0;
-    public static final int RETRIEVE_NEWER = 1;
-    public static final int RETRIEVE_OLDER = 2;
+public class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
     private static final int PRIORITY = 4;
 
@@ -33,7 +29,6 @@ public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
     private ShotManager shotManager;
     private FollowManager followManager;
 
-    private int shotRetrieveType;
     private User currentUser;
 
     @Inject
@@ -45,62 +40,11 @@ public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
         this.followManager = followManager;
     }
 
-    public void init(User currentUser, int retrieveType) {
-        this.shotRetrieveType = retrieveType;
+    public void init(User currentUser) {
         this.currentUser = currentUser;
     }
 
-    @Override
-    protected void run() throws SQLException, IOException {
-        switch (shotRetrieveType) {
-            case RETRIEVE_INITIAL:
-                retrieveInitial();
-                break;
-            case RETRIEVE_NEWER:
-                retrieveNewer();
-                break;
-            case RETRIEVE_OLDER:
-                retrieveOlder();
-                break;
-        }
-    }
-
-    private void retrieveInitial() throws IOException, SQLException {
-        // Try to get timeline from database
-
-        List<Shot> localShots = shotManager.retrieveTimelineWithUsers();
-        if (localShots != null && localShots.size() > 0) {
-            // Got them already :)
-            postSuccessfulEvent(new ShotsResultEvent(localShots));
-        } else {
-            // If we don't have any, check the server
-            List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
-            shotManager.saveShots(remoteShots);
-            // Retrieve from db because we need the user objects associated to the shots
-            List<Shot> shotsWithUsersFromServer = shotManager.retrieveTimelineWithUsers();
-            postSuccessfulEvent(new ShotsResultEvent(shotsWithUsersFromServer));
-        }
-    }
-
-    private void retrieveNewer() throws IOException, SQLException {
-        Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
-        List<Shot> newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
-        //TODO what if newshots is empty?
-        shotManager.saveShots(newShots);
-        List<Shot> updatedTimeline = shotManager.retrieveTimelineWithUsers();
-        postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
-    }
-
-    private void retrieveOlder() throws IOException, SQLException {
-        Long firstModifiedDate = shotManager.getFirstModifiedDate(GMContract.ShotTable.TABLE);
-        List<Shot> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
-        shotManager.saveShots(olderShots);
-
-        List<Shot> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots);
-        postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
-    }
-
-    private List<Long> getFollowingIds() throws SQLException {
+    public List<Long> getFollowingIds() throws SQLException {
         return followManager.getUserFollowingIdsWithOwnUser(currentUser.getIdUser());
     }
 
@@ -116,9 +60,11 @@ public class TimelineJob extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
         shotManager.setDataBase(db);
     }
 
+    @Override protected void run() throws SQLException, IOException {
 
-    @Override protected boolean isNetworkRequired() {
-        return true;
     }
 
+    @Override protected boolean isNetworkRequired() {
+        return false;
+    }
 }

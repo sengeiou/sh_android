@@ -38,6 +38,9 @@ import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
+import gm.mobi.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.PostNewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -113,7 +116,7 @@ public class TimelineFragment extends BaseFragment
                     if (!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
-                        startJob(context, TimelineJob.RETRIEVE_NEWER);
+                        startRetrieveNewShotsTimeLineJob(context);
                     }
                     pollShots();
                 }
@@ -137,6 +140,7 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
         clearCurrentNotifications();
     }
@@ -300,14 +304,27 @@ public class TimelineFragment extends BaseFragment
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
             User currentUser = GolesApplication.get(context).getCurrentUser();
-
-            startJob(context, TimelineJob.RETRIEVE_NEWER);
+            startRetrieveNewShotsTimeLineJob(context);
         }
     }
 
-    private void startJob(Context context, int typeRetrieve) {
-        TimelineJob job = GolesApplication.get(context).getObjectGraph().get(TimelineJob.class);
-        job.init(currentUser, typeRetrieve);
+    private void startRetrieveFromDataBaseJob(Context context){
+        RetrieveFromDataBaseTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveFromDataBaseTimeLineJob.class);
+        startJob(job);
+    }
+
+    private void startRetrieveInitialTimeLineJob(Context context){
+        RetrieveInitialTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveInitialTimeLineJob.class);
+        startJob(job);
+    }
+
+    private void startRetrieveNewShotsTimeLineJob(Context context){
+        RetrieveNewShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
+        startJob(job);
+    }
+
+    private void startJob(TimelineJob job){
+        job.init(currentUser);
         jobManager.addJobInBackground(job);
     }
 
@@ -318,13 +335,13 @@ public class TimelineFragment extends BaseFragment
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            startJob(context, TimelineJob.RETRIEVE_OLDER);
+            startRetrieveNewShotsTimeLineJob(context);
         }
     }
 
     public void loadInitialTimeline() {
         User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
-        startJob(getActivity().getApplicationContext(), TimelineJob.RETRIEVE_INITIAL);
+        startRetrieveInitialTimeLineJob(getActivity());
         swipeRefreshLayout.setRefreshing(true);
     }
 

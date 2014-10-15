@@ -36,7 +36,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     @Inject
     public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
       BagdadService service, UserManager userManager, FollowManager followManager) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;

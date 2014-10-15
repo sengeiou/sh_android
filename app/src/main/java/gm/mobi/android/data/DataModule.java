@@ -42,6 +42,10 @@ import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.task.jobs.shots.PostNewShotJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
@@ -84,6 +88,9 @@ import static android.content.Context.MODE_PRIVATE;
     PostNewShotJob.class,
 
     ProfileFragment.class,
+
+    RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
+    RetrieveOldShotsTimeLineJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
