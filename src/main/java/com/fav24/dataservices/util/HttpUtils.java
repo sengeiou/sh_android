@@ -21,6 +21,14 @@ import org.apache.http.message.BasicNameValuePair;
 import com.fav24.dataservices.DataServicesContext;
 
 
+/**
+ * Esta clase es obsoleta.
+ * <br/>
+ * Para nuevos desarrollos usar la clase:
+ * <br/>
+ * {@linkplain com.fav24.dataservices.util.FastHttpUtils}.
+ */
+@Deprecated
 public class HttpUtils {
 
 	private static final String USER_AGENT = "DataServices";

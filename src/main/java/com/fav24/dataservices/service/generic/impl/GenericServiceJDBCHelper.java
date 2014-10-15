@@ -1299,7 +1299,7 @@ public class GenericServiceJDBCHelper {
 		/*
 		 * Montaje del filtro de claves:
 		 * - Se realliza un FND (Forma Normal Disyuntiva) con los campos de las claves primarias.
-		 * - Si un campo clave es NULL, se considera que el registro no existe, y directamente se retorna false.
+		 * - Si el campo es NULL, no se incluye en el filtro.
 		 * 
 		 * Interpretación del resultado del filtrado:
 		 * - Si se obtiene más de una fila, significa que la recuperación implica una clave duplicada, y saltará una excepción.
@@ -1346,7 +1346,10 @@ public class GenericServiceJDBCHelper {
 					i++;
 				}
 				else {
-					return false;
+					keyTypes = null;
+					keyParams = null;
+					keyQuery = null;
+					break;
 				}
 			}
 
