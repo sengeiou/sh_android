@@ -15,6 +15,8 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     UserManager userManager;
     FollowManager followManager;
     TeamManager teamManager;
+
+    @Inject UserVOMapper userVOMapper;
 
     private User currentUser;
 
@@ -68,13 +72,28 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     protected void run() throws SQLException, IOException {
         List<User> following = getFollowingsFromServer();
         Timber.d("Downloaded %d followings' users", following.size());
+
         List<Follow> followsByFollowing = getFollowsByFollowing(following);
         // Save and send result
         userManager.saveUsers(following);
         followManager.saveFollows(followsByFollowing);
-        postSuccessfulEvent(new FollowsResultEvent(following));
+        List<UserVO> userFollows = getUserVOs(following);
+
+        postSuccessfulEvent(new FollowsResultEvent(userFollows));
 
     }
+
+    public List<UserVO> getUserVOs(List<User> users){
+        List<UserVO> userVOs = new ArrayList<>();
+        for(User user:users){
+            Long currentUserId = currentUser.getIdUser();
+            Follow follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
+            userVOs.add(userVOMapper.toVO(user, follow, currentUserId));
+        }
+        return userVOs;
+    }
+
+
 
     private List<User> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);

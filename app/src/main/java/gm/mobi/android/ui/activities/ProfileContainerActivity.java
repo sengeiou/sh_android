@@ -11,15 +11,16 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
+import gm.mobi.android.ui.model.UserVO;
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
     private static final String EXTRA_USER = "user";
 
-    public static Intent getIntent(Context context, User user) {
+    public static Intent getIntent(Context context, UserVO userVO) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
-        i.putExtra(EXTRA_USER, user);
+        i.putExtra(EXTRA_USER, userVO);
         return i;
     }
 
@@ -32,7 +33,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setupActionBar();
 
         if (savedInstanceState == null) {
-            User user = (User) getIntent().getSerializableExtra(EXTRA_USER);
+            UserVO user = (UserVO) getIntent().getSerializableExtra(EXTRA_USER);
             if (user == null) {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();

@@ -27,6 +27,7 @@ import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
+import gm.mobi.android.ui.model.UserVO;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -121,7 +122,7 @@ public class UserFollowsFragment extends BaseFragment {
     @Subscribe
     public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
-        List<User> usersFollowing = event.getResult();
+        List<UserVO> usersFollowing = event.getResult();
         if (usersFollowing.size() == 0) {
             setEmpty(true);
         } else {
@@ -129,7 +130,7 @@ public class UserFollowsFragment extends BaseFragment {
         }
     }
 
-    protected void setListContent(List<User> usersFollowing) {
+    protected void setListContent(List<UserVO> usersFollowing) {
         getAdapter().setItems(usersFollowing);
     }
 
@@ -146,7 +147,8 @@ public class UserFollowsFragment extends BaseFragment {
 
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
-        User user = getAdapter().getItem(position);
+        //TODO HACER QUE FUNCIONE EL VO EN TODOS SITIOS
+        UserVO user = getAdapter().getItem(position);
         startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
     }
 

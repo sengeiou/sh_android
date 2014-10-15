@@ -64,13 +64,22 @@ public class FollowManager extends AbstractManager{
     public Follow getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =?";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
+        //boolean res = true;
+        //String raw_query = "SELECT * FROM "+ FollowTable.TABLE;
+        //Cursor c = db.rawQuery(raw_query, new String[]{});
+        //if (c.getCount() > 0) res = false;
+        //c.close();
+        //if(res == true){
+        //    return null;
+        //}else{
+        Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+            if(c.getCount()>0){
+                c.moveToFirst();
+                return followMapper.fromCursor(c);
+            }
+        //}
 
-        Cursor c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
-        if(c.getCount()>0){
-            c.moveToFirst();
-         return  followMapper.fromCursor(c);
-        }
-        return new Follow();
+        return null;
     }
 
     /**
@@ -78,7 +87,7 @@ public class FollowManager extends AbstractManager{
      */
     public  List<Long> getUserFollowingIds(Long idUser) throws SQLException {
         List<Long> userIds = new ArrayList<>();
-        db.beginTransaction();
+
         String args = ID_USER+"=?";
         String[] argsString = new String[]{String.valueOf(idUser)};
         if(isTableEmpty(FOLLOW_TABLE)){
@@ -92,7 +101,6 @@ public class FollowManager extends AbstractManager{
                 c.moveToNext();
             }
         }
-        db.endTransaction();
         c.close();
         return userIds;
     }

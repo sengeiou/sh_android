@@ -11,12 +11,13 @@ import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.ui.model.UserVO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListAdapter extends BindableAdapter<User> {
+public class UserListAdapter extends BindableAdapter<UserVO> {
 
-    private List<User> users;
+    private List<UserVO> users;
     private Picasso picasso;
 
     public UserListAdapter(Context context, Picasso picasso) {
@@ -25,12 +26,12 @@ public class UserListAdapter extends BindableAdapter<User> {
         this.users = new ArrayList<>(0);
     }
 
-    public void setItems(List<User> users) {
+    public void setItems(List<UserVO> users) {
         this.users = users;
         notifyDataSetChanged();
     }
 
-    public void addItems(List<User> users) {
+    public void addItems(List<UserVO> users) {
         this.users.addAll(users);
         notifyDataSetChanged();
     }
@@ -43,7 +44,7 @@ public class UserListAdapter extends BindableAdapter<User> {
         return users.size();
     }
 
-    @Override public User getItem(int position) {
+    @Override public UserVO getItem(int position) {
         return users.get(position);
     }
 
@@ -57,7 +58,7 @@ public class UserListAdapter extends BindableAdapter<User> {
         return rowView;
     }
 
-    @Override public void bindView(User item, int position, View view) {
+    @Override public void bindView(UserVO item, int position, View view) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.name.setText(item.getUserName());
         viewHolder.username.setText(item.getFavoriteTeamName());
@@ -72,7 +73,7 @@ public class UserListAdapter extends BindableAdapter<User> {
         }
     }
 
-    public List<User> getItems() {
+    public List<UserVO> getItems() {
         return users;
     }
 

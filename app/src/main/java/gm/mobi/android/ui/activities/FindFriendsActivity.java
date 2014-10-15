@@ -33,6 +33,7 @@ import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
+import gm.mobi.android.ui.model.UserVO;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -161,7 +162,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
     @OnItemClick(R.id.search_results_list)
     public void openProfile(int position) {
-        User user = (User) resultsListView.getItemAtPosition(position);
+        UserVO user = (UserVO) resultsListView.getItemAtPosition(position);
         startActivity(ProfileContainerActivity.getIntent(this, user));
     }
 
@@ -198,8 +199,8 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     @Subscribe
     public void receivedRemoteResult(SearchPeopleRemoteResultEvent event) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<User>> results = event.getResult();
-        List<User> users = results.getResult();
+        PaginatedResult<List<UserVO>> results = event.getResult();
+        List<UserVO> users = results.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
             Timber.d("Received %d remote results", usersReturned);
@@ -220,7 +221,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
 
     @Subscribe
     public void receivedLocalResult(SearchPeopleLocalResultEvent event) {
-        List<User> results = event.getResult();
+        List<UserVO> results = event.getResult();
         Timber.d("Received %d local results", results.size());
         setListContent(results, NO_OFFSET);
         setEmpty(false);
@@ -246,7 +247,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         currentResultOffset += newItems;
     }
 
-    private void setListContent(List<User> users, int offset) {
+    private void setListContent(List<UserVO> users, int offset) {
         if (offset > NO_OFFSET) {
             adapter.addItems(users);
         } else {
@@ -276,7 +277,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     }
 
     private void clearResults() {
-        adapter.setItems(new ArrayList<User>(0));
+        adapter.setItems(new ArrayList<UserVO>(0));
 
     }
 
@@ -297,7 +298,8 @@ public class FindFriendsActivity extends BaseSignedInActivity {
         currentResultOffset = savedInstanceState.getInt(EXTRA_SEARCH_OFFSET, 0);
         hasMoreItemsToLoad = savedInstanceState.getBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, false);
         isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
-        List<User> restoredResults = (List<User>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        List<UserVO> restoredResults = (List<UserVO>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+
         if (restoredResults != null && restoredResults.size() > 0) {
             setListContent(restoredResults, currentResultOffset);
             setEmpty(false);

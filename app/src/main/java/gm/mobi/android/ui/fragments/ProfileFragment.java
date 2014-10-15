@@ -27,6 +27,7 @@ import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import gm.mobi.android.ui.model.UserVO;
 import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {
@@ -54,11 +55,11 @@ public class ProfileFragment extends BaseFragment {
     @Inject JobManager jobManager;
 
     // Args
-    User user;
+    UserVO user;
 
     User currentUser;
 
-    public static ProfileFragment newInstance(User user) {
+    public static ProfileFragment newInstance(UserVO user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
         arguments.putSerializable(ARGUMENT_USER, user);
@@ -74,7 +75,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void injectArguments() {
         Bundle arguments = getArguments();
-        user = (User) arguments.getSerializable(ARGUMENT_USER);
+        user = (UserVO) arguments.getSerializable(ARGUMENT_USER);
     }
 
     @Override
@@ -130,19 +131,19 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
         user = event.getResult();
-        setUserInfo(user, event.doIFollowHim(), user.getFavoriteTeamName());
+        setUserInfo(user);
     }
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        setUserInfo(user,event.isDoIFollowHim(),user.getFavoriteTeamName());
+        setUserInfo(user);
     }
 
     private void setTitle(String title) {
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
-    private void setBasicUserInfo(User user) {
+    private void setBasicUserInfo(UserVO user) {
         setTitle(user.getUserName());
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
@@ -156,10 +157,11 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    private void setUserInfo(User user, int doIFollowHim, String favTeamName) {
+    private void setUserInfo(UserVO user) {
         setBasicUserInfo(user);
+        String favTeamName = user.getFavoriteTeamName();
         bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
-        setMainButtonStatus(doIFollowHim);
+        setMainButtonStatus(user.getRelationship());
     }
 
     private void setMainButtonStatus(int doIFollowHim) {

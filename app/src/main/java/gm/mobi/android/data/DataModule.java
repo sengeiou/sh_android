@@ -88,7 +88,6 @@ import static android.content.Context.MODE_PRIVATE;
     PostNewShotJob.class,
 
     ProfileFragment.class,
-
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class,
 

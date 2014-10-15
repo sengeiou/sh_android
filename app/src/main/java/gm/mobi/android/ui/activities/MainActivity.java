@@ -38,6 +38,8 @@ import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.PeopleFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
+import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -59,6 +61,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject Picasso picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
+    @Inject UserVOMapper userVOMapper;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -75,6 +78,8 @@ public class MainActivity extends BaseSignedInActivity {
     private int currentSelectedDrawerPosition = -1;
     private MenuAdapter menuAdapter;
 
+    private UserVO userVO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +94,7 @@ public class MainActivity extends BaseSignedInActivity {
 
         actionBar = getSupportActionBar();
         currentUser = GolesApplication.get(this).getCurrentUser();
-
+        userVO = userVOMapper.toVO(currentUser,null,currentUser.getIdUser());
         startGCMRegistration();
         setupSyncing();
         setupNavigationDrawer();
@@ -243,7 +248,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @OnClick(R.id.menu_drawer_profile)
     public void openProfileFromDrawer() {
-        startActivity(ProfileContainerActivity.getIntent(this, currentUser));
+        startActivity(ProfileContainerActivity.getIntent(this, userVO));
     }
 
     private void setScreenTitle(String title) {

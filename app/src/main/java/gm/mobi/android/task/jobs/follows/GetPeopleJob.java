@@ -8,12 +8,16 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,16 +28,18 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
     public static final int PRIORITY = 5;
     BagdadService service;
 
-    private Long userId;
+    private Long currentUserId;
     private UserManager userManager;
     private FollowManager followManager;
+    private UserVOMapper userVOMapper;
 
 
-    @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager) {
+    @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
+        this.userVOMapper = userVOMapper;
         setOpenHelper(openHelper);
     }
 
@@ -44,22 +50,36 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
 
     @Override
     protected void run() throws IOException, SQLException {
+
         List<User> peopleFromDatabase = getPeopleFromDatabase();
+
+        List<UserVO> userVOs = getUserVOs(peopleFromDatabase);
+
         if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
-            postSuccessfulEvent(new FollowsResultEvent(peopleFromDatabase));
+            postSuccessfulEvent(new FollowsResultEvent(userVOs));
         }
 
-        List<User> peopleFromServer = service.getFollowing(userId, 0L);
+        List<User> peopleFromServer = service.getFollowing(currentUserId, 0L);
         Collections.sort(peopleFromServer, new NameComparator());
-        postSuccessfulEvent(new FollowsResultEvent(peopleFromServer));
+        userVOs = getUserVOs(peopleFromServer);
+        postSuccessfulEvent(new FollowsResultEvent(userVOs));
+    }
+
+    public List<UserVO> getUserVOs(List<User> users){
+        List<UserVO> userVOs = new ArrayList<>();
+        for(User user: users){
+            Follow follow = followManager.getFollowByUserIds(currentUserId, user.getIdUser());
+            userVOs.add(userVOMapper.toVO(user,follow,currentUserId));
+        }
+        return userVOs;
     }
 
     public void init(long currentUserId) {
-        userId = currentUserId;
+        this.currentUserId = currentUserId;
     }
 
     private List<User> getPeopleFromDatabase() throws SQLException {
-        List<Long> usersFollowingIds = followManager.getUserFollowingIds(userId);
+        List<Long> usersFollowingIds = followManager.getUserFollowingIds(currentUserId);
         List<User> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
         return usersFollowing;
     }

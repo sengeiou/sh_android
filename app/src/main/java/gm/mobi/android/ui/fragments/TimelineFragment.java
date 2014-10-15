@@ -25,12 +25,15 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.path.android.jobqueue.persistentQueue.sqlite.DbOpenHelper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
@@ -48,6 +51,8 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import java.sql.SQLException;
 import java.util.List;
@@ -64,6 +69,10 @@ public class TimelineFragment extends BaseFragment
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject BagdadNotificationManager notificationManager;
+    //@Inject UserVOMapper userVOMapper;
+    //@Inject DbOpenHelper openHelper;
+    //@Inject FollowManager followManager;
+
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -304,9 +313,11 @@ public class TimelineFragment extends BaseFragment
     }
 
     public void openProfile(int position) {
-        User user = adapter.getItem(position).getUser();
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user);
-        startActivity(profileIntent);
+        //Long currentUserId = currentUser.getIdUser();
+        //User user = adapter.getItem(position).getUser();
+        //
+        //Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user);
+        //startActivity(profileIntent);
     }
 
     public void startRefreshing(Context context) throws SQLException {
