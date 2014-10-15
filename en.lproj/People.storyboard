@@ -118,10 +118,10 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Points" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y5p-tT-Y7j">
-                                                <rect key="frame" x="290" y="40" width="50" height="21"/>
+                                                <rect key="frame" x="290" y="40" width="50" height="14"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="oVY-nL-LkJ"/>
-                                                    <constraint firstAttribute="height" constant="21" id="svQ-f9-fU1"/>
+                                                    <constraint firstAttribute="height" constant="14" id="svQ-f9-fU1"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                                 <color key="textColor" red="0.53333333333333333" green="0.59999999999999998" blue="0.65098039215686276" alpha="1" colorSpace="calibratedRGB"/>

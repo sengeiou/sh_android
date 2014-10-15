@@ -138,6 +138,8 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)setupTimeLineTableView {
     
+    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
@@ -324,8 +326,8 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-	
+    ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
     Shot *shot = self.arrayShots[indexPath.row];
 	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
