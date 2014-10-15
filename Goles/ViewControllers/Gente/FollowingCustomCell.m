@@ -72,25 +72,43 @@
 
 //------------------------------------------------------------------------------
 - (void)configureFollowButton {
+    
     self.actionButton.hidden = NO;
     [self.actionButton setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+    
     [self.actionButton setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+    
     [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(-1, 0, 0, 0)];
+   
     self.actionButton.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+    
     self.actionButton.backgroundColor = [UIColor whiteColor];
+   
     self.actionButton.layer.borderWidth = 1.0f;
     self.actionButton.layer.masksToBounds = YES;
+   
+    [self.actionButton setImage: nil forState:UIControlStateNormal];
+
 }
 
 //------------------------------------------------------------------------------
 - (void)configureFollowingButton {
+   
     self.actionButton.hidden = NO;
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+   
     NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
     [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
     [self.actionButton setAttributedTitle:buttonString forState:UIControlStateNormal];
+    
+    [self.actionButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+
+    
     self.actionButton.backgroundColor = [Fav24Colors iosSevenBlue];
+    
+    self.actionButton.layer.borderWidth = 0.0f;
+    self.actionButton.layer.masksToBounds = NO;
+    
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 }
 
