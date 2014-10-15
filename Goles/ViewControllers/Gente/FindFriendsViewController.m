@@ -234,10 +234,22 @@
     [self reloadTableWithAnimation];
     
     self.textInSearchBar = searchBar.text;
-    
-    [searchBar resignFirstResponder];
 }
 
+-(void)enableCancelButton{
+   
+    for (UIView *view in self.mySearchBar.subviews)
+    {
+        for (id subview in view.subviews)
+        {
+            if ( [subview isKindOfClass:[UIButton class]] )
+            {
+                [subview setEnabled:YES];
+                return;
+            }
+        }
+    }
+}
 
 #pragma mark - Search Response method
 //------------------------------------------------------------------------------
@@ -340,6 +352,7 @@
          if (self.lastContentOffset > scrollView.contentOffset.y){
              [UIView animateWithDuration:0.25 animations:^{
                  [self.mySearchBar resignFirstResponder];
+                 [self enableCancelButton];
             }];
          }
     }
