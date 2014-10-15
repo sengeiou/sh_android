@@ -297,11 +297,6 @@
         [appDelegate registerAPNS];
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         
-        if (SYNCHRO_ACTIVATED)
-            [[SyncManager singleton] startSyncProcess];
-       
-        [appDelegate setTabBarItems];
-        
     }
 }
 
@@ -314,7 +309,21 @@
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
         else if (status && [entityClass isSubclassOfClass:[User class]])
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-     
+        else if (status && [entityClass isSubclassOfClass:[Shot class]]){
+            if (SYNCHRO_ACTIVATED)
+                [[SyncManager singleton] startSyncProcess];
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            [appDelegate setTabBarItems];
+
+        }
+    }else if(!status && refresh){
+        if (SYNCHRO_ACTIVATED)
+            [[SyncManager singleton] startSyncProcess];
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate setTabBarItems];
+        
     }else if(error){
         dispatch_async(dispatch_get_main_queue(), ^{
             

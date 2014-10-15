@@ -42,7 +42,6 @@
     
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    
 }
 
 //------------------------------------------------------------------------------
@@ -104,7 +103,6 @@
     [self pushToProfileUser:self.followingUsers[indexPath.row]];
 }
 
-
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
 - (void)goProfile:(id)sender{
@@ -129,8 +127,6 @@
     self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
     [self.usersTable reloadData];
 }
-
-
 
 #pragma mark - Conection response methods
 //------------------------------------------------------------------------------
