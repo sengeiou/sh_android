@@ -49,7 +49,7 @@
         img.clipsToBounds = YES;
     }
     
-    return imageView;
+    return img;
 
 }
 

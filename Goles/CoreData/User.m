@@ -74,7 +74,8 @@
     NSString *sessionToken = [dict objectForKey:kJSON_SESSIONTOKEN ];
     if ([sessionToken isKindOfClass:[NSString class]])
         [self setSessionToken:sessionToken];
-    
+    else
+        return NO;
     
     NSString *email = [dict objectForKey:kJSON_EMAIL ];
     if ([email isKindOfClass:[NSString class]])

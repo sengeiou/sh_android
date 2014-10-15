@@ -60,7 +60,8 @@
     //Create 'req' array
     NSMutableArray *req = [[NSMutableArray alloc] initWithCapacity:5];
     
-    NSNumber *idDevice = [[UserManager singleton] getIdDevice];
+//    NSNumber *idDevice = [[UserManager singleton] getIdDevice];
+     NSNumber *idDevice = @0;
     NSNumber *idPlayer = [[UserManager singleton] getUserId];
 //    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
     
