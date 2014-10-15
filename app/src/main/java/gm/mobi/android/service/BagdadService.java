@@ -32,6 +32,8 @@ public interface BagdadService {
 
     public Device updateDevice(Device device) throws IOException;
 
+    public Device getDeviceByUniqueId(String uniqueDeviceId) throws IOException;
+
     public Follow followUser(Follow follow) throws IOException;
 
     public Follow unfollowUser(Follow follow) throws IOException;

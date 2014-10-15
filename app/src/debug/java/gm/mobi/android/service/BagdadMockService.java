@@ -80,6 +80,10 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
+    @Override public Device getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
+        return null;
+    }
+
     @Override public Follow followUser(Follow follow) throws IOException {
         return null;
     }

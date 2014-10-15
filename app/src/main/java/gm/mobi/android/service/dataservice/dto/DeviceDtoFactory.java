@@ -25,14 +25,10 @@ public class DeviceDtoFactory {
     }
 
     public GenericDto getUpdateDeviceOperationDto(Device device) {
-        FilterDto filter = and(DeviceTable.ID_DEVICE).isEqualTo(null)
-          .and(DeviceTable.ID_USER).isEqualTo(device.getIdUser())
-          .build();
-
         MetadataDto md = new MetadataDto.Builder()
           .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
           .entity(DeviceTable.TABLE)
-          .putKey(DeviceTable.ID_DEVICE, null)
+          .putKey(DeviceTable.ID_DEVICE, device.getUniqueDevideID())
           .build();
 
         OperationDto op = new OperationDto.Builder()

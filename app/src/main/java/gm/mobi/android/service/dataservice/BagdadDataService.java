@@ -256,7 +256,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override public Follow getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
-        GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser,idUser);
+        GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -281,6 +281,11 @@ public class BagdadDataService implements BagdadService {
         Map<String, Object> dataItem = ops[0].getData()[0];
         Device deviceReceived = deviceMapper.fromDto(dataItem);
         return deviceReceived;
+    }
+
+    @Override public Device getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
+
+        return null;
     }
 
     @Override public Follow followUser(Follow follow) throws IOException {

@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.constant.Constants;
 import gm.mobi.android.data.prefs.GCMAppVersion;
 import gm.mobi.android.data.prefs.GCMRegistrationId;
 import gm.mobi.android.data.prefs.IntPreference;
@@ -70,6 +72,8 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
         if (regId.isEmpty()) {
             Timber.d("Registration id not found or invalid. Retrieving a new one from GCM server");
             registerGCM();
+        } else {
+            Timber.d("Registration id found, skipping registration process.");
         }
     }
 
@@ -86,27 +90,36 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
     }
 
     private void sendTokenToServer(String regId) throws IOException {
-        //TODO until we have a proper registration process, we just update the device in database or create a new one,
-        // and send it to the server
         String uniqueDeviceId = getUniqueDeviceId(getContext());
+        Device existingDevice = getCurrentDevice(uniqueDeviceId);
+
+        if (existingDevice == null) {
+            existingDevice = new Device();
+            existingDevice.setIdUser(currentUser.getIdUser());
+            existingDevice.setPlatform(Constants.ANDROID_PLATFORM.intValue());
+            existingDevice.setOsVer("Android");
+            existingDevice.setModel("Mío");
+            existingDevice.setUniqueDevideID(uniqueDeviceId);
+            existingDevice.setToken(regId);
+            existingDevice.setCsys_birth(new Date());
+            existingDevice.setCsys_revision(0);
+        } else {
+            existingDevice.setCsys_revision(existingDevice.getCsys_revision()+1);
+        }
+
+        existingDevice.setToken(regId);
+        existingDevice.setCsys_modified(new Date());
+
+        service.updateDevice(existingDevice);
+    }
+
+
+    @Nullable private Device getCurrentDevice(String uniqueDeviceId) throws IOException {
         Device currentDevice = deviceManager.getDeviceByUniqueId(uniqueDeviceId);
         if (currentDevice == null) {
-            currentDevice = new Device();
-            currentDevice.setIdUser(currentUser.getIdUser());
-            currentDevice.setPlatform(1);
-            currentDevice.setOsVer("Android");
-            currentDevice.setModel("Mío");
-            currentDevice.setUniqueDevideID(uniqueDeviceId);
-            currentDevice.setToken(regId);
-            currentDevice.setCsys_revision(0);
-            currentDevice.setCsys_birth(new Date());
-            currentDevice.setCsys_modified(new Date());
-        } else {
-            currentDevice.setToken(regId);
-            currentDevice.setCsys_revision(currentDevice.getCsys_revision()+1);
-            currentDevice.setCsys_modified(new Date());
+            currentDevice = service.getDeviceByUniqueId(uniqueDeviceId);
         }
-        service.updateDevice(currentDevice);
+        return currentDevice;
     }
 
     @Override protected void createDatabase() {
