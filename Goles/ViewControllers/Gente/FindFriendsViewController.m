@@ -38,6 +38,7 @@
 
 @property (nonatomic,weak)      IBOutlet    UIView  *viewNotPeople;
 @property (nonatomic,weak)      IBOutlet    UILabel  *lblNotPeople;
+@property (nonatomic,strong) NSString *textInSearchBar;
 
 @end
 
@@ -50,7 +51,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     // Do any additional setup after loading the view.
-    [self addSearchNavBar];
+   
     [self initSpinner];
     self.usersSearch = [[NSMutableArray alloc]init];
     search = NO;
@@ -62,6 +63,8 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [self addSearchNavBar];
+    
     self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
     //Background blur image under the modalview
     self.usersTable.backgroundView = [[UIImageView alloc] initWithImage:[self.backgroundImage applyBlurWithRadius:20
@@ -82,8 +85,10 @@
     self.mySearchBar.placeholder = NSLocalizedString(@"Search People", nil);
     self.mySearchBar.delegate = self;
     [self.mySearchBar becomeFirstResponder];
-    [self.navigationController.navigationBar addSubview:self.mySearchBar];
+    
+    self.mySearchBar.text = self.textInSearchBar;
 
+    [self.navigationController.navigationBar addSubview:self.mySearchBar];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -209,7 +214,8 @@
 //    
 //    [self restoreInitialStateView];
 //    [self reloadTableWithAnimation];
-    
+    self.textInSearchBar = nil;
+
     [self dismissViewControllerAnimated:YES completion:^{
         NSLog(@"vuelvo");
     }];
@@ -226,6 +232,8 @@
     //[self.followingUsers removeAllObjects]; // First clear the filtered array.
     self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
     [self reloadTableWithAnimation];
+    
+    self.textInSearchBar = searchBar.text;
     
     [searchBar resignFirstResponder];
 }
