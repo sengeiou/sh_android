@@ -225,6 +225,7 @@
                         <outlet property="mainView" destination="hzD-5B-NPo" id="jQJ-9E-ovV"/>
                         <outlet property="scrollView" destination="pn0-5T-r2b" id="nQH-mc-yUO"/>
                         <outlet property="segmentedControl" destination="yAO-9V-L0h" id="vGD-xg-R5n"/>
+                        <outlet property="txtViewWebSite" destination="10r-qX-pEO" id="3mB-Ly-73S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dd5-14-dki" userLabel="First Responder" sceneMemberID="firstResponder"/>
