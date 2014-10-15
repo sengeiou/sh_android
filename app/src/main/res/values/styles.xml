@@ -126,7 +126,7 @@
 
    <!-- EditProfile Button -->
     <style name="ProfileEditProfileButton">
-        <item name="android:background">@drawable/btn_white</item>
+        <item name="android:background">@drawable/btn_follow</item>
         <item name="android:clickable">true</item>
     </style>
 
@@ -134,7 +134,6 @@
     <style name="ProfileEditProfileButtonText">
         <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableLeft">@drawable/ic_check</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center</item>
         <item name="android:text">@string/profile_edit_profile</item>
