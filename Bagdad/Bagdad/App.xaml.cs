@@ -22,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Coding4Fun.Toolkit.Controls;
 using Microsoft.Phone.Notification;
+using Bagdad.Models;
 
 namespace Bagdad
 {
@@ -31,7 +32,7 @@ namespace Bagdad
         #region VARIABLES
 
         public static int ID_DEVICE = 0;
-        public static int ID_USER = 2;
+        public static int ID_USER = 0;
         public static double TIME_LAPSE = -7167518.431640625;
         public const int PLATFORM_ID = 2;
         public static bool hasDeletedMaxShots = false;
@@ -353,6 +354,22 @@ namespace Bagdad
 
         }
 
+        public static String UDID()
+        {
+            byte[] myDeviceID = (byte[])Microsoft.Phone.Info.DeviceExtendedProperties.GetValue("DeviceUniqueId");
+            return System.Convert.ToBase64String(myDeviceID);
+        }
+
+        public static string modelVersion()
+        {
+            return Microsoft.Phone.Info.DeviceStatus.DeviceManufacturer + " " + Microsoft.Phone.Info.DeviceStatus.DeviceName;
+        }
+
+        public static string locale()
+        {
+            return System.Globalization.CultureInfo.CurrentCulture.Name;
+        }
+
         #endregion
 
         #region DATA_BASE
@@ -398,7 +415,7 @@ namespace Bagdad
 
         #region SECCIÓN DE PUSHES
 
-        public String pushToken;
+        public static String pushToken;
 
         // Funciones referentes a Notificaciones Toast:
         private void setNotificationChannel()
@@ -560,8 +577,8 @@ namespace Bagdad
         private async void UpdateTokenOnServer()
         {
             //we get the params on Local DB, if there are no device information, the same query will create a new one in server.
-
-
+            Device device = new Device();
+            await device.UpdateDeviceToken();
         }
 
         #endregion

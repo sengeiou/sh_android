@@ -51,7 +51,6 @@ namespace Bagdad
             if(followings.Followings.Count == 0) await LoadFollowingsData();
             else
             {
-                followingList.ItemsSource = null;
                 followingList.ItemsSource = followings.Followings;
             }
             progress.IsVisible = false;

@@ -91,7 +91,6 @@ namespace Bagdad
                     if (App.ShotsVM.shotsList.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                     else
                     {
-                        myShots.ItemsSource = null;
                         myShots.ItemsSource = App.ShotsVM.shotsList;
                     }
                 }

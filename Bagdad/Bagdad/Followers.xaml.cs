@@ -67,7 +67,6 @@ namespace Bagdad
             }
             else
             {
-                followingList.ItemsSource = null;
                 followingList.ItemsSource = followers.Followings;
             }
 

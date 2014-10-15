@@ -77,6 +77,14 @@ namespace Bagdad.Utils
 
         #endregion
 
+        #region DEVICE
+
+        public const String GetCurrentDevice = "SELECT idDevice, idUser, token, uniqueDeviceID, model, osVer, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized FROM Device LIMIT 1";
+
+        public const String SaveOrCreateDevice = "INSERT OR REPLACE INTO Device (idDevice, idUser, token, uniqueDeviceID, model, osVer, csys_birth, csys_modified, csys_revision) VALUES (@idDevice, @idUser, @token, @uniqueDeviceID, @model, @osVer, @csys_birth, @csys_modified, @csys_revision)";
+
+        #endregion
+
         #region Generic
 
         public const String getMaxModificationDateOf = "SELECT maxTimestamp FROM Synchro WHERE Entity = @Entity";

@@ -19,6 +19,7 @@ namespace Bagdad.Utils
         public const String SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET = "retrieveNoAutoOffset";
         public const String SERCOM_OP_UPDATECREATE = "CreateUpdate";
         public const String SERCOM_OP_CREATE = "Create";
+        public const String SERCOM_OP_DELETE = "Delete";
 
         //TABLES
         public const String SERCOM_TB_LOGIN = "Login";

@@ -100,6 +100,9 @@ namespace Bagdad.Models
                     await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
                 App.DBLoaded.Set();
+
+                Device device = new Device();
+                await device.UpdateDeviceToken();
             }
             catch (Exception e)
             {

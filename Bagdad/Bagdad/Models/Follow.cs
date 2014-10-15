@@ -248,5 +248,25 @@ namespace Bagdad.Models
             }
             return followings;
         }
+
+        #region FOLLOW/UNFOLLOW
+
+        public async Task<bool> AddFollowing(int _idUser)
+        {
+            return await AddOrDelFollowing(_idUser, Constants.SERCOM_OP_CREATE);
+        }
+
+        public async Task<bool> DelFollowing(int _idUser)
+        {
+            return await AddOrDelFollowing(_idUser, Constants.SERCOM_OP_DELETE);
+        }
+
+        private async Task<bool> AddOrDelFollowing(int _idUser, String _operation)
+        {
+            //TODO: ALL
+            return true;
+        }
+
+        #endregion
     }
 }
