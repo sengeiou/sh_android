@@ -260,12 +260,31 @@
          
             [self showAlertBadText];
         });
+    }else if (!status){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self showAlertBadText];
+        });
     }
 }
 
 -(void)showAlertBadText{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Id or Password are not valid", nil) message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
-    [alert show];
+   
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:NSLocalizedString(@"Id or Password are not valid", nil)
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"OK", nil)
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [alert dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+     [alert addAction:ok];
+     [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Webservice response methods
@@ -300,12 +319,36 @@
             [appDelegate setTabBarItems];
         }
         
+    }else if(error){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self showAlertTimeout];
+        });
+
     }else{
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [self showAlertBadText];
         });
     }
+}
+
+-(void)showAlertTimeout{
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:NSLocalizedString(@"Connection timed out.", nil)
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = [UIAlertAction
+                            actionWithTitle:NSLocalizedString(@"OK", nil)
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction * action)
+                            {
+                                [alert dismissViewControllerAnimated:YES completion:nil];
+                            }];
+
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UITextField response methods

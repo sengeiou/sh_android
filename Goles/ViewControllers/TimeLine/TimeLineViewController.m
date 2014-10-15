@@ -23,7 +23,7 @@
 #import "TimeLineUtilities.h"
 #import "InfoTableViewController.h"
 
-@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol, UIAlertViewDelegate>{
+@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
     BOOL moreCells;
     BOOL refreshTable;
@@ -538,9 +538,33 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Shot Not Posted", nil) message:NSLocalizedString(@"Connection timed out.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Retry", nil), nil];
-    alertView.tag = 18;
-    [alertView show];
+
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:NSLocalizedString(@"Shot Not Posted", nil)
+                                  message:NSLocalizedString(@"Connection timed out.", nil)
+                                  preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction* retry = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"Retry", nil)
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [alert dismissViewControllerAnimated:YES completion:nil];
+                             [self sendShot];
+                         }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                  [self setupUIWhenCancelOrNotConnection];
+                             }];
+    [alert addAction:retry];
+    [alert addAction:cancel];
+
+    [self presentViewController:alert animated:YES completion:nil];
     
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
@@ -570,8 +594,26 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (void)showAlert{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Shot Not Posted", nil) message:NSLocalizedString(@"Whoops! You already shot that.", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
-    [alert show];
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:NSLocalizedString(@"Shot Not Posted", nil)
+                                  message:NSLocalizedString(@"Whoops! You already shot that.", nil)
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = [UIAlertAction
+                            actionWithTitle:NSLocalizedString(@"OK", nil)
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction * action)
+                            {
+                                [alert dismissViewControllerAnimated:YES completion:nil];
+                                self.txtView.backgroundColor = [UIColor whiteColor];
+                                self.txtView.textColor = [UIColor blackColor];
+                                self.btnShoot.enabled = YES;
+                                self.viewToDisableTextField.hidden = YES;
+                            }];
+    
+    [alert addAction:ok];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
@@ -600,32 +642,6 @@ static NSString *CellIdentifier = @"shootCell";
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
-}
-
-
-#pragma mark - UIAlertViewDelegate
-//------------------------------------------------------------------------------
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 18) {
-        switch (buttonIndex) {
-            case 0:{
-                [self setupUIWhenCancelOrNotConnection];
-                break;
-            }
-            case 1:
-                [self sendShot];
-                
-                break;
-            default:
-                break;
-        }
-
-    }else{
-        self.txtView.backgroundColor = [UIColor whiteColor];
-        self.txtView.textColor = [UIColor blackColor];
-        self.btnShoot.enabled = YES;
-        self.viewToDisableTextField.hidden = YES;
-    }
 }
 
 //------------------------------------------------------------------------------
