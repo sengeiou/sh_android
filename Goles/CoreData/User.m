@@ -51,6 +51,38 @@
 }
 
 //------------------------------------------------------------------------------
++(User *)createUserWithUser:(User *)user {
+    
+    NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
+    User *newUser = [NSEntityDescription insertNewObjectForEntityForName:K_COREDATA_USER inManagedObjectContext:context];
+    
+    [newUser setIdUser:user.idUser];
+    [newUser setUserName:user.userName];
+    [newUser setIdFavoriteTeam:user.idFavoriteTeam];
+    [newUser setSessionToken:user.sessionToken];
+    [newUser setEMail:user.eMail];
+    [newUser setName:user.name];
+    [newUser setPhoto:user.photo];
+    [newUser setBio:user.bio];
+    [newUser setWebsite:user.website];
+    [newUser setPoints:user.points];
+    [newUser setNumFollowing:user.numFollowing];
+    [newUser setNumFollowers:user.numFollowers];
+    [newUser setRank:user.rank];
+    [newUser setFavoriteTeamName:user.favoriteTeamName];
+    
+    //SYNCRO  PROPERTIES
+    
+//        [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
+//
+//        [self setCsys_modified:modified];
+//    
+//        [self setCsys_deleted:deleted];
+    
+    
+    return newUser;
+}
+//------------------------------------------------------------------------------
 -(BOOL)setUserValuesWithDictionary:(NSDictionary *)dict {
     
     BOOL result = YES;

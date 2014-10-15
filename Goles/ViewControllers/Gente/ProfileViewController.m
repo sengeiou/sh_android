@@ -134,7 +134,7 @@
     
     BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
     if (followActionSuccess)
-        [self dataFillView];
+        [self configureFollowButton];
     
 }
 
