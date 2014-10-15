@@ -10,6 +10,7 @@
                 <Attribute Alias="token" Direction="Both" Description="Api platform token">token</Attribute>
                 <Attribute Alias="idPushEngine" Direction="Both" Description="Push engine identifier">idPushEngine</Attribute>
                 <Attribute Alias="uniqueDeviceID" Direction="Both" Description="Unique Device Identifier">uniqueDeviceID</Attribute>
+                <Attribute Alias="status" Direction="Both" Description="Estado después del último envío de push">status</Attribute>
                 <Attribute Alias="platform" Direction="Both" Description="Platform">platform</Attribute>
                 <Attribute Alias="model" Direction="Both" Description="Device model">model</Attribute>
                 <Attribute Alias="osVer" Direction="Both" Description="OS version">osVer</Attribute>
@@ -39,6 +40,11 @@
                     <Attribute Alias="idDevice">idDevice</Attribute>
                 </Filter>
                 <Filter>
+                    <Attribute Alias="uniqueDeviceID">uniqueDeviceID</Attribute>
+                    <Attribute Alias="token">token</Attribute>
+                </Filter>
+                <Filter>
+                    <Attribute Alias="idDevice">idDevice</Attribute>
                     <Attribute Alias="uniqueDeviceID">uniqueDeviceID</Attribute>
                     <Attribute Alias="token">token</Attribute>
                 </Filter>
