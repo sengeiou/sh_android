@@ -361,20 +361,21 @@
     //NSLog(@"Orientation:%d:",[[UIDevice currentDevice] orientation]);
     if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
         NSLog(@"Horizontal");
-        if (screenRect.size.height > screenRect.size.width){
-             NSLog(@"Horizontal >height");
+        if (screenRect.size.height > screenRect.size.width)
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
-        }else{
-             NSLog(@"Horizontal >widht");
+        else
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
-        }
     }
     else if ([[UIDevice currentDevice] orientation] == 1){
         NSLog(@"Vertical");
-//        if (screenRect.size.height > screenRect.size.width)
-//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
-//        else
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
+        if (screenRect.size.height > screenRect.size.width){
+             NSLog(@"Vertical >height");
+            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
+        }else{
+             NSLog(@"Vertical < height");
+            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height-15, 30);
+            
+        }
     }
     
 }
