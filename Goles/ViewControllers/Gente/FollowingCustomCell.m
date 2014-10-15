@@ -59,6 +59,8 @@
     else
         self.actionButton.hidden = YES;
     
+    self.actionButton.tag = indexPath.row;
+
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;
@@ -69,6 +71,13 @@
 	
 	[self.photobutton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
+
+//------------------------------------------------------------------------------
+- (void)addTargetBtnFollow:(id)target action:(SEL)action {
+    
+    [self.actionButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
 
 //------------------------------------------------------------------------------
 - (void)configureFollowButton {

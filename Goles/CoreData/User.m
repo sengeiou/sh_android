@@ -72,12 +72,13 @@
     [newUser setFavoriteTeamName:user.favoriteTeamName];
     
     //SYNCRO  PROPERTIES
-    
-//        [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
-//
-//        [self setCsys_modified:modified];
-//    
-//        [self setCsys_deleted:deleted];
+    [newUser setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
+   
+    NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
+
+    [newUser setCsys_modified:[NSNumber numberWithLongLong:epochTime]];
+    [newUser setCsys_revision:0];
+    [newUser setCsys_birth:[NSNumber numberWithLongLong:epochTime]];
     
     
     return newUser;

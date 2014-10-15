@@ -123,6 +123,8 @@
 	
     [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
     [self.btnFollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+  
+    
     self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnFollow.backgroundColor = [UIColor whiteColor];
     self.btnFollow.layer.borderWidth = 1.0f;
@@ -132,8 +134,10 @@
 
 //------------------------------------------------------------------------------
 - (void)setFollowToYes {
-	
+    
+    [self.btnFollow setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
+    
     self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
@@ -159,7 +163,6 @@
         [self configureFollowButton];
     
 }
-
 //------------------------------------------------------------------------------
 
 #pragma mark - Localizable Strings

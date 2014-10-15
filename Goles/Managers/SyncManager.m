@@ -124,9 +124,11 @@
                 Follow *follow = (Follow *)updatedEntity;
                 NSArray *dataArray = @[[Follow createDictFromEntity:follow]];
                 NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
-                if (follow.csys_syncronized == kJSON_SYNCRO_NEW)
+               
+                if ([follow.csys_syncronized isEqualToString: kJSON_SYNCRO_NEW])
                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_INSERT];
-                else if (follow.csys_syncronized == kJSON_SYNCRO_DELETED)
+                
+                else if ([follow.csys_syncronized isEqualToString: kJSON_SYNCRO_DELETED])
                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_DELETE];
             }
             

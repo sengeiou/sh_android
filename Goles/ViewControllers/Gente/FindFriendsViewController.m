@@ -122,8 +122,19 @@
     
     [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
     [cell addTarget:self action:@selector(goProfile:)];
+    [cell addTargetBtnFollow:self action:@selector(followUser:)];
     
     return cell;
+}
+
+//------------------------------------------------------------------------------
+- (void)followUser:(id)sender{
+    UIButton *btn = (UIButton *) sender;
+    User *userFollow = self.usersSearch[btn.tag];
+    
+    BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    if (followActionSuccess)
+        [self.usersTable reloadData];
 }
 
 //------------------------------------------------------------------------------
