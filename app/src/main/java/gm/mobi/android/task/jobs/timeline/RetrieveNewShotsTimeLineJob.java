@@ -13,6 +13,7 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -34,11 +35,15 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
 
     @Override protected void run() throws SQLException, IOException {
         super.run();
+        List<Shot> updatedTimeline = new ArrayList<>();
+        List<Shot> newShots = new ArrayList<>();
         Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
-        List<Shot> newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
-        //TODO what if newshots is empty?
-        shotManager.saveShots(newShots);
-        List<Shot> updatedTimeline = shotManager.retrieveTimelineWithUsers();
+        if(getFollowingIds().size()>0) {
+             newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
+            //TODO what if newshots is empty?
+            shotManager.saveShots(newShots);
+            updatedTimeline = shotManager.retrieveTimelineWithUsers();
+        }
         postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }
 

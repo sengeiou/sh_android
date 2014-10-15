@@ -41,6 +41,7 @@ import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.timeline.RetrieveFromDataBaseTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
+import gm.mobi.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
 import gm.mobi.android.ui.activities.PostNewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -48,6 +49,7 @@ import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
+import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -116,7 +118,11 @@ public class TimelineFragment extends BaseFragment
                     if (!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
-                        startRetrieveNewShotsTimeLineJob(context);
+                        try {
+                            startRetrieveNewShotsTimeLineJob(context);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
                     pollShots();
                 }
@@ -222,7 +228,7 @@ public class TimelineFragment extends BaseFragment
                     }
 
                     @Override
-                    public void onScrollIdle() {
+                    public void onScrollIdle() throws SQLException {
                         int lastVisiblePosition = listView.getLastVisiblePosition();
                         if (lastVisiblePosition >= listView.getAdapter().getCount()-1) {
                             Context context = getActivity();
@@ -254,7 +260,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override
-    public void onRefresh() {
+    public void onRefresh() throws SQLException {
         Context context = getActivity();
         if (context != null) {
             startRefreshing(context);
@@ -267,7 +273,11 @@ public class TimelineFragment extends BaseFragment
         if (requestCode == REQUEST_NEW_SHOT) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT);
-                startRefreshing(getActivity());
+                try {
+                    startRefreshing(getActivity());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -298,7 +308,7 @@ public class TimelineFragment extends BaseFragment
         startActivity(profileIntent);
     }
 
-    public void startRefreshing(Context context) {
+    public void startRefreshing(Context context) throws SQLException {
         if (!isRefreshing) {
             isRefreshing = true;
             swipeRefreshLayout.setRefreshing(true);
@@ -313,12 +323,18 @@ public class TimelineFragment extends BaseFragment
         startJob(job);
     }
 
-    private void startRetrieveInitialTimeLineJob(Context context){
-        RetrieveInitialTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveInitialTimeLineJob.class);
+    private void startRetrieveOldShotsTimeLineJob(Context context){
+        RetrieveOldShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveOldShotsTimeLineJob.class);
         startJob(job);
     }
 
-    private void startRetrieveNewShotsTimeLineJob(Context context){
+    private void startRetrieveInitialTimeLineJob(Context context){
+        RetrieveInitialTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(
+          RetrieveInitialTimeLineJob.class);
+        startJob(job);
+    }
+
+    private void startRetrieveNewShotsTimeLineJob(Context context) throws SQLException {
         RetrieveNewShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
         startJob(job);
     }
@@ -329,13 +345,13 @@ public class TimelineFragment extends BaseFragment
     }
 
     //TODO parameter: last shot as offset
-    public void startLoadMoreShots(Context context) {
+    public void startLoadMoreShots(Context context) throws SQLException {
         if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
             User currentUser = GolesApplication.get(context).getCurrentUser();
             Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
-            startRetrieveNewShotsTimeLineJob(context);
+            startRetrieveOldShotsTimeLineJob(context);
         }
     }
 
@@ -366,7 +382,12 @@ public class TimelineFragment extends BaseFragment
 
         if (newShotsCount == 0) {
             Timber.i("No new shots");
-            adapter.notifyDataSetChanged(); // Refresh time indicator
+            if(adapter != null){ //Means that We have at least one shot and for that reason the adapter was initialized
+                adapter.notifyDataSetChanged(); // Refresh time indicator
+            }else{
+
+            }
+
         } else {
             Timber.i("Received %d new shots", newShotsCount);
             int originalPosition = listView.getFirstVisiblePosition();

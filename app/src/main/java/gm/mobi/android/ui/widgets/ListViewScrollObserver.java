@@ -3,6 +3,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
+import java.sql.SQLException;
 
 public class ListViewScrollObserver implements OnScrollListener {
     private OnListViewScrollListener listener;
@@ -13,7 +14,7 @@ public class ListViewScrollObserver implements OnScrollListener {
 
     public interface OnListViewScrollListener {
         void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact);
-        void onScrollIdle();
+        void onScrollIdle() throws SQLException;
     }
 
     public ListViewScrollObserver(ListView listView) {
@@ -56,7 +57,11 @@ public class ListViewScrollObserver implements OnScrollListener {
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (listener != null && scrollState == SCROLL_STATE_IDLE) {
-            listener.onScrollIdle();
+            try {
+                listener.onScrollIdle();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

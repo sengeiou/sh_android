@@ -35,7 +35,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-
+import java.sql.SQLException;
 
 /**
  * The SwipeRefreshLayout should be used whenever the user can refresh the
@@ -493,7 +493,11 @@ public class SwipeRefreshLayoutOverlay extends ViewGroup {
                     // User velocity passed min velocity; trigger a refresh
                     if (yDiff > mDistanceToTriggerSync) {
                         // User movement passed distance; trigger a refresh
-                        startRefresh();
+                        try {
+                            startRefresh();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         // Just track the user's movement
                         setTriggerPercentage(
@@ -535,7 +539,7 @@ public class SwipeRefreshLayoutOverlay extends ViewGroup {
         return true;
     }
 
-    private void startRefresh() {
+    private void startRefresh() throws SQLException {
         removeCallbacks(mCancel);
         mReturnToStartPosition.run();
         setRefreshing(true);
@@ -579,7 +583,7 @@ public class SwipeRefreshLayoutOverlay extends ViewGroup {
      * triggers a refresh should implement this interface.
      */
     public interface OnRefreshListener {
-        public void onRefresh();
+        public void onRefresh() throws SQLException;
     }
 
     /**
