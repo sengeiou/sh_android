@@ -122,17 +122,22 @@
     
     [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
     [cell addTarget:self action:@selector(goProfile:)];
-    [cell addTargetBtnFollow:self action:@selector(followUser:)];
+    [cell addTargetBtnFollow:self action:@selector(followAndUnFollowUser:)];
     
     return cell;
 }
 
 //------------------------------------------------------------------------------
-- (void)followUser:(id)sender{
+- (void)followAndUnFollowUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersSearch[btn.tag];
     
-    BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    BOOL followActionSuccess;
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
+        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    else
+        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
+    
     if (followActionSuccess)
         [self.usersTable reloadData];
 }

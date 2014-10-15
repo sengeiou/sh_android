@@ -95,7 +95,12 @@
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersList[btn.tag];
     
-    BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    BOOL followActionSuccess;
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
+        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    else
+        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
+    
     if (followActionSuccess)
         [self.usersTable reloadData];
 }
