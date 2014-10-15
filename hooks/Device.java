@@ -13,7 +13,7 @@ public class Device implements GenericServiceHook {
 	private static final Long WINDOWSPHONE_PLATFORM = 2L;
 
 	private static final Long ANDROID_ENGINE = 2L;
-	private static final Long IOS_ENGINE = 1L;
+	private static final Long IOS_ENGINE = 5L;
 	private static final Long WINDOWSPHONE_ENGINE = 4L;
 
 	private static final String ENTITY_DEVICE = "Device";
