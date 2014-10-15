@@ -71,12 +71,14 @@
                                                                                                        tintColor:[UIColor colorWithWhite:1 alpha:0.5]
                                                                                            saturationDeltaFactor:1.8
                                                                                                        maskImage:nil]];
+    [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
+
 }
 
 //------------------------------------------------------------------------------
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+
     [self restoreInitialStateView];
 }
 
@@ -139,7 +141,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     self.indexToShow = indexPath;
-    [self pushToProfileUser:self.followingUsers[indexPath.row]];
+    [self pushToProfileUser:self.usersSearch[indexPath.row]];
 }
 
 //------------------------------------------------------------------------------
@@ -164,7 +166,7 @@
 - (void)goProfile:(id)sender{
     
     UIButton *btn = (UIButton *) sender;
-    [self pushToProfileUser:self.followingUsers[btn.tag]];
+    [self pushToProfileUser:self.usersSearch[btn.tag]];
 }
 //------------------------------------------------------------------------------
 - (void)pushToProfileUser:(User *)user {
@@ -372,7 +374,10 @@
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
     }
     else if ([[UIDevice currentDevice] orientation] == 1){
-        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.height-10, 30);
+//        if (screenRect.size.height > screenRect.size.width)
+//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
+//        else
+        self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
     }
     
 }
