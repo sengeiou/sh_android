@@ -82,6 +82,7 @@ static NSString *CellIdentifier = @"shootCell";
     
     [self textLocalizable];
     [self addPlaceHolder];
+    
     //Set titleView
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
     
@@ -145,7 +146,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)setupTimeLineTableView {
     
-    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+//    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
@@ -155,6 +156,7 @@ static NSString *CellIdentifier = @"shootCell";
     else
         [self hiddenViewNotShots];
     
+    self.timelineTableView.scrollsToTop = YES;
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
     self.timelineTableView.estimatedRowHeight = 60.0f;
@@ -206,7 +208,7 @@ static NSString *CellIdentifier = @"shootCell";
 - (void)setTextViewForShotCreation {
 
     self.txtView.delegate = self;
-    
+    self.txtView.scrollsToTop = NO;
     self.txtView.clipsToBounds = YES;
     self.txtView.layer.cornerRadius = 8.0f;
 	self.txtView.layer.borderWidth = 0.3;
@@ -364,6 +366,27 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 //------------------------------------------------------------------------------
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // If you are just returning a constant value from this method, you should instead just set the table view's
+    // estimatedRowHeight property (in viewDidLoad or similar), which is even faster as the table view won't
+    // have to call this method for every row in the table view.
+    //
+    // Only implement this method if you have row heights that vary by extreme amounts and you notice the scroll indicator
+    // "jumping" as you scroll the table view when using a constant estimatedRowHeight. If you do implement this method,
+    // be sure to do as little work as possible to get a reasonably-accurate estimate.
+    
+    // NOTE for iOS 7.0.x ONLY, this bug has been fixed by Apple as of iOS 7.1:
+    // A constraint exception will be thrown if the estimated row height for an inserted row is greater
+    // than the actual height for that row. In order to work around this, we need to return the actual
+    // height for the the row when inserting into the table view - uncomment the below 3 lines of code.
+    // See: https://github.com/caoimghgin/TableViewCellWithAutoLayout/issues/6
+    //    if (self.isInsertingRow) {
+    //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    //    }
+//    return UITableViewAutomaticDimension;
+//}
+
+//------------------------------------------------------------------------------
 - (void)addLoadMoreCell{
     self.timelineTableView.tableFooterView = self.spinner;
     
@@ -397,6 +420,8 @@ static NSString *CellIdentifier = @"shootCell";
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
+    
+#warning Need to check if some shot is inserted or deleted in DB. Only in this case is necessaary to reload
     
     if (self.arrayShots.count > 0)
         [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
@@ -548,7 +573,6 @@ static NSString *CellIdentifier = @"shootCell";
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
         [self keyboardHide:nil];
-        //self.txtView.userInteractionEnabled = YES;
         self.viewToDisableTextField.hidden = YES;
 
     }else if (error){
