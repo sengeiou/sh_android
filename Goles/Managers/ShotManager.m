@@ -67,7 +67,7 @@
     NSString *oneDayAgoString = [NSString stringWithFormat:@"%f", oneDayAgoDate*1000];
     
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth > %@",[[UserManager singleton] getActiveUsersIDs],oneDayAgoString];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser == %@ AND csys_birth > %@",[[UserManager singleton] getUserId],oneDayAgoString];
     
     return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
     
