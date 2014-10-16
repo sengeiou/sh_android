@@ -127,7 +127,10 @@
         NSString *token = [dict objectForKey:kJSON_TOKEN];
         if ([token isKindOfClass:[NSString class]])
             [self setToken:token];
-
+        
+        NSNumber *platform = [dict objectForKey:kJSON_DEVICE_PLATFORM];
+        if ([platform isKindOfClass:[NSNumber class]])
+            [self setPlatform:platform];
 
         //SYNCRO  PROPERTIES
         
@@ -151,7 +154,7 @@
             [self setCsys_modified:modified];
         }
         
-        NSNumber *deleted = [dict objectForKey:K_OP_DELETE];
+        NSNumber *deleted = [dict objectForKey:kJSON_DELETED];
         if ([deleted isKindOfClass:[NSNumber class]]) {
             [self setCsys_deleted:deleted];
         }
