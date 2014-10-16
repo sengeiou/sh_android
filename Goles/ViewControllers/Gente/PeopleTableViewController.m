@@ -88,7 +88,7 @@
     
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
 
-    [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:NO];
+    [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:NO inPeople:YES];
     [cell addTarget:self action:@selector(goProfile:)];
 
 	return cell;

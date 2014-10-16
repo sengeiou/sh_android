@@ -57,9 +57,6 @@
     search = NO;
   
     self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-   
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -122,7 +119,7 @@
     
     User *user = [self.followingUsers objectAtIndex:indexPath.row];
     
-    [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES];
+    [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:YES inPeople:NO];
     [cell addTarget:self action:@selector(goProfile:)];
     [cell addTargetBtnFollow:self action:@selector(followAndUnFollowUser:)];
     
@@ -239,13 +236,6 @@
     }
 }
 
-#pragma mark - Conection response methods
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
-    
-    if (status)
-        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser] withDelegate:self];
-}
 
 #pragma mark - Search Response method
 //------------------------------------------------------------------------------

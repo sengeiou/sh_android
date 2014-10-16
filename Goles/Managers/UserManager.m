@@ -281,11 +281,9 @@
 //------------------------------------------------------------------------------
 - (BOOL)checkIfImFollowingUser:(User *)user {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",[[UserManager singleton] getUserId],  @"d"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@",[[UserManager singleton] getUserId],  @"d"];
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
-    
-   
-    
+
     for (Follow *follow in follows) {
         NSLog(@"follow: %@",follow.idUserFollowed);
         

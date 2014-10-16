@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (nonatomic,weak) IBOutlet UIButton *photobutton;
 
--(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching;
+-(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching inPeople:(BOOL)peopleTable;
 -(void)addTarget:(id)target action:(SEL)action;
 -(void)addTargetBtnFollow:(id)target action:(SEL)action;
 

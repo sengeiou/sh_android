@@ -24,13 +24,13 @@
 }
 
 //------------------------------------------------------------------------------
--(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching{
+-(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching inPeople:(BOOL)peopleTable{
     
     self.lblNickName.text = user.userName;
     self.lblfavouriteTeamName.text = user.favoriteTeamName;
     self.actionButton.layer.cornerRadius = 5.0f;
     
-    if  (searching){
+    if  (searching || !peopleTable){
         if ([[UserManager singleton] checkIfImFollowingUser:user])
             [self configureFollowingButton];
         else if (user.idUser == [[UserManager singleton] getUserId])

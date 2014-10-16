@@ -31,6 +31,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnFollowers;
 @property (weak, nonatomic) IBOutlet UILabel *lblFollowers;
 @property (weak, nonatomic) IBOutlet UIButton *btnFollow;
+@property (weak, nonatomic) IBOutlet UIButton *btnUnfollow;
+@property (weak, nonatomic) IBOutlet UIButton *btnEditProfile;
+
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblRank;
 @property (weak, nonatomic) IBOutlet UILabel *lblTeamBio;
@@ -112,39 +115,42 @@
 
 //------------------------------------------------------------------------------
 - (void)setEditProfile {
-    [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setTitle:NSLocalizedString(@"EDIT PROFILE", nil) forState:UIControlStateNormal];
-    self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
-    self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-    self.btnFollow.backgroundColor = [UIColor whiteColor];
-    self.btnFollow.layer.borderWidth = 1.0f;
-    self.btnFollow.layer.masksToBounds = YES;
+
+    self.btnFollow.hidden = YES;
+    self.btnUnfollow.hidden = YES;
+    self.btnEditProfile.hidden = NO;
+
+    [self.btnEditProfile setTitle:NSLocalizedString(@"EDIT PROFILE", nil) forState:UIControlStateNormal];
+
+    self.btnEditProfile.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+    self.btnEditProfile.layer.borderWidth = 1.0f;
+    self.btnEditProfile.layer.masksToBounds = YES;
 }
 
 //------------------------------------------------------------------------------
 - (void)setFollowToNo {
-	
-    [self.btnFollow setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
-    [self.btnFollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
-  
     
-    self.btnFollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-    self.btnFollow.backgroundColor = [UIColor whiteColor];
-    self.btnFollow.layer.borderWidth = 1.0f;
-    self.btnFollow.layer.masksToBounds = YES;
-    [self.btnFollow addTarget:self action:@selector(followUser) forControlEvents:UIControlEventTouchUpInside];
+    self.btnFollow.hidden = YES;
+    self.btnEditProfile.hidden = YES;
+    self.btnUnfollow.hidden = NO;
+
+    [self.btnUnfollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+    self.btnUnfollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+    self.btnUnfollow.layer.borderWidth = 1.0f;
+    self.btnUnfollow.layer.masksToBounds = YES;
+   [self.btnUnfollow addTarget:self action:@selector(followUser) forControlEvents:UIControlEventTouchUpInside];
 }
 
 //------------------------------------------------------------------------------
 - (void)setFollowToYes {
     
-    [self.btnFollow setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.btnFollow.hidden = NO;
+    self.btnEditProfile.hidden = YES;
+    self.btnUnfollow.hidden = YES;
+    
     [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
     
-    self.btnFollow.backgroundColor = [Fav24Colors iosSevenBlue];
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0f, -5.0f, 0.0f, 0.0f);
-    [self.btnFollow setContentEdgeInsets:contentInsets];
     [self.btnFollow addTarget:self action:@selector(unFollowUser) forControlEvents:UIControlEventTouchUpInside];
 }
 
