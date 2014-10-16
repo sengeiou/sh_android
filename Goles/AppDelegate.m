@@ -114,6 +114,9 @@
 //------------------------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
+    
     User *userCurrent = [[UserManager sharedInstance] getActiveUser];
     
     if (userCurrent){
@@ -247,12 +250,13 @@
 //------------------------------------------------------------------------------
 -(void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     
-    DLog(@"APNS Response with token %@",devToken);
+    //DLog(@"APNS Response with token %@",devToken);
 
 	NSString *token = [[[[devToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""]
                         stringByReplacingOccurrencesOfString:@">" withString:@""]
                        stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
+    DLog(@"APNS Response with token %@",token);
+
     [[UserManager singleton] setDeviceToken:token];
 }
 

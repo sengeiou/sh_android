@@ -154,7 +154,7 @@
                                             <constraint firstAttribute="width" constant="0.40000000000000002" id="eXb-Uh-2UI"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="RkQ-hv-BdO">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="RkQ-hv-BdO">
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.40000000000000002" id="Nc3-hf-FCK"/>
                                         </constraints>
