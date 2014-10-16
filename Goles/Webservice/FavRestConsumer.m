@@ -484,7 +484,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create 'metadata' block
-    NSDictionary *metadata = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:[NSNull null]};
+    NSDictionary *metadata = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_KEY:key,K_WS_OPS_ENTITY:entity,K_WS_OPS_ITEMS:@1};
     
     //Create 'ops' block
     NSDictionary *opsDictionary = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:dictArray};

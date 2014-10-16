@@ -71,10 +71,12 @@
 
 
         // To handle push notification
-//        if (launchOptions) {
-//            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (launchOptions) {
+            
+            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+            [self updateNotificationBadgeWith:remoteNotif];
 //            [self parsePayload:remoteNotif];
-//        }
+        }
         
         // Set Apirater settings
         [self setApiraterSettings];
@@ -162,6 +164,9 @@
         
     }else {
         self.request = [FavRestConsumerHelper createREQ];
+        
+        [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
+
         if (SYNCHRO_ACTIVATED)
             [[SyncManager singleton] startSyncProcess];
         [self setTabBarItems];
@@ -274,8 +279,20 @@
 }
 
 //------------------------------------------------------------------------------
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+
+    if ( application.applicationState == UIApplicationStateActive ){
+        [application setApplicationIconBadgeNumber:0];
+    } else {
+        [self updateNotificationBadgeWith:userInfo];
+    }
+
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+//------------------------------------------------------------------------------
+//-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//
 //    if ( application.applicationState == UIApplicationStateActive ){
 //        
 //		NSDictionary *apsInfo = [userInfo objectForKey:@"aps"];
@@ -306,10 +323,19 @@
 //                AudioServicesPlaySystemSound (completeSound);
 //            }
 //        }
-//		
-//	} else {
-//        [self parsePayload:userInfo];
 //    }
+////	} else {
+////        [self parsePayload:userInfo];
+////    }
+//}
+//------------------------------------------------------------------------------
+- (void)updateNotificationBadgeWith:(NSDictionary *)userInfo {
+
+    //Update badge
+    NSString* alertValue = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
+    int  badgeValue= [alertValue intValue] + 1;
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeValue];
+   
 }
 
 //------------------------------------------------------------------------------

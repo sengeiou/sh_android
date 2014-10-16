@@ -204,7 +204,7 @@
         
         //No Device on DB
         if (![currentDBDevice isKindOfClass:[Device class]]) {
-            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:[NSNumber numberWithLongLong:epochTime],kJSON_MODIFIED:[NSNumber numberWithLongLong:epochTime],kJSON_DEVICE_PLATFORM:@1}];
+            Device *device = [Device updateWithDictionary:@{kJSON_ID_DEVICE:[NSNull null],kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:[NSNumber numberWithLongLong:epochTime],kJSON_MODIFIED:[NSNumber numberWithLongLong:epochTime],kJSON_DEVICE_PLATFORM:@1}];
             if (device)
                 [[CoreDataManager singleton] saveContext];
 

@@ -98,14 +98,9 @@ static NSString *CellIdentifier = @"shootCell";
     [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
     [self setupTimeLineTableView];
     
-    [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
 }
 
--(void)registerAPNS{
-    
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate registerAPNS];
-}
+
 #pragma mark - Localizable Strings
 //------------------------------------------------------------------------------
 -(void)textLocalizable{

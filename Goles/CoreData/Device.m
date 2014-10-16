@@ -127,10 +127,6 @@
         NSString *token = [dict objectForKey:kJSON_TOKEN];
         if ([token isKindOfClass:[NSString class]])
             [self setToken:token];
-        
-        NSNumber *platform = [dict objectForKey:kJSON_DEVICE_PLATFORM];
-        if ([platform isKindOfClass:[NSNumber class]])
-            [self setPlatform:platform];
 
         //SYNCRO  PROPERTIES
         

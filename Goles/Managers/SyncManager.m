@@ -85,7 +85,7 @@
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"SENDING CONTENT TO SERVER:%@",[NSDate date]);
 
-#warning Move all process in this method to a block
+//TODO Move all process in this method to a block
     
     //Array of all entities that send data to server
     NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER - K_COREDATA_DEVICE
@@ -126,6 +126,7 @@
                 NSDictionary *key = @{kJSON_ID_USER:follow.idUser,kJSON_FOLLOW_IDUSERFOLLOWED:follow.idUserFollowed};
                
                 if ([follow.csys_syncronized isEqualToString: kJSON_SYNCRO_NEW])
+                    
                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_INSERT];
                 
                 else if ([follow.csys_syncronized isEqualToString: kJSON_SYNCRO_DELETED])
@@ -136,7 +137,12 @@
                 
                 Device *device = [[UserManager sharedInstance] getDevice];
                 
-                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_ID_DEVICE: device.idDevice, kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform,  K_WS_OPS_DELETE_DATE: device.csys_deleted}];
+                NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform,  K_WS_OPS_DELETE_DATE: [NSNull null],K_WS_OPS_BIRTH_DATE:device.csys_birth,K_WS_OPS_UPDATE_DATE:device.csys_modified,K_WS_OPS_REVISION:device.csys_revision}];
+                
+                if (device.idDevice == nil)
+                    [mutDict addEntriesFromDictionary:@{kJSON_ID_DEVICE:[NSNull null]}];
+                else
+                    [mutDict addEntriesFromDictionary:@{kJSON_ID_DEVICE:device.idDevice}];
                 
                 NSArray *dataArray = @[mutDict];
             

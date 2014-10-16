@@ -24,12 +24,12 @@
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES">
         <attribute name="appVer" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="idDevice" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="idDevice" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="idUser" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="language" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="locale" optional="YES" attributeType="String" syncable="YES"/>
