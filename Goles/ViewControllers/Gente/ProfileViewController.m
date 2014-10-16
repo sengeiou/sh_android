@@ -73,7 +73,10 @@
 
 //------------------------------------------------------------------------------
 - (void)dataFillView{
-    self.title = self.selectedUser.userName;
+    //self.title = self.selectedUser.userName;
+    
+    [self.navigationItem setTitle:self.selectedUser.userName];
+
     
     [self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
     [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
