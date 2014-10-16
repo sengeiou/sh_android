@@ -31,7 +31,8 @@ import timber.log.Timber;
 
 public class BagdadNotificationManager {
 
-    private static final int NOTIFICATION_SHOT = 1;
+    public static final int NOTIFICATION_SHOT = 1;
+    public static final int NOTIFICATION_ERROR = 0;
 
     private static final int REQUEST_DELETE = 1;
     private static final int REQUEST_OPEN = 2;
@@ -170,5 +171,12 @@ public class BagdadNotificationManager {
     public void clearShotNotifications() {
         notificationManager.cancel(NOTIFICATION_SHOT);
         shotsCurrentlyNotified.clear();
+    }
+
+    public void sendErrorNotification(String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentTitle("Error")
+          .setContentText(message)
+          .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+        notificationManager.notify(NOTIFICATION_ERROR, builder.build());
     }
 }

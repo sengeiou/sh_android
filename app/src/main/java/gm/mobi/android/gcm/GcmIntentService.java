@@ -20,8 +20,6 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import gm.mobi.android.GolesApplication;
-import gm.mobi.android.R;
-import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
@@ -58,6 +56,9 @@ public class GcmIntentService extends IntentService {
             notificationManager.sendNewShotNotification(shot);
         } catch (JSONException | IOException e) {
             Timber.e(e, "Error creating notification");
+        } catch (Exception e) {
+            Timber.e(e, "Error creating notification");
+            notificationManager.sendErrorNotification(e.getMessage());
         }
     }
 }
