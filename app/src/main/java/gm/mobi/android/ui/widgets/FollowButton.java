@@ -43,12 +43,6 @@ public class FollowButton extends FrameLayout {
         if (isInEditMode()) {
             setFollowing(false);
         }
-
-        setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) {
-                Timber.d("Click");
-            }
-        });
     }
 
     @Override public boolean onInterceptTouchEvent(MotionEvent ev) {
