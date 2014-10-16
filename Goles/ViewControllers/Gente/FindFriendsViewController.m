@@ -56,7 +56,7 @@
     self.usersSearch = [[NSMutableArray alloc]init];
     search = NO;
   
-//    self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
    
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 
@@ -71,9 +71,11 @@
                                                                                                        tintColor:[UIColor colorWithWhite:1 alpha:0.5]
                                                                                            saturationDeltaFactor:1.8
                                                                                                        maskImage:nil]];
+    
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 
 }
+
 
 //------------------------------------------------------------------------------
 - (void)viewWillDisappear:(BOOL)animated {
@@ -373,7 +375,7 @@
 }
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
-    
+        
     CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
     
     //NSLog(@"Orientation:%d:",[[UIDevice currentDevice] orientation]);
