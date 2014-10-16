@@ -285,7 +285,6 @@
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
 
     for (Follow *follow in follows) {
-        NSLog(@"follow: %@",follow.idUserFollowed);
         
         if (follow.idUserFollowed == user.idUser)
             return YES;

@@ -72,6 +72,10 @@
     
     self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
     self.btnFollow.clipsToBounds = YES;
+    self.btnUnfollow.layer.cornerRadius = 5; // this value vary as per your desire
+    self.btnUnfollow.clipsToBounds = YES;
+    self.btnEditProfile.layer.cornerRadius = 5; // this value vary as per your desire
+    self.btnEditProfile.clipsToBounds = YES;
 }
 
 //------------------------------------------------------------------------------
