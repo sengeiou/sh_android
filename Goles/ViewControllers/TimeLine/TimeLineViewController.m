@@ -694,12 +694,21 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (void)setupUIWhenCancelOrNotConnection {
+
     self.btnShoot.enabled = YES;
     self.viewToDisableTextField.hidden = YES;
     self.orientation = NO;
     //                [self keyboardHide:nil];
     self.txtView.backgroundColor = [UIColor whiteColor];
-    self.txtView.textColor = [UIColor blackColor];
+    
+    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
+    
+    if ([self.txtView.text isEqualToString:placeHolder])
+    
+        self.txtView.textColor = [Fav24Colors textWhatsUpViewSendShot];
+    else
+
+        self.txtView.textColor = [UIColor blackColor];
 
 }
 
