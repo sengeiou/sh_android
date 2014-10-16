@@ -51,7 +51,9 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
+import gm.mobi.android.ui.model.ShotVO;
 import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.ShotVOMapper;
 import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import java.sql.SQLException;
@@ -69,10 +71,7 @@ public class TimelineFragment extends BaseFragment
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject BagdadNotificationManager notificationManager;
-    //@Inject UserVOMapper userVOMapper;
-    //@Inject DbOpenHelper openHelper;
-    //@Inject FollowManager followManager;
-
+    @Inject ShotVOMapper shotMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -313,11 +312,13 @@ public class TimelineFragment extends BaseFragment
     }
 
     public void openProfile(int position) {
-        //Long currentUserId = currentUser.getIdUser();
-        //User user = adapter.getItem(position).getUser();
-        //
-        //Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), user);
-        //startActivity(profileIntent);
+        Long currentUserId = currentUser.getIdUser();
+        ShotVO shotVO = adapter.getItem(position);
+         ShotVOMapper shotVOMapper = new ShotVOMapper();
+        UserVO userVO = shotVOMapper.userVOFromShotVO(shotVO);
+
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), userVO);
+        startActivity(profileIntent);
     }
 
     public void startRefreshing(Context context) throws SQLException {
@@ -325,7 +326,7 @@ public class TimelineFragment extends BaseFragment
             isRefreshing = true;
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
-            User currentUser = GolesApplication.get(context).getCurrentUser();
+            //User currentUser = GolesApplication.get(context).getCurrentUser();
             startRetrieveNewShotsTimeLineJob(context);
         }
     }
@@ -361,21 +362,21 @@ public class TimelineFragment extends BaseFragment
         if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
-            User currentUser = GolesApplication.get(context).getCurrentUser();
-            Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
+            //User currentUser = GolesApplication.get(context).getCurrentUser();
+            //Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
             startRetrieveOldShotsTimeLineJob(context);
         }
     }
 
     public void loadInitialTimeline() {
-        User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
+        //User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
         startRetrieveInitialTimeLineJob(getActivity());
         swipeRefreshLayout.setRefreshing(true);
     }
 
     @Subscribe
     public void showTimeline(ShotsResultEvent event) {
-        List<Shot> shots = event.getResult();
+        List<ShotVO> shots = event.getResult();
         swipeRefreshLayout.setRefreshing(false);
         if (shots != null && shots.size() > 0) {
             adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
@@ -397,7 +398,7 @@ public class TimelineFragment extends BaseFragment
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
         int newShotsCount = event.getNewShotsCount();
-        List<Shot> updatedTimeline = event.getResult();
+        List<ShotVO> updatedTimeline = event.getResult();
 
         if (newShotsCount == 0) {
             Timber.i("No new shots");
@@ -420,7 +421,7 @@ public class TimelineFragment extends BaseFragment
     @Subscribe
     public void displayOldShots(OldShotsReceivedEvent event) {
         isLoadingMore = false;
-        List<Shot> shots = event.getResult();
+        List<ShotVO> shots = event.getResult();
         int olderShotsSize = shots.size();
         if (olderShotsSize == 0) {
             footerProgress.setVisibility(View.INVISIBLE); // Maintain size

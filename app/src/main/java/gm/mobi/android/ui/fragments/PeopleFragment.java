@@ -67,7 +67,6 @@ public class PeopleFragment extends UserFollowsFragment {
     @Override public UserListAdapter getAdapter() {
         if (peopleAdapter == null) {
             peopleAdapter = new PeopleAdapter(getActivity(), picasso);
-
         }
         return peopleAdapter;
     }

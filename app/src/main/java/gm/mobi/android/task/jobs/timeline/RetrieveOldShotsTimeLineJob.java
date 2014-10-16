@@ -11,6 +11,7 @@ import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
+import gm.mobi.android.ui.model.ShotVO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,7 +21,7 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
 
     private ShotManager shotManager;
     private BagdadService service;
-
+    private User currentUser;
 
     @Inject public RetrieveOldShotsTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
@@ -30,8 +31,10 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
 
     }
 
-    @Override public void init(User currentUser) {
+    @Override public void init(User currentUser)
+    {
         super.init(currentUser);
+        this.currentUser = currentUser;
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -40,7 +43,8 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
         List<Shot> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         shotManager.saveShots(olderShots);
 
-        List<Shot> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots);
+        List<ShotVO> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, currentUser.getIdUser());
+
         postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }
 

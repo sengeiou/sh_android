@@ -60,6 +60,10 @@ public abstract class BagdadBaseJob<T> extends Job {
         }
     }
 
+    public boolean hasInternetConnection(){
+        return networkUtil.isConnected(application);
+    }
+
     protected void configureManagers() {
         createDatabase();
         setDatabaseToManagers(db);

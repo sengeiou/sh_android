@@ -11,16 +11,17 @@ import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.ui.model.ShotVO;
 import gm.mobi.android.util.TimeUtils;
 import java.util.List;
 
-public class TimelineAdapter extends BindableAdapter<Shot> {
+public class TimelineAdapter extends BindableAdapter<ShotVO> {
 
-    List<Shot> shots;
+    List<ShotVO> shots;
     private Picasso picasso;
     private final View.OnClickListener avatarClickListener;
 
-    public TimelineAdapter(Context context, List<Shot> shots, Picasso picasso, View.OnClickListener avatarClickListener) {
+    public TimelineAdapter(Context context, List<ShotVO> shots, Picasso picasso, View.OnClickListener avatarClickListener) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
@@ -57,7 +58,7 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
     }
 
     @Override
-    public Shot getItem(int position) {
+    public ShotVO getItem(int position) {
         return shots.get(position);
     }
 
@@ -79,21 +80,21 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
     }
 
     @Override
-    public void bindView(Shot item, int position, View view) {
+    public void bindView(ShotVO item, int position, View view) {
         switch (getItemViewType(position)) {
             case 0: // Shot
 
                 ViewHolder vh = (ViewHolder) view.getTag();
                 vh.position = position;
 
-                vh.name.setText(item.getUser().getName());
+                vh.name.setText(item.getName());
 
                 vh.text.setText(item.getComment());
 
                 long timestamp = item.getCsys_birth().getTime();
                 vh.timestamp.setText(TimeUtils.getElapsedTime(getContext(), timestamp));
 
-                String photo = item.getUser().getPhoto();
+                String photo = item.getPhoto();
                 boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
                 if (isValidPhotoUrl) {
                     picasso.load(photo).into(vh.avatar);
@@ -105,12 +106,12 @@ public class TimelineAdapter extends BindableAdapter<Shot> {
         }
     }
 
-    public void addShotsBelow(List<Shot> newShots) {
+    public void addShotsBelow(List<ShotVO> newShots) {
         this.shots.addAll(newShots);
         notifyDataSetChanged();
     }
 
-    public void setShots(List<Shot> shots) {
+    public void setShots(List<ShotVO> shots) {
         this.shots = shots;
         notifyDataSetChanged();
     }

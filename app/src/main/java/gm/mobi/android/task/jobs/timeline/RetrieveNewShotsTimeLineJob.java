@@ -11,6 +11,7 @@ import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
+import gm.mobi.android.ui.model.ShotVO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
 
     private ShotManager shotManager;
     private BagdadService service;
+    private User currentUser;
 
     @Inject public RetrieveNewShotsTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
@@ -30,19 +32,21 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
     }
 
     @Override public void init(User currentUser) {
+
         super.init(currentUser);
+        this.currentUser = currentUser;
     }
 
     @Override protected void run() throws SQLException, IOException {
         super.run();
-        List<Shot> updatedTimeline = new ArrayList<>();
+        List<ShotVO> updatedTimeline = new ArrayList<>();
         List<Shot> newShots = new ArrayList<>();
         Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
         if(getFollowingIds().size()>0) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
-            updatedTimeline = shotManager.retrieveTimelineWithUsers();
+            updatedTimeline = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         }
         postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }

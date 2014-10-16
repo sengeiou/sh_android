@@ -3,8 +3,12 @@ package gm.mobi.android.ui.model;
 import gm.mobi.android.db.objects.Synchronized;
 import java.io.Serializable;
 
-public class UserVO extends Synchronized implements Serializable {
+public class ShotVO extends Synchronized implements Serializable {
 
+    //Shot attributes
+    private Long idShot;
+    private String comment;
+    //User attributes
     private Long idUser;
     private String favoriteTeamName;
     private Long favoriteTeamId;
@@ -19,12 +23,20 @@ public class UserVO extends Synchronized implements Serializable {
     private String bio;
     private int relationship;
 
-    public Long getFavoriteTeamId() {
-        return favoriteTeamId;
+    public Long getIdShot() {
+        return idShot;
     }
 
-    public void setFavoriteTeamId(Long favoriteTeamId) {
-        this.favoriteTeamId = favoriteTeamId;
+    public void setIdShot(Long idShot) {
+        this.idShot = idShot;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Long getIdUser() {
@@ -41,6 +53,14 @@ public class UserVO extends Synchronized implements Serializable {
 
     public void setFavoriteTeamName(String favoriteTeamName) {
         this.favoriteTeamName = favoriteTeamName;
+    }
+
+    public Long getFavoriteTeamId() {
+        return favoriteTeamId;
+    }
+
+    public void setFavoriteTeamId(Long favoriteTeamId) {
+        this.favoriteTeamId = favoriteTeamId;
     }
 
     public String getUserName() {

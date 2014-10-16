@@ -124,7 +124,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void startFollowUnfollowUserJob(User currentUser, Context context, int followType){
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,user.getIdUser(), followType);
+        job.init(currentUser,user, followType);
         jobManager.addJobInBackground(job);
     }
 
@@ -136,6 +136,7 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+        user.setRelationship(event.isDoIFollowHim());
         setUserInfo(user);
     }
 

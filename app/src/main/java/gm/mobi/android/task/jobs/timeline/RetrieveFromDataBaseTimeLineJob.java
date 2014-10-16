@@ -10,6 +10,7 @@ import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
+import gm.mobi.android.ui.model.ShotVO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEvent>{
 
     private ShotManager shotManager;
+    private User currentUser;
 
     @Inject public RetrieveFromDataBaseTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
@@ -26,12 +28,14 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
     }
 
     @Override public void init(User currentUser) {
+
         super.init(currentUser);
+        this.currentUser = currentUser;
     }
 
     @Override protected void run() throws SQLException, IOException {
         super.run();
-        List<Shot> localShots = shotManager.retrieveTimelineWithUsers();
+        List<ShotVO> localShots = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         if (localShots != null && localShots.size() > 0) {
             // Got them already :)
             postSuccessfulEvent(new ShotsResultEvent(localShots));

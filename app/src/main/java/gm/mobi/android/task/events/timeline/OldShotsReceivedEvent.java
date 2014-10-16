@@ -1,12 +1,12 @@
 package gm.mobi.android.task.events.timeline;
 
-import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.ui.model.ShotVO;
 import java.util.List;
 
-public class OldShotsReceivedEvent extends BagdadBaseJob.SuccessEvent<List<Shot>> {
+public class OldShotsReceivedEvent extends BagdadBaseJob.SuccessEvent<List<ShotVO>> {
 
-    public OldShotsReceivedEvent(List<Shot> result) {
+    public OldShotsReceivedEvent(List<ShotVO> result) {
         super(result);
     }
 }

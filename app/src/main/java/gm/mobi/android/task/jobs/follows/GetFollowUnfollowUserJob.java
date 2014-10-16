@@ -14,6 +14,8 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -29,23 +31,27 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
 
     private User currentUser;
+    private UserVO user;
     private Long idUser;
     private int followUnfollowType;
     private int doIFollowHim;
+    private UserVOMapper userVOMapper;
 
     @Inject
     public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-      BagdadService service, UserManager userManager, FollowManager followManager) {
+      BagdadService service, UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
         super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
+        this.userVOMapper = userVOMapper;
         this.setOpenHelper(openHelper);
     }
 
-    public void init(User currentUser, Long idUser, int followUnfollowType){
+    public void init(User currentUser, UserVO user, int followUnfollowType){
         this.currentUser = currentUser;
-        this.idUser = idUser;
+        this.user = user;
+        idUser = user.getIdUser();
         this.followUnfollowType = followUnfollowType;
     }
 
@@ -60,12 +66,18 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
+        Long idUser = user.getIdUser();
+
         doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
                 Follow followUser = followUser();
+                User userToCreate = null;
                 doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
+                if(followUser.getIdUser()!=null)
+                    userToCreate = userVOMapper.userByUserVO(user);
+                    userManager.saveUser(userToCreate);
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
             break;
             case UserDtoFactory.UNFOLLOW_TYPE:
                 if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){

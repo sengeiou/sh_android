@@ -91,7 +91,7 @@ public class UserManager extends AbstractManager {
         String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
         Cursor c = db.query(USER_TABLE, UserTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(USER_TABLE, UserTable.ID, new String[] { String.valueOf(user.getIdUser()) });
+            res = db.delete(USER_TABLE, UserTable.ID+"=?", new String[] { String.valueOf(user.getIdUser()) });
         }
         c.close();
         return res;

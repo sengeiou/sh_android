@@ -140,6 +140,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     protected void setListContent(List<UserVO> usersFollowing) {
+        emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
     }
 
@@ -160,23 +161,25 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
     }
 
-    public void startFollowUnfollowUserJob(Long userId, Context context, int followType){
+    public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,userId, followType);
+        job.init(currentUser,userVO, followType);
         jobManager.addJobInBackground(job);
     }
 
-    public void followUser(Long userId){
-        startFollowUnfollowUserJob(userId, getActivity(), UserDtoFactory.FOLLOW_TYPE);
+    public void followUser(UserVO user){
+        startFollowUnfollowUserJob(user, getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(Long userId){
-        startFollowUnfollowUserJob(userId,getActivity(),UserDtoFactory.UNFOLLOW_TYPE);
+    public void unfollowUser(UserVO user){
+        startFollowUnfollowUserJob(user,getActivity(),UserDtoFactory.UNFOLLOW_TYPE);
     }
 
     @Override public void onResume() {
         super.onResume();
         bus.register(this);
+        updateList();
+
     }
 
     @Override public void onPause() {
@@ -191,6 +194,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     private void setEmpty(boolean empty) {
         emptyTextView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        userlistListView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -209,12 +213,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void follow(int position) {
         user = getAdapter().getItem(position);
-        followUser(user.getIdUser());
+        followUser(user);
     }
 
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
-        unfollowUser(user.getIdUser());
+        unfollowUser(user);
     }
 
 
@@ -223,5 +227,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         startJob();
     }
 
+    public void updateList(){
+        if(getAdapter()!=null) getAdapter().notifyDataSetChanged();
+    }
 
 }

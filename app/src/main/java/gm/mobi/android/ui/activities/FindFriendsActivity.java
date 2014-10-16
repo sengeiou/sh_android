@@ -313,27 +313,27 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Override public void follow(int position) {
         UserVO user = adapter.getItem(position);
-        unfollowUser(user.getIdUser());
+        followUser(user);
     }
 
     @Override public void unFollow(int position) {
         UserVO user = adapter.getItem(position);
-        followUser(user.getIdUser());
+        unfollowUser(user);
     }
 
-    public void startFollowUnfollowUserJob(Long userId, Context context, int followType){
+    public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         User currentUser = GolesApplication.get(this).getCurrentUser();
-        job.init(currentUser,userId, followType);
+        job.init(currentUser,userVO, followType);
         jobManager.addJobInBackground(job);
     }
 
-    public void followUser(Long userId){
-        startFollowUnfollowUserJob(userId, this, UserDtoFactory.FOLLOW_TYPE);
+    public void followUser(UserVO user){
+        startFollowUnfollowUserJob(user, this, UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(Long userId){
-        startFollowUnfollowUserJob(userId,this,UserDtoFactory.UNFOLLOW_TYPE);
+    public void unfollowUser(UserVO user){
+        startFollowUnfollowUserJob(user,this,UserDtoFactory.UNFOLLOW_TYPE);
     }
 
 

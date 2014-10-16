@@ -6,10 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
+import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.mappers.ShotVOMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +49,7 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<Shot> retrieveOldOrNewTimeLineWithUsers(List<Shot> shots) {
+    public List<ShotVO> retrieveOldOrNewTimeLineWithUsers(List<Shot> shots, Long currentUserId) {
         String idShots = "(";
         String idUsers = "(";
         for (Shot shot : shots) {
@@ -130,14 +134,20 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<Shot> shotList = new ArrayList<>(count);
+        List<ShotVO> shotList = new ArrayList<>(count);
         cursor.moveToFirst();
         do {
+            ShotVO shotVO = new ShotVO();
             Shot shot = shotMapper.fromCursor(cursor);
+            ShotVOMapper shotVOMapper = new ShotVOMapper();
+            FollowMapper followMapper = new FollowMapper();
+            FollowManager followManager = new FollowManager(followMapper);
+            followManager.setDataBase(db);
             User user = userMapper.fromCursor(cursor);
+            Follow follow  = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
+            shotVO = shotVOMapper.toVO(user,follow,shot,currentUserId);
             if (user != null) {
-                shot.setUser(user);
-                shotList.add(shot);
+                shotList.add(shotVO);
             } else {
                 Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
             }
@@ -147,7 +157,7 @@ public class ShotManager extends  AbstractManager{
         return shotList;
     }
 
-    public List<Shot> retrieveTimelineWithUsers() {
+    public List<ShotVO> retrieveTimelineWithUsers(Long currentUserId) {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
                 + ShotTable.COMMENT +
@@ -175,14 +185,23 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<Shot> shots = new ArrayList<>(count);
+        List<ShotVO> shots = new ArrayList<>(count);
         cursor.moveToFirst();
         do {
+            ShotVO shotVO = new ShotVO();
             Shot shot = shotMapper.fromCursor(cursor);
+
+            ShotVOMapper shotVOMapper = new ShotVOMapper();
+            FollowMapper followMapper = new FollowMapper();
+
+            FollowManager followManager = new FollowManager(followMapper);
+            followManager.setDataBase(db);
+
             User user = userMapper.fromCursor(cursor);
+            Follow follow  = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
+            shotVO = shotVOMapper.toVO(user,follow,shot,currentUserId);
             if (user != null) {
-                shot.setUser(user);
-                shots.add(shot);
+                shots.add(shotVO);
             } else {
                 Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
             }
