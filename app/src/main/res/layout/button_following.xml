@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-  style="@style/FollowButton"
+  style="@style/FollowButton.Checked"
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -8,7 +8,7 @@
   android:visibility="gone">
 
     <TextView
-      style="@style/FollowButtonText"
+      style="@style/FollowButtonText.Checked"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center" />

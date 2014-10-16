@@ -87,13 +87,12 @@
     </style>
 
     <!-- Follow button -->
-    <style name="ProfileFollowButton">
+    <style name="FollowButton">
         <item name="android:background">@drawable/btn_follow</item>
-        <item name="android:clickable">true</item>
     </style>
 
 
-    <style name="ProfileFollowButtonText">
+    <style name="FollowButtonText">
         <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:drawableLeft">@drawable/ic_person_add</item>
@@ -102,12 +101,11 @@
         <item name="android:text">@string/profile_follow</item>
     </style>
 
-    <style name="ProfileFollowButton.Checked">
+    <style name="FollowButton.Checked">
         <item name="android:background">@drawable/btn_following</item>
-        <item name="android:clickable">true</item>
     </style>
 
-    <style name="ProfileFollowButtonText.Checked">
+    <style name="FollowButtonText.Checked">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:drawableLeft">@drawable/ic_check</item>
@@ -117,7 +115,7 @@
     </style>
 
     <!--Following button-->
-    <style name="ProfileFollowingButton">
+    <style name="FollowingButton">
         <item name="android:background">@drawable/btn_follow</item>
         <item name="android:clickable">true</item>
     </style>

@@ -172,6 +172,26 @@
         android:visibility="gone"
         />
 
+    <!-- NOTIFICATIONS SECTION -->
+    <TextView
+      style="@style/Widget.U2020.DebugDrawer.Header"
+      android:layout_columnSpan="2"
+      android:layout_gravity="start|end"
+      android:text="Notifications"
+      />
+
+    <TextView
+      style="@style/Widget.U2020.DebugDrawer.RowTitle"
+      android:layout_gravity="start|end|center_vertical"
+      android:text="Show notifications"
+      />
+
+    <Switch
+      android:id="@+id/debug_notif_enable"
+      style="@style/Widget.U2020.DebugDrawer.RowWidget"
+      android:layout_gravity="start|center_vertical"
+      />
+
     <!-- USER INTERFACE SECTION -->
 
     <TextView

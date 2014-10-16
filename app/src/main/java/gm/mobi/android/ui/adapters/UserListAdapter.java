@@ -13,6 +13,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.widgets.FollowButton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,18 +72,18 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
+
         if(isFollowButtonVisible()){
             if(item.getRelationship() == Follow.RELATIONSHIP_FOLLOWING){
-                viewHolder.followButton.setVisibility(View.GONE);
-                viewHolder.followingButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(true);
             }else if(item.getRelationship() == Follow.RELATIONSHIP_OWN){
-                viewHolder.followButton.setVisibility(View.GONE);
-                viewHolder.followingButton.setVisibility(View.GONE);
+                viewHolder.followButton.setEditProfile();
             }else{
-                viewHolder.followButton.setVisibility(View.VISIBLE);
-                viewHolder.followingButton.setVisibility(View.GONE);
+                viewHolder.followButton.setFollowing(false);
             }
-            viewHolder.followingButton.setOnClickListener(new View.OnClickListener() {
+            //TODO clean and refactor callback usage
+            // It's unefficient to create two new OnClickListener instances every bindView call
+            viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     if(callback!=null){
                         callback.unFollow(position);
@@ -99,9 +100,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
             });
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
-            viewHolder.followingButton.setVisibility(View.GONE);
          }
-
     }
 
     public void setCallback(FollowUnfollowAdapterCallback callback){
@@ -116,8 +115,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         @InjectView(R.id.user_avatar) ImageView avatar;
         @InjectView(R.id.user_name) TextView name;
         @InjectView(R.id.user_username) TextView username;
-        @InjectView(R.id.follow_button) View followButton;
-        @InjectView(R.id.following_button) View followingButton;
+        @InjectView(R.id.user_follow_button) FollowButton followButton;
         public int position;
 
         public ViewHolder(View view) {

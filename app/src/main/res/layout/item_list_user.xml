@@ -33,37 +33,11 @@
       android:textSize="14sp"
       tools:text="rafa" />
 
-    <FrameLayout
-      android:id="@+id/follow_button"
-      style="@style/ProfileFollowButton"
+    <gm.mobi.android.ui.widgets.FollowButton
+      android:id="@+id/user_follow_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
-      android:padding="8dp"
-      android:visibility="visible"
-      tools:visibility="visible">
-        <TextView
-          style="@style/ProfileFollowButtonText"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center" />
-    </FrameLayout>
-    <FrameLayout
-      android:id="@+id/following_button"
-      style="@style/ProfileFollowButton.Checked"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:padding="8dp"
-      android:visibility="visible"
-      tools:visibility="gone">
-
-        <TextView
-          style="@style/ProfileFollowButtonText.Checked"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center" />
-    </FrameLayout>
+      />
 </RelativeLayout>

@@ -30,6 +30,7 @@ import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.widgets.FollowButton;
 import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {
@@ -48,9 +49,7 @@ public class ProfileFragment extends BaseFragment {
     @InjectView(R.id.profile_marks_followers) TextView followersTextView;
     @InjectView(R.id.profile_marks_following_text) TextView followingTextView;
 
-    @InjectView(R.id.profile_follow_button) View followButton;
-    @InjectView(R.id.profile_following_button) View followingButton;
-    @InjectView(R.id.profile_edit_profile_button) View editProfileButton;
+    @InjectView(R.id.profile_follow_button) FollowButton followButton;
 
     @Inject Bus bus;
     @Inject Picasso picasso;
@@ -175,15 +174,11 @@ public class ProfileFragment extends BaseFragment {
         setMainButtonStatus(user.getRelationship());
     }
 
-    private void setMainButtonStatus(int doIFollowHim) {
-        if(doIFollowHim == Follow.RELATIONSHIP_OWN){
-            followingButton.setVisibility(View.GONE);
-            followButton.setVisibility(View.GONE);
-            editProfileButton.setVisibility(View.VISIBLE);
+    private void setMainButtonStatus(int followRelationship) {
+        if(followRelationship == Follow.RELATIONSHIP_OWN){
+            followButton.setEditProfile();
         }else{
-            editProfileButton.setVisibility(View.GONE);
-            followingButton.setVisibility(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING ? View.VISIBLE : View.GONE);
-            followButton.setVisibility(doIFollowHim == Follow.RELATIONSHIP_NONE ? View.VISIBLE : View.GONE);
+            followButton.setFollowing(followRelationship == Follow.RELATIONSHIP_FOLLOWING);
         }
     }
 
@@ -198,10 +193,20 @@ public class ProfileFragment extends BaseFragment {
     }
 
     @OnClick(R.id.profile_follow_button)
+    public void onMainButonClick() {
+        if (followButton.isEditProfile()) {
+            //TODO
+        }else if (followButton.isFollowing()) {
+            unfollowUser();
+        } else {
+            followUser();
+        }
+    }
+
     public void followUser(){
         startFollowUnfollowUserJob(currentUser, getActivity(),UserDtoFactory.FOLLOW_TYPE);
     }
-    @OnClick(R.id.profile_following_button)
+
     public void unfollowUser(){
         startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
     }
