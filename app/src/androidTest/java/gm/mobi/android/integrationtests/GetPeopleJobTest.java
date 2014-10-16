@@ -62,7 +62,7 @@ public class GetPeopleJobTest {
         currentUser.setName("Rafa");
         currentUser.setSessionToken("9283569275");
         currentUser.setEmail("saluydhgasfda");
-        currentUser.setFavouriteTeamId(1L);
+        currentUser.setFavoriteTeamId(1L);
         currentUser.setPhoto("iuhadsfiu");
         currentUser.setPoints(2L);
         currentUser.setNumFollowers(3L);
@@ -96,7 +96,7 @@ public class GetPeopleJobTest {
         User followedUser = new User();
         followedUser.setIdUser(FOLLOWED_USER);
         followedUser.setName("Inma");
-        followedUser.setFavouriteTeamId(1L);
+        followedUser.setFavoriteTeamId(1L);
         followedUser.setPhoto("iuhadsfiu");
         followedUser.setPoints(2L);
         followedUser.setNumFollowers(3L);

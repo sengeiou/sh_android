@@ -7,10 +7,15 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.io.IOException;
 import java.sql.SQLException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -32,42 +37,48 @@ import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class GetUserInfoJobTest {
+public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
 
     private static final Long USER_ID = 1L;
-    private Bus bus;
-    private SQLiteOpenHelper dbHelper;
+    private static final Long CURRENT_USER_ID = 2L;
+    private BagdadService service;
+    private SQLiteOpenHelper openHelper;
+    private FollowManager followManager;
+    private UserManager userManager;
+    private UserVOMapper userVOMapper;
+    private TeamManager teamManager;
+    private GetUserInfoJob getUserInfoJob;
 
-    @org.junit.Before
-    public void setup() {
-        dbHelper = mock(SQLiteOpenHelper.class);
+    @Before
+    @Override
+    public void setUp() throws IOException {
+        super.setUp();
+        service = mock(BagdadService.class);
+        openHelper = mock(SQLiteOpenHelper.class);
+        userManager = mock(UserManager.class);
+        followManager = mock(FollowManager.class);
+        teamManager = mock(TeamManager.class);
 
-        bus = mock(Bus.class);
+        userVOMapper = mock(UserVOMapper.class);
+
+        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
+        when(service.getFollowByIdUserFollowed(CURRENT_USER_ID, USER_ID)).thenReturn(new Follow());
+
+        getUserInfoJob =
+          new GetUserInfoJob(Robolectric.application,bus,openHelper,service, networkUtil,userManager,followManager,teamManager, userVOMapper);
+        User currentUser = new User();
+        currentUser.setIdUser(CURRENT_USER_ID);
+        getUserInfoJob.init(USER_ID, currentUser);
     }
 
     @Test
     public void logWhenUserIsNotFoundInDataBase() throws IOException, SQLException {
-        UserManager userManager = mock(UserManager.class);
         when(userManager.getUserByIdUser(anyLong())).thenReturn(null);
-
-        assertTrue(userManager != null);
 
         Tree mockTree = mock(Tree.class);
         Timber.plant(mockTree);
 
-        NetworkUtil networkUtil = mock(NetworkUtil.class);
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
-
-        BagdadService service = mock(BagdadService.class);
-        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
-
-        GetUserInfoJob getUserInfoJob = new GetUserInfoJob(Robolectric.application,bus,dbHelper,service, networkUtil,userManager,null,null);
-
-        assertTrue(getUserInfoJob.userManager != null);
-
-        getUserInfoJob.init(1L,null);
-
-        assertTrue(getUserInfoJob.userManager != null);
 
         getUserInfoJob.run();
 
@@ -77,26 +88,19 @@ public class GetUserInfoJobTest {
 
     @Test
     public void postResultInBusWhenUserIsFoundInDataBase() throws Throwable {
-        UserManager userManager = mock(UserManager.class);
         when(userManager.getUserByIdUser(anyLong())).thenReturn(new User());
 
-        FollowManager followManager = mock(FollowManager.class);
-
-        TeamManager teamManager = mock(TeamManager.class);
-
-        NetworkUtil networkUtil = mock(NetworkUtil.class);
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
 
-        BagdadService service = mock(BagdadService.class);
         when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
 
-        GetUserInfoJob getUserInfoJob =
-          new GetUserInfoJob(Robolectric.application, bus, dbHelper, service, networkUtil, userManager, followManager,
-            teamManager);
-        getUserInfoJob.init(1L,null);
         getUserInfoJob.onRun();
+
         //TODO comprobar tipo de objeto posteado
         verify(bus, atLeastOnce()).post(anyObject());
     }
 
+    @Override protected BagdadBaseJob getSystemUnderTest() {
+        return getUserInfoJob;
+    }
 }

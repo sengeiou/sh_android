@@ -2,19 +2,18 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.path.android.jobqueue.network.NetworkUtil;
-import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import java.util.ArrayList;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
+import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import java.io.IOException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -22,71 +21,50 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class GetPeopleJobTest {
+public class GetPeopleJobTest extends BagdadBaseJobTestAbstract {
 
-    public static final long CURRENT_USER_ID =1L;
+    public static final long CURRENT_USER_ID = 1L;
+    private UserVOMapper userVOMapper;
+    private GetPeopleJob getPeopleJob;
 
-    @Test
-    public void postErrorWhenCallToServiceFails() throws Throwable{
+    private BagdadService service;
+    private SQLiteOpenHelper openHelper;
+    private UserManager userManager;
+    private FollowManager followManager;
 
-        Bus bus = mock(Bus.class);
-        BagdadService service = mock(BagdadService.class);
-        when(service.getFollowing(anyLong(), anyLong())).thenThrow(new ServerException());
+    @Before
+    public void setUp() throws IOException {
+        super.setUp();
+        service = mock(BagdadService.class);
+        openHelper = mock(SQLiteOpenHelper.class);
+        userManager = mock(UserManager.class);
+        followManager = mock(FollowManager.class);
 
-        NetworkUtil networkUtil = mock(NetworkUtil.class);
-        when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
-
-        SQLiteOpenHelper openHelper = mock(SQLiteOpenHelper.class);
-        UserManager userManager = mock(UserManager.class);
-        FollowManager followManager = mock(FollowManager.class);
-
-        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, networkUtil, openHelper, userManager, followManager);
+        userVOMapper = mock(UserVOMapper.class);
+        getPeopleJob =
+          new GetPeopleJob(Robolectric.application, bus, service, networkUtil, openHelper, userManager, followManager,
+            userVOMapper);
         getPeopleJob.init(CURRENT_USER_ID);
-        getPeopleJob.onRun();
-
-        verify(bus).post(any(CommunicationErrorEvent.class));
-
     }
 
     @Test
-    public void postConnectionNotAvailableEventWhenConnectionNotAvailable() throws Throwable {
-        NetworkUtil networkUtil = mock(NetworkUtil.class);
-        when(networkUtil.isConnected(any(Context.class))).thenReturn(false);
+    public void postErrorWhenCallToServiceFails() throws Throwable {
 
-        BagdadService service = mock(BagdadService.class);
-        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenThrow(new ServerException());
 
-        Bus bus = mock(Bus.class);
+        when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
 
-        SQLiteOpenHelper openHelper = mock(SQLiteOpenHelper.class);
-        UserManager userManager = mock(UserManager.class);
-        FollowManager followManager = mock(FollowManager.class);
-
-        GetPeopleJob getPeopleJob = new GetPeopleJob(Robolectric.application, bus, service, networkUtil, openHelper, userManager, followManager);
-        getPeopleJob.init(CURRENT_USER_ID);
         getPeopleJob.onRun();
 
-        ArgumentCaptor<ConnectionNotAvailableEvent> eventArgumentCaptor =
-          ArgumentCaptor.forClass(ConnectionNotAvailableEvent.class);
-
-        verify(bus, atLeastOnce()).post(eventArgumentCaptor.capture());
-
-        boolean receivedEvent = false;
-        for (Object event : eventArgumentCaptor.getAllValues()) {
-            if (event instanceof ConnectionNotAvailableEvent) {
-                receivedEvent = true;
-                break;
-            }
-        }
-        assertThat(receivedEvent).isTrue();
-        //TODO Adriáaaaaaaan!
-        //assertThat(eventArgumentCaptor.getValue()).isInstanceOf(ConnectionNotAvailableEvent.class);
+        verify(bus).post(any(CommunicationErrorEvent.class));
+    }
+    @Override protected BagdadBaseJob getSystemUnderTest() {
+        return getPeopleJob;
     }
 }
