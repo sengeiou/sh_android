@@ -223,7 +223,7 @@
 //------------------------------------------------------------------------------
 - (NSArray *)getFollowingUsersOfUser:(User *)user {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",user.idUser,  @"d"];
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
     NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
     for (Follow *obj in follows) {
@@ -263,7 +263,7 @@
 //------------------------------------------------------------------------------
 - (NSArray *)getFollowersOfUser:(User *)user {
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@",user.idUser];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@  && csys_syncronized != %@ ",user.idUser, @"d"];
 	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
 	NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
 	for (Follow *obj in follows) {
@@ -281,9 +281,14 @@
 //------------------------------------------------------------------------------
 - (BOOL)checkIfImFollowingUser:(User *)user {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",[[UserManager singleton] getUserId],  @"d"];
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    
+   
+    
     for (Follow *follow in follows) {
+        NSLog(@"follow: %@",follow.idUserFollowed);
+        
         if (follow.idUserFollowed == user.idUser)
             return YES;
     }
