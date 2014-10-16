@@ -20,11 +20,11 @@
 
 
 //Synchronization switch
-#define SYNCHRO_ACTIVATED      NO
+#define SYNCHRO_ACTIVATED      YES
 
 
 //Syncro time process in seconds
-#define SYNCHRO_TIMER   20
+#define SYNCHRO_TIMER   10
 
 //Syncro time process in seconds
 #define CHARACTERS_SHOT   140
