@@ -117,9 +117,9 @@ public class BagdadNotificationManager {
         extras.putInt(MainActivity.EXTRA_SHOW_SECTION,
           MainActivity.DRAWER_POSITION_TIMELINE);
 
-        return PendingIntent.getActivity(context, REQUEST_OPEN,
-          //new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), 0);
-          new Intent(context, MainActivity.class).putExtras(extras), PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(context, REQUEST_OPEN,
+          new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
+          //new Intent(context, MainActivity.class).putExtras(extras), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected Bitmap getUserPhoto(String url) {

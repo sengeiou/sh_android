@@ -24,6 +24,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
             notificationManager.clearShotNotifications();
         }else if (action.equals(ACTION_OPEN_SHOT_NOTIFICATION)) {
             context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            notificationManager.clearShotNotifications();
         }
     }
 }
