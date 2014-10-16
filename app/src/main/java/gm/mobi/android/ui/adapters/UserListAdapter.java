@@ -21,6 +21,8 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
     private List<UserVO> users;
     private Picasso picasso;
 
+    private FollowUnfollowAdapterCallback callback;
+
     public UserListAdapter(Context context, Picasso picasso) {
         super(context);
         this.picasso = picasso;
@@ -59,7 +61,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         return rowView;
     }
 
-    @Override public void bindView(UserVO item, int position, View view) {
+    @Override public void bindView(UserVO item, final int position, View view) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.name.setText(item.getUserName());
         viewHolder.username.setText(item.getFavoriteTeamName());
@@ -69,16 +71,41 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
         }
-        if(item.getRelationship() == Follow.RELATIONSHIP_FOLLOWING){
-            viewHolder.followButton.setVisibility(View.GONE);
-            viewHolder.followingButton.setVisibility(View.VISIBLE);
-        }else if(item.getRelationship() == Follow.RELATIONSHIP_OWN){
-            viewHolder.followButton.setVisibility(View.GONE);
-            viewHolder.followingButton.setVisibility(View.GONE);
+        if(isFollowButtonVisible()){
+            if(item.getRelationship() == Follow.RELATIONSHIP_FOLLOWING){
+                viewHolder.followButton.setVisibility(View.GONE);
+                viewHolder.followingButton.setVisibility(View.VISIBLE);
+            }else if(item.getRelationship() == Follow.RELATIONSHIP_OWN){
+                viewHolder.followButton.setVisibility(View.GONE);
+                viewHolder.followingButton.setVisibility(View.GONE);
+            }else{
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followingButton.setVisibility(View.GONE);
+            }
+            viewHolder.followingButton.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if(callback!=null){
+                        callback.unFollow(position);
+                    }
+                }
+            });
+
+            viewHolder.followButton.setOnClickListener(new View.OnClickListener(){
+                @Override public void onClick(View v) {
+                    if(callback!=null){
+                        callback.follow(position);
+                    }
+                }
+            });
         }else{
-            viewHolder.followButton.setVisibility(View.VISIBLE);
+            viewHolder.followButton.setVisibility(View.GONE);
             viewHolder.followingButton.setVisibility(View.GONE);
-        }
+         }
+
+    }
+
+    public void setCallback(FollowUnfollowAdapterCallback callback){
+        this.callback = callback;
     }
 
     public List<UserVO> getItems() {
@@ -89,12 +116,20 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         @InjectView(R.id.user_avatar) ImageView avatar;
         @InjectView(R.id.user_name) TextView name;
         @InjectView(R.id.user_username) TextView username;
-        @InjectView(R.id.profile_follow_button) View followButton;
-        @InjectView(R.id.profile_following_button) View followingButton;
+        @InjectView(R.id.follow_button) View followButton;
+        @InjectView(R.id.following_button) View followingButton;
         public int position;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
     }
+
+
+    public interface FollowUnfollowAdapterCallback{
+        public void follow(int position);
+        public void unFollow(int position);
+    }
+
+
 }

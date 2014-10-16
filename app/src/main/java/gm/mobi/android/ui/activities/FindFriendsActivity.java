@@ -25,10 +25,13 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.PaginatedResult;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
+import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
+import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
@@ -41,7 +44,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class FindFriendsActivity extends BaseSignedInActivity {
+public class FindFriendsActivity extends BaseSignedInActivity implements UserListAdapter.FollowUnfollowAdapterCallback {
 
     public static final int NO_OFFSET = 0;
     private static final String EXTRA_RESULTS = "results";
@@ -86,6 +89,7 @@ public class FindFriendsActivity extends BaseSignedInActivity {
     private void setupViews() {
         if (adapter == null) {
             adapter = new UserListAdapter(this, picasso);
+            adapter.setCallback(this);
         }
         resultsListView.setAdapter(adapter);
 
@@ -306,4 +310,38 @@ public class FindFriendsActivity extends BaseSignedInActivity {
             setLoading(hasMoreItemsToLoad);
         }
     }
+
+    @Override public void follow(int position) {
+        UserVO user = adapter.getItem(position);
+        unfollowUser(user.getIdUser());
+    }
+
+    @Override public void unFollow(int position) {
+        UserVO user = adapter.getItem(position);
+        followUser(user.getIdUser());
+    }
+
+    public void startFollowUnfollowUserJob(Long userId, Context context, int followType){
+        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        User currentUser = GolesApplication.get(this).getCurrentUser();
+        job.init(currentUser,userId, followType);
+        jobManager.addJobInBackground(job);
+    }
+
+    public void followUser(Long userId){
+        startFollowUnfollowUserJob(userId, this, UserDtoFactory.FOLLOW_TYPE);
+    }
+
+    public void unfollowUser(Long userId){
+        startFollowUnfollowUserJob(userId,this,UserDtoFactory.UNFOLLOW_TYPE);
+    }
+
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+        startSearch();
+    }
+
+
+
 }

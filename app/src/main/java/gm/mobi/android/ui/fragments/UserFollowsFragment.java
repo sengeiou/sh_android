@@ -1,5 +1,6 @@
 package gm.mobi.android.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -22,7 +23,9 @@ import gm.mobi.android.db.objects.User;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
+import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
+import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
@@ -32,7 +35,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class UserFollowsFragment extends BaseFragment {
+public class UserFollowsFragment extends BaseFragment implements UserListAdapter.FollowUnfollowAdapterCallback{
 
     public static final String TAG = "follows";
     public static final int FOLLOWING = UserDtoFactory.GET_FOLLOWING;
@@ -53,6 +56,11 @@ public class UserFollowsFragment extends BaseFragment {
     Long userId;
     Integer followType;
 
+    UserVO user;
+
+    //CurrentUser
+    User currentUser;
+
     private UserListAdapter userListAdapter;
 
     public static UserFollowsFragment newInstance(Long userId, Integer followType) {
@@ -72,6 +80,7 @@ public class UserFollowsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
+        currentUser = GolesApplication.get(getActivity()).getCurrentUser();
     }
 
     public void injectArguments() {
@@ -147,9 +156,22 @@ public class UserFollowsFragment extends BaseFragment {
 
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
-        //TODO HACER QUE FUNCIONE EL VO EN TODOS SITIOS
-        UserVO user = getAdapter().getItem(position);
+        user = getAdapter().getItem(position);
         startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
+    }
+
+    public void startFollowUnfollowUserJob(Long userId, Context context, int followType){
+        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        job.init(currentUser,userId, followType);
+        jobManager.addJobInBackground(job);
+    }
+
+    public void followUser(Long userId){
+        startFollowUnfollowUserJob(userId, getActivity(), UserDtoFactory.FOLLOW_TYPE);
+    }
+
+    public void unfollowUser(Long userId){
+        startFollowUnfollowUserJob(userId,getActivity(),UserDtoFactory.UNFOLLOW_TYPE);
     }
 
     @Override public void onResume() {
@@ -180,7 +202,26 @@ public class UserFollowsFragment extends BaseFragment {
     public UserListAdapter getAdapter() {
         if (userListAdapter == null) {
             userListAdapter = new UserListAdapter(getActivity(), picasso);
+            userListAdapter.setCallback(this);
         }
         return userListAdapter;
     }
+
+    @Override public void follow(int position) {
+        user = getAdapter().getItem(position);
+        followUser(user.getIdUser());
+    }
+
+    @Override public void unFollow(int position) {
+        user = getAdapter().getItem(position);
+        unfollowUser(user.getIdUser());
+    }
+
+
+    @Subscribe
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+        startJob();
+    }
+
+
 }
