@@ -7,6 +7,8 @@ import dagger.Provides;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
+import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.DebugNotificationManager;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.service.DebugApiModule;
 import gm.mobi.android.ui.debug.NetworkProxy;
@@ -28,6 +30,7 @@ public class DebugDataModule {
     private static final boolean DEFAULT_SCALPEL_WIREFRAME_ENABLED = false; // Draw views by default.
     private static final boolean DEFAULT_SEEN_DEBUG_DRAWER = false; // Show debug drawer first time.
     private static final boolean DEFAULT_NETWORK_ENABLED = true;
+    private static final boolean DEFAULT_NOTIFICATIONS_ENABLED = true;
 
     @Provides @Singleton @ApiEndpoint StringPreference provideEndpointPreference(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_endpoint", ApiEndpoints.TEST.url);
@@ -44,6 +47,10 @@ public class DebugDataModule {
 
     @Provides @Singleton @NetworkEnabled BooleanPreference provideNetworkEnabled(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_network_enabled", DEFAULT_NETWORK_ENABLED);
+    }
+
+    @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(SharedPreferences preferences){
+        return new BooleanPreference(preferences, "debug_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
     }
 
     @Provides @Singleton @AnimationSpeed IntPreference provideAnimationSpeed(SharedPreferences preferences) {
@@ -74,4 +81,10 @@ public class DebugDataModule {
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {
         return networkUtil;
     }
+
+    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(
+      DebugNotificationManager notificationManager) {
+        return notificationManager;
+    }
+
 }

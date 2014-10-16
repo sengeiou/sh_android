@@ -1,5 +1,6 @@
 package gm.mobi.android.gcm.notifications;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -43,7 +44,7 @@ public class BagdadNotificationManager {
 
     private SparseArray<Shot> shotsCurrentlyNotified = new SparseArray<>();
 
-    @Inject public BagdadNotificationManager(Context context, NotificationManagerCompat notificationManager,
+    @Inject public BagdadNotificationManager(Application context, NotificationManagerCompat notificationManager,
       Picasso picasso) {
         this.context = context;
         this.notificationManager = notificationManager;
@@ -62,7 +63,7 @@ public class BagdadNotificationManager {
             // Single notification
             notification = buildSingleShotNotification(shot);
         }
-        notificationManager.notify(NOTIFICATION_SHOT, notification);
+        notify(NOTIFICATION_SHOT, notification);
     }
 
     protected Notification buildSingleShotNotification(Shot shot) {
@@ -177,6 +178,16 @@ public class BagdadNotificationManager {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentTitle("Error")
           .setContentText(message)
           .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-        notificationManager.notify(NOTIFICATION_ERROR, builder.build());
+        notify(NOTIFICATION_ERROR, builder.build());
+    }
+
+    private void notify(int id, Notification notification) {
+        if(areNotificationsEnabled()){
+            notificationManager.notify(id, notification);
+        }
+    }
+
+    public boolean areNotificationsEnabled() {
+        return true;
     }
 }

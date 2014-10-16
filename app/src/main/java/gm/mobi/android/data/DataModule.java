@@ -153,8 +153,12 @@ public class DataModule {
         return GoogleCloudMessaging.getInstance(application);
     }
 
-    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, Picasso picasso) {
-        NotificationManagerCompat nm = NotificationManagerCompat.from(app);
+    @Provides @Singleton NotificationManagerCompat provideNotificationManagerCompat(Application application) {
+        return NotificationManagerCompat.from(application);
+
+    }
+
+    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, NotificationManagerCompat nm, Picasso picasso) {
         return new BagdadNotificationManager(app, nm, picasso);
     }
 

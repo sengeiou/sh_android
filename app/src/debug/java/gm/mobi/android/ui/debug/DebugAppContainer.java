@@ -37,6 +37,7 @@ import gm.mobi.android.data.ApiEndpoint;
 import gm.mobi.android.data.ApiEndpoints;
 import gm.mobi.android.data.CustomEndpoint;
 import gm.mobi.android.data.NetworkEnabled;
+import gm.mobi.android.data.NotificationsEnabled;
 import gm.mobi.android.data.PicassoDebugging;
 import gm.mobi.android.data.ScalpelEnabled;
 import gm.mobi.android.data.ScalpelWireframeEnabled;
@@ -89,6 +90,7 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
     private final BooleanPreference seenDebugDrawer;
+    private final BooleanPreference notificationsEnabled;
     private BooleanPreference initialSetupCompleted;
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
@@ -109,6 +111,7 @@ public class DebugAppContainer implements AppContainer {
                              @SeenDebugDrawer BooleanPreference seenDebugDrawer,
                              @InitialSetupCompleted BooleanPreference initialSetupCompleted,
                              @CustomEndpoint StringPreference customEndpoint,
+                             @NotificationsEnabled BooleanPreference notificationsEnabled,
                              BagdadMockService mockBagdadService,
                              Application app) {
         this.client = client;
@@ -123,6 +126,7 @@ public class DebugAppContainer implements AppContainer {
         this.picassoDebugging = picassoDebugging;
         this.initialSetupCompleted = initialSetupCompleted;
         this.customEndpoint = customEndpoint;
+        this.notificationsEnabled = notificationsEnabled;
         this.mockBagdadService = mockBagdadService;
         this.app = app;
     }
@@ -143,6 +147,8 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_network_error) Spinner networkErrorView;
     @InjectView(R.id.debug_network_proxy) Spinner networkProxyView;
     @InjectView(R.id.debug_network_logging) Spinner networkLoggingView;
+
+    @InjectView(R.id.debug_notif_enable) Switch notificationsEnabledView;
 
     @InjectView(R.id.debug_ui_animation_speed) Spinner uiAnimationSpeedView;
     @InjectView(R.id.debug_ui_pixel_grid) Switch uiPixelGridView;
@@ -215,6 +221,7 @@ public class DebugAppContainer implements AppContainer {
         }
 
         setupNetworkSection();
+        setupNotificationsSection();
         setupUserInterfaceSection();
         setupBuildSection();
         setupDeviceSection();
@@ -384,6 +391,16 @@ public class DebugAppContainer implements AppContainer {
     showCustomEndpointDialog(endpointView.getSelectedItemPosition(), networkEndpoint.get());
   }
 
+    private void setupNotificationsSection() {
+        boolean showNotifications = notificationsEnabled.get();
+        notificationsEnabledView.setChecked(showNotifications);
+        notificationsEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Timber.d("Setting notifications %s", isChecked ? "on" : "off");
+                notificationsEnabled.set(isChecked);
+            }
+        });
+    }
     private void setupUserInterfaceSection() {
     final AnimationSpeedAdapter speedAdapter = new AnimationSpeedAdapter(activity);
     uiAnimationSpeedView.setAdapter(speedAdapter);
