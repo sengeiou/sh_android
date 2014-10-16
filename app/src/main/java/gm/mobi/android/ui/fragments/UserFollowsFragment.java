@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -25,6 +26,7 @@ import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
+import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -47,6 +49,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
+    @Inject NetworkUtil networkUtil;
 
     @InjectView(R.id.userlist_list) ListView userlistListView;
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
@@ -112,9 +115,9 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     private void retrieveUsers() {
-        startJob();
-        setLoadingView(true);
-        setEmpty(false);
+            startJob();
+            setLoadingView(true);
+            setEmpty(false);
     }
 
     public void startJob(){
@@ -162,9 +165,17 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
-        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,userVO, followType);
-        jobManager.addJobInBackground(job);
+        if(isThereInternetConnection()){
+            GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+            job.init(currentUser,userVO, followType);
+            jobManager.addJobInBackground(job);
+        }else{
+            GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+            job.init(currentUser,userVO,followType);
+            jobManager.addJobInBackground(job);
+        }
+
+
     }
 
     public void followUser(UserVO user){
@@ -230,5 +241,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void updateList(){
         if(getAdapter()!=null) getAdapter().notifyDataSetChanged();
     }
+
+
+    public boolean isThereInternetConnection(){
+        return networkUtil.isConnected(getActivity().getApplication());
+    }
+
 
 }

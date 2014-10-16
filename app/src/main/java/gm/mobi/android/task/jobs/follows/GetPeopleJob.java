@@ -56,12 +56,10 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
         if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
         }
-        if(hasInternetConnection()) {
             List<User> peopleFromServer = service.getFollowing(currentUserId, 0L);
             Collections.sort(peopleFromServer, new NameComparator());
             userVOs = getUserVOs(peopleFromServer);
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
-        }
     }
 
     public List<UserVO> getUserVOs(List<User> users){

@@ -21,27 +21,24 @@ import java.sql.SQLException;
 import java.util.Date;
 import javax.inject.Inject;
 
-public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
+public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFollowResultEvent> {
+    private static final int PRIORITY = 4; //TODO Define next values for our queue
 
-    private static final int PRIORITY = 6; //TODO Define next values for our queue
-
-    BagdadService service;
     UserManager userManager;
     FollowManager followManager;
 
+    private UserVOMapper userVOMapper;
 
     private User currentUser;
     private UserVO user;
     private Long idUser;
     private int followUnfollowType;
     private int doIFollowHim;
-    private UserVOMapper userVOMapper;
 
     @Inject
-    public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-      BagdadService service, UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
-        super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
-        this.service = service;
+    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
+       UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
+        super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userVOMapper = userVOMapper;
@@ -56,7 +53,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     }
 
     @Override protected void createDatabase() {
-            createWritableDb();
+        createWritableDb();
     }
 
     @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
@@ -71,17 +68,17 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
         doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
-                Follow followUser = followUser();
+                Follow followUser = followUserInDB();
                 User userToCreate = null;
                 doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
                 if(followUser.getIdUser()!=null)
                     userToCreate = userVOMapper.userByUserVO(user);
-                    userManager.saveUser(userToCreate);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
-            break;
+                userManager.saveUser(userToCreate);
+                postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
+                break;
             case UserDtoFactory.UNFOLLOW_TYPE:
                 if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
-                    Follow follow = unfollowUser();
+                    Follow follow = unfollowUserinDB();
                     doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
                     postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIFollowHim));
                 }else{
@@ -89,35 +86,31 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
                     return;
                 }
                 break;
-            }
         }
-
-
-    public Follow unfollowUser() throws SQLException, IOException{
-        Follow follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
-        follow.setCsys_deleted(new Date());
-        Follow followReceived = service.unfollowUser(follow);
-        if(followReceived!=null){
-            followManager.saveFollowFromServer(followReceived);
-        }
-        return followReceived;
     }
 
-    public Follow followUser() throws IOException, SQLException{
+
+    public Follow unfollowUserinDB() throws SQLException, IOException{
+        Follow follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
+        follow.setCsys_deleted(new Date());
+        followManager.saveFollow(follow);
+        return follow;
+    }
+
+    public Follow followUserInDB() throws IOException, SQLException{
         Follow follow = new Follow();
         follow.setFollowedUser(idUser);
         follow.setIdUser(currentUser.getIdUser());
         follow.setCsys_birth(new Date());
         follow.setCsys_modified(new Date());
         follow.setCsys_revision(0);
-        Follow followReceived = service.followUser(follow);
-        if(followReceived!=null){
-            followManager.saveFollowFromServer(followReceived);
-        }
-        return followReceived;
+        followManager.saveFollow(follow);
+        return follow;
     }
 
+
+
     @Override protected boolean isNetworkRequired() {
-        return true;
+        return false;
     }
 }

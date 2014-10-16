@@ -2,6 +2,7 @@ package gm.mobi.android;
 
 import android.app.Application;
 import android.content.Context;
+import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.ObjectGraph;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.util.FileLogger;
@@ -12,6 +13,7 @@ public class GolesApplication extends Application {
     private static GolesApplication instance;
     private ObjectGraph objectGraph;
     private User currentUser;
+    private static NetworkUtil networkUtil;
 
     public GolesApplication() {
         instance = this;
@@ -72,4 +74,10 @@ public class GolesApplication extends Application {
     public static GolesApplication get(Context context) {
         return (GolesApplication) context.getApplicationContext();
     }
+
+
+    public static boolean  isThereInternetConnection(Context context, NetworkUtil networkUtil){
+        return networkUtil.isConnected(get(context));
+    }
+
 }

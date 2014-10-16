@@ -118,7 +118,7 @@ public class GetPeopleJobTest {
 
         FollowManager followManager = objectGraph.get(FollowManager.class);
         followManager.setDataBase(database);
-        followManager.saveFollow(followRelationship);
+        followManager.saveFollowFromServer(followRelationship);
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);

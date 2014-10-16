@@ -68,7 +68,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         User userFromService = getUserFromService();
         if(!idCurrentUser.equals(userId)){
             Follow followFromService = getFolloFromService();
-            if(followFromService.getIdUser()!=null) followManager.saveFollow(followFromService);
+            if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
             follow = followManager.getFollowByUserIds(idCurrentUser,userId);
              userVO = userVOMapper.toVO(userFromService,follow,idCurrentUser);
         }

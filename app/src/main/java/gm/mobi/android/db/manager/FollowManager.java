@@ -29,9 +29,9 @@ public class FollowManager extends AbstractManager{
     }
 
     /**
-     * Insert a Follow
+     * Insert a Follow from Server datas
      */
-    public void saveFollow(Follow follow) throws SQLException {
+    public void saveFollowFromServer(Follow follow) throws SQLException {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
 
@@ -44,8 +44,18 @@ public class FollowManager extends AbstractManager{
         }
     }
 
+
+    /** Insert a Follow **/
+    public void saveFollow(Follow follow)
+    {
+        if(follow!=null){
+            ContentValues contentValues = followMapper.toContentValues(follow);
+            db.insertWithOnConflict(FOLLOW_TABLE,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+        }
+    }
+
     /**
-     * Insert a Follow list
+     * Insert a Follow list from Server datas
      * *
      */
     public void saveFollows(List<Follow> followList) {
