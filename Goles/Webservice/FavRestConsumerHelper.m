@@ -137,6 +137,27 @@
 }
 
 //-----------------------------------------------------------------------------
++ (NSDictionary *)createMetadataForSearchPeopleWithItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter {
+    
+    //Create 'metadata' block
+    NSDictionary *meta = @{K_WS_OPS_OPERATION:K_OP_RETREAVE,K_WS_OPS_ENTITY:K_COREDATA_USER};
+    NSMutableDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:meta];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_TOTAL_ITEMS:[NSNull null]}];
+    [metadata addEntriesFromDictionary:@{K_WS_OPS_INCLUDE_DELETED:K_WS_FALSE}];
+    
+    if ([items isKindOfClass:[NSNumber class]])
+        [metadata addEntriesFromDictionary:@{K_WS_OPS_ITEMS:items}];
+    
+    if ([offset isKindOfClass:[NSNumber class]])
+        [metadata addEntriesFromDictionary:@{K_WS_OPS_OFFSET:offset}];
+    if ([filter isKindOfClass:[NSDictionary class]])
+        [metadata addEntriesFromDictionary:filter];
+    
+    
+    return metadata;
+}
+
+//-----------------------------------------------------------------------------
 + (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key {
     
     //Create 'metadata' block

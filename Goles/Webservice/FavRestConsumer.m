@@ -687,12 +687,8 @@
     NSArray *req = [FavRestConsumerHelper createREQ];
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
-                                                                     andEntity:K_COREDATA_USER
-                                                                     withItems:@8
-                                                                    withOffSet:offset
-                                                                     andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
-    
+    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForSearchPeopleWithItems:@25 withOffSet:offset andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
+
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[User class]]]};
     

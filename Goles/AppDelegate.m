@@ -71,12 +71,12 @@
 
 
         // To handle push notification
-        if (launchOptions) {
-            
-            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-            [self updateNotificationBadgeWith:remoteNotif];
+//        if (launchOptions) {
+//            
+//            NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+//            [self updateNotificationBadgeWith:remoteNotif];
 //            [self parsePayload:remoteNotif];
-        }
+//        }
         
         // Set Apirater settings
         [self setApiraterSettings];
@@ -242,8 +242,6 @@
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)]) {
         // iOS 8 Notifications
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
-        
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
     else {
         // iOS < 8 Notifications
@@ -287,7 +285,7 @@
         [self updateNotificationBadgeWith:userInfo];
     }
 
-    completionHandler(UIBackgroundFetchResultNoData);
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 //------------------------------------------------------------------------------
@@ -332,8 +330,7 @@
 - (void)updateNotificationBadgeWith:(NSDictionary *)userInfo {
 
     //Update badge
-    NSString* alertValue = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
-    int  badgeValue= [alertValue intValue] + 1;
+    long  badgeValue= [[UIApplication sharedApplication] applicationIconBadgeNumber]+1;
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeValue];
    
 }

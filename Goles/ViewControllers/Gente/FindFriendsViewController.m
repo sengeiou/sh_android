@@ -56,7 +56,7 @@
     self.usersSearch = [[NSMutableArray alloc]init];
     search = NO;
   
-    self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+//    self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
    
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 
