@@ -43,7 +43,8 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
+    
     [super viewWillAppear:animated];
     self.title = NSLocalizedString(@"People", nil);
     
@@ -56,7 +57,9 @@
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 }
 
--(void)addButtonsItem{
+//------------------------------------------------------------------------------
+-(void)addButtonsItem {
+    
     UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addFriends:)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
     
@@ -64,11 +67,6 @@
     self.navigationItem.leftBarButtonItem = findButtonItem;
 }
 
-#pragma mark - ADD PEOPLE
-
-//------------------------------------------------------------------------------
-- (IBAction)addFriends:(id)sender {
-}
 
 #pragma mark - TABLE VIEW
 //------------------------------------------------------------------------------
@@ -79,7 +77,6 @@
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    //NSLog(@"CEldas a pintar: %lu", (unsigned long)self.followingUsers.count);
     return self.followingUsers.count;
 }
 
@@ -152,7 +149,7 @@
 }
 
 
-#pragma mark - Search methods
+#pragma mark - SEARCH PEOPLE
 //------------------------------------------------------------------------------
 - (IBAction)searchFriends:(id)sender {
 
@@ -160,10 +157,14 @@
     UINavigationController *navFindFriendsVC = [[UINavigationController alloc]initWithRootViewController:findFriendsVC];
     findFriendsVC.backgroundImage = [Utils getUIImageFromUIView:self.view];
     [self presentViewController:navFindFriendsVC animated:YES completion:^{
-        NSLog(@"Paso");
     }];
 
 }
 
 
+#pragma mark - ADD PEOPLE
+//------------------------------------------------------------------------------
+- (IBAction)addFriends:(id)sender {
+    
+}
 @end

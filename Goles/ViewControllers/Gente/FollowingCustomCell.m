@@ -24,24 +24,6 @@
 }
 
 //------------------------------------------------------------------------------
--(void)configureCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath{
-
-    self.lblNickName.text = user.userName;
-    self.lblfavouriteTeamName.text = user.favoriteTeamName;
-    self.actionButton.layer.cornerRadius = 5.0f;
-	
-    if ([self checkIfImFollowingUser:user])
-        [self configureFollowingButton];
-    else if (user.idUser == [[UserManager singleton] getUserId])
-        self.actionButton.hidden = YES;
-    else
-        [self configureFollowButton];
-
-    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
-    self.photobutton.tag = indexPath.row;
-}
-
-//------------------------------------------------------------------------------
 -(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching{
     
     self.lblNickName.text = user.userName;
@@ -49,7 +31,7 @@
     self.actionButton.layer.cornerRadius = 5.0f;
     
     if  (searching){
-        if ([self checkIfImFollowingUser:user])
+        if ([[UserManager singleton] checkIfImFollowingUser:user])
             [self configureFollowingButton];
         else if (user.idUser == [[UserManager singleton] getUserId])
             self.actionButton.hidden = YES;
@@ -121,16 +103,5 @@
     [self.actionButton setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 }
 
-//------------------------------------------------------------------------------
-- (BOOL)checkIfImFollowingUser:(User *)user {
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
-    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
-    for (Follow *follow in follows) {
-        if (follow.idUserFollowed == user.idUser)
-            return YES;
-    }
-    return NO;
-}
 
 @end

@@ -951,7 +951,7 @@ static NSString *CellIdentifier = @"shootCell";
 - (NSString *)countCharacters:(NSUInteger) lenght{
     
     if (lenght <= CHARACTERS_SHOT){
-        NSString *charLeft = [NSString stringWithFormat:@"%u",CHARACTERS_SHOT - lenght];
+        NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
         return charLeft;
     }
     return @"0";

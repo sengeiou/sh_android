@@ -128,32 +128,6 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)followAndUnFollowUser:(id)sender{
-    UIButton *btn = (UIButton *) sender;
-    User *userFollow = self.usersSearch[btn.tag];
-    
-    BOOL followActionSuccess;
-    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
-        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
-    else
-        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-    
-    if (followActionSuccess)
-        [self.usersTable reloadData];
-}
-
-//------------------------------------------------------------------------------
-- (void)addLoadMoreCell{
-    if (search) {
-        self.usersTable.tableFooterView = self.spinner;
-        //NSLog(@"ofsset: %lu",  (unsigned long)self.followingUsers.count);
-        moreCells = NO;
-        [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInteger:self.followingUsers.count] withDelegate:self];
-        
-    }
-}
-
-//------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     self.indexToShow = indexPath;
@@ -176,6 +150,34 @@
         self.lblFooter.text = NSLocalizedString(@"", nil);
 }
 
+#pragma mark - TableView Pagination
+//------------------------------------------------------------------------------
+- (void)addLoadMoreCell{
+    if (search) {
+        self.usersTable.tableFooterView = self.spinner;
+        //NSLog(@"ofsset: %lu",  (unsigned long)self.followingUsers.count);
+        moreCells = NO;
+        [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInteger:self.followingUsers.count] withDelegate:self];
+        
+    }
+}
+
+#pragma mark - FOLLOW AND UNFOLLOW
+//------------------------------------------------------------------------------
+- (void)followAndUnFollowUser:(id)sender{
+    UIButton *btn = (UIButton *) sender;
+    User *userFollow = self.usersSearch[btn.tag];
+    
+    BOOL followActionSuccess;
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
+        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+    else
+        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
+    
+    if (followActionSuccess)
+        [self.usersTable reloadData];
+}
+
 
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
@@ -192,33 +194,6 @@
     profileVC.selectedUser = user;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
-
-//------------------------------------------------------------------------------
-- (void)reloadTableWithAnimation {
-    
-    [UIView transitionWithView: self.usersTable
-                      duration: 0.25f
-                       options: UIViewAnimationOptionTransitionCrossDissolve
-                    animations: ^(void)
-     {
-         [self.usersTable reloadData];
-     }
-                    completion: ^(BOOL isFinished)
-     {
-     }];
-}
-
-#pragma mark - HELPER METHODS
-//------------------------------------------------------------------------------
-- (void)restoreInitialStateView {
-    
-    [self.mySearchBar setAlpha:0.0];
-
-    //self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
-    [self.mySearchBar resignFirstResponder];
-    [self.mySearchBar setText:@""];
-}
-
 
 #pragma mark - Search methods
 //------------------------------------------------------------------------------
@@ -246,6 +221,7 @@
     self.textInSearchBar = searchBar.text;
 }
 
+//------------------------------------------------------------------------------
 -(void)enableCancelButton{
    
     for (UIView *view in self.mySearchBar.subviews)
@@ -259,6 +235,14 @@
             }
         }
     }
+}
+
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+    
+    if (status)
+        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser] withDelegate:self];
 }
 
 #pragma mark - Search Response method
@@ -328,12 +312,30 @@
     [self.usersTable reloadData];
 }
 
-#pragma mark - Conection response methods
 //------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
+- (void)reloadTableWithAnimation {
     
-    if (status)
-        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:[[UserManager singleton] getActiveUser] withDelegate:self];
+    [UIView transitionWithView: self.usersTable
+                      duration: 0.25f
+                       options: UIViewAnimationOptionTransitionCrossDissolve
+                    animations: ^(void)
+     {
+         [self.usersTable reloadData];
+     }
+                    completion: ^(BOOL isFinished)
+     {
+     }];
+}
+
+#pragma mark - HELPER METHODS
+//------------------------------------------------------------------------------
+- (void)restoreInitialStateView {
+    
+    [self.mySearchBar setAlpha:0.0];
+    
+    //self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
+    [self.mySearchBar resignFirstResponder];
+    [self.mySearchBar setText:@""];
 }
 
 //------------------------------------------------------------------------------

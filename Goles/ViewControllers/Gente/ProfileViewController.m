@@ -101,7 +101,7 @@
     
     if ([self.selectedUser isEqual:[[UserManager sharedInstance] getActiveUser]]) {
         [self setEditProfile];
-    }else if ([[UserManager singleton] isLoggedUserFollowing:self.selectedUser])
+    }else if ([[UserManager singleton] checkIfImFollowingUser:self.selectedUser])
 		[self setFollowToYes];
 	else
 		[self setFollowToNo];

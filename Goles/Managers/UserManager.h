@@ -15,20 +15,28 @@
 + (UserManager *)singleton;
 + (UserManager *)sharedInstance;
 
+
+//User
 - (NSNumber *)getUserId;
 - (User *)getActiveUser;
+- (NSString *)getUserSessionToken;
+- (NSArray *)getActiveUsersIDs;
+- (User *)getUserForId:(NSInteger )idUser;
+- (User *)createUserFromDict:(NSDictionary *)dict;
+
+
+//Device
 - (Device *)getDevice;
 - (NSNumber *)getIdDevice;
 - (void)setDeviceToken:(NSString *)token;
-- (NSString *)getUserSessionToken;
-- (NSArray *)getActiveUsersIDs;
+
+
+//Follow / unfollow
+- (BOOL)startFollowingUser:(User *)user;
+- (BOOL)stopFollowingUser:(User *)user;
 - (NSArray *)getFollowingUsersOfUser:(User *)user;
 - (NSArray *)getFollowingPeopleForMe;
 - (NSArray *)getFollowersOfUser:(User *)user;
-- (BOOL)isLoggedUserFollowing:(User *)user;
-- (User *)getUserForId:(NSInteger )idUser;
-- (User *)createUserFromDict:(NSDictionary *)dict;
-- (BOOL)startFollowingUser:(User *)user;
-- (BOOL)stopFollowingUser:(User *)user;
+- (BOOL)checkIfImFollowingUser:(User *)user;
 
 @end

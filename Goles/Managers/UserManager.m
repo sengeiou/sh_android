@@ -48,7 +48,13 @@
     return self;
 }
 
-#pragma mark - public methods
+#pragma mark - USER
+//------------------------------------------------------------------------------
+-(NSNumber *)getUserId {
+    
+    return [[self getActiveUser] idUser];
+}
+
 //------------------------------------------------------------------------------
 - (User *)getActiveUser {
 
@@ -63,61 +69,9 @@
     return nil;
 }
 
-
-//------------------------------------------------------------------------------
--(NSNumber *)getUserId {
-    
-    return [[self getActiveUser] idUser];
-}
-
 //------------------------------------------------------------------------------
 -(NSString *)getUserSessionToken {
    return [[self getActiveUser] sessionToken];
-}
-
-
-//------------------------------------------------------------------------------
--(Device *)getDevice{
-    Device *device = [[self getActiveUser] device];
-    if (device) {
-        return device;
-    }
-    return nil;
-}
-
-//------------------------------------------------------------------------------
--(NSNumber *)getIdDevice{
-    
-    if ([[self getDevice] isKindOfClass:[Device class]]) {
-        return [[self getDevice] idDevice];
-    }
-    return nil;
-}
-
-
-//------------------------------------------------------------------------------
--(void)setDeviceToken:(NSString *)token {
-    NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
-
-    if ( token ){
- 
-        Device *currentDBDevice = [self getDevice];
-        
-        //No Device on DB
-        if (![currentDBDevice isKindOfClass:[Device class]]) {
-            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:[NSNumber numberWithLongLong:epochTime],kJSON_MODIFIED:[NSNumber numberWithLongLong:epochTime],kJSON_DEVICE_PLATFORM:@1}];
-            if (device)
-                [[CoreDataManager singleton] saveContext];
-
-        }
-        //Device exists
-        else if (![token isEqualToString:[self getDevice].token]) {
-            NSNumber *revision = [NSNumber numberWithLong:currentDBDevice.csys_revisionValue+1];
-            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_UPDATED,kJSON_REVISION:revision}];
-            if (device)
-                [[CoreDataManager singleton] saveContext];
-        }
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -140,78 +94,6 @@
 }
 
 //------------------------------------------------------------------------------
-- (NSArray *)getFollowingUsersOfUser:(User *)user {
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
-    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
-    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
-    for (Follow *obj in follows) {
-        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
-        if (user)
-            [idUsersArray addObject:user];
-    }
-
-    if (idUsersArray.count > 0)
-        return idUsersArray;
-    
-    return nil;
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *)getFollowingPeopleForMe {
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",[[UserManager singleton] getUserId], @"d"];
-    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
-    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
-    for (Follow *obj in follows) {
-        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
-        if (user)
-            [idUsersArray addObject:user];
-    }
-    
-    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
-    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
-    NSArray *sortedArray = [idUsersArray sortedArrayUsingDescriptors:descriptors];
-    
-    if (sortedArray.count > 0)
-        return sortedArray;
-    
-    return nil;
-}
-
-//------------------------------------------------------------------------------
-- (NSArray *)getFollowersOfUser:(User *)user {
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@",user.idUser];
-	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
-	NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
-	for (Follow *obj in follows) {
-		User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserValue];
-		if (user)
-			[idUsersArray addObject:user];
-	}
-	
-	if (idUsersArray.count > 0)
-		return idUsersArray;
-	
-	return nil;
-}
-
-//------------------------------------------------------------------------------
-- (BOOL)isLoggedUserFollowing:(User *)user {
-
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[self getUserId]];
-	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
-	for (Follow *followedUser in follows) {
-		if (followedUser.idUserFollowed == user.idUser)
-			return YES;
-	}
-	
-	return NO;
-}
-
-
-//------------------------------------------------------------------------------
 - (User *)getUserForId:(NSInteger )idUser {
     
     User *user = [[CoreDataManager singleton] getEntity:[User class] withId:idUser];
@@ -222,59 +104,11 @@
 }
 
 //------------------------------------------------------------------------------
-- (BOOL)startFollowingUser:(User *)user {
-
-    User *userCheck = [self getUserForId:user.idUserValue];
-    if (userCheck) {
-        NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
-        Follow *follow = [Follow updateWithDictionary:followDict];
-        if (follow){
-            [[CoreDataManager singleton] saveContext];
-            return YES;
-        }
-        
-    }
-    else {
-       
-        User *newUser = [User createUserWithUser:user];
-        
-        if (newUser){
-            NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
-            Follow *follow = [Follow updateWithDictionary:followDict];
-            if (follow){
-                [[CoreDataManager singleton] saveContext];
-                return YES;
-            }
-        }
-    }
-    
-    return NO;
-}
-
-//------------------------------------------------------------------------------
-- (BOOL)stopFollowingUser:(User *)user {
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && idUserFollowed == %@",[self getUserId] ,user.idUser];
-    Follow *follow = [[[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate] firstObject];
-    if (follow){
-        NSDate *date = [NSDate date];
-        NSTimeInterval timeInt = [date timeIntervalSince1970];
-        follow.csys_deleted = [NSNumber numberWithDouble:timeInt*1000];
-        follow.csys_syncronized = kJSON_SYNCRO_DELETED;
-        [[CoreDataManager singleton] saveContext];
-        return YES;
-    }
-    
-    return NO;
-        
-}
-
-//------------------------------------------------------------------------------
 - (User *)createUserFromDict:(NSDictionary *)dict {
     
     NSEntityDescription *entity = [NSEntityDescription entityForName:K_COREDATA_USER inManagedObjectContext:[[CoreDataManager singleton] getContext]];
     User *user = [[User alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-
+    
     NSNumber *idUser = [dict objectForKey:kJSON_ID_USER];
     if ( [idUser isKindOfClass:[NSNumber class]] )
         [user setIdUser:idUser];
@@ -335,8 +169,174 @@
     NSNumber *rank = [dict objectForKey:kJSON_RANK ];
     if ([rank isKindOfClass:[NSNumber class]])
         [user setRank:rank];
-
+    
     return user;
+}
+
+
+#pragma mark - DEVICE
+//------------------------------------------------------------------------------
+-(Device *)getDevice{
+    Device *device = [[self getActiveUser] device];
+    if (device) {
+        return device;
+    }
+    return nil;
+}
+
+//------------------------------------------------------------------------------
+-(NSNumber *)getIdDevice{
+    
+    if ([[self getDevice] isKindOfClass:[Device class]]) {
+        return [[self getDevice] idDevice];
+    }
+    return nil;
+}
+
+
+//------------------------------------------------------------------------------
+-(void)setDeviceToken:(NSString *)token {
+    NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
+
+    if ( token ){
+ 
+        Device *currentDBDevice = [self getDevice];
+        
+        //No Device on DB
+        if (![currentDBDevice isKindOfClass:[Device class]]) {
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,kJSON_REVISION:@0,kJSON_BIRTH:[NSNumber numberWithLongLong:epochTime],kJSON_MODIFIED:[NSNumber numberWithLongLong:epochTime],kJSON_DEVICE_PLATFORM:@1}];
+            if (device)
+                [[CoreDataManager singleton] saveContext];
+
+        }
+        //Device exists
+        else if (![token isEqualToString:[self getDevice].token]) {
+            NSNumber *revision = [NSNumber numberWithLong:currentDBDevice.csys_revisionValue+1];
+            Device *device = [Device updateWithDictionary:@{kJSON_TOKEN:token,kJSON_SYNCRONIZED:kJSON_SYNCRO_UPDATED,kJSON_REVISION:revision}];
+            if (device)
+                [[CoreDataManager singleton] saveContext];
+        }
+    }
+}
+
+#pragma mark - FOLLOW / UNFOLLOW
+//------------------------------------------------------------------------------
+- (NSArray *)getFollowingUsersOfUser:(User *)user {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
+    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+    for (Follow *obj in follows) {
+        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
+        if (user)
+            [idUsersArray addObject:user];
+    }
+
+    if (idUsersArray.count > 0)
+        return idUsersArray;
+    
+    return nil;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *)getFollowingPeopleForMe {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && csys_syncronized != %@ ",[[UserManager singleton] getUserId], @"d"];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+    for (Follow *obj in follows) {
+        User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserFollowedValue];
+        if (user)
+            [idUsersArray addObject:user];
+    }
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    NSArray *sortedArray = [idUsersArray sortedArrayUsingDescriptors:descriptors];
+    
+    if (sortedArray.count > 0)
+        return sortedArray;
+    
+    return nil;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *)getFollowersOfUser:(User *)user {
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@",user.idUser];
+	NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] orderedByKey:kJSON_MODIFIED ascending:NO withPredicate:predicate];
+	NSMutableArray *idUsersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
+	for (Follow *obj in follows) {
+		User *user = [[CoreDataManager singleton] getEntity:[User class] withId:obj.idUserValue];
+		if (user)
+			[idUsersArray addObject:user];
+	}
+	
+	if (idUsersArray.count > 0)
+		return idUsersArray;
+	
+	return nil;
+}
+
+//------------------------------------------------------------------------------
+- (BOOL)checkIfImFollowingUser:(User *)user {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",[[UserManager singleton] getUserId]];
+    NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
+    for (Follow *follow in follows) {
+        if (follow.idUserFollowed == user.idUser)
+            return YES;
+    }
+    return NO;
+}
+
+
+//------------------------------------------------------------------------------
+- (BOOL)startFollowingUser:(User *)user {
+
+    User *userCheck = [self getUserForId:user.idUserValue];
+    if (userCheck) {
+        NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
+        Follow *follow = [Follow updateWithDictionary:followDict];
+        if (follow){
+            [[CoreDataManager singleton] saveContext];
+            return YES;
+        }
+        
+    }
+    else {
+       
+        User *newUser = [User createUserWithUser:user];
+        
+        if (newUser){
+            NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:@0,K_WS_OPS_UPDATE_DATE:@0,K_WS_OPS_DELETE_DATE:[NSNull null]};
+            Follow *follow = [Follow updateWithDictionary:followDict];
+            if (follow){
+                [[CoreDataManager singleton] saveContext];
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+//------------------------------------------------------------------------------
+- (BOOL)stopFollowingUser:(User *)user {
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && idUserFollowed == %@",[self getUserId] ,user.idUser];
+    Follow *follow = [[[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate] firstObject];
+    if (follow){
+        NSDate *date = [NSDate date];
+        NSTimeInterval timeInt = [date timeIntervalSince1970];
+        follow.csys_deleted = [NSNumber numberWithDouble:timeInt*1000];
+        follow.csys_syncronized = kJSON_SYNCRO_DELETED;
+        [[CoreDataManager singleton] saveContext];
+        return YES;
+    }
+    
+    return NO;
+        
 }
 
 @end
