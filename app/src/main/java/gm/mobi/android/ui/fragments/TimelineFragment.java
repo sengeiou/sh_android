@@ -434,15 +434,5 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    @OnClick(R.id.timeline_new_pronostic)
-    public void debugNotification() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override protected Void doInBackground(Void... params) {
-                notificationManager.sendNewShotNotification((Shot) listView.getItemAtPosition(1));
-                return null;
-            }
-        }.execute();
-    }
-
 }
 
