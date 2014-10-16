@@ -265,7 +265,7 @@
     }else if (!status){
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [self showAlertBadText];
+            [self showAlertTimeout];
         });
     }
 }
@@ -300,6 +300,11 @@
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Follow class] withDelegate:self];
         
         [Utils setValueToUserDefaults:[[UserManager sharedInstance] getUserId] ToKey:kJSON_ID_USER];
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self showAlertBadText];
+        });
     }
 }
 
