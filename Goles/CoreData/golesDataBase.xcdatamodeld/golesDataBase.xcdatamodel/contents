@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AppAdvice" representedClassName="AppAdvice" syncable="YES">
         <attribute name="buttonAction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="buttonData" optional="YES" attributeType="String" syncable="YES"/>
@@ -42,11 +42,11 @@
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="device" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Follow" representedClassName="Follow" syncable="YES">
-        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_revision" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_syncronized" optional="YES" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idUser" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="idUserFollowed" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
