@@ -517,7 +517,7 @@ namespace Bagdad
                 System.Diagnostics.Debug.WriteLine("-------------------PUSH APP ABIERTA RECIBIDO----------------: App.xaml.cs - url: " + url);
                 toast.MillisecondsUntilHidden = 6000;
 
-                toast.ImageSource = new BitmapImage(new Uri("Assets/Tiles/FlipCycleTileEnd.png", UriKind.RelativeOrAbsolute));
+                toast.ImageSource = new BitmapImage(new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.RelativeOrAbsolute));
 
                 toast.Stretch = Stretch.Fill;
 

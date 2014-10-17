@@ -161,5 +161,17 @@ namespace Bagdad.ViewModels
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        public async Task<bool> AddAsFollowing(User user)
+        {
+            Follow follow = new Follow();
+            return await follow.AddFollowing(user);
+        }
+
+        public async Task<bool> RemoveFromFollowing(User user)
+        {
+            Follow follow = new Follow();
+            return await follow.DelFollowing(user);
+        }
     }
 }

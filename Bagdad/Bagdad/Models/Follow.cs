@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -209,7 +210,7 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString() });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(follow["idFavoriteTeam"].ToString()), csys_revision = int.Parse(follow["revision"].ToString()), csys_birth = double.Parse(follow["birth"].ToString()), csys_modified = double.Parse(follow["modified"].ToString()) });
                     }
 
                 }
@@ -237,7 +238,7 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString() });
+                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(follow["idFavoriteTeam"].ToString()), csys_revision = int.Parse(follow["revision"].ToString()), csys_birth = double.Parse(follow["birth"].ToString()), csys_modified = double.Parse(follow["modified"].ToString()) });
                     }
 
                 }
@@ -251,22 +252,157 @@ namespace Bagdad.Models
 
         #region FOLLOW/UNFOLLOW
 
-        public async Task<bool> AddFollowing(int _idUser)
+        public async Task<bool> AddFollowing(User user)
         {
-            return await AddOrDelFollowing(_idUser, Constants.SERCOM_OP_CREATE);
+            bool _return = false;
+            ServiceCommunication sc = new ServiceCommunication();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.InsertOrReplaceFollowData);
+                
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+                st.BindIntParameterWithName("@idUserFollowed", user.idUser);
+                st.BindTextParameterWithName("@csys_birth", DateTime.UtcNow.ToString("s").Replace('T', ' '));
+                st.BindTextParameterWithName("@csys_modified", DateTime.UtcNow.ToString("s").Replace('T', ' '));
+                st.BindIntParameterWithName("@csys_revision", 0);
+                st.BindNullParameterWithName("@csys_deleted");
+                st.BindTextParameterWithName("@csys_synchronized", "N");
+
+                await st.StepAsync();
+                App.DBLoaded.Set();
+
+                _return = await UpdateNumOfFollowings(1, user);
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                Debug.WriteLine("E R R O R - Follow - AddFollowing: " + sError + " / " + e.Message);
+            }
+            return _return;
         }
 
-        public async Task<bool> DelFollowing(int _idUser)
+        public async Task<bool> DelFollowing(User user)
         {
-            return await AddOrDelFollowing(_idUser, Constants.SERCOM_OP_DELETE);
+            bool _return = false;
+            ServiceCommunication sc = new ServiceCommunication();
+
+            try
+            {
+                int _revision = await GetNewRevisionForFollowing(user.idUser);
+
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.LogicDeleteFollowData);
+
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+                st.BindIntParameterWithName("@idUserFollowed", user.idUser);
+
+                st.BindTextParameterWithName("@csys_modified", DateTime.UtcNow.ToString("s").Replace('T', ' '));
+                st.BindTextParameterWithName("@csys_deleted", DateTime.UtcNow.ToString("s").Replace('T', ' '));
+                st.BindIntParameterWithName("@csys_revision", _revision);
+                st.BindTextParameterWithName("@csys_synchronized", "D");
+
+                await st.StepAsync();
+                App.DBLoaded.Set();
+
+                _return = await UpdateNumOfFollowings(-1, user);
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                App.DBLoaded.Set();
+                Debug.WriteLine("E R R O R - Follow - DelFollowing: " + sError + " / " + e.Message);
+            }
+            return _return;
         }
 
-        private async Task<bool> AddOrDelFollowing(int _idUser, String _operation)
+        private async Task<int> GetNewRevisionForFollowing(int _idUser)
         {
-            //TODO: ALL
-            return true;
+            int _return = 0;
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetFollowingRevision);
+
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+                st.BindIntParameterWithName("@idUserFollowed", _idUser);
+
+                if(await st.StepAsync())
+                {
+                    _return = st.GetIntAt(0) + 1;
+                }    
+                    
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetNewRevisionForFollowing: " + e.Message, e);
+            }
+            return _return;
         }
 
+        private async Task<bool> UpdateNumOfFollowings(int _change, User user)
+        {
+            bool _result = false;
+
+            int actualNumOfFollowings = await GetActualNumOfFollowings() + _change;
+            
+            if (_change > 0) _result = await user.AddCurrentUserToLocalDB();
+            else _result = await user.RemoveCurrentUserFromLocalDB();
+
+            if(_result) _result = await EditNumOfFollowings(actualNumOfFollowings);
+
+            return _result;
+        }
+
+        private async Task<int> GetActualNumOfFollowings()
+        {
+            int _return = 0;
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetActualNumOfFollowings);
+
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+
+                if (await st.StepAsync())
+                {
+                    _return = st.GetIntAt(0);
+                }
+
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetActualNumOfFollowings: " + e.Message, e);
+            }
+            return _return;
+        }
+
+        private async Task<bool> EditNumOfFollowings(int _newNum)
+        {
+            bool _return = false;
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.EditNumOfFollowings);
+
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+                st.BindIntParameterWithName("@numFollowings", _newNum);
+
+                await st.StepAsync();
+                _return = true;
+                
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetActualNumOfFollowings: " + e.Message, e);
+            }
+            return _return;
+        }
+        
         #endregion
     }
 }

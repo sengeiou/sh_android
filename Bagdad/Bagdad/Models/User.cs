@@ -263,7 +263,13 @@ namespace Bagdad.Models
                     uvm.followers = st.GetIntAt(7);
                     uvm.userWebsite = st.GetTextAt(8);
                     uvm.favoriteTeamName = st.GetTextAt(9);
+                    uvm.idFavoriteTeam = st.GetIntAt(10);
+                    uvm.birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(11)));
+                    uvm.modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(12)));
+                    uvm.revision = st.GetIntAt(13);
+
                 }
+                App.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -296,7 +302,11 @@ namespace Bagdad.Models
                     uvm.following = int.Parse(userProfileInfo["numFollowings"].ToString());
                     uvm.followers = int.Parse(userProfileInfo["numFollowers"].ToString());
                     uvm.userWebsite = (userProfileInfo["website"] != null) ? userProfileInfo["website"].ToString() : null;
-                    uvm.favoriteTeamName = (userProfileInfo["favoriteTeamName"] != null) ? userProfileInfo["favoriteTeamName"].ToString() : null; 
+                    uvm.favoriteTeamName = (userProfileInfo["favoriteTeamName"] != null) ? userProfileInfo["favoriteTeamName"].ToString() : null;
+                    uvm.idFavoriteTeam = int.Parse(userProfileInfo["idFavoriteTeam"].ToString());
+                    uvm.birth = (!String.IsNullOrEmpty(userProfileInfo["birth"].ToString()) ? Double.Parse(userProfileInfo["birth"].ToString()) : 0);
+                    uvm.modified = (!String.IsNullOrEmpty(userProfileInfo["modified"].ToString()) ? Double.Parse(userProfileInfo["modified"].ToString()) : 0);
+                    uvm.revision = int.Parse(userProfileInfo["revision"].ToString());
                 }
             }
             catch (Exception e)
@@ -323,7 +333,7 @@ namespace Bagdad.Models
                 {
                     foreach (JToken user in response["ops"][0]["data"])
                     {
-                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString(), favoriteTeamName = user["favoriteTeamName"].ToString() });
+                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString(), favoriteTeamName = user["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(user["idFavoriteTeam"].ToString()), csys_revision = int.Parse(user["revision"].ToString()), csys_birth = (!String.IsNullOrEmpty(user["birth"].ToString()) ? double.Parse(user["birth"].ToString()) : 0), csys_modified = (!String.IsNullOrEmpty(user["modified"].ToString()) ? double.Parse(user["modified"].ToString()) : Util.DateToDouble(DateTime.Now)) });
                     }
 
                 }
@@ -359,8 +369,13 @@ namespace Bagdad.Models
                     user.numFollowers = st.GetIntAt(7);
                     user.website = st.GetTextAt(8);
                     user.favoriteTeamName = st.GetTextAt(9);
+                    user.idFavoriteTeam = st.GetIntAt(10);
+                    user.csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(11)));
+                    user.csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(12)));
+                    user.csys_revision = st.GetIntAt(13);
                     usersResult.Add(user);
                 }
+                App.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -368,5 +383,73 @@ namespace Bagdad.Models
             }
             return usersResult;
         }
+
+        public async Task<bool> AddCurrentUserToLocalDB()
+        {
+            bool _return = false;
+            UserImageManager userImageManager = new UserImageManager();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.InsertUserData);
+                
+                st.BindIntParameterWithName("@idUser", this.idUser);
+                st.BindIntParameterWithName("@idFavoriteTeam", this.idFavoriteTeam);
+                st.BindTextParameterWithName("@favoriteTeamName", this.favoriteTeamName);
+                st.BindTextParameterWithName("@userName", this.userName);
+                st.BindTextParameterWithName("@name", this.name);
+                st.BindTextParameterWithName("@photo", this.photo);
+                st.BindTextParameterWithName("@bio", this.bio);
+                st.BindTextParameterWithName("@website", this.website);
+                st.BindIntParameterWithName("@points", this.points);
+                st.BindIntParameterWithName("@numFollowings", this.numFollowing);
+                st.BindIntParameterWithName("@numFollowers", this.numFollowers);
+                st.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(this.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                st.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(this.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                st.BindIntParameterWithName("@csys_revision", this.csys_revision);
+                st.BindNullParameterWithName("@csys_deleted");
+                st.BindTextParameterWithName("@csys_synchronized", "S");
+
+                await st.StepAsync();
+                App.DBLoaded.Set();
+                
+                userImageManager.SaveImageFromURL(this.photo, this.idUser);
+                
+                _return = true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("User - AddCurrentUserToLocalDB: " + e.Message, e);
+            }
+            return _return;
+        }
+
+        public async Task<bool> RemoveCurrentUserFromLocalDB()
+        {
+            bool _return = false;
+            UserImageManager userImageManager = new UserImageManager();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.DeleteUserData);
+
+                st.BindIntParameterWithName("@idUser", this.idUser);
+                
+                await st.StepAsync();
+                App.DBLoaded.Set();
+
+                userImageManager.RemoveImageById(this.idUser);
+
+                _return = true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("User - AddCurrentUserToLocalDB: " + e.Message, e);
+            }
+            return _return;
+        }
+
     }
 }

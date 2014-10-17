@@ -15,6 +15,7 @@ using System.Windows.Automation.Provider;
 using Bagdad.Resources;
 using System.Diagnostics;
 using Bagdad.Models;
+using System.Windows.Media;
 
 namespace Bagdad
 {
@@ -163,5 +164,6 @@ namespace Bagdad
             followingList.ItemsSource = null;
             followingList.ItemsSource = followings.Followings;
         }
+
     }
 }

@@ -27,9 +27,9 @@ namespace Bagdad.Utils
 
         public const String GetNameAndURL = "SELECT name, photo FROM User WHERE idUser = @idUser";
 
-        public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName FROM User WHERE idUser = @idUser";
+        public const String GetUserProfileInfo = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName, idFavoriteTeam, csys_birth, csys_modified, csys_revision FROM User WHERE idUser = @idUser";
 
-        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
+        public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName, idFavoriteTeam, csys_birth, csys_modified, csys_revision FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
 
         #endregion
 
@@ -63,17 +63,27 @@ namespace Bagdad.Utils
 
         public const String InsertFollowData = "INSERT INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
+        public const String InsertOrReplaceFollowData = "INSERT OR REPLACE INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+
         public const String UpdateFollowData = "UPDATE Follow SET csys_modified =  @csys_modified, csys_revision = @csys_revision,csys_synchronized = @csys_synchronized WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
+
+        public const String LogicDeleteFollowData = "UPDATE Follow SET csys_modified =  @csys_modified, csys_revision = @csys_revision,csys_synchronized = @csys_synchronized, csys_deleted = @csys_deleted WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
 
         public const String DeleteFollowData = "DELETE FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
 
-        public const String SelectIdUserFollowing = "SELECT idUserFollowed from Follow where idUser = @idUser";
+        public const String SelectIdUserFollowing = "SELECT idUserFollowed FROM Follow WHERE idUser = @idUser AND csys_deleted IS NULL";
 
-        public const String GetFollowByIdUserAndIdUserFollowed = "SELECT idUser, idUserFollowed FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
+        public const String GetFollowByIdUserAndIdUserFollowed = "SELECT idUser, idUserFollowed FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed AND csys_deleted IS NULL";
 
         public const String GetAllInfoFromFollowings = "SELECT u.idUser, u.userName, u.name, u.photo, u.favoriteTeamName FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY f.csys_modified DESC";
 
         public const String GetAllInfoFromPeople = "SELECT u.idUser, u.userName, u.name, u.photo, u.favoriteTeamName FROM User u JOIN Follow f ON u.idUser = f.idUserFollowed WHERE f.idUser = @idUser ORDER BY u.name ASC, u.userName ASC";
+
+        public const String GetFollowingRevision = "SELECT csys_revision FROM Follow WHERE idUser = @idUser AND idUserFollowed = @idUserFollowed";
+
+        public const String GetActualNumOfFollowings = "SELECT numFollowings FROM User WHERE idUser = @idUser";
+
+        public const String EditNumOfFollowings = "UPDATE USER SET numFollowings = @numFollowings WHERE idUser = @idUser";
 
         #endregion
 

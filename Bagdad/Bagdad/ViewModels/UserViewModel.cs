@@ -16,6 +16,7 @@ namespace Bagdad.ViewModels
     public class UserViewModel
     {
         public int idUser { get; set; }
+        public int idFavoriteTeam { get; set; }
         public int points { get; set; }
         public int following { get; set; }
         public int followers { get; set; }
@@ -27,7 +28,10 @@ namespace Bagdad.ViewModels
         public String favoriteTeamName { get; set; }
         public bool isFollowed { get; set; }
         public BitmapImage userImage { get; set; }
-        
+        public int revision { get; set; }
+        public Double birth { get; set; }
+        public Double modified { get; set; }
+
         public UserViewModel() { }
 
         public async Task<bool> GetUserProfileInfo(int idUser)
@@ -37,13 +41,13 @@ namespace Bagdad.ViewModels
 
                 Follow follow = new Follow();
                 User user = new User();
-                UserViewModel uvm;
+                UserViewModel uvm = null;
 
                 if (await follow.ImFollowing(idUser) || idUser == App.ID_USER)
                 { 
                     uvm = await user.GetProfileInfo(idUser);
                 }
-                else
+                if(uvm== null || uvm.idUser == 0)
                 {
                     uvm = await user.GetProfilInfoFromServer(idUser);
                 }
@@ -58,6 +62,10 @@ namespace Bagdad.ViewModels
                 this.userBio = uvm.userBio;
                 this.userWebsite = uvm.userWebsite;
                 this.favoriteTeamName = uvm.favoriteTeamName;
+                this.idFavoriteTeam = uvm.idFavoriteTeam;
+                this.birth = uvm.birth;
+                this.modified = uvm.modified;
+                this.revision = uvm.revision;
 
                 this.isFollowed = await uvm.ImFollowing();
             }
@@ -121,6 +129,23 @@ namespace Bagdad.ViewModels
                 Debug.WriteLine("E R R O R - UserViewModel - FindUsersInLocal: " + e.Message);
             }
             return findedUsers;
+        }
+
+        public async Task<bool> AddAsFollowing()
+        {
+            Follow follow = new Follow();
+            return await follow.AddFollowing(AsUser());
+        }
+
+        public async Task<bool> RemoveFromFollowing()
+        {   
+            Follow follow = new Follow();
+            return await follow.DelFollowing(AsUser());
+        }
+
+        public User AsUser()
+        {
+            return new User() { idUser = this.idUser, idFavoriteTeam = this.idFavoriteTeam, userName = this.userNickName, name = this.userName, bio = this.userBio, photo = this.userURLImage, favoriteTeamName = this.favoriteTeamName, numFollowers = this.followers, numFollowing = this.following, points = this.points, website = this.userWebsite, csys_birth = this.birth, csys_modified = this.modified, csys_revision = this.revision };
         }
     }
 }

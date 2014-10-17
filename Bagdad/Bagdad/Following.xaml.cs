@@ -14,6 +14,7 @@ using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using Bagdad.Resources;
 using System.Diagnostics;
+using System.Windows.Media;
 
 namespace Bagdad
 {
@@ -179,6 +180,40 @@ namespace Bagdad
         {
             followingList.ItemsSource = null;
             followingList.ItemsSource = followings.Followings;
+        }
+
+        private async void Button_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            if (!((FollowViewModel)followingList.SelectedItem).isFollowed)
+            {
+                await followings.AddAsFollowing(((FollowViewModel)followingList.SelectedItem).userInfo);
+
+                ((FollowViewModel)followingList.SelectedItem).isFollowed = true;
+                ((FollowViewModel)followingList.SelectedItem).buttonVisible = Visibility.Visible;
+                ((FollowViewModel)followingList.SelectedItem).buttonText = AppResources.ProfileButtonFollowing + "  ";
+                ((FollowViewModel)followingList.SelectedItem).buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                ((FollowViewModel)followingList.SelectedItem).buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White);
+                ((FollowViewModel)followingList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                ((FollowViewModel)followingList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
+                ((FollowViewModel)followingList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                await followings.RemoveFromFollowing(((FollowViewModel)followingList.SelectedItem).userInfo);
+
+                ((FollowViewModel)followingList.SelectedItem).isFollowed = false;
+                ((FollowViewModel)followingList.SelectedItem).buttonVisible = Visibility.Visible;
+                ((FollowViewModel)followingList.SelectedItem).buttonText = AppResources.ProfileButtonFollow + "  ";
+                ((FollowViewModel)followingList.SelectedItem).buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                ((FollowViewModel)followingList.SelectedItem).buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                ((FollowViewModel)followingList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                ((FollowViewModel)followingList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
+                ((FollowViewModel)followingList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
+            }
+
+            followingList.ItemsSource = null;
+            followingList.ItemsSource = followings.Followings;
+
         }
     }
 }

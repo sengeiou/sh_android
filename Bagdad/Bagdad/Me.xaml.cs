@@ -58,7 +58,7 @@ namespace Bagdad
         {
             progress.IsVisible = true;
 
-            if (uvm.idUser != idUser) await uvm.GetUserProfileInfo(idUser);
+            if (uvm.idUser != idUser ) await uvm.GetUserProfileInfo(idUser);
 
             if (uvm.idUser != App.ID_USER)
             {
@@ -128,7 +128,7 @@ namespace Bagdad
             ApplicationBar.MenuItems.Add(appBarMenuItemMe);
         }
 
-        private void updateButton()
+        private async void updateButton()
         {
             if (!isFollowing)
             {
@@ -141,6 +141,8 @@ namespace Bagdad
                 headButtonIconVisible.Fill = new System.Windows.Media.SolidColorBrush(Colors.White);
 
                 isFollowing = true;
+
+                await uvm.AddAsFollowing();
             }
             else
             {
@@ -153,6 +155,8 @@ namespace Bagdad
                 headButtonIconVisible.Fill = Resources["PhoneForegroundBrush"] as SolidColorBrush;
                 
                 isFollowing = false;
+
+                await uvm.RemoveFromFollowing();
             }
         }
 

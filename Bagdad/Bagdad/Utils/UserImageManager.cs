@@ -73,6 +73,14 @@ namespace Bagdad.Utils
             }
         }
 
+        public void RemoveImageById(int idUser)
+        {
+            if (IsolatedStorageFile.GetUserStoreForApplication().FileExists(idUser + ".jpg"))
+            {
+                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(idUser + ".jpg");
+            }
+        }
+
         void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
             if (e.Error == null)
