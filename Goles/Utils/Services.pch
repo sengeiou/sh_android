@@ -22,13 +22,12 @@ NSString *golesBaseURL;
 
 //TEST ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
 #define K_ENDPOINT_DEVELOPER              @"http://tst.shootermessenger.com/data-services/rest/generic/"
+//#define K_ENDPOINT_DEVELOPER            @"http://192.168.1.81:8081/data-services/rest/generic/"//Josep MIquel
+
 //Server timestamp
 #define SERVERTIME                      @"http://tst.shootermessenger.com/data-services/rest/system/ping"
-#define SERVERTIME_DEVELOPER            @"http://tst.shootermessenger.com/data-services/rest/system/ping"
 
 
-//MAQUINA DE JOSEP_MIQUEL
-//#define K_ENDPOINT_DEVELOPER            @"http://192.168.1.81:8081/data-services/rest/generic/"
 
 /***********************************************************************
  ** Constants globals de l'applicació                                 **

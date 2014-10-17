@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -628,7 +629,7 @@
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Aq-nO-kjy">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Aq-nO-kjy">
                                                     <rect key="frame" x="479" y="11" width="110" height="28"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -648,15 +649,22 @@
                                                 <constraint firstItem="K3l-Kb-w84" firstAttribute="leading" secondItem="k9b-BQ-ToL" secondAttribute="trailing" constant="10" id="Elo-D5-3Q0"/>
                                                 <constraint firstItem="lQq-WY-r20" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="60" id="H66-rn-GXY"/>
                                                 <constraint firstItem="k9b-BQ-ToL" firstAttribute="top" secondItem="OOL-jZ-8yO" secondAttribute="topMargin" constant="-1" id="HSX-TO-iwZ"/>
+                                                <constraint firstItem="K3l-Kb-w84" firstAttribute="leading" secondItem="1Aq-nO-kjy" secondAttribute="trailing" constant="3" id="Ilz-R9-uA8"/>
                                                 <constraint firstItem="I4N-nh-Rb4" firstAttribute="top" secondItem="OOL-jZ-8yO" secondAttribute="topMargin" constant="-4" id="Itk-vI-g3b"/>
                                                 <constraint firstAttribute="centerY" secondItem="1Aq-nO-kjy" secondAttribute="centerY" id="Re5-pP-d5L"/>
                                                 <constraint firstItem="k9b-BQ-ToL" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="60" id="Xyf-hD-e2D"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="K3l-Kb-w84" secondAttribute="trailing" constant="3" id="aSm-6A-AsW"/>
                                                 <constraint firstItem="K3l-Kb-w84" firstAttribute="leading" secondItem="lQq-WY-r20" secondAttribute="trailing" constant="10" id="ebM-FZ-P3R"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="1Aq-nO-kjy" secondAttribute="trailing" constant="3" id="gex-aX-efC"/>
                                                 <constraint firstItem="I4N-nh-Rb4" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="6" id="mrO-11-iiL"/>
                                                 <constraint firstItem="eeQ-O2-Me6" firstAttribute="top" secondItem="OOL-jZ-8yO" secondAttribute="topMargin" constant="-8" id="sIN-zI-Pg8"/>
                                                 <constraint firstItem="eeQ-O2-Me6" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="-8" id="uP8-MI-jrj"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Ilz-R9-uA8"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>

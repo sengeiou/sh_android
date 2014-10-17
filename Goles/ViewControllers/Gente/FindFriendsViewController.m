@@ -166,8 +166,8 @@
 //------------------------------------------------------------------------------
 - (void)followAndUnFollowUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
-    User *userFollow = self.usersSearch[btn.tag];
-    
+//    User *userFollow = self.usersSearch[btn.tag];
+    User *userFollow = self.followingUsers[btn.tag];
     BOOL followActionSuccess;
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
         followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
@@ -252,19 +252,19 @@
         
         [self.followingUsers addObjectsFromArray:self.usersSearch];
         
-        
-        //NSLog(@"NUMERO TOTAL DE USUARIOS: %lu", (unsigned long)self.followingUsers.count);
-        
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
-        //NSLog(@"NUMERO TOTAL DE USUARIOS ORDENADOS: %lu", (unsigned long)self.followingUsers.count);
         
         [self reloadTableWithAnimation];
         
         [self addLoadMoreCell];
         
+    }else if (!error) {
+        refreshTable = YES;
+        [self.followingUsers removeAllObjects];
+    
     }else if (error){
         refreshTable = NO;
         

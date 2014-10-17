@@ -169,7 +169,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.timelineTableView.scrollsToTop = YES;
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 150.0f;
+    self.timelineTableView.estimatedRowHeight = 300.0f;
 }
 
 //------------------------------------------------------------------------------
@@ -192,14 +192,21 @@ static NSString *CellIdentifier = @"shootCell";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
+
+    [super viewWillAppear:animated];
+    [self performSelector:@selector(updateCurrentTitleView) withObject:nil];
     [self setLocalNotificationObservers];
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
 }
+
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
 
