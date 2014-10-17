@@ -124,6 +124,9 @@ namespace Bagdad
                 }
 
                 DataContext = searchedFriends;
+                findList.ItemsSource = null;
+                findList.ItemsSource = searchedFriends.Followings;
+
 
                 if (findList.Items.Count > 0)
                 {
