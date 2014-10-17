@@ -62,7 +62,6 @@
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 
 }
-
 //------------------------------------------------------------------------------
 - (void)customView{
     

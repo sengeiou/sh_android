@@ -15,6 +15,7 @@
 #import "FavRestConsumer.h"
 #import "Follow.h"
 #import "Conection.h"
+#import "CoreDataManager.h"
 
 @interface FollowingTableViewController ()
 
@@ -35,7 +36,6 @@
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
-    [self loadLocalDataInArrays];
     [self setNavigationBarTitle];
 }
 
@@ -43,6 +43,8 @@
 - (void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
+    [self reloadDataAndTable];
     
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 }
@@ -55,6 +57,8 @@
         self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
     else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
         self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
+    
+    [self.usersTable reloadData];
 }
 
 //------------------------------------------------------------------------------
@@ -157,9 +161,14 @@
     
     if (status && !error){
         
-        if ([entityClass isSubclassOfClass:[Follow class]])
-            [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self];
-        if ([entityClass isSubclassOfClass:[User class]])
+        if ([entityClass isSubclassOfClass:[Follow class]]){
+            
+            if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+                [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self withTypeOfUsers: FOLLOWING_SELECTED];
+            else
+                [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self withTypeOfUsers: FOLLOWERS_SELECTED];
+
+        }if ([entityClass isSubclassOfClass:[User class]])
             [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
     }
 }

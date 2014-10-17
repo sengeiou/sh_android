@@ -15,6 +15,7 @@
 #import "SyncManager.h"
 #import "Team.h"
 #import "Device.h"
+#import "Constants.h"
 
 @implementation FilterCreation
 
@@ -90,13 +91,19 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)getFilterForUser:(User *)user {
++ (NSDictionary *)getFilterForUser:(User *)user withTypeOfUser:(NSNumber *)typeOfUser {
     
     //Security check
     if (!user)
         return @{};
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
+    NSPredicate *predicate;
+    
+    if ([typeOfUser  isEqual: FOLLOWING_SELECTED])
+       predicate = [NSPredicate predicateWithFormat:@"idUser == %@",user.idUser];
+    else if ([typeOfUser  isEqual: FOLLOWERS_SELECTED])
+        predicate = [NSPredicate predicateWithFormat:@"idUserFollowed == %@",user.idUser];
+
     NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
     NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
     for (Follow *followedUser in follows) {

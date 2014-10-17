@@ -91,7 +91,7 @@
     NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER - K_COREDATA_DEVICE
     
     for (id entity in entitiesToSynchro){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != 's'",kJSON_SYNCRONIZED];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != %@",kJSON_SYNCRONIZED, @"s"];
         NSArray *entityArray = [[CoreDataManager singleton] getAllEntities:NSClassFromString(entity) withPredicate:predicate];
         
         for (id updatedEntity in entityArray) {

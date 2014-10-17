@@ -207,7 +207,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)getUsersFromUser:(User *)user withDelegate:(id)delegate {
+- (void)getUsersFromUser:(User *)user withDelegate:(id)delegate  withTypeOfUsers:(NSNumber *) type; {
     
     //Create Alias block
     NSString *alias = [FavRestConsumerHelper getAliasForEntity:[User class]];
@@ -223,7 +223,7 @@
                                                                      andEntity:NSStringFromClass([User class])
                                                                      withItems:@1000
                                                                     withOffSet:@0
-                                                                     andFilter:[FilterCreation getFilterForUser:user]];
+                                                                     andFilter:[FilterCreation getFilterForUser:user withTypeOfUser: type]];
     
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[User class]]]};

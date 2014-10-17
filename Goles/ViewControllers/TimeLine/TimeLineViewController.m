@@ -195,7 +195,12 @@ static NSString *CellIdentifier = @"shootCell";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    [self performSelector:@selector(updateCurrentTitleView) withObject:nil];
+    self.navigationItem.titleView = nil;
+
+    [self updateCurrentTitleView];
+    
+    //self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    //[self performSelector:@selector(updateCurrentTitleView) withObject:nil];
     [self setLocalNotificationObservers];
 }
 
