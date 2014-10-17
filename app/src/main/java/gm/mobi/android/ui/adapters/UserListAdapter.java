@@ -83,21 +83,23 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
             }
             //TODO clean and refactor callback usage
             // It's unefficient to create two new OnClickListener instances every bindView call
-            viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if(callback!=null){
-                        callback.unFollow(position);
-                    }
-                }
-            });
-
-            viewHolder.followButton.setOnClickListener(new View.OnClickListener(){
-                @Override public void onClick(View v) {
-                    if(callback!=null){
-                        callback.follow(position);
-                    }
-                }
-            });
+           if(viewHolder.followButton.isFollowing()){
+               viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
+                   @Override public void onClick(View v) {
+                       if(callback!=null){
+                           callback.unFollow(position);
+                       }
+                   }
+               });
+           }else{
+               viewHolder.followButton.setOnClickListener(new View.OnClickListener(){
+                   @Override public void onClick(View v) {
+                       if(callback!=null){
+                           callback.follow(position);
+                       }
+                   }
+               });
+           }
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
          }
