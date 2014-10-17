@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -40,7 +41,7 @@
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Rank" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMG-1h-rqk">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rank" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMG-1h-rqk">
                                                 <rect key="frame" x="61" y="107" width="28" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="Gyj-nz-bkG"/>
@@ -343,6 +344,19 @@
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-64-REm">
+                                            <rect key="frame" x="479" y="11" width="110" height="28"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="28" id="89M-ZN-sXa"/>
+                                                <constraint firstAttribute="width" constant="110" id="IPD-KD-yjj"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                            <state key="normal" title="+ FOLLOW">
+                                                <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="jOk-cS-Nsp" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-8" id="1gY-wR-Rau"/>
@@ -351,6 +365,7 @@
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
+                                        <constraint firstAttribute="centerY" secondItem="RlL-64-REm" secondAttribute="centerY" id="Mmx-tJ-5xo"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="aqE-cJ-1eP"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-1" id="cuu-Bd-De3"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-4" id="daY-28-9ld"/>
@@ -361,7 +376,8 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="actionButton" destination="6RI-lt-Kek" id="V2r-4j-ibM"/>
+                                    <outlet property="follow" destination="RlL-64-REm" id="CDY-6f-97d"/>
+                                    <outlet property="following" destination="6RI-lt-Kek" id="wk2-sP-IVB"/>
                                     <outlet property="imgPhoto" destination="Uvh-e6-f3G" id="QbD-W2-dz3"/>
                                     <outlet property="lblNickName" destination="TBy-mi-FaP" id="5m4-W7-cl0"/>
                                     <outlet property="lblfavouriteTeamName" destination="fHl-cH-0HG" id="f40-cb-UW5"/>
@@ -605,6 +621,19 @@
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Aq-nO-kjy">
+                                                    <rect key="frame" x="479" y="11" width="110" height="28"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="G9q-bh-NFJ"/>
+                                                        <constraint firstAttribute="width" constant="110" id="IUB-as-lkW"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                    <state key="normal" title="+ FOLLOW">
+                                                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="lQq-WY-r20" firstAttribute="top" secondItem="k9b-BQ-ToL" secondAttribute="bottom" constant="-2" id="2QF-Zu-m8s"/>
@@ -613,6 +642,7 @@
                                                 <constraint firstItem="lQq-WY-r20" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="60" id="H66-rn-GXY"/>
                                                 <constraint firstItem="k9b-BQ-ToL" firstAttribute="top" secondItem="OOL-jZ-8yO" secondAttribute="topMargin" constant="-1" id="HSX-TO-iwZ"/>
                                                 <constraint firstItem="I4N-nh-Rb4" firstAttribute="top" secondItem="OOL-jZ-8yO" secondAttribute="topMargin" constant="-4" id="Itk-vI-g3b"/>
+                                                <constraint firstAttribute="centerY" secondItem="1Aq-nO-kjy" secondAttribute="centerY" id="Re5-pP-d5L"/>
                                                 <constraint firstItem="k9b-BQ-ToL" firstAttribute="leading" secondItem="OOL-jZ-8yO" secondAttribute="leadingMargin" constant="60" id="Xyf-hD-e2D"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="K3l-Kb-w84" secondAttribute="trailing" constant="3" id="aSm-6A-AsW"/>
                                                 <constraint firstItem="K3l-Kb-w84" firstAttribute="leading" secondItem="lQq-WY-r20" secondAttribute="trailing" constant="10" id="ebM-FZ-P3R"/>
@@ -623,7 +653,8 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="actionButton" destination="K3l-Kb-w84" id="BKf-1B-Fi9"/>
+                                            <outlet property="follow" destination="1Aq-nO-kjy" id="M0Q-aN-oIz"/>
+                                            <outlet property="following" destination="K3l-Kb-w84" id="Sz9-bj-Tvj"/>
                                             <outlet property="imgPhoto" destination="I4N-nh-Rb4" id="zjY-t3-Zf3"/>
                                             <outlet property="lblNickName" destination="k9b-BQ-ToL" id="I23-5m-wTV"/>
                                             <outlet property="lblfavouriteTeamName" destination="lQq-WY-r20" id="2lK-oM-lcb"/>

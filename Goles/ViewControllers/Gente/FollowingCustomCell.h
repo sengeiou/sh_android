@@ -14,7 +14,8 @@
 @property (nonatomic,weak) IBOutlet UILabel *lblNickName;
 @property (nonatomic,weak) IBOutlet UILabel *lblfavouriteTeamName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
-@property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (weak, nonatomic) IBOutlet UIButton *following;
+@property (weak, nonatomic) IBOutlet UIButton *follow;
 @property (nonatomic,weak) IBOutlet UIButton *photobutton;
 
 -(void)configurePeopleCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath whileSearching:(BOOL)searching inPeople:(BOOL)peopleTable;
