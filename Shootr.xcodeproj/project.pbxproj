@@ -17,6 +17,7 @@
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
 		A5754FC019E7DB7900D20267 /* PeopleLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */; };
 		A582A33B19ED834E002B23BC /* FindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33A19ED834E002B23BC /* FindFriendsViewController.m */; };
+		A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33D19F154C6002B23BC /* Followingbutton.m */; };
 		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
@@ -147,6 +148,8 @@
 		A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleLineUtilities.m; sourceTree = "<group>"; };
 		A582A33919ED834E002B23BC /* FindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindFriendsViewController.h; sourceTree = "<group>"; };
 		A582A33A19ED834E002B23BC /* FindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FindFriendsViewController.m; sourceTree = "<group>"; };
+		A582A33C19F154C6002B23BC /* Followingbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Followingbutton.h; path = Buttons/Followingbutton.h; sourceTree = "<group>"; };
+		A582A33D19F154C6002B23BC /* Followingbutton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Followingbutton.m; path = Buttons/Followingbutton.m; sourceTree = "<group>"; };
 		A58DA83F19D02EA9003EE5CB /* _User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _User.h; sourceTree = "<group>"; };
 		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
 		A58DA84219D02EB8003EE5CB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -812,6 +815,8 @@
 			children = (
 				AADF791219F1534D00AE9DB8 /* Followbutton.h */,
 				AADF791319F1534D00AE9DB8 /* Followbutton.m */,
+				A582A33C19F154C6002B23BC /* Followingbutton.h */,
+				A582A33D19F154C6002B23BC /* Followingbutton.m */,
 			);
 			name = Buttons;
 			sourceTree = "<group>";
@@ -965,6 +970,7 @@
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
+				A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
 				AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */,

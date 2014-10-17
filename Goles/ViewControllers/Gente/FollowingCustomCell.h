@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "User.h"
 #import "Followbutton.h"
+#import "Followingbutton.h"
 
 @interface FollowingCustomCell : UITableViewCell
 
 @property (nonatomic,weak) IBOutlet UILabel *lblNickName;
 @property (nonatomic,weak) IBOutlet UILabel *lblfavouriteTeamName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
-@property (weak, nonatomic) IBOutlet UIButton *following;
+@property (weak, nonatomic) IBOutlet Followingbutton *following;
 @property (weak, nonatomic) IBOutlet Followbutton *follow;
 @property (nonatomic,weak) IBOutlet UIButton *photobutton;
 

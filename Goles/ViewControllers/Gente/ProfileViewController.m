@@ -20,6 +20,8 @@
 #import "Utils.h"
 #import "TimeLineUtilities.h"
 #import "DownloadImage.h"
+#import "Followingbutton.h"
+#import "Followbutton.h"
 
 @interface ProfileViewController ()
 
@@ -30,8 +32,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblFollowing;
 @property (weak, nonatomic) IBOutlet UIButton *btnFollowers;
 @property (weak, nonatomic) IBOutlet UILabel *lblFollowers;
-@property (weak, nonatomic) IBOutlet UIButton *btnFollow;
-@property (weak, nonatomic) IBOutlet UIButton *btnUnfollow;
+@property (weak, nonatomic) IBOutlet Followingbutton *btnFollow;
+@property (weak, nonatomic) IBOutlet Followbutton *btnUnfollow;
 @property (weak, nonatomic) IBOutlet UIButton *btnEditProfile;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
@@ -142,6 +144,7 @@
     self.btnUnfollow.hidden = NO;
 
     [self.btnUnfollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+
     self.btnUnfollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.btnUnfollow.layer.borderWidth = 1.0f;
     self.btnUnfollow.layer.masksToBounds = YES;
@@ -156,7 +159,6 @@
     self.btnUnfollow.hidden = YES;
     
     [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
-    
     [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
     [self.btnFollow addTarget:self action:@selector(unFollowUser) forControlEvents:UIControlEventTouchUpInside];
 }

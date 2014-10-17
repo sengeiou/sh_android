@@ -8,6 +8,7 @@
 
 #import "Followingbutton.h"
 #import "Fav24Colors.h"
+#import "Utils.h"
 
 @implementation Followingbutton
 
@@ -24,10 +25,29 @@
     
     if (highlighted) {
         self.backgroundColor = [UIColor whiteColor];
-        self.titleLabel.textColor = [Fav24Colors iosSevenBlue];
+        
+        [self setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+        
+        self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+        self.layer.borderWidth = 1.0f;
+        self.layer.masksToBounds = YES;
+        [self setImage:[UIImage imageNamed:@" "] forState:UIControlStateNormal];
+
+    }  else{
+        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        
+        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
+        [self setAttributedTitle:buttonString forState:UIControlStateNormal];
+        
+        self.layer.borderWidth = 0.0f;
+        self.layer.masksToBounds = NO;
+        
+        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 
     }
-    
+  
 }
+
 
 @end
