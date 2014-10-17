@@ -966,7 +966,7 @@ public class GenericServiceJDBCHelper {
 
 		// En caso de necesitar recuperar alguna atributo de la key (sobretodo en caso de keys compuestas), se consulta el registro.
 		if (!firstField) {
-			
+
 			recoveredQuery.append(" FROM ").append(entityAccessPolicy.getName().getName());
 
 			recoveredQuery.append(" WHERE ").append(fndQuery);
@@ -1222,6 +1222,42 @@ public class GenericServiceJDBCHelper {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Obtención del número total de registros con o sin marca de eliminación.
+	 * 
+	 * @param connection Conexión JDBC a usar para realizar la recuperación o modificación.
+	 * @param entityName Nombre de la tabla a consultar.
+	 * @param deletedColumn Nombre de la columna en que se informa la fecha de eliminación de una fila.
+	 *  
+	 * @throws SQLException 
+	 */
+	public static long getEntityRows(Connection connection, String entityName, String deletedColumn) throws SQLException {
+
+		StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityName);
+		if (deletedColumn != null) {
+			GenericServiceJDBCHelper.scapeColumn(countQuery.append(" WHERE "), deletedColumn).append(" IS NULL");
+		}
+
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(countQuery.toString());
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.first()) {
+				return resultSet.getLong(1);
+			}
+
+		} finally {
+			JDBCUtils.CloseQuietly(resultSet);
+			JDBCUtils.CloseQuietly(preparedStatement);
+		}
+
+		return 0;
 	}
 
 	/**

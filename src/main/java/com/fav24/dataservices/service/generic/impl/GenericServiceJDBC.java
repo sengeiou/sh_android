@@ -368,7 +368,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 		}
 
 		queryInsert.append(',').append(columnsToInsert);
-		
+
 		queryInsert.append(") VALUES (?,?,?,?"); // REVISION, BIRTH, MODIFIED, DELETED
 
 		for (int i=0; i<inColumns.size(); i++) {
@@ -413,7 +413,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 					Object value = itemAttributes.get(inAlias);
 					String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
-					
+
 					if (value == null) {
 
 						preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
@@ -489,21 +489,9 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			}
 
 			// Información de totales.
-			operation.getMetadata().setItems(Long.valueOf(operation.getData().size()));
-
-			// Obtención del número total de registros total de la entidad.
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityAccessPolicy.getName().getName());
-			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.first()) {
-
-				Long totalItems = resultSet.getLong(1);
-				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
-			}
-			else {
-				operation.getMetadata().setTotalItems(null);
-			}
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName()));
+			operation.getMetadata().setItems((long)operation.getData().size());
+			operation.getMetadata().setOffset(0L);
 		} 
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
@@ -629,7 +617,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				}
 			}
 
-			operation.getMetadata().setItems(Long.valueOf(preparedStatement.executeUpdate()));
+			long numDeletedItems = preparedStatement.executeUpdate();
 
 			preparedStatement.close();
 
@@ -687,7 +675,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 					resultSet = preparedStatement.executeQuery();
 
-					operation.getMetadata().setItems(GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, entityInformation, operation.getData()));
+					numDeletedItems = GenericServiceJDBCHelper.extractData(resultSet, entityAccessPolicy, entityInformation, operation.getData());
 
 					resultSet.close();
 					preparedStatement.close();
@@ -709,22 +697,10 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				}
 			}
 
-			/*
-			 *  Obtención del número total de registros sin marca de eliminación.
-			 */
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ");
-			GenericServiceJDBCHelper.scapeColumn(countQuery, deletedColumn).append(" IS NULL");
-			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.first()) {
-
-				Long totalItems = resultSet.getLong(1);
-				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
-			}
-			else {
-				operation.getMetadata().setTotalItems(null);
-			}
+			// Información de totales.
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), deletedColumn));
+			operation.getMetadata().setItems((long)numDeletedItems);
+			operation.getMetadata().setOffset(0L);
 		}
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
@@ -842,24 +818,12 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 				}
 			}
 
-			operation.getMetadata().setItems(Long.valueOf(preparedStatement.executeUpdate()));
-			preparedStatement.close();
+			int numDeletedItems = preparedStatement.executeUpdate();
 
-			/*
-			 * Obtención del número total de registros después del borrado.
-			 */
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom);
-			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.first()) {
-
-				Long totalItems = resultSet.getLong(1);
-				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
-			}
-			else {
-				operation.getMetadata().setTotalItems(null);
-			}
+			// Información de totales.
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), null));
+			operation.getMetadata().setItems((long)numDeletedItems);
+			operation.getMetadata().setOffset(0L);
 		}
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
@@ -996,7 +960,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 			resultSet = preparedStatement.executeQuery();
 
-			long numItemns = 0;
+			long numUpdatedItemns = 0;
 			if (resultSet.first()) {
 
 				operation.getData().clear();
@@ -1011,35 +975,16 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					if (GenericServiceJDBCHelper.updateRow(connection, resultSet, now, dataItem, entityAccessPolicy, entityInformation, operation.getMetadata())) {
 
 						operation.getData().add(dataItem);
-						numItemns++;
+						numUpdatedItemns++;
 					}
 
 				} while (resultSet.next());
 			}
 
-			operation.getMetadata().setItems(numItemns);
-
-			resultSet.close();
-			preparedStatement.close();
-
-			/*
-			 *  Obtención del número total de registros sin marca de eliminación.
-			 */
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) ").append(queryFrom).append(" WHERE ");
-
-			GenericServiceJDBCHelper.scapeColumn(countQuery, deletedColumn).append(" IS NULL");
-
-			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.first()) {
-
-				Long totalItems = resultSet.getLong(1);
-				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
-			}
-			else {
-				operation.getMetadata().setTotalItems(null);
-			}
+			// Información de totales.
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), deletedColumn));
+			operation.getMetadata().setItems(numUpdatedItemns);
+			operation.getMetadata().setOffset(0L);
 		}
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
@@ -1146,7 +1091,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 					Object value = itemAttributes.get(inAlias);
 					String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
-					
+
 					if (value == null) {
 
 						preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
@@ -1222,21 +1167,9 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 			}
 
 			// Información de totales.
-			operation.getMetadata().setItems(Long.valueOf(operation.getData().size()));
-
-			// Obtención del número total de registros total de la entidad.
-			StringBuilder countQuery = new StringBuilder("SELECT COUNT(*) FROM ").append(entityAccessPolicy.getName().getName());
-			preparedStatement = connection.prepareStatement(countQuery.toString());
-
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.first()) {
-
-				Long totalItems = resultSet.getLong(1);
-				operation.getMetadata().setTotalItems(resultSet.wasNull() ? null : totalItems);
-			}
-			else {
-				operation.getMetadata().setTotalItems(null);
-			}
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), deletedColumn));
+			operation.getMetadata().setItems((long)operation.getData().size());
+			operation.getMetadata().setOffset(0L);
 		} 
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));
@@ -1371,7 +1304,7 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 
 						Object value = itemAttributes.get(inAlias);
 						String columnName = entityAccessPolicy.getData().getAttribute(inAlias).getName();
-						
+
 						if (value == null) {
 
 							preparedStatement.setNull(i, entityInformation.dataFields.get(columnName));
@@ -1414,6 +1347,11 @@ public class GenericServiceJDBC extends GenericServiceBasic<Connection> {
 					preparedStatement.clearParameters();
 				}
 			}
+
+			// Información de totales.
+			operation.getMetadata().setTotalItems(GenericServiceJDBCHelper.getEntityRows(connection, entityAccessPolicy.getName().getName(), entityAccessPolicy.getData().getAttribute(SynchronizationField.DELETED.getSynchronizationField()).getName()));
+			operation.getMetadata().setItems((long)operation.getData().size());
+			operation.getMetadata().setOffset(0L);
 		} 
 		catch (Throwable t) {
 			throw new ServerException(GenericService.ERROR_OPERATION, String.format(GenericService.ERROR_OPERATION_MESSAGE, operation.getMetadata().getOperation().getOperationType(), operation.getMetadata().getEntity(), t.getMessage()));

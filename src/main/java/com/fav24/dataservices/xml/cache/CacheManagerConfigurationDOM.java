@@ -7,8 +7,8 @@ import org.w3c.dom.NodeList;
 import com.fav24.dataservices.domain.cache.CacheManagerConfiguration;
 
 
-public class CacheManagerConfigurationDOM extends CacheManagerConfiguration
-{
+public class CacheManagerConfigurationDOM extends CacheManagerConfiguration {
+
 	/**
 	 * Construye la configuración de un gestor de caché.
 	 * 
@@ -18,7 +18,7 @@ public class CacheManagerConfigurationDOM extends CacheManagerConfiguration
 	public CacheManagerConfigurationDOM(Node node, CacheManagerConfiguration parentConfiguration) {
 
 		super(parentConfiguration);
-		
+
 		Element element = (Element) node;
 
 		setMaxBytesLocalHeap(StorageSize.fromStringToBytes(element.getAttribute("MaxBytesLocalHeap")));
@@ -34,7 +34,7 @@ public class CacheManagerConfigurationDOM extends CacheManagerConfiguration
 				String nodeName = node_i.getNodeName();
 
 				if ("DefaultCache".equals(nodeName)) {
-					
+
 					setDefaultCacheConfiguration(new CacheConfigurationDOM(node_i, parentConfiguration == null ? null : parentConfiguration.getDefaultCacheConfiguration()));
 				}
 				else if ("DiskStore".equals(nodeName)) {
