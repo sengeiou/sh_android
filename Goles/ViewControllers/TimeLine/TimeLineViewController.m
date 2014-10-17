@@ -169,7 +169,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.timelineTableView.scrollsToTop = YES;
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 60.0f;
+    self.timelineTableView.estimatedRowHeight = 150.0f;
 }
 
 //------------------------------------------------------------------------------
@@ -194,7 +194,6 @@ static NSString *CellIdentifier = @"shootCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [self setLocalNotificationObservers];
-
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -312,35 +311,35 @@ static NSString *CellIdentifier = @"shootCell";
     return self.arrayShots.count;
 }
 
-//------------------------------------------------------------------------------
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-	
-    Shot *shot = self.arrayShots[indexPath.row];
-    
-    NSString *reuseIdentifier = CellIdentifier;
-    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
-    if (!cell) {
-        cell = [[ShotTableViewCell alloc] init];
-        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
-    }
-    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-    [cell addTarget:self action:@selector(goProfile:)];
-
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-    
-    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
- 
-    [cell setNeedsLayout];
-    [cell layoutIfNeeded];
-    
-     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    
-    height += 1;
-    
-    return height;
-
-}
+////------------------------------------------------------------------------------
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//	
+//    Shot *shot = self.arrayShots[indexPath.row];
+//    
+//    NSString *reuseIdentifier = CellIdentifier;
+//    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
+//    if (!cell) {
+//        cell = [[ShotTableViewCell alloc] init];
+//        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
+//    }
+//    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+//    [cell addTarget:self action:@selector(goProfile:)];
+//
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
+//    
+//    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+// 
+//    [cell setNeedsLayout];
+//    [cell layoutIfNeeded];
+//    
+//     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+//    
+//    height += 1;
+//    
+//    return height;
+//
+//}
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
