@@ -119,8 +119,23 @@ static NSString *CellIdentifier = @"shootCell";
 
     //Get ping from server
     returningFromBackground = YES;
+    
+    [self getTimeLastSyncornized];
+    
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+    
+    
+    
+}
+
+-(void)getTimeLastSyncornized{
+    
+    NSNumber *lastSync = [[CoreDataManager singleton] getLastSyncroTime];
+    double lastTime = [lastSync doubleValue];
+    NSDate* date = [[NSDate dateWithTimeIntervalSince1970:lastTime] dateByAddingTimeInterval:300];
+   
+    if ([date compare:[NSDate date]] == NSOrderedAscending)
+        self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
 }
 
 #pragma mark - General setup on ViewDidLoad
@@ -955,7 +970,7 @@ static NSString *CellIdentifier = @"shootCell";
 - (NSString *)countCharacters:(NSUInteger) lenght{
     
     if (lenght <= CHARACTERS_SHOT){
-        NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
+        NSString *charLeft = [NSString stringWithFormat:@"%u",CHARACTERS_SHOT - lenght];
         return charLeft;
     }
     return @"0";
