@@ -115,9 +115,9 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     private void retrieveUsers() {
-            startJob();
-            setLoadingView(true);
-            setEmpty(false);
+        startJob();
+        setLoadingView(true);
+        setEmpty(false);
     }
 
     public void startJob(){
@@ -165,17 +165,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
-        if(isThereInternetConnection()){
-            GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-            job.init(currentUser,userVO, followType);
-            jobManager.addJobInBackground(job);
-        }else{
-            GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-            job.init(currentUser,userVO,followType);
-            jobManager.addJobInBackground(job);
-        }
 
 
+        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        job.init(currentUser,userVO, followType);
+        jobManager.addJobInBackground(job);
     }
 
     public void followUser(UserVO user){

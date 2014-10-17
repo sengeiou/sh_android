@@ -48,6 +48,7 @@ public class PeopleFragment extends UserFollowsFragment {
     @Override
     public void onResume() {
         super.onResume();
+        startJob();
     }
 
     @Override

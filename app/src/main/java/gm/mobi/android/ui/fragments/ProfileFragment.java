@@ -125,15 +125,10 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void startFollowUnfollowUserJob(User currentUser, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,user,followType);
-        jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         job.init(currentUser,user, followType);
         jobManager.addJobInBackground(job);
-
-
 
     }
 
