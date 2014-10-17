@@ -122,9 +122,11 @@ namespace Bagdad.Models
             String _modified = "null";
             int _revision = csys_revision++;
 
-            if (this.idDevice != null && this.idDevice != 0) _idDevice = this.idDevice.ToString();
-            if (this.csys_birth != null && this.csys_birth != 0) _birth = this.csys_birth.ToString();
-            if (this.csys_modified != null && this.csys_modified != 0) _modified = this.csys_modified.ToString();
+            if (this.idDevice != 0) _idDevice = this.idDevice.ToString();
+            if (this.csys_birth != 0) _birth = this.csys_birth.ToString();
+            else _birth = Util.DateToDouble(DateTime.UtcNow).ToString();
+            if (this.csys_modified != 0) _modified = this.csys_modified.ToString();
+            else _modified = Util.DateToDouble(DateTime.UtcNow).ToString();
 
             ServiceCommunication sc = new ServiceCommunication();
             
