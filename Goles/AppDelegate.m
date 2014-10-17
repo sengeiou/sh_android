@@ -104,6 +104,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     UIApplication *app = [UIApplication sharedApplication];
+    [application setApplicationIconBadgeNumber:0];
     
     UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
         [app endBackgroundTask:bgTask];
