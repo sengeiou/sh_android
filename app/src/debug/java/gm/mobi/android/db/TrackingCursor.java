@@ -9,13 +9,15 @@ import java.util.List;
 
 public class TrackingCursor extends SQLiteCursor {
 
-    private static List<Cursor> openCursors = new LinkedList<Cursor>();
+    private static final List<Cursor> openCursors = new LinkedList<Cursor>();
     private StackTraceElement[] stackTrace;
 
     public TrackingCursor(SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
         super(driver, editTable, query);
-        openCursors.add(this);
-        stackTrace = Thread.currentThread().getStackTrace();
+        synchronized (openCursors){
+            openCursors.add(this);
+            stackTrace = Thread.currentThread().getStackTrace();
+        }
 
     }
 
