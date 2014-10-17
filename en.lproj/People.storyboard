@@ -344,7 +344,7 @@
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-64-REm">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-64-REm">
                                             <rect key="frame" x="479" y="11" width="110" height="28"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
@@ -366,14 +366,22 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstAttribute="centerY" secondItem="RlL-64-REm" secondAttribute="centerY" id="Mmx-tJ-5xo"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="RlL-64-REm" secondAttribute="trailing" constant="3" id="Nsi-ub-J9G"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="aqE-cJ-1eP"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-1" id="cuu-Bd-De3"/>
+                                        <constraint firstItem="RlL-64-REm" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="dET-08-rIc"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-4" id="daY-28-9ld"/>
                                         <constraint firstItem="Uvh-e6-f3G" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="6" id="faJ-ai-Lsd"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="TBy-mi-FaP" secondAttribute="trailing" constant="10" id="fyM-ce-M0p"/>
+                                        <constraint firstItem="RlL-64-REm" firstAttribute="leading" secondItem="TBy-mi-FaP" secondAttribute="leading" constant="411" id="sJf-6q-etF"/>
                                         <constraint firstAttribute="centerY" secondItem="6RI-lt-Kek" secondAttribute="centerY" id="tfu-Bz-zVi"/>
                                         <constraint firstItem="jOk-cS-Nsp" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="-8" id="w6e-zQ-QlG"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="sJf-6q-etF"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="follow" destination="RlL-64-REm" id="CDY-6f-97d"/>

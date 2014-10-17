@@ -86,7 +86,8 @@
     [cell configurePeopleCellWithUser:user inRow:indexPath whileSearching:NO inPeople:NO];
     [cell addTarget:self action:@selector(goProfile:)];
     [cell addTargetBtnFollow:self action:@selector(followUser:)];
-  
+    [cell addTargetBtnFollowing:self action:@selector(followUser:)];
+
     return cell;
 }
 

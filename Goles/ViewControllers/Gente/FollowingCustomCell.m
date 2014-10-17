@@ -62,10 +62,13 @@
 - (void)addTargetBtnFollow:(id)target action:(SEL)action {
     
     [self.follow addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    [self.following addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 
 }
-
+//------------------------------------------------------------------------------
+- (void)addTargetBtnFollowing:(id)target action:(SEL)action {
+    
+    [self.following addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
 
 //------------------------------------------------------------------------------
 - (void)configureFollowButton {
