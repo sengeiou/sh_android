@@ -56,7 +56,11 @@
     if (self.selectedUser != nil)
         [self dataFillView];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated{
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+
 }
 
 //------------------------------------------------------------------------------

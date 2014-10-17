@@ -25,7 +25,7 @@
         
         [img setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
             img.image = image;
-            img.layer.cornerRadius = imageView.frame.size.width / 2;
+            img.layer.cornerRadius = img.frame.size.width / 2;
             img.clipsToBounds = YES;
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
             //[[UIImageView sharedImageCache] cacheImage:image forName: [NSString stringWithFormat:@"%@", url]];
@@ -45,7 +45,7 @@
         }];
     }else{
         img.image = image;
-        img.layer.cornerRadius = imageView.frame.size.width / 2;
+        img.layer.cornerRadius = img.frame.size.width / 2;
         img.clipsToBounds = YES;
     }
     

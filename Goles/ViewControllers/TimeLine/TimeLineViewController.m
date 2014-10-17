@@ -123,9 +123,7 @@ static NSString *CellIdentifier = @"shootCell";
     [self getTimeLastSyncornized];
     
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    
-    
-    
+
 }
 
 -(void)getTimeLastSyncornized{
@@ -169,7 +167,8 @@ static NSString *CellIdentifier = @"shootCell";
     self.timelineTableView.scrollsToTop = YES;
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 300.0f;
+    self.timelineTableView.estimatedRowHeight = 80.0f;
+
 }
 
 //------------------------------------------------------------------------------
@@ -319,34 +318,34 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 ////------------------------------------------------------------------------------
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//	
-//    Shot *shot = self.arrayShots[indexPath.row];
-//    
-//    NSString *reuseIdentifier = CellIdentifier;
-//    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
-//    if (!cell) {
-//        cell = [[ShotTableViewCell alloc] init];
-//        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
-//    }
-//    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-//    [cell addTarget:self action:@selector(goProfile:)];
-//
-//    [cell setNeedsUpdateConstraints];
-//    [cell updateConstraintsIfNeeded];
-//    
-//    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
-// 
-//    [cell setNeedsLayout];
-//    [cell layoutIfNeeded];
-//    
-//     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-//    
-//    height += 1;
-//    
-//    return height;
-//
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+	
+    Shot *shot = self.arrayShots[indexPath.row];
+    
+    NSString *reuseIdentifier = CellIdentifier;
+    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
+    if (!cell) {
+        cell = [[ShotTableViewCell alloc] init];
+        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
+    }
+    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+    [cell addTarget:self action:@selector(goProfile:)];
+
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    
+    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+ 
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    
+     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    
+    height += 1;
+    
+    return height;
+
+}
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -382,7 +381,7 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 //------------------------------------------------------------------------------
-//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     // If you are just returning a constant value from this method, you should instead just set the table view's
     // estimatedRowHeight property (in viewDidLoad or similar), which is even faster as the table view won't
     // have to call this method for every row in the table view.
@@ -399,8 +398,8 @@ static NSString *CellIdentifier = @"shootCell";
     //    if (self.isInsertingRow) {
     //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
     //    }
-//    return UITableViewAutomaticDimension;
-//}
+     return UITableViewAutomaticDimension;
+}
 
 //------------------------------------------------------------------------------
 - (void)addLoadMoreCell{
