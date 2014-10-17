@@ -102,6 +102,9 @@
       <DependentUpon>FindFriends.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Device.cs" />
+    <Compile Include="p.xaml.cs">
+      <DependentUpon>p.xaml</DependentUpon>
+    </Compile>
     <Compile Include="People.xaml.cs">
       <DependentUpon>People.xaml</DependentUpon>
     </Compile>
@@ -166,6 +169,10 @@
     <Page Include="FindFriends.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="p.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="People.xaml">
       <Generator>MSBuild:Compile</Generator>

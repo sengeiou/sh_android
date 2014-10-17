@@ -495,64 +495,65 @@ namespace Bagdad
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
+                if (!(Application.Current.RootVisual as PhoneApplicationFrame).CurrentSource.OriginalString.Contains("TimeLine.xaml"))
+                {
+                    ToastPrompt toast = new ToastPrompt();
 
-                ToastPrompt toast = new ToastPrompt();
+                    if (e.Collection.ContainsKey("wp:Text1"))
+                        toast.Title = e.Collection["wp:Text1"];
+                    else
+                        toast.Title = "";
 
-                if (e.Collection.ContainsKey("wp:Text1"))
-                    toast.Title = e.Collection["wp:Text1"];
-                else
-                    toast.Title = "";
+                    if (e.Collection.ContainsKey("wp:Text2"))
+                        toast.Message = e.Collection["wp:Text2"];
+                    else
+                        toast.Message = "";
 
-                if (e.Collection.ContainsKey("wp:Text2"))
-                    toast.Message = e.Collection["wp:Text2"];
-                else
-                    toast.Message = "";
-
-                if (e.Collection.ContainsKey("wp:Param"))
-                    url = e.Collection["wp:Param"];
-                else
-                    url = "";
+                    if (e.Collection.ContainsKey("wp:Param"))
+                        url = e.Collection["wp:Param"];
+                    else
+                        url = "";
 
 
-                System.Diagnostics.Debug.WriteLine("-------------------PUSH APP ABIERTA RECIBIDO----------------: App.xaml.cs - url: " + url);
-                toast.MillisecondsUntilHidden = 6000;
+                    System.Diagnostics.Debug.WriteLine("-------------------PUSH APP ABIERTA RECIBIDO----------------: App.xaml.cs - url: " + url);
+                    toast.MillisecondsUntilHidden = 6000;
 
-                toast.ImageSource = new BitmapImage(new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.RelativeOrAbsolute));
+                    toast.ImageSource = new BitmapImage(new Uri("Assets/Tiles/FlipCycleTileSmall.png", UriKind.RelativeOrAbsolute));
 
-                toast.Stretch = Stretch.Fill;
+                    toast.Stretch = Stretch.Fill;
 
-                toast.ImageHeight = 21;
-                toast.ImageWidth = 21;
+                    toast.ImageHeight = 21;
+                    toast.ImageWidth = 21;
 
-                toast.FontSize = 15;
-                toast.Tap += goToDetail;
-                //toast.NavigationUri = new Uri(e.Collection["wp:Param"], UriKind.Relative);
+                    toast.FontSize = 15;
+                    toast.Tap += goToDetail;
+                    //toast.NavigationUri = new Uri(e.Collection["wp:Param"], UriKind.Relative);
 
-                System.Windows.Thickness margin = new System.Windows.Thickness();
+                    System.Windows.Thickness margin = new System.Windows.Thickness();
 
-                margin.Left = 0;
-                margin.Right = 0;
-                margin.Top = -8;
-                margin.Bottom = 0;
+                    margin.Left = 0;
+                    margin.Right = 0;
+                    margin.Top = -8;
+                    margin.Bottom = 0;
 
-                toast.Margin = margin;
+                    toast.Margin = margin;
 
-                toast.Height = 64;
+                    toast.Height = 64;
 
-                toast.Completed += ShowSystemTray;
+                    toast.Completed += ShowSystemTray;
 
-                toast.TextWrapping = TextWrapping.NoWrap;
+                    toast.TextWrapping = TextWrapping.NoWrap;
 
-                toast.Show();
-                //SystemTray.IsVisible = false;
+                    toast.Show();
+                    //SystemTray.IsVisible = false;
 
-                //SystemTray.Opacity = 0;
+                    //SystemTray.Opacity = 0;
 
-                //TODO: "Cargando" de sistema
-                //SystemTray.ProgressIndicator = new ProgressIndicator() { Text = "Cargando...", IsIndeterminate = true, IsVisible = true };
+                    //TODO: "Cargando" de sistema
+                    //SystemTray.ProgressIndicator = new ProgressIndicator() { Text = "Cargando...", IsIndeterminate = true, IsVisible = true };
 
-                //testVibrationDevice.Vibrate(TimeSpan.FromSeconds(0.25));
-
+                    //testVibrationDevice.Vibrate(TimeSpan.FromSeconds(0.25));
+                }
             });
             // Display a dialog of all the fields in the toast.
             //Deployment.Current.Dispatcher.BeginInvoke(() => MessageBox.Show(message.ToString()));
