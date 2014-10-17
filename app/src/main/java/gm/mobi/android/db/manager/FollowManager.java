@@ -18,6 +18,7 @@ public class FollowManager extends AbstractManager{
 
     FollowMapper followMapper;
     private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
+    private static final String CSYS_SYNCHRONIZED = GMContract.SyncColumns.CSYS_SYNCHRONIZED;
     private static final String FOLLOW_TABLE = FollowTable.TABLE;
     private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
     private static final String ID_USER = FollowTable.ID_USER;
@@ -34,7 +35,7 @@ public class FollowManager extends AbstractManager{
     public void saveFollowFromServer(Follow follow) throws SQLException {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
-
+            contentValues.put(CSYS_SYNCHRONIZED,"S");
             if (contentValues.get(CSYS_DELETED) != null) {
                 deleteFollow(follow);
             } else {
@@ -48,22 +49,24 @@ public class FollowManager extends AbstractManager{
     /** Insert a Follow **/
     public void saveFollow(Follow follow)
     {
+        //In this case, the follow is created by us. So synchronized attribut must be "N" or "U"
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
-            db.insertWithOnConflict(FOLLOW_TABLE,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
-        }
+            db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+         }
     }
 
     /**
      * Insert a Follow list from Server datas
      * *
      */
-    public void saveFollows(List<Follow> followList) {
+    public void saveFollowsFromServer(List<Follow> followList) {
         for (Follow follow : followList) {
             ContentValues contentValues = followMapper.toContentValues(follow);
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                  deleteFollow(follow);
             } else {
+                contentValues.put(CSYS_SYNCHRONIZED,"S");
                 db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.i("Follow inserted ",follow.getIdUser());
             }
@@ -81,6 +84,7 @@ public class FollowManager extends AbstractManager{
                 c.close();
                 return follow;
             }
+        c.close();
         return null;
     }
 
@@ -90,16 +94,17 @@ public class FollowManager extends AbstractManager{
     public  List<Long> getUserFollowingIds(Long idUser) throws SQLException {
         List<Long> userIds = new ArrayList<>();
 
-        String args = ID_USER+"=?";
+        String args = ID_USER+"=? AND "+CSYS_DELETED +" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUser)};
         if(isTableEmpty(FOLLOW_TABLE)){
             Timber.e("La tabla follow está vacia");
         }
-        Cursor c = db.query(GMContract.FollowTable.TABLE, new String[]{ID_FOLLOWED_USER},args,argsString,null,null,null,null);
+        Cursor c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+
         if (c.getCount() > 0) {
             c.moveToFirst();
             while (!c.isAfterLast()) {
-                userIds.add(c.getLong(0));
+                userIds.add(c.getLong(c.getColumnIndex(ID_FOLLOWED_USER)));
                 c.moveToNext();
             }
         }
@@ -207,4 +212,23 @@ public class FollowManager extends AbstractManager{
         insertInTableSync(FOLLOW_TABLE, 2,0,0);
     }
 
+
+    /**
+    * Check if it exists any data for send to server. This method It is called before request datas
+     *
+    * **/
+    public List<Follow> getDatasForSendToServerInCase(){
+        long res = 0;
+        List<Follow> followsToUpdate = new ArrayList<>();
+        String args = CSYS_DELETED+" IS NOT NULL";
+        Cursor c = db.query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                followsToUpdate.add(followMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return followsToUpdate;
+    }
 }

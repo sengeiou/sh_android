@@ -91,19 +91,25 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
 
 
     public Follow unfollowUserinDB() throws SQLException, IOException{
+        //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
+        //attribute to "U"
         Follow follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
         follow.setCsys_deleted(new Date());
+        follow.setCsys_synchronized("U");
         followManager.saveFollow(follow);
         return follow;
     }
 
     public Follow followUserInDB() throws IOException, SQLException{
+        //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
+        //So the syncrhonized attribute for this case is "N"
         Follow follow = new Follow();
         follow.setFollowedUser(idUser);
         follow.setIdUser(currentUser.getIdUser());
         follow.setCsys_birth(new Date());
         follow.setCsys_modified(new Date());
         follow.setCsys_revision(0);
+        follow.setCsys_synchronized("N");
         followManager.saveFollow(follow);
         return follow;
     }

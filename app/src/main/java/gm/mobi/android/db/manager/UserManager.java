@@ -17,6 +17,7 @@ import javax.inject.Inject;
 public class UserManager extends AbstractManager {
 
     UserMapper userMapper;
+    private String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
     private static final String USER_TABLE = UserTable.TABLE;
     private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
     @Inject
@@ -46,9 +47,10 @@ public class UserManager extends AbstractManager {
     /**
      * Insert User list
      */
-    public void saveUsers(List<User> users) throws SQLException {
+    public void saveUsersFromServer(List<User> users) throws SQLException {
         for (User user : users) {
             ContentValues contentValues = userMapper.toContentValues(user);
+            contentValues.put(CSYS_SYNCHRONIZED, "S");
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 deleteUser(user);
             } else {

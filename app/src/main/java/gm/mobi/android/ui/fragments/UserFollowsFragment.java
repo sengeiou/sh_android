@@ -165,8 +165,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
-
-
+        //Proceso de encolamiento
+        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        job2.init(currentUser,user,followType);
+        jobManager.addJobInBackground(job2);
+        //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         job.init(currentUser,userVO, followType);
         jobManager.addJobInBackground(job);
@@ -225,7 +228,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         user = getAdapter().getItem(position);
         unfollowUser(user);
     }
-
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){

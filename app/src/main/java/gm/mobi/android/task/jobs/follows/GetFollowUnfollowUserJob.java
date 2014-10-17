@@ -19,6 +19,7 @@ import gm.mobi.android.ui.model.mappers.UserVOMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import javax.inject.Inject;
 
 public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
@@ -67,7 +68,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
         Long idUser = user.getIdUser();
-
+        checkIfWeHaveSomeChangesInFollowAndSendToServer();
         doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
@@ -91,6 +92,21 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
                 break;
             }
         }
+
+    public void checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException{
+        List<Follow> followsToUpdate = followManager.getDatasForSendToServerInCase();
+        Follow followReceived = null;
+        if(followsToUpdate.size()>0){
+            for(Follow f: followsToUpdate){
+                if(f.getCsys_deleted()!=null){
+                    followReceived = service.unfollowUser(f);
+                }else{
+                    followReceived = service.followUser(f);
+                }
+                if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
+            }
+        }
+    }
 
 
     public Follow unfollowUser() throws SQLException, IOException{

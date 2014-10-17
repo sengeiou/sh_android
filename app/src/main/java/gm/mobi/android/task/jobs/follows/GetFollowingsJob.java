@@ -75,8 +75,8 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
 
         List<Follow> followsByFollowing = getFollowsByFollowing(following);
         // Save and send result
-        userManager.saveUsers(following);
-        followManager.saveFollows(followsByFollowing);
+        userManager.saveUsersFromServer(following);
+        followManager.saveFollowsFromServer(followsByFollowing);
         List<UserVO> userFollows = getUserVOs(following);
 
         postSuccessfulEvent(new FollowsResultEvent(userFollows));
