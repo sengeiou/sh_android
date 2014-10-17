@@ -13,10 +13,7 @@ import com.fav24.dataservices.util.FastHttpUtils;
 
 public class CreateShot implements GenericServiceHook {
 
-	private static final String SPECIAL_SERVICES_TEST_HOST = "54.75.245.130";
-	private static final String SPECIAL_SERVICES_LOCALHOST = "localhost";
-
-	private static final String SPECIAL_SERVICES_HOST = SPECIAL_SERVICES_LOCALHOST;
+	private static final String SPECIAL_SERVICES_HOST = "localhost";
 	private static final Integer SPECIAL_SERVICES_PORT = 8085;
 
 	private static final String QUEUE_SHOT_URL = "http://" + SPECIAL_SERVICES_HOST + ":" + SPECIAL_SERVICES_PORT + "/shootr-services/rest/notification/shot";
@@ -117,13 +114,12 @@ public class CreateShot implements GenericServiceHook {
 
 			for (DataItem dataItem : operation.getData()) {
 
+				// Envío an sistema de push.
 				attrs.put(ATTR_IDSHOT, dataItem.getAttributes().get(ATTR_IDSHOT));
 				attrs.put(ATTR_IDUSER, dataItem.getAttributes().get(ATTR_IDUSER));
 				attrs.put(ATTR_COMMENT, dataItem.getAttributes().get(ATTR_COMMENT));
 
-				// Envío an sistema de push.
 				try {
-					
 					FastHttpUtils.sendPost(QUEUE_SHOT_URL, null, objectMapper.writeValueAsString(attrs), null);
 				} catch (Throwable t) {
 					return new HookMethodOutput(t.getMessage());
