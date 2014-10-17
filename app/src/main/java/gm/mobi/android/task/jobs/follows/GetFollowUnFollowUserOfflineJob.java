@@ -22,7 +22,7 @@ import java.util.Date;
 import javax.inject.Inject;
 
 public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFollowResultEvent> {
-    private static final int PRIORITY = 4; //TODO Define next values for our queue
+    private static final int PRIORITY = 9; //TODO Define next values for our queue
 
     UserManager userManager;
     FollowManager followManager;

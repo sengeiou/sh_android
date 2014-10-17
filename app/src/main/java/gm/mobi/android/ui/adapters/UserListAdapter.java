@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
+import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.model.UserVO;
@@ -63,7 +64,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
     }
 
     @Override public void bindView(UserVO item, final int position, View view) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.name.setText(item.getUserName());
         viewHolder.username.setText(item.getFavoriteTeamName());
         String photo = item.getPhoto();
@@ -87,6 +88,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
                viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
                    @Override public void onClick(View v) {
                        if(callback!=null){
+                           changeButtonState(viewHolder,Follow.RELATIONSHIP_NONE);
                            callback.unFollow(position);
                        }
                    }
@@ -95,6 +97,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
                viewHolder.followButton.setOnClickListener(new View.OnClickListener(){
                    @Override public void onClick(View v) {
                        if(callback!=null){
+                           changeButtonState(viewHolder,Follow.RELATIONSHIP_FOLLOWING);
                            callback.follow(position);
                        }
                    }
@@ -129,6 +132,14 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
     public interface FollowUnfollowAdapterCallback{
         public void follow(int position);
         public void unFollow(int position);
+    }
+
+    public void changeButtonState(ViewHolder viewHolder ,int stateFollow){
+        if(stateFollow == Follow.RELATIONSHIP_FOLLOWING) {
+            viewHolder.followButton.setFollowing(true);
+        }else{
+            viewHolder.followButton.setFollowing(false);
+        }
     }
 
 

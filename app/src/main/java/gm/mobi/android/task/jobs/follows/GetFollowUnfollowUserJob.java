@@ -68,44 +68,49 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
         Long idUser = user.getIdUser();
-        checkIfWeHaveSomeChangesInFollowAndSendToServer();
-        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-        switch (followUnfollowType){
-            case UserDtoFactory.FOLLOW_TYPE:
-                Follow followUser = followUser();
-                User userToCreate = null;
-                doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                if(followUser.getIdUser()!=null)
-                    userToCreate = userVOMapper.userByUserVO(user);
-                    userManager.saveUser(userToCreate);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
-            break;
-            case UserDtoFactory.UNFOLLOW_TYPE:
-                if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
-                    Follow follow = unfollowUser();
+        synchronized (followManager){
+            checkIfWeHaveSomeChangesInFollowAndSendToServer();
+            doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+            switch (followUnfollowType){
+                case UserDtoFactory.FOLLOW_TYPE:
+                    Follow followUser = followUser();
+                    User userToCreate = null;
                     doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIFollowHim));
-                }else{
-                    //TODO. Check if we aren't in the good followType
-                    return;
-                }
+                    if(followUser.getIdUser()!=null)
+                        userToCreate = userVOMapper.userByUserVO(user);
+                        userManager.saveUser(userToCreate);
+                        postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
                 break;
-            }
+                case UserDtoFactory.UNFOLLOW_TYPE:
+                    if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
+                        Follow follow = unfollowUser();
+                        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+                        postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIFollowHim));
+                    }else{
+                        //TODO. Check if we aren't in the good followType
+                        return;
+                    }
+                    break;
+                }
         }
+    }
 
     public void checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException{
-        List<Follow> followsToUpdate = followManager.getDatasForSendToServerInCase();
-        Follow followReceived = null;
-        if(followsToUpdate.size()>0){
-            for(Follow f: followsToUpdate){
-                if(f.getCsys_deleted()!=null){
-                    followReceived = service.unfollowUser(f);
-                }else{
-                    followReceived = service.followUser(f);
-                }
-                if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
-            }
-        }
+       synchronized (followManager){
+           List<Follow> followsToUpdate = followManager.getDatasForSendToServerInCase();
+           Follow followReceived = null;
+           if(followsToUpdate.size()>0){
+               for(Follow f: followsToUpdate){
+                   if(f.getCsys_deleted()!=null){
+                       followReceived = service.unfollowUser(f);
+                   }else{
+                       followReceived = service.followUser(f);
+                   }
+                   if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
+               }
+           }
+       }
+
     }
 
 

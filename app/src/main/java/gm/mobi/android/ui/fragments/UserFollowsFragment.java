@@ -186,8 +186,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Override public void onResume() {
         super.onResume();
         bus.register(this);
-        updateList();
-
     }
 
     @Override public void onPause() {
@@ -231,13 +229,11 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        startJob();
-    }
+        if(isThereInternetConnection()){
+            startJob();
+        }
 
-    public void updateList(){
-        if(getAdapter()!=null) getAdapter().notifyDataSetChanged();
     }
-
 
     public boolean isThereInternetConnection(){
         return networkUtil.isConnected(getActivity().getApplication());

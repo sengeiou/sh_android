@@ -47,6 +47,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
         this.idUserToRetrieveFollowsFrom = userId;
         this.followType = followType;
         currentUser = GolesApplication.get(getContext()).getCurrentUser();
+
         currentUserId = currentUser!= null ? currentUser.getIdUser() : null;
     }
 
@@ -70,6 +71,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
         return service.getFollowing(idUserToRetrieveFollowsFrom, 0L);
     }
     private List<User> getFollowerUsersFromService() throws  IOException{
+
         Timber.i("Hace la llamada de getFollowers");
         return service.getFollowers(idUserToRetrieveFollowsFrom,0L);
     }
@@ -77,7 +79,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
 
 
     @Override protected boolean isNetworkRequired() {
-        return false;
+        return true;
     }
 
     @Override protected void createDatabase() {
