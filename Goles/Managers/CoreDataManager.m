@@ -437,7 +437,8 @@
   
     NSLog(@"%@",[storeURL absoluteString]);
 
-    if (!IS_GENERATING_DEFAULT_DATABASE && ![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSUTF8StringEncoding error:nil] isDirectory:NO])
+    BOOL isDirectory = NO;
+    if (!IS_GENERATING_DEFAULT_DATABASE && ![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSUTF8StringEncoding error:nil] isDirectory:&isDirectory])
         [self copyDefaultDataToSQLiteDataBase];
     
     NSError *error = nil;
