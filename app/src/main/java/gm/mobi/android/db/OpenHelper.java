@@ -9,12 +9,8 @@ public class OpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "bagdad.db";
     public static final int DATABASE_VERSION = 1;
 
-    public OpenHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    public OpenHelper(Context context, String dbName) {
-        super(context, dbName, null, DATABASE_VERSION);
+    public OpenHelper(Context context, SQLiteDatabase.CursorFactory cursorFactory) {
+        super(context, DATABASE_NAME, cursorFactory, DATABASE_VERSION);
     }
 
     @Override

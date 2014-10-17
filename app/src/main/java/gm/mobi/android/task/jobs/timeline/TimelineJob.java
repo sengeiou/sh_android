@@ -1,12 +1,14 @@
 package gm.mobi.android.task.jobs.timeline;
 
 import android.app.Application;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.TrackingCursor;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
@@ -20,8 +22,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
-public class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
+public abstract class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
     private static final int PRIORITY = 4;
 
@@ -31,7 +34,6 @@ public class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
     private User currentUser;
 
-    @Inject
     public TimelineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(new Params(PRIORITY), context, bus, networkUtil);
         setOpenHelper(dbHelper);
@@ -58,10 +60,6 @@ public class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
     protected void setDatabaseToManagers(SQLiteDatabase db) {
         followManager.setDataBase(db);
         shotManager.setDataBase(db);
-    }
-
-    @Override protected void run() throws SQLException, IOException {
-
     }
 
     @Override protected boolean isNetworkRequired() {

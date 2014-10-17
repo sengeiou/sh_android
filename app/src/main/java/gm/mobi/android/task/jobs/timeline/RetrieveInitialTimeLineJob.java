@@ -37,7 +37,6 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
     }
 
     @Override protected void run() throws SQLException, IOException {
-        super.run();
         List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
         shotManager.saveShots(remoteShots);
         // Retrieve from db because we need the user objects associated to the shots

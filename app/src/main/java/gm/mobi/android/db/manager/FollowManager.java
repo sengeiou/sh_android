@@ -77,7 +77,9 @@ public class FollowManager extends AbstractManager{
         Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
             if(c.getCount()>0){
                 c.moveToFirst();
-                return followMapper.fromCursor(c);
+                Follow follow = followMapper.fromCursor(c);
+                c.close();
+                return follow;
             }
         return null;
     }
@@ -155,6 +157,7 @@ public class FollowManager extends AbstractManager{
                 }
             } while (queryResults.moveToNext());
         }
+        queryResults.close();
         return resultRelationship;
     }
 
@@ -178,6 +181,7 @@ public class FollowManager extends AbstractManager{
                     }
                 } while (queryResults.moveToNext());
             }
+            queryResults.close();
         }
         return resultRelationship;
     }

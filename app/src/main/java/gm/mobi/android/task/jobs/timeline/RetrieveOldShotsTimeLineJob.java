@@ -38,7 +38,6 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
     }
 
     @Override protected void run() throws SQLException, IOException {
-        super.run();
         Long firstModifiedDate = shotManager.getFirstModifiedDate(GMContract.ShotTable.TABLE);
         List<Shot> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         shotManager.saveShots(olderShots);

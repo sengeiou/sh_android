@@ -1,12 +1,16 @@
 package gm.mobi.android.data;
 
+import android.app.Application;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
+import gm.mobi.android.db.OpenHelper;
+import gm.mobi.android.db.TrackingCursorFactory;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.notifications.DebugNotificationManager;
 import gm.mobi.android.service.ApiModule;
@@ -80,6 +84,10 @@ public class DebugDataModule {
 
     @Provides @Singleton NetworkUtil providesNetworkUtil(DebugNetworkUtil networkUtil) {
         return networkUtil;
+    }
+
+    @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application) {
+        return new OpenHelper(application.getApplicationContext(), new TrackingCursorFactory());
     }
 
     @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(

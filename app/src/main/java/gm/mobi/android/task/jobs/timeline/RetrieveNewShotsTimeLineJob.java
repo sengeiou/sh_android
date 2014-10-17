@@ -38,7 +38,6 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
     }
 
     @Override protected void run() throws SQLException, IOException {
-        super.run();
         List<ShotVO> updatedTimeline = new ArrayList<>();
         List<Shot> newShots = new ArrayList<>();
         Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);

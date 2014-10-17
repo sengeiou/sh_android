@@ -119,7 +119,7 @@ public class DataModule {
 
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
-        return new OpenHelper(application.getApplicationContext());
+        return new OpenHelper(application.getApplicationContext(), null);
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {

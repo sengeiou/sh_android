@@ -50,7 +50,7 @@ public abstract class AbstractManager {
     }
 
     public  long insertOrUpdate( String tableName,ContentValues contentValues,String[] projection,String where, String[] args){
-        Cursor c;
+        Cursor c = null;
         long res = 0;
         try{
             c = db.query(tableName,projection,where, args, null, null, null );
@@ -62,6 +62,10 @@ public abstract class AbstractManager {
 
         }catch(Exception e){
             Timber.e("[UPDATE EXCEPTION], insertOrUpdate in table %s with exception %s and message %s",tableName,e, e.getMessage());
+        }finally {
+            if (c != null) {
+                c.close();
+            }
         }
         return res;
     }
@@ -123,6 +127,7 @@ public abstract class AbstractManager {
             } else {
                 firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
             }
+            c.close();
         }
         return firstDateModified;
     }
