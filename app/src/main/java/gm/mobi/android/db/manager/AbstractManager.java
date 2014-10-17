@@ -59,7 +59,7 @@ public abstract class AbstractManager {
             }else{
                 res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
-
+            c.close();
         }catch(Exception e){
             Timber.e("[UPDATE EXCEPTION], insertOrUpdate in table %s with exception %s and message %s",tableName,e, e.getMessage());
         }finally {
@@ -88,9 +88,7 @@ public abstract class AbstractManager {
 
         String[] column = new String[]{GMContract.TablesSync.MAX_ROWS};
         String[] stringArgs = new String[]{entity};
-
         String args = GMContract.TablesSync.ENTITY+"=?";
-
         Cursor c = db.query(GMContract.TablesSync.TABLE, column,args,stringArgs,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
@@ -178,4 +176,6 @@ public abstract class AbstractManager {
             return sb.toString();
         }
     }
+
+
 }
