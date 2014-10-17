@@ -8,14 +8,42 @@
 
 #import "Followbutton.h"
 #import "Fav24Colors.h"
+#import "Utils.h"
 
 @implementation Followbutton
+
+-(id) initWithCoder:(NSCoder *)aDecoder {
+    
+    if ((self = [super initWithCoder:aDecoder])) {
+        self.backgroundColor = [UIColor whiteColor];
+        [self setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+        [self setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+        self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+        self.layer.borderWidth = 1.0f;
+        self.layer.masksToBounds = YES;
+
+    }
+    return self;
+}
+
 
 - (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
     
     if (highlighted) {
         self.backgroundColor = [Fav24Colors iosSevenBlue];
+        [self setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateHighlighted];
+        self.titleLabel.textColor = [UIColor whiteColor];
+//        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+//        self.layer.borderWidth = 1.0f;
+        self.layer.masksToBounds = YES;
+    }else {
+        self.backgroundColor = [UIColor whiteColor];
+        [self setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+        [self setTitleColor:[Fav24Colors iosSevenBlue] forState:UIControlStateNormal];
+        self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+        self.layer.borderWidth = 1.0f;
+        self.layer.masksToBounds = YES;
     }
     
 }

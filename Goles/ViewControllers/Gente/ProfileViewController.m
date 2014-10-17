@@ -23,6 +23,7 @@
 #import "Followingbutton.h"
 #import "Followbutton.h"
 
+
 @interface ProfileViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
@@ -32,8 +33,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblFollowing;
 @property (weak, nonatomic) IBOutlet UIButton *btnFollowers;
 @property (weak, nonatomic) IBOutlet UILabel *lblFollowers;
-@property (weak, nonatomic) IBOutlet Followingbutton *btnFollow;
-@property (weak, nonatomic) IBOutlet Followbutton *btnUnfollow;
+@property (weak, nonatomic) IBOutlet UIButton *btnFollow;
+@property (weak, nonatomic) IBOutlet UIButton *btnUnfollow;
 @property (weak, nonatomic) IBOutlet UIButton *btnEditProfile;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblName;

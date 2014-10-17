@@ -75,6 +75,7 @@
     
     self.follow.hidden = NO;
     self.following.hidden = YES;
+    
     [self.follow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
     self.follow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
     self.follow.layer.borderWidth = 1.0f;

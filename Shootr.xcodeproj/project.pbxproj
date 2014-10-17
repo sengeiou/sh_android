@@ -105,6 +105,7 @@
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
 		AAD77D0219EE69C700A1B831 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */; };
 		AADF791419F1534D00AE9DB8 /* Followbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = AADF791319F1534D00AE9DB8 /* Followbutton.m */; };
+		AADF791719F1560400AE9DB8 /* EditProfileBUtton.m in Sources */ = {isa = PBXBuildFile; fileRef = AADF791619F1560400AE9DB8 /* EditProfileBUtton.m */; };
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
 		AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */; };
@@ -310,6 +311,8 @@
 		AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		AADF791219F1534D00AE9DB8 /* Followbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Followbutton.h; path = Buttons/Followbutton.h; sourceTree = "<group>"; };
 		AADF791319F1534D00AE9DB8 /* Followbutton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Followbutton.m; path = Buttons/Followbutton.m; sourceTree = "<group>"; };
+		AADF791519F1560400AE9DB8 /* EditProfileBUtton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditProfileBUtton.h; path = Buttons/EditProfileBUtton.h; sourceTree = "<group>"; };
+		AADF791619F1560400AE9DB8 /* EditProfileBUtton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditProfileBUtton.m; path = Buttons/EditProfileBUtton.m; sourceTree = "<group>"; };
 		AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimelineViewControllerTest.m; path = Tests/TimelineViewControllerTest.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5819E4253C00F32FF7 /* TimeLineHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineHelper.h; path = Tests/TimeLineHelper.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineHelper.m; path = Tests/TimeLineHelper.m; sourceTree = SOURCE_ROOT; };
@@ -815,6 +818,8 @@
 			children = (
 				AADF791219F1534D00AE9DB8 /* Followbutton.h */,
 				AADF791319F1534D00AE9DB8 /* Followbutton.m */,
+				AADF791519F1560400AE9DB8 /* EditProfileBUtton.h */,
+				AADF791619F1560400AE9DB8 /* EditProfileBUtton.m */,
 				A582A33C19F154C6002B23BC /* Followingbutton.h */,
 				A582A33D19F154C6002B23BC /* Followingbutton.m */,
 			);
@@ -1029,6 +1034,7 @@
 				AA623E721998D17800A942A9 /* Fav24Colors.m in Sources */,
 				AA623E181998D17800A942A9 /* _AppAdvice.m in Sources */,
 				AA623E4B1998D17800A942A9 /* Message.m in Sources */,
+				AADF791719F1560400AE9DB8 /* EditProfileBUtton.m in Sources */,
 				AA72640F19D0506A0067A39D /* Follow.m in Sources */,
 				AA74B3D119DD7EE800EF90D5 /* CustomTextView.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
