@@ -161,7 +161,7 @@ namespace Bagdad
         {
             try
             {
-                App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.SHOTS);
+                App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, ServiceCommunication.enumSynchroTables.SHOTS);
             }
             catch (Exception e)
             {
@@ -246,12 +246,14 @@ namespace Bagdad
         {
             NavigationService.Navigate(new Uri("/Me.xaml", UriKind.Relative));
             timer.Stop();
+            timerToLoad.Stop();
         }
 
         private void appBarMenuItemPeople_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/People.xaml", UriKind.Relative));
             timer.Stop();
+            timerToLoad.Stop();
         }
 
         private void appBarShootButton_Click(object sender, EventArgs e)
@@ -323,6 +325,7 @@ namespace Bagdad
             int shotUserId = ((Bagdad.ViewModels.ShotViewModel)myShots.SelectedItem).shotUserId;
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + shotUserId, UriKind.Relative));
             timer.Stop();
+            timerToLoad.Stop();
         }
         #endregion
 

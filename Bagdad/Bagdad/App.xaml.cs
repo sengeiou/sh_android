@@ -213,7 +213,7 @@ namespace Bagdad
                 var synchroLogin = await util.isUserAlreadyLoged();
                 if (synchroLogin)
                 {
-                    UpdateServices(Constants.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
+                    UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);
                 }
                 else
                 {
@@ -305,13 +305,13 @@ namespace Bagdad
         }
 
         //Llamada a la Synchro
-        public static void UpdateServices(int Type, ServiceCommunication.enumSynchroTables tablesType)
+        public static void UpdateServices(ServiceCommunication.enumTypeSynchro _type, ServiceCommunication.enumSynchroTables tablesType)
         {
             ServiceCommunication sc = new ServiceCommunication();
             sc.initTablesToSynchro(tablesType);
             BackgroundWorker bgw = new BackgroundWorker();
 
-            sc.SetSynchroType(Type);
+            sc.SetSynchroType(_type);
 
             bgw.DoWork += sc.SynchronizeProcess;
             bgw.RunWorkerAsync();

@@ -12,6 +12,7 @@ using Bagdad.ViewModels;
 using Microsoft.Phone.Tasks;
 using Bagdad.Resources;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Bagdad
 {
@@ -22,6 +23,7 @@ namespace Bagdad
         UserImageManager uim;
         UserViewModel uvm;
         public ProgressIndicator progress;
+        private DispatcherTimer timer;
 
         public Me()
         {
@@ -37,6 +39,11 @@ namespace Bagdad
 
             };
             SystemTray.SetProgressIndicator(this, progress);
+
+            timer = new DispatcherTimer();
+            timer.Tick += timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 0, 10);
+            timer.Start();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -211,6 +218,20 @@ namespace Bagdad
         {
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
         }
+
+        /// <summary>
+        /// Evento del timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        async void timer_Tick(object sender, EventArgs e)
+        {
+            if (!App.isSynchroRunning())
+            {
+                App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
+            }
+        }
+
         #endregion
 
     }

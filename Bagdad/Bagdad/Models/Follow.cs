@@ -34,7 +34,6 @@ namespace Bagdad.Models
                 database = await App.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertFollowData))
                 {
-                    await database.ExecuteStatementAsync("BEGIN TRANSACTION");
 
                     foreach (Follow follow in follows)
                     {
@@ -56,7 +55,6 @@ namespace Bagdad.Models
                         await custstmt.StepAsync().AsTask().ConfigureAwait(false);
                         done++;
                     }
-                    await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
                 App.DBLoaded.Set();
             }
@@ -401,6 +399,141 @@ namespace Bagdad.Models
                 throw new Exception("Follow - GetActualNumOfFollowings: " + e.Message, e);
             }
             return _return;
+        }
+
+
+        public async Task<string> SynchronizeFollows()
+        {
+            try
+            {
+                List<Follow> follows = await GetFollowsToUpdate();
+                if (follows.Count() > 0)
+                {
+                    String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                                "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
+                                "\"ops\": [{@Data\"metadata\": {" +
+                                    "\"items\": null," +
+                                    "\"TotalItems\": null," +
+                                    "\"operation\": \"@Operation\"," +
+                                    "\"key\": {" +
+                                        "\"idUser\": null," +
+                                        "\"idUserFollowed\": null" +
+                                    "}," +
+                                    "\"entity\": \"Follow\"" +
+                                "}}]}";
+
+                    String singleData = "{" +
+                                    "\"idUser\": @idUser," +
+                                    "\"idFollowedUser\": @idFollowedUser," +
+                                    "\"birth\": @birth," +
+                                    "\"revision\": @revision," +
+                                    "\"modified\": @modified," +
+                                    "\"deleted\": @deleted" +
+                                "}";
+
+                    StringBuilder builderData = new StringBuilder();
+
+                    TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                    double epochDate = t.TotalMilliseconds;
+
+                    //req
+                    json = json.Replace("@idDevice", "\"null\"");
+                    json = json.Replace("@idUser", this.idUser.ToString());
+                    json = json.Replace("@appVersion", App.appVersionInt().ToString());
+                    json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
+                    json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+
+                    bool isFirst = true;
+                    foreach (Follow follow in follows)
+                    {
+                        String data = singleData;
+                        if (isFirst)
+                        {
+                            data = "\"data\": [" + data;
+                            isFirst = false;
+                        }
+                        else data += ",";
+
+                        //ops
+                        data = data.Replace("@idUser", follow.idUser.ToString());
+                        data = data.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
+                        data = data.Replace("@birth", Math.Round(epochDate, 0).ToString());
+                        data = data.Replace("@modified", Math.Round(epochDate, 0).ToString());
+                        data = data.Replace("@revision", follow.csys_revision.ToString());
+                        data = data.Replace("@deleted", follow.csys_deleted.ToString());
+
+                        builderData.Append(data);
+                    }
+
+                    builderData.Append("],");
+                    json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
+                    json = json.Replace("@Data", builderData.ToString());
+
+                    ServiceCommunication serviceCom = new ServiceCommunication();
+                    await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
+
+                    await UpdateFollowSynchro();
+
+                    json = follows.Count().ToString();
+                    return json;
+                }
+                else return "0";
+            }
+            catch (TimeoutException timeEx)
+            {
+                throw timeEx;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - SynchronizeFollows: " + e.Message, e);
+            }
+        }
+
+
+        private async Task<bool> UpdateFollowSynchro()
+        {
+            bool _result = false;
+
+            try {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.UpdateFollowSynchro);
+
+                await st.StepAsync();
+
+                _result = true;
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetFollowsToUpdate: " + e.Message, e);
+            }
+
+            return _result;
+        }
+
+        private async Task<List<Follow>> GetFollowsToUpdate()
+        {
+            List<Follow> follows = new List<Follow>();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetFollowsToUpdate);
+
+                while (await st.StepAsync())
+                {
+                    string synchro = st.GetTextAt(6);
+                    char synchroChar = 'N'; 
+                    if(synchro.Length > 0) synchroChar = synchro.ToCharArray(0,1)[0];
+                    follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
+                }
+                
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetFollowsToUpdate: " + e.Message, e);
+            }
+            return follows;
         }
         
         #endregion

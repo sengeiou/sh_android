@@ -34,11 +34,6 @@ namespace Bagdad.Utils
         public const int SERCOM_PARAM_TIME_LINE_OFFSET_PAG = 20;
         public const int SERCOM_PARAM_TIME_LINE_FIRST_CHARGE = 50;
 
-        //SynchroTypes
-        public const int ST_UPLOAD_ONLY = 0;
-        public const int ST_DOWNLOAD_ONLY = 1;
-        public const int ST_FULL_SYNCHRO = 2;
-
         #endregion
 
         public const String CONST_FOLLOWING = "following";

@@ -451,7 +451,7 @@ namespace Bagdad.Models
                                 "\"entity\": \"Shot\"" +
                             "}}]}";
 
-                String Data = "\"data\": [{" +
+                String data = "\"data\": [{" +
                                 "\"idShot\": null," +
                                 "\"idUser\": @idUser," +
                                 "\"comment\": \"@comment\"," +
@@ -472,17 +472,17 @@ namespace Bagdad.Models
                 json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
 
                 //ops
-                Data = Data.Replace("@idUser", this.idUser.ToString());
-                Data = Data.Replace("@comment", this.comment);
-                Data = Data.Replace("@birth", Math.Round(epochDate, 0).ToString());
-                Data = Data.Replace("@modified", Math.Round(epochDate, 0).ToString());
-                Data = Data.Replace("@revision", "0");
-                Data = Data.Replace("@deleted", "null");
+                data = data.Replace("@idUser", this.idUser.ToString());
+                data = data.Replace("@comment", this.comment);
+                data = data.Replace("@birth", Math.Round(epochDate, 0).ToString());
+                data = data.Replace("@modified", Math.Round(epochDate, 0).ToString());
+                data = data.Replace("@revision", "0");
+                data = data.Replace("@deleted", "null");
 
 
 
                 json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
-                json = json.Replace("@Data", Data);
+                json = json.Replace("@Data", data);
 
                 ServiceCommunication serviceCom = new ServiceCommunication();
                 await serviceCom.SendDataToServer(Constants.SERCOM_TB_SHOT, json);
@@ -495,7 +495,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Shot - SynchronizeSubscriptions: " + e.Message, e);
+                throw new Exception("Shot - SynchronizeShot: " + e.Message, e);
             }
         }
 

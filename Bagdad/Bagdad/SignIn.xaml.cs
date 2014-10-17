@@ -36,7 +36,7 @@ namespace Bagdad
                             //Call by email
                             if (await util.LogInByEmail(txbUser.Text, pbPassword.Password))
                             {
-                                App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.FULL);
+                                App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, ServiceCommunication.enumSynchroTables.FULL);
                                 NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
                             }
                         }
@@ -56,7 +56,7 @@ namespace Bagdad
                                 //Call by userName
                                 if (await util.LogInByUserName(txbUser.Text, pbPassword.Password))
                                 {
-                                    App.UpdateServices(Bagdad.Utils.Constants.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.FULL);
+                                    App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, ServiceCommunication.enumSynchroTables.FULL);
                                     NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
                                 }
                             }

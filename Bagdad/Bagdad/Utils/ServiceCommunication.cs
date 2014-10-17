@@ -17,7 +17,12 @@ namespace Bagdad.Utils
 
         public enum enumSynchroTables
         {
-            FULL = 0, SHOTS = 1
+            FULL = 0, SHOTS = 1, FOLLOW = 2
+        }
+
+        public enum enumTypeSynchro
+        {
+            ST_UPLOAD_ONLY = 0, ST_DOWNLOAD_ONLY = 1, ST_FULL_SYNCHRO = 2
         }
 
         public int nChanges = 0;    //Número de cambios provocador por la sincro
@@ -62,7 +67,11 @@ namespace Bagdad.Utils
                     listTables.Add(Constants.SERCOM_TB_SHOT);
                     break;
                 case enumSynchroTables.SHOTS:
+                    listTables.Add(Constants.SERCOM_TB_FOLLOW);
                     listTables.Add(Constants.SERCOM_TB_SHOT);
+                    break;
+                case enumSynchroTables.FOLLOW:
+                    listTables.Add(Constants.SERCOM_TB_FOLLOW);
                     break;
             }
         }
@@ -100,14 +109,14 @@ namespace Bagdad.Utils
                                 total = 0;
                                 if (listTables.Contains(Table.Entity))
                                 {
-                                    if (Table.Direction.Equals("Both") && (SynchroType == Constants.ST_UPLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO))
+                                    if (Table.Direction.Equals("Both") && (SynchroType == enumTypeSynchro.ST_UPLOAD_ONLY || SynchroType == enumTypeSynchro.ST_FULL_SYNCHRO))
                                     {
                                         Debug.WriteLine("SUBIENDO: " + Table.Entity);
                                         string sText = await UpdateServer(Table.Entity);
                                         Debug.WriteLine(sText);
                                     }
 
-                                    if (SynchroType == Constants.ST_DOWNLOAD_ONLY || SynchroType == Constants.ST_FULL_SYNCHRO)
+                                    if (SynchroType == enumTypeSynchro.ST_DOWNLOAD_ONLY || SynchroType == enumTypeSynchro.ST_FULL_SYNCHRO)
                                     {
                                         Debug.WriteLine("DESCARGANDO: " + Table.Entity);
                                         double date = await gm.getMaxModificationDateOf(Table.Entity);
@@ -174,6 +183,11 @@ namespace Bagdad.Utils
                         json = await shot.SynchronizeShot();
                         result = "\t Sincronizado: " + entity + "\n";
                         break;
+                    case Constants.SERCOM_TB_FOLLOW:
+                        Follow follow = new Follow();
+                        json = await follow.SynchronizeFollows();
+                        result = "\t Sincronizado: " + entity + "\n\t\t" + json + " follows synchronizados.";
+                        break;
                     default:
                         result = "\t NOT DONE YET: " + entity + "\n";
                         break;
@@ -229,20 +243,20 @@ namespace Bagdad.Utils
         /// </summary>
         private int? synchroType;
 
-        private int SynchroType
+        private enumTypeSynchro SynchroType
         {
             get
             {
-                if (synchroType == null) return 2;
-                else return (int)synchroType;
+                if (synchroType == null) return enumTypeSynchro.ST_UPLOAD_ONLY;
+                else return (enumTypeSynchro)synchroType;
             }
         }
 
-        public void SetSynchroType(int Type)
+        public void SetSynchroType(enumTypeSynchro _type)
         {
-            if (Type >= Constants.ST_UPLOAD_ONLY && Type <= Constants.ST_FULL_SYNCHRO)
+            if (_type >= enumTypeSynchro.ST_UPLOAD_ONLY && _type <= enumTypeSynchro.ST_FULL_SYNCHRO)
             {
-                synchroType = Type;
+                synchroType = (int)_type;
             }
             else
             {

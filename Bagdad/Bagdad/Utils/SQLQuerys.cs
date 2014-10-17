@@ -61,7 +61,7 @@ namespace Bagdad.Utils
 
         #region FOLLOW
 
-        public const String InsertFollowData = "INSERT INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+        public const String InsertFollowData = "INSERT OR REPLACE INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
         public const String InsertOrReplaceFollowData = "INSERT OR REPLACE INTO Follow (idUser, idUserFollowed, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idUserFollowed, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
@@ -84,6 +84,10 @@ namespace Bagdad.Utils
         public const String GetActualNumOfFollowings = "SELECT numFollowings FROM User WHERE idUser = @idUser";
 
         public const String EditNumOfFollowings = "UPDATE USER SET numFollowings = @numFollowings WHERE idUser = @idUser";
+
+        public const String GetFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S'";
+
+        public const String UpdateFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S'";
 
         #endregion
 
