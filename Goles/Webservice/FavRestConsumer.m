@@ -696,7 +696,7 @@
     NSArray *ops = @[operation];
     
     //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(searchResponseWithStatus:andError:andUsers:)];
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(searchResponseWithStatus:andError:andUsers:needToPaginate:)];
     
     //Create full data structure
     if (req && ops) {
@@ -704,22 +704,22 @@
         [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
             
             if (!error && delegateRespondsToProtocol)
-                [FavGeneralDAO searchParser:data onCompletion:^(BOOL status, NSError *error, NSArray *data) {
+                [FavGeneralDAO searchParser:data onCompletion:^(BOOL status, NSError *error, NSArray *data,int needToPaginate) {
                     
                     if (!error && status && data.count > 0)
-                        [delegate searchResponseWithStatus:YES andError:nil andUsers:data];
+                        [delegate searchResponseWithStatus:YES andError:nil andUsers:data needToPaginate:needToPaginate];
                     else
-                        [delegate searchResponseWithStatus:YES andError:error andUsers:nil];
+                        [delegate searchResponseWithStatus:YES andError:error andUsers:nil needToPaginate:needToPaginate];
                 }];
             else if (delegateRespondsToProtocol){
-                [delegate searchResponseWithStatus:NO andError:error andUsers:nil];
+                [delegate searchResponseWithStatus:NO andError:error andUsers:nil needToPaginate:nil];
                 DLog(@"Request error:%@",error);
             }
         }];
     }else if (delegateRespondsToProtocol){
         
         NSError *reqError = [NSError errorWithDomain:@"Request error" code:1 userInfo:operation];
-        [delegate searchResponseWithStatus:NO andError:reqError andUsers:nil];
+        [delegate searchResponseWithStatus:NO andError:reqError andUsers:nil needToPaginate:nil];
         DLog(@"No valid req structure created");
     }
     

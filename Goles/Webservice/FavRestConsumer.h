@@ -24,7 +24,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 
 - (void)parserResponseFromLoginWithStatus:(BOOL)status andError:(NSError *)error;
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error;
-- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray;
+- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray needToPaginate:(BOOL)pagination;
 
 @end
 

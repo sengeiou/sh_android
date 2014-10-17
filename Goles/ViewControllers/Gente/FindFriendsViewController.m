@@ -240,7 +240,7 @@
 
 #pragma mark - Search Response method
 //------------------------------------------------------------------------------
-- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray{
+- (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray needToPaginate:(BOOL)pagination{
     
     if (usersArray.count > 0) {
         
@@ -259,16 +259,17 @@
         
         [self reloadTableWithAnimation];
         
-        [self addLoadMoreCell];
+        if (pagination)
+            [self addLoadMoreCell];
         
-    }else if (!error) {
+    }else if (!error && usersArray.count == 0) {
         refreshTable = YES;
         [self.followingUsers removeAllObjects];
     
     }else if (error){
         refreshTable = NO;
-        
         [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
+        
     }else{
         refreshTable = NO;
         
