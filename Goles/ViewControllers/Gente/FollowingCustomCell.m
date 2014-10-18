@@ -28,8 +28,8 @@
     
     self.lblNickName.text = user.userName;
     self.lblfavouriteTeamName.text = user.favoriteTeamName;
-    self.following.layer.cornerRadius = 5.0f;
-    self.follow.layer.cornerRadius = 5.0f;
+//    self.following.layer.cornerRadius = 5.0f;
+//    self.follow.layer.cornerRadius = 5.0f;
 
     if  (searching || !peopleTable){
         if ([[UserManager singleton] checkIfImFollowingUser:user])
@@ -75,11 +75,11 @@
     
     self.follow.hidden = NO;
     self.following.hidden = YES;
-    
-    [self.follow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
-    self.follow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-    self.follow.layer.borderWidth = 1.0f;
-    self.follow.layer.masksToBounds = YES;
+//    
+//    [self.follow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
+//    self.follow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+//    self.follow.layer.borderWidth = 1.0f;
+//    self.follow.layer.masksToBounds = YES;
 }
 
 //------------------------------------------------------------------------------
@@ -88,16 +88,16 @@
     self.following.hidden = NO;
     self.follow.hidden = YES;
 
-    [self.following setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-   
-    NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
-    [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
-    [self.following setAttributedTitle:buttonString forState:UIControlStateNormal];
-   
-    self.following.layer.borderWidth = 0.0f;
-    self.following.layer.masksToBounds = NO;
-    
-    [self.following setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
+//    [self.following setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//   
+//    NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+//    [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
+//    [self.following setAttributedTitle:buttonString forState:UIControlStateNormal];
+//   
+//    self.following.layer.borderWidth = 0.0f;
+//    self.following.layer.masksToBounds = NO;
+//    
+//    [self.following setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 }
 
 

@@ -15,15 +15,15 @@
 -(id) initWithCoder:(NSCoder *)aDecoder {
     
     if ((self = [super initWithCoder:aDecoder])) {
-
-        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
-        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
-        [self setAttributedTitle:buttonString forState:UIControlStateNormal];
-        
-        self.layer.borderWidth = 0.0f;
-        self.layer.masksToBounds = YES;
-        
-        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
+        [self setImage:[UIImage imageNamed:@"Icon_Following"] forState:UIControlStateNormal];
+//        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+//        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
+//        [self setAttributedTitle:buttonString forState:UIControlStateNormal];
+//        
+//        self.layer.borderWidth = 0.0f;
+//        self.layer.masksToBounds = YES;
+//        
+//        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
         
     }
     return self;
@@ -34,27 +34,28 @@
     [super setHighlighted:highlighted];
     
     if (highlighted) {
-        self.backgroundColor = [UIColor whiteColor];
-        
-        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
-        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(0, buttonString.length)];
-        [self setAttributedTitle:buttonString forState:UIControlStateHighlighted];
-
-        self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-        self.layer.borderWidth = 1.0f;
-        self.layer.masksToBounds = YES;
-        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateHighlighted];
+        [self setImage:[UIImage imageNamed:@"Icon_Following_Pressed"] forState:UIControlStateHighlighted];
+//        self.backgroundColor = [UIColor whiteColor];
+//        
+//        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+//        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:NSMakeRange(0, buttonString.length)];
+//        [self setAttributedTitle:buttonString forState:UIControlStateHighlighted];
+//
+//        self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
+//        self.layer.borderWidth = 1.0f;
+//        self.layer.masksToBounds = YES;
+//        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateHighlighted];
 
     }  else{
-        
-        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
-        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
-        [self setAttributedTitle:buttonString forState:UIControlStateNormal];
-        
-        self.layer.borderWidth = 0.0f;
-        self.layer.masksToBounds = YES;
-        
-        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
+            [self setImage:[UIImage imageNamed:@"Icon_Following"] forState:UIControlStateNormal];
+//        NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
+//        [buttonString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSForegroundColorAttributeName:[UIColor whiteColor]} range:NSMakeRange(0, buttonString.length)];
+//        [self setAttributedTitle:buttonString forState:UIControlStateNormal];
+//        
+//        self.layer.borderWidth = 0.0f;
+//        self.layer.masksToBounds = YES;
+//        
+//        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
 
     }
   
