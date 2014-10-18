@@ -7,14 +7,7 @@
 //
 
 #import "FollowingCustomCell.h"
-#import "UIImageView+AFNetworking.h"
-#import "Fav24Colors.h"
 #import "UserManager.h"
-#import "CoreDataManager.h"
-#import "Follow.h"
-#import <QuartzCore/QuartzCore.h>
-#import "TimeLineUtilities.h"
-#import "Utils.h"
 #import "DownloadImage.h"
 
 @implementation FollowingCustomCell
@@ -28,8 +21,6 @@
     
     self.lblNickName.text = user.userName;
     self.lblfavouriteTeamName.text = user.favoriteTeamName;
-//    self.following.layer.cornerRadius = 5.0f;
-//    self.follow.layer.cornerRadius = 5.0f;
 
     if  (searching || !peopleTable){
         if ([[UserManager singleton] checkIfImFollowingUser:user])
@@ -87,7 +78,9 @@
    
     self.following.hidden = NO;
     self.follow.hidden = YES;
-
+    [self.following setImage:[UIImage imageNamed:@"Icon_Following"] forState:UIControlStateNormal];
+    [self.following setImage:[UIImage imageNamed:@"Icon_Following_Pressed"] forState:UIControlStateHighlighted];
+    
 //    [self.following setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //   
 //    NSMutableAttributedString *buttonString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@" FOLLOWING", nil)];
