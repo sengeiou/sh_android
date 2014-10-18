@@ -233,7 +233,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.txtView.layer.cornerRadius = 8.0f;
 	self.txtView.layer.borderWidth = 0.3;
 	self.txtView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-
+    self.txtView.textContainerInset = UIEdgeInsetsMake(2, 2, 0, 0);
     //Disable keyboard intro key
     if (self.textComment.length == 0)
         self.txtView.enablesReturnKeyAutomatically = YES;

@@ -130,11 +130,6 @@
     self.btnUnfollow.hidden = YES;
     self.btnEditProfile.hidden = NO;
 
-//    [self.btnEditProfile setTitle:NSLocalizedString(@"EDIT PROFILE", nil) forState:UIControlStateNormal];
-//
-//    self.btnEditProfile.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-//    self.btnEditProfile.layer.borderWidth = 1.0f;
-//    self.btnEditProfile.layer.masksToBounds = YES;
 }
 
 //------------------------------------------------------------------------------
@@ -143,13 +138,7 @@
     self.btnFollow.hidden = YES;
     self.btnEditProfile.hidden = YES;
     self.btnUnfollow.hidden = NO;
-//
-//    [self.btnUnfollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
-//
-//    self.btnUnfollow.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
-//    self.btnUnfollow.layer.borderWidth = 1.0f;
-//    self.btnUnfollow.layer.masksToBounds = YES;
-//   [self.btnUnfollow addTarget:self action:@selector(followUser) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 //------------------------------------------------------------------------------
@@ -158,10 +147,7 @@
     self.btnFollow.hidden = NO;
     self.btnEditProfile.hidden = YES;
     self.btnUnfollow.hidden = YES;
-//    
-//    [self.btnFollow setTitle:NSLocalizedString(@" FOLLOWING", nil) forState:UIControlStateNormal];
-//    [self.btnFollow setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
-//    [self.btnFollow addTarget:self action:@selector(unFollowUser) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 #pragma mark - FOLLOW AND UNFOLLOW ACTIONS

@@ -9,6 +9,7 @@
 
 @interface TimeLineViewController : UIViewController <UITextViewDelegate,UITableViewDataSource,UITableViewDelegate>
 
+//Publixc interface for Unit Testing
 -(BOOL) controlRepeatedShot:(NSString *)texto;
 -(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text;
 -(NSString *)countCharacters:(NSUInteger) lenght;
