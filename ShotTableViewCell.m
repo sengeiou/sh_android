@@ -123,7 +123,7 @@
         
         //PHOTO
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:kLabelVerticalPhotoInsets];
-        [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
+//        [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:kLabelHorizontalPhotoInsets];
         [self.imgPhoto autoSetDimensionsToSize:CGSizeMake(48, 48)];
         

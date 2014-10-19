@@ -313,34 +313,34 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 ////------------------------------------------------------------------------------
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-	
-    Shot *shot = self.arrayShots[indexPath.row];
-    
-    NSString *reuseIdentifier = CellIdentifier;
-    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
-    if (!cell) {
-        cell = [[ShotTableViewCell alloc] init];
-        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
-    }
-    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-    [cell addTarget:self action:@selector(goProfile:)];
-
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-    
-    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
- 
-    [cell setNeedsLayout];
-    [cell layoutIfNeeded];
-    
-     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    
-    height += 1;
-    
-    return height;
-
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+//	
+//    Shot *shot = self.arrayShots[indexPath.row];
+//    
+//    NSString *reuseIdentifier = CellIdentifier;
+//    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
+//    if (!cell) {
+//        cell = [[ShotTableViewCell alloc] init];
+//        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
+//    }
+//    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+//    [cell addTarget:self action:@selector(goProfile:)];
+//
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
+//    
+//    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+// 
+//    [cell setNeedsLayout];
+//    [cell layoutIfNeeded];
+//    
+//     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+//    
+//    height += 1;
+//    
+//    return height;
+//
+//}
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -377,23 +377,26 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // If you are just returning a constant value from this method, you should instead just set the table view's
-    // estimatedRowHeight property (in viewDidLoad or similar), which is even faster as the table view won't
-    // have to call this method for every row in the table view.
-    //
-    // Only implement this method if you have row heights that vary by extreme amounts and you notice the scroll indicator
-    // "jumping" as you scroll the table view when using a constant estimatedRowHeight. If you do implement this method,
-    // be sure to do as little work as possible to get a reasonably-accurate estimate.
-    
-    // NOTE for iOS 7.0.x ONLY, this bug has been fixed by Apple as of iOS 7.1:
-    // A constraint exception will be thrown if the estimated row height for an inserted row is greater
-    // than the actual height for that row. In order to work around this, we need to return the actual
-    // height for the the row when inserting into the table view - uncomment the below 3 lines of code.
-    // See: https://github.com/caoimghgin/TableViewCellWithAutoLayout/issues/6
-    //    if (self.isInsertingRow) {
-    //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
-    //    }
-     return UITableViewAutomaticDimension;
+//    // If you are just returning a constant value from this method, you should instead just set the table view's
+//    // estimatedRowHeight property (in viewDidLoad or similar), which is even faster as the table view won't
+//    // have to call this method for every row in the table view.
+//    //
+//    // Only implement this method if you have row heights that vary by extreme amounts and you notice the scroll indicator
+//    // "jumping" as you scroll the table view when using a constant estimatedRowHeight. If you do implement this method,
+//    // be sure to do as little work as possible to get a reasonably-accurate estimate.
+//    
+//    // NOTE for iOS 7.0.x ONLY, this bug has been fixed by Apple as of iOS 7.1:
+//    // A constraint exception will be thrown if the estimated row height for an inserted row is greater
+//    // than the actual height for that row. In order to work around this, we need to return the actual
+//    // height for the the row when inserting into the table view - uncomment the below 3 lines of code.
+//    // See: https://github.com/caoimghgin/TableViewCellWithAutoLayout/issues/6
+//    //    if (self.isInsertingRow) {
+//    //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
+//    //    }
+//     return UITableViewAutomaticDimension;
+
+	return 80;
+
 }
 
 //------------------------------------------------------------------------------

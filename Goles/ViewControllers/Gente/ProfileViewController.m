@@ -62,6 +62,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+	[super viewWillAppear:animated];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 
 }

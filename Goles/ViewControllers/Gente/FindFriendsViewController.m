@@ -60,6 +60,9 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+	
+	[super viewWillAppear:animated];
+	
     [self addSearchNavBar];
     
     self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
