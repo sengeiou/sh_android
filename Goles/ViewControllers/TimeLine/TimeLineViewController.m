@@ -23,6 +23,7 @@
 #import "TimeLineUtilities.h"
 #import "InfoTableViewController.h"
 #import "WritingText.h"
+#import "WatchingMenu.h"
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -37,14 +38,12 @@
 }
 
 @property (nonatomic,weak)      IBOutlet    UITableView                 *timelineTableView;
-@property (nonatomic,weak)      IBOutlet    UIButton                    *btnWatching;
-@property (nonatomic,weak)      IBOutlet    UIButton                    *btnIgnore;
-@property (nonatomic,weak)      IBOutlet    WritingText                  *writingTextBox;
+@property (nonatomic,weak)      IBOutlet    WritingText                 *writingTextBox;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewNotShots;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewToDisableTextField;
-@property (nonatomic,weak)      IBOutlet    UIView                      *viewOptions;
+@property (nonatomic,weak)      IBOutlet    WatchingMenu                *watchingMenu;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewTextField;
 @property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewPositionConstraint;
@@ -58,8 +57,6 @@
 @property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                NSString                    *textComment;
 
-@property (weak, nonatomic) IBOutlet UILabel *lblMatch;
-@property (weak, nonatomic) IBOutlet UILabel *lblNowPlaying;
 @property (weak, nonatomic) IBOutlet UILabel *lblNoShots;
 @property (weak, nonatomic) IBOutlet UILabel *lblShare;
 
@@ -79,9 +76,9 @@ static NSString *CellIdentifier = @"shootCell";
     [super viewDidLoad];
         
     //For Alpha version
-    self.viewOptions.hidden = YES;
+    self.watchingMenu.hidden = YES;
     
-    [self textLocalizable];
+    [self textLocalizableLabels];
     [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
     
     //Set titleView
@@ -94,9 +91,7 @@ static NSString *CellIdentifier = @"shootCell";
  
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-    
-    self.offscreenCells = [NSMutableDictionary dictionary];
-    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+	
     [self setupTimeLineTableView];
     
 }
@@ -104,12 +99,9 @@ static NSString *CellIdentifier = @"shootCell";
 
 #pragma mark - Localizable Strings
 //------------------------------------------------------------------------------
--(void)textLocalizable{
+-(void)textLocalizableLabels{
     
     [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
-    [self.btnWatching setTitle:NSLocalizedString(@"I'm Watching", nil) forState:UIControlStateNormal];
-    [self.btnIgnore setTitle:NSLocalizedString(@"Ignore", nil) forState:UIControlStateNormal];
-    self.lblNowPlaying.text = NSLocalizedString(@"Now Playing", nil);
     [self.startShootingFirstTime setTitle:NSLocalizedString(@"Start Shooting", nil) forState:UIControlStateNormal];
     self.lblNoShots.text =  NSLocalizedString(@"No Shots", nil);
     self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
@@ -127,6 +119,7 @@ static NSString *CellIdentifier = @"shootCell";
 
 }
 
+//------------------------------------------------------------------------------
 -(void)getTimeLastSyncornized{
     
     NSNumber *lastSync = [[CoreDataManager singleton] getLastSyncroTime];
@@ -155,8 +148,9 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)setupTimeLineTableView {
     
-//    [self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
-    
+	self.offscreenCells = [NSMutableDictionary dictionary];
+	[self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
+	
     //Get shots from CoreData
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     
@@ -229,6 +223,7 @@ static NSString *CellIdentifier = @"shootCell";
 - (void)setTextViewForShotCreation {
 
     self.writingTextBox.delegate = self;
+#warning self.textComment is always 0 on viewDidLoad, isn't it? So maybe we can move the enablesReturnKeyAutomatically to the WritingTExt class init
     if (self.textComment.length == 0)
         self.writingTextBox.enablesReturnKeyAutomatically = YES;
 
@@ -290,7 +285,7 @@ static NSString *CellIdentifier = @"shootCell";
 
     //For Beta version only in iphone 4
 //    [UIView animateWithDuration:0.25 animations:^{
-//        self.viewOptions.alpha = 0.0;
+//        self.watchingMenu.alpha = 0.0;
 //    }];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
 }
@@ -299,13 +294,13 @@ static NSString *CellIdentifier = @"shootCell";
 //
 ////------------------------------------------------------------------------------
 //- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    return self.viewOptions.frame.size.height;
+//    return self.watchingMenu.frame.size.height;
 //}
 //
 ////------------------------------------------------------------------------------
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
 //    
-//    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.viewOptions.frame.size.height)];
+//    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.watchingMenu.frame.size.height)];
 //    header.backgroundColor = [UIColor clearColor];
 //
 //    return header;
@@ -717,7 +712,7 @@ static NSString *CellIdentifier = @"shootCell";
 
 #pragma mark - UIScrollViewDelegate
 //------------------------------------------------------------------------------
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
 
     // For Beta version and only iphone 4
 
@@ -725,10 +720,10 @@ static NSString *CellIdentifier = @"shootCell";
 //    
 //   if (currentOffset == 0)
 //        [UIView animateWithDuration:0.25 animations:^{
-//            self.viewOptions.alpha = 1.0;
+//            self.watchingMenu.alpha = 1.0;
 //            self.viewTextField.alpha = 1.0;
 //        }];
-}
+//}
 
 //------------------------------------------------------------------------------
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -741,7 +736,7 @@ static NSString *CellIdentifier = @"shootCell";
         NSLog(@"");
         // For Beta version and only iphone 4
 //        [UIView animateWithDuration:0.2 animations:^{
-//            self.viewOptions.alpha = 0.0;
+//            self.watchingMenu.alpha = 0.0;
 //            self.viewTextField.alpha = 0.0; // For Beta version and only iphone 4
 //        }];
     else{
@@ -754,7 +749,7 @@ static NSString *CellIdentifier = @"shootCell";
 //                 self.viewTextField.alpha = 1.0;
 //             }];
 //         
-//         }else if (scrollView.contentOffset.y > self.viewOptions.frame.size.height){
+//         }else if (scrollView.contentOffset.y > self.watchingMenu.frame.size.height){
 //             [UIView animateWithDuration:0.2 animations:^{
 //                 self.viewTextField.alpha = 0.0;
 //             

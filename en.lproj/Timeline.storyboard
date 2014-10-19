@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BFE-dc-Rj9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BFE-dc-Rj9">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="175" width="600" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Shots" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4j-im-41b">
-                                        <rect key="frame" x="249" y="50" width="102.5" height="29"/>
+                                        <rect key="frame" x="249" y="50" width="103" height="29"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="29" id="MfJ-z3-loA"/>
                                         </constraints>
@@ -31,7 +31,7 @@
                                         <color key="highlightedColor" red="0.58039215686274503" green="0.58039215686274503" blue="0.58039215686274503" alpha="1" colorSpace="calibratedRGB"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share with friends about football." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hnE-HA-emO">
-                                        <rect key="frame" x="174" y="90" width="251.5" height="20"/>
+                                        <rect key="frame" x="174" y="90" width="252" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="aQU-my-fSz"/>
                                         </constraints>
@@ -132,7 +132,7 @@
                                     <rect key="frame" x="0.0" y="20" width="800" height="780"/>
                                 </variation>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAK-0x-gdD">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAK-0x-gdD" customClass="WatchingMenu">
                                 <rect key="frame" x="-4" y="20" width="608" height="84"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lha-vI-5wj">
@@ -187,7 +187,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now playing" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KF1-ZY-zUZ">
-                                        <rect key="frame" x="60" y="20" width="74.5" height="20"/>
+                                        <rect key="frame" x="60" y="20" width="75" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="JPg-yx-nGw"/>
                                         </constraints>
@@ -219,6 +219,12 @@
                                     <constraint firstItem="lha-vI-5wj" firstAttribute="bottom" secondItem="hAK-0x-gdD" secondAttribute="bottom" id="vhw-Hn-NYf"/>
                                     <constraint firstAttribute="trailing" secondItem="RkQ-hv-BdO" secondAttribute="trailing" constant="-20" id="yC7-hb-WZC"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="buttonIgnore" destination="qN5-Nb-Req" id="8SR-Mo-a5f"/>
+                                    <outlet property="buttonWatching" destination="lha-vI-5wj" id="nNs-a4-6c0"/>
+                                    <outlet property="labelMatchName" destination="UAX-w4-gsh" id="dp7-6l-xlq"/>
+                                    <outlet property="labelNowPlaying" destination="KF1-ZY-zUZ" id="nds-sD-YRw"/>
+                                </connections>
                             </view>
                             <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eCR-lh-3pe">
                                 <rect key="frame" x="-4" y="0.0" width="608" height="600"/>
@@ -320,20 +326,16 @@
                         <outlet property="backgroundView" destination="eCR-lh-3pe" id="F2H-bq-rjZ"/>
                         <outlet property="bottomViewHeightConstraint" destination="fxF-sH-uaZ" id="ZNi-ez-RgK"/>
                         <outlet property="bottomViewPositionConstraint" destination="Cfi-LK-l7y" id="fDB-b5-KXg"/>
-                        <outlet property="btnIgnore" destination="qN5-Nb-Req" id="WTp-ck-T8h"/>
                         <outlet property="btnShoot" destination="41t-je-TRg" id="KtR-gA-HMn"/>
-                        <outlet property="btnWatching" destination="lha-vI-5wj" id="EXj-Zw-0tJ"/>
                         <outlet property="charactersLeft" destination="OCp-RM-5b3" id="cyY-Vx-Ywl"/>
-                        <outlet property="lblMatch" destination="UAX-w4-gsh" id="cmy-E1-Nnf"/>
                         <outlet property="lblNoShots" destination="D4j-im-41b" id="jBx-sb-L05"/>
-                        <outlet property="lblNowPlaying" destination="KF1-ZY-zUZ" id="tNf-IU-3N5"/>
                         <outlet property="lblShare" destination="hnE-HA-emO" id="IIB-vA-bG3"/>
                         <outlet property="startShootingFirstTime" destination="8nY-Ek-GNA" id="5Wv-tP-VHD"/>
                         <outlet property="timelineTableView" destination="cfX-1I-iII" id="Z50-EZ-goo"/>
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
-                        <outlet property="viewOptions" destination="hAK-0x-gdD" id="2pE-52-jOg"/>
                         <outlet property="viewTextField" destination="HR5-eu-cfc" id="cZd-QG-Qcf"/>
                         <outlet property="viewToDisableTextField" destination="6Kp-9S-nop" id="4R7-l1-kZQ"/>
+                        <outlet property="watchingMenu" destination="hAK-0x-gdD" id="OES-d8-1sp"/>
                         <outlet property="writingTextBox" destination="zPp-71-7UU" id="SeW-2I-skh"/>
                         <segue destination="Nyt-NO-Lqg" kind="show" identifier="pushInfoView" id="qH9-BV-8IT"/>
                     </connections>

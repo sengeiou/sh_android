@@ -37,6 +37,7 @@
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
+		AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AA2E444519F40F55000A52DE /* WatchingMenu.m */; };
 		AA623CDF1998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CE11998A7F200A942A9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE01998A7F200A942A9 /* CoreGraphics.framework */; };
 		AA623CE31998A7F200A942A9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE21998A7F200A942A9 /* UIKit.framework */; };
@@ -183,6 +184,8 @@
 		AA241F85199CFB5200897D6D /* _SyncControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _SyncControl.m; sourceTree = "<group>"; };
 		AA241F87199CFB6400897D6D /* SyncManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncManager.h; sourceTree = "<group>"; };
 		AA241F88199CFB6400897D6D /* SyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncManager.m; sourceTree = "<group>"; };
+		AA2E444419F40F55000A52DE /* WatchingMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WatchingMenu.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.h"; sourceTree = SOURCE_ROOT; };
+		AA2E444519F40F55000A52DE /* WatchingMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WatchingMenu.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.m"; sourceTree = SOURCE_ROOT; };
 		AA623CDB1998A7F200A942A9 /* Shootr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shootr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CDE1998A7F200A942A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AA623CE01998A7F200A942A9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -370,6 +373,8 @@
 			children = (
 				9EB33D1319F2D807001A0151 /* WritingText.h */,
 				9EB33D1419F2D807001A0151 /* WritingText.m */,
+				AA2E444419F40F55000A52DE /* WatchingMenu.h */,
+				AA2E444519F40F55000A52DE /* WatchingMenu.m */,
 			);
 			name = "Custom classes";
 			sourceTree = "<group>";
@@ -1020,6 +1025,7 @@
 				AAE0EF7319E529EB00F32FF7 /* TimeLineUtilities.m in Sources */,
 				AACA544319C057C000E39D94 /* AFURLResponseSerialization.m in Sources */,
 				9EB33D0B19F2C5BE001A0151 /* FollowButtonProfile.m in Sources */,
+				AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */,
 				9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */,
 				AA72640C19D0505A0067A39D /* _Follow.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
