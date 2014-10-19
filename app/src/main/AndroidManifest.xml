@@ -88,8 +88,7 @@
 
         <activity
           android:name=".ui.activities.FindFriendsActivity"
-          android:label="@string/activity_find_friends_title"
-          android:theme="@style/GolesTheme.ActionBarSearch">
+          android:label="@string/activity_find_friends_title">
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"

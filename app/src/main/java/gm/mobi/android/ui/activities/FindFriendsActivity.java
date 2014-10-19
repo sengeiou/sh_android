@@ -98,20 +98,20 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         resultsListView.addFooterView(progressView, null, false);
 
         new ListViewScrollObserver(resultsListView).setOnScrollUpAndDownListener(
-          new ListViewScrollObserver.OnListViewScrollListener() {
-              @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                new ListViewScrollObserver.OnListViewScrollListener() {
+                    @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 /* no-op */
-              }
+                    }
 
-              @Override public void onScrollIdle() {
-                  int lastVisiblePosition = resultsListView.getLastVisiblePosition();
-                  int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
-                  boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
-                  if (shouldStartLoadingMore && hasMoreItemsToLoad) {
-                      makeNextRemoteSearch();
-                  }
-              }
-          });
+                    @Override public void onScrollIdle() {
+                        int lastVisiblePosition = resultsListView.getLastVisiblePosition();
+                        int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
+                        boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                        if (shouldStartLoadingMore && hasMoreItemsToLoad) {
+                            makeNextRemoteSearch();
+                        }
+                    }
+                });
     }
 
     private View getLoadingView() {

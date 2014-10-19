@@ -3,13 +3,13 @@ package gm.mobi.android.ui.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -163,7 +163,7 @@ public class MainActivity extends BaseSignedInActivity {
         //TODO generalizar esto, dejando la responsabilidad de qué hacer en el propio item
         if (selectedItem instanceof MenuAdapter.FragmentMenuItem) {
             MenuAdapter.FragmentMenuItem fragmentMenuItem =
-                (MenuAdapter.FragmentMenuItem) selectedItem;
+                    (MenuAdapter.FragmentMenuItem) selectedItem;
             replaceShownFragment(fragmentMenuItem.fragmentClass, fragmentMenuItem.extras);
             setScreenTitle(fragmentMenuItem.title);
             setActiveDrawerPosition(position);
@@ -207,11 +207,11 @@ public class MainActivity extends BaseSignedInActivity {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         drawerToggle = new ActionBarDrawerToggle(
-            this,                  /* host Activity */
-            drawerLayout,         /* DrawerLayout object */
-            R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-            R.string.drawer_open,  /* "open drawer" description */
-            R.string.drawer_close  /* "close drawer" description */
+                this,                  /* host Activity */
+                drawerLayout,         /* DrawerLayout object */
+                getToolbar(),  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
         ) {
 
             /** Called when a drawer has settled in a completely closed state. */
@@ -236,7 +236,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void lockMenuDrawer(boolean lock) {
         drawerLayout.setDrawerLockMode(
-            lock ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
+                lock ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
         getSupportActionBar().setDisplayHomeAsUpEnabled(!lock);
     }
 
@@ -266,9 +266,9 @@ public class MainActivity extends BaseSignedInActivity {
 
     private List<MenuAdapter.MenuItem> getDrawerMenu() {
         MenuAdapter.MenuItem[] menuItems = {
-            new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
-            new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, PeopleFragment.class),
-            new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
+                new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
+                new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, PeopleFragment.class),
+                new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
         };
         return Arrays.asList(menuItems);
     }

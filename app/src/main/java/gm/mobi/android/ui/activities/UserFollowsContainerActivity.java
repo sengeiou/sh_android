@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
+
 import gm.mobi.android.R;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
@@ -30,7 +33,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         if (!restoreSessionOrLogin()) return;
 
         setContainerContent(R.layout.activity_fragment_container);
-
+        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
         getIntentExtras();
         setScreenTitle();
 
@@ -46,6 +49,17 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         if (userId == 0L) {
             Timber.e("Consulted following list of user id %d", userId);
             finish();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
