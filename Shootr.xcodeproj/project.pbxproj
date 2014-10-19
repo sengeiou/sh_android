@@ -12,6 +12,7 @@
 		9EB33D0B19F2C5BE001A0151 /* FollowButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D0A19F2C5BE001A0151 /* FollowButtonProfile.m */; };
 		9EB33D0E19F2C5D9001A0151 /* EditButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D0D19F2C5D9001A0151 /* EditButtonProfile.m */; };
 		9EB33D1119F2C659001A0151 /* FollowingButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D1019F2C659001A0151 /* FollowingButtonProfile.m */; };
+		9EB33D1519F2D807001A0151 /* WritingText.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D1419F2D807001A0151 /* WritingText.m */; };
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
 		A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A52B9A0D19E688A6007D8A67 /* DownloadImage.m */; };
@@ -140,6 +141,8 @@
 		9EB33D0D19F2C5D9001A0151 /* EditButtonProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditButtonProfile.m; path = Buttons/EditButtonProfile.m; sourceTree = "<group>"; };
 		9EB33D0F19F2C659001A0151 /* FollowingButtonProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FollowingButtonProfile.h; path = Buttons/FollowingButtonProfile.h; sourceTree = "<group>"; };
 		9EB33D1019F2C659001A0151 /* FollowingButtonProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FollowingButtonProfile.m; path = Buttons/FollowingButtonProfile.m; sourceTree = "<group>"; };
+		9EB33D1319F2D807001A0151 /* WritingText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WritingText.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WritingText.h"; sourceTree = SOURCE_ROOT; };
+		9EB33D1419F2D807001A0151 /* WritingText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WritingText.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WritingText.m"; sourceTree = SOURCE_ROOT; };
 		A50CCD8219C8889B005369E6 /* Conection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conection.h; sourceTree = "<group>"; };
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
@@ -362,6 +365,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9EB33D1219F2D7BE001A0151 /* Custom classes */ = {
+			isa = PBXGroup;
+			children = (
+				9EB33D1319F2D807001A0151 /* WritingText.h */,
+				9EB33D1419F2D807001A0151 /* WritingText.m */,
+			);
+			name = "Custom classes";
+			sourceTree = "<group>";
+		};
 		A526039019DD7F9D00375FB1 /* Webservice */ = {
 			isa = PBXGroup;
 			children = (
@@ -718,6 +730,7 @@
 		AA623E881998D78600A942A9 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				9EB33D1219F2D7BE001A0151 /* Custom classes */,
 				A59EECDA19D1759F00D011C5 /* CustomCells */,
 				AACA545319C08E4A00E39D94 /* TimeLineViewController.h */,
 				AACA545419C08E4A00E39D94 /* TimeLineViewController.m */,
@@ -986,6 +999,7 @@
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */,
+				9EB33D1519F2D807001A0151 /* WritingText.m in Sources */,
 				AA72641519D422570067A39D /* CleanManager.m in Sources */,
 				AA74B40C19DEA3EC00EF90D5 /* FollowingCustomCell.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,

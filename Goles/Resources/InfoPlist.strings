@@ -74,7 +74,7 @@
 "Retry" = "Retry";
 
 //POST NEW MESSAGE
-"What's Up?" = "Comment?";
+"Comment" = "Comment";
 
 //CONNECTION
 "The network connection was lost" = "The network connection was lost";

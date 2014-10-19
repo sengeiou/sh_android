@@ -154,7 +154,7 @@
                                             <constraint firstAttribute="width" constant="0.40000000000000002" id="eXb-Uh-2UI"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="RkQ-hv-BdO">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="RkQ-hv-BdO">
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.40000000000000002" id="Nc3-hf-FCK"/>
                                         </constraints>
@@ -234,7 +234,7 @@
                                             <constraint firstAttribute="height" constant="0.40000000000000002" id="yF1-do-eh8"/>
                                         </constraints>
                                     </imageView>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" text="Comment" translatesAutoresizingMaskIntoConstraints="NO" id="zPp-71-7UU">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" text="Comment" translatesAutoresizingMaskIntoConstraints="NO" id="zPp-71-7UU" userLabel="Writing Text Box" customClass="WritingText">
                                         <rect key="frame" x="10" y="9" width="530" height="58"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -330,11 +330,11 @@
                         <outlet property="lblShare" destination="hnE-HA-emO" id="IIB-vA-bG3"/>
                         <outlet property="startShootingFirstTime" destination="8nY-Ek-GNA" id="5Wv-tP-VHD"/>
                         <outlet property="timelineTableView" destination="cfX-1I-iII" id="Z50-EZ-goo"/>
-                        <outlet property="txtView" destination="zPp-71-7UU" id="GhD-aY-fpt"/>
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
                         <outlet property="viewOptions" destination="hAK-0x-gdD" id="2pE-52-jOg"/>
                         <outlet property="viewTextField" destination="HR5-eu-cfc" id="cZd-QG-Qcf"/>
                         <outlet property="viewToDisableTextField" destination="6Kp-9S-nop" id="4R7-l1-kZQ"/>
+                        <outlet property="writingTextBox" destination="zPp-71-7UU" id="SeW-2I-skh"/>
                         <segue destination="Nyt-NO-Lqg" kind="show" identifier="pushInfoView" id="qH9-BV-8IT"/>
                     </connections>
                 </viewController>

@@ -22,6 +22,7 @@
 #import <CoreText/CoreText.h>
 #import "TimeLineUtilities.h"
 #import "InfoTableViewController.h"
+#import "WritingText.h"
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -38,7 +39,7 @@
 @property (nonatomic,weak)      IBOutlet    UITableView                 *timelineTableView;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnWatching;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnIgnore;
-@property (nonatomic,weak)      IBOutlet    UITextView                  *txtView;
+@property (nonatomic,weak)      IBOutlet    WritingText                  *writingTextBox;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewNotShots;
@@ -81,7 +82,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.viewOptions.hidden = YES;
     
     [self textLocalizable];
-    [self addPlaceHolder];
+    [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
     
     //Set titleView
     self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
@@ -227,16 +228,10 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)setTextViewForShotCreation {
 
-    self.txtView.delegate = self;
-    self.txtView.scrollsToTop = NO;
-    self.txtView.clipsToBounds = YES;
-    self.txtView.layer.cornerRadius = 8.0f;
-	self.txtView.layer.borderWidth = 0.3;
-	self.txtView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-    self.txtView.textContainerInset = UIEdgeInsetsMake(2, 2, 0, 0);
-    //Disable keyboard intro key
+    self.writingTextBox.delegate = self;
     if (self.textComment.length == 0)
-        self.txtView.enablesReturnKeyAutomatically = YES;
+        self.writingTextBox.enablesReturnKeyAutomatically = YES;
+
 }
 
 //------------------------------------------------------------------------------
@@ -477,14 +472,15 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-    self.txtView.backgroundColor = [Fav24Colors backgroundTextViewSendShot];
+//    self.writingTextBox.backgroundColor = [Fav24Colors backgroundTextViewSendShot];
+    [self.writingTextBox setWritingTextViewWhenSendShot];
     self.viewToDisableTextField.hidden = NO;
 
     //self.txtView.userInteractionEnabled= NO;
-    [self.txtView resignFirstResponder];
+//    [self.writingTextBox resignFirstResponder];
     self.orientation = NO;
     [self keyboardHide:nil];
-    self.txtView.textColor = [Fav24Colors textTextViewSendShot];
+//    self.writingTextBox.textColor = [Fav24Colors textTextViewSendShot];
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
     self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
@@ -496,7 +492,7 @@ static NSString *CellIdentifier = @"shootCell";
 -(IBAction)startSendShot:(id)sender{
     
     [self keyboardShow:nil];
-    [self.txtView becomeFirstResponder];
+    [self.writingTextBox becomeFirstResponder];
 }
 
 
@@ -576,7 +572,7 @@ static NSString *CellIdentifier = @"shootCell";
 }
 //------------------------------------------------------------------------------
 -(void)changecolortextview{
-    self.txtView.textColor = [UIColor lightGrayColor];
+    self.writingTextBox.textColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - ShotCreationProtocol response
@@ -586,7 +582,7 @@ static NSString *CellIdentifier = @"shootCell";
     if (status && !error){
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
         lengthTextField = 0;
-        [self addPlaceHolder];
+        [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
         rows = 0;
         self.charactersLeft.hidden = YES;
         [self reloadShotsTableWithAnimation:nil];
@@ -600,14 +596,6 @@ static NSString *CellIdentifier = @"shootCell";
     }
 }
 
-//------------------------------------------------------------------------------
--(void)addPlaceHolder{
-    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
-    self.txtView.text = placeHolder;
-    self.txtView.textColor = [Fav24Colors textWhatsUpViewSendShot];
-    self.txtView.backgroundColor = [UIColor whiteColor];
-
-}
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
@@ -655,7 +643,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     
-    [self controlCharactersShot:self.txtView.text];
+    [self controlCharactersShot:self.writingTextBox.text];
 
     if (![self controlRepeatedShot:self.textComment])
         
@@ -678,8 +666,7 @@ static NSString *CellIdentifier = @"shootCell";
                             handler:^(UIAlertAction * action)
                             {
                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                                self.txtView.backgroundColor = [UIColor whiteColor];
-                                self.txtView.textColor = [UIColor blackColor];
+                                [self.writingTextBox setWritingTextViewWhenShotRepeated];
                                 self.btnShoot.enabled = YES;
                                 self.viewToDisableTextField.hidden = YES;
                             }];
@@ -723,17 +710,8 @@ static NSString *CellIdentifier = @"shootCell";
     self.btnShoot.enabled = YES;
     self.viewToDisableTextField.hidden = YES;
     self.orientation = NO;
-    //                [self keyboardHide:nil];
-    self.txtView.backgroundColor = [UIColor whiteColor];
     
-    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
-    
-    if ([self.txtView.text isEqualToString:placeHolder])
-    
-        self.txtView.textColor = [Fav24Colors textWhatsUpViewSendShot];
-    else
-
-        self.txtView.textColor = [UIColor blackColor];
+    [self.writingTextBox setWritingTextViewWhenCancelTouched];
 
 }
 
@@ -791,19 +769,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 -(void)keyboardShow:(NSNotification*)notification{
     
-    self.txtView.textColor = [UIColor blackColor];
-
-    self.txtView.backgroundColor = [UIColor whiteColor];
-    
-//    if (rows >= 3)
-//        self.charactersLeft.hidden = NO;
-//    else
-//        self.charactersLeft.hidden = YES;
-    
-    NSString *placeHolder = NSLocalizedString (@"What's Up?", nil);
-    
-    if ([self.txtView.text isEqualToString:placeHolder])
-        self.txtView.text = nil;
+    [self.writingTextBox setWritingTextviewWhenKeyboardShown];
     
     [self darkenBackgroundView];
 
@@ -848,11 +814,8 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    NSLog(@"%lu", (unsigned long)self.txtView.text.length);
-    NSLog(@"%lu", (unsigned long)lengthTextField);
-
     if (lengthTextField == 0){
-         [self addPlaceHolder];
+         [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
     }
     self.orientation = NO;
 }
@@ -869,7 +832,7 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (!self.orientation){
 
-        [self.txtView resignFirstResponder];
+        [self.writingTextBox resignFirstResponder];
 
         
         self.backgroundView.hidden = YES;
@@ -878,12 +841,12 @@ static NSString *CellIdentifier = @"shootCell";
         self.timelineTableView.scrollEnabled = YES;
             
         if (lengthTextField == 0){
-            [self addPlaceHolder];
+            [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
             
             rows = 0;
             self.charactersLeft.hidden = YES;
         }else
-            self.txtView.textColor = [UIColor blackColor];
+            self.writingTextBox.textColor = [UIColor blackColor];
 
         if (rows <= 2) {
             self.bottomViewHeightConstraint.constant = 75;
@@ -892,7 +855,7 @@ static NSString *CellIdentifier = @"shootCell";
                 [self.view layoutIfNeeded];
             }];
         }else{
-            self.bottomViewHeightConstraint.constant = ((rows-2)*self.txtView.font.lineHeight)+75;
+            self.bottomViewHeightConstraint.constant = ((rows-2)*self.writingTextBox.font.lineHeight)+75;
 //            self.bottomViewHeightConstraint.constant = (rows*18)+75;
             self.bottomViewPositionConstraint.constant = 0.0f;
             [UIView animateWithDuration:0.25f animations:^{
