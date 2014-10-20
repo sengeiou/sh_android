@@ -346,10 +346,7 @@ static NSString *CellIdentifier = @"shootCell";
 	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
-    
-    cell.imgPhoto.layer.cornerRadius = cell.imgPhoto.frame.size.width / 2;
-    cell.imgPhoto.clipsToBounds = YES;
-    
+  
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
     
