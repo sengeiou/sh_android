@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -185,7 +186,7 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<ShotVO> shots = new ArrayList<>(count);
+        List<ShotVO> shots = new CopyOnWriteArrayList();
         cursor.moveToFirst();
         do {
             ShotVO shotVO = new ShotVO();

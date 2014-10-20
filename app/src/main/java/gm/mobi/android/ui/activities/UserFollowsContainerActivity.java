@@ -33,7 +33,6 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         if (!restoreSessionOrLogin()) return;
 
         setContainerContent(R.layout.activity_fragment_container);
-        getActionBarToolbar().setNavigationIcon(R.drawable.ic_up);
         getIntentExtras();
         setScreenTitle();
 

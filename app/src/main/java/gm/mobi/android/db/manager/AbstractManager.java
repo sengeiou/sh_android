@@ -53,13 +53,15 @@ public abstract class AbstractManager {
         Cursor c = null;
         long res = 0;
         try{
-            c = db.query(tableName,projection,where, args, null, null, null );
-            if(c.getCount()>0){
-                res = db.update(tableName,contentValues,where,args);
-            }else{
-                res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            synchronized (db) {
+                c = db.query(tableName, projection, where, args, null, null, null);
+                if (c.getCount() > 0) {
+                    res = db.update(tableName, contentValues, where, args);
+                } else {
+                    res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
+                c.close();
             }
-            c.close();
         }catch(Exception e){
             Timber.e("[UPDATE EXCEPTION], insertOrUpdate in table %s with exception %s and message %s",tableName,e, e.getMessage());
         }finally {

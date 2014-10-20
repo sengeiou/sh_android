@@ -34,7 +34,6 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     private Long userId;
     private User currentUser;
-    private int doIFollowHim;
     private UserVOMapper userVOMapper;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,

@@ -39,7 +39,9 @@ public class FollowManager extends AbstractManager{
             if (contentValues.get(CSYS_DELETED) != null) {
                 deleteFollow(follow);
             } else {
-                db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                synchronized (db){
+                    db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                }
             }
             insertInSync();
         }

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
 
 public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEvent>{
@@ -39,14 +40,14 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
 
     @Override protected void run() throws SQLException, IOException {
         List<ShotVO> updatedTimeline = new ArrayList<>();
-        List<Shot> newShots = new ArrayList<>();
+        List<Shot> newShots = new CopyOnWriteArrayList<>();
         Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
         if(getFollowingIds().size()>0) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
-            updatedTimeline = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         }
+        updatedTimeline = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }
 

@@ -137,14 +137,12 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
-        user = event.getResult();
         setUserInfo(user);
     }
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        user.setRelationship(event.isDoIFollowHim());
-        setUserInfo(user);
+        setUserInfo(event.getResult());
     }
 
     private void setTitle(String title) {

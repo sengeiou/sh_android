@@ -34,6 +34,7 @@ import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.model.UserVO;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -222,6 +223,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         followUser(user);
     }
 
+
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
         unfollowUser(user);
@@ -229,10 +231,16 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        if(isThereInternetConnection()){
-            startJob();
-        }
+            UserVO userVO = event.getResult();
+            List<UserVO> userVOs = getAdapter().getItems();
+            int i = userVOs.indexOf(userVO);
+            userVOs.remove(userVO);
+            getAdapter().removeItems();
+            userVOs.add(i,userVO);
+            getAdapter().setItems(userVOs);
 
+
+            getAdapter().notifyDataSetChanged();
     }
 
     public boolean isThereInternetConnection(){

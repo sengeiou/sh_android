@@ -74,13 +74,15 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
                 if(followUser.getIdUser()!=null)
                     userToCreate = userVOMapper.userByUserVO(user);
                 userManager.saveUser(userToCreate);
-                postSuccessfulEvent(new FollowUnFollowResultEvent(followUser, doIFollowHim));
+                user.setRelationship(doIFollowHim);
+                postSuccessfulEvent(new FollowUnFollowResultEvent(user));
                 break;
             case UserDtoFactory.UNFOLLOW_TYPE:
                 if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
                     Follow follow = unfollowUserinDB();
                     doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(follow,doIFollowHim));
+                    user.setRelationship(doIFollowHim);
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(user));
                 }else{
                     //TODO. Check if we aren't in the good followType
                     return;

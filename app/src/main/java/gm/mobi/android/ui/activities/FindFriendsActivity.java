@@ -31,6 +31,7 @@ import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
+import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
@@ -322,10 +323,13 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
-        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         User currentUser = GolesApplication.get(this).getCurrentUser();
+        GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
         job.init(currentUser,userVO, followType);
         jobManager.addJobInBackground(job);
+        GetFollowUnfollowUserJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        job2.init(currentUser,userVO, followType);
+        jobManager.addJobInBackground(job2);
     }
 
     public void followUser(UserVO user){
@@ -339,7 +343,17 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        startSearch();
+        UserVO userVO = event.getResult();
+        List<UserVO> userVOs = adapter.getItems();
+        int i = userVOs.indexOf(userVO);
+        userVOs.remove(userVO);
+        adapter.removeItems();
+        userVOs.add(i,userVO);
+        adapter.setItems(userVOs);
+
+
+        adapter.notifyDataSetChanged();
+
     }
 
 

@@ -37,8 +37,13 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
     }
 
     public void addItems(List<UserVO> users) {
+        this.users = new ArrayList<>();
         this.users.addAll(users);
         notifyDataSetChanged();
+    }
+
+    public void removeItems(){
+        this.users = null;
     }
 
     public boolean isFollowButtonVisible() {
