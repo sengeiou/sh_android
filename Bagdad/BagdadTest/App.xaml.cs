@@ -7,6 +7,10 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using BagdadTest.Resources;
+using Windows.Storage;
+using SQLiteWinRT;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace BagdadTest
 {
@@ -54,13 +58,14 @@ namespace BagdadTest
                 // y consumirán energía de la batería cuando el usuario no esté usando el teléfono.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
         }
 
         // Código para ejecutar cuando la aplicación se inicia (p. ej. a partir de Inicio)
         // Este código no se ejecutará cuando la aplicación se reactive
-        private void Application_Launching(object sender, LaunchingEventArgs e)
+        private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            await Utils.PrepareDB.initializeDatabase();
+            InitializeDB();
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -218,6 +223,25 @@ namespace BagdadTest
 
                 throw;
             }
+        }
+
+        public static Database db;
+
+        public static ManualResetEvent DBLoaded = new ManualResetEvent(false);
+        public async void InitializeDB()
+        {
+            db = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
+            await db.OpenAsync();
+            DBLoaded.Set();
+        }
+
+        public static Task<SQLiteWinRT.Database> GetDatabaseAsync()
+        {
+            return Task.Run(() =>
+            {
+                DBLoaded.WaitOne(-1);
+                return db;
+            });
         }
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Integration\Initialization.cs" />
     <Compile Include="Models\FollowTests.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -84,6 +85,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DataBaseHelper.cs" />
+    <Compile Include="Utils\PrepareDB.cs" />
+    <Compile Include="ViewModels\FollowsViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -101,6 +105,7 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="shooter.db" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="MSTestFramework, Version=11.0" />
@@ -128,6 +133,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Silverlight4\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\wp8\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -148,6 +156,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\sqllite\trunk\SQLiteWinRTPhone.vcxproj">
+      <Project>{4ae0193f-5986-404e-87b6-1ec9301d16d8}</Project>
+      <Name>SQLiteWinRTPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bagdad\Bagdad.csproj">
       <Project>{bbf2a5f0-fea1-4d3f-b9a3-b12397bee02f}</Project>
       <Name>Bagdad</Name>
