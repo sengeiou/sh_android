@@ -267,7 +267,7 @@
         
     }else if (!error && usersArray.count == 0) {
         refreshTable = YES;
-        [self.followingUsers removeAllObjects];
+       //[self.followingUsers removeAllObjects];
     
     }else if (error){
         refreshTable = NO;

@@ -103,6 +103,9 @@
 //------------------------------------------------------------------------------
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
+    
     UIApplication *app = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:0];
     
@@ -116,10 +119,7 @@
 
 //------------------------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-	
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-
-    
+	    
     User *userCurrent = [[UserManager sharedInstance] getActiveUser];
     
     if (userCurrent){

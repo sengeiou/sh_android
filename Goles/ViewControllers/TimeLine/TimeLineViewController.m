@@ -287,7 +287,10 @@ static NSString *CellIdentifier = @"shootCell";
 //    [UIView animateWithDuration:0.25 animations:^{
 //        self.watchingMenu.alpha = 0.0;
 //    }];
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
+    //[[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
+    
+    [self.refreshControl endRefreshing];
+
 }
 
 #pragma mark - UITableViewDelegate
@@ -547,8 +550,9 @@ static NSString *CellIdentifier = @"shootCell";
     else if(!status && !refresh && !isShot && !returningFromBackground){
         //        self.orientation = NO;
         [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
-    } else
-        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
+    }
+//    } else
+//        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
     
     returningFromBackground = NO;
     
@@ -697,8 +701,8 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 -(void) removePullToRefresh{
     
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-    [self.timelineTableView reloadData];
+   // self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+   // [self.timelineTableView reloadData];
     [self.refreshControl endRefreshing];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "Followbutton.h"
+#import "Fav24Colors.h"
 
 @implementation Followbutton
 
@@ -31,7 +32,8 @@
         UIImage *unSeletedImage = [UIImage imageNamed:@"Icon_NotFollowing_Pressed"];
         unSeletedImage = [unSeletedImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self setImage:unSeletedImage forState:UIControlStateHighlighted];
-    
+        self.tintColor = [Fav24Colors iosSevenBlue];
+
     }else {
      
         UIImage *unSeletedImage = [UIImage imageNamed:@"Icon_NotFollowing"];
