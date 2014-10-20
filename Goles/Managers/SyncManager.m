@@ -88,7 +88,7 @@
 //TODO Move all process in this method to a block
     
     //Array of all entities that send data to server
-    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER - K_COREDATA_DEVICE
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW, K_COREDATA_DEVICE]; //K_COREDATA_USER
     
     for (id entity in entitiesToSynchro){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K != %@",kJSON_SYNCRONIZED, @"s"];
