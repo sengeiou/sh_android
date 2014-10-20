@@ -180,6 +180,8 @@ static NSString *CellIdentifier = @"shootCell";
     
     [self setLocalNotificationObservers];
 }
+
+//------------------------------------------------------------------------------
 -(void)viewDidAppear:(BOOL)animated {
 
     self.navigationItem.titleView.hidden = NO;
@@ -231,8 +233,11 @@ static NSString *CellIdentifier = @"shootCell";
     
     self.timelineTableView.hidden = NO;
     self.viewNotShots.hidden = YES;
-    self.timelineTableView.delegate = self;
-    self.timelineTableView.dataSource = self;
+    
+    if (self.timelineTableView.delegate == nil) {
+        self.timelineTableView.delegate = self;
+        self.timelineTableView.dataSource = self;
+    }
 }
 
 #pragma mark - FUTURE METHODS
