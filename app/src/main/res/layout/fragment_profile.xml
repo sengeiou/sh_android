@@ -146,6 +146,7 @@
           android:layout_marginLeft="8dp"
           android:layout_toRightOf="@+id/profile_name"
           android:textColor="@color/gray_60"
+          android:visibility="gone"
           tools:text="rank 34k" />
 
         <TextView
