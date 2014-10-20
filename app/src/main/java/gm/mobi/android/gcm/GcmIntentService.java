@@ -42,18 +42,26 @@ public class GcmIntentService extends IntentService {
     @Inject UserManager userManager;
     @Inject BagdadService service;
     @Inject ShotVOMapper shotVOMapper;
+    private SQLiteDatabase database;
 
     public GcmIntentService() {
         super("GCM Service");
     }
 
+    @Override public void onCreate() {
+        super.onCreate();
+        GolesApplication.get(this).inject(this);
+        database = openHelper.getReadableDatabase();
+        userManager.setDataBase(database);
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        database.close();
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        GolesApplication.get(this).inject(this);
-        SQLiteDatabase db = openHelper.getReadableDatabase();
-        userManager.setDataBase(db);
-
         Bundle extras = intent.getExtras();
         String text = extras.getString("t");
         Timber.d("Received notification intent: %s", text);
@@ -78,7 +86,6 @@ public class GcmIntentService extends IntentService {
             Timber.e(e, "Error creating notification");
             notificationManager.sendErrorNotification(e.getMessage());
         }
-        db.close();
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
@@ -86,8 +93,12 @@ public class GcmIntentService extends IntentService {
         Long idUser = parameters.getLong("idUser");
         Shot shot = service.getShotById(idShot);
         User user = userManager.getUserByIdUser(idUser);
-        ShotVO shotVO = shotVOMapper.toVO(user, null, shot, 0L);
-        notificationManager.sendNewShotNotification(shotVO);
+        if (shot != null && user != null) {
+            ShotVO shotVO = shotVOMapper.toVO(user, null, shot, 0L);
+            notificationManager.sendNewShotNotification(shotVO);
+        } else {
+            Timber.e("Shot or User null recived, can't show notifications :(");
+        }
     }
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {
