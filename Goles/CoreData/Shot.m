@@ -1,4 +1,4 @@
- #import "Shot.h"
+#import "Shot.h"
 #import "CoreDataManager.h"
 #import "User.h"
 

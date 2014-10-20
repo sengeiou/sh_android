@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -280,7 +280,7 @@
                                             </state>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nick" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBy-mi-FaP">
-                                            <rect key="frame" x="68" y="7" width="483" height="21"/>
+                                            <rect key="frame" x="68" y="7" width="462" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="rzw-op-pjn"/>
                                             </constraints>
@@ -289,7 +289,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FavouriteTeamName" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHl-cH-0HG">
-                                            <rect key="frame" x="68" y="26" width="483" height="21"/>
+                                            <rect key="frame" x="68" y="26" width="462" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="EdJ-aT-s02"/>
                                             </constraints>
@@ -298,11 +298,11 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6RI-lt-Kek" userLabel="Following Button" customClass="Followingbutton">
-                                            <rect key="frame" x="561" y="11" width="28" height="28"/>
+                                            <rect key="frame" x="540" y="1" width="52" height="48"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="28" id="6sj-aQ-rqT"/>
-                                                <constraint firstAttribute="width" constant="28" id="fnw-E7-0KJ"/>
+                                                <constraint firstAttribute="height" constant="48" id="6sj-aQ-rqT"/>
+                                                <constraint firstAttribute="width" constant="52" id="fnw-E7-0KJ"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -314,12 +314,12 @@
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-64-REm" userLabel="Follow Button" customClass="Followbutton">
-                                            <rect key="frame" x="561" y="11" width="28" height="28"/>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-64-REm" userLabel="Follow Button" customClass="Followbutton">
+                                            <rect key="frame" x="547" y="0.0" width="52" height="48"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="28" id="89M-ZN-sXa"/>
-                                                <constraint firstAttribute="width" constant="28" id="IPD-KD-yjj"/>
+                                                <constraint firstAttribute="height" constant="48" id="89M-ZN-sXa"/>
+                                                <constraint firstAttribute="width" constant="52" id="IPD-KD-yjj"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -335,12 +335,12 @@
                                     <constraints>
                                         <constraint firstItem="jOk-cS-Nsp" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-8" id="1gY-wR-Rau"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="AXX-kg-k9G"/>
-                                        <constraint firstItem="6RI-lt-Kek" firstAttribute="trailing" secondItem="yZH-QS-KQQ" secondAttribute="trailingMargin" constant="-3" id="Ibn-kR-mUb"/>
+                                        <constraint firstItem="6RI-lt-Kek" firstAttribute="trailing" secondItem="yZH-QS-KQQ" secondAttribute="trailingMargin" id="Ibn-kR-mUb"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstAttribute="centerY" secondItem="RlL-64-REm" secondAttribute="centerY" id="Mmx-tJ-5xo"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="RlL-64-REm" secondAttribute="trailing" constant="3" id="Nsi-ub-J9G"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="RlL-64-REm" secondAttribute="trailing" id="Nsi-ub-J9G"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="aqE-cJ-1eP"/>
                                         <constraint firstItem="TBy-mi-FaP" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-1" id="cuu-Bd-De3"/>
                                         <constraint firstItem="RlL-64-REm" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="dET-08-rIc"/>

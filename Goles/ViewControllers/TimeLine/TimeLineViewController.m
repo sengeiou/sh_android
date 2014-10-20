@@ -190,13 +190,23 @@ static NSString *CellIdentifier = @"shootCell";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    self.navigationItem.titleView = nil;
-
     [self updateCurrentTitleView];
+
+    self.navigationItem.titleView.hidden = YES;
+
+
+   [self performSelector:@selector(appearViewTitle) withObject:nil afterDelay:0.35];
+//    [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:2 forBarMetrics:UIBarMetricsLandscapePhone];
+//    self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
+    //[self restrictRotation:NO];
     
-    //self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-    //[self performSelector:@selector(updateCurrentTitleView) withObject:nil];
     [self setLocalNotificationObservers];
+}
+
+-(void)appearViewTitle{
+    self.navigationItem.titleView.hidden = NO;
+
 }
 
 //------------------------------------------------------------------------------
@@ -973,12 +983,13 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)updateCurrentTitleView {
 
+    self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
     if (self.navigationItem.titleView.subviews.count > 1) {
         UILabel *actualLabel = [self.navigationItem.titleView.subviews objectAtIndex:1];
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleViewWithText:actualLabel.text];
     }else
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-
 }
 
 @end

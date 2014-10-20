@@ -61,6 +61,11 @@
     
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    self.navigationItem.titleView.hidden = YES;
+
+}
+
 -(void)viewWillAppear:(BOOL)animated{
 	[super viewWillAppear:animated];
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
