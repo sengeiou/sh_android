@@ -138,7 +138,8 @@
                 Device *device = [[UserManager sharedInstance] getDevice];
                 
                 NSLog(@"DEVICE: %@", device.idDevice);
-                
+                NSLog(@"USER: %@", [[UserManager sharedInstance]getUserId]);
+
                 
                 NSMutableDictionary *mutDict = [[NSMutableDictionary alloc] initWithDictionary:@{kJSON_TOKEN: device.token,kJSON_DEVICE_OSVERSION:device.osVer, kJSON_DEVICE_MODEL: device.model, kJSON_ID_USER: [[UserManager sharedInstance]getUserId], kJSON_DEVICE_PLATFORM: device.platform,  K_WS_OPS_DELETE_DATE: [NSNull null],K_WS_OPS_BIRTH_DATE:device.csys_birth,K_WS_OPS_UPDATE_DATE:device.csys_modified,K_WS_OPS_REVISION:device.csys_revision}];
                 

@@ -74,6 +74,7 @@
     
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 
+    [self.usersTable reloadData];
 }
 
 
