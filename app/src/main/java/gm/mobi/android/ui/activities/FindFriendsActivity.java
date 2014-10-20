@@ -339,7 +339,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        startSearch();
+        UserVO userVO = event.getResult();
+
     }
 
 

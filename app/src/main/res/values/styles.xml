@@ -3,16 +3,11 @@
     <style name="None"></style>
 
     <!-- Base application themes. -->
-    <style name="GolesTheme" parent="Theme.AppCompat.Light">
+    <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:editTextBackground">@drawable/edit_text_background</item>
         <item name="android:textColorLink">@color/links</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/primary</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="windowActionBar">false</item>
     </style>
 
     <style name="GolesTheme.NoActionBar">
@@ -31,22 +26,18 @@
     <style name="ActionBar.Solid.Goles" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <!--<item name="android:background">@drawable/ab_solid_goles</item>-->
         <item name="android:background">@color/primary</item>
-        <item name="android:windowActionBar">false</item>
         <item name="android:icon">@drawable/ic_ab_icon</item>
-        <item name="android:textColor">@color/white</item>
-
     </style>
 
     <style name="GolesTheme.ActionBarSearch">
         <item name="android:actionBarWidgetTheme">@style/ActionBarWidgets</item>
-        <item name="android:windowActionBar">false</item>
     </style>
 
     <style name="ActionBarWidgets" parent="GolesTheme">
-        <!--<item name="searchViewSearchIcon">@drawable/ic_action_search</item>
+        <item name="searchViewSearchIcon">@drawable/ic_action_search</item>
         <item name="searchViewCloseIcon">@drawable/ic_action_close</item>
-        <item name="searchViewTextField">@drawable/abc_textfield_search_default_holo_dark</item>-->
-        <item name="android:autoCompleteTextViewStyle">@style/ActionBarSearchText</item>
+        <item name="searchViewTextField">@drawable/abc_textfield_search_default_holo_dark</item>
+        <item name="searchViewAutoCompleteTextView">@style/ActionBarSearchText</item>
     </style>
 
     <style name="ActionBarSearchText" parent="ActionBar.Solid.Goles">
