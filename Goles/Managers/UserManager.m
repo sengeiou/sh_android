@@ -174,15 +174,15 @@
 }
 
 //------------------------------------------------------------------------------
--(void)setNumberFollowings:(NSNumber *)numberFollowing ofUser:(User *) user{
+-(void)setNumberFollowings:(NSNumber *)numberFollowing{
+    
+    User *user = [[UserManager sharedInstance]getActiveUser];
     
     if (numberFollowing && user){
-        user.numFollowing = numberFollowing;
+        [user setNumFollowing: numberFollowing];
         [[CoreDataManager singleton] saveContext];
     }
 }
-
-
 
 #pragma mark - DEVICE
 //------------------------------------------------------------------------------

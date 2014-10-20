@@ -228,7 +228,6 @@
 		[followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
 	}
-
 }
 
 #pragma mark - Conection response methods
@@ -238,9 +237,11 @@
     if(refresh)
         [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
     else if(!status){ //REFRESH VIEW IN MODE OFFLINE
-            
-        self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
-        [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
+    
+        if ([self.selectedUser.idUser isEqual:[[UserManager sharedInstance] getUserId]]) {
+            self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
+            [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
+        }
     }
 }
 
@@ -250,7 +251,7 @@
     if (status && !error){
         if ([entityClass isSubclassOfClass:[User class]]){
             self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
-            [self dataFillView];
+            [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
         }
     }
 }

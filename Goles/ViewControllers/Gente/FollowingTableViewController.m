@@ -100,13 +100,15 @@
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersList[btn.tag];
     
+    User *activeUser = [[UserManager sharedInstance] getActiveUser];
+    
     BOOL followActionSuccess;
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]){
         followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
-        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[self.selectedUser.numFollowing intValue] + 1] ofUser:self.selectedUser];
+        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
     }else{
         followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-        [[UserManager sharedInstance]setNumberFollowings: [NSNumber numberWithInt:[self.selectedUser.numFollowing intValue] - 1] ofUser:self.selectedUser];
+        [[UserManager sharedInstance]setNumberFollowings: [NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
 
     }
     if (followActionSuccess)
