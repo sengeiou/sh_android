@@ -1248,7 +1248,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
-				PROVISIONING_PROFILE = "d69a6a1c-95af-47fb-a23c-07bae7443522";
+				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
@@ -1273,7 +1273,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
-				PROVISIONING_PROFILE = "d69a6a1c-95af-47fb-a23c-07bae7443522";
+				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
