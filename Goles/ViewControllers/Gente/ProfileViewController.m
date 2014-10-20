@@ -98,8 +98,8 @@
     
     self.lblName.text = self.selectedUser.name;
     
-    NSString *rank =  NSLocalizedString(@"rank", nil);
-    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
+//    NSString *rank =  NSLocalizedString(@"rank", nil);
+//    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
     
     self.lblTeamBio.text = [NSString stringWithFormat:@"%@, %@",self.selectedUser.favoriteTeamName, self.selectedUser.bio];
     [self.lblTeamBio sizeToFit];
@@ -143,7 +143,6 @@
     self.btnUnfollow.hidden = YES;
     self.btnEditProfile.hidden = NO;
     [self.btnEditProfile addTarget:self action:@selector(editProfile) forControlEvents:UIControlEventTouchUpInside];
-
 }
 
 //------------------------------------------------------------------------------
@@ -171,7 +170,6 @@
     BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
     if (followActionSuccess)
         [self configureFollowButton];
-    
 }
 
 //------------------------------------------------------------------------------
@@ -180,7 +178,6 @@
     BOOL unfollowActionSuccess = [[UserManager singleton] stopFollowingUser:self.selectedUser];
     if (unfollowActionSuccess)
         [self configureFollowButton];
-    
 }
 
 //------------------------------------------------------------------------------

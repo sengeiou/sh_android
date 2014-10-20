@@ -143,7 +143,7 @@
         if ([entityClass isSubclassOfClass:[Follow class]])
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]]){
-            [self reloadDataAndTable];
+            [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
         }
     }
 }

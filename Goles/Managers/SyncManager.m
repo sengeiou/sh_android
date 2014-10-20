@@ -74,13 +74,13 @@
 }
 
 -(void)start{
-    [self sendUpdatesToServerWithDelegate:self];
+    [self sendUpdatesToServerWithDelegate:self necessaryDownload:YES];
 
 }
 
 #pragma mark - Upload data request
 //------------------------------------------------------------------------------
-- (void)sendUpdatesToServerWithDelegate:(id)delegate {
+- (void)sendUpdatesToServerWithDelegate:(id)delegate necessaryDownload:(BOOL)necessaryDownload {
     
     NSLog(@"/////////////////////////////////////////////////////");
     NSLog(@"SENDING CONTENT TO SERVER:%@",[NSDate date]);
@@ -169,7 +169,9 @@
             }
         }
     }
-    [self downloadEntitiesProcessingWithDelegate:delegate];
+    
+    if (necessaryDownload)
+        [self downloadEntitiesProcessingWithDelegate:delegate];
 }
 
 #pragma mark - Other request methods

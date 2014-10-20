@@ -190,8 +190,10 @@ static NSString *CellIdentifier = @"shootCell";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    
-   [self updateCurrentTitleView];
+    [self updateCurrentTitleView];
+
+   // [UIBarButtonItem.appearance setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -64) forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setTitleVerticalPositionAdjustment:0 forBarMetrics:UIBarMetricsDefault];
 
     self.navigationItem.titleView.hidden = YES;
     

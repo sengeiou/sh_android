@@ -16,6 +16,7 @@
 #import "Follow.h"
 #import "Conection.h"
 #import "CoreDataManager.h"
+#import "SyncManager.h"
 
 @interface FollowingTableViewController ()
 
@@ -99,18 +100,15 @@
 - (void)followUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersList[btn.tag];
-    
-    User *activeUser = [[UserManager sharedInstance] getActiveUser];
-    
+        
     BOOL followActionSuccess;
-    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]){
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
         followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
-        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
-    }else{
+    else
         followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-        [[UserManager sharedInstance]setNumberFollowings: [NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
+    
+    [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
 
-    }
     if (followActionSuccess)
         [self.usersTable reloadData];
 }

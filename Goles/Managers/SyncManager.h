@@ -46,7 +46,7 @@
  For every entity in array, this method search all the rows that have "csys_synchronized" no equal to "S".
 
  */
-- (void)sendUpdatesToServerWithDelegate:(id)delegate;
+- (void)sendUpdatesToServerWithDelegate:(id)delegate necessaryDownload:(BOOL)necessaryDownload;
 
 - (SyncControl *)getSyncControlForEntity:(NSString *)entity;
 
