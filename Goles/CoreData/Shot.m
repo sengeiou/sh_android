@@ -13,7 +13,7 @@
     
     BOOL insertedCorrectly = [shot setShotValuesWithDictionary:dict];
     if ( !insertedCorrectly ){
-        [[CoreDataManager singleton] deleteObject:shot];
+        [[CoreDataManager singleton] deleteObjectInInsertContext:shot];
         return nil;
     }
     return shot;

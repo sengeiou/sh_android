@@ -154,7 +154,7 @@
     titlelabel.text = NSLocalizedString (@"Timeline", nil);
 
     [titleView addSubview:titlelabel];
-    
+  
     return titleView;
 }
 

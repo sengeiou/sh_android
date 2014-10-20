@@ -239,7 +239,7 @@
 
 //------------------------------------------------------------------------------
 - (void) deleteObject:(NSManagedObject *)object{
-    if (object) [managedObjectInsertContext deleteObject:object];
+    if (object) [managedObjectContext deleteObject:object];
 }
 
 //------------------------------------------------------------------------------

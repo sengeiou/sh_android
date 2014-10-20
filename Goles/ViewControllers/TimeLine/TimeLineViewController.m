@@ -190,20 +190,29 @@ static NSString *CellIdentifier = @"shootCell";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    [self updateCurrentTitleView];
+   
+    //self.navigationController.navigationBar.topItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    
+   [self updateCurrentTitleView];
 
     self.navigationItem.titleView.hidden = YES;
+//
+//
+//    [self performSelector:@selector(appearViewTitle) withObject:nil afterDelay:0.4];
 
+    //    [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:2 forBarMetrics:UIBarMetricsLandscapePhone];
 
-   [self performSelector:@selector(appearViewTitle) withObject:nil afterDelay:0.35];
-//    [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:2 forBarMetrics:UIBarMetricsLandscapePhone];
-//    self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   // self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     //[self restrictRotation:NO];
     
     [self setLocalNotificationObservers];
 }
+-(void)viewDidAppear:(BOOL)animated {
+    //[self updateCurrentTitleView];
+    self.navigationItem.titleView.hidden = NO;
 
+}
 -(void)appearViewTitle{
     self.navigationItem.titleView.hidden = NO;
 
@@ -573,7 +582,8 @@ static NSString *CellIdentifier = @"shootCell";
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
-        [self reloadShotsTable:nil];
+        [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
+        //[self reloadShotsTable:nil];
         moreCells = YES;
     }else if (!refresh){
         moreCells = NO;
@@ -597,7 +607,9 @@ static NSString *CellIdentifier = @"shootCell";
         [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
         rows = 0;
         self.charactersLeft.hidden = YES;
-        [self reloadShotsTableWithAnimation:nil];
+        [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
+
+       // [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
         [self keyboardHide:nil];
@@ -984,10 +996,11 @@ static NSString *CellIdentifier = @"shootCell";
 - (void)updateCurrentTitleView {
 
     self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     if (self.navigationItem.titleView.subviews.count > 1) {
         UILabel *actualLabel = [self.navigationItem.titleView.subviews objectAtIndex:1];
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleViewWithText:actualLabel.text];
+        
     }else
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
