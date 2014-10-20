@@ -17,17 +17,17 @@ namespace Bagdad.Factories
     {
 
 
-        public UserImageManager CreateUserImageManager()
+        public virtual UserImageManager CreateUserImageManager()
         {
             return new UserImageManager();
         }
 
-        public FollowViewModel CreateFollowViewModel()
+        public virtual FollowViewModel CreateFollowViewModel()
         {
             return new FollowViewModel();
         }
 
-        public FollowViewModel CreateNonVisibleFollowViewModel(User _user, BitmapImage _image, bool _followed)
+        public virtual FollowViewModel CreateNonVisibleFollowViewModel(User _user, BitmapImage _image, bool _followed)
         {
             FollowViewModel followVM = new FollowViewModel()
             {
@@ -39,7 +39,7 @@ namespace Bagdad.Factories
             return followVM;
         }
 
-        public FollowViewModel CreateFollowViewModel(User _user, BitmapImage _image, bool _followed)
+        public virtual FollowViewModel CreateFollowViewModel(User _user, BitmapImage _image, bool _followed)
         {
             FollowViewModel followVM = new FollowViewModel()
             {
@@ -57,7 +57,7 @@ namespace Bagdad.Factories
             return followVM;
         }
 
-        public Follow CreateFollow()
+        public virtual Follow CreateFollow()
         {
             return new Follow();
         }

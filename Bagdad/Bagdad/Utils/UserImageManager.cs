@@ -150,7 +150,7 @@ namespace Bagdad.Utils
         /// </summary>
         /// <param name="userID">ID of the image owner</param>
         /// <returns>BitmapImage if image exist, else return null</returns>
-        public BitmapImage GetUserImage(int userID)
+        public virtual BitmapImage GetUserImage(int userID)
         {
             byte[] data;
 

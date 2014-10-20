@@ -68,7 +68,7 @@ namespace Bagdad.Models
             return done;
         }
 
-        public async Task<List<int>> getidUserFollowing()
+        public virtual async Task<List<int>> getidUserFollowing()
         {
             List<int> listOfidUserFollowing = new List<int>();
             try

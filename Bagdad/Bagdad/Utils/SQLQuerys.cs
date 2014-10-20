@@ -87,7 +87,11 @@ namespace Bagdad.Utils
 
         public const String GetFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S'";
 
+        public const String GetUnFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S'"; //TODO: Modificar sentencia!!!!!!!!!!!!!!
+
         public const String UpdateFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S'";
+
+        public const String UpdateUnFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S'"; //TODO: Modificar sentencia!!!!!!!!!!!!!!
 
         #endregion
 
