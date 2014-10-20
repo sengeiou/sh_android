@@ -317,7 +317,7 @@ static NSString *CellIdentifier = @"shootCell";
 
 ////------------------------------------------------------------------------------
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//	
+
 //    Shot *shot = self.arrayShots[indexPath.row];
 //    
 //    NSString *reuseIdentifier = CellIdentifier;
@@ -342,7 +342,7 @@ static NSString *CellIdentifier = @"shootCell";
 //    height += 1;
 //    
 //    return height;
-//
+
 //}
 
 //------------------------------------------------------------------------------
@@ -396,9 +396,9 @@ static NSString *CellIdentifier = @"shootCell";
 //    //    if (self.isInsertingRow) {
 //    //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
 //    //    }
-//     return UITableViewAutomaticDimension;
+     return UITableViewAutomaticDimension;
 
-	return 80;
+//	return 80;
 
 }
 
