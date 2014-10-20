@@ -61,8 +61,6 @@
 
 @property (strong, nonatomic) NSMutableDictionary *offscreenCells;
 
--(void)startSendShot;
-
 @end
 
 static NSString *CellIdentifier = @"shootCell";
