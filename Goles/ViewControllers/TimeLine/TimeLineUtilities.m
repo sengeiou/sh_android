@@ -89,7 +89,7 @@
              inImage:(UIImage*)  image
              atPoint:(CGPoint)   point andSizeFont:(CGFloat) sizeFont;
 {
-    UIFont *font = [UIFont systemFontOfSize:sizeFont];
+  UIFont *font = [UIFont systemFontOfSize:sizeFont];
     
     //UIGraphicsBeginImageContext(image.size);
     UIGraphicsBeginImageContext(CGSizeMake(210, 210));
@@ -116,6 +116,7 @@
     UIGraphicsEndImageContext();
     
    return newImage;
+
 }
 
 //------------------------------------------------------------------------------
