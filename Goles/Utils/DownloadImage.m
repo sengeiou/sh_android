@@ -9,6 +9,7 @@
 #import "DownloadImage.h"
 #import "UIImageView+AFNetworking.h"
 #import "TimeLineUtilities.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation DownloadImage
 
@@ -24,9 +25,11 @@
     if (image == nil) {
         
         [img setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            img.image = image;
-            img.layer.cornerRadius = img.frame.size.width / 2;
-            img.clipsToBounds = YES;
+            imageView.image = image;
+            imageView.layer.cornerRadius = imageView.frame.size.width / 2;
+            imageView.clipsToBounds = YES;
+            
+
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
             //[[UIImageView sharedImageCache] cacheImage:image forName: [NSString stringWithFormat:@"%@", url]];
 
@@ -37,19 +40,22 @@
                 UIImage *imageCreate = [TimeLineUtilities drawText:text
                                                            inImage:imageDefault
                                                            atPoint:[TimeLineUtilities centerTextInImage:imageView] andSizeFont:80];
-                img.image = imageCreate;
+                imageView.image = imageCreate;
+                
                 [[UIImageView sharedImageCache] cacheImage:imageCreate forName: text];
             }else{
-                img.image = imageCacheDefault;
+                imageView.image = imageCacheDefault;
+            
             }
         }];
     }else{
-        img.image = image;
-        img.layer.cornerRadius = img.frame.size.width / 2;
-        img.clipsToBounds = YES;
+        imageView.image = image;
+        imageView.layer.cornerRadius = imageView.frame.size.width / 2;
+        imageView.clipsToBounds = YES;
+
     }
     
-    return img;
+    return imageView;
 
 }
 

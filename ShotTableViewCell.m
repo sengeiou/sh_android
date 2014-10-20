@@ -90,6 +90,7 @@
     self.lblName.text = shot.user.userName;
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];  
+    self.imgPhoto.layer.masksToBounds = YES;
     
     self.lblDate.text = [TimeLineUtilities getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;
@@ -123,7 +124,7 @@
         
         //PHOTO
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:kLabelVerticalPhotoInsets];
-//        [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
+        [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:kLabelHorizontalPhotoInsets];
         [self.imgPhoto autoSetDimensionsToSize:CGSizeMake(48, 48)];
         

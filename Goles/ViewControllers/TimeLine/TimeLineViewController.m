@@ -162,7 +162,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.timelineTableView.scrollsToTop = YES;
     self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 80.0f;
+    self.timelineTableView.estimatedRowHeight = 127.0f;
 
 }
 
@@ -358,7 +358,10 @@ static NSString *CellIdentifier = @"shootCell";
 	
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
-
+    
+//    cell.imgPhoto.layer.cornerRadius = cell.imgPhoto.frame.size.width / 2;
+//    cell.imgPhoto.clipsToBounds = YES;
+    
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
     
