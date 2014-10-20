@@ -4,7 +4,7 @@
     xmlns:vm="clr-namespace:Bagdad.ViewModels"
     xmlns:m="clr-namespace:Bagdad.Models">
 
-    <vm:FollowsViewModel.Followings>
+    <vm:FollowsViewModel.followings>
         <vm:FollowViewModel buttonText="✔ FOLLOWING" isFollowed="True" buttonVisible="Visible">
             <vm:FollowViewModel.userInfo>
                 <m:User idUser="1"  userName="Prueba1" />
@@ -30,5 +30,5 @@
                 <m:User idUser="1"  userName="Prueba5" />
             </vm:FollowViewModel.userInfo>
         </vm:FollowViewModel>
-    </vm:FollowsViewModel.Followings>
+    </vm:FollowsViewModel.followings>
 </vm:FollowsViewModel>

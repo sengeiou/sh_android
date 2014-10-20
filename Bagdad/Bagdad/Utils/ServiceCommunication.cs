@@ -187,6 +187,8 @@ namespace Bagdad.Utils
                         Follow follow = new Follow();
                         json = await follow.SynchronizeFollows();
                         result = "\t Sincronizado: " + entity + "\n\t\t" + json + " follows synchronizados.";
+                        json = await follow.SynchronizeUnFollows();
+                        result += "\n\t Sincronizado: " + entity + "\n\t\t" + json + " unfollows synchronizados.";
                         break;
                     default:
                         result = "\t NOT DONE YET: " + entity + "\n";

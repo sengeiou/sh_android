@@ -125,14 +125,14 @@ namespace Bagdad
 
                 DataContext = searchedFriends;
                 findList.ItemsSource = null;
-                findList.ItemsSource = searchedFriends.Followings;
+                findList.ItemsSource = searchedFriends.followings;
 
 
                 if (findList.Items.Count > 0)
                 {
                     Focus();
                     endOfList = false;
-                    offset = searchedFriends.Followings.Count;
+                    offset = searchedFriends.followings.Count;
                     NoResults.Visibility = System.Windows.Visibility.Collapsed;
                 }
                 else NoResults.Visibility = System.Windows.Visibility.Visible;
@@ -159,10 +159,10 @@ namespace Bagdad
             {
                 if (!endOfList)
                 {
-                    charge = searchedFriends.Followings.Count();
-                    foreach (FollowViewModel user in (await uvm.FindUsersInServer(SearchBar.Text, offset)).Followings)
+                    charge = searchedFriends.followings.Count();
+                    foreach (FollowViewModel user in (await uvm.FindUsersInServer(SearchBar.Text, offset)).followings)
                     {
-                        searchedFriends.Followings.Add(user);
+                        searchedFriends.followings.Add(user);
                     }
 
                     DataContext = null;
@@ -184,7 +184,7 @@ namespace Bagdad
         private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
         {
             findList.ItemsSource = null;
-            findList.ItemsSource = searchedFriends.Followings;
+            findList.ItemsSource = searchedFriends.followings;
         }
 
         private async void Button_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -217,7 +217,7 @@ namespace Bagdad
             }
 
             findList.ItemsSource = null;
-            findList.ItemsSource = searchedFriends.Followings;
+            findList.ItemsSource = searchedFriends.followings;
 
         }
     }

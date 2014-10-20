@@ -21,6 +21,7 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+
         private String ops_data = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> follows)
@@ -283,6 +284,7 @@ namespace Bagdad.Models
 
         public async Task<bool> DelFollowing(User user)
         {
+            //TODO: Split unfollow sending to server
             bool _return = false;
             ServiceCommunication sc = new ServiceCommunication();
 
@@ -407,6 +409,7 @@ namespace Bagdad.Models
             try
             {
                 List<Follow> follows = await GetFollowsToUpdate();
+
                 if (follows.Count() > 0)
                 {
                     String json = "{\"status\": {\"message\": null,\"code\": null}," +
@@ -417,7 +420,7 @@ namespace Bagdad.Models
                                     "\"operation\": \"@Operation\"," +
                                     "\"key\": {" +
                                         "\"idUser\": null," +
-                                        "\"idUserFollowed\": null" +
+                                        "\"idFollowedUser\": null" +
                                     "}," +
                                     "\"entity\": \"Follow\"" +
                                 "}}]}";
@@ -442,6 +445,7 @@ namespace Bagdad.Models
                     json = json.Replace("@appVersion", App.appVersionInt().ToString());
                     json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
                     json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+                    json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
 
                     bool isFirst = true;
                     foreach (Follow follow in follows)
@@ -466,13 +470,12 @@ namespace Bagdad.Models
                     }
 
                     builderData.Append("],");
-                    json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
                     json = json.Replace("@Data", builderData.ToString());
 
                     ServiceCommunication serviceCom = new ServiceCommunication();
                     await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
 
-                    await UpdateFollowSynchro();
+                    await UpdateFollowSynchro(true);
 
                     json = follows.Count().ToString();
                     return json;
@@ -489,14 +492,97 @@ namespace Bagdad.Models
             }
         }
 
+        public async Task<string> SynchronizeUnFollows()
+        {
+            try
+            {
+                List<Follow> follows = await GetUnFollowsToUpdate();
 
-        private async Task<bool> UpdateFollowSynchro()
+                if (follows.Count() > 0)
+                {
+                    String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                                "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
+                                "\"ops\": [{@Data\"metadata\": {" +
+                                    "\"items\": null," +
+                                    "\"TotalItems\": null," +
+                                    "\"operation\": \"@Operation\"," +
+                                    "\"key\": {" +
+                                        "\"idUser\": @idUser," +
+                                        "\"idFollowedUser\": @idFollowedUser" +
+                                    "}," +
+                                    "\"entity\": \"Follow\"" +
+                                "}}]}";
+
+                    String data = "\"data\": [{" +
+                                    "\"idUser\": @idUser," +
+                                    "\"idFollowedUser\": @idFollowedUser," +
+                                    "\"birth\": @birth," +
+                                    "\"revision\": @revision," +
+                                    "\"modified\": @modified," +
+                                    "\"deleted\": @deleted" +
+                                "}],";
+
+                    StringBuilder builderData = new StringBuilder();
+
+                    TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                    double epochDate = t.TotalMilliseconds;
+
+                    //req
+                    json = json.Replace("@idDevice", "\"null\"");
+                    json = json.Replace("@idUser", this.idUser.ToString());
+                    json = json.Replace("@idFollowedUser", this.idUserFollowed.ToString());
+                    json = json.Replace("@appVersion", App.appVersionInt().ToString());
+                    json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
+                    json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+                    json = json.Replace("@Operation", Constants.SERCOM_OP_DELETE);
+
+                    foreach (Follow follow in follows)
+                    {
+                        //ops
+                        data = data.Replace("@idUser", follow.idUser.ToString());
+                        data = data.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
+                        data = data.Replace("@birth", Math.Round(epochDate, 0).ToString());
+                        data = data.Replace("@modified", Math.Round(epochDate, 0).ToString());
+                        data = data.Replace("@revision", follow.csys_revision.ToString());
+                        data = data.Replace("@deleted", follow.csys_deleted.ToString());
+
+                        builderData.Append(data);
+                        json = json.Replace("@Data", builderData.ToString());
+                        ServiceCommunication serviceCom = new ServiceCommunication();
+                        await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
+                    }
+
+                    
+
+                    
+
+                    await UpdateFollowSynchro(false);
+
+                    json = follows.Count().ToString();
+                    return json;
+                }
+                else return "0";
+            }
+            catch (TimeoutException timeEx)
+            {
+                throw timeEx;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - SynchronizeFollows: " + e.Message, e);
+            }
+        }
+        private async Task<bool> UpdateFollowSynchro(bool isFollow)
         {
             bool _result = false;
 
             try {
+                String sqlQuery = "";
+                if (isFollow) sqlQuery = SQLQuerys.UpdateFollowSynchro;
+                else sqlQuery = SQLQuerys.UpdateUnFollowSynchro;
+
                 Database db = await App.GetDatabaseAsync();
-                Statement st = await db.PrepareStatementAsync(SQLQuerys.UpdateFollowSynchro);
+                Statement st = await db.PrepareStatementAsync(sqlQuery);
 
                 await st.StepAsync();
 
@@ -532,6 +618,31 @@ namespace Bagdad.Models
             catch (Exception e)
             {
                 throw new Exception("Follow - GetFollowsToUpdate: " + e.Message, e);
+            }
+            return follows;
+        }
+
+        private async Task<List<Follow>> GetUnFollowsToUpdate()
+        {
+            List<Follow> follows = new List<Follow>();
+            try
+            {
+                Database db = await App.GetDatabaseAsync();
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUnFollowsToUpdate);
+
+                while (await st.StepAsync())
+                {
+                    string synchro = st.GetTextAt(6);
+                    char synchroChar = 'D';
+                    if (synchro.Length > 0) synchroChar = synchro.ToCharArray(0, 1)[0];
+                    follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
+                }
+
+                App.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Follow - GetUnFollowsToUpdate: " + e.Message, e);
             }
             return follows;
         }

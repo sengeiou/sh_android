@@ -91,6 +91,7 @@ namespace Bagdad
                     if (App.ShotsVM.shotsList.Count == 0) NoShootsAdvice.Visibility = System.Windows.Visibility.Visible;
                     else
                     {
+                        myShots.ItemsSource = null;
                         myShots.ItemsSource = App.ShotsVM.shotsList;
                     }
                 }
@@ -109,7 +110,7 @@ namespace Bagdad
             base.OnBackKeyPress(e);            
             Application.Current.Terminate();
         }
-
+        
         // Build a localized ApplicationBar
         private void BuildLocalizedApplicationBar()
         {

@@ -143,6 +143,7 @@
     <Compile Include="TimeLine.xaml.cs">
       <DependentUpon>TimeLine.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Factories\BagdadFactory.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\UserImageManager.cs" />

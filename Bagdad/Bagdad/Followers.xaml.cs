@@ -61,14 +61,14 @@ namespace Bagdad
                 Title.Text = this.NavigationContext.QueryString["userName"];
             }
 
-            if (followers.Followings.Count == 0)
+            if (followers.followings.Count == 0)
             {
                 var res = await LoadFollowersData();
                 if (res == -1) NavigationService.GoBack();
             }
             else
             {
-                followingList.ItemsSource = followers.Followings;
+                followingList.ItemsSource = followers.followings;
             }
 
             progress.IsVisible = false;
@@ -178,7 +178,7 @@ namespace Bagdad
         private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
         {
             followingList.ItemsSource = null;
-            followingList.ItemsSource = followers.Followings;
+            followingList.ItemsSource = followers.followings;
         }
 
         private async void Button_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -211,7 +211,7 @@ namespace Bagdad
             }
 
             followingList.ItemsSource = null;
-            followingList.ItemsSource = followers.Followings;
+            followingList.ItemsSource = followers.followings;
 
         }
     }

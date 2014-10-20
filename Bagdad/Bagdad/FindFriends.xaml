@@ -54,7 +54,7 @@
         <tk:PhoneTextBox x:Name="SearchBar" InputScope="Search" Grid.Row="1" Margin="-12,-18,-12,24" AcceptsReturn="False" Loaded="SearchBar_Loaded" KeyDown="SearchBar_KeyDown" Hint="search"/>
        
         <!--Row2-->
-        <ListBox x:Name="findList" Grid.Row="2" ItemsSource="{Binding Followings}" tk:TiltEffect.IsTiltEnabled="True" MouseEnter="findList_MouseEnter">
+        <ListBox x:Name="findList" Grid.Row="2" ItemsSource="{Binding followings}" tk:TiltEffect.IsTiltEnabled="True" MouseEnter="findList_MouseEnter">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="{Binding ActualWidth, ElementName=findList}" Margin="0,0,-12,48">

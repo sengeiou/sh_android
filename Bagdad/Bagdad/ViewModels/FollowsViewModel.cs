@@ -17,12 +17,22 @@ namespace Bagdad.ViewModels
 {
     public class FollowsViewModel : INotifyPropertyChanged
     {
-         public ObservableCollection<FollowViewModel> Followings { get; private set; }
+        public ObservableCollection<FollowViewModel> followings { get; private set; }
+
+        public Factories.BagdadFactory bagdadFactory { private get;  set; }
+
+        public FollowsViewModel(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory;
+            IsDataLoaded = false;
+            this.followings = new ObservableCollection<FollowViewModel>();
+        }
 
         public FollowsViewModel()
         {
+            bagdadFactory = new Factories.BagdadFactory();
             IsDataLoaded = false;
-            this.Followings = new ObservableCollection<FollowViewModel>();
+            this.followings = new ObservableCollection<FollowViewModel>();
         }
 
         public bool IsDataLoaded
@@ -82,14 +92,15 @@ namespace Bagdad.ViewModels
         public async Task<int> AddUserToList(User user)
         {
             //image
-            UserImageManager userImageManager = new UserImageManager();
+
+            UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
 
             BitmapImage image = userImageManager.GetUserImage(user.idUser);
 
             if (image == null && !String.IsNullOrEmpty(user.photo)) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(user.photo, UriKind.Absolute));
 
             //isFollowed
-            Follow follow = new Follow();
+            Follow follow = bagdadFactory.CreateFollow();
             List<int> myFollowings = await follow.getidUserFollowing();
 
             bool followed = false;
@@ -101,51 +112,12 @@ namespace Bagdad.ViewModels
             if (user.idUser == App.ID_USER)
             {
                 //Don't Show The Button
-                Followings.Add(new FollowViewModel()
-                {
-                    userInfo = user,
-                    userImage = image,
-                    isFollowed = followed,
-                    buttonVisible = Visibility.Collapsed
-                });
+                followings.Add(bagdadFactory.CreateNonVisibleFollowViewModel(user, image, followed));
             }
             else
             {
                 //Default Button
-                if (followed)
-                {
-                    Followings.Add(new FollowViewModel()
-                    {
-                        userInfo = user,
-                        userImage = image,
-                        isFollowed = followed,
-                        buttonVisible = Visibility.Visible,
-                        buttonText = AppResources.ProfileButtonFollowing + "  ",
-                        buttonBackgorund = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush,
-                        buttonForeground = new System.Windows.Media.SolidColorBrush(Colors.White),
-                        buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush,
-                        buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute)),
-                        buttonIconVisible = System.Windows.Visibility.Visible
-                    });
-
-                }
-                else
-                {
-                    Followings.Add(new FollowViewModel()
-                    {
-                        userInfo = user,
-                        userImage = image,
-                        isFollowed = followed,
-                        buttonVisible = Visibility.Visible,
-                        buttonText = AppResources.ProfileButtonFollow + "  ",
-                        buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush,
-                        buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
-                        buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
-                        buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute)),
-                        buttonIconVisible = System.Windows.Visibility.Visible
-                    });
-                   
-                }
+                followings.Add(bagdadFactory.CreateFollowViewModel(user, image, followed));
             }
 
             return 1;

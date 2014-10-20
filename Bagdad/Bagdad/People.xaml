@@ -45,7 +45,7 @@
         <TextBlock x:Name="Title" Grid.Row="0" Margin="0,12,0,24" Text="{Binding LocalizedResources.MePeople, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
 
         <!--Row1-->
-        <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding Followings}" tk:TiltEffect.IsTiltEnabled="True">
+        <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding followings}" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,12,48" Tap="goToProfile_Tap">

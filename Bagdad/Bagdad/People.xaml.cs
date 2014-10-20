@@ -49,10 +49,10 @@ namespace Bagdad
         {
             idUser = App.ID_USER;
 
-            if(followings.Followings.Count == 0) await LoadFollowingsData();
+            if(followings.followings.Count == 0) await LoadFollowingsData();
             else
             {
-                followingList.ItemsSource = followings.Followings;
+                followingList.ItemsSource = followings.followings;
             }
             progress.IsVisible = false;
         }
@@ -162,7 +162,7 @@ namespace Bagdad
         private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
         {
             followingList.ItemsSource = null;
-            followingList.ItemsSource = followings.Followings;
+            followingList.ItemsSource = followings.followings;
         }
 
     }
