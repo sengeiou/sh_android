@@ -1,7 +1,6 @@
 package gm.mobi.android.gcm.notifications;
 
 import android.app.Application;
-import android.content.Context;
 import android.support.v4.app.NotificationManagerCompat;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.data.NotificationsEnabled;
@@ -12,9 +11,12 @@ public class DebugNotificationManager extends BagdadNotificationManager {
 
     private BooleanPreference notificationsEnabled;
 
-    @Inject public DebugNotificationManager(Application context, NotificationManagerCompat notificationManager, Picasso picasso, @NotificationsEnabled
-      BooleanPreference notificationsEnabled) {
-        super(context, notificationManager, picasso);
+    @Inject public DebugNotificationManager(Application context,
+      NotificationManagerCompat notificationManager,
+      NotificationBuilderFactory notificationBuilderFactory,
+      Picasso picasso,
+      @NotificationsEnabled BooleanPreference notificationsEnabled) {
+        super(context, notificationManager, notificationBuilderFactory, picasso);
         this.notificationsEnabled = notificationsEnabled;
     }
 

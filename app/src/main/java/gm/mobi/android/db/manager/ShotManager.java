@@ -25,15 +25,17 @@ public class ShotManager extends  AbstractManager{
 
     @Inject ShotMapper shotMapper;
     @Inject UserMapper userMapper;
+    @Inject ShotVOMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
     private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
     private static final String CSYS_BIRTH = GMContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
-    public ShotManager(ShotMapper shotMapper, UserMapper userMapper){
+    public ShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotVOMapper shotVOMapper){
         this.shotMapper = shotMapper;
         this.userMapper = userMapper;
+        this.shotVOMapper = shotVOMapper;
     }
 
     /**

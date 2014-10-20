@@ -71,7 +71,7 @@ public class TimelineFragment extends BaseFragment
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject BagdadNotificationManager notificationManager;
-    @Inject ShotVOMapper shotMapper;
+    @Inject ShotVOMapper shotVOMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -314,7 +314,7 @@ public class TimelineFragment extends BaseFragment
     public void openProfile(int position) {
         Long currentUserId = currentUser.getIdUser();
         ShotVO shotVO = adapter.getItem(position);
-        ShotVOMapper shotVOMapper = new ShotVOMapper();
+        shotVOMapper = new ShotVOMapper();
         UserVO userVO = shotVOMapper.userVOFromShotVO(shotVO);
 
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), userVO);
@@ -343,7 +343,7 @@ public class TimelineFragment extends BaseFragment
 
     private void startRetrieveInitialTimeLineJob(Context context){
         RetrieveInitialTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(
-                RetrieveInitialTimeLineJob.class);
+          RetrieveInitialTimeLineJob.class);
         startJob(job);
     }
 

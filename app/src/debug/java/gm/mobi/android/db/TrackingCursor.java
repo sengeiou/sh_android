@@ -22,6 +22,7 @@ public class TrackingCursor extends SQLiteCursor {
     }
 
     public void close() {
+        super.close();
         openCursors.remove(this);
     }
 

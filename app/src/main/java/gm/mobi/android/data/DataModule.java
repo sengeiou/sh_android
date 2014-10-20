@@ -30,6 +30,7 @@ import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.gcm.GcmIntentService;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
+import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
@@ -158,8 +159,12 @@ public class DataModule {
 
     }
 
-    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, NotificationManagerCompat nm, Picasso picasso) {
-        return new BagdadNotificationManager(app, nm, picasso);
+    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
+        return new BagdadNotificationManager(app, nm, notificationBuilderFactory, picasso);
+    }
+
+    @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
+        return new NotificationBuilderFactory();
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {

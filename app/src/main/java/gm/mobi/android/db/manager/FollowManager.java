@@ -79,15 +79,14 @@ public class FollowManager extends AbstractManager{
     public Follow getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =?";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
+        Follow follow = null;
         Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
-            if(c.getCount()>0){
+        if(c.getCount()>0){
                 c.moveToFirst();
-                Follow follow = followMapper.fromCursor(c);
-                c.close();
-                return follow;
+                follow = followMapper.fromCursor(c);
             }
         c.close();
-        return null;
+        return follow;
     }
 
     /**

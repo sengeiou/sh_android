@@ -12,6 +12,7 @@ import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.ui.model.mappers.ShotVOMapper;
 
 @Module(
   complete = false,
@@ -26,8 +27,8 @@ public class ManagerModule {
         return new FollowManager(followMapper);
     }
 
-    @Provides ShotManager provideShotManager(ShotMapper shotMapper, UserMapper userMapper) {
-        return new ShotManager(shotMapper, userMapper);
+    @Provides ShotManager provideShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotVOMapper shotVOMapper) {
+        return new ShotManager(shotMapper, userMapper, shotVOMapper);
     }
 
     @Provides TeamManager provideTeamManager(TeamMapper teamMapper) {
