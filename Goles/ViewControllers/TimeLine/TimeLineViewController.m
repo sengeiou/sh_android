@@ -32,7 +32,6 @@
     BOOL refreshTable;
     BOOL returningFromBackground;
     float rows;
-    float rowsOLD;
     CGRect previousRect;
 
     UITapGestureRecognizer *tapTapRecognizer;
