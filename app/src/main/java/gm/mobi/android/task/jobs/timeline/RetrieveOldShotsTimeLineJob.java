@@ -43,7 +43,7 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
         shotManager.saveShots(olderShots);
 
         List<ShotVO> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, currentUser.getIdUser());
-
+        //TODO parser Shot to ShotVO
         postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }
 
