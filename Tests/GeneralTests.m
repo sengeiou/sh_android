@@ -112,5 +112,10 @@
 
 }*/
 
+- (void)testFailed {
+    
+    XCTAssertNotEqual(1, 1);
+}
+
 
 @end
