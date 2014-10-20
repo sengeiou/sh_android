@@ -137,7 +137,8 @@
               android:background="?android:selectableItemBackground"
               android:clickable="true"
               android:scaleType="center"
-              android:src="@drawable/ic_crosshair" />
+              android:src="@drawable/ic_crosshair"
+              android:visibility="gone" />
         </RelativeLayout>
 
     </LinearLayout>

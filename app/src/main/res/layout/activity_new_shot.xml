@@ -92,6 +92,7 @@
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:scaleType="center"
+                android:visibility="gone"
                 android:src="@drawable/ic_crosshair"/>
 
             <TextView
