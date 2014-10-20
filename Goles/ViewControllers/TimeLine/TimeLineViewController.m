@@ -79,9 +79,6 @@ static NSString *CellIdentifier = @"shootCell";
     
     [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
     
-    //Set titleView
-    self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
-    
     [self miscelaneousSetup];
     
     [self setNavigationBarButtons];
@@ -425,7 +422,9 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Reload table View
 //------------------------------------------------------------------------------
 - (void)reloadShotsTable:(id)sender {
+   
 
+   
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
@@ -434,22 +433,6 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (self.arrayShots.count > 0)
         [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
-}
-
-//------------------------------------------------------------------------------
-- (void)reloadShotsTableWithAnimation:(id)sender {
-    
-    //PAra la primera vez
-    self.viewNotShots.hidden = YES;
-    self.timelineTableView.hidden = NO;
-    self.timelineTableView.dataSource = self;
-    self.timelineTableView.delegate = self;
-    
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    
-    if (self.arrayShots.count > 0)
-        [self performSelectorOnMainThread:@selector(animationInsertShot) withObject:nil waitUntilDone:NO];
-    
 }
 
 //------------------------------------------------------------------------------
@@ -466,19 +449,17 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Send shot
 //------------------------------------------------------------------------------
 - (void)sendShot{
-//    self.writingTextBox.backgroundColor = [Fav24Colors backgroundTextViewSendShot];
+
     [self.writingTextBox setWritingTextViewWhenSendShot];
     self.viewToDisableTextField.hidden = NO;
 
-    //self.txtView.userInteractionEnabled= NO;
-//    [self.writingTextBox resignFirstResponder];
     self.orientation = NO;
     [self keyboardHide:nil];
-//    self.writingTextBox.textColor = [Fav24Colors textTextViewSendShot];
+
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
     self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:YES];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:YES];
 }
 
 #pragma mark - Start Send Shot
@@ -586,7 +567,6 @@ static NSString *CellIdentifier = @"shootCell";
         self.charactersLeft.hidden = YES;
         [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
 
-       // [self reloadShotsTableWithAnimation:nil];
         [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
         [self keyboardHide:nil];
@@ -693,7 +673,16 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Reload methods
 //------------------------------------------------------------------------------
 -(void)reloadTimeline{
-   
+    //PAra la primera vez
+    self.viewNotShots.hidden = YES;
+    self.timelineTableView.hidden = NO;
+    
+    if (self.timelineTableView.delegate == nil) {
+        self.timelineTableView.delegate = self;
+        self.timelineTableView.dataSource = self;
+    }
+    /////
+    
     [self.timelineTableView reloadData];
 }
 
