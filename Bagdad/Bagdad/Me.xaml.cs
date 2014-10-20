@@ -204,9 +204,16 @@ namespace Bagdad
             }
         }
 
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnBackKeyPress(e);
+            timer.Stop();
+        }
+
         private void appBarMenuItemTimeLine_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
+            timer.Stop();
         }
 
         private void appBarMenuItemPeople_Click(object sender, EventArgs e)
@@ -217,6 +224,7 @@ namespace Bagdad
         private void appBarMenuItemMe_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/Me.xaml?idUser=" + App.ID_USER, UriKind.Relative));
+            timer.Stop();
         }
 
         /// <summary>

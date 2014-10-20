@@ -76,7 +76,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!--Column0-->
-                    <Grid Grid.Column="0">
+                    <Grid Grid.Column="0" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
