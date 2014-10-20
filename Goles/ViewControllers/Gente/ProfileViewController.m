@@ -237,6 +237,11 @@
     
     if(refresh)
         [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
+    else if(!status){ //REFRESH VIEW IN MODE OFFLINE
+            
+        self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
+        [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -173,6 +173,16 @@
     return user;
 }
 
+//------------------------------------------------------------------------------
+-(void)setNumberFollowings:(NSNumber *)numberFollowing ofUser:(User *) user{
+    
+    if (numberFollowing && user){
+        user.numFollowing = numberFollowing;
+        [[CoreDataManager singleton] saveContext];
+    }
+}
+
+
 
 #pragma mark - DEVICE
 //------------------------------------------------------------------------------

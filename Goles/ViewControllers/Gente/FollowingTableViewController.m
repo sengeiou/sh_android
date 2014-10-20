@@ -101,11 +101,14 @@
     User *userFollow = self.usersList[btn.tag];
     
     BOOL followActionSuccess;
-    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]){
         followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
-    else
+        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[self.selectedUser.numFollowing intValue] + 1] ofUser:self.selectedUser];
+    }else{
         followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-    
+        [[UserManager sharedInstance]setNumberFollowings: [NSNumber numberWithInt:[self.selectedUser.numFollowing intValue] - 1] ofUser:self.selectedUser];
+
+    }
     if (followActionSuccess)
         [self.usersTable reloadData];
 }

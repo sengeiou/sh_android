@@ -23,6 +23,7 @@
 - (NSArray *)getActiveUsersIDs;
 - (User *)getUserForId:(NSInteger )idUser;
 - (User *)createUserFromDict:(NSDictionary *)dict;
+-(void)setNumberFollowings:(NSNumber *)numberFollowing ofUser:(User *) user;
 
 
 //Device
