@@ -232,9 +232,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
             UserVO userVO = event.getResult();
             List<UserVO> userVOs = getAdapter().getItems();
+            userVOs.remove(userVO);
+            getAdapter().removeItems();
             userVOs.add(userVO);
-
             getAdapter().setItems(userVOs);
+
+
             getAdapter().notifyDataSetChanged();
     }
 
