@@ -592,7 +592,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a what&apos;s up?.
+        ///   Busca una cadena traducida similar a comment.
         /// </summary>
         public static string WhatsUp {
             get {

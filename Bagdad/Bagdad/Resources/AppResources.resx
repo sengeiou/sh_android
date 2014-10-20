@@ -283,7 +283,7 @@
     <comment>Start.xaml</comment>
   </data>
   <data name="WhatsUp" xml:space="preserve">
-    <value>what's up?</value>
+    <value>comment</value>
     <comment>TimeLine.xaml</comment>
   </data>
   <data name="CanConnect" xml:space="preserve">
