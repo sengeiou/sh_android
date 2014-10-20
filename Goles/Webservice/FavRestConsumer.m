@@ -475,7 +475,12 @@
 - (void)createEntity:(NSString *)entity withData:(NSArray *)dictArray andKey:(NSDictionary *)key andDelegate:(id)delegate withOperation:(NSString *)operation{
     
     //Create Alias block
-    NSString *alias = [NSString stringWithFormat:@"CREATE_%@",entity.uppercaseString];
+    
+    NSString *alias;
+    if ([operation isEqualToString:K_OP_DELETE])
+        alias = [NSString stringWithFormat:@"DELETE_%@",entity.uppercaseString];
+    else
+        alias = [NSString stringWithFormat:@"CREATE_%@",entity.uppercaseString];
     
     //Create Staus block
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};

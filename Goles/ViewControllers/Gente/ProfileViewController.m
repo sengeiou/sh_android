@@ -130,6 +130,7 @@
     self.btnFollow.hidden = YES;
     self.btnUnfollow.hidden = YES;
     self.btnEditProfile.hidden = NO;
+    [self.btnEditProfile addTarget:self action:@selector(editProfile) forControlEvents:UIControlEventTouchUpInside];
 
 }
 
@@ -139,7 +140,7 @@
     self.btnFollow.hidden = YES;
     self.btnEditProfile.hidden = YES;
     self.btnUnfollow.hidden = NO;
-
+    [self.btnUnfollow addTarget:self action:@selector(followUser) forControlEvents:UIControlEventTouchUpInside];
 }
 
 //------------------------------------------------------------------------------
@@ -148,7 +149,7 @@
     self.btnFollow.hidden = NO;
     self.btnEditProfile.hidden = YES;
     self.btnUnfollow.hidden = YES;
-
+    [self.btnFollow addTarget:self action:@selector(unFollowUser) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - FOLLOW AND UNFOLLOW ACTIONS
@@ -169,7 +170,13 @@
         [self configureFollowButton];
     
 }
+
 //------------------------------------------------------------------------------
+- (void)editProfile {
+    
+    NSLog(@"Edit Profile");
+    
+}
 
 #pragma mark - Localizable Strings
 //------------------------------------------------------------------------------

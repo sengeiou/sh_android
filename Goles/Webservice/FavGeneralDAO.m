@@ -97,7 +97,7 @@ static NSArray *cuotasToDelete;
     NSUInteger returnedItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ITEMS] integerValue];
     NSUInteger totalItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_TOTAL_ITEMS] integerValue];
     
-    BOOL needToPaginate = returnedItems < totalItems;
+    BOOL needToPaginate = totalItems <= returnedItems;
     
     if (dict && statusOK) {
         

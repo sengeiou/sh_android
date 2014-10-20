@@ -177,6 +177,7 @@
     else
         followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
     
+    
     if (followActionSuccess)
         [self.usersTable reloadData];
 }
@@ -260,33 +261,40 @@
         NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
         self.followingUsers = [sortedArray mutableCopy];
         
-        [self reloadTableWithAnimation];
-        
         if (pagination)
             [self addLoadMoreCell];
+        else
+            self.spinner.hidden = YES;
         
+        [self reloadTableWithAnimation];
     }else if (!error && usersArray.count == 0) {
         refreshTable = YES;
-       //[self.followingUsers removeAllObjects];
-    
-    }else if (error){
-        refreshTable = NO;
-        [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
-        
-    }else{
-        refreshTable = NO;
-        
-        if (self.followingUsers.count == 0){
-            self.usersTable.hidden = YES;
-            self.viewNotPeople.hidden = NO;
-        }else{
-            
-            self.usersTable.hidden = NO;
-            self.viewNotPeople.hidden = YES;
+        if (!self.usersSearch.count > 0){
+            [self.followingUsers removeAllObjects];
             self.spinner.hidden = YES;
         }
+
+    }else{
+        refreshTable = NO;
+        [self checkIfNeedToShowNotPeopleView];
     }
 }
+
+//------------------------------------------------------------------------------
+- (void)checkIfNeedToShowNotPeopleView {
+    
+    if (self.followingUsers.count == 0){
+        self.usersTable.hidden = YES;
+        self.viewNotPeople.hidden = NO;
+    }else{
+        self.spinner.hidden = YES;
+        
+        self.usersTable.hidden = NO;
+        self.viewNotPeople.hidden = YES;
+        self.spinner.hidden = YES;
+    }
+}
+
 #pragma mark - Webservice response methods
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
