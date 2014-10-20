@@ -39,9 +39,21 @@
     self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
 }
 
-- (void)addTargetSendShot:(id)target action:(SEL)action
-{
+//------------------------------------------------------------------------------
+- (void)addTargetSendShot:(id)target action:(SEL)action {
+    
     [self.startShootingFirstTime addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
+#pragma mark - PUBLIC METHODS
+//------------------------------------------------------------------------------
+- (void)setNoShotsViewInvisible {
+    self.hidden = YES;
+}
+
+//------------------------------------------------------------------------------
+- (void)setNoShotsViewVisible {
+    self.hidden = NO;
 }
 
 @end

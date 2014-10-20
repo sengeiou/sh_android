@@ -37,4 +37,5 @@
 	self.labelNowPlaying.text = NSLocalizedString(@"Now Playing", nil);
 
 }
+
 @end

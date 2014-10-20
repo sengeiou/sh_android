@@ -13,6 +13,7 @@
 @property (nonatomic,weak)      IBOutlet    UIButton                    *startShootingFirstTime;
 
 - (void)addTargetSendShot:(id)target action:(SEL)action;
-
+- (void)setNoShotsViewInvisible;
+- (void)setNoShotsViewVisible;
 
 @end
