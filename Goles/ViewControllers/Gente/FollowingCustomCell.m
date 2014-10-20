@@ -78,6 +78,7 @@
    
     self.following.hidden = NO;
     self.follow.hidden = YES;
+    
 //    [self.following setImage:[UIImage imageNamed:@"Icon_Following"] forState:UIControlStateNormal];
 //    [self.following setImage:[UIImage imageNamed:@"Icon_Following_Pressed"] forState:UIControlStateHighlighted];
 //    self.following.tintColor = [Fav24Colors iosSevenBlue];

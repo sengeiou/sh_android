@@ -33,7 +33,7 @@
         UIImage *unSeletedImage = [UIImage imageNamed:@"Icon_Following_Pressed"];
         unSeletedImage = [unSeletedImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         [self setImage:unSeletedImage forState:UIControlStateHighlighted];
-        self.tintColor = [Fav24Colors iosSevenGray];
+        self.tintColor = [Fav24Colors iosSevenBlue];
 
     }  else{
 
