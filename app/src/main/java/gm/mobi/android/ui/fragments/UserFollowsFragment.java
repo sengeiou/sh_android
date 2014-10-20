@@ -223,6 +223,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         followUser(user);
     }
 
+
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
         unfollowUser(user);
@@ -232,9 +233,10 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
             UserVO userVO = event.getResult();
             List<UserVO> userVOs = getAdapter().getItems();
+            int i = userVOs.indexOf(userVO);
             userVOs.remove(userVO);
             getAdapter().removeItems();
-            userVOs.add(userVO);
+            userVOs.add(i,userVO);
             getAdapter().setItems(userVOs);
 
 
