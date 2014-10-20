@@ -127,11 +127,7 @@ public class TimelineFragment extends BaseFragment
                     if (!shouldPoll) return;
                     Context context = getActivity();
                     if (context != null) {
-                        try {
-                            startRetrieveNewShotsTimeLineJob(context);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        startRetrieveNewShotsTimeLineJob(context);
                     }
                     pollShots();
                 }
@@ -196,6 +192,9 @@ public class TimelineFragment extends BaseFragment
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
+        listView.setAdapter(adapter);
+
         // Header and footer
         headerView =
                 LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
@@ -237,14 +236,8 @@ public class TimelineFragment extends BaseFragment
                     }
 
                     @Override
-                    public void onScrollIdle() throws SQLException {
-                        int lastVisiblePosition = listView.getLastVisiblePosition();
-                        if (lastVisiblePosition >= listView.getAdapter().getCount()-1) {
-                            Context context = getActivity();
-                            if (context != null) {
-                                startLoadMoreShots(context);
-                            }
-                        }
+                    public void onScrollIdle() {
+                        loadMoreShotsIfNeeded();
                     }
                 });
     }
@@ -282,11 +275,7 @@ public class TimelineFragment extends BaseFragment
         if (requestCode == REQUEST_NEW_SHOT) {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT);
-                try {
-                    startRefreshing(getActivity());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                startRefreshing(getActivity());
             }
         }
     }
@@ -321,7 +310,7 @@ public class TimelineFragment extends BaseFragment
         startActivity(profileIntent);
     }
 
-    public void startRefreshing(Context context) throws SQLException {
+    public void startRefreshing(Context context) {
         if (!isRefreshing) {
             isRefreshing = true;
             swipeRefreshLayout.setRefreshing(true);
@@ -347,7 +336,7 @@ public class TimelineFragment extends BaseFragment
         startJob(job);
     }
 
-    private void startRetrieveNewShotsTimeLineJob(Context context) throws SQLException {
+    private void startRetrieveNewShotsTimeLineJob(Context context) {
         RetrieveNewShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
         startJob(job);
     }
@@ -357,8 +346,18 @@ public class TimelineFragment extends BaseFragment
         jobManager.addJobInBackground(job);
     }
 
+    private void loadMoreShotsIfNeeded() {
+        int lastVisiblePosition = listView.getLastVisiblePosition();
+        if (lastVisiblePosition >= listView.getAdapter().getCount()-1) {
+            Context context = getActivity();
+            if (context != null) {
+                startLoadMoreShots(context);
+            }
+        }
+    }
+
     //TODO parameter: last shot as offset
-    public void startLoadMoreShots(Context context) throws SQLException {
+    public void startLoadMoreShots(Context context) {
         if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
@@ -379,13 +378,13 @@ public class TimelineFragment extends BaseFragment
         List<ShotVO> shots = event.getResult();
         swipeRefreshLayout.setRefreshing(false);
         if (shots != null && shots.size() > 0) {
-            adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
-            listView.setAdapter(adapter);
+            adapter.setShots(shots);
             setEmpty(false);
         } else {
             setEmpty(true);
             Timber.i("No shots received");
         }
+        loadMoreShotsIfNeeded();
     }
 
     private void setEmpty(boolean empty) {

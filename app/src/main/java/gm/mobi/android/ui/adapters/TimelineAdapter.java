@@ -13,6 +13,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.ui.model.ShotVO;
 import gm.mobi.android.util.TimeUtils;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineAdapter extends BindableAdapter<ShotVO> {
@@ -21,11 +22,11 @@ public class TimelineAdapter extends BindableAdapter<ShotVO> {
     private Picasso picasso;
     private final View.OnClickListener avatarClickListener;
 
-    public TimelineAdapter(Context context, List<ShotVO> shots, Picasso picasso, View.OnClickListener avatarClickListener) {
+    public TimelineAdapter(Context context, Picasso picasso, View.OnClickListener avatarClickListener) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
-        this.shots = shots;
+        this.shots = new ArrayList<>(0);
     }
 
     @Override
