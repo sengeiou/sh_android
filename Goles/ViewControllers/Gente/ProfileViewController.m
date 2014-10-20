@@ -105,13 +105,23 @@
     [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;
-    self.txtViewWebSite.enabledTextCheckingTypes = NSTextCheckingTypeLink; // Automatically detect links when the label text is subsequently changed
+    self.txtViewWebSite.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    self.txtViewWebSite.linkAttributes = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:(__bridge NSString *)kCTUnderlineStyleAttributeName];
     self.txtViewWebSite.delegate = self;
     [self.txtViewWebSite sizeToFit];
 	
 	[self configureFollowButton];
 	
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:self.selectedUser.photo] andUIimageView:self.imgPhoto andText:[self.selectedUser.name substringToIndex:1]];
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - TTTAttributedLabelDelegate
+
+- (void)attributedLabel:(__unused TTTAttributedLabel *)label
+   didSelectLinkWithURL:(NSURL *)url {
+    
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 #pragma mark - FOLLOW BUTTONS
