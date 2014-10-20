@@ -190,32 +190,16 @@ static NSString *CellIdentifier = @"shootCell";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-   
-    //self.navigationController.navigationBar.topItem.titleView = [TimeLineUtilities createTimelineTitleView];
     
    [self updateCurrentTitleView];
 
     self.navigationItem.titleView.hidden = YES;
-//
-//
-//    [self performSelector:@selector(appearViewTitle) withObject:nil afterDelay:0.4];
-
-    //    [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:2 forBarMetrics:UIBarMetricsLandscapePhone];
-
-   // self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-    //[self restrictRotation:NO];
     
     [self setLocalNotificationObservers];
 }
 -(void)viewDidAppear:(BOOL)animated {
-    //[self updateCurrentTitleView];
-    self.navigationItem.titleView.hidden = NO;
 
-}
--(void)appearViewTitle{
     self.navigationItem.titleView.hidden = NO;
-
 }
 
 //------------------------------------------------------------------------------
@@ -583,15 +567,18 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
         [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
-        //[self reloadShotsTable:nil];
         moreCells = YES;
     }else if (!refresh){
         moreCells = NO;
         refreshTable = NO;
     }
-    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
-
+    [self performSelectorOnMainThread:@selector(changeViewTitleMainThread) withObject:nil waitUntilDone:NO];
 }
+
+-(void)changeViewTitleMainThread{
+    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
+}
+
 //------------------------------------------------------------------------------
 -(void)changecolortextview{
     self.writingTextBox.textColor = [UIColor lightGrayColor];
@@ -994,8 +981,6 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - Title View Get
 //------------------------------------------------------------------------------
 - (void)updateCurrentTitleView {
-
-    self.navigationItem.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     if (self.navigationItem.titleView.subviews.count > 1) {
         UILabel *actualLabel = [self.navigationItem.titleView.subviews objectAtIndex:1];
