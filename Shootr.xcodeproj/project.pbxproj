@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0800933919F59E5100429207 /* ViewNotShots.m in Sources */ = {isa = PBXBuildFile; fileRef = 0800933819F59E5100429207 /* ViewNotShots.m */; };
 		9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */; };
 		9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */; };
 		9EB33D0B19F2C5BE001A0151 /* FollowButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D0A19F2C5BE001A0151 /* FollowButtonProfile.m */; };
@@ -133,6 +134,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0800933719F59E5100429207 /* ViewNotShots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewNotShots.h; sourceTree = SOURCE_ROOT; };
+		0800933819F59E5100429207 /* ViewNotShots.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewNotShots.m; sourceTree = SOURCE_ROOT; };
 		9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoTableViewController.h; path = Goles/ViewControllers/TimeLine/InfoTableViewController.h; sourceTree = SOURCE_ROOT; };
 		9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoTableViewController.m; path = Goles/ViewControllers/TimeLine/InfoTableViewController.m; sourceTree = SOURCE_ROOT; };
 		9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoCustomCell.h; path = Goles/ViewControllers/TimeLine/InfoCustomCell.h; sourceTree = SOURCE_ROOT; };
@@ -378,6 +381,8 @@
 				9EB33D1419F2D807001A0151 /* WritingText.m */,
 				AA2E444419F40F55000A52DE /* WatchingMenu.h */,
 				AA2E444519F40F55000A52DE /* WatchingMenu.m */,
+				0800933719F59E5100429207 /* ViewNotShots.h */,
+				0800933819F59E5100429207 /* ViewNotShots.m */,
 			);
 			name = "Custom classes";
 			sourceTree = "<group>";
@@ -1005,6 +1010,7 @@
 				A582A33B19ED834E002B23BC /* FindFriendsViewController.m in Sources */,
 				AA623E771998D17800A942A9 /* FavRestConsumer.m in Sources */,
 				AA623E351998D17800A942A9 /* _Team.m in Sources */,
+				0800933919F59E5100429207 /* ViewNotShots.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,

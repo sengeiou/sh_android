@@ -90,7 +90,10 @@
     self.lblName.text = shot.user.userName;
     
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];  
-    self.imgPhoto.layer.masksToBounds = YES;
+//    self.imgPhoto.layer.masksToBounds = YES;
+    
+    NSLog(@"%@", shot.user.name);
+    NSLog(@"%ld", (long)row);
     
     self.lblDate.text = [TimeLineUtilities getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;
@@ -122,7 +125,7 @@
         [self.txvText autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.lblName withOffset:kLabelVerticalCommentToName];
         [self.txvText autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalBottomComment relation:NSLayoutRelationGreaterThanOrEqual];
         
-        //PHOTO
+//        //PHOTO
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:kLabelVerticalPhotoInsets];
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:kLabelHorizontalPhotoInsets];

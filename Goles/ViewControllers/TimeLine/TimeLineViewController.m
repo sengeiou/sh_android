@@ -24,6 +24,7 @@
 #import "InfoTableViewController.h"
 #import "WritingText.h"
 #import "WatchingMenu.h"
+#import "ViewNotShots.h"
 
 @interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
     NSUInteger lengthTextField;
@@ -41,14 +42,13 @@
 @property (nonatomic,weak)      IBOutlet    WritingText                 *writingTextBox;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
-@property (nonatomic,weak)      IBOutlet    UIView                      *viewNotShots;
+@property (nonatomic,weak)      IBOutlet    ViewNotShots                *viewNotShots;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewToDisableTextField;
 @property (nonatomic,weak)      IBOutlet    WatchingMenu                *watchingMenu;
 @property (nonatomic,weak)      IBOutlet    UIView                      *viewTextField;
 @property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewPositionConstraint;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewHeightConstraint;
-@property (nonatomic,weak)      IBOutlet    UIButton                    *startShootingFirstTime;
 @property (nonatomic,strong)                NSArray                     *arrayShots;
 @property (nonatomic,strong)                UIRefreshControl            *refreshControl;
 @property (nonatomic, assign)               CGFloat                     lastContentOffset;
@@ -57,12 +57,11 @@
 @property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                NSString                    *textComment;
 
-@property (weak, nonatomic) IBOutlet UILabel *lblNoShots;
-@property (weak, nonatomic) IBOutlet UILabel *lblShare;
+
 
 @property (strong, nonatomic) NSMutableDictionary *offscreenCells;
 
--(IBAction)startSendShot:(id)sender;
+-(void)startSendShot;
 
 @end
 
@@ -78,7 +77,9 @@ static NSString *CellIdentifier = @"shootCell";
     //For Alpha version
     self.watchingMenu.hidden = YES;
     
-    [self textLocalizableLabels];
+    [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
+    [self.viewNotShots addTargetSendShot:self action:@selector(startSendShot)];
+    
     [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
     
     //Set titleView
@@ -93,18 +94,6 @@ static NSString *CellIdentifier = @"shootCell";
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 	
     [self setupTimeLineTableView];
-    
-}
-
-
-#pragma mark - Localizable Strings
-//------------------------------------------------------------------------------
--(void)textLocalizableLabels{
-    
-    [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
-    [self.startShootingFirstTime setTitle:NSLocalizedString(@"Start Shooting", nil) forState:UIControlStateNormal];
-    self.lblNoShots.text =  NSLocalizedString(@"No Shots", nil);
-    self.lblShare.text = NSLocalizedString (@"Share with friends about football.", nil);
 }
 
 //------------------------------------------------------------------------------
@@ -359,8 +348,8 @@ static NSString *CellIdentifier = @"shootCell";
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
     [cell addTarget:self action:@selector(goProfile:)];
     
-//    cell.imgPhoto.layer.cornerRadius = cell.imgPhoto.frame.size.width / 2;
-//    cell.imgPhoto.clipsToBounds = YES;
+    cell.imgPhoto.layer.cornerRadius = cell.imgPhoto.frame.size.width / 2;
+    cell.imgPhoto.clipsToBounds = YES;
     
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
@@ -497,7 +486,7 @@ static NSString *CellIdentifier = @"shootCell";
 
 #pragma mark - Start Send Shot
 //------------------------------------------------------------------------------
--(IBAction)startSendShot:(id)sender{
+-(void)startSendShot{
     
     [self keyboardShow:nil];
     [self.writingTextBox becomeFirstResponder];

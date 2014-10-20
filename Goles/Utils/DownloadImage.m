@@ -19,7 +19,6 @@
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
     //UIImage *image = [[UIImageView sharedImageCache] cachedImageForName:[NSString stringWithFormat:@"%@", url]];
     UIImage *imageCacheDefault = [[UIImageView sharedImageCache] cachedImageForName:text];
-
     __weak UIImageView *img = imageView;
    
     if (image == nil) {
