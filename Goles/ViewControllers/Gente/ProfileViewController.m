@@ -22,9 +22,9 @@
 #import "DownloadImage.h"
 #import "Followingbutton.h"
 #import "Followbutton.h"
+#import "TTTAttributedLabel.h"
 
-
-@interface ProfileViewController ()
+@interface ProfileViewController () <TTTAttributedLabelDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnPoints;
@@ -40,7 +40,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblRank;
 @property (weak, nonatomic) IBOutlet UILabel *lblTeamBio;
-@property (weak, nonatomic) IBOutlet UILabel *txtViewWebSite;
+@property (weak, nonatomic) IBOutlet TTTAttributedLabel *txtViewWebSite;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -105,6 +105,8 @@
     [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;
+    self.txtViewWebSite.enabledTextCheckingTypes = NSTextCheckingTypeLink; // Automatically detect links when the label text is subsequently changed
+    self.txtViewWebSite.delegate = self;
     [self.txtViewWebSite sizeToFit];
 	
 	[self configureFollowButton];
