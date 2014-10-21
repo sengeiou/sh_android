@@ -222,34 +222,31 @@ namespace Bagdad.Models
                 {
                     foreach (JToken login in job["ops"][0]["data"])
                     {
-                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                        Login loginParse = new Login();
+                        users.Add(
+                            bagdadFactory.CreateFullFilledLogin(
+                                int.Parse(login["idUser"].ToString()),
+                                ((login["sessionToken"] != null) ? login["sessionToken"].ToString() : ""),
+                                ((login["email"] != null) ? login["email"].ToString() : ""),
+                                int.Parse(login["idFavoriteTeam"].ToString()),
+                                ((login["favoriteTeamName"] != null) ? login["favoriteTeamName"].ToString() : ""),
+                                ((login["userName"] != null) ? login["userName"].ToString() : ""),
+                                ((login["name"] != null) ? login["name"].ToString() : ""),
+                                ((login["photo"] != null) ? login["photo"].ToString() : ""),
+                                ((login["bio"] != null) ? login["bio"].ToString() : ""),
+                                ((login["website"] != null) ? login["website"].ToString() : ""),
+                                int.Parse(login["points"].ToString()),
+                                int.Parse(login["numFollowings"].ToString()),
+                                int.Parse(login["numFollowers"].ToString()),
+                                Double.Parse(login["birth"].ToString()),
+                                Double.Parse(login["modified"].ToString()),
+                                ((!String.IsNullOrEmpty(login["deleted"].ToString())) ? Double.Parse(login["deleted"].ToString()) : 0),
+                                int.Parse(login["revision"].ToString()),
+                                'S'
+                            ) 
+                        );
 
-                        loginParse.idUser = int.Parse(login["idUser"].ToString());
-                        loginParse.sessionToken = (login["sessionToken"] != null) ? login["sessionToken"].ToString() : null;
-                        loginParse.email = (login["email"] != null) ? login["email"].ToString() : null;
-                        loginParse.idFavoriteTeam = int.Parse(login["idFavoriteTeam"].ToString());
-                        loginParse.favoriteTeamName = (login["favoriteTeamName"] != null) ? login["favoriteTeamName"].ToString() : null;
-                        loginParse.userName = (login["userName"] != null) ? login["userName"].ToString() : null;
-                        loginParse.name = (login["name"] != null) ? login["name"].ToString() : null;
-                        loginParse.photo = (login["photo"] != null) ? login["photo"].ToString() : null;
-                        loginParse.bio = (login["bio"] != null) ? login["bio"].ToString() : null;
-                        loginParse.website = (login["website"] != null) ? login["website"].ToString() : null; 
-                        loginParse.points = int.Parse(login["points"].ToString());
-                        loginParse.numFollowing = int.Parse(login["numFollowings"].ToString());
-                        loginParse.numFollowers = int.Parse(login["numFollowers"].ToString());
-                        loginParse.csys_birth = Double.Parse(login["birth"].ToString());
-                        loginParse.csys_modified = Double.Parse(login["modified"].ToString());
-                        Double deleted; if (Double.TryParse(login["deleted"].ToString(), out deleted))
-                            loginParse.csys_deleted = deleted;
-                        loginParse.csys_revision = int.Parse(login["revision"].ToString());
-                        loginParse.csys_synchronized = 'S';
-
-                        App.ID_USER = loginParse.idUser;
-
-                        userImageManager.SaveImageFromURL(loginParse.photo, loginParse.idUser);
-
-                        users.Add(loginParse);
+                        App.ID_USER = int.Parse(login["idUser"].ToString());
+                        if (login["photo"] != null) userImageManager.SaveImageFromURL(login["photo"].ToString(), int.Parse(login["idUser"].ToString()));
                     }
                 }
             }

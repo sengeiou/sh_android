@@ -22,7 +22,6 @@ namespace BagdadTest.Models
         {
             JObject json = new JObject();
             json = JObject.Parse("{\"alias\":null,\"status\":{\"code\":\"OK\",\"message\":\"Las operaciones se han realizado correctamente.\"},\"req\":[0,0,2,1000000,1413878987417],\"ops\":[{\"metadata\":{\"operation\":\"Retrieve\",\"entity\":\"Login\",\"includeDeleted\":null,\"totalItems\":1,\"offset\":null,\"items\":1,\"key\":{\"password\":\"d93a5def7511da3d0f2d\",\"userName\":\"teo\"},\"filter\":null},\"data\":[{\"numFollowers\":8,\"birth\":1413556061000,\"website\":\"https://www.outlook.com\",\"photo\":\"http://s3-eu-west-1.amazonaws.com/bagdag/mordisquitos.jpg\",\"deleted\":null,\"modified\":1413556061000,\"sessionToken\":\"c81e728d9d4c2f636f067f89cc14862c\",\"revision\":0,\"favoriteTeamName\":\"Arsenal\",\"bio\":\"I'm a shooter lover and I also hate pineapples\",\"email\":\"teo.rodriguez@fav24.com\",\"name\":\"Teófilo\",\"userName\":\"Teo\",\"idUser\":2,\"numFollowings\":7,\"points\":0,\"idFavoriteTeam\":96775}]}]}");
-            var factory = new Mock<BagdadFactory>();
             var userImageFactory = new Mock<UserImageManager>();
 
 
@@ -33,11 +32,9 @@ namespace BagdadTest.Models
                 image = new BitmapImage();
             });
 
-            factory.Setup(factorySetup => factorySetup.CreateUserImageManager()).Returns(userImageFactory.Object);
-
-            Login login = new Login(factory.Object);
+            Login login = new Login();
             
-            List<BaseModelJsonConstructor>  listLogin = login.ParseJson(json);
+            List<BaseModelJsonConstructor> listLogin = login.ParseJson(json);
 
             Assert.AreEqual(1, listLogin.Count);
             login = (Login)listLogin[0];
