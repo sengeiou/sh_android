@@ -63,6 +63,10 @@
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Timeline", nil);
     
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+   // UIViewController *rootViewController = [viewControllers objectAtIndex:viewControllers.count - 2];
+    
     self.timelineTableView =  self.childViewControllers.firstObject;
     self.timelineTableView.delegate = self;
     
@@ -152,6 +156,8 @@
     self.navigationItem.titleView.hidden = NO;
 }
 
+
+
 //------------------------------------------------------------------------------
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -178,7 +184,6 @@
 #warning self.textComment is always 0 on viewDidLoad, isn't it? So maybe we can move the enablesReturnKeyAutomatically to the WritingTExt class init
     if (self.textComment.length == 0)
         self.writingTextBox.enablesReturnKeyAutomatically = YES;
-
 }
 
 #pragma mark - FUTURE METHODS

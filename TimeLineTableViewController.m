@@ -236,7 +236,10 @@ static NSString *CellIdentifier = @"shootCell";
     else{
         if (maximumOffset - currentOffset <= 200.0 && self.moreCells)
             [self addLoadMoreCell];
-        
+        else{
+            self.refreshTable = NO;
+            self.moreCells = NO;
+        }
         // For Beta version and only iphone 4
         //         if (self.lastContentOffset > scrollView.contentOffset.y){
         //             [UIView animateWithDuration:0.25 animations:^{
