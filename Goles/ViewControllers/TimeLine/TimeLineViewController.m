@@ -643,6 +643,8 @@
     [self updateCurrentTitleView];
     
     [self restrictRotation:NO];
+    
+    [self.timelineTableView orientationChanged:notification];
 }
 
 #pragma mark - Title View Get

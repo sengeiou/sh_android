@@ -23,10 +23,13 @@
 #import "Followingbutton.h"
 #import "Followbutton.h"
 #import "TTTAttributedLabel.h"
+#import "ChangeEndPointViewController.h"
 
 @interface ProfileViewController () <TTTAttributedLabelDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
+@property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
+
 @property (weak, nonatomic) IBOutlet UIButton *btnPoints;
 @property (weak, nonatomic) IBOutlet UILabel *lblPoints;
 @property (weak, nonatomic) IBOutlet UIButton *btnFollowing;
@@ -98,6 +101,7 @@
     
     self.lblName.text = self.selectedUser.name;
     
+    //Para la siguiente version de la app
 //    NSString *rank =  NSLocalizedString(@"rank", nil);
 //    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
     
@@ -113,6 +117,20 @@
 	[self configureFollowButton];
 	
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:self.selectedUser.photo] andUIimageView:self.imgPhoto andText:[self.selectedUser.name substringToIndex:1]];
+    
+    
+    if ([self.selectedUser.idUser isEqual:[[UserManager sharedInstance] getUserId]]) {
+        if (K_DEBUG_MODE) {
+            [self.btnPhoto addTarget:self action:@selector(passToChageEndPoint) forControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+    
+}
+
+-(void)passToChageEndPoint{
+    ChangeEndPointViewController *changeEndPointVC = [self.storyboard instantiateViewControllerWithIdentifier:@"changeEndPointVC"];
+    [self.navigationController pushViewController:changeEndPointVC animated:YES];
+
 }
 
 //------------------------------------------------------------------------------

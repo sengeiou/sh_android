@@ -21,6 +21,7 @@
 		A52CE42719DC415900163841 /* PeopleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42619DC415900163841 /* PeopleTableViewController.m */; };
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
+		A543BFDD19F6AE5C00C04F52 /* ChangeEndPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A543BFDC19F6AE5C00C04F52 /* ChangeEndPointViewController.m */; };
 		A5754FC019E7DB7900D20267 /* PeopleLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */; };
 		A582A33B19ED834E002B23BC /* FindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33A19ED834E002B23BC /* FindFriendsViewController.m */; };
 		A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33D19F154C6002B23BC /* Followingbutton.m */; };
@@ -162,6 +163,8 @@
 		A52CE42819DC418000163841 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		A52CE42919DC418000163841 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		A53ACC0D19D96E26009421D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
+		A543BFDB19F6AE5C00C04F52 /* ChangeEndPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeEndPointViewController.h; sourceTree = "<group>"; };
+		A543BFDC19F6AE5C00C04F52 /* ChangeEndPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeEndPointViewController.m; sourceTree = "<group>"; };
 		A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleLineUtilities.h; sourceTree = "<group>"; };
 		A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleLineUtilities.m; sourceTree = "<group>"; };
 		A582A33919ED834E002B23BC /* FindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindFriendsViewController.h; sourceTree = "<group>"; };
@@ -423,6 +426,24 @@
 				AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */,
 			);
 			name = Timeline;
+			sourceTree = "<group>";
+		};
+		A543BFD619F6A01900C04F52 /* CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */,
+				AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */,
+			);
+			name = CustomCells;
+			sourceTree = "<group>";
+		};
+		A543BFD719F6A02700C04F52 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */,
+				A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		A59EECDA19D1759F00D011C5 /* CustomCells */ = {
@@ -736,6 +757,8 @@
 		AA623E871998D78600A942A9 /* People */ = {
 			isa = PBXGroup;
 			children = (
+				A543BFD719F6A02700C04F52 /* Utilities */,
+				A543BFD619F6A01900C04F52 /* CustomCells */,
 				AADF791119F152C600AE9DB8 /* Buttons */,
 				A52CE42519DC415900163841 /* PeopleTableViewController.h */,
 				A52CE42619DC415900163841 /* PeopleTableViewController.m */,
@@ -743,12 +766,10 @@
 				A52CE42919DC418000163841 /* ProfileViewController.m */,
 				AA74B40719DEA33400EF90D5 /* FollowingTableViewController.h */,
 				AA74B40819DEA33400EF90D5 /* FollowingTableViewController.m */,
-				AA74B40A19DEA3EC00EF90D5 /* FollowingCustomCell.h */,
-				AA74B40B19DEA3EC00EF90D5 /* FollowingCustomCell.m */,
-				A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */,
-				A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */,
 				A582A33919ED834E002B23BC /* FindFriendsViewController.h */,
 				A582A33A19ED834E002B23BC /* FindFriendsViewController.m */,
+				A543BFDB19F6AE5C00C04F52 /* ChangeEndPointViewController.h */,
+				A543BFDC19F6AE5C00C04F52 /* ChangeEndPointViewController.m */,
 			);
 			name = People;
 			path = ViewControllers/Gente;
@@ -1090,6 +1111,7 @@
 				AA72640F19D0506A0067A39D /* Follow.m in Sources */,
 				AA241F83199CFB4900897D6D /* SyncControl.m in Sources */,
 				AACA544A19C057C000E39D94 /* UIProgressView+AFNetworking.m in Sources */,
+				A543BFDD19F6AE5C00C04F52 /* ChangeEndPointViewController.m in Sources */,
 				AA623E6C1998D17800A942A9 /* CoreDataManager.m in Sources */,
 				AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */,
 				AACA544019C057C000E39D94 /* AFSecurityPolicy.m in Sources */,

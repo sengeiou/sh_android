@@ -28,6 +28,7 @@
 
 - (void)reloadShotsTable;
 
+- (void)orientationChanged:(NSNotification *) notification;
 
 @end
 

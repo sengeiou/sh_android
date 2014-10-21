@@ -17,10 +17,6 @@
 #import "TimeLineUtilities.h"
 #import "CoreDataParsing.h"
 
-#define kTopTableInsets         250.0f
-#define kBottomTableInsets      60.0f
-#define kLateralTableInsets     16.0f
-#define kLateralRightTableInsets     -16.0f
 static NSString *CellIdentifier = @"shootCell";
 
 @interface TimeLineTableViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -324,6 +320,36 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)isNecessaryRefreshCells:(BOOL)refeshTableView{
     self.refreshTable = refeshTableView;
+}
+
+//------------------------------------------------------------------------------
+- (void)orientationChanged:(NSNotification *) notification{
+    
+    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+
+    switch (deviceOrientation) {
+        case UIDeviceOrientationPortraitUpsideDown:{
+            self.myTableView.contentInset = UIEdgeInsetsMake(60, 0, 60, 0);
+            self.myTableView.contentOffset = CGPointMake(0, -60);
+
+            break;
+        }case UIDeviceOrientationLandscapeLeft:{
+            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 60, 0);
+            self.myTableView.contentOffset = CGPointMake(0, -40);
+
+            break;
+        } case UIDeviceOrientationLandscapeRight:{
+            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 60, 0);
+            self.myTableView.contentOffset = CGPointMake(0, -40);
+
+            break;
+        }default:{
+            self.myTableView.contentInset = UIEdgeInsetsMake(60, 0, 60, 0);
+            self.myTableView.contentOffset = CGPointMake(0, -60);
+
+            break;
+        }
+    }
 }
 
 @end

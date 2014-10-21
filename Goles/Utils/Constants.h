@@ -11,7 +11,7 @@
 
 #import "Services.pch"
 
-#define K_DEBUG_MODE    NO
+#define K_DEBUG_MODE    YES
 #define K_DEBUG_SERVICE NO
 
 #define IS_DEVELOPING   YES  // Pointing to PRE or PRO

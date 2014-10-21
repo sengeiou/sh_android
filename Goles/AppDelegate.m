@@ -68,9 +68,20 @@ extern void __gcov_flush();
     }
     else {
 
-        if (IS_DEVELOPING)
-            golesBaseURL = K_ENDPOINT_DEVELOPER;
-        else
+        if (IS_DEVELOPING){
+            
+            if (K_DEBUG_MODE) {
+                NSString * changeURL =[Utils getValueFromUserDefaultsFromKey:@"newUrl"];
+                
+                if (changeURL != nil)
+                    golesBaseURL = changeURL;
+                else
+                    golesBaseURL = K_ENDPOINT_DEVELOPER;
+            }else{
+                 golesBaseURL = K_ENDPOINT_DEVELOPER;
+            }
+        
+        }else
             golesBaseURL = K_ENDPOINT_PRODUCTION;
 
 
