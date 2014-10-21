@@ -141,7 +141,7 @@
 
     [self updateCurrentTitleView];
 
-    self.navigationItem.titleView.hidden = YES;
+//    self.navigationItem.titleView.hidden = YES;
     
     [self setLocalNotificationObservers];
 }
@@ -414,7 +414,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-
 //------------------------------------------------------------------------------
 - (NSString *)controlCharactersShot:(NSString *)text{
     
@@ -428,9 +427,6 @@
 }
 
 #pragma mark - Reload methods
-
-
-
 //------------------------------------------------------------------------------
 - (void)setupUIWhenCancelOrNotConnection {
 
@@ -441,7 +437,6 @@
     [self.writingTextBox setWritingTextViewWhenCancelTouched];
 
 }
-
 
 #pragma mark - KEYBOARD
 //------------------------------------------------------------------------------
