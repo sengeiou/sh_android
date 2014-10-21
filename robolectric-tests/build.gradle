@@ -53,30 +53,39 @@ robolectric {
 
 jacoco {
     version = '0.7.2.201409121644'
+    reportsDir = file("$buildDir/jacoco")
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
+task jacocoTestReport(type: JacocoReport, dependsOn: "testDebug") {
     group = "Reporting"
-
-    description = "Generate Jacoco coverage reports for Android sources"
-
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        csv.enabled = true
+    }
+    // class R is used, but usage will not be covered, so ignore this class from report
+    // This differs per plugin version (0.10 -> 0.11)
+    // have very different fileTrees.
+    // I have added rules to Ignore Dagger/Butterknife
     classDirectories = fileTree(
       dir: '../app/build/intermediates/classes/debug',
-      excludes: ['**/R.class',
-                 '**/R$*.class',
-                 '**/*$ViewInjector*.*',
-                 '**/BuildConfig.*',
-                 '**/Manifest*.*']
-    )
+      excludes: ['com/app/R*.class',
+                 '**/*$InjectAdapter.class',
+                 '**/*$ModuleAdapter.class',
+                 '**/*$ViewInjector*.class'
+      ])
 
     def coverageSourceDirs = ['../app/src/main/java']
-    additionalSourceDirs = files(coverageSourceDirs)
     sourceDirectories = files(coverageSourceDirs)
     executionData = files('../robolectric-tests/build/jacoco/testDebug.exec')
-
-    reports {
-        html.enabled = true
-        html.destination "$buildDir/jacoco"
+    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+    // We iterate through the compiled .class tree and rename $$ to $.
+    doFirst {
+        new File('./app/build/intermediates/classes/').eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
     }
-
 }
