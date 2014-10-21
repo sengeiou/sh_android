@@ -28,10 +28,19 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
 
 
         private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
+        public User(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public User()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> users)
         {
@@ -197,7 +206,7 @@ namespace Bagdad.Models
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
         {
             List<BaseModelJsonConstructor> users = new List<BaseModelJsonConstructor>();
-            UserImageManager userImageManager = new UserImageManager();
+            UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
 
             try
             {
@@ -205,30 +214,28 @@ namespace Bagdad.Models
                 {
                     foreach (JToken user in job["ops"][0]["data"])
                     {
-                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                        User userParse = new User();
+                        users.Add(
+                            bagdadFactory.CreateFilledUserWithDeleteAndSynchronizedInfo(
+                                int.Parse(user["idUser"].ToString()),
+                                user["userName"].ToString(),
+                                user["name"].ToString(),
+                                user["photo"].ToString(),
+                                int.Parse(user["numFollowers"].ToString()),
+                                int.Parse(user["numFollowings"].ToString()),
+                                int.Parse(user["points"].ToString()),
+                                user["bio"].ToString(),
+                                user["website"].ToString(),
+                                favoriteTeamName = user["favoriteTeamName"].ToString(),
+                                int.Parse(user["idFavoriteTeam"].ToString()),
+                                Double.Parse(user["birth"].ToString()),
+                                Double.Parse(user["modified"].ToString()),
+                                ((!String.IsNullOrEmpty(user["deleted"].ToString())) ? Double.Parse(user["deleted"].ToString()) : 0),
+                                int.Parse(user["revision"].ToString()),
+                                'S'
+                            )
+                        );
 
-                        userParse.idUser = int.Parse(user["idUser"].ToString());
-                        userParse.idFavoriteTeam = int.Parse(user["idFavoriteTeam"].ToString());
-                        userParse.favoriteTeamName = user["favoriteTeamName"].ToString();
-                        userParse.userName = user["userName"].ToString();
-                        userParse.name = user["name"].ToString();
-                        userParse.photo = user["photo"].ToString();
-                        userParse.bio = user["bio"].ToString();
-                        userParse.website = user["website"].ToString();
-                        userParse.points = int.Parse(user["points"].ToString());
-                        userParse.numFollowing = int.Parse(user["numFollowings"].ToString());
-                        userParse.numFollowers = int.Parse(user["numFollowers"].ToString());
-                        userParse.csys_birth = Double.Parse(user["birth"].ToString());
-                        userParse.csys_modified = Double.Parse(user["modified"].ToString());
-                        Double deleted; if (Double.TryParse(user["deleted"].ToString(), out deleted))
-                            userParse.csys_deleted = deleted;
-                        userParse.csys_revision = int.Parse(user["revision"].ToString());
-                        userParse.csys_synchronized = 'S';
-
-                        userImageManager.Enqueue(userParse.idUser.ToString() + "♠" + userParse.photo);
-
-                        users.Add(userParse);
+                        userImageManager.Enqueue(int.Parse(user["idUser"].ToString()) + "♠" + user["photo"].ToString());
                     }
                 }
                 userImageManager.SaveMultipleImages();
@@ -243,7 +250,7 @@ namespace Bagdad.Models
 
         public async Task<UserViewModel> GetProfileInfo(int idUser)
         {
-            UserViewModel uvm = new UserViewModel();
+            UserViewModel uvm = bagdadFactory.CreateUserViewModel();
             try
             {
                 Database db = await App.GetDatabaseAsync();
@@ -280,10 +287,10 @@ namespace Bagdad.Models
 
         public async Task<UserViewModel> GetProfilInfoFromServer(int idUser)
         {
-            UserViewModel uvm = new UserViewModel();
+            UserViewModel uvm = bagdadFactory.CreateUserViewModel();
             try
             {
-                ServiceCommunication sc = new ServiceCommunication();
+                ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
 
                 String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + ops_data + "}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
 
@@ -318,7 +325,7 @@ namespace Bagdad.Models
 
         public async Task<List<User>> FindUsersInServer(String searchString, int offset)
         {
-            Follow follow = new Follow();
+            Follow follow = bagdadFactory.CreateFollow();
 
             List<User> users = new List<User>();
             try
@@ -333,7 +340,24 @@ namespace Bagdad.Models
                 {
                     foreach (JToken user in response["ops"][0]["data"])
                     {
-                        users.Add(new User() { idUser = int.Parse(user["idUser"].ToString()), userName = user["userName"].ToString(), name = user["name"].ToString(), photo = user["photo"].ToString(), numFollowers = int.Parse(user["numFollowers"].ToString()), numFollowing = int.Parse(user["numFollowings"].ToString()), points = int.Parse(user["points"].ToString()), bio = user["bio"].ToString(), website = user["website"].ToString(), favoriteTeamName = user["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(user["idFavoriteTeam"].ToString()), csys_revision = int.Parse(user["revision"].ToString()), csys_birth = (!String.IsNullOrEmpty(user["birth"].ToString()) ? double.Parse(user["birth"].ToString()) : 0), csys_modified = (!String.IsNullOrEmpty(user["modified"].ToString()) ? double.Parse(user["modified"].ToString()) : Util.DateToDouble(DateTime.Now)) });
+                        users.Add(
+                            bagdadFactory.CreateFilledUserWithOutDeleteAndSynchronizedInfo(
+                                int.Parse(user["idUser"].ToString()),
+                                user["userName"].ToString(),
+                                user["name"].ToString(),
+                                user["photo"].ToString(),
+                                int.Parse(user["numFollowers"].ToString()),
+                                int.Parse(user["numFollowings"].ToString()),
+                                int.Parse(user["points"].ToString()),
+                                user["bio"].ToString(),
+                                user["website"].ToString(),
+                                user["favoriteTeamName"].ToString(),
+                                int.Parse(user["idFavoriteTeam"].ToString()),
+                                int.Parse(user["revision"].ToString()),
+                                (!String.IsNullOrEmpty(user["birth"].ToString()) ? double.Parse(user["birth"].ToString()) : 0),
+                                (!String.IsNullOrEmpty(user["modified"].ToString()) ? double.Parse(user["modified"].ToString()) : Util.DateToDouble(DateTime.Now))
+                            )
+                        );
                     }
 
                 }
@@ -358,22 +382,24 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    User user = new User();
-                    user.idUser = st.GetIntAt(0);
-                    user.userName = st.GetTextAt(1);
-                    user.name = st.GetTextAt(2);
-                    user.photo = st.GetTextAt(3);
-                    user.bio = st.GetTextAt(4);
-                    user.points = st.GetIntAt(5);
-                    user.numFollowing = st.GetIntAt(6);
-                    user.numFollowers = st.GetIntAt(7);
-                    user.website = st.GetTextAt(8);
-                    user.favoriteTeamName = st.GetTextAt(9);
-                    user.idFavoriteTeam = st.GetIntAt(10);
-                    user.csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(11)));
-                    user.csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(12)));
-                    user.csys_revision = st.GetIntAt(13);
-                    usersResult.Add(user);
+                    usersResult.Add(
+                        bagdadFactory.CreateFilledUserWithOutDeleteAndSynchronizedInfo(
+                            st.GetIntAt(0),
+                            st.GetTextAt(1),
+                            st.GetTextAt(2),
+                            st.GetTextAt(3),
+                            st.GetIntAt(7),
+                            st.GetIntAt(6),
+                            st.GetIntAt(5),
+                            st.GetTextAt(4),
+                            st.GetTextAt(8),
+                            st.GetTextAt(9),
+                            st.GetIntAt(10),
+                            st.GetIntAt(13),
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(11))),
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(12)))
+                        )
+                    );
                 }
                 App.DBLoaded.Set();
             }
@@ -387,7 +413,7 @@ namespace Bagdad.Models
         public async Task<bool> AddCurrentUserToLocalDB()
         {
             bool _return = false;
-            UserImageManager userImageManager = new UserImageManager();
+            UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
             try
             {
                 Database db = await App.GetDatabaseAsync();
@@ -428,7 +454,7 @@ namespace Bagdad.Models
         public async Task<bool> RemoveCurrentUserFromLocalDB()
         {
             bool _return = false;
-            UserImageManager userImageManager = new UserImageManager();
+            UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
             try
             {
                 Database db = await App.GetDatabaseAsync();
