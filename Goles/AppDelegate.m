@@ -28,6 +28,7 @@
 #import "User.h"
 #import "Shot.h"
 #import "CleanManager.h"
+#include <stdio.h>
 
 #define kWerePushNotificationsDisabled  @"disabledPushNotificationInSettings"
 #define kAlertViewWelcome               1001
@@ -46,7 +47,7 @@
 
 @end
 
-
+extern void __gcov_flush();
 
 @implementation AppDelegate
 //------------------------------------------------------------------------------
@@ -105,6 +106,7 @@
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
+    __gcov_flush();
     
     UIApplication *app = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:0];
