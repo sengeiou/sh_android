@@ -84,7 +84,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "GCOV_PREFIX_STRIP"
-            value = "7"
+            value = "12"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

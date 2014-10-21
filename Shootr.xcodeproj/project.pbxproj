@@ -1308,7 +1308,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
 				);
-				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Goles/Shootr-Info.plist";
