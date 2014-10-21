@@ -56,14 +56,10 @@ jacoco {
     reportsDir = file("$buildDir/jacoco")
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: "testDebug") {
+task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running tests."
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-        csv.enabled = true
-    }
+
     // class R is used, but usage will not be covered, so ignore this class from report
     // This differs per plugin version (0.10 -> 0.11)
     // have very different fileTrees.
@@ -79,6 +75,13 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "testDebug") {
     def coverageSourceDirs = ['../app/src/main/java']
     sourceDirectories = files(coverageSourceDirs)
     executionData = files('../robolectric-tests/build/jacoco/testDebug.exec')
+
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        csv.enabled = true
+    }
+
     // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
     // We iterate through the compiled .class tree and rename $$ to $.
     doFirst {
