@@ -152,7 +152,7 @@
     
     // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
     // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
-//    self.txvText.preferredMaxLayoutWidth = CGRectGetWidth(self.txvText.frame);
+
     self.txvText.preferredMaxLayoutWidth = CGRectGetWidth(self.txvText.frame);
 
 }
