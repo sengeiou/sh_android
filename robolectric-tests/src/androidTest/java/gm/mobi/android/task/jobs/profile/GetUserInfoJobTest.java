@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
@@ -36,7 +37,7 @@ import static org.mockito.Mockito.when;
 
 
 @Config(emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
 
     private static final Long USER_ID = 1L;

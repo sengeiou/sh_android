@@ -4,7 +4,6 @@ import gm.mobi.android.db.objects.Device;
 import gm.mobi.android.db.objects.Follow;
 import gm.mobi.android.db.objects.Shot;
 import gm.mobi.android.db.objects.User;
-import hugo.weaving.DebugLog;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    @DebugLog
     public User login(String id, String password) {
         if (id.equals("rafa.vazsan@gmail.com") || id.equals("sloydev")) {
             User mockUser = new User();

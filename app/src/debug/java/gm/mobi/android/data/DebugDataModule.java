@@ -16,13 +16,17 @@ import gm.mobi.android.gcm.notifications.DebugNotificationManager;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.service.DebugApiModule;
 import gm.mobi.android.ui.debug.NetworkProxy;
+import gm.mobi.android.util.FileLogger;
+import java.util.Arrays;
+import java.util.List;
 import javax.inject.Singleton;
+import timber.log.Timber;
 
 @Module(
-        includes = DebugApiModule.class,
-        complete = false,
-        library = true,
-        overrides = true
+  includes = DebugApiModule.class,
+  complete = false,
+  library = true,
+  overrides = true
 )
 public class DebugDataModule {
 
@@ -44,8 +48,7 @@ public class DebugDataModule {
         return ApiEndpoints.isMockMode(selectedEndpoint.get());
     }
 
-    @Provides @Singleton @NetworkProxy
-    StringPreference provideNetworkProxy(SharedPreferences preferences) {
+    @Provides @Singleton @NetworkProxy StringPreference provideNetworkProxy(SharedPreferences preferences) {
         return new StringPreference(preferences, "debug_network_proxy");
     }
 
@@ -53,7 +56,8 @@ public class DebugDataModule {
         return new BooleanPreference(preferences, "debug_network_enabled", DEFAULT_NETWORK_ENABLED);
     }
 
-    @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(SharedPreferences preferences){
+    @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
+      SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);
     }
 
@@ -73,9 +77,9 @@ public class DebugDataModule {
         return new BooleanPreference(preferences, "debug_scalpel_enabled", DEFAULT_SCALPEL_ENABLED);
     }
 
-    @Provides @Singleton @ScalpelWireframeEnabled BooleanPreference provideScalpelWireframeEnabled(SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "debug_scalpel_wireframe_drawer",
-                DEFAULT_SCALPEL_WIREFRAME_ENABLED);
+    @Provides @Singleton @ScalpelWireframeEnabled BooleanPreference provideScalpelWireframeEnabled(
+      SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "debug_scalpel_wireframe_drawer", DEFAULT_SCALPEL_WIREFRAME_ENABLED);
     }
 
     @Provides @Singleton @CustomEndpoint StringPreference provideCustomEndpoint(SharedPreferences preferences) {

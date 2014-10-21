@@ -1,0 +1,82 @@
+apply plugin: 'com.android.library'
+apply plugin: 'robolectric'
+apply plugin: 'jacoco'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "21.0.1"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 19
+    }
+
+    buildTypes {
+        debug {
+            runProguard false
+        }
+        release {
+            runProguard false
+        }
+
+    }
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    def androidModule = project(':app')
+    compile androidModule
+
+    androidTestCompile 'junit:junit:4.11'
+    androidTestCompile 'com.squareup:fest-android:1.0.7'
+    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    androidTestCompile 'org.robolectric:robolectric:2.3'
+
+    compile 'com.squareup.assertj:assertj-android:1.0.0'
+    androidTestCompile 'org.assertj:assertj-core:1.6.1'
+
+    androidTestCompile androidModule.android.applicationVariants.toList().first().javaCompile.classpath
+    androidTestCompile androidModule.android.applicationVariants.toList().first().javaCompile.outputs.files
+    androidTestCompile files(androidModule.plugins.findPlugin("com.android.application").getBootClasspath())
+}
+
+robolectric {
+    // configure the set of classes for JUnit tests
+    set('include', ['**/*Test.class', '**/*Should.class', '**/*Tests.class'])
+
+    // configure max heap size of the test JVM
+    maxHeapSize = "2048m"
+}
+
+jacoco {
+    version = '0.7.2.201409121644'
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
+    group = "Reporting"
+
+    description = "Generate Jacoco coverage reports for Android sources"
+
+    classDirectories = fileTree(
+      dir: '../app/build/intermediates/classes/debug',
+      excludes: ['**/R.class',
+                 '**/R$*.class',
+                 '**/*$ViewInjector*.*',
+                 '**/BuildConfig.*',
+                 '**/Manifest*.*']
+    )
+
+    def coverageSourceDirs = ['../app/src/main/java']
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files('../robolectric-tests/build/jacoco/testDebug.exec')
+
+    reports {
+        html.enabled = true
+        html.destination "$buildDir/jacoco"
+    }
+
+}

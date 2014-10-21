@@ -7,6 +7,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.gcm.notifications.SingleShotNotification;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 @Config(emulateSdk = 18)
 public class BagdadNotificationManagerTest {
 

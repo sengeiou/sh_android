@@ -1,5 +1,6 @@
 package gm.mobi.android.integrationtests;
 
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.TestGolesApplication;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
@@ -17,7 +18,7 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Config(emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 public class ShotDtoFactoryTest {
 
     @Inject ShotDtoFactory shotDtoFactory;

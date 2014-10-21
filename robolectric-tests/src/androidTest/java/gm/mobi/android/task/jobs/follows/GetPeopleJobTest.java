@@ -2,6 +2,7 @@ package gm.mobi.android.task.jobs.follows;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.exception.ServerException;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 public class GetPeopleJobTest extends BagdadBaseJobTestAbstract {
 
     public static final long CURRENT_USER_ID = 1L;

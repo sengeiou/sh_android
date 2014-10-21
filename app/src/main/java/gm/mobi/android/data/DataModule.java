@@ -59,6 +59,8 @@ import gm.mobi.android.ui.fragments.PeopleFragment;
 import gm.mobi.android.ui.fragments.ProfileFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
 import gm.mobi.android.ui.fragments.UserFollowsFragment;
+import gm.mobi.android.util.LogTreeFactory;
+import gm.mobi.android.util.LogTreeFactoryImpl;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -106,7 +108,9 @@ import static android.content.Context.MODE_PRIVATE;
 
     NotificationIntentReceiver.class,
 
-  GcmIntentService.class,
+    GcmIntentService.class,
+
+    LogTreeFactory.class,
 
   },
   includes = {
@@ -165,6 +169,10 @@ public class DataModule {
 
     @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
         return new NotificationBuilderFactory();
+    }
+
+    @Provides LogTreeFactory provideLogTreeFactory() {
+        return new LogTreeFactoryImpl();
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {

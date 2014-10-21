@@ -1,5 +1,6 @@
 package gm.mobi.android.service.dataservice.dto;
 
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 public class UserDtoFactoryTest {
 
     UtilityDtoFactory utilityDtoFactory;

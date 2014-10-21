@@ -2,6 +2,7 @@ package gm.mobi.android.task.jobs.follows;
 
 import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.RobolectricGradleTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +10,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-@Config(emulateSdk = 18) @RunWith(RobolectricTestRunner.class)
+@Config(emulateSdk = 18) @RunWith(RobolectricGradleTestRunner.class)
 public class GetUsersFollowsJobTest {
 
     private GolesApplication application;

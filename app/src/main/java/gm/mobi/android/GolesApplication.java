@@ -5,7 +5,7 @@ import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.ObjectGraph;
 import gm.mobi.android.db.objects.User;
-import gm.mobi.android.util.FileLogger;
+import gm.mobi.android.util.LogTreeFactory;
 import timber.log.Timber;
 
 public class GolesApplication extends Application {
@@ -13,7 +13,6 @@ public class GolesApplication extends Application {
     private static GolesApplication instance;
     private ObjectGraph objectGraph;
     private User currentUser;
-    private static NetworkUtil networkUtil;
 
     public GolesApplication() {
         instance = this;
@@ -27,13 +26,10 @@ public class GolesApplication extends Application {
     }
 
     public void plantTrees() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-            Timber.plant(new FileLogger.FileLogTree());
-        } else {
-            //TODO Crashlytics tree
+        LogTreeFactory logTreeFactory = objectGraph.get(LogTreeFactory.class);
+        for (Timber.Tree tree : logTreeFactory.getTrees()) {
+            Timber.plant(tree);
         }
-
     }
 
     public void buildObjectGraphAndInject() {

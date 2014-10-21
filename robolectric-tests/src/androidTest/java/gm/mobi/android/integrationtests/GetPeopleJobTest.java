@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
+import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.TestGolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
 public class GetPeopleJobTest {
 
     public static final long FOLLOWED_USER = 1L;

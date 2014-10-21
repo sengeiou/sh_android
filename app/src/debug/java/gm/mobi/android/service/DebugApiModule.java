@@ -6,7 +6,6 @@ import gm.mobi.android.data.ApiEndpoint;
 import gm.mobi.android.data.IsMockMode;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.service.dataservice.BagdadDataService;
-import hugo.weaving.DebugLog;
 import javax.inject.Singleton;
 
 @Module(
@@ -16,7 +15,6 @@ import javax.inject.Singleton;
 )
 public class DebugApiModule {
 
-    @DebugLog
     @Provides @Singleton Endpoint provideEndpoint(@ApiEndpoint StringPreference apiEndpoint) {
         return Endpoints.newFixedEndpoint(apiEndpoint.get());
     }

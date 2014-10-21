@@ -8,7 +8,6 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.TrackingCursor;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.Shot;
