@@ -56,9 +56,7 @@ extern void __gcov_flush();
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     setenv("GCOV_PREFIX", [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding], 1);
-    
-    __gcov_flush();
-    
+        
     NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:2 * 1024 * 1024
                                                             diskCapacity:100 * 1024 * 1024
                                                                 diskPath:nil];
@@ -156,6 +154,7 @@ extern void __gcov_flush();
 //------------------------------------------------------------------------------
 - (void)applicationWillTerminate:(UIApplication *)application {
 
+    __gcov_flush();
 	[[[SyncManager singleton] synchroTimer] invalidate];
 }
 
