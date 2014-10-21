@@ -141,7 +141,7 @@
 
     [self updateCurrentTitleView];
 
-     self.navigationItem.titleView.hidden = YES;
+    self.navigationItem.titleView.hidden = YES;
     
     [self setLocalNotificationObservers];
 }
