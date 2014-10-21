@@ -7,7 +7,7 @@ import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ public class UserManager extends AbstractManager {
      * Retrieve currentUser
      * *
      */
-    public User getCurrentUser() {
-        User user = null;
+    public UserEntity getCurrentUser() {
+        UserEntity user = null;
         if (!isTableEmpty(USER_TABLE)) {
             Cursor c =
               db.query(USER_TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null,
@@ -47,8 +47,8 @@ public class UserManager extends AbstractManager {
     /**
      * Insert User list
      */
-    public void saveUsersFromServer(List<User> users) throws SQLException {
-        for (User user : users) {
+    public void saveUsersFromServer(List<UserEntity> users) throws SQLException {
+        for (UserEntity user : users) {
             ContentValues contentValues = userMapper.toContentValues(user);
             contentValues.put(CSYS_SYNCHRONIZED, "S");
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
@@ -65,9 +65,9 @@ public class UserManager extends AbstractManager {
     /**
      * Insert a user
      */
-    public void saveUser(User user) throws SQLException {
+    public void saveUser(UserEntity user) throws SQLException {
 
-        User currentUser = getCurrentUser();
+        UserEntity currentUser = getCurrentUser();
         ContentValues contentValues = null;
         String[] projection = UserTable.PROJECTION;
         String where = UserTable.ID + "=?";
@@ -87,7 +87,7 @@ public class UserManager extends AbstractManager {
     /**
      * Delete a user
      */
-    public long deleteUser(User user) {
+    public long deleteUser(UserEntity user) {
         long res = 0;
         String args = GMContract.UserTable.ID + "=?";
         String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
@@ -102,8 +102,8 @@ public class UserManager extends AbstractManager {
     /**
      * Retrieve User by idUser
      */
-    public User getUserByIdUser(Long idUser) {
-        User resUser = null;
+    public UserEntity getUserByIdUser(Long idUser) {
+        UserEntity resUser = null;
         String args = UserTable.ID + "=?";
         String[] argsString = new String[] { String.valueOf(idUser) };
 
@@ -120,9 +120,9 @@ public class UserManager extends AbstractManager {
         insertInTableSync(USER_TABLE,1,0,0);
     }
 
-    public List<User> getUsersByIds(List<Long> usersIds) {
+    public List<UserEntity> getUsersByIds(List<Long> usersIds) {
         int userIdsSize = usersIds.size();
-        List<User> result = new ArrayList<>(userIdsSize);
+        List<UserEntity> result = new ArrayList<>(userIdsSize);
         if (userIdsSize == 0) {
             return result;
         }
@@ -137,7 +137,7 @@ public class UserManager extends AbstractManager {
         if (queryResults.getCount() > 0) {
             queryResults.moveToFirst();
             do {
-                User user = userMapper.fromCursor(queryResults);
+                UserEntity user = userMapper.fromCursor(queryResults);
                 if (user != null) {
                     result.add(user);
                 }
@@ -146,8 +146,8 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
-    public List<User> searchUsers(String searchString){
-        List<User> users = new ArrayList<>();
+    public List<UserEntity> searchUsers(String searchString){
+        List<UserEntity> users = new ArrayList<>();
         String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)
           .replaceAll("[^\\p{ASCII}]", "");
         String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
@@ -156,7 +156,7 @@ public class UserManager extends AbstractManager {
           if(c.getCount()>0){
             c.moveToFirst();
               do {
-                  User user = userMapper.fromCursor(c);
+                  UserEntity user = userMapper.fromCursor(c);
                   if (user != null) {
                       users.add(user);
                   }

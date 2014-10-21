@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.objects.Follow;
+import gm.mobi.android.db.objects.FollowEntity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class FollowManager extends AbstractManager{
     /**
      * Insert a Follow from Server datas
      */
-    public void saveFollowFromServer(Follow follow) throws SQLException {
+    public void saveFollowFromServer(FollowEntity follow) throws SQLException {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
             contentValues.put(CSYS_SYNCHRONIZED,"S");
@@ -49,7 +49,7 @@ public class FollowManager extends AbstractManager{
 
 
     /** Insert a Follow **/
-    public void saveFollow(Follow follow)
+    public void saveFollow(FollowEntity follow)
     {
         //In this case, the follow is created by us. So synchronized attribut must be "N" or "U"
         if(follow!=null){
@@ -62,8 +62,8 @@ public class FollowManager extends AbstractManager{
      * Insert a Follow list from Server datas
      * *
      */
-    public void saveFollowsFromServer(List<Follow> followList) {
-        for (Follow follow : followList) {
+    public void saveFollowsFromServer(List<FollowEntity> followList) {
+        for (FollowEntity follow : followList) {
             ContentValues contentValues = followMapper.toContentValues(follow);
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                  deleteFollow(follow);
@@ -76,13 +76,13 @@ public class FollowManager extends AbstractManager{
        insertInSync();
     }
 
-    public Follow getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
+    public FollowEntity getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =?";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
             if(c.getCount()>0){
                 c.moveToFirst();
-                Follow follow = followMapper.fromCursor(c);
+                FollowEntity follow = followMapper.fromCursor(c);
                 c.close();
                 return follow;
             }
@@ -121,7 +121,7 @@ public class FollowManager extends AbstractManager{
     }
 
     public int getFollowRelationship(Long idFromUser, Long idToUser) {
-        int resultRelationship = Follow.RELATIONSHIP_NONE;
+        int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
         String fromUserIdArgument = String.valueOf(idFromUser);
         String toUserIdArgument = String.valueOf(idToUser);
 
@@ -144,7 +144,7 @@ public class FollowManager extends AbstractManager{
             boolean iFollowHim = false;
             boolean heFollowsMe = false;
             do {
-                Follow follow = followMapper.fromCursor(queryResults);
+                FollowEntity follow = followMapper.fromCursor(queryResults);
                 if (follow != null) {
                     if (follow.getIdUser().equals(idFromUser) && follow.getFollowedUser()
                         .equals(idToUser)) {
@@ -155,11 +155,11 @@ public class FollowManager extends AbstractManager{
                     }
 
                     if (iFollowHim && heFollowsMe) {
-                        resultRelationship = Follow.RELATIONSHIP_BOTH;
+                        resultRelationship = FollowEntity.RELATIONSHIP_BOTH;
                     }else if (iFollowHim) {
-                        resultRelationship = Follow.RELATIONSHIP_FOLLOWING;
+                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
                     }else if (heFollowsMe) {
-                        resultRelationship = Follow.RELATIONSHIP_FOLLOWER;
+                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWER;
                     }
                 }
             } while (queryResults.moveToNext());
@@ -169,9 +169,9 @@ public class FollowManager extends AbstractManager{
     }
 
     public int doIFollowHimState(Long idCurrentUser, Long idUser){
-        int resultRelationship = Follow.RELATIONSHIP_NONE;
+        int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
         if(idCurrentUser.equals(idUser)){
-            return Follow.RELATIONSHIP_OWN;
+            return FollowEntity.RELATIONSHIP_OWN;
         }else {
             String fromUserIdArgument = String.valueOf(idCurrentUser);
             String toUserIdArgument = String.valueOf(idUser);
@@ -180,11 +180,11 @@ public class FollowManager extends AbstractManager{
             if (queryResults.getCount() > 0) {
                 queryResults.moveToFirst();
                 do {
-                    Follow follow = followMapper.fromCursor(queryResults);
+                    FollowEntity follow = followMapper.fromCursor(queryResults);
                     if (follow != null && follow.getCsys_deleted() == null) {
-                        resultRelationship = Follow.RELATIONSHIP_FOLLOWING;
+                        resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
                     }else if(follow!=null && follow.getCsys_deleted() !=null){
-                        resultRelationship = Follow.RELATIONSHIP_NONE;
+                        resultRelationship = FollowEntity.RELATIONSHIP_NONE;
                     }
                 } while (queryResults.moveToNext());
             }
@@ -196,7 +196,7 @@ public class FollowManager extends AbstractManager{
     /**
      * Delete one Follow
      */
-    public long deleteFollow(Follow follow) {
+    public long deleteFollow(FollowEntity follow) {
         long res = 0;
         String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
@@ -219,10 +219,10 @@ public class FollowManager extends AbstractManager{
     * Check if it exists any data for send to server. This method It is called before request datas
      *
     * **/
-    public List<Follow> getDatasForSendToServerInCase(){
+    public List<FollowEntity> getDatasForSendToServerInCase(){
         long res = 0;
-        List<Follow> followsToUpdate = new ArrayList<>();
-        String args = CSYS_DELETED+" IS NOT NULL";
+        List<FollowEntity> followsToUpdate = new ArrayList<>();
+        String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'S' OR "+CSYS_SYNCHRONIZED+"='U'";
         Cursor c = db.query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();

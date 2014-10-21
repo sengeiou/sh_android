@@ -1,12 +1,11 @@
 package gm.mobi.android.task.events.follows;
 
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 
-public class FollowUnFollowResultEvent extends BagdadBaseJob.SuccessEvent<UserVO> {
+public class FollowUnFollowResultEvent extends BagdadBaseJob.SuccessEvent<UserModel> {
 
-int doIFollowHim;
-public FollowUnFollowResultEvent(UserVO result) {
+public FollowUnFollowResultEvent(UserModel result) {
     super(result);
 }
 

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 import javax.inject.Inject;
 
@@ -32,7 +32,7 @@ public class BaseSignedInActivity extends BaseActivity {
         } else {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             userManager.setDataBase(db);
-            User currentUser = userManager.getCurrentUser();
+            UserEntity currentUser = userManager.getCurrentUser();
             db.close();
             if (currentUser != null) {
                 app.setCurrentUser(currentUser);
@@ -53,7 +53,7 @@ public class BaseSignedInActivity extends BaseActivity {
      *
      * @return Currently signed in User
      */
-    public User getCurrentUser() {
+    public UserEntity getCurrentUser() {
         return GolesApplication.get(this).getCurrentUser();
     }
 

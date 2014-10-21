@@ -6,11 +6,11 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,7 +21,7 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
     private ShotManager shotManager;
     private BagdadService service;
     private FollowManager followManager;
-    private User currentUser;
+    private UserEntity currentUser;
 
     @Inject public RetrieveInitialTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
@@ -31,16 +31,16 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
         this.followManager = followManager;
     }
 
-    @Override public void init(User currentUser) {
+    @Override public void init(UserEntity currentUser) {
         super.init(currentUser);
         this.currentUser = currentUser;
     }
 
     @Override protected void run() throws SQLException, IOException {
-        List<Shot> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
+        List<ShotEntity> remoteShots = service.getShotsByUserIdList(getFollowingIds(), 0L);
         shotManager.saveShots(remoteShots);
         // Retrieve from db because we need the user objects associated to the shots
-        List<ShotVO> shotsWithUsersFromServer = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
+        List<ShotModel> shotsWithUsersFromServer = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         postSuccessfulEvent(new ShotsResultEvent(shotsWithUsersFromServer));
    }
 

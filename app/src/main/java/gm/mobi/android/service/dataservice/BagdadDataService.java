@@ -11,10 +11,10 @@ import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.Device;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.DeviceEntity;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
@@ -75,7 +75,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public User login(String id, String password) throws IOException {
+    public UserEntity login(String id, String password) throws IOException {
         GenericDto loginDto = userDtoFactory.getLoginOperationDto(id, SecurityUtils.encodePassword(password));
         GenericDto responseDto = postRequest(loginDto);
         OperationDto[] ops = responseDto.getOps();
@@ -85,8 +85,8 @@ public class BagdadDataService implements BagdadService {
 
 
 
-    @Override public List<User> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
-            List<User> following = new ArrayList<>();
+    @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
+            List<UserEntity> following = new ArrayList<>();
             GenericDto requestDto =
               userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, false);
             GenericDto responseDto = postRequest(requestDto);
@@ -99,7 +99,7 @@ public class BagdadDataService implements BagdadService {
             if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
                 Map<String, Object>[] data = ops[0].getData();
                 for(Map<String,Object> d:data){
-                    User user = userMapper.fromDto(d);
+                    UserEntity user = userMapper.fromDto(d);
                     if(user.getCsys_deleted() == null){
                         following.add(user);
                     }
@@ -110,8 +110,8 @@ public class BagdadDataService implements BagdadService {
 
 
 
-    @Override public List<User> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
-        List<User> followers = new ArrayList<>();
+    @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
+        List<UserEntity> followers = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.getFollowersOperationDto(idUserFollowed, 0L, lastModifiedDate, false);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -123,7 +123,7 @@ public class BagdadDataService implements BagdadService {
         if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for(Map<String,Object> d:data){
-                User user = userMapper.fromDto(d);
+                UserEntity user = userMapper.fromDto(d);
                 if(user.getCsys_deleted()==null){
                     followers.add(user);
                 }
@@ -134,7 +134,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public Shot getShotById(Long idShot) throws IOException {
+    public ShotEntity getShotById(Long idShot) throws IOException {
         GenericDto requestDto = shotDtoFactory.getSingleShotOperationDto(idShot);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -151,8 +151,8 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
-        List<Shot> newerShots = new ArrayList<>();
+    public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
+        List<ShotEntity> newerShots = new ArrayList<>();
         GenericDto genericDto =
           timelineDtoFactory.getNewerShotsOperationDto(followingUserIds, newestShotDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
@@ -164,7 +164,7 @@ public class BagdadDataService implements BagdadService {
         if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (int i = 0; i < data.length; i++) {
-                Shot shot = shotMapper.fromDto(data[i]);
+                ShotEntity shot = shotMapper.fromDto(data[i]);
                 newerShots.add(shot);
             }
         }
@@ -172,8 +172,8 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getOlderShots(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
-        List<Shot> olderShots = new ArrayList<>();
+    public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
+        List<ShotEntity> olderShots = new ArrayList<>();
         GenericDto genericDto =
           timelineDtoFactory.getOlderShotsOperationDto(followingUserIds, lastModifiedDate, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
@@ -185,7 +185,7 @@ public class BagdadDataService implements BagdadService {
         if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (int i = 0; i < data.length; i++) {
-                Shot shot = shotMapper.fromDto(data[i]);
+                ShotEntity shot = shotMapper.fromDto(data[i]);
                 olderShots.add(shot);
             }
         }
@@ -193,8 +193,8 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
-        List<Shot> shots = new ArrayList<>();
+    public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
+        List<ShotEntity> shots = new ArrayList<>();
         GenericDto genericDto = timelineDtoFactory.getAllShotsOperationDto(followingUserIds, DEFAULT_LIMIT);
         GenericDto responseDto = postRequest(genericDto);
         OperationDto[] ops = responseDto.getOps();
@@ -205,7 +205,7 @@ public class BagdadDataService implements BagdadService {
         if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for (int i = 0; i < data.length; i++) {
-                Shot shot = shotMapper.fromDto(data[i]);
+                ShotEntity shot = shotMapper.fromDto(data[i]);
                 shots.add(shot);
             }
         }
@@ -213,7 +213,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public Shot postNewShot(Long idUser, String comment) throws IOException {
+    public ShotEntity postNewShot(Long idUser, String comment) throws IOException {
         GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -230,7 +230,7 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public User getUserByIdUser(Long idUser) throws IOException {
+    public UserEntity getUserByIdUser(Long idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getUserByUserId(idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -247,9 +247,9 @@ public class BagdadDataService implements BagdadService {
     }
 
     @Override
-    public PaginatedResult<List<User>> searchUsersByNameOrNickNamePaginated(String searchQuery,
+    public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
       int pageOffset) throws IOException{
-        List<User> users = new ArrayList<>();
+        List<UserEntity> users = new ArrayList<>();
         GenericDto requestDto = userDtoFactory.searchUserOperation(searchQuery, SEARCH_PAGE_LIMIT, pageOffset);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -272,7 +272,7 @@ public class BagdadDataService implements BagdadService {
         return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT).setPageOffset(pageOffset).setTotalItems(totalItems);
     }
 
-    @Override public Follow getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
+    @Override public FollowEntity getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
         GenericDto requestDto = userDtoFactory.getFollowUserDtoByIdUser(idCurrentUser, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -281,13 +281,13 @@ public class BagdadDataService implements BagdadService {
             return null;
         }
         Map<String,Object> dataItem = ops[0].getData()[0];
-        Follow followReceived = followMapper.fromDto(dataItem);
+        FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
     }
 
 
     @Override
-    public Device updateDevice(Device device) throws IOException {
+    public DeviceEntity updateDevice(DeviceEntity device) throws IOException {
         GenericDto requestDto = deviceDtoFactory.getUpdateDeviceOperationDto(device);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -296,16 +296,16 @@ public class BagdadDataService implements BagdadService {
             return null;
         }
         Map<String, Object> dataItem = ops[0].getData()[0];
-        Device deviceReceived = deviceMapper.fromDto(dataItem);
+        DeviceEntity deviceReceived = deviceMapper.fromDto(dataItem);
         return deviceReceived;
     }
 
-    @Override public Device getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
+    @Override public DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
 
         return null;
     }
 
-    @Override public Follow followUser(Follow follow) throws IOException {
+    @Override public FollowEntity followUser(FollowEntity follow) throws IOException {
         GenericDto requestDto = userDtoFactory.followUserDto(follow);
         GenericDto reponseDto = postRequest(requestDto);
         OperationDto[] ops = reponseDto.getOps();
@@ -314,11 +314,11 @@ public class BagdadDataService implements BagdadService {
             return null;
         }
         Map<String,Object> dataItem = ops[0].getData()[0];
-        Follow followReceived = followMapper.fromDto(dataItem);
+        FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
     }
 
-    @Override public Follow unfollowUser(Follow follow) throws IOException {
+    @Override public FollowEntity unfollowUser(FollowEntity follow) throws IOException {
         GenericDto requestDto = userDtoFactory.unfollowUserDto(follow);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
@@ -327,7 +327,7 @@ public class BagdadDataService implements BagdadService {
             return null;
         }
         Map<String,Object> dataItem = ops[0].getData()[0];
-        Follow followReceived = followMapper.fromDto(dataItem);
+        FollowEntity followReceived = followMapper.fromDto(dataItem);
         return followReceived;
     }
 

@@ -2,7 +2,7 @@ package gm.mobi.android.db.manager;
 
 import gm.mobi.android.db.GMContract.DeviceTable;
 import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.objects.Device;
+import gm.mobi.android.db.objects.DeviceEntity;
 import javax.inject.Inject;
 
 public class DeviceManager extends AbstractManager {
@@ -14,16 +14,16 @@ public class DeviceManager extends AbstractManager {
         this.deviceMapper = deviceMapper;
     }
 
-    public void saveDevice(Device device) {
+    public void saveDevice(DeviceEntity device) {
         //TODO rellenar
     }
 
-    public Device getDeviceById(Long idDevice) {
+    public DeviceEntity getDeviceById(Long idDevice) {
         //TODO rellenar
         return null;
     }
 
-    public Device getDeviceByUniqueId(String uniqueId) {
+    public DeviceEntity getDeviceByUniqueId(String uniqueId) {
         return null;
     }
 

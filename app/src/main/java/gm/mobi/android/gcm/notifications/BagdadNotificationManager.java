@@ -19,8 +19,8 @@ import android.text.style.StyleSpan;
 import android.util.SparseArray;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.ui.activities.MainActivity;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class BagdadNotificationManager {
     private NotificationManagerCompat notificationManager;
     private Picasso picasso;
 
-    private SparseArray<Shot> shotsCurrentlyNotified = new SparseArray<>();
+    private SparseArray<ShotEntity> shotsCurrentlyNotified = new SparseArray<>();
 
     @Inject public BagdadNotificationManager(Application context, NotificationManagerCompat notificationManager,
       Picasso picasso) {
@@ -51,7 +51,7 @@ public class BagdadNotificationManager {
         this.picasso = picasso;
     }
 
-    public void sendNewShotNotification(Shot shot) {
+    public void sendNewShotNotification(ShotEntity shot) {
         //TODO check if the timeline is currently shown
         shotsCurrentlyNotified.append(shot.getIdShot().intValue(), shot);
 
@@ -66,8 +66,8 @@ public class BagdadNotificationManager {
         notify(NOTIFICATION_SHOT, notification);
     }
 
-    protected Notification buildSingleShotNotification(Shot shot) {
-        User user = shot.getUser();
+    protected Notification buildSingleShotNotification(ShotEntity shot) {
+        UserEntity user = shot.getUser();
         Bitmap avatar = getUserPhoto(user.getPhoto());
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setContentTitle(user.getName())
           .setContentText(shot.getComment())
@@ -77,7 +77,7 @@ public class BagdadNotificationManager {
         return builder.build();
     }
 
-    protected Notification buildMultipleShotNotification(SparseArray<Shot> shots) {
+    protected Notification buildMultipleShotNotification(SparseArray<ShotEntity> shots) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         int shotCount = shots.size();
@@ -133,10 +133,10 @@ public class BagdadNotificationManager {
         }
     }
 
-    protected List<String> getUserNamesFromShots(SparseArray<Shot> shots) {
+    protected List<String> getUserNamesFromShots(SparseArray<ShotEntity> shots) {
         List<String> names = new ArrayList<>(shots.size());
         for (int i = 0; i < shots.size(); i++) {
-            Shot shot = shots.valueAt(i);
+            ShotEntity shot = shots.valueAt(i);
             String userName = shot.getUser().getName();
             names.add(userName);
         }
@@ -144,12 +144,12 @@ public class BagdadNotificationManager {
         return names;
     }
 
-    protected NotificationCompat.InboxStyle getInboxStyleFromShots(SparseArray<Shot> shots,
+    protected NotificationCompat.InboxStyle getInboxStyleFromShots(SparseArray<ShotEntity> shots,
       NotificationCompat.Builder builder) {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle(builder);
         for (int i = 0; i < shots.size(); i++) {
-            Shot shot = shots.valueAt(i);
-            User user = shot.getUser();
+            ShotEntity shot = shots.valueAt(i);
+            UserEntity user = shot.getUser();
             String userName = user.getName();
             String shotText = shot.getComment();
             Spannable styledLine = getSpannableLineFromNameAndComment(userName, shotText);

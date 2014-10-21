@@ -20,7 +20,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
@@ -32,9 +32,8 @@ import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -60,10 +59,10 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     Long userId;
     Integer followType;
 
-    UserVO user;
+    UserModel user;
 
     //CurrentUser
-    User currentUser;
+    UserEntity currentUser;
 
     private UserListAdapter userListAdapter;
 
@@ -135,7 +134,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Subscribe
     public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
-        List<UserVO> usersFollowing = event.getResult();
+        List<UserModel> usersFollowing = event.getResult();
         if (usersFollowing.size() == 0) {
             setEmpty(true);
         } else {
@@ -143,7 +142,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         }
     }
 
-    protected void setListContent(List<UserVO> usersFollowing) {
+    protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
     }
@@ -162,25 +161,25 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
         user = getAdapter().getItem(position);
-        startActivity(ProfileContainerActivity.getIntent(getActivity(), user));
+        startActivity(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()));
     }
 
-    public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
+    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de encolamiento
         GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,user,followType);
+        job2.init(currentUser,user.getIdUser(),followType);
         jobManager.addJobInBackground(job2);
         //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,userVO, followType);
+        job.init(currentUser,userVO.getIdUser(), followType);
         jobManager.addJobInBackground(job);
     }
 
-    public void followUser(UserVO user){
+    public void followUser(UserModel user){
         startFollowUnfollowUserJob(user, getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(UserVO user){
+    public void unfollowUser(UserModel user){
         startFollowUnfollowUserJob(user,getActivity(),UserDtoFactory.UNFOLLOW_TYPE);
     }
 
@@ -231,8 +230,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-            UserVO userVO = event.getResult();
-            List<UserVO> userVOs = getAdapter().getItems();
+            UserModel userVO = event.getResult();
+            List<UserModel> userVOs = getAdapter().getItems();
             int i = userVOs.indexOf(userVO);
             userVOs.remove(userVO);
             getAdapter().removeItems();

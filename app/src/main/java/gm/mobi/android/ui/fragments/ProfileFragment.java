@@ -1,6 +1,8 @@
 package gm.mobi.android.ui.fragments;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,8 +20,8 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
@@ -29,7 +31,7 @@ import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.widgets.FollowButton;
 import javax.inject.Inject;
 
@@ -57,14 +59,15 @@ public class ProfileFragment extends BaseFragment {
     @Inject NetworkUtil networkUtil;
 
     // Args
-    UserVO user;
+    Long idUser;
 
-    User currentUser;
+    UserEntity currentUser;
 
-    public static ProfileFragment newInstance(UserVO user) {
+    public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle arguments = new Bundle();
-        arguments.putSerializable(ARGUMENT_USER, user);
+        //TODO  pasar idUser
+        arguments.putSerializable(ARGUMENT_USER, idUser);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -77,7 +80,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void injectArguments() {
         Bundle arguments = getArguments();
-        user = (UserVO) arguments.getSerializable(ARGUMENT_USER);
+        idUser = (Long) arguments.getSerializable(ARGUMENT_USER);
     }
 
     @Override
@@ -107,7 +110,6 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setBasicUserInfo(user);
         retrieveUserInfo();
     }
 
@@ -118,26 +120,28 @@ public class ProfileFragment extends BaseFragment {
         //TODO loading
     }
 
-    public void startGetUserInfoJob(User currentUser, Context context){
+    public void startGetUserInfoJob(UserEntity currentUser, Context context){
         GetUserInfoJob job = GolesApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(user.getIdUser(),currentUser);
+        job.init(idUser,currentUser);
         jobManager.addJobInBackground(job);
     }
 
-    public void startFollowUnfollowUserJob(User currentUser, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,user,followType);
-        jobManager.addJobInBackground(job2);
+    public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
+        if(!isNetworkAvailable()){
+            GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+            job2.init(currentUser,idUser,followType);
+            jobManager.addJobInBackground(job2);
+        }
 
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,user, followType);
+        job.init(currentUser,idUser, followType);
         jobManager.addJobInBackground(job);
 
     }
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
-        setUserInfo(user);
+        setUserInfo(event.getResult());
     }
 
     @Subscribe
@@ -149,12 +153,10 @@ public class ProfileFragment extends BaseFragment {
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
 
-    private void setBasicUserInfo(UserVO user) {
+    private void setBasicUserInfo(UserModel user) {
         setTitle(user.getUserName());
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
-        rankTextView.setText(getString(R.string.profile_rank_format, String.valueOf(user.getRank())));
-        pointsTextView.setText(String.valueOf(user.getPoints()));
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
         String photo = user.getPhoto();
@@ -163,7 +165,7 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    private void setUserInfo(UserVO user) {
+    private void setUserInfo(UserModel user) {
         setBasicUserInfo(user);
         String favTeamName = user.getFavoriteTeamName();
         bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
@@ -171,10 +173,10 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setMainButtonStatus(int followRelationship) {
-        if(followRelationship == Follow.RELATIONSHIP_OWN){
+        if(followRelationship == FollowEntity.RELATIONSHIP_OWN){
             followButton.setEditProfile();
         }else{
-            followButton.setFollowing(followRelationship == Follow.RELATIONSHIP_FOLLOWING);
+            followButton.setFollowing(followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING);
         }
     }
 
@@ -208,7 +210,17 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void openUserFollowsList(int followType) {
-        if(user==null) return;
-        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), user.getIdUser(), followType));
+        if(idUser==null) return;
+        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType));
     }
+
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+          .getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
+
+
 }

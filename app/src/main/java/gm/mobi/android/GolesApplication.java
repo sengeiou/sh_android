@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.ObjectGraph;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.util.FileLogger;
 import timber.log.Timber;
 
@@ -12,7 +12,7 @@ public class GolesApplication extends Application {
 
     private static GolesApplication instance;
     private ObjectGraph objectGraph;
-    private User currentUser;
+    private UserEntity currentUser;
     private static NetworkUtil networkUtil;
 
     public GolesApplication() {
@@ -57,11 +57,11 @@ public class GolesApplication extends Application {
     }
 
 
-    public User getCurrentUser() {
+    public UserEntity getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(UserEntity currentUser) {
         this.currentUser = currentUser;
     }
 

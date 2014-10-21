@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
@@ -31,7 +31,7 @@ public class PeopleFragment extends UserFollowsFragment {
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
+        UserEntity currentUser = GolesApplication.get(getActivity()).getCurrentUser();
         userId = currentUser.getIdUser();
         followType = FOLLOWING;
         super.onActivityCreated(savedInstanceState);

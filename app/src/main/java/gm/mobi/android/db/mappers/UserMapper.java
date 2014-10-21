@@ -3,7 +3,7 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +13,8 @@ public class UserMapper extends GenericMapper {
 
     public UserMapper(){}
 
-    public  User fromCursor(Cursor c) {
-        User user = getUserByCursor(c);
+    public UserEntity fromCursor(Cursor c) {
+        UserEntity user = getUserByCursor(c);
         // Fields that might not come from server for all users
         int sessionTokenIndex = c.getColumnIndex(UserTable.SESSION_TOKEN);
         if (sessionTokenIndex >= 0) {
@@ -28,7 +28,7 @@ public class UserMapper extends GenericMapper {
         return user;
     }
 
-    public  ContentValues toContentValues(User u) {
+    public  ContentValues toContentValues(UserEntity u) {
 
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
@@ -52,7 +52,7 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
-    public  ContentValues userToContentValues(User u, User currentUser){
+    public  ContentValues userToContentValues(UserEntity u, UserEntity currentUser){
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
@@ -76,7 +76,7 @@ public class UserMapper extends GenericMapper {
     }
 
     //TODO bad smell: nombre de método ofuscado
-    public  Map<String, Object> reqRestUsersToDto(User user) {
+    public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
@@ -94,8 +94,8 @@ public class UserMapper extends GenericMapper {
         return dto;
     }
 
-    public  User fromDto(Map<String, Object> dto) {
-        User user = new User();
+    public UserEntity fromDto(Map<String, Object> dto) {
+        UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
         user.setFavoriteTeamId(dto.containsKey(UserTable.FAVORITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue(): null);
         user.setFavoriteTeamName(dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
@@ -116,7 +116,7 @@ public class UserMapper extends GenericMapper {
 
 
 
-    public  Map<String, Object> toDto(User user) {
+    public  Map<String, Object> toDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
@@ -137,8 +137,8 @@ public class UserMapper extends GenericMapper {
     }
 
 
-    public User getUserByCursor(Cursor c){
-        User user = new User();
+    public UserEntity getUserByCursor(Cursor c){
+        UserEntity user = new UserEntity();
         user.setIdUser(c.getLong(c.getColumnIndex(UserTable.ID)));
         user.setFavoriteTeamId(c.getLong(c.getColumnIndex(UserTable.FAVORITE_TEAM_ID)));
         user.setFavoriteTeamName(c.getString(c.getColumnIndex(UserTable.FAVORITE_TEAM_NAME)));

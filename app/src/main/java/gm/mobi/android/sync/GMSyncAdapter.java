@@ -11,7 +11,7 @@ import com.path.android.jobqueue.JobManager;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.constant.SyncConstants;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -49,7 +49,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
         // Big boys stuff
-        User currentUser;
+        UserEntity currentUser;
         Timber.e("Entra en onPerformSync");
         try {
             synchronized (this) {

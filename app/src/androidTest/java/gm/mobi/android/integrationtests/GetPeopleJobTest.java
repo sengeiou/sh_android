@@ -7,8 +7,8 @@ import dagger.ObjectGraph;
 import gm.mobi.android.TestGolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
@@ -57,7 +57,7 @@ public class GetPeopleJobTest {
         userManager.setDataBase(database);
 
 
-        User currentUser = new User();
+        UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(CURRENT_USER);
         currentUser.setName("Rafa");
         currentUser.setSessionToken("9283569275");
@@ -80,7 +80,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<UserEntity>());
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
@@ -93,7 +93,7 @@ public class GetPeopleJobTest {
     //TODO after refactoring jobs, check that the response came exactly from database
     public void postResponseTwiceWhenDatabasePopulated() throws Throwable {
 
-        User followedUser = new User();
+        UserEntity followedUser = new UserEntity();
         followedUser.setIdUser(FOLLOWED_USER);
         followedUser.setName("Inma");
         followedUser.setFavoriteTeamId(1L);
@@ -108,7 +108,7 @@ public class GetPeopleJobTest {
         userManager.saveUser(followedUser);
 
 
-        Follow followRelationship = new Follow();
+        FollowEntity followRelationship = new FollowEntity();
         followRelationship.setIdUser(CURRENT_USER);
         followRelationship.setFollowedUser(FOLLOWED_USER);
         followRelationship.setCsys_birth(new Date());
@@ -122,7 +122,7 @@ public class GetPeopleJobTest {
 
         Bus bus = mock(Bus.class);
         BagdadService service = mock(BagdadService.class);
-        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<User>());
+        when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<UserEntity>());
 
 
         getPeopleJob.setBus(bus);

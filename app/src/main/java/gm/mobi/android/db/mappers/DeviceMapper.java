@@ -3,14 +3,14 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.objects.Device;
+import gm.mobi.android.db.objects.DeviceEntity;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DeviceMapper extends GenericMapper {
 
-    public Device fromCursor(Cursor c) {
-        Device device = new Device();
+    public DeviceEntity fromCursor(Cursor c) {
+        DeviceEntity device = new DeviceEntity();
         device.setIdDevice(c.getLong(c.getColumnIndex(GMContract.DeviceTable.ID_DEVICE)));
         device.setIdUser(c.getLong(c.getColumnIndex(GMContract.DeviceTable.ID_USER)));
         device.setPlatform(c.getInt(c.getColumnIndex(GMContract.DeviceTable.PLATFORM)));
@@ -22,7 +22,7 @@ public class DeviceMapper extends GenericMapper {
         return device;
     }
 
-    public ContentValues toContentValues(Device device) {
+    public ContentValues toContentValues(DeviceEntity device) {
         ContentValues cv = new ContentValues();
         cv.put(GMContract.DeviceTable.ID_DEVICE, device.getIdDevice());
         cv.put(GMContract.DeviceTable.ID_USER, device.getIdUser());
@@ -35,8 +35,8 @@ public class DeviceMapper extends GenericMapper {
         return cv;
     }
 
-    public Device fromDto(Map<String, Object> dto) {
-        Device device = new Device();
+    public DeviceEntity fromDto(Map<String, Object> dto) {
+        DeviceEntity device = new DeviceEntity();
         device.setIdDevice(((Number) dto.get(GMContract.DeviceTable.ID_DEVICE)).longValue());
         device.setIdUser(((Number) dto.get(GMContract.DeviceTable.ID_USER)).longValue());
         device.setPlatform(((Number) dto.get(GMContract.DeviceTable.PLATFORM)).intValue());
@@ -48,7 +48,7 @@ public class DeviceMapper extends GenericMapper {
         return device;
     }
 
-    public Map<String, Object> toDto(Device device) {
+    public Map<String, Object> toDto(DeviceEntity device) {
         Map<String,Object> dto = new HashMap<>();
         dto.put(GMContract.DeviceTable.ID_DEVICE, device == null ? null : device.getIdDevice());
         dto.put(GMContract.DeviceTable.ID_USER, device == null ? null : device.getIdUser());

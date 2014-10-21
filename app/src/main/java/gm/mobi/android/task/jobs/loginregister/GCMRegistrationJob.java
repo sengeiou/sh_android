@@ -20,8 +20,8 @@ import gm.mobi.android.data.prefs.GCMRegistrationId;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
 import gm.mobi.android.db.manager.DeviceManager;
-import gm.mobi.android.db.objects.Device;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.DeviceEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.GCMConstants;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.loginregister.PushTokenResult;
@@ -42,7 +42,7 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
     private StringPreference registrationId;
     private IntPreference registeredAppVersion;
     private final GoogleCloudMessaging gcm;
-    private User currentUser;
+    private UserEntity currentUser;
     private BagdadService service;
 
     private DeviceManager deviceManager;
@@ -91,10 +91,10 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
 
     private void sendTokenToServer(String regId) throws IOException {
         String uniqueDeviceId = getUniqueDeviceId(getContext());
-        Device existingDevice = getCurrentDevice(uniqueDeviceId);
+        DeviceEntity existingDevice = getCurrentDevice(uniqueDeviceId);
 
         if (existingDevice == null) {
-            existingDevice = new Device();
+            existingDevice = new DeviceEntity();
             existingDevice.setIdUser(currentUser.getIdUser());
             existingDevice.setPlatform(Constants.ANDROID_PLATFORM.intValue());
             existingDevice.setOsVer("Android");
@@ -114,8 +114,8 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
     }
 
 
-    @Nullable private Device getCurrentDevice(String uniqueDeviceId) throws IOException {
-        Device currentDevice = deviceManager.getDeviceByUniqueId(uniqueDeviceId);
+    @Nullable private DeviceEntity getCurrentDevice(String uniqueDeviceId) throws IOException {
+        DeviceEntity currentDevice = deviceManager.getDeviceByUniqueId(uniqueDeviceId);
         if (currentDevice == null) {
             currentDevice = service.getDeviceByUniqueId(uniqueDeviceId);
         }

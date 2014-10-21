@@ -4,7 +4,6 @@ import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -25,17 +24,13 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
-import com.path.android.jobqueue.persistentQueue.sqlite.DbOpenHelper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
@@ -51,10 +46,8 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
-import gm.mobi.android.ui.model.ShotVO;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.ShotVOMapper;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.ShotModel;
+import gm.mobi.android.ui.model.mappers.ShotModelMapper;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import java.sql.SQLException;
 import java.util.List;
@@ -71,7 +64,7 @@ public class TimelineFragment extends BaseFragment
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject BagdadNotificationManager notificationManager;
-    @Inject ShotVOMapper shotMapper;
+    @Inject ShotModelMapper shotMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -91,7 +84,7 @@ public class TimelineFragment extends BaseFragment
     private int watchingHeight;
     private boolean moreShots = true;
     private boolean shouldPoll;
-    private User currentUser;
+    private UserEntity currentUser;
 
 
      /* ---- Lifecycle methods ---- */
@@ -313,11 +306,9 @@ public class TimelineFragment extends BaseFragment
 
     public void openProfile(int position) {
         Long currentUserId = currentUser.getIdUser();
-        ShotVO shotVO = adapter.getItem(position);
-        ShotVOMapper shotVOMapper = new ShotVOMapper();
-        UserVO userVO = shotVOMapper.userVOFromShotVO(shotVO);
+        ShotModel shotVO = adapter.getItem(position);
 
-        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), userVO);
+        Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
         startActivity(profileIntent);
     }
 
@@ -376,7 +367,7 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void showTimeline(ShotsResultEvent event) {
-        List<ShotVO> shots = event.getResult();
+        List<ShotModel> shots = event.getResult();
         swipeRefreshLayout.setRefreshing(false);
         if (shots != null && shots.size() > 0) {
             adapter = new TimelineAdapter(getActivity(), shots, picasso, avatarClickListener);
@@ -398,7 +389,7 @@ public class TimelineFragment extends BaseFragment
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
         int newShotsCount = event.getNewShotsCount();
-        List<ShotVO> updatedTimeline = event.getResult();
+        List<ShotModel> updatedTimeline = event.getResult();
 
         if (newShotsCount == 0) {
             Timber.i("No new shots");
@@ -421,7 +412,7 @@ public class TimelineFragment extends BaseFragment
     @Subscribe
     public void displayOldShots(OldShotsReceivedEvent event) {
         isLoadingMore = false;
-        List<ShotVO> shots = event.getResult();
+        List<ShotModel> shots = event.getResult();
         int olderShotsSize = shots.size();
         if (olderShotsSize == 0) {
             footerProgress.setVisibility(View.INVISIBLE); // Maintain size

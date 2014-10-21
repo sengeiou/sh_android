@@ -9,12 +9,12 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
     private UserManager userManager;
     private FollowManager followManager;
 
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userModelMapper;
 
     private String searchString;
 
@@ -36,11 +36,11 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
 
     @Inject
     public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,
-      UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
+      UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
-        this.userVOMapper = userVOMapper;
+        this.userModelMapper = userModelMapper;
         setOpenHelper(openHelper);
     }
 
@@ -60,7 +60,7 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
     }
 
     @Override protected void run() throws SQLException, IOException {
-        List<User> results = retrieveDataFromDatabase();
+        List<UserEntity> results = retrieveDataFromDatabase();
         postSuccessfulEvent(new SearchPeopleLocalResultEvent(getUserVOs(results)));
     }
 
@@ -69,16 +69,16 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
     }
 
 
-    public List<UserVO> getUserVOs(List<User> users){
-        List<UserVO> userVOs = new ArrayList<>();
-        for(User user:users){
-            Follow follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            userVOs.add(userVOMapper.toVO(user,follow,currentUserId));
+    public List<UserModel> getUserVOs(List<UserEntity> users){
+        List<UserModel> userVOs = new ArrayList<>();
+        for(UserEntity user:users){
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
+            userVOs.add(userModelMapper.toUserModel(user,follow,currentUserId));
         }
         return userVOs;
     }
 
-    public List<User> retrieveDataFromDatabase(){
+    public List<UserEntity> retrieveDataFromDatabase(){
         return userManager.searchUsers(searchString);
     }
 

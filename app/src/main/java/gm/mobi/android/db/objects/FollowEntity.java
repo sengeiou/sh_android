@@ -1,6 +1,6 @@
 package gm.mobi.android.db.objects;
 
-public class Follow extends Synchronized{
+public class FollowEntity extends Synchronized{
 
     public static final int RELATIONSHIP_NONE = 0;
     public static final int RELATIONSHIP_OWN = 1;

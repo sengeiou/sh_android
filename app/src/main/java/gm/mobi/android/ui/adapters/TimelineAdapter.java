@@ -10,18 +10,17 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import gm.mobi.android.util.TimeUtils;
 import java.util.List;
 
-public class TimelineAdapter extends BindableAdapter<ShotVO> {
+public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
-    List<ShotVO> shots;
+    List<ShotModel> shots;
     private Picasso picasso;
     private final View.OnClickListener avatarClickListener;
 
-    public TimelineAdapter(Context context, List<ShotVO> shots, Picasso picasso, View.OnClickListener avatarClickListener) {
+    public TimelineAdapter(Context context, List<ShotModel> shots, Picasso picasso, View.OnClickListener avatarClickListener) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
@@ -58,7 +57,7 @@ public class TimelineAdapter extends BindableAdapter<ShotVO> {
     }
 
     @Override
-    public ShotVO getItem(int position) {
+    public ShotModel getItem(int position) {
         return shots.get(position);
     }
 
@@ -80,7 +79,7 @@ public class TimelineAdapter extends BindableAdapter<ShotVO> {
     }
 
     @Override
-    public void bindView(ShotVO item, int position, View view) {
+    public void bindView(ShotModel item, int position, View view) {
         switch (getItemViewType(position)) {
             case 0: // Shot
 
@@ -106,12 +105,12 @@ public class TimelineAdapter extends BindableAdapter<ShotVO> {
         }
     }
 
-    public void addShotsBelow(List<ShotVO> newShots) {
+    public void addShotsBelow(List<ShotModel> newShots) {
         this.shots.addAll(newShots);
         notifyDataSetChanged();
     }
 
-    public void setShots(List<ShotVO> shots) {
+    public void setShots(List<ShotModel> shots) {
         this.shots = shots;
         notifyDataSetChanged();
     }

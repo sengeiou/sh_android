@@ -8,13 +8,13 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,15 +31,15 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
     private Long currentUserId;
     private UserManager userManager;
     private FollowManager followManager;
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userModelMapper;
 
 
-    @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
+    @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.userVOMapper = userVOMapper;
+        this.userModelMapper = userModelMapper;
         setOpenHelper(openHelper);
     }
 
@@ -51,22 +51,22 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
     @Override
     protected void run() throws IOException, SQLException {
 
-        List<User> peopleFromDatabase = getPeopleFromDatabase();
-        List<UserVO> userVOs = getUserVOs(peopleFromDatabase);
+        List<UserEntity> peopleFromDatabase = getPeopleFromDatabase();
+        List<UserModel> userVOs = getUserVOs(peopleFromDatabase);
         if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
         }
-            List<User> peopleFromServer = service.getFollowing(currentUserId, 0L);
+            List<UserEntity> peopleFromServer = service.getFollowing(currentUserId, 0L);
             Collections.sort(peopleFromServer, new NameComparator());
             userVOs = getUserVOs(peopleFromServer);
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
     }
 
-    public List<UserVO> getUserVOs(List<User> users){
-        List<UserVO> userVOs = new ArrayList<>();
-        for(User user: users){
-            Follow follow = followManager.getFollowByUserIds(currentUserId, user.getIdUser());
-            userVOs.add(userVOMapper.toVO(user,follow,currentUserId));
+    public List<UserModel> getUserVOs(List<UserEntity> users){
+        List<UserModel> userVOs = new ArrayList<>();
+        for(UserEntity user: users){
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, user.getIdUser());
+            userVOs.add(userModelMapper.toUserModel(user,follow,currentUserId));
         }
         return userVOs;
     }
@@ -75,9 +75,9 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
         this.currentUserId = currentUserId;
     }
 
-    private List<User> getPeopleFromDatabase() throws SQLException {
+    private List<UserEntity> getPeopleFromDatabase() throws SQLException {
         List<Long> usersFollowingIds = followManager.getUserFollowingIds(currentUserId);
-        List<User> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
+        List<UserEntity> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
         return usersFollowing;
     }
 
@@ -96,9 +96,9 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
         return false;
     }
 
-    static class NameComparator implements Comparator<User> {
+    static class NameComparator implements Comparator<UserEntity> {
 
-        @Override public int compare(User user1, User user2) {
+        @Override public int compare(UserEntity user1, UserEntity user2) {
             return user1.getName().compareTo(user2.getName());
         }
 

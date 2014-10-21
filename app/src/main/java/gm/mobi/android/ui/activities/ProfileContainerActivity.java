@@ -8,19 +8,18 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.fragments.ProfileFragment;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
     private static final String EXTRA_USER = "user";
 
-    public static Intent getIntent(Context context, UserVO userVO) {
+    public static Intent getIntent(Context context, Long idUser) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
-        i.putExtra(EXTRA_USER, userVO);
+        i.putExtra(EXTRA_USER, idUser);
         return i;
     }
 
@@ -33,12 +32,12 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setupActionBar();
 
         if (savedInstanceState == null) {
-            UserVO user = (UserVO) getIntent().getSerializableExtra(EXTRA_USER);
-            if (user == null) {
+            Long idUser = (Long) getIntent().getSerializableExtra(EXTRA_USER);
+            if (idUser == null) {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();
             }
-            ProfileFragment profileFragment = ProfileFragment.newInstance(user);
+            ProfileFragment profileFragment = ProfileFragment.newInstance(idUser);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //TODO check que no hubiera ya uno? necesario?
             transaction.add(R.id.container, profileFragment, ProfileFragment.TAG);

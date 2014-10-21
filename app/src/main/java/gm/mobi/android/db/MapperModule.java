@@ -7,16 +7,15 @@ import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.ui.model.ShotVO;
-import gm.mobi.android.ui.model.mappers.ShotVOMapper;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.mappers.ShotModelMapper;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 
 @Module(
   complete = false,
   library = true)
 public class MapperModule {
 
-    @Provides ShotVOMapper provideShotVOMapper(){ return new ShotVOMapper();}
+    @Provides ShotModelMapper provideShotVOMapper(){ return new ShotModelMapper();}
 
     @Provides FollowMapper provideFollowMapper() {
         return new FollowMapper();
@@ -34,7 +33,7 @@ public class MapperModule {
         return new ShotMapper();
     }
 
-    @Provides UserVOMapper provideUserVOMapper(){ return new UserVOMapper();}
+    @Provides UserModelMapper provideUserVOMapper(){ return new UserModelMapper();}
 
     @Provides UserMapper provideUserMapper() {
         return new UserMapper();

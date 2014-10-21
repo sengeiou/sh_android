@@ -10,13 +10,13 @@ import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,10 +32,9 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     UserManager userManager;
     FollowManager followManager;
     TeamManager teamManager;
+    @Inject UserModelMapper userModelMapper;
 
-    @Inject UserVOMapper userVOMapper;
-
-    private User currentUser;
+    private UserEntity currentUser;
 
     @Inject
     public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
@@ -47,15 +46,15 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
         this.setOpenHelper(openHelper);
     }
 
-    public void init(User currentUser) {
+    public void init(UserEntity currentUser) {
         this.currentUser = currentUser;
     }
 
 
-    public List<Follow> getFollowsByFollowing(List<User> following){
-        List<Follow> followsByFollowing = new ArrayList<>();
-        for(User u:following){
-            Follow f = new Follow();
+    public List<FollowEntity> getFollowsByFollowing(List<UserEntity> following){
+        List<FollowEntity> followsByFollowing = new ArrayList<>();
+        for(UserEntity u:following){
+            FollowEntity f = new FollowEntity();
             f.setIdUser(currentUser.getIdUser());
             f.setFollowedUser(u.getIdUser());
             f.setCsys_birth(u.getCsys_birth());
@@ -70,32 +69,29 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
 
     @Override
     protected void run() throws SQLException, IOException {
-        List<User> following = getFollowingsFromServer();
+        List<UserEntity> following = getFollowingsFromServer();
         Timber.d("Downloaded %d followings' users", following.size());
-
-        List<Follow> followsByFollowing = getFollowsByFollowing(following);
+        List<FollowEntity> followsByFollowing = getFollowsByFollowing(following);
         // Save and send result
         userManager.saveUsersFromServer(following);
         followManager.saveFollowsFromServer(followsByFollowing);
-        List<UserVO> userFollows = getUserVOs(following);
-
+        List<UserModel> userFollows = getUserVOs(following);
         postSuccessfulEvent(new FollowsResultEvent(userFollows));
-
     }
 
-    public List<UserVO> getUserVOs(List<User> users){
-        List<UserVO> userVOs = new ArrayList<>();
-        for(User user:users){
+    public List<UserModel> getUserVOs(List<UserEntity> users){
+        List<UserModel> userVOs = new ArrayList<>();
+        for(UserEntity user:users){
             Long currentUserId = currentUser.getIdUser();
-            Follow follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            userVOs.add(userVOMapper.toVO(user, follow, currentUserId));
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
+            userVOs.add(userModelMapper.toUserModel(user, follow, currentUserId));
         }
         return userVOs;
     }
 
 
 
-    private List<User> getFollowingsFromServer() throws IOException {
+    private List<UserEntity> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
         return service.getFollowing(currentUser.getIdUser(), modifiedFollows);
     }

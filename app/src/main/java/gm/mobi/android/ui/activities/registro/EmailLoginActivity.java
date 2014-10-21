@@ -22,7 +22,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
@@ -69,7 +69,7 @@ public class EmailLoginActivity extends BaseActivity {
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
 //        currentLoginJob = null;
-        User user = event.getResult();
+        UserEntity user = event.getResult();
         // Yey!
         Timber.d("Succesfuly logged in %s", user.getUserName());
         // Store user in current session

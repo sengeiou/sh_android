@@ -1,6 +1,6 @@
 package gm.mobi.android.db.objects;
 
-public class Device extends Synchronized {
+public class DeviceEntity extends Synchronized {
 
     private Long idDevice;
     private Long idUser;

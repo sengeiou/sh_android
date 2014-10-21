@@ -3,8 +3,8 @@ package gm.mobi.android.gcm;
 import android.app.Application;
 import android.app.Notification;
 import android.support.v4.app.NotificationManagerCompat;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class BagdadNotificationManagerTest {
         NotificationManagerCompat androidNotificationManager = mock(NotificationManagerCompat.class);
         notificationManager = new BagdadNotificationManager(application, androidNotificationManager, null);
 
-        Shot testShot = getTestShot1();
+        ShotEntity testShot = getTestShot1();
         notificationManager.sendNewShotNotification(testShot);
 
         ArgumentCaptor<Notification> argumentCaptor = ArgumentCaptor.forClass(Notification.class);
@@ -48,8 +48,8 @@ public class BagdadNotificationManagerTest {
         //TODO y ahora qué? ...
     }
 
-    private Shot getTestShot1() {
-        Shot testShot = new Shot();
+    private ShotEntity getTestShot1() {
+        ShotEntity testShot = new ShotEntity();
         testShot.setIdShot(SHOT_1_ID);
         testShot.setIdUser(USER_1_ID);
         testShot.setComment(COMMENT);
@@ -57,8 +57,8 @@ public class BagdadNotificationManagerTest {
         return testShot;
     }
 
-    private User getTestUser1() {
-        User testUser = new User();
+    private UserEntity getTestUser1() {
+        UserEntity testUser = new UserEntity();
         testUser.setIdUser(USER_1_ID);
         testUser.setUserName(USER_1_NAME);
         testUser.setPhoto("");
