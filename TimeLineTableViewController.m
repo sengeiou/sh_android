@@ -39,6 +39,7 @@ static NSString *CellIdentifier = @"shootCell";
 
 @implementation TimeLineTableViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -47,6 +48,7 @@ static NSString *CellIdentifier = @"shootCell";
     [self loadData];
 }
 
+//------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

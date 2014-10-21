@@ -20,7 +20,7 @@
 #define kLabelHorizontalPhotoInsets         16.0f
 #define kLabelVerticalPhotoInsets           11.5f
 #define kLabelVerticalInsets                7.5f
-#define kLabelVerticalBottomComment         18.0f
+#define kLabelVerticalBottomComment         24.0f
 #define kLabelVerticalCommentToName         1.0f
 
 @interface ShotTableViewCell ()
@@ -32,11 +32,13 @@
 
 @implementation ShotTableViewCell
 
+//------------------------------------------------------------------------------
 - (void)awakeFromNib {
     
     
 }
 
+//------------------------------------------------------------------------------
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -77,6 +79,7 @@
 
 }
 
+//------------------------------------------------------------------------------
 - (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row {
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
@@ -89,27 +92,19 @@
 
     self.lblName.text = shot.user.userName;
     
-    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];  
-//    self.imgPhoto.layer.masksToBounds = YES;
-    
-    NSLog(@"%@", shot.user.name);
-    NSLog(@"%ld", (long)row);
+    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];
     
     self.lblDate.text = [TimeLineUtilities getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;
 }
 
-- (void)addTarget:(id)target action:(SEL)action
-{
+//------------------------------------------------------------------------------
+- (void)addTarget:(id)target action:(SEL)action {
+    
     [self.btnPhoto addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state
-}
-
+//------------------------------------------------------------------------------
 - (void)updateConstraints {
     
     if (!self.didSetupConstraints) {
@@ -125,9 +120,8 @@
         [self.txvText autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.lblName withOffset:kLabelVerticalCommentToName];
         [self.txvText autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalBottomComment relation:NSLayoutRelationGreaterThanOrEqual];
         
-//        //PHOTO
+        //PHOTO
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:kLabelVerticalPhotoInsets];
-        [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kLabelVerticalPhotoInsets relation:NSLayoutRelationGreaterThanOrEqual];
         [self.imgPhoto autoPinEdgeToSuperviewEdge:ALEdgeLeading withInset:kLabelHorizontalPhotoInsets];
         [self.imgPhoto autoSetDimensionsToSize:CGSizeMake(48, 48)];
         
@@ -146,8 +140,9 @@
     [super updateConstraints];
 }
 
-- (void)layoutSubviews
-{
+//------------------------------------------------------------------------------
+- (void)layoutSubviews {
+    
     [super layoutSubviews];
     
     // Make sure the contentView does a layout pass here so that its subviews have their frames set, which we
