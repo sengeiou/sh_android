@@ -55,5 +55,15 @@ namespace BagdadTest.Models
             Assert.AreEqual(0, user.points);
             Assert.AreEqual(96775, user.idFavoriteTeam);
         }
+
+        [TestMethod]
+        public void TestFindFriendsInServer()
+        {
+            User user = new User();
+            List<User> listOfFindedUsers = user.FindUsersInServer("a", 0).Result;
+            Assert.AreNotEqual(0, listOfFindedUsers.Count);
+            foreach (User userInfo in listOfFindedUsers)
+                Assert.AreNotEqual(0, userInfo.idUser);
+        }
     }
 }
