@@ -23,7 +23,7 @@ def getSvnRevision(){
     return revision.getNumber();
 }
 
-//apply plugin: 'android-sdk-manager'
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 //apply plugin: 'hugo'
 
