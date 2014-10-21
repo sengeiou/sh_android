@@ -41,9 +41,9 @@ public class FollowButton extends FrameLayout {
         addView(followingButton);
 
 
-        //if (isInEditMode()) {
-        //    setFollowing(false);
-        //}
+        if (isInEditMode()) {
+            setFollowing(false);
+        }
     }
 
     @Override public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -56,7 +56,6 @@ public class FollowButton extends FrameLayout {
             followButton.setVisibility(GONE);
             followingButton.setVisibility(VISIBLE);
         } else {
-
             followButton.setVisibility(VISIBLE);
             followingButton.setVisibility(GONE);
         }
@@ -73,6 +72,9 @@ public class FollowButton extends FrameLayout {
     }
 
     public boolean isFollowing() {
-        return isFollowing;
+        if(followButton.getVisibility() == View.GONE && followingButton.getVisibility() == View.VISIBLE){
+            return true;
+        }
+        return false;
     }
 }

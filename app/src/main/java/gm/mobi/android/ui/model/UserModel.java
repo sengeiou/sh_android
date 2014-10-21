@@ -4,6 +4,7 @@ public class UserModel {
 
     private Long idUser;
     private String favoriteTeamName;
+    private Long favoriteTeamId;
     private String userName;
     private String name;
     private String photo;
@@ -12,7 +13,23 @@ public class UserModel {
     private String website;
     private String bio;
     private int relationship;
+    private Long points;
 
+    public Long getPoints() {
+        return points;
+    }
+
+    public void setPoints(Long points) {
+        this.points = points;
+    }
+
+    public Long getFavoriteTeamId() {
+        return favoriteTeamId;
+    }
+
+    public void setFavoriteTeamId(Long favoriteTeamId) {
+        this.favoriteTeamId = favoriteTeamId;
+    }
     public Long getIdUser() {
         return idUser;
     }

@@ -1,6 +1,12 @@
 package gm.mobi.android.ui.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -33,6 +39,7 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.model.UserModel;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -161,14 +168,17 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @OnItemClick(R.id.userlist_list)
     public void openUserProfile(int position) {
         user = getAdapter().getItem(position);
-        startActivity(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()));
+        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()), 666);
     }
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        //Proceso de encolamiento
-        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,user.getIdUser(),followType);
-        jobManager.addJobInBackground(job2);
+        //Proceso de insercción en base de datos
+        if(!isNetworkAvailable()){
+            GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+            job2.init(currentUser,userVO.getIdUser(),followType);
+            jobManager.addJobInBackground(job2);
+        }
+
         //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         job.init(currentUser,userVO.getIdUser(), followType);
@@ -209,6 +219,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         ButterKnife.reset(this);
     }
 
+    @Override public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        Timber.e("Entra en onViewStateRestored");
+        getAdapter().notifyDataSetChanged();
+    }
+
     public UserListAdapter getAdapter() {
         if (userListAdapter == null) {
             userListAdapter = new UserListAdapter(getActivity(), picasso);
@@ -225,26 +241,74 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
-        unfollowUser(user);
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getName()+"?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                unfollowUser(user);
+              }
+          })
+          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+
+              }
+          })
+          .create()
+          .show();
     }
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
             UserModel userVO = event.getResult();
+        if(userVO!=null){
             List<UserModel> userVOs = getAdapter().getItems();
-            int i = userVOs.indexOf(userVO);
-            userVOs.remove(userVO);
+            int i = 0,index = 0;
+            for(UserModel userModel:userVOs){
+                if(userModel.getIdUser().equals(userVO.getIdUser())){
+                    index = i;
+                }
+                i++;
+            }
+            userVOs.remove(index);
             getAdapter().removeItems();
-            userVOs.add(i,userVO);
+            userVOs.add(index,userVO);
             getAdapter().setItems(userVOs);
-
-
             getAdapter().notifyDataSetChanged();
+        }
+
     }
 
-    public boolean isThereInternetConnection(){
-        return networkUtil.isConnected(getActivity().getApplication());
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+          .getActiveNetworkInfo();
+        return activeNetworkInfo != null;
     }
 
-
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode == Activity.RESULT_OK && data!=null){
+            Bundle bundleUser = data.getExtras();
+            int i=0;int index =0;
+            UserModel userModel = new UserModel();
+            userModel.setPhoto(bundleUser.getString("PHOTO"));
+            userModel.setUserName(bundleUser.getString("USER_NAME"));
+            userModel.setName(bundleUser.getString("NAME"));
+            userModel.setFavoriteTeamName(bundleUser.getString("FAVORITE_TEAM"));
+            userModel.setRelationship(bundleUser.getInt("RELATIONSHIP"));
+            userModel.setIdUser(bundleUser.getLong("ID_USER"));
+            List<UserModel> userModels = getAdapter().getItems();
+            for(UserModel userM: userModels){
+                if(userM.getIdUser().equals(userModel.getIdUser())){
+                    index = i;
+                }
+                i++;
+            }
+            userModels.remove(index);
+            getAdapter().removeItems();
+            userModels.add(index,userModel);
+            getAdapter().setItems(userModels);
+            getAdapter().notifyDataSetChanged();
+        }
+    }
 }

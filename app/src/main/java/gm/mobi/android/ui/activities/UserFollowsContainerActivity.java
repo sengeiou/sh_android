@@ -74,4 +74,5 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         String title = followType.equals(UserDtoFactory.GET_FOLLOWERS) ? getString(R.string.activity_followers_title) : getString(R.string.activity_following_title);
         getSupportActionBar().setTitle(title);
     }
+
 }

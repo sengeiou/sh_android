@@ -1,6 +1,10 @@
 package gm.mobi.android.ui.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,6 +32,7 @@ import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
+import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
@@ -62,6 +67,8 @@ public class ProfileFragment extends BaseFragment {
     Long idUser;
 
     UserEntity currentUser;
+
+    static UserModel user;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -147,6 +154,11 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
         setUserInfo(event.getResult());
+
+    }
+
+    public static UserModel getUser(){
+        return user;
     }
 
     private void setTitle(String title) {
@@ -154,6 +166,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setBasicUserInfo(UserModel user) {
+        this.user = user;
         setTitle(user.getUserName());
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
@@ -206,7 +219,17 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void unfollowUser(){
-        startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getName()+"?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+              }
+          })
+          .setNegativeButton("No", null)
+          .create()
+          .show();
+
     }
 
     private void openUserFollowsList(int followType) {
@@ -221,6 +244,5 @@ public class ProfileFragment extends BaseFragment {
           .getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
-
 
 }

@@ -8,31 +8,35 @@ import java.util.Date;
 public class UserModelMapper {
 
     public UserModel toUserModel(UserEntity user, FollowEntity follow, Long currentUserId){
-        UserModel userVO = new UserModel();
-        userVO.setIdUser(user.getIdUser());
-        userVO.setBio(user.getBio());
-        userVO.setUserName(user.getUserName());
-        userVO.setFavoriteTeamName(user.getFavoriteTeamName());
-        userVO.setName(user.getName());
-        userVO.setNumFollowers(user.getNumFollowers());
-        userVO.setNumFollowings(user.getNumFollowings());
-        userVO.setPhoto(user.getPhoto());
-        userVO.setRelationship(user.getIdUser().equals(currentUserId) ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(follow));
-        userVO.setWebsite(user.getWebsite());
-        return userVO;
+        UserModel userModel = new UserModel();
+        userModel.setIdUser(user.getIdUser());
+        userModel.setBio(user.getBio());
+        userModel.setUserName(user.getUserName());
+        userModel.setFavoriteTeamId(user.getFavoriteTeamId());
+        userModel.setPoints(user.getPoints());
+        userModel.setFavoriteTeamName(user.getFavoriteTeamName());
+        userModel.setName(user.getName());
+        userModel.setNumFollowers(user.getNumFollowers());
+        userModel.setNumFollowings(user.getNumFollowings());
+        userModel.setPhoto(user.getPhoto());
+        userModel.setRelationship(user.getIdUser().equals(currentUserId) ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(follow));
+        userModel.setWebsite(user.getWebsite());
+        return userModel;
     }
 
-    public UserEntity userByUserVO(UserModel userVO){
+    public UserEntity userByUserVO(UserModel userModel){
         UserEntity user = new UserEntity();
-        user.setIdUser(userVO.getIdUser());
-        user.setBio(userVO.getBio());
-        user.setFavoriteTeamName(userVO.getFavoriteTeamName());
-        user.setUserName(userVO.getUserName());
-        user.setName(userVO.getName());
-        user.setWebsite(userVO.getWebsite());
-        user.setNumFollowers(userVO.getNumFollowers());
-        user.setNumFollowings(userVO.getNumFollowings());
-        user.setPhoto(userVO.getPhoto());
+        user.setIdUser(userModel.getIdUser());
+        user.setBio(userModel.getBio());
+        user.setFavoriteTeamId(userModel.getFavoriteTeamId());
+        user.setFavoriteTeamName(userModel.getFavoriteTeamName());
+        user.setUserName(userModel.getUserName());
+        user.setName(userModel.getName());
+        user.setWebsite(userModel.getWebsite());
+        user.setPoints(userModel.getPoints());
+        user.setNumFollowers(userModel.getNumFollowers());
+        user.setNumFollowings(userModel.getNumFollowings());
+        user.setPhoto(userModel.getPhoto());
         user.setCsys_birth(new Date());
         user.setCsys_modified(new Date());
         user.setCsys_revision(0);
@@ -40,7 +44,7 @@ public class UserModelMapper {
     }
 
     private int getRelationShip(FollowEntity f){
-        if(f!=null){
+        if(f!=null && f.getCsys_deleted() == null){
             return FollowEntity.RELATIONSHIP_FOLLOWING;
         }else{
             return FollowEntity.RELATIONSHIP_NONE;

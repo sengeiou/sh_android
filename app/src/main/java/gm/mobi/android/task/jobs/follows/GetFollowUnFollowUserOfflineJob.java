@@ -29,7 +29,6 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
     private UserModelMapper userModelMapper;
 
     private UserEntity currentUser;
-    private UserModel user;
     private Long idUser;
     private int followUnfollowType;
     private int doIFollowHim;
@@ -62,23 +61,24 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
         doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+        UserModel userToReturn = null;
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
                 FollowEntity followUser = followUserInDB();
-                UserEntity userToCreate = null;
                 doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                if(followUser.getIdUser()!=null)
-                 userToCreate = userModelMapper.userByUserVO(user);
-                userManager.saveUser(userToCreate);
-                user.setRelationship(doIFollowHim);
-                postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+                if(followUser.getIdUser()!=null){
+                    UserEntity user = userManager.getUserByIdUser(idUser);
+                    if(user!=null){
+                        userToReturn = userModelMapper.toUserModel(user,followUser, idCurrentUser);
+                    }
+                }
+                postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
                 break;
             case UserDtoFactory.UNFOLLOW_TYPE:
                 if(doIFollowHim == FollowEntity.RELATIONSHIP_FOLLOWING){
                     FollowEntity follow = unfollowUserinDB();
-                    doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                    user.setRelationship(doIFollowHim);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+                    userToReturn = userModelMapper.toUserModel(userManager.getUserByIdUser(idUser),follow,idCurrentUser);
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
                 }else{
                     //TODO. Check if we aren't in the good followType
                     return;
@@ -106,6 +106,7 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         if(follow!=null && (follow.getCsys_synchronized().equals("N") || follow.getCsys_synchronized().equals("U") || follow.getCsys_synchronized().equals("D"))){
             follow.setCsys_synchronized("U");
         }else{
+            follow = new FollowEntity();
             follow.setCsys_synchronized("N");
         }
         follow.setFollowedUser(idUser);

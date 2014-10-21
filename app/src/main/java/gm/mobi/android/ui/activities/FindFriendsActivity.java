@@ -99,20 +99,20 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         resultsListView.addFooterView(progressView, null, false);
 
         new ListViewScrollObserver(resultsListView).setOnScrollUpAndDownListener(
-                new ListViewScrollObserver.OnListViewScrollListener() {
-                    @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+          new ListViewScrollObserver.OnListViewScrollListener() {
+              @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 /* no-op */
-                    }
+              }
 
-                    @Override public void onScrollIdle() {
-                        int lastVisiblePosition = resultsListView.getLastVisiblePosition();
-                        int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
-                        boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
-                        if (shouldStartLoadingMore && hasMoreItemsToLoad) {
-                            makeNextRemoteSearch();
-                        }
-                    }
-                });
+              @Override public void onScrollIdle() {
+                  int lastVisiblePosition = resultsListView.getLastVisiblePosition();
+                  int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
+                  boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                  if (shouldStartLoadingMore && hasMoreItemsToLoad) {
+                      makeNextRemoteSearch();
+                  }
+              }
+          });
     }
 
     private View getLoadingView() {
@@ -342,20 +342,26 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
         UserModel userVO = event.getResult();
-        List<UserModel> userVOs = adapter.getItems();
-        int i = userVOs.indexOf(userVO);
-        userVOs.remove(userVO);
-        adapter.removeItems();
-        userVOs.add(i,userVO);
-        adapter.setItems(userVOs);
-
-
-        adapter.notifyDataSetChanged();
-
+        if (userVO != null) {
+            List<UserModel> userVOs = adapter.getItems();
+            int i = 0, index = 0;
+            for (UserModel userModel : userVOs) {
+                if (userModel.getIdUser().equals(userVO.getIdUser())) {
+                    index = i;
+                }
+                i++;
+            }
+            userVOs.remove(index);
+            adapter.removeItems();
+            userVOs.add(index, userVO);
+            adapter.setItems(userVOs);
+            adapter.notifyDataSetChanged();
+        }
     }
 
 
 
-}
+
+    }

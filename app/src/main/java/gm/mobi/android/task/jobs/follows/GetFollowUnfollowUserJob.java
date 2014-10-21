@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
 
@@ -69,23 +70,22 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
          synchronized (followManager){
             checkIfWeHaveSomeChangesInFollowAndSendToServer();
             FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,idUser);
-            user = userModelMapper.toUserModel(getUserByIdUser(idUser),follow,idCurrentUser);
-            switch (followUnfollowType){
+             FollowEntity followUser= null;
+             doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+             switch (followUnfollowType){
                 case UserDtoFactory.FOLLOW_TYPE:
-                    FollowEntity followUser = followUser();
+                     followUser = followUser();
+                    user = userModelMapper.toUserModel(getUserByIdUser(idUser),followUser,idCurrentUser);
                     UserEntity userToCreate = null;
-                    doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
                     if(followUser.getIdUser()!=null)
                         userToCreate = userModelMapper.userByUserVO(user);
                         userManager.saveUser(userToCreate);
-                        user.setRelationship(doIFollowHim);
                         postSuccessfulEvent(new FollowUnFollowResultEvent(user));
                 break;
                 case UserDtoFactory.UNFOLLOW_TYPE:
                     if(doIFollowHim == FollowEntity.RELATIONSHIP_FOLLOWING){
-                        unfollowUser();
-                        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                        user.setRelationship(doIFollowHim);
+                        followUser = unfollowUser();
+                        user = userModelMapper.toUserModel(getUserByIdUser(idUser),followUser,idCurrentUser);
                         postSuccessfulEvent(new FollowUnFollowResultEvent(user));
                     }else{
                         //TODO. Check if we aren't in the good followType
@@ -136,10 +136,11 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     public FollowEntity followUser() throws IOException, SQLException{
         FollowEntity follow = new FollowEntity();
         follow.setFollowedUser(idUser);
+        Timber.e("IDUSER WHO IS FOLLOWED"+String.valueOf(idUser));
         follow.setIdUser(currentUser.getIdUser());
+        Timber.e("ID USER WHO FOLLOWS TO"+String.valueOf(currentUser.getIdUser()));
         follow.setCsys_birth(new Date());
-        follow.setCsys_modified(new Date());
-        follow.setCsys_revision(0);
+        follow.setCsys_modified(new Date());        follow.setCsys_revision(0);
         FollowEntity followReceived = service.followUser(follow);
         if(followReceived!=null){
             followManager.saveFollowFromServer(followReceived);

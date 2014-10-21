@@ -1,5 +1,6 @@
 package gm.mobi.android.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import timber.log.Timber;
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
     private static final String EXTRA_USER = "user";
+    Long idUser;
 
     public static Intent getIntent(Context context, Long idUser) {
         Intent i = new Intent(context, ProfileContainerActivity.class);
@@ -32,7 +34,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         setupActionBar();
 
         if (savedInstanceState == null) {
-            Long idUser = (Long) getIntent().getSerializableExtra(EXTRA_USER);
+            idUser = (Long) getIntent().getSerializableExtra(EXTRA_USER);
             if (idUser == null) {
                 Timber.e("Se intentó abrir la pantalla de perfil con sin pasarle user");
                 finish();
@@ -60,5 +62,21 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override public void onBackPressed() {
+        Intent data = new Intent();
+        Bundle bundleUser = new Bundle();
+        UserModel user = ProfileFragment.getUser();
+        bundleUser.putLong("ID_USER", user.getIdUser());
+        bundleUser.putString("USER_NAME", user.getUserName());
+        bundleUser.putString("NAME", user.getName());
+        bundleUser.putString("FAVORITE_TEAM", user.getFavoriteTeamName());
+        bundleUser.putInt("RELATIONSHIP", user.getRelationship());
+        bundleUser.putString("PHOTO", user.getPhoto());
+        data.putExtras(bundleUser);
+        setResult(Activity.RESULT_OK,data);
+        super.onBackPressed();
+
     }
 }
