@@ -258,6 +258,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         } else {
             adapter.setItems(users);
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void setLoading(boolean loading) {
