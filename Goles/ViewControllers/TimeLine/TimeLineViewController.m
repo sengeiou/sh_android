@@ -61,6 +61,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"Timeline", nil);
     
     self.timelineTableView =  self.childViewControllers.firstObject;
     self.timelineTableView.delegate = self;

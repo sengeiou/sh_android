@@ -80,3 +80,6 @@
 "The network connection was lost" = "The network connection was lost";
 "We are working to fix it as soon as possible" = "We are working to fix it as soon as possible";
 
+//FOLLOW/UNFOLLOW
+/************Alertas ***************/
+"Unfollow" = "Unfollow";

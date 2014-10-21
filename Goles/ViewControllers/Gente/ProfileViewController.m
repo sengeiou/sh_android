@@ -69,12 +69,12 @@
 //------------------------------------------------------------------------------
 - (void)customView{
     
-    UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
-                                initWithTitle:@" "
-                                style:UIBarButtonItemStylePlain
-                                target:self
-                                action:nil];
-    self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
+//    UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
+//                                initWithTitle:@" "
+//                                style:UIBarButtonItemStylePlain
+//                                target:self
+//                                action:nil];
+//    self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
 
     
     self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire

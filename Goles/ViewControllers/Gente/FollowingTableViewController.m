@@ -23,6 +23,7 @@
 @property (nonatomic,strong) NSArray *usersList;
 @property (nonatomic,weak) IBOutlet UITableView *usersTable;
 @property (nonatomic,strong)       NSIndexPath         *indexToShow;
+@property (nonatomic,assign)       BOOL   followActionSuccess;
 
 @end
 
@@ -101,16 +102,58 @@
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersList[btn.tag];
         
-    BOOL followActionSuccess;
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
-        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+        self.followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
     else
-        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-    
+        [self unfollow:userFollow];
+        
     [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
 
-    if (followActionSuccess)
+    [self reloadTable];
+}
+
+-(void)unfollow:(User *)userUnfollow{
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:userUnfollow.userName
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [alert dismissViewControllerAnimated:YES completion:nil];
+                            
+                             self.followActionSuccess = NO;
+                         }];
+    
+    UIAlertAction* unfollow = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                             style:UIAlertActionStyleDestructive
+                             handler:^(UIAlertAction * action)
+                             {
+                                 
+                                 self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                               
+                                 [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
+                                 
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+
+    
+    [alert addAction:unfollow];
+
+    [alert addAction:cancel];
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)reloadTable{
+    if (self.followActionSuccess)
         [self.usersTable reloadData];
+
 }
 
 //------------------------------------------------------------------------------
