@@ -49,7 +49,6 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
         this.setOpenHelper(openHelper);
     }
 
-    //TODO init with id
     public void init(UserEntity currentUser, Long idUser, int followUnfollowType){
         this.currentUser = currentUser;
         this.idUser = idUser;
@@ -99,7 +98,6 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     public void checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException{
        synchronized (followManager){
-           //TODO check, just what csys_syncronized is 'N', 'U', 'D'
            List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
            FollowEntity followReceived = null;
            if(followsToUpdate.size()>0){

@@ -51,7 +51,6 @@ public class FollowManager extends AbstractManager{
     /** Insert a Follow **/
     public void saveFollow(FollowEntity follow)
     {
-        //In this case, the follow is created by us. So synchronized attribut must be "N" or "U"
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
             db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -222,7 +221,7 @@ public class FollowManager extends AbstractManager{
     public List<FollowEntity> getDatasForSendToServerInCase(){
         long res = 0;
         List<FollowEntity> followsToUpdate = new ArrayList<>();
-        String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'S' OR "+CSYS_SYNCHRONIZED+"='U'";
+        String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'D' OR "+CSYS_SYNCHRONIZED+"='U'";
         Cursor c = db.query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();

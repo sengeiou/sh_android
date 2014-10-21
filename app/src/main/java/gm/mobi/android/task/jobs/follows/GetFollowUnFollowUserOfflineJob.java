@@ -93,7 +93,7 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         //attribute to "U"
         FollowEntity follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
         follow.setCsys_deleted(new Date());
-        follow.setCsys_synchronized("U");
+        follow.setCsys_synchronized("D");
         followManager.saveFollow(follow);
         return follow;
     }
@@ -101,13 +101,18 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
     public FollowEntity followUserInDB() throws IOException, SQLException{
         //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
         //So the syncrhonized attribute for this case is "N"
-        FollowEntity follow = new FollowEntity();
+
+        FollowEntity follow = followManager.getFollowByUserIds(currentUser.getIdUser(),idUser);
+        if(follow!=null && (follow.getCsys_synchronized().equals("N") || follow.getCsys_synchronized().equals("U") || follow.getCsys_synchronized().equals("D"))){
+            follow.setCsys_synchronized("U");
+        }else{
+            follow.setCsys_synchronized("N");
+        }
         follow.setFollowedUser(idUser);
         follow.setIdUser(currentUser.getIdUser());
         follow.setCsys_birth(new Date());
         follow.setCsys_modified(new Date());
         follow.setCsys_revision(0);
-        follow.setCsys_synchronized("N");
         followManager.saveFollow(follow);
         return follow;
     }
