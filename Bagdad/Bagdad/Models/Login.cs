@@ -29,9 +29,18 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
 
         private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-        
+
+        public Login(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public Login()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> logins)
         {
             int done = 0;
@@ -149,7 +158,7 @@ namespace Bagdad.Models
         }
 
         /// <summary>
-        /// Construimos el filtro 
+        /// Construct the filter
         /// </summary>
         /// <param name="conditionDate"></param>
         /// <returns></returns>
@@ -158,7 +167,7 @@ namespace Bagdad.Models
             StringBuilder sbFilterIdUser = new StringBuilder();
             try
             {
-                Follow follow = new Follow();
+                Follow follow = bagdadFactory.CreateFollow();
                 var followList = await follow.getidUserFollowing();
                 bool isFirst = true;
                 foreach (int idUser in followList)
@@ -173,7 +182,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
+                throw new Exception("E R R O R - Login - constructFilterFollow: " + e.Message);
             }
             return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ " + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
@@ -206,7 +215,7 @@ namespace Bagdad.Models
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
         {
             List<BaseModelJsonConstructor> users = new List<BaseModelJsonConstructor>();
-            UserImageManager userImageManager = new UserImageManager();
+            UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
             try
             {
                 if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["items"].ToString().Equals("0"))
@@ -247,7 +256,7 @@ namespace Bagdad.Models
             catch (Exception e)
             {
 
-                throw new Exception("E R R O R - Shot - ParseJson: " + e.Message);
+                throw new Exception("E R R O R - Login - ParseJson: " + e.Message);
             }
             return users;
         }
