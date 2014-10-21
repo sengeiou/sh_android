@@ -7,9 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
-        classpath 'org.robolectric:robolectric-gradle-plugin:0.11.+'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'org.tmatesoft.svnkit:svnkit:1.8.5'
     }
@@ -146,5 +144,5 @@ dependencies {
         transitive = true
     }
 
-    compile project(':ext-libs:SwipeRefreshLayoutOverlay:library')
+    compile 'es.oneoctopus.swiperefreshlayoutoverlay:library:3.0.0'
 }

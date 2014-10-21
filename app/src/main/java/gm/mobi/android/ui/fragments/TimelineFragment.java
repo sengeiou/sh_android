@@ -262,7 +262,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     @Override
-    public void onRefresh() throws SQLException {
+    public void onRefresh() {
         Context context = getActivity();
         if (context != null) {
             startRefreshing(context);

@@ -1,1 +1,1 @@
-include ':app', 'ext-libs:SwipeRefreshLayoutOverlay:library', ':robolectric-tests'
+include ':app', ':robolectric-tests'
