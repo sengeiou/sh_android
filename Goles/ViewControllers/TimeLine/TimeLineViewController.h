@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TimeLineViewController : UIViewController <UITextViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface TimeLineViewController : UIViewController
 
 //Publixc interface for Unit Testing
 -(BOOL) controlRepeatedShot:(NSString *)texto;

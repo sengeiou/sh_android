@@ -14,6 +14,7 @@
 		9EB33D0E19F2C5D9001A0151 /* EditButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D0D19F2C5D9001A0151 /* EditButtonProfile.m */; };
 		9EB33D1119F2C659001A0151 /* FollowingButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D1019F2C659001A0151 /* FollowingButtonProfile.m */; };
 		9EB33D1519F2D807001A0151 /* WritingText.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D1419F2D807001A0151 /* WritingText.m */; };
+		9EF1B08419F6779200D4F30D /* TimeLineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EF1B08319F6779200D4F30D /* TimeLineTableViewController.m */; };
 		A50CCD8419C8889B005369E6 /* Conection.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8319C8889B005369E6 /* Conection.m */; };
 		A50CCD8719C898A5005369E6 /* Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = A50CCD8619C898A5005369E6 /* Encryption.m */; };
 		A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A52B9A0D19E688A6007D8A67 /* DownloadImage.m */; };
@@ -148,6 +149,8 @@
 		9EB33D1019F2C659001A0151 /* FollowingButtonProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FollowingButtonProfile.m; path = Buttons/FollowingButtonProfile.m; sourceTree = "<group>"; };
 		9EB33D1319F2D807001A0151 /* WritingText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WritingText.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WritingText.h"; sourceTree = SOURCE_ROOT; };
 		9EB33D1419F2D807001A0151 /* WritingText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WritingText.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WritingText.m"; sourceTree = SOURCE_ROOT; };
+		9EF1B08219F6779200D4F30D /* TimeLineTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeLineTableViewController.h; sourceTree = SOURCE_ROOT; };
+		9EF1B08319F6779200D4F30D /* TimeLineTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeLineTableViewController.m; sourceTree = SOURCE_ROOT; };
 		A50CCD8219C8889B005369E6 /* Conection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conection.h; sourceTree = "<group>"; };
 		A50CCD8319C8889B005369E6 /* Conection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conection.m; sourceTree = "<group>"; };
 		A50CCD8519C898A5005369E6 /* Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encryption.h; sourceTree = "<group>"; };
@@ -385,6 +388,15 @@
 				0800933819F59E5100429207 /* ViewNotShots.m */,
 			);
 			name = "Custom classes";
+			sourceTree = "<group>";
+		};
+		9EF1B08519F68C3C00D4F30D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
+				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		A526039019DD7F9D00375FB1 /* Webservice */ = {
@@ -745,12 +757,13 @@
 		AA623E881998D78600A942A9 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				9EF1B08519F68C3C00D4F30D /* Utilities */,
 				9EB33D1219F2D7BE001A0151 /* Custom classes */,
 				A59EECDA19D1759F00D011C5 /* CustomCells */,
 				AACA545319C08E4A00E39D94 /* TimeLineViewController.h */,
 				AACA545419C08E4A00E39D94 /* TimeLineViewController.m */,
-				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
-				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
+				9EF1B08219F6779200D4F30D /* TimeLineTableViewController.h */,
+				9EF1B08319F6779200D4F30D /* TimeLineTableViewController.m */,
 				9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */,
 				9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */,
 			);
@@ -1028,6 +1041,7 @@
 				0800933919F59E5100429207 /* ViewNotShots.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
+				9EF1B08419F6779200D4F30D /* TimeLineTableViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */,
 				9EB33D1519F2D807001A0151 /* WritingText.m in Sources */,
@@ -1212,7 +1226,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1245,7 +1259,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1257,6 +1271,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
@@ -1269,7 +1285,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
-				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
@@ -1282,6 +1298,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
@@ -1294,7 +1312,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = Shootr;
-				PROVISIONING_PROFILE = "96a0bd77-0161-448c-943b-a71e45c31c7f";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Goles/Managers/Shootr-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};

@@ -25,19 +25,20 @@
 #import "WritingText.h"
 #import "WatchingMenu.h"
 #import "ViewNotShots.h"
+#import "TimeLineTableViewController.h"
 
-@interface TimeLineViewController ()<UIScrollViewDelegate, UITextViewDelegate, ConectionProtocol>{
+@interface TimeLineViewController ()<UITextViewDelegate, ConectionProtocol, TimeLineTableViewControllerDelegate>{
+   
     NSUInteger lengthTextField;
-    BOOL moreCells;
-    BOOL refreshTable;
     BOOL returningFromBackground;
-    float rows;
+    float textViewWrittenRows;
     CGRect previousRect;
 
     UITapGestureRecognizer *tapTapRecognizer;
 }
 
-@property (nonatomic,weak)      IBOutlet    UITableView                 *timelineTableView;
+@property (nonatomic,strong)      TimeLineTableViewController               *timelineTableView;
+
 @property (nonatomic,weak)      IBOutlet    WritingText                 *writingTextBox;
 @property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
 @property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
@@ -48,21 +49,11 @@
 @property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewPositionConstraint;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewHeightConstraint;
-@property (nonatomic,strong)                NSArray                     *arrayShots;
-@property (nonatomic,strong)                UIRefreshControl            *refreshControl;
-@property (nonatomic, assign)               CGFloat                     lastContentOffset;
 @property (nonatomic, assign)               int                         sizeKeyboard;
-@property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
-@property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                NSString                    *textComment;
 
 
-
-@property (strong, nonatomic) NSMutableDictionary *offscreenCells;
-
 @end
-
-static NSString *CellIdentifier = @"shootCell";
 
 @implementation TimeLineViewController
 
@@ -70,7 +61,10 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-        
+    
+    self.timelineTableView =  self.childViewControllers.firstObject;
+    self.timelineTableView.delegate = self;
+    
     //For Alpha version
     self.watchingMenu.hidden = YES;
     
@@ -86,8 +80,6 @@ static NSString *CellIdentifier = @"shootCell";
  
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-	
-    [self setupTimeLineTableView];
 }
 
 //------------------------------------------------------------------------------
@@ -99,7 +91,6 @@ static NSString *CellIdentifier = @"shootCell";
     [self getTimeLastSyncornized];
     
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-
 }
 
 //------------------------------------------------------------------------------
@@ -122,31 +113,7 @@ static NSString *CellIdentifier = @"shootCell";
     
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     
-    [self initSpinner];
-    
-    self.arrayShots = [[NSArray alloc]init];
     self.btnShoot.enabled = NO;
-}
-
-//------------------------------------------------------------------------------
-- (void)setupTimeLineTableView {
-    
-	self.offscreenCells = [NSMutableDictionary dictionary];
-	[self.timelineTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
-	
-    //Get shots from CoreData
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    
-    if (self.arrayShots.count == 0)
-        self.timelineTableView.hidden = YES;
-    else
-        [self hiddenViewNotShots];
-    
-    self.timelineTableView.scrollsToTop = YES;
-    self.timelineTableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
-    self.timelineTableView.rowHeight = UITableViewAutomaticDimension;
-    self.timelineTableView.estimatedRowHeight = 127.0f;
-
 }
 
 //------------------------------------------------------------------------------
@@ -155,10 +122,7 @@ static NSString *CellIdentifier = @"shootCell";
     //Listen for show conecting process
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
     
-    //Listen for synchro process end
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable:) name:K_NOTIF_SHOT_END object:nil];
-
-    //Listen to orientation changes
+      //Listen to orientation changes
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     //Listen for keyboard process open
@@ -216,30 +180,6 @@ static NSString *CellIdentifier = @"shootCell";
 
 }
 
-//------------------------------------------------------------------------------
-- (void)initSpinner{
-    moreCells = YES;
-    refreshTable = YES;
-    
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [self.spinner startAnimating];
-    self.spinner.frame = CGRectMake(0, 0, 320, 44);
-}
-
-//------------------------------------------------------------------------------
--(void)hiddenViewNotShots{
-    
-    [self addPullToRefresh];
-    
-    self.timelineTableView.hidden = NO;
-    self.viewNotShots.hidden = YES;
-    
-    if (self.timelineTableView.delegate == nil) {
-        self.timelineTableView.delegate = self;
-        self.timelineTableView.dataSource = self;
-    }
-}
-
 #pragma mark - FUTURE METHODS
 //------------------------------------------------------------------------------
 - (void) search{
@@ -257,195 +197,6 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void) watching{
     
-}
-
-
-#pragma mark - Pull to refresh
-//------------------------------------------------------------------------------
-- (void)addPullToRefresh{
-    // Config pull to refresh
-    if (self.refreshControl == nil) {
-        self.refreshControl = [[UIRefreshControl alloc] initWithFrame:CGRectMake(self.timelineTableView.frame.origin.x, self.timelineTableView.frame.origin.y+100, 40, 40)];
-        [self.refreshControl addTarget:self action:@selector(onPullToRefresh:) forControlEvents:UIControlEventValueChanged];
-        [self.timelineTableView addSubview:self.refreshControl];
-    }  
-}
-//------------------------------------------------------------------------------
-- (void)onPullToRefresh:(UIRefreshControl *)refreshControl {
-
-    //For Beta version only in iphone 4
-//    [UIView animateWithDuration:0.25 animations:^{
-//        self.watchingMenu.alpha = 0.0;
-//    }];
-    //[[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
-    
-    [self.refreshControl endRefreshing];
-
-}
-
-#pragma mark - UITableViewDelegate
-//
-////------------------------------------------------------------------------------
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    return self.watchingMenu.frame.size.height;
-//}
-//
-////------------------------------------------------------------------------------
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-//    
-//    UIView *header =  [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, self.watchingMenu.frame.size.height)];
-//    header.backgroundColor = [UIColor clearColor];
-//
-//    return header;
-//}
-
-//------------------------------------------------------------------------------
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return self.arrayShots.count;
-}
-
-////------------------------------------------------------------------------------
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    Shot *shot = self.arrayShots[indexPath.row];
-//    
-//    NSString *reuseIdentifier = CellIdentifier;
-//    ShotTableViewCell *cell = [self.offscreenCells objectForKey:reuseIdentifier];
-//    if (!cell) {
-//        cell = [[ShotTableViewCell alloc] init];
-//        [self.offscreenCells setObject:cell forKey:reuseIdentifier];
-//    }
-//    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-//    [cell addTarget:self action:@selector(goProfile:)];
-//
-//    [cell setNeedsUpdateConstraints];
-//    [cell updateConstraintsIfNeeded];
-//    
-//    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
-// 
-//    [cell setNeedsLayout];
-//    [cell layoutIfNeeded];
-//    
-//     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-//  
-//    NSLog(@"%f", height);
-//    
-//    height += 1;
-//    
-//    return height;
-//
-//}
-
-//------------------------------------------------------------------------------
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
-    Shot *shot = self.arrayShots[indexPath.row];
-	
-    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-    [cell addTarget:self action:@selector(goProfile:)];
-  
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-    
-    return cell;
- }
-
-//------------------------------------------------------------------------------
-- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-    if (!refreshTable && !moreCells){
-        self.spinner.hidden = YES;
-        
-        self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.timelineTableView.frame.size.width, 44)];
-        self.lblFooter.text = NSLocalizedString(@"No more shots", nil);
-        self.lblFooter.textColor = [Fav24Colors iosSevenGray];
-        self.lblFooter.textAlignment = NSTextAlignmentCenter;
-        self.lblFooter.backgroundColor = [UIColor clearColor];
-        self.timelineTableView.tableFooterView = self.lblFooter;
-    }else{
-        self.lblFooter.hidden = YES;
-    }
-}
-
-////------------------------------------------------------------------------------
-//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-////    // If you are just returning a constant value from this method, you should instead just set the table view's
-////    // estimatedRowHeight property (in viewDidLoad or similar), which is even faster as the table view won't
-////    // have to call this method for every row in the table view.
-////    //
-////    // Only implement this method if you have row heights that vary by extreme amounts and you notice the scroll indicator
-////    // "jumping" as you scroll the table view when using a constant estimatedRowHeight. If you do implement this method,
-////    // be sure to do as little work as possible to get a reasonably-accurate estimate.
-////    
-////    // NOTE for iOS 7.0.x ONLY, this bug has been fixed by Apple as of iOS 7.1:
-////    // A constraint exception will be thrown if the estimated row height for an inserted row is greater
-////    // than the actual height for that row. In order to work around this, we need to return the actual
-////    // height for the the row when inserting into the table view - uncomment the below 3 lines of code.
-////    // See: https://github.com/caoimghgin/TableViewCellWithAutoLayout/issues/6
-////    //    if (self.isInsertingRow) {
-////    //        return [self tableView:tableView heightForRowAtIndexPath:indexPath];
-////    //    }
-//     return UITableViewAutomaticDimension;
-//
-////	return 80;
-//
-//}
-
-//------------------------------------------------------------------------------
-- (void)addLoadMoreCell{
-    self.timelineTableView.tableFooterView = self.spinner;
-    
-    moreCells = NO;
-    [[FavRestConsumer sharedInstance] getOldShotsWithDelegate:self];
-    
-}
-
-#pragma mark - Button to Profile ViewController
-//------------------------------------------------------------------------------
-- (void)goProfile:(id)sender{
-    
-    UIButton *btn = (UIButton *) sender;
-    
-    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    
-    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
-    
-    Shot *selectedShot = self.arrayShots[btn.tag];
-    
-    profileVC.selectedUser = selectedShot.user;
-    
-    
-    [self.navigationController pushViewController:profileVC animated:YES];
-}
-
-#pragma mark - Reload table View
-//------------------------------------------------------------------------------
-- (void)reloadShotsTable:(id)sender {
-   
-
-   
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-    
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    
-#warning Need to check if some shot is inserted or deleted in DB. Only in this case is necessaary to reload
-    
-    if (self.arrayShots.count > 0)
-        [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
-}
-
-//------------------------------------------------------------------------------
-- (void)animationInsertShot{
-    
-    [self.timelineTableView reloadData];
-    
-//    [self.timelineTableView beginUpdates];
-//    NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
-//    [self.timelineTableView endUpdates];
 }
 
 #pragma mark - Send shot
@@ -476,9 +227,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (BOOL) controlRepeatedShot:(NSString *)texto{
     
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLineBetweenHours];
-    
-    if ([self isShotMessageAlreadyInList:self.arrayShots withText:texto])
+    if ([self isShotMessageAlreadyInList:[[ShotManager singleton] getShotsForTimeLineBetweenHours] withText:texto])
         return YES;
     
     return NO;
@@ -499,13 +248,13 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 -(void)changeStateViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-    self.lblFooter.hidden = YES;
-
+    [self.timelineTableView setFooterInvisible];
 }
+
 //------------------------------------------------------------------------------
 -(void)changeStateActualizandoViewNavBar{
     self.navigationItem.titleView = [TimeLineUtilities createActualizandoTitleView];
-    self.lblFooter.hidden = YES;
+    [self.timelineTableView setFooterInvisible];
 }
 
 #pragma mark - RESPONSE METHODS
@@ -516,7 +265,6 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (status & !isShot)
         [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
-    
     if (isShot){
         self.orientation = NO;
         [self shotCreated];
@@ -539,13 +287,20 @@ static NSString *CellIdentifier = @"shootCell";
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
-        [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
-        moreCells = YES;
+        [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
+        [self.timelineTableView isNecessaryMoreCells:YES];
+        //moreCells = YES;
     }else if (!refresh){
-        moreCells = NO;
-        refreshTable = NO;
+       // moreCells = NO;
+       // refreshTable = NO;
+        [self.timelineTableView isNecessaryMoreCells:NO];
+        [self.timelineTableView isNecessaryRefreshCells:NO];
     }
     [self performSelectorOnMainThread:@selector(changeViewTitleMainThread) withObject:nil waitUntilDone:NO];
+}
+
+-(void)callReloadTable{
+    [self.timelineTableView reloadShotsTable];
 }
 
 -(void)changeViewTitleMainThread{
@@ -565,11 +320,10 @@ static NSString *CellIdentifier = @"shootCell";
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
         lengthTextField = 0;
         [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
-        rows = 0;
+        textViewWrittenRows = 0;
         self.charactersLeft.hidden = YES;
-        [self performSelectorOnMainThread:@selector(reloadShotsTable:) withObject:nil waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
 
-        [self.timelineTableView setScrollsToTop:YES];
         self.btnShoot.enabled = NO;
         [self keyboardHide:nil];
         self.viewToDisableTextField.hidden = YES;
@@ -673,28 +427,8 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 #pragma mark - Reload methods
-//------------------------------------------------------------------------------
--(void)reloadTimeline{
-    //PAra la primera vez
-    self.viewNotShots.hidden = YES;
-    self.timelineTableView.hidden = NO;
-    
-    if (self.timelineTableView.delegate == nil) {
-        self.timelineTableView.delegate = self;
-        self.timelineTableView.dataSource = self;
-    }
-    /////
-    
-    [self.timelineTableView reloadData];
-}
 
-//------------------------------------------------------------------------------
--(void) removePullToRefresh{
-    
-   // self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-   // [self.timelineTableView reloadData];
-    [self.refreshControl endRefreshing];
-}
+
 
 //------------------------------------------------------------------------------
 - (void)setupUIWhenCancelOrNotConnection {
@@ -707,55 +441,6 @@ static NSString *CellIdentifier = @"shootCell";
 
 }
 
-#pragma mark - UIScrollViewDelegate
-//------------------------------------------------------------------------------
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-
-    // For Beta version and only iphone 4
-
-//    CGFloat currentOffset = scrollView.contentOffset.y;
-//    
-//   if (currentOffset == 0)
-//        [UIView animateWithDuration:0.25 animations:^{
-//            self.watchingMenu.alpha = 1.0;
-//            self.viewTextField.alpha = 1.0;
-//        }];
-//}
-
-//------------------------------------------------------------------------------
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
- 
-    
-    CGFloat currentOffset = scrollView.contentOffset.y;
-    CGFloat maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
-   
-    if (currentOffset < 0)
-        NSLog(@"");
-        // For Beta version and only iphone 4
-//        [UIView animateWithDuration:0.2 animations:^{
-//            self.watchingMenu.alpha = 0.0;
-//            self.viewTextField.alpha = 0.0; // For Beta version and only iphone 4
-//        }];
-    else{
-        if (maximumOffset - currentOffset <= 200.0 && moreCells)
-            [self addLoadMoreCell];
-
-// For Beta version and only iphone 4
-//         if (self.lastContentOffset > scrollView.contentOffset.y){
-//             [UIView animateWithDuration:0.25 animations:^{
-//                 self.viewTextField.alpha = 1.0;
-//             }];
-//         
-//         }else if (scrollView.contentOffset.y > self.watchingMenu.frame.size.height){
-//             [UIView animateWithDuration:0.2 animations:^{
-//                 self.viewTextField.alpha = 0.0;
-//             
-//             }];
-    }
-  
-    
-     self.lastContentOffset = scrollView.contentOffset.y;
-}
 
 #pragma mark - KEYBOARD
 //------------------------------------------------------------------------------
@@ -766,7 +451,7 @@ static NSString *CellIdentifier = @"shootCell";
     [self darkenBackgroundView];
 
 
-    self.timelineTableView.scrollEnabled = NO;
+    self.timelineTableView.tableView.scrollEnabled = NO;
 
     [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                               delay:0.0
@@ -829,26 +514,25 @@ static NSString *CellIdentifier = @"shootCell";
         
         self.backgroundView.hidden = YES;
         
-        [self.timelineTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
-        self.timelineTableView.scrollEnabled = YES;
+        [self.timelineTableView.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+        self.timelineTableView.tableView.scrollEnabled = YES;
             
         if (lengthTextField == 0){
             [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
             
-            rows = 0;
+            textViewWrittenRows = 0;
             self.charactersLeft.hidden = YES;
         }else
             self.writingTextBox.textColor = [UIColor blackColor];
 
-        if (rows <= 2) {
+        if (textViewWrittenRows <= 2) {
             self.bottomViewHeightConstraint.constant = 75;
             self.bottomViewPositionConstraint.constant = 0.0f;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
         }else{
-            self.bottomViewHeightConstraint.constant = ((rows-2)*self.writingTextBox.font.lineHeight)+75;
-//            self.bottomViewHeightConstraint.constant = (rows*18)+75;
+            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-2)*self.writingTextBox.font.lineHeight)+75;
             self.bottomViewPositionConstraint.constant = 0.0f;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
@@ -886,6 +570,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.charactersLeft.text = [self countCharacters:lengthTextField];
     return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
 }
+
 //------------------------------------------------------------------------------
 - (void)textViewDidChange:(UITextView *)textView{
     
@@ -902,16 +587,16 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenWriting:(UITextView *)textView withCharacter:(NSString *)character{
 
-	rows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight);
+	textViewWrittenRows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight);
 
     if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
-        if (rows > 2 && ![character isEqualToString:@"\n"] && ![character isEqualToString:@""]) {
-            self.bottomViewHeightConstraint.constant = ((rows-2)*textView.font.lineHeight)+75;
+        if (textViewWrittenRows > 2 && ![character isEqualToString:@"\n"] && ![character isEqualToString:@""]) {
+            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-2)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
-        }else if(rows > 1 && [character isEqualToString:@"\n"]){
-            self.bottomViewHeightConstraint.constant = ((rows-1)*textView.font.lineHeight)+75;
+        }else if(textViewWrittenRows > 1 && [character isEqualToString:@"\n"]){
+            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-1)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self.view layoutIfNeeded];
             }];
@@ -922,9 +607,9 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)adaptViewSizeWhenDeleting:(UITextView *)textView{
     
-    if (rows > 2) {
-        rows = rows-3;
-        self.bottomViewHeightConstraint.constant = (rows*textView.font.lineHeight)+75;
+    if (textViewWrittenRows > 2) {
+        textViewWrittenRows = textViewWrittenRows-3;
+        self.bottomViewHeightConstraint.constant = (textViewWrittenRows*textView.font.lineHeight)+75;
         [UIView animateWithDuration:0.25f animations:^{
             [self.view layoutIfNeeded];
         }];
@@ -969,6 +654,31 @@ static NSString *CellIdentifier = @"shootCell";
         
     }else
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+}
+#pragma mark - Protocol Timeline
+
+//------------------------------------------------------------------------------
+- (void)changeTitleView:(UIView *) viewTitleView{
+    self.navigationItem.titleView = viewTitleView;
+}
+
+//------------------------------------------------------------------------------
+- (void)setHiddenViewNotshots:(BOOL) isNecessaryHidden{
+    
+    if (isNecessaryHidden)
+        self.viewNotShots.hidden = YES;
+}
+
+//------------------------------------------------------------------------------
+- (void) pushToProfile:(Shot *)shotSelected{
+   
+    AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    
+    ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    
+    profileVC.selectedUser = shotSelected.user;
+    
+    [self.navigationController pushViewController:profileVC animated:YES];
 }
 
 @end
