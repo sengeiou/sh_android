@@ -61,20 +61,6 @@ static NSString *CellIdentifier = @"shootCell";
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 
-//------------------------------------------------------------------------------
-- (void)updateConstraints {
-    
-    //  [self.tableView autoPinEdgeToSuperviewEdge:ALEdgeTop withInset:kTopTableInsets];
-    // [self.tableView autoPinEdgeToSuperviewEdge:ALEdgeBottom withInset:kBottomTableInsets];
-    //    [self.tableView autoPinEdgeToSuperviewEdge:ALEdgeLeft withInset:kLateralTableInsets];
-    //  [self.tableView autoPinEdgeToSuperviewEdge:ALEdgeRight withInset:kLateralRightTableInsets];
-    //    [self.tableView autoPinEdge:ALEdgeTop toEdge:ALEdgeTop ofView:self.tableView.superview withOffset:200];
-    
-   // [self.tableView autoMatchDimension:ALDimensionWidth toDimension:ALDimensionWidth ofView:self.tableView.superview];
-    
-    // [super updateConstraints];
-}
-
 #pragma mark - View lifecycle
 //------------------------------------------------------------------------------
 - (void)loadData {

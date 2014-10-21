@@ -252,7 +252,7 @@
         refreshTable = YES;
         
         [self.usersSearch addObjectsFromArray:usersArray];
-        
+
         [self.followingUsers removeAllObjects];
         
         [self.followingUsers addObjectsFromArray:self.usersSearch];
@@ -274,11 +274,12 @@
             [self.followingUsers removeAllObjects];
             self.spinner.hidden = YES;
         }
-
     }else{
         refreshTable = NO;
-        [self checkIfNeedToShowNotPeopleView];
     }
+    
+    [self checkIfNeedToShowNotPeopleView];
+
 }
 
 //------------------------------------------------------------------------------
