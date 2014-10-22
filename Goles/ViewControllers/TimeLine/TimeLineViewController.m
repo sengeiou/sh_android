@@ -63,10 +63,6 @@
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Timeline", nil);
     
-    
-    NSArray *viewControllers = self.navigationController.viewControllers;
-   // UIViewController *rootViewController = [viewControllers objectAtIndex:viewControllers.count - 2];
-    
     self.timelineTableView =  self.childViewControllers.firstObject;
     self.timelineTableView.delegate = self;
     
