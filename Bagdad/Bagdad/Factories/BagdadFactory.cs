@@ -141,7 +141,7 @@ namespace Bagdad.Factories
                 buttonBackgorund = (_followed) ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush,
                 buttonForeground = (_followed) ? new System.Windows.Media.SolidColorBrush(Colors.White) : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
                 buttonBorderColor = (_followed) ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
-                buttonIcon = (_followed) ? new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute)) : new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute)),
+                buttonIcon = (_followed) ? new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute)) : new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute)),
                 buttonIconVisible = System.Windows.Visibility.Visible
             };
             return followVM;

@@ -15,6 +15,7 @@ using System.Windows.Automation.Provider;
 using Bagdad.Resources;
 using System.Diagnostics;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Bagdad
 {
@@ -211,8 +212,13 @@ namespace Bagdad
                 ((FollowViewModel)followingList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
             }
 
-            followingList.ItemsSource = null;
-            followingList.ItemsSource = followings.followings;
+            //Yeah! It's so ugly... but it works better and don't blink the rest of the list.
+
+            ((Border)((Grid)sender).Children.First()).Background = ((FollowViewModel)followingList.SelectedItem).buttonBackgorund;
+            ((Border)((Grid)sender).Children.First()).BorderBrush = ((FollowViewModel)followingList.SelectedItem).buttonBorderColor;
+            ((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).Visibility = ((FollowViewModel)followingList.SelectedItem).buttonIconVisible;
+            ((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).Fill = ((FollowViewModel)followingList.SelectedItem).buttonForeground;
+            ((ImageBrush)((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).OpacityMask).ImageSource = ((FollowViewModel)followingList.SelectedItem).buttonIcon;
 
         }
     }
