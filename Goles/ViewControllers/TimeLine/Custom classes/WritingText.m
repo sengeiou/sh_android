@@ -32,6 +32,8 @@
     self.layer.borderColor = [[UIColor darkGrayColor] CGColor];
     self.textContainerInset = UIEdgeInsetsMake(2, 2, 0, 0);
     
+    self.spellCheckingType = UITextSpellCheckingTypeNo;
+    
     [self addPlaceholderInTextView];
     
     [self setTextViewForShotCreation];

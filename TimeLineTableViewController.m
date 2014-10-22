@@ -346,12 +346,16 @@ static NSString *CellIdentifier = @"shootCell";
             self.myTableView.contentOffset = CGPointMake(0, -40);
 
             break;
-        }default:{
+        }case UIDeviceOrientationPortrait:{
             self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
             self.myTableView.contentOffset = CGPointMake(0, -60);
 
             break;
+        }default:{
+           
+            break;
         }
+
     }
 }
 
