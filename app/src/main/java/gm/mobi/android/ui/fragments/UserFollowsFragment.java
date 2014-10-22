@@ -152,6 +152,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
+        getAdapter().notifyDataSetChanged();
     }
 
     @Subscribe
@@ -173,11 +174,9 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
-        if(!isNetworkAvailable()){
-            GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-            job2.init(currentUser,userVO.getIdUser(),followType);
-            jobManager.addJobInBackground(job2);
-        }
+        //GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        //job2.init(currentUser,userVO.getIdUser(),followType);
+        //jobManager.addJobInBackground(job2);
 
         //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
@@ -217,12 +216,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-    }
-
-    @Override public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Timber.e("Entra en onViewStateRestored");
-        getAdapter().notifyDataSetChanged();
     }
 
     public UserListAdapter getAdapter() {
@@ -275,14 +268,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             getAdapter().notifyDataSetChanged();
         }
 
-    }
-
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager
-          .getActiveNetworkInfo();
-        return activeNetworkInfo != null;
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

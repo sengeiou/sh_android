@@ -31,7 +31,6 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     public void setItems(List<UserModel> users) {
         this.users = users;
-        notifyDataSetChanged();
     }
 
     public void addItems(List<UserModel> users) {

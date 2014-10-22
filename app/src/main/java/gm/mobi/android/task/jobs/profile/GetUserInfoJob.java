@@ -35,6 +35,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     private Long userId;
     private UserEntity currentUser;
     private UserModelMapper userVOMapper;
+    private NetworkUtil networkUtil;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
       NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager, UserModelMapper userVOMapper) {
@@ -43,6 +44,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         this.userManager = userManager;
         this.followManager = followManager;
         this.teamManager = teamManager;
+        this.networkUtil = networkUtil1;
         this.userVOMapper = userVOMapper;
         setOpenHelper(dbHelper);
     }
@@ -64,20 +66,23 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
         }
 
-        UserEntity userFromService = getUserFromService();
-        if(!idCurrentUser.equals(userId)){
-            FollowEntity followFromService = getFolloFromService();
-            if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
-            follow = followManager.getFollowByUserIds(idCurrentUser,userId);
-             userVO = userVOMapper.toUserModel(userFromService,follow,idCurrentUser);
+        if(networkUtil.isConnected(getContext())){
+            UserEntity userFromService = getUserFromService();
+            if(!idCurrentUser.equals(userId)){
+                FollowEntity followFromService = getFolloFromService();
+                if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
+                follow = followManager.getFollowByUserIds(idCurrentUser,userId);
+                userVO = userVOMapper.toUserModel(userFromService,follow,idCurrentUser);
+            }
+
+            postSuccessfulEvent(new UserInfoResultEvent(userVO));
+            if (userFromLocalDatabase != null) {
+                Timber.d("Obtained user from server found in database. Updating database.");
+                userManager.saveUser(userFromService);
+            }
         }
 
-        postSuccessfulEvent(new UserInfoResultEvent(userVO));
 
-        if (userFromLocalDatabase != null) {
-            Timber.d("Obtained user from server found in database. Updating database.");
-            userManager.saveUser(userFromService);
-        }
     }
 
     private FollowEntity getFolloFromService() throws IOException {

@@ -74,13 +74,13 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
              doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
              switch (followUnfollowType){
                 case UserDtoFactory.FOLLOW_TYPE:
-                     followUser = followUser();
-                    user = userModelMapper.toUserModel(getUserByIdUser(idUser),followUser,idCurrentUser);
-                    UserEntity userToCreate = null;
-                    if(followUser.getIdUser()!=null)
-                        userToCreate = userModelMapper.userByUserVO(user);
+                    if(doIFollowHim == FollowEntity.RELATIONSHIP_NONE){
+                        followUser = followUser();
+                        user = userModelMapper.toUserModel(getUserByIdUser(idUser),followUser,idCurrentUser);
+                        UserEntity userToCreate = userModelMapper.userByUserVO(user);
                         userManager.saveUser(userToCreate);
                         postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+                    }
                 break;
                 case UserDtoFactory.UNFOLLOW_TYPE:
                     if(doIFollowHim == FollowEntity.RELATIONSHIP_FOLLOWING){
@@ -140,7 +140,8 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
         follow.setIdUser(currentUser.getIdUser());
         Timber.e("ID USER WHO FOLLOWS TO"+String.valueOf(currentUser.getIdUser()));
         follow.setCsys_birth(new Date());
-        follow.setCsys_modified(new Date());        follow.setCsys_revision(0);
+        follow.setCsys_modified(new Date());
+        follow.setCsys_revision(0);
         FollowEntity followReceived = service.followUser(follow);
         if(followReceived!=null){
             followManager.saveFollowFromServer(followReceived);

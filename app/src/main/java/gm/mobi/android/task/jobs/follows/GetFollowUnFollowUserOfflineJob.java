@@ -66,23 +66,31 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
             case UserDtoFactory.FOLLOW_TYPE:
                 FollowEntity followUser = followUserInDB();
                 doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                if(followUser.getIdUser()!=null){
-                    UserEntity user = userManager.getUserByIdUser(idUser);
-                    if(user!=null){
-                        userToReturn = userModelMapper.toUserModel(user,followUser, idCurrentUser);
+                if(doIFollowHim == FollowEntity.RELATIONSHIP_NONE){
+                    if(followUser.getIdUser()!=null){
+                        UserEntity user = userManager.getUserByIdUser(idUser);
+                        if(user!=null){
+                            userToReturn = userModelMapper.toUserModel(user,followUser, idCurrentUser);
+                        }
                     }
+                    postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
                 }
-                postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
+
                 break;
             case UserDtoFactory.UNFOLLOW_TYPE:
                 if(doIFollowHim == FollowEntity.RELATIONSHIP_FOLLOWING){
                     FollowEntity follow = unfollowUserinDB();
-                    userToReturn = userModelMapper.toUserModel(userManager.getUserByIdUser(idUser),follow,idCurrentUser);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
+                    UserEntity userEntity = userManager.getUserByIdUser(idUser);
+                    if(userEntity!=null){
+                        userToReturn = userModelMapper.toUserModel(userEntity,follow,idCurrentUser);
+                        postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
+                    }
+
                 }else{
                     //TODO. Check if we aren't in the good followType
                     return;
                 }
+
                 break;
         }
     }

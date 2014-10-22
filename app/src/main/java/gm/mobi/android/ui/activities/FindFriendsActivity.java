@@ -1,6 +1,10 @@
 package gm.mobi.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -222,6 +226,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
                 setEmpty(true);
             }
         }
+
+        adapter.notifyDataSetChanged();
     }
 
     @Subscribe
@@ -230,6 +236,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         Timber.d("Received %d local results", results.size());
         setListContent(results, NO_OFFSET);
         setEmpty(false);
+
     }
 
     @Subscribe
@@ -258,7 +265,6 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         } else {
             adapter.setItems(users);
         }
-        adapter.notifyDataSetChanged();
     }
 
     private void setLoading(boolean loading) {
@@ -325,9 +331,10 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         UserEntity currentUser = GolesApplication.get(this).getCurrentUser();
-        GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job.init(currentUser,userVO.getIdUser(), followType);
-        jobManager.addJobInBackground(job);
+        //GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        //job.init(currentUser,userVO.getIdUser(), followType);
+        //jobManager.addJobInBackground(job);
+
         GetFollowUnfollowUserJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         job2.init(currentUser,userVO.getIdUser(), followType);
         jobManager.addJobInBackground(job2);
@@ -337,32 +344,40 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         startFollowUnfollowUserJob(user, this, UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(UserModel user){
-        startFollowUnfollowUserJob(user,this,UserDtoFactory.UNFOLLOW_TYPE);
-    }
+    public void unfollowUser(final UserModel user){
+        new AlertDialog.Builder(this).setMessage("Unfollow "+user.getName()+"?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);
+              }
+          })
+          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
 
+              }
+          })
+          .create()
+          .show();
+    }
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
         UserModel userVO = event.getResult();
+        List<UserModel> userVOs = adapter.getItems();
+        int index = 0;int i = 0;
         if (userVO != null) {
-            List<UserModel> userVOs = adapter.getItems();
-            int i = 0, index = 0;
-            for (UserModel userModel : userVOs) {
-                if (userModel.getIdUser().equals(userVO.getIdUser())) {
+            for(UserModel userM: userVOs){
+                if(userM.getIdUser().equals(userVO.getIdUser())){
                     index = i;
                 }
                 i++;
             }
             userVOs.remove(index);
             adapter.removeItems();
-            userVOs.add(index, userVO);
+            userVOs.add(index,userVO);
             adapter.setItems(userVOs);
             adapter.notifyDataSetChanged();
         }
     }
 
-
-
-
-    }
+ }

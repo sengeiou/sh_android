@@ -1,6 +1,8 @@
 package gm.mobi.android.ui.model;
 
-public class UserModel {
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
 
     private Long idUser;
     private String favoriteTeamName;

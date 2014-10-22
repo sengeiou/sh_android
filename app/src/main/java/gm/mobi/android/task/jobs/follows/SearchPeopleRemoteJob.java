@@ -63,6 +63,8 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResul
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId, u.getIdUser());
+            //before doing this UPDATE FOLLOWS
+
             userVOs.add(userModelMapper.toUserModel(u,follow,currentUserId));
         }
         return userVOs;

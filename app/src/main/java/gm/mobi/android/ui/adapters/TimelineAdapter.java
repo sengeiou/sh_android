@@ -86,7 +86,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 ViewHolder vh = (ViewHolder) view.getTag();
                 vh.position = position;
 
-                vh.name.setText(item.getName());
+                vh.name.setText(item.getUserName());
 
                 vh.text.setText(item.getComment());
 

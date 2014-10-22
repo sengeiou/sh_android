@@ -35,11 +35,12 @@ public class FollowManager extends AbstractManager{
     public void saveFollowFromServer(FollowEntity follow) throws SQLException {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
-            contentValues.put(CSYS_SYNCHRONIZED,"S");
+
             if (contentValues.get(CSYS_DELETED) != null) {
                 deleteFollow(follow);
             } else {
                 synchronized (db){
+                    contentValues.put(CSYS_SYNCHRONIZED,"S");
                     db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 }
             }
@@ -76,7 +77,7 @@ public class FollowManager extends AbstractManager{
     }
 
     public FollowEntity getFollowByUserIds(Long idUserWhoFollow, Long idUserFollowed){
-        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =?";
+        String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ CSYS_DELETED+" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
             if(c.getCount()>0){

@@ -10,7 +10,7 @@ public class ShotModel {
     private Date csys_birth;
     //User attributes
     private Long idUser;
-    private String name;
+    private String userName;
     private String photo;
 
     public Long getIdShot() {
@@ -45,12 +45,12 @@ public class ShotModel {
         this.idUser = idUser;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUseName(String userName) {
+        this.userName = userName;
     }
 
     public String getPhoto() {
