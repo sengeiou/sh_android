@@ -165,6 +165,5 @@
 #pragma mark - ADD PEOPLE
 //------------------------------------------------------------------------------
 - (IBAction)addFriends:(id)sender {
-    
 }
 @end
