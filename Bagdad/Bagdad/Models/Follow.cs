@@ -101,9 +101,14 @@ namespace Bagdad.Models
 
         protected override String GetOps() { return ops_data; }
 
+        protected override string GetAlias(string operation)
+        {
+            return "";
+        }
+
         public override async Task<string> ConstructFilter(string conditionDate)
         {
-            return "\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[" + conditionDate + "],\"nexus\":\"and\"";
+            return "\"filterItems\":[],\"filters\":[{\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[],\"nexus\":\"or\"}," + conditionDate + "],\"nexus\":\"and\"";
         }
 
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
@@ -451,12 +456,13 @@ namespace Bagdad.Models
                     foreach (Follow follow in follows)
                     {
                         String data = singleData;
-                        if (isFirst)
+                        if (!isFirst) data += ",";
+                        else
                         {
                             data = "\"data\": [" + data;
                             isFirst = false;
                         }
-                        else data += ",";
+                        
 
                         //ops
                         data = data.Replace("@idUser", follow.idUser.ToString());
@@ -464,7 +470,7 @@ namespace Bagdad.Models
                         data = data.Replace("@birth", Math.Round(epochDate, 0).ToString());
                         data = data.Replace("@modified", Math.Round(epochDate, 0).ToString());
                         data = data.Replace("@revision", follow.csys_revision.ToString());
-                        data = data.Replace("@deleted", follow.csys_deleted.ToString());
+                        data = data.Replace("@deleted", "null");
 
                         builderData.Append(data);
                     }
@@ -503,7 +509,7 @@ namespace Bagdad.Models
                     String json = "{\"status\": {\"message\": null,\"code\": null}," +
                                 "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
                                 "\"ops\": [{@Data\"metadata\": {" +
-                                    "\"items\": null," +
+                                    "\"items\": 1," +
                                     "\"TotalItems\": null," +
                                     "\"operation\": \"@Operation\"," +
                                     "\"key\": {" +
@@ -528,9 +534,7 @@ namespace Bagdad.Models
                     double epochDate = t.TotalMilliseconds;
 
                     //req
-                    json = json.Replace("@idDevice", "\"null\"");
-                    json = json.Replace("@idUser", this.idUser.ToString());
-                    json = json.Replace("@idFollowedUser", this.idUserFollowed.ToString());
+                    json = json.Replace("@idDevice", App.ID_DEVICE.ToString());
                     json = json.Replace("@appVersion", App.appVersionInt().ToString());
                     json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
                     json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
@@ -538,6 +542,8 @@ namespace Bagdad.Models
 
                     foreach (Follow follow in follows)
                     {
+                        json = json.Replace("@idUser", follow.idUser.ToString());
+                        json = json.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
                         //ops
                         data = data.Replace("@idUser", follow.idUser.ToString());
                         data = data.Replace("@idFollowedUser", follow.idUserFollowed.ToString());

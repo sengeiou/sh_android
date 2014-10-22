@@ -189,13 +189,14 @@ namespace Bagdad.Utils
                         result = "\t Sincronizado: " + entity + "\n\t\t" + json + " follows synchronizados.";
                         json = await follow.SynchronizeUnFollows();
                         result += "\n\t Sincronizado: " + entity + "\n\t\t" + json + " unfollows synchronizados.";
+                        return result;
                         break;
                     default:
                         result = "\t NOT DONE YET: " + entity + "\n";
                         break;
                 }
 
-                if(!String.IsNullOrEmpty(json)) SendDataToServer(entity, json);
+                if(!String.IsNullOrEmpty(json)) await SendDataToServer(entity, json);
                 return result;
             }
             catch (Exception ex)
@@ -341,6 +342,7 @@ namespace Bagdad.Utils
                     String status = "\"status\":{\"message\":null,\"code\":null}";
                     String req = await GetREQ();
                     String ops = GetOPS(Translate(operation), entity, searchParams, offset);
+                    String alias = GetAlias(Translate(operation), entity, searchParams, offset);
 
                     json = "{" + status + "," + req + "," + ops + "}";
                 }
@@ -434,6 +436,12 @@ namespace Bagdad.Utils
         {
             BaseModelJsonConstructor model = CreateModelJsonConstructor(Translate(entity));
             return model.ConstructOperation(operation, searchParams, offset,  ((entity.Equals(Constants.SERCOM_TB_OLD_SHOTS)) ? Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG : Constants.SERCOM_PARAM_OFFSET_PAG));
+        }
+
+        private String GetAlias(String operation, String entity, String searchParams, int offset)
+        {
+            BaseModelJsonConstructor model = CreateModelJsonConstructor(Translate(entity));
+            return model.ConstructAlias(operation);
         }
 
         private String ConstructOPS(String opsData, String operation, String entity, String searchParams, int offset, int nItems)

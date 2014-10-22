@@ -15,7 +15,7 @@ namespace Bagdad.Utils
 
         public const String InsertUserData = "INSERT OR REPLACE INTO User (idUser, idFavoriteTeam, favoriteTeamName, userName, name, photo, bio, website, points, numFollowings, numFollowers, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idFavoriteTeam, @favoriteTeamName, @userName, @name, @photo, @bio, @website, @points, @numFollowings, @numFollowers, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
 
-        public const String UpdateUserData = "UPDATE User SET idFavoriteTeam = @idFavoriteTeam, favoriteTeamName = @favoriteTeamName, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized WHERE idUser = @idUser";
+        public const String UpdateUserData = "UPDATE User SET idFavoriteTeam = @idFavoriteTeam, favoriteTeamName = @favoriteTeamName, userName = @userName, name = @name, photo = @photo, bio = @bio, website = @website, points= @points, numFollowings = @numFollowings, numFollowers = @numFollowers, csys_modified = @csys_modified, csys_revision =  @csys_revision, csys_synchronized = @csys_synchronized, csys_deleted = @csys_deleted WHERE idUser = @idUser";
 
         public const String DeleteUserData = "DELETE FROM User WHERE idUser = @idUser";
 
@@ -85,13 +85,13 @@ namespace Bagdad.Utils
 
         public const String EditNumOfFollowings = "UPDATE USER SET numFollowings = @numFollowings WHERE idUser = @idUser";
 
-        public const String GetFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S'";
+        public const String GetFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S' AND csys_synchronized <> 'D'";
 
-        public const String GetUnFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized <> 'S'"; //TODO: Modificar sentencia!!!!!!!!!!!!!!
+        public const String GetUnFollowsToUpdate = "SELECT idUser, idUserFollowed, csys_birth, csys_modified, csys_deleted, csys_revision, csys_synchronized FROM Follow WHERE csys_synchronized = 'D'"; 
 
-        public const String UpdateFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S'";
+        public const String UpdateFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S' AND csys_synchronized <> 'D'";
 
-        public const String UpdateUnFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized <> 'S'"; //TODO: Modificar sentencia!!!!!!!!!!!!!!
+        public const String UpdateUnFollowSynchro = "UPDATE Follow set csys_synchronized = 'S' WHERE csys_synchronized = 'D'";
 
         #endregion
 

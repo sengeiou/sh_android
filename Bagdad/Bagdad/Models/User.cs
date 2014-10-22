@@ -37,6 +37,7 @@ namespace Bagdad.Models
         {
             bagdadFactory = _bagdadFactory; 
         }
+        
         public User()
         {
             bagdadFactory = new Factories.BagdadFactory();
@@ -46,6 +47,7 @@ namespace Bagdad.Models
         {
             int done = 0;
             Database database;
+            User meUser = bagdadFactory.CreateUser();
 
             try
             {
@@ -57,56 +59,62 @@ namespace Bagdad.Models
 
                     foreach (User user in users)
                     {
-                        //idUser, idFavoriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                        custstmt.Reset();
-
-                        custstmt.BindIntParameterWithName("@idUser", user.idUser);
-
-                        if(user.idFavoriteTeam == 0)
-                            custstmt.BindNullParameterWithName("@idFavoriteTeam");
+                        if (user.idUser == App.ID_USER) meUser = user;
                         else
-                            custstmt.BindIntParameterWithName("@idFavoriteTeam", user.idFavoriteTeam);
+                        {
+                            //idUser, idFavoriteTeam, userName, name, photo, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
+                            custstmt.Reset();
 
-                        custstmt.BindTextParameterWithName("@favoriteTeamName", user.favoriteTeamName);
-                        custstmt.BindTextParameterWithName("@userName", user.userName);
-                        custstmt.BindTextParameterWithName("@name", user.name);
-                        custstmt.BindTextParameterWithName("@photo", user.photo);
 
-                        if (String.IsNullOrEmpty(user.bio))
-                            custstmt.BindNullParameterWithName("@bio");
-                        else
-                            custstmt.BindTextParameterWithName("@bio", user.bio);
+                            custstmt.BindIntParameterWithName("@idUser", user.idUser);
 
-                        if (String.IsNullOrEmpty(user.website))
-                            custstmt.BindNullParameterWithName("@website");
-                        else
-                            custstmt.BindTextParameterWithName("@website", user.website);
+                            if (user.idFavoriteTeam == 0)
+                                custstmt.BindNullParameterWithName("@idFavoriteTeam");
+                            else
+                                custstmt.BindIntParameterWithName("@idFavoriteTeam", user.idFavoriteTeam);
 
-                        if(user.numFollowing == 0)
-                            custstmt.BindNullParameterWithName("@numFollowings");
-                        else
-                            custstmt.BindInt64ParameterWithName("@numFollowings", user.numFollowing);
+                            custstmt.BindTextParameterWithName("@favoriteTeamName", user.favoriteTeamName);
+                            custstmt.BindTextParameterWithName("@userName", user.userName);
+                            custstmt.BindTextParameterWithName("@name", user.name);
+                            custstmt.BindTextParameterWithName("@photo", user.photo);
 
-                        if (user.numFollowers == 0)
-                            custstmt.BindNullParameterWithName("@numFollowers");
-                        else
-                            custstmt.BindInt64ParameterWithName("@numFollowers", user.numFollowers);
+                            if (String.IsNullOrEmpty(user.bio))
+                                custstmt.BindNullParameterWithName("@bio");
+                            else
+                                custstmt.BindTextParameterWithName("@bio", user.bio);
 
-                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(user.csys_birth.ToString()).ToString("s").Replace('T', ' '));
-                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(user.csys_modified.ToString()).ToString("s").Replace('T', ' '));
-                        if (user.csys_deleted == 0)
-                            custstmt.BindNullParameterWithName("@csys_deleted");
-                        else
-                            custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(user.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
-                        custstmt.BindIntParameterWithName("@csys_revision", user.csys_revision);
-                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+                            if (String.IsNullOrEmpty(user.website))
+                                custstmt.BindNullParameterWithName("@website");
+                            else
+                                custstmt.BindTextParameterWithName("@website", user.website);
 
-                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
-                        done++;
+                            if (user.numFollowing == 0)
+                                custstmt.BindNullParameterWithName("@numFollowings");
+                            else
+                                custstmt.BindInt64ParameterWithName("@numFollowings", user.numFollowing);
+
+                            if (user.numFollowers == 0)
+                                custstmt.BindNullParameterWithName("@numFollowers");
+                            else
+                                custstmt.BindInt64ParameterWithName("@numFollowers", user.numFollowers);
+
+                            custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(user.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                            custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(user.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                            if (user.csys_deleted == 0)
+                                custstmt.BindNullParameterWithName("@csys_deleted");
+                            else
+                                custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(user.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                            custstmt.BindIntParameterWithName("@csys_revision", user.csys_revision);
+                            custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+
+                            await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                            done++;
+                        }
                     }
                     await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
                 DataBaseHelper.DBLoaded.Set();
+                if(meUser.idUser != 0) await updateUserMe(meUser);
             }
             catch (Exception e)
             {
@@ -115,6 +123,75 @@ namespace Bagdad.Models
                 throw new Exception("E R R O R - User - SaveData: " + e.Message);
             }
             return done;
+        }
+
+        public async Task<int> updateUserMe(User user)
+        {
+            Database database;
+
+            try
+            {
+                database = await DataBaseHelper.GetDatabaseAsync();
+                Statement custstmt = await database.PrepareStatementAsync(SQLQuerys.UpdateUserData);
+
+                // idFavoriteTeam , favoriteTeamName , userName, name , photo , bio , website, points, numFollowings, numFollowers, csys_modified , csys_revision, csys_synchronized  -- WHERE idUser = @idUser
+
+                custstmt.BindIntParameterWithName("@idUser", user.idUser);
+
+                if (user.idFavoriteTeam == 0)
+                    custstmt.BindNullParameterWithName("@idFavoriteTeam");
+                else
+                    custstmt.BindIntParameterWithName("@idFavoriteTeam", user.idFavoriteTeam);
+
+                custstmt.BindTextParameterWithName("@favoriteTeamName", user.favoriteTeamName);
+                custstmt.BindTextParameterWithName("@userName", user.userName);
+                custstmt.BindTextParameterWithName("@name", user.name);
+                custstmt.BindTextParameterWithName("@photo", user.photo);
+
+                if (String.IsNullOrEmpty(user.bio))
+                    custstmt.BindNullParameterWithName("@bio");
+                else
+                    custstmt.BindTextParameterWithName("@bio", user.bio);
+
+                if (String.IsNullOrEmpty(user.website))
+                    custstmt.BindNullParameterWithName("@website");
+                else
+                    custstmt.BindTextParameterWithName("@website", user.website);
+
+                if (user.points == 0)
+                    custstmt.BindNullParameterWithName("@points");
+                else
+                    custstmt.BindInt64ParameterWithName("@points", user.points);
+
+                if (user.numFollowing == 0)
+                    custstmt.BindNullParameterWithName("@numFollowings");
+                else
+                    custstmt.BindInt64ParameterWithName("@numFollowings", user.numFollowing);
+
+                if (user.numFollowers == 0)
+                    custstmt.BindNullParameterWithName("@numFollowers");
+                else
+                    custstmt.BindInt64ParameterWithName("@numFollowers", user.numFollowers);
+
+                custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(user.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                if (user.csys_deleted == 0)
+                    custstmt.BindNullParameterWithName("@csys_deleted");
+                else
+                    custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(user.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                custstmt.BindIntParameterWithName("@csys_revision", user.csys_revision);
+                custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+
+                await custstmt.StepAsync();
+
+                DataBaseHelper.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                DataBaseHelper.DBLoaded.Set();
+                throw new Exception("E R R O R - User - updateUserMe: " + e.Message);
+            }
+            return 1;
         }
 
         public async Task<String> getSessionToken()
@@ -146,6 +223,11 @@ namespace Bagdad.Models
         
         protected override String GetOps() { return ops_data; }
 
+        protected override string GetAlias(string operation)
+        {
+            return "";
+        }
+
         public String GetUserOps() { return ops_data; }
 
         /// <summary>
@@ -170,6 +252,7 @@ namespace Bagdad.Models
                      sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
                      isFirst = false;
                  }
+                 sbFilterIdUser.Append(",{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}");
             }
             catch (Exception e)
             {

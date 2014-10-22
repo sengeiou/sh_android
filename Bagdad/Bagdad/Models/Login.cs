@@ -151,6 +151,11 @@ namespace Bagdad.Models
 
         protected override String GetOps() { return ops_data; }
 
+        protected override string GetAlias(string operation)
+        {
+            return "";
+        }
+
         public override string ConstructOperation(String operation, String searchParams, int offset, int nItems)
         {
             nItems = 1;

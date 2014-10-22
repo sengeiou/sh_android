@@ -42,6 +42,11 @@ namespace Bagdad.Models
 
         protected override String GetOps() { return ops_data; }
 
+        protected override string GetAlias(string operation)
+        {
+            return "";
+        }
+
         public override Task<int> SaveData(List<BaseModelJsonConstructor> models)
         {
             throw new NotImplementedException();
