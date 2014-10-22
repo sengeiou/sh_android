@@ -156,7 +156,7 @@
     self.viewToDisableTextField.hidden = NO;
     
     [self keyboardHide:nil];
-    
+
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
     [self shotCreated];
@@ -198,14 +198,16 @@
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     
-    [self controlCharactersShot:self.writingTextBox.text];
-    
-    if (![self controlRepeatedShot:[self.writingTextBox getTextComment]]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_SEND object:[self.writingTextBox getTextComment]];
-        [self performSelectorOnMainThread:@selector(changecolortextviewWhenSendShot) withObject:nil waitUntilDone:NO];
+    if (self.writingTextBox.text != nil) {
+        [self controlCharactersShot:self.writingTextBox.text];
         
-    }else
-        [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_REPEAT object:nil];
+        if (![self controlRepeatedShot:[self.writingTextBox getTextComment]]){
+            [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_SEND object:[self.writingTextBox getTextComment]];
+            [self performSelectorOnMainThread:@selector(changecolortextviewWhenSendShot) withObject:nil waitUntilDone:NO];
+            
+        }else
+            [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_REPEAT object:nil];
+    }
 }
 
 
