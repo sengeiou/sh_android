@@ -31,6 +31,35 @@
     self.layer.borderWidth = 0.3;
     self.layer.borderColor = [[UIColor darkGrayColor] CGColor];
     self.textContainerInset = UIEdgeInsetsMake(2, 2, 0, 0);
+    
+    [self addPlaceholderInTextView];
+    
+    [self setTextViewForShotCreation];
+}
+
+- (NSString *) getTextComment{
+    return self.textComment;
+}
+
+
+//------------------------------------------------------------------------------
+-(void)addPlaceholderInTextView{
+    self.lengthTextField = 0;
+    [self setPlaceholder:NSLocalizedString (@"Comment", nil)];
+}
+
+//------------------------------------------------------------------------------
+- (NSInteger) getNumberOfCharacters{
+    
+   return self.lengthTextField;
+}
+
+//------------------------------------------------------------------------------
+- (void)setTextViewForShotCreation {
+        
+#warning self.textComment is always 0 on viewDidLoad, isn't it? So maybe we can move the enablesReturnKeyAutomatically to the WritingTExt class init
+    if (self.textComment.length == 0)
+        self.enablesReturnKeyAutomatically = YES;
 }
 
 #pragma mark - PUBLIC METHODS

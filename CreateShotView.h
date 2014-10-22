@@ -21,8 +21,6 @@
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint              *bottomViewPositionConstraint;
 @property (nonatomic,strong)    IBOutlet    NSLayoutConstraint              *bottomViewHeightConstraint;
 
-@property (nonatomic,strong)                NSString                        *textComment;
-@property (nonatomic,assign)                NSUInteger                      lengthTextField;
 @property (nonatomic,assign)                float                           textViewWrittenRows;
 @property (nonatomic,assign)                CGRect                          previousRect;
 @property (nonatomic, assign)               int                             sizeKeyboard;
@@ -44,7 +42,5 @@
 - (void)setupUIWhenCancelOrNotConnectionOrRepeat;
 - (void)keyboardHide:(NSNotification*)notification;
 - (void)keyboardShow:(NSNotification*)notification;
-- (NSUInteger) numberOfCharactersInTextView;
-- (void)addPlaceHolder;
 
 @end

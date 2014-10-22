@@ -29,13 +29,11 @@
 {
     [super awakeFromNib];
     
+    self.writingTextBox.delegate = self;
+
     [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
     [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
     self.btnShoot.enabled = NO;
-    
-    [self addPlaceHolder];
-    
-    [self setTextViewForShotCreation];
 }
 
 //------------------------------------------------------------------------------
@@ -44,29 +42,14 @@
     //Listen for keyboard process close
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
     
-    self.lengthTextField = 0;
     self.previousRect = CGRectZero;
-}
-
--(void)addPlaceHolder{
-    [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
-}
-
-//------------------------------------------------------------------------------
-- (void)setTextViewForShotCreation {
-    
-    self.writingTextBox.delegate = self;
-
-#warning self.textComment is always 0 on viewDidLoad, isn't it? So maybe we can move the enablesReturnKeyAutomatically to the WritingTExt class init
-    if (self.textComment.length == 0)
-        self.writingTextBox.enablesReturnKeyAutomatically = YES;
 }
 
 #pragma mark - SETTINGS
 -(void)stateInitial{
     
-    self.lengthTextField = 0;
-    [self addPlaceHolder];
+    [self.writingTextBox addPlaceholderInTextView];
+    
     self.textViewWrittenRows = 0;
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
@@ -133,13 +116,13 @@
     [self.timelineTableView.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
     self.timelineTableView.tableView.scrollEnabled = YES;
     
-    if (self.lengthTextField == 0){
-        [self addPlaceHolder];
+    if ([self.writingTextBox getNumberOfCharacters] == 0){
+        [self.writingTextBox addPlaceholderInTextView];
         
         self.textViewWrittenRows = 0;
         self.charactersLeft.hidden = YES;
     }else
-        self.writingTextBox.textColor = [UIColor blackColor];
+        [self.writingTextBox setWritingTextViewWhenCancelTouched];
     
     if (self.textViewWrittenRows <= 2) {
         self.bottomViewHeightConstraint.constant = 75;
@@ -161,12 +144,6 @@
 - (void)keyboardWillHide {
     
     [self keyboardHide:nil];
-}
-
-//------------------------------------------------------------------------------
-- (NSUInteger) numberOfCharactersInTextView{
-    
-    return self.lengthTextField;
 }
 
 #pragma mark - Start Send Shot
@@ -217,10 +194,10 @@
     NSRange range = [text rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
     text = [text stringByReplacingCharactersInRange:range withString:@""];
     
-    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    [self.writingTextBox setTextComment:[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+    [self.writingTextBox setTextComment:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]];
     
-    return self.textComment;
+    return [self.writingTextBox getTextComment];
 }
 
 #pragma mark - Shot creation
@@ -229,8 +206,8 @@
     
     [self controlCharactersShot:self.writingTextBox.text];
     
-    if (![self controlRepeatedShot:self.textComment]){
-        [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_SEND object:self.textComment];
+    if (![self controlRepeatedShot:[self.writingTextBox getTextComment]]){
+        [[NSNotificationCenter defaultCenter] postNotificationName:k_NOTIF_SHOT_SEND object:[self.writingTextBox getTextComment]];
         [self performSelectorOnMainThread:@selector(changecolortextviewWhenSendShot) withObject:nil waitUntilDone:NO];
         
     }else
@@ -242,25 +219,26 @@
 //------------------------------------------------------------------------------
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    self.lengthTextField = textView.text.length - range.length + text.length;
+    [self.writingTextBox setLengthTextField:textView.text.length - range.length +  text.length ];
+
     self.charactersLeft.hidden = NO;
     
-    if (self.lengthTextField >= 1)
+    if ([self.writingTextBox getNumberOfCharacters] >= 1)
         self.btnShoot.enabled = YES;
     else
         self.btnShoot.enabled = NO;
     
     [self adaptViewSizeWhenWriting:textView withCharacter:text];
     
-    if (self.lengthTextField == 0){
+    if ([self.writingTextBox getNumberOfCharacters] == 0){
         self.bottomViewHeightConstraint.constant = 75;
         [UIView animateWithDuration:0.25f animations:^{
             [self layoutIfNeeded];
         }];
     }
     
-    self.charactersLeft.text = [self countCharacters:self.lengthTextField];
-    return (self.lengthTextField > CHARACTERS_SHOT) ? NO : YES;
+    self.charactersLeft.text = [self countCharacters:[self.writingTextBox getNumberOfCharacters]];
+    return ([self.writingTextBox getNumberOfCharacters] > CHARACTERS_SHOT) ? NO : YES;
 }
 
 //------------------------------------------------------------------------------

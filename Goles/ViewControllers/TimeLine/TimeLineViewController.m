@@ -364,8 +364,8 @@
 //------------------------------------------------------------------------------
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if ([self.viewTextField numberOfCharactersInTextView] == 0){
-         [self.viewTextField addPlaceHolder];
+    if ([self.viewTextField.writingTextBox getNumberOfCharacters] == 0){
+         [self.viewTextField.writingTextBox addPlaceholderInTextView];
     }
     self.orientation = NO;
 }
