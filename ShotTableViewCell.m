@@ -44,26 +44,31 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
+        self.backgroundColor = [UIColor whiteColor];
+        
         //USERNAME
         self.lblName = [UILabel newAutoLayoutView];
         [self.lblName setLineBreakMode:NSLineBreakByTruncatingTail];
         self.lblName.font = [UIFont boldSystemFontOfSize:17];
+        self.lblName.backgroundColor = [UIColor whiteColor];
         
         //COMMENT
-        self.txvText = [UILabel newAutoLayoutView];
+        self.txvText = [TTTAttributedLabel newAutoLayoutView];
         [self.txvText setNumberOfLines:0];
         [self.txvText setLineBreakMode:NSLineBreakByWordWrapping];
         self.txvText.font = [UIFont systemFontOfSize:15];
-
+        self.txvText.backgroundColor = [UIColor whiteColor];
+        
         //PHOTO
         self.imgPhoto = [UIImageView newAutoLayoutView];
-//
-//        //BUTTONIMAGE
+
+        //BUTTONIMAGE
         self.btnPhoto = [UIButton newAutoLayoutView];
         
         //DATE
         self.lblDate = [UILabel newAutoLayoutView];
         self.lblDate.textColor = [Fav24Colors dateTimelime];
+        self.lblDate.backgroundColor = [UIColor whiteColor];
         
         //ADD SUBVIEWS
         [self.contentView addSubview:self.lblName];
