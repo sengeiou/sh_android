@@ -54,12 +54,7 @@ public abstract class AbstractManager {
         long res = 0;
         try{
             synchronized (db) {
-                c = db.query(tableName, projection, where, args, null, null, null);
-                if (c.getCount() > 0) {
-                    res = db.update(tableName, contentValues, where, args);
-                } else {
-                    res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                }
+                  res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 c.close();
             }
         }catch(Exception e){
