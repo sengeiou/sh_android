@@ -109,7 +109,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendShotByNotification:) name:k_NOTIF_SHOT_SEND object:nil];
 
       //Listen to orientation changes
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationUpdates:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -382,7 +382,7 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)orientationChanged:(NSNotification *)notification{
+- (void)orientationUpdates:(NSNotification *)notification{
 
     [self updateCurrentTitleView];
     
