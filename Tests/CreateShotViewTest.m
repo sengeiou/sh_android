@@ -12,10 +12,10 @@
 #import "WritingText.h"
 
 
-//#define HC_SHORTHAND
-//#import <OCHamcrestIOS/OCHamcrestIOS.h>
-//#define MOCKITO_SHORTHAND
-//#import <OCMockitoIOS/OCMockitoIOS.h>
+#define HC_SHORTHAND
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#define MOCKITO_SHORTHAND
+#import <OCMockitoIOS/OCMockitoIOS.h>
 
 
 
@@ -31,7 +31,7 @@
 
 - (void)setUp {
     [super setUp];
-//    self.writingText = mock([WritingText class]);
+    self.writingText = mock([WritingText class]);
 }
 
 - (void)tearDown {
@@ -45,11 +45,11 @@
     XCTAssertFalse(self.createSV.viewToDisableTextField.hidden);
 }
 
-//- (void)testWhenSendShotChangePropertiesTExtView {
-//    
-//    self.createSV.writingTextBox = self.writingText;
-//    [self.createSV sendShot];
-//  //  [verify(self.writingText) setWritingTextViewWhenSendShot];
-//}
+- (void)testWhenSendShotChangePropertiesTExtView {
+    
+    self.createSV.writingTextBox = self.writingText;
+    [self.createSV sendShot];
+    [verify(self.writingText) setWritingTextViewWhenSendShot];
+}
 
 @end

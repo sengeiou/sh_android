@@ -42,6 +42,9 @@
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
 		AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AA2E444519F40F55000A52DE /* WatchingMenu.m */; };
+		AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */; };
+		AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */; };
+		AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5B865219F8110300A50B13 /* CreateShotViewTest.m */; };
 		AA623CDF1998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CE11998A7F200A942A9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE01998A7F200A942A9 /* CoreGraphics.framework */; };
 		AA623CE31998A7F200A942A9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE21998A7F200A942A9 /* UIKit.framework */; };
@@ -199,6 +202,9 @@
 		AA241F88199CFB6400897D6D /* SyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncManager.m; sourceTree = "<group>"; };
 		AA2E444419F40F55000A52DE /* WatchingMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WatchingMenu.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.h"; sourceTree = SOURCE_ROOT; };
 		AA2E444519F40F55000A52DE /* WatchingMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WatchingMenu.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.m"; sourceTree = SOURCE_ROOT; };
+		AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
+		AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
+		AA5B865219F8110300A50B13 /* CreateShotViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateShotViewTest.m; path = Tests/CreateShotViewTest.m; sourceTree = SOURCE_ROOT; };
 		AA623CDB1998A7F200A942A9 /* Shootr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shootr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CDE1998A7F200A942A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AA623CE01998A7F200A942A9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -377,6 +383,8 @@
 				AA623CF81998A7F200A942A9 /* XCTest.framework in Frameworks */,
 				AA623CFA1998A7F200A942A9 /* UIKit.framework in Frameworks */,
 				AA623CF91998A7F200A942A9 /* Foundation.framework in Frameworks */,
+				AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */,
+				AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +437,7 @@
 				AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */,
 				AAE0EF5819E4253C00F32FF7 /* TimeLineHelper.h */,
 				AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */,
+				AA5B865219F8110300A50B13 /* CreateShotViewTest.m */,
 			);
 			name = Timeline;
 			sourceTree = "<group>";
@@ -539,6 +548,8 @@
 		AA623CDD1998A7F200A942A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */,
+				AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */,
 				A58F910C19A4A5830076AA1E /* AudioToolbox.framework */,
 				AA623CDE1998A7F200A942A9 /* Foundation.framework */,
 				AA623CE01998A7F200A942A9 /* CoreGraphics.framework */,
@@ -1139,6 +1150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */,
 				AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */,
 				AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */,
 				AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */,
@@ -1354,10 +1366,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shootr.app/Shootr";
+				CLANG_ENABLE_MODULES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
@@ -1366,6 +1380,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/ShootrTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = ShootrTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1376,14 +1396,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Shootr.app/Shootr";
+				CLANG_ENABLE_MODULES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goles/Shootr-Prefix.pch";
 				INFOPLIST_FILE = "Tests/ShootrTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = ShootrTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
