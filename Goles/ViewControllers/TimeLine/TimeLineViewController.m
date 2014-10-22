@@ -16,41 +16,26 @@
 #import "Conection.h"
 #import "Fav24Colors.h"
 #import "AppDelegate.h"
-#import "Constants.h"
 #import "ProfileViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import <CoreText/CoreText.h>
 #import "TimeLineUtilities.h"
 #import "InfoTableViewController.h"
-#import "WritingText.h"
 #import "WatchingMenu.h"
 #import "ViewNotShots.h"
 #import "TimeLineTableViewController.h"
+#import "CreateShotView.h"
 
-@interface TimeLineViewController ()<UITextViewDelegate, ConectionProtocol, TimeLineTableViewControllerDelegate>{
-   
-    NSUInteger lengthTextField;
-    BOOL returningFromBackground;
-    float textViewWrittenRows;
-    CGRect previousRect;
+@interface TimeLineViewController ()<UITextViewDelegate, ConectionProtocol, TimeLineTableViewControllerDelegate>
 
-    UITapGestureRecognizer *tapTapRecognizer;
-}
+@property (nonatomic,weak)      IBOutlet    ViewNotShots                    *viewNotShots;
+@property (nonatomic,weak)      IBOutlet    WatchingMenu                    *watchingMenu;
+@property (nonatomic,weak)      IBOutlet    CreateShotView                  *viewTextField;
+@property (nonatomic,strong)    IBOutlet    UIView                          *backgroundView;
 
-@property (nonatomic,strong)      TimeLineTableViewController               *timelineTableView;
-
-@property (nonatomic,weak)      IBOutlet    WritingText                 *writingTextBox;
-@property (nonatomic,weak)      IBOutlet    UIButton                    *btnShoot;
-@property (nonatomic,weak)      IBOutlet    UILabel                     *charactersLeft;
-@property (nonatomic,weak)      IBOutlet    ViewNotShots                *viewNotShots;
-@property (nonatomic,weak)      IBOutlet    UIView                      *viewToDisableTextField;
-@property (nonatomic,weak)      IBOutlet    WatchingMenu                *watchingMenu;
-@property (nonatomic,weak)      IBOutlet    UIView                      *viewTextField;
-@property (nonatomic,strong)    IBOutlet    UIView                      *backgroundView;
-@property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewPositionConstraint;
-@property (nonatomic,strong)    IBOutlet    NSLayoutConstraint          *bottomViewHeightConstraint;
-@property (nonatomic, assign)               int                         sizeKeyboard;
-@property (nonatomic,strong)                NSString                    *textComment;
+@property (nonatomic,strong)                TimeLineTableViewController     *timelineTableView;
+@property (nonatomic, assign)               BOOL                            returningFromBackground;
+@property (nonatomic,strong)                UITapGestureRecognizer          *tapTapRecognizer;
 
 
 @end
@@ -62,32 +47,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = NSLocalizedString(@"Timeline", nil);
-    
+        
     self.timelineTableView =  self.childViewControllers.firstObject;
     self.timelineTableView.delegate = self;
     
     //For Alpha version
     self.watchingMenu.hidden = YES;
     
-    [self.btnShoot setTitle:NSLocalizedString(@"Shoot", nil) forState:UIControlStateNormal];
-    [self.viewNotShots addTargetSendShot:self action:@selector(startSendShot)];
-    
-    [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
-    
-    [self miscelaneousSetup];
+    [self.viewNotShots addTargetSendShot:self action:@selector(initSendShot)];
     
     [self setNavigationBarButtons];
-    [self setTextViewForShotCreation];
  
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
 }
 
 //------------------------------------------------------------------------------
+-(void)initSendShot{
+    [self.viewTextField startSendShot];
+}
+
+//------------------------------------------------------------------------------
 - (void)returnBackground{
 
     //Get ping from server
-    returningFromBackground = YES;
+    self.returningFromBackground = YES;
     
     [self getTimeLastSyncornized];
     
@@ -105,33 +89,27 @@
         self.navigationItem.titleView = [TimeLineUtilities createCheckingTitleView];
 }
 
-#pragma mark - General setup on ViewDidLoad
-//------------------------------------------------------------------------------
-- (void)miscelaneousSetup {
-    
-    lengthTextField = 0;
-    previousRect = CGRectZero;
-    
-    [self.btnShoot addTarget:self action:@selector(sendShot) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.btnShoot.enabled = NO;
-}
-
 //------------------------------------------------------------------------------
 - (void)setLocalNotificationObservers {
     
+    //Listen for keyboard process close
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hiddenKeyboard) name:UIKeyboardWillHideNotification object:nil];
+   
+    //Listen for keyboard process open
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+    
+
     //Listen for show conecting process
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
     
+    //Listen for show alert show repeat
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAlert) name:k_NOTIF_SHOT_REPEAT object:nil];
+
+    //Listen for show alert show send
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendShotByNotification:) name:k_NOTIF_SHOT_SEND object:nil];
+
       //Listen to orientation changes
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
-    
-    //Listen for keyboard process open
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
-    
-    //Listen for keyboard process close
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -152,8 +130,6 @@
     self.navigationItem.titleView.hidden = NO;
 }
 
-
-
 //------------------------------------------------------------------------------
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -173,14 +149,6 @@
     self.navigationItem.rightBarButtonItem = infoButton;
 }
 
-//------------------------------------------------------------------------------
-- (void)setTextViewForShotCreation {
-
-    self.writingTextBox.delegate = self;
-#warning self.textComment is always 0 on viewDidLoad, isn't it? So maybe we can move the enablesReturnKeyAutomatically to the WritingTExt class init
-    if (self.textComment.length == 0)
-        self.writingTextBox.enablesReturnKeyAutomatically = YES;
-}
 
 #pragma mark - FUTURE METHODS
 //------------------------------------------------------------------------------
@@ -201,50 +169,6 @@
     
 }
 
-#pragma mark - Send shot
-//------------------------------------------------------------------------------
-- (void)sendShot{
-
-    [self.writingTextBox setWritingTextViewWhenSendShot];
-    self.viewToDisableTextField.hidden = NO;
-
-    self.orientation = NO;
-    [self keyboardHide:nil];
-
-    self.charactersLeft.hidden = YES;
-    self.btnShoot.enabled = NO;
-    self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:YES];
-}
-
-#pragma mark - Start Send Shot
-//------------------------------------------------------------------------------
--(void)startSendShot{
-    
-    [self keyboardShow:nil];
-    [self.writingTextBox becomeFirstResponder];
-}
-
-
-//------------------------------------------------------------------------------
-- (BOOL) controlRepeatedShot:(NSString *)texto{
-    
-    if ([self isShotMessageAlreadyInList:[[ShotManager singleton] getShotsForTimeLineBetweenHours] withText:texto])
-        return YES;
-    
-    return NO;
-}
-
-//------------------------------------------------------------------------------
--(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text{
-    
-    for (Shot *shot in shots) {
-        
-        if ([shot.comment isEqualToString:text])
-            return YES;
-    }
-    return NO;
-}
 
 #pragma mark - Change NavigationBar
 //------------------------------------------------------------------------------
@@ -267,18 +191,21 @@
     
     if (status & !isShot)
         [self performSelectorOnMainThread:@selector(changeStateCheckingViewNavBar) withObject:nil waitUntilDone:NO];
+    
     if (isShot){
+        
         self.orientation = NO;
-        [self shotCreated];
-        [self performSelectorOnMainThread:@selector(changecolortextview) withObject:nil waitUntilDone:NO];
+        [self.viewTextField shotCreated];
+   
     }else if(refresh)
+        
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
-    else if(!status && !refresh && !isShot && !returningFromBackground){
+
+    else if(!status && !refresh && !isShot && !self.returningFromBackground){
+        
         [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
-    }
-    
-    returningFromBackground = NO;
-    
+
+    self.returningFromBackground = NO;
 }
 
 #pragma mark - Webservice response methods
@@ -286,26 +213,27 @@
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
+       
         [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
         [self.timelineTableView isNecessaryMoreCells:YES];
+
     }else if (!refresh){
+
         [self.timelineTableView isNecessaryMoreCells:NO];
         [self.timelineTableView isNecessaryRefreshCells:NO];
     }
+
     [self performSelectorOnMainThread:@selector(changeViewTitleMainThread) withObject:nil waitUntilDone:NO];
 }
 
 -(void)callReloadTable{
+    
     [self.timelineTableView reloadShotsTable];
 }
 
 -(void)changeViewTitleMainThread{
+    
     [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
-}
-
-//------------------------------------------------------------------------------
--(void)changecolortextview{
-    self.writingTextBox.textColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - ShotCreationProtocol response
@@ -313,26 +241,23 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
+        
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-        lengthTextField = 0;
-        [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
-        textViewWrittenRows = 0;
-        self.charactersLeft.hidden = YES;
+        [self.viewTextField stateInitial];
+
         [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
 
-        self.btnShoot.enabled = NO;
-        [self keyboardHide:nil];
-        self.viewToDisableTextField.hidden = YES;
-
-    }else if (error){
+    }else if (error)
         [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];
-    }
+    
 }
 
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
-
+    
+    self.orientation = NO;
+    
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:NSLocalizedString(@"Shot Not Posted", nil)
                                   message:NSLocalizedString(@"Connection timed out.", nil)
@@ -344,7 +269,8 @@
                          handler:^(UIAlertAction * action)
                          {
                              [alert dismissViewControllerAnimated:YES completion:nil];
-                             [self sendShot];
+                            
+                             [self retrySendShot];
                          }];
     
     UIAlertAction* cancel = [UIAlertAction
@@ -353,7 +279,7 @@
                              handler:^(UIAlertAction * action)
                              {
                                  [alert dismissViewControllerAnimated:YES completion:nil];
-                                  [self setupUIWhenCancelOrNotConnection];
+                                 [self.viewTextField setupUIWhenCancelOrNotConnectionOrRepeat];
                              }];
     [alert addAction:retry];
     [alert addAction:cancel];
@@ -363,28 +289,6 @@
     self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
 
-//------------------------------------------------------------------------------
-- (void)cleanViewWhenNotConnection{
-    
-//    [self keyboardHide:nil];
-    [self setupUIWhenCancelOrNotConnection];
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
-    
-}
-
-#pragma mark - Shot creation
-//------------------------------------------------------------------------------
-- (void)shotCreated {
-    
-    [self controlCharactersShot:self.writingTextBox.text];
-
-    if (![self controlRepeatedShot:self.textComment])
-        
-        [[ShotManager singleton] createShotWithComment:self.textComment andDelegate:self];
-    else
-        [self performSelectorOnMainThread:@selector(showAlert) withObject:nil waitUntilDone:NO];
-    
-}
 
 //------------------------------------------------------------------------------
 - (void)showAlert{
@@ -394,15 +298,14 @@
                                   preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction* ok = [UIAlertAction
-                            actionWithTitle:NSLocalizedString(@"OK", nil)
-                            style:UIAlertActionStyleDefault
-                            handler:^(UIAlertAction * action)
-                            {
-                                [alert dismissViewControllerAnimated:YES completion:nil];
-                                [self.writingTextBox setWritingTextViewWhenShotRepeated];
-                                self.btnShoot.enabled = YES;
-                                self.viewToDisableTextField.hidden = YES;
-                            }];
+                         actionWithTitle:NSLocalizedString(@"OK", nil)
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [alert dismissViewControllerAnimated:YES completion:nil];
+                             [self.viewTextField setupUIWhenCancelOrNotConnectionOrRepeat];
+                            
+                         }];
     
     [alert addAction:ok];
     
@@ -410,61 +313,23 @@
 }
 
 //------------------------------------------------------------------------------
-- (NSString *)controlCharactersShot:(NSString *)text{
-    
-    NSRange range = [text rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
-    text = [text stringByReplacingCharactersInRange:range withString:@""];
-    
-    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    self.textComment = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    return self.textComment;
-}
-
-#pragma mark - Reload methods
-//------------------------------------------------------------------------------
-- (void)setupUIWhenCancelOrNotConnection {
-
-    self.btnShoot.enabled = YES;
-    self.viewToDisableTextField.hidden = YES;
-    self.orientation = NO;
-    
-    [self.writingTextBox setWritingTextViewWhenCancelTouched];
-
-}
-
-#pragma mark - KEYBOARD
-//------------------------------------------------------------------------------
--(void)keyboardShow:(NSNotification*)notification{
-    
-    [self.writingTextBox setWritingTextviewWhenKeyboardShown];
-    
-    [self darkenBackgroundView];
-
-
-    self.timelineTableView.tableView.scrollEnabled = NO;
-
-    [UIView animateWithDuration:(double)[[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseIn
-                         animations:^{
-                             self.bottomViewPositionConstraint.constant = [self getKeyboardHeight:notification];
-                             [self.view layoutIfNeeded];
-                         }completion:^(BOOL finished) {
-                            
-                         }];
-
+-(void)sendShotByNotification:(NSNotification *)notification{
+   
+    [[ShotManager singleton] createShotWithComment:[notification object] andDelegate:self];
 }
 
 //------------------------------------------------------------------------------
-- (int)getKeyboardHeight:(NSNotification *)notification {
-    
-    NSDictionary* keyboardInfo = [notification userInfo];
-    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    self.sizeKeyboard = keyboardFrameBeginRect.size.height-50;
+-(void)retrySendShot{
+    [self.viewTextField sendShot];
+    self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
+    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:YES];
+}
 
-    return self.sizeKeyboard;
+//------------------------------------------------------------------------------
+- (void)cleanViewWhenNotConnection{
+    
+    [self.viewTextField setupUIWhenCancelOrNotConnectionOrRepeat];
+    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
 
 //------------------------------------------------------------------------------
@@ -472,153 +337,40 @@
     
     self.backgroundView.hidden = NO;
     
-    if (tapTapRecognizer == nil){
-        tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-        [self.backgroundView addGestureRecognizer:tapTapRecognizer];
+    if (self.tapTapRecognizer == nil){
+        self.tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyboard)];
+        [self.backgroundView addGestureRecognizer:self.tapTapRecognizer];
         self.orientation = NO;
     }
 }
 
 //------------------------------------------------------------------------------
+-(void)hiddenKeyboard{
+    
+    if (!self.orientation){
+        [self.viewTextField keyboardHide:nil];
+        self.backgroundView.hidden = YES;
+    }
+}
+
+//------------------------------------------------------------------------------
+-(void)showKeyboard:(NSNotification *) notification{
+    
+    [self darkenBackgroundView];
+    [self.viewTextField keyboardShow:notification];
+}
+
+//------------------------------------------------------------------------------
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (lengthTextField == 0){
-         [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
+    if ([self.viewTextField numberOfCharactersInTextView] == 0){
+         [self.viewTextField addPlaceHolder];
     }
     self.orientation = NO;
 }
 
-//------------------------------------------------------------------------------
-- (void)keyboardWillHide {
-
-    [self keyboardHide:nil];
-}
-
-//------------------------------------------------------------------------------
-- (void)keyboardHide:(NSNotification*)notification{
-
-    
-    if (!self.orientation){
-
-        [self.writingTextBox resignFirstResponder];
-
-        
-        self.backgroundView.hidden = YES;
-        
-        [self.timelineTableView.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
-        self.timelineTableView.tableView.scrollEnabled = YES;
-            
-        if (lengthTextField == 0){
-            [self.writingTextBox setPlaceholder:NSLocalizedString (@"Comment", nil)];
-            
-            textViewWrittenRows = 0;
-            self.charactersLeft.hidden = YES;
-        }else
-            self.writingTextBox.textColor = [UIColor blackColor];
-
-        if (textViewWrittenRows <= 2) {
-            self.bottomViewHeightConstraint.constant = 75;
-            self.bottomViewPositionConstraint.constant = 0.0f;
-            [UIView animateWithDuration:0.25f animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        }else{
-            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-2)*self.writingTextBox.font.lineHeight)+75;
-            self.bottomViewPositionConstraint.constant = 0.0f;
-            [UIView animateWithDuration:0.25f animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        
-        }
-    }
-}
-
-#pragma mark - TEXTVIEW
-
-//------------------------------------------------------------------------------
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    
-    //NSString* result = [self controlCharactersShot:self.txtView.text];
-
-    lengthTextField = textView.text.length - range.length + text.length;
-    self.charactersLeft.hidden = NO;
-
-//    if (![result isEqualToString:@""] && lengthTextField >= 1)
-    if (lengthTextField >= 1)
-        self.btnShoot.enabled = YES;
-    else
-        self.btnShoot.enabled = NO;
-
-    [self adaptViewSizeWhenWriting:textView withCharacter:text];
-
-    if (lengthTextField == 0){
-		self.bottomViewHeightConstraint.constant = 75;
-		[UIView animateWithDuration:0.25f animations:^{
-			[self.view layoutIfNeeded];
-		}];
-    }
-    
-    self.charactersLeft.text = [self countCharacters:lengthTextField];
-    return (lengthTextField > CHARACTERS_SHOT) ? NO : YES;
-}
-
-//------------------------------------------------------------------------------
-- (void)textViewDidChange:(UITextView *)textView{
-    
-    UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
-    CGRect currentRect = [textView caretRectForPosition:pos];
-
-    if (currentRect.origin.y < previousRect.origin.y)
-        [self adaptViewSizeWhenDeleting:textView];
-   
-    previousRect = currentRect;
-    
-}
-
-//------------------------------------------------------------------------------
-- (void)adaptViewSizeWhenWriting:(UITextView *)textView withCharacter:(NSString *)character{
-
-	textViewWrittenRows = round( (textView.contentSize.height - textView.textContainerInset.top - textView.textContainerInset.bottom) / textView.font.lineHeight);
-
-    if (self.viewTextField.frame.origin.y > self.navigationController.navigationBar.frame.size.height+25){
-        if (textViewWrittenRows > 2 && ![character isEqualToString:@"\n"] && ![character isEqualToString:@""]) {
-            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-2)*textView.font.lineHeight)+75;
-            [UIView animateWithDuration:0.25f animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        }else if(textViewWrittenRows > 1 && [character isEqualToString:@"\n"]){
-            self.bottomViewHeightConstraint.constant = ((textViewWrittenRows-1)*textView.font.lineHeight)+75;
-            [UIView animateWithDuration:0.25f animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-- (void)adaptViewSizeWhenDeleting:(UITextView *)textView{
-    
-    if (textViewWrittenRows > 2) {
-        textViewWrittenRows = textViewWrittenRows-3;
-        self.bottomViewHeightConstraint.constant = (textViewWrittenRows*textView.font.lineHeight)+75;
-        [UIView animateWithDuration:0.25f animations:^{
-            [self.view layoutIfNeeded];
-        }];
-    }
-}
-
-//------------------------------------------------------------------------------
-- (NSString *)countCharacters:(NSUInteger) lenght{
-    
-    if (lenght <= CHARACTERS_SHOT){
-        NSString *charLeft = [NSString stringWithFormat:@"%lu",CHARACTERS_SHOT - lenght];
-        return charLeft;
-    }
-    return @"0";
-}
 
 #pragma mark - Orientation methods
-
 //------------------------------------------------------------------------------
 - (void)restrictRotation:(BOOL) restriction {
     
@@ -648,8 +400,8 @@
     }else
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
 }
-#pragma mark - Protocol Timeline
 
+#pragma mark - Protocol Timeline
 //------------------------------------------------------------------------------
 - (void)changeTitleView:(UIView *) viewTitleView{
     self.navigationItem.titleView = viewTitleView;

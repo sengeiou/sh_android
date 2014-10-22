@@ -32,7 +32,8 @@ extern NSString *const k_SYNC_ALIAS;
 #pragma mark - INTERNAL NOTIFICATIONS
 extern NSString *const K_NOTIF_SHOT_END;
 extern NSString *const k_NOTIF_BACKGROUND;
-
+extern NSString *const k_NOTIF_SHOT_REPEAT;
+extern NSString *const k_NOTIF_SHOT_SEND;
 
 #pragma mark - REQUEST CREATION
 //Operation Types

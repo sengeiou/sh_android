@@ -34,6 +34,8 @@ NSString *const k_SYNC_ALIAS                           = @"aliasView";
 #pragma mark - INTERNAL NOTIFICATIONS
 NSString *const K_NOTIF_SHOT_END                       = @"shots_synchro_end";
 NSString *const k_NOTIF_BACKGROUND                     = @"ReturnForBackground";
+NSString *const k_NOTIF_SHOT_REPEAT                    = @"shotRepeat";
+NSString *const k_NOTIF_SHOT_SEND                      = @"shotSend";
 
 #pragma mark - REQUEST CREATION
 //Operation Types

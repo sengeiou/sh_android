@@ -172,7 +172,7 @@
                                 <rect key="frame" x="-4" y="0.0" width="608" height="600"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HR5-eu-cfc" customClass="CreateShotView">
                                 <rect key="frame" x="-4" y="481" width="608" height="75"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="fDT-Kv-eYE">
@@ -226,6 +226,14 @@
                                     <constraint firstAttribute="trailing" secondItem="41t-je-TRg" secondAttribute="trailing" constant="4" id="wKZ-pw-tRQ"/>
                                     <constraint firstAttribute="bottom" secondItem="zPp-71-7UU" secondAttribute="bottom" constant="8" id="xPN-m9-fLe"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="bottomViewHeightConstraint" destination="fxF-sH-uaZ" id="5h0-gl-POY"/>
+                                    <outlet property="bottomViewPositionConstraint" destination="Cfi-LK-l7y" id="bRU-6Q-dgz"/>
+                                    <outlet property="btnShoot" destination="41t-je-TRg" id="tcs-AD-jtl"/>
+                                    <outlet property="charactersLeft" destination="OCp-RM-5b3" id="OqI-R6-CTS"/>
+                                    <outlet property="viewToDisableTextField" destination="6Kp-9S-nop" id="Koa-Gc-Bpt"/>
+                                    <outlet property="writingTextBox" destination="zPp-71-7UU" id="xr5-0m-vvt"/>
+                                </connections>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Kp-9S-nop">
                                 <rect key="frame" x="0.0" y="481" width="600" height="75"/>
@@ -266,15 +274,9 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="backgroundView" destination="eCR-lh-3pe" id="F2H-bq-rjZ"/>
-                        <outlet property="bottomViewHeightConstraint" destination="fxF-sH-uaZ" id="ZNi-ez-RgK"/>
-                        <outlet property="bottomViewPositionConstraint" destination="Cfi-LK-l7y" id="fDB-b5-KXg"/>
-                        <outlet property="btnShoot" destination="41t-je-TRg" id="KtR-gA-HMn"/>
-                        <outlet property="charactersLeft" destination="OCp-RM-5b3" id="cyY-Vx-Ywl"/>
                         <outlet property="viewNotShots" destination="VYB-IF-QLU" id="vlD-fa-eAD"/>
                         <outlet property="viewTextField" destination="HR5-eu-cfc" id="cZd-QG-Qcf"/>
-                        <outlet property="viewToDisableTextField" destination="6Kp-9S-nop" id="4R7-l1-kZQ"/>
                         <outlet property="watchingMenu" destination="hAK-0x-gdD" id="OES-d8-1sp"/>
-                        <outlet property="writingTextBox" destination="zPp-71-7UU" id="SeW-2I-skh"/>
                         <segue destination="Nyt-NO-Lqg" kind="show" identifier="pushInfoView" id="qH9-BV-8IT"/>
                     </connections>
                 </viewController>

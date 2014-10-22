@@ -9,10 +9,7 @@
 
 @interface TimeLineViewController : UIViewController
 
-//Publixc interface for Unit Testing
--(BOOL) controlRepeatedShot:(NSString *)texto;
--(BOOL) isShotMessageAlreadyInList:(NSArray *)shots withText:(NSString *) text;
--(NSString *)countCharacters:(NSUInteger) lenght;
+
 
 @property(nonatomic, assign)    BOOL orientation;
 
