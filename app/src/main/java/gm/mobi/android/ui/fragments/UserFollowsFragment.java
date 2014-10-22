@@ -152,6 +152,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
+
         getAdapter().notifyDataSetChanged();
     }
 
@@ -174,13 +175,13 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
-        //GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        //job2.init(currentUser,userVO.getIdUser(),followType);
-        //jobManager.addJobInBackground(job2);
+        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        job2.init(currentUser,userVO.getIdUser(),followType);
+        jobManager.addJobInBackground(job2);
 
         //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,userVO.getIdUser(), followType);
+        job.init(currentUser);
         jobManager.addJobInBackground(job);
     }
 
@@ -265,6 +266,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             getAdapter().removeItems();
             userVOs.add(index,userVO);
             getAdapter().setItems(userVOs);
+
             getAdapter().notifyDataSetChanged();
         }
 

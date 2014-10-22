@@ -3,8 +3,6 @@ package gm.mobi.android.ui.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -226,8 +224,6 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
                 setEmpty(true);
             }
         }
-
-        adapter.notifyDataSetChanged();
     }
 
     @Subscribe
@@ -265,6 +261,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         } else {
             adapter.setItems(users);
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void setLoading(boolean loading) {
@@ -290,7 +287,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     private void clearResults() {
         adapter.setItems(new ArrayList<UserModel>(0));
-
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -331,12 +328,12 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         UserEntity currentUser = GolesApplication.get(this).getCurrentUser();
-        //GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        //job.init(currentUser,userVO.getIdUser(), followType);
-        //jobManager.addJobInBackground(job);
+        GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        job.init(currentUser,userVO.getIdUser(), followType);
+        jobManager.addJobInBackground(job);
 
         GetFollowUnfollowUserJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job2.init(currentUser,userVO.getIdUser(), followType);
+        job2.init(currentUser);
         jobManager.addJobInBackground(job2);
     }
 

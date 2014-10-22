@@ -134,25 +134,25 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
-        if(!isNetworkAvailable()){
-            GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-            job2.init(currentUser,idUser,followType);
-            jobManager.addJobInBackground(job2);
-        }
+        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        job2.init(currentUser,idUser,followType);
+        jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser,idUser, followType);
+        job.init(currentUser);
         jobManager.addJobInBackground(job);
 
     }
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
+        if(event.getResult()!=null)
         setUserInfo(event.getResult());
     }
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
+        if(event.getResult()!=null)
         setUserInfo(event.getResult());
 
     }
@@ -235,14 +235,6 @@ public class ProfileFragment extends BaseFragment {
     private void openUserFollowsList(int followType) {
         if(idUser==null) return;
         startActivity(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType));
-    }
-
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager
-          .getActiveNetworkInfo();
-        return activeNetworkInfo != null;
     }
 
 }

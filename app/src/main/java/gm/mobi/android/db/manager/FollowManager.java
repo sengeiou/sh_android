@@ -33,6 +33,7 @@ public class FollowManager extends AbstractManager{
      * Insert a Follow from Server datas
      */
     public void saveFollowFromServer(FollowEntity follow) throws SQLException {
+        long id = 0;
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
 
@@ -41,9 +42,11 @@ public class FollowManager extends AbstractManager{
             } else {
                 synchronized (db){
                     contentValues.put(CSYS_SYNCHRONIZED,"S");
-                    db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                   id = db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 }
             }
+        }
+        if(id!=-1){
             insertInSync();
         }
     }

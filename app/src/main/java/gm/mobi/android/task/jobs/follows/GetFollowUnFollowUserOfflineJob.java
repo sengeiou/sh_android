@@ -103,6 +103,8 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         follow.setCsys_deleted(new Date());
         follow.setCsys_synchronized("D");
         followManager.saveFollow(follow);
+        currentUser.setNumFollowings(currentUser.getNumFollowings()-1);
+        userManager.saveUser(currentUser);
         return follow;
     }
 
@@ -122,7 +124,10 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         follow.setCsys_birth(new Date());
         follow.setCsys_modified(new Date());
         follow.setCsys_revision(0);
+        currentUser.setNumFollowers(currentUser.getNumFollowers()+1);
+        userManager.saveUser(currentUser);
         followManager.saveFollow(follow);
+
         return follow;
     }
 

@@ -84,7 +84,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
             }
             viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                       if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
+                       if(viewHolder.followButton.isFollowing()){
                             if(callback!=null){
                                 changeButtonState(viewHolder,FollowEntity.RELATIONSHIP_NONE);
                                 callback.unFollow(position);
