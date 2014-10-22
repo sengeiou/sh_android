@@ -47,12 +47,14 @@
 
 @end
 
+// Flush out test coverage files
 extern void __gcov_flush();
 
 @implementation AppDelegate
 //------------------------------------------------------------------------------
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
+    //Sets the directory for the gcda test coverage files
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     setenv("GCOV_PREFIX", [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding], 1);
@@ -120,6 +122,7 @@ extern void __gcov_flush();
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
+    // Flush out test coverage files
     __gcov_flush();
     
     UIApplication *app = [UIApplication sharedApplication];
@@ -165,7 +168,7 @@ extern void __gcov_flush();
 //------------------------------------------------------------------------------
 - (void)applicationWillTerminate:(UIApplication *)application {
 
-    __gcov_flush();
+    __gcov_flush(); // Flush out test coverage files
 	[[[SyncManager singleton] synchroTimer] invalidate];
 }
 

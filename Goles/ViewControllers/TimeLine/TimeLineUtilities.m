@@ -19,14 +19,9 @@
 }
 
 //------------------------------------------------------------------------------
-+ (UIView *)createConectandoTitleView {
++ (UIView *)createCheckingTitleView {
     
-    return [self createTitleViewWithTitle:NSLocalizedString (@"Connecting...", nil)];
-}
-//------------------------------------------------------------------------------
-+ (UIView *)createActualizandoTitleView {
-    
-    return [self createTitleViewWithTitle:NSLocalizedString (@"Updating...", nil)];
+    return [self createTitleViewWithTitle:NSLocalizedString (@"Checking for Shots...", nil)];
 }
 
 //------------------------------------------------------------------------------

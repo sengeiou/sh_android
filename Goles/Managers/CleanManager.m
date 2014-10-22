@@ -123,7 +123,7 @@
 //------------------------------------------------------------------------------
 -(void)deleteOldShotsOnCompletion:(booleanReturnBlock)completion{
     
-    NSArray *newShots = [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@10];
+    NSArray *newShots = [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@1000];
     NSArray *shotsToDelete;
     
     if (newShots > 0)

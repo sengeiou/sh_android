@@ -27,23 +27,23 @@
 
 }
 
-@property (nonatomic,strong)                UISearchBar     *mySearchBar;
-@property (nonatomic, strong)               NSMutableArray *usersSearch;
-@property (nonatomic,strong)                UILabel         *lblFooter;
+@property (nonatomic,strong)                UISearchBar                 *mySearchBar;
+@property (nonatomic, strong)               NSMutableArray              *usersSearch;
+@property (nonatomic,strong)                UILabel                     *lblFooter;
 @property (nonatomic,strong)                UIActivityIndicatorView     *spinner;
-@property (nonatomic,strong)                NSMutableArray  *followingUsers;
-@property (nonatomic,strong)    IBOutlet    UITableView     *usersTable;
-@property (nonatomic,strong)                NSIndexPath     *indexToShow;
-@property (nonatomic, assign)               CGFloat          lastContentOffset;
-
-@property (nonatomic,weak)      IBOutlet    UIView  *viewNotPeople;
-@property (nonatomic,weak)      IBOutlet    UILabel  *lblNotPeople;
-@property (nonatomic,strong) NSString *textInSearchBar;
+@property (nonatomic,strong)                NSMutableArray              *followingUsers;
+@property (nonatomic,strong)    IBOutlet    UITableView                 *usersTable;
+@property (nonatomic,strong)                NSIndexPath                 *indexToShow;
+@property (nonatomic, assign)               CGFloat                     lastContentOffset;
+@property (nonatomic,weak)      IBOutlet    UIView                      *viewNotPeople;
+@property (nonatomic,weak)      IBOutlet    UILabel                     *lblNotPeople;
+@property (nonatomic,strong)                NSString                    *textInSearchBar;
 
 @end
 
 @implementation FindFriendsViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -59,6 +59,7 @@
     self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
 	
 	[super viewWillAppear:animated];
@@ -85,6 +86,7 @@
     [self restoreInitialStateView];
 }
 
+//------------------------------------------------------------------------------
 -(void)addSearchNavBar{
     self.mySearchBar = [PeopleLineUtilities createSearchNavBar];
     self.mySearchBar.placeholder = NSLocalizedString(@"Search People", nil);
@@ -96,6 +98,7 @@
     [self.navigationController.navigationBar addSubview:self.mySearchBar];
 }
 
+//------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -215,12 +218,14 @@
 
 //------------------------------------------------------------------------------
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
     search = YES;
     [self.usersSearch removeAllObjects];
     
     [[FavRestConsumer sharedInstance] searchPeopleWithName:searchBar.text withOffset:@0 withDelegate:self];
-    //[self.followingUsers removeAllObjects]; // First clear the filtered array.
     self.followingUsers = [[NSMutableArray alloc] initWithArray:[SearchManager searchPeopleLocal:searchBar.text]];
+    [self.mySearchBar resignFirstResponder];
+    [self enableCancelButton];
     [self reloadTableWithAnimation];
     
     self.textInSearchBar = searchBar.text;

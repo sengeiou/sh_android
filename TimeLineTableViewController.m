@@ -53,7 +53,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)basicSetup {
     self.myTableView.scrollsToTop = YES;
-    self.myTableView.contentInset = UIEdgeInsetsMake(60, 0, 60, 0);
+    self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 60, 0);
     self.myTableView.rowHeight = UITableViewAutomaticDimension;
     self.myTableView.estimatedRowHeight = 80.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];

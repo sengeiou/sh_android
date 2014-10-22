@@ -12,8 +12,7 @@
 
 + (UIView *)createEnviandoTitleView;
 + (UIView *)createTimelineTitleView;
-+ (UIView *)createConectandoTitleView;
-+ (UIView *)createActualizandoTitleView;
++ (UIView *)createCheckingTitleView;
 + (UIView *)createTimelineTitleViewWithText:(NSString *)text;
 
 + (NSString *)getDateShot:(NSNumber *) dateShot;

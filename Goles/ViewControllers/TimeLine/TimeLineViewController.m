@@ -102,7 +102,7 @@
     NSDate* date = [[NSDate dateWithTimeIntervalSince1970:lastTime] dateByAddingTimeInterval:300];
    
     if ([date compare:[NSDate date]] == NSOrderedAscending)
-        self.navigationItem.titleView = [TimeLineUtilities createConectandoTitleView];
+        self.navigationItem.titleView = [TimeLineUtilities createCheckingTitleView];
 }
 
 #pragma mark - General setup on ViewDidLoad
@@ -124,7 +124,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnBackground) name:k_NOTIF_BACKGROUND object:nil];
     
       //Listen to orientation changes
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     //Listen for keyboard process open
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -254,8 +254,8 @@
 }
 
 //------------------------------------------------------------------------------
--(void)changeStateActualizandoViewNavBar{
-    self.navigationItem.titleView = [TimeLineUtilities createActualizandoTitleView];
+-(void)changeStateCheckingViewNavBar{
+    self.navigationItem.titleView = [TimeLineUtilities createCheckingTitleView];
     [self.timelineTableView setFooterInvisible];
 }
 
@@ -266,7 +266,7 @@
 - (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
     
     if (status & !isShot)
-        [self performSelectorOnMainThread:@selector(changeStateActualizandoViewNavBar) withObject:nil waitUntilDone:NO];
+        [self performSelectorOnMainThread:@selector(changeStateCheckingViewNavBar) withObject:nil waitUntilDone:NO];
     if (isShot){
         self.orientation = NO;
         [self shotCreated];
@@ -274,11 +274,8 @@
     }else if(refresh)
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
     else if(!status && !refresh && !isShot && !returningFromBackground){
-        //        self.orientation = NO;
         [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
     }
-//    } else
-//        [self performSelectorOnMainThread:@selector(removePullToRefresh) withObject:nil waitUntilDone:YES];
     
     returningFromBackground = NO;
     
@@ -291,10 +288,7 @@
     if (status && [entityClass isSubclassOfClass:[Shot class]]){
         [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
         [self.timelineTableView isNecessaryMoreCells:YES];
-        //moreCells = YES;
     }else if (!refresh){
-       // moreCells = NO;
-       // refreshTable = NO;
         [self.timelineTableView isNecessaryMoreCells:NO];
         [self.timelineTableView isNecessaryRefreshCells:NO];
     }
