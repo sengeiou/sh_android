@@ -180,6 +180,11 @@ namespace Bagdad.Factories
         {
             return new ShotViewModel() { shotId = _shotId, shotMessage = _shotMessage, shotTime = _shotTime, shotUserId = _shotUserId, shotUserImageURL = _shotUserImageURL, shotUserName = _shotUserName };
         }
+
+        public virtual SynchroTableInfo CreateGenericModelGetSynchronizationTables(int _order, String _entity, int _frequency, DateTime _maxTimestamp, DateTime _minTimestamp, String _direction, int _maxRows, int _minRows)
+        {
+            return new SynchroTableInfo() { Order = _order, Entity = _entity, Frequency = _frequency, MaxTimestamp = _maxTimestamp, MinTimestamp = _minTimestamp, Direction = _direction, MaxRows = _maxRows, MinRows = _minRows };
+        }
     }
 
 }

@@ -12,6 +12,17 @@ namespace Bagdad.Models
 {
     class GenericModel
     {
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
+
+        public GenericModel(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public GenericModel()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
+
         public async Task<double> getMaxModificationDateOf(String entity)
         {
             try
@@ -95,7 +106,7 @@ namespace Bagdad.Models
 
                     String _direction = selectStatement.GetTextAt(5);
 
-                    ListSTI.Add(new SynchroTableInfo() { Order = _order, Entity = _entity, Frequency = _frequency, MaxTimestamp = _maxTimestamp, MinTimestamp = _minTimestamp, Direction = _direction, MaxRows = _maxRows, MinRows = _minRows });
+                    ListSTI.Add(bagdadFactory.CreateGenericModelGetSynchronizationTables(_order, _entity, _frequency, _maxTimestamp, _minTimestamp, _direction, _maxRows, _minRows));
                 }
 
                 DataBaseHelper.DBLoaded.Set();
