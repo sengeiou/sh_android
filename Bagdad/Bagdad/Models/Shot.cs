@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    class Shot : BaseModelJsonConstructor
+    public class Shot : BaseModelJsonConstructor
     {
         public int idShot { get; set; }
         public int idUser { get; set; }
@@ -21,9 +21,17 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
         private String ops_data = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
-
+        public Shot(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public Shot()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> shots)
         {
@@ -112,7 +120,7 @@ namespace Bagdad.Models
 
                         if (add)
                         {
-                            OldShots.Add(new ShotViewModel() { shotId = idShot, shotMessage = comment, shotTime = shotDate, shotUserId = idUser, shotUserImageURL = userData[1], shotUserName = userData[0] });
+                            OldShots.Add(bagdadFactory.CreateShotViewModel(idShot, comment, shotDate, idUser, userData[1], userData[0]));
                             done++;
                         }
 
@@ -247,7 +255,7 @@ namespace Bagdad.Models
             List<BaseModelJsonConstructor> shotsToUpdate;
             try
             {
-                shotsToUpdate = new List<BaseModelJsonConstructor>();
+                shotsToUpdate = new List<BaseModelJsonConstructor>();  //TODO:
 
                 database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.DeleteShotData))
@@ -352,15 +360,16 @@ namespace Bagdad.Models
                 while (await selectStatement.StepAsync())
                 {
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new ShotViewModel
-                    {
-                        shotId = selectStatement.GetIntAt(0),
-                        shotUserId = selectStatement.GetIntAt(1),
-                        shotMessage = selectStatement.GetTextAt(2),
-                        shotUserName = selectStatement.GetTextAt(3),
-                        shotUserImageURL = selectStatement.GetTextAt(4),
-                        shotTime = selectStatement.GetTextAt(5)
-                    });
+                    shotList.Add(
+                        bagdadFactory.CreateShotViewModel(
+                            selectStatement.GetIntAt(0),
+                            selectStatement.GetTextAt(2),
+                            selectStatement.GetTextAt(5),
+                            selectStatement.GetIntAt(1),
+                            selectStatement.GetTextAt(4),
+                            selectStatement.GetTextAt(3)
+                        )
+                    );
                 }
                 return shotList;
             }
@@ -390,13 +399,14 @@ namespace Bagdad.Models
                 {
                     DateTime.TryParseExact(selectStatement.GetTextAt(5), pattern, null, System.Globalization.DateTimeStyles.None, out parsedDate);
                     //s.idShot, s.idUser, s.comment, u.name, u.photo, s.csys_birth
-                    shotList.Add(new Shot
-                    {
-                        idShot = selectStatement.GetIntAt(0),
-                        idUser = selectStatement.GetIntAt(1),
-                        comment = selectStatement.GetTextAt(2),
-                        csys_birth = Util.DateToDouble(parsedDate)
-                    });
+                    shotList.Add(
+                        bagdadFactory.CreateShotForTimeLineOtherShots(
+                            selectStatement.GetIntAt(0),
+                            selectStatement.GetIntAt(1),
+                            selectStatement.GetTextAt(2),
+                            Util.DateToDouble(parsedDate)
+                        )
+                    );                    
                     count++;
                 }
                 App.ShotsVM.SetShotsOnScreenToUpdate(shotList, true);
@@ -420,7 +430,7 @@ namespace Bagdad.Models
             StringBuilder sbFilterIdUser = new StringBuilder();
             try
             {
-                Follow follow = new Follow();
+                Follow follow = bagdadFactory.CreateFollow();
                 var followList = await follow.getidUserFollowing();
                 foreach (int idUser in followList)
                 {
@@ -484,7 +494,7 @@ namespace Bagdad.Models
                 json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
                 json = json.Replace("@Data", data);
 
-                ServiceCommunication serviceCom = new ServiceCommunication();
+                ServiceCommunication serviceCom = bagdadFactory.CreateServiceCommunication();
                 await serviceCom.SendDataToServer(Constants.SERCOM_TB_SHOT, json);
 
                 return json;
@@ -536,19 +546,18 @@ namespace Bagdad.Models
                 {
                     foreach (JToken shot in job["ops"][0]["data"])
                     {
-                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                        Shot shotParse = new Shot();
-
-                        shotParse.idShot = int.Parse(shot["idShot"].ToString());
-                        shotParse.idUser = int.Parse(shot["idUser"].ToString());
-                        shotParse.comment = (shot["comment"] != null) ? shot["comment"].ToString() : null;
-                        shotParse.csys_birth = Double.Parse(shot["birth"].ToString());
-                        shotParse.csys_modified = Double.Parse(shot["modified"].ToString());
-                        Double deleted; if (Double.TryParse(shot["deleted"].ToString(), out deleted))
-                            shotParse.csys_deleted = deleted;
-                        shotParse.csys_revision = int.Parse(shot["revision"].ToString());
-                        shotParse.csys_synchronized = 'S';
-                        shots.Add(shotParse);
+                        shots.Add(
+                            bagdadFactory.CreateShotForParseJson(
+                                int.Parse(shot["idShot"].ToString()),
+                                int.Parse(shot["idUser"].ToString()),
+                                ((shot["comment"] != null) ? shot["comment"].ToString() : null),
+                                Double.Parse(shot["birth"].ToString()),
+                                Double.Parse(shot["modified"].ToString()),
+                                ((!String.IsNullOrEmpty(shot["deleted"].ToString())) ? Double.Parse(shot["deleted"].ToString()) : 0),
+                                int.Parse(shot["revision"].ToString()),
+                                'S'
+                            )    
+                        );
                     }
                 }
             }

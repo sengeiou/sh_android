@@ -17,6 +17,7 @@ using Bagdad.ViewModels;
 using System.Windows.Threading;
 using Bagdad.Utils;
 using System.Windows.Media.Animation;
+using Bagdad.Models;
 
 namespace Bagdad
 {
@@ -70,8 +71,8 @@ namespace Bagdad
         {
             try
             {
-                Util util = new Util();
-                var synchroLogin = await util.isUserAlreadyLoged();
+                Login login = new Login();
+                var synchroLogin = await login.isUserAlreadyLoged();
                 if (synchroLogin)
                 {
                     timer.Start();

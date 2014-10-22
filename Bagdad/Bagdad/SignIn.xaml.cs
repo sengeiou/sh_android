@@ -10,18 +10,22 @@ using Microsoft.Phone.Shell;
 using Bagdad.Utils;
 using Bagdad.Resources;
 using System.Diagnostics;
+using Bagdad.Models;
 
 namespace Bagdad
 {
     public partial class SignIn : PhoneApplicationPage
     {
-        Util util = new Util();
+        Login login;
+        Util util;
 
         public SignIn()
         {
             InitializeComponent();
+            login = new Login();
+            util = new Util();
         }
-        
+
         private async void SignIn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -34,7 +38,7 @@ namespace Bagdad
                         if (util.isAValidPassword(pbPassword.Password))
                         {
                             //Call by email
-                            if (await util.LogInByEmail(txbUser.Text, pbPassword.Password))
+                            if (await login.LogInByEmail(txbUser.Text, pbPassword.Password))
                             {
                                 App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, ServiceCommunication.enumSynchroTables.FULL);
                                 NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));
@@ -54,7 +58,7 @@ namespace Bagdad
                             if (util.isAValidPassword(pbPassword.Password))
                             {
                                 //Call by userName
-                                if (await util.LogInByUserName(txbUser.Text, pbPassword.Password))
+                                if (await login.LogInByUserName(txbUser.Text, pbPassword.Password))
                                 {
                                     App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, ServiceCommunication.enumSynchroTables.FULL);
                                     NavigationService.Navigate(new Uri("/TimeLine.xaml", UriKind.Relative));

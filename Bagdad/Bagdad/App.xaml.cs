@@ -208,10 +208,11 @@ namespace Bagdad
             try
             {
                 Util util = new Util();
+                Login login = new Login();
 
                 if(isInternetAvailable) TIME_LAPSE = await util.CalculateTimeLapse();
 
-                var synchroLogin = await util.isUserAlreadyLoged();
+                var synchroLogin = await login.isUserAlreadyLoged();
                 if (synchroLogin)
                 {
                     UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FULL);

@@ -13,7 +13,7 @@ namespace BagdadTest.Integration
     public class Initialization
     {
 
-        [TestMethod]
+       /* [TestMethod]
         public void CanQueryDatabase()
         {
             
@@ -55,7 +55,7 @@ namespace BagdadTest.Integration
             bool isLogged = util.isUserAlreadyLoged().Result;
 
             Assert.AreEqual(false, isLogged);
-        }
+        }*/
 
     }
 }

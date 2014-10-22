@@ -257,5 +257,52 @@ namespace Bagdad.Models
             }
             return users;
         }
+
+        public async Task<bool> isUserAlreadyLoged()
+        {
+            try
+            {
+                User u = new User();
+                String sessionToken = await u.getSessionToken();
+
+                if (sessionToken.Equals("")) return false;
+                else return true;
+            }
+            catch (System.Security.SecurityException e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  isUserAlreadyLoged: " + e.Message);
+                throw e;
+            }
+        }
+
+        public async Task<bool> LogInByEmail(String email, String password)
+        {
+            try
+            {
+                ServiceCommunication sercom = new ServiceCommunication();
+                await sercom.DoRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"email\": \"" + email + "\",\"password\" : \"" + Util.encryptPassword(password) + "\"}", 0);
+                return true;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  LogInByEmail: " + e.Message);
+                throw e;
+            }
+        }
+
+        public async Task<bool> LogInByUserName(String userName, String password)
+        {
+            try
+            {
+                ServiceCommunication sercom = new ServiceCommunication();
+                await sercom.DoRequest(Constants.SERCOM_OP_RETRIEVE, Constants.SERCOM_TB_LOGIN, "\"key\":{\"userName\": \"" + userName + "\",\"password\" : \"" + Util.encryptPassword(password) + "\"}", 0);
+                return true;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R :  LogInByUserName: " + e.Message);
+                throw e;
+            }
+        }
     }
 }

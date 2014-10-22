@@ -151,6 +151,35 @@ namespace Bagdad.Factories
         {
             return new Follow();
         }
+
+        public virtual Shot CreateShot()
+        {
+            return new Shot();
+        }
+
+        public virtual Shot CreateShotForTimeLineOtherShots(int _idShot, int _idUser, String _comment, Double _csys_birth)
+        {
+            return new Shot() { idShot = _idShot, idUser = _idUser, comment = _comment, csys_birth = _csys_birth };
+        }
+
+        public virtual Shot CreateShotForParseJson(int _idShot, int _idUser, String _comment, Double _csys_birth, Double _csys_modified, Double _csys_deleted, int _csys_revision, Char _csys_synchronized)
+        {
+            return new Shot(){
+                idShot = _idShot,
+                idUser = _idUser,
+                comment = _comment,
+                csys_birth = _csys_birth,
+                csys_modified = _csys_modified,
+                csys_deleted = _csys_deleted,
+                csys_revision = _csys_revision,
+                csys_synchronized = _csys_synchronized
+            };
+        }
+
+        public virtual ShotViewModel CreateShotViewModel(int _shotId, String _shotMessage, String _shotTime, int _shotUserId, String _shotUserImageURL, String _shotUserName)
+        {
+            return new ShotViewModel() { shotId = _shotId, shotMessage = _shotMessage, shotTime = _shotTime, shotUserId = _shotUserId, shotUserImageURL = _shotUserImageURL, shotUserName = _shotUserName };
+        }
     }
 
 }
