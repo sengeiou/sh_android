@@ -558,7 +558,7 @@ public class DebugAppContainer implements AppContainer {
             Method method = ValueAnimator.class.getDeclaredMethod("setDurationScale", float.class);
             method.invoke(null, (float) multiplier);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to apply animation speed.", e);
+            Timber.e(e, "Unable to apply animation speed.");
         }
     }
 

@@ -19,7 +19,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import com.facebook.Session;
 import com.squareup.otto.Bus;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.adapters.WelcomePagerAdapter;
@@ -28,7 +27,6 @@ import gm.mobi.android.ui.widgets.WelcomeIndicator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class WelcomeLoginActivity extends BaseActivity {
 
@@ -138,11 +136,11 @@ public class WelcomeLoginActivity extends BaseActivity {
 
     private void setupLoginPage(Bundle savedInstanceState) {
         // Mata sesión de facebook anterior si había
-        Session activeSession = Session.getActiveSession();
+        /*Session activeSession = Session.getActiveSession();
         if (!(activeSession == null || activeSession.getState().isClosed())) {
             Timber.d("Matando sesión actual");
             activeSession.closeAndClearTokenInformation();
-        }
+        }*/
 
         // Facebook setup
 //        mButtonFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));

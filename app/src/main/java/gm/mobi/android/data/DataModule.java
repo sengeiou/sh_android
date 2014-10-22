@@ -175,6 +175,10 @@ public class DataModule {
         return new LogTreeFactoryImpl();
     }
 
+    @Provides @Singleton SessionManager provideSessionManager() {
+        return new SessionManager();
+    }
+
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
         // Custom config: https://github.com/path/android-priority-jobqueue/wiki/Job-Manager-Configuration, https://github.com/path/android-priority-jobqueue/blob/master/examples/twitter/TwitterClient/src/com/path/android/jobqueue/examples/twitter/TwitterApplication.java
         Configuration configuration =

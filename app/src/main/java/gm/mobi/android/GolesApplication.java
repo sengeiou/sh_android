@@ -4,15 +4,18 @@ import android.app.Application;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.ObjectGraph;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.util.LogTreeFactory;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 public class GolesApplication extends Application {
 
     private static GolesApplication instance;
     private ObjectGraph objectGraph;
-    private User currentUser;
+
+    @Inject SessionManager currentSession;
 
     public GolesApplication() {
         instance = this;
@@ -53,12 +56,14 @@ public class GolesApplication extends Application {
     }
 
 
+    @Deprecated
     public User getCurrentUser() {
-        return currentUser;
+        return currentSession.getCurrentUser();
     }
 
+    @Deprecated
     public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentSession.setCurrentUser(currentUser);
     }
 
 

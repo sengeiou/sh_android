@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
@@ -14,6 +15,7 @@ public class BaseSignedInActivity extends BaseActivity {
 
     @Inject UserManager userManager;
     @Inject SQLiteOpenHelper dbHelper;
+    @Inject SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,7 @@ public class BaseSignedInActivity extends BaseActivity {
      */
     public boolean restoreSessionOrLogin() {
 
-        GolesApplication app = GolesApplication.get(this);
-        if (app.getCurrentUser() != null) {
+        if (sessionManager.getCurrentUser() != null) {
             return true;
         } else {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -35,7 +36,7 @@ public class BaseSignedInActivity extends BaseActivity {
             User currentUser = userManager.getCurrentUser();
             db.close();
             if (currentUser != null) {
-                app.setCurrentUser(currentUser);
+                sessionManager.setCurrentUser(currentUser);
                 return true;
             } else {
                 finish();
