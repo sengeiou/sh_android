@@ -201,7 +201,7 @@
         
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[Shot class] withDelegate:self];
 
-    else if(!status && !refresh && !isShot && !self.returningFromBackground){
+    else if(!status && !refresh && !isShot && !self.returningFromBackground)
         
         [self performSelectorOnMainThread:@selector(cleanViewWhenNotConnection) withObject:nil waitUntilDone:YES];
 
