@@ -197,14 +197,16 @@ public class Follow implements GenericServiceHook {
      */
     private void manageFollowEvent(Connection sqlConnection, DataItem dataItem, boolean generatePush) throws IOException {
 
+        Long idUser = ((Number)dataItem.getAttributes().get(ATTR_IDUSER)).longValue();
+        Long idUserFollowed = ((Number)dataItem.getAttributes().get(ATTR_IDFOLLOWEDUSER)).longValue();
+
         // Actualización de following y followers.
         updateFollowers(sqlConnection, dataItem);
         updateFollowings(sqlConnection, dataItem);
 
         if (generatePush){
 
-            Long idUser = ((Number)dataItem.getAttributes().get(ATTR_IDUSER)).longValue();
-            Long idUserFollowed = ((Number)dataItem.getAttributes().get(ATTR_IDFOLLOWEDUSER)).longValue();
+
 
             // Envío an sistema de push.
             Map<String, Object> attrs = new HashMap<String, Object>();
