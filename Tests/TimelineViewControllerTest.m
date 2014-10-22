@@ -15,10 +15,11 @@
 #import "TimeLineHelper.h"
 #import "UserManager.h"
 #import <math.h>
+#import "CreateShotView.h"
 
 @interface TimelineViewControllerTest : XCTestCase
 
-@property(nonatomic, strong) TimeLineViewController *tlcv;
+@property(nonatomic, strong) CreateShotView *tlcv;
 
 @end
 
@@ -27,7 +28,7 @@
 - (void)setUp {
     [super setUp];
  
-    self.tlcv = [[TimeLineViewController alloc] init];
+    self.tlcv = [[CreateShotView alloc] init];
 }
 
 - (void)tearDown {

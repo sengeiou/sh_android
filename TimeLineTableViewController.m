@@ -53,7 +53,7 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)basicSetup {
     self.myTableView.scrollsToTop = YES;
-    self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 60, 0);
+    self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
     self.myTableView.rowHeight = UITableViewAutomaticDimension;
     self.myTableView.estimatedRowHeight = 80.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
@@ -332,22 +332,22 @@ static NSString *CellIdentifier = @"shootCell";
 
     switch (deviceOrientation) {
         case UIDeviceOrientationPortraitUpsideDown:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(60, 0, 60, 0);
+            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
             self.myTableView.contentOffset = CGPointMake(0, -60);
 
             break;
         }case UIDeviceOrientationLandscapeLeft:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 60, 0);
+            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
             self.myTableView.contentOffset = CGPointMake(0, -40);
 
             break;
         } case UIDeviceOrientationLandscapeRight:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 60, 0);
+            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
             self.myTableView.contentOffset = CGPointMake(0, -40);
 
             break;
         }default:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(60, 0, 60, 0);
+            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
             self.myTableView.contentOffset = CGPointMake(0, -60);
 
             break;

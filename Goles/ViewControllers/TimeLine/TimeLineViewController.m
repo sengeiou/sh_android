@@ -127,6 +127,7 @@
 //------------------------------------------------------------------------------
 -(void)viewDidAppear:(BOOL)animated {
 
+    [super viewDidAppear:animated];
     self.navigationItem.titleView.hidden = NO;
 }
 
@@ -233,7 +234,7 @@
 
 -(void)changeViewTitleMainThread{
     
-    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0];
 }
 
 #pragma mark - ShotCreationProtocol response
@@ -247,7 +248,7 @@
 
         [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
 
-    }else if (error)
+    }else if (!status || error)
         [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];
     
 }
