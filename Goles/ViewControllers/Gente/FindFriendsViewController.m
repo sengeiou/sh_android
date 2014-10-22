@@ -66,7 +66,7 @@
 	
     [self addSearchNavBar];
     
-    self.lblNotPeople.text =  NSLocalizedString(@"No people found", nil);
+    self.lblNotPeople.text =  NSLocalizedString(@"No Results", nil);
     //Background blur image under the modalview
     self.usersTable.backgroundView = [[UIImageView alloc] initWithImage:[self.backgroundImage applyBlurWithRadius:20
                                                                                                        tintColor:[UIColor colorWithWhite:1 alpha:0.5]
