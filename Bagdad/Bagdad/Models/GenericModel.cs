@@ -17,7 +17,7 @@ namespace Bagdad.Models
             try
             {
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
                 double maxDate = 0;
 
                 string selectQuery = SQLQuerys.getMaxModificationDateOf;
@@ -32,7 +32,7 @@ namespace Bagdad.Models
                     System.Diagnostics.Debug.WriteLine("GenericModel - getMaxModificationDateOf. Fecha recuperada para la tabla " + entity + ": " + maxDate.ToString());
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 return maxDate;
             }
@@ -46,7 +46,7 @@ namespace Bagdad.Models
         {
             try
             {
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.updateModificationDateOf);
 
@@ -55,7 +55,7 @@ namespace Bagdad.Models
 
                 await selectStatement.StepAsync();
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 System.Diagnostics.Debug.WriteLine("GenericModel - updateModificationDateOf. Fecha establecida para la tabla " + entity + ": " + modificationTime.ToString());
                 return 1;
             }
@@ -69,7 +69,7 @@ namespace Bagdad.Models
         {
             try
             {
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
                 List<SynchroTableInfo> ListSTI = new List<SynchroTableInfo>();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetSynchronizationTables);
@@ -98,7 +98,7 @@ namespace Bagdad.Models
                     ListSTI.Add(new SynchroTableInfo() { Order = _order, Entity = _entity, Frequency = _frequency, MaxTimestamp = _maxTimestamp, MinTimestamp = _minTimestamp, Direction = _direction, MaxRows = _maxRows, MinRows = _minRows });
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 return ListSTI;
             }
@@ -133,7 +133,7 @@ namespace Bagdad.Models
         {
             try
             {
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 String sDeleteQuery = "DELETE FROM " + Entity;
 
@@ -141,7 +141,7 @@ namespace Bagdad.Models
 
                 await selectStatement.StepAsync();
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 System.Diagnostics.Debug.WriteLine("GenericModel - deleteTableToReset. Restablecida la tabla " + Entity + " (todos los datos borrados)");
                 return true;
             }
@@ -159,7 +159,7 @@ namespace Bagdad.Models
             {
                 idShot = await getOlderShotToDelete();
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
                 
                 string selectQuery = SQLQuerys.deleteShotsOlderThanMax;
 
@@ -169,7 +169,7 @@ namespace Bagdad.Models
 
                 await selectStatement.StepAsync();
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 System.Diagnostics.Debug.WriteLine("- - - Borrados los " + Constants.SHOTS_LIMIT.ToString() + " shots inferiores a " + idShot.ToString()  + " correctamente.");
                 return true;
             }
@@ -185,7 +185,7 @@ namespace Bagdad.Models
             int retorn = -1;
             try
             {
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 string selectQuery = SQLQuerys.getMinIdShotOlderThanMax;
 
@@ -198,7 +198,7 @@ namespace Bagdad.Models
                     retorn = selectStatement.GetIntAt(0);
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 return retorn;
             }
             catch (Exception e)

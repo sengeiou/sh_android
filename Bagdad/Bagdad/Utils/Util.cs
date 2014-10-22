@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Utils
 {
-    class Util
+    public class Util
     {
         public static DateTime FromUnixTime(String unixTime)
         {

@@ -136,7 +136,7 @@ namespace Bagdad.Models
             {
                 int done = 0;
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 string sQuery = sQuery = SQLQuerys.shotsSynchronized;
 
@@ -147,7 +147,7 @@ namespace Bagdad.Models
                 custstmt.BindIntParameterWithName("@idShot", idShot);
                 await custstmt.StepAsync();
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 return done;
             }
@@ -164,7 +164,7 @@ namespace Bagdad.Models
 
             try
             {
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertShotData))
                 {
                     await database.ExecuteStatementAsync("BEGIN TRANSACTION");
@@ -191,13 +191,13 @@ namespace Bagdad.Models
                     }
                     await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros añadidos\n");
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - InsertData: " + e.Message);
             }
             return done;
@@ -210,7 +210,7 @@ namespace Bagdad.Models
 
             try
             {
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.UpdateShotData))
                 {
                     foreach (Shot shot in shots)
@@ -229,12 +229,12 @@ namespace Bagdad.Models
                     }
                     Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros actualizados\n");
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - SaveData: " + e.Message);
             }
             return done;
@@ -249,7 +249,7 @@ namespace Bagdad.Models
             {
                 shotsToUpdate = new List<BaseModelJsonConstructor>();
 
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.DeleteShotData))
                 {
                     foreach (Shot shot in shots)
@@ -263,13 +263,13 @@ namespace Bagdad.Models
                         done++;
                     }
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 Debug.WriteLine("\t\t\t\t\t" + GetEntityName() + " acabado con un total de: " + done + " registros borrados\n");
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
             }
             return done;
@@ -282,7 +282,7 @@ namespace Bagdad.Models
 
             try
             {
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.getShotById))
                 {
                     custstmt.Reset();
@@ -294,12 +294,12 @@ namespace Bagdad.Models
                         done = custstmt.GetIntAt(0);
                     }
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
             }
             return done;
@@ -312,7 +312,7 @@ namespace Bagdad.Models
 
             try
             {
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.getShotByComment24Hours))
                 {
                     custstmt.Reset();
@@ -327,12 +327,12 @@ namespace Bagdad.Models
                         retorn = true;
                     }
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - DeleteData: " + e.Message);
             }
             return retorn;
@@ -343,7 +343,7 @@ namespace Bagdad.Models
             try
             {
                 List<ShotViewModel> shotList = new List<ShotViewModel>();
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineShots);
                 selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -366,7 +366,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - GetTimeLineShots: " + e.Message);
             }
         }
@@ -379,7 +379,7 @@ namespace Bagdad.Models
             {
                 int count = 0;
                 List<BaseModelJsonConstructor> shotList = new List<BaseModelJsonConstructor>();
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetTimeLineOtherShots);
                 selectStatement.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -405,7 +405,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Shot - getTimeLineShots: " + e.Message);
             }
         }
@@ -504,7 +504,7 @@ namespace Bagdad.Models
             try
             {
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
                 double maxDate = 0;
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.getOlderShotDate);
@@ -516,7 +516,7 @@ namespace Bagdad.Models
                     System.Diagnostics.Debug.WriteLine("Shot - GetOlderShotDate. Older Shot Date: " + maxDate.ToString());
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 return maxDate;
             }

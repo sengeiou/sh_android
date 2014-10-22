@@ -1,22 +1,46 @@
-﻿using System;
+﻿using SQLiteWinRT;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
 
-namespace BagdadTest.Utils
+namespace Bagdad.Utils
 {
-    class PrepareDB
+    public class DataBaseHelper
     {
+        #region DATA_BASE
+
+        public static Database db;
+
+        public static ManualResetEvent DBLoaded = new ManualResetEvent(false);
+
+        public async void InitializeDB()
+        {            
+            db = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
+            await db.OpenAsync();
+            DBLoaded.Set();
+        }
+
+        public static Task<SQLiteWinRT.Database> GetDatabaseAsync()
+        {
+            return Task.Run(() =>
+            {
+                DBLoaded.WaitOne(-1);
+                return db;
+            });
+        }
+
         internal async static Task<int> initializeDatabase()
         {
             await CopyDatabase();
             return 1;
         }
 
-        private static async Task<int> CopyDatabase()
+        public static async Task<int> CopyDatabase()
         {
             try
             {
@@ -46,5 +70,6 @@ namespace BagdadTest.Utils
                 return 0;
             }
         }
+        #endregion
     }
 }

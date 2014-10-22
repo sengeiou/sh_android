@@ -1,27 +1,26 @@
-﻿using SQLiteWinRT;
+﻿using Bagdad.Utils;
+using SQLiteWinRT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace BagdadTest.Utils
 {
-    class DataBaseHelper
+    class DataBaseHelperTest
     {
+        public Database database;
 
-        Database database;
 
-        public async Task init()
-        {
-            database = await Bagdad.App.GetDatabaseAsync();   
-        }
+        ////////public async void InitializeDB()
+        ////////{
+        ////////    //database = new Database(await StorageFolder.GetFolderFromPathAsync("C:\\Data\\Users\\DefApps\\AppData\\{BBF2A5F0-FEA1-4D3F-B9A3-B12397BEE02F}\\local"), "shooter.db");
+        ////////    database = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
+        ////////    await database.OpenAsync();
 
-        public void ReleaseDataBase()
-        {
-            Bagdad.App.DBLoaded.Set();
-        }
-
+        ////////}
         public async Task ResetDataBase()
         {
             await TruncateDeviceTable();
@@ -63,12 +62,21 @@ namespace BagdadTest.Utils
         }
         private async Task DeleteContentFromTable(String table)
         {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper();
+            dataBaseHelper.InitializeDB();
+            database = await DataBaseHelper.GetDatabaseAsync();
+
             Statement statement = await database.PrepareStatementAsync("DELETE FROM " + table);
 
             await statement.StepAsync();
         }
 
         public async Task<List<String>> GetListOfTables(){
+            //////DataBaseHelper dataBaseHelper = new DataBaseHelper();
+            //////await DataBaseHelper.CopyDatabase(); 
+            //////dataBaseHelper.InitializeDB();
+            //////DataBaseHelper.DBLoaded.Set();
+            database = await DataBaseHelper.GetDatabaseAsync();
 
             Statement statement = await database.PrepareStatementAsync("SELECT DISTINCT tbl_name FROM sqlite_master");
             List<String> tableNames = new List<String>();
@@ -81,6 +89,9 @@ namespace BagdadTest.Utils
 
         public async Task<int> SimpleQuery()
         {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper();
+            dataBaseHelper.InitializeDB();
+            database = await DataBaseHelper.GetDatabaseAsync();
 
             Statement statement = await database.PrepareStatementAsync("SELECT 1");
             if (await statement.StepAsync())

@@ -16,20 +16,22 @@ namespace BagdadTest.Integration
         [TestMethod]
         public void CanQueryDatabase()
         {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper();
-            Task.FromResult(dataBaseHelper.init()).Wait();
-            int simpleQueryResult = dataBaseHelper.SimpleQuery().Result;
-            dataBaseHelper.ReleaseDataBase();
+            
+            DataBaseHelperTest dbTestHelper = new DataBaseHelperTest();
+            
+            int simpleQueryResult = dbTestHelper.SimpleQuery().Result;
+            DataBaseHelper.DBLoaded.Set();
+
             Assert.AreEqual(1, simpleQueryResult);
         }
 
         [TestMethod]
         public void ExistingTablesInDataBase()
         {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper();
-            Task.FromResult(dataBaseHelper.init()).Wait();
-            List<String> tableNames = dataBaseHelper.GetListOfTables().Result;
-            dataBaseHelper.ReleaseDataBase();
+            DataBaseHelperTest dbTestHelper = new DataBaseHelperTest();
+         
+            List<String> tableNames = dbTestHelper.GetListOfTables().Result;
+
             Assert.AreEqual(6, tableNames.Count);
             Assert.IsTrue(tableNames.Contains("User"));
             Assert.IsTrue(tableNames.Contains("Shot"));
@@ -43,9 +45,10 @@ namespace BagdadTest.Integration
         public void TestUserNotLogedInAtStartUp()
         {
             DataBaseHelper dataBaseHelper = new DataBaseHelper();
-            Task.FromResult(dataBaseHelper.init()).Wait();
-            Task.FromResult(dataBaseHelper.ResetDataBase()).Wait();
-            dataBaseHelper.ReleaseDataBase();
+            DataBaseHelperTest dbTestHelper = new DataBaseHelperTest();
+
+            dataBaseHelper.InitializeDB();
+            DataBaseHelper.DBLoaded.Set();
 
             Util util = new Util();
 

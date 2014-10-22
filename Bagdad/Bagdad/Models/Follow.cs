@@ -32,7 +32,7 @@ namespace Bagdad.Models
             try
             {
 
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertFollowData))
                 {
 
@@ -57,12 +57,12 @@ namespace Bagdad.Models
                         done++;
                     }
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Follow - SaveData: " + sError + " / " + e.Message);
             }
             return done;
@@ -74,7 +74,7 @@ namespace Bagdad.Models
             try
             {
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 string selectQuery = SQLQuerys.SelectIdUserFollowing;
 
@@ -87,7 +87,7 @@ namespace Bagdad.Models
                     listOfidUserFollowing.Add(selectStatement.GetIntAt(0));
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 return listOfidUserFollowing;
             }
@@ -145,7 +145,7 @@ namespace Bagdad.Models
             try
             {
 
-                Database database = await App.GetDatabaseAsync();
+                Database database = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.GetFollowByIdUserAndIdUserFollowed);
 
@@ -157,7 +157,7 @@ namespace Bagdad.Models
                     imFollowing = true;
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
             }
             catch (Exception e)
@@ -177,7 +177,7 @@ namespace Bagdad.Models
             List<User> followings = new List<User>();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(query);
                 st.BindIntParameterWithName("@idUser", idUser);
 
@@ -257,7 +257,7 @@ namespace Bagdad.Models
             ServiceCommunication sc = new ServiceCommunication();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.InsertOrReplaceFollowData);
                 
                 st.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -269,14 +269,14 @@ namespace Bagdad.Models
                 st.BindTextParameterWithName("@csys_synchronized", "N");
 
                 await st.StepAsync();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 _return = await UpdateNumOfFollowings(1, user);
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 Debug.WriteLine("E R R O R - Follow - AddFollowing: " + sError + " / " + e.Message);
             }
             return _return;
@@ -292,7 +292,7 @@ namespace Bagdad.Models
             {
                 int _revision = await GetNewRevisionForFollowing(user.idUser);
 
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.LogicDeleteFollowData);
 
                 st.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -304,14 +304,14 @@ namespace Bagdad.Models
                 st.BindTextParameterWithName("@csys_synchronized", "D");
 
                 await st.StepAsync();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 _return = await UpdateNumOfFollowings(-1, user);
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 Debug.WriteLine("E R R O R - Follow - DelFollowing: " + sError + " / " + e.Message);
             }
             return _return;
@@ -322,7 +322,7 @@ namespace Bagdad.Models
             int _return = 0;
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetFollowingRevision);
 
                 st.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -331,9 +331,9 @@ namespace Bagdad.Models
                 if(await st.StepAsync())
                 {
                     _return = st.GetIntAt(0) + 1;
-                }    
-                    
-                App.DBLoaded.Set();
+                }
+
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -361,7 +361,7 @@ namespace Bagdad.Models
             int _return = 0;
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetActualNumOfFollowings);
 
                 st.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -371,7 +371,7 @@ namespace Bagdad.Models
                     _return = st.GetIntAt(0);
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -385,7 +385,7 @@ namespace Bagdad.Models
             bool _return = false;
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.EditNumOfFollowings);
 
                 st.BindIntParameterWithName("@idUser", App.ID_USER);
@@ -393,8 +393,8 @@ namespace Bagdad.Models
 
                 await st.StepAsync();
                 _return = true;
-                
-                App.DBLoaded.Set();
+
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -581,13 +581,13 @@ namespace Bagdad.Models
                 if (isFollow) sqlQuery = SQLQuerys.UpdateFollowSynchro;
                 else sqlQuery = SQLQuerys.UpdateUnFollowSynchro;
 
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(sqlQuery);
 
                 await st.StepAsync();
 
                 _result = true;
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -602,7 +602,7 @@ namespace Bagdad.Models
             List<Follow> follows = new List<Follow>();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetFollowsToUpdate);
 
                 while (await st.StepAsync())
@@ -612,8 +612,8 @@ namespace Bagdad.Models
                     if(synchro.Length > 0) synchroChar = synchro.ToCharArray(0,1)[0];
                     follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
                 }
-                
-                App.DBLoaded.Set();
+
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -627,7 +627,7 @@ namespace Bagdad.Models
             List<Follow> follows = new List<Follow>();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUnFollowsToUpdate);
 
                 while (await st.StepAsync())
@@ -638,7 +638,7 @@ namespace Bagdad.Models
                     follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {

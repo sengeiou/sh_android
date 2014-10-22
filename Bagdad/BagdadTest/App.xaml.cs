@@ -64,8 +64,9 @@ namespace BagdadTest
         // Este código no se ejecutará cuando la aplicación se reactive
         private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            await Utils.PrepareDB.initializeDatabase();
-            InitializeDB();
+            await Bagdad.Utils.DataBaseHelper.CopyDatabase();
+            Bagdad.Utils.DataBaseHelper dbHelper = new Bagdad.Utils.DataBaseHelper();
+            dbHelper.InitializeDB();
         }
 
         // Código para ejecutar cuando la aplicación se activa (se trae a primer plano)
@@ -223,25 +224,6 @@ namespace BagdadTest
 
                 throw;
             }
-        }
-
-        public static Database db;
-
-        public static ManualResetEvent DBLoaded = new ManualResetEvent(false);
-        public async void InitializeDB()
-        {
-            db = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
-            await db.OpenAsync();
-            DBLoaded.Set();
-        }
-
-        public static Task<SQLiteWinRT.Database> GetDatabaseAsync()
-        {
-            return Task.Run(() =>
-            {
-                DBLoaded.WaitOne(-1);
-                return db;
-            });
         }
     }
 }

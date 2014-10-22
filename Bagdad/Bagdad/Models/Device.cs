@@ -56,7 +56,7 @@ namespace Bagdad.Models
             bool _return = false;
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetCurrentDevice);
 
                 if (await st.StepAsync())
@@ -75,7 +75,7 @@ namespace Bagdad.Models
                     App.ID_DEVICE = st.GetIntAt(0);
                     _return = true;
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -163,7 +163,7 @@ namespace Bagdad.Models
             bool _return = false;
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.SaveOrCreateDevice);
 
                 st.BindIntParameterWithName("@idDevice", this.idDevice);
@@ -179,7 +179,7 @@ namespace Bagdad.Models
                 await st.StepAsync();
                 _return = true;
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {

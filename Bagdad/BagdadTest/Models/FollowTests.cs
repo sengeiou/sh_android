@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Bagdad.Models;
 using System.Threading.Tasks;
+using SQLiteWinRT;
 
 namespace BagdadTest.Model
 {
@@ -9,6 +10,16 @@ namespace BagdadTest.Model
     public class FollowTests
     {
         /*[TestMethod]
+        public void TestDataBase()
+        {
+            Bagdad.Utils.DataBaseHelper dbHelper = new Bagdad.Utils.DataBaseHelper();
+            dbHelper.InitializeDB();
+            Database db = Task.FromResult(Bagdad.Utils.DataBaseHelper.GetDatabaseAsync());
+            Assert.AreEqual(0, 1);
+        }
+
+
+        [TestMethod]
         public void ConstructFilter()
         {
             Follow follow = new Follow();

@@ -50,7 +50,7 @@ namespace Bagdad.Models
             try
             {
 
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertUserData))
                 {
                     await database.ExecuteStatementAsync("BEGIN TRANSACTION");
@@ -106,12 +106,12 @@ namespace Bagdad.Models
                     }
                     await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - User - SaveData: " + e.Message);
             }
             return done;
@@ -122,7 +122,7 @@ namespace Bagdad.Models
             String sessionToken = "";
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetSessionToken);
 
@@ -133,7 +133,7 @@ namespace Bagdad.Models
                     if (idPlayer > 0) App.ID_USER = idPlayer;
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -183,7 +183,7 @@ namespace Bagdad.Models
             List<String> userInfo = new List<string>();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetNameAndURL);
                 st.BindIntParameterWithName("@idUser", idUser);
@@ -194,7 +194,7 @@ namespace Bagdad.Models
                     userInfo.Add(st.GetTextAt(1)); //URL
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -253,7 +253,7 @@ namespace Bagdad.Models
             UserViewModel uvm = bagdadFactory.CreateUserViewModel();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUserProfileInfo);
                 st.BindIntParameterWithName("@idUser", idUser);
@@ -276,7 +276,7 @@ namespace Bagdad.Models
                     uvm.revision = st.GetIntAt(13);
 
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -374,7 +374,7 @@ namespace Bagdad.Models
             List<User> usersResult = new List<User>();
             try
             {
-             Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
              Statement st = await db.PrepareStatementAsync(SQLQuerys.GetUsersByUserAndNick);
              st.BindTextParameterWithName("@name", "%" + searchString + "%");
@@ -401,7 +401,7 @@ namespace Bagdad.Models
                         )
                     );
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -416,7 +416,7 @@ namespace Bagdad.Models
             UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.InsertUserData);
                 
@@ -438,7 +438,7 @@ namespace Bagdad.Models
                 st.BindTextParameterWithName("@csys_synchronized", "S");
 
                 await st.StepAsync();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 
                 userImageManager.SaveImageFromURL(this.photo, this.idUser);
                 
@@ -457,14 +457,14 @@ namespace Bagdad.Models
             UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.DeleteUserData);
 
                 st.BindIntParameterWithName("@idUser", this.idUser);
                 
                 await st.StepAsync();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 userImageManager.RemoveImageById(this.idUser);
 

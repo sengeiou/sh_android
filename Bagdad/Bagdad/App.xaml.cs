@@ -97,8 +97,9 @@ namespace Bagdad
         // Este código no se ejecutará cuando la aplicación se reactive
         private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            await PrepareDB.initializeDatabase();
-            InitializeDB();
+            await DataBaseHelper.initializeDatabase();
+            DataBaseHelper dbHelper = new DataBaseHelper();
+            dbHelper.InitializeDB();
             Setup();
         }
 
@@ -368,30 +369,6 @@ namespace Bagdad
         public static string locale()
         {
             return System.Globalization.CultureInfo.CurrentCulture.Name;
-        }
-
-        #endregion
-
-        #region DATA_BASE
-
-        public static Database db;
-
-        public static ManualResetEvent DBLoaded = new ManualResetEvent(false);
-
-        private async void InitializeDB()
-        {
-            db = new Database(ApplicationData.Current.LocalFolder, "shooter.db");
-            await db.OpenAsync();
-            DBLoaded.Set();
-        }
-
-        public static Task<SQLiteWinRT.Database> GetDatabaseAsync()
-        {
-            return Task.Run(() =>
-            {
-                DBLoaded.WaitOne(-1);
-                return db;
-            });
         }
 
         #endregion

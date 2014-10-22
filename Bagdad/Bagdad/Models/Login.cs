@@ -49,7 +49,7 @@ namespace Bagdad.Models
             try
             {
 
-                database = await App.GetDatabaseAsync();
+                database = await DataBaseHelper.GetDatabaseAsync();
                 using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertLoginData))
                 {
                     await database.ExecuteStatementAsync("BEGIN TRANSACTION");
@@ -108,7 +108,7 @@ namespace Bagdad.Models
                     }
                     await database.ExecuteStatementAsync("COMMIT TRANSACTION");
                 }
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
 
                 Device device = new Device();
                 await device.UpdateDeviceToken();
@@ -116,7 +116,7 @@ namespace Bagdad.Models
             catch (Exception e)
             {
                 string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
                 throw new Exception("E R R O R - Login - SaveData: " + e.Message);
             }
             return done;
@@ -127,7 +127,7 @@ namespace Bagdad.Models
             String sessionToken = "";
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetSessionToken);
 
@@ -138,7 +138,7 @@ namespace Bagdad.Models
                     if (idPlayer > 0) App.ID_USER = idPlayer;
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
@@ -192,7 +192,7 @@ namespace Bagdad.Models
             List<String> userInfo = new List<string>();
             try
             {
-                Database db = await App.GetDatabaseAsync();
+                Database db = await DataBaseHelper.GetDatabaseAsync();
 
                 Statement st = await db.PrepareStatementAsync(SQLQuerys.GetNameAndURL);
                 st.BindIntParameterWithName("@idUser", idUser);
@@ -203,7 +203,7 @@ namespace Bagdad.Models
                     userInfo.Add(st.GetTextAt(1)); //URL
                 }
 
-                App.DBLoaded.Set();
+                DataBaseHelper.DBLoaded.Set();
             }
             catch (Exception e)
             {
