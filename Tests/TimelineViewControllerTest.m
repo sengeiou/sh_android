@@ -64,11 +64,11 @@
 }
 
 -(void)testCharactersCounterLeft {
-    
-    XCTAssertTrue([[self.tlcv countCharacters:2] isEqualToString:@"138"]);
-    XCTAssertTrue([[self.tlcv countCharacters:0] isEqualToString:@"140"]);
-    XCTAssertTrue([[self.tlcv countCharacters:140] isEqualToString:@"0"]);
-    XCTAssertTrue([[self.tlcv countCharacters:150] isEqualToString:@"0"]);
+
+    XCTAssertEqualObjects([self.tlcv countCharacters:2],@"138");
+    XCTAssertEqualObjects([self.tlcv countCharacters:0],@"140");
+    XCTAssertEqualObjects([self.tlcv countCharacters:140],@"0");
+    XCTAssertEqualObjects([self.tlcv countCharacters:150],@"0");
 }
 
 
