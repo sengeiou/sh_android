@@ -54,6 +54,14 @@
    return self.lengthTextField;
 }
 
+-(BOOL) thereIsText{
+ 
+    if([self getNumberOfCharacters] >= 1)
+      return YES;
+    
+    return NO;
+}
+
 //------------------------------------------------------------------------------
 - (void)setTextViewForShotCreation {
         
@@ -83,7 +91,6 @@
         self.textColor = [Fav24Colors textWhatsUpViewSendShot];
     else
         self.textColor = [UIColor blackColor];
-
 }
 
 //------------------------------------------------------------------------------
@@ -112,5 +119,6 @@
     [self resignFirstResponder];
     self.textColor = [Fav24Colors textTextViewSendShot];
 }
+
 
 @end

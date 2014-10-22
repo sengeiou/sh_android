@@ -245,6 +245,7 @@
         
         self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
         [self.viewTextField stateInitial];
+        [self.viewTextField keyboardHide:nil];
 
         [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
 

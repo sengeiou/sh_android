@@ -22,5 +22,6 @@
 
 - (NSInteger) getNumberOfCharacters;
 - (NSString *) getTextComment;
+- (BOOL) thereIsText;
 
 @end

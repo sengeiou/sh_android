@@ -54,8 +54,6 @@
     self.charactersLeft.hidden = YES;
     self.btnShoot.enabled = NO;
     self.viewToDisableTextField.hidden = YES;
-
-    [self keyboardHide:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -95,7 +93,6 @@
                      }completion:^(BOOL finished) {
                          
                      }];
-    
 }
 
 //------------------------------------------------------------------------------
@@ -117,10 +114,8 @@
     self.timelineTableView.tableView.scrollEnabled = YES;
     
     if ([self.writingTextBox getNumberOfCharacters] == 0){
-        [self.writingTextBox addPlaceholderInTextView];
+        [self stateInitial];
         
-        self.textViewWrittenRows = 0;
-        self.charactersLeft.hidden = YES;
     }else
         [self.writingTextBox setWritingTextViewWhenCancelTouched];
     
@@ -136,7 +131,6 @@
         [UIView animateWithDuration:0.25f animations:^{
             [self layoutIfNeeded];
         }];
-        
     }
 }
 
@@ -222,15 +216,15 @@
     [self.writingTextBox setLengthTextField:textView.text.length - range.length +  text.length ];
 
     self.charactersLeft.hidden = NO;
-    
-    if ([self.writingTextBox getNumberOfCharacters] >= 1)
-        self.btnShoot.enabled = YES;
-    else
-        self.btnShoot.enabled = NO;
-    
+
     [self adaptViewSizeWhenWriting:textView withCharacter:text];
     
-    if ([self.writingTextBox getNumberOfCharacters] == 0){
+    if ([self.writingTextBox thereIsText])
+        self.btnShoot.enabled = YES;
+    
+    else if ([self.writingTextBox thereIsText]){
+        self.btnShoot.enabled = NO;
+        
         self.bottomViewHeightConstraint.constant = 75;
         [UIView animateWithDuration:0.25f animations:^{
             [self layoutIfNeeded];
