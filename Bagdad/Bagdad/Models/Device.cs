@@ -25,9 +25,19 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
 
         private String ops_data = "\"idDevice\": null,\"idUser\": null,\"token\": null,\"idPushEngine\": null,\"uniqueDeviceID\": null,\"platform\": null,\"model\": null,\"osVer\": null,\"locale\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
         
+        public Device(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public Device()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
+
         protected override String GetEntityName() { return Constants.SERCOM_TB_DEVICE; }
 
         protected override String GetOps() { return ops_data; }
@@ -128,7 +138,7 @@ namespace Bagdad.Models
             if (this.csys_modified != 0) _modified = this.csys_modified.ToString();
             else _modified = Util.DateToDouble(DateTime.UtcNow).ToString();
 
-            ServiceCommunication sc = new ServiceCommunication();
+            ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
             
             String json = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idDevice\": " + _idDevice + ",\"idUser\": " + App.ID_USER + ",\"token\": \"" + App.pushToken + "\",\"uniqueDeviceID\": \"" + App.UDID() + "\",\"platform\": " + App.PLATFORM_ID + ",\"model\": \"" + App.modelVersion() + "\",\"osVer\": \"" + App.osVersion() + "\",\"locale\": \"" + App.locale() + "\",\"revision\": " + _revision + ",\"birth\": " + _birth + ",\"modified\": " + _modified + ",\"deleted\": null}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"UpdateCreate\",\"key\": {\"uniqueDeviceID\": \"" + App.UDID() + "\"},\"entity\": \"Device\"}}]}";
             JObject response = JObject.Parse(await sc.MakeRequestToMemory(json));
