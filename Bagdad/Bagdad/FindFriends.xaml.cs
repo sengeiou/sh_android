@@ -192,8 +192,6 @@ namespace Bagdad
         {
             if (!((FollowViewModel)findList.SelectedItem).isFollowed)
             {
-                await searchedFriends.AddAsFollowing(((FollowViewModel)findList.SelectedItem).userInfo);
-
                 ((FollowViewModel)findList.SelectedItem).isFollowed = true;
                 ((FollowViewModel)findList.SelectedItem).buttonVisible = Visibility.Visible;
                 ((FollowViewModel)findList.SelectedItem).buttonText = AppResources.ProfileButtonFollowing + "  ";
@@ -202,19 +200,24 @@ namespace Bagdad
                 ((FollowViewModel)findList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
                 ((FollowViewModel)findList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.added.png", UriKind.RelativeOrAbsolute));
                 ((FollowViewModel)findList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
+
+                await searchedFriends.AddAsFollowing(((FollowViewModel)findList.SelectedItem).userInfo);
             }
             else
             {
-                await searchedFriends.RemoveFromFollowing(((FollowViewModel)findList.SelectedItem).userInfo);
+                if (MessageBox.Show(AppResources.unFollowQuestion, ((FollowViewModel)findList.SelectedItem).userInfo.userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ((FollowViewModel)findList.SelectedItem).isFollowed = false;
+                    ((FollowViewModel)findList.SelectedItem).buttonVisible = Visibility.Visible;
+                    ((FollowViewModel)findList.SelectedItem).buttonText = AppResources.ProfileButtonFollow + "  ";
+                    ((FollowViewModel)findList.SelectedItem).buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                    ((FollowViewModel)findList.SelectedItem).buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                    ((FollowViewModel)findList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                    ((FollowViewModel)findList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
+                    ((FollowViewModel)findList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
 
-                ((FollowViewModel)findList.SelectedItem).isFollowed = false;
-                ((FollowViewModel)findList.SelectedItem).buttonVisible = Visibility.Visible;
-                ((FollowViewModel)findList.SelectedItem).buttonText = AppResources.ProfileButtonFollow + "  ";
-                ((FollowViewModel)findList.SelectedItem).buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                ((FollowViewModel)findList.SelectedItem).buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                ((FollowViewModel)findList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                ((FollowViewModel)findList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
-                ((FollowViewModel)findList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
+                    await searchedFriends.RemoveFromFollowing(((FollowViewModel)findList.SelectedItem).userInfo);
+                }
             }
 
             //Yeah! It's so ugly... but it works better and don't blink the rest of the list.

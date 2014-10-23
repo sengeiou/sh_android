@@ -194,6 +194,11 @@
           <target state="new">no results for </target>
           <note from="MultilingualBuild" annotates="source" priority="2">FindFriends.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/unFollowQuestion" translate="yes" xml:space="preserve">
+          <source>Unfollow?</source>
+          <target state="new">Unfollow?</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">buttons</note>
+        </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
           <source>Whoops! You already shot that.</source>
           <target state="new">Whoops! You already shot that.</target>

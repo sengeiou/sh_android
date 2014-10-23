@@ -153,17 +153,20 @@ namespace Bagdad
             }
             else
             {
-                headButtonText.Text = AppResources.ProfileButtonFollow;
-                headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
+                if (MessageBox.Show(AppResources.unFollowQuestion, uvm.userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    headButtonText.Text = AppResources.ProfileButtonFollow;
+                    headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;
+                    headButton.Foreground = Resources["PhoneForegroundBrush"] as SolidColorBrush;
 
-                headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
-                headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
-                headButtonIconVisible.Fill = Resources["PhoneForegroundBrush"] as SolidColorBrush;
-                
-                isFollowing = false;
+                    headButtonIcon.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.add.png", UriKind.RelativeOrAbsolute));
+                    headButtonIconVisible.Visibility = System.Windows.Visibility.Visible;
+                    headButtonIconVisible.Fill = Resources["PhoneForegroundBrush"] as SolidColorBrush;
 
-                await uvm.RemoveFromFollowing();
+                    isFollowing = false;
+
+                    await uvm.RemoveFromFollowing();
+                }
             }
         }
 

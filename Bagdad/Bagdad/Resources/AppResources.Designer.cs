@@ -574,6 +574,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Unfollow?.
+        /// </summary>
+        public static string unFollowQuestion {
+            get {
+                return ResourceManager.GetString("unFollowQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Email or Username.
         /// </summary>
         public static string UserOrEmail {

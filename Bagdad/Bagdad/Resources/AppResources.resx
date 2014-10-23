@@ -354,4 +354,8 @@
     <value>no results for </value>
     <comment>FindFriends.xaml</comment>
   </data>
+  <data name="unFollowQuestion" xml:space="preserve">
+    <value>Unfollow?</value>
+    <comment>buttons</comment>
+  </data>
 </root>
