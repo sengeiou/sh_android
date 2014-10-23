@@ -175,8 +175,8 @@ public class DataModule {
         return new LogTreeFactoryImpl();
     }
 
-    @Provides @Singleton SessionManager provideSessionManager() {
-        return new SessionManager();
+    @Provides @Singleton SessionManager provideSessionManager(SessionManagerImpl sessionManager) {
+        return sessionManager;
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {

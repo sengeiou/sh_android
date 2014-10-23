@@ -18,7 +18,7 @@ public class TestGolesApplication extends GolesApplication implements TestLifecy
     }
 
     @Override
-    public void plantTrees() {
+    public void plantLoggerTrees() {
         Timber.plant(new Timber.Tree() {
 
             String formatString(String message, Object... args) {

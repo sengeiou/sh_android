@@ -29,6 +29,7 @@ public class UserManager extends AbstractManager {
      * Retrieve currentUser
      * *
      */
+    @Deprecated
     public User getCurrentUser() {
         User user = null;
         if (!isTableEmpty(USER_TABLE)) {

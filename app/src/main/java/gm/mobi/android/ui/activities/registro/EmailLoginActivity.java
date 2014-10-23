@@ -22,6 +22,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
@@ -43,6 +44,7 @@ public class EmailLoginActivity extends BaseActivity {
 
     @Inject JobManager jobManager;
     @Inject Bus bus;
+    @Inject SessionManager sessionManager;
 
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
@@ -73,7 +75,7 @@ public class EmailLoginActivity extends BaseActivity {
         // Yey!
         Timber.d("Succesfuly logged in %s", user.getUserName());
         // Store user in current session
-        GolesApplication.get(this).setCurrentUser(user);
+        sessionManager.createSession(user.getIdUser(), user.getSessionToken(), user); //TODO quitar token del User
         // Launch main activity, and destroy the stack trace
         finish();
         Intent i = new Intent(this,MainActivity.class);

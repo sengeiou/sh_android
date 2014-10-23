@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.data.SessionManager;
+import gm.mobi.android.data.SessionManagerImpl;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.User;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
@@ -26,26 +27,43 @@ public class BaseSignedInActivity extends BaseActivity {
      * Retrieves the current User from database, or redirect to login activity if not found.
      * @return true if there is a user signed in, false if there is not and will open the login screen.
      */
+    //TODO refactor: method name not clear
     public boolean restoreSessionOrLogin() {
-
-        if (sessionManager.getCurrentUser() != null) {
+        if (isSessionActive()) {
             return true;
         } else {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            userManager.setDataBase(db);
-            User currentUser = userManager.getCurrentUser();
-            db.close();
-            if (currentUser != null) {
-                sessionManager.setCurrentUser(currentUser);
+            if (isSessionStored()) {
+                restoreSession();
                 return true;
             } else {
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(new Intent(this, WelcomeLoginActivity.class));
+               finishActivityAndLogin();
                 return false;
             }
         }
     }
+
+    public boolean isSessionActive() {
+        return sessionManager.getCurrentUser() != null;
+    }
+
+    public boolean isSessionStored() {
+        return sessionManager.getSessionToken() != null && sessionManager.getCurrentUserId() > 0L;
+    }
+
+    public void restoreSession() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        userManager.setDataBase(db);
+        User currentUser = userManager.getUserByIdUser(sessionManager.getCurrentUserId());
+        db.close();
+        sessionManager.setCurrentUser(currentUser);
+    }
+
+    private void finishActivityAndLogin() {
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(new Intent(this, WelcomeLoginActivity.class));
+    }
+
 
     /**
      * Utility method to get the current user from the Application object.
@@ -55,7 +73,7 @@ public class BaseSignedInActivity extends BaseActivity {
      * @return Currently signed in User
      */
     public User getCurrentUser() {
-        return GolesApplication.get(this).getCurrentUser();
+        return sessionManager.getCurrentUser();
     }
 
 }
