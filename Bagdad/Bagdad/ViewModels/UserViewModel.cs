@@ -89,7 +89,6 @@ namespace Bagdad.ViewModels
                 Debug.WriteLine("E R R O R - UserViewModel - GetUserProfileInfo: " + e.Message);
                 return false;
             }
-            return true;
         }
 
         public async Task<FollowsViewModel> FindUsersInServer(String searchString, int offset)

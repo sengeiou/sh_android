@@ -143,7 +143,6 @@ namespace Bagdad.Models
         public async Task<bool> AddFollowing(User user)
         {
             bool _return = false;
-            ServiceCommunication sc = new ServiceCommunication();
             try
             {
                 Database db = await DataBaseHelper.GetDatabaseAsync();
@@ -173,9 +172,7 @@ namespace Bagdad.Models
 
         public async Task<bool> DelFollowing(User user)
         {
-            //TODO: Split unfollow sending to server
             bool _return = false;
-            ServiceCommunication sc = new ServiceCommunication();
 
             try
             {

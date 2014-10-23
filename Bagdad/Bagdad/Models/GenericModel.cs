@@ -119,27 +119,7 @@ namespace Bagdad.Models
             }
         }
 
-        public async Task<int> resetSynchroTables()
-        {
-            try
-            {
-                //TODO: resetSynchroTables
-                /*Database database = await App.GetDatabaseAsync();
-
-                Statement selectStatement = await database.PrepareStatementAsync(SQLQuerys.resetSynchroTable);
-
-                await selectStatement.StepAsync();
-
-                App.DBLoaded.Set();
-                System.Diagnostics.Debug.WriteLine("GenericModel - resetSynchroTables. Restablecidas fechas de tablas de synchro a 1406703600000");*/
-                return 1;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("E R R O R : GenericModel - resetSynchroTables: " + e.Message, e);
-            }
-        }
-
+      
         public async Task<bool> deleteTableToReset(String Entity)
         {
             try

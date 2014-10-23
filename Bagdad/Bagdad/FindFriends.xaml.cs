@@ -22,7 +22,7 @@ namespace Bagdad
 {
     public partial class FindFriends : PhoneApplicationPage
     {
-        int idUser = 0;
+        //int idUser = 0;
         int offset = 0;
         private int scrollToChargue = 0;
         private bool endOfList = false;
