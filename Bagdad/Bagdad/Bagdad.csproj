@@ -103,6 +103,8 @@
     </Compile>
     <Compile Include="Models\DeviceDataBase.cs" />
     <Compile Include="Models\DeviceCommunications.cs" />
+    <Compile Include="Models\FollowDataBase.cs" />
+    <Compile Include="Models\FollowCommunications.cs" />
     <Compile Include="Models\LoginDataBase.cs" />
     <Compile Include="Models\LoginCommunications.cs" />
     <Compile Include="Models\ShotDataBase.cs" />
