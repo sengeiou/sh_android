@@ -33,7 +33,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
 
     private UserEntity currentUser;
-        private Long idUser;
+
     private UserModelMapper userModelMapper;
 
     @Inject
@@ -62,12 +62,12 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     @Override protected void run() throws SQLException, IOException {
          synchronized (followManager) {
-             UserModel user = checkIfWeHaveSomeChangesInFollowAndSendToServer(currentUser.getIdUser());
+             UserModel user = checkIfWeHaveSomeChangesInFollowAndSendToServer();
              postSuccessfulEvent(new FollowUnFollowResultEvent(user));
          }
     }
 
-    public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer(Long idCurrentUser) throws IOException, SQLException{
+    public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException{
         synchronized (followManager){
            List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
            FollowEntity followReceived = null;
@@ -86,7 +86,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
                        followReceived = service.followUser(f);
                        if(followReceived!=null){
                            followManager.saveFollowFromServer(followReceived);
-                           return userModelMapper.toUserModel(userEntity,followReceived,idCurrentUser);
+                           return userModelMapper.toUserModel(userEntity,followReceived, false);
                        }
                    }
                }
