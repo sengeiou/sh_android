@@ -152,6 +152,25 @@ namespace Bagdad.Factories
             return new Follow();
         }
 
+        public virtual Follow CreateFollowParseJson(int _idUser, int _idUserFollowed, Double _csys_birth, Double _csys_modified, Double _csys_deleted, int _csys_revision, Char _csys_synchronized)
+        {
+            return new Follow()
+            {
+                idUser = _idUser,
+                idUserFollowed = _idUserFollowed,
+                csys_birth = _csys_birth,
+                csys_modified = _csys_modified,
+                csys_deleted = _csys_deleted,
+                csys_revision = _csys_revision,
+                csys_synchronized = _csys_synchronized
+            };
+        }
+
+        public virtual User CreateFollowingUserBasicInfo(int _idUser, String _userName, String _name, String _photo, String _favoriteTeamName)
+        {
+            return new User() { idUser = _idUser, userName = _userName, name = _name, photo = _photo, favoriteTeamName = _favoriteTeamName };
+        }
+
         public virtual Shot CreateShot()
         {
             return new Shot();

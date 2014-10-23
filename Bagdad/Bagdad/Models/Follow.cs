@@ -21,8 +21,18 @@ namespace Bagdad.Models
         public Double csys_deleted { get; set; }
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
 
         private String ops_data = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+
+        public Follow(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public Follow()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
 
         public override async Task<int> SaveData(List<BaseModelJsonConstructor> follows)
         {
@@ -121,18 +131,17 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in job["ops"][0]["data"])
                     {
-                        //idShot, idUser, comment, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized
-                        Follow followParse = new Follow();
-
-                        followParse.idUser = int.Parse(follow["idUser"].ToString());
-                        followParse.idUserFollowed = int.Parse(follow["idFollowedUser"].ToString());
-                        followParse.csys_birth = Double.Parse(follow["birth"].ToString());
-                        followParse.csys_modified = Double.Parse(follow["modified"].ToString());
-                        Double deleted; if (Double.TryParse(follow["deleted"].ToString(), out deleted))
-                            followParse.csys_deleted = deleted;
-                        followParse.csys_revision = int.Parse(follow["revision"].ToString());
-                        followParse.csys_synchronized = 'S';
-                        follows.Add(followParse);
+                        follows.Add(
+                            bagdadFactory.CreateFollowParseJson(
+                                int.Parse(follow["idUser"].ToString()),
+                                int.Parse(follow["idFollowedUser"].ToString()),
+                                Double.Parse(follow["birth"].ToString()),
+                                Double.Parse(follow["modified"].ToString()),
+                                ((!String.IsNullOrEmpty(follow["deleted"].ToString())) ? Double.Parse(follow["deleted"].ToString()) : 0),
+                                int.Parse(follow["revision"].ToString()),
+                                'S'
+                            )    
+                        );
                     }
                 }
             }
@@ -188,7 +197,7 @@ namespace Bagdad.Models
 
                 while (await st.StepAsync())
                 {
-                    followings.Add(new User() { idUser = st.GetIntAt(0), userName = st.GetTextAt(1), name = st.GetTextAt(2), photo = st.GetTextAt(3), favoriteTeamName = st.GetTextAt(4)});
+                    followings.Add(bagdadFactory.CreateFollowingUserBasicInfo(st.GetIntAt(0), st.GetTextAt(1), st.GetTextAt(2), st.GetTextAt(3), st.GetTextAt(4)));
                 }
             }
             catch (Exception e)
@@ -204,7 +213,7 @@ namespace Bagdad.Models
             try
             {
                 User user = new User(); 
-                ServiceCommunication sc = new ServiceCommunication();
+                ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
 
                 String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + user.GetUserOps() + "}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUserFollowing\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Following\"}}]}";
 
@@ -214,9 +223,25 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(follow["idFavoriteTeam"].ToString()), csys_revision = int.Parse(follow["revision"].ToString()), csys_birth = double.Parse(follow["birth"].ToString()), csys_modified = double.Parse(follow["modified"].ToString()) });
+                        followings.Add(
+                            bagdadFactory.CreateFilledUserWithOutDeleteAndSynchronizedInfo(
+                                int.Parse(follow["idUser"].ToString()),
+                                follow["userName"].ToString(),
+                                follow["name"].ToString(),
+                                follow["photo"].ToString(),
+                                int.Parse(follow["numFollowers"].ToString()),
+                                int.Parse(follow["numFollowings"].ToString()),
+                                int.Parse(follow["points"].ToString()),
+                                follow["bio"].ToString(),
+                                follow["website"].ToString(),
+                                follow["favoriteTeamName"].ToString(),
+                                int.Parse(follow["idFavoriteTeam"].ToString()),
+                                int.Parse(follow["revision"].ToString()),
+                                double.Parse(follow["birth"].ToString()),
+                                double.Parse(follow["modified"].ToString())
+                            )
+                        );
                     }
-
                 }
             }
             catch (Exception e)
@@ -231,7 +256,7 @@ namespace Bagdad.Models
             List<User> followings = new List<User>();
             try
             {
-                ServiceCommunication sc = new ServiceCommunication();
+                ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
 
                 String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"userName\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUserFollowed\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Followers\"}}]}";
 
@@ -242,7 +267,24 @@ namespace Bagdad.Models
                 {
                     foreach (JToken follow in responseFollow["ops"][0]["data"])
                     {
-                        followings.Add(new User() { idUser = int.Parse(follow["idUser"].ToString()), userName = follow["userName"].ToString(), name = follow["name"].ToString(), photo = follow["photo"].ToString(), numFollowers = int.Parse(follow["numFollowers"].ToString()), numFollowing = int.Parse(follow["numFollowings"].ToString()), points = int.Parse(follow["points"].ToString()), bio = follow["bio"].ToString(), website = follow["website"].ToString(), favoriteTeamName = follow["favoriteTeamName"].ToString(), idFavoriteTeam = int.Parse(follow["idFavoriteTeam"].ToString()), csys_revision = int.Parse(follow["revision"].ToString()), csys_birth = double.Parse(follow["birth"].ToString()), csys_modified = double.Parse(follow["modified"].ToString()) });
+                        followings.Add(
+                            bagdadFactory.CreateFilledUserWithOutDeleteAndSynchronizedInfo(
+                                int.Parse(follow["idUser"].ToString()),
+                                follow["userName"].ToString(),
+                                follow["name"].ToString(),
+                                follow["photo"].ToString(),
+                                int.Parse(follow["numFollowers"].ToString()),
+                                int.Parse(follow["numFollowings"].ToString()),
+                                int.Parse(follow["points"].ToString()),
+                                follow["bio"].ToString(),
+                                follow["website"].ToString(),
+                                follow["favoriteTeamName"].ToString(),
+                                int.Parse(follow["idFavoriteTeam"].ToString()),
+                                int.Parse(follow["revision"].ToString()),
+                                double.Parse(follow["birth"].ToString()),
+                                double.Parse(follow["modified"].ToString())
+                            )
+                        );
                     }
 
                 }
@@ -456,7 +498,7 @@ namespace Bagdad.Models
                     foreach (Follow follow in follows)
                     {
                         String data = singleData;
-                        if (!isFirst) data += ",";
+                        if (!isFirst) data = "," + data;
                         else
                         {
                             data = "\"data\": [" + data;
