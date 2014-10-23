@@ -142,7 +142,8 @@ namespace Bagdad.Models
 
                 if (follows.Count() > 0)
                 {
-                    String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                    String json = "{\"alias\": @alias" +
+                                    "\"status\": {\"message\": null,\"code\": null}," +
                                 "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
                                 "\"ops\": [{@Data\"metadata\": {" +
                                     "\"items\": null," +
@@ -176,6 +177,7 @@ namespace Bagdad.Models
                     json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
                     json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
                     json = json.Replace("@Operation", Constants.SERCOM_OP_CREATE);
+                    json = json.Replace("@alias", GetAlias(Constants.SERCOM_OP_CREATE));
 
                     bool isFirst = true;
                     foreach (Follow follow in follows)
@@ -231,7 +233,8 @@ namespace Bagdad.Models
 
                 if (unFollows.Count() > 0)
                 {
-                    String jsonOriginal = "{\"status\": {\"message\": null,\"code\": null}," +
+                    String jsonOriginal = "{\"alias\": @alias" +
+                                        "\"status\": {\"message\": null,\"code\": null}," +
                                 "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
                                 "\"ops\": [{@Data\"metadata\": {" +
                                     "\"items\": 1," +
@@ -262,6 +265,7 @@ namespace Bagdad.Models
                     jsonOriginal = jsonOriginal.Replace("@idPlatform", App.PLATFORM_ID.ToString());
                     jsonOriginal = jsonOriginal.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
                     jsonOriginal = jsonOriginal.Replace("@Operation", Constants.SERCOM_OP_DELETE);
+                    jsonOriginal = jsonOriginal.Replace("@alias", GetAlias(Constants.SERCOM_OP_DELETE));
 
                     foreach (Follow follow in unFollows)
                     {

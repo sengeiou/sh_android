@@ -49,6 +49,7 @@ namespace Bagdad.Models
                 json = json.Replace("@appVersion", App.appVersionInt().ToString());
                 json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
                 json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+                json = json.Replace("@alias", GetAlias(Constants.SERCOM_OP_CREATE));
 
                 //ops
                 data = data.Replace("@idUser", this.idUser.ToString());

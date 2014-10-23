@@ -40,6 +40,11 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
+            if (operation.Equals(Constants.SERCOM_OP_DELETE))
+                return "\"UNFOLLOW_USER\",";
+            else if (operation.Equals(Constants.SERCOM_OP_CREATE))
+                return "\"FOLLOW_USER\",";
+            else
             return "\"GET_FOLLOWINGS\",";
         }
 
