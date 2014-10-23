@@ -345,7 +345,6 @@ namespace Bagdad
 
         async void timerToLoad_Tick(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("· · · · · · · · timerToLoad UpdatingShotsOnScreen");
             var hasNewShot = await App.ShotsVM.UpdateShotsOnScreen();
             if(hasNewShot == 1)
             {
