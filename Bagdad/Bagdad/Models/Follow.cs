@@ -502,9 +502,9 @@ namespace Bagdad.Models
         {
             try
             {
-                List<Follow> follows = await GetUnFollowsToUpdate();
+                List<Follow> unFollows = await GetUnFollowsToUpdate();
 
-                if (follows.Count() > 0)
+                if (unFollows.Count() > 0)
                 {
                     String json = "{\"status\": {\"message\": null,\"code\": null}," +
                                 "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
@@ -540,7 +540,7 @@ namespace Bagdad.Models
                     json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
                     json = json.Replace("@Operation", Constants.SERCOM_OP_DELETE);
 
-                    foreach (Follow follow in follows)
+                    foreach (Follow follow in unFollows)
                     {
                         json = json.Replace("@idUser", follow.idUser.ToString());
                         json = json.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
@@ -564,7 +564,7 @@ namespace Bagdad.Models
 
                     await UpdateFollowSynchro(false);
 
-                    json = follows.Count().ToString();
+                    json = unFollows.Count().ToString();
                     return json;
                 }
                 else return "0";
