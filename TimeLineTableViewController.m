@@ -14,7 +14,6 @@
 #import "Fav24Colors.h"
 #import "AppDelegate.h"
 #import "TimeLineViewController.h"
-#import "TimeLineUtilities.h"
 #import "CoreDataParsing.h"
 
 static NSString *CellIdentifier = @"shootCell";
@@ -129,8 +128,8 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)reloadShotsTable {
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(changeTitleView:)])
-        [self.delegate changeTitleView:[TimeLineUtilities createTimelineTitleView]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(changeTitleView)])
+        [self.delegate changeTitleView];
     
     self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
     

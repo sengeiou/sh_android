@@ -11,30 +11,6 @@
 
 @implementation TimeLineUtilities
 
-#pragma mark - PUBLIC METHODS OF TITLE VIEW CREATION
-//------------------------------------------------------------------------------
-+ (UIView *)createEnviandoTitleView {
-    
-    return [self createTitleViewWithTitle:NSLocalizedString (@"Shooting...", nil)];
-}
-
-//------------------------------------------------------------------------------
-+ (UIView *)createCheckingTitleView {
-    
-    return [self createTitleViewWithTitle:NSLocalizedString (@"Checking for Shots...", nil)];
-}
-
-//------------------------------------------------------------------------------
-+ (UIView *)createTimelineTitleView {
-
-    return [self createBasicTitleView];
-}
-
-//------------------------------------------------------------------------------
-+ (UIView *)createTimelineTitleViewWithText:(NSString *)text {
-    return [self createTitleViewWithTitle:text];
-}
-
 //------------------------------------------------------------------------------
 +(NSString *)getDateShot:(NSNumber *) dateShot{
     
@@ -118,40 +94,6 @@
 + (CGPoint) centerTextInImage:(UIImageView *)imageView{
     
     return CGPointMake((imageView.frame.size.width / 2) + 12, (imageView.frame.size.width / 2) - 10);
-}
-
-#pragma mark - PRIVATE HELPER METHODS
-//------------------------------------------------------------------------------
-+ (UIView *)createTitleViewWithTitle:(NSString *)title {
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(screenRect.origin.x, screenRect.origin.y, screenRect.size.width, 50)];
-    UILabel *titlelabel = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.width/2)-90, 10, 150, 30)];
-    titlelabel.font = [UIFont boldSystemFontOfSize:17];
-    titlelabel.text = title;
-    
-    UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    activity.frame = CGRectMake((screenRect.size.width/2)-125, 10, 30, 30);
-    [activity startAnimating];
-    
-    [titleView addSubview:activity];
-    [titleView addSubview:titlelabel];
-    
-    return titleView;
-}
-
-//------------------------------------------------------------------------------
-+ (UIView *)createBasicTitleView {
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(screenRect.origin.x, screenRect.origin.y, screenRect.size.width, 50)];
-    UILabel *titlelabel = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.width/2)-85, 10, 100, 30)];
-    titlelabel.font = [UIFont boldSystemFontOfSize:17];
-    titlelabel.text = NSLocalizedString (@"Timeline", nil);
-
-    [titleView addSubview:titlelabel];
-  
-    return titleView;
 }
 
 @end

@@ -34,7 +34,7 @@
 
 @protocol TimeLineTableViewControllerDelegate <NSObject>
 
-- (void)changeTitleView:(UIView *) viewTitleView;
+- (void)changeTitleView;
 - (void)setHiddenViewNotshots:(BOOL) isNecessaryHidden;
 - (void) pushToProfile:(Shot *)shotSelected;
 

@@ -14,7 +14,6 @@
 #import "Conection.h"
 #import "AppDelegate.h"
 #import "ProfileViewController.h"
-#import "TimeLineUtilities.h"
 #import "InfoTableViewController.h"
 #import "WatchingMenu.h"
 #import "ViewNotShots.h"
@@ -80,8 +79,10 @@
     double lastTime = [lastSync doubleValue];
     NSDate* date = [[NSDate dateWithTimeIntervalSince1970:lastTime] dateByAddingTimeInterval:300];
    
-    if ([date compare:[NSDate date]] == NSOrderedAscending)
-        self.navigationItem.titleView = [TimeLineUtilities createCheckingTitleView];
+    if ([date compare:[NSDate date]] == NSOrderedAscending){
+        self.title = NSLocalizedString (@"Checking for Shots...", nil);
+        self.tabBarItem.title = @"Timeline";
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -113,8 +114,6 @@
     [super viewWillAppear:animated];
 
     [self updateCurrentTitleView];
-
-    self.navigationItem.titleView.hidden = YES;
     
     [self setLocalNotificationObservers];
 }
@@ -123,7 +122,6 @@
 -(void)viewDidAppear:(BOOL)animated {
 
     [super viewDidAppear:animated];
-    self.navigationItem.titleView.hidden = NO;
 }
 
 //------------------------------------------------------------------------------
@@ -169,13 +167,15 @@
 #pragma mark - Change NavigationBar
 //------------------------------------------------------------------------------
 -(void)changeStateViewNavBar{
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    [self changeTitleView];
     [self.timelineTableView setFooterInvisible];
 }
 
 //------------------------------------------------------------------------------
 -(void)changeStateCheckingViewNavBar{
-    self.navigationItem.titleView = [TimeLineUtilities createCheckingTitleView];
+
+    self.title = NSLocalizedString (@"Checking for Shots...", nil);
+    self.tabBarItem.title = @"Timeline";
     [self.timelineTableView setFooterInvisible];
 }
 
@@ -237,8 +237,7 @@
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
     
     if (status && !error){
-        
-        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+        [self changeTitleView];
         [self.viewTextField stateInitial];
         [self.viewTextField keyboardHide:nil];
 
@@ -282,8 +281,7 @@
     [alert addAction:cancel];
 
     [self presentViewController:alert animated:YES completion:nil];
-    
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    [self changeTitleView];
 }
 
 
@@ -318,7 +316,9 @@
 //------------------------------------------------------------------------------
 -(void)retrySendShot{
     [self.viewTextField sendShot];
-    self.navigationItem.titleView = [TimeLineUtilities createEnviandoTitleView];
+    self.title = NSLocalizedString (@"Shooting...", nil);
+    self.tabBarItem.title = @"Timeline";
+
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:YES];
 }
 
@@ -326,7 +326,7 @@
 - (void)cleanViewWhenNotConnection{
     
     [self.viewTextField setupUIWhenCancelOrNotConnectionOrRepeat];
-    self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+    [self changeTitleView];
 }
 
 //------------------------------------------------------------------------------
@@ -391,17 +391,16 @@
 - (void)updateCurrentTitleView {
 
     if (self.navigationItem.titleView.subviews.count > 1) {
-        UILabel *actualLabel = [self.navigationItem.titleView.subviews objectAtIndex:1];
-        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleViewWithText:actualLabel.text];
-        
+        NSString *nowText = self.title;
+        self.title = nowText;
     }else
-        self.navigationItem.titleView = [TimeLineUtilities createTimelineTitleView];
+        [self changeTitleView];
 }
 
 #pragma mark - Protocol Timeline
 //------------------------------------------------------------------------------
-- (void)changeTitleView:(UIView *) viewTitleView{
-    self.navigationItem.titleView = viewTitleView;
+- (void)changeTitleView{
+    self.title = NSLocalizedString (@"Timeline", nil);
 }
 
 //------------------------------------------------------------------------------
