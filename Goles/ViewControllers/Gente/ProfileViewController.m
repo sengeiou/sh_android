@@ -14,8 +14,6 @@
 #import "Constants.h"
 #import "UserManager.h"
 #import "Fav24Colors.h"
-#import "Conection.h"
-#import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
 #import "Utils.h"
 #import "DownloadImage.h"
@@ -56,30 +54,35 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+
     [self customView];
     [self textLocalizable];
-
-    if (self.selectedUser != nil)
-        [self dataFillView];
-    
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
+    
 	[super viewWillAppear:animated];
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
-
+    
+    //Listen for keyboard process close
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataFillView) name:k_NOTIF_USER_SYNCHRO_END object:nil];
+    
+    
+    self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
+   
+    if (self.selectedUser != nil)
+        [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 //------------------------------------------------------------------------------
 - (void)customView{
-    
-//    UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
-//                                initWithTitle:@" "
-//                                style:UIBarButtonItemStylePlain
-//                                target:self
-//                                action:nil];
-//    self.navigationController.navigationBar.topItem.backBarButtonItem=btnBack;
-
     
     self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
     self.btnFollow.clipsToBounds = YES;
@@ -128,6 +131,7 @@
     
 }
 
+//------------------------------------------------------------------------------
 -(void)passToChageEndPoint{
     ChangeEndPointViewController *changeEndPointVC = [self.storyboard instantiateViewControllerWithIdentifier:@"changeEndPointVC"];
     [self.navigationController pushViewController:changeEndPointVC animated:YES];
@@ -186,9 +190,10 @@
 //------------------------------------------------------------------------------
 - (void)followUser {
     
-    BOOL followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
-    if (followActionSuccess)
-        [self configureFollowButton];
+    self.followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
+    if (self.followActionSuccess){
+        [self dataFillView];
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -197,6 +202,7 @@
     [self unfollow:self.selectedUser];
 }
 
+//------------------------------------------------------------------------------
 -(void)unfollow:(User *)userUnfollow{
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:userUnfollow.userName
@@ -221,8 +227,7 @@
                                    
                                    self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
                                    
-                                   [self performSelectorOnMainThread:@selector(configureFollowButton) withObject:nil waitUntilDone:NO];
-                                   
+                                   [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
                                    [alert dismissViewControllerAnimated:YES completion:nil];
                                    
                                }];
@@ -246,11 +251,11 @@
 //------------------------------------------------------------------------------
 -(void)textLocalizable{
     
-    self.lblPoints.text = NSLocalizedString(@"Points", nil);
+//    self.lblPoints.text = NSLocalizedString(@"Points", nil);
     self.lblFollowing.text = NSLocalizedString(@"Following", nil);
     self.lblFollowers.text = NSLocalizedString(@"Followers", nil);
 
-    [self setSegments];
+//    [self setSegments];
 }
 
 //------------------------------------------------------------------------------
@@ -266,6 +271,7 @@
     self.segmentedControl.selectedSegmentIndex = 0;
 
 }
+
 #pragma mark - Navigation
 //------------------------------------------------------------------------------
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -281,32 +287,5 @@
 		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
 	}
 }
-
-#pragma mark - Conection response methods
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
-    
-    if(refresh)
-        [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
-    else if(!status){ //REFRESH VIEW IN MODE OFFLINE
-    
-        if ([self.selectedUser.idUser isEqual:[[UserManager sharedInstance] getUserId]]) {
-            self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
-            [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
-    
-    if (status && !error){
-        if ([entityClass isSubclassOfClass:[User class]]){
-            self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
-            [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
-        }
-    }
-}
-
 
 @end

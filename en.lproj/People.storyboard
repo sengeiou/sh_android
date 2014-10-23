@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WWH-eX-HIc">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -41,7 +41,7 @@
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMG-1h-rqk">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YMG-1h-rqk">
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="Gyj-nz-bkG"/>
                                                 </constraints>
@@ -362,7 +362,7 @@
                                             </constraints>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOk-cS-Nsp" userLabel="Photo Button">
-                                            <rect key="frame" x="0.0" y="0.0" width="70" height="50"/>
+                                            <rect key="frame" x="0.0" y="8" width="70" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="70" id="d0r-zS-vcF"/>
                                                 <constraint firstAttribute="height" constant="50" id="vlO-mu-fPV"/>
@@ -425,11 +425,11 @@
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="jOk-cS-Nsp" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" constant="-8" id="1gY-wR-Rau"/>
+                                        <constraint firstItem="jOk-cS-Nsp" firstAttribute="top" secondItem="yZH-QS-KQQ" secondAttribute="topMargin" id="1gY-wR-Rau"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="leading" secondItem="yZH-QS-KQQ" secondAttribute="leadingMargin" constant="60" id="AXX-kg-k9G"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="trailing" secondItem="yZH-QS-KQQ" secondAttribute="trailingMargin" constant="-5" id="Ibn-kR-mUb"/>
                                         <constraint firstItem="fHl-cH-0HG" firstAttribute="top" secondItem="TBy-mi-FaP" secondAttribute="bottom" constant="-2" id="J6F-cz-oJA"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" constant="-9" id="L0S-Yk-U40"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="jOk-cS-Nsp" secondAttribute="bottom" id="L0S-Yk-U40"/>
                                         <constraint firstItem="6RI-lt-Kek" firstAttribute="leading" secondItem="fHl-cH-0HG" secondAttribute="trailing" constant="10" id="LUG-vP-J9I"/>
                                         <constraint firstAttribute="centerY" secondItem="RlL-64-REm" secondAttribute="centerY" id="Mmx-tJ-5xo"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="RlL-64-REm" secondAttribute="trailing" constant="-5" id="Nsi-ub-J9G"/>
@@ -447,6 +447,7 @@
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
+                                            <exclude reference="L0S-Yk-U40"/>
                                             <exclude reference="Ibn-kR-mUb"/>
                                             <exclude reference="LUG-vP-J9I"/>
                                             <exclude reference="fyM-ce-M0p"/>

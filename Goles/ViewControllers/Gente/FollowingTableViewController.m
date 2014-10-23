@@ -14,7 +14,6 @@
 #import "Constants.h"
 #import "FavRestConsumer.h"
 #import "Follow.h"
-#import "Conection.h"
 #import "CoreDataManager.h"
 #import "SyncManager.h"
 
@@ -35,8 +34,11 @@
     [super viewDidLoad];
 	
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    //Get ping from server
-    [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
+    [self getUsersServer];
+    
+    [self performSelectorOnMainThread:@selector(reloadDataMainThread) withObject:nil waitUntilDone:NO];
+
     
     [self setNavigationBarTitle];
 }
@@ -46,7 +48,7 @@
     
     [super viewWillAppear:animated];
     
-    [self reloadDataAndTable];
+    [self loadLocalDataInArrays];
     
     [self.usersTable deselectRowAtIndexPath:self.indexToShow  animated:YES];
 }
@@ -59,8 +61,23 @@
         self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
     else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
         self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
+    NSLog(@"Users list count in local DB:%lu",(unsigned long)self.usersList.count);
     
+    [self performSelectorOnMainThread:@selector(reloadDataMainThread) withObject:nil waitUntilDone:NO];
+
+}
+
+-(void)getUsersServer{
+    if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
+        [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
+    
+    else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
+        [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
+}
+
+- (void)reloadDataMainThread{
     [self.usersTable reloadData];
+
 }
 
 //------------------------------------------------------------------------------
@@ -102,14 +119,13 @@
     UIButton *btn = (UIButton *) sender;
     User *userFollow = self.usersList[btn.tag];
         
-    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]) {
         self.followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+        [self reloadTable];
+    }
     else
         [self unfollow:userFollow];
-        
-    [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
-
-    [self reloadTable];
+    
 }
 
 -(void)unfollow:(User *)userUnfollow{
@@ -135,7 +151,6 @@
                              {
                                  
                                  self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-                               
                                  [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
                                  
                                  [alert dismissViewControllerAnimated:YES completion:nil];
@@ -169,13 +184,6 @@
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
-#pragma mark - RELOAD
-//------------------------------------------------------------------------------
-- (void)reloadDataAndTable {
-    
-    [self loadLocalDataInArrays];
-    [self.usersTable reloadData];
-}
 
 #pragma mark - NAVIGATION
 //------------------------------------------------------------------------------
@@ -190,17 +198,6 @@
 }
 
 #pragma mark - DATASERVICE RESPONSE
-//------------------------------------------------------------------------------
-- (void)conectionResponseForStatus:(BOOL)status andRefresh:(BOOL)refresh withShot:(BOOL)isShot{
-    
-    if (status){
-        if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
-            [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
-        
-        else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
-            [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
-    }
-}
 
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
@@ -215,7 +212,7 @@
                 [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self withTypeOfUsers: FOLLOWERS_SELECTED];
 
         }if ([entityClass isSubclassOfClass:[User class]])
-            [self performSelectorOnMainThread:@selector(reloadDataAndTable) withObject:nil waitUntilDone:NO];
+            [self loadLocalDataInArrays];
     }
 }
 

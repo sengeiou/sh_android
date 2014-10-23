@@ -12,6 +12,7 @@
 #import "CoreDataManager.h"
 #import "CoreDataParsing.h"
 #import "Follow.h"
+#import "SyncManager.h"
 
 @implementation UserManager
 
@@ -103,6 +104,8 @@
     return nil;
 }
 
+
+
 //------------------------------------------------------------------------------
 - (User *)createUserFromDict:(NSDictionary *)dict {
     
@@ -178,10 +181,16 @@
     
     User *user = [[UserManager sharedInstance]getActiveUser];
     
-    if (numberFollowing && user){
+    if (numberFollowing && user)
         [user setNumFollowing: numberFollowing];
-       // [[CoreDataManager singleton] saveContext];
-    }
+    
+}
+
+//------------------------------------------------------------------------------
+- (void)setNumberFollowers:(NSNumber *)numberFollowers forUSer:(User *)user {
+
+    if (numberFollowers && user)
+        [user setNumFollowers: numberFollowers];
 }
 
 #pragma mark - DEVICE
@@ -315,8 +324,9 @@
         Follow *follow = [Follow updateWithDictionary:followDict];
         if (follow){
             [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
-
-            [[CoreDataManager singleton] saveContext];
+            [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
+            if ([[CoreDataManager singleton] saveContext])
+                [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
             return YES;
         }
     }
@@ -329,8 +339,9 @@
             Follow *follow = [Follow updateWithDictionary:followDict];
             if (follow){
                 [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
-
-                [[CoreDataManager singleton] saveContext];
+                [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
+                if ([[CoreDataManager singleton] saveContext])
+                    [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
                 return YES;
             }
         }
@@ -353,8 +364,9 @@
         follow.csys_syncronized = kJSON_SYNCRO_DELETED;
         
         [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
-
-        [[CoreDataManager singleton] saveContext];
+        [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] - 1] forUSer:user];
+        if ([[CoreDataManager singleton] saveContext])
+            [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
         return YES;
     }
     

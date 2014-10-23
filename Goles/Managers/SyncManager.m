@@ -215,7 +215,7 @@
 - (void)synchroEntityWithCompletion:(void (^)(BOOL status,NSError *error))completionBlock{
     
     //Array of all entities that needs to be synchronized
-    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT];
+    NSArray *entitiesToSynchro = @[K_COREDATA_FOLLOW,K_COREDATA_SHOT, K_COREDATA_USER];
     
     for (id entity in entitiesToSynchro) {
         if ([[self entityNeedsToSyncro:entity] integerValue] == 1)
@@ -296,15 +296,16 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
     if (status && [entityClass isSubclassOfClass:[Follow class]]){
         [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
-    }
-
-    else if (status && [entityClass isSubclassOfClass:[Shot class]]){
-        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    }else if (status && [entityClass isSubclassOfClass:[Shot class]]){
         [notificationCenter postNotificationName:K_NOTIF_SHOT_END object:nil userInfo:nil];
     }else if (status && [entityClass isSubclassOfClass:[Device class]]){
          [Utils setValueToUserDefaults:[[UserManager sharedInstance] getIdDevice] ToKey:kJSON_ID_DEVICE];
+    }else if (status && [entityClass isSubclassOfClass:[User class]]){
+        [notificationCenter postNotificationName:k_NOTIF_USER_SYNCHRO_END object:nil userInfo:nil];
     }
 }
 

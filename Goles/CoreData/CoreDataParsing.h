@@ -34,6 +34,7 @@ extern NSString *const K_NOTIF_SHOT_END;
 extern NSString *const k_NOTIF_BACKGROUND;
 extern NSString *const k_NOTIF_SHOT_REPEAT;
 extern NSString *const k_NOTIF_SHOT_SEND;
+extern NSString *const k_NOTIF_USER_SYNCHRO_END;
 
 #pragma mark - REQUEST CREATION
 //Operation Types

@@ -36,6 +36,7 @@ NSString *const K_NOTIF_SHOT_END                       = @"shots_synchro_end";
 NSString *const k_NOTIF_BACKGROUND                     = @"ReturnForBackground";
 NSString *const k_NOTIF_SHOT_REPEAT                    = @"shotRepeat";
 NSString *const k_NOTIF_SHOT_SEND                      = @"shotSend";
+NSString *const k_NOTIF_USER_SYNCHRO_END               = @"userSynchroEnd";
 
 #pragma mark - REQUEST CREATION
 //Operation Types

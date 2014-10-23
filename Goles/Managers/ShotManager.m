@@ -54,8 +54,8 @@
    // NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth < %@",[[UserManager singleton] getActiveUsersIDs],nowDateString];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@",[[UserManager singleton] getActiveUsersIDs]];
 
-//    return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
-    return [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@300];
+    return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+//    return [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@300];
 }
 
 //------------------------------------------------------------------------------

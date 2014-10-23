@@ -24,7 +24,7 @@
 - (User *)getUserForId:(NSInteger )idUser;
 - (User *)createUserFromDict:(NSDictionary *)dict;
 - (void)setNumberFollowings:(NSNumber *)numberFollowing;
-
+- (void)setNumberFollowers:(NSNumber *)numberFollowers forUSer:(User *)user; 
 
 //Device
 - (Device *)getDevice;
