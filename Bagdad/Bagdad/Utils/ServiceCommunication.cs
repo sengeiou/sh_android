@@ -344,7 +344,7 @@ namespace Bagdad.Utils
                     String ops = GetOPS(Translate(operation), entity, searchParams, offset);
                     String alias = GetAlias(Translate(operation), entity, searchParams, offset);
 
-                    json = "{" + status + "," + req + "," + ops + "}";
+                    json = "{" + alias + status + "," + req + "," + ops + "}";
                 }
 
                 String response = await MakeRequest(json);
@@ -363,7 +363,7 @@ namespace Bagdad.Utils
                     {
                         //Save data on DB
                         totalDone += await SaveData(entity, job);
-                        Debug.WriteLineIf((totalDone > 0),"\n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
+                        Debug.WriteLineIf((totalDone > 0),"\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n");
                         
                         //If there is offset
                         if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
@@ -376,7 +376,7 @@ namespace Bagdad.Utils
                     {
                         //Show the ERRORs
                         sErrorJSON = job["status"].ToString();
-                        Debug.WriteLine("E R R O R \n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
+                        Debug.WriteLine("E R R O R \n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n");
                         throw new Exception();
                     }
 
@@ -403,7 +403,7 @@ namespace Bagdad.Utils
                         if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
                         {
                             totalDone = 1;
-                            Debug.WriteLineIf((totalDone > 0), "\n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
+                            Debug.WriteLineIf((totalDone > 0), "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n");
                         }
                         else totalDone = 0; 
 

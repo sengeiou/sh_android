@@ -106,7 +106,11 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
-            return "";
+            if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
+                return "\"GET_NEWER_SHOTS\",";
+            else if (operation.Equals(Constants.SERCOM_OP_UPDATECREATE) || operation.Equals(Constants.SERCOM_OP_CREATE))
+                return "\"CREATE_SHOT\",";
+            else return "\"GET_NEWER_SHOTS\",";
         }
 
         public override async Task<string> ConstructFilter(string conditionDate)
@@ -129,5 +133,6 @@ namespace Bagdad.Models
             }
             return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
         }
+
     }
 }

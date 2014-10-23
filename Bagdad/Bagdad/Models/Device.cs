@@ -44,7 +44,7 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
-            return "";
+            return "\"UPDATE_DEVICE\",";
         }
 
         public override Task<string> ConstructFilter(string conditionDate)
@@ -77,5 +77,6 @@ namespace Bagdad.Models
             }
             return false;
         }
+
     }
 }

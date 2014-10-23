@@ -48,7 +48,7 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
-            return "";
+            return "\"USER_LOGIN\",";
         }
 
         public override string ConstructOperation(String operation, String searchParams, int offset, int nItems)

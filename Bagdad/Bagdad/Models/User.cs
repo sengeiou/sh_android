@@ -43,7 +43,7 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
-            return "";
+            return "\"GET_USERS\",";
         }
 
         public String GetUserOps() { return ops_data; }

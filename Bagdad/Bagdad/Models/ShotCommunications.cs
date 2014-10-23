@@ -17,7 +17,8 @@ namespace Bagdad.Models
         {
             try
             {
-                String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                String json = "{\"alias\": @alias" +
+                                "\"status\": {\"message\": null,\"code\": null}," +
                             "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
                             "\"ops\": [{@Data\"metadata\": {" +
                                 "\"items\": null," +

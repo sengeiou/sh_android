@@ -23,7 +23,7 @@ namespace Bagdad.Models
 
         virtual public string ConstructAlias(String operation)
         {
-            return "\"alias\":\""+ GetAlias(operation) + "\"";
+            return "\"alias\":"+ GetAlias(operation) + "";
         }
 
         abstract public Task<string> ConstructFilter(string conditionDate);
