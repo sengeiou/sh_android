@@ -85,7 +85,7 @@ public class GetPeopleJobTest {
 
         getPeopleJob.setBus(bus);
         getPeopleJob.setService(service);
-        getPeopleJob.init(anyLong());
+        getPeopleJob.init(CURRENT_USER);
         getPeopleJob.onRun();
         verify(bus, atMost(1)).post(any(FollowsResultEvent.class));
     }
