@@ -35,6 +35,7 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     @Inject UserModelMapper userModelMapper;
 
     private UserEntity currentUser;
+    private boolean isMe;
 
     @Inject
     public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
@@ -84,7 +85,8 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
         for(UserEntity user:users){
             Long currentUserId = currentUser.getIdUser();
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            userVOs.add(userModelMapper.toUserModel(user, follow, currentUserId));
+            isMe = user.getIdUser().equals(currentUserId);
+            userVOs.add(userModelMapper.toUserModel(user, follow, isMe));
         }
         return userVOs;
     }
