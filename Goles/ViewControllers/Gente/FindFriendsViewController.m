@@ -39,6 +39,9 @@
 @property (nonatomic,weak)      IBOutlet    UILabel                     *lblNotPeople;
 @property (nonatomic,strong)                NSString                    *textInSearchBar;
 
+@property (nonatomic,assign)       BOOL   followActionSuccess;
+
+
 @end
 
 @implementation FindFriendsViewController
@@ -175,17 +178,61 @@
     UIButton *btn = (UIButton *) sender;
 //    User *userFollow = self.usersSearch[btn.tag];
     User *userFollow = self.followingUsers[btn.tag];
-    BOOL followActionSuccess;
-    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)])
-        followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
-    else
-        followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-    
-    
-    if (followActionSuccess)
-        [self.usersTable reloadData];
+
+    if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]){
+        self.followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+       
+        if (self.followActionSuccess)
+            [self.usersTable reloadData];
+
+    }else
+        //followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
+        [self unfollow:userFollow];
 }
 
+-(void)unfollow:(User *)userUnfollow{
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:userUnfollow.userName
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                                 self.followActionSuccess = NO;
+                             }];
+    
+    UIAlertAction* unfollow = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                               style:UIAlertActionStyleDestructive
+                               handler:^(UIAlertAction * action)
+                               {
+                                   
+                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                                   
+                                   [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
+                                   
+                                   [alert dismissViewControllerAnimated:YES completion:nil];
+                                   
+                               }];
+    
+    
+    [alert addAction:unfollow];
+    
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)reloadTable{
+    if (self.followActionSuccess)
+        [self.usersTable reloadData];
+    
+}
 
 #pragma mark - Navigation
 //------------------------------------------------------------------------------

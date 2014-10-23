@@ -48,6 +48,8 @@
 @property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (nonatomic,assign)       BOOL   followActionSuccess;
+
 @end
 
 @implementation ProfileViewController
@@ -193,9 +195,45 @@
 //------------------------------------------------------------------------------
 - (void)unFollowUser {
     
-    BOOL unfollowActionSuccess = [[UserManager singleton] stopFollowingUser:self.selectedUser];
-    if (unfollowActionSuccess)
-        [self configureFollowButton];
+    [self unfollow:self.selectedUser];
+}
+
+-(void)unfollow:(User *)userUnfollow{
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:userUnfollow.userName
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                                 self.followActionSuccess = NO;
+                             }];
+    
+    UIAlertAction* unfollow = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                               style:UIAlertActionStyleDestructive
+                               handler:^(UIAlertAction * action)
+                               {
+                                   
+                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                                   
+                                   [self performSelectorOnMainThread:@selector(configureFollowButton) withObject:nil waitUntilDone:NO];
+                                   
+                                   [alert dismissViewControllerAnimated:YES completion:nil];
+                                   
+                               }];
+    
+    
+    [alert addAction:unfollow];
+    
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 //------------------------------------------------------------------------------
