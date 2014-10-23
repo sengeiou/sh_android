@@ -73,7 +73,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
                 FollowEntity followFromService = getFolloFromService();
                 if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
             }
-            postSuccessfulEvent(new UserInfoResultEvent(null));
+            postSuccessfulEvent(new UserInfoResultEvent(userVO));
             if (userFromLocalDatabase != null) {
                 Timber.d("Obtained user from server found in database. Updating database.");
                 userManager.saveUser(userFromService);
