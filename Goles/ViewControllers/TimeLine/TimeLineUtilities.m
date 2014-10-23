@@ -126,7 +126,7 @@
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(screenRect.origin.x, screenRect.origin.y, screenRect.size.width, 50)];
-    UILabel *titlelabel = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.width/2)-90, 10, 120, 30)];
+    UILabel *titlelabel = [[UILabel alloc] initWithFrame:CGRectMake((screenRect.size.width/2)-90, 10, 150, 30)];
     titlelabel.font = [UIFont boldSystemFontOfSize:17];
     titlelabel.text = title;
     

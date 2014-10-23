@@ -163,9 +163,9 @@
 }
 
 //------------------------------------------------------------------------------
-- (BOOL) controlRepeatedShot:(NSString *)texto{
+- (BOOL) controlRepeatedShot:(NSString *)text{
     
-    if ([self isShotMessageAlreadyInList:[[ShotManager singleton] getShotsForTimeLineBetweenHours] withText:texto])
+    if ([self isShotMessageAlreadyInList:[[ShotManager singleton] getShotsForTimeLineBetweenHours] withText:text])
         return YES;
     
     return NO;
@@ -259,7 +259,7 @@
             self.bottomViewHeightConstraint.constant = ((self.textViewWrittenRows-2)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
                 [self layoutIfNeeded];
-            }];
+            }];   
         }else if(self.textViewWrittenRows > 1 && [character isEqualToString:@"\n"]){
             self.bottomViewHeightConstraint.constant = ((self.textViewWrittenRows-1)*textView.font.lineHeight)+75;
             [UIView animateWithDuration:0.25f animations:^{
