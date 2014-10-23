@@ -40,7 +40,7 @@ namespace Bagdad.Models
 
         protected override string GetAlias(string operation)
         {
-            return "";
+            return "\"GET_FOLLOWINGS\",";
         }
 
         public override async Task<string> ConstructFilter(string conditionDate)
@@ -63,6 +63,7 @@ namespace Bagdad.Models
 
             return _result;
         }
+
 
         #endregion
     }

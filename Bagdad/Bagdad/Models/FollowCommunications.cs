@@ -133,9 +133,7 @@ namespace Bagdad.Models
             }
             return followings;
         }
-
-        #region FOLLOW/UNFOLLOW
-
+        
         public async Task<string> SynchronizeFollows()
         {
             try
@@ -189,7 +187,7 @@ namespace Bagdad.Models
                             data = "\"data\": [" + data;
                             isFirst = false;
                         }
-                        
+
 
                         //ops
                         data = data.Replace("@idUser", follow.idUser.ToString());
@@ -233,7 +231,7 @@ namespace Bagdad.Models
 
                 if (unFollows.Count() > 0)
                 {
-                    String json = "{\"status\": {\"message\": null,\"code\": null}," +
+                    String jsonOriginal = "{\"status\": {\"message\": null,\"code\": null}," +
                                 "\"req\": [@idDevice,@idUser,@idPlatform,@appVersion,@requestTime]," +
                                 "\"ops\": [{@Data\"metadata\": {" +
                                     "\"items\": 1," +
@@ -246,7 +244,7 @@ namespace Bagdad.Models
                                     "\"entity\": \"Follow\"" +
                                 "}}]}";
 
-                    String data = "\"data\": [{" +
+                    String dataOriginal = "\"data\": [{" +
                                     "\"idUser\": @idUser," +
                                     "\"idFollowedUser\": @idFollowedUser," +
                                     "\"birth\": @birth," +
@@ -255,22 +253,23 @@ namespace Bagdad.Models
                                     "\"deleted\": @deleted" +
                                 "}],";
 
-                    StringBuilder builderData = new StringBuilder();
-
                     TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
                     double epochDate = t.TotalMilliseconds;
 
                     //req
-                    json = json.Replace("@idDevice", App.ID_DEVICE.ToString());
-                    json = json.Replace("@appVersion", App.appVersionInt().ToString());
-                    json = json.Replace("@idPlatform", App.PLATFORM_ID.ToString());
-                    json = json.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
-                    json = json.Replace("@Operation", Constants.SERCOM_OP_DELETE);
+                    jsonOriginal = jsonOriginal.Replace("@idDevice", App.ID_DEVICE.ToString());
+                    jsonOriginal = jsonOriginal.Replace("@appVersion", App.appVersionInt().ToString());
+                    jsonOriginal = jsonOriginal.Replace("@idPlatform", App.PLATFORM_ID.ToString());
+                    jsonOriginal = jsonOriginal.Replace("@requestTime", Math.Round(epochDate, 0).ToString());
+                    jsonOriginal = jsonOriginal.Replace("@Operation", Constants.SERCOM_OP_DELETE);
 
                     foreach (Follow follow in unFollows)
                     {
+                        String json = jsonOriginal;
+                        String data = dataOriginal;
                         json = json.Replace("@idUser", follow.idUser.ToString());
                         json = json.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
+
                         //ops
                         data = data.Replace("@idUser", follow.idUser.ToString());
                         data = data.Replace("@idFollowedUser", follow.idUserFollowed.ToString());
@@ -279,20 +278,15 @@ namespace Bagdad.Models
                         data = data.Replace("@revision", follow.csys_revision.ToString());
                         data = data.Replace("@deleted", follow.csys_deleted.ToString());
 
-                        builderData.Append(data);
-                        json = json.Replace("@Data", builderData.ToString());
+                        json = json.Replace("@Data", data);
                         ServiceCommunication serviceCom = new ServiceCommunication();
                         await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
                     }
 
-                    
-
-                    
-
                     await UpdateFollowSynchro(false);
 
-                    json = unFollows.Count().ToString();
-                    return json;
+                    jsonOriginal = unFollows.Count().ToString();
+                    return jsonOriginal;
                 }
                 else return "0";
             }
@@ -305,7 +299,6 @@ namespace Bagdad.Models
                 throw new Exception("Follow - SynchronizeFollows: " + e.Message, e);
             }
         }
-        
-        #endregion
+
     }
 }

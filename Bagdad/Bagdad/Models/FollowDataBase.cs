@@ -140,8 +140,6 @@ namespace Bagdad.Models
             return followings;
         }
 
-        #region FOLLOW/UNFOLLOW
-
         public async Task<bool> AddFollowing(User user)
         {
             bool _return = false;
@@ -355,6 +353,5 @@ namespace Bagdad.Models
             return follows;
         }
         
-        #endregion
     }
 }
