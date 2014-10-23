@@ -100,6 +100,7 @@ public class ProfileFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         bus.register(this);
+        retrieveUserInfo();
     }
 
     @Override
@@ -117,7 +118,7 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        retrieveUserInfo();
+
     }
 
     private void retrieveUserInfo() {
@@ -211,6 +212,7 @@ public class ProfileFragment extends BaseFragment {
             unfollowUser();
         } else {
             followUser();
+
         }
     }
 
@@ -224,6 +226,7 @@ public class ProfileFragment extends BaseFragment {
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+
               }
           })
           .setNegativeButton("No", null)
@@ -234,7 +237,11 @@ public class ProfileFragment extends BaseFragment {
 
     private void openUserFollowsList(int followType) {
         if(idUser==null) return;
-        startActivity(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType));
+        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType),677);
     }
+
+
+
+
 
 }

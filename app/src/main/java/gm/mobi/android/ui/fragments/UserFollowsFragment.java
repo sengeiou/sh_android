@@ -39,7 +39,6 @@ import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.model.UserModel;
-import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -298,4 +297,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
             getAdapter().notifyDataSetChanged();
         }
     }
+
+
 }

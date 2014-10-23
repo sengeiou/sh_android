@@ -66,22 +66,43 @@ public class UserManager extends AbstractManager {
      * Insert a user
      */
     public void saveUser(UserEntity user) throws SQLException {
-
+        UserEntity userEntity = user;
         UserEntity currentUser = getCurrentUser();
-        ContentValues contentValues = null;
-        String[] projection = UserTable.PROJECTION;
-        String where = UserTable.ID + "=?";
-        contentValues =
-          currentUser != null ? userMapper.userToContentValues(user, currentUser) : userMapper.toContentValues(user);
-        String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
-        String[] args = { userId };
-        if (contentValues.getAsLong(CSYS_DELETED) != null) {
-            deleteUser(user);
-        } else {
-            insertOrUpdate(USER_TABLE, contentValues, projection, where, args);
+        if(!user.getIdUser().equals(currentUser.getIdUser())) {
+            ContentValues contentValues = userMapper.toContentValues(user);
+            String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
+            String[] args = { userId };
+            if (contentValues.getAsLong(CSYS_DELETED) != null) {
+                deleteUser(user);
+            } else {
+                db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        }else{
+            currentUser.setNumFollowers(user.getNumFollowers());
+                currentUser.setNumFollowings(user.getNumFollowings());
+                currentUser.setBio(user.getBio());
+                currentUser.setFavoriteTeamName(user.getFavoriteTeamName());
+                currentUser.setName(user.getName());
+                currentUser.setFavoriteTeamId(user.getFavoriteTeamId());
+                currentUser.setPhoto(user.getPhoto());
+                currentUser.setUserName(user.getUserName());
+                currentUser.setPoints(user.getPoints());
+                db.update(UserTable.TABLE,userMapper.currentUserToContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
         }
         insertInSync();
         //TODO error handling? if(res<0)
+    }
+
+    public void saveCurrentUser(UserEntity user) throws  SQLException{
+        ContentValues contentValues = userMapper.currentUserToContentValues(user);
+        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+            deleteUser(user);
+        } else {
+            db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        insertInSync();
+
+
     }
 
     /**
@@ -150,6 +171,7 @@ public class UserManager extends AbstractManager {
         List<UserEntity> users = new ArrayList<>();
         String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)
           .replaceAll("[^\\p{ASCII}]", "");
+
         String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
           Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
 

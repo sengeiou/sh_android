@@ -42,7 +42,7 @@ public class LoginUserJob extends BagdadBaseJob<LoginResultEvent> {
     protected void run() throws SQLException, IOException {
         try {
             UserEntity user = service.login(usernameEmail, password);
-            userManager.saveUser(user);
+            userManager.saveCurrentUser(user);
             postSuccessfulEvent(new LoginResultEvent(user));
         } catch (ServerException e) {
             if (e.getErrorCode() != null && e.getErrorCode().equals(ServerException.G025)) {

@@ -93,7 +93,8 @@ public class MainActivity extends BaseSignedInActivity {
 
         actionBar = getSupportActionBar();
         currentUser = GolesApplication.get(this).getCurrentUser();
-        userVO = userModelMapper.toUserModel(currentUser,null,currentUser.getIdUser());
+        userVO = userModelMapper.toUserModel(currentUser,null,true);
+
         startGCMRegistration();
         setupSyncing();
         setupNavigationDrawer();

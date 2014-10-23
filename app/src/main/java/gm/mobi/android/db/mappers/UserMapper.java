@@ -34,9 +34,7 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
         cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
-        cv.put(UserTable.SESSION_TOKEN, u.getSessionToken());
         cv.put(UserTable.USER_NAME, u.getUserName());
-        cv.put(UserTable.EMAIL, u.getEmail());
         cv.put(UserTable.NAME, u.getName());
         cv.put(UserTable.PHOTO, u.getPhoto());
         cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
@@ -52,14 +50,14 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
-    public  ContentValues userToContentValues(UserEntity u, UserEntity currentUser){
+    public  ContentValues currentUserToContentValues(UserEntity u){
         ContentValues cv = new ContentValues();
         cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
         cv.put(UserTable.FAVORITE_TEAM_NAME, u.getFavoriteTeamName());
-        cv.put(UserTable.SESSION_TOKEN, currentUser.getSessionToken());
+        cv.put(UserTable.SESSION_TOKEN, u.getSessionToken());
         cv.put(UserTable.USER_NAME, u.getUserName());
-        cv.put(UserTable.EMAIL, currentUser.getEmail());
+        cv.put(UserTable.EMAIL, u.getEmail());
         cv.put(UserTable.NAME, u.getName());
         cv.put(UserTable.PHOTO, u.getPhoto());
         cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());

@@ -86,12 +86,10 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
                 @Override public void onClick(View v) {
                        if(viewHolder.followButton.isFollowing()){
                             if(callback!=null){
-                                changeButtonState(viewHolder,FollowEntity.RELATIONSHIP_NONE);
                                 callback.unFollow(position);
                             }
                        }else{
                            if(callback!=null){
-                               changeButtonState(viewHolder,FollowEntity.RELATIONSHIP_FOLLOWING);
                                callback.follow(position);
                            }
                        }
@@ -129,14 +127,6 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         public void unFollow(int position);
     }
 
-    public void changeButtonState(ViewHolder viewHolder ,int stateFollow){
-        if(stateFollow == FollowEntity.RELATIONSHIP_FOLLOWING) {
-            viewHolder.followButton.setFollowing(true);
-        }else{
-            viewHolder.followButton.setFollowing(false);
-
-        }
-    }
 
 
 }

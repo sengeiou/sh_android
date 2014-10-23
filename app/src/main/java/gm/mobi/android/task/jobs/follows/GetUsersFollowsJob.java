@@ -60,8 +60,11 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user: users){
-            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, user.getIdUser());
-            userVOs.add(userModelMapper.toUserModel(user,follow,currentUserId));
+
+            Long idUser = user.getIdUser();
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
+            boolean isMe = idUser.equals(currentUserId);
+            userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
         return userVOs;
     }

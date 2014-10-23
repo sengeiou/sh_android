@@ -60,7 +60,8 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
         FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,userId);
         UserModel userVO = null;
         if (userFromLocalDatabase != null) {
-            userVO = userVOMapper.toUserModel(userFromLocalDatabase, follow, idCurrentUser);
+            boolean isMe = idCurrentUser.equals(userFromLocalDatabase.getIdUser());
+            userVO = userVOMapper.toUserModel(userFromLocalDatabase, follow, isMe);
             postSuccessfulEvent(new UserInfoResultEvent(userVO));
         } else {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
@@ -71,11 +72,8 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
             if(!idCurrentUser.equals(userId)){
                 FollowEntity followFromService = getFolloFromService();
                 if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
-                follow = followManager.getFollowByUserIds(idCurrentUser,userId);
-                userVO = userVOMapper.toUserModel(userFromService,follow,idCurrentUser);
             }
-
-            postSuccessfulEvent(new UserInfoResultEvent(userVO));
+            postSuccessfulEvent(new UserInfoResultEvent(null));
             if (userFromLocalDatabase != null) {
                 Timber.d("Obtained user from server found in database. Updating database.");
                 userManager.saveUser(userFromService);

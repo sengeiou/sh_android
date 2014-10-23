@@ -62,10 +62,11 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResul
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
-            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, u.getIdUser());
+            Long idUser = u.getIdUser();
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
             //before doing this UPDATE FOLLOWS
-
-            userVOs.add(userModelMapper.toUserModel(u,follow,currentUserId));
+            boolean isMe = idUser.equals(currentUserId);
+            userVOs.add(userModelMapper.toUserModel(u,follow,isMe));
         }
         return userVOs;
     }
