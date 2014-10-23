@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bagdad.Models
 {
-    public class Device : BaseModelJsonConstructor
+    public partial class Device : BaseModelJsonConstructor
     {
 
         
@@ -47,56 +47,9 @@ namespace Bagdad.Models
             return "";
         }
 
-        public override Task<int> SaveData(List<BaseModelJsonConstructor> models)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<BaseModelJsonConstructor> ParseJson(JObject job)
-        {
-            throw new NotImplementedException();
-        }
-
         public override Task<string> ConstructFilter(string conditionDate)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Update Object with the current information on the Local DB
-        /// </summary>
-        /// <returns>true if device exists, false if not</returns>
-        public async Task<bool> GetCurrentDeviceInfo()
-        {
-            bool _return = false;
-            try
-            {
-                Database db = await DataBaseHelper.GetDatabaseAsync();
-                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetCurrentDevice);
-
-                if (await st.StepAsync())
-                {
-
-                    idDevice = st.GetIntAt(0);
-                    idUser = st.GetIntAt(1);
-                    token = st.GetTextAt(2);
-                    uniqueDeviceID = st.GetTextAt(3);
-                    model = st.GetTextAt(4);
-                    osVer = st.GetTextAt(5);
-                    csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(6)));
-                    csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(7)));
-                    csys_revision = st.GetIntAt(8);
-
-                    App.ID_DEVICE = st.GetIntAt(0);
-                    _return = true;
-                }
-                DataBaseHelper.DBLoaded.Set();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Device - GetCurrentDeviceID: " + e.Message, e);
-            }
-            return _return;
         }
 
         /// <summary>
@@ -123,84 +76,6 @@ namespace Bagdad.Models
                 return await UpdateCreateDeviceAtServer();
             }
             return false;
-        }
-
-        /// <summary>
-        /// Updates the data in Server (create a new Device if no exist) and take this data to the current Device Object
-        /// </summary>
-        /// <returns>true if process finalizy correctly, false if not</returns>
-        private async Task<bool> UpdateCreateDeviceAtServer()
-        {
-
-            String _idDevice = "null";
-            String _birth = "null";
-            String _modified = "null";
-            int _revision = csys_revision++;
-
-            if (this.idDevice != 0) _idDevice = this.idDevice.ToString();
-            if (this.csys_birth != 0) _birth = this.csys_birth.ToString();
-            else _birth = Util.DateToDouble(DateTime.UtcNow).ToString();
-            if (this.csys_modified != 0) _modified = this.csys_modified.ToString();
-            else _modified = Util.DateToDouble(DateTime.UtcNow).ToString();
-
-            ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
-            
-            String json = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{\"idDevice\": " + _idDevice + ",\"idUser\": " + App.ID_USER + ",\"token\": \"" + App.pushToken + "\",\"uniqueDeviceID\": \"" + App.UDID() + "\",\"platform\": " + App.PLATFORM_ID + ",\"model\": \"" + App.modelVersion() + "\",\"osVer\": \"" + App.osVersion() + "\",\"locale\": \"" + App.locale() + "\",\"revision\": " + _revision + ",\"birth\": " + _birth + ",\"modified\": " + _modified + ",\"deleted\": null}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"UpdateCreate\",\"key\": {\"uniqueDeviceID\": \"" + App.UDID() + "\"},\"entity\": \"Device\"}}]}";
-            JObject response = JObject.Parse(await sc.MakeRequestToMemory(json));
-
-
-            if (response["status"]["code"].ToString().Equals("OK") && !response["ops"][0]["metadata"]["items"].ToString().Equals("0"))
-            {
-                foreach (JToken device in response["ops"][0]["data"])
-                {
-                    this.idDevice = int.Parse(device["idDevice"].ToString());
-                    this.idUser = int.Parse(device["idUser"].ToString());
-                    this.token = device["token"].ToString();
-                    this.uniqueDeviceID = device["uniqueDeviceID"].ToString();
-                    this.model = device["model"].ToString();
-                    this.osVer = device["osVer"].ToString();
-                    this.csys_birth = double.Parse(device["birth"].ToString());
-                    this.csys_modified = double.Parse(device["modified"].ToString());
-                    this.csys_revision = int.Parse(device["revision"].ToString());
-                }
-                if (await SaveOrUpdateLocalData()) return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Put the current object data in the Local DB
-        /// </summary>
-        /// <returns>true if works, false if not</returns>
-        private async Task<bool> SaveOrUpdateLocalData()
-        {
-            bool _return = false;
-            try
-            {
-                Database db = await DataBaseHelper.GetDatabaseAsync();
-                Statement st = await db.PrepareStatementAsync(SQLQuerys.SaveOrCreateDevice);
-
-                st.BindIntParameterWithName("@idDevice", this.idDevice);
-                st.BindIntParameterWithName("@idUser", this.idUser);
-                st.BindTextParameterWithName("@token", this.token);
-                st.BindTextParameterWithName("@uniqueDeviceID", this.uniqueDeviceID);
-                st.BindTextParameterWithName("@model", this.model);
-                st.BindTextParameterWithName("@osVer", this.osVer);
-                st.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(this.csys_birth.ToString()).ToString("s").Replace('T', ' '));
-                st.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(this.csys_modified.ToString()).ToString("s").Replace('T', ' '));
-                st.BindTextParameterWithName("@csys_revision", Util.FromUnixTime(this.csys_revision.ToString()).ToString("s").Replace('T', ' '));
-
-                await st.StepAsync();
-                _return = true;
-
-                DataBaseHelper.DBLoaded.Set();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Device - GetCurrentDeviceID: " + e.Message, e);
-            }
-            return _return;
         }
     }
 }

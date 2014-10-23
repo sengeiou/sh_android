@@ -101,6 +101,8 @@
     <Compile Include="FindFriends.xaml.cs">
       <DependentUpon>FindFriends.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DeviceDataBase.cs" />
+    <Compile Include="Models\DeviceCommunications.cs" />
     <Compile Include="Models\LoginDataBase.cs" />
     <Compile Include="Models\LoginCommunications.cs" />
     <Compile Include="Models\ShotDataBase.cs" />
