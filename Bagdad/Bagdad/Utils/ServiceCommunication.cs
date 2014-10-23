@@ -363,6 +363,7 @@ namespace Bagdad.Utils
                     {
                         //Save data on DB
                         totalDone += await SaveData(entity, job);
+                        Debug.WriteLineIf((totalDone > 0),"\n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
                         
                         //If there is offset
                         if (int.Parse(job["ops"][0]["metadata"]["items"].ToString()) == Constants.SERCOM_PARAM_OFFSET_PAG && operation.Equals(Constants.SERCOM_OP_RETRIEVE))
@@ -375,6 +376,7 @@ namespace Bagdad.Utils
                     {
                         //Show the ERRORs
                         sErrorJSON = job["status"].ToString();
+                        Debug.WriteLine("E R R O R \n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
                         throw new Exception();
                     }
 
@@ -399,8 +401,12 @@ namespace Bagdad.Utils
                     {
                         //IF It's an UPLOAD we return 1 for SUCCESS and 0 for ERROR.
                         if (job.ToString().Contains("status") && job.ToString().Contains("code") && job["status"]["code"].ToString().Equals("OK"))
+                        {
                             totalDone = 1;
+                            Debug.WriteLineIf((totalDone > 0), "\n\n\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n" + json + "\n- - - - - - - - - - - - - - - - - - - - - - - - - - -\n" + response + "\n· · · · · · · · · · · · · · · · · · · · · · · · · · · · ·\n\n\n");
+                        }
                         else totalDone = 0; 
+
                         if (entity.Equals(Constants.SERCOM_TB_SHOT)) totalDone += await SaveData(entity, job);
                     }
                 }
