@@ -19,12 +19,12 @@
 #import "Conection.h"
 #import "Follow.h"
 #import "UIImage+ImageEffects.h"
+#import "SyncManager.h"
 
 @interface FindFriendsViewController ()<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>{
     BOOL search;
     BOOL moreCells;
     BOOL refreshTable;
-
 }
 
 @property (nonatomic,strong)                UISearchBar                 *mySearchBar;
@@ -40,7 +40,6 @@
 @property (nonatomic,strong)                NSString                    *textInSearchBar;
 
 @property (nonatomic,assign)       BOOL   followActionSuccess;
-@property (nonatomic,strong)       User   *userSelected;
 
 
 @end
@@ -82,7 +81,6 @@
     [self.usersTable reloadData];
 }
 
-
 //------------------------------------------------------------------------------
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -117,8 +115,6 @@
 
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    //NSLog(@"CEldas a pintar: %lu", (unsigned long)self.followingUsers.count);
     return self.followingUsers.count;
 }
 
@@ -149,6 +145,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (!refreshTable && search){
+        
         self.spinner.hidden = YES;
         
         self.lblFooter =  [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.usersTable.frame.size.width, 44)];
@@ -157,6 +154,7 @@
         self.lblFooter.textAlignment = NSTextAlignmentCenter;
         self.lblFooter.backgroundColor = [UIColor clearColor];
         self.usersTable.tableFooterView = self.lblFooter;
+        
     }else if (!search)
         self.lblFooter.text = NSLocalizedString(@"", nil);
 }
@@ -166,10 +164,8 @@
 - (void)addLoadMoreCell{
     if (search) {
         self.usersTable.tableFooterView = self.spinner;
-        //NSLog(@"ofsset: %lu",  (unsigned long)self.followingUsers.count);
         moreCells = NO;
         [[FavRestConsumer sharedInstance] searchPeopleWithName:self.mySearchBar.text withOffset:[NSNumber numberWithInteger:self.followingUsers.count] withDelegate:self];
-        
     }
 }
 
@@ -177,77 +173,65 @@
 //------------------------------------------------------------------------------
 - (void)followAndUnFollowUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
-//    User *userFollow = self.usersSearch[btn.tag];
-    //User *userFollow = self.followingUsers[btn.tag];
-    self.userSelected = self.followingUsers[btn.tag];
+
+    User *user = self.followingUsers[btn.tag];
     
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]){
-        self.followActionSuccess = [[UserManager singleton] startFollowingUser:self.userSelected];
+        self.followActionSuccess = [[UserManager singleton] startFollowingUser:user];
        
-        if (self.followActionSuccess)
-            [self.usersTable reloadData];
+        if (self.followActionSuccess) {
+            [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+            [self reloadTable];
+        }
 
     }else
-        //followActionSuccess = [[UserManager singleton] stopFollowingUser:userFollow];
-        [self unfollow:self.userSelected];
+        [self unfollow:user];
 }
 
+//------------------------------------------------------------------------------
 -(void)unfollow:(User *)userUnfollow{
-//    UIAlertController * alert=   [UIAlertController
-//                                  alertControllerWithTitle:userUnfollow.userName
-//                                  message:nil
-//                                  preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    UIAlertAction* cancel = [UIAlertAction
-//                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
-//                             style:UIAlertActionStyleDefault
-//                             handler:^(UIAlertAction * action)
-//                             {
-//                                 [alert dismissViewControllerAnimated:YES completion:nil];
-//                                 
-//                                 self.followActionSuccess = NO;
-//                             }];
-//    
-//    UIAlertAction* unfollow = [UIAlertAction
-//                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
-//                               style:UIAlertActionStyleDestructive
-//                               handler:^(UIAlertAction * action)
-//                               {
-//                                   
-//                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-//                                   
-//                                   [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
-//                                   
-//                                   [alert dismissViewControllerAnimated:YES completion:nil];
-//                                   
-//                               }];
-//    
-//    
-//    [alert addAction:unfollow];
-//    
-//    [alert addAction:cancel];
-//    
-//    [self presentViewController:alert animated:YES completion:nil];
-    UIActionSheet *actionShet = [[UIActionSheet alloc] initWithTitle:userUnfollow.userName delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Unfollow", nil) otherButtonTitles: nil];
-    actionShet.actionSheetStyle = UIActionSheetStyleDefault;
-    [actionShet showInView:self.view];
+
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:userUnfollow.userName
+                                          message:nil
+                                          preferredStyle:UIAlertControllerStyleActionSheet];
     
+    
+    UIAlertAction *unfollow = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                         style:UIAlertActionStyleDestructive
+                         handler:^(UIAlertAction * action)
+                         {
+                             
+                             self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                             if (self.followActionSuccess) {
+                                 [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+                                 
+                                 [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
+                             }
+                             
+                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+    
+    UIAlertAction *cancel = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                         style:UIAlertActionStyleCancel
+                         handler:^(UIAlertAction * action)
+                         {
+                             [alertController dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+
+    [alertController addAction:unfollow];
+    [alertController addAction:cancel];
+
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (buttonIndex == 0) {
-        self.followActionSuccess = [[UserManager singleton] stopFollowingUser:self.userSelected];
-        [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
-        
-    }
-}
-
-
+//------------------------------------------------------------------------------
 -(void)reloadTable{
-    if (self.followActionSuccess)
-        [self.usersTable reloadData];
-    
+    [self.usersTable reloadData];
 }
 
 #pragma mark - Navigation
@@ -257,6 +241,7 @@
     UIButton *btn = (UIButton *) sender;
     [self pushToProfileUser:self.usersSearch[btn.tag]];
 }
+
 //------------------------------------------------------------------------------
 - (void)pushToProfileUser:(User *)user {
     
@@ -310,7 +295,6 @@
     }
 }
 
-
 #pragma mark - Search Response method
 //------------------------------------------------------------------------------
 - (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray needToPaginate:(BOOL)pagination{
@@ -336,6 +320,7 @@
             self.spinner.hidden = YES;
         
         [self reloadTableWithAnimation];
+        
     }else if (!error && usersArray.count == 0) {
         refreshTable = YES;
         if (!self.usersSearch.count > 0){
@@ -347,18 +332,19 @@
     }
     
     [self checkIfNeedToShowNotPeopleView];
-
 }
 
 //------------------------------------------------------------------------------
 - (void)checkIfNeedToShowNotPeopleView {
     
     if (self.followingUsers.count == 0){
+    
         self.usersTable.hidden = YES;
         self.viewNotPeople.hidden = NO;
-    }else{
-        self.spinner.hidden = YES;
         
+    }else{
+        
+        self.spinner.hidden = YES;
         self.usersTable.hidden = NO;
         self.viewNotPeople.hidden = YES;
         self.spinner.hidden = YES;
@@ -375,17 +361,11 @@
             [[FavRestConsumer sharedInstance] getAllEntitiesFromClass:[User class] withDelegate:self];
         if ([entityClass isSubclassOfClass:[User class]]){
             if (search)
-                [self reloadDataAndTable];
+                [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
         }
     }
 }
 #pragma mark - Reload methods
-//------------------------------------------------------------------------------
-- (void)reloadDataAndTable {
-    
-    self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];
-    [self.usersTable reloadData];
-}
 
 //------------------------------------------------------------------------------
 - (void)reloadTableWithAnimation {
@@ -408,7 +388,6 @@
     
     [self.mySearchBar setAlpha:0.0];
     
-    //self.followingUsers = [[[UserManager singleton] getFollowingPeopleForMe] mutableCopy];;
     [self.mySearchBar resignFirstResponder];
     [self.mySearchBar setText:@""];
 }
@@ -446,12 +425,12 @@
     
     self.lastContentOffset = scrollView.contentOffset.y;
 }
+
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
         
     CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
     
-    //NSLog(@"Orientation:%d:",[[UIDevice currentDevice] orientation]);
     if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
         if (screenRect.size.height > screenRect.size.width)
             self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
@@ -466,7 +445,6 @@
             
         }
     }
-    
 }
 
 @end

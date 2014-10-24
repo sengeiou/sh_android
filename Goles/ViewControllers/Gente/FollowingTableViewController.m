@@ -23,7 +23,6 @@
 @property (nonatomic,weak) IBOutlet UITableView *usersTable;
 @property (nonatomic,strong)       NSIndexPath         *indexToShow;
 @property (nonatomic,assign)       BOOL   followActionSuccess;
-@property (nonatomic,strong)       User   *userFollowUnfollow;
 
 @end
 
@@ -39,7 +38,6 @@
 
     [self getUsersServer];
     
-
     [self setNavigationBarTitle];
 }
 
@@ -59,14 +57,14 @@
     
     if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
         self.usersList = [[UserManager singleton] getFollowingUsersOfUser:self.selectedUser];
+   
     else if ([self.viewSelected  isEqual: FOLLOWERS_SELECTED])
         self.usersList = [[UserManager singleton] getFollowersOfUser:self.selectedUser];
-    NSLog(@"Users list count in local DB:%lu",(unsigned long)self.usersList.count);
     
     [self performSelectorOnMainThread:@selector(reloadDataMainThread) withObject:nil waitUntilDone:NO];
-
 }
 
+//------------------------------------------------------------------------------
 -(void)getUsersServer{
     if ([self.viewSelected  isEqual: FOLLOWING_SELECTED])
         [[FavRestConsumer sharedInstance] getFollowingUsersOfUser:self.selectedUser withDelegate:self];
@@ -75,9 +73,9 @@
         [[FavRestConsumer sharedInstance] getFollowersOfUser:self.selectedUser withDelegate:self];
 }
 
+//------------------------------------------------------------------------------
 - (void)reloadDataMainThread{
     [self.usersTable reloadData];
-
 }
 
 //------------------------------------------------------------------------------
@@ -117,71 +115,54 @@
 //------------------------------------------------------------------------------
 - (void)followUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
-    self.userFollowUnfollow = self.usersList[btn.tag];
+    User *user = self.usersList[btn.tag];
         
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]) {
-        self.followActionSuccess = [[UserManager singleton] startFollowingUser:self.userFollowUnfollow];
-        [self reloadTable];
+        self.followActionSuccess = [[UserManager singleton] startFollowingUser:user];
+       
+        if (self.followActionSuccess) {
+            [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+            [self reloadDataMainThread];
+        }
     }
     else
-        [self unfollow:self.userFollowUnfollow];
-    
+        [self unfollow:user];
 }
 
+//------------------------------------------------------------------------------
 -(void)unfollow:(User *)userUnfollow{
-//    UIAlertController * alert=   [UIAlertController
-//                                  alertControllerWithTitle:userUnfollow.userName
-//                                  message:nil
-//                                  preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    UIAlertAction* cancel = [UIAlertAction
-//                         actionWithTitle:NSLocalizedString(@"Cancel", nil)
-//                         style:UIAlertActionStyleDefault
-//                         handler:^(UIAlertAction * action)
-//                         {
-//                             [alert dismissViewControllerAnimated:YES completion:nil];
-//                            
-//                             self.followActionSuccess = NO;
-//                         }];
-//    
-//    UIAlertAction* unfollow = [UIAlertAction
-//                             actionWithTitle:NSLocalizedString(@"Unfollow", nil)
-//                             style:UIAlertActionStyleDestructive
-//                             handler:^(UIAlertAction * action)
-//                             {
-//                                 
-//                                 self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-//                                 [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
-//                                 
-//                                 [alert dismissViewControllerAnimated:YES completion:nil];
-//                                 
-//                             }];
-//
-//    
-//    [alert addAction:unfollow];
-//
-//    [alert addAction:cancel];
-//
-//    [self presentViewController:alert animated:YES completion:nil];
-    UIActionSheet *actionShet = [[UIActionSheet alloc] initWithTitle:userUnfollow.userName delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Unfollow", nil) otherButtonTitles: nil];
-    actionShet.actionSheetStyle = UIActionSheetStyleDefault;
-    [actionShet showInView:self.view];
     
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:userUnfollow.userName
+                                          message:nil
+                                          preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if (buttonIndex == 0) {
-        self.followActionSuccess = [[UserManager singleton] stopFollowingUser:self.userFollowUnfollow];
-        [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
-        
-    }
-}
-
--(void)reloadTable{
-    if (self.followActionSuccess)
-        [self.usersTable reloadData];
-
+    UIAlertAction *unfollow = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                               style:UIAlertActionStyleDestructive
+                               handler:^(UIAlertAction * action)
+                               {
+                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                                   if (self.followActionSuccess) {
+                                       [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+                                       
+                                       [self performSelectorOnMainThread:@selector(reloadDataMainThread) withObject:nil waitUntilDone:NO];
+                                   }
+                                   [alertController dismissViewControllerAnimated:YES completion:nil];
+                               }];
+    
+    UIAlertAction *cancel = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alertController dismissViewControllerAnimated:YES completion:nil];
+                             }];
+    
+    [alertController addAction:unfollow];
+    [alertController addAction:cancel];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -197,7 +178,6 @@
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
-
 #pragma mark - NAVIGATION
 //------------------------------------------------------------------------------
 -(void)goProfile:(id)sender{
@@ -211,7 +191,6 @@
 }
 
 #pragma mark - DATASERVICE RESPONSE
-
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     

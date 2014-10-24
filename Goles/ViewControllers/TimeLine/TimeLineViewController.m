@@ -271,7 +271,7 @@
     
     UIAlertAction* cancel = [UIAlertAction
                              actionWithTitle:NSLocalizedString(@"Cancel", nil)
-                             style:UIAlertActionStyleDefault
+                             style:UIAlertActionStyleCancel
                              handler:^(UIAlertAction * action)
                              {
                                  [alert dismissViewControllerAnimated:YES completion:nil];

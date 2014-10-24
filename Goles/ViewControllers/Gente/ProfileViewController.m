@@ -57,6 +57,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
+    [self dataFillView];
+    
     [self customView];
     [self textLocalizable];
 }
@@ -67,11 +70,7 @@
 	[super viewWillAppear:animated];
     
     //Listen for keyboard process close
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dataFillView) name:k_NOTIF_USER_SYNCHRO_END object:nil];
-    
-    
-    self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
-    [self dataFillView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBotonAndScores) name:k_NOTIF_USER_SYNCHRO_END object:nil];
 
     [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
 }
@@ -96,20 +95,19 @@
 
 //------------------------------------------------------------------------------
 - (void)dataFillView{
-    //self.title = self.selectedUser.userName;
     
     [self.navigationItem setTitle:self.selectedUser.userName];
 
     
-    //[self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
     [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
     [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
     
     self.lblName.text = self.selectedUser.name;
     
     //Para la siguiente version de la app
-//    NSString *rank =  NSLocalizedString(@"rank", nil);
-//    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
+    /*[self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
+      NSString *rank =  NSLocalizedString(@"rank", nil);
+      self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];*/
     
     self.lblTeamBio.text = [NSString stringWithFormat:@"%@, %@",self.selectedUser.favoriteTeamName, self.selectedUser.bio];
     [self.lblTeamBio sizeToFit];
@@ -132,24 +130,19 @@
     }
 }
 
+//------------------------------------------------------------------------------
 - (void)refreshBotonAndScores{
     
-    //[self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
     [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
     [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
-    
-    //Para la siguiente version de la app
-    //    NSString *rank =  NSLocalizedString(@"rank", nil);
-    //    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
-    
     [self configureFollowButton];
 }
 
 //------------------------------------------------------------------------------
 -(void)passToChageEndPoint{
+    
     ChangeEndPointViewController *changeEndPointVC = [self.storyboard instantiateViewControllerWithIdentifier:@"changeEndPointVC"];
     [self.navigationController pushViewController:changeEndPointVC animated:YES];
-
 }
 
 //------------------------------------------------------------------------------
@@ -219,77 +212,62 @@
 
 //------------------------------------------------------------------------------
 -(void)unfollow:(User *)userUnfollow{
-//    UIAlertController * alert=   [UIAlertController
-//                                  alertControllerWithTitle:userUnfollow.userName
-//                                  message:nil
-//                                  preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    UIAlertAction* cancel = [UIAlertAction
-//                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
-//                             style:UIAlertActionStyleDefault
-//                             handler:^(UIAlertAction * action)
-//                             {
-//                                 [alert dismissViewControllerAnimated:YES completion:nil];
-//                                 
-//                                 self.followActionSuccess = NO;
-//                             }];
-//    
-//    UIAlertAction* unfollow = [UIAlertAction
-//                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
-//                               style:UIAlertActionStyleDestructive
-//                               handler:^(UIAlertAction * action)
-//                               {
-//                                   
-//                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-//                                   
-//                                   [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
-//                                   [alert dismissViewControllerAnimated:YES completion:nil];
-//                                   
-//                               }];
-//    
-//    
-//    [alert addAction:unfollow];
-//    
-//    [alert addAction:cancel];
-//    [alert addAction:cancel];
-//
-//    [self presentViewController:alert animated:YES completion:nil];
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:userUnfollow.userName
+                                  message:nil
+                                  preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+                                 
+                                 self.followActionSuccess = NO;
+                             }];
+    
+    UIAlertAction* unfollow = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+                               style:UIAlertActionStyleDestructive
+                               handler:^(UIAlertAction * action)
+                               {
+                                   
+                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+                                   
+                                   if (self.followActionSuccess) {
+                                       [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+                                       [self performSelectorOnMainThread:@selector(refreshBotonAndScores) withObject:nil waitUntilDone:NO];
+                                   }
+                                   
+                                   [alert dismissViewControllerAnimated:YES completion:nil];
+                                   
+                               }];
     
     
-    UIActionSheet *actionShet = [[UIActionSheet alloc] initWithTitle:userUnfollow.userName delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Unfollow", nil) otherButtonTitles: nil];
-    actionShet.actionSheetStyle = UIActionSheetStyleDefault;
-    [actionShet showInView:self.view];
+    [alert addAction:unfollow];
     
+    [alert addAction:cancel];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (buttonIndex == 0) {
-        self.followActionSuccess = [[UserManager singleton] stopFollowingUser:self.selectedUser];
-        [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
-        [self performSelectorOnMainThread:@selector(refreshBotonAndScores) withObject:nil waitUntilDone:NO];
-
-    }
-    
-}
-
 
 //------------------------------------------------------------------------------
 - (void)editProfile {
     
     NSLog(@"Edit Profile");
-    
 }
 
 #pragma mark - Localizable Strings
 //------------------------------------------------------------------------------
 -(void)textLocalizable{
     
-//    self.lblPoints.text = NSLocalizedString(@"Points", nil);
     self.lblFollowing.text = NSLocalizedString(@"Following", nil);
     self.lblFollowers.text = NSLocalizedString(@"Followers", nil);
-
-//    [self setSegments];
+    
+    //Para la siguiente version de la app
+    /* self.lblPoints.text = NSLocalizedString(@"Points", nil);
+       [self setSegments];*/
 }
 
 //------------------------------------------------------------------------------
@@ -311,12 +289,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"toFollowing"]) {
+      
         FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
         [followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWING_SELECTED];
     }
 	if ([segue.identifier isEqualToString:@"toFollowers"]) {
-		FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
+		
+        FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
 		[followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
 	}
@@ -328,7 +308,7 @@
     
     if (status && !error){
         
-        if ([entityClass isSubclassOfClass:[Follow class]]) {
+        if ([entityClass isSubclassOfClass:[Follow class]]) { //Para cuando este ya situada en la misma pantalla
             [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
 
         }else if ([entityClass isSubclassOfClass:[User class]]){

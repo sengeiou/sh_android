@@ -325,7 +325,9 @@
         if (follow){
 //            [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
 //            [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
-            if ([[CoreDataManager singleton] saveContext])
+            
+             [[CoreDataManager singleton] saveContext];
+            //if ([[CoreDataManager singleton] saveContext])
                 //[[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
             return YES;
         }
@@ -340,7 +342,9 @@
             if (follow){
 //                [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
 //                [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
-                if ([[CoreDataManager singleton] saveContext])
+                
+                 [[CoreDataManager singleton] saveContext];
+                //if ([[CoreDataManager singleton] saveContext])
                   //  [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
                 return YES;
             }
@@ -353,7 +357,7 @@
 //------------------------------------------------------------------------------
 - (BOOL)stopFollowingUser:(User *)user {
     
-    User *activeUser = [[UserManager sharedInstance] getActiveUser];
+    //User *activeUser = [[UserManager sharedInstance] getActiveUser];
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@ && idUserFollowed == %@",[self getUserId] ,user.idUser];
     Follow *follow = [[[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate] firstObject];
@@ -365,7 +369,9 @@
         
 //        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
 //        [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] - 1] forUSer:user];
-        if ([[CoreDataManager singleton] saveContext])
+        
+        [[CoreDataManager singleton] saveContext];
+        //if ([[CoreDataManager singleton] saveContext])
           //  [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
         return YES;
     }
