@@ -303,7 +303,8 @@
 
 //------------------------------------------------------------------------------
 -(void)sendShotByNotification:(NSNotification *)notification{
-   
+    self.title = NSLocalizedString (@"Shooting...", nil);
+
     [[ShotManager singleton] createShotWithComment:[notification object] andDelegate:self];
 }
 
