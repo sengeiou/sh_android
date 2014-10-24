@@ -109,7 +109,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendShotByNotification:) name:k_NOTIF_SHOT_SEND object:nil];
 
       //Listen to orientation changes
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationUpdates:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
+   // [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationUpdates:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 //------------------------------------------------------------------------------
@@ -303,6 +303,10 @@
 
 //------------------------------------------------------------------------------
 -(void)sendShotByNotification:(NSNotification *)notification{
+    
+    self.orientation = NO;
+    [self hiddenKeyboard];
+    
     self.title = NSLocalizedString (@"Shooting...", nil);
 
     [[ShotManager singleton] createShotWithComment:[notification object] andDelegate:self];
@@ -355,8 +359,8 @@
 //------------------------------------------------------------------------------
 -(void)hiddenKeyboard{
     
-    if (self.keyboardIsVisible) {
-        if (!self.orientation){
+    if (!self.orientation){
+        if (self.keyboardIsVisible) {
             [self.viewTextField keyboardHide:nil];
             //self.backgroundView.hidden = YES;
             
@@ -405,11 +409,11 @@
 //------------------------------------------------------------------------------
 - (void)orientationUpdates:(NSNotification *)notification{
 
-    [self updateCurrentTitleView];
+//    [self updateCurrentTitleView];
+//    
+//    [self restrictRotation:NO];
     
-    [self restrictRotation:NO];
-    
-    [self.timelineTableView orientationChanged:notification];
+   // [self.timelineTableView orientationChanged:notification];
 }
 
 #pragma mark - Title View Get
