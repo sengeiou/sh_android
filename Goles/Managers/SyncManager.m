@@ -131,6 +131,7 @@
                 
                 else if ([follow.csys_syncronized isEqualToString: kJSON_SYNCRO_DELETED])
                     [[FavRestConsumer sharedInstance] createEntity:K_COREDATA_FOLLOW withData:dataArray andKey:key andDelegate:delegate withOperation:K_OP_DELETE];
+                
             }
             
             if  ([updatedEntity isKindOfClass:[Device class]]){

@@ -21,8 +21,10 @@
 #import "Followbutton.h"
 #import "TTTAttributedLabel.h"
 #import "ChangeEndPointViewController.h"
+#import "FavRestConsumer.h"
+#import "SyncManager.h"
 
-@interface ProfileViewController () <TTTAttributedLabelDelegate>
+@interface ProfileViewController () <TTTAttributedLabelDelegate, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
@@ -69,9 +71,9 @@
     
     
     self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
-   
-    if (self.selectedUser != nil)
-        [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
+    [self dataFillView];
+
+    [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -99,7 +101,7 @@
     [self.navigationItem setTitle:self.selectedUser.userName];
 
     
-    [self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
+    //[self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
     [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
     [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
     
@@ -128,7 +130,19 @@
             [self.btnPhoto addTarget:self action:@selector(passToChageEndPoint) forControlEvents:UIControlEventTouchUpInside];
         }
     }
+}
+
+- (void)refreshBotonAndScores{
     
+    //[self.btnPoints setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.points] forState:UIControlStateNormal];
+    [self.btnFollowing setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowing] forState:UIControlStateNormal];
+    [self.btnFollowers setTitle:[NSString stringWithFormat:@"%@", self.selectedUser.numFollowers] forState:UIControlStateNormal];
+    
+    //Para la siguiente version de la app
+    //    NSString *rank =  NSLocalizedString(@"rank", nil);
+    //    self.lblRank.text = [NSString stringWithFormat:@"%@ %@",rank, self.selectedUser.rank];
+    
+    [self configureFollowButton];
 }
 
 //------------------------------------------------------------------------------
@@ -192,7 +206,8 @@
     
     self.followActionSuccess = [[UserManager singleton] startFollowingUser:self.selectedUser];
     if (self.followActionSuccess){
-        [self dataFillView];
+        [self refreshBotonAndScores];
+        [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
     }
 }
 
@@ -204,41 +219,60 @@
 
 //------------------------------------------------------------------------------
 -(void)unfollow:(User *)userUnfollow{
-    UIAlertController * alert=   [UIAlertController
-                                  alertControllerWithTitle:userUnfollow.userName
-                                  message:nil
-                                  preferredStyle:UIAlertControllerStyleActionSheet];
+//    UIAlertController * alert=   [UIAlertController
+//                                  alertControllerWithTitle:userUnfollow.userName
+//                                  message:nil
+//                                  preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    UIAlertAction* cancel = [UIAlertAction
+//                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
+//                             style:UIAlertActionStyleDefault
+//                             handler:^(UIAlertAction * action)
+//                             {
+//                                 [alert dismissViewControllerAnimated:YES completion:nil];
+//                                 
+//                                 self.followActionSuccess = NO;
+//                             }];
+//    
+//    UIAlertAction* unfollow = [UIAlertAction
+//                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+//                               style:UIAlertActionStyleDestructive
+//                               handler:^(UIAlertAction * action)
+//                               {
+//                                   
+//                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+//                                   
+//                                   [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
+//                                   [alert dismissViewControllerAnimated:YES completion:nil];
+//                                   
+//                               }];
+//    
+//    
+//    [alert addAction:unfollow];
+//    
+//    [alert addAction:cancel];
+//    [alert addAction:cancel];
+//
+//    [self presentViewController:alert animated:YES completion:nil];
     
-    UIAlertAction* cancel = [UIAlertAction
-                             actionWithTitle:NSLocalizedString(@"Cancel", nil)
-                             style:UIAlertActionStyleDefault
-                             handler:^(UIAlertAction * action)
-                             {
-                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                                 
-                                 self.followActionSuccess = NO;
-                             }];
     
-    UIAlertAction* unfollow = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"Unfollow", nil)
-                               style:UIAlertActionStyleDestructive
-                               handler:^(UIAlertAction * action)
-                               {
-                                   
-                                   self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-                                   
-                                   [self performSelectorOnMainThread:@selector(dataFillView) withObject:nil waitUntilDone:NO];
-                                   [alert dismissViewControllerAnimated:YES completion:nil];
-                                   
-                               }];
+    UIActionSheet *actionShet = [[UIActionSheet alloc] initWithTitle:userUnfollow.userName delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Unfollow", nil) otherButtonTitles: nil];
+    actionShet.actionSheetStyle = UIActionSheetStyleDefault;
+    [actionShet showInView:self.view];
     
-    
-    [alert addAction:unfollow];
-    
-    [alert addAction:cancel];
-    
-    [self presentViewController:alert animated:YES completion:nil];
 }
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex == 0) {
+        self.followActionSuccess = [[UserManager singleton] stopFollowingUser:self.selectedUser];
+        [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+        [self performSelectorOnMainThread:@selector(refreshBotonAndScores) withObject:nil waitUntilDone:NO];
+
+    }
+    
+}
+
 
 //------------------------------------------------------------------------------
 - (void)editProfile {
@@ -286,6 +320,22 @@
 		[followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
 	}
+}
+
+#pragma mark - Conection response methods
+//------------------------------------------------------------------------------
+- (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
+    
+    if (status && !error){
+        
+        if ([entityClass isSubclassOfClass:[Follow class]]) {
+            [[FavRestConsumer sharedInstance] getEntityFromClass:[User class] withKey:@{kJSON_ID_USER:self.selectedUser.idUser} withDelegate:self];
+
+        }else if ([entityClass isSubclassOfClass:[User class]]){
+            self.selectedUser = [[UserManager singleton] getUserForId:[self.selectedUser.idUser integerValue]];
+            [self performSelectorOnMainThread:@selector(refreshBotonAndScores) withObject:nil waitUntilDone:NO];
+        }
+    }
 }
 
 @end

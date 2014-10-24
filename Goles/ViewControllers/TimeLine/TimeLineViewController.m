@@ -331,8 +331,18 @@
 
 //------------------------------------------------------------------------------
 - (void)darkenBackgroundView {
-    
     self.backgroundView.hidden = NO;
+    [self.backgroundView setAlpha:0.0];
+    [UIView animateWithDuration:1.5
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn // See other options
+                     animations:^{
+                         [self.backgroundView setAlpha:0.5];
+                     }
+                     completion:^(BOOL finished) {
+                         // Completion Block
+                     }];
+    //self.backgroundView.hidden = NO;
     
     if (self.tapTapRecognizer == nil){
         self.tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyboard)];
@@ -346,7 +356,20 @@
     
     if (!self.orientation){
         [self.viewTextField keyboardHide:nil];
-        self.backgroundView.hidden = YES;
+        //self.backgroundView.hidden = YES;
+        
+        [self.backgroundView setAlpha:0.5];
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseIn // See other options
+                         animations:^{
+                             [self.backgroundView setAlpha:0.0];
+                         }
+                         completion:^(BOOL finished) {
+                             // Completion Block
+                             //self.backgroundView.hidden = YES;
+                         }];
+
     }
 }
 

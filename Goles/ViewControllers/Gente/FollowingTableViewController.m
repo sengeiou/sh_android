@@ -17,12 +17,13 @@
 #import "CoreDataManager.h"
 #import "SyncManager.h"
 
-@interface FollowingTableViewController ()
+@interface FollowingTableViewController () <UIActionSheetDelegate>
 
 @property (nonatomic,strong) NSArray *usersList;
 @property (nonatomic,weak) IBOutlet UITableView *usersTable;
 @property (nonatomic,strong)       NSIndexPath         *indexToShow;
 @property (nonatomic,assign)       BOOL   followActionSuccess;
+@property (nonatomic,strong)       User   *userFollowUnfollow;
 
 @end
 
@@ -34,12 +35,11 @@
     [super viewDidLoad];
 	
 	self.usersTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+    [self reloadDataMainThread];
+
     [self getUsersServer];
     
-    [self performSelectorOnMainThread:@selector(reloadDataMainThread) withObject:nil waitUntilDone:NO];
 
-    
     [self setNavigationBarTitle];
 }
 
@@ -117,52 +117,65 @@
 //------------------------------------------------------------------------------
 - (void)followUser:(id)sender{
     UIButton *btn = (UIButton *) sender;
-    User *userFollow = self.usersList[btn.tag];
+    self.userFollowUnfollow = self.usersList[btn.tag];
         
     if ([btn.titleLabel.text isEqualToString:NSLocalizedString(@"+ FOLLOW", nil)]) {
-        self.followActionSuccess = [[UserManager singleton] startFollowingUser:userFollow];
+        self.followActionSuccess = [[UserManager singleton] startFollowingUser:self.userFollowUnfollow];
         [self reloadTable];
     }
     else
-        [self unfollow:userFollow];
+        [self unfollow:self.userFollowUnfollow];
     
 }
 
 -(void)unfollow:(User *)userUnfollow{
-    UIAlertController * alert=   [UIAlertController
-                                  alertControllerWithTitle:userUnfollow.userName
-                                  message:nil
-                                  preferredStyle:UIAlertControllerStyleActionSheet];
+//    UIAlertController * alert=   [UIAlertController
+//                                  alertControllerWithTitle:userUnfollow.userName
+//                                  message:nil
+//                                  preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    UIAlertAction* cancel = [UIAlertAction
+//                         actionWithTitle:NSLocalizedString(@"Cancel", nil)
+//                         style:UIAlertActionStyleDefault
+//                         handler:^(UIAlertAction * action)
+//                         {
+//                             [alert dismissViewControllerAnimated:YES completion:nil];
+//                            
+//                             self.followActionSuccess = NO;
+//                         }];
+//    
+//    UIAlertAction* unfollow = [UIAlertAction
+//                             actionWithTitle:NSLocalizedString(@"Unfollow", nil)
+//                             style:UIAlertActionStyleDestructive
+//                             handler:^(UIAlertAction * action)
+//                             {
+//                                 
+//                                 self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
+//                                 [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
+//                                 
+//                                 [alert dismissViewControllerAnimated:YES completion:nil];
+//                                 
+//                             }];
+//
+//    
+//    [alert addAction:unfollow];
+//
+//    [alert addAction:cancel];
+//
+//    [self presentViewController:alert animated:YES completion:nil];
+    UIActionSheet *actionShet = [[UIActionSheet alloc] initWithTitle:userUnfollow.userName delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Unfollow", nil) otherButtonTitles: nil];
+    actionShet.actionSheetStyle = UIActionSheetStyleDefault;
+    [actionShet showInView:self.view];
     
-    UIAlertAction* cancel = [UIAlertAction
-                         actionWithTitle:NSLocalizedString(@"Cancel", nil)
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                             [alert dismissViewControllerAnimated:YES completion:nil];
-                            
-                             self.followActionSuccess = NO;
-                         }];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    UIAlertAction* unfollow = [UIAlertAction
-                             actionWithTitle:NSLocalizedString(@"Unfollow", nil)
-                             style:UIAlertActionStyleDestructive
-                             handler:^(UIAlertAction * action)
-                             {
-                                 
-                                 self.followActionSuccess = [[UserManager singleton] stopFollowingUser:userUnfollow];
-                                 [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
-                                 
-                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                                 
-                             }];
-
-    
-    [alert addAction:unfollow];
-
-    [alert addAction:cancel];
-
-    [self presentViewController:alert animated:YES completion:nil];
+    if (buttonIndex == 0) {
+        self.followActionSuccess = [[UserManager singleton] stopFollowingUser:self.userFollowUnfollow];
+        [self performSelectorOnMainThread:@selector(reloadTable) withObject:nil waitUntilDone:NO];
+        
+    }
 }
 
 -(void)reloadTable{
@@ -210,7 +223,7 @@
                 [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self withTypeOfUsers: FOLLOWING_SELECTED];
             else
                 [[FavRestConsumer sharedInstance] getUsersFromUser:self.selectedUser withDelegate:self withTypeOfUsers: FOLLOWERS_SELECTED];
-
+            
         }if ([entityClass isSubclassOfClass:[User class]])
             [self loadLocalDataInArrays];
     }

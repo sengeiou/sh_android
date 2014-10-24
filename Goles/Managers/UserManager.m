@@ -317,16 +317,16 @@
     NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
 
     User *userCheck = [self getUserForId:user.idUserValue];
-    User *activeUser = [[UserManager sharedInstance] getActiveUser];
+    //User *activeUser = [[UserManager sharedInstance] getActiveUser];
     
     if (userCheck) {
         NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:user.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:userCheck.csys_birth,K_WS_OPS_UPDATE_DATE:[NSNumber numberWithLongLong:epochTime],K_WS_OPS_DELETE_DATE:[NSNull null]};
         Follow *follow = [Follow updateWithDictionary:followDict];
         if (follow){
-            [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
-            [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
+//            [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
+//            [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
             if ([[CoreDataManager singleton] saveContext])
-                [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+                //[[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
             return YES;
         }
     }
@@ -338,10 +338,10 @@
             NSDictionary *followDict = @{kJSON_ID_USER:[self getUserId],kJSON_FOLLOW_IDUSERFOLLOWED:newUser.idUser,kJSON_SYNCRONIZED:kJSON_SYNCRO_NEW,K_WS_OPS_REVISION:@0,K_WS_OPS_BIRTH_DATE:[NSNumber numberWithLongLong:epochTime],K_WS_OPS_UPDATE_DATE:[NSNumber numberWithLongLong:epochTime],K_WS_OPS_DELETE_DATE:[NSNull null]};
             Follow *follow = [Follow updateWithDictionary:followDict];
             if (follow){
-                [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
-                [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
+//                [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] + 1]];
+//                [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] + 1] forUSer:user];
                 if ([[CoreDataManager singleton] saveContext])
-                    [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+                  //  [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
                 return YES;
             }
         }
@@ -363,10 +363,10 @@
         follow.csys_deleted = [NSNumber numberWithDouble:timeInt*1000];
         follow.csys_syncronized = kJSON_SYNCRO_DELETED;
         
-        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
-        [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] - 1] forUSer:user];
+//        [[UserManager sharedInstance]setNumberFollowings:[NSNumber numberWithInt:[activeUser.numFollowing intValue] - 1]];
+//        [[UserManager sharedInstance]setNumberFollowers:[NSNumber numberWithInt:[user.numFollowers intValue] - 1] forUSer:user];
         if ([[CoreDataManager singleton] saveContext])
-            [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
+          //  [[SyncManager sharedInstance] sendUpdatesToServerWithDelegate:self necessaryDownload:NO];
         return YES;
     }
     
