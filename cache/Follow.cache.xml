@@ -44,8 +44,8 @@
 		
 		<EntityCache Alias="Follow">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>10</TimeToIdleSeconds>
-				<TimeToLiveSeconds>10</TimeToLiveSeconds>
+				<TimeToIdleSeconds>2</TimeToIdleSeconds>
+				<TimeToLiveSeconds>2</TimeToLiveSeconds>
 			</Expiry>
 			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
 			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>

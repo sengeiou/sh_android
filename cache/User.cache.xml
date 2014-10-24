@@ -44,8 +44,8 @@
 		
 		<EntityCache Alias="User">
 			<Expiry Eternal="false">
-				<TimeToIdleSeconds>10</TimeToIdleSeconds>
-				<TimeToLiveSeconds>10</TimeToLiveSeconds>
+				<TimeToIdleSeconds>1</TimeToIdleSeconds>
+				<TimeToLiveSeconds>1</TimeToLiveSeconds>
 			</Expiry>
 			<MaxBytesLocalHeap>10M</MaxBytesLocalHeap>
 			<MaxBytesLocalDisk>100M</MaxBytesLocalDisk>
