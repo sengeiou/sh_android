@@ -1,0 +1,26 @@
+<gsmrs version="2.0" sport="soccer" lang="en" last_generated="2014-09-29 13:03:07" last_updated="2014-09-28 18:16:04">
+    <method method_id="2" name="get_matches">
+        <parameter name="detailed" value="no"/>
+        <parameter name="id" value="4943"/>
+        <parameter name="lang" value="en"/>
+        <parameter name="type" value="season"/>
+    </method>
+    <competition competition_id="25" ow_competition_id="3" name="European Championship" teamtype="default"
+                 display_order="10" type="international" area_id="7" area_name="Europe"
+                 last_updated="2014-09-28 19:07:11" soccertype="default">
+        <season season_id="4943" name="2012 Poland/Ukraine" start_date="2012-06-08" end_date="2012-07-01"
+                service_level="1" last_updated="2014-09-28 18:16:04">
+            <round round_id="13552" name="Group stage" start_date="2012-06-08" end_date="2012-06-19" type="table"
+                   groups="4" has_outgroup_matches="no" last_updated="2014-09-28 18:16:04">
+                <group group_id="4277" name="Group A" details="" winner="" last_updated="2014-09-28 18:16:04">
+                    <match match_id="1063182" ow_match_id="426847" date_utc="2012-06-08" time_utc="16:00:00"
+                           date_london="2012-06-08" time_london="17:00:00" team_A_id="1677" ow_team_A_id="511"
+                           team_A_name="Poland" team_A_country="POL" team_B_id="1091" ow_team_B_id="517"
+                           team_B_name="Greece" team_B_country="GRC" status="Played" gameweek="" winner="draw" fs_A="1"
+                           fs_B="1" hts_A="1" hts_B="0" ets_A="" ets_B="" ps_A="" ps_B=""
+                           last_updated="2014-09-25 15:45:01"/>
+                </group>
+            </round>
+        </season>
+    </competition>
+</gsmrs>
