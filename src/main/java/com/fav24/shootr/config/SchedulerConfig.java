@@ -1,5 +1,7 @@
 package com.fav24.shootr.config;
 
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -31,5 +33,10 @@ public class SchedulerConfig implements AsyncConfigurer, SchedulingConfigurer {
 	public void configureTasks(ScheduledTaskRegistrar registrar) {
 		TaskScheduler scheduler = this.taskScheduler();
 		registrar.setTaskScheduler(scheduler);
+	}
+	
+	@Override
+	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+		return new SimpleAsyncUncaughtExceptionHandler() ;
 	}
 }
