@@ -177,7 +177,7 @@
 
 //------------------------------------------------------------------------------
 - (void)setFollowToNo {
-    
+   [self.btnUnfollow setAttributedTitle:[Utils formatTitle:NSLocalizedString(@"+ FOLLOW", nil)] forState:UIControlStateNormal];
     self.btnFollow.hidden = YES;
     self.btnEditProfile.hidden = YES;
     self.btnUnfollow.hidden = NO;
