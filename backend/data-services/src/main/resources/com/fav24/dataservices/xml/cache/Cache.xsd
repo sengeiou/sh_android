@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="Cache">
+		<xsd:complexType>
+			<xsd:sequence>
+				<!-- Configuración por defecto de un gestor de cachés. -->
+				<xsd:element name="DefaultCacheManager" type="TCacheManagerConfiguration" minOccurs="0" maxOccurs="1"/>
+				<!-- Las cachés se pueden agrupar por CacheManagers, según características comúnes. -->
+				<xsd:element name="EntityCacheManager" type="TEntityCacheManager" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="Version" type="TVersion" use="optional"/>
+			<xsd:attribute name="Description" type="xsd:string" use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- -->
+	<xsd:simpleType name="TVersion">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([0-9]{1,5})[.]([0-9]{1,5})[.]([0-9]{1,5})(((alpha|beta|rc)-([0-9]{1,5}))|)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- -->
+	<!-- Bytes nomenclature:
+	# -> bytes. # bytes
+	#K -> Kilobytes. (# x 1024) bytes
+	#M -> Megabytes. (# x 1000 x 1024) bytes
+	#G -> Gigabytes. (# x 1000000 x 1024) bytes
+	 -->
+	<xsd:simpleType name="TStorageSize">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([0-9]{1,19})((G|M|K)|)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- -->
+	<xsd:complexType name="TCacheManagerConfiguration">
+		<xsd:sequence>
+			<!-- Configuración por defecto de una caché. -->
+			<xsd:element name="DefaultCache" type="TCacheConfiguration" minOccurs="0" maxOccurs="1"/>
+			<!-- Ubicación de los ficheros de persistencia de la caché. -->
+			<xsd:element name="DiskStore" type="TDiskStore" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+		<xsd:attribute name="MaxBytesLocalHeap" type="TStorageSize" use="optional"/>
+		<xsd:attribute name="MaxBytesLocalDisk" type="TStorageSize" use="optional"/>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TEntityCacheManager">
+		<xsd:complexContent>
+			<xsd:extension base="TCacheManagerConfiguration">
+				<xsd:sequence>
+					<xsd:element name="EntityCache" type="TEntityCache" minOccurs="1" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:attribute name="Name" type="xsd:string" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TCacheConfiguration">
+		<xsd:sequence>
+			<!-- Tiempos de vida de un elemento. -->
+			<xsd:element name="Expiry" type="TExpiry" minOccurs="0" maxOccurs="1"/>
+			<!-- Número máximo de bytes en memoria. -->
+			<xsd:element name="MaxBytesLocalHeap" type="TStorageSize"/>
+			<!-- Número máximo de bytes en disco. 0 = infinito. Cuidado! puede provocar que el servidor se quede sin espacio en disco! -->
+			<xsd:element name="MaxBytesLocalDisk" type="TStorageSize"/>
+			<!-- Intervalo de tiempo entre chequeos, en busca de elementos caducados en disco. -->
+			<xsd:element name="DiskExpiryThreadIntervalSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+			<!-- Políticas de desalojo de las entradas almacenadas en memoria. -->
+			<xsd:element name="MemoryStoreEvictionPolicy" type="TMemoryStoreEvictionPolicy" minOccurs="0" maxOccurs="1"/>
+			<!-- Persistencia en disco. Si esta no está activa, los elementos se limitan al espacio en memoria. -->
+			<xsd:element name="Persistence" type="TPersistence" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TEntityCache">
+		<xsd:complexContent>
+			<xsd:extension base="TCacheConfiguration">
+				<xsd:attribute name="Alias" type="xsd:string" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TExpiry">
+		<xsd:sequence>
+			<!-- Tiempo máximo de vida en segundos de un elemento que no está siendo consultado. -->
+			<xsd:element name="TimeToIdleSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+			<!-- Tiempo máximo de vida en segundos de un elemento. -->
+			<xsd:element name="TimeToLiveSeconds" type="xsd:long" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+			<!-- Indica si los elementos de la caché están o no afectados por el paso del tiempo. 
+			Si esta propiedad se activa, se ignoran los valores de TimeToIdleSeconds y TimeToLiveSeconds -->
+		<xsd:attribute name="Eternal" type="xsd:boolean" use="optional" default="true"/>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TPersistence">
+		<xsd:attribute name="Active" type="xsd:boolean" use="optional" default="true"/>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="TDiskStore">
+		<xsd:attribute name="Path" type="xsd:string" use="optional" default="java.io.tmpdir"/>
+	</xsd:complexType>
+	<!-- Políticas de desalojo de las entradas almacenadas en memoria.
+			El desalojo de una entrada en memoria, implica la entrada del element en la zona de disco.
+
+			LRU: Least Recently Used - Se elimina el que hace más tiempo que no se usa.
+			LFU: Least Frequently Used - Se elimina el de uso menos frecuente. 
+			FIFO: First In First Out - Se elimina en el mismo orden de entrada de los elementos.
+	-->
+	<xsd:simpleType name="TMemoryStoreEvictionPolicy">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LRU"/>
+			<xsd:enumeration value="LFU"/>
+			<xsd:enumeration value="FIFO"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

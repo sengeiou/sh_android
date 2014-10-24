@@ -1,0 +1,154 @@
+/**
+ * Estructura global del monitor.
+ */
+var WorkloadMonitor = {
+		MeasureStartTime : null,
+		RequestsRate : null,
+		RequestsRatePeak : null,
+		TotalRequests : null,
+		TotalRequestsKo : null,
+		OperationRate : null,
+		OperationRatePeak : null,
+		TotalOperations : null,
+		TotalOperationsKo : null,
+		SubsystemOperationRate : null,
+		SubsystemOperationRatePeak : null,
+		TotalSubsystemOperations : null,
+		TotalSubsystemOpertionsKo : null
+}
+
+/**
+ * Inicializa el monitor de trabajo realizado.
+ * 
+ * @param MeasureStartTime Etiqueta que contiene momento de inicio de la medida.
+ * @param RequestsRate Etiqueta que contiene la tasa de peticiones entrantes.
+ * @param RequestsRatePeak Etiqueta que contiene el pico máximo de tasa de peticiones entrantes.
+ * @param TotalRequests Etiqueta que contiene el número total de peticiones entrantes.
+ * @param TotalRequestsKo Etiqueta que contiene el número total de peticiones entrantes rechazadas.
+ * @param OperationRate Etiqueta que contiene la tasa de operaciones procesadas.
+ * @param OperationRatePeak Etiqueta que contiene el pico máximo de tasa de operaciones procesadas.
+ * @param TotalOperations Etiqueta que contiene las operaciones procesadas.
+ * @param TotalOperationsKo Etiqueta que contiene las operaciones rechazadas.
+ * @param SubsystemOperationRate Etiqueta que contiene la tasa de operaciones enviadas al subsistema.
+ * @param SubsystemOperationRatePeak Etiqueta que contiene el pico máximo de tasa de operaciones enviadas al subsistema.
+ * @param TotalSubsystemOperations Etiqueta que contiene el número total de operaciones enviadas al subsistema.
+ * @param TotalSubsystemOpertionsKo Etiqueta que contiene el número total de operaciones fallidas en el subsistema.
+ */
+function initSystemWorkload(
+		MeasureStartTime,
+		RequestsRate, RequestsRatePeak, TotalRequests, TotalRequestsKo,
+		OperationRate, OperationRatePeak, TotalOperations,TotalOperationsKo,
+		SubsystemOperationRate, SubsystemOperationRatePeak, TotalSubsystemOperations, TotalSubsystemOpertionsKo) {
+
+	WorkloadMonitor.MeasureStartTime = MeasureStartTime;
+	WorkloadMonitor.RequestsRate = RequestsRate;
+	WorkloadMonitor.RequestsRatePeak = RequestsRatePeak;
+	WorkloadMonitor.TotalRequests = TotalRequests;
+	WorkloadMonitor.TotalRequestsKo = TotalRequestsKo;
+	WorkloadMonitor.OperationRate = OperationRate;
+	WorkloadMonitor.OperationRatePeak = OperationRatePeak;
+	WorkloadMonitor.TotalOperations = TotalOperations;
+	WorkloadMonitor.TotalOperationsKo = TotalOperationsKo;
+	WorkloadMonitor.SubsystemOperationRate = SubsystemOperationRate;
+	WorkloadMonitor.SubsystemOperationRatePeak = SubsystemOperationRatePeak;
+	WorkloadMonitor.TotalSubsystemOperations = TotalSubsystemOperations;
+	WorkloadMonitor.TotalSubsystemOpertionsKo = TotalSubsystemOpertionsKo;
+
+	startWorkloadMonitor();
+	
+	// Asignación de la función de destrución de los procesos activos.
+	App.destructionFunction = destroySystemWorkload;
+}
+
+/**
+ * Función instanciada al cerrar la ventana de monitorización del trabajo realizado por el sistema.
+ */
+function destroySystemWorkload() {
+
+	stopWorkloadMonitor();
+
+	delete WorkloadMonitor;
+}
+
+/**
+ * Crea un nuevo period de medidas de trabajo realizado.
+ */
+function newWorkloadMeasurePeriod() {
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.open("POST", App.servicesURL + '/system/workload/newMeasurePeriod', false);
+	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	// Envío.
+	xhr.send(JSON.stringify({offset: null, period: null, timeRange: null}));
+
+	var jsonResponse = JSON.parse(xhr.responseText);
+
+	var measureStartTime = new Date();
+	measureStartTime.setTime(jsonResponse);
+
+	WorkloadMonitor.MeasureStartTime.innerHTML = measureStartTime;
+}
+
+/**
+ * Alimentador de información del diagrama de trabajo realizado instantaneo.
+ */
+function workloadMonitorDataRenderer() {
+
+	delete data;
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.open("POST", App.servicesURL + '/system/workload', false);
+	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	// Envío.
+	xhr.send(JSON.stringify({offset: null, period: null, timeRange: null}));
+
+	var jsonResponse = JSON.parse(xhr.responseText);
+
+	if (jsonResponse["data"] != null && jsonResponse["data"]["MeasureStartTime"] != null) {
+
+		var measureStartTime = new Date();
+		measureStartTime.setTime(jsonResponse["data"]["MeasureStartTime"]);
+		
+		// Asignación de la información a las etiquetas.
+		WorkloadMonitor.MeasureStartTime.innerHTML = measureStartTime;
+		WorkloadMonitor.RequestsRate.innerHTML = Number(jsonResponse["data"]["RequestsRate"]).toFixed(2).toLocaleString() + " req/s";
+		WorkloadMonitor.RequestsRatePeak.innerHTML = Number(jsonResponse["data"]["RequestsRatePeak"]).toFixed(2).toLocaleString() + " req/s";
+		WorkloadMonitor.TotalRequests.innerHTML = jsonResponse["data"]["TotalRequests"].toLocaleString() + " req";
+		WorkloadMonitor.TotalRequestsKo.innerHTML = jsonResponse["data"]["TotalRequestsKo"].toLocaleString() + " req";
+		WorkloadMonitor.OperationRate.innerHTML = Number(jsonResponse["data"]["OperationRate"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.OperationRatePeak.innerHTML = Number(jsonResponse["data"]["OperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.TotalOperations.innerHTML = jsonResponse["data"]["TotalOperations"].toLocaleString() + " op";
+		WorkloadMonitor.TotalOperationsKo.innerHTML = jsonResponse["data"]["TotalOperationsKo"].toLocaleString() + " op";
+		WorkloadMonitor.SubsystemOperationRate.innerHTML = Number(jsonResponse["data"]["SubsystemOperationRate"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.SubsystemOperationRatePeak.innerHTML = Number(jsonResponse["data"]["SubsystemOperationRatePeak"]).toFixed(2).toLocaleString() + " op/s";
+		WorkloadMonitor.TotalSubsystemOperations.innerHTML = jsonResponse["data"]["TotalSubsystemOperations"].toLocaleString() + " op";
+		WorkloadMonitor.TotalSubsystemOpertionsKo.innerHTML = jsonResponse["data"]["TotalSubsystemOpertionsKo"].toLocaleString() + " op";
+	}
+}
+
+/**
+ * Detiene el monitor de trabajo realizado.
+ */
+function stopWorkloadMonitor() {
+
+	if (App.workloadMonitorInterval) {
+		clearInterval(App.workloadMonitorInterval);
+		App.workloadMonitorInterval = null;
+	}
+}
+
+/**
+ * Reanuda el monitor de trabajo realizado.
+ */
+function startWorkloadMonitor() {
+
+	stopWorkloadMonitor();
+	App.workloadMonitorInterval = setInterval(function() { 		
+
+		// Petición y repintado de la información de trabajo realizado por el sistema.
+		workloadMonitorDataRenderer();
+
+	}, 1000);
+}

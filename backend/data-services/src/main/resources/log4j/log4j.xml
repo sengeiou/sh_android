@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J//EN" "http://logging.apache.org/log4j/docs/api/org/apache/log4j/xml/log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/' debug="true">
+
+	<!-- 1.Access Policy Service -->
+	<appender name="accessPolicyService" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/accessPolicyService.log" />
+		<param name="Append" value="true" />
+		<param name="Threshold" value="DEBUG" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+	
+	<!-- 2.Access Policy Service Monitor -->
+	<appender name="accessPolicyMonitor" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/accessPolicyMonitor.log" />
+		<param name="Append" value="true" />
+		<param name="Threshold" value="DEBUG" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+	
+	<!-- 3.Generic Service -->
+	<appender name="genericService" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/genericService.log" />
+		<param name="Append" value="true" />
+		<param name="Threshold" value="DEBUG" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+	
+	<!-- 4.Generic Service Monitor -->
+	<appender name="genericMonitor" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/genericMonitor.log" />
+		<param name="Append" value="true" />
+		<param name="Threshold" value="DEBUG" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+		
+	<!-- A.Context Listeners -->
+	<appender name="fileContextListener" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/contextListener.log" />
+		<param name="Threshold" value="DEBUG" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>	
+	
+	<!-- Z.Root Info -->
+	<appender name="fileRoot" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/root_package.log" />
+		<param name="Threshold" value="INFO" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+	
+	<!-- Z.Root Error -->
+	<appender name="fileError" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyyMMdd" />
+		<param name="File" value="${catalina.home}/logs/error.log" />
+		<param name="Threshold" value="ERROR" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+	
+	<!-- Console -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="DEBUG" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value=" %d{dd MMM yyyy HH:mm:ss,SSS} %-5p [%t] %c - %m%n " />
+		</layout>
+	</appender>
+
+	<!-- 1.Access Policy Service -->
+	<category name="com.fav24.dataservices.services.AccessPolicyService">
+		<level value="INFO" />
+		<appender-ref ref="accessPolicyService" />
+	</category>
+	
+	<!-- 2.Access Policy Service Monitor Filter -->
+	<category name="com.fav24.dataservices.filter.AccessPolicyMonitorFilter">
+		<level value="INFO" />
+		<appender-ref ref="accessPolicyMonitor" />
+	</category>
+	
+	<!-- 3.Generic -->
+	<!-- Service -->
+	<category name="com.fav24.dataservices.services.GenericService">
+		<level value="INFO" />
+		<appender-ref ref="genericService" />
+	</category>
+	<!-- Controler -->
+	<category name="com.fav24.dataservices.controller.rest.generic.GenericController">
+		<level value="INFO" />
+		<appender-ref ref="genericService" />
+	</category>
+
+	<!-- 4.Generic Service Monitor Filter -->
+	<category name="com.fav24.dataservices.filter.GenericMonitorFilter">
+		<level value="INFO" />
+		<appender-ref ref="genericMonitor" />
+	</category>
+
+	<!-- A.Context Listeners -->
+	<category name="org.springframework.context.ApplicationListener">
+		<level value="INFO" />
+		<appender-ref ref="fileContextListener" />
+	</category>
+
+	<!-- Z. Root -->
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="fileRoot" />
+		<appender-ref ref="fileError" />
+		<appender-ref ref="console" />
+	</root>
+</log4j:configuration>

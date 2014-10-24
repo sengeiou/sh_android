@@ -1,0 +1,17 @@
+.measure {
+    color: #428bca;
+	text-decoration: none;
+}
+
+.hookTitle {
+    color: #428bca;
+    size: 16pt;
+    font-weight: bold;
+	text-decoration: none;
+}
+
+.alterContainer {
+	width: 50%;
+	margin: 0 auto;
+	margin-top: 81px;
+}
