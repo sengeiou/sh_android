@@ -51,7 +51,7 @@
     [super viewDidLoad];
     
     //Listen to orientation changes
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:nil];
     
     // Do any additional setup after loading the view.
    
@@ -429,22 +429,22 @@
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *)notification{
         
-    CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
-    
-    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
-        if (screenRect.size.height > screenRect.size.width)
-            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
-        else
-            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
-    }
-    else if ([[UIDevice currentDevice] orientation] == 1){
-        if (screenRect.size.height > screenRect.size.width){
-            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
-        }else{
-            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height-15, 30);
-            
-        }
-    }
+//    CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+//    
+//    if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation])){
+//        if (screenRect.size.height > screenRect.size.width)
+//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height, 30);
+//        else
+//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.width-15, 30);
+//    }
+//    else if ([[UIDevice currentDevice] orientation] == 1){
+//        if (screenRect.size.height > screenRect.size.width){
+//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 6, screenRect.size.width-15, 30);
+//        }else{
+//            self.mySearchBar.frame = CGRectMake(screenRect.origin.x+12, 2, screenRect.size.height-15, 30);
+//            
+//        }
+//    }
 }
 
 @end

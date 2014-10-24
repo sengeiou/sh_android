@@ -167,30 +167,52 @@ static NSString *CellIdentifier = @"shootCell";
     
     UITableView *tableView = self.myTableView;
     
+
+    
+    
     switch(type) {
             
-        case NSFetchedResultsChangeInsert:
+        case NSFetchedResultsChangeInsert:{
+     
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
+          
+            NSArray *indexs = [self addIndexPath];
+            [tableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+        }break;
             
         case NSFetchedResultsChangeDelete:
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
+           
             [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
+}
+
+-(NSArray *)addIndexPath{
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
+    
+    for (int j = 0; j < rowCount; j++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:0]];
+    }
+    
+    
+    return indexPaths;
 }
 
 //------------------------------------------------------------------------------
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.myTableView endUpdates];
+    
+//    [self.myTableView reloadData];
 }
 
 #pragma mark - Pull to refresh
@@ -328,35 +350,35 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (void)orientationChanged:(NSNotification *) notification{
     
-    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
-
-    switch (deviceOrientation) {
-        case UIDeviceOrientationPortraitUpsideDown:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
-            self.myTableView.contentOffset = CGPointMake(0, -60);
-
-            break;
-        }case UIDeviceOrientationLandscapeLeft:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
-            self.myTableView.contentOffset = CGPointMake(0, -40);
-
-            break;
-        } case UIDeviceOrientationLandscapeRight:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
-            self.myTableView.contentOffset = CGPointMake(0, -40);
-
-            break;
-        }case UIDeviceOrientationPortrait:{
-            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
-            self.myTableView.contentOffset = CGPointMake(0, -60);
-
-            break;
-        }default:{
-           
-            break;
-        }
-
-    }
+//    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+//
+//    switch (deviceOrientation) {
+//        case UIDeviceOrientationPortraitUpsideDown:{
+//            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
+//            self.myTableView.contentOffset = CGPointMake(0, -60);
+//
+//            break;
+//        }case UIDeviceOrientationLandscapeLeft:{
+//            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
+//            self.myTableView.contentOffset = CGPointMake(0, -40);
+//
+//            break;
+//        } case UIDeviceOrientationLandscapeRight:{
+//            self.myTableView.contentInset = UIEdgeInsetsMake(40, 0, 70, 0);
+//            self.myTableView.contentOffset = CGPointMake(0, -40);
+//
+//            break;
+//        }case UIDeviceOrientationPortrait:{
+//            self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
+//            self.myTableView.contentOffset = CGPointMake(0, -60);
+//
+//            break;
+//        }default:{
+//           
+//            break;
+//        }
+//
+//    }
 }
 
 @end

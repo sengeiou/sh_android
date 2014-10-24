@@ -422,7 +422,8 @@ extern void __gcov_flush();
         //NSLog(@"TODAS");
         self.timelineVC.orientation = YES;
 //        return UIInterfaceOrientationMaskAll;
-        return UIInterfaceOrientationMaskAllButUpsideDown;
+        //return UIInterfaceOrientationMaskAllButUpsideDown;
+        return UIInterfaceOrientationMaskPortrait;
     }
 }
 
