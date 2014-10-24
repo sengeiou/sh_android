@@ -72,7 +72,6 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
                     if(followUser.getIdUser()!=null){
                         UserEntity user = userManager.getUserByIdUser(idUser);
                         if(user!=null){
-                            user.setNumFollowers(user.getNumFollowers()+1);
                             userManager.saveUser(user);
                             userToReturn = userModelMapper.toUserModel(user,followUser, false);
                         }
@@ -88,7 +87,6 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
                     FollowEntity follow = unfollowUserinDB();
                     UserEntity userEntity = userManager.getUserByIdUser(idUser);
                     if(userEntity!=null){
-                        userEntity.setNumFollowers(userEntity.getNumFollowers()-1);
                         userManager.saveUser(userEntity);
                         userToReturn = userModelMapper.toUserModel(userEntity,follow, false);
                         postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
@@ -110,7 +108,6 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         follow.setCsys_synchronized("D");
         followManager.saveFollow(follow);
 
-        currentUser.setNumFollowings(currentUser.getNumFollowings()-1);
         userManager.saveUser(currentUser);
         return follow;
     }
@@ -133,7 +130,6 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         follow.setCsys_revision(0);
         followManager.saveFollow(follow);
 
-        currentUser.setNumFollowings(currentUser.getNumFollowings()+1);
         userManager.saveUser(currentUser);
         return follow;
     }
