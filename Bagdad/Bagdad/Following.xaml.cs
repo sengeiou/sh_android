@@ -47,6 +47,12 @@ namespace Bagdad
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
+            {
+                followings.followings.Clear();
+                offset = 0;
+            }
+
             progress.IsVisible = true;
             if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["idUser"].Equals(""))
             {
@@ -83,6 +89,7 @@ namespace Bagdad
                 {
                     int returned = await followings.LoadData(idUser, offset, Constants.CONST_FOLLOWING);
                     offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
+                    DataContext = followings;
                     return returned;
                 }
                 else
@@ -223,6 +230,7 @@ namespace Bagdad
             ((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).Fill = ((FollowViewModel)followingList.SelectedItem).buttonForeground;
             ((ImageBrush)((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).OpacityMask).ImageSource = ((FollowViewModel)followingList.SelectedItem).buttonIcon;
 
+            PhoneApplicationService.Current.State["RefreshNeeded"] = true;
         }
     }
 }

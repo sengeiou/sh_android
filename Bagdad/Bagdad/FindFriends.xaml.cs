@@ -49,8 +49,14 @@ namespace Bagdad
             SystemTray.SetProgressIndicator(this, progress);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
+            {
+                searchedFriends.followings.Clear();
+                offset = 0;
+                await DoSearch();
+            }
         }
 
         private void BuildLocalizedApplicationBar()
@@ -109,38 +115,43 @@ namespace Bagdad
         {
             if (e.Key == Key.Enter && SearchBar.Text.Length > 0)
             {
-                progress.IsVisible = true;
-
-                if (findList.Items.Count > 0) findList.ScrollIntoView(findList.Items.First());
-
-                if (App.isInternetAvailable)
-                {
-                    searchedFriends = await uvm.FindUsersInServer(SearchBar.Text, 0);
-                    loadedFromServer = true;
-                }
-                else
-                {
-                    searchedFriends = await uvm.FindUsersInLocal(SearchBar.Text);
-                    loadedFromServer = false;
-                }
-
-                DataContext = searchedFriends;
-                findList.ItemsSource = null;
-                findList.ItemsSource = searchedFriends.followings;
-
-
-                if (findList.Items.Count > 0)
-                {
-                    Focus();
-                    endOfList = false;
-                    offset = searchedFriends.followings.Count;
-                    NoResults.Visibility = System.Windows.Visibility.Collapsed;
-                }
-                else NoResults.Visibility = System.Windows.Visibility.Visible;
-
-                progress.IsVisible = false;
+                await DoSearch();
             }
             else NoResults.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private async Task DoSearch()
+        {
+            progress.IsVisible = true;
+
+            if (findList.Items.Count > 0) findList.ScrollIntoView(findList.Items.First());
+
+            if (App.isInternetAvailable)
+            {
+                searchedFriends = await uvm.FindUsersInServer(SearchBar.Text, 0);
+                loadedFromServer = true;
+            }
+            else
+            {
+                searchedFriends = await uvm.FindUsersInLocal(SearchBar.Text);
+                loadedFromServer = false;
+            }
+
+            DataContext = searchedFriends;
+            findList.ItemsSource = null;
+            findList.ItemsSource = searchedFriends.followings;
+
+
+            if (findList.Items.Count > 0)
+            {
+                Focus();
+                endOfList = false;
+                offset = searchedFriends.followings.Count;
+                NoResults.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else NoResults.Visibility = System.Windows.Visibility.Visible;
+
+            progress.IsVisible = false;
         }
 
         private async void findList_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

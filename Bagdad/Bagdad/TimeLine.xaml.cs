@@ -69,6 +69,11 @@ namespace Bagdad
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
+            {
+                PhoneApplicationService.Current.State["RefreshNeeded"] = false;
+            }
+
             try
             {
                 Login login = new Login();

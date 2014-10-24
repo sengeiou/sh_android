@@ -48,6 +48,11 @@ namespace Bagdad
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
+            {
+                uvm.idUser = 0;
+            }
+
             if (this.NavigationContext.QueryString.Count > 0 && !this.NavigationContext.QueryString["idUser"].Equals(""))
             {
                 idUser = int.Parse(this.NavigationContext.QueryString["idUser"]);
@@ -168,6 +173,8 @@ namespace Bagdad
                     await uvm.RemoveFromFollowing();
                 }
             }
+
+            PhoneApplicationService.Current.State["RefreshNeeded"] = true;
         }
 
         private void LoadImage()

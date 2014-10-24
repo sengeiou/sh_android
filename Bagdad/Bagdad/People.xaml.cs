@@ -47,6 +47,12 @@ namespace Bagdad
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
+            {
+                followings.followings.Clear();
+                offset = 0;
+            }
+
             idUser = App.ID_USER;
 
             if(followings.followings.Count == 0) await LoadFollowingsData();
