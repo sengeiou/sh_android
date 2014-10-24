@@ -62,41 +62,41 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
         List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
-        UserModel resUserModel = null;
+        FollowEntity followEntity = null;
         if (followsToUpdate.size() > 0) {
             for (FollowEntity f : followsToUpdate) {
                 if (f.getCsys_synchronized().equals("D")) {
-                    unfollowUserAndRecordInDatabase(f);
+                    followEntity = unfollowUserAndRecordInDatabase(f);
                 } else {
-                    resUserModel = followUserAndRecordInDatabase(f, getUserFromDatabaseOrServer(f.getFollowedUser()));
+                    followEntity = followUserAndRecordInDatabase(f);
                 }
             }
         }
-        return resUserModel;
+        return userModelMapper.toUserModel(getUserFromDatabaseOrServer(followEntity.getFollowedUser()),followEntity,false);
     }
 
 
-    public UserModel followUserAndRecordInDatabase(FollowEntity f, UserEntity userEntity) throws SQLException, IOException {
+    public FollowEntity followUserAndRecordInDatabase(FollowEntity f) throws SQLException, IOException {
        FollowEntity followReceived = service.followUser(f);
         if(followReceived!=null){
             followManager.saveFollowFromServer(followReceived);
-            return userModelMapper.toUserModel(userEntity,followReceived, false);
         }
-        return null;
+        return followReceived;
     }
 
     public UserEntity getUserFromDatabaseOrServer(Long idUser) throws SQLException, IOException {
        UserEntity userEntity = userManager.getUserByIdUser(idUser);
-        if(userEntity==null){
+        if(hasInternetConnection() || userEntity == null){
             userEntity = service.getUserByIdUser(idUser);
             userManager.saveUser(userEntity);
         }
         return userEntity;
     }
 
-    public void unfollowUserAndRecordInDatabase(FollowEntity f) throws IOException, SQLException {
+    public FollowEntity unfollowUserAndRecordInDatabase(FollowEntity f) throws IOException, SQLException {
         FollowEntity followReceived = service.unfollowUser(f);
         if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
+        return followReceived;
     }
 
 

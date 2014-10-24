@@ -64,13 +64,15 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
         }
 
-        if(networkUtil.isConnected(getContext())){
+        if(hasInternetConnection()){
             UserEntity userFromService = getUserFromService();
-            if(!idCurrentUser.equals(userId)){
-                FollowEntity followFromService = getFolloFromService();
+            boolean isMe = idCurrentUser.equals(userId);
+            FollowEntity followFromService = null;
+            if(!isMe){
+                followFromService = getFolloFromService();
                 if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
             }
-            postSuccessfulEvent(new UserInfoResultEvent(userVO));
+            postSuccessfulEvent(new UserInfoResultEvent(userVOMapper.toUserModel(userFromService,followFromService,isMe)));
             if (userFromLocalDatabase != null) {
                 Timber.d("Obtained user from server found in database. Updating database.");
                 userManager.saveUser(userFromService);
