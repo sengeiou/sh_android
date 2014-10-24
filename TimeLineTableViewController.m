@@ -167,15 +167,11 @@ static NSString *CellIdentifier = @"shootCell";
     
     UITableView *tableView = self.myTableView;
     
-
-    
-    
     switch(type) {
             
         case NSFetchedResultsChangeInsert:{
      
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-          
             NSArray *indexs = [self addIndexPath];
             [tableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
             
@@ -188,6 +184,7 @@ static NSString *CellIdentifier = @"shootCell";
         case NSFetchedResultsChangeUpdate:
            
             [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
+//            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -196,7 +193,9 @@ static NSString *CellIdentifier = @"shootCell";
     }
 }
 
+//------------------------------------------------------------------------------
 -(NSArray *)addIndexPath{
+    
     NSMutableArray *indexPaths = [NSMutableArray array];
     NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
     
@@ -210,9 +209,10 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.myTableView endUpdates];
     
-//    [self.myTableView reloadData];
+    [self.myTableView endUpdates];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 #pragma mark - Pull to refresh
