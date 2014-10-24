@@ -6,6 +6,7 @@ import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.TestGolesApplication;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.Follow;
@@ -40,6 +41,7 @@ public class GetPeopleJobTest {
     public static final long CURRENT_USER = 2L;
     @Inject GetPeopleJob getPeopleJob;
     @Inject SQLiteOpenHelper openHelper;
+    @Inject SessionManager sessionManager;
     private ObjectGraph objectGraph;
     private TestGolesApplication testGolesApplication;
     private UserManager userManager;
@@ -73,7 +75,8 @@ public class GetPeopleJobTest {
         currentUser.setCsys_revision(0);
 
         userManager.saveUser(currentUser);
-        testGolesApplication.setCurrentUser(currentUser);
+        //TODO currenUser desde el SessionManager, no Application
+        sessionManager.setCurrentUser(currentUser);
     }
 
     @Test
