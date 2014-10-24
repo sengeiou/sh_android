@@ -5,7 +5,7 @@ import android.database.Cursor;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.objects.Team;
+import gm.mobi.android.db.objects.TeamEntity;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -24,9 +24,9 @@ public class TeamManager extends AbstractManager{
     /**
      * Insert in database a list of teams
      * */
-    public void saveTeams( List<Team> teams) {
+    public void saveTeams( List<TeamEntity> teams) {
         //Save teams
-        for (Team team : teams) {
+        for (TeamEntity team : teams) {
             ContentValues contentValues = teamMapper.toContentValues(team);
             String args = TeamTable.ID_TEAM+"=?";
             String[] where = new String[]{String.valueOf(team.getIdTeam())};
@@ -43,8 +43,8 @@ public class TeamManager extends AbstractManager{
     /**
      * Retrieve a team by its identifier
      * */
-    public Team getTeamByIdTeam( Long teamId){
-        Team  resTeam = null;
+    public TeamEntity getTeamByIdTeam( Long teamId){
+        TeamEntity resTeam = null;
         String args = TeamTable.ID_TEAM+"=?";
         String[] argsString = new String[]{String.valueOf(teamId)};
 
@@ -66,7 +66,7 @@ public class TeamManager extends AbstractManager{
     /**
      * Insert a single item in table
      * */
-    public void insertOrUpdateTeam(Team team){
+    public void insertOrUpdateTeam(TeamEntity team){
         String args = TeamTable.ID_TEAM+"=?";
         String[] where = new String[]{String.valueOf(team.getIdTeam())};
         ContentValues contentValues = teamMapper.toContentValues(team);
@@ -76,7 +76,7 @@ public class TeamManager extends AbstractManager{
     /**
      * Delete one Follow
      */
-    public long deleteTeam( Team team) {
+    public long deleteTeam( TeamEntity team) {
         long res = 0;
         String args = TeamTable.ID_TEAM + "=?";
         String[] stringArgs = new String[]{String.valueOf(team.getIdTeam())};

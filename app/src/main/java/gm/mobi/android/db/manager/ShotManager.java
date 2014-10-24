@@ -9,15 +9,16 @@ import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
-import gm.mobi.android.ui.model.ShotVO;
-import gm.mobi.android.ui.model.mappers.ShotVOMapper;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
+import gm.mobi.android.ui.model.ShotModel;
+import gm.mobi.android.ui.model.mappers.ShotModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -25,14 +26,14 @@ public class ShotManager extends  AbstractManager{
 
     @Inject ShotMapper shotMapper;
     @Inject UserMapper userMapper;
-    @Inject ShotVOMapper shotVOMapper;
+    @Inject ShotModelMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
     private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
     private static final String CSYS_BIRTH = GMContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
-    public ShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotVOMapper shotVOMapper){
+    public ShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
         this.shotMapper = shotMapper;
         this.userMapper = userMapper;
         this.shotVOMapper = shotVOMapper;
@@ -41,7 +42,7 @@ public class ShotManager extends  AbstractManager{
     /**
      * Insert a Shot
      */
-    public void saveShot(Shot shot) throws SQLException {
+    public void saveShot(ShotEntity shot) throws SQLException {
         ContentValues contentValues = shotMapper.toContentValues(shot);
         if (contentValues.getAsLong(CSYS_DELETED) != null) {
             deleteShot(shot);
@@ -51,10 +52,10 @@ public class ShotManager extends  AbstractManager{
         insertInSync();
     }
 
-    public List<ShotVO> retrieveOldOrNewTimeLineWithUsers(List<Shot> shots, Long currentUserId) {
+    public List<ShotModel> retrieveOldOrNewTimeLineWithUsers(List<ShotEntity> shots, Long currentUserId) {
         String idShots = "(";
         String idUsers = "(";
-        for (Shot shot : shots) {
+        for (ShotEntity shot : shots) {
             idUsers = idUsers.concat(shot.getIdUser() + ",");
             idShots = idShots.concat(shot.getIdShot() + ",");
         }
@@ -136,20 +137,16 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<ShotVO> shotList = new ArrayList<>(count);
+        List<ShotModel> shotList = new ArrayList<>(count);
         cursor.moveToFirst();
         do {
-            ShotVO shotVO = new ShotVO();
-            Shot shot = shotMapper.fromCursor(cursor);
-            ShotVOMapper shotVOMapper = new ShotVOMapper();
-            FollowMapper followMapper = new FollowMapper();
-            FollowManager followManager = new FollowManager(followMapper);
-            followManager.setDataBase(db);
-            User user = userMapper.fromCursor(cursor);
-            Follow follow  = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            shotVO = shotVOMapper.toVO(user,follow,shot,currentUserId);
+
+            ShotEntity shot = shotMapper.fromCursor(cursor);
+            ShotModelMapper shotVOMapper = new ShotModelMapper();
+            UserEntity user = userMapper.fromCursor(cursor);
+            ShotModel shotModel = shotVOMapper.toShotModel(user, shot);
             if (user != null) {
-                shotList.add(shotVO);
+                shotList.add(shotModel);
             } else {
                 Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
             }
@@ -159,7 +156,7 @@ public class ShotManager extends  AbstractManager{
         return shotList;
     }
 
-    public List<ShotVO> retrieveTimelineWithUsers(Long currentUserId) {
+    public List<ShotModel> retrieveTimelineWithUsers(Long currentUserId) {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
                 + ShotTable.COMMENT +
@@ -187,23 +184,17 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<ShotVO> shots = new ArrayList<>(count);
+        List<ShotModel> shots = new CopyOnWriteArrayList();
         cursor.moveToFirst();
         do {
-            ShotVO shotVO = new ShotVO();
-            Shot shot = shotMapper.fromCursor(cursor);
 
-            ShotVOMapper shotVOMapper = new ShotVOMapper();
-            FollowMapper followMapper = new FollowMapper();
+            ShotEntity shot = shotMapper.fromCursor(cursor);
 
-            FollowManager followManager = new FollowManager(followMapper);
-            followManager.setDataBase(db);
-
-            User user = userMapper.fromCursor(cursor);
-            Follow follow  = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            shotVO = shotVOMapper.toVO(user,follow,shot,currentUserId);
+            ShotModelMapper shotVOMapper = new ShotModelMapper();
+            UserEntity user = userMapper.fromCursor(cursor);
+            ShotModel shotModel = shotVOMapper.toShotModel(user,shot);
             if (user != null) {
-                shots.add(shotVO);
+                shots.add(shotModel);
             } else {
                 Timber.e("No User found for Shot with id %d and userId %d", shot.getIdShot(), shot.getIdUser());
             }
@@ -216,10 +207,10 @@ public class ShotManager extends  AbstractManager{
     /**
      * Insert a shot list
      */
-    public void saveShots(List<Shot> shotList) {
+    public void saveShots(List<ShotEntity> shotList) {
         long res;
         Collections.reverse(shotList);
-        for (Shot shot : shotList) {
+        for (ShotEntity shot : shotList) {
             ContentValues contentValues = shotMapper.toContentValues(shot);
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 res = deleteShot(shot);
@@ -234,7 +225,7 @@ public class ShotManager extends  AbstractManager{
     /**
      * Delete a shot
      */
-    public long deleteShot(Shot shot) {
+    public long deleteShot(ShotEntity shot) {
         long res = 0;
         String args = GMContract.ShotTable.ID_SHOT + "=?";
         String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
@@ -250,11 +241,11 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE,3,1000,0);
     }
 
-    public Shot retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
+    public ShotEntity retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
         Cursor c = db.query(SHOT_TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?", new String[]{String.valueOf(userId)}, null, null, CSYS_BIRTH + " DESC", "1");
         if (c.getCount() > 0) {
             c.moveToFirst();
-            Shot lastShot = shotMapper.fromCursor(c);
+            ShotEntity lastShot = shotMapper.fromCursor(c);
             c.close();
             return lastShot;
         }

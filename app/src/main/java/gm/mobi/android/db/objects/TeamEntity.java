@@ -1,13 +1,13 @@
 package gm.mobi.android.db.objects;
 
-public class Team extends Synchronized{
+public class TeamEntity extends Synchronized{
     Long mIdTeam;
     String mOfficialName;
     String mClubName;
     String mShortName;
     String mTlaName;
 
-    public Team(){}
+    public TeamEntity(){}
 
     public Long getIdTeam() {
         return mIdTeam;

@@ -10,19 +10,15 @@ import com.squareup.picasso.RequestCreator;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
-import gm.mobi.android.gcm.notifications.SingleShotNotification;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.assertj.android.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -65,7 +61,7 @@ public class BagdadNotificationManagerTest {
     public void singleShotNotificationFiredWhenOneShot() {
         when(builderFactory.getNotificationBuilder(any(Context.class))).thenReturn(builder);
 
-        ShotVO testShot = getTestShot1();
+        ShotModel testShot = getTestShot1();
         notificationManager.sendNewShotNotification(testShot);
 
         ArgumentCaptor<Notification> argumentCaptor = ArgumentCaptor.forClass(Notification.class);
@@ -73,17 +69,17 @@ public class BagdadNotificationManagerTest {
           argumentCaptor.capture());
 
         verify(builder).setContentText(testShot.getComment());
-        verify(builder).setContentTitle(testShot.getName());
+        verify(builder).setContentTitle(testShot.getUsername());
     }
 
-    private ShotVO getTestShot1() {
-        ShotVO testShot = new ShotVO();
+    private ShotModel getTestShot1() {
+        ShotModel testShot = new ShotModel();
         testShot.setIdShot(SHOT_1_ID);
         testShot.setIdUser(USER_1_ID);
         testShot.setComment(COMMENT);
 
         testShot.setIdUser(USER_1_ID);
-        testShot.setUserName(USER_1_NAME);
+        testShot.setUsername(USER_1_NAME);
         testShot.setPhoto("");
         return testShot;
     }

@@ -2,7 +2,7 @@ package gm.mobi.android.db.objects;
 
 import java.io.Serializable;
 
-public class User extends Synchronized implements Serializable{
+public class UserEntity extends Synchronized implements Serializable{
 
     private Long idUser;
     private Long favoriteTeamId;
@@ -19,9 +19,10 @@ public class User extends Synchronized implements Serializable{
     private String website;
     private String bio;
 
-    public User(){}
+    public UserEntity(){}
 
-    public User(Long idUser, Long favoriteTeamId, String sessionToken, String userName, String email, String name, String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
+    public UserEntity(Long idUser, Long favoriteTeamId, String sessionToken, String userName, String email, String name,
+      String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
         this.idUser = idUser;
         this.favoriteTeamId = favoriteTeamId;
         this.sessionToken = sessionToken;
@@ -37,7 +38,8 @@ public class User extends Synchronized implements Serializable{
         this.bio = bio;
     }
 
-    public User(Long idUser, Long favoriteTeamId,String favoriteTeamName, String userName, String name, String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
+    public UserEntity(Long idUser, Long favoriteTeamId, String favoriteTeamName, String userName, String name,
+      String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
         this.idUser = idUser;
         this.favoriteTeamId = favoriteTeamId;
         this.favoriteTeamName = favoriteTeamName;

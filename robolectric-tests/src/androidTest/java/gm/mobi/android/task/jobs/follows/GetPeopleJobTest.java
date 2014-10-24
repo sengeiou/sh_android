@@ -10,16 +10,14 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -31,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class GetPeopleJobTest extends BagdadBaseJobTestAbstract {
 
     public static final long CURRENT_USER_ID = 1L;
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userVOMapper;
     private GetPeopleJob getPeopleJob;
 
     private BagdadService service;
@@ -47,7 +45,7 @@ public class GetPeopleJobTest extends BagdadBaseJobTestAbstract {
         userManager = mock(UserManager.class);
         followManager = mock(FollowManager.class);
 
-        userVOMapper = mock(UserVOMapper.class);
+        userVOMapper = mock(UserModelMapper.class);
         getPeopleJob =
           new GetPeopleJob(Robolectric.application, bus, service, networkUtil, openHelper, userManager, followManager,
             userVOMapper);

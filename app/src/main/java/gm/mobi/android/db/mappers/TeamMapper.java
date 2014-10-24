@@ -3,14 +3,14 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.objects.Team;
+import gm.mobi.android.db.objects.TeamEntity;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TeamMapper extends GenericMapper {
 
-    public Team fromCursor(Cursor c) {
-        Team team = new Team();
+    public TeamEntity fromCursor(Cursor c) {
+        TeamEntity team = new TeamEntity();
         team.setIdTeam(c.getLong(c.getColumnIndex(GMContract.TeamTable.ID_TEAM)));
         team.setClubName(c.getString(c.getColumnIndex(GMContract.TeamTable.CLUB_NAME)));
         team.setOfficialName(c.getString(c.getColumnIndex(GMContract.TeamTable.OFFICIAL_NAME)));
@@ -20,7 +20,7 @@ public class TeamMapper extends GenericMapper {
         return team;
     }
 
-    public ContentValues toContentValues(Team team) {
+    public ContentValues toContentValues(TeamEntity team) {
         ContentValues cv = new ContentValues();
         cv.put(GMContract.TeamTable.ID_TEAM, team.getIdTeam());
         cv.put(GMContract.TeamTable.CLUB_NAME, team.getClubName());
@@ -31,8 +31,8 @@ public class TeamMapper extends GenericMapper {
         return cv;
     }
 
-    public Team fromDto(Map<String, Object> dto) {
-        Team team = new Team();
+    public TeamEntity fromDto(Map<String, Object> dto) {
+        TeamEntity team = new TeamEntity();
         team.setIdTeam(((Number) dto.get(GMContract.TeamTable.ID_TEAM)).longValue());
         team.setClubName((String) dto.get(GMContract.TeamTable.CLUB_NAME));
         team.setOfficialName((String) dto.get(GMContract.TeamTable.OFFICIAL_NAME));
@@ -42,7 +42,7 @@ public class TeamMapper extends GenericMapper {
         return team;
     }
 
-    public Map<String, Object> toDto(Team team) {
+    public Map<String, Object> toDto(TeamEntity team) {
         Map<String,Object> dto = new HashMap<>();
         dto.put(GMContract.TeamTable.ID_TEAM, team == null ? null : team.getIdTeam());
         dto.put(GMContract.TeamTable.OFFICIAL_NAME, team == null ? null : team.getOfficialName());

@@ -2,30 +2,26 @@ package gm.mobi.android.task.jobs.profile;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.path.android.jobqueue.network.NetworkUtil;
-import com.squareup.otto.Bus;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import timber.log.Timber;
 import timber.log.Timber.Tree;
 
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
@@ -46,7 +42,7 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
     private SQLiteOpenHelper openHelper;
     private FollowManager followManager;
     private UserManager userManager;
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userVOMapper;
     private TeamManager teamManager;
     private GetUserInfoJob getUserInfoJob;
 
@@ -60,14 +56,14 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
         followManager = mock(FollowManager.class);
         teamManager = mock(TeamManager.class);
 
-        userVOMapper = mock(UserVOMapper.class);
+        userVOMapper = mock(UserModelMapper.class);
 
-        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
-        when(service.getFollowByIdUserFollowed(CURRENT_USER_ID, USER_ID)).thenReturn(new Follow());
+        when(service.getUserByIdUser(USER_ID)).thenReturn(new UserEntity());
+        when(service.getFollowByIdUserFollowed(CURRENT_USER_ID, USER_ID)).thenReturn(new FollowEntity());
 
         getUserInfoJob =
           new GetUserInfoJob(Robolectric.application,bus,openHelper,service, networkUtil,userManager,followManager,teamManager, userVOMapper);
-        User currentUser = new User();
+        UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(CURRENT_USER_ID);
         getUserInfoJob.init(USER_ID, currentUser);
     }
@@ -89,11 +85,11 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
 
     @Test
     public void postResultInBusWhenUserIsFoundInDataBase() throws Throwable {
-        when(userManager.getUserByIdUser(anyLong())).thenReturn(new User());
+        when(userManager.getUserByIdUser(anyLong())).thenReturn(new UserEntity());
 
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
 
-        when(service.getUserByIdUser(USER_ID)).thenReturn(new User());
+        when(service.getUserByIdUser(USER_ID)).thenReturn(new UserEntity());
 
         getUserInfoJob.onRun();
 

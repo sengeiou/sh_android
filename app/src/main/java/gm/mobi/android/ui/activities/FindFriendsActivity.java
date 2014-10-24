@@ -1,6 +1,8 @@
 package gm.mobi.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -23,7 +25,7 @@ import com.squareup.picasso.Picasso;
 import dagger.ObjectGraph;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
@@ -37,7 +39,7 @@ import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
 import gm.mobi.android.ui.adapters.UserListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -99,20 +101,20 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         resultsListView.addFooterView(progressView, null, false);
 
         new ListViewScrollObserver(resultsListView).setOnScrollUpAndDownListener(
-                new ListViewScrollObserver.OnListViewScrollListener() {
-                    @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+          new ListViewScrollObserver.OnListViewScrollListener() {
+              @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                 /* no-op */
-                    }
+              }
 
-                    @Override public void onScrollIdle() {
-                        int lastVisiblePosition = resultsListView.getLastVisiblePosition();
-                        int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
-                        boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
-                        if (shouldStartLoadingMore && hasMoreItemsToLoad) {
-                            makeNextRemoteSearch();
-                        }
-                    }
-                });
+              @Override public void onScrollIdle() {
+                  int lastVisiblePosition = resultsListView.getLastVisiblePosition();
+                  int loadingFooterPosition = resultsListView.getAdapter().getCount() - 1;
+                  boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
+                  if (shouldStartLoadingMore && hasMoreItemsToLoad) {
+                      makeNextRemoteSearch();
+                  }
+              }
+          });
     }
 
     private View getLoadingView() {
@@ -167,8 +169,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @OnItemClick(R.id.search_results_list)
     public void openProfile(int position) {
-        UserVO user = (UserVO) resultsListView.getItemAtPosition(position);
-        startActivity(ProfileContainerActivity.getIntent(this, user));
+        UserModel user = (UserModel) resultsListView.getItemAtPosition(position);
+        startActivity(ProfileContainerActivity.getIntent(this, user.getIdUser()));
     }
 
     public void startSearch() {
@@ -204,8 +206,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     @Subscribe
     public void receivedRemoteResult(SearchPeopleRemoteResultEvent event) {
         isLoadingRemoteData = false;
-        PaginatedResult<List<UserVO>> results = event.getResult();
-        List<UserVO> users = results.getResult();
+        PaginatedResult<List<UserModel>> results = event.getResult();
+        List<UserModel> users = results.getResult();
         int usersReturned = users.size();
         if (usersReturned > 0) {
             Timber.d("Received %d remote results", usersReturned);
@@ -226,10 +228,11 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     @Subscribe
     public void receivedLocalResult(SearchPeopleLocalResultEvent event) {
-        List<UserVO> results = event.getResult();
+        List<UserModel> results = event.getResult();
         Timber.d("Received %d local results", results.size());
         setListContent(results, NO_OFFSET);
         setEmpty(false);
+
     }
 
     @Subscribe
@@ -252,12 +255,13 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         currentResultOffset += newItems;
     }
 
-    private void setListContent(List<UserVO> users, int offset) {
+    private void setListContent(List<UserModel> users, int offset) {
         if (offset > NO_OFFSET) {
             adapter.addItems(users);
         } else {
             adapter.setItems(users);
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void setLoading(boolean loading) {
@@ -282,8 +286,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     private void clearResults() {
-        adapter.setItems(new ArrayList<UserVO>(0));
-
+        adapter.setItems(new ArrayList<UserModel>(0));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -303,7 +307,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         currentResultOffset = savedInstanceState.getInt(EXTRA_SEARCH_OFFSET, 0);
         hasMoreItemsToLoad = savedInstanceState.getBoolean(EXTRA_SEARCH_HAS_MORE_ITEMS, false);
         isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
-        List<UserVO> restoredResults = (List<UserVO>) savedInstanceState.getSerializable(EXTRA_RESULTS);
+        List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
 
         if (restoredResults != null && restoredResults.size() > 0) {
             setListContent(restoredResults, currentResultOffset);
@@ -313,49 +317,64 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     @Override public void follow(int position) {
-        UserVO user = adapter.getItem(position);
+        UserModel user = adapter.getItem(position);
         followUser(user);
     }
 
     @Override public void unFollow(int position) {
-        UserVO user = adapter.getItem(position);
+        UserModel user = adapter.getItem(position);
         unfollowUser(user);
     }
 
-    public void startFollowUnfollowUserJob(UserVO userVO, Context context, int followType){
-        User currentUser = GolesApplication.get(this).getCurrentUser();
+    public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
+        UserEntity currentUser = GolesApplication.get(this).getCurrentUser();
         GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job.init(currentUser,userVO, followType);
+        job.init(currentUser,userVO.getIdUser(), followType);
         jobManager.addJobInBackground(job);
+
         GetFollowUnfollowUserJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job2.init(currentUser,userVO, followType);
+        job2.init(currentUser);
         jobManager.addJobInBackground(job2);
     }
 
-    public void followUser(UserVO user){
+    public void followUser(UserModel user){
         startFollowUnfollowUserJob(user, this, UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(UserVO user){
-        startFollowUnfollowUserJob(user,this,UserDtoFactory.UNFOLLOW_TYPE);
-    }
+    public void unfollowUser(final UserModel user){
+        new AlertDialog.Builder(this).setMessage("Unfollow "+user.getName()+"?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);
+              }
+          })
+          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
 
+              }
+          })
+          .create()
+          .show();
+    }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        UserVO userVO = event.getResult();
-        List<UserVO> userVOs = adapter.getItems();
-        int i = userVOs.indexOf(userVO);
-        userVOs.remove(userVO);
-        adapter.removeItems();
-        userVOs.add(i,userVO);
-        adapter.setItems(userVOs);
-
-
-        adapter.notifyDataSetChanged();
-
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+        UserModel userVO = event.getResult();
+        List<UserModel> userVOs = adapter.getItems();
+        int index = 0;int i = 0;
+        if (userVO != null) {
+            for(UserModel userM: userVOs){
+                if(userM.getIdUser().equals(userVO.getIdUser())){
+                    index = i;
+                }
+                i++;
+            }
+            userVOs.remove(index);
+            adapter.removeItems();
+            userVOs.add(index,userVO);
+            adapter.setItems(userVOs);
+            adapter.notifyDataSetChanged();
+        }
     }
 
-
-
-}
+ }

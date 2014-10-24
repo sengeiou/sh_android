@@ -3,14 +3,14 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.ShotEntity;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ShotMapper extends GenericMapper {
 
-    public  Shot fromCursor(Cursor c) {
-        Shot shot = new Shot();
+    public ShotEntity fromCursor(Cursor c) {
+        ShotEntity shot = new ShotEntity();
         shot.setIdShot(c.getLong(c.getColumnIndex(GMContract.ShotTable.ID_SHOT)));
         shot.setIdUser(c.getLong(c.getColumnIndex(GMContract.ShotTable.ID_USER)));
         shot.setComment(c.getString(c.getColumnIndex(GMContract.ShotTable.COMMENT)));
@@ -18,7 +18,7 @@ public class ShotMapper extends GenericMapper {
         return shot;
     }
 
-    public ContentValues toContentValues(Shot shot) {
+    public ContentValues toContentValues(ShotEntity shot) {
         ContentValues cv = new ContentValues();
         cv.put(GMContract.ShotTable.ID_SHOT, shot.getIdShot());
         cv.put(GMContract.ShotTable.ID_USER, shot.getIdUser());
@@ -27,8 +27,8 @@ public class ShotMapper extends GenericMapper {
         return cv;
     }
 
-    public  Shot fromDto(Map<String, Object> dto) {
-        Shot shot = new Shot();
+    public ShotEntity fromDto(Map<String, Object> dto) {
+        ShotEntity shot = new ShotEntity();
         shot.setIdShot(((Number) dto.get(GMContract.ShotTable.ID_SHOT)).longValue());
         shot.setIdUser(((Number) dto.get(GMContract.ShotTable.ID_USER)).longValue());
         shot.setComment((String) dto.get(GMContract.ShotTable.COMMENT));
@@ -36,7 +36,7 @@ public class ShotMapper extends GenericMapper {
         return shot;
     }
 
-    public  Map<String, Object> toDto(Shot shot) {
+    public  Map<String, Object> toDto(ShotEntity shot) {
         Map<String,Object> dto = new HashMap<>();
         dto.put(GMContract.ShotTable.ID_SHOT, shot == null ? null : shot.getIdShot());
         dto.put(GMContract.ShotTable.ID_USER, shot == null ? null : shot.getIdUser());

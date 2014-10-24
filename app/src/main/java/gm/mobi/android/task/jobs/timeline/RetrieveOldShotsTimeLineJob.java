@@ -7,11 +7,11 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,7 +21,7 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
 
     private ShotManager shotManager;
     private BagdadService service;
-    private User currentUser;
+    private UserEntity currentUser;
 
     @Inject public RetrieveOldShotsTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
@@ -31,7 +31,7 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
 
     }
 
-    @Override public void init(User currentUser)
+    @Override public void init(UserEntity currentUser)
     {
         super.init(currentUser);
         this.currentUser = currentUser;
@@ -39,10 +39,9 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
 
     @Override protected void run() throws SQLException, IOException {
         Long firstModifiedDate = shotManager.getFirstModifiedDate(GMContract.ShotTable.TABLE);
-        List<Shot> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
+        List<ShotEntity> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         shotManager.saveShots(olderShots);
-
-        List<ShotVO> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, currentUser.getIdUser());
+        List<ShotModel> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, currentUser.getIdUser());
         //TODO parser Shot to ShotVO
         postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }

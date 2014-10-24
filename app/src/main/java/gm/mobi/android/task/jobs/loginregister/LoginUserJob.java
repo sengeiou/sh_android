@@ -7,7 +7,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
@@ -41,8 +41,8 @@ public class LoginUserJob extends BagdadBaseJob<LoginResultEvent> {
     @Override
     protected void run() throws SQLException, IOException {
         try {
-            User user = service.login(usernameEmail, password);
-            userManager.saveUser(user);
+            UserEntity user = service.login(usernameEmail, password);
+            userManager.saveCurrentUser(user);
             postSuccessfulEvent(new LoginResultEvent(user));
         } catch (ServerException e) {
             if (e.getErrorCode() != null && e.getErrorCode().equals(ServerException.G025)) {

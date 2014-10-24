@@ -8,7 +8,7 @@ import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.Follow;
+import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
@@ -88,7 +88,7 @@ public class UserDtoFactory {
     }
 
 
-    public GenericDto followUserDto(Follow follow){
+    public GenericDto followUserDto(FollowEntity follow){
         if(follow.getIdUser() == null){
             throw new IllegalArgumentException("IdUser who follow to, can't be null");
         }
@@ -106,7 +106,7 @@ public class UserDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_FOLLOW_USER, op);
     }
 
-    public GenericDto unfollowUserDto(Follow follow){
+    public GenericDto unfollowUserDto(FollowEntity follow){
         if(follow.getIdUser() == null){
             throw new IllegalArgumentException("IdUser who follow to, can't be null");
         }

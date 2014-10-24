@@ -1,29 +1,52 @@
 package gm.mobi.android.task.jobs.follows;
 
-import dagger.ObjectGraph;
-import gm.mobi.android.GolesApplication;
+import android.database.sqlite.SQLiteOpenHelper;
 import gm.mobi.android.RobolectricGradleTestRunner;
+import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
+import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
+import java.io.IOException;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-@Config(emulateSdk = 18) @RunWith(RobolectricGradleTestRunner.class)
-public class GetUsersFollowsJobTest {
+import static org.mockito.Mockito.mock;
 
-    private GolesApplication application;
-    private ObjectGraph objectGraph;
+@Config(emulateSdk = 18) @RunWith(RobolectricGradleTestRunner.class)
+public class GetUsersFollowsJobTest extends BagdadBaseJobTestAbstract {
+
+    public static final long USER_ID = 1L;
+
+    private UserModelMapper userVOMapper;
+    private GetUsersFollowsJob getUsersFollowsJob;
+
+    private BagdadService service;
+    private SQLiteOpenHelper openHelper;
+    private UserManager userManager;
+    private FollowManager followManager;
+
 
     @Before
-    public void setup() {
-        application = (GolesApplication) Robolectric.application;
-        objectGraph = application.getObjectGraph();
+    public void setUp() throws IOException {
+        super.setUp();
+        service = mock(BagdadService.class);
+        openHelper = mock(SQLiteOpenHelper.class);
+        userManager = mock(UserManager.class);
+        followManager = mock(FollowManager.class);
+
+        userVOMapper = mock(UserModelMapper.class);
+        getUsersFollowsJob =
+          new GetUsersFollowsJob(Robolectric.application, bus, openHelper,  service, networkUtil, followManager,
+            userVOMapper);
+        getUsersFollowsJob.init(USER_ID, UserDtoFactory.GET_FOLLOWING); //TODO test both relationships?
     }
 
-    @Test
-    public void postCommunicationErrorWhenExceptionThrownRetrievingFollowing() {
-        //TODO Adrián, qué hacemos con estos tests repetidos?
+    @Override protected BagdadBaseJob getSystemUnderTest() {
+        return getUsersFollowsJob;
     }
 }

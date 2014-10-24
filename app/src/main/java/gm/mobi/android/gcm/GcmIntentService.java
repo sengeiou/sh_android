@@ -1,35 +1,24 @@
 package gm.mobi.android.gcm;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.Notification.Style;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.media.RingtoneManager;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.BigTextStyle;
-import android.support.v4.app.NotificationManagerCompat;
-
-import gm.mobi.android.ui.model.ShotVO;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.ShotVOMapper;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
-
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.ui.model.ShotModel;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.ShotModelMapper;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 public class GcmIntentService extends IntentService {
@@ -41,7 +30,8 @@ public class GcmIntentService extends IntentService {
     @Inject SQLiteOpenHelper openHelper;
     @Inject UserManager userManager;
     @Inject BagdadService service;
-    @Inject ShotVOMapper shotVOMapper;
+    @Inject ShotModelMapper shotModelMapper;
+    @Inject UserModelMapper userModelMapper;
     private SQLiteDatabase database;
 
     public GcmIntentService() {
@@ -91,10 +81,10 @@ public class GcmIntentService extends IntentService {
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
         Long idShot = parameters.getLong("idShot");
         Long idUser = parameters.getLong("idUser");
-        Shot shot = service.getShotById(idShot);
-        User user = userManager.getUserByIdUser(idUser);
+        ShotEntity shot = service.getShotById(idShot);
+        UserEntity user = userManager.getUserByIdUser(idUser);
         if (shot != null && user != null) {
-            ShotVO shotVO = shotVOMapper.toVO(user, null, shot, 0L);
+            ShotModel shotVO = shotModelMapper.toShotModel(user, shot);
             notificationManager.sendNewShotNotification(shotVO);
         } else {
             Timber.e("Shot or User null recived, can't show notifications :(");
@@ -103,8 +93,9 @@ public class GcmIntentService extends IntentService {
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong("idUser");
-        User user = service.getUserByIdUser(idUser);
-        notificationManager.sendNewFollowerNotification(user);
+        UserEntity user = service.getUserByIdUser(idUser);
+        UserModel userModel = userModelMapper.toUserModel(user, null, false);
+        notificationManager.sendNewFollowerNotification(userModel);
     }
 
     private void receivedUnknown(JSONObject parameters) {

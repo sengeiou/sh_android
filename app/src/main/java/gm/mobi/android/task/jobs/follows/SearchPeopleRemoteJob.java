@@ -7,15 +7,16 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.GolesApplication;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,42 +34,47 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResul
     private int pageOffset;
 
     private FollowManager followManager;
+    private SessionManager sessionManager;
 
     private Long currentUserId;
 
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userModelMapper;
 
     @Inject
     public SearchPeopleRemoteJob(Application app, Bus bus, BagdadService service, NetworkUtil networkUtil,
-      FollowManager followManager, UserVOMapper userVOMapper, SQLiteOpenHelper openHelper) {
+      FollowManager followManager, UserModelMapper userModelMapper, SQLiteOpenHelper openHelper, SessionManager sessionManager) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;
-        this.userVOMapper = userVOMapper;
+        this.userModelMapper = userModelMapper;
         this.followManager = followManager;
+        this.sessionManager = sessionManager;
         setOpenHelper(openHelper);
     }
 
     public void init(String searchString, int pageOffset) {
         this.searchString = searchString;
         this.pageOffset = pageOffset;
-        currentUserId = GolesApplication.get(getContext()).getCurrentUser().getIdUser();
+        currentUserId = sessionManager.getCurrentUser().getIdUser();
     }
 
     @Override protected void run() throws SQLException, IOException {
-        PaginatedResult<List<User>> searchResults = getSearchFromServer();
+        PaginatedResult<List<UserEntity>> searchResults = getSearchFromServer();
         postSuccessfulEvent(new SearchPeopleRemoteResultEvent(new PaginatedResult<>(getUserVOs(searchResults.getResult())).setPageOffset(pageOffset).setTotalItems(searchResults.getTotalItems())));
     }
 
-    public List<UserVO> getUserVOs(List<User> users){
-        List<UserVO> userVOs = new ArrayList<>();
-        for(User u:users){
-            Follow follow = followManager.getFollowByUserIds(currentUserId, u.getIdUser());
-            userVOs.add(userVOMapper.toVO(u,follow,currentUserId));
+    public List<UserModel> getUserVOs(List<UserEntity> users){
+        List<UserModel> userVOs = new ArrayList<>();
+        for(UserEntity u:users){
+            Long idUser = u.getIdUser();
+            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
+            //before doing this UPDATE FOLLOWS
+            boolean isMe = idUser.equals(currentUserId);
+            userVOs.add(userModelMapper.toUserModel(u,follow,isMe));
         }
         return userVOs;
     }
 
-    private PaginatedResult<List<User>> getSearchFromServer() throws IOException {
+    private PaginatedResult<List<UserEntity>> getSearchFromServer() throws IOException {
         return service.searchUsersByNameOrNickNamePaginated(searchString, pageOffset);
     }
 

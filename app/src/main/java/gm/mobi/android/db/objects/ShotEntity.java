@@ -1,12 +1,12 @@
 package gm.mobi.android.db.objects;
 
-public class Shot extends Synchronized{
+public class ShotEntity extends Synchronized{
 
     private Long idShot;
     private Long idUser;
     private String comment;
 
-    private User mUserObject;
+    private UserEntity mUserObject;
 
     public Long getIdShot() {
         return idShot;
@@ -32,11 +32,11 @@ public class Shot extends Synchronized{
         this.comment = comment;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return mUserObject;
     }
 
-    public void setUser(User mUser) {
+    public void setUser(UserEntity mUser) {
         this.mUserObject = mUser;
     }
 }

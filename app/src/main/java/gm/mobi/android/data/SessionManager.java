@@ -1,12 +1,12 @@
 package gm.mobi.android.data;
 
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 
 public interface SessionManager {
 
-    public User getCurrentUser();
+    public UserEntity getCurrentUser();
 
-    public void setCurrentUser(User currentUser);
+    public void setCurrentUser(UserEntity currentUser);
 
     public String getSessionToken();
 
@@ -16,7 +16,7 @@ public interface SessionManager {
 
     public void setCurrentUserId(long currentUserId);
 
-    public void createSession(long userId, String sessionToken, User loggedInUser);
+    public void createSession(long userId, String sessionToken, UserEntity loggedInUser);
 
     public void destroySession();
 }

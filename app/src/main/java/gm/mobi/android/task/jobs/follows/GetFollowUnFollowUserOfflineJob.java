@@ -8,18 +8,18 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFollowResultEvent> {
     private static final int PRIORITY = 9; //TODO Define next values for our queue
@@ -27,28 +27,27 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
     UserManager userManager;
     FollowManager followManager;
 
-    private UserVOMapper userVOMapper;
+    private UserModelMapper userModelMapper;
 
-    private User currentUser;
-    private UserVO user;
+    private UserEntity currentUser;
     private Long idUser;
     private int followUnfollowType;
     private int doIFollowHim;
+    private boolean isMe;
 
     @Inject
     public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-       UserManager userManager, FollowManager followManager, UserVOMapper userVOMapper) {
+       UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
-        this.userVOMapper = userVOMapper;
+        this.userModelMapper = userModelMapper;
         this.setOpenHelper(openHelper);
     }
 
-    public void init(User currentUser, UserVO user, int followUnfollowType){
+    public void init(UserEntity currentUser, Long idUser, int followUnfollowType){
         this.currentUser = currentUser;
-        this.user = user;
-        idUser = user.getIdUser();
+        this.idUser = idUser;
         this.followUnfollowType = followUnfollowType;
     }
 
@@ -63,26 +62,38 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
 
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
-        Long idUser = user.getIdUser();
-
         doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+        UserModel userToReturn = null;
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:
-                Follow followUser = followUserInDB();
-                User userToCreate = null;
                 doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                if(followUser.getIdUser()!=null)
-                    userToCreate = userVOMapper.userByUserVO(user);
-                userManager.saveUser(userToCreate);
-                user.setRelationship(doIFollowHim);
-                postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+                if(doIFollowHim == FollowEntity.RELATIONSHIP_NONE){
+                    FollowEntity followUser = followUserInDB();
+                    if(followUser.getIdUser()!=null){
+                        UserEntity user = userManager.getUserByIdUser(idUser);
+                        if(user!=null){
+                            user.setNumFollowers(user.getNumFollowers()+1);
+                            userManager.saveUser(user);
+                            userToReturn = userModelMapper.toUserModel(user,followUser, false);
+                        }
+
+                        postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
+                    }
+
+                }
+
                 break;
             case UserDtoFactory.UNFOLLOW_TYPE:
-                if(doIFollowHim == Follow.RELATIONSHIP_FOLLOWING){
-                    Follow follow = unfollowUserinDB();
-                    doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
-                    user.setRelationship(doIFollowHim);
-                    postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+                if(doIFollowHim == FollowEntity.RELATIONSHIP_FOLLOWING){
+                    FollowEntity follow = unfollowUserinDB();
+                    UserEntity userEntity = userManager.getUserByIdUser(idUser);
+                    if(userEntity!=null){
+                        userEntity.setNumFollowers(userEntity.getNumFollowers()-1);
+                        userManager.saveUser(userEntity);
+                        userToReturn = userModelMapper.toUserModel(userEntity,follow, false);
+                        postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
+                    }
+
                 }else{
                     //TODO. Check if we aren't in the good followType
                     return;
@@ -91,28 +102,39 @@ public class GetFollowUnFollowUserOfflineJob  extends BagdadBaseJob<FollowUnFoll
         }
     }
 
-
-    public Follow unfollowUserinDB() throws SQLException, IOException{
+    public FollowEntity unfollowUserinDB() throws SQLException, IOException{
         //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
         //attribute to "U"
-        Follow follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
+        FollowEntity follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
         follow.setCsys_deleted(new Date());
-        follow.setCsys_synchronized("U");
+        follow.setCsys_synchronized("D");
         followManager.saveFollow(follow);
+
+        currentUser.setNumFollowings(currentUser.getNumFollowings()-1);
+        userManager.saveUser(currentUser);
         return follow;
     }
 
-    public Follow followUserInDB() throws IOException, SQLException{
+    public FollowEntity followUserInDB() throws IOException, SQLException{
         //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
         //So the syncrhonized attribute for this case is "N"
-        Follow follow = new Follow();
+        Long idCurrentUser = currentUser.getIdUser();
+         FollowEntity follow = followManager.getFollowByUserIds(currentUser.getIdUser(),idUser);
+        if(follow!=null && (follow.getCsys_synchronized().equals("N") || follow.getCsys_synchronized().equals("U") || follow.getCsys_synchronized().equals("D"))){
+            follow.setCsys_synchronized("U");
+        }else{
+            follow = new FollowEntity();
+            follow.setCsys_synchronized("N");
+        }
+        follow.setIdUser(idCurrentUser);
         follow.setFollowedUser(idUser);
-        follow.setIdUser(currentUser.getIdUser());
         follow.setCsys_birth(new Date());
         follow.setCsys_modified(new Date());
         follow.setCsys_revision(0);
-        follow.setCsys_synchronized("N");
         followManager.saveFollow(follow);
+
+        currentUser.setNumFollowings(currentUser.getNumFollowings()+1);
+        userManager.saveUser(currentUser);
         return follow;
     }
 

@@ -3,7 +3,7 @@ package gm.mobi.android.service.dataservice.dto;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,7 +65,7 @@ public class ShotDtoFactoryTest {
         String comment = "comment";
         Map<String, Object> mockedData = new HashMap<>();
         mockedData.put(GMContract.ShotTable.COMMENT, comment);
-        when(shotMapper.toDto(any(Shot.class))).thenReturn(mockedData);
+        when(shotMapper.toDto(any(ShotEntity.class))).thenReturn(mockedData);
 
         GenericDto genericDto = new GenericDto();
         ArgumentCaptor<OperationDto> operationDtoArgumentCaptor = ArgumentCaptor.forClass(OperationDto.class);

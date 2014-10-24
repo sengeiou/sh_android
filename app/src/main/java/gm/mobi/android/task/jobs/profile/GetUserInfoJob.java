@@ -9,13 +9,13 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
@@ -33,62 +33,64 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     TeamManager teamManager;
 
     private Long userId;
-    private User currentUser;
-    private int doIFollowHim;
-    private UserVOMapper userVOMapper;
+    private UserEntity currentUser;
+    private UserModelMapper userVOMapper;
+    private NetworkUtil networkUtil;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
-      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager, UserVOMapper userVOMapper) {
+      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.teamManager = teamManager;
+        this.networkUtil = networkUtil1;
         this.userVOMapper = userVOMapper;
         setOpenHelper(dbHelper);
     }
 
-    public void init(Long userId, User currentUser) {
+    public void init(Long userId, UserEntity currentUser) {
         this.userId = userId;
         this.currentUser = currentUser;
     }
 
     @Override public void run() throws SQLException, IOException {
-        User userFromLocalDatabase = getUserFromDatabase();
+        UserEntity userFromLocalDatabase = getUserFromDatabase();
         Long idCurrentUser = currentUser.getIdUser();
-        Follow follow = followManager.getFollowByUserIds(idCurrentUser,userId);
-        UserVO userVO = null;
+        FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,userId);
+        UserModel userVO = null;
         if (userFromLocalDatabase != null) {
-            userVO = userVOMapper.toVO(userFromLocalDatabase, follow, idCurrentUser);
+            boolean isMe = idCurrentUser.equals(userFromLocalDatabase.getIdUser());
+            userVO = userVOMapper.toUserModel(userFromLocalDatabase, follow, isMe);
             postSuccessfulEvent(new UserInfoResultEvent(userVO));
         } else {
             Timber.d("User with id %d not found in local database. Retrieving from the service...", userId);
         }
 
-        User userFromService = getUserFromService();
-        if(!idCurrentUser.equals(userId)){
-            Follow followFromService = getFolloFromService();
-            if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
-            follow = followManager.getFollowByUserIds(idCurrentUser,userId);
-             userVO = userVOMapper.toVO(userFromService,follow,idCurrentUser);
+        if(networkUtil.isConnected(getContext())){
+            UserEntity userFromService = getUserFromService();
+            if(!idCurrentUser.equals(userId)){
+                FollowEntity followFromService = getFolloFromService();
+                if(followFromService.getIdUser()!=null) followManager.saveFollowFromServer(followFromService);
+            }
+            postSuccessfulEvent(new UserInfoResultEvent(userVO));
+            if (userFromLocalDatabase != null) {
+                Timber.d("Obtained user from server found in database. Updating database.");
+                userManager.saveUser(userFromService);
+            }
         }
 
-        postSuccessfulEvent(new UserInfoResultEvent(userVO));
 
-        if (userFromLocalDatabase != null) {
-            Timber.d("Obtained user from server found in database. Updating database.");
-            userManager.saveUser(userFromService);
-        }
     }
 
-    private Follow getFolloFromService() throws IOException {
+    private FollowEntity getFolloFromService() throws IOException {
         return service.getFollowByIdUserFollowed(currentUser.getIdUser(), userId);
     }
-    private User getUserFromDatabase() {
+    private UserEntity getUserFromDatabase() {
         return userManager.getUserByIdUser(userId);
     }
 
-    private User getUserFromService() throws IOException {
+    private UserEntity getUserFromService() throws IOException {
         return service.getUserByIdUser(userId);
     }
 

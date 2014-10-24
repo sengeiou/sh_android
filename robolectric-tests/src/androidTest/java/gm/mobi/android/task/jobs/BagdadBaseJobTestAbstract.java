@@ -3,6 +3,7 @@ package gm.mobi.android.task.jobs;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
+import dagger.ObjectGraph;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import org.junit.Ignore;
@@ -41,7 +42,7 @@ public abstract class BagdadBaseJobTestAbstract {
 
     protected abstract BagdadBaseJob getSystemUnderTest();
 
-    public static class ConnectionNotAvailableMatcher extends ArgumentMatcher<ConnectionNotAvailableEvent> {
+    public static class ConnectionNotAvailableMatcher extends ArgumentMatcher<Object> {
 
         @Override public boolean matches(Object o) {
             return o instanceof ConnectionNotAvailableEvent;

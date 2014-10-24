@@ -8,7 +8,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.data.SessionManagerImpl;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 import javax.inject.Inject;
 
@@ -53,7 +53,7 @@ public class BaseSignedInActivity extends BaseActivity {
     public void restoreSession() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         userManager.setDataBase(db);
-        User currentUser = userManager.getUserByIdUser(sessionManager.getCurrentUserId());
+        UserEntity currentUser = userManager.getUserByIdUser(sessionManager.getCurrentUserId());
         db.close();
         sessionManager.setCurrentUser(currentUser);
     }
@@ -72,7 +72,7 @@ public class BaseSignedInActivity extends BaseActivity {
      *
      * @return Currently signed in User
      */
-    public User getCurrentUser() {
+    public UserEntity getCurrentUser() {
         return sessionManager.getCurrentUser();
     }
 

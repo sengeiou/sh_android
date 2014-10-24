@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
 import timber.log.Timber;
 
@@ -14,12 +14,12 @@ public class SingleShotNotification extends AbstractShotNotification {
 
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
 
-    private ShotVO shot;
+    private ShotModel shot;
     private Picasso picasso;
     private Bitmap largeIcon;
 
     public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, Picasso picasso,
-      ShotVO shot) {
+      ShotModel shot) {
         super(context, builderFactory);
         this.shot = shot;
         this.picasso = picasso;
@@ -38,7 +38,7 @@ public class SingleShotNotification extends AbstractShotNotification {
     }
 
     public String getTitle() {
-        return shot.getName();
+        return shot.getUsername();
     }
 
     @Override

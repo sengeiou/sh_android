@@ -28,7 +28,7 @@ import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.sync.SyncConfigurator;
 import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.ui.adapters.MenuAdapter;
@@ -37,8 +37,8 @@ import gm.mobi.android.ui.fragments.DummyFragment;
 import gm.mobi.android.ui.fragments.InitialSetupFragment;
 import gm.mobi.android.ui.fragments.PeopleFragment;
 import gm.mobi.android.ui.fragments.TimelineFragment;
-import gm.mobi.android.ui.model.UserVO;
-import gm.mobi.android.ui.model.mappers.UserVOMapper;
+import gm.mobi.android.ui.model.UserModel;
+import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -60,7 +60,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject Picasso picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
-    @Inject UserVOMapper userVOMapper;
+    @Inject UserModelMapper userModelMapper;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -73,11 +73,11 @@ public class MainActivity extends BaseSignedInActivity {
     private ActionBar actionBar;
 
     private String currentTitle;
-    private User currentUser;
+    private UserEntity currentUser;
     private int currentSelectedDrawerPosition = -1;
     private MenuAdapter menuAdapter;
 
-    private UserVO userVO;
+    private UserModel userVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,8 @@ public class MainActivity extends BaseSignedInActivity {
 
         actionBar = getSupportActionBar();
         currentUser = GolesApplication.get(this).getCurrentUser();
-        userVO = userVOMapper.toVO(currentUser,null,currentUser.getIdUser());
+        userVO = userModelMapper.toUserModel(currentUser,null,true);
+
         startGCMRegistration();
         setupSyncing();
         setupNavigationDrawer();
@@ -247,7 +248,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @OnClick(R.id.menu_drawer_profile)
     public void openProfileFromDrawer() {
-        startActivity(ProfileContainerActivity.getIntent(this, userVO));
+        startActivity(ProfileContainerActivity.getIntent(this, userVO.getIdUser()));
     }
 
     private void setScreenTitle(String title) {

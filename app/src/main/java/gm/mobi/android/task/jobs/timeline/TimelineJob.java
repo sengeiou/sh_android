@@ -1,27 +1,18 @@
 package gm.mobi.android.task.jobs.timeline;
 
 import android.app.Application;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
-import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
-import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import javax.inject.Inject;
-import timber.log.Timber;
 
 public abstract class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
 
@@ -31,7 +22,7 @@ public abstract class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.Success
     private ShotManager shotManager;
     private FollowManager followManager;
 
-    private User currentUser;
+    private UserEntity currentUser;
 
     public TimelineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(new Params(PRIORITY), context, bus, networkUtil);
@@ -41,7 +32,7 @@ public abstract class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.Success
         this.followManager = followManager;
     }
 
-    public void init(User currentUser) {
+    public void init(UserEntity currentUser) {
         this.currentUser = currentUser;
     }
 

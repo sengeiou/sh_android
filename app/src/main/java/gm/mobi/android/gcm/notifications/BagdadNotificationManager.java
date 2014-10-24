@@ -19,11 +19,12 @@ import android.text.style.StyleSpan;
 import android.util.SparseArray;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.ui.activities.MainActivity;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
+import gm.mobi.android.ui.model.UserModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +43,7 @@ public class BagdadNotificationManager {
     private NotificationBuilderFactory notificationBuilderFactory;
     private Picasso picasso;
 
-    private List<ShotVO> shotsCurrentlyNotified = new ArrayList<>();
+    private List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
 
     @Inject public BagdadNotificationManager(Application context, NotificationManagerCompat notificationManager,
       NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
@@ -52,7 +53,7 @@ public class BagdadNotificationManager {
         this.picasso = picasso;
     }
 
-    public void sendNewShotNotification(ShotVO shot) {
+    public void sendNewShotNotification(ShotModel shot) {
         //TODO check if the timeline is currently shown
         shotsCurrentlyNotified.add(shot);
 
@@ -65,11 +66,11 @@ public class BagdadNotificationManager {
         notify(NOTIFICATION_SHOT, notification);
     }
 
-    protected Notification buildSingleShotNotification(ShotVO shot) {
+    protected Notification buildSingleShotNotification(ShotModel shot) {
         return new SingleShotNotification(context, notificationBuilderFactory, picasso, shot).build();
     }
 
-    protected Notification buildMultipleShotNotification(List<ShotVO> shots) {
+    protected Notification buildMultipleShotNotification(List<ShotModel> shots) {
         return new MultipleShotNotification(context, notificationBuilderFactory, shots).build();
     }
 
@@ -96,7 +97,7 @@ public class BagdadNotificationManager {
         return true;
     }
 
-    public void sendNewFollowerNotification(User user) {
+    public void sendNewFollowerNotification(UserModel user) {
         Notification notification = new FollowerNotification(context, notificationBuilderFactory, user).build();
         //TODO ids generados
         notify(NOTIFICATION_FOLLOW, notification);

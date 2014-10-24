@@ -3,8 +3,7 @@ package gm.mobi.android.service.dataservice.dto;
 import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract.DeviceTable;
 import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.objects.Device;
-import gm.mobi.android.service.dataservice.generic.FilterDto;
+import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
@@ -24,7 +23,7 @@ public class DeviceDtoFactory {
         this.utilityDtoFactory = utilityDtoFactory;
     }
 
-    public GenericDto getUpdateDeviceOperationDto(Device device) {
+    public GenericDto getUpdateDeviceOperationDto(DeviceEntity device) {
         MetadataDto md = new MetadataDto.Builder()
           .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
           .entity(DeviceTable.TABLE)

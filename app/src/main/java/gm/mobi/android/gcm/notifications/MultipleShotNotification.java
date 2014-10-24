@@ -10,16 +10,16 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import gm.mobi.android.R;
-import gm.mobi.android.ui.model.ShotVO;
+import gm.mobi.android.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MultipleShotNotification extends AbstractShotNotification {
 
-    private List<ShotVO> shots;
+    private List<ShotModel> shots;
 
-    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory, List<ShotVO> shots) {
+    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory, List<ShotModel> shots) {
         super(context, builderFactory);
         this.shots = shots;
     }
@@ -51,8 +51,8 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     protected NotificationCompat.InboxStyle getInboxStyleFromShots() {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
-        for (ShotVO shot : shots) {
-            String userName = shot.getName();
+        for (ShotModel shot : shots) {
+            String userName = shot.getUsername();
             String shotText = shot.getComment();
             Spannable styledLine = getSpannableLineFromNameAndComment(userName, shotText);
             inbox.addLine(styledLine);
@@ -69,8 +69,8 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     private List<String> getUserNamesFromShots() {
         List<String> names = new ArrayList<>(shots.size());
-        for (ShotVO shot : shots) {
-            String userName = shot.getName();
+        for (ShotModel shot : shots) {
+            String userName = shot.getUsername();
             names.add(userName);
         }
         Collections.sort(names);

@@ -4,10 +4,9 @@ import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.objects.Shot;
+import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
-import gm.mobi.android.service.dataservice.generic.MetadataDto.Builder;
 import gm.mobi.android.service.dataservice.generic.OperationDto;
 import javax.inject.Inject;
 
@@ -62,7 +61,7 @@ public class ShotDtoFactory {
                 .putKey(GMContract.ShotTable.ID_SHOT, null)
                 .build();
 
-        Shot shotTemplate = new Shot();
+        ShotEntity shotTemplate = new ShotEntity();
         shotTemplate.setComment(comment);
         shotTemplate.setIdUser(idUser);
 

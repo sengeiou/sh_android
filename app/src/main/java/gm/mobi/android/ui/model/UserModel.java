@@ -1,9 +1,8 @@
 package gm.mobi.android.ui.model;
 
-import gm.mobi.android.db.objects.Synchronized;
 import java.io.Serializable;
 
-public class UserVO extends Synchronized implements Serializable {
+public class UserModel implements Serializable {
 
     private Long idUser;
     private String favoriteTeamName;
@@ -11,13 +10,20 @@ public class UserVO extends Synchronized implements Serializable {
     private String userName;
     private String name;
     private String photo;
-    private Long points;
     private Long numFollowings;
     private Long numFollowers;
-    private Long rank;
     private String website;
     private String bio;
     private int relationship;
+    private Long points;
+
+    public Long getPoints() {
+        return points;
+    }
+
+    public void setPoints(Long points) {
+        this.points = points;
+    }
 
     public Long getFavoriteTeamId() {
         return favoriteTeamId;
@@ -26,7 +32,6 @@ public class UserVO extends Synchronized implements Serializable {
     public void setFavoriteTeamId(Long favoriteTeamId) {
         this.favoriteTeamId = favoriteTeamId;
     }
-
     public Long getIdUser() {
         return idUser;
     }
@@ -67,13 +72,6 @@ public class UserVO extends Synchronized implements Serializable {
         this.photo = photo;
     }
 
-    public Long getPoints() {
-        return points;
-    }
-
-    public void setPoints(Long points) {
-        this.points = points;
-    }
 
     public Long getNumFollowings() {
         return numFollowings;
@@ -89,14 +87,6 @@ public class UserVO extends Synchronized implements Serializable {
 
     public void setNumFollowers(Long numFollowers) {
         this.numFollowers = numFollowers;
-    }
-
-    public Long getRank() {
-        return rank;
-    }
-
-    public void setRank(Long rank) {
-        this.rank = rank;
     }
 
     public String getWebsite() {

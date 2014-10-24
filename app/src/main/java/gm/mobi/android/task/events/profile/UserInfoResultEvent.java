@@ -1,14 +1,13 @@
 package gm.mobi.android.task.events.profile;
 
-import gm.mobi.android.db.objects.User;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.ui.model.UserModel;
 
-public class UserInfoResultEvent extends BagdadBaseJob.SuccessEvent<UserVO> {
+public class UserInfoResultEvent extends BagdadBaseJob.SuccessEvent<UserModel> {
 
     private int doIFollowHim;
 
-    public UserInfoResultEvent(UserVO result) {
+    public UserInfoResultEvent(UserModel result) {
         super(result);
     }
 

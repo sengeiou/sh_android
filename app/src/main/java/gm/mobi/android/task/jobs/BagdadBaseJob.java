@@ -38,7 +38,7 @@ public abstract class BagdadBaseJob<T> extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        if (!networkUtil.isConnected(application)) {
+        if (!hasInternetConnection()) {
             postConnectionNotAvailableEvent();
             if (isNetworkRequired()) {
                 return;

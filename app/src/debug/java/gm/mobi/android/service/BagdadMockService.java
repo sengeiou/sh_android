@@ -1,9 +1,9 @@
 package gm.mobi.android.service;
 
-import gm.mobi.android.db.objects.Device;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.DeviceEntity;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,9 +20,9 @@ public class BagdadMockService implements BagdadService {
     }
 
     @Override
-    public User login(String id, String password) {
+    public UserEntity login(String id, String password) {
         if (id.equals("rafa.vazsan@gmail.com") || id.equals("sloydev")) {
-            User mockUser = new User();
+            UserEntity mockUser = new UserEntity();
             mockUser.setIdUser(1L);
             mockUser.setName("Rafa");
             mockUser.setSessionToken("Nnananananananana");
@@ -36,61 +36,61 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
-    @Override public List<User> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
+    @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override public List<User> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
+    @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override public Shot getShotById(Long idShot) throws IOException {
+    @Override public ShotEntity getShotById(Long idShot) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
+    @Override public List<ShotEntity> getNewShots(List<Long> followingUserIds, Long newestShotDate) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
+    @Override public List<ShotEntity> getOlderShots(List<Long> followingUserIds, Long oldestShotDate) throws IOException {
         return null;
     }
 
-    @Override public List<Shot> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
+    @Override public List<ShotEntity> getShotsByUserIdList(List<Long> followingUserIds, Long lastModifiedDate) throws IOException {
         return null;
     }
 
-    @Override public Shot postNewShot(Long idUser, String comment) throws IOException {
+    @Override public ShotEntity postNewShot(Long idUser, String comment) throws IOException {
         return null;
     }
 
     @Override
-    public User getUserByIdUser(Long idUser) throws IOException {
+    public UserEntity getUserByIdUser(Long idUser) throws IOException {
         return null;
     }
 
-    @Override public PaginatedResult<List<User>> searchUsersByNameOrNickNamePaginated(String searchQuery,
+    @Override public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery,
       int pageOffset) throws IOException {
         return null;
     }
 
-    @Override public Follow getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws IOException {
+    @Override public FollowEntity getFollowByIdUserFollowed(Long currentUserId, Long idUser) throws IOException {
         return null;
     }
 
-    @Override public Device updateDevice(Device device) throws IOException {
+    @Override public DeviceEntity updateDevice(DeviceEntity device) throws IOException {
         return null;
     }
 
-    @Override public Device getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
+    @Override public DeviceEntity getDeviceByUniqueId(String uniqueDeviceId) throws IOException {
         return null;
     }
 
-    @Override public Follow followUser(Follow follow) throws IOException {
+    @Override public FollowEntity followUser(FollowEntity follow) throws IOException {
         return null;
     }
 
-    @Override public Follow unfollowUser(Follow follow) throws IOException {
+    @Override public FollowEntity unfollowUser(FollowEntity follow) throws IOException {
         return null;
     }
 

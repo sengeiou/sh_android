@@ -5,7 +5,7 @@ import android.test.ActivityUnitTestCase;
 import com.squareup.spoon.Spoon;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
@@ -24,7 +24,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        User currentUser = new User();
+        UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(5L);
         //TODO make test aware of the current user
         activity = getActivity();

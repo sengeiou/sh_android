@@ -10,17 +10,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.R;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.objects.Follow;
-import gm.mobi.android.db.objects.User;
-import gm.mobi.android.ui.model.UserVO;
+import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.widgets.FollowButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListAdapter extends BindableAdapter<UserVO> {
+public class UserListAdapter extends BindableAdapter<UserModel> {
 
-    private List<UserVO> users;
+    private List<UserModel> users;
     private Picasso picasso;
 
     private FollowUnfollowAdapterCallback callback;
@@ -31,15 +29,13 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         this.users = new ArrayList<>(0);
     }
 
-    public void setItems(List<UserVO> users) {
+    public void setItems(List<UserModel> users) {
         this.users = users;
-        notifyDataSetChanged();
     }
 
-    public void addItems(List<UserVO> users) {
+    public void addItems(List<UserModel> users) {
         this.users = new ArrayList<>();
         this.users.addAll(users);
-        notifyDataSetChanged();
     }
 
     public void removeItems(){
@@ -54,7 +50,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         return users.size();
     }
 
-    @Override public UserVO getItem(int position) {
+    @Override public UserModel getItem(int position) {
         return users.get(position);
     }
 
@@ -68,7 +64,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         return rowView;
     }
 
-    @Override public void bindView(UserVO item, final int position, View view) {
+    @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.name.setText(item.getUserName());
         viewHolder.username.setText(item.getFavoriteTeamName());
@@ -80,34 +76,27 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         }
 
         if(isFollowButtonVisible()){
-            if(item.getRelationship() == Follow.RELATIONSHIP_FOLLOWING){
+            if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){
                 viewHolder.followButton.setFollowing(true);
-            }else if(item.getRelationship() == Follow.RELATIONSHIP_OWN){
+            }else if(item.getRelationship() == FollowEntity.RELATIONSHIP_OWN){
                 viewHolder.followButton.setEditProfile();
             }else{
                 viewHolder.followButton.setFollowing(false);
             }
-            //TODO clean and refactor callback usage
-            // It's unefficient to create two new OnClickListener instances every bindView call
-           if(viewHolder.followButton.isFollowing()){
-               viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
-                   @Override public void onClick(View v) {
-                       if(callback!=null){
-                           changeButtonState(viewHolder,Follow.RELATIONSHIP_NONE);
-                           callback.unFollow(position);
+            viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                       if(viewHolder.followButton.isFollowing()){
+                            if(callback!=null){
+                                callback.unFollow(position);
+                            }
+                       }else{
+                           if(callback!=null){
+                               callback.follow(position);
+                           }
                        }
-                   }
-               });
-           }else{
-               viewHolder.followButton.setOnClickListener(new View.OnClickListener(){
-                   @Override public void onClick(View v) {
-                       if(callback!=null){
-                           changeButtonState(viewHolder,Follow.RELATIONSHIP_FOLLOWING);
-                           callback.follow(position);
-                       }
-                   }
-               });
-           }
+                }
+            });
+
         }else{
             viewHolder.followButton.setVisibility(View.GONE);
          }
@@ -117,7 +106,7 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         this.callback = callback;
     }
 
-    public List<UserVO> getItems() {
+    public List<UserModel> getItems() {
         return users;
     }
 
@@ -139,13 +128,6 @@ public class UserListAdapter extends BindableAdapter<UserVO> {
         public void unFollow(int position);
     }
 
-    public void changeButtonState(ViewHolder viewHolder ,int stateFollow){
-        if(stateFollow == Follow.RELATIONSHIP_FOLLOWING) {
-            viewHolder.followButton.setFollowing(true);
-        }else{
-            viewHolder.followButton.setFollowing(false);
-        }
-    }
 
 
 }

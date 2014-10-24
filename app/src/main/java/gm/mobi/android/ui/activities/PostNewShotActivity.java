@@ -25,8 +25,8 @@ import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.objects.Shot;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
@@ -52,11 +52,11 @@ public class PostNewShotActivity extends BaseSignedInActivity {
     @Inject Bus bus;
     @Inject SQLiteOpenHelper dbHelper;
     @Inject ShotManager shotManager;
-    private User currentUser;
+    private UserEntity currentUser;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
-    private Shot previousShot;
+    private ShotEntity previousShot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         }
     }
 
-    public void startJob(User currentUser, String comment){
+    public void startJob(UserEntity currentUser, String comment){
         PostNewShotJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
         job.init(currentUser, comment);
         jobManager.addJobInBackground(job);

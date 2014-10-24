@@ -3,11 +3,12 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.User;
+import gm.mobi.android.db.objects.UserEntity;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -17,39 +18,22 @@ import javax.inject.Inject;
 public class UserManager extends AbstractManager {
 
     UserMapper userMapper;
+    private SessionManager sessionManager;
     private String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
     private static final String USER_TABLE = UserTable.TABLE;
     private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
-    @Inject
-    public UserManager(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
-    /**
-     * Retrieve currentUser
-     * *
-     */
-    @Deprecated
-    public User getCurrentUser() {
-        User user = null;
-        if (!isTableEmpty(USER_TABLE)) {
-            Cursor c =
-              db.query(USER_TABLE, UserTable.PROJECTION, UserTable.SESSION_TOKEN + " IS NOT NULL", null, null,
-                null, null, "1");
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                user = userMapper.fromCursor(c);
-            }
-            c.close();
-        }
-        return user;
+    @Inject
+    public UserManager(UserMapper userMapper, SessionManager sessionManager) {
+        this.userMapper = userMapper;
+        this.sessionManager = sessionManager;
     }
 
     /**
      * Insert User list
      */
-    public void saveUsersFromServer(List<User> users) throws SQLException {
-        for (User user : users) {
+    public void saveUsersFromServer(List<UserEntity> users) throws SQLException {
+        for (UserEntity user : users) {
             ContentValues contentValues = userMapper.toContentValues(user);
             contentValues.put(CSYS_SYNCHRONIZED, "S");
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
@@ -66,29 +50,49 @@ public class UserManager extends AbstractManager {
     /**
      * Insert a user
      */
-    public void saveUser(User user) throws SQLException {
-
-        User currentUser = getCurrentUser();
-        ContentValues contentValues = null;
-        String[] projection = UserTable.PROJECTION;
-        String where = UserTable.ID + "=?";
-        contentValues =
-          currentUser != null ? userMapper.userToContentValues(user, currentUser) : userMapper.toContentValues(user);
-        String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
-        String[] args = { userId };
-        if (contentValues.getAsLong(CSYS_DELETED) != null) {
-            deleteUser(user);
-        } else {
-            insertOrUpdate(USER_TABLE, contentValues, projection, where, args);
+    public void saveUser(UserEntity user) throws SQLException {
+        UserEntity currentUser = sessionManager.getCurrentUser();
+        if(!user.getIdUser().equals(currentUser.getIdUser())) {
+            ContentValues contentValues = userMapper.toContentValues(user);
+            String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
+            String[] args = { userId };
+            if (contentValues.getAsLong(CSYS_DELETED) != null) {
+                deleteUser(user);
+            } else {
+                db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        }else{
+            currentUser.setNumFollowers(user.getNumFollowers());
+            currentUser.setNumFollowings(user.getNumFollowings());
+            currentUser.setBio(user.getBio());
+            currentUser.setFavoriteTeamName(user.getFavoriteTeamName());
+            currentUser.setName(user.getName());
+            currentUser.setFavoriteTeamId(user.getFavoriteTeamId());
+            currentUser.setPhoto(user.getPhoto());
+            currentUser.setUserName(user.getUserName());
+            currentUser.setPoints(user.getPoints());
+            db.update(UserTable.TABLE,userMapper.currentUserToContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
         }
         insertInSync();
         //TODO error handling? if(res<0)
     }
 
+    public void saveCurrentUser(UserEntity user) throws  SQLException{
+        ContentValues contentValues = userMapper.currentUserToContentValues(user);
+        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+            deleteUser(user);
+        } else {
+            db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        insertInSync();
+
+
+    }
+
     /**
      * Delete a user
      */
-    public long deleteUser(User user) {
+    public long deleteUser(UserEntity user) {
         long res = 0;
         String args = GMContract.UserTable.ID + "=?";
         String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
@@ -103,8 +107,8 @@ public class UserManager extends AbstractManager {
     /**
      * Retrieve User by idUser
      */
-    public User getUserByIdUser(Long idUser) {
-        User resUser = null;
+    public UserEntity getUserByIdUser(Long idUser) {
+        UserEntity resUser = null;
         String args = UserTable.ID + "=?";
         String[] argsString = new String[] { String.valueOf(idUser) };
 
@@ -121,9 +125,9 @@ public class UserManager extends AbstractManager {
         insertInTableSync(USER_TABLE,1,0,0);
     }
 
-    public List<User> getUsersByIds(List<Long> usersIds) {
+    public List<UserEntity> getUsersByIds(List<Long> usersIds) {
         int userIdsSize = usersIds.size();
-        List<User> result = new ArrayList<>(userIdsSize);
+        List<UserEntity> result = new ArrayList<>(userIdsSize);
         if (userIdsSize == 0) {
             return result;
         }
@@ -138,7 +142,7 @@ public class UserManager extends AbstractManager {
         if (queryResults.getCount() > 0) {
             queryResults.moveToFirst();
             do {
-                User user = userMapper.fromCursor(queryResults);
+                UserEntity user = userMapper.fromCursor(queryResults);
                 if (user != null) {
                     result.add(user);
                 }
@@ -147,17 +151,18 @@ public class UserManager extends AbstractManager {
         return result;
     }
 
-    public List<User> searchUsers(String searchString){
-        List<User> users = new ArrayList<>();
+    public List<UserEntity> searchUsers(String searchString){
+        List<UserEntity> users = new ArrayList<>();
         String stringToSearch = Normalizer.normalize(searchString, Normalizer.Form.NFD)
           .replaceAll("[^\\p{ASCII}]", "");
+
         String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
           Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
 
           if(c.getCount()>0){
             c.moveToFirst();
               do {
-                  User user = userMapper.fromCursor(c);
+                  UserEntity user = userMapper.fromCursor(c);
                   if (user != null) {
                       users.add(user);
                   }
