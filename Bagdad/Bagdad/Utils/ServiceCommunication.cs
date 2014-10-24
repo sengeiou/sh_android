@@ -17,7 +17,7 @@ namespace Bagdad.Utils
 
         public enum enumSynchroTables
         {
-            FULL = 0, SHOTS = 1, FOLLOW = 2
+            FULL = 0, SHOTS = 1, FOLLOW = 2, USER = 3
         }
 
         public enum enumTypeSynchro
@@ -72,6 +72,10 @@ namespace Bagdad.Utils
                     break;
                 case enumSynchroTables.FOLLOW:
                     listTables.Add(Constants.SERCOM_TB_FOLLOW);
+                    listTables.Add(Constants.SERCOM_TB_USER);
+                    break;
+                case enumSynchroTables.USER:
+                    listTables.Add(Constants.SERCOM_TB_USER);
                     break;
             }
         }
@@ -145,7 +149,8 @@ namespace Bagdad.Utils
                     }
                 else
                 {
-                    Debug.WriteLine("Sin internet no es posible la sincronización general");
+                    if(!App.isInternetAvailable) Debug.WriteLine("Sin internet no es posible la sincronización general");
+                    else Debug.WriteLine("Sincronización en proceso. Imposible mandar ahora los datos");
                 }
             }
             catch (Exception ex)

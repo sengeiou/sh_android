@@ -137,13 +137,17 @@ namespace Bagdad.ViewModels
         public async Task<bool> AddAsFollowing(User user)
         {
             Follow follow = new Follow();
-            return await follow.AddFollowing(user);
+            bool retorn = await follow.AddFollowing(user);
+            App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
+            return retorn;
         }
 
         public async Task<bool> RemoveFromFollowing(User user)
         {
             Follow follow = new Follow();
-            return await follow.DelFollowing(user);
+            bool retorn = await follow.DelFollowing(user);
+            App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
+            return retorn;
         }
     }
 }

@@ -173,7 +173,7 @@ namespace Bagdad
                     await uvm.RemoveFromFollowing();
                 }
             }
-
+            App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
             PhoneApplicationService.Current.State["RefreshNeeded"] = true;
         }
 
@@ -244,10 +244,10 @@ namespace Bagdad
         /// <param name="e"></param>
         async void timer_Tick(object sender, EventArgs e)
         {
-            if (!App.isSynchroRunning())
-            {
-                App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
-            }
+            ////if (!App.isSynchroRunning())
+            ////{
+            ////    App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
+            ////}
         }
 
         #endregion
