@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AccessPolicy Version="1.0.0" Description="Políticas de acceso a las entidades de la aplicación Shooter">
+    <Entities Name="Entidades Base">
+        <Entity AllowedOperations="Retrieve" OnlyByKey="false" OnlySpecifiedFilters="true" MaxPageSize="1000">
+            <Name Alias="Team">Team</Name>
+            <Data>
+                <!-- User -->
+                <Attribute Alias="idTeam" Direction="Output" Description="Team identifier">idTeam</Attribute>
+                <Attribute Alias="clubName" Direction="Output" Description="Club name">clubName</Attribute>
+                <Attribute Alias="officialName" Direction="Output" Description="Official name">officialName</Attribute>
+                <Attribute Alias="shortName" Direction="Output" Description="Short name">shortName</Attribute>
+                <Attribute Alias="tlaName" Direction="Output" Description="Tiny name">tlaName</Attribute>
+
+                <!-- Información de auditoría -->
+                <Attribute Alias="revision" Direction="Output" Description="It's initialized by 0 to the creation. Must be increased by 1 in each modification ">csys_revision</Attribute>
+                <Attribute Alias="birth" Direction="Output" Description="It's initialized by current_time to the creation. Only should be modified in the return backend updates">csys_birth</Attribute>
+                <Attribute Alias="modified" Direction="Output" Description="It's initialized by current_time to the creation. Must be updated at each modification or in the return backend updates">csys_modified</Attribute>
+                <Attribute Alias="deleted" Direction="Output" Description="It's initialized by null to the creation. Must be updated at current_time when is marked as deleted when is not yet synchronized">csys_deleted</Attribute>
+            </Data>
+
+            <Keys>
+                <Key>
+                    <Attribute Alias="idTeam">idTeam</Attribute>
+                </Key>
+            </Keys>
+
+            <Filters>
+                <Filter>
+                    <Attribute Alias="idTeam">idTeam</Attribute>
+                    <Attribute Alias="modified">csys_modified</Attribute>
+                    <Attribute Alias="deleted">csys_deleted</Attribute>
+                </Filter>
+
+            </Filters>
+        </Entity>
+    </Entities>
+</AccessPolicy>
