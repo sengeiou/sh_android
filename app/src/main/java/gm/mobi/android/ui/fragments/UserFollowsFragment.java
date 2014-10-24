@@ -180,7 +180,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
         //Al instante
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser);
         jobManager.addJobInBackground(job);
     }
 

@@ -25,11 +25,10 @@ import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.DeviceManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.gcm.GcmIntentService;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
+import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
@@ -98,7 +97,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
-    TimelineJob.class, TimelineFragment.class, TeamManager.class,
+    TimelineJob.class, TimelineFragment.class,
 
     GCMRegistrationJob.class,
 

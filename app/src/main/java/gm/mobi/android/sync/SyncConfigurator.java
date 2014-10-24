@@ -61,9 +61,9 @@ public class SyncConfigurator {
     private void addSyncShots() {
         Timber.d("Adding periodic sync of shots");
         Bundle syncParameters = new Bundle();
-        syncParameters.putInt(SyncConstants.CALL_TYPE, SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE);
+        syncParameters.putInt(SyncConstants.CALL_TYPE, SyncConstants.GET_NEW_SHOTS_CALLTYPE);
         ContentResolver.addPeriodicSync(dummyAccount, CONTENT_AUTHORITY, syncParameters,
-            SyncConstants.SYNC_INTERVAL_FOR_REMOVE_SHOTS);
+            SyncConstants.SYNC_INTERVAL_FOR_NEW_SHOTS);
     }
 
     private void addSyncFollowings() {

@@ -8,7 +8,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
@@ -31,19 +30,17 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     BagdadService service;
     UserManager userManager;
     FollowManager followManager;
-    TeamManager teamManager;
     @Inject UserModelMapper userModelMapper;
 
     private UserEntity currentUser;
     private boolean isMe;
 
     @Inject
-    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager, TeamManager teamManager) {
+    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.teamManager = teamManager;
         this.setOpenHelper(openHelper);
     }
 
@@ -106,7 +103,6 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     protected void setDatabaseToManagers(SQLiteDatabase db) {
         userManager.setDataBase(db);
         followManager.setDataBase(db);
-        teamManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

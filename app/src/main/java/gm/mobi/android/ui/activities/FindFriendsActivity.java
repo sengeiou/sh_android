@@ -328,13 +328,12 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         UserEntity currentUser = GolesApplication.get(this).getCurrentUser();
-        GetFollowUnFollowUserOfflineJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job.init(currentUser,userVO.getIdUser(), followType);
-        jobManager.addJobInBackground(job);
+        GetFollowUnFollowUserOfflineJob jobOffline = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        jobOffline.init(currentUser,userVO.getIdUser(), followType);
+        jobManager.addJobInBackground(jobOffline);
 
-        GetFollowUnfollowUserJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job2.init(currentUser);
-        jobManager.addJobInBackground(job2);
+        GetFollowUnfollowUserJob jobOnline = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        jobManager.addJobInBackground(jobOnline);
     }
 
     public void followUser(UserModel user){

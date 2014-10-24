@@ -5,7 +5,6 @@ import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.TablesSync;
-import gm.mobi.android.db.GMContract.TeamTable;
 import gm.mobi.android.db.GMContract.UserTable;
 
 public class SQLiteUtils {
@@ -65,18 +64,6 @@ public class SQLiteUtils {
             + TablesSync.ENTITY+" VARCHAR(255) NOT NULL,"
             + TablesSync.FREQUENCY+" INT NULL, " +
             "PRIMARY KEY("+TablesSync.ORDER+"));";
-
-    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+TeamTable.TABLE+" ("
-            + TeamTable.ID_TEAM+" INT NOT NULL PRIMARY KEY,"
-            + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
-            + TeamTable.CLUB_NAME+" VARCHAR(255),"
-            + TeamTable.SHORT_NAME+" VARCHAR(255),"
-            + TeamTable.TLA_NAME+" VARCHAR(255),"
-            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
       + DeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"

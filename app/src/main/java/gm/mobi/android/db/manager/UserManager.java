@@ -19,7 +19,7 @@ public class UserManager extends AbstractManager {
 
     UserMapper userMapper;
     private SessionManager sessionManager;
-    private String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
+    private static final String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
     private static final String USER_TABLE = UserTable.TABLE;
     private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
 
@@ -52,41 +52,42 @@ public class UserManager extends AbstractManager {
      */
     public void saveUser(UserEntity user) throws SQLException {
         UserEntity currentUser = sessionManager.getCurrentUser();
+
         if(!user.getIdUser().equals(currentUser.getIdUser())) {
             ContentValues contentValues = userMapper.toContentValues(user);
-            String userId = String.valueOf(contentValues.getAsLong(UserTable.ID));
-            String[] args = { userId };
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 deleteUser(user);
             } else {
                 db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }else{
-            currentUser.setNumFollowers(user.getNumFollowers());
-            currentUser.setNumFollowings(user.getNumFollowings());
-            currentUser.setBio(user.getBio());
-            currentUser.setFavoriteTeamName(user.getFavoriteTeamName());
-            currentUser.setName(user.getName());
-            currentUser.setFavoriteTeamId(user.getFavoriteTeamId());
-            currentUser.setPhoto(user.getPhoto());
-            currentUser.setUserName(user.getUserName());
-            currentUser.setPoints(user.getPoints());
-            db.update(UserTable.TABLE,userMapper.currentUserToContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
+            updateCurrentUser(currentUser,user);
         }
         insertInSync();
-        //TODO error handling? if(res<0)
     }
 
+    public void updateCurrentUser(UserEntity currentUser, UserEntity user){
+        currentUser.setNumFollowers(user.getNumFollowers());
+        currentUser.setNumFollowings(user.getNumFollowings());
+        currentUser.setBio(user.getBio());
+        currentUser.setFavoriteTeamName(user.getFavoriteTeamName());
+        currentUser.setName(user.getName());
+        currentUser.setFavoriteTeamId(user.getFavoriteTeamId());
+        currentUser.setPhoto(user.getPhoto());
+        currentUser.setUserName(user.getUserName());
+        currentUser.setPoints(user.getPoints());
+        db.update(UserTable.TABLE,userMapper.toContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
+    }
+
+
     public void saveCurrentUser(UserEntity user) throws  SQLException{
-        ContentValues contentValues = userMapper.currentUserToContentValues(user);
+        ContentValues contentValues = userMapper.toContentValues(user);
         if (contentValues.getAsLong(CSYS_DELETED) != null) {
             deleteUser(user);
         } else {
             db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
-
-
     }
 
     /**
@@ -148,6 +149,7 @@ public class UserManager extends AbstractManager {
                 }
             } while (queryResults.moveToNext());
         }
+        queryResults.close();
         return result;
     }
 
@@ -168,6 +170,7 @@ public class UserManager extends AbstractManager {
                   }
               }while(c.moveToNext());
           }
+        c.close();
         return users;
     }
 }

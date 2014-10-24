@@ -34,7 +34,6 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
     }
 
     public void addItems(List<UserModel> users) {
-        this.users = new ArrayList<>();
         this.users.addAll(users);
     }
 

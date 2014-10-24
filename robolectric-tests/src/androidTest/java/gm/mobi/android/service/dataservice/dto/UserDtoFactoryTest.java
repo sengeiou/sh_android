@@ -3,7 +3,6 @@ package gm.mobi.android.service.dataservice.dto;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import gm.mobi.android.service.dataservice.generic.MetadataDto;
@@ -13,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,14 +26,13 @@ public class UserDtoFactoryTest {
     UtilityDtoFactory utilityDtoFactory;
     UserDtoFactory userDtoFactory;
     UserMapper userMapper;
-    TeamMapper teamMapper;
     FollowMapper followMapper;
 
     @Before
     public void setup() {
         utilityDtoFactory = mock(UtilityDtoFactory.class);
         userMapper = mock(UserMapper.class);
-        userDtoFactory = new UserDtoFactory(utilityDtoFactory, userMapper, teamMapper, followMapper);
+        userDtoFactory = new UserDtoFactory(utilityDtoFactory, userMapper, followMapper);
     }
 
     @Test(expected = IllegalArgumentException.class)

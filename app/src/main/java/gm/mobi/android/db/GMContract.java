@@ -124,28 +124,6 @@ public class GMContract {
         };
     }
 
-    public static final class TeamTable implements SyncColumns{
-        public static final String TABLE = "Team";
-        public static final String ID_TEAM = "idTeam";
-        public static final String OFFICIAL_NAME = "officialName";
-        public static final String CLUB_NAME = "clubName";
-        public static final String SHORT_NAME = "shortName";
-        public static final String TLA_NAME = "tlaName";
-
-        public static final String[] PROJECTION = {
-                ID_TEAM,
-                OFFICIAL_NAME,
-                CLUB_NAME,
-                SHORT_NAME,
-                TLA_NAME,
-                CSYS_BIRTH,
-                CSYS_MODIFIED,
-                CSYS_DELETED,
-                CSYS_REVISION,
-                CSYS_SYNCHRONIZED
-        };
-    }
-
     public static final class DeviceTable implements SyncColumns{
 
         public static final String TABLE = "Device";

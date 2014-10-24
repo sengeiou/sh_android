@@ -18,7 +18,7 @@ public class SyncConstants {
     //Sync Interval
     public static final long SYNC_INTERVAL_FOLLOWINGS = 24*60*60; //Sync frequency in Seconds - Every 24 hours
     public static final long SYNC_INTERVAL_FOR_REMOVE_SHOTS =24*60*60;//Sync frequency in Seconds - Every 24 hours
-
+    public static final long SYNC_INTERVAL_FOR_NEW_SHOTS = 10*60;
 
 
     //Sync callTypes

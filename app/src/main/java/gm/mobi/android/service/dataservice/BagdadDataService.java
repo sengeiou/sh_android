@@ -9,7 +9,6 @@ import com.squareup.okhttp.Response;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.db.objects.FollowEntity;
@@ -52,13 +51,12 @@ public class BagdadDataService implements BagdadService {
     private UserMapper userMapper;
     private FollowMapper followMapper;
     private ShotMapper shotMapper;
-    private TeamMapper teamMapper;
     private DeviceMapper deviceMapper;
 
     @Inject
     public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, TeamMapper teamMapper,
+      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
       DeviceMapper deviceMapper) {
         this.client = client;
         this.endpoint = endpoint;
@@ -70,7 +68,6 @@ public class BagdadDataService implements BagdadService {
         this.userMapper = userMapper;
         this.followMapper = followMapper;
         this.shotMapper = shotMapper;
-        this.teamMapper = teamMapper;
         this.deviceMapper = deviceMapper;
     }
 

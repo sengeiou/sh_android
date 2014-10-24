@@ -57,7 +57,6 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
                 if (callType == 0) return;
                 switch (callType) {
                     case SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE:
-                        Timber.e("Entra en la sincro para hacer el remove");
                         //TODO REMOVE OLD SHOTS
 //                         removeOldShots(mDbHelper.getReadableDatabase());
                         Timber.e("Entra en la sincronización para el tipo de llamada : %d",

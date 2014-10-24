@@ -3,7 +3,6 @@ package gm.mobi.android.ui.model.mappers;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.model.UserModel;
-import java.util.Date;
 
 public class UserModelMapper {
 

@@ -29,13 +29,16 @@ public class UserMapper extends GenericMapper {
     }
 
     public  ContentValues toContentValues(UserEntity u) {
-
         ContentValues cv = new ContentValues();
+        String sessionToken = u.getSessionToken();
+        String email = u.getEmail();
         cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
         cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
+        cv.put(UserTable.SESSION_TOKEN,sessionToken!=null?sessionToken:null);
         cv.put(UserTable.USER_NAME, u.getUserName());
         cv.put(UserTable.NAME, u.getName());
+        cv.put(UserTable.EMAIL, email!=null ? email :null);
         cv.put(UserTable.PHOTO, u.getPhoto());
         cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
         cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
@@ -47,29 +50,6 @@ public class UserMapper extends GenericMapper {
         cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
         cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
         setSynchronizedtoContentValues(u, cv);
-        return cv;
-    }
-
-    public  ContentValues currentUserToContentValues(UserEntity u){
-        ContentValues cv = new ContentValues();
-        cv.put(UserTable.ID, u.getIdUser());
-        cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
-        cv.put(UserTable.FAVORITE_TEAM_NAME, u.getFavoriteTeamName());
-        cv.put(UserTable.SESSION_TOKEN, u.getSessionToken());
-        cv.put(UserTable.USER_NAME, u.getUserName());
-        cv.put(UserTable.EMAIL, u.getEmail());
-        cv.put(UserTable.NAME, u.getName());
-        cv.put(UserTable.PHOTO, u.getPhoto());
-        cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
-        cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());
-        cv.put(UserTable.POINTS, u.getPoints());
-        cv.put(UserTable.RANK, u.getRank());
-        cv.put(UserTable.BIO, u.getBio());
-        cv.put(UserTable.WEBSITE, u.getWebsite());
-        cv.put(UserTable.NAME_NORMALIZED,normalizedText(u.getName()));
-        cv.put(UserTable.EMAIL_NORMALIZED,normalizedText(u.getEmail()));
-        cv.put(UserTable.USER_NAME_NORMALIZED,normalizedText(u.getUserName()));
-        setSynchronizedtoContentValues(u,cv);
         return cv;
     }
 

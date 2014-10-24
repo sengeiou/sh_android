@@ -140,7 +140,6 @@ public class ProfileFragment extends BaseFragment {
         jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
-        job.init(currentUser);
         jobManager.addJobInBackground(job);
 
     }

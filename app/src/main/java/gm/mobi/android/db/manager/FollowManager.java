@@ -222,7 +222,6 @@ public class FollowManager extends AbstractManager{
      *
     * **/
     public List<FollowEntity> getDatasForSendToServerInCase(){
-        long res = 0;
         List<FollowEntity> followsToUpdate = new ArrayList<>();
         String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'D' OR "+CSYS_SYNCHRONIZED+"='U'";
         Cursor c = db.query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);

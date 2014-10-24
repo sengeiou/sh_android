@@ -49,24 +49,6 @@ public abstract class AbstractManager {
         return numRows;
     }
 
-    public  long insertOrUpdate( String tableName,ContentValues contentValues,String[] projection,String where, String[] args){
-        Cursor c = null;
-        long res = 0;
-        try{
-            synchronized (db) {
-                  res = db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                c.close();
-            }
-        }catch(Exception e){
-            Timber.e("[UPDATE EXCEPTION], insertOrUpdate in table %s with exception %s and message %s",tableName,e, e.getMessage());
-        }finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-        return res;
-    }
-
     public long insertOrUpdateSyncTable(TableSync tableSync){
         ContentValues contentValues = new ContentValues();
         contentValues.put(GMContract.TablesSync.ORDER,tableSync.getOrder());

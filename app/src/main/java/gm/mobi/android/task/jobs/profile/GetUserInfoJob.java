@@ -7,7 +7,6 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
@@ -30,7 +29,6 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
 
     UserManager userManager;
     FollowManager followManager;
-    TeamManager teamManager;
 
     private Long userId;
     private UserEntity currentUser;
@@ -38,12 +36,11 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     private NetworkUtil networkUtil;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
-      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, TeamManager teamManager, UserModelMapper userVOMapper) {
+      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.teamManager = teamManager;
         this.networkUtil = networkUtil1;
         this.userVOMapper = userVOMapper;
         setOpenHelper(dbHelper);
@@ -102,7 +99,6 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     @Override
     protected void setDatabaseToManagers(SQLiteDatabase db) {
         followManager.setDataBase(db);
-        teamManager.setDataBase(db);
         userManager.setDataBase(db);
     }
 

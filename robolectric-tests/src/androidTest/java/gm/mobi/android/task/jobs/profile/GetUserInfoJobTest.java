@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import gm.mobi.android.RobolectricGradleTestRunner;
 import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.TeamManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
@@ -43,7 +42,6 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
     private FollowManager followManager;
     private UserManager userManager;
     private UserModelMapper userVOMapper;
-    private TeamManager teamManager;
     private GetUserInfoJob getUserInfoJob;
 
     @Before
@@ -54,7 +52,6 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
         openHelper = mock(SQLiteOpenHelper.class);
         userManager = mock(UserManager.class);
         followManager = mock(FollowManager.class);
-        teamManager = mock(TeamManager.class);
 
         userVOMapper = mock(UserModelMapper.class);
 
@@ -62,7 +59,7 @@ public class GetUserInfoJobTest extends BagdadBaseJobTestAbstract {
         when(service.getFollowByIdUserFollowed(CURRENT_USER_ID, USER_ID)).thenReturn(new FollowEntity());
 
         getUserInfoJob =
-          new GetUserInfoJob(Robolectric.application,bus,openHelper,service, networkUtil,userManager,followManager,teamManager, userVOMapper);
+          new GetUserInfoJob(Robolectric.application,bus,openHelper,service, networkUtil,userManager,followManager, userVOMapper);
         UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(CURRENT_USER_ID);
         getUserInfoJob.init(USER_ID, currentUser);

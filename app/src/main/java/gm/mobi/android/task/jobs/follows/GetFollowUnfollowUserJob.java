@@ -31,9 +31,6 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
     UserManager userManager;
     FollowManager followManager;
 
-
-    private UserEntity currentUser;
-
     private UserModelMapper userModelMapper;
 
     @Inject
@@ -45,10 +42,6 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
         this.setOpenHelper(openHelper);
-    }
-
-    public void init(UserEntity currentUser){
-        this.currentUser = currentUser;
     }
 
     @Override protected void createDatabase() {
@@ -67,33 +60,43 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
          }
     }
 
-    public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException{
-        synchronized (followManager){
-           List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
-           FollowEntity followReceived = null;
-            UserEntity userEntity = null;
-           if(followsToUpdate.size()>0){
-               for(FollowEntity f: followsToUpdate){
-                   if(f.getCsys_synchronized().equals("D")){
-                       followReceived = service.unfollowUser(f);
-                       if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
-                   }else{
-                       userEntity = userManager.getUserByIdUser(f.getFollowedUser());
-                       if(userEntity==null){
-                           userEntity = service.getUserByIdUser(f.getFollowedUser());
-                           userManager.saveUser(userEntity);
-                       }
-                       followReceived = service.followUser(f);
-                       if(followReceived!=null){
-                           followManager.saveFollowFromServer(followReceived);
-                           return userModelMapper.toUserModel(userEntity,followReceived, false);
-                       }
-                   }
-               }
-           }
-       }
-        return null;
+    public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
+        List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
+        UserModel resUserModel = null;
+        if (followsToUpdate.size() > 0) {
+            for (FollowEntity f : followsToUpdate) {
+                if (f.getCsys_synchronized().equals("D")) {
+                    unfollowUserAndRecordInDatabase(f);
+                } else {
+                    resUserModel = followUserAndRecordInDatabase(f, getUserFromDatabaseOrServer(f.getFollowedUser()));
+                }
+            }
+        }
+        return resUserModel;
+    }
 
+
+    public UserModel followUserAndRecordInDatabase(FollowEntity f, UserEntity userEntity) throws SQLException, IOException {
+       FollowEntity followReceived = service.followUser(f);
+        if(followReceived!=null){
+            followManager.saveFollowFromServer(followReceived);
+            return userModelMapper.toUserModel(userEntity,followReceived, false);
+        }
+        return null;
+    }
+
+    public UserEntity getUserFromDatabaseOrServer(Long idUser) throws SQLException, IOException {
+       UserEntity userEntity = userManager.getUserByIdUser(idUser);
+        if(userEntity==null){
+            userEntity = service.getUserByIdUser(idUser);
+            userManager.saveUser(userEntity);
+        }
+        return userEntity;
+    }
+
+    public void unfollowUserAndRecordInDatabase(FollowEntity f) throws IOException, SQLException {
+        FollowEntity followReceived = service.unfollowUser(f);
+        if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
     }
 
 

@@ -4,7 +4,6 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
@@ -25,8 +24,8 @@ public class DataServiceModule {
         return new UtilityDtoFactory();
     }
 
-    @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, TeamMapper teamMapper, FollowMapper followMapper) {
-        return new UserDtoFactory(utilityDtoFactory, userMapper, teamMapper ,followMapper);
+    @Provides @Singleton UserDtoFactory provideUserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
+        return new UserDtoFactory(utilityDtoFactory, userMapper, followMapper);
     }
 
     @Provides @Singleton TimelineDtoFactory provideTimelineDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {

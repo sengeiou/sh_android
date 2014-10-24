@@ -6,7 +6,6 @@ import gm.mobi.android.constant.ServiceConstants;
 import gm.mobi.android.db.GMContract.FollowTable;
 import gm.mobi.android.db.GMContract.UserTable;
 import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
@@ -46,16 +45,14 @@ public class UserDtoFactory {
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
-    TeamMapper teamMapper;
     FollowMapper followMapper;
 
     public static final String ID_USER_FOLLOWING = "idUserFollowing";
     public static final String ID_USER_WHO_IS_FOLLOWED = "idUserFollowed";
 
-    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, TeamMapper teamMapper, FollowMapper followMapper) {
+    @Inject public UserDtoFactory(UtilityDtoFactory utilityDtoFactory, UserMapper userMapper, FollowMapper followMapper) {
         this.utilityDtoFactory = utilityDtoFactory;
         this.userMapper = userMapper;
-        this.teamMapper = teamMapper;
         this.followMapper = followMapper;
     }
 
