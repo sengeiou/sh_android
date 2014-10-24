@@ -70,7 +70,11 @@
 //------------------------------------------------------------------------------
 - (void)setupUIWhenCancelOrNotConnectionOrRepeat {
     
-    self.btnShoot.enabled = YES;
+   if ([self.writingTextBox thereIsText])
+       self.btnShoot.enabled = YES;
+    else
+        self.btnShoot.enabled = NO;
+    
     self.viewToDisableTextField.hidden = YES;
     
     [self.writingTextBox setWritingTextViewWhenCancelTouched];
