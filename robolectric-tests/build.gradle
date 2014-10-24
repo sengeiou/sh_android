@@ -74,7 +74,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
 
     def coverageSourceDirs = ['../app/src/main/java']
     sourceDirectories = files(coverageSourceDirs)
-    executionData = files('../robolectric-tests/build/jacoco/testDebug.exec')
+    executionData = files('../robolectric-tests/build/jacoco/test.exec')
 
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
