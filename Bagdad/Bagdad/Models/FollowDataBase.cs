@@ -313,7 +313,17 @@ namespace Bagdad.Models
                     string synchro = st.GetTextAt(6);
                     char synchroChar = 'N'; 
                     if(synchro.Length > 0) synchroChar = synchro.ToCharArray(0,1)[0];
-                    follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
+                    follows.Add(
+                        bagdadFactory.CreateFollowToUpdate(
+                            st.GetIntAt(0), 
+                            st.GetIntAt(1), 
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), 
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), 
+                            ((String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4)))), 
+                            synchroChar,
+                            st.GetIntAt(5)
+                        )
+                    );
                 }
 
                 DataBaseHelper.DBLoaded.Set();
@@ -338,7 +348,17 @@ namespace Bagdad.Models
                     string synchro = st.GetTextAt(6);
                     char synchroChar = 'D';
                     if (synchro.Length > 0) synchroChar = synchro.ToCharArray(0, 1)[0];
-                    follows.Add(new Follow { idUser = st.GetIntAt(0), idUserFollowed = st.GetIntAt(1), csys_birth = Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))), csys_modified = Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))), csys_deleted = (String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4))), csys_synchronized = synchroChar, csys_revision = st.GetIntAt(5) });
+                    follows.Add(
+                        bagdadFactory.CreateFollowToUpdate(
+                            st.GetIntAt(0),
+                            st.GetIntAt(1),
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(2))),
+                            Util.DateToDouble(DateTime.Parse(st.GetTextAt(3))),
+                            ((String.IsNullOrEmpty(st.GetTextAt(4))) ? 0d : Util.DateToDouble(DateTime.Parse(st.GetTextAt(4)))),
+                            synchroChar,
+                            st.GetIntAt(5)
+                        )
+                    );
                 }
 
                 DataBaseHelper.DBLoaded.Set();

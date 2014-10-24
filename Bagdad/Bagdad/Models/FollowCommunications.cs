@@ -50,7 +50,7 @@ namespace Bagdad.Models
             List<User> followings = new List<User>();
             try
             {
-                User user = new User(); 
+                User user = bagdadFactory.CreateUser();
                 ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
 
                 String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + user.GetUserOps() + "}],\"metadata\": {\"items\": " + Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG + ",\"TotalItems\": null,\"offset\": " + offset + ",\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUserFollowing\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"Following\"}}]}";
@@ -205,7 +205,7 @@ namespace Bagdad.Models
                     builderData.Append("],");
                     json = json.Replace("@Data", builderData.ToString());
 
-                    ServiceCommunication serviceCom = new ServiceCommunication();
+                    ServiceCommunication serviceCom = bagdadFactory.CreateServiceCommunication();
                     await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
 
                     await UpdateFollowSynchro(true);
@@ -283,7 +283,7 @@ namespace Bagdad.Models
                         data = data.Replace("@deleted", follow.csys_deleted.ToString());
 
                         json = json.Replace("@Data", data);
-                        ServiceCommunication serviceCom = new ServiceCommunication();
+                        ServiceCommunication serviceCom = bagdadFactory.CreateServiceCommunication();
                         await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
                     }
 

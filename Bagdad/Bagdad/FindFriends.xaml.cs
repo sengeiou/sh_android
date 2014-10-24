@@ -239,6 +239,7 @@ namespace Bagdad
             ((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).Fill = ((FollowViewModel)findList.SelectedItem).buttonForeground;
             ((ImageBrush)((Rectangle)((Grid)((Border)((Grid)sender).Children.First()).Child).Children.First()).OpacityMask).ImageSource = ((FollowViewModel)findList.SelectedItem).buttonIcon;
 
+            PhoneApplicationService.Current.State["RefreshNeeded"] = true;
         }
     }
 }
