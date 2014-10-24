@@ -31,6 +31,8 @@
 @property (nonatomic, assign)               BOOL                            returningFromBackground;
 @property (nonatomic,strong)                UITapGestureRecognizer          *tapTapRecognizer;
 
+@property (nonatomic, assign)               BOOL                            keyboardIsVisible;
+
 
 @end
 
@@ -47,6 +49,8 @@
     
     //For Alpha version
     self.watchingMenu.hidden = YES;
+
+    self.keyboardIsVisible = NO;
     
     [self.viewNotShots addTargetSendShot:self action:@selector(initSendShot)];
     
@@ -321,45 +325,53 @@
 
 //------------------------------------------------------------------------------
 - (void)darkenBackgroundView {
-    self.backgroundView.hidden = NO;
-    [self.backgroundView setAlpha:0.0];
-    [UIView animateWithDuration:1.5
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseIn // See other options
-                     animations:^{
-                         [self.backgroundView setAlpha:0.5];
-                     }
-                     completion:^(BOOL finished) {
-                         // Completion Block
-                     }];
-    //self.backgroundView.hidden = NO;
-    
-    if (self.tapTapRecognizer == nil){
-        self.tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyboard)];
-        [self.backgroundView addGestureRecognizer:self.tapTapRecognizer];
-        self.orientation = NO;
+
+    if (!self.keyboardIsVisible) {
+        self.backgroundView.hidden = NO;
+        [self.backgroundView setAlpha:0.0];
+        [UIView animateWithDuration:1.5
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseIn // See other options
+                         animations:^{
+                             [self.backgroundView setAlpha:0.5];
+                         }
+                         completion:^(BOOL finished) {
+                             // Completion Block
+                         }];
+        //self.backgroundView.hidden = NO;
+        
+        if (self.tapTapRecognizer == nil){
+            self.tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyboard)];
+            [self.backgroundView addGestureRecognizer:self.tapTapRecognizer];
+            self.orientation = NO;
+        }
+        
+        self.keyboardIsVisible = YES;
     }
+
 }
 
 //------------------------------------------------------------------------------
 -(void)hiddenKeyboard{
     
-    if (!self.orientation){
-        [self.viewTextField keyboardHide:nil];
-        //self.backgroundView.hidden = YES;
-        
-        [self.backgroundView setAlpha:0.5];
-        [UIView animateWithDuration:0.5
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseIn // See other options
-                         animations:^{
-                             [self.backgroundView setAlpha:0.0];
-                         }
-                         completion:^(BOOL finished) {
-                             // Completion Block
-                             //self.backgroundView.hidden = YES;
-                         }];
-
+    if (self.keyboardIsVisible) {
+        if (!self.orientation){
+            [self.viewTextField keyboardHide:nil];
+            //self.backgroundView.hidden = YES;
+            
+            [self.backgroundView setAlpha:0.5];
+            [UIView animateWithDuration:0.5
+                                  delay:0.0
+                                options:UIViewAnimationOptionCurveEaseIn // See other options
+                             animations:^{
+                                 [self.backgroundView setAlpha:0.0];
+                             }
+                             completion:^(BOOL finished) {
+                                 // Completion Block
+                                 //self.backgroundView.hidden = YES;
+                             }];
+        self.keyboardIsVisible = NO;
+       }
     }
 }
 
