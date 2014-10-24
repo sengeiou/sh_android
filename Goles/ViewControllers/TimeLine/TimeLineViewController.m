@@ -202,12 +202,10 @@
 //------------------------------------------------------------------------------
 - (void)parserResponseForClass:(Class)entityClass status:(BOOL)status andError:(NSError *)error andRefresh:(BOOL)refresh{
     
-    if (status && [entityClass isSubclassOfClass:[Shot class]]){
-       
-        [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
+    if (status && [entityClass isSubclassOfClass:[Shot class]])
         [self.timelineTableView isNecessaryMoreCells:YES];
 
-    }else if (!refresh){
+    else if (!refresh){
 
         [self.timelineTableView isNecessaryMoreCells:NO];
         [self.timelineTableView isNecessaryRefreshCells:NO];
@@ -234,8 +232,6 @@
         [self changeTitleView];
         [self.viewTextField stateInitial];
         [self.viewTextField keyboardHide:nil];
-
-        [self performSelectorOnMainThread:@selector(callReloadTable) withObject:nil waitUntilDone:NO];
 
     }else if (!status || error)
         [self performSelectorOnMainThread:@selector(showAlertcanNotCreateShot) withObject:nil waitUntilDone:NO];

@@ -7,7 +7,6 @@
 
 #import "ShotManager.h"
 #import "UserManager.h"
-#import "CoreDataManager.h"
 #import "FavRestConsumer.h"
 #import "CoreDataParsing.h"
 #import "Shot.h"
@@ -47,15 +46,27 @@
 
 #pragma mark - SHOT REQUEST
 //------------------------------------------------------------------------------
-- (NSArray *)getShotsForTimeLine {
+- (NSFetchedResultsController *)getShotsForTimeLine {
 
-    //NSTimeInterval nowDate = [[NSDate date] timeIntervalSince1970];
-    //NSString *nowDateString = [NSString stringWithFormat:@"%f", nowDate*1000];
-   // NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@ AND csys_birth < %@",[[UserManager singleton] getActiveUsersIDs],nowDateString];
+    NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:K_COREDATA_SHOT inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser IN %@",[[UserManager singleton] getActiveUsersIDs]];
+    [fetchRequest setPredicate:predicate];
+    
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:kJSON_BIRTH ascending:NO];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+    
+    [fetchRequest setFetchBatchSize:30];
+    
+    NSFetchedResultsController *theFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                                  managedObjectContext:context
+                                                                                                    sectionNameKeyPath:nil
+                                                                                                             cacheName:@"ShotCache"];
+    return theFetchedResultsController;
 
-    return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
-//    return [[CoreDataManager singleton] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withFetchLimit:@300];
 }
 
 //------------------------------------------------------------------------------
@@ -72,7 +83,6 @@
     return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
     
 }
-
 
 #pragma mark - SHOT CREATION
 //------------------------------------------------------------------------------

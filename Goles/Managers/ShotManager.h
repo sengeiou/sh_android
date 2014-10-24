@@ -6,13 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CoreDataManager.h"
 
 @interface ShotManager : NSObject
 
 + (ShotManager *)singleton;
 + (ShotManager *)sharedInstance;
 
-- (NSArray *)getShotsForTimeLine;
+- (NSFetchedResultsController *)getShotsForTimeLine;
 - (NSArray *) getShotsForTimeLineBetweenHours;
 - (void)createShotWithComment:(NSString *)comment andDelegate:(id)delegate;
 

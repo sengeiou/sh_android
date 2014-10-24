@@ -15,13 +15,13 @@
 #import "AppDelegate.h"
 #import "TimeLineViewController.h"
 #import "CoreDataParsing.h"
+#import "CoreDataManager.h"
+#import "UserManager.h"
 
 static NSString *CellIdentifier = @"shootCell";
 
-@interface TimeLineTableViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimeLineTableViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
-@property (nonatomic,strong)            NSArray                     *arrayShots;
-@property (nonatomic,strong)            NSMutableDictionary         *offscreenCells;
 @property (nonatomic)                   BOOL                        moreCells;
 @property (nonatomic)                   BOOL                        refreshTable;
 @property (nonatomic,strong)            UIActivityIndicatorView     *spinner;
@@ -29,6 +29,7 @@ static NSString *CellIdentifier = @"shootCell";
 @property (nonatomic,strong)            UIRefreshControl            *refreshControl;
 @property (nonatomic,assign)            CGFloat                     lastContentOffset;
 @property (nonatomic,assign)            IBOutlet    UITableView     *myTableView;
+@property (nonatomic, retain)           NSFetchedResultsController  *fetchedResultsController;
 
 @end
 
@@ -36,17 +37,20 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
-    [super viewDidLoad];
-
-    [self basicSetup];
     
+    [super viewDidLoad];
+    [self basicSetup];
     [self loadData];
+}
+
+//------------------------------------------------------------------------------
+- (void)viewDidUnload {
+    self.fetchedResultsController = nil;
 }
 
 //------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 //------------------------------------------------------------------------------
@@ -61,27 +65,13 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - View lifecycle
 //------------------------------------------------------------------------------
 - (void)loadData {
-    
-    //Listen for synchro process end
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadShotsTable) name:K_NOTIF_SHOT_END object:nil];
-    
-    
-    //Get shots from CoreData
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    self.offscreenCells = [NSMutableDictionary dictionary];
-    [self initSpinner];
-    [self setupTimeLineView];
-    
-    [self.myTableView reloadData];
-}
 
-//------------------------------------------------------------------------------
-- (void)setupTimeLineView {
+    [self initSpinner];
     
-    if (self.arrayShots.count == 0)
-        self.myTableView.hidden = YES;
-    else
-        [self hiddenViewNotShots];
+    NSError *error;
+    if (![[self fetchedResultsController] performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+    }
     
 }
 
@@ -89,22 +79,29 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.arrayShots.count;
+    return _fetchedResultsController.fetchedObjects.count;
+
 }
 
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    ShotTableViewCell *cell = (id) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    Shot *shot = self.arrayShots[indexPath.row];
-    
-    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
-    [cell addTarget:self action:@selector(goProfile:)];
-    
+    ShotTableViewCell *cell = (ShotTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
+    [self configureCell:cell atIndexPAth:indexPath];
+
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
     
     return cell;
+}
+
+//------------------------------------------------------------------------------
+- (void)configureCell:(ShotTableViewCell *)cell atIndexPAth:(NSIndexPath *)indexPath {
+    
+    Shot *shot = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+    [cell addTarget:self action:@selector(goProfile:)];
 }
 
 //------------------------------------------------------------------------------
@@ -130,30 +127,8 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(changeTitleView)])
         [self.delegate changeTitleView];
-    
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    
-#warning Need to check if some shot is inserted or deleted in DB. Only in this case is necessary to reload
-    
-    if (self.arrayShots.count > 0)
-        [self performSelectorOnMainThread:@selector(reloadTimeline) withObject:nil waitUntilDone:NO];
 }
 
-//------------------------------------------------------------------------------
-- (void)reloadShotsTableWithAnimation:(id)sender {
-    
-    //First Time
-    if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
-        [self.delegate setHiddenViewNotshots:YES];
-    
-    self.myTableView.hidden = NO;
-    
-    self.arrayShots = [[ShotManager singleton] getShotsForTimeLine];
-    
-    if (self.arrayShots.count > 0)
-        [self performSelectorOnMainThread:@selector(animationInsertShot) withObject:nil waitUntilDone:NO];
-    
-}
 
 //------------------------------------------------------------------------------
 -(void)reloadTimeline{
@@ -166,15 +141,56 @@ static NSString *CellIdentifier = @"shootCell";
     [self.myTableView reloadData];
 }
 
+#pragma mark - FETCHED_RESULTS_CONTROLLER
 //------------------------------------------------------------------------------
-- (void)animationInsertShot{
+- (NSFetchedResultsController *)fetchedResultsController {
     
-    [self.myTableView reloadData];
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
     
-    //    [self.timelineTableView beginUpdates];
-    //    NSIndexPath *iPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    //    [self.timelineTableView insertRowsAtIndexPaths:@[iPath] withRowAnimation:UITableViewRowAnimationTop];
-    //    [self.timelineTableView endUpdates];
+    //GET THE DATA
+    self.fetchedResultsController = [[ShotManager singleton] getShotsForTimeLine];
+    
+    self.fetchedResultsController.delegate = self;
+    
+    return _fetchedResultsController;
+}
+
+//------------------------------------------------------------------------------
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.myTableView beginUpdates];
+}
+
+//------------------------------------------------------------------------------
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    UITableView *tableView = self.myTableView;
+    
+    switch(type) {
+            
+        case NSFetchedResultsChangeInsert:
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+//------------------------------------------------------------------------------
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.myTableView endUpdates];
 }
 
 #pragma mark - Pull to refresh
@@ -204,20 +220,6 @@ static NSString *CellIdentifier = @"shootCell";
 }
 
 #pragma mark - UIScrollViewDelegate
-//------------------------------------------------------------------------------
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-
-// For Beta version and only iphone 4
-
-//    CGFloat currentOffset = scrollView.contentOffset.y;
-//
-//   if (currentOffset == 0)
-//        [UIView animateWithDuration:0.25 animations:^{
-//            self.watchingMenu.alpha = 1.0;
-//            self.viewTextField.alpha = 1.0;
-//        }];
-//}
-
 //------------------------------------------------------------------------------
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
@@ -261,7 +263,7 @@ static NSString *CellIdentifier = @"shootCell";
     UIButton *btn = (UIButton *) sender;
     
     if ([self.delegate respondsToSelector:@selector(pushToProfile:)])
-        [self.delegate pushToProfile:self.arrayShots[btn.tag]];
+        [self.delegate pushToProfile:[self.fetchedResultsController.fetchedObjects objectAtIndex:btn.tag]];
 }
 
 //------------------------------------------------------------------------------
