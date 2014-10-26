@@ -157,7 +157,7 @@ static NSString *CellIdentifier = @"shootCell";
     
     self.fetchedResultsController.delegate = self;
     
-    return self.fetchedResultsController;
+    return _fetchedResultsController;
 }
 
 //------------------------------------------------------------------------------
