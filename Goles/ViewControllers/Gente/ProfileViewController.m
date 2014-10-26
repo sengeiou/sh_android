@@ -58,7 +58,9 @@
     
     [super viewDidLoad];
 
-    self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
+    if (!self.search)
+        self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
+   
     [self dataFillView];
     [self textLocalizable];
 }

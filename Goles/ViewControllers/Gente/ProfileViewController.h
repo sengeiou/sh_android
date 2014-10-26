@@ -12,5 +12,6 @@
 @interface ProfileViewController : UIViewController
 
 @property (nonatomic, strong) User *selectedUser;
+@property (nonatomic, assign) BOOL search;
 
 @end

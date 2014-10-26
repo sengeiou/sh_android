@@ -248,6 +248,7 @@
     AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
     profileVC.selectedUser = user;
+    profileVC.search = YES;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
