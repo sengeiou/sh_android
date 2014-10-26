@@ -8,8 +8,7 @@
 +(Shot *)insertWithDictionary:(NSDictionary *)dict {
     
     NSManagedObjectContext *context = [[CoreDataManager singleton] getInsertContext];
-    Shot *shot = [NSEntityDescription insertNewObjectForEntityForName:@"Shot"
-                                               inManagedObjectContext:context];
+    Shot *shot = [NSEntityDescription insertNewObjectForEntityForName:@"Shot" inManagedObjectContext:context];
     
     BOOL insertedCorrectly = [shot setShotValuesWithDictionary:dict];
     if ( !insertedCorrectly ){

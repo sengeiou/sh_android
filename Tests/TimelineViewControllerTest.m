@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "TimeLineHelper.h"
 #import "CreateShotView.h"
+#import "ManagerHelper.h"
 
 @interface TimelineViewControllerTest : XCTestCase
 
@@ -42,6 +43,8 @@
     
     [TimeLineHelper emptyShotsDataBase];
     [TimeLineHelper populateThreeShots];
+    [ManagerHelper emptyUsersDataBase];
+    [ManagerHelper populateThreeUsers];
     
     
     NSString *string1 = @"Texte repetit";

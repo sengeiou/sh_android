@@ -77,10 +77,10 @@
     NSTimeInterval oneDayAgoDate = [oneDayAgo timeIntervalSince1970];
     NSString *oneDayAgoString = [NSString stringWithFormat:@"%f", oneDayAgoDate*1000];
     
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user.idUser == %@ AND csys_birth > %@",[[UserManager singleton] getUserId],oneDayAgoString];
     
-    return [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+    NSArray *array = [[CoreDataManager sharedInstance] getAllEntities:[Shot class] orderedByKey:kJSON_BIRTH ascending:NO withPredicate:predicate];
+    return array;
     
 }
 

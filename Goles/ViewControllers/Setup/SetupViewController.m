@@ -44,6 +44,7 @@
 
 @implementation SetupViewController
 
+//------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -62,7 +63,7 @@
     [self textLocalizable];
 }
 
-
+//------------------------------------------------------------------------------
 -(void)adjustFrame{
    
     self.mtableView.frame = CGRectMake(self.mtableView.frame.origin.x, 0, self.view.frame.size.width, self.mtableView.frame.size.height);
@@ -103,7 +104,7 @@
 
 }
 
-
+//------------------------------------------------------------------------------
 -(void)addTextFields{
     txtFieldName = [[UITextField alloc] initWithFrame:CGRectMake(180,3,self.view.frame.size.width-185,40)];
     txtFieldName.delegate = self;
@@ -122,6 +123,7 @@
 }
 
 #pragma mark - Localizable Strings
+//------------------------------------------------------------------------------
 -(void)textLocalizable{
     
     [self.btnForgotPwd setTitle: NSLocalizedString(@"Forgot Password?", nil) forState:UIControlStateNormal];
@@ -131,10 +133,12 @@
     self.lblNote.text = NSLocalizedString(@"Shootr will never post without your permission.", nil);
 }
 
+//------------------------------------------------------------------------------
 - (BOOL) shouldAutorotate {
     return NO;
 }
 
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
    
     [super viewWillAppear:animated];
@@ -145,6 +149,7 @@
         self.mScrollView.contentInset = UIEdgeInsetsMake(-40.0, 0, 0, 0.0);
 }
 
+//------------------------------------------------------------------------------
 -(void)modifyNavigationBar{
     
     self.navigationItem.backBarButtonItem.title = NSLocalizedString(@"Back", nil);
@@ -156,6 +161,7 @@
     [self disableButtonItem];
 }
 
+//------------------------------------------------------------------------------
 -(void)enableButtonItem{
     self.btnEnter.enabled = YES;
     
@@ -166,7 +172,10 @@
                                  forState:UIControlStateNormal];
 
 }
+
+//------------------------------------------------------------------------------
 -(void)disableButtonItem{
+    
     self.btnEnter.enabled = NO;
 
     [self.btnEnter setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -175,17 +184,22 @@
                                            nil]
                                  forState:UIControlStateNormal];
 }
--(void)viewDidDisappear:(BOOL)animated{
+
+//------------------------------------------------------------------------------
+-(void)viewDidDisappear:(BOOL)animated {
+    
     [super viewDidDisappear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
 
+//------------------------------------------------------------------------------
 -(void)dismissKeyboard {
+    
     [txtFieldName resignFirstResponder];
-
     [txtFieldPwd resignFirstResponder];
 }
 
+//------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -193,8 +207,9 @@
 
 
 #pragma mark - Table view data source
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+//------------------------------------------------------------------------------
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     return 2;
 }
 
@@ -204,8 +219,9 @@
     return 44;
 }
 
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
- {
+//------------------------------------------------------------------------------
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+     
      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellSetup"  forIndexPath:indexPath];
      
      switch (indexPath.row) {
@@ -233,6 +249,7 @@
      return cell;
 }
 
+//------------------------------------------------------------------------------
 - (IBAction)passEnter:(id)sender {
 
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:NO withShot:NO];
@@ -270,6 +287,7 @@
     }
 }
 
+//------------------------------------------------------------------------------
 -(void)showAlertBadText{
    
     UIAlertController * alert=   [UIAlertController
@@ -341,7 +359,9 @@
     }
 }
 
+//------------------------------------------------------------------------------
 -(void)showAlertTimeout{
+    
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:NSLocalizedString(@"Connection timed out.", nil)
                                   message:nil

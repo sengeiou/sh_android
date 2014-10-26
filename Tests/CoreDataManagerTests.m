@@ -32,7 +32,7 @@
     [super tearDown];
 }
 
-//Fetch 1 item from insertContext
+//Fetch 1 item from insertContext - Test with Shot entity
 - (void)testToFetchOneShotFromCoreDataBasedOnID {
     
     id fetchedEntity = [[CoreDataManager singleton] getEntityInInsertContext:[Shot class] withId:1];
@@ -40,7 +40,7 @@
     XCTAssertNotNil(fetchedEntity,@"We must have an entity");
 }
 
-//Fetch 1 item from basicContext
+//Fetch 1 item from basicContext - Test with User entity
 - (void)testToFetchOneUserFromCoreDataBasedOnID {
     
     id fetchedEntity = [[CoreDataManager singleton] getEntity:[User class] withId:1];
@@ -48,7 +48,7 @@
     XCTAssertNotNil(fetchedEntity,@"We must have an entity");
 }
 
-//Fetch All items in basicContext
+//Fetch All items in basicContext - Test with User entity
 - (void)testThatAllObjectsAreReturnedOnFetch {
     
     NSArray *fetchResult = [[CoreDataManager singleton] getAllEntities:[User class]];
