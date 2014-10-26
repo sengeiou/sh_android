@@ -30,7 +30,7 @@ static NSString *CellIdentifier = @"shootCell";
 @property (nonatomic,assign)            CGFloat                     lastContentOffset;
 @property (nonatomic,assign)            IBOutlet    UITableView     *myTableView;
 @property (nonatomic, retain)           NSFetchedResultsController  *fetchedResultsController;
-
+@property (nonatomic, strong)           NSArray                     *arrayShots;
 @end
 
 @implementation TimeLineTableViewController
@@ -79,7 +79,10 @@ static NSString *CellIdentifier = @"shootCell";
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return _fetchedResultsController.fetchedObjects.count;
+    if (self.fetchedResultsController.fetchedObjects.count > 0)
+        [self addPullToRefresh];
+    
+    return self.fetchedResultsController.fetchedObjects.count;
 
 }
 
@@ -138,7 +141,7 @@ static NSString *CellIdentifier = @"shootCell";
         [self.delegate setHiddenViewNotshots:YES];
     self.myTableView.hidden = NO;
     
-    [self.myTableView reloadData];
+   // [self.myTableView reloadData];
 }
 
 #pragma mark - FETCHED_RESULTS_CONTROLLER
@@ -154,7 +157,7 @@ static NSString *CellIdentifier = @"shootCell";
     
     self.fetchedResultsController.delegate = self;
     
-    return _fetchedResultsController;
+    return self.fetchedResultsController;
 }
 
 //------------------------------------------------------------------------------
