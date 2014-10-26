@@ -55,15 +55,15 @@
 
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
 
     self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
     [self dataFillView];
-    
-    [self customView];
     [self textLocalizable];
 }
 
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -80,17 +80,6 @@
     [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-//------------------------------------------------------------------------------
-- (void)customView{
-    
-    self.btnFollow.layer.cornerRadius = 5; // this value vary as per your desire
-    self.btnFollow.clipsToBounds = YES;
-    self.btnUnfollow.layer.cornerRadius = 5; // this value vary as per your desire
-    self.btnUnfollow.clipsToBounds = YES;
-    self.btnEditProfile.layer.cornerRadius = 5; // this value vary as per your desire
-    self.btnEditProfile.clipsToBounds = YES;
 }
 
 //------------------------------------------------------------------------------
@@ -123,6 +112,7 @@
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:self.selectedUser.photo] andUIimageView:self.imgPhoto andText:[self.selectedUser.name substringToIndex:1]];
     
     
+    //To get acces to debug menu
     if ([self.selectedUser.idUser isEqual:[[UserManager sharedInstance] getUserId]]) {
         if (K_DEBUG_MODE) {
             [self.btnPhoto addTarget:self action:@selector(passToChageEndPoint) forControlEvents:UIControlEventTouchUpInside];

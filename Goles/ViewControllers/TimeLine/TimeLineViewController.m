@@ -61,6 +61,22 @@
 }
 
 //------------------------------------------------------------------------------
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self updateCurrentTitleView];
+    
+    [self setLocalNotificationObservers];
+}
+
+//------------------------------------------------------------------------------
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//------------------------------------------------------------------------------
 -(void)initSendShot{
     [self.viewTextField startSendShot];
 }
@@ -112,21 +128,6 @@
    // [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationUpdates:)    name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
-//------------------------------------------------------------------------------
--(void)viewWillAppear:(BOOL)animated{
-
-    [super viewWillAppear:animated];
-
-    [self updateCurrentTitleView];
-    
-    [self setLocalNotificationObservers];
-}
-
-//------------------------------------------------------------------------------
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 //------------------------------------------------------------------------------
 - (void)setNavigationBarButtons {
@@ -156,15 +157,10 @@
     
 }
 
-//------------------------------------------------------------------------------
-- (void) watching{
-    
-}
-
-
 #pragma mark - Change NavigationBar
 //------------------------------------------------------------------------------
 -(void)changeStateViewNavBar{
+    
     [self changeTitleView];
     [self.timelineTableView setFooterInvisible];
 }
@@ -218,16 +214,6 @@
     [self performSelectorOnMainThread:@selector(changeViewTitleMainThread) withObject:nil waitUntilDone:NO];
 }
 
--(void)callReloadTable{
-    
-    [self.timelineTableView reloadShotsTable];
-}
-
--(void)changeViewTitleMainThread{
-    
-    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0];
-}
-
 #pragma mark - ShotCreationProtocol response
 //------------------------------------------------------------------------------
 - (void)createShotResponseWithStatus:(BOOL)status andError:(NSError *)error {
@@ -244,6 +230,18 @@
 
 #pragma mark - Response utilities methods
 //------------------------------------------------------------------------------
+-(void)callReloadTable{
+    
+    [self.timelineTableView reloadShotsTable];
+}
+
+//------------------------------------------------------------------------------
+-(void)changeViewTitleMainThread{
+    
+    [self performSelector:@selector(changeStateViewNavBar) withObject:nil afterDelay:0];
+}
+
+//------------------------------------------------------------------------------
 -(void)showAlertcanNotCreateShot{
     
     self.orientation = NO;
@@ -259,7 +257,6 @@
                          handler:^(UIAlertAction * action)
                          {
                              [alert dismissViewControllerAnimated:YES completion:nil];
-                            
                              [self retrySendShot];
                          }];
     
@@ -343,7 +340,6 @@
                          completion:^(BOOL finished) {
                              // Completion Block
                          }];
-        //self.backgroundView.hidden = NO;
         
         if (self.tapTapRecognizer == nil){
             self.tapTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyboard)];
@@ -362,7 +358,6 @@
     if (!self.orientation){
         if (self.keyboardIsVisible) {
             [self.viewTextField keyboardHide:nil];
-            //self.backgroundView.hidden = YES;
             
             [self.backgroundView setAlpha:0.5];
             [UIView animateWithDuration:0.5
@@ -373,7 +368,6 @@
                              }
                              completion:^(BOOL finished) {
                                  // Completion Block
-                                 //self.backgroundView.hidden = YES;
                              }];
         self.keyboardIsVisible = NO;
        }

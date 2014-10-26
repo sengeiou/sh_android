@@ -18,7 +18,8 @@
          [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.backgroundColor = [Fav24Colors iosSevenBlue];
         self.layer.masksToBounds = YES;
-        
+        self.layer.cornerRadius = 5;
+        self.clipsToBounds = YES;
         [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
         [self setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
     }

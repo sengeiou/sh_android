@@ -9,8 +9,6 @@
 
 @interface TimeLineViewController : UIViewController
 
-
-
 @property(nonatomic, assign)    BOOL orientation;
 
 @end

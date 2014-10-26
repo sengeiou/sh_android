@@ -123,6 +123,13 @@
     }else
         [self.writingTextBox setWritingTextViewWhenCancelTouched];
     
+    [self animateTheViewToNewPosition];
+    
+}
+
+//------------------------------------------------------------------------------
+- (void)animateTheViewToNewPosition {
+    
     if (self.textViewWrittenRows <= 2) {
         self.bottomViewHeightConstraint.constant = 75;
         self.bottomViewPositionConstraint.constant = 0.0f;

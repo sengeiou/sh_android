@@ -296,6 +296,7 @@
 }
 
 #pragma mark - Search Response method
+
 //------------------------------------------------------------------------------
 - (void)searchResponseWithStatus:(BOOL)status andError:(NSError *)error andUsers:(NSArray *)usersArray needToPaginate:(BOOL)pagination{
     
@@ -303,16 +304,7 @@
         
         refreshTable = YES;
         
-        [self.usersSearch addObjectsFromArray:usersArray];
-
-        [self.followingUsers removeAllObjects];
-        
-        [self.followingUsers addObjectsFromArray:self.usersSearch];
-        
-        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
-        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
-        NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
-        self.followingUsers = [sortedArray mutableCopy];
+        [self constructArraysFromResponse:usersArray];
         
         if (pagination)
             [self addLoadMoreCell];
@@ -332,6 +324,28 @@
     }
     
     [self checkIfNeedToShowNotPeopleView];
+}
+
+
+//------------------------------------------------------------------------------
+- (void)constructArraysFromResponse:(NSArray *)usersArray {
+    
+    [self.usersSearch addObjectsFromArray:usersArray];
+    
+    [self.followingUsers removeAllObjects];
+    
+    [self.followingUsers addObjectsFromArray:self.usersSearch];
+    
+    [self sortArray];
+}
+
+//------------------------------------------------------------------------------
+- (void)sortArray {
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:kJSON_NAME ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    NSArray *sortedArray = [self.followingUsers  sortedArrayUsingDescriptors:descriptors];
+    self.followingUsers = [sortedArray mutableCopy];
 }
 
 //------------------------------------------------------------------------------

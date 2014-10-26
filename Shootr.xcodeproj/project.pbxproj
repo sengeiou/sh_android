@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0800933919F59E5100429207 /* ViewNotShots.m in Sources */ = {isa = PBXBuildFile; fileRef = 0800933819F59E5100429207 /* ViewNotShots.m */; };
+		9E46304319FBAD2800125402 /* CoreDataManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E46304219FBAD2800125402 /* CoreDataManagerTests.m */; };
+		9E46304619FBB0FE00125402 /* ManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E46304519FBB0FE00125402 /* ManagerHelper.m */; };
 		9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */; };
 		9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */; };
 		9EB33D0B19F2C5BE001A0151 /* FollowButtonProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB33D0A19F2C5BE001A0151 /* FollowButtonProfile.m */; };
@@ -142,6 +144,9 @@
 /* Begin PBXFileReference section */
 		0800933719F59E5100429207 /* ViewNotShots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewNotShots.h; sourceTree = SOURCE_ROOT; };
 		0800933819F59E5100429207 /* ViewNotShots.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewNotShots.m; sourceTree = SOURCE_ROOT; };
+		9E46304219FBAD2800125402 /* CoreDataManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreDataManagerTests.m; path = Tests/CoreDataManagerTests.m; sourceTree = SOURCE_ROOT; };
+		9E46304419FBB0FE00125402 /* ManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ManagerHelper.h; path = Tests/ManagerHelper.h; sourceTree = SOURCE_ROOT; };
+		9E46304519FBB0FE00125402 /* ManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ManagerHelper.m; path = Tests/ManagerHelper.m; sourceTree = SOURCE_ROOT; };
 		9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoTableViewController.h; path = Goles/ViewControllers/TimeLine/InfoTableViewController.h; sourceTree = SOURCE_ROOT; };
 		9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoTableViewController.m; path = Goles/ViewControllers/TimeLine/InfoTableViewController.m; sourceTree = SOURCE_ROOT; };
 		9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoCustomCell.h; path = Goles/ViewControllers/TimeLine/InfoCustomCell.h; sourceTree = SOURCE_ROOT; };
@@ -391,6 +396,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E46304119FBAD0500125402 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				9E46304219FBAD2800125402 /* CoreDataManagerTests.m */,
+				9E46304419FBB0FE00125402 /* ManagerHelper.h */,
+				9E46304519FBB0FE00125402 /* ManagerHelper.m */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		9EB33D1219F2D7BE001A0151 /* Custom classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -594,6 +609,7 @@
 				AAE0EF6019E425AD00F32FF7 /* GeneralTests.m */,
 				A526039219DD89C600375FB1 /* Timeline */,
 				A526039119DD80ED00375FB1 /* Performance */,
+				9E46304119FBAD0500125402 /* Managers */,
 				A526039019DD7F9D00375FB1 /* Webservice */,
 				AA623CFE1998A7F200A942A9 /* Supporting Files */,
 			);
@@ -1133,6 +1149,7 @@
 				AA623E731998D17800A942A9 /* Fav24Fonts.m in Sources */,
 				AACA544019C057C000E39D94 /* AFSecurityPolicy.m in Sources */,
 				AA623E3C1998D17800A942A9 /* CoreDataParsing.m in Sources */,
+				9E46304619FBB0FE00125402 /* ManagerHelper.m in Sources */,
 				AACA544719C057C000E39D94 /* UIAlertView+AFNetworking.m in Sources */,
 				AA623E711998D17800A942A9 /* UserManager.m in Sources */,
 				AA72640619D03A510067A39D /* _Shot.m in Sources */,
@@ -1152,6 +1169,7 @@
 			files = (
 				AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */,
 				AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */,
+				9E46304319FBAD2800125402 /* CoreDataManagerTests.m in Sources */,
 				AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */,
 				AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */,
 				AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */,

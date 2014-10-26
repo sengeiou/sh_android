@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "FavRestConsumerHelper.h"
+#import "ManagerHelper.h"
 
 @interface FavRestConsumerHelperTest : XCTestCase
 
@@ -20,6 +21,9 @@
 
 - (void)setUp {
     [super setUp];
+    [ManagerHelper emptyUsersDataBase];
+    [ManagerHelper populateThreeUsers];
+    
     self.requestorArray = [FavRestConsumerHelper createREQ];
 }
 

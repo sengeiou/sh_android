@@ -14,6 +14,7 @@
 
 @property (nonatomic,strong)                NSArray         *usersArray;
 @property (nonatomic,strong)    IBOutlet    UITableView     *infoTableView;
+
 @end
 
 @implementation InfoTableViewController

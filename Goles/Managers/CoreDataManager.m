@@ -143,6 +143,8 @@
     }
     return YES;
 }
+
+//Test implemented
 //------------------------------------------------------------------------------
 - (id)getEntity:(Class)entityClass withId:(NSInteger)entityId{
     
@@ -155,6 +157,7 @@
     else                        return nil;
 }
 
+//Test implemented
 //------------------------------------------------------------------------------
 - (id)getEntityInInsertContext:(Class)entityClass withId:(NSInteger)entityId{
     
@@ -174,13 +177,14 @@
 
 }
 
-
+//Test implemented
 //------------------------------------------------------------------------------
 - (NSArray *) getAllEntities:(Class)entityClass {
     
     return [self getAllEntities:entityClass orderedByKey:nil];
 }
 
+//Test implemented
 //------------------------------------------------------------------------------
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key {
     
@@ -197,7 +201,6 @@
 - (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate {
     
     NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
-    //  NSPredicate *predicate = [NSPredicate predicateWithFormat:@"path = %@ && status = 1 && platform = 1",path];
     
     [request setPredicate:predicate];
     NSError * error = nil;

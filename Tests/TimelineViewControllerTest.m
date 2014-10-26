@@ -8,13 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "Shot.h"
-#import "ShotManager.h"
-#import "TimeLineViewController.h"
-#import "CoreDataManager.h"
 #import "TimeLineHelper.h"
-#import "UserManager.h"
-#import <math.h>
 #import "CreateShotView.h"
 
 @interface TimelineViewControllerTest : XCTestCase
@@ -45,8 +39,8 @@
 
 
 -(void)testWhenShotsAvailableNewShotIsNotRepeated{
+    
     [TimeLineHelper emptyShotsDataBase];
-
     [TimeLineHelper populateThreeShots];
     
     

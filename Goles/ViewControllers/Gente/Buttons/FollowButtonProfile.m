@@ -19,6 +19,8 @@
         self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
         self.layer.borderWidth = 1.0f;
         self.layer.masksToBounds = YES;
+        self.layer.cornerRadius = 5;
+        self.clipsToBounds = YES;
     }
     
     return self;

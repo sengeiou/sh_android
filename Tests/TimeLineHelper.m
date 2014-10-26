@@ -16,9 +16,9 @@
 
 +(NSArray *)createThreeShotsWithDict{
     //Populate DB
-    NSDictionary *shotsOne = @{kJSON_SHOT_IDSHOT:@1,kJSON_SHOT_COMMENT:@"",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:[[UserManager singleton] getUserId]};
-    NSDictionary *shotsTwo = @{kJSON_SHOT_IDSHOT:@2,kJSON_SHOT_COMMENT:@"Texte repetit",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:[[UserManager singleton] getUserId]};
-    NSDictionary *shotsThree = @{kJSON_SHOT_IDSHOT:@3,kJSON_SHOT_COMMENT:@"TExte aL3ator1",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:[[UserManager singleton] getUserId]};
+    NSDictionary *shotsOne = @{kJSON_SHOT_IDSHOT:@1,kJSON_SHOT_COMMENT:@"",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:@1};
+    NSDictionary *shotsTwo = @{kJSON_SHOT_IDSHOT:@2,kJSON_SHOT_COMMENT:@"Texte repetit",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:@1};
+    NSDictionary *shotsThree = @{kJSON_SHOT_IDSHOT:@3,kJSON_SHOT_COMMENT:@"TExte aL3ator1",K_WS_OPS_BIRTH_DATE:[self createEpochFromNow],kJSON_ID_USER:@1};
     NSArray *shots = @[shotsOne,shotsTwo,shotsThree];
     
     return shots;

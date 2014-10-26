@@ -31,6 +31,9 @@
     [super setUp];
     self.writingText = mock([WritingText class]);
     self.createSV = [[CreateShotView alloc] init];
+//    UIStoryboard *timelineST = [UIStoryboard storyboardWithName:@"Timeline" bundle:nil];
+//    TimeLineViewController *tlvc = [timelineST instantiateViewControllerWithIdentifier:@"timelineVC"];
+//    self.createSV = [tlvc childViewControllers];
     
 //    self.createSV.viewToDisableTextField = [[UIView alloc] init];
 }
@@ -40,12 +43,12 @@
     [super tearDown];
 }
 
-//- (void)testWhenSendShotTextFieldIsVisible {
-//    
-//    [self.createSV sendShot];
-//    XCTAssertNotNil(self.createSV.viewToDisableTextField);
-////    XCTAssertFalse(self.createSV.viewToDisableTextField.hidden);
-//}
+- (void)DISABLEtestWhenSendShotTextFieldIsVisible {
+    
+    [self.createSV sendShot];
+    XCTAssertNotNil(self.createSV.viewToDisableTextField);
+    XCTAssertFalse(self.createSV.viewToDisableTextField.hidden);
+}
 
 - (void)testWhenSendShotChangePropertiesTExtView {
     
