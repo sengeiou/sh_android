@@ -18,7 +18,7 @@ public class FollowerNotification extends CommonNotification {
 
     @Override
     public void setNotificationValues(NotificationCompat.Builder builder) {
-        builder.setContentTitle(getResources().getString(R.string.notification_follow_title, user.getName()));
+        builder.setContentTitle(getResources().getString(R.string.notification_follow_title, user.getUserName()));
         String warningMessage = "Notificación no definida aún en ninguna tarea. No la termino hasta que esté definida.";
         builder.setContentText(warningMessage);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(warningMessage));

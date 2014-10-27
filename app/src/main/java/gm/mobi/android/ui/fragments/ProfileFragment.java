@@ -221,7 +221,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void unfollowUser(){
 
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getName()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUserName()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
@@ -238,9 +238,4 @@ public class ProfileFragment extends BaseFragment {
         if(idUser==null) return;
         startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType),677);
     }
-
-
-
-
-
 }
