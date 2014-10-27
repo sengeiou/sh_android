@@ -97,7 +97,7 @@
 
     self.lblName.text = shot.user.userName;
     
-    self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];
+    self.imgPhoto = [DownloadImage downloadImageForTimeLineWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];
     
     self.lblDate.text = [TimeLineUtilities getDateShot:shot.csys_birth];
     self.btnPhoto.tag = row;

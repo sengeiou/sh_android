@@ -152,6 +152,16 @@ static NSString *CellIdentifier = @"shootCell";
         [self.delegate changeTitleView];
 }
 
+
+//------------------------------------------------------------------------------
+-(void)reloadTimeline{
+    
+    //First Time
+    if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
+        [self.delegate setHiddenViewNotshots:YES];
+    self.myTableView.hidden = NO;
+}
+
 #pragma mark - FETCHED_RESULTS_CONTROLLER
 //------------------------------------------------------------------------------
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -324,15 +334,6 @@ static NSString *CellIdentifier = @"shootCell";
         [self.delegate setHiddenViewNotshots:YES];
 }
 
-//------------------------------------------------------------------------------
--(void)reloadTimeline{
-    
-    //First Time
-    if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
-        [self.delegate setHiddenViewNotshots:YES];
-    self.myTableView.hidden = NO;
-    
-}
 
 #pragma mark - PUBLIC METHODS
 //------------------------------------------------------------------------------

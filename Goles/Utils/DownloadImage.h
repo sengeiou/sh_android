@@ -11,5 +11,6 @@
 @interface DownloadImage : NSObject
 
 +(UIImageView *) downloadImageWithUrl:(NSURL *) url andUIimageView:(UIImageView *)imageView andText:(NSString *)text;
++(UIImageView *) downloadImageForTimeLineWithUrl:(NSURL *) url andUIimageView:(UIImageView *)imageView andText:(NSString *)text;
 
 @end
