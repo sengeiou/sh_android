@@ -42,7 +42,21 @@ static NSString *CellIdentifier = @"shootCell";
     [self basicSetup];
     [self loadData];
 }
+-(void)viewWillAppear:(BOOL)animated{
 
+    [super viewWillAppear:animated];
+    
+    NSLog(@"APPEAR: %f", self.myTableView.contentInset.bottom);
+
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    
+    NSLog(@"DISSAPPEAR: %f", self.myTableView.contentInset.bottom);
+
+}
 //------------------------------------------------------------------------------
 - (void)viewDidUnload {
     self.fetchedResultsController = nil;
@@ -138,17 +152,6 @@ static NSString *CellIdentifier = @"shootCell";
         [self.delegate changeTitleView];
 }
 
-
-//------------------------------------------------------------------------------
--(void)reloadTimeline{
-    
-    //First Time
-    if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
-        [self.delegate setHiddenViewNotshots:YES];
-    self.myTableView.hidden = NO;
-}
-
->>>>>>> .r1209
 #pragma mark - FETCHED_RESULTS_CONTROLLER
 //------------------------------------------------------------------------------
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -277,6 +280,10 @@ static NSString *CellIdentifier = @"shootCell";
     }
     
     self.lastContentOffset = scrollView.contentOffset.y;
+
+    NSLog(@"%f", self.lastContentOffset);
+    NSLog(@"scroll: %f", self.myTableView.contentInset.top);
+
 }
 
 #pragma mark - Button to Profile ViewController

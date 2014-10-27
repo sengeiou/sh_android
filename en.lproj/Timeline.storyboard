@@ -69,7 +69,7 @@
                                 </connections>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z9F-sP-HqP">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <connections>
                                     <segue destination="M7F-sH-IxJ" kind="embed" id="YWZ-eq-M7I"/>
                                 </connections>
@@ -245,7 +245,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="eCR-lh-3pe" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="2Ks-uQ-cX3"/>
-                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="z9F-sP-HqP" secondAttribute="bottom" constant="-44" id="2dM-Jb-Yki"/>
+                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="z9F-sP-HqP" secondAttribute="bottom" id="2dM-Jb-Yki"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="eCR-lh-3pe" secondAttribute="bottom" constant="-44" id="A7x-tW-ef3"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="bottom" id="Cfi-LK-l7y"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="Dan-L3-EUl"/>
@@ -289,7 +289,7 @@
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="M7F-sH-IxJ" customClass="TimeLineTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yqd-L0-h2h">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
