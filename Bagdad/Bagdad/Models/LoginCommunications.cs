@@ -21,12 +21,14 @@ namespace Bagdad.Models
                 {
                     foreach (JToken login in job["ops"][0]["data"])
                     {
+                        int nFavorite = 0;
+                        int.TryParse(login["idFavoriteTeam"].ToString(), out nFavorite);
                         users.Add(
                             bagdadFactory.CreateFullFilledLogin(
                                 int.Parse(login["idUser"].ToString()),
                                 ((login["sessionToken"] != null) ? login["sessionToken"].ToString() : ""),
                                 ((login["email"] != null) ? login["email"].ToString() : ""),
-                                int.Parse(login["idFavoriteTeam"].ToString()),
+                                nFavorite,
                                 ((login["favoriteTeamName"] != null) ? login["favoriteTeamName"].ToString() : ""),
                                 ((login["userName"] != null) ? login["userName"].ToString() : ""),
                                 ((login["name"] != null) ? login["name"].ToString() : ""),

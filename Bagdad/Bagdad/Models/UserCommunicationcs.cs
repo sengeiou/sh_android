@@ -20,6 +20,8 @@ namespace Bagdad.Models
                 {
                     foreach (JToken user in job["ops"][0]["data"])
                     {
+                        int nFavorite = 0;
+                        int.TryParse(user["idFavoriteTeam"].ToString(), out nFavorite);
                         users.Add(
                             bagdadFactory.CreateFilledUserWithDeleteAndSynchronizedInfo(
                                 int.Parse(user["idUser"].ToString()),
@@ -32,7 +34,7 @@ namespace Bagdad.Models
                                 user["bio"].ToString(),
                                 user["website"].ToString(),
                                 favoriteTeamName = user["favoriteTeamName"].ToString(),
-                                int.Parse(user["idFavoriteTeam"].ToString()),
+                                nFavorite,
                                 Double.Parse(user["birth"].ToString()),
                                 Double.Parse(user["modified"].ToString()),
                                 ((!String.IsNullOrEmpty(user["deleted"].ToString())) ? Double.Parse(user["deleted"].ToString()) : 0),

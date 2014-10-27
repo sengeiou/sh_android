@@ -44,6 +44,8 @@ namespace Bagdad.Models
                 return "\"UNFOLLOW_USER\",";
             else if (operation.Equals(Constants.SERCOM_OP_CREATE))
                 return "\"FOLLOW_USER\",";
+            else if (operation.Equals(Constants.SERCOM_OP_RETRIEVE))
+                return "\"GET_FOLLOWINGS\",";
             else
             return "\"GET_FOLLOWINGS\",";
         }

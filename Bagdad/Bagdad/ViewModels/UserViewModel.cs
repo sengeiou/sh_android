@@ -44,30 +44,33 @@ namespace Bagdad.ViewModels
                 UserViewModel uvm = null;
 
                 if (await follow.ImFollowing(idUser) || idUser == App.ID_USER)
-                { 
+                {
                     uvm = await user.GetProfileInfo(idUser);
                 }
-                if(uvm== null || uvm.idUser == 0)
+
+                if (uvm == null || uvm.idUser == 0)
                 {
-                    uvm = await user.GetProfilInfoFromServer(idUser);
+                    if (App.isInternetAvailable) uvm = await user.GetProfilInfoFromServer(idUser);
                 }
+                if (uvm != null)
+                {
+                    this.idUser = uvm.idUser;
+                    this.points = uvm.points;
+                    this.followers = uvm.followers;
+                    this.following = uvm.following;
+                    this.userNickName = uvm.userNickName;
+                    this.userName = uvm.userName;
+                    this.userURLImage = uvm.userURLImage;
+                    this.userBio = uvm.userBio;
+                    this.userWebsite = uvm.userWebsite;
+                    this.favoriteTeamName = uvm.favoriteTeamName;
+                    this.idFavoriteTeam = uvm.idFavoriteTeam;
+                    this.birth = uvm.birth;
+                    this.modified = uvm.modified;
+                    this.revision = uvm.revision;
 
-                this.idUser = uvm.idUser;
-                this.points = uvm.points;
-                this.followers = uvm.followers;
-                this.following = uvm.following;
-                this.userNickName = uvm.userNickName;
-                this.userName = uvm.userName;
-                this.userURLImage = uvm.userURLImage;
-                this.userBio = uvm.userBio;
-                this.userWebsite = uvm.userWebsite;
-                this.favoriteTeamName = uvm.favoriteTeamName;
-                this.idFavoriteTeam = uvm.idFavoriteTeam;
-                this.birth = uvm.birth;
-                this.modified = uvm.modified;
-                this.revision = uvm.revision;
-
-                this.isFollowed = await uvm.ImFollowing();
+                    this.isFollowed = await uvm.ImFollowing();
+                }
             }
             catch (Exception e)
             {
