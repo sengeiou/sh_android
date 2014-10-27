@@ -73,7 +73,7 @@ namespace Bagdad.Models
                                 follow["bio"].ToString(),
                                 follow["website"].ToString(),
                                 follow["favoriteTeamName"].ToString(),
-                                int.Parse(follow["idFavoriteTeam"].ToString()),
+                                ((!String.IsNullOrEmpty(follow["idFavoriteTeam"].ToString())) ? int.Parse(follow["idFavoriteTeam"].ToString()) : 0),
                                 int.Parse(follow["revision"].ToString()),
                                 double.Parse(follow["birth"].ToString()),
                                 double.Parse(follow["modified"].ToString())
@@ -117,7 +117,7 @@ namespace Bagdad.Models
                                 follow["bio"].ToString(),
                                 follow["website"].ToString(),
                                 follow["favoriteTeamName"].ToString(),
-                                int.Parse(follow["idFavoriteTeam"].ToString()),
+                                ((!String.IsNullOrEmpty(follow["idFavoriteTeam"].ToString())) ? int.Parse(follow["idFavoriteTeam"].ToString()) : 0),
                                 int.Parse(follow["revision"].ToString()),
                                 double.Parse(follow["birth"].ToString()),
                                 double.Parse(follow["modified"].ToString())

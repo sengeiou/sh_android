@@ -73,6 +73,11 @@ namespace Bagdad
             {
                 PhoneApplicationService.Current.State["RefreshNeeded"] = false;
             }
+            else if (e.NavigationMode == NavigationMode.Back)
+            {
+                myShots.ItemsSource = null;
+                myShots.ItemsSource = App.ShotsVM.shotsList;
+            }
 
             try
             {
