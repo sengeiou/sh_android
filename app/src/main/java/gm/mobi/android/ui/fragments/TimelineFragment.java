@@ -4,7 +4,6 @@ import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,7 +31,6 @@ import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
@@ -49,10 +47,8 @@ import gm.mobi.android.ui.adapters.TimelineAdapter;
 import gm.mobi.android.ui.base.BaseActivity;
 import gm.mobi.android.ui.base.BaseFragment;
 import gm.mobi.android.ui.model.ShotModel;
-import gm.mobi.android.ui.model.ShotModel;
 import gm.mobi.android.ui.model.mappers.ShotModelMapper;
 import gm.mobi.android.ui.widgets.ListViewScrollObserver;
-import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -398,18 +394,33 @@ public class TimelineFragment extends BaseFragment
             if(adapter != null){ //Means that We have at least one shot and for that reason the adapter was initialized
                 adapter.notifyDataSetChanged(); // Refresh time indicator
             }else{
-
+                //TODO why is this empty?
             }
-
         } else {
             Timber.i("Received %d new shots", newShotsCount);
             int originalPosition = listView.getFirstVisiblePosition();
-            int newPosition = originalPosition + newShotsCount - 1;
+            int newPosition = originalPosition + newShotsCount;
             adapter.setShots(updatedTimeline);
-            listView.setSelection(newPosition);
-            listView.smoothScrollToPosition(0);
+            setListPosition(newPosition);
+            if (shouldGoToTop()) {
+                goToTop();
+            }
         }
     }
+
+    private boolean shouldGoToTop() {
+        return listView.getFirstVisiblePosition() == 0;
+    }
+
+    public void setListPosition(int position) {
+        listView.setSelection(position);
+    }
+
+    public void goToTop() {
+        listView.smoothScrollToPosition(0);
+    }
+
+
 
     @Subscribe
     public void displayOldShots(OldShotsReceivedEvent event) {
