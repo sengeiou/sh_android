@@ -121,7 +121,7 @@ namespace Bagdad.Models
                                 user["bio"].ToString(),
                                 user["website"].ToString(),
                                 user["favoriteTeamName"].ToString(),
-                                int.Parse(user["idFavoriteTeam"].ToString()),
+                                ((!String.IsNullOrEmpty(user["idFavoriteTeam"].ToString())) ? int.Parse(user["idFavoriteTeam"].ToString()) : 0),
                                 int.Parse(user["revision"].ToString()),
                                 (!String.IsNullOrEmpty(user["birth"].ToString()) ? double.Parse(user["birth"].ToString()) : 0),
                                 (!String.IsNullOrEmpty(user["modified"].ToString()) ? double.Parse(user["modified"].ToString()) : Util.DateToDouble(DateTime.Now))
