@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gm.mobi.android.ui.widgets.CheckedLinearLayout
+  style="@style/MenuDrawer.Widget.Title"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+
+    <gm.mobi.android.ui.widgets.CheckableImageView
+      android:id="@+id/drawer_item_icon"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="32dp"
+      tools:src="@drawable/ic_drawer_timeline"
+       />
+    <!--android:tint="@color/drawer_text"-->
+
+    <CheckedTextView
+      android:id="@+id/drawer_item_text"
+      style="@style/MenuDrawer.Widget.TitleText"
+      android:layout_width="match_parent"
+      android:layout_height="60dp"
+      android:ellipsize="end"
+      android:gravity="center_vertical"
+      android:singleLine="true"
+      tools:text="Example item" />
+
+</gm.mobi.android.ui.widgets.CheckedLinearLayout>

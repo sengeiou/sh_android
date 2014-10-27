@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_registro_email">Nueva cuenta</string>
+
+    <!-- Time strings-->
+    <string name="day_title_today">Today</string>
+    <string name="day_title_tomorrow">Tomorrow</string>
+    <string name="day_title_yesterday">Yesterday</string>
+
+    <!-- Welcome texts -->
+    <string name="welcome_title_0">Goles</string>
+    <string name="welcome_subtitle_0">Convierte tu móvil en el notificador de goles más rápido del mundo.</string>
+    <string name="welcome_title_1">Rápida</string>
+    <string name="welcome_subtitle_1"><b>Goles</b> notifica goles y resultados antes que cualquier app.</string>
+    <string name="welcome_title_2">Simple</string>
+    <string name="welcome_subtitle_2"><b>Goles</b> es increíblemente fácil de usar.</string>
+    <string name="welcome_title_3">Sin publicidad</string>
+    <string name="welcome_subtitle_3"><b>Goles</b> no te molesta con anuncios ni cosas raras.</string>
+    <string name="welcome_title_login">Cloud</string>
+    <string name="welcome_subtitle_login">Goles guarda tus equipos y suscripciones en la nube.</string>
+
+    <string-array name="emails_test">
+        <item>rafa.vazsan@gmail.com</item>
+        <item>rafagames92@gmail.com</item>
+        <item>rafael.vazquez@gmail.com</item>
+    </string-array>
+
+    <string name="title_activity_partido">Sevilla-R.Madrid</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="facebookID">716903905047845</string>
+
+    <string name="connection_lost">The network connection was lost</string>
+
+    <!-- Activity literals -->
+    <string name="activity_login_signin">Sign In</string>
+    <string name="activity_login_register_email">Register with Email</string>
+    <string name="activity_login_register_facebook">Sign In with Facebook</string>
+
+    <string name="title_activity_login_email">Sign In</string>
+    <string name="activity_login_email_id_hint">Username or Email</string>
+    <string name="activity_login_email_password_hint">Password</string>
+    <string name="activity_login_email_button">Enter</string>
+    <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
+    <string name="activity_login_email_forgot">Forgot Password?</string>
+
+    <string name="activity_timeline_new_text">Comment</string>
+    <string name="activity_timeline_empty_message">Share your footbal thoughts.\nStart Shooting.</string>
+    <string name="activity_timeline_empty_title">No Shots</string>
+
+    <string name="activity_following_title">Following</string>
+    <string name="activity_followers_title">Followers</string>
+    <string name="following_list_empty">Not following anyone</string>
+    <string name="follower_list_empty">Nobody following</string>
+
+    <string name="no_more_shots">No more shots</string>
+
+    <string name="new_shoot_action">Shoot</string>
+    <string name="new_shot_repeated">Whoops! You already shot that.</string>
+
+    <string name="profile_following">Following</string>
+    <string name="profile_follow">Follow</string>
+    <string name="profile_edit_profile">Edit Profile</string>
+    <string name="profile_rank_format">rank %s</string>
+    <string name="profile_marks_points">points</string>
+    <string name="profile_marks_following">following</string>
+    <string name="profile_marks_followers">followers</string>
+    <string name="profile_bio_format">%1$s. %2$s</string>
+
+    <!-- Menu names -->
+    <string name="menu_info">Info</string>
+    <string name="menu_search_timeline">Search Timeline</string>
+    <string name="menu_search_people">Find People</string>
+
+    <!-- Errors -->
+    <string name="communication_error">Communication error</string>
+
+    <!-- Watching status texts -->
+    <string name="watching_text_me_and_more">Sevilla-Lopera</string>
+
+    <!--TimeUtils-->
+    <string name="plural_days">days</string>
+    <string name="singular_day">day</string>
+    <string name="minutes">m</string>
+    <string name="seconds">s</string>
+    <string name="hours">h</string>
+    <string name="days">d</string>
+    <string name="now">now</string>
+    <string name="drawer_open">Open menu</string>
+    <string name="drawer_close">Close menu</string>
+
+    <!-- Notifications -->
+    <string name="notification_shot_multiple_title">%d new shots</string>
+    <string name="notification_follow_title">%s is now following you</string>
+
+    <string name="activity_find_friends_title">Find People</string>
+    <string name="activity_find_friends_hint">Find People</string>
+    <string name="activity_find_friends_empty_message">No results.</string>
+    <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
+</resources>

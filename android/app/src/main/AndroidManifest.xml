@@ -1,0 +1,159 @@
+<manifest
+  package="gm.mobi.android"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Sync adapter -->
+    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
+    <!-- Account management -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
+    <!-- GCM -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- optional -->
+
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+
+
+    <application
+      android:name=".GolesApplication"
+      android:allowBackup="true"
+      android:icon="@drawable/ic_launcher"
+      android:label="@string/app_name"
+      android:theme="@style/GolesTheme">
+
+
+        <activity
+          android:name=".ui.activities.MainActivity"
+          android:label="@string/app_name"
+          android:launchMode="singleTask"
+          >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+          android:name=".ui.activities.registro.WelcomeLoginActivity"
+          android:label="@string/app_name"
+          android:launchMode="singleTop"
+          android:theme="@style/GolesTheme.NoActionBar">
+        </activity>
+        <!--<activity
+            android:name=".ui.activities.registro.EmailRegistrationActivity"
+            android:label="@string/title_activity_registro_email">
+        </activity>
+        <activity
+            android:name=".ui.activities.registro.FacebookRegistroActivity"
+            android:label="@string/title_activity_registro_email">
+        </activity>-->
+        <activity
+          android:name=".ui.activities.registro.EmailLoginActivity"
+          android:label="@string/title_activity_login_email">
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="gm.mobi.android.ui.activities.registro.WelcomeLoginActivity"/>
+        </activity>
+
+
+        <activity
+          android:name=".ui.activities.PostNewShotActivity"
+          android:theme="@style/GolesTheme.NoActionBar.Floating">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activities.ProfileContainerActivity" >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="gm.mobi.android.ui.activities.MainActivity" />
+        </activity>
+
+        <activity android:name=".ui.activities.UserFollowsContainerActivity" >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="gm.mobi.android.ui.activities.MainActivity" />
+        </activity>
+
+        <activity
+          android:name=".ui.activities.FindFriendsActivity"
+          android:label="@string/activity_find_friends_title">
+
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="gm.mobi.android.ui.activities.MainActivity" />
+        </activity>
+
+        <activity android:name="com.facebook.LoginActivity"/>
+
+        <meta-data
+          android:name="com.facebook.sdk.ApplicationId"
+          android:value="@string/facebookID"
+          />
+
+        <!-- Sync adapter -->
+
+        <service android:name=".sync.GMAccountService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+              android:name="android.accounts.AccountAuthenticator"
+              android:resource="@xml/authenticator"/>
+        </service>
+
+        <provider
+          android:name="gm.mobi.android.db.provider.ShootrContentProvider"
+          android:authorities="gm.mobi.android.db.provider"
+          android:exported="false"
+          android:syncable="true"/>
+
+        <service
+          android:name="gm.mobi.android.sync.SyncService"
+          android:exported="true"
+          android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+              android:name="android.content.SyncAdapter"
+              android:resource="@xml/syncadapter"/>
+        </service>
+
+        <receiver android:name=".gcm.GMBroadcastReceiver"
+          android:exported="true"
+          android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".gcm.NotificationIntentReceiver"
+          >
+            <intent-filter>
+                <action android:name="gm.mobi.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
+                <action android:name="gm.mobi.android.ACTION_OPEN_SHOT_NOTIFICATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+          android:name=".gcm.GcmIntentService"
+          android:exported="false" />
+
+
+    </application>
+
+</manifest>

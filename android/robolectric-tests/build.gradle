@@ -1,0 +1,94 @@
+apply plugin: 'com.android.library'
+apply plugin: 'robolectric'
+apply plugin: 'jacoco'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "21.0.2"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 19
+    }
+
+    buildTypes {
+        debug {
+            runProguard false
+        }
+        release {
+            runProguard false
+        }
+
+    }
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    def androidModule = project(':app')
+    compile androidModule
+
+    androidTestCompile 'junit:junit:4.11'
+    androidTestCompile 'com.squareup:fest-android:1.0.7'
+    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    androidTestCompile 'org.robolectric:robolectric:2.3'
+
+    compile 'com.squareup.assertj:assertj-android:1.0.0'
+    androidTestCompile 'org.assertj:assertj-core:1.6.1'
+
+    androidTestCompile androidModule.android.applicationVariants.toList().first().javaCompile.classpath
+    androidTestCompile androidModule.android.applicationVariants.toList().first().javaCompile.outputs.files
+    androidTestCompile files(androidModule.plugins.findPlugin("com.android.application").getBootClasspath())
+}
+
+robolectric {
+    // configure the set of classes for JUnit tests
+    set('include', ['**/*Test.class', '**/*Should.class', '**/*Tests.class'])
+
+    // configure max heap size of the test JVM
+    maxHeapSize = "2048m"
+}
+
+jacoco {
+    version = '0.7.2.201409121644'
+    reportsDir = file("$buildDir/jacoco")
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+
+    // class R is used, but usage will not be covered, so ignore this class from report
+    // This differs per plugin version (0.10 -> 0.11)
+    // have very different fileTrees.
+    // I have added rules to Ignore Dagger/Butterknife
+    classDirectories = fileTree(
+      dir: '../app/build/intermediates/classes/debug',
+      excludes: ['com/app/R*.class',
+                 '**/*$InjectAdapter.class',
+                 '**/*$ModuleAdapter.class',
+                 '**/*$ViewInjector*.class'
+      ])
+
+    def coverageSourceDirs = ['../app/src/main/java']
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files('../robolectric-tests/build/jacoco/test.exec')
+
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        csv.enabled = true
+    }
+
+    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+    // We iterate through the compiled .class tree and rename $$ to $.
+    doFirst {
+        new File('./app/build/intermediates/classes/').eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}

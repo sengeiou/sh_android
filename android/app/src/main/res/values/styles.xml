@@ -1,0 +1,162 @@
+<resources>
+
+    <style name="None"></style>
+
+    <!-- Base application themes. -->
+    <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:editTextBackground">@drawable/edit_text_background</item>
+        <item name="android:textColorLink">@color/links</item>
+    </style>
+
+    <style name="GolesTheme.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowTitleSize">0dp</item>
+    </style>
+
+    <style name="GolesTheme.NoActionBar.Floating">
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowIsFloating">true</item>-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
+
+    <!-- Styles -->
+    <style name="ActionBar.Solid.Goles" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <!--<item name="android:background">@drawable/ab_solid_goles</item>-->
+        <item name="android:background">@color/primary</item>
+        <item name="android:icon">@drawable/ic_ab_icon</item>
+    </style>
+
+    <style name="GolesTheme.ActionBarSearch">
+        <item name="android:actionBarWidgetTheme">@style/ActionBarWidgets</item>
+    </style>
+
+    <style name="ActionBarWidgets" parent="GolesTheme">
+        <item name="searchViewSearchIcon">@drawable/ic_action_search</item>
+        <item name="searchViewCloseIcon">@drawable/ic_action_close</item>
+        <item name="searchViewTextField">@drawable/abc_textfield_search_default_holo_dark</item>
+        <item name="searchViewAutoCompleteTextView">@style/ActionBarSearchText</item>
+    </style>
+
+    <style name="ActionBarSearchText" parent="ActionBar.Solid.Goles">
+        <item name="android:textColorHint">@color/white_disabled</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="TextAppearance.FloatLabel" parent="android:TextAppearance.Small">
+        <item name="android:textColor">@color/gray_60</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- UI widgets -->
+    <style name="BlueButton">
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginFacebookButton">
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginEmailButton">
+        <item name="android:background">@drawable/btn_gray</item>
+        <item name="android:textColor">@color/gray_30</item>
+    </style>
+
+    <style name="LoginSessionButton">
+        <item name="android:background">@color/transparent</item>x
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="ProfileMarkTitle">
+        <item name="android:textColor">@color/gray_60</item>
+    </style>
+
+    <style name="ProfileMarkValue">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <!-- Follow button -->
+    <style name="FollowButton">
+        <item name="android:background">@drawable/btn_follow</item>
+    </style>
+
+
+    <style name="FollowButtonText">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/profile_follow</item>
+    </style>
+
+    <style name="FollowButton.Checked">
+        <item name="android:background">@drawable/btn_following</item>
+    </style>
+
+    <style name="FollowButtonText.Checked">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawableLeft">@drawable/ic_check</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/profile_following</item>
+    </style>
+
+    <!--Following button-->
+    <style name="FollowingButton">
+        <item name="android:background">@drawable/btn_follow</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+
+
+   <!-- EditProfile Button -->
+    <style name="ProfileEditProfileButton">
+        <item name="android:background">@drawable/btn_follow</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+
+    <style name="ProfileEditProfileButtonText">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/profile_edit_profile</item>
+    </style>
+
+    <!-- Menú drawer -->
+
+    <style name="MenuDrawer" />
+
+    <style name="MenuDrawer.Widget" />
+
+    <style name="MenuDrawer.Widget.Title">
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:paddingRight">32dp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="MenuDrawer.Widget.TitleText">
+        <item name="android:textColor">@color/drawer_text_selector</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/user_avatar"
+      android:layout_width="@dimen/userlist_avatar_size"
+      android:layout_height="@dimen/userlist_avatar_size"
+      android:src="@drawable/ic_contact_picture_default" />
+
+    <TextView
+      android:id="@+id/user_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="16dp"
+      android:layout_toRightOf="@+id/user_avatar"
+      android:textSize="14dp"
+      tools:text="Rafa" />
+
+    <TextView
+      android:id="@+id/user_username"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@+id/user_name"
+      android:layout_below="@+id/user_name"
+      android:textColor="@color/gray_50"
+      android:textSize="14sp"
+      tools:text="rafa" />
+
+    <gm.mobi.android.ui.widgets.FollowButton
+      android:id="@+id/user_follow_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      />
+</RelativeLayout>
