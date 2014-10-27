@@ -246,6 +246,7 @@ public class TimelineFragment extends BaseFragment
         inflater.inflate(R.menu.timeline, menu);
         // Little hack for ActionBarCompat
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.findItem(R.id.menu_info).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
