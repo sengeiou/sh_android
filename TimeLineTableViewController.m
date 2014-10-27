@@ -154,7 +154,6 @@ static NSString *CellIdentifier = @"shootCell";
     
     //GET THE DATA
     self.fetchedResultsController = [[ShotManager singleton] getShotsForTimeLine];
-    
     self.fetchedResultsController.delegate = self;
     
     return _fetchedResultsController;

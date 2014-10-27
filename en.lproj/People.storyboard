@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pn0-5T-r2b">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pn0-5T-r2b">
+                                <rect key="frame" x="0.0" y="0.0" width="634" height="600"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hzD-5B-NPo" userLabel="Main View">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="221"/>
@@ -228,7 +228,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="pn0-5T-r2b" secondAttribute="trailing" constant="-16" id="IWa-kC-BtB"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="pn0-5T-r2b" secondAttribute="trailing" constant="-50" id="IWa-kC-BtB"/>
                             <constraint firstItem="hzD-5B-NPo" firstAttribute="width" secondItem="6I7-Nj-aKP" secondAttribute="width" id="c6C-JJ-skC"/>
                             <constraint firstItem="7lY-ap-KUg" firstAttribute="top" secondItem="pn0-5T-r2b" secondAttribute="bottom" id="kb5-BN-D7q"/>
                             <constraint firstItem="pn0-5T-r2b" firstAttribute="top" secondItem="6I7-Nj-aKP" secondAttribute="topMargin" id="kgI-XE-Vdk"/>
