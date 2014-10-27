@@ -48,7 +48,7 @@
 //------------------------------------------------------------------------------
 - (NSFetchedResultsController *)getShotsForTimeLine {
 
-    NSManagedObjectContext *context = [[CoreDataManager singleton] getContext];
+    NSManagedObjectContext *context = [[CoreDataManager singleton] getInsertContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:K_COREDATA_SHOT inManagedObjectContext:context];
     [fetchRequest setEntity:entity];

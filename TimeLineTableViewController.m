@@ -174,8 +174,8 @@ static NSString *CellIdentifier = @"shootCell";
         case NSFetchedResultsChangeInsert:{
      
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            NSArray *indexs = [self addIndexPath];
-//            [tableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
+            NSArray *indexs = [self addIndexPath];
+            [tableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
             
         }break;
             
