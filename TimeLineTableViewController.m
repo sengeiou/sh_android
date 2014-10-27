@@ -195,7 +195,7 @@ static NSString *CellIdentifier = @"shootCell";
     [self.myTableView endUpdates];
     
     NSArray *indexs = [self addIndexPath];
-    [self.myTableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.myTableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationNone];
     
 }
 
