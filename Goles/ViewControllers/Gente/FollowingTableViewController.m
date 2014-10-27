@@ -39,6 +39,25 @@
     [self getUsersServer];
     
     [self setNavigationBarTitle];
+    
+    if (self.search)
+        [self addBtnDone];
+
+}
+
+//------------------------------------------------------------------------------
+-(void)addBtnDone{
+    
+    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeModal)];
+    self.navigationItem.rightBarButtonItem = addButtonItem;
+}
+
+//------------------------------------------------------------------------------
+-(void)closeModal{
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Cierro modal");
+    }];
 }
 
 //------------------------------------------------------------------------------
@@ -170,6 +189,7 @@
     
     AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    profileVC.search = self.search;
     User *selectedUser = self.usersList[indexPath.row];
     profileVC.selectedUser = selectedUser;
     
@@ -185,6 +205,7 @@
 	UIButton *btn = (UIButton *) sender;
 	AppDelegate *delegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
 	ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
+    profileVC.search = self.search;
 	User *selectedUser = self.usersList[btn.tag];
 	profileVC.selectedUser = selectedUser;
 	[self.navigationController pushViewController:profileVC animated:YES];

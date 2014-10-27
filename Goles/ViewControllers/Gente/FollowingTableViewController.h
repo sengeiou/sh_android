@@ -13,5 +13,6 @@
 
 @property (nonatomic,strong)    User *selectedUser;
 @property (nonatomic,strong)	NSNumber	*viewSelected;
+@property (nonatomic, assign) BOOL search;
 
 @end

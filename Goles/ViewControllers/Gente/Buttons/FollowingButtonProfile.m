@@ -38,15 +38,12 @@
         self.layer.borderColor = [[Fav24Colors iosSevenBlue] CGColor];
         self.layer.borderWidth = 1.0f;
         self.layer.masksToBounds = YES;
-        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateHighlighted];
-        
+        [self setImage:[UIImage imageNamed:@"Icon_CheckBlue"] forState:UIControlStateHighlighted];
+
     }  else{
 
         self.backgroundColor = [Fav24Colors iosSevenBlue];
         self.layer.masksToBounds = YES;
-        
-//        [self setImage:[UIImage imageNamed:@"checkWhite"] forState:UIControlStateNormal];
-        
     }
 }
 

@@ -60,12 +60,28 @@
 
     if (!self.search)
         self.selectedUser = [[UserManager singleton] getUserForId:self.selectedUser.idUserValue];
-   
+    else
+        [self addBtnDone];
+
     [self dataFillView];
     [self textLocalizable];
 }
 
 //------------------------------------------------------------------------------
+-(void)addBtnDone{
+    
+    UIBarButtonItem *addButtonItem =  [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeModal)];
+    self.navigationItem.rightBarButtonItem = addButtonItem;
+}
+
+//------------------------------------------------------------------------------
+-(void)closeModal{
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Cierro modal");
+    }];
+}
+
 //------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -283,12 +299,14 @@
     if ([segue.identifier isEqualToString:@"toFollowing"]) {
       
         FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
+        followingTVC.search = self.search;
         [followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWING_SELECTED];
     }
 	if ([segue.identifier isEqualToString:@"toFollowers"]) {
 		
         FollowingTableViewController *followingTVC = (FollowingTableViewController *)[segue destinationViewController];
+        followingTVC.search = self.search;
 		[followingTVC setSelectedUser:self.selectedUser];
 		[followingTVC setViewSelected:FOLLOWERS_SELECTED];
 	}
