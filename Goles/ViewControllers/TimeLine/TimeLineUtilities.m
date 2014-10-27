@@ -21,9 +21,9 @@
     
     NSInteger seconds = [today timeIntervalSinceDate:refDate];
     
-    if (seconds == 0) {
-        NSLog(@"SEGUNDOOOS: %ld", (long)seconds);
-    }
+//    if (seconds == 0) {
+//        NSLog(@"SEGUNDOOOS: %ld", (long)seconds);
+//    }
     
     
     NSInteger days = (int) (floor(seconds / (3600 * 24)));

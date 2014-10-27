@@ -141,7 +141,6 @@ static NSString *CellIdentifier = @"shootCell";
         [self.delegate setHiddenViewNotshots:YES];
     self.myTableView.hidden = NO;
     
-   // [self.myTableView reloadData];
 }
 
 #pragma mark - FETCHED_RESULTS_CONTROLLER
@@ -172,10 +171,7 @@ static NSString *CellIdentifier = @"shootCell";
     switch(type) {
             
         case NSFetchedResultsChangeInsert:{
-     
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            NSArray *indexs = [self addIndexPath];
-            [tableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
             
         }break;
             
@@ -184,15 +180,23 @@ static NSString *CellIdentifier = @"shootCell";
             break;
             
         case NSFetchedResultsChangeUpdate:
-           
             [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
-//            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeMove:
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
+}
+
+//------------------------------------------------------------------------------
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    
+    [self.myTableView endUpdates];
+    
+    NSArray *indexs = [self addIndexPath];
+    [self.myTableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationAutomatic];
+    
 }
 
 //------------------------------------------------------------------------------
@@ -209,13 +213,7 @@ static NSString *CellIdentifier = @"shootCell";
     return indexPaths;
 }
 
-//------------------------------------------------------------------------------
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    
-    [self.myTableView endUpdates];
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-}
+
 
 #pragma mark - Pull to refresh
 //------------------------------------------------------------------------------

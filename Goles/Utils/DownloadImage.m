@@ -17,7 +17,6 @@
     
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     UIImage *image = [[UIImageView sharedImageCache] cachedImageForRequest:urlRequest];
-    //UIImage *image = [[UIImageView sharedImageCache] cachedImageForName:[NSString stringWithFormat:@"%@", url]];
     UIImage *imageCacheDefault = [[UIImageView sharedImageCache] cachedImageForName:text];
     __weak UIImageView *img = imageView;
    
@@ -30,7 +29,6 @@
             
 
             [[UIImageView sharedImageCache] cacheImage:image forRequest:urlRequest];
-            //[[UIImageView sharedImageCache] cacheImage:image forName: [NSString stringWithFormat:@"%@", url]];
 
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             if (imageCacheDefault == nil) {
