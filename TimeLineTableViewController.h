@@ -13,7 +13,7 @@
 
 @interface TimeLineTableViewController : UITableViewController
 
-
+@property (nonatomic,assign)            IBOutlet    UITableView     *myTableView;
 @property (nonatomic, weak) id<TimeLineTableViewControllerDelegate> delegate;
 
 - (void)setTableInvisible;

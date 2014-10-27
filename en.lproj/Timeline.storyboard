@@ -9,7 +9,7 @@
         <!--Time Line View Controller-->
         <scene sceneID="ma8-82-r4x">
             <objects>
-                <viewController storyboardIdentifier="timelineVC" id="9ja-sz-nUH" customClass="TimeLineViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="timelineVC" automaticallyAdjustsScrollViewInsets="NO" id="9ja-sz-nUH" customClass="TimeLineViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dWm-Ow-xgL"/>
                         <viewControllerLayoutGuide type="bottom" id="PYj-0c-sIh"/>
@@ -69,7 +69,7 @@
                                 </connections>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z9F-sP-HqP">
-                                <rect key="frame" x="-4" y="0.0" width="608" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <connections>
                                     <segue destination="M7F-sH-IxJ" kind="embed" id="YWZ-eq-M7I"/>
                                 </connections>
@@ -245,12 +245,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="eCR-lh-3pe" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="2Ks-uQ-cX3"/>
-                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="z9F-sP-HqP" secondAttribute="bottom" id="2dM-Jb-Yki"/>
+                            <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="z9F-sP-HqP" secondAttribute="bottom" constant="-44" id="2dM-Jb-Yki"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="eCR-lh-3pe" secondAttribute="bottom" constant="-44" id="A7x-tW-ef3"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="HR5-eu-cfc" secondAttribute="bottom" id="Cfi-LK-l7y"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="Dan-L3-EUl"/>
                             <constraint firstAttribute="trailingMargin" secondItem="HR5-eu-cfc" secondAttribute="trailing" constant="-20" id="IIt-1S-DOZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="z9F-sP-HqP" secondAttribute="trailing" constant="-20" id="J6b-Uf-OSi"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="z9F-sP-HqP" secondAttribute="trailing" constant="-16" id="J6b-Uf-OSi"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hAK-0x-gdD" secondAttribute="trailing" constant="-20" id="MyE-TD-7uU"/>
                             <constraint firstItem="HR5-eu-cfc" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="N7k-Sj-Bps"/>
                             <constraint firstItem="eCR-lh-3pe" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" constant="-20" id="Q6e-k2-CeH"/>
@@ -262,7 +262,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="eCR-lh-3pe" secondAttribute="trailing" constant="-20" id="n8t-HM-jPA"/>
                             <constraint firstItem="hAK-0x-gdD" firstAttribute="top" secondItem="dWm-Ow-xgL" secondAttribute="bottom" id="nDk-BC-SGd"/>
                             <constraint firstItem="PYj-0c-sIh" firstAttribute="top" secondItem="6Kp-9S-nop" secondAttribute="bottom" id="oKz-9h-4Mu"/>
-                            <constraint firstItem="z9F-sP-HqP" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-20" id="vIo-fH-Fc8"/>
+                            <constraint firstItem="z9F-sP-HqP" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="vIo-fH-Fc8"/>
                             <constraint firstItem="VYB-IF-QLU" firstAttribute="leading" secondItem="KoL-Ez-vwg" secondAttribute="leadingMargin" constant="-16" id="xx5-RT-4XS"/>
                         </constraints>
                     </view>
@@ -287,9 +287,9 @@
         <!--Time Line Table View Controller-->
         <scene sceneID="ymm-EZ-Ms7">
             <objects>
-                <tableViewController id="M7F-sH-IxJ" customClass="TimeLineTableViewController" sceneMemberID="viewController">
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="M7F-sH-IxJ" customClass="TimeLineTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yqd-L0-h2h">
-                        <rect key="frame" x="0.0" y="0.0" width="608" height="556"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>

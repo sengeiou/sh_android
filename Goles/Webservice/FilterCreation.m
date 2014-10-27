@@ -52,9 +52,14 @@
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idUser == %@",userID];
 		NSArray *follows = [[CoreDataManager singleton] getAllEntities:[Follow class] withPredicate:predicate];
 		NSMutableArray *usersArray = [[NSMutableArray alloc] initWithCapacity:follows.count];
-		for (Follow *followedUser in follows) {
+	
+        for (Follow *followedUser in follows) {
 			[usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:followedUser.idUserFollowed}];
 		}
+        
+        if (userID != nil)
+            [usersArray addObject:@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:userID}];
+        
         NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[@{K_WS_FILTERITEMS:[usersArray copy],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS: K_WS_OPS_OR},filterDate]}};
         
         return filter;

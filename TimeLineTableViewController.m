@@ -28,9 +28,9 @@ static NSString *CellIdentifier = @"shootCell";
 @property (nonatomic,strong)            UILabel                     *labelFooter;
 @property (nonatomic,strong)            UIRefreshControl            *refreshControl;
 @property (nonatomic,assign)            CGFloat                     lastContentOffset;
-@property (nonatomic,assign)            IBOutlet    UITableView     *myTableView;
 @property (nonatomic, retain)           NSFetchedResultsController  *fetchedResultsController;
 @property (nonatomic, strong)           NSArray                     *arrayShots;
+
 @end
 
 @implementation TimeLineTableViewController
@@ -55,10 +55,14 @@ static NSString *CellIdentifier = @"shootCell";
 
 //------------------------------------------------------------------------------
 - (void)basicSetup {
-    self.myTableView.scrollsToTop = YES;
-    self.myTableView.contentInset = UIEdgeInsetsMake(66, 0, 70, 0);
+    //self.myTableView.scrollsToTop = YES;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
+
+    self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
+
     self.myTableView.rowHeight = UITableViewAutomaticDimension;
-    self.myTableView.estimatedRowHeight = 80.0f;
+    
+    self.myTableView.estimatedRowHeight = 68.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 
@@ -78,7 +82,7 @@ static NSString *CellIdentifier = @"shootCell";
 #pragma mark - UITableViewDelegate
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+        
     if (self.fetchedResultsController.fetchedObjects.count > 0)
         [self addPullToRefresh];
     
@@ -104,6 +108,8 @@ static NSString *CellIdentifier = @"shootCell";
     
     Shot *shot = [self.fetchedResultsController objectAtIndexPath:indexPath];
     [cell configureBasicCellWithShot:shot andRow:indexPath.row];
+
+ 
     [cell addTarget:self action:@selector(goProfile:)];
 }
 
@@ -140,7 +146,6 @@ static NSString *CellIdentifier = @"shootCell";
     if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
         [self.delegate setHiddenViewNotshots:YES];
     self.myTableView.hidden = NO;
-    
 }
 
 #pragma mark - FETCHED_RESULTS_CONTROLLER
@@ -233,11 +238,6 @@ static NSString *CellIdentifier = @"shootCell";
     //        self.watchingMenu.alpha = 0.0;
     //    }];
     
-    [self.refreshControl endRefreshing];
-}
-
-//------------------------------------------------------------------------------
--(void) removePullToRefresh{
     [self.refreshControl endRefreshing];
 }
 

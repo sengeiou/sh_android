@@ -124,7 +124,7 @@ extern void __gcov_flush();
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     // Flush out test coverage files
-    __gcov_flush();
+    //__gcov_flush();
     
     UIApplication *app = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:0];
@@ -169,7 +169,7 @@ extern void __gcov_flush();
 //------------------------------------------------------------------------------
 - (void)applicationWillTerminate:(UIApplication *)application {
 
-    __gcov_flush(); // Flush out test coverage files
+    //__gcov_flush(); // Flush out test coverage files
 	[[[SyncManager singleton] synchroTimer] invalidate];
 }
 

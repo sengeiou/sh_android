@@ -442,7 +442,6 @@
     ProfileViewController *profileVC = [delegate.peopleSB instantiateViewControllerWithIdentifier:@"profileVC"];
     
     profileVC.selectedUser = shotSelected.user;
-    
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
