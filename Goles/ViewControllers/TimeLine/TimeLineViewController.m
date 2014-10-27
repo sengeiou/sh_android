@@ -229,11 +229,6 @@
 }
 
 #pragma mark - Response utilities methods
-//------------------------------------------------------------------------------
--(void)callReloadTable{
-    
-    [self.timelineTableView reloadShotsTable];
-}
 
 //------------------------------------------------------------------------------
 -(void)changeViewTitleMainThread{

@@ -148,6 +148,7 @@ static NSString *CellIdentifier = @"shootCell";
     self.myTableView.hidden = NO;
 }
 
+>>>>>>> .r1209
 #pragma mark - FETCHED_RESULTS_CONTROLLER
 //------------------------------------------------------------------------------
 - (NSFetchedResultsController *)fetchedResultsController {
@@ -177,15 +178,15 @@ static NSString *CellIdentifier = @"shootCell";
             
         case NSFetchedResultsChangeInsert:{
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            
-        }break;
+            break;
+        }
             
         case NSFetchedResultsChangeDelete:
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
+//            [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -208,7 +209,7 @@ static NSString *CellIdentifier = @"shootCell";
 -(NSArray *)addIndexPath{
     
     NSMutableArray *indexPaths = [NSMutableArray array];
-    NSInteger rowCount = [self.tableView numberOfRowsInSection:0];
+    NSInteger rowCount = [self.myTableView numberOfRowsInSection:0];
     
     for (int j = 0; j < rowCount; j++) {
         [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:0]];
@@ -314,6 +315,16 @@ static NSString *CellIdentifier = @"shootCell";
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
         [self.delegate setHiddenViewNotshots:YES];
+}
+
+//------------------------------------------------------------------------------
+-(void)reloadTimeline{
+    
+    //First Time
+    if (self.delegate && [self.delegate respondsToSelector:@selector(setHiddenViewNotshots:)])
+        [self.delegate setHiddenViewNotshots:YES];
+    self.myTableView.hidden = NO;
+    
 }
 
 #pragma mark - PUBLIC METHODS

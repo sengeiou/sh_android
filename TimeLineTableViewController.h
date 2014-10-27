@@ -26,8 +26,6 @@
 - (void)isNecessaryMoreCells:(BOOL)moreCells;
 - (void)isNecessaryRefreshCells:(BOOL)refeshTableView;
 
-- (void)reloadShotsTable;
-
 - (void)orientationChanged:(NSNotification *) notification;
 
 @end
