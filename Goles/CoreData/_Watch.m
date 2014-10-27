@@ -1,51 +1,46 @@
 // DO NOT EDIT. This file is machine-generated and constantly overwritten.
-// Make changes to Team.m instead.
+// Make changes to Watch.m instead.
 
-#import "_Team.h"
+#import "_Watch.h"
 
-const struct TeamAttributes TeamAttributes = {
-	.clubName = @"clubName",
+const struct WatchAttributes WatchAttributes = {
 	.csys_birth = @"csys_birth",
 	.csys_deleted = @"csys_deleted",
 	.csys_modified = @"csys_modified",
 	.csys_revision = @"csys_revision",
 	.csys_syncronized = @"csys_syncronized",
-	.idTeam = @"idTeam",
-	.officialName = @"officialName",
-	.shortName = @"shortName",
-	.tlaName = @"tlaName",
+	.status = @"status",
 };
 
-const struct TeamRelationships TeamRelationships = {
-	.matchAsLocal = @"matchAsLocal",
-	.matchAsVisitor = @"matchAsVisitor",
+const struct WatchRelationships WatchRelationships = {
+	.match = @"match",
 	.user = @"user",
 };
 
-const struct TeamFetchedProperties TeamFetchedProperties = {
+const struct WatchFetchedProperties WatchFetchedProperties = {
 };
 
-@implementation TeamID
+@implementation WatchID
 @end
 
-@implementation _Team
+@implementation _Watch
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:moc_];
+	return [NSEntityDescription insertNewObjectForEntityForName:@"Watch" inManagedObjectContext:moc_];
 }
 
 + (NSString*)entityName {
-	return @"Team";
+	return @"Watch";
 }
 
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_ {
 	NSParameterAssert(moc_);
-	return [NSEntityDescription entityForName:@"Team" inManagedObjectContext:moc_];
+	return [NSEntityDescription entityForName:@"Watch" inManagedObjectContext:moc_];
 }
 
-- (TeamID*)objectID {
-	return (TeamID*)[super objectID];
+- (WatchID*)objectID {
+	return (WatchID*)[super objectID];
 }
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
@@ -71,21 +66,14 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
-	if ([key isEqualToString:@"idTeamValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"idTeam"];
+	if ([key isEqualToString:@"statusValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"status"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
 
 	return keyPaths;
 }
-
-
-
-
-@dynamic clubName;
-
-
 
 
 
@@ -201,90 +189,38 @@ const struct TeamFetchedProperties TeamFetchedProperties = {
 
 
 
-@dynamic idTeam;
+@dynamic status;
 
 
 
-- (int64_t)idTeamValue {
-	NSNumber *result = [self idTeam];
-	return [result longLongValue];
+- (int16_t)statusValue {
+	NSNumber *result = [self status];
+	return [result shortValue];
 }
 
-- (void)setIdTeamValue:(int64_t)value_ {
-	[self setIdTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setStatusValue:(int16_t)value_ {
+	[self setStatus:[NSNumber numberWithShort:value_]];
 }
 
-- (int64_t)primitiveIdTeamValue {
-	NSNumber *result = [self primitiveIdTeam];
-	return [result longLongValue];
+- (int16_t)primitiveStatusValue {
+	NSNumber *result = [self primitiveStatus];
+	return [result shortValue];
 }
 
-- (void)setPrimitiveIdTeamValue:(int64_t)value_ {
-	[self setPrimitiveIdTeam:[NSNumber numberWithLongLong:value_]];
+- (void)setPrimitiveStatusValue:(int16_t)value_ {
+	[self setPrimitiveStatus:[NSNumber numberWithShort:value_]];
 }
 
 
 
 
 
-@dynamic officialName;
+@dynamic match;
 
-
-
-
-
-
-@dynamic shortName;
-
-
-
-
-
-
-@dynamic tlaName;
-
-
-
-
-
-
-@dynamic matchAsLocal;
-
-	
-- (NSMutableSet*)matchAsLocalSet {
-	[self willAccessValueForKey:@"matchAsLocal"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchAsLocal"];
-  
-	[self didAccessValueForKey:@"matchAsLocal"];
-	return result;
-}
-	
-
-@dynamic matchAsVisitor;
-
-	
-- (NSMutableSet*)matchAsVisitorSet {
-	[self willAccessValueForKey:@"matchAsVisitor"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchAsVisitor"];
-  
-	[self didAccessValueForKey:@"matchAsVisitor"];
-	return result;
-}
 	
 
 @dynamic user;
 
-	
-- (NSMutableSet*)userSet {
-	[self willAccessValueForKey:@"user"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"user"];
-  
-	[self didAccessValueForKey:@"user"];
-	return result;
-}
 	
 
 

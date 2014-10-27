@@ -50,12 +50,10 @@
     NSLog(@"%@", dict);
     
     NSNumber *idMatch = [dict objectForKey:kJSON_ID_MATCH];
-    NSNumber *matchState = [dict objectForKey:kJSON_MATCH_STATE];
     NSNumber *idLocal = [dict objectForKey:kJSON_ID_TEAM_LOCAL];
     NSNumber *idVisitor = [dict objectForKey:kJSON_ID_TEAM_VISITOR];
     
     if ( [idMatch isKindOfClass:[NSNumber class]] &&
-        [matchState isKindOfClass:[NSNumber class]] &&
         [idLocal isKindOfClass:[NSNumber class]] &&
         [idVisitor isKindOfClass:[NSNumber class]])
     {
@@ -64,20 +62,7 @@
         Team *visitorTeam = [[CoreDataManager sharedInstance] getEntity:[Team class] withId:[[dict objectForKey:kJSON_ID_TEAM_VISITOR] integerValue]];
 
         [self setIdMatch:idMatch];
-        [self setMatchState:matchState];
         
-              NSNumber *matchDate = [dict objectForKey:kJSON_DATE_MATCH];
-        if ( [matchDate isKindOfClass:[NSNumber class]] )
-            [self setMatchDate:matchDate];
-        
-        NSNumber *matchType = [dict objectForKey:kJSON_MATCH_TYPE];
-        if ( [matchDate isKindOfClass:[NSNumber class]] )
-            [self setMatchType:matchType];
-        
-        NSNumber *matchSubstate = [dict objectForKey:@"matchSubstate"];
-        if ([matchSubstate isKindOfClass:[NSNumber class]])
-			[self setMatchSubstate:matchSubstate];
-		
         //SYNCRO  PROPERTIES
         
         NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];

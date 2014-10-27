@@ -29,6 +29,8 @@
 		A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33D19F154C6002B23BC /* Followingbutton.m */; };
 		A58DA84119D02EA9003EE5CB /* _User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84019D02EA9003EE5CB /* _User.m */; };
 		A58DA84419D02EB8003EE5CB /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A58DA84319D02EB8003EE5CB /* User.m */; };
+		A58E4A0819FEB61B00549434 /* _Watch.m in Sources */ = {isa = PBXBuildFile; fileRef = A58E4A0719FEB61B00549434 /* _Watch.m */; };
+		A58E4A0B19FEB62F00549434 /* Watch.m in Sources */ = {isa = PBXBuildFile; fileRef = A58E4A0A19FEB62F00549434 /* Watch.m */; };
 		A58F910D19A4A5830076AA1E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A58F910C19A4A5830076AA1E /* AudioToolbox.framework */; };
 		A59EECDD19D1761500D011C5 /* ShotTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */; };
 		A5A678A419C71FC200DEEA51 /* People.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5A678A619C71FC200DEEA51 /* People.storyboard */; };
@@ -184,6 +186,10 @@
 		A58DA84019D02EA9003EE5CB /* _User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _User.m; sourceTree = "<group>"; };
 		A58DA84219D02EB8003EE5CB /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		A58DA84319D02EB8003EE5CB /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		A58E4A0619FEB61B00549434 /* _Watch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Watch.h; sourceTree = "<group>"; };
+		A58E4A0719FEB61B00549434 /* _Watch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Watch.m; sourceTree = "<group>"; };
+		A58E4A0919FEB62F00549434 /* Watch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Watch.h; sourceTree = "<group>"; };
+		A58E4A0A19FEB62F00549434 /* Watch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Watch.m; sourceTree = "<group>"; };
 		A58F910C19A4A5830076AA1E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A59EECDB19D1761500D011C5 /* ShotTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShotTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShotTableViewCell.m; sourceTree = SOURCE_ROOT; };
@@ -509,6 +515,8 @@
 				AA623D7A1998D17700A942A9 /* _SML.m */,
 				AA623D7F1998D17700A942A9 /* _Team.h */,
 				AA623D801998D17700A942A9 /* _Team.m */,
+				A58E4A0619FEB61B00549434 /* _Watch.h */,
+				A58E4A0719FEB61B00549434 /* _Watch.m */,
 			);
 			name = MachineClass;
 			sourceTree = "<group>";
@@ -536,6 +544,8 @@
 				AA623DC21998D17700A942A9 /* Team.m */,
 				A58DA84219D02EB8003EE5CB /* User.h */,
 				A58DA84319D02EB8003EE5CB /* User.m */,
+				A58E4A0919FEB62F00549434 /* Watch.h */,
+				A58E4A0A19FEB62F00549434 /* Watch.m */,
 			);
 			name = "CoreData Classes";
 			sourceTree = "<group>";
@@ -1077,6 +1087,7 @@
 				A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */,
 				AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */,
 				AA72641219D1C8280067A39D /* ShotManager.m in Sources */,
+				A58E4A0B19FEB62F00549434 /* Watch.m in Sources */,
 				AA74B40919DEA33400EF90D5 /* FollowingTableViewController.m in Sources */,
 				AACA543D19C057C000E39D94 /* AFHTTPRequestOperationManager.m in Sources */,
 				A58DA84119D02EA9003EE5CB /* _User.m in Sources */,
@@ -1133,6 +1144,7 @@
 				A59EECDD19D1761500D011C5 /* ShotTableViewCell.m in Sources */,
 				AACA544619C057C000E39D94 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */,
+				A58E4A0819FEB61B00549434 /* _Watch.m in Sources */,
 				AACA544219C057C000E39D94 /* AFURLRequestSerialization.m in Sources */,
 				AACA544519C057C000E39D94 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				A58DA84419D02EB8003EE5CB /* User.m in Sources */,

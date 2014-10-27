@@ -10,59 +10,25 @@ extern const struct MatchAttributes {
 	__unsafe_unretained NSString *csys_modified;
 	__unsafe_unretained NSString *csys_revision;
 	__unsafe_unretained NSString *csys_syncronized;
-	__unsafe_unretained NSString *elapsedMinutes;
-	__unsafe_unretained NSString *endFinal;
 	__unsafe_unretained NSString *idLocalTeam;
 	__unsafe_unretained NSString *idMatch;
-	__unsafe_unretained NSString *idPreviousMatch;
-	__unsafe_unretained NSString *idRound;
 	__unsafe_unretained NSString *idVisitorTeam;
-	__unsafe_unretained NSString *idWinnerTeam;
-	__unsafe_unretained NSString *listTV;
-	__unsafe_unretained NSString *localScore;
 	__unsafe_unretained NSString *matchDate;
-	__unsafe_unretained NSString *matchState;
-	__unsafe_unretained NSString *matchSubstate;
-	__unsafe_unretained NSString *matchType;
-	__unsafe_unretained NSString *notConfirmedMatchDate;
-	__unsafe_unretained NSString *order;
-	__unsafe_unretained NSString *overTimeStartDate;
-	__unsafe_unretained NSString *previousMatchScore;
-	__unsafe_unretained NSString *scorePenaltiesLocalTeam;
-	__unsafe_unretained NSString *scorePenaltiesVisitorTeam;
-	__unsafe_unretained NSString *secondHalfStartDate;
-	__unsafe_unretained NSString *startDate;
-	__unsafe_unretained NSString *twitterLocal;
-	__unsafe_unretained NSString *twitterVisitor;
-	__unsafe_unretained NSString *visitorScore;
+	__unsafe_unretained NSString *status;
 } MatchAttributes;
 
 extern const struct MatchRelationships {
+	__unsafe_unretained NSString *teamLocal;
+	__unsafe_unretained NSString *teamVisitor;
+	__unsafe_unretained NSString *watches;
 } MatchRelationships;
 
 extern const struct MatchFetchedProperties {
 } MatchFetchedProperties;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@class Team;
+@class Team;
+@class Watch;
 
 
 
@@ -154,34 +120,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* elapsedMinutes;
-
-
-
-@property int32_t elapsedMinutesValue;
-- (int32_t)elapsedMinutesValue;
-- (void)setElapsedMinutesValue:(int32_t)value_;
-
-//- (BOOL)validateElapsedMinutes:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* endFinal;
-
-
-
-@property int64_t endFinalValue;
-- (int64_t)endFinalValue;
-- (void)setEndFinalValue:(int64_t)value_;
-
-//- (BOOL)validateEndFinal:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSNumber* idLocalTeam;
 
 
@@ -210,34 +148,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* idPreviousMatch;
-
-
-
-@property int64_t idPreviousMatchValue;
-- (int64_t)idPreviousMatchValue;
-- (void)setIdPreviousMatchValue:(int64_t)value_;
-
-//- (BOOL)validateIdPreviousMatch:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* idRound;
-
-
-
-@property int32_t idRoundValue;
-- (int32_t)idRoundValue;
-- (void)setIdRoundValue:(int32_t)value_;
-
-//- (BOOL)validateIdRound:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSNumber* idVisitorTeam;
 
 
@@ -247,44 +157,6 @@ extern const struct MatchFetchedProperties {
 - (void)setIdVisitorTeamValue:(int32_t)value_;
 
 //- (BOOL)validateIdVisitorTeam:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* idWinnerTeam;
-
-
-
-@property int32_t idWinnerTeamValue;
-- (int32_t)idWinnerTeamValue;
-- (void)setIdWinnerTeamValue:(int32_t)value_;
-
-//- (BOOL)validateIdWinnerTeam:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* listTV;
-
-
-
-//- (BOOL)validateListTV:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* localScore;
-
-
-
-@property int16_t localScoreValue;
-- (int16_t)localScoreValue;
-- (void)setLocalScoreValue:(int16_t)value_;
-
-//- (BOOL)validateLocalScore:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -304,194 +176,37 @@ extern const struct MatchFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSNumber* matchState;
+@property (nonatomic, strong) NSNumber* status;
 
 
 
-@property int16_t matchStateValue;
-- (int16_t)matchStateValue;
-- (void)setMatchStateValue:(int16_t)value_;
+@property int16_t statusValue;
+- (int16_t)statusValue;
+- (void)setStatusValue:(int16_t)value_;
 
-//- (BOOL)validateMatchState:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateStatus:(id*)value_ error:(NSError**)error_;
 
 
 
 
 
-@property (nonatomic, strong) NSNumber* matchSubstate;
+@property (nonatomic, strong) Team *teamLocal;
 
+//- (BOOL)validateTeamLocal:(id*)value_ error:(NSError**)error_;
 
 
-@property int16_t matchSubstateValue;
-- (int16_t)matchSubstateValue;
-- (void)setMatchSubstateValue:(int16_t)value_;
 
-//- (BOOL)validateMatchSubstate:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) Team *teamVisitor;
 
+//- (BOOL)validateTeamVisitor:(id*)value_ error:(NSError**)error_;
 
 
 
-@property (nonatomic, strong) NSNumber* matchType;
 
+@property (nonatomic, strong) NSSet *watches;
 
-
-@property int16_t matchTypeValue;
-- (int16_t)matchTypeValue;
-- (void)setMatchTypeValue:(int16_t)value_;
-
-//- (BOOL)validateMatchType:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* notConfirmedMatchDate;
-
-
-
-@property BOOL notConfirmedMatchDateValue;
-- (BOOL)notConfirmedMatchDateValue;
-- (void)setNotConfirmedMatchDateValue:(BOOL)value_;
-
-//- (BOOL)validateNotConfirmedMatchDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* order;
-
-
-
-@property int64_t orderValue;
-- (int64_t)orderValue;
-- (void)setOrderValue:(int64_t)value_;
-
-//- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* overTimeStartDate;
-
-
-
-@property int64_t overTimeStartDateValue;
-- (int64_t)overTimeStartDateValue;
-- (void)setOverTimeStartDateValue:(int64_t)value_;
-
-//- (BOOL)validateOverTimeStartDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSString* previousMatchScore;
-
-
-
-//- (BOOL)validatePreviousMatchScore:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* scorePenaltiesLocalTeam;
-
-
-
-@property int64_t scorePenaltiesLocalTeamValue;
-- (int64_t)scorePenaltiesLocalTeamValue;
-- (void)setScorePenaltiesLocalTeamValue:(int64_t)value_;
-
-//- (BOOL)validateScorePenaltiesLocalTeam:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* scorePenaltiesVisitorTeam;
-
-
-
-@property int64_t scorePenaltiesVisitorTeamValue;
-- (int64_t)scorePenaltiesVisitorTeamValue;
-- (void)setScorePenaltiesVisitorTeamValue:(int64_t)value_;
-
-//- (BOOL)validateScorePenaltiesVisitorTeam:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* secondHalfStartDate;
-
-
-
-@property int64_t secondHalfStartDateValue;
-- (int64_t)secondHalfStartDateValue;
-- (void)setSecondHalfStartDateValue:(int64_t)value_;
-
-//- (BOOL)validateSecondHalfStartDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* startDate;
-
-
-
-@property int64_t startDateValue;
-- (int64_t)startDateValue;
-- (void)setStartDateValue:(int64_t)value_;
-
-//- (BOOL)validateStartDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* twitterLocal;
-
-
-
-@property BOOL twitterLocalValue;
-- (BOOL)twitterLocalValue;
-- (void)setTwitterLocalValue:(BOOL)value_;
-
-//- (BOOL)validateTwitterLocal:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* twitterVisitor;
-
-
-
-@property BOOL twitterVisitorValue;
-- (BOOL)twitterVisitorValue;
-- (void)setTwitterVisitorValue:(BOOL)value_;
-
-//- (BOOL)validateTwitterVisitor:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* visitorScore;
-
-
-
-@property int16_t visitorScoreValue;
-- (int16_t)visitorScoreValue;
-- (void)setVisitorScoreValue:(int16_t)value_;
-
-//- (BOOL)validateVisitorScore:(id*)value_ error:(NSError**)error_;
-
+- (NSMutableSet*)watchesSet;
 
 
 
@@ -500,6 +215,11 @@ extern const struct MatchFetchedProperties {
 @end
 
 @interface _Match (CoreDataGeneratedAccessors)
+
+- (void)addWatches:(NSSet*)value_;
+- (void)removeWatches:(NSSet*)value_;
+- (void)addWatchesObject:(Watch*)value_;
+- (void)removeWatchesObject:(Watch*)value_;
 
 @end
 
@@ -548,24 +268,6 @@ extern const struct MatchFetchedProperties {
 
 
 
-- (NSNumber*)primitiveElapsedMinutes;
-- (void)setPrimitiveElapsedMinutes:(NSNumber*)value;
-
-- (int32_t)primitiveElapsedMinutesValue;
-- (void)setPrimitiveElapsedMinutesValue:(int32_t)value_;
-
-
-
-
-- (NSNumber*)primitiveEndFinal;
-- (void)setPrimitiveEndFinal:(NSNumber*)value;
-
-- (int64_t)primitiveEndFinalValue;
-- (void)setPrimitiveEndFinalValue:(int64_t)value_;
-
-
-
-
 - (NSNumber*)primitiveIdLocalTeam;
 - (void)setPrimitiveIdLocalTeam:(NSNumber*)value;
 
@@ -584,53 +286,11 @@ extern const struct MatchFetchedProperties {
 
 
 
-- (NSNumber*)primitiveIdPreviousMatch;
-- (void)setPrimitiveIdPreviousMatch:(NSNumber*)value;
-
-- (int64_t)primitiveIdPreviousMatchValue;
-- (void)setPrimitiveIdPreviousMatchValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveIdRound;
-- (void)setPrimitiveIdRound:(NSNumber*)value;
-
-- (int32_t)primitiveIdRoundValue;
-- (void)setPrimitiveIdRoundValue:(int32_t)value_;
-
-
-
-
 - (NSNumber*)primitiveIdVisitorTeam;
 - (void)setPrimitiveIdVisitorTeam:(NSNumber*)value;
 
 - (int32_t)primitiveIdVisitorTeamValue;
 - (void)setPrimitiveIdVisitorTeamValue:(int32_t)value_;
-
-
-
-
-- (NSNumber*)primitiveIdWinnerTeam;
-- (void)setPrimitiveIdWinnerTeam:(NSNumber*)value;
-
-- (int32_t)primitiveIdWinnerTeamValue;
-- (void)setPrimitiveIdWinnerTeamValue:(int32_t)value_;
-
-
-
-
-- (NSString*)primitiveListTV;
-- (void)setPrimitiveListTV:(NSString*)value;
-
-
-
-
-- (NSNumber*)primitiveLocalScore;
-- (void)setPrimitiveLocalScore:(NSNumber*)value;
-
-- (int16_t)primitiveLocalScoreValue;
-- (void)setPrimitiveLocalScoreValue:(int16_t)value_;
 
 
 
@@ -644,127 +304,28 @@ extern const struct MatchFetchedProperties {
 
 
 
-- (NSNumber*)primitiveMatchState;
-- (void)setPrimitiveMatchState:(NSNumber*)value;
+- (NSNumber*)primitiveStatus;
+- (void)setPrimitiveStatus:(NSNumber*)value;
 
-- (int16_t)primitiveMatchStateValue;
-- (void)setPrimitiveMatchStateValue:(int16_t)value_;
+- (int16_t)primitiveStatusValue;
+- (void)setPrimitiveStatusValue:(int16_t)value_;
 
 
 
 
-- (NSNumber*)primitiveMatchSubstate;
-- (void)setPrimitiveMatchSubstate:(NSNumber*)value;
 
-- (int16_t)primitiveMatchSubstateValue;
-- (void)setPrimitiveMatchSubstateValue:(int16_t)value_;
+- (Team*)primitiveTeamLocal;
+- (void)setPrimitiveTeamLocal:(Team*)value;
 
 
 
+- (Team*)primitiveTeamVisitor;
+- (void)setPrimitiveTeamVisitor:(Team*)value;
 
-- (NSNumber*)primitiveMatchType;
-- (void)setPrimitiveMatchType:(NSNumber*)value;
 
-- (int16_t)primitiveMatchTypeValue;
-- (void)setPrimitiveMatchTypeValue:(int16_t)value_;
 
-
-
-
-- (NSNumber*)primitiveNotConfirmedMatchDate;
-- (void)setPrimitiveNotConfirmedMatchDate:(NSNumber*)value;
-
-- (BOOL)primitiveNotConfirmedMatchDateValue;
-- (void)setPrimitiveNotConfirmedMatchDateValue:(BOOL)value_;
-
-
-
-
-- (NSNumber*)primitiveOrder;
-- (void)setPrimitiveOrder:(NSNumber*)value;
-
-- (int64_t)primitiveOrderValue;
-- (void)setPrimitiveOrderValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveOverTimeStartDate;
-- (void)setPrimitiveOverTimeStartDate:(NSNumber*)value;
-
-- (int64_t)primitiveOverTimeStartDateValue;
-- (void)setPrimitiveOverTimeStartDateValue:(int64_t)value_;
-
-
-
-
-- (NSString*)primitivePreviousMatchScore;
-- (void)setPrimitivePreviousMatchScore:(NSString*)value;
-
-
-
-
-- (NSNumber*)primitiveScorePenaltiesLocalTeam;
-- (void)setPrimitiveScorePenaltiesLocalTeam:(NSNumber*)value;
-
-- (int64_t)primitiveScorePenaltiesLocalTeamValue;
-- (void)setPrimitiveScorePenaltiesLocalTeamValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveScorePenaltiesVisitorTeam;
-- (void)setPrimitiveScorePenaltiesVisitorTeam:(NSNumber*)value;
-
-- (int64_t)primitiveScorePenaltiesVisitorTeamValue;
-- (void)setPrimitiveScorePenaltiesVisitorTeamValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveSecondHalfStartDate;
-- (void)setPrimitiveSecondHalfStartDate:(NSNumber*)value;
-
-- (int64_t)primitiveSecondHalfStartDateValue;
-- (void)setPrimitiveSecondHalfStartDateValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveStartDate;
-- (void)setPrimitiveStartDate:(NSNumber*)value;
-
-- (int64_t)primitiveStartDateValue;
-- (void)setPrimitiveStartDateValue:(int64_t)value_;
-
-
-
-
-- (NSNumber*)primitiveTwitterLocal;
-- (void)setPrimitiveTwitterLocal:(NSNumber*)value;
-
-- (BOOL)primitiveTwitterLocalValue;
-- (void)setPrimitiveTwitterLocalValue:(BOOL)value_;
-
-
-
-
-- (NSNumber*)primitiveTwitterVisitor;
-- (void)setPrimitiveTwitterVisitor:(NSNumber*)value;
-
-- (BOOL)primitiveTwitterVisitorValue;
-- (void)setPrimitiveTwitterVisitorValue:(BOOL)value_;
-
-
-
-
-- (NSNumber*)primitiveVisitorScore;
-- (void)setPrimitiveVisitorScore:(NSNumber*)value;
-
-- (int16_t)primitiveVisitorScoreValue;
-- (void)setPrimitiveVisitorScoreValue:(int16_t)value_;
-
-
+- (NSMutableSet*)primitiveWatches;
+- (void)setPrimitiveWatches:(NSMutableSet*)value;
 
 
 @end

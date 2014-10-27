@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AppAdvice" representedClassName="AppAdvice" syncable="YES">
         <attribute name="buttonAction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="buttonData" optional="YES" attributeType="String" syncable="YES"/>
@@ -56,31 +56,14 @@
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="elapsedMinutes" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="endFinal" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="idLocalTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="idMatch" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="idPreviousMatch" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="idRound" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="idVisitorTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="idWinnerTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="listTV" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="localScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="matchDate" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="matchState" attributeType="Integer 16" minValueString="0" maxValueString="4" defaultValueString="0" syncable="YES"/>
-        <attribute name="matchSubstate" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="matchType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="notConfirmedMatchDate" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="overTimeStartDate" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="previousMatchScore" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="scorePenaltiesLocalTeam" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="scorePenaltiesVisitorTeam" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="secondHalfStartDate" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="startDate" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="twitterLocal" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="twitterVisitor" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="visitorScore" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="teamLocal" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsLocal" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamVisitor" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsVisitor" inverseEntity="Team" syncable="YES"/>
+        <relationship name="watches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="match" inverseEntity="Watch" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES">
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -133,6 +116,8 @@
         <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tlaName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="matchAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
+        <relationship name="matchAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
         <relationship name="user" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="team" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
@@ -158,17 +143,29 @@
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
         <relationship name="shots" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Shot" inverseName="user" inverseEntity="Shot" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="user" inverseEntity="Team" syncable="YES"/>
+        <relationship name="watch" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="user" inverseEntity="Watch" syncable="YES"/>
+    </entity>
+    <entity name="Watch" representedClassName="Watch" syncable="YES">
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="match" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="watches" inverseEntity="Match" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="watch" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
         <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
-        <element name="Follow" positionX="-693" positionY="135" width="128" height="150"/>
-        <element name="Match" positionX="-45" positionY="-27" width="128" height="495"/>
+        <element name="Follow" positionX="-693" positionY="135" width="128" height="148"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="238"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
         <element name="SML" positionX="-290" positionY="45" width="128" height="180"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
-        <element name="Team" positionX="169" positionY="77" width="128" height="208"/>
-        <element name="User" positionX="-425" positionY="324" width="128" height="375"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="388"/>
+        <element name="Watch" positionX="-702" positionY="126" width="128" height="163"/>
     </elements>
 </model>

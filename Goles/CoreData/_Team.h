@@ -18,12 +18,16 @@ extern const struct TeamAttributes {
 } TeamAttributes;
 
 extern const struct TeamRelationships {
+	__unsafe_unretained NSString *matchAsLocal;
+	__unsafe_unretained NSString *matchAsVisitor;
 	__unsafe_unretained NSString *user;
 } TeamRelationships;
 
 extern const struct TeamFetchedProperties {
 } TeamFetchedProperties;
 
+@class Match;
+@class Match;
 @class User;
 
 
@@ -170,6 +174,20 @@ extern const struct TeamFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *matchAsLocal;
+
+- (NSMutableSet*)matchAsLocalSet;
+
+
+
+
+@property (nonatomic, strong) NSSet *matchAsVisitor;
+
+- (NSMutableSet*)matchAsVisitorSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *user;
 
 - (NSMutableSet*)userSet;
@@ -181,6 +199,16 @@ extern const struct TeamFetchedProperties {
 @end
 
 @interface _Team (CoreDataGeneratedAccessors)
+
+- (void)addMatchAsLocal:(NSSet*)value_;
+- (void)removeMatchAsLocal:(NSSet*)value_;
+- (void)addMatchAsLocalObject:(Match*)value_;
+- (void)removeMatchAsLocalObject:(Match*)value_;
+
+- (void)addMatchAsVisitor:(NSSet*)value_;
+- (void)removeMatchAsVisitor:(NSSet*)value_;
+- (void)addMatchAsVisitorObject:(Match*)value_;
+- (void)removeMatchAsVisitorObject:(Match*)value_;
 
 - (void)addUser:(NSSet*)value_;
 - (void)removeUser:(NSSet*)value_;
@@ -265,6 +293,16 @@ extern const struct TeamFetchedProperties {
 - (void)setPrimitiveTlaName:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveMatchAsLocal;
+- (void)setPrimitiveMatchAsLocal:(NSMutableSet*)value;
+
+
+
+- (NSMutableSet*)primitiveMatchAsVisitor;
+- (void)setPrimitiveMatchAsVisitor:(NSMutableSet*)value;
 
 
 

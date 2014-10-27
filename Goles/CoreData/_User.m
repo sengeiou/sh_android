@@ -29,6 +29,7 @@ const struct UserRelationships UserRelationships = {
 	.device = @"device",
 	.shots = @"shots",
 	.team = @"team",
+	.watch = @"watch",
 };
 
 const struct UserFetchedProperties UserFetchedProperties = {
@@ -459,6 +460,19 @@ const struct UserFetchedProperties UserFetchedProperties = {
 
 @dynamic team;
 
+	
+
+@dynamic watch;
+
+	
+- (NSMutableSet*)watchSet {
+	[self willAccessValueForKey:@"watch"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"watch"];
+  
+	[self didAccessValueForKey:@"watch"];
+	return result;
+}
 	
 
 

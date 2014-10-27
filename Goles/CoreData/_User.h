@@ -30,6 +30,7 @@ extern const struct UserRelationships {
 	__unsafe_unretained NSString *device;
 	__unsafe_unretained NSString *shots;
 	__unsafe_unretained NSString *team;
+	__unsafe_unretained NSString *watch;
 } UserRelationships;
 
 extern const struct UserFetchedProperties {
@@ -38,6 +39,7 @@ extern const struct UserFetchedProperties {
 @class Device;
 @class Shot;
 @class Team;
+@class Watch;
 
 
 
@@ -323,6 +325,13 @@ extern const struct UserFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *watch;
+
+- (NSMutableSet*)watchSet;
+
+
+
+
 
 @end
 
@@ -332,6 +341,11 @@ extern const struct UserFetchedProperties {
 - (void)removeShots:(NSSet*)value_;
 - (void)addShotsObject:(Shot*)value_;
 - (void)removeShotsObject:(Shot*)value_;
+
+- (void)addWatch:(NSSet*)value_;
+- (void)removeWatch:(NSSet*)value_;
+- (void)addWatchObject:(Watch*)value_;
+- (void)removeWatchObject:(Watch*)value_;
 
 @end
 
@@ -495,6 +509,11 @@ extern const struct UserFetchedProperties {
 
 - (Team*)primitiveTeam;
 - (void)setPrimitiveTeam:(Team*)value;
+
+
+
+- (NSMutableSet*)primitiveWatch;
+- (void)setPrimitiveWatch:(NSMutableSet*)value;
 
 
 @end
