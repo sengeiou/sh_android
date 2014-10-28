@@ -89,7 +89,7 @@
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 3.5;
+    paragraphStyle.lineSpacing = 2.8;
     NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
     [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
     

@@ -20,6 +20,14 @@
 
 static NSString *CellIdentifier = @"shootCell";
 
+typedef enum typesOfChange : NSUInteger {
+    k_NoChange,
+    k_Update,
+    k_Insert,
+    k_Delete,
+    k_Move,
+} typesOfChange;
+
 @interface TimeLineTableViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
 @property (nonatomic)                   BOOL                        moreCells;
@@ -30,6 +38,7 @@ static NSString *CellIdentifier = @"shootCell";
 @property (nonatomic,assign)            CGFloat                     lastContentOffset;
 @property (nonatomic, retain)           NSFetchedResultsController  *fetchedResultsController;
 @property (nonatomic, strong)           NSArray                     *arrayShots;
+@property (nonatomic)                   NSInteger                   tableTypeOfChange;
 
 @end
 
@@ -190,48 +199,43 @@ static NSString *CellIdentifier = @"shootCell";
     switch(type) {
             
         case NSFetchedResultsChangeInsert:{
+            self.tableTypeOfChange = k_Insert;
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
         }
             
-        case NSFetchedResultsChangeDelete:
+        case NSFetchedResultsChangeDelete:{
+            self.tableTypeOfChange = k_Delete;
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
-        case NSFetchedResultsChangeUpdate:
-//            [self configureCell:(ShotTableViewCell *)[self.myTableView cellForRowAtIndexPath:indexPath] atIndexPAth:indexPath];
+        }
+        case NSFetchedResultsChangeUpdate:{
+            self.tableTypeOfChange = k_Update;
             break;
-            
-        case NSFetchedResultsChangeMove:
+        }
+        case NSFetchedResultsChangeMove:{
+            self.tableTypeOfChange = k_Move;
             [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
+        }
     }
 }
 
 //------------------------------------------------------------------------------
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     
-    [self.myTableView endUpdates];
-    
-    NSArray *indexs = [self addIndexPath];
-    [self.myTableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationNone];
-    
-}
+    if (self.tableTypeOfChange == k_Insert) {
 
-//------------------------------------------------------------------------------
--(NSArray *)addIndexPath{
-    
-    NSMutableArray *indexPaths = [NSMutableArray array];
-    NSInteger rowCount = [self.myTableView numberOfRowsInSection:0];
-    
-    for (int j = 0; j < rowCount; j++) {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:0]];
+        [self.myTableView reloadData];
+        Shot *lastShot = self.fetchedResultsController.fetchedObjects.firstObject;
+        NSInteger lastShotUserID = lastShot.user.idUserValue;
+        if (lastShotUserID == [[[UserManager singleton] getUserId] integerValue] )
+            [self.myTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
+        self.tableTypeOfChange = k_NoChange;
     }
-    
-    
-    return indexPaths;
-}
 
+}
 
 
 #pragma mark - Pull to refresh
@@ -251,7 +255,7 @@ static NSString *CellIdentifier = @"shootCell";
     //    [UIView animateWithDuration:0.25 animations:^{
     //        self.watchingMenu.alpha = 0.0;
     //    }];
-    
+    [self.myTableView reloadData];
     [self.refreshControl endRefreshing];
 }
 
@@ -291,8 +295,8 @@ static NSString *CellIdentifier = @"shootCell";
     
     self.lastContentOffset = scrollView.contentOffset.y;
 
-    NSLog(@"%f", self.lastContentOffset);
-    NSLog(@"scroll: %f", self.myTableView.contentInset.top);
+//    NSLog(@"%f", self.lastContentOffset);
+//    NSLog(@"scroll: %f", self.myTableView.contentInset.top);
 
 }
 
