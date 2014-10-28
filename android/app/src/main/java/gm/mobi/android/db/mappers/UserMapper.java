@@ -75,7 +75,7 @@ public class UserMapper extends GenericMapper {
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
-        user.setFavoriteTeamId(dto.containsKey(UserTable.FAVORITE_TEAM_ID) ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue(): null);
+        user.setFavoriteTeamId(dto.containsKey(UserTable.FAVORITE_TEAM_ID) && dto.get(UserTable.FAVORITE_TEAM_ID)!=null ? ((Number) dto.get(UserTable.FAVORITE_TEAM_ID)).longValue(): null);
         user.setFavoriteTeamName(dto.containsKey(UserTable.FAVORITE_TEAM_NAME) ? (String) dto.get(UserTable.FAVORITE_TEAM_NAME) : null);
         user.setSessionToken(dto.containsKey(UserTable.SESSION_TOKEN) ? (String) dto.get(UserTable.SESSION_TOKEN) : null);
         user.setUserName(dto.containsKey(UserTable.USER_NAME) ? ((String) dto.get(UserTable.USER_NAME)) : null);

@@ -8,17 +8,24 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.mappers.MatchMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.mappers.WatchMapper;
 import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.MatchEntity;
 import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.TeamEntity;
 import gm.mobi.android.db.objects.UserEntity;
+import gm.mobi.android.db.objects.WatchEntity;
 import gm.mobi.android.exception.ServerException;
 import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.service.Endpoint;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.service.dataservice.dto.DeviceDtoFactory;
+import gm.mobi.android.service.dataservice.dto.MatchDtoFactory;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -46,21 +53,26 @@ public class BagdadDataService implements BagdadService {
     private UserDtoFactory userDtoFactory;
     private TimelineDtoFactory timelineDtoFactory;
     private ShotDtoFactory shotDtoFactory;
+    private MatchDtoFactory matchDtoFactory;
     private DeviceDtoFactory deviceDtoFactory;
 
     private UserMapper userMapper;
     private FollowMapper followMapper;
     private ShotMapper shotMapper;
+    private MatchMapper matchMapper;
     private DeviceMapper deviceMapper;
+    private WatchMapper watchMapper;
+    private TeamMapper teamMapper;
 
     @Inject
     public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
-      DeviceMapper deviceMapper) {
+      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, MatchDtoFactory matchDtoFactory,
+      DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
+        this.matchDtoFactory = matchDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
@@ -69,6 +81,10 @@ public class BagdadDataService implements BagdadService {
         this.followMapper = followMapper;
         this.shotMapper = shotMapper;
         this.deviceMapper = deviceMapper;
+        this.matchMapper = matchMapper;
+        this.watchMapper = watchMapper;
+        this.teamMapper = teamMapper;
+
     }
 
     @Override
@@ -79,8 +95,6 @@ public class BagdadDataService implements BagdadService {
         Map<String, Object>[] data = ops[0].getData();
         return userMapper.fromDto(data[0]);
     }
-
-
 
     @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
             List<UserEntity> following = new ArrayList<>();
@@ -328,6 +342,90 @@ public class BagdadDataService implements BagdadService {
         return followReceived;
     }
 
+    @Override public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getLastMatchWhereMyFavoriteTeamPlays(idFavoriteTeam);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        Map<String,Object> dataItem  = ops[0].getData()[0];
+        MatchEntity matchReceived = matchMapper.fromDto(dataItem);
+        return matchReceived;
+    }
+
+
+
+    @Override public List<WatchEntity> getMyFollowingWatches(List<Long> followingIds, Long date) throws IOException {
+
+        GenericDto requestDto = matchDtoFactory.getWatchFollowing(followingIds,  date);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        MetadataDto metadata = ops[0].getMetadata();
+        Long items = metadata.getItems();
+        List<WatchEntity> watchesReceived = new ArrayList<>();
+        if (ops.length > 0) {
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                watchesReceived.add(watchMapper.fromDto(dataItem));
+            }
+        } else {
+            return null;
+        }
+        return watchesReceived;
+    }
+
+    @Override public List<MatchEntity> getMatchesFromFollowingWatches(List<Long> matcheIds) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getMatchesFromWatchFollowing(matcheIds);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+
+        MetadataDto metadata = ops[0].getMetadata();
+        Long items = metadata.getItems();
+        List<MatchEntity> matchesReceived = new ArrayList<>();
+        if (ops.length > 0) {
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                matchesReceived.add(matchMapper.fromDto(dataItem));
+            }
+        } else {
+            return null;
+        }
+        return matchesReceived;
+
+    }
+
+    @Override public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException{
+        GenericDto requestDto = matchDtoFactory.getTeamsFromTeamIds(teamIds);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        MetadataDto md = ops[0].getMetadata();
+        Long items = md.getItems();
+        List<TeamEntity> teamEntities = new ArrayList<>();
+        if(ops.length>0){
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                teamEntities.add(teamMapper.fromDto(dataItem));
+            }
+        } else {
+            return null;
+        }
+        return teamEntities;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);
@@ -370,4 +468,5 @@ public class BagdadDataService implements BagdadService {
             throw new ServerException(ServerException.V999);
         }
     }
+
 }

@@ -20,6 +20,10 @@ public class OpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_FOLLOW);
         db.execSQL(SQLiteUtils.CREATE_TABLE_TABLESSYNC);
         db.execSQL(SQLiteUtils.CREATE_TABLE_DEVICE);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_TEAM);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_MATCH);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_WATCH);
+
     }
 
     @Override
@@ -29,6 +33,9 @@ public class OpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + GMContract.FollowTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + GMContract.TablesSync.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + GMContract.DeviceTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + GMContract.TeamTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + GMContract.MatchTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + GMContract.WatchTable.TABLE);
         onCreate(db);
     }
 

@@ -66,6 +66,17 @@ public class FilterBuilder {
     }
 
     /**
+     * Utility method to provide common delete dates filter.
+     * Creates an OrItem with deleted equals null.
+     *
+     * @return OrItem for attaching to a builder.
+     */
+    public static OrItem orDeletedEqualsNull() {
+        return or(SyncColumns.CSYS_DELETED).isEqualTo(null);
+    }
+
+
+    /**
      * Filter data field. Represents the field from the service which is going to be compared with
      * a value.
      * <p/>

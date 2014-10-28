@@ -267,7 +267,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
             getAdapter().notifyDataSetChanged();
         }
-
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {

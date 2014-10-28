@@ -6,6 +6,9 @@ import gm.mobi.android.db.GMContract.ShotTable;
 import gm.mobi.android.db.GMContract.SyncColumns;
 import gm.mobi.android.db.GMContract.TablesSync;
 import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.GMContract.TeamTable;
+import gm.mobi.android.db.GMContract.MatchTable;
+import gm.mobi.android.db.GMContract.WatchTable;
 
 public class SQLiteUtils {
 
@@ -66,16 +69,52 @@ public class SQLiteUtils {
             "PRIMARY KEY("+TablesSync.ORDER+"));";
 
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "+ DeviceTable.TABLE +" ("
-      + DeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"
-      + DeviceTable.ID_USER+" INT NOT NULL,"
-      + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
-      + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
-      + DeviceTable.MODEL+" VARCHAR(255) NULL,"
-      + DeviceTable.OS_VERSION+" VARCHAR(255),"
-      + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
-      + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
-      + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
-      + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
-      + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
+            + DeviceTable.ID_DEVICE+" INT NOT NULL PRIMARY KEY,"
+            + DeviceTable.ID_USER+" INT NOT NULL,"
+            + DeviceTable.TOKEN+" VARCHAR(255) NULL,"
+            + DeviceTable.UNIQUE_DEVICE_ID+" VARCHAR(255) NULL,"
+            + DeviceTable.MODEL+" VARCHAR(255) NULL,"
+            + DeviceTable.OS_VERSION+" VARCHAR(255),"
+            + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED + " DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION + " INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED + " CHAR(1) NULL)";
 
-}
+    public static final String CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "+ TeamTable.TABLE+" ("
+            + TeamTable.ID_TEAM+" INT NOT NULL PRIMARY KEY,"
+            + TeamTable.CLUB_NAME+" VARCHAR(255) NOT NULL,"
+            + TeamTable.OFFICIAL_NAME+" VARCHAR(255),"
+            + TeamTable.SHORT_NAME+" VARCHAR(255),"
+            + TeamTable.TLA_NAME+" VARCHAR(255),"
+            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED+ "DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_MATCH = "CREATE TABLE IF NOT EXISTS "+ MatchTable.TABLE+" ("
+            + MatchTable.ID_MATCH+" INT NOT NULL PRIMARY KEY,"
+            + MatchTable.MATCH_DATE+ " DATETIME NOT NULL,"
+            + MatchTable.ID_LOCAL_TEAM+" INT NOT NULL,"
+            + MatchTable.ID_VISITOR_TEAM+" INT NOT NULL,"
+            + MatchTable.LOCAL_TEAM_NAME+" VARCHAR(255) NOT NULL,"
+            + MatchTable.VISITOR_TEAM_NAME+" VARCHAR(255) NOT NULL,"
+            + MatchTable.STATUS+" INT NOT NULL,"
+            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
+
+    public static final String CREATE_TABLE_WATCH = "CREATE TABLE IF NOT EXISTS "+ WatchTable.TABLE+" ("
+            + WatchTable.ID_MATCH + " INT NOT NULL,"
+            + WatchTable.ID_USER+ " INT NOT NULL,"
+            + WatchTable.STATUS+" INT NOT NULL,"
+            + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
+            + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
+            + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
+            + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL,"
+            + " PRIMARY KEY("+WatchTable.ID_USER+","+WatchTable.ID_MATCH+"))";
+    }

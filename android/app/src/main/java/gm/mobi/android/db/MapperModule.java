@@ -4,8 +4,11 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.mappers.FollowMapper;
+import gm.mobi.android.db.mappers.MatchMapper;
 import gm.mobi.android.db.mappers.ShotMapper;
+import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
+import gm.mobi.android.db.mappers.WatchMapper;
 import gm.mobi.android.ui.model.mappers.ShotModelMapper;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 
@@ -33,4 +36,10 @@ public class MapperModule {
     @Provides UserMapper provideUserMapper() {
         return new UserMapper();
     }
+
+    @Provides MatchMapper provideMatchMapper(){ return new MatchMapper();}
+
+    @Provides WatchMapper provideWatchMapper(){ return new WatchMapper();}
+
+    @Provides TeamMapper provideTeamMapper(){ return new TeamMapper();}
 }

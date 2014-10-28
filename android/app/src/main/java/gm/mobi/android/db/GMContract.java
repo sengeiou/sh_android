@@ -1,6 +1,7 @@
 package gm.mobi.android.db;
 
 import android.provider.BaseColumns;
+import gm.mobi.android.db.objects.Synchronized;
 
 public class GMContract {
 
@@ -150,5 +151,72 @@ public class GMContract {
           CSYS_SYNCHRONIZED
         } ;
     }
+
+    public static final class TeamTable implements SyncColumns{
+        public static final String TABLE = "Team";
+        public static final String ID_TEAM = "idTeam";
+        public static final String CLUB_NAME="clubName";
+        public static final String OFFICIAL_NAME="officialName";
+        public static final String SHORT_NAME="shortName";
+        public static final String TLA_NAME="tlaName";
+
+        public static final String[] PROJECTION = {
+          ID_TEAM,
+          CLUB_NAME,
+          OFFICIAL_NAME,
+          SHORT_NAME,
+          TLA_NAME,
+          CSYS_BIRTH,
+          CSYS_MODIFIED,
+          CSYS_DELETED,
+          CSYS_REVISION,
+          CSYS_SYNCHRONIZED
+        };
+    }
+
+    public static final class MatchTable implements SyncColumns{
+        public static final String TABLE = "Match";
+        public static final String ID_MATCH = "idMatch";
+        public static final String MATCH_DATE = "matchDate";
+        public static final String ID_LOCAL_TEAM = "idLocalTeam";
+        public static final String ID_VISITOR_TEAM = "idVisitorTeam";
+        public static final String LOCAL_TEAM_NAME = "localTeamName";
+        public static final String VISITOR_TEAM_NAME = "visitorTeamName";
+        public static final String STATUS = "status";
+
+        public static final String[] PROJECTION = {
+          ID_MATCH,
+          MATCH_DATE,
+          ID_LOCAL_TEAM,
+          ID_VISITOR_TEAM,
+          LOCAL_TEAM_NAME,
+          VISITOR_TEAM_NAME,
+          STATUS,
+          CSYS_BIRTH,
+          CSYS_MODIFIED,
+          CSYS_DELETED,
+          CSYS_REVISION,
+          CSYS_SYNCHRONIZED
+        };
+    }
+
+    public static final class WatchTable implements  SyncColumns{
+        public static final String TABLE = "Watch";
+        public static final String ID_USER = "idUser";
+        public static final String ID_MATCH = "idMatch";
+        public static final String STATUS = "status";
+
+        public static final String[] PROJECTION = {
+          ID_USER,
+          ID_MATCH,
+          STATUS,
+          CSYS_BIRTH,
+          CSYS_MODIFIED,
+          CSYS_DELETED,
+          CSYS_REVISION,
+          CSYS_SYNCHRONIZED
+        };
+    }
+
 
 }

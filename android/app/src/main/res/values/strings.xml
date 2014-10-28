@@ -47,7 +47,7 @@
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
     <string name="activity_login_email_forgot">Forgot Password?</string>
 
-    <string name="activity_timeline_new_text">Comment</string>
+    <string name="activity_timeline_new_text">Shoot something</string>
     <string name="activity_timeline_empty_message">Share your footbal thoughts.\nStart Shooting.</string>
     <string name="activity_timeline_empty_title">No Shots</string>
 

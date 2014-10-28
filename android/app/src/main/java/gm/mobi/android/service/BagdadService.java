@@ -2,8 +2,11 @@ package gm.mobi.android.service;
 
 import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.db.objects.FollowEntity;
+import gm.mobi.android.db.objects.MatchEntity;
 import gm.mobi.android.db.objects.ShotEntity;
+import gm.mobi.android.db.objects.TeamEntity;
 import gm.mobi.android.db.objects.UserEntity;
+import gm.mobi.android.db.objects.WatchEntity;
 import java.io.IOException;
 import java.util.List;
 
@@ -39,4 +42,13 @@ public interface BagdadService {
     public FollowEntity followUser(FollowEntity follow) throws IOException;
 
     public FollowEntity unfollowUser(FollowEntity follow) throws IOException;
+
+    public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException;
+
+    public List<WatchEntity> getMyFollowingWatches(List<Long> followingIds, Long date) throws IOException;
+
+    public List<MatchEntity> getMatchesFromFollowingWatches(List<Long> matcheIds) throws IOException;
+
+    public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException;
+
 }
