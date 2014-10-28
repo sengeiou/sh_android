@@ -1,4 +1,4 @@
-﻿using BagdadTest.Utils;
+﻿using BagdadTest.Models;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bagdad.Utils;
+using BagdadTest.Utils;
+using Bagdad.Models;
 
 namespace BagdadTest.Integration
 {
@@ -13,10 +15,9 @@ namespace BagdadTest.Integration
     public class Initialization
     {
 
-       /* [TestMethod]
+        [TestMethod]
         public void CanQueryDatabase()
         {
-            
             DataBaseHelperTest dbTestHelper = new DataBaseHelperTest();
             
             int simpleQueryResult = dbTestHelper.SimpleQuery().Result;
@@ -32,13 +33,15 @@ namespace BagdadTest.Integration
          
             List<String> tableNames = dbTestHelper.GetListOfTables().Result;
 
-            Assert.AreEqual(6, tableNames.Count);
+            Assert.AreEqual(8, tableNames.Count);
             Assert.IsTrue(tableNames.Contains("User"));
             Assert.IsTrue(tableNames.Contains("Shot"));
             Assert.IsTrue(tableNames.Contains("Follow"));
             Assert.IsTrue(tableNames.Contains("Device"));
             Assert.IsTrue(tableNames.Contains("Synchro"));
             Assert.IsTrue(tableNames.Contains("Team"));
+            Assert.IsTrue(tableNames.Contains("Watch"));
+            Assert.IsTrue(tableNames.Contains("Matches"));
         }
 
         [TestMethod]
@@ -50,12 +53,26 @@ namespace BagdadTest.Integration
             dataBaseHelper.InitializeDB();
             DataBaseHelper.DBLoaded.Set();
 
-            Util util = new Util();
+            Login login = new Login();
 
-            bool isLogged = util.isUserAlreadyLoged().Result;
+            bool isLogged = login.isUserAlreadyLoged().Result;
 
             Assert.AreEqual(false, isLogged);
-        }*/
+        }
+
+        [TestMethod]
+        public void TestUserLogedInAtStartUp()
+        {
+            DataBaseHelperTest dbTestHelper = new DataBaseHelperTest();
+
+            int simpleQueryResult = dbTestHelper.InsertLogin().Result;
+
+            Login login = new Login();
+
+            bool isLogged = login.isUserAlreadyLoged().Result;
+
+            Assert.AreEqual(true, isLogged);
+        }
 
     }
 }
