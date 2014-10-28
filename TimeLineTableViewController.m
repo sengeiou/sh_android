@@ -83,7 +83,7 @@ typedef enum typesOfChange : NSUInteger {
 
     self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
 
-    self.myTableView.rowHeight = UITableViewAutomaticDimension;
+//    self.myTableView.rowHeight = UITableViewAutomaticDimension;
     
     self.myTableView.estimatedRowHeight = 68.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
@@ -223,10 +223,10 @@ typedef enum typesOfChange : NSUInteger {
 
 //------------------------------------------------------------------------------
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    
+        
     if (self.tableTypeOfChange == k_Insert) {
-
-        [self.myTableView reloadData];
+        NSArray *indexs = [self addIndexPath];
+        [self.myTableView reloadRowsAtIndexPaths: indexs withRowAnimation:UITableViewRowAnimationNone];
         Shot *lastShot = self.fetchedResultsController.fetchedObjects.firstObject;
         NSInteger lastShotUserID = lastShot.user.idUserValue;
         if (lastShotUserID == [[[UserManager singleton] getUserId] integerValue] )
@@ -234,8 +234,24 @@ typedef enum typesOfChange : NSUInteger {
         
         self.tableTypeOfChange = k_NoChange;
     }
-
+    
+    [self.myTableView endUpdates];
 }
+
+//------------------------------------------------------------------------------
+-(NSArray *)addIndexPath{
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    NSInteger rowCount = [self.myTableView numberOfRowsInSection:0];
+    
+    for (int j = 0; j < rowCount; j++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:0]];
+    }
+    
+    
+    return indexPaths;
+}
+
 
 
 #pragma mark - Pull to refresh
