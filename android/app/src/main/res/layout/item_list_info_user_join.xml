@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:padding="16dp"
+  android:background="@drawable/bg_item_list_info_user">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+      android:id="@+id/info_user_avatar"
+      android:layout_width="@dimen/userlist_avatar_size"
+      android:layout_height="@dimen/userlist_avatar_size"
+      android:src="@drawable/ic_contact_picture_default" />
+
+    <TextView
+      android:id="@+id/info_user_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="16dp"
+      android:layout_toRightOf="@+id/info_user_avatar"
+      android:textSize="14dp"
+      tools:text="Rafa" />
+
+    <TextView
+      android:id="@+id/info_user_watching"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@+id/info_user_name"
+      android:layout_below="@+id/info_user_name"
+      android:textColor="@color/gray_50"
+      android:textSize="14sp"
+      tools:text="Watching" />
+
+    <TextView
+      android:id="@+id/info_user_edit"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@+id/info_user_watching"
+      android:layout_below="@+id/info_user_watching"
+      android:textColor="@color/primary"
+      android:textSize="14sp"
+      android:background="?android:selectableItemBackground"
+      android:text="Edit" />
+
+</RelativeLayout>
