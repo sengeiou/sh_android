@@ -31,16 +31,23 @@ namespace Bagdad.ViewModels
         public int revision { get; set; }
         public Double birth { get; set; }
         public Double modified { get; set; }
+        public Factories.BagdadFactory bagdadFactory { private get; set; }
 
-        public UserViewModel() { }
+        public UserViewModel(Factories.BagdadFactory _bagdadFactory)
+        {
+            bagdadFactory = _bagdadFactory; 
+        }
+        public UserViewModel()
+        {
+            bagdadFactory = new Factories.BagdadFactory();
+        }
 
         public async Task<bool> GetUserProfileInfo(int idUser)
         {
             try
             {
-
-                Follow follow = new Follow();
-                User user = new User();
+                Follow follow = bagdadFactory.CreateFollow();
+                User user = bagdadFactory.CreateUser();
                 UserViewModel uvm = null;
 
                 if (await follow.ImFollowing(idUser) || idUser == App.ID_USER)
@@ -84,7 +91,7 @@ namespace Bagdad.ViewModels
         {
             try
             {
-                Follow follow = new Follow();
+                Follow follow = bagdadFactory.CreateFollow();
                 return await follow.ImFollowing(idUser);
             }
             catch (Exception e)
@@ -96,7 +103,7 @@ namespace Bagdad.ViewModels
 
         public async Task<FollowsViewModel> FindUsersInServer(String searchString, int offset)
         {
-            User users = new User();
+            User users = bagdadFactory.CreateUser();
             
             List<User> findUsers = await users.FindUsersInServer(searchString, offset);
 
@@ -115,16 +122,14 @@ namespace Bagdad.ViewModels
             FollowsViewModel findedUsers = new FollowsViewModel();
             try
             {
-                User users = new User();
-                UserImageManager userImageManager = new UserImageManager();
+                User users = bagdadFactory.CreateUser();
+                UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
 
                 List<User> findUsers = await users.FindUsersInDB(searchString);
                 foreach (User user in findUsers)
                 {
                     await findedUsers.AddUserToList(user);
                 }
-                //image
-
             }
             catch (Exception e)
             {
@@ -135,19 +140,19 @@ namespace Bagdad.ViewModels
 
         public async Task<bool> AddAsFollowing()
         {
-            Follow follow = new Follow();
+            Follow follow = bagdadFactory.CreateFollow();
             return await follow.AddFollowing(AsUser());
         }
 
         public async Task<bool> RemoveFromFollowing()
-        {   
-            Follow follow = new Follow();
+        {
+            Follow follow = bagdadFactory.CreateFollow();
             return await follow.DelFollowing(AsUser());
         }
 
         public User AsUser()
         {
-            return new User() { idUser = this.idUser, idFavoriteTeam = this.idFavoriteTeam, userName = this.userNickName, name = this.userName, bio = this.userBio, photo = this.userURLImage, favoriteTeamName = this.favoriteTeamName, numFollowers = this.followers, numFollowing = this.following, points = this.points, website = this.userWebsite, csys_birth = this.birth, csys_modified = this.modified, csys_revision = this.revision };
+            return bagdadFactory.CreateFilledUserWithOutDeleteAndSynchronizedInfo(this.idUser, this.userNickName, this.userName, this.userURLImage, this.followers, this.following, this.points, this.userBio, this.userWebsite, this.favoriteTeamName, this.idFavoriteTeam, this.revision, this.birth, this.modified);
         }
     }
 }
