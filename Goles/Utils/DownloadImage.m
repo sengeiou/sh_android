@@ -19,13 +19,13 @@
     
      NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0f];
     
-    [img setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageCircle"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+    [img setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"defaultImageSquare"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
         
         imageView.image = image;
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
 
-            UIImage *imageDefault = [UIImage imageNamed:@"defaultImageCircle"];
+            UIImage *imageDefault = [UIImage imageNamed:@"defaultImageSquare"];
             UIImage *imageCreate = [TimeLineUtilities drawText:text
                                                        inImage:imageDefault
                                                        atPoint:[TimeLineUtilities centerTextInImage:imageView] andSizeFont:80];

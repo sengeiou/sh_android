@@ -21,7 +21,7 @@
 #define kLabelVerticalPhotoInsets           11.5f
 #define kLabelVerticalInsets                7.5f
 #define kLabelVerticalBottomComment         24.0f
-#define kLabelVerticalCommentToName         1.0f
+#define kLabelVerticalCommentToName         1.5f
 
 @interface ShotTableViewCell ()
 
@@ -89,7 +89,7 @@
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 3;
+    paragraphStyle.lineSpacing = 3.5;
     NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
     [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
     
