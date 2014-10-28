@@ -41,6 +41,7 @@ import gm.mobi.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.InfoActivity;
 import gm.mobi.android.ui.activities.PostNewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
 import gm.mobi.android.ui.adapters.TimelineAdapter;
@@ -251,6 +252,11 @@ public class TimelineFragment extends BaseFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_info:
+                startActivity(new Intent(getActivity(), InfoActivity.class));
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

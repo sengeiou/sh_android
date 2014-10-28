@@ -96,6 +96,7 @@
     <string name="notification_shot_multiple_title">%d new shots</string>
     <string name="notification_follow_title">%s is now following you</string>
 
+    <string name="activity_info_title">Info</string>
     <string name="activity_find_friends_title">Find People</string>
     <string name="activity_find_friends_hint">Find People</string>
     <string name="activity_find_friends_empty_message">No results.</string>

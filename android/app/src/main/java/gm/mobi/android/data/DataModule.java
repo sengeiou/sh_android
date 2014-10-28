@@ -49,6 +49,7 @@ import gm.mobi.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import gm.mobi.android.task.jobs.timeline.TimelineJob;
+import gm.mobi.android.ui.activities.InfoActivity;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
@@ -79,6 +80,7 @@ import static android.content.Context.MODE_PRIVATE;
     DummyFragment.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
+    InfoActivity.class,
 
     GetFollowingsJob.class, GMSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
     GetFollowUnfollowUserJob.class, GetFollowUnFollowUserOfflineJob.class,

@@ -22,4 +22,7 @@
     <!-- User Lists -->
     <dimen name="userlist_avatar_size">40dp</dimen>
 
+    <!-- Info -->
+    <dimen name="info_match_title_height">48dp</dimen>
+
 </resources>

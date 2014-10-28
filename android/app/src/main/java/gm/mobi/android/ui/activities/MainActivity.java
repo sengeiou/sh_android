@@ -88,7 +88,7 @@ public class MainActivity extends BaseSignedInActivity {
             return;
         }
 
-        setContainerContent(R.layout.main_activity);
+        setContainerContent(R.layout.activity_main);
         ButterKnife.inject(this);
 
         actionBar = getSupportActionBar();

@@ -3,6 +3,7 @@ package gm.mobi.android.ui;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.ui.activities.FindFriendsActivity;
+import gm.mobi.android.ui.activities.InfoActivity;
 import gm.mobi.android.ui.activities.MainActivity;
 import gm.mobi.android.ui.activities.PostNewShotActivity;
 import gm.mobi.android.ui.activities.ProfileContainerActivity;
@@ -27,6 +28,7 @@ import javax.inject.Singleton;
                 ProfileContainerActivity.class,
                 UserFollowsContainerActivity.class,
                 FindFriendsActivity.class,
+                InfoActivity.class,
 
         },
         complete = false

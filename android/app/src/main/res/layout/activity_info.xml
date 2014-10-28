@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/info_items_list"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:divider="@null"
+  android:dividerHeight="0dp"
+  tools:listitem="@layout/item_list_info_user"
+  tools:listheader="@layout/info_header_view"
+  tools:listfooter="@layout/info_header_view">
+
+
+</ListView>
