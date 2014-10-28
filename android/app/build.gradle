@@ -15,6 +15,7 @@ apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'spoon'
 //apply plugin: 'hugo'
+apply plugin: "sonar-runner"
 
 
 
@@ -154,6 +155,21 @@ spoon {
     //className = 'gm.mobi.android.ui.activities.registro.WelcomeLoginActivityTest'
 }
 
+sonarRunner {
+    sonarProperties {
+        property "sonar.host.url", "http://development.golesmessenger.com:9090"
+        property "sonar.jdbc.url", "jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8"
+        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
+        property "sonar.jdbc.username", "sonar"
+        property "sonar.jdbc.password", "sonar"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+        properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
+        //properties["sonar.tests"] = android.sourceSets.instrumentTest.java.srcDirs
+        //property "sonar.junit.reportsPath","build/instrumentTest-results/connected/"
+        properties["sonar.binaries"] = file("build/classes/debug")
+    }
+}
 
 //
 // Remove useless packages from Google Play Services library
