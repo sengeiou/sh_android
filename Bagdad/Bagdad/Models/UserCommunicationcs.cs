@@ -63,13 +63,16 @@ namespace Bagdad.Models
             {
                 ServiceCommunication sc = bagdadFactory.CreateServiceCommunication();
 
-                String jsonFollow = "{\"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + ops_data + "}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
+                String jsonFollow = "{\"alias\": \"GET_USERS\", \"status\": {\"message\": null,\"code\": null}," + await sc.GetREQ() + ",\"ops\": [{\"data\": [{" + ops_data + "}],\"metadata\": {\"items\": 1,\"TotalItems\": null,\"operation\": \"retrieve\",\"filter\": {\"filterItems\": [],\"filters\": [{\"filterItems\": [{\"comparator\": \"ne\",\"name\": \"modified\",\"value\": null},{\"comparator\": \"eq\",\"name\": \"deleted\",\"value\": null}],\"filters\": [],\"nexus\": \"or\"},{\"filterItems\": [{\"comparator\": \"eq\",\"name\": \"idUser\",\"value\": " + idUser + "}],\"filters\": [],\"nexus\": \"and\"}],\"nexus\": \"and\"},\"entity\": \"User\"}}]}";
 
                 JObject responseFollow = JObject.Parse(await sc.MakeRequestToMemory(jsonFollow));
 
                 if (responseFollow["status"]["code"].ToString().Equals("OK") && !responseFollow["ops"][0]["metadata"]["items"].ToString().Equals("0"))
                 {
                     JToken userProfileInfo = responseFollow["ops"][0]["data"][0];
+
+                    int nFavorite = 0;
+                    int.TryParse(userProfileInfo["idFavoriteTeam"].ToString(), out nFavorite);
 
                     uvm.idUser = int.Parse(userProfileInfo["idUser"].ToString());
                     uvm.userNickName = (userProfileInfo["userName"] != null) ? userProfileInfo["userName"].ToString() : null;
@@ -81,7 +84,7 @@ namespace Bagdad.Models
                     uvm.followers = int.Parse(userProfileInfo["numFollowers"].ToString());
                     uvm.userWebsite = (userProfileInfo["website"] != null) ? userProfileInfo["website"].ToString() : null;
                     uvm.favoriteTeamName = (userProfileInfo["favoriteTeamName"] != null) ? userProfileInfo["favoriteTeamName"].ToString() : null;
-                    uvm.idFavoriteTeam = int.Parse(userProfileInfo["idFavoriteTeam"].ToString());
+                    uvm.idFavoriteTeam = nFavorite;
                     uvm.birth = (!String.IsNullOrEmpty(userProfileInfo["birth"].ToString()) ? Double.Parse(userProfileInfo["birth"].ToString()) : 0);
                     uvm.modified = (!String.IsNullOrEmpty(userProfileInfo["modified"].ToString()) ? Double.Parse(userProfileInfo["modified"].ToString()) : 0);
                     uvm.revision = int.Parse(userProfileInfo["revision"].ToString());
@@ -89,7 +92,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("E R R O R - User - GetProfileInfo: " + e.Message);
+                throw new Exception("E R R O R - User - GetProfilInfoFromServer: " + e.Message);
             }
             return uvm;
         }

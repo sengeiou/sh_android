@@ -48,6 +48,8 @@ namespace Bagdad
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (!App.isSynchroRunning()) App.UpdateServices(ServiceCommunication.enumTypeSynchro.ST_FULL_SYNCHRO, ServiceCommunication.enumSynchroTables.FOLLOW);
+
             if (e.NavigationMode == NavigationMode.Back && PhoneApplicationService.Current.State.ContainsKey("RefreshNeeded") && (bool)PhoneApplicationService.Current.State["RefreshNeeded"] == true)
             {
                 uvm.idUser = 0;
@@ -72,7 +74,13 @@ namespace Bagdad
 
             if (uvm.idUser != idUser ) await uvm.GetUserProfileInfo(idUser);
 
-            if (uvm.idUser != App.ID_USER)
+            if (uvm.idUser == 0)
+            {
+                if (App.IsAirplaneMode()) MessageBox.Show(AppResources.AirplaneMode, AppResources.CanConnect, MessageBoxButton.OK);
+                else MessageBox.Show(AppResources.NoInternetConnection, AppResources.CanConnect, MessageBoxButton.OK);
+                NavigationService.GoBack();
+            }
+            else if (uvm.idUser != App.ID_USER)
             {
                 if (uvm.isFollowed)
                 {
@@ -104,15 +112,18 @@ namespace Bagdad
                 isFollowing = false;
             }
 
-            ProfileTitle.Text = uvm.userNickName.ToUpper();
-            points.Text = uvm.points.ToString();
-            following.Text = uvm.following.ToString();
-            followers.Text = uvm.followers.ToString();
-            userName.Text = uvm.userName;
-            userBio.Text = uvm.favoriteTeamName + " - " + uvm.userBio;
-            userWebsite.Text = uvm.userWebsite;
+            if (uvm.idUser != 0)
+            {
+                ProfileTitle.Text = uvm.userNickName.ToUpper();
+                points.Text = uvm.points.ToString();
+                following.Text = uvm.following.ToString();
+                followers.Text = uvm.followers.ToString();
+                userName.Text = uvm.userName;
+                userBio.Text = uvm.favoriteTeamName + " - " + uvm.userBio;
+                userWebsite.Text = uvm.userWebsite;
 
-            LoadImage();
+                LoadImage();
+            }
             progress.IsVisible = false;
         }
 
@@ -158,7 +169,7 @@ namespace Bagdad
             }
             else
             {
-                if (MessageBox.Show(AppResources.unFollowQuestion, uvm.userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                if (MessageBox.Show(AppResources.unFollowQuestion + " " + uvm.userName + "?", uvm.userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     headButtonText.Text = AppResources.ProfileButtonFollow;
                     headButton.Background = Resources["PhoneBackgroundBrush"] as SolidColorBrush;

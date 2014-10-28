@@ -39,7 +39,7 @@
     </tk:TransitionService.NavigationOutTransition>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="12,0">
+    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="24,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -53,10 +53,10 @@
         </StackPanel>
 
         <!--Row1-->
-        <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding followings}" tk:TiltEffect.IsTiltEnabled="True" Margin="0,0,12,0">
+        <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding followings}" tk:TiltEffect.IsTiltEnabled="True" Margin="0,0,-24,0" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,0,48">
+                    <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,12,36">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -70,22 +70,21 @@
                         </Grid>
 
                         <!--Column1-->
-                        <Grid Grid.Column="1" Margin="12,0">
+                        <Grid Grid.Column="1" Margin="12,0" Tap="goToProfile_Tap">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
                             <!--Row0-->
-                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
-
+                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Bold" Foreground="{StaticResource PhoneForegroundBrush}"/>
                             <!--Row1-->
-                            <TextBlock Grid.Row="1" Text="{Binding userInfo.favoriteTeamName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                            <TextBlock Grid.Row="1" Text="{Binding userInfo.favoriteTeamName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}" VerticalAlignment="Top"/>
 
                         </Grid>
 
                         <!--Column2-->
-                        <Grid Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Tap="Button_Tap">
+                        <Grid Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Tap="Button_Tap" Margin="0,0,12,0">
                             <Border Background="{Binding buttonBackgorund}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2" Margin="12">
                                 <Grid HorizontalAlignment="Center">
 

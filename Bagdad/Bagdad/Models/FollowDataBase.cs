@@ -275,7 +275,7 @@ namespace Bagdad.Models
             return _return;
         }
 
-        private async Task<bool> UpdateFollowSynchro(bool isFollow)
+        private async Task<bool> UpdateFollowSynchro(bool isFollow, int idUser, int idUserFollowed)
         {
             bool _result = false;
 
@@ -287,6 +287,11 @@ namespace Bagdad.Models
                 Database db = await DataBaseHelper.GetDatabaseAsync();
                 Statement st = await db.PrepareStatementAsync(sqlQuery);
 
+                if (!isFollow)
+                {
+                    st.BindIntParameterWithName("@idUser", idUser);
+                    st.BindIntParameterWithName("@idUserFollowed", idUserFollowed);
+                }
                 await st.StepAsync();
 
                 _result = true;
@@ -294,7 +299,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Follow - GetFollowsToUpdate: " + e.Message, e);
+                throw new Exception("Follow - UpdateFollowSynchro: " + e.Message, e);
             }
 
             return _result;

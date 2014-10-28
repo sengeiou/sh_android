@@ -69,7 +69,7 @@
         </ControlTemplate>
         
         <DataTemplate x:Key="PortaitItemTemplate" >
-            <Grid x:Name="itemGrid" Margin="0,0,0,48" Width="{Binding ActualWidth, ElementName=myShots}">
+            <Grid x:Name="itemGrid" Margin="0,0,0,36" Width="{Binding ActualWidth, ElementName=myShots}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -196,7 +196,7 @@
     
     <Grid> 
     <!--LayoutRoot contiene la cuadrícula raíz donde se coloca el resto del contenido de la página-->
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Margin="12,0,12,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -219,20 +219,19 @@
                     </Grid.RowDefinitions>
 
                     <!--Row0.0-->
-                    <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
-
-                    <!--Row0.1-->
+                        <TextBlock Grid.Row="0" Text="{Binding LocalizedResources.TimeLine, Source={StaticResource LocalizedStrings}}" FontWeight="SemiBold" FontSize="{StaticResource PhoneFontSizeMedium}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                        <!--Row0.1-->
                     <TextBlock Grid.Row="1" Text="" FontStyle="Italic" FontSize="{StaticResource PhoneFontSizeSmall}" Style="{StaticResource PhoneTextBlockBase}"/>
 
                 </Grid>
 
                 <!--Column1-->
-                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
+                <Rectangle Grid.Column="1" Margin="0,0,36,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
                     <Rectangle.OpacityMask>
                         <ImageBrush ImageSource="/Resources/icons/appbar.information.png"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
-                <Rectangle Grid.Column="1" Margin="0,0,12,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
+                <Rectangle Grid.Column="1" Margin="0,0,36,0" Height="35" Width="35" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top">
                     <Rectangle.OpacityMask>
                         <ImageBrush ImageSource="/Resources/icons/basecircle.png"/>
                     </Rectangle.OpacityMask>
@@ -254,7 +253,7 @@
         </Grid>
         
         <!--Row3-->
-        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True" MouseLeave="myShots_MouseMove">
+        <ListBox x:Name="myShots" Grid.Row="2" Margin="12,17,-12,0" ItemsSource="{Binding shotsList}" MouseEnter="MyShots_MouseEnter" tk:TiltEffect.IsTiltEnabled="True" MouseLeave="myShots_MouseMove">
             <ListBox.Resources>
                 <Style x:Key="TimeLineListBox" TargetType="ListBox">
                     <Setter Property="Background" Value="Transparent"/>

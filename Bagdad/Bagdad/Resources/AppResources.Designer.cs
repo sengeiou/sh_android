@@ -574,7 +574,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Unfollow?.
+        ///   Busca una cadena traducida similar a Unfollow.
         /// </summary>
         public static string unFollowQuestion {
             get {
@@ -601,7 +601,7 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a comment.
+        ///   Busca una cadena traducida similar a shoot something.
         /// </summary>
         public static string WhatsUp {
             get {

@@ -172,9 +172,18 @@ namespace Bagdad
                 if (!endOfList)
                 {
                     charge = searchedFriends.followings.Count();
-                    foreach (FollowViewModel user in (await uvm.FindUsersInServer(SearchBar.Text, offset)).followings)
+                    if (App.isInternetAvailable)
                     {
-                        searchedFriends.followings.Add(user);
+                        foreach (FollowViewModel user in (await uvm.FindUsersInServer(SearchBar.Text, offset)).followings)
+                        {
+                            searchedFriends.followings.Add(user);
+                        }
+                    }
+                    else {
+                        foreach (FollowViewModel user in (await uvm.FindUsersInLocal(SearchBar.Text)).followings)
+                        {
+                            searchedFriends.followings.Add(user);
+                        }
                     }
 
                     DataContext = null;
@@ -216,14 +225,15 @@ namespace Bagdad
             }
             else
             {
-                if (MessageBox.Show(AppResources.unFollowQuestion, ((FollowViewModel)findList.SelectedItem).userInfo.userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                string userName = ((FollowViewModel)findList.SelectedItem).userInfo.userName;
+                if (MessageBox.Show(AppResources.unFollowQuestion + " " + userName + "?", userName, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ((FollowViewModel)findList.SelectedItem).isFollowed = false;
                     ((FollowViewModel)findList.SelectedItem).buttonVisible = Visibility.Visible;
                     ((FollowViewModel)findList.SelectedItem).buttonText = AppResources.ProfileButtonFollow + "  ";
                     ((FollowViewModel)findList.SelectedItem).buttonBackgorund = Application.Current.Resources["PhoneBackgroundBrush"] as SolidColorBrush;
-                    ((FollowViewModel)findList.SelectedItem).buttonForeground = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
-                    ((FollowViewModel)findList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush;
+                    ((FollowViewModel)findList.SelectedItem).buttonForeground = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
+                    ((FollowViewModel)findList.SelectedItem).buttonBorderColor = Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush;
                     ((FollowViewModel)findList.SelectedItem).buttonIcon = new System.Windows.Media.Imaging.BitmapImage(new Uri("Resources/icons/appbar.user.add.png", UriKind.RelativeOrAbsolute));
                     ((FollowViewModel)findList.SelectedItem).buttonIconVisible = System.Windows.Visibility.Visible;
 
@@ -231,7 +241,7 @@ namespace Bagdad
                 }
             }
 
-            //Yeah! It's so ugly... but it works better and don't blink the rest of the list.
+            //TODO: Yeah! It's so ugly... but it works better and don't blink the rest of the list.
 
             ((Border)((Grid)sender).Children.First()).Background = ((FollowViewModel)findList.SelectedItem).buttonBackgorund;
             ((Border)((Grid)sender).Children.First()).BorderBrush = ((FollowViewModel)findList.SelectedItem).buttonBorderColor;

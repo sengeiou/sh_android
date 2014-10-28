@@ -283,7 +283,7 @@
     <comment>Start.xaml</comment>
   </data>
   <data name="WhatsUp" xml:space="preserve">
-    <value>comment</value>
+    <value>shoot something</value>
     <comment>TimeLine.xaml</comment>
   </data>
   <data name="CanConnect" xml:space="preserve">
@@ -355,7 +355,7 @@
     <comment>FindFriends.xaml</comment>
   </data>
   <data name="unFollowQuestion" xml:space="preserve">
-    <value>Unfollow?</value>
+    <value>Unfollow</value>
     <comment>buttons</comment>
   </data>
 </root>

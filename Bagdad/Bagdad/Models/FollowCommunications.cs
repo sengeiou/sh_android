@@ -208,7 +208,7 @@ namespace Bagdad.Models
                     ServiceCommunication serviceCom = bagdadFactory.CreateServiceCommunication();
                     await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
 
-                    await UpdateFollowSynchro(true);
+                    await UpdateFollowSynchro(true, 0, 0);
 
                     json = follows.Count().ToString();
                     return json;
@@ -285,9 +285,10 @@ namespace Bagdad.Models
                         json = json.Replace("@Data", data);
                         ServiceCommunication serviceCom = bagdadFactory.CreateServiceCommunication();
                         await serviceCom.SendDataToServer(Constants.SERCOM_TB_FOLLOW, json);
+                        await UpdateFollowSynchro(false, follow.idUser, follow.idUserFollowed);
                     }
 
-                    await UpdateFollowSynchro(false);
+                    
 
                     jsonOriginal = unFollows.Count().ToString();
                     return jsonOriginal;

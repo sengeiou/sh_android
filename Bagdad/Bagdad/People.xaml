@@ -35,7 +35,7 @@
     </tk:TransitionService.NavigationOutTransition>
 
     <!--LayoutRoot es la cuadrícula raíz donde se coloca todo el contenido de la página-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="12,0">
+    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="24,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -48,11 +48,10 @@
         <ListBox x:Name="followingList" Grid.Row="1" ItemsSource="{Binding followings}" tk:TiltEffect.IsTiltEnabled="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,12,48" Tap="goToProfile_Tap">
+                    <Grid Width="{Binding ActualWidth, ElementName=followingList}" Margin="0,0,12,36" Tap="goToProfile_Tap">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
-                            <!--<ColumnDefinition Width="Auto"/>-->
                         </Grid.ColumnDefinitions>
                         
                         <!--Column0-->
@@ -64,33 +63,16 @@
                         <!--Column1-->
                         <Grid Grid.Column="1" Margin="12,0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             
                             <!--Row0-->
-                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeMedium}" FontWeight="SemiBold" Foreground="{StaticResource PhoneForegroundBrush}"/>
-
+                            <TextBlock Grid.Row="0" Text="{Binding userInfo.userName}" FontSize="{StaticResource PhoneFontSizeSmall}" FontWeight="Bold" Foreground="{StaticResource PhoneForegroundBrush}"/>
                             <!--Row1-->
-                            <TextBlock Grid.Row="1" Text="{Binding userInfo.favoriteTeamName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"/>
+                            <TextBlock Grid.Row="1" Text="{Binding userInfo.favoriteTeamName}" Foreground="{StaticResource PhoneDisabledBrush}" FontSize="{StaticResource PhoneFontSizeSmall}" VerticalAlignment="Top"/>
 
-                        </Grid>
-
-                        <!--Column2-->
-                        <!--<Button Grid.Column="2" Width="75" Visibility="{Binding buttonVisible}" Background="{Binding buttonBackgorund}" Foreground="{Binding buttonForeground}" BorderBrush="{Binding buttonBorderColor}" BorderThickness="2">
-                            <Button.Content>
-                                <Grid HorizontalAlignment="Center">
-
-                                    <Rectangle Visibility="{Binding buttonIconVisible}" Fill="{Binding buttonForeground}" Width="45" Height="45" Margin="-12" HorizontalAlignment="Right">
-                                        <Rectangle.OpacityMask>
-                                            <ImageBrush ImageSource="{Binding buttonIcon}"/>
-                                        </Rectangle.OpacityMask>
-                                    </Rectangle>
-
-                                </Grid>
-                            </Button.Content>
-                        </Button>-->
-                        
+                        </Grid>   
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

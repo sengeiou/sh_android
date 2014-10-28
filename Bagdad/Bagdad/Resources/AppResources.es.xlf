@@ -135,8 +135,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">Start.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/WhatsUp" translate="yes" xml:space="preserve">
-          <source>comment</source>
-          <target state="new">comment</target>
+          <source>shoot something</source>
+          <target state="new">shoot something</target>
           <note from="MultilingualBuild" annotates="source" priority="2">TimeLine.xaml</note>
           </trans-unit>
         <trans-unit id="Resx/NoInternet" translate="yes" xml:space="preserve">
@@ -195,8 +195,8 @@
           <note from="MultilingualBuild" annotates="source" priority="2">FindFriends.xaml</note>
         </trans-unit>
         <trans-unit id="Resx/unFollowQuestion" translate="yes" xml:space="preserve">
-          <source>Unfollow?</source>
-          <target state="new">Unfollow?</target>
+          <source>Unfollow</source>
+          <target state="new">Unfollow</target>
           <note from="MultilingualBuild" annotates="source" priority="2">buttons</note>
         </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
