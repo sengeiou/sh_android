@@ -72,8 +72,14 @@ public class InfoActivity extends BaseSignedInActivity {
         user.setStatus("Watching");
         user.setPhoto("http://www.pak101.com/funnypictures/Animals/2012/8/2/the_monopoly_cat_vbgkd_Pak101(dot)com.jpg");
 
+        UserWatchingModel me = new UserWatchingModel();
+        me.setIdUser(sessionManager.getCurrentUserId());
+        me.setName("rafa");
+        me.setStatus("Not watching");
+        me.setPhoto("http://img1.wikia.nocookie.net/__cb20110606042636/es.futurama/images/c/c6/Futurama_fry_looking_squint2.jpg");
+
         List<UserWatchingModel> userList = new ArrayList<>();
-        userList.add(user);
+        userList.add(me);
         userList.add(user);
         userList.add(user);
 
