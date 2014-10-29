@@ -16,6 +16,7 @@
 #import "Team.h"
 #import "Device.h"
 #import "Constants.h"
+#import "Watch.h"
 
 @implementation FilterCreation
 
@@ -89,6 +90,17 @@
         NSDictionary *filter = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_USER,K_CD_VALUE:[[UserManager sharedInstance]getUserId]}],
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_AND};
+        return filter;
+    }
+    
+    if ([entity isSubclassOfClass:[Watch class]]){
+        
+        NSDictionary *filterDate = [self composeFilterDateForEntity:entity];
+        
+        NSArray *filters = @[@{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR},
+                             @{K_WS_FILTERITEMS:@[@{K_WS_STATUS:@1}],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_AND},
+                             @{K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate],K_WS_OPS_NEXUS:K_WS_OPS_OR}];
+        NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:filters}};
         return filter;
     }
     
@@ -193,6 +205,32 @@
     
     return filter;
 }
+
+//-----------------------------------------------------------------------------
++ (NSDictionary *)getFilterForNextMatchOfMyTeam {
+    
+    NSNumber *userIdTeam = [[[UserManager singleton] getActiveUser] idFavoriteTeam];
+    
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSDictionary *filterTeam = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_TEAM_LOCAL,K_CD_VALUE:userIdTeam},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_TEAM_VISITOR,K_CD_VALUE:userIdTeam}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSDictionary *filterStatus = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_STATUS,K_CD_VALUE:@0},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_STATUS,K_CD_VALUE:@1}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate,filterTeam,filterStatus]}};
+    
+    return filter;
+}
+
+
 
 #pragma mark - Helper methods
 //-----------------------------------------------------------------------------

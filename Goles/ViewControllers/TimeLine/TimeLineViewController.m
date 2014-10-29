@@ -59,6 +59,9 @@
  
     //Get ping from server
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
+    
+    
+//    [[FavRestConsumer sharedInstance] getAllWatchWithDelegate:self];
 }
 
 //------------------------------------------------------------------------------

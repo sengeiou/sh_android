@@ -115,6 +115,9 @@ NSString *const kALIAS_SHOT                            = @"GET_SHOTS";
 NSString *const kALIAS_OLDER_SHOTS                     = @"GET_OLDER_SHOTS";
 NSString *const kALIAS_USER                            = @"GET_USERS";
 NSString *const kALIAS_FIND_FRIENDS                    = @"FINDFIRENDS";
+NSString *const kALIAS_USER_NEXT_MATCH                 = @"GET_NEXT_MATCH_WHERE_MY_TEAM_PLAYS";
+NSString *const kALIAS_FOLLOWING_WATCHES               = @"GET_MY_FOLLOWING_WATCHES";
+NSString *const kALIAS_MATCHES_FROM_WATCHES            = @"GET_MATCHES_FROM_WATCH_FOLLOWING";
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -128,6 +131,7 @@ NSString *const K_CDENTITY_SYNC_CONTROL                 = @"SyncControl";
 NSString *const K_COREDATA_SML                          = @"SML";
 NSString *const K_COREDATA_FOLLOW                       = @"Follow";
 NSString *const K_COREDATA_SHOT                         = @"Shot";
+NSString *const K_COREDATA_WATCH                        = @"Watch";
 
 #pragma mark - CORE DATA CLASSES
 

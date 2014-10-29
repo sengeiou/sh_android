@@ -16,5 +16,6 @@
 + (NSDictionary *)getFilterForFollowersOfUser:(User *)user;
 + (NSDictionary *)getFilterForUser:(User *)user withTypeOfUser:(NSNumber *)typeOfUser;
 + (NSDictionary *)getFilterForPeopleSearch:(NSString *)textTosearch;
++ (NSDictionary *)getFilterForNextMatchOfMyTeam;
 
 @end

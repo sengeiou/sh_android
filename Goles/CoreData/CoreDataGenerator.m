@@ -65,12 +65,17 @@
 
     NSDictionary *shots = @{k_SYNC_NAME_ENTITY:K_COREDATA_SHOT,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update10seconds,
                              k_SYNC_ALIAS:K_COREDATA_SHOT};
+    
     NSDictionary *teams = @{k_SYNC_NAME_ENTITY:K_COREDATA_TEAM,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                             k_SYNC_ALIAS:K_COREDATA_TEAM};
-    NSDictionary *device = @{k_SYNC_NAME_ENTITY:K_COREDATA_DEVICE,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
-                            k_SYNC_ALIAS:K_COREDATA_TEAM};
     
-    NSArray *inserted = [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[user,follow,shots, teams,device]];
+    NSDictionary *device = @{k_SYNC_NAME_ENTITY:K_COREDATA_DEVICE,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
+                            k_SYNC_ALIAS:K_COREDATA_DEVICE};
+    
+    NSDictionary *watch = @{k_SYNC_NAME_ENTITY:K_COREDATA_WATCH,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update10minutes,
+                             k_SYNC_ALIAS:K_COREDATA_WATCH};
+    
+    NSArray *inserted = [[CoreDataManager singleton] updateEntities:[SyncControl class] WithArray:@[user,follow,shots,teams,device,watch]];
     if (inserted.count > 0)
         [self saveAndAlert];
 }

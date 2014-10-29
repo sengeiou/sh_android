@@ -20,6 +20,7 @@
 #import "ShotManager.h"
 #import "Follow.h"
 #import "Shot.h"
+#import "Watch.h"
 #import "CommunicationHelper.h"
 
 @interface FavRestConsumer ()
@@ -167,11 +168,7 @@
       //Create full data structure
     if (req && ops) {
         NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-       
-//        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-//            [self validateAllEntitiesFromClass:entityClass withData:data withError:error andDelegate:delegate];
-//        }];
-        
+
        [self.communicationHelper postRequest:serverCall onCompletion:^(NSDictionary *response, NSError *error) {
             [self validateAllEntitiesFromClass:entityClass withData:response withError:error andDelegate:delegate];
         }];
@@ -180,6 +177,7 @@
         DLog(@"No valid req structure created for class %@",NSStringFromClass(entityClass));
 }
 
+//------------------------------------------------------------------------------
 -(void)validateAllEntitiesFromClass:(Class)entityClass withData:(NSDictionary *)data withError:(NSError *)error andDelegate:(id)delegate{
     //Check if delegate has protocol "ParserProtocol" implemented
     BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
@@ -210,6 +208,127 @@
 
 }
 
+//------------------------------------------------------------------------------
+- (void)getUserNextMatchWithDelegate:(id)delegate {
+    
+    //Create Alias block
+    NSString *alias = kALIAS_USER_NEXT_MATCH;
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = self.appDelegate.request;
+    
+    //Create Provider 'metadata' block
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
+                                                                                 andEntity:K_COREDATA_MATCH
+                                                                                 withItems:@1000
+                                                                                withOffSet:@0
+                                                                                 andFilter:[FilterCreation getFilterForNextMatchOfMyTeam]];
+    
+    //Create playerProvider 'ops' block
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Match class]]]};
+    
+    //Create 'ops' block
+    NSArray *ops = @[operation];
+    
+    //Create full data structure
+    if (req && ops) {
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        
+        [self.communicationHelper postRequest:serverCall onCompletion:^(NSDictionary *response, NSError *error) {
+            [self validateUserNextMatchWithData:response withError:error andDelegate:delegate];
+        }];
+        
+    }else
+        DLog(@"No valid req structure created for Match request");
+}
+
+//------------------------------------------------------------------------------
+-(void)validateUserNextMatchWithData:(NSDictionary *)data withError:(NSError *)error andDelegate:(id)delegate{
+    
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
+    
+    
+    if (!error){
+        
+        [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+            if (!error && status && delegateRespondsToProtocol)
+                [delegate parserResponseForClass:[Watch class] status:YES andError:nil  andRefresh:refresh];
+            else if (delegateRespondsToProtocol)
+                [delegate parserResponseForClass:[Watch class] status:NO andError:error andRefresh:refresh];
+        }];
+        
+        
+    }else if (delegateRespondsToProtocol){
+        
+        [delegate parserResponseForClass:[Watch class] status:NO andError:error andRefresh:NO];
+        DLog(@"Request error:%@",error);
+    }
+    
+}
+
+//------------------------------------------------------------------------------
+- (void)getAllWatchWithDelegate:(id)delegate {
+    
+    //Create Alias block
+    NSString *alias = kALIAS_FOLLOWING_WATCHES;
+    
+    //Create Staus block
+    NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
+    
+    //Create 'req' block
+    NSArray *req = self.appDelegate.request;
+    
+    //Create Provider 'metadata' block
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
+                                                                                 andEntity:K_COREDATA_WATCH
+                                                                                 withItems:@1000
+                                                                                withOffSet:@0
+                                                                                 andFilter:[FilterCreation getFilterForEntity:[Watch class]]];
+    
+    //Create playerProvider 'ops' block
+    NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Watch class]]]};
+    
+    //Create 'ops' block
+    NSArray *ops = @[operation];
+    
+    //Create full data structure
+    if (req && ops) {
+        NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
+        
+        [self.communicationHelper postRequest:serverCall onCompletion:^(NSDictionary *response, NSError *error) {
+            [self validateWatchWithData:response withError:error andDelegate:delegate];
+        }];
+        
+    }else
+        DLog(@"No valid req structure created for Watch request");
+}
+
+//------------------------------------------------------------------------------
+-(void)validateWatchWithData:(NSDictionary *)data withError:(NSError *)error andDelegate:(id)delegate{
+
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
+    
+    
+    if (!error){
+
+        [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+            if (!error && status && delegateRespondsToProtocol)
+                [delegate parserResponseForClass:[Watch class] status:YES andError:nil  andRefresh:refresh];
+            else if (delegateRespondsToProtocol)
+                [delegate parserResponseForClass:[Watch class] status:NO andError:error andRefresh:refresh];
+        }];
+        
+        
+    }else if (delegateRespondsToProtocol){
+        
+        [delegate parserResponseForClass:[Watch class] status:NO andError:error andRefresh:NO];
+        DLog(@"Request error:%@",error);
+    }
+    
+}
 
 //------------------------------------------------------------------------------
 - (void)getUsersFromUser:(User *)user withDelegate:(id)delegate  withTypeOfUsers:(NSNumber *) type; {

@@ -112,6 +112,9 @@ extern NSString *const kALIAS_SHOT;
 extern NSString *const kALIAS_OLDER_SHOTS;
 extern NSString *const kALIAS_USER;
 extern NSString *const kALIAS_FIND_FRIENDS;
+extern NSString *const kALIAS_USER_NEXT_MATCH;
+extern NSString *const kALIAS_FOLLOWING_WATCHES;
+extern NSString *const kALIAS_MATCHES_FROM_WATCHES;
 
 #pragma mark - CORE DATA ENTITY NAMES
 
@@ -125,6 +128,7 @@ extern NSString *const K_CDENTITY_SYNC_CONTROL;
 extern NSString *const K_COREDATA_SML;
 extern NSString *const K_COREDATA_FOLLOW;
 extern NSString *const K_COREDATA_SHOT;
+extern NSString *const K_COREDATA_WATCH;
 
 #pragma mark - CORE DATA CLASSES
 

@@ -116,7 +116,7 @@
     return attributedString;
 }
 
-static CGFloat kPaddingTop = 38.0f;
+static CGFloat kPaddingTop = 42.0f;
 static CGFloat kPaddingRight = 96.0f;
 
 #define kFont [UIFont systemFontOfSize:15.0]

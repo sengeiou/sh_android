@@ -14,6 +14,7 @@
 #import "User.h"
 #import "Follow.h"
 #import "Shot.h"
+#import "Watch.h"
 
 @implementation FavEntityDescriptor
 
@@ -128,7 +129,16 @@
                  kJSON_TLA_NAME:[NSNull null]};
 
     }
-
+    else if ([entityClass isSubclassOfClass:[Watch class]]) {
+        return @{K_WS_OPS_REVISION:[NSNull null],
+                 K_WS_OPS_BIRTH_DATE:[NSNull null],
+                 K_WS_OPS_UPDATE_DATE:[NSNull null],
+                 K_WS_OPS_DELETE_DATE:[NSNull null],
+                 kJSON_ID_USER:[NSNull null],
+                 kJSON_ID_MATCH:[NSNull null],
+                 K_WS_STATUS:[NSNull null]};
+        
+    }
   
     return nil;
 }
