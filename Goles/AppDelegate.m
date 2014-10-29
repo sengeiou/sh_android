@@ -185,7 +185,7 @@ extern void __gcov_flush();
         self.window.rootViewController = navLoginVC;
         
     }else {
-        self.request = [FavRestConsumerHelper createREQ];
+        self.request = [[FavRestConsumerHelper singleton] createREQ];
         
         [self performSelectorInBackground:@selector(registerAPNS) withObject:nil];
 

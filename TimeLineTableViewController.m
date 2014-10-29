@@ -48,13 +48,12 @@ typedef enum typesOfChange : NSUInteger {
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    [self basicSetup];
     [self loadData];
 }
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    
+    [self basicSetup];
     NSLog(@"APPEAR: %f", self.myTableView.contentInset.bottom);
 
 }
@@ -85,7 +84,7 @@ typedef enum typesOfChange : NSUInteger {
 
 //    self.myTableView.rowHeight = UITableViewAutomaticDimension;
     
-    self.myTableView.estimatedRowHeight = 68.0f;
+    self.myTableView.estimatedRowHeight = 100.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 

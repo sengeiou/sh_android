@@ -6,22 +6,55 @@
 //
 
 #import "FavRestConsumerHelper.h"
-#import "UserManager.h"
+
 #import "CoreDataParsing.h"
 #import "Match.h"
 #import "Message.h"
-#import "SML.h"
 #import "AppAdvice.h"
 #import "Team.h"
 #import "User.h"
 #import "Follow.h"
 #import "Shot.h"
 
+
 @implementation FavRestConsumerHelper
 
+//------------------------------------------------------------------------------
+//DataAccessLayer singleton instance shared across application
++ (FavRestConsumerHelper *)singleton
+{
+    static FavRestConsumerHelper *sharedRestConsumerHelper = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        sharedRestConsumerHelper = [[FavRestConsumerHelper alloc] init];
+        sharedRestConsumerHelper.userManager = [UserManager singleton];
+    });
+    return sharedRestConsumerHelper;
+}
+
+//------------------------------------------------------------------------------
++ (FavRestConsumerHelper *)sharedInstance
+{
+    return [self singleton];
+}
+
+//------------------------------------------------------------------------------
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        
+    }
+    return self;
+}
+
+//------------------------------------------------------------------------------
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
 
 //-----------------------------------------------------------------------------
-+ (NSString *)getAliasForEntity:(Class)entity {
+- (NSString *)getAliasForEntity:(Class)entity {
     
     if ([entity isSubclassOfClass:[User class]])
         return kALIAS_USER;
@@ -35,7 +68,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSString *)getEntityForClass:(Class)entity {
+- (NSString *)getEntityForClass:(Class)entity {
     
   if ([entity isSubclassOfClass:[User class]])
         return @"Login";
@@ -45,7 +78,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSString *)getClassForString:(NSString *)entityString {
+- (NSString *)getClassForString:(NSString *)entityString {
     
     if ([entityString isEqualToString:@"Login"])
         return @"User";
@@ -55,14 +88,15 @@
 
 
 //-----------------------------------------------------------------------------
-+ (NSArray *)createREQ {
+- (NSArray *)createREQ {
     
     //Create 'req' array
     NSMutableArray *req = [[NSMutableArray alloc] initWithCapacity:5];
     
 //    NSNumber *idDevice = [[UserManager singleton] getIdDevice];
      NSNumber *idDevice = @0;
-    NSNumber *idPlayer = [[UserManager singleton] getUserId];
+//    NSNumber *idPlayer = [[UserManager singleton] getUserId];
+        NSNumber *idPlayer = [self.userManager getUserId];
 //    NSString *sessionToken = [[UserManager singleton] getUserSessionToken];
     
     NSNumber *idPlatform = @1;
@@ -73,6 +107,7 @@
         [req addObject:idDevice];
     else
         [req addObject:[NSNull null]];
+    
     if ([idPlayer isKindOfClass:[NSNumber class]])
         [req addObject:idPlayer];
     else
@@ -88,7 +123,8 @@
     return [req copy];
 }
 
-+ (NSInteger)getAppVersion {
+//-----------------------------------------------------------------------------
+- (NSInteger)getAppVersion {
     
     NSString *bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
     NSArray *versionArray = [bundleVersion componentsSeparatedByString:@"."];
@@ -116,7 +152,7 @@
 
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter {
+- (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter {
 
     //Create 'metadata' block
     NSDictionary *meta = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_ENTITY:entity};
@@ -137,7 +173,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)createMetadataForSearchPeopleWithItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter {
+- (NSDictionary *)createMetadataForSearchPeopleWithItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter {
     
     //Create 'metadata' block
     NSDictionary *meta = @{K_WS_OPS_OPERATION:K_OP_RETREAVE,K_WS_OPS_ENTITY:K_COREDATA_USER};
@@ -158,7 +194,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key {
+- (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key {
     
     //Create 'metadata' block
     NSDictionary *meta = @{K_WS_OPS_OPERATION:operation,K_WS_OPS_ENTITY:entity};
@@ -173,7 +209,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)createFilterForParameter:(NSString *)entity andValue:(NSNumber *)idToSearch {
+- (NSDictionary *)createFilterForParameter:(NSString *)entity andValue:(NSNumber *)idToSearch {
     
     if ([entity isKindOfClass:[NSString class]] && [idToSearch isKindOfClass:[NSNumber class]]) {
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:entity,K_CD_VALUE:idToSearch}];
@@ -187,7 +223,7 @@
 }
 
 //-----------------------------------------------------------------------------
-+ (NSDictionary *)createFilterForAllItems:(NSString *)entity{
+- (NSDictionary *)createFilterForAllItems:(NSString *)entity{
     
     if ([entity isKindOfClass:[NSString class]]) {
         NSArray *filterItems = @[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:entity,K_CD_VALUE:[NSNull null]}];

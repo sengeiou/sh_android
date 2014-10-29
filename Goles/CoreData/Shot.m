@@ -83,7 +83,9 @@
     NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
     if ( [revision isKindOfClass:[NSNumber class]] )
         [self setCsys_revision:revision];
-  
+    else
+        [self setCsys_revision:@0];
+    
     NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
     if ([birth isKindOfClass:[NSNumber class]]) {
         [self setCsys_birth:birth];

@@ -74,7 +74,6 @@
 		AA623E3D1998D17800A942A9 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623D901998D17700A942A9 /* Device.m */; };
 		AA623E481998D17800A942A9 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DA61998D17700A942A9 /* Match.m */; };
 		AA623E4B1998D17800A942A9 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DAC1998D17700A942A9 /* Message.m */; };
-		AA623E531998D17800A942A9 /* SML.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DBC1998D17700A942A9 /* SML.m */; };
 		AA623E561998D17800A942A9 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DC21998D17700A942A9 /* Team.m */; };
 		AA623E611998D17800A942A9 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = AA623DDC1998D17700A942A9 /* Appirater.m */; };
 		AA623E621998D17800A942A9 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA623DDE1998D17700A942A9 /* AppiraterLocalizable.strings */; };
@@ -130,6 +129,9 @@
 		AAF77D5E19ED32A50020E2FB /* ALView+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5619ED32A50020E2FB /* ALView+PureLayout.m */; };
 		AAF77D5F19ED32A50020E2FB /* NSArray+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5819ED32A50020E2FB /* NSArray+PureLayout.m */; };
 		AAF77D6019ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF77D5A19ED32A50020E2FB /* NSLayoutConstraint+PureLayout.m */; };
+		AAFA03E319FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA03E219FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m */; };
+		AAFA03E61A0002240048ACA1 /* CommunicationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA03E51A0002240048ACA1 /* CommunicationHelper.m */; };
+		AAFA03E81A000B680048ACA1 /* CommunicationHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFA03E71A000B680048ACA1 /* CommunicationHelperTest.m */; };
 		AAFD7BCB19E7C36800535A35 /* SearchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AAFD7BCA19E7C36800535A35 /* SearchManager.m */; };
 /* End PBXBuildFile section */
 
@@ -256,8 +258,6 @@
 		AA623DA61998D17700A942A9 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
 		AA623DAB1998D17700A942A9 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		AA623DAC1998D17700A942A9 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		AA623DBB1998D17700A942A9 /* SML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SML.h; sourceTree = "<group>"; };
-		AA623DBC1998D17700A942A9 /* SML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SML.m; sourceTree = "<group>"; };
 		AA623DC11998D17700A942A9 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
 		AA623DC21998D17700A942A9 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		AA623DDB1998D17700A942A9 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
@@ -370,6 +370,10 @@
 		AAF77D5B19ED32A50020E2FB /* PureLayout+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PureLayout+Internal.h"; sourceTree = "<group>"; };
 		AAF77D5C19ED32A50020E2FB /* PureLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayout.h; sourceTree = "<group>"; };
 		AAF77D5D19ED32A50020E2FB /* PureLayoutDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PureLayoutDefines.h; sourceTree = "<group>"; };
+		AAFA03E219FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavRestConsumerHelperUnitTest.m; sourceTree = SOURCE_ROOT; };
+		AAFA03E41A0002240048ACA1 /* CommunicationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationHelper.h; sourceTree = "<group>"; };
+		AAFA03E51A0002240048ACA1 /* CommunicationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationHelper.m; sourceTree = "<group>"; };
+		AAFA03E71A000B680048ACA1 /* CommunicationHelperTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommunicationHelperTest.m; path = Tests/CommunicationHelperTest.m; sourceTree = SOURCE_ROOT; };
 		AAFD7BC919E7C36800535A35 /* SearchManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchManager.h; sourceTree = "<group>"; };
 		AAFD7BCA19E7C36800535A35 /* SearchManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +444,8 @@
 			isa = PBXGroup;
 			children = (
 				AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */,
+				AAFA03E219FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m */,
+				AAFA03E71A000B680048ACA1 /* CommunicationHelperTest.m */,
 			);
 			name = Webservice;
 			sourceTree = "<group>";
@@ -534,8 +540,6 @@
 				AA623DA61998D17700A942A9 /* Match.m */,
 				AA623DAB1998D17700A942A9 /* Message.h */,
 				AA623DAC1998D17700A942A9 /* Message.m */,
-				AA623DBB1998D17700A942A9 /* SML.h */,
-				AA623DBC1998D17700A942A9 /* SML.m */,
 				AA241F81199CFB4900897D6D /* SyncControl.h */,
 				AA241F82199CFB4900897D6D /* SyncControl.m */,
 				AA72640719D03A6E0067A39D /* Shot.h */,
@@ -781,6 +785,8 @@
 				AA623E171998D17800A942A9 /* FavRestConsumerHelper.m */,
 				AA05ADFC199A6E320046EB6F /* FilterCreation.h */,
 				AA05ADFD199A6E320046EB6F /* FilterCreation.m */,
+				AAFA03E41A0002240048ACA1 /* CommunicationHelper.h */,
+				AAFA03E51A0002240048ACA1 /* CommunicationHelper.m */,
 			);
 			path = Webservice;
 			sourceTree = "<group>";
@@ -1082,6 +1088,7 @@
 				AA623E561998D17800A942A9 /* Team.m in Sources */,
 				A50CCD8719C898A5005369E6 /* Encryption.m in Sources */,
 				AA623CEF1998A7F200A942A9 /* AppDelegate.m in Sources */,
+				AAFA03E61A0002240048ACA1 /* CommunicationHelper.m in Sources */,
 				AACA543F19C057C000E39D94 /* AFNetworkReachabilityManager.m in Sources */,
 				AA241F89199CFB6400897D6D /* SyncManager.m in Sources */,
 				A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */,
@@ -1167,7 +1174,6 @@
 				AA72640619D03A510067A39D /* _Shot.m in Sources */,
 				A50CCD8419C8889B005369E6 /* Conection.m in Sources */,
 				AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */,
-				AA623E531998D17800A942A9 /* SML.m in Sources */,
 				A52B9A0E19E688A6007D8A67 /* DownloadImage.m in Sources */,
 				AACA544919C057C000E39D94 /* UIImageView+AFNetworking.m in Sources */,
 				AA623CEB1998A7F200A942A9 /* main.m in Sources */,
@@ -1179,7 +1185,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAFA03E319FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m in Sources */,
 				AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */,
+				AAFA03E81A000B680048ACA1 /* CommunicationHelperTest.m in Sources */,
 				AAE0EF6119E425AD00F32FF7 /* GeneralTests.m in Sources */,
 				9E46304319FBAD2800125402 /* CoreDataManagerTests.m in Sources */,
 				AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */,

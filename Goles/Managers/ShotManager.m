@@ -59,6 +59,7 @@
     NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:kJSON_BIRTH ascending:NO];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
     
+//    [fetchRequest setFetchLimit:300];
     [fetchRequest setFetchBatchSize:30];
     
     NSFetchedResultsController *theFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

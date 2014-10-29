@@ -24,7 +24,7 @@
     [ManagerHelper emptyUsersDataBase];
     [ManagerHelper populateThreeUsers];
     
-    self.requestorArray = [FavRestConsumerHelper createREQ];
+    self.requestorArray = [[FavRestConsumerHelper singleton] createREQ];
 }
 
 - (void)tearDown {
@@ -60,5 +60,6 @@
     XCTAssertEqual([[self.requestorArray objectAtIndex:5] isKindOfClass:[NSString class]], true,@"Session token must be a NSString");
     
 }
+
 
 @end

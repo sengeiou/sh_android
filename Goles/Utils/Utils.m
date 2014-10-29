@@ -6,7 +6,6 @@
 //
 
 #import "Utils.h"
-#import "FavRestConsumerHelper.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Fav24Fonts.h"
 #import "Fav24Colors.h"

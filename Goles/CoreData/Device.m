@@ -139,6 +139,8 @@
         NSNumber *revision = [dict objectForKey:kJSON_REVISION];
         if ( [revision isKindOfClass:[NSNumber class]] )
             [self setCsys_revision:revision];
+        else
+            [self setCsys_revision:@0];
         
         NSNumber *birth = [dict objectForKey:kJSON_BIRTH];
         if ([birth isKindOfClass:[NSNumber class]]) {

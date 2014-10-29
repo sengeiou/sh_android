@@ -22,6 +22,7 @@
 
 @property (nonatomic,strong) CreateShotView *createSV;
 @property (nonatomic,strong) WritingText *writingText;
+@property (nonatomic,strong) TimeLineViewController *timelineVC;
 
 @end
 
@@ -31,17 +32,24 @@
     [super setUp];
     self.writingText = mock([WritingText class]);
     self.createSV = [[CreateShotView alloc] init];
-//    UIStoryboard *timelineST = [UIStoryboard storyboardWithName:@"Timeline" bundle:nil];
-//    TimeLineViewController *tlvc = [timelineST instantiateViewControllerWithIdentifier:@"timelineVC"];
-//    self.createSV = [tlvc childViewControllers];
-    
-//    self.createSV.viewToDisableTextField = [[UIView alloc] init];
+    UIStoryboard *timelineST = [UIStoryboard storyboardWithName:@"Timeline" bundle:nil];
+    self.timelineVC = [timelineST instantiateViewControllerWithIdentifier:@"timelineVC"];
+//    [self.timelineVC viewDidLoad];
 }
 
 - (void)tearDown {
 
     [super tearDown];
 }
+
+//- (void)DISABLE_testThatStoryBoardIsCreated {
+//
+//    
+//    XCTAssertNotNil(self.timelineVC.viewNotShots);
+//    XCTAssertNotNil(self.timelineVC.watchingMenu);
+//    XCTAssertNotNil(self.timelineVC.viewTextField);
+//    XCTAssertNotNil(self.timelineVC.backgroundView);
+//}
 
 - (void)DISABLEtestWhenSendShotTextFieldIsVisible {
     

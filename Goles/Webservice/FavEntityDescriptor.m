@@ -9,7 +9,6 @@
 #import "CoreDataParsing.h"
 #import "Match.h"
 #import "Team.h"
-#import "SML.h"
 #import "Message.h"
 #import "AppAdvice.h"
 #import "User.h"
@@ -49,17 +48,6 @@
                  kJSON_OFICIAL_NAME:[NSNull null],
                  kJSON_SHORT_NAME:[NSNull null],
                  kJSON_TLA_NAME:[NSNull null]};
-    }
-    else if ([entityClass isSubclassOfClass:[SML class]]) {
-        
-        return @{K_WS_OPS_REVISION:[NSNull null],
-                 K_WS_OPS_BIRTH_DATE:[NSNull null],
-                 K_WS_OPS_UPDATE_DATE:[NSNull null],
-                 K_WS_OPS_DELETE_DATE:[NSNull null],
-                 kJSON_ID_SML:[NSNull null],
-                 kJSON_SOUND:[NSNull null],
-                 kJSON_MESSAGE:[NSNull null],
-                 kJSON_LANGUAGE:[NSNull null]};
     }
     else if ([entityClass isSubclassOfClass:[Message class]]) {
         

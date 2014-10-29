@@ -77,7 +77,7 @@
     NSTimeInterval epochTime = [[NSDate date] timeIntervalSince1970]*1000;
 
     [newUser setCsys_modified:[NSNumber numberWithLongLong:epochTime]];
-    [newUser setCsys_revision:0];
+    [newUser setCsys_revision:@0];
     [newUser setCsys_birth:[NSNumber numberWithLongLong:epochTime]];
     
     
@@ -160,6 +160,8 @@
     NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
     if ( [revision isKindOfClass:[NSNumber class]] )
         [self setCsys_revision:revision];
+    else
+        [self setCsys_revision:@0];
     
     NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
     if ([birth isKindOfClass:[NSNumber class]]) {

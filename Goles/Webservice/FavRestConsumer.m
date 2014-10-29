@@ -20,13 +20,14 @@
 #import "ShotManager.h"
 #import "Follow.h"
 #import "Shot.h"
+#import "CommunicationHelper.h"
 
 @interface FavRestConsumer ()
 
 @property (nonatomic) BOOL       serviceActive;
 
 @property (nonatomic, strong) AppDelegate *appDelegate;
-
+@property (nonatomic, strong) CommunicationHelper *communicationHelper;
 
 @end
 
@@ -51,6 +52,7 @@
         // Initialize the Consumer
         _sharedInstance = [[FavRestConsumer alloc] initWithSessionConfiguration:sessionConfiguration];
         
+        _sharedInstance.communicationHelper = [CommunicationHelper singleton];
         
     });
     
@@ -141,7 +143,7 @@
 - (void)getAllEntitiesFromClass:(Class)entityClass withDelegate:(id)delegate {
     
     //Create Alias block
-    NSString *alias = [FavRestConsumerHelper getAliasForEntity:entityClass];
+    NSString *alias = [[FavRestConsumerHelper singleton] getAliasForEntity:entityClass];
     
     //Create Staus block
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
@@ -150,9 +152,9 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:NSStringFromClass(entityClass)
-                                                                     withItems:@1000
+                                                                     withItems:@300
                                                                      withOffSet:@0
                                                                      andFilter:[FilterCreation getFilterForEntity:entityClass]];
     
@@ -162,55 +164,58 @@
     //Create 'ops' block
     NSArray *ops = @[operation];
     
-    //Check if delegate has protocol "ParserProtocol" implemented
-    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
-    
-    //Create full data structure
+      //Create full data structure
     if (req && ops) {
         NSDictionary *serverCall = @{K_WS_ALIAS:alias,K_WS_STATUS:status,K_WS_REQ: req,K_WS_OPS:ops};
-        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
-            
-            if (!error){
-                if ([entityClass isSubclassOfClass:[Shot class]]) {
-                    [FavGeneralDAO shotParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
-                        if (!error && status && delegateRespondsToProtocol)
-                            [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
-                        else if (delegateRespondsToProtocol)
-                            [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
-                    }];
-                }else{
-                    [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
-                        if (!error && status && delegateRespondsToProtocol)
-                            [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
-                        else if (delegateRespondsToProtocol)
-                            [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
-                    }];
-                }
-
-            }
-//                [FavGeneralDAO genericParser:data onCompletion:^(BOOL status,NSError *error, BOOL refresh){
-//                   
-//                    if (!error && status && delegateRespondsToProtocol)
-//                       [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
-//                    else if (delegateRespondsToProtocol)
-//                       [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
-//                }];
-			
-            else if (delegateRespondsToProtocol){
-                
-                [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:NO];
-                DLog(@"Request error:%@",error);
-            }
+       
+//        [self fetchDataWithParameters:serverCall onCompletion:^(NSDictionary *data,NSError *error) {
+//            [self validateAllEntitiesFromClass:entityClass withData:data withError:error andDelegate:delegate];
+//        }];
+        
+       [self.communicationHelper postRequest:serverCall onCompletion:^(NSDictionary *response, NSError *error) {
+            [self validateAllEntitiesFromClass:entityClass withData:response withError:error andDelegate:delegate];
         }];
+        
     }else
         DLog(@"No valid req structure created for class %@",NSStringFromClass(entityClass));
 }
+
+-(void)validateAllEntitiesFromClass:(Class)entityClass withData:(NSDictionary *)data withError:(NSError *)error andDelegate:(id)delegate{
+    //Check if delegate has protocol "ParserProtocol" implemented
+    BOOL delegateRespondsToProtocol = [delegate respondsToSelector:@selector(parserResponseForClass:status:andError:andRefresh:)];
+    
+
+    if (!error){
+        if ([entityClass isSubclassOfClass:[Shot class]]) {
+            [FavGeneralDAO shotParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                if (!error && status && delegateRespondsToProtocol)
+                    [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
+                else if (delegateRespondsToProtocol)
+                    [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
+            }];
+        }else{
+            [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+                if (!error && status && delegateRespondsToProtocol)
+                    [delegate parserResponseForClass:entityClass status:YES andError:nil  andRefresh:refresh];
+                else if (delegateRespondsToProtocol)
+                    [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:refresh];
+            }];
+        }
+        
+    }else if (delegateRespondsToProtocol){
+        
+        [delegate parserResponseForClass:entityClass status:NO andError:error andRefresh:NO];
+        DLog(@"Request error:%@",error);
+    }
+
+}
+
 
 //------------------------------------------------------------------------------
 - (void)getUsersFromUser:(User *)user withDelegate:(id)delegate  withTypeOfUsers:(NSNumber *) type; {
     
     //Create Alias block
-    NSString *alias = [FavRestConsumerHelper getAliasForEntity:[User class]];
+    NSString *alias = [[FavRestConsumerHelper singleton] getAliasForEntity:[User class]];
     
     //Create Staus block
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
@@ -219,7 +224,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:NSStringFromClass([User class])
                                                                      withItems:@1000
                                                                     withOffSet:@0
@@ -271,7 +276,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_SHOT
                                                                      withItems:@20
                                                                     withOffSet:@0
@@ -314,7 +319,7 @@
 - (void)getEntityFromClass:(Class)entityClass withKey:(NSDictionary *)key withDelegate:(id)delegate {
     
     //Create Alias block
-    NSString *alias = [FavRestConsumerHelper getAliasForEntity:entityClass];
+    NSString *alias = [[FavRestConsumerHelper singleton] getAliasForEntity:entityClass];
     
     //Create Staus block
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
@@ -323,7 +328,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:NSStringFromClass(entityClass)
                                                                      withItems:@1
                                                                     withOffSet:@0
@@ -379,7 +384,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_FOLLOW
                                                                      withItems:@300
                                                                     withOffSet:@0
@@ -431,7 +436,7 @@
     NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:K_COREDATA_FOLLOW
                                                                      withItems:@300
                                                                     withOffSet:@0
@@ -634,10 +639,10 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = [[FavRestConsumerHelper singleton] createREQ];
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForOperation:K_OP_RETREAVE
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                      andEntity:kJSON_LOGIN
                                                                      withItems:@1
                                                                     withOffSet:@0
@@ -689,10 +694,10 @@
     NSDictionary *status = @{K_WS_STATUS_CODE: [NSNull null],K_WS_STATUS_MESSAGE:[NSNull null]};
     
     //Create 'req' block
-    NSArray *req = [FavRestConsumerHelper createREQ];
+    NSArray *req = self.appDelegate.request;
     
     //Create Provider 'metadata' block
-    NSDictionary *metadata = [FavRestConsumerHelper createMetadataForSearchPeopleWithItems:@25 withOffSet:offset andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
+    NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForSearchPeopleWithItems:@25 withOffSet:offset andFilter:[FilterCreation getFilterForPeopleSearch:textToSearch]];
 
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[User class]]]};

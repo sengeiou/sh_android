@@ -6,8 +6,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UserManager.h"
 
 @interface FavRestConsumerHelper : NSObject
+
+@property (nonatomic,strong) UserManager *userManager;
+
++ (FavRestConsumerHelper *)singleton;
++ (FavRestConsumerHelper *)sharedInstance;
+
+
+//METHODS FOR TESTING
+-(void)setUserManager:(UserManager *)userManager;
+
+    
 
 //------------------------------------------------------------------------------
 /**
@@ -21,11 +33,11 @@
  
  @returns An NSString with with the alias name
  */
-+ (NSString *)getAliasForEntity:(Class)entity;
+- (NSString *)getAliasForEntity:(Class)entity;
 
-+ (NSString *)getEntityForClass:(Class)entity;
+- (NSString *)getEntityForClass:(Class)entity;
 
-+ (NSString *)getClassForString:(NSString *)entityString;
+- (NSString *)getClassForString:(NSString *)entityString;
 
 
 //------------------------------------------------------------------------------
@@ -38,7 +50,7 @@
  
  @returns An NSArray of 5 items.
  */
-+ (NSArray *)createREQ;
+- (NSArray *)createREQ;
 
 //------------------------------------------------------------------------------
 /**
@@ -54,11 +66,11 @@
  
  @returns An integer with the app version
  */
-+ (NSInteger)getAppVersion;
+- (NSInteger)getAppVersion;
 
 
-+ (NSDictionary *)createFilterForParameter:(NSString *)entity andValue:(NSNumber *)idToSearch;
-+ (NSDictionary *)createFilterForAllItems:(NSString *)entity;
+- (NSDictionary *)createFilterForParameter:(NSString *)entity andValue:(NSNumber *)idToSearch;
+- (NSDictionary *)createFilterForAllItems:(NSString *)entity;
 
 /**
  @brief Creates the metadata block of a webservice request
@@ -75,12 +87,12 @@
  
  @returns An NSDictionary with metada block.
  */
-+ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter;
+- (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter;
 
 //COMENTARIOOOOOOS
-+ (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key;
+- (NSDictionary *)createMetadataForOperation:(NSString *)operation andEntity:(NSString *)entity withItems:(NSNumber *)items withOffSet:(NSNumber *)offset andKey:(NSDictionary *)key;
 
-+ (NSDictionary *)createMetadataForSearchPeopleWithItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter;
+- (NSDictionary *)createMetadataForSearchPeopleWithItems:(NSNumber *)items withOffSet:(NSNumber *)offset andFilter:(NSDictionary *)filter;
 
 
 @end

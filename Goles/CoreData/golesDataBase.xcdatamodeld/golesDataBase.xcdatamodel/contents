@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AppAdvice" representedClassName="AppAdvice" syncable="YES">
         <attribute name="buttonAction" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="buttonData" optional="YES" attributeType="String" syncable="YES"/>
@@ -7,7 +7,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="endVersion" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -27,7 +27,7 @@
         <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idDevice" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="idUser" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -45,7 +45,7 @@
         <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
         <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
-        <attribute name="csys_revision" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_revision" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" optional="YES" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idUser" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="idUserFollowed" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -54,7 +54,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idLocalTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="idMatch" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
@@ -69,7 +69,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idMessage" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="locale" attributeType="String" syncable="YES"/>
@@ -82,21 +82,10 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idShot" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="shots" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="SML" representedClassName="SML" syncable="YES">
-        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
-        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
-        <attribute name="idSML" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="language" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="message" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
-        <attribute name="sound" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
     </entity>
     <entity name="SyncControl" representedClassName="SyncControl" syncable="YES">
         <attribute name="aliasView" optional="YES" attributeType="String" syncable="YES"/>
@@ -110,7 +99,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="idTeam" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
@@ -125,7 +114,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="eMail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="favoriteTeamName" optional="YES" attributeType="String" syncable="YES"/>
@@ -149,7 +138,7 @@
         <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="-1" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="match" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="watches" inverseEntity="Match" syncable="YES"/>
@@ -159,13 +148,12 @@
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
         <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
         <element name="Follow" positionX="-693" positionY="135" width="128" height="148"/>
-        <element name="Match" positionX="-45" positionY="-27" width="128" height="238"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="240"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
-        <element name="SML" positionX="-290" positionY="45" width="128" height="180"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
-        <element name="Team" positionX="169" positionY="77" width="128" height="238"/>
-        <element name="User" positionX="-425" positionY="324" width="128" height="388"/>
-        <element name="Watch" positionX="-702" positionY="126" width="128" height="163"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="240"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="390"/>
+        <element name="Watch" positionX="-702" positionY="126" width="128" height="165"/>
     </elements>
 </model>
