@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ResourceFlowDirection" xml:space="preserve">
+    <value>LeftToRight</value>
+    <comment>Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</comment>
+  </data>
+  <data name="ResourceLanguage" xml:space="preserve">
+    <value>es-es</value>
+    <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
+  </data>
+  <data name="ApplicationTitle" xml:space="preserve">
+    <value>Bagdad</value>
+  </data>
+  <data name="AppBarButtonText" xml:space="preserve">
+    <value>agregar</value>
+  </data>
+  <data name="AppBarMenuItemText" xml:space="preserve">
+    <value>Elemento de menú</value>
+  </data>
+  <data name="SignInTitle" xml:space="preserve">
+    <value>Sign In</value>
+    <comment>SignIn.xaml, LoginOrregister.xaml</comment>
+  </data>
+  <data name="FacebookAdvice1" xml:space="preserve">
+    <value>Shootr will never post without your permission.</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot Password?</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="NewAccount" xml:space="preserve">
+    <value>Create New Account</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="SignWithFacebook" xml:space="preserve">
+    <value>Sign In with Facebook</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="UserOrEmail" xml:space="preserve">
+    <value>Email or Username</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="ImWatching" xml:space="preserve">
+    <value>Watching</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Me" xml:space="preserve">
+    <value>ME</value>
+    <comment>All</comment>
+  </data>
+  <data name="People" xml:space="preserve">
+    <value>People</value>
+    <comment>All</comment>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="Shoot" xml:space="preserve">
+    <value>Shoot</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="TimeLine" xml:space="preserve">
+    <value>TIMELINE</value>
+    <comment>All</comment>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>The Password is in an invalid format.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="InvalidUserOrEmail" xml:space="preserve">
+    <value>The Username or Email are in an invalid format.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="NoInternetConnection" xml:space="preserve">
+    <value>The network connection was lost</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="NoOneWatching" xml:space="preserve">
+    <value>No one watching</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="NoShoots" xml:space="preserve">
+    <value>No Shots</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="NoShootsSubtitle" xml:space="preserve">
+    <value>Share with friends about football.</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="StartShooting" xml:space="preserve">
+    <value>Start Shooting</value>
+    <comment>TimeLine.xaml, Start.xaml</comment>
+  </data>
+  <data name="UserOrPasswordDoesntMatch" xml:space="preserve">
+    <value>User or Password doesn't match.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="Followers" xml:space="preserve">
+    <value>Followers</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>Following</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="Shots" xml:space="preserve">
+    <value>Shots</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+    <comment>SignIn.xaml</comment>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>Free</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="FreeInfo" xml:space="preserve">
+    <value>Shootr is free. No ads. No fees.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="Fun" xml:space="preserve">
+    <value>Fun</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="FunInfo" xml:space="preserve">
+    <value>Shootr is instant, 24 hours a day fun.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="GeneralLoginError" xml:space="preserve">
+    <value>Id or Password are not valid.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="NewInfo" xml:space="preserve">
+    <value>Shootr connects you with friends and family.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="RegisterWithEmail" xml:space="preserve">
+    <value>Register with Email</value>
+    <comment>LoginOrregister.xaml</comment>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>Shootr</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="ShooterInfo" xml:space="preserve">
+    <value>Shootr is a new way to share football.</value>
+    <comment>Start.xaml</comment>
+  </data>
+  <data name="WhatsUp" xml:space="preserve">
+    <value>shoot something</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="CanConnect" xml:space="preserve">
+    <value>Can't connect</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="NoInternet" xml:space="preserve">
+    <value>There's a problem connecting with the internet. Check your connection and try again.</value>
+    <comment>SignIn.xaml.cs</comment>
+  </data>
+  <data name="Synchroning" xml:space="preserve">
+    <value>Syncing...</value>
+    <comment>TimeLine.xaml.cs</comment>
+  </data>
+  <data name="MeFollowers" xml:space="preserve">
+    <value>FOLLOWERS</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="MeFollowing" xml:space="preserve">
+    <value>FOLLOWING</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="MePoints" xml:space="preserve">
+    <value>POINTS</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="ProfileButtonEdit" xml:space="preserve">
+    <value>EDIT PROFILE</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="ProfileButtonFollow" xml:space="preserve">
+    <value>FOLLOW</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="ProfileButtonFollowing" xml:space="preserve">
+    <value>FOLLOWING</value>
+    <comment>Me.xaml</comment>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>There's a problem retriving data, please try again later.</value>
+    <comment>All</comment>
+  </data>
+  <data name="ShootRepeated" xml:space="preserve">
+    <value>Whoops! You already shot that.</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="ShotNotPosted" xml:space="preserve">
+    <value>Shot not posted</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="TimeOut" xml:space="preserve">
+    <value>The request timed out.</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="AirplaneMode" xml:space="preserve">
+    <value>Your phone is in airplane mode.</value>
+    <comment>TimeLine.xaml</comment>
+  </data>
+  <data name="MePeople" xml:space="preserve">
+    <value>PEOPLE</value>
+    <comment>People.xaml</comment>
+  </data>
+  <data name="FindFriends" xml:space="preserve">
+    <value>FIND FRIENDS</value>
+    <comment>People.xaml, FindFriends.xaml</comment>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>no results for </value>
+    <comment>FindFriends.xaml</comment>
+  </data>
+  <data name="unFollowQuestion" xml:space="preserve">
+    <value>Unfollow</value>
+    <comment>buttons</comment>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>INFO</value>
+    <comment>Info.xaml</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Info.xaml</comment>
+  </data>
+</root>
