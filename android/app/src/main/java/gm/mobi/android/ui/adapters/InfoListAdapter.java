@@ -28,6 +28,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private List<Object> itemsList;
     private Picasso picasso;
 
+
     public InfoListAdapter(Context context, Picasso picasso) {
         super(context);
         this.picasso = picasso;
