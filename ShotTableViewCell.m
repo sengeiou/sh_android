@@ -90,11 +90,11 @@
 
     NSMutableAttributedString *attributedString = [TimeLineUtilities filterLinkWithContent:shot.comment];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 2.8;
+    paragraphStyle.lineSpacing = 2.5;
     NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
     [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
     
-    self.txvText.attributedText = [TimeLineUtilities filterLinkWithContent:shot.comment];
+    self.txvText.attributedText = attributedString;
     
     self.lblName.text = shot.user.userName;
     
