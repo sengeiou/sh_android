@@ -13,8 +13,11 @@
 
     <color name="material_black">#de000000</color>
 
+    <color name="background_dark">#ececec</color>
+
     <!-- Shadows -->
     <color name="shadow_start">#33000000</color>
+    <color name="shadow_dark_start">#66000000</color>
 
     <!-- Gray scale -->
     <color name="gray_10">#1a1a1a</color>

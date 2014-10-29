@@ -20,20 +20,22 @@ import java.util.Map;
 
 public class InfoListAdapter extends BindableAdapter<Object> {
 
-    private static final int TYPE_COUNT = 2;
+    private static final int TYPE_COUNT = 3;
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_USER = 1;
+    private static final int TYPE_ME = 2;
 
     private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
     private Picasso picasso;
+    private Long currentUserId;
 
-
-    public InfoListAdapter(Context context, Picasso picasso) {
+    public InfoListAdapter(Context context, Picasso picasso, Long currentUserId) {
         super(context);
         this.picasso = picasso;
         this.itemsList = new ArrayList<>();
+        this.currentUserId = currentUserId;
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
@@ -70,11 +72,18 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         if (item instanceof MatchModel) {
             return TYPE_HEADER;
         } else if (item instanceof UserWatchingModel) {
+            if (isCurrentUser((UserWatchingModel) item)) {
+                return TYPE_ME;
+            }
             return TYPE_USER;
         } else {
             throwItemUnknownException(position, item.getClass().getName());
             return -1;
         }
+    }
+
+    private boolean isCurrentUser(UserWatchingModel item) {
+        return currentUserId.equals(item.getIdUser());
     }
 
     @Override public boolean areAllItemsEnabled() {
@@ -96,6 +105,10 @@ public class InfoListAdapter extends BindableAdapter<Object> {
                 v = inflater.inflate(R.layout.item_list_info_user, container, false);
                 v.setTag(new UserViewHolder(v));
                 break;
+            case TYPE_ME:
+                v = inflater.inflate(R.layout.item_list_info_user_join, container, false);
+                v.setTag(new UserViewHolder(v));
+                break;
             default:
                 throwItemUnknownException(position, "???");
         }
@@ -108,6 +121,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
                 bindHeader((MatchModel) item, position, view);
                 break;
             case TYPE_USER:
+            case TYPE_ME:
                 bindUser((UserWatchingModel) item, position, view);
                 break;
         }

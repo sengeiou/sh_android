@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Shootr" type="AppleRunConfiguration" factoryName="Application" SCHEME_NAME="Shootr" PROJECT_NAME="Shootr" TARGET_NAME="Shootr" CONFIG_NAME="Debug" WORKING_DIR="" PASS_PARENT_ENVS="FALSE" RUN_TARGET_PROJECT_NAME="Shootr" RUN_TARGET_NAME="Shootr" MAKE_ACTIVE="TRUE" WAIT_FOR="FALSE">
+    <envs>
+      <env name="GCOV_PREFIX_STRIP" value="14" />
+    </envs>
+    <method />
+  </configuration>
+</component>
