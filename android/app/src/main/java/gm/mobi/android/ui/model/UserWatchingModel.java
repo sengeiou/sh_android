@@ -5,10 +5,8 @@ import java.io.Serializable;
 public class UserWatchingModel implements Serializable {
 
     private Long idUser;
-    private String favoriteTeamName;
     private Long favoriteTeamId;
     private String userName;
-    private String name;
     private String photo;
 
     private String status; //TODO cambiar por valor
@@ -19,14 +17,6 @@ public class UserWatchingModel implements Serializable {
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
-    }
-
-    public String getFavoriteTeamName() {
-        return favoriteTeamName;
-    }
-
-    public void setFavoriteTeamName(String favoriteTeamName) {
-        this.favoriteTeamName = favoriteTeamName;
     }
 
     public Long getFavoriteTeamId() {
@@ -43,14 +33,6 @@ public class UserWatchingModel implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPhoto() {

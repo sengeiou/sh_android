@@ -17,5 +17,17 @@ namespace Bagdad.Models
         {
             throw new NotImplementedException();
         }
+
+        protected override String GetOps() { return ops_data; }
+
+        protected override string GetAlias(string operation)
+        {
+            return "";
+        }
+
+        public override async Task<string> ConstructFilter(string conditionDate)
+        {
+            return "";
+        }
     }
 }

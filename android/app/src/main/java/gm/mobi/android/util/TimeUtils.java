@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
 
-    public static TimeZone getDisplayTimeZone(Context context) {
+    public static TimeZone getDisplayTimeZone() {
         return TimeZone.getDefault();
     }
 
@@ -52,15 +52,15 @@ public class TimeUtils {
     public static String formatShortDate(Context context, Date date) {
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
-        return DateUtils.formatDateRange(context, formatter, date.getTime(), date.getTime(), DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR, getDisplayTimeZone(context).getID()).toString();
+        return DateUtils.formatDateRange(context, formatter, date.getTime(), date.getTime(), DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR, getDisplayTimeZone().getID()).toString();
     }
 
     /**
      * @return String short format date for a date time
      */
-    public static String formatShortTime(Context context, Date date) {
+    public static String formatShortTime(Date date) {
         DateFormat mFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-        TimeZone mTimeZone = getDisplayTimeZone(context);
+        TimeZone mTimeZone = getDisplayTimeZone();
         if (mTimeZone != null) mFormat.setTimeZone(mTimeZone);
         return mFormat.format(date);
     }

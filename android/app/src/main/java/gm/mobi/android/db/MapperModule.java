@@ -9,15 +9,22 @@ import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.mappers.WatchMapper;
+import gm.mobi.android.ui.model.UserWatchingModel;
+import gm.mobi.android.ui.model.mappers.MatchModelMapper;
 import gm.mobi.android.ui.model.mappers.ShotModelMapper;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
+import gm.mobi.android.ui.model.mappers.UserWatchingModelMapper;
 
 @Module(
   complete = false,
   library = true)
 public class MapperModule {
 
-    @Provides ShotModelMapper provideShotVOMapper(){ return new ShotModelMapper();}
+    @Provides ShotModelMapper provideShotModelMapper(){ return new ShotModelMapper();}
+
+    @Provides MatchModelMapper provideMatchModelMapper(){ return new MatchModelMapper();}
+
+    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(){ return new UserWatchingModelMapper();}
 
     @Provides FollowMapper provideFollowMapper() {
         return new FollowMapper();
@@ -42,4 +49,5 @@ public class MapperModule {
     @Provides WatchMapper provideWatchMapper(){ return new WatchMapper();}
 
     @Provides TeamMapper provideTeamMapper(){ return new TeamMapper();}
+
 }
