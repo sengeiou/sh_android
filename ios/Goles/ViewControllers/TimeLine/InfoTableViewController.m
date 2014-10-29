@@ -9,6 +9,9 @@
 #import "InfoTableViewController.h"
 #import "InfoCustomCell.h"
 #import "User.h"
+#import "UserManager.h"
+#import "InfoUtilities.h"
+#import "Match.h"
 
 @interface InfoTableViewController ()
 
@@ -28,7 +31,10 @@
 
 
 #pragma mark - TABLE VIEW
-
+//------------------------------------------------------------------------------
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
+}
 //------------------------------------------------------------------------------
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
@@ -38,6 +44,15 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 
     return @"Real Madrid - Barcelona";
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    Match *match = [[Match alloc]init];
+
+    match.matchDate = @1414602325;
+    
+    return [InfoUtilities createHeaderViewWithFrame:tableView.frame andMatch:match];
+    
 }
 
 //------------------------------------------------------------------------------
@@ -52,7 +67,9 @@
     static NSString *CellIdentifier = @"infoCell";
     InfoCustomCell *cell = (id) [self.infoTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    User *user = self.usersArray[indexPath.row];
+    //User *user = self.usersArray[indexPath.row];
+    User *user = [[UserManager sharedInstance]getActiveUser];
+    
     
     [cell configureInfoCellWithUser:user inRow:indexPath];
 //    [cell addTarget:self action:@selector(goProfile:)];
