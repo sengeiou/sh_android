@@ -1,8 +1,9 @@
 package gm.mobi.android.db.objects;
 
+import android.support.annotation.NonNull;
 import java.util.Date;
 
-public class MatchEntity extends Synchronized{
+public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
 
     private Long idMatch;
     private Date matchDate;
@@ -71,7 +72,7 @@ public class MatchEntity extends Synchronized{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof MatchEntity)) return false;
 
         MatchEntity that = (MatchEntity) o;
 
@@ -85,6 +86,7 @@ public class MatchEntity extends Synchronized{
         return idMatch != null ? idMatch.hashCode() : 0;
     }
 
-
-
+    @Override public int compareTo(@NonNull MatchEntity another) {
+        return this.getMatchDate().compareTo(another.getMatchDate());
+    }
 }

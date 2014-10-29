@@ -1,8 +1,9 @@
 package gm.mobi.android.db.objects;
 
+import android.support.annotation.NonNull;
 import java.io.Serializable;
 
-public class UserEntity extends Synchronized implements Serializable{
+public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>{
 
     private Long idUser;
     private Long favoriteTeamId;
@@ -164,5 +165,9 @@ public class UserEntity extends Synchronized implements Serializable{
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    @Override public int compareTo(@NonNull UserEntity another) {
+        return this.getUserName().compareTo(another.getUserName());
     }
 }

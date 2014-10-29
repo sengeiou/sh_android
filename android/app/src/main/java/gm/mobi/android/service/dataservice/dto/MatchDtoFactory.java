@@ -73,10 +73,12 @@ public class MatchDtoFactory {
 
     public GenericDto getMatchesNotEndedByIds(List<Long> matchIds){
         FilterDto matchesWatchFollowingFilter = and(
-          orIsNotDeleted(),
-          or(GMContract.MatchTable.ID_MATCH).isIn(matchIds),
-          or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED)
-            .or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED))
+          orIsNotDeleted()
+            .or(GMContract.MatchTable.ID_MATCH).isIn(matchIds)
+        ).and(
+              or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED)
+                .or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED)
+          )
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
