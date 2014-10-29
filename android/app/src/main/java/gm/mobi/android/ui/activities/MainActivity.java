@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,9 +70,9 @@ public class MainActivity extends BaseSignedInActivity {
     @InjectView(R.id.menu_drawer_profile_name) TextView currentUserName;
     @InjectView(R.id.menu_drawer_profile_email) TextView currentUserUsername;
 
-    private ActionBarDrawerToggle drawerToggle;
     private ActionBar actionBar;
-
+    private android.support.v7.app.ActionBarDrawerToggle drawerToggle;
+    private Toolbar toolbarActionBar;
     private String currentTitle;
     private UserEntity currentUser;
     private int currentSelectedDrawerPosition = -1;
@@ -205,11 +206,11 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void setupNavigationDrawer() {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
-        drawerToggle = new ActionBarDrawerToggle(
+        toolbarActionBar = getActionBarToolbar();
+        drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(
             this,                  /* host Activity */
             drawerLayout,         /* DrawerLayout object */
-            R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+            getToolbar(),  /* nav drawer icon to replace 'Up' caret */
             R.string.drawer_open,  /* "open drawer" description */
             R.string.drawer_close  /* "close drawer" description */
         ) {
