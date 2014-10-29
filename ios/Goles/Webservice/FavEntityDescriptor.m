@@ -30,7 +30,9 @@
                  kJSON_ID_TEAM_VISITOR:[NSNull null],
                  kJSON_DATE_MATCH:[NSNull null],
                  kJSON_ID_MATCH:[NSNull null],
-                 K_WS_STATUS:[NSNull null],
+                 kJSON_MATCH_STATUS:[NSNull null],
+                 kJSON_LOCAL_TEAM_NAME:[NSNull null],
+                 kJSON_VISITOR_TEAM_NAME:[NSNull null]
                  };
     }
     else if ([entityClass isSubclassOfClass:[Team class]]) {

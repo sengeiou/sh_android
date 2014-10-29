@@ -223,7 +223,7 @@
     //Create Provider 'metadata' block
     NSDictionary *metadata = [[FavRestConsumerHelper singleton] createMetadataForOperation:K_OP_RETREAVE
                                                                                  andEntity:K_COREDATA_MATCH
-                                                                                 withItems:@1000
+                                                                                 withItems:@1
                                                                                 withOffSet:@0
                                                                                  andFilter:[FilterCreation getFilterForNextMatchOfMyTeam]];
     
@@ -255,9 +255,9 @@
         
         [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
             if (!error && status && delegateRespondsToProtocol)
-                [delegate parserResponseForClass:[Watch class] status:YES andError:nil  andRefresh:refresh];
+                [delegate parserResponseForClass:[Match class] status:YES andError:nil  andRefresh:refresh];
             else if (delegateRespondsToProtocol)
-                [delegate parserResponseForClass:[Watch class] status:NO andError:error andRefresh:refresh];
+                [delegate parserResponseForClass:[Match class] status:NO andError:error andRefresh:refresh];
         }];
         
         

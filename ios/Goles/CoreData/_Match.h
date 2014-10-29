@@ -13,8 +13,10 @@ extern const struct MatchAttributes {
 	__unsafe_unretained NSString *idLocalTeam;
 	__unsafe_unretained NSString *idMatch;
 	__unsafe_unretained NSString *idVisitorTeam;
+	__unsafe_unretained NSString *localTeamName;
 	__unsafe_unretained NSString *matchDate;
 	__unsafe_unretained NSString *status;
+	__unsafe_unretained NSString *visitorTeamName;
 } MatchAttributes;
 
 extern const struct MatchRelationships {
@@ -29,6 +31,8 @@ extern const struct MatchFetchedProperties {
 @class Team;
 @class Team;
 @class Watch;
+
+
 
 
 
@@ -162,6 +166,16 @@ extern const struct MatchFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* localTeamName;
+
+
+
+//- (BOOL)validateLocalTeamName:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* matchDate;
 
 
@@ -185,6 +199,16 @@ extern const struct MatchFetchedProperties {
 - (void)setStatusValue:(int16_t)value_;
 
 //- (BOOL)validateStatus:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* visitorTeamName;
+
+
+
+//- (BOOL)validateVisitorTeamName:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -295,6 +319,12 @@ extern const struct MatchFetchedProperties {
 
 
 
+- (NSString*)primitiveLocalTeamName;
+- (void)setPrimitiveLocalTeamName:(NSString*)value;
+
+
+
+
 - (NSNumber*)primitiveMatchDate;
 - (void)setPrimitiveMatchDate:(NSNumber*)value;
 
@@ -309,6 +339,12 @@ extern const struct MatchFetchedProperties {
 
 - (int16_t)primitiveStatusValue;
 - (void)setPrimitiveStatusValue:(int16_t)value_;
+
+
+
+
+- (NSString*)primitiveVisitorTeamName;
+- (void)setPrimitiveVisitorTeamName:(NSString*)value;
 
 
 

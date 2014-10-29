@@ -172,6 +172,9 @@ extern NSString * const kJSON_ID_MATCH;
 extern NSString * const kJSON_ID_TEAM_LOCAL;
 extern NSString * const kJSON_ID_TEAM_VISITOR;
 extern NSString * const kJSON_DATE_MATCH;
+extern NSString *const kJSON_LOCAL_TEAM_NAME;
+extern NSString *const kJSON_VISITOR_TEAM_NAME;
+extern NSString *const kJSON_MATCH_STATUS;
 
 //MESSAGE
 extern NSString *const kJSON_ID_MESSAGE;

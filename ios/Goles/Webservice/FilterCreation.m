@@ -230,6 +230,25 @@
     return filter;
 }
 
+//-----------------------------------------------------------------------------
++ (NSDictionary *)getFilterForWatches {
+    
+    
+    NSDictionary *filterDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_OPS_DELETE_DATE,K_CD_VALUE:[NSNull null]},
+                                                    @{K_WS_COMPARATOR: K_WS_OPS_GT,K_CD_NAME:K_WS_OPS_UPDATE_DATE,K_CD_VALUE:@0}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_AND};
+
+    NSDictionary *filterUsers = @{K_WS_FILTERITEMS:[self composeUsersToFilter],K_WS_FILTERS:[NSNull null],K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSDictionary *filterStatus = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:K_WS_STATUS,K_CD_VALUE:@1}],
+                                   K_WS_FILTERS:[NSNull null],
+                                   K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate,filterUsers,filterStatus]}};
+    
+    return filter;
+}
 
 
 #pragma mark - Helper methods
