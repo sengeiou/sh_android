@@ -170,6 +170,10 @@
       <Project>{bbf2a5f0-fea1-4d3f-b9a3-b12397bee02f}</Project>
       <Name>Shootr</Name>
     </ProjectReference>
+    <ProjectReference Include="..\sqlite\SQLiteWinRTPhone.vcxproj">
+      <Project>{4ae0193f-5986-404e-87b6-1ec9301d16d8}</Project>
+      <Name>SQLiteWinRTPhone</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

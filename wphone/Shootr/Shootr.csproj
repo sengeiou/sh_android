@@ -328,7 +328,12 @@
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\sqlite\SQLiteWinRTPhone.vcxproj">
+      <Project>{4ae0193f-5986-404e-87b6-1ec9301d16d8}</Project>
+      <Name>SQLiteWinRTPhone</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <XliffResource Include="Resources\AppResources.es.xlf">
       <Generator>XliffResxGenerator</Generator>
