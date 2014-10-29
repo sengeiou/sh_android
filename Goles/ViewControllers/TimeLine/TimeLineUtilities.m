@@ -96,4 +96,24 @@
     return CGPointMake((imageView.frame.size.width / 2) + 12, (imageView.frame.size.width / 2) - 10);
 }
 
++ (NSMutableAttributedString *)filterLinkWithContent:(NSString *)content {
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:content];
+    NSError *error = NULL;
+    NSDataDetector *detector =
+    [NSDataDetector dataDetectorWithTypes:(NSTextCheckingTypes)NSTextCheckingTypeLink | NSTextCheckingTypePhoneNumber
+                                    error:&error];
+    NSArray *matches = [detector matchesInString:content
+                                         options:0
+                                           range:NSMakeRange(0, [content length])];
+    for (NSTextCheckingResult *match in matches) {
+        
+        if (([match resultType] == NSTextCheckingTypeLink)) {
+            
+            NSURL *url = [match URL];
+            [attributedString addAttribute:NSLinkAttributeName value:url range:match.range];
+        }
+    }
+    return attributedString;
+}
+
 @end
