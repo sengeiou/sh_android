@@ -170,9 +170,9 @@
       <Project>{4ae0193f-5986-404e-87b6-1ec9301d16d8}</Project>
       <Name>SQLiteWinRTPhone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bagdad\Bagdad.csproj">
+    <ProjectReference Include="..\Shootr\Shootr.csproj">
       <Project>{bbf2a5f0-fea1-4d3f-b9a3-b12397bee02f}</Project>
-      <Name>Bagdad</Name>
+      <Name>Shootr</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
