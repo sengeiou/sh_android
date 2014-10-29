@@ -65,6 +65,14 @@
     else
         result = NO;
     
+    NSString *localTeaName = [dict objectForKey:kJSON_LOCAL_TEAM_NAME];
+    if ( [localTeaName isKindOfClass:[NSString class]] )
+        [self setLocalTeamName:localTeaName];
+
+    NSString *visitorTeaName = [dict objectForKey:kJSON_VISITOR_TEAM_NAME];
+    if ( [visitorTeaName isKindOfClass:[NSString class]] )
+        [self setVisitorTeamName:visitorTeaName];
+    
     NSNumber *matchDate = [dict objectForKey:kJSON_DATE_MATCH];
     if ( [matchDate isKindOfClass:[NSNumber class]] )
         [self setMatchDate:matchDate];
