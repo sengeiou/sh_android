@@ -9,6 +9,9 @@
 #import "InfoTableViewController.h"
 #import "InfoCustomCell.h"
 #import "User.h"
+#import "UserManager.h"
+#import "InfoUtilities.h"
+#import "Match.h"
 
 @interface InfoTableViewController ()
 
@@ -23,21 +26,30 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
 }
 
 
 #pragma mark - TABLE VIEW
-
+//------------------------------------------------------------------------------
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
+}
 //------------------------------------------------------------------------------
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
 //------------------------------------------------------------------------------
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+   
+    return 50;
+}
 
-    return @"Real Madrid - Barcelona";
+//------------------------------------------------------------------------------
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    return [InfoUtilities createHeaderViewWithFrame:tableView.frame andMatch:[Match alloc]];
 }
 
 //------------------------------------------------------------------------------
@@ -52,7 +64,13 @@
     static NSString *CellIdentifier = @"infoCell";
     InfoCustomCell *cell = (id) [self.infoTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    User *user = self.usersArray[indexPath.row];
+    if (indexPath.row != 0)
+        cell.btnEdit.hidden = YES;
+
+    
+    //User *user = self.usersArray[indexPath.row];
+    User *user = [[UserManager sharedInstance]getActiveUser];
+    
     
     [cell configureInfoCellWithUser:user inRow:indexPath];
 //    [cell addTarget:self action:@selector(goProfile:)];

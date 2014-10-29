@@ -24,6 +24,7 @@
 		A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE42919DC418000163841 /* ProfileViewController.m */; };
 		A53ACC0E19D96E26009421D8 /* Setup2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53ACC0C19D96E26009421D8 /* Setup2.storyboard */; };
 		A543BFDD19F6AE5C00C04F52 /* ChangeEndPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A543BFDC19F6AE5C00C04F52 /* ChangeEndPointViewController.m */; };
+		A55B222F1A015367008B9130 /* InfoUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A55B222E1A015367008B9130 /* InfoUtilities.m */; };
 		A5754FC019E7DB7900D20267 /* PeopleLineUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */; };
 		A582A33B19ED834E002B23BC /* FindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33A19ED834E002B23BC /* FindFriendsViewController.m */; };
 		A582A33E19F154C6002B23BC /* Followingbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = A582A33D19F154C6002B23BC /* Followingbutton.m */; };
@@ -177,6 +178,8 @@
 		A53ACC0D19D96E26009421D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Setup2.storyboard; sourceTree = "<group>"; };
 		A543BFDB19F6AE5C00C04F52 /* ChangeEndPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeEndPointViewController.h; sourceTree = "<group>"; };
 		A543BFDC19F6AE5C00C04F52 /* ChangeEndPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeEndPointViewController.m; sourceTree = "<group>"; };
+		A55B222D1A015367008B9130 /* InfoUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoUtilities.h; sourceTree = SOURCE_ROOT; };
+		A55B222E1A015367008B9130 /* InfoUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoUtilities.m; sourceTree = SOURCE_ROOT; };
 		A5754FBE19E7DB7900D20267 /* PeopleLineUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleLineUtilities.h; sourceTree = "<group>"; };
 		A5754FBF19E7DB7900D20267 /* PeopleLineUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleLineUtilities.m; sourceTree = "<group>"; };
 		A582A33919ED834E002B23BC /* FindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FindFriendsViewController.h; sourceTree = "<group>"; };
@@ -433,6 +436,8 @@
 			children = (
 				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
 				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
+				A55B222D1A015367008B9130 /* InfoUtilities.h */,
+				A55B222E1A015367008B9130 /* InfoUtilities.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1115,6 +1120,7 @@
 				AA74B40C19DEA3EC00EF90D5 /* FollowingCustomCell.m in Sources */,
 				AA623E481998D17800A942A9 /* Match.m in Sources */,
 				AACA543E19C057C000E39D94 /* AFHTTPSessionManager.m in Sources */,
+				A55B222F1A015367008B9130 /* InfoUtilities.m in Sources */,
 				A52CE42A19DC418000163841 /* ProfileViewController.m in Sources */,
 				AA623E2A1998D17800A942A9 /* _Message.m in Sources */,
 				AA623E271998D17800A942A9 /* _Match.m in Sources */,

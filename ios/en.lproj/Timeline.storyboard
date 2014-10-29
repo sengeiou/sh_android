@@ -366,7 +366,7 @@
         <scene sceneID="QZk-lp-QNj">
             <objects>
                 <tableViewController storyboardIdentifier="infoTVC" id="Nyt-NO-Lqg" customClass="InfoTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RrD-5G-uPc">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RrD-5G-uPc">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -411,11 +411,21 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhh-bm-3YN">
+                                            <rect key="frame" x="546" y="10" width="46" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="8lM-Ds-bhl"/>
+                                                <constraint firstAttribute="width" constant="46" id="JOW-X0-0Lg"/>
+                                            </constraints>
+                                            <state key="normal" title="Edit"/>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="zBh-HN-QO8" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="-4" id="1iA-y3-6jv"/>
                                         <constraint firstItem="oTe-ts-g3n" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="-8" id="88W-9b-YQc"/>
                                         <constraint firstItem="RkP-EO-bea" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="60" id="CLi-Me-DCs"/>
+                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="2" id="Cjh-Ze-ACu"/>
+                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="trailing" secondItem="Xkb-B3-CKM" secondAttribute="trailingMargin" id="GeE-EM-QAW"/>
                                         <constraint firstItem="RkP-EO-bea" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="-1" id="Mzq-LJ-kSj"/>
                                         <constraint firstItem="zBh-HN-QO8" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="6" id="buV-7h-fhZ"/>
                                         <constraint firstItem="oTe-ts-g3n" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" id="cBq-zN-jgI"/>
@@ -424,6 +434,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="btnEdit" destination="dhh-bm-3YN" id="U05-KB-OKa"/>
                                     <outlet property="imgPhoto" destination="zBh-HN-QO8" id="eCd-lJ-bOv"/>
                                     <outlet property="photobutton" destination="oTe-ts-g3n" id="Dpi-IJ-9IL"/>
                                     <outlet property="userName" destination="RkP-EO-bea" id="Y3c-OB-Hbd"/>
