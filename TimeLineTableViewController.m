@@ -17,6 +17,7 @@
 #import "CoreDataParsing.h"
 #import "CoreDataManager.h"
 #import "UserManager.h"
+#import "TimeLineUtilities.h"
 
 static NSString *CellIdentifier = @"shootCell";
 
@@ -50,21 +51,14 @@ typedef enum typesOfChange : NSUInteger {
     [super viewDidLoad];
     [self loadData];
 }
+
+//------------------------------------------------------------------------------
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
     [self basicSetup];
-    NSLog(@"APPEAR: %f", self.myTableView.contentInset.bottom);
-
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    
-    [super viewWillDisappear:animated];
-    
-    NSLog(@"DISSAPPEAR: %f", self.myTableView.contentInset.bottom);
-
-}
 //------------------------------------------------------------------------------
 - (void)viewDidUnload {
     self.fetchedResultsController = nil;
@@ -77,14 +71,8 @@ typedef enum typesOfChange : NSUInteger {
 
 //------------------------------------------------------------------------------
 - (void)basicSetup {
-    //self.myTableView.scrollsToTop = YES;
-    //self.automaticallyAdjustsScrollViewInsets = NO;
-
-    self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
-
-    self.myTableView.rowHeight = UITableViewAutomaticDimension;
     
-    self.myTableView.estimatedRowHeight = 100.0f;
+    self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 
@@ -98,13 +86,13 @@ typedef enum typesOfChange : NSUInteger {
     if (![[self fetchedResultsController] performFetch:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
-    
 }
 
 #pragma mark - UITableViewDelegate
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-        
+    
+    
     if (self.fetchedResultsController.fetchedObjects.count > 0)
         [self addPullToRefresh];
     
@@ -112,9 +100,17 @@ typedef enum typesOfChange : NSUInteger {
 
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    Shot *shot = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    CGFloat f = MAX(72, [TimeLineUtilities commentSizeForText:shot.comment].height);
+    return  f;
+}
+
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     ShotTableViewCell *cell = (ShotTableViewCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
     [self configureCell:cell atIndexPAth:indexPath];
@@ -138,6 +134,8 @@ typedef enum typesOfChange : NSUInteger {
 //------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    Shot *shot = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
     if (!self.refreshTable && !self.moreCells){
         self.spinner.hidden = YES;
         
@@ -159,7 +157,6 @@ typedef enum typesOfChange : NSUInteger {
     if (self.delegate && [self.delegate respondsToSelector:@selector(changeTitleView)])
         [self.delegate changeTitleView];
 }
-
 
 //------------------------------------------------------------------------------
 -(void)reloadTimeline{
@@ -250,8 +247,6 @@ typedef enum typesOfChange : NSUInteger {
     
     return indexPaths;
 }
-
-
 
 #pragma mark - Pull to refresh
 //------------------------------------------------------------------------------

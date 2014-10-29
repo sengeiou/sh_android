@@ -14,13 +14,14 @@
 #import "AFHTTPRequestOperation.h"
 #import "DownloadImage.h"
 #import "Fav24Colors.h"
+#import "TimeLineUtilities.h"
 
 #define kLabelHorizontalLeftInsets          80.0f
 #define kLabelHorizontalRightInsets         16.0f
 #define kLabelHorizontalPhotoInsets         16.0f
 #define kLabelVerticalPhotoInsets           11.5f
 #define kLabelVerticalInsets                7.5f
-#define kLabelVerticalBottomComment         24.0f
+#define kLabelVerticalBottomComment         0.0f //24.0f
 #define kLabelVerticalCommentToName         1.5f
 
 @interface ShotTableViewCell ()
@@ -53,7 +54,7 @@
         self.lblName.backgroundColor = [UIColor whiteColor];
         
         //COMMENT
-        self.txvText = [TTTAttributedLabel newAutoLayoutView];
+        self.txvText = [UILabel newAutoLayoutView];
         [self.txvText setNumberOfLines:0];
         [self.txvText setLineBreakMode:NSLineBreakByWordWrapping];
         self.txvText.font = [UIFont systemFontOfSize:15];
@@ -87,14 +88,17 @@
 //------------------------------------------------------------------------------
 - (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row {
 
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = 2.8;
-    NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
-    [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
+//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    paragraphStyle.lineSpacing = 2.8;
+//    NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
+//    [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
     
-    self.txvText.attributedText = attributedString;
+  //  self.txvText.attributedText = attributedString;
+    self.txvText.attributedText = [TimeLineUtilities filterLinkWithContent:shot.comment];
 
+    
+    
     self.lblName.text = shot.user.userName;
     
     self.imgPhoto = [DownloadImage downloadImageForTimeLineWithUrl:[NSURL URLWithString:shot.user.photo] andUIimageView:self.imgPhoto andText:[shot.user.name substringToIndex:1]];
@@ -158,8 +162,7 @@
     // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
     // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
 
-//    self.txvText.preferredMaxLayoutWidth = CGRectGetWidth(self.txvText.frame);
-    self.txvText.preferredMaxLayoutWidth =320;
+   self.txvText.preferredMaxLayoutWidth = CGRectGetWidth(self.txvText.frame);
 
 }
 

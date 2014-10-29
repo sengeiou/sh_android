@@ -128,7 +128,7 @@
                                                 <color key="textColor" red="0.53333333329999999" green="0.59999999999999998" blue="0.65098039220000004" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="500" text="website" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10r-qX-pEO" customClass="TTTAttributedLabel">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="500" text="website" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10r-qX-pEO">
                                                 <rect key="frame" x="18" y="136" width="564" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="E3m-xW-iyw"/>
@@ -251,7 +251,7 @@
                         <outlet property="mainView" destination="hzD-5B-NPo" id="jQJ-9E-ovV"/>
                         <outlet property="scrollView" destination="pn0-5T-r2b" id="nQH-mc-yUO"/>
                         <outlet property="segmentedControl" destination="yAO-9V-L0h" id="vGD-xg-R5n"/>
-                        <outlet property="txtViewWebSite" destination="10r-qX-pEO" id="3mB-Ly-73S"/>
+                        <outlet property="txtViewWebSite" destination="10r-qX-pEO" id="zCX-fL-6bt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dd5-14-dki" userLabel="First Responder" sceneMemberID="firstResponder"/>

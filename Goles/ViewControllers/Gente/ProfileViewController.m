@@ -19,12 +19,12 @@
 #import "DownloadImage.h"
 #import "Followingbutton.h"
 #import "Followbutton.h"
-#import "TTTAttributedLabel.h"
 #import "ChangeEndPointViewController.h"
 #import "FavRestConsumer.h"
 #import "SyncManager.h"
+#import "TimeLineUtilities.h"
 
-@interface ProfileViewController () <TTTAttributedLabelDelegate, UIActionSheetDelegate>
+@interface ProfileViewController () <UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
@@ -42,7 +42,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblName;
 @property (weak, nonatomic) IBOutlet UILabel *lblRank;
 @property (weak, nonatomic) IBOutlet UILabel *lblTeamBio;
-@property (weak, nonatomic) IBOutlet TTTAttributedLabel *txtViewWebSite;
+@property (weak, nonatomic) IBOutlet UILabel *txtViewWebSite;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -120,9 +120,7 @@
     [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;
-    self.txtViewWebSite.enabledTextCheckingTypes = NSTextCheckingTypeLink;
-    self.txtViewWebSite.linkAttributes = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:(__bridge NSString *)kCTUnderlineStyleAttributeName];
-    self.txtViewWebSite.delegate = self;
+   // self.txtViewWebSite.text = [TimeLineUtilities filterLinkWithContent:self.selectedUser.website];
     [self.txtViewWebSite sizeToFit];
 	
 	[self configureFollowButton];
@@ -151,15 +149,6 @@
     
     ChangeEndPointViewController *changeEndPointVC = [self.storyboard instantiateViewControllerWithIdentifier:@"changeEndPointVC"];
     [self.navigationController pushViewController:changeEndPointVC animated:YES];
-}
-
-//------------------------------------------------------------------------------
-#pragma mark - TTTAttributedLabelDelegate
-
-- (void)attributedLabel:(__unused TTTAttributedLabel *)label
-   didSelectLinkWithURL:(NSURL *)url {
-    
-    [[UIApplication sharedApplication] openURL:url];
 }
 
 #pragma mark - FOLLOW BUTTONS

@@ -118,7 +118,6 @@
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
 		AAD77D0219EE69C700A1B831 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */; };
 		AADF791419F1534D00AE9DB8 /* Followbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = AADF791319F1534D00AE9DB8 /* Followbutton.m */; };
-		AADF791A19F51B2900AE9DB8 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = AADF791919F51B2900AE9DB8 /* TTTAttributedLabel.m */; };
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
 		AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */; };
@@ -349,8 +348,6 @@
 		AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		AADF791219F1534D00AE9DB8 /* Followbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Followbutton.h; path = Buttons/Followbutton.h; sourceTree = "<group>"; };
 		AADF791319F1534D00AE9DB8 /* Followbutton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Followbutton.m; path = Buttons/Followbutton.m; sourceTree = "<group>"; };
-		AADF791819F51B2900AE9DB8 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
-		AADF791919F51B2900AE9DB8 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimelineViewControllerTest.m; path = Tests/TimelineViewControllerTest.m; sourceTree = SOURCE_ROOT; };
 		AAE0EF5819E4253C00F32FF7 /* TimeLineHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeLineHelper.h; path = Tests/TimeLineHelper.h; sourceTree = SOURCE_ROOT; };
 		AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineHelper.m; path = Tests/TimeLineHelper.m; sourceTree = SOURCE_ROOT; };
@@ -698,8 +695,6 @@
 		AA623DC51998D17700A942A9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				AADF791819F51B2900AE9DB8 /* TTTAttributedLabel.h */,
-				AADF791919F51B2900AE9DB8 /* TTTAttributedLabel.m */,
 				AAF77D5419ED32A50020E2FB /* Source */,
 				AACA541619C057C000E39D94 /* AFNetworking */,
 				AACA542A19C057C000E39D94 /* UIKit+AFNetworking */,
@@ -1142,7 +1137,6 @@
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,
 				AA623E371998D17800A942A9 /* AppAdvice.m in Sources */,
-				AADF791A19F51B2900AE9DB8 /* TTTAttributedLabel.m in Sources */,
 				AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */,
 				AA623E321998D17800A942A9 /* _SML.m in Sources */,
 				AA623F0D1998D78600A942A9 /* LoginViewController.m in Sources */,

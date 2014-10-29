@@ -7,11 +7,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Shot.h"
-#import "TTTAttributedLabel.h"
 
 @interface ShotTableViewCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet TTTAttributedLabel *txvText;
+@property (retain, nonatomic) IBOutlet UILabel *txvText;
 @property (retain, nonatomic) IBOutlet UILabel *lblName;
 @property (retain, nonatomic) IBOutlet UILabel *lblDate;
 @property (retain, nonatomic) IBOutlet UIImageView *imgPhoto;
