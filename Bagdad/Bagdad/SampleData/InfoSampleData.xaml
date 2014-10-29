@@ -1,0 +1,26 @@
+﻿<vm:InfoWatchListOfMatchesViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Bagdad.ViewModels" >
+
+    <vm:InfoWatchListOfMatchesViewModel.listOfWatchingMatches>
+        <vm:WatchListMatchViewModel isLive="True" matchDate="Live" matchName="Equipo A VS. Equipo B" >
+            <vm:WatchListMatchViewModel.usersViewingMatch>
+                <vm:WatchListOfMatchUserInfoViewModel>
+                    <vm:WatchListOfMatchUserInfoViewModel.user>
+                        <vm:UserViewModel userName="Victor" userImage="/Resources/start/start_shooter.png"/>
+                    </vm:WatchListOfMatchUserInfoViewModel.user>
+                </vm:WatchListOfMatchUserInfoViewModel>
+            </vm:WatchListMatchViewModel.usersViewingMatch>
+        </vm:WatchListMatchViewModel>
+        <vm:WatchListMatchViewModel isLive="False" matchDate="15/12/2036 21:25" matchName="Equipo C VS. Equipo D" >
+            <vm:WatchListMatchViewModel.usersViewingMatch>
+                <vm:WatchListOfMatchUserInfoViewModel>
+                    <vm:WatchListOfMatchUserInfoViewModel.user>
+                        <vm:UserViewModel userName="Victor" userImage="/Resources/start/start_shooter.png"/>
+                    </vm:WatchListOfMatchUserInfoViewModel.user>
+                </vm:WatchListOfMatchUserInfoViewModel>
+            </vm:WatchListMatchViewModel.usersViewingMatch>
+        </vm:WatchListMatchViewModel>
+    </vm:InfoWatchListOfMatchesViewModel.listOfWatchingMatches>
+</vm:InfoWatchListOfMatchesViewModel>

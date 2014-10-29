@@ -106,6 +106,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Enter.
         /// </summary>
         public static string Enter {
@@ -210,6 +219,15 @@ namespace Bagdad.Resources {
         public static string ImWatching {
             get {
                 return ResourceManager.GetString("ImWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a INFO.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
             }
         }
         

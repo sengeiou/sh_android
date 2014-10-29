@@ -347,5 +347,28 @@ namespace Bagdad.Models
             }
             return _return;
         }
+        public async Task<int> GetCurrentUserFavoriteTeamId()
+        {
+            int idFavoriteTeam = 0;
+            try
+            {
+                Database db = await DataBaseHelper.GetDatabaseAsync();
+
+                Statement st = await db.PrepareStatementAsync(SQLQuerys.GetFavoriteTeamId);
+                st.BindIntParameterWithName("@idUser", App.ID_USER);
+
+                if (await st.StepAsync())
+                {
+                    idFavoriteTeam = st.GetIntAt(0);
+                }
+
+                DataBaseHelper.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - GetNameAndImageURL: " + e.Message);
+            }
+            return idFavoriteTeam;
+        }
     }
 }

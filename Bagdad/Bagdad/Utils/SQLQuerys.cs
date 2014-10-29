@@ -31,6 +31,8 @@ namespace Bagdad.Utils
 
         public const String GetUsersByUserAndNick = "SELECT idUser, userName, name, photo, bio, points, numFollowings, numFollowers, website, favoriteTeamName, idFavoriteTeam, csys_birth, csys_modified, csys_revision FROM User WHERE userName LIKE @userName OR name LIKE @name ORDER BY name, userName";
 
+        public const String GetFavoriteTeamId = "SELECT idFavoriteTeam FROM User WHERE idUser = @idUser";
+
         #endregion
 
         #region SHOT
@@ -100,6 +102,12 @@ namespace Bagdad.Utils
         public const String GetCurrentDevice = "SELECT idDevice, idUser, token, uniqueDeviceID, model, osVer, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized FROM Device LIMIT 1";
 
         public const String SaveOrCreateDevice = "INSERT OR REPLACE INTO Device (idDevice, idUser, token, uniqueDeviceID, model, osVer, csys_birth, csys_modified, csys_revision) VALUES (@idDevice, @idUser, @token, @uniqueDeviceID, @model, @osVer, @csys_birth, @csys_modified, @csys_revision)";
+
+        #endregion
+
+        #region MATCH
+
+        public const String GetNextTeamMatch = "SELECT idMatch, localTeamName, visitorTeamName, matchDate, status FROM Matches WHERE ( idLocalTeam = @idLocalTeam OR idVisitorTeam = @idVisitorTeam ) AND ( status = 1 OR status = 0) ORDER BY matchDate ASC LIMIT 1";
 
         #endregion
 

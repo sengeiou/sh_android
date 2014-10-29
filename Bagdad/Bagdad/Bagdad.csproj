@@ -103,6 +103,9 @@
     </Compile>
     <Compile Include="Models\DeviceDataBase.cs" />
     <Compile Include="Models\DeviceCommunications.cs" />
+    <Compile Include="Models\MatchCommunications.cs" />
+    <Compile Include="Models\MatchDataBase.cs" />
+    <Compile Include="Models\Match.cs" />
     <Compile Include="Models\FollowDataBase.cs" />
     <Compile Include="Models\FollowCommunications.cs" />
     <Compile Include="Models\LoginDataBase.cs" />
@@ -114,6 +117,9 @@
     <Compile Include="Models\Device.cs" />
     <Compile Include="p.xaml.cs">
       <DependentUpon>p.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Info.xaml.cs">
+      <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
     <Compile Include="People.xaml.cs">
       <DependentUpon>People.xaml</DependentUpon>
@@ -163,10 +169,13 @@
     <Compile Include="Utils\ServiceCommunication.cs" />
     <Compile Include="Utils\Util.cs" />
     <Compile Include="ViewModels\FollowsViewModel.cs" />
+    <Compile Include="ViewModels\WatchListOfMatchUserInfoViewModel.cs" />
     <Compile Include="ViewModels\ShotsViewModel.cs" />
     <Compile Include="ViewModels\FollowViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ShotViewModel.cs" />
+    <Compile Include="ViewModels\InfoWatchListOfMatchesViewModel.cs" />
+    <Compile Include="ViewModels\WatchListMatchViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -184,6 +193,10 @@
     <Page Include="p.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Info.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="People.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +217,10 @@
     <Page Include="Me.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleData\InfoSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SampleData\FollowingSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>

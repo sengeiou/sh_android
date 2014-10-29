@@ -319,7 +319,9 @@ namespace Bagdad
 
         private void Info_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            MessageBox.Show("Info");
+            NavigationService.Navigate(new Uri("/Info.xaml", UriKind.Relative));
+            timer.Stop();
+            timerToLoad.Stop();
         }
 
         private void Shot_Tap(object sender, System.Windows.Input.GestureEventArgs e)

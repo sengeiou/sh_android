@@ -358,4 +358,12 @@
     <value>Unfollow</value>
     <comment>buttons</comment>
   </data>
+  <data name="Info" xml:space="preserve">
+    <value>INFO</value>
+    <comment>Info.xaml</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Info.xaml</comment>
+  </data>
 </root>

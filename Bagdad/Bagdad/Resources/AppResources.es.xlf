@@ -199,6 +199,16 @@
           <target state="new">Unfollow</target>
           <note from="MultilingualBuild" annotates="source" priority="2">buttons</note>
         </trans-unit>
+        <trans-unit id="Resx/Info" translate="yes" xml:space="preserve">
+          <source>INFO</source>
+          <target state="new">INFO</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Info.xaml</note>
+        </trans-unit>
+        <trans-unit id="Resx/Edit" translate="yes" xml:space="preserve">
+          <source>Edit</source>
+          <target state="new">Edit</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Info.xaml</note>
+        </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
           <source>Whoops! You already shot that.</source>
           <target state="new">Whoops! You already shot that.</target>

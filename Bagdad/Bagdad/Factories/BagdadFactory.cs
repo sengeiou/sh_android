@@ -217,6 +217,16 @@ namespace Bagdad.Factories
         {
             return new SynchroTableInfo() { Order = _order, Entity = _entity, Frequency = _frequency, MaxTimestamp = _maxTimestamp, MinTimestamp = _minTimestamp, Direction = _direction, MaxRows = _maxRows, MinRows = _minRows };
         }
+
+        public virtual Match CreateMatch()
+        {
+            return new Match();
+        }
+
+        public virtual Match CreateNextTeamMatch(int _idMatch, String _localTeamName, String _visitorTeamName, Double _matchDate, int _status)
+        {
+            return new Match() { idMatch = _idMatch, localTeamName = _localTeamName, visitorTeamName = _visitorTeamName, matchDate = _matchDate, status = _status };
+        }
     }
 
 }

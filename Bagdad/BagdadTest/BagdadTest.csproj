@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="Utils\DataBaseHelper.cs" />
     <Compile Include="ViewModels\FollowsViewModelTest.cs" />
+    <Compile Include="ViewModels\InfoWatchListOfMatchesViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
