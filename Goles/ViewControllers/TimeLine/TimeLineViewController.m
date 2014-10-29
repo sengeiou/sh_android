@@ -32,6 +32,7 @@
 @property (nonatomic,strong)                UITapGestureRecognizer          *tapTapRecognizer;
 
 @property (nonatomic, assign)               BOOL                            keyboardIsVisible;
+@property (nonatomic, assign)               BOOL                            dragged;
 
 
 @end
@@ -377,14 +378,21 @@
 }
 
 //------------------------------------------------------------------------------
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    if ([self.viewTextField.writingTextBox getNumberOfCharacters] == 0){
-         [self.viewTextField.writingTextBox addPlaceholderInTextView];
-    }
-    self.orientation = NO;
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+   
+    self.dragged=YES;
 }
 
+//------------------------------------------------------------------------------
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    if (!self.dragged) {
+        if ([self.viewTextField.writingTextBox getNumberOfCharacters] == 0){
+            [self.viewTextField.writingTextBox addPlaceholderInTextView];
+        }
+        self.orientation = NO;
+    }
+    self.dragged=NO;
+}
 
 #pragma mark - Orientation methods
 //------------------------------------------------------------------------------
