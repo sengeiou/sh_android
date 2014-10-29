@@ -54,15 +54,16 @@
     NSNumber *referenceDate = @0;
     NSNumber *startDate = @0;
     NSNumber *update30minutes = @1800;
-    NSNumber *update1minute = @10;
+    NSNumber *update10minutes = @600;
+    NSNumber *update10seconds = @10;
     
     NSDictionary *user = @{k_SYNC_NAME_ENTITY:K_COREDATA_USER,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                            k_SYNC_ALIAS:K_COREDATA_USER};
     
-    NSDictionary *follow = @{k_SYNC_NAME_ENTITY:K_COREDATA_FOLLOW,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
+    NSDictionary *follow = @{k_SYNC_NAME_ENTITY:K_COREDATA_FOLLOW,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update10minutes,
                            k_SYNC_ALIAS:K_COREDATA_FOLLOW};
 
-    NSDictionary *shots = @{k_SYNC_NAME_ENTITY:K_COREDATA_SHOT,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update1minute,
+    NSDictionary *shots = @{k_SYNC_NAME_ENTITY:K_COREDATA_SHOT,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update10seconds,
                              k_SYNC_ALIAS:K_COREDATA_SHOT};
     NSDictionary *teams = @{k_SYNC_NAME_ENTITY:K_COREDATA_TEAM,k_SYNC_LASTSERVER_DATE:referenceDate,k_SYNC_LASTCALL:startDate,k_SYNC_PRIORITY:update30minutes,
                             k_SYNC_ALIAS:K_COREDATA_TEAM};
