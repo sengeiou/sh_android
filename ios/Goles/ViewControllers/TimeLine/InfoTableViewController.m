@@ -26,7 +26,7 @@
 //------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
 }
 
 
@@ -41,18 +41,15 @@
 }
 
 //------------------------------------------------------------------------------
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-
-    return @"Real Madrid - Barcelona";
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+   
+    return 50;
 }
+
+//------------------------------------------------------------------------------
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    Match *match = [[Match alloc]init];
-
-    match.matchDate = @1414602325;
-    
-    return [InfoUtilities createHeaderViewWithFrame:tableView.frame andMatch:match];
-    
+    return [InfoUtilities createHeaderViewWithFrame:tableView.frame andMatch:[Match alloc]];
 }
 
 //------------------------------------------------------------------------------
@@ -66,6 +63,10 @@
     
     static NSString *CellIdentifier = @"infoCell";
     InfoCustomCell *cell = (id) [self.infoTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    if (indexPath.row != 0)
+        cell.btnEdit.hidden = YES;
+
     
     //User *user = self.usersArray[indexPath.row];
     User *user = [[UserManager sharedInstance]getActiveUser];

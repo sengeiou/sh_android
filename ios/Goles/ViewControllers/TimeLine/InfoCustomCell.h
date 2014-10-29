@@ -15,6 +15,7 @@
 @property (nonatomic,weak) IBOutlet UIImageView *imgPhoto;
 @property (nonatomic,weak) IBOutlet UIButton    *photobutton;
 @property (nonatomic,weak) IBOutlet UILabel     *wacthing;
+@property (nonatomic,weak) IBOutlet UIButton    *btnEdit;
 
 - (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath;
 
