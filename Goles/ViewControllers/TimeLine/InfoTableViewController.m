@@ -49,7 +49,7 @@
 //------------------------------------------------------------------------------
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"userCell";
+    static NSString *CellIdentifier = @"infoCell";
     InfoCustomCell *cell = (id) [self.infoTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     User *user = self.usersArray[indexPath.row];

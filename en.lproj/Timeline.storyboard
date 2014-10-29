@@ -365,13 +365,13 @@
         <!--Info Table View Controller-->
         <scene sceneID="QZk-lp-QNj">
             <objects>
-                <tableViewController id="Nyt-NO-Lqg" customClass="InfoTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="infoTVC" id="Nyt-NO-Lqg" customClass="InfoTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RrD-5G-uPc">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" rowHeight="50" id="Orq-Wh-dEc" customClass="InfoCustomCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="infoCell" rowHeight="50" id="Orq-Wh-dEc" customClass="InfoCustomCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Orq-Wh-dEc" id="Xkb-B3-CKM">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -402,8 +402,8 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFi-zY-CrQ">
-                                            <rect key="frame" x="68" y="26" width="60" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watching" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFi-zY-CrQ">
+                                            <rect key="frame" x="68" y="26" width="57" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="J7o-nQ-0rb"/>
                                             </constraints>
@@ -425,9 +425,9 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="imgPhoto" destination="zBh-HN-QO8" id="eCd-lJ-bOv"/>
-                                    <outlet property="nickName" destination="tFi-zY-CrQ" id="DJQ-uV-4ab"/>
                                     <outlet property="photobutton" destination="oTe-ts-g3n" id="Dpi-IJ-9IL"/>
-                                    <outlet property="userName" destination="RkP-EO-bea" id="AOf-LJ-djX"/>
+                                    <outlet property="userName" destination="RkP-EO-bea" id="Y3c-OB-Hbd"/>
+                                    <outlet property="wacthing" destination="tFi-zY-CrQ" id="MEx-DA-vZt"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

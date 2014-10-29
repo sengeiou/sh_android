@@ -153,8 +153,8 @@
 //------------------------------------------------------------------------------
 - (void) infoButton{
     
-//    InfoTableViewController *infoTVC = [[InfoTableViewController alloc] init];
-//    [self.navigationController pushViewController:infoTVC animated:YES];
+    InfoTableViewController *infoTVC = [self.storyboard instantiateViewControllerWithIdentifier:@"infoTVC"];
+    [self.navigationController pushViewController:infoTVC animated:YES];
     
 }
 

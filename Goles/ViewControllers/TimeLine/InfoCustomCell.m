@@ -18,8 +18,8 @@
 
 - (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath {
     
-    user = [[CoreDataManager singleton] getEntity:[User class] withId:6];
-    self.lblFavouriteTeamName.text = user.favoriteTeamName;
+    self.userName.text = [[CoreDataManager singleton] getEntity:[User class] withId:6];
+    //self.lblFavouriteTeamName.text = user.favoriteTeamName;
     self.userName.text = user.name;
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     
