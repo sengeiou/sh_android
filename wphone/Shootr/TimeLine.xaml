@@ -58,7 +58,7 @@
                     <ScrollViewer 
         				x:Name="ContentElement" 
         				MaxHeight="169"
-        				Width="350"
+        				Width="325"
         				BorderThickness="0" 
         				Background="Transparent"
         				HorizontalContentAlignment="Stretch"
