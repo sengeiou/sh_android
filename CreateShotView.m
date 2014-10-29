@@ -208,8 +208,9 @@
 #pragma mark - Shot creation
 //------------------------------------------------------------------------------
 - (void)shotCreated {
-    
-    if (self.writingTextBox.text != nil && ![self.writingTextBox.text isEqualToString: NSLocalizedString (@"Comment", nil)]) {
+  
+    if ([self.writingTextBox getNumberOfCharacters] != 0) {
+
         [self controlCharactersShot:self.writingTextBox.text];
         
         if (![self controlRepeatedShot:[self.writingTextBox getTextComment]]){
