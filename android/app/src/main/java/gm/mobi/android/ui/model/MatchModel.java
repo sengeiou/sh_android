@@ -6,6 +6,8 @@ public class MatchModel {
     private Long idMatch;
     private String localTeamName;
     private String visitorTeamName;
+    private Long localTeamId;
+    private Long visitorTeamId;
     private String datetime;
     private String title;
 
@@ -47,5 +49,21 @@ public class MatchModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Long getVisitorTeamId() {
+        return visitorTeamId;
+    }
+
+    public void setVisitorTeamId(Long visitorTeamId) {
+        this.visitorTeamId = visitorTeamId;
+    }
+
+    public Long getLocalTeamId() {
+        return localTeamId;
+    }
+
+    public void setLocalTeamId(Long localTeamId) {
+        this.localTeamId = localTeamId;
     }
 }

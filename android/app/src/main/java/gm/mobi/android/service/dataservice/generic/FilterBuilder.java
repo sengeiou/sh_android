@@ -71,7 +71,7 @@ public class FilterBuilder {
      *
      * @return OrItem for attaching to a builder.
      */
-    public static OrItem orDeletedEqualsNull() {
+    public static OrItem orIsNotDeleted() {
         return or(SyncColumns.CSYS_DELETED).isEqualTo(null);
     }
 

@@ -7,8 +7,14 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.task.events.info.WatchingInfoResult;
+import gm.mobi.android.task.jobs.info.GetWatchingInfoJob;
 import gm.mobi.android.ui.adapters.InfoListAdapter;
 import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.model.MatchModel;
@@ -21,6 +27,8 @@ import javax.inject.Inject;
 public class InfoActivity extends BaseSignedInActivity {
 
     @Inject Picasso picasso;
+    @Inject JobManager jobManager;
+    @Inject Bus bus;
 
     @InjectView(R.id.info_items_list) ListView listView;
     InfoListAdapter adapter;
@@ -39,9 +47,9 @@ public class InfoActivity extends BaseSignedInActivity {
         ButterKnife.inject(this);
 
         adapter = new InfoListAdapter(this, picasso);
-        adapter.setContent(getDummyInfo());
-        listView.setAdapter(adapter);
 
+        listView.setAdapter(adapter);
+        retrieveInfoList();
     }
 
     @OnItemClick(R.id.info_items_list)
@@ -60,7 +68,7 @@ public class InfoActivity extends BaseSignedInActivity {
         match3.setTitle("R.Madrid-La Palma del Condado");
 
         UserWatchingModel user = new UserWatchingModel();
-        user.setName("Dummy");
+        user.setUserName("Dummy");
         user.setStatus("Watching");
         user.setPhoto("http://www.pak101.com/funnypictures/Animals/2012/8/2/the_monopoly_cat_vbgkd_Pak101(dot)com.jpg");
 
@@ -74,4 +82,28 @@ public class InfoActivity extends BaseSignedInActivity {
         resMap.put(match3, userList);
         return resMap;
     }
+
+
+    public void retrieveInfoList(){
+        GetWatchingInfoJob job = GolesApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
+        job.init();
+        jobManager.addJobInBackground(job);
+    }
+
+    @Subscribe
+    public void receivedInfoList(WatchingInfoResult event){
+        Map<MatchModel, List<UserWatchingModel>> result = event.getResult();
+        adapter.setContent(result);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        bus.register(this);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        bus.unregister(this);
+    }
+
 }

@@ -102,11 +102,11 @@ public class BagdadMockService implements BagdadService {
         return null;
     }
 
-    @Override public List<WatchEntity> getMyFollowingWatches(List<Long> followingIds, Long date) throws IOException {
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long date) throws IOException {
         return null;
     }
 
-    @Override public List<MatchEntity> getMatchesFromFollowingWatches(List<Long> matcheIds) throws IOException {
+    @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {
         return null;
     }
 

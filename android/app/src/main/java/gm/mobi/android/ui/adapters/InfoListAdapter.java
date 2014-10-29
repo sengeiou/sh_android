@@ -31,11 +31,12 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     public InfoListAdapter(Context context, Picasso picasso) {
         super(context);
         this.picasso = picasso;
+        this.itemsList = new ArrayList<>();
     }
 
     public void setContent(Map<MatchModel, List<UserWatchingModel>> itemsMap) {
         this.itemsMap = itemsMap;
-        this.itemsList = new ArrayList<>();
+        this.itemsList.clear();
 
         for (MatchModel match : itemsMap.keySet()) {
             itemsList.add(match);
@@ -43,6 +44,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
                 itemsList.add(user);
             }
         }
+        notifyDataSetChanged();
     }
 
     @Override public int getCount() {
@@ -116,9 +118,13 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public void bindUser(UserWatchingModel user, int position, View view) {
         UserViewHolder vh = (UserViewHolder) view.getTag();
-        vh.name.setText(user.getName());
+        vh.name.setText(user.getUserName());
         vh.watching.setText(user.getStatus());
-        picasso.load(user.getPhoto()).into(vh.avatar);
+        if (!user.getPhoto().isEmpty()) {
+            picasso.load(user.getPhoto()).into(vh.avatar);
+        } else {
+            picasso.load(R.drawable.ic_contact_picture_default);
+        }
     }
 
 
