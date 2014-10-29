@@ -82,7 +82,7 @@ typedef enum typesOfChange : NSUInteger {
 
     self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
 
-//    self.myTableView.rowHeight = UITableViewAutomaticDimension;
+    self.myTableView.rowHeight = UITableViewAutomaticDimension;
     
     self.myTableView.estimatedRowHeight = 100.0f;
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
