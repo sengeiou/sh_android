@@ -116,16 +116,18 @@
     return attributedString;
 }
 
-//SIZE COMMENT FOR HEIGHT CELL DYNAMIC
-static CGFloat kPaddingTop = 30.5f;
-static CGFloat kPaddingBottom = 7.5f;
-static CGFloat kPaddingLeft = 6.0f;
+static CGFloat kPaddingTop = 38.0f;
+static CGFloat kPaddingRight = 96.0f;
 
+//static CGFloat kMarginTop = 5.0f;
+//static CGFloat kMarginBottom = 5.0f;
 #define kFont [UIFont systemFontOfSize:15.0]
+
+
 
 + (CGSize)commentSizeForText:(NSString *)text {
     CGSize textSize = [TimeLineUtilities textSizeForText:text];
-    CGFloat height = textSize.height + kPaddingTop + kPaddingBottom;
+    CGFloat height = textSize.height+ kPaddingTop;
     
     
     return CGSizeMake(textSize.width, height);
@@ -136,7 +138,7 @@ static CGFloat kPaddingLeft = 6.0f;
     CGFloat screenWidth = screenRect.size.width;
     
     
-    CGFloat width = screenWidth - kPaddingLeft;
+    CGFloat width = screenWidth - kPaddingRight;
     CGSize maxSize = CGSizeMake(width, CGFLOAT_MAX);
     CGSize size = [text sizeWithFont:kFont constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
     
