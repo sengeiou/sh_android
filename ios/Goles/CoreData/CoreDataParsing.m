@@ -168,7 +168,9 @@ NSString *const kJSON_ID_MATCH                         = @"idMatch";
 NSString *const kJSON_ID_TEAM_LOCAL                    = @"idLocalTeam";
 NSString *const kJSON_ID_TEAM_VISITOR                  = @"idVisitorTeam";
 NSString *const kJSON_DATE_MATCH                       = @"matchDate";
-
+NSString *const kJSON_LOCAL_TEAM_NAME                  = @"localTeamName";
+NSString *const kJSON_VISITOR_TEAM_NAME                = @"visitorTeamName";
+NSString *const kJSON_MATCH_STATUS                     = @"status";
 
 // TEAM
 NSString * const kJSON_TEAM_IDTEAM                      =@"idTeam";

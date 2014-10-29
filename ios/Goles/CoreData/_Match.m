@@ -12,8 +12,10 @@ const struct MatchAttributes MatchAttributes = {
 	.idLocalTeam = @"idLocalTeam",
 	.idMatch = @"idMatch",
 	.idVisitorTeam = @"idVisitorTeam",
+	.localTeamName = @"localTeamName",
 	.matchDate = @"matchDate",
 	.status = @"status",
+	.visitorTeamName = @"visitorTeamName",
 };
 
 const struct MatchRelationships MatchRelationships = {
@@ -292,6 +294,13 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 
 
+@dynamic localTeamName;
+
+
+
+
+
+
 @dynamic matchDate;
 
 
@@ -339,6 +348,13 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 - (void)setPrimitiveStatusValue:(int16_t)value_ {
 	[self setPrimitiveStatus:[NSNumber numberWithShort:value_]];
 }
+
+
+
+
+
+@dynamic visitorTeamName;
+
 
 
 

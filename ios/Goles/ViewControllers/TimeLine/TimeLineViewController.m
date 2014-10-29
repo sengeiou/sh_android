@@ -61,7 +61,7 @@
     [[Conection sharedInstance]getServerTimewithDelegate:self andRefresh:YES withShot:NO];
     
     
-//    [[FavRestConsumer sharedInstance] getAllWatchWithDelegate:self];
+    [[FavRestConsumer sharedInstance] getUserNextMatchWithDelegate:self];
 }
 
 //------------------------------------------------------------------------------

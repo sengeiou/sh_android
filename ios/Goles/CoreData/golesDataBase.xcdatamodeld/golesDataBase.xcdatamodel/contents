@@ -59,8 +59,10 @@
         <attribute name="idLocalTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="idMatch" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="idVisitorTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="localTeamName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="matchDate" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="visitorTeamName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="teamLocal" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsLocal" inverseEntity="Team" syncable="YES"/>
         <relationship name="teamVisitor" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsVisitor" inverseEntity="Team" syncable="YES"/>
         <relationship name="watches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="match" inverseEntity="Watch" syncable="YES"/>
@@ -148,7 +150,7 @@
         <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
         <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
         <element name="Follow" positionX="-693" positionY="135" width="128" height="148"/>
-        <element name="Match" positionX="-45" positionY="-27" width="128" height="240"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="270"/>
         <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
         <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
         <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>

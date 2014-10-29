@@ -66,6 +66,7 @@ typedef void (^FetchDataCompletionBlock)(NSDictionary *data, NSError *error);
 - (void)getFollowingUsersOfUser:(User *)user withDelegate:(id)delegate;
 - (void)getFollowersOfUser:(User *)user withDelegate:(id)delegate;
 - (void)getAllWatchWithDelegate:(id)delegate;
+- (void)getUserNextMatchWithDelegate:(id)delegate;
 
 //Special request methods
 
