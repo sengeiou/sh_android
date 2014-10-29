@@ -109,6 +109,8 @@ namespace Bagdad.Utils
 
         public const String GetNextTeamMatch = "SELECT idMatch, localTeamName, visitorTeamName, matchDate, status FROM Matches WHERE ( idLocalTeam = @idLocalTeam OR idVisitorTeam = @idVisitorTeam ) AND ( status = 1 OR status = 0) ORDER BY matchDate ASC LIMIT 1";
 
+        public const String getMatchesUserFollowing = "SELECT idMatch FROM Watch";
+
         #endregion
 
         #region Generic
