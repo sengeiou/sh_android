@@ -22,7 +22,7 @@
 #define kLabelVerticalPhotoInsets           11.5f
 #define kLabelVerticalInsets                7.5f
 #define kLabelVerticalBottomComment         0.0f //24.0f
-#define kLabelVerticalCommentToName         1.5f
+#define kLabelVerticalCommentToName         1.0f
 
 @interface ShotTableViewCell ()
 
@@ -88,16 +88,13 @@
 //------------------------------------------------------------------------------
 - (void)configureBasicCellWithShot:(Shot *)shot andRow:(NSInteger)row {
 
-//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[shot.comment cleanStringfromLinks:shot.comment]];
-//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    paragraphStyle.lineSpacing = 2.8;
-//    NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
-//    [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
+    NSMutableAttributedString *attributedString = [TimeLineUtilities filterLinkWithContent:shot.comment];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 2.8;
+    NSDictionary *dict = @{NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName: [UIFont systemFontOfSize:15] };
+    [attributedString addAttributes:dict range:NSMakeRange(0, [[shot.comment cleanStringfromLinks:shot.comment] length])];
     
-  //  self.txvText.attributedText = attributedString;
     self.txvText.attributedText = [TimeLineUtilities filterLinkWithContent:shot.comment];
-
-    
     
     self.lblName.text = shot.user.userName;
     
