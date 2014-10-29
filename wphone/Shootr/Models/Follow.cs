@@ -23,7 +23,7 @@ namespace Bagdad.Models
         public char csys_synchronized { get; set; }
         public Factories.BagdadFactory bagdadFactory { private get; set; }
 
-        private String ops_data = "\"idUser\": null,\"idFollowedUser\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        
 
         public Follow(Factories.BagdadFactory _bagdadFactory)
         {
@@ -34,26 +34,7 @@ namespace Bagdad.Models
             bagdadFactory = new Factories.BagdadFactory();
         }
 
-        protected override String GetEntityName() { return Constants.SERCOM_TB_FOLLOW; }
-
-        protected override String GetOps() { return ops_data; }
-
-        protected override string GetAlias(string operation)
-        {
-            if (operation.Equals(Constants.SERCOM_OP_DELETE))
-                return "\"UNFOLLOW_USER\",";
-            else if (operation.Equals(Constants.SERCOM_OP_CREATE))
-                return "\"FOLLOW_USER\",";
-            else if (operation.Equals(Constants.SERCOM_OP_RETRIEVE))
-                return "\"GET_FOLLOWINGS\",";
-            else
-            return "\"GET_FOLLOWINGS\",";
-        }
-
-        public override async Task<string> ConstructFilter(string conditionDate)
-        {
-            return "\"filterItems\":[],\"filters\":[{\"filterItems\":[{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "},{\"comparator\":\"ne\",\"name\":\"idFollowedUser\",\"value\":null}],\"filters\":[],\"nexus\":\"or\"}," + conditionDate + "],\"nexus\":\"and\"";
-        }
+        protected override String GetEntityName() { return Constants.SERCOM_TB_FOLLOW; }       
 
         #region FOLLOW/UNFOLLOW
 

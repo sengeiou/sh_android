@@ -13,6 +13,17 @@ namespace Bagdad.Models
 {
     public partial class Shot : BaseModelJsonConstructor
     {
+        private String ops_data = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        protected override String GetOps() { return ops_data; }
+
+        protected override string GetAlias(string operation)
+        {
+            if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
+                return "\"GET_NEWER_SHOTS\",";
+            else if (operation.Equals(Constants.SERCOM_OP_UPDATECREATE) || operation.Equals(Constants.SERCOM_OP_CREATE))
+                return "\"CREATE_SHOT\",";
+            else return "\"GET_NEWER_SHOTS\",";
+        }
         public async Task<string> SynchronizeShot()
         {
             try
@@ -79,6 +90,26 @@ namespace Bagdad.Models
             }
         }
 
+        public override async Task<string> ConstructFilter(string conditionDate)
+        {
+
+            StringBuilder sbFilterIdUser = new StringBuilder();
+            try
+            {
+                Follow follow = bagdadFactory.CreateFollow();
+                var followList = await follow.getidUserFollowing();
+                foreach (int idUser in followList)
+                {
+                    sbFilterIdUser.Append(",");
+                    sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
+            }
+            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}" + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
+        }
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
         {
             List<BaseModelJsonConstructor> shots = new List<BaseModelJsonConstructor>();

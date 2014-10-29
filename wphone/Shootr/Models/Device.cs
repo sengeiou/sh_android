@@ -27,7 +27,7 @@ namespace Bagdad.Models
         public char csys_synchronized { get; set; }
         public Factories.BagdadFactory bagdadFactory { private get; set; }
 
-        private String ops_data = "\"idDevice\": null,\"idUser\": null,\"token\": null,\"idPushEngine\": null,\"uniqueDeviceID\": null,\"platform\": null,\"model\": null,\"osVer\": null,\"locale\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+        
         
         public Device(Factories.BagdadFactory _bagdadFactory)
         {
@@ -40,18 +40,7 @@ namespace Bagdad.Models
 
         protected override String GetEntityName() { return Constants.SERCOM_TB_DEVICE; }
 
-        protected override String GetOps() { return ops_data; }
-
-        protected override string GetAlias(string operation)
-        {
-            return "\"UPDATE_DEVICE\",";
-        }
-
-        public override Task<string> ConstructFilter(string conditionDate)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Returns true if the param token and the one stored in local DB are equals, false if not
         /// </summary>

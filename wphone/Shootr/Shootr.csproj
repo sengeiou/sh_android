@@ -115,6 +115,9 @@
     <Compile Include="Models\UserCommunicationcs.cs" />
     <Compile Include="Models\UserDataBase.cs" />
     <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\Watch.cs" />
+    <Compile Include="Models\WatchCommunications.cs" />
+    <Compile Include="Models\WatchDataBase.cs" />
     <Compile Include="p.xaml.cs">
       <DependentUpon>p.xaml</DependentUpon>
     </Compile>
