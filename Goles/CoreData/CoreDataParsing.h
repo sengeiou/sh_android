@@ -164,33 +164,10 @@ extern NSString * const kJSON_SHORT_NAME;
 extern NSString * const kJSON_TLA_NAME;
 
 // MATCH
-extern NSString * const kJSON_MATCHLIST;
 extern NSString * const kJSON_ID_MATCH;
-extern NSString * const kJSON_MATCH_STATE;
-extern NSString * const kJSON_LOCAL_NAME;
-extern NSString * const kJSON_LOCAL_MATCH_SCORE;
 extern NSString * const kJSON_ID_TEAM_LOCAL;
-extern NSString * const kJSON_VISITOR_NAME;
-extern NSString * const kJSON_VISITOR_MATCH_SCORE;
 extern NSString * const kJSON_ID_TEAM_VISITOR;
-extern NSString * const kJSON_MATCH_ODD;
 extern NSString * const kJSON_DATE_MATCH;
-extern NSString * const kJSON_ELAPSED_MINUTES;
-extern NSString * const kJSON_TIME_MATCH;
-extern NSString * const kJSON_EVENT_DATE;
-extern NSString * const kJSON_MATCH_TYPE;
-extern NSString * const kJSON_SCORE_TEAMLOCAL_PENALTIES;
-extern NSString * const kJSON_SCORE_TEAMVISITOR_PENALTIES;
-extern NSString * const kJSON_DATE_FINAL;
-extern NSString * const kJSON_ID_MATCHOFFER;
-extern NSString * const kJSON_TWITTERLOCAL;
-extern NSString * const kJSON_TWITTERVISITOR;
-extern NSString * const kJSON_MATCH_REFEREE;
-extern NSString * const kJSON_PREVIOUS_SCORELOCAL;
-extern NSString * const kJSON_PREVIOUS_SCOREVISITOR;
-extern NSString * const kJSON_SCORE_LOCAL;
-extern NSString * const kJSON_SCORE_VISITOR;
-extern NSString * const kJSON_DATE_START;
 
 //MESSAGE
 extern NSString *const kJSON_ID_MESSAGE;

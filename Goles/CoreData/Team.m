@@ -54,7 +54,8 @@
 //------------------------------------------------------------------------------
 -(BOOL)setTeamValuesWithDictionary:(NSDictionary *)dict {
     
-    if (![dict isKindOfClass:[NSDictionary class]] )        return NO;
+    if (![dict isKindOfClass:[NSDictionary class]] )
+        return NO;
     
     NSNumber *idTeam = [dict objectForKey:kJSON_TEAM_IDTEAM];
     if ( [idTeam isKindOfClass:[NSNumber class]] )

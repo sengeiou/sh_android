@@ -28,13 +28,8 @@
                  kJSON_ID_TEAM_LOCAL:[NSNull null],
                  kJSON_ID_TEAM_VISITOR:[NSNull null],
                  kJSON_DATE_MATCH:[NSNull null],
-                 kJSON_MATCH_TYPE:[NSNull null],
-                 kJSON_SCORE_TEAMLOCAL_PENALTIES:[NSNull null],
-                 kJSON_SCORE_TEAMVISITOR_PENALTIES:[NSNull null],
-                 kJSON_DATE_START:[NSNull null],
-                 kJSON_DATE_FINAL:[NSNull null],
-                 kJSON_MATCH_STATE:[NSNull null],
                  kJSON_ID_MATCH:[NSNull null],
+                 K_WS_STATUS:[NSNull null],
                  };
     }
     else if ([entityClass isSubclassOfClass:[Team class]]) {

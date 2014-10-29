@@ -46,57 +46,67 @@
 -(BOOL)setMatchValuesWithDictionary:(NSDictionary *)dict{
     
     BOOL result = YES;
-
-    NSLog(@"%@", dict);
     
     NSNumber *idMatch = [dict objectForKey:kJSON_ID_MATCH];
-    NSNumber *idLocal = [dict objectForKey:kJSON_ID_TEAM_LOCAL];
-    NSNumber *idVisitor = [dict objectForKey:kJSON_ID_TEAM_VISITOR];
-    
-    if ( [idMatch isKindOfClass:[NSNumber class]] &&
-        [idLocal isKindOfClass:[NSNumber class]] &&
-        [idVisitor isKindOfClass:[NSNumber class]])
-    {
-        
-        Team *localTeam = [[CoreDataManager sharedInstance] getEntity:[Team class] withId:[[dict objectForKey:kJSON_ID_TEAM_LOCAL] integerValue]];
-        Team *visitorTeam = [[CoreDataManager sharedInstance] getEntity:[Team class] withId:[[dict objectForKey:kJSON_ID_TEAM_VISITOR] integerValue]];
-
+    if ( [idMatch isKindOfClass:[NSNumber class]] )
         [self setIdMatch:idMatch];
-        
-        //SYNCRO  PROPERTIES
-        
-        NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
-        if ( [syncro isKindOfClass:[NSString class]] )
-            [self setCsys_syncronized:syncro];
-        else
-            [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
-        
-        NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
-        if ( [revision isKindOfClass:[NSNumber class]] )
-            [self setCsys_revision:revision];
-        else
-            [self setCsys_revision:@0];
-        
-        NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
-        if ([birth isKindOfClass:[NSNumber class]]) {
-            [self setCsys_birth:birth];
-        }
-        
-        NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
-        if ([modified isKindOfClass:[NSNumber class]]) {
-            [self setCsys_modified:modified];
-        }
-        
-        NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
-        if ([deleted isKindOfClass:[NSNumber class]]) {
-            [self setCsys_deleted:deleted];
-        }
-        
-    }
     else
         result = NO;
     
-    return result;
+    NSNumber *idLocal = [dict objectForKey:kJSON_ID_TEAM_LOCAL];
+    if ( [idLocal isKindOfClass:[NSNumber class]] )
+        [self setIdLocalTeam:idLocal];
+    else
+        result = NO;
+    
+    NSNumber *idVisitor = [dict objectForKey:kJSON_ID_TEAM_VISITOR];
+    if ( [idVisitor isKindOfClass:[NSNumber class]] )
+        [self setIdVisitorTeam:idVisitor];
+    else
+        result = NO;
+    
+    NSNumber *matchDate = [dict objectForKey:kJSON_DATE_MATCH];
+    if ( [matchDate isKindOfClass:[NSNumber class]] )
+        [self setMatchDate:matchDate];
+    else
+        result = NO;
+    
+    
+    NSNumber *status = [dict objectForKey:K_WS_STATUS];
+    if ( [status isKindOfClass:[NSNumber class]] )
+        [self setStatus:status];
+    else
+        result = NO;
+    
+    //SYNCRO  PROPERTIES
+    NSString *syncro = [dict objectForKey:kJSON_SYNCRONIZED];
+    if ( [syncro isKindOfClass:[NSString class]] )
+        [self setCsys_syncronized:syncro];
+    else
+        [self setCsys_syncronized:kJSON_SYNCRO_SYNCRONIZED];
+    
+    NSNumber *revision = [dict objectForKey:K_WS_OPS_REVISION];
+    if ( [revision isKindOfClass:[NSNumber class]] )
+        [self setCsys_revision:revision];
+    else
+        [self setCsys_revision:@0];
+    
+    NSNumber *birth = [dict objectForKey:K_WS_OPS_BIRTH_DATE];
+    if ([birth isKindOfClass:[NSNumber class]]) {
+        [self setCsys_birth:birth];
+    }
+    
+    NSNumber *modified = [dict objectForKey:K_WS_OPS_UPDATE_DATE];
+    if ([modified isKindOfClass:[NSNumber class]]) {
+        [self setCsys_modified:modified];
+    }
+    
+    NSNumber *deleted = [dict objectForKey:K_WS_OPS_DELETE_DATE];
+    if ([deleted isKindOfClass:[NSNumber class]]) {
+        [self setCsys_deleted:deleted];
+    }
+    
+   return result;
 }
 
 
