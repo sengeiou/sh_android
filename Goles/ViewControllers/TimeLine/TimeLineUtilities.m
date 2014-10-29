@@ -8,6 +8,7 @@
 
 #import "TimeLineUtilities.h"
 #import "CoreDataParsing.h"
+#import "Fav24Colors.h"
 
 @implementation TimeLineUtilities
 
@@ -102,15 +103,14 @@
     NSDataDetector *detector =
     [NSDataDetector dataDetectorWithTypes:(NSTextCheckingTypes)NSTextCheckingTypeLink | NSTextCheckingTypePhoneNumber
                                     error:&error];
+    
     NSArray *matches = [detector matchesInString:content
                                          options:0
                                            range:NSMakeRange(0, [content length])];
     for (NSTextCheckingResult *match in matches) {
         
         if (([match resultType] == NSTextCheckingTypeLink)) {
-            
-            NSURL *url = [match URL];
-            [attributedString addAttribute:NSLinkAttributeName value:url range:match.range];
+            [attributedString addAttributes:@{NSForegroundColorAttributeName:[Fav24Colors iosSevenBlue]} range:match.range];
         }
     }
     return attributedString;
@@ -119,11 +119,7 @@
 static CGFloat kPaddingTop = 38.0f;
 static CGFloat kPaddingRight = 96.0f;
 
-//static CGFloat kMarginTop = 5.0f;
-//static CGFloat kMarginBottom = 5.0f;
 #define kFont [UIFont systemFontOfSize:15.0]
-
-
 
 + (CGSize)commentSizeForText:(NSString *)text {
     CGSize textSize = [TimeLineUtilities textSizeForText:text];

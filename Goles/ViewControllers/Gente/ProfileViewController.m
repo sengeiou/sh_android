@@ -120,7 +120,7 @@
     [self.lblTeamBio sizeToFit];
     
     self.txtViewWebSite.text = self.selectedUser.website;
-   // self.txtViewWebSite.text = [TimeLineUtilities filterLinkWithContent:self.selectedUser.website];
+
     [self.txtViewWebSite sizeToFit];
 	
 	[self configureFollowButton];
