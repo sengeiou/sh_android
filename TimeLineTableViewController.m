@@ -71,8 +71,14 @@ typedef enum typesOfChange : NSUInteger {
 
 //------------------------------------------------------------------------------
 - (void)basicSetup {
-    
+
+    //self.myTableView.scrollsToTop = YES;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
+
     self.myTableView.contentInset = UIEdgeInsetsMake(64, 0, 70, 0);
+
+    self.myTableView.rowHeight = UITableViewAutomaticDimension;
+
     [self.myTableView registerClass:[ShotTableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
 
