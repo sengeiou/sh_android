@@ -314,12 +314,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\sqllite\trunk\SQLiteWinRTPhone.vcxproj">
-      <Project>{4AE0193F-5986-404E-87B6-1EC9301D16D8}</Project>
-      <Name>SQLiteWinRTPhone</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Coding4Fun.Toolkit.Controls">
       <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.0.7\lib\windowsphone8\Coding4Fun.Toolkit.Controls.dll</HintPath>
     </Reference>
