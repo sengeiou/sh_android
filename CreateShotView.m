@@ -209,7 +209,7 @@
 //------------------------------------------------------------------------------
 - (void)shotCreated {
     
-    if (self.writingTextBox.text != nil) {
+    if (self.writingTextBox.text != nil && ![self.writingTextBox.text isEqualToString: NSLocalizedString (@"Comment", nil)]) {
         [self controlCharactersShot:self.writingTextBox.text];
         
         if (![self controlRepeatedShot:[self.writingTextBox getTextComment]]){
