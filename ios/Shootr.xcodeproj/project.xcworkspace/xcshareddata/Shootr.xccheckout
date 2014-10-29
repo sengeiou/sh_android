@@ -10,36 +10,31 @@
 	<string>Shootr</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
-		<string>http://desarrollo.golesmessenger.com/svn/ios/Goles5/trunk</string>
+		<key>32CE3CF9ADD2B61AE51B55925E9EEDB813369155</key>
+		<string>http://gitlab.fav24.com/root/shootr.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Shootr.xcodeproj</string>
+	<string>ios/Shootr.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
-		<string>../..</string>
-	</dict>
-	<key>IDESourceControlProjectRepositoryRootDictionary</key>
-	<dict>
-		<key>e767c7ee-930a-4462-95f7-2222c70908f9++5214</key>
-		<string>http://desarrollo.golesmessenger.com/svn/ios</string>
+		<key>32CE3CF9ADD2B61AE51B55925E9EEDB813369155</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://desarrollo.golesmessenger.com/svn/ios/Goles5/trunk/Shootr.xcodeproj</string>
+	<string>http://gitlab.fav24.com/root/shootr.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>e767c7ee-930a-4462-95f7-2222c70908f9++5214</string>
+	<string>32CE3CF9ADD2B61AE51B55925E9EEDB813369155</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.subversion</string>
+			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>e767c7ee-930a-4462-95f7-2222c70908f9++5214</string>
+			<string>32CE3CF9ADD2B61AE51B55925E9EEDB813369155</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Goles5</string>
+			<string>shootr</string>
 		</dict>
 	</array>
 </dict>
