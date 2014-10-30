@@ -9,7 +9,7 @@
 #import "InfoManager.h"
 #import "CoreDataManager.h"
 #import "UserManager.h"
-
+#
 @implementation InfoManager
 
 #pragma mark - SINGLETON
