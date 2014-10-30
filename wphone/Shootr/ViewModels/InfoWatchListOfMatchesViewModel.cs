@@ -12,7 +12,7 @@ namespace Bagdad.ViewModels
     {
         public List<WatchListMatchViewModel> listOfWatchingMatches { get; set; }
 
-        public BagdadFactory bagdadFactory;
+        private BagdadFactory bagdadFactory;
 
         public InfoWatchListOfMatchesViewModel()
         {
@@ -29,16 +29,17 @@ namespace Bagdad.ViewModels
             User user = bagdadFactory.CreateUser();
             int idFavoriteTeam = await user.GetCurrentUserFavoriteTeamId();
             await GetNextTeamMatch(idFavoriteTeam);
+            await GetAnotherMatches(idFavoriteTeam);
         }
 
-        public async Task GetNextTeamMatch(int _idFavoriteTeam)
+        private async Task GetNextTeamMatch(int _idFavoriteTeam)
         {
             WatchListMatchViewModel watchListMatch = bagdadFactory.CreateWatchListMatchViewModel();
-
-            listOfWatchingMatches.Add(await watchListMatch.GetNextMatchOfFavoriteTeam(_idFavoriteTeam));
+            var a = await watchListMatch.GetNextMatchOfFavoriteTeam(_idFavoriteTeam);
+            if(a.idMatch != 0) listOfWatchingMatches.Add(a);
         }
 
-        public async Task GetAnotherMatches(int _idFavoriteTeam)
+        private async Task GetAnotherMatches(int _idFavoriteTeam)
         {
             WatchListMatchViewModel watchListMatch = bagdadFactory.CreateWatchListMatchViewModel();
 

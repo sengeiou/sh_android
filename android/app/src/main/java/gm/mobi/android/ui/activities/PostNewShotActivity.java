@@ -83,12 +83,6 @@ public class PostNewShotActivity extends BaseSignedInActivity {
 
         previousShot = shotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
             GolesApplication.get(this).getCurrentUser().getIdUser());
-
-        // Compound drawable hack
-        //        Drawable icon = getResources().getDrawable(R.drawable.ic_send);
-        //        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-        //        sendButton.setCompoundDrawables(null, null, icon, null);
-
         setTextReceivedFromIntent();
     }
 

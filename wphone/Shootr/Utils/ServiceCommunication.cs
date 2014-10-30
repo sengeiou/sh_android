@@ -154,7 +154,7 @@ namespace Bagdad.Utils
                 else
                 {
                     if(!App.isInternetAvailable) Debug.WriteLine("Sin internet no es posible la sincronización general");
-                    else Debug.WriteLine("Sincronización en proceso. Imposible mandar ahora los datos");
+                    else Debug.WriteLine("++++++++++++++++++++++++++++\n\tSincronización en proceso. Imposible mandar ahora la petición\t\n++++++++++++++++++++++++++++");
                 }
             }
             catch (Exception ex)
@@ -313,6 +313,9 @@ namespace Bagdad.Utils
                     break;
                 case Constants.SERCOM_TB_WATCH:
                     model = new Watch();
+                    break;
+                case Constants.SERCOM_TB_MATCH:
+                    model = new Match();
                     break;
                 default:
                     break;

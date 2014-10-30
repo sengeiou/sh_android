@@ -73,10 +73,10 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Match - GetNextTeamMatch: " + e.Message, e);
+                throw new Exception("Match - GetAnotherMatches: " + e.Message, e);
             }
 
-            return newMatch;
+            return newMatches;
         }
 
         public async Task<List<UserViewModel>> GetListOfUsersWatchingTheMatch(int _idMatch)
@@ -115,15 +115,59 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("Match - GetNextTeamMatch: " + e.Message, e);
+                throw new Exception("Match - GetListOfUsersWatchingTheMatch: " + e.Message, e);
             }
 
             return users;
         }
 
-        public override Task<int> SaveData(List<BaseModelJsonConstructor> models)
+        public async override Task<int> SaveData(List<BaseModelJsonConstructor> matches)
         {
-            throw new NotImplementedException();
+            int done = 0;
+            Database database;
+
+            try
+            {
+
+                database = await DataBaseHelper.GetDatabaseAsync();
+                using (var custstmt = await database.PrepareStatementAsync(SQLQuerys.InsertMatchesData))
+                {
+
+                    foreach (Match match in matches)
+                    {
+                        //idMatch, matchDate, status, idLocalTeam, idVisitorTeam, localTeamName, visitorTeamName
+                        custstmt.Reset();
+
+                        custstmt.BindIntParameterWithName("@idMatch", match.idMatch);
+                        custstmt.BindTextParameterWithName("@matchDate", Util.FromUnixTime(match.matchDate.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@status", match.status);
+                        custstmt.BindIntParameterWithName("@idLocalTeam", match.idLocalTeam);
+                        custstmt.BindIntParameterWithName("@idVisitorTeam", match.idVisitorTeam);
+                        custstmt.BindTextParameterWithName("@localTeamName", match.localTeamName);
+                        custstmt.BindTextParameterWithName("@visitorTeamName", match.visitorTeamName);
+                        custstmt.BindTextParameterWithName("@csys_birth", Util.FromUnixTime(match.csys_birth.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindTextParameterWithName("@csys_modified", Util.FromUnixTime(match.csys_modified.ToString()).ToString("s").Replace('T', ' '));
+                        if (match.csys_deleted == 0)
+                            custstmt.BindNullParameterWithName("@csys_deleted");
+                        else
+                            custstmt.BindTextParameterWithName("@csys_deleted", Util.FromUnixTime(match.csys_deleted.ToString()).ToString("s").Replace('T', ' '));
+                        custstmt.BindIntParameterWithName("@csys_revision", match.csys_revision);
+                        custstmt.BindTextParameterWithName("@csys_synchronized", "S");
+
+
+                        await custstmt.StepAsync().AsTask().ConfigureAwait(false);
+                        done++;
+                    }
+                }
+                DataBaseHelper.DBLoaded.Set();
+            }
+            catch (Exception e)
+            {
+                string sError = Database.GetSqliteErrorCode(e.HResult).ToString();
+                DataBaseHelper.DBLoaded.Set();
+                throw new Exception("E R R O R - Match - SaveData: " + sError + " / " + e.Message);
+            }
+            return done;
         }
     }
 }

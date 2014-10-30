@@ -17,10 +17,7 @@ namespace Bagdad.Models
         {
             return "\"GET_WATCH\",";
         }
-        public override string ConstructAlias(string operation)
-        {
-            return base.ConstructAlias(operation);
-        }
+        
         public override async Task<string> ConstructFilter(string conditionDate)
         {
             StringBuilder sbFilterIdUser = new StringBuilder();
@@ -49,7 +46,40 @@ namespace Bagdad.Models
 
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
         {
-            throw new NotImplementedException();
+            List<BaseModelJsonConstructor> watches = new List<BaseModelJsonConstructor>();
+
+            try
+            {
+                if (job["status"]["code"].ToString().Equals("OK") && !job["ops"][0]["metadata"]["items"].ToString().Equals("0"))
+                {
+                    foreach (JToken watchJson in job["ops"][0]["data"])
+                    {
+                        int idMatchParsed = 0, statusParsed = 0, idUserParsed = 0;
+                        int.TryParse(watchJson["idMatch"].ToString(), out idMatchParsed);
+                        int.TryParse(watchJson["status"].ToString(), out statusParsed);
+                        int.TryParse(watchJson["idUser"].ToString(), out idUserParsed);
+
+                        Watch watch = bagdadFactory.CreateWatch();
+
+                        watch.idMatch = idMatchParsed;
+                        watch.idUser = idUserParsed;
+                        watch.status = statusParsed;
+
+                        watch.csys_birth = Double.Parse(watchJson["birth"].ToString());
+                        watch.csys_modified = Double.Parse(watchJson["modified"].ToString());
+                        watch.csys_deleted = ((!String.IsNullOrEmpty(watchJson["deleted"].ToString())) ? Double.Parse(watchJson["deleted"].ToString()) : 0);
+                        watch.csys_revision = int.Parse(watchJson["revision"].ToString());
+                        watch.csys_synchronized = 'S';
+                        watches.Add(watch);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("E R R O R - Match - ParseJson: " + e.Message);
+            }
+            return watches;
         }
     }
 }

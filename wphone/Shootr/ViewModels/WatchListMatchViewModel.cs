@@ -32,17 +32,23 @@ namespace Bagdad.ViewModels
 
         public async Task<WatchListMatchViewModel> GetNextMatchOfFavoriteTeam(int _idTeam)
         {
+            
             Match match = bagdadFactory.CreateMatch();
+            try
+            {
+                match = await match.GetNextTeamMatch(_idTeam);
 
-            match = await match.GetNextTeamMatch(_idTeam);
+                idMatch = match.idMatch;
+                matchName = match.localTeamName + "-" + match.visitorTeamName;
+                matchDate = Utils.Util.FromUnixTime(match.matchDate.ToString()).ToString();
+                isLive = match.status == 1 ? true : false;
 
-            idMatch = match.idMatch;
-            matchName = match.localTeamName + "-" + match.visitorTeamName;
-            matchDate = Utils.Util.FromUnixTime(match.matchDate.ToString()).ToString();
-            isLive = match.status == 1 ? true : false;
-
-            usersViewingMatch = await GetMatchViewerUsersInfo(idMatch, isLive);
-
+                usersViewingMatch = await GetMatchViewerUsersInfo(idMatch, isLive);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R:  WatchListMatchViewModel - GetNextMatchOfFavoriteTeam :" + e.Message);
+            }
             return this;
         }
 
@@ -50,18 +56,24 @@ namespace Bagdad.ViewModels
         {
             List<WatchListMatchViewModel> matchList = bagdadFactory.CreateListOfWatchListMatchViewModel();
             Match matches = bagdadFactory.CreateMatch();
-
-            foreach (Match match in await matches.GetAnotherMatches(_idTeam))
+            try
             {
-                matchList.Add(
-                    bagdadFactory.CreateFilledWatchListMatchViewModel(
-                        match.idMatch,
-                        match.localTeamName + "-" + match.visitorTeamName,
-                        Utils.Util.FromUnixTime(match.matchDate.ToString()).ToString(),
-                        (match.status == 1 ? true : false),
-                        await GetMatchViewerUsersInfo(idMatch, isLive)
-                    )
-                );
+                foreach (Match match in await matches.GetAnotherMatches(_idTeam))
+                {
+                    matchList.Add(
+                        bagdadFactory.CreateFilledWatchListMatchViewModel(
+                            match.idMatch,
+                            match.localTeamName + "-" + match.visitorTeamName,
+                            Utils.Util.FromUnixTime(match.matchDate.ToString()).ToString(),
+                            (match.status == 1 ? true : false),
+                            await GetMatchViewerUsersInfo(idMatch, isLive)
+                        )
+                    );
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R:  WatchListMatchViewModel - GetAnotherMatches :" + e.Message);
             }
             return matchList;
         }
@@ -70,49 +82,55 @@ namespace Bagdad.ViewModels
         {
             Match match = bagdadFactory.CreateMatch();
             List<WatchListOfMatchUserInfoViewModel> users = bagdadFactory.CreateListOfWatchListOfMatchUserInfoViewModel();
-            
-            List<UserViewModel> usersInfo = await match.GetListOfUsersWatchingTheMatch(_idMatch);
-
-            UserViewModel currentUserInfo = bagdadFactory.CreateUserViewModel();
-            await currentUserInfo.GetUserProfileInfo(App.ID_USER);
-            
-            if(usersInfo.Contains(currentUserInfo)){
-                users.Add(
-                    bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
-                        currentUserInfo,
-                        AppResources.Watching,
-                        (_isLive ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush),
-                        Visibility.Visible 
-                    )
-                );
-            }
-            else
+            try
             {
-                users.Add(
-                    bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
-                        currentUserInfo,
-                        AppResources.NotWatching,
-                        Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
-                        Visibility.Visible
-                    )
-                );
-            }
+                List<UserViewModel> usersInfo = await match.GetListOfUsersWatchingTheMatch(_idMatch);
 
-            foreach (UserViewModel user in usersInfo)
-            {
-                if (user.idUser != App.ID_USER)
+                UserViewModel currentUserInfo = bagdadFactory.CreateUserViewModel();
+                await currentUserInfo.GetUserProfileInfo(App.ID_USER);
+
+                if (usersInfo.Contains(currentUserInfo))
                 {
                     users.Add(
                         bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
-                            user,
+                            currentUserInfo,
                             AppResources.Watching,
                             (_isLive ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush),
-                            Visibility.Collapsed
+                            Visibility.Visible
                         )
                     );
                 }
-            }
+                else
+                {
+                    users.Add(
+                        bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
+                            currentUserInfo,
+                            AppResources.NotWatching,
+                            Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
+                            Visibility.Visible
+                        )
+                    );
+                }
 
+                foreach (UserViewModel user in usersInfo)
+                {
+                    if (user.idUser != App.ID_USER)
+                    {
+                        users.Add(
+                            bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
+                                user,
+                                AppResources.Watching,
+                                (_isLive ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush),
+                                Visibility.Collapsed
+                            )
+                        );
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("E R R O R:  WatchListMatchViewModel - GetMatchViewerUsersInfo :" + e.Message);
+            }
             return users;
         }
     }
