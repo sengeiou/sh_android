@@ -63,8 +63,8 @@
         <attribute name="matchDate" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="visitorTeamName" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="teamLocal" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsLocal" inverseEntity="Team" syncable="YES"/>
-        <relationship name="teamVisitor" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsVisitor" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsLocal" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsVisitor" inverseEntity="Team" syncable="YES"/>
         <relationship name="watches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="match" inverseEntity="Watch" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES">

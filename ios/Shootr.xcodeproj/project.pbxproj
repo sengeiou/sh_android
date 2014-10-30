@@ -47,6 +47,7 @@
 		AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F85199CFB5200897D6D /* _SyncControl.m */; };
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
 		AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AA2E444519F40F55000A52DE /* WatchingMenu.m */; };
+		AA3445DF1A0226C100E4D89E /* FavRestConsumerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */; };
 		AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */; };
 		AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */; };
 		AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5B865219F8110300A50B13 /* CreateShotViewTest.m */; };
@@ -217,6 +218,7 @@
 		AA241F88199CFB6400897D6D /* SyncManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncManager.m; sourceTree = "<group>"; };
 		AA2E444419F40F55000A52DE /* WatchingMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WatchingMenu.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.h"; sourceTree = SOURCE_ROOT; };
 		AA2E444519F40F55000A52DE /* WatchingMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WatchingMenu.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.m"; sourceTree = SOURCE_ROOT; };
+		AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavRestConsumerTest.m; path = Tests/FavRestConsumerTest.m; sourceTree = SOURCE_ROOT; };
 		AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
 		AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		AA5B865219F8110300A50B13 /* CreateShotViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateShotViewTest.m; path = Tests/CreateShotViewTest.m; sourceTree = SOURCE_ROOT; };
@@ -448,6 +450,7 @@
 				AAE0EF5D19E4256E00F32FF7 /* FavRestConsumerHelperTest.m */,
 				AAFA03E219FFF5F30048ACA1 /* FavRestConsumerHelperUnitTest.m */,
 				AAFA03E71A000B680048ACA1 /* CommunicationHelperTest.m */,
+				AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */,
 			);
 			name = Webservice;
 			sourceTree = "<group>";
@@ -1193,6 +1196,7 @@
 				AAE0EF6A19E4275D00F32FF7 /* TimelineViewControllerTest.m in Sources */,
 				AAE0EF5E19E4256E00F32FF7 /* FavRestConsumerHelperTest.m in Sources */,
 				AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */,
+				AA3445DF1A0226C100E4D89E /* FavRestConsumerTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
