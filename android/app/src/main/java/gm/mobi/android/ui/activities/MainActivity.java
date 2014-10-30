@@ -206,7 +206,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void setupNavigationDrawer() {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        toolbarActionBar = getActionBarToolbar();
+
         drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(
             this,                  /* host Activity */
             drawerLayout,         /* DrawerLayout object */

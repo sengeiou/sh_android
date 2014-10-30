@@ -46,7 +46,7 @@ public class InfoActivity extends BaseSignedInActivity {
         }
 
         setContainerContent(R.layout.activity_info);
-
+        setupActionBar();
         ButterKnife.inject(this);
 
         adapter = new InfoListAdapter(this, picasso);
