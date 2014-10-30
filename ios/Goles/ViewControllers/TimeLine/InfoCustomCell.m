@@ -9,6 +9,7 @@
 #import "InfoCustomCell.h"
 #import "DownloadImage.h"
 #import "CoreDataManager.h"
+#import "UserManager.h"
 
 @implementation InfoCustomCell
 
@@ -16,7 +17,7 @@
     // Initialization code
 }
 
-- (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath {
+- (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath  {
     
     self.userName.text = user.userName;
     //self.lblFavouriteTeamName.text = user.favoriteTeamName;
@@ -26,6 +27,9 @@
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;
     
+    if (user.idUser != [[UserManager sharedInstance]getUserId])
+        self.btnEdit.hidden = YES;
+
     
 }
 
