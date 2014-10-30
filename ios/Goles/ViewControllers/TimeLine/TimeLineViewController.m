@@ -62,6 +62,7 @@
     
     
     [[FavRestConsumer sharedInstance] getUserNextMatchWithDelegate:self];
+    [[FavRestConsumer sharedInstance] getAllWatchWithDelegate:self];
 }
 
 //------------------------------------------------------------------------------

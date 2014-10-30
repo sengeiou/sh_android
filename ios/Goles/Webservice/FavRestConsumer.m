@@ -347,7 +347,7 @@
                                                                                  andEntity:K_COREDATA_WATCH
                                                                                  withItems:@1000
                                                                                 withOffSet:@0
-                                                                                 andFilter:[FilterCreation getFilterForEntity:[Watch class]]];
+                                                                                 andFilter:[FilterCreation getFilterForWatches]];
     
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Watch class]]]};

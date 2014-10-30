@@ -26,9 +26,6 @@ const struct DeviceRelationships DeviceRelationships = {
 	.user = @"user",
 };
 
-const struct DeviceFetchedProperties DeviceFetchedProperties = {
-};
-
 @implementation DeviceID
 @end
 
@@ -54,7 +51,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -99,19 +96,9 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic appVer;
 
-
-
-
-
-
 @dynamic csys_birth;
-
-
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -131,13 +118,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_deleted;
-
-
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -157,13 +138,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_modified;
-
-
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -183,13 +158,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_revision;
-
-
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -209,20 +178,9 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_syncronized;
 
-
-
-
-
-
 @dynamic idDevice;
-
-
 
 - (int64_t)idDeviceValue {
 	NSNumber *result = [self idDevice];
@@ -242,13 +200,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveIdDevice:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic idUser;
-
-
 
 - (int64_t)idUserValue {
 	NSNumber *result = [self idUser];
@@ -268,41 +220,15 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic language;
-
-
-
-
-
 
 @dynamic locale;
 
-
-
-
-
-
 @dynamic model;
-
-
-
-
-
 
 @dynamic osVer;
 
-
-
-
-
-
 @dynamic platform;
-
-
 
 - (int16_t)platformValue {
 	NSNumber *result = [self platform];
@@ -322,13 +248,7 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitivePlatform:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic status;
-
-
 
 - (BOOL)statusValue {
 	NSNumber *result = [self status];
@@ -348,31 +268,11 @@ const struct DeviceFetchedProperties DeviceFetchedProperties = {
 	[self setPrimitiveStatus:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic timeZone;
-
-
-
-
-
 
 @dynamic token;
 
-
-
-
-
-
 @dynamic user;
 
-	
-
-
-
-
-
-
 @end
+

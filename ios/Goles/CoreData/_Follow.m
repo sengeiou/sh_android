@@ -13,12 +13,6 @@ const struct FollowAttributes FollowAttributes = {
 	.idUserFollowed = @"idUserFollowed",
 };
 
-const struct FollowRelationships FollowRelationships = {
-};
-
-const struct FollowFetchedProperties FollowFetchedProperties = {
-};
-
 @implementation FollowID
 @end
 
@@ -44,7 +38,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -79,12 +73,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic csys_birth;
-
-
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -104,13 +93,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_deleted;
-
-
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -130,13 +113,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_modified;
-
-
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -156,13 +133,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_revision;
-
-
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -182,20 +153,9 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_syncronized;
 
-
-
-
-
-
 @dynamic idUser;
-
-
 
 - (int64_t)idUserValue {
 	NSNumber *result = [self idUser];
@@ -215,13 +175,7 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic idUserFollowed;
-
-
 
 - (int64_t)idUserFollowedValue {
 	NSNumber *result = [self idUserFollowed];
@@ -241,13 +195,5 @@ const struct FollowFetchedProperties FollowFetchedProperties = {
 	[self setPrimitiveIdUserFollowed:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
-
-
-
-
-
 @end
+

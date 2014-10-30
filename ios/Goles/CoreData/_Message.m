@@ -19,9 +19,6 @@ const struct MessageRelationships MessageRelationships = {
 	.advice = @"advice",
 };
 
-const struct MessageFetchedProperties MessageFetchedProperties = {
-};
-
 @implementation MessageID
 @end
 
@@ -47,7 +44,7 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -82,12 +79,7 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic csys_birth;
-
-
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -107,13 +99,7 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_deleted;
-
-
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -133,13 +119,7 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_modified;
-
-
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -159,13 +139,7 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_revision;
-
-
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -185,20 +159,9 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_syncronized;
 
-
-
-
-
-
 @dynamic idMessage;
-
-
 
 - (int64_t)idMessageValue {
 	NSNumber *result = [self idMessage];
@@ -218,27 +181,11 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitiveIdMessage:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic locale;
-
-
-
-
-
 
 @dynamic message;
 
-
-
-
-
-
 @dynamic platform;
-
-
 
 - (int32_t)platformValue {
 	NSNumber *result = [self platform];
@@ -258,26 +205,16 @@ const struct MessageFetchedProperties MessageFetchedProperties = {
 	[self setPrimitivePlatform:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic advice;
 
-	
 - (NSMutableSet*)adviceSet {
 	[self willAccessValueForKey:@"advice"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"advice"];
-  
+
 	[self didAccessValueForKey:@"advice"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+

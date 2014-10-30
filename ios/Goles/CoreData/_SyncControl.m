@@ -11,12 +11,6 @@ const struct SyncControlAttributes SyncControlAttributes = {
 	.updatePriority = @"updatePriority",
 };
 
-const struct SyncControlRelationships SyncControlRelationships = {
-};
-
-const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
-};
-
 @implementation SyncControlID
 @end
 
@@ -42,7 +36,7 @@ const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"lastCallValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"lastCall"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -62,19 +56,9 @@ const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic aliasView;
 
-
-
-
-
-
 @dynamic lastCall;
-
-
 
 - (int64_t)lastCallValue {
 	NSNumber *result = [self lastCall];
@@ -94,13 +78,7 @@ const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
 	[self setPrimitiveLastCall:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic lastServerDate;
-
-
 
 - (int64_t)lastServerDateValue {
 	NSNumber *result = [self lastServerDate];
@@ -120,20 +98,9 @@ const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
 	[self setPrimitiveLastServerDate:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic nameEntity;
 
-
-
-
-
-
 @dynamic updatePriority;
-
-
 
 - (int64_t)updatePriorityValue {
 	NSNumber *result = [self updatePriority];
@@ -153,13 +120,5 @@ const struct SyncControlFetchedProperties SyncControlFetchedProperties = {
 	[self setPrimitiveUpdatePriority:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
-
-
-
-
-
 @end
+

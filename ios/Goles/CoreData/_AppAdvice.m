@@ -29,9 +29,6 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	.message = @"message",
 };
 
-const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
-};
-
 @implementation AppAdviceID
 @end
 
@@ -57,7 +54,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"buttonTextIdValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"buttonTextId"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -127,26 +124,11 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic buttonAction;
-
-
-
-
-
 
 @dynamic buttonData;
 
-
-
-
-
-
 @dynamic buttonTextId;
-
-
 
 - (int32_t)buttonTextIdValue {
 	NSNumber *result = [self buttonTextId];
@@ -166,13 +148,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveButtonTextId:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic csys_birth;
-
-
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -192,13 +168,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_deleted;
-
-
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -218,13 +188,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_modified;
-
-
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -244,13 +208,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_revision;
-
-
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -270,27 +228,11 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_syncronized;
-
-
-
-
-
 
 @dynamic endDate;
 
-
-
-
-
-
 @dynamic endVersion;
-
-
 
 - (int32_t)endVersionValue {
 	NSNumber *result = [self endVersion];
@@ -310,13 +252,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveEndVersion:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic idAppAdvice;
-
-
 
 - (int64_t)idAppAdviceValue {
 	NSNumber *result = [self idAppAdvice];
@@ -336,13 +272,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveIdAppAdvice:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic idMessage;
-
-
 
 - (int32_t)idMessageValue {
 	NSNumber *result = [self idMessage];
@@ -362,20 +292,9 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveIdMessage:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic path;
 
-
-
-
-
-
 @dynamic platform;
-
-
 
 - (int16_t)platformValue {
 	NSNumber *result = [self platform];
@@ -395,20 +314,9 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitivePlatform:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic startDate;
 
-
-
-
-
-
 @dynamic startVersion;
-
-
 
 - (int32_t)startVersionValue {
 	NSNumber *result = [self startVersion];
@@ -428,13 +336,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveStartVersion:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic status;
-
-
 
 - (BOOL)statusValue {
 	NSNumber *result = [self status];
@@ -454,13 +356,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveStatus:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic visibleButton;
-
-
 
 - (BOOL)visibleButtonValue {
 	NSNumber *result = [self visibleButton];
@@ -480,13 +376,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveVisibleButton:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic weight;
-
-
 
 - (int32_t)weightValue {
 	NSNumber *result = [self weight];
@@ -506,17 +396,7 @@ const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
 	[self setPrimitiveWeight:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic message;
 
-	
-
-
-
-
-
-
 @end
+

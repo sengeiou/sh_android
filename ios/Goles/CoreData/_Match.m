@@ -24,9 +24,6 @@ const struct MatchRelationships MatchRelationships = {
 	.watches = @"watches",
 };
 
-const struct MatchFetchedProperties MatchFetchedProperties = {
-};
-
 @implementation MatchID
 @end
 
@@ -52,7 +49,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -102,12 +99,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic csys_birth;
-
-
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -127,13 +119,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_deleted;
-
-
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -153,13 +139,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_modified;
-
-
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -179,13 +159,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_revision;
-
-
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -205,20 +179,9 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic csys_syncronized;
 
-
-
-
-
-
 @dynamic idLocalTeam;
-
-
 
 - (int32_t)idLocalTeamValue {
 	NSNumber *result = [self idLocalTeam];
@@ -238,13 +201,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveIdLocalTeam:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic idMatch;
-
-
 
 - (int64_t)idMatchValue {
 	NSNumber *result = [self idMatch];
@@ -264,13 +221,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveIdMatch:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic idVisitorTeam;
-
-
 
 - (int32_t)idVisitorTeamValue {
 	NSNumber *result = [self idVisitorTeam];
@@ -290,20 +241,9 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveIdVisitorTeam:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic localTeamName;
 
-
-
-
-
-
 @dynamic matchDate;
-
-
 
 - (int64_t)matchDateValue {
 	NSNumber *result = [self matchDate];
@@ -323,13 +263,7 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveMatchDate:[NSNumber numberWithLongLong:value_]];
 }
 
-
-
-
-
 @dynamic status;
-
-
 
 - (int16_t)statusValue {
 	NSNumber *result = [self status];
@@ -349,41 +283,22 @@ const struct MatchFetchedProperties MatchFetchedProperties = {
 	[self setPrimitiveStatus:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic visitorTeamName;
-
-
-
-
-
 
 @dynamic teamLocal;
 
-	
-
 @dynamic teamVisitor;
-
-	
 
 @dynamic watches;
 
-	
 - (NSMutableSet*)watchesSet {
 	[self willAccessValueForKey:@"watches"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"watches"];
-  
+
 	[self didAccessValueForKey:@"watches"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
