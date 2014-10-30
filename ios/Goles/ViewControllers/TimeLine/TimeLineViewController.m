@@ -380,6 +380,15 @@
     [self darkenBackgroundView];
     [self.viewTextField keyboardShow:notification];
 }
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+   
+    if (!self.dragged) {
+        if ([self.viewTextField.writingTextBox getNumberOfCharacters] == 0){
+            [self.viewTextField.writingTextBox addPlaceholderInTextView];
+        }
+        self.orientation = NO;
+    }
+}
 
 //------------------------------------------------------------------------------
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
