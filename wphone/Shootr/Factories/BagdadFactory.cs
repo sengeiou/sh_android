@@ -27,9 +27,25 @@ namespace Bagdad.Factories
             return new UserViewModel();
         }
 
+        public virtual UserViewModel CreateFillUserViewModelForInfoView(int _idUser, String _userName, String _name, String _photo, int _numFollowers, int _numFollowing, int _points, String _bio, String _website, String _favoriteTeamName, int _idFavoriteTeam, int _csys_revision, double _csys_birth, double _csys_modified)
+        {
+            UserImageManager userImageManager = CreateUserImageManager();
+
+            BitmapImage image = userImageManager.GetUserImage(_idUser);
+
+            if (image == null && !String.IsNullOrEmpty(_photo)) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(_photo, UriKind.Absolute));
+
+            return new UserViewModel() { idUser = _idUser, userName = _name, userNickName = _userName, favoriteTeamName = _favoriteTeamName, idFavoriteTeam = _idFavoriteTeam, followers = _numFollowers, following = _numFollowing, points = _points, userURLImage = _photo, userWebsite = _website, birth = _csys_birth, modified = _csys_modified, revision = _csys_revision, userBio = _bio, isFollowed = true, userImage = image};
+        }
+
         public virtual User CreateUser()
         {
             return new User();
+        }
+
+        public virtual List<UserViewModel> CreateListOfUserViewModel()
+        {
+            return new List<UserViewModel>();
         }
 
         public virtual User CreateFilledUserWithOutDeleteAndSynchronizedInfo(int _idUser, String _userName, String _name, String _photo, int _numFollowers, int _numFollowing, int _points, String _bio, String _website, String _favoriteTeamName, int _idFavoriteTeam, int _csys_revision, double _csys_birth, double _csys_modified)
@@ -223,9 +239,39 @@ namespace Bagdad.Factories
             return new Match();
         }
 
+        public virtual List<Match> CreateListOfMatches()
+        {
+            return new List<Match>();
+        }
+
         public virtual Match CreateNextTeamMatch(int _idMatch, String _localTeamName, String _visitorTeamName, Double _matchDate, int _status)
         {
             return new Match() { idMatch = _idMatch, localTeamName = _localTeamName, visitorTeamName = _visitorTeamName, matchDate = _matchDate, status = _status };
+        }
+
+        public virtual WatchListMatchViewModel CreateWatchListMatchViewModel()
+        {
+            return new WatchListMatchViewModel();
+        }
+
+        public virtual WatchListMatchViewModel CreateFilledWatchListMatchViewModel(int _idMatch, String _matchName, String _matchDate, Boolean _isLive, List<WatchListOfMatchUserInfoViewModel> _usersViewingMatch)
+        {
+            return new WatchListMatchViewModel(){ idMatch = _idMatch, matchName = _matchName, matchDate = _matchDate, isLive = _isLive, usersViewingMatch = _usersViewingMatch};
+        }
+
+        public virtual List<WatchListOfMatchUserInfoViewModel> CreateListOfWatchListOfMatchUserInfoViewModel()
+        {
+            return new List<WatchListOfMatchUserInfoViewModel>();
+        }
+
+        public virtual WatchListOfMatchUserInfoViewModel CreateWatchListOfMatchUserInfoViewModel(UserViewModel _user, String _viewInfo, SolidColorBrush _viewInfoForeground, Visibility _editButtonVisibility )
+        {
+            return new WatchListOfMatchUserInfoViewModel() { editButtonVisibility = _editButtonVisibility, viewInfo = _viewInfo, viewInfoForeground = _viewInfoForeground, user = _user };
+        }
+
+        public virtual List<WatchListMatchViewModel> CreateListOfWatchListMatchViewModel()
+        {
+            return new List<WatchListMatchViewModel>();
         }
     }
 

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AppAdvice" representedClassName="AppAdvice" syncable="YES">
+        <attribute name="buttonAction" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="buttonData" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="buttonTextId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="endVersion" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="idAppAdvice" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="idMessage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="path" attributeType="String" defaultValueString="&quot;errorPath&quot;" syncable="YES"/>
+        <attribute name="platform" attributeType="Integer 16" defaultValueString="1" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="startVersion" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="visibleButton" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="weight" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="advice" inverseEntity="Message" syncable="YES"/>
+    </entity>
+    <entity name="Device" representedClassName="Device" syncable="YES">
+        <attribute name="appVer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idDevice" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="idUser" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="language" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locale" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="model" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="osVer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="platform" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="timeZone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="User" inverseName="device" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Follow" representedClassName="Follow" syncable="YES">
+        <attribute name="csys_birth" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_deleted" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_modified" optional="YES" attributeType="Integer 64" syncable="YES"/>
+        <attribute name="csys_revision" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" optional="YES" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idUser" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="idUserFollowed" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Match" representedClassName="Match" syncable="YES">
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idLocalTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="idMatch" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="idVisitorTeam" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="localTeamName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="matchDate" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="visitorTeamName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="teamLocal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsLocal" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamVisitor" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="matchAsVisitor" inverseEntity="Team" syncable="YES"/>
+        <relationship name="watches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="match" inverseEntity="Watch" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="Message" syncable="YES">
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idMessage" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="locale" attributeType="String" syncable="YES"/>
+        <attribute name="message" attributeType="String" syncable="YES"/>
+        <attribute name="platform" attributeType="Integer 32" defaultValueString="1" syncable="YES"/>
+        <relationship name="advice" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AppAdvice" inverseName="message" inverseEntity="AppAdvice" syncable="YES"/>
+    </entity>
+    <entity name="Shot" representedClassName="Shot" syncable="YES">
+        <attribute name="comment" attributeType="String" syncable="YES"/>
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idShot" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="shots" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="SyncControl" representedClassName="SyncControl" syncable="YES">
+        <attribute name="aliasView" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastCall" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastServerDate" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="nameEntity" attributeType="String" syncable="YES"/>
+        <attribute name="updatePriority" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" syncable="YES">
+        <attribute name="clubName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="idTeam" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="officialName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shortName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tlaName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="matchAsLocal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamLocal" inverseEntity="Match" syncable="YES"/>
+        <relationship name="matchAsVisitor" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" inverseName="teamVisitor" inverseEntity="Match" syncable="YES"/>
+        <relationship name="user" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="team" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="eMail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favoriteTeamName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="idFavoriteTeam" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="idUser" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numFollowers" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="numFollowing" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="photo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="points" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="rank" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="sessionToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userName" attributeType="String" syncable="YES"/>
+        <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="device" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
+        <relationship name="shots" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Shot" inverseName="user" inverseEntity="Shot" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="user" inverseEntity="Team" syncable="YES"/>
+        <relationship name="watch" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Watch" inverseName="user" inverseEntity="Watch" syncable="YES"/>
+    </entity>
+    <entity name="Watch" representedClassName="Watch" syncable="YES">
+        <attribute name="csys_birth" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_deleted" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_modified" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_revision" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="csys_syncronized" attributeType="String" defaultValueString="&quot;no&quot;" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="match" maxCount="1" deletionRule="Nullify" destinationEntity="Match" inverseName="watches" inverseEntity="Match" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="watch" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AppAdvice" positionX="-909" positionY="144" width="128" height="345"/>
+        <element name="Device" positionX="-207" positionY="351" width="128" height="300"/>
+        <element name="Follow" positionX="-693" positionY="135" width="128" height="148"/>
+        <element name="Match" positionX="-45" positionY="-27" width="128" height="270"/>
+        <element name="Message" positionX="-711" positionY="291" width="128" height="195"/>
+        <element name="Shot" positionX="-702" positionY="126" width="128" height="165"/>
+        <element name="SyncControl" positionX="-648" positionY="69" width="128" height="120"/>
+        <element name="Team" positionX="169" positionY="77" width="128" height="240"/>
+        <element name="User" positionX="-425" positionY="324" width="128" height="390"/>
+        <element name="Watch" positionX="-702" positionY="126" width="128" height="165"/>
+    </elements>
+</model>

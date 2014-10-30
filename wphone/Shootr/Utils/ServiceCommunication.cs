@@ -17,7 +17,7 @@ namespace Bagdad.Utils
 
         public enum enumSynchroTables
         {
-            FULL = 0, SHOTS = 1, FOLLOW = 2, USER = 3
+            FULL = 0, SHOTS = 1, FOLLOW = 2, USER = 3, WATCH = 4
         }
 
         public enum enumTypeSynchro
@@ -76,6 +76,10 @@ namespace Bagdad.Utils
                     break;
                 case enumSynchroTables.USER:
                     listTables.Add(Constants.SERCOM_TB_USER);
+                    break;
+                case enumSynchroTables.WATCH:
+                    listTables.Add(Constants.SERCOM_TB_WATCH);
+                    listTables.Add(Constants.SERCOM_TB_MATCH);
                     break;
             }
         }
@@ -306,6 +310,9 @@ namespace Bagdad.Utils
                     break;
                 case Constants.SERCOM_TB_SHOT:
                     model = new Shot();
+                    break;
+                case Constants.SERCOM_TB_WATCH:
+                    model = new Watch();
                     break;
                 default:
                     break;

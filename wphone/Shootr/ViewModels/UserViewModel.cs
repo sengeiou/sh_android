@@ -123,7 +123,6 @@ namespace Bagdad.ViewModels
             try
             {
                 User users = bagdadFactory.CreateUser();
-                UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
 
                 List<User> findUsers = await users.FindUsersInDB(searchString);
                 foreach (User user in findUsers)

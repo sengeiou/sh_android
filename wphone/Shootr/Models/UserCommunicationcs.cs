@@ -71,7 +71,7 @@ namespace Bagdad.Models
             StringBuilder sbFilterIdUser = new StringBuilder();
             try
             {
-                Follow follow = new Follow();
+                Follow follow = bagdadFactory.CreateFollow();
                 var followList = await follow.getidUserFollowing();
                 bool isFirst = true;
                 foreach (int idUser in followList)

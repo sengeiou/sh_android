@@ -29,13 +29,23 @@ namespace Bagdad.ViewModels
             User user = bagdadFactory.CreateUser();
             int idFavoriteTeam = await user.GetCurrentUserFavoriteTeamId();
             await GetNextTeamMatch(idFavoriteTeam);
-            //another matches
         }
 
         public async Task GetNextTeamMatch(int _idFavoriteTeam)
         {
-            WatchListMatchViewModel watchListMatch = new WatchListMatchViewModel();
+            WatchListMatchViewModel watchListMatch = bagdadFactory.CreateWatchListMatchViewModel();
 
+            listOfWatchingMatches.Add(await watchListMatch.GetNextMatchOfFavoriteTeam(_idFavoriteTeam));
+        }
+
+        public async Task GetAnotherMatches(int _idFavoriteTeam)
+        {
+            WatchListMatchViewModel watchListMatch = bagdadFactory.CreateWatchListMatchViewModel();
+
+            foreach (WatchListMatchViewModel matchInfo in await watchListMatch.GetAnotherMatches(_idFavoriteTeam))
+            {
+                listOfWatchingMatches.Add(matchInfo);
+            }
         }
 
     }

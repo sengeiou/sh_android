@@ -1,0 +1,542 @@
+
+//
+//  CoreDataManager.m
+//
+//  Created by Christian Cabarrocas on 10/09/14.
+//  Copyright (c) 2013 Fav24. All rights reserved.
+//
+
+#import "CoreDataManager.h"
+#import "CoreDataParsing.h"
+#import "Constants.h"
+#import "Team.h"
+#import "UserManager.h"
+#import "SyncManager.h"
+#import "SyncControl.h"
+#import "Utils.h"
+#import "Shot.h"
+
+@interface CoreDataManager()
+{
+    NSManagedObjectModel            *managedObjectModel;
+    NSPersistentStoreCoordinator    *persistentStoreCoordinator;
+    NSManagedObjectContext          *managedObjectContext;
+    NSManagedObjectContext          *managedObjectInsertContext;
+
+}
+
+@property (nonatomic, retain, readonly) NSManagedObjectModel            *managedObjectModel;
+@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
+@property (nonatomic, retain, readonly) NSManagedObjectContext          *managedObjectContext;
+@property (nonatomic, retain, readonly) NSManagedObjectContext          *managedObjectInsertContext;
+
+-(NSFetchRequest *)createFetchRequestForEntityNamed:(NSString *)entityName
+                                       orderedByKey:(NSString *)key
+                                          ascending:(BOOL)ascending;
+
+@end
+
+
+@implementation CoreDataManager
+
+//------------------------------------------------------------------------------
+//DataAccessLayer singleton instance shared across application
++ (CoreDataManager *)singleton
+{
+    static CoreDataManager *sharedCoreData = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&predicate, ^{
+        sharedCoreData = [[CoreDataManager alloc] init];
+    });
+    return sharedCoreData;
+}
+
+//------------------------------------------------------------------------------
++ (CoreDataManager *)sharedInstance
+{
+    return [CoreDataManager singleton];
+}
+//------------------------------------------------------------------------------
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+//------------------------------------------------------------------------------
+- (id)init {
+    self = [super init];
+    if (self != nil) {
+        // Setting Core Data context
+        [self managedObjectContext];
+        [self managedObjectInsertContext];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(contextDidSaveBackgroundContext:)
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:[self managedObjectInsertContext]];
+    }
+    return self;
+}
+
+//------------------------------------------------------------------------------
+- (void)contextDidSaveBackgroundContext:(NSNotification *)notification {
+    
+    @synchronized(self) {
+        [managedObjectContext performBlock:^{
+            [managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+            [managedObjectContext save:nil];
+        }];
+    }
+}
+
+#pragma mark - Public methods
+//------------------------------------------------------------------------------
+- (BOOL)eraseCoreData{
+    
+    BOOL result = YES;
+    
+    NSError *error = nil;
+    NSArray *stores = [persistentStoreCoordinator persistentStores];
+    for(NSPersistentStore *store in stores) {
+        [persistentStoreCoordinator removePersistentStore:store error:&error];
+        if ( ![[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:&error] )
+        {
+            result = NO;
+            if (K_DEBUG_MODE) DLog(@"Error: %@", error);
+        }
+
+    }
+    managedObjectContext = nil;
+    persistentStoreCoordinator = nil;
+    managedObjectModel = nil;
+    
+    [self managedObjectContext];
+    
+    return result;
+}
+
+
+//------------------------------------------------------------------------------
+- (NSManagedObjectContext *)getContext {
+    
+    return managedObjectContext;
+}
+
+//------------------------------------------------------------------------------
+- (NSManagedObjectContext *)getInsertContext {
+    
+    return managedObjectInsertContext;
+}
+//------------------------------------------------------------------------------
+- (BOOL)saveContext {
+    NSError *error;
+    if (![managedObjectContext save:&error]) {
+        DLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return NO;
+    }
+    return YES;
+}
+//------------------------------------------------------------------------------
+- (BOOL)saveInsertContext {
+    NSError *error;
+    if (![managedObjectInsertContext save:&error]) {
+        DLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        return NO;
+    }
+    return YES;
+}
+
+//Test implemented
+//------------------------------------------------------------------------------
+- (id)getEntity:(Class)entityClass withId:(NSInteger)entityId{
+    
+    NSAssert( (entityClass != [NSNull class] && entityClass),@"[SHOOTR MESSENGER ERROR]: Error trying to find entity of class '%@'",NSStringFromClass(entityClass));
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %li",NSStringFromClass(entityClass),(long)entityId]];
+    NSArray *result = [self getAllEntities:entityClass withPredicate:predicate];
+    
+    if ( [result count]>0 )     return [result objectAtIndex:0];
+    else                        return nil;
+}
+
+//Test implemented
+//------------------------------------------------------------------------------
+- (id)getEntityInInsertContext:(Class)entityClass withId:(NSInteger)entityId{
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamedInsertContext:NSStringFromClass(entityClass) orderedByKey:nil ascending:YES];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"id%@ = %li",NSStringFromClass(entityClass),(long)entityId]];
+    [request setPredicate:predicate];
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectInsertContext executeFetchRequest:request error:&error];
+    }
+    if (result.count > 0)
+        return [result firstObject];
+    
+    return nil;
+
+}
+
+//Test implemented
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass {
+    
+    return [self getAllEntities:entityClass orderedByKey:nil];
+}
+
+//Test implemented
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key {
+    
+    return [self getAllEntities:entityClass orderedByKey:key ascending:YES];
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending {
+    
+    return [self getAllEntities:entityClass orderedByKey:key ascending:ascending withPredicate:nil];
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withPredicate:(NSPredicate *)predicate {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
+    
+    [request setPredicate:predicate];
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    }
+    
+    return result;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass withPredicate:(NSPredicate *)predicate {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:nil ascending:YES];
+    [request setPredicate:predicate];
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    }
+    return result;
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *) getAllEntities:(Class)entityClass orderedByKey:(NSString *)key ascending:(BOOL)ascending withFetchLimit:(NSNumber *)fetchLimit {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:NSStringFromClass(entityClass) orderedByKey:key ascending:ascending];
+    request.fetchLimit = [fetchLimit integerValue];
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] ){
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    }
+    
+    return result;
+}
+
+//------------------------------------------------------------------------------
+- (void) deleteObject:(NSManagedObject *)object{
+    if (object) [managedObjectContext deleteObject:object];
+}
+
+//------------------------------------------------------------------------------
+- (void) deleteObjectInInsertContext:(NSManagedObject *)object{
+    if (object) [managedObjectInsertContext deleteObject:object];
+}
+//------------------------------------------------------------------------------
+- (void) deleteAllEntities:(Class) entityClass {
+    
+    NSArray *items = [self getAllEntities:entityClass];
+    [self deleteEntitiesIn:items];
+}
+
+//------------------------------------------------------------------------------
+- (void) deleteEntitiesIn:(NSArray *) entitiesArray  {
+    
+    for (NSManagedObject *managedObject in entitiesArray)
+    	[managedObjectContext deleteObject:managedObject];
+}
+
+//------------------------------------------------------------------------------
+- (NSArray *)deleteEntities:(Class)entityClass NotIn:(NSArray *)dataArray withId:(NSString *) idClass{
+    
+    NSArray *toDelete = nil;
+ 
+    if ( [dataArray isKindOfClass:[NSArray class]] ){
+        NSString *entityId;
+        
+        if (idClass != nil)
+            entityId = [NSString stringWithFormat:@"%@",idClass];
+        else
+            entityId = [NSString stringWithFormat:@"id%@",NSStringFromClass(entityClass)];
+
+        
+        // Get all objects ids
+        NSArray *idsArray = [dataArray valueForKey:entityId];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (%K IN %@)",entityId, idsArray];
+        toDelete = [[CoreDataManager singleton] getAllEntities:entityClass withPredicate:predicate];
+        [[CoreDataManager singleton] deleteEntitiesIn:toDelete];
+    }
+    
+    return toDelete;
+}
+
+
+//------------------------------------------------------------------------------
+- (NSArray *)insertEntities:(Class)entityClass WithArray:(NSArray *)dataArray {
+    
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    if ( [entityClass respondsToSelector:@selector(insertWithDictionary:)] )
+    {
+        if ( [dataArray isKindOfClass:[NSArray class]] && [dataArray count]>0 ){
+            for (NSDictionary *entityDict in dataArray  ){
+                id entity = [entityClass insertWithDictionary:entityDict];
+                if ( entity )
+                    [result addObject:entity];
+            }
+        }
+    } else {
+        DLog(@"[SHOOTR ERROR]: Se esta intentando actualizar la entidad de Core Data '%@' que no responde al evento insertEntities", entityClass);
+    }
+    
+    return result;
+}
+
+
+//------------------------------------------------------------------------------
+- (NSArray *)updateEntities:(Class)entityClass WithArray:(NSArray *)dataArray {
+    
+    NSMutableArray *resultInserted = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *entityDict in dataArray) {
+
+        id entity = [entityClass updateWithDictionary:entityDict];
+            if ( entity )
+                [resultInserted addObject:entity];
+        }
+
+    return resultInserted;
+}
+
+//------------------------------------------------------------------------------
+- (NSNumber *) getMaxModifiedValueForEntity:(NSString *)entityClass {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:entityClass orderedByKey:kJSON_MODIFIED ascending:NO];
+    request.fetchLimit = 1;
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] )
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    NSNumber *value;
+    
+    if ([result count] > 0)
+        return [[result firstObject] csys_modified];
+   
+    return value;
+    
+}
+
+#pragma mark - Private methods
+
+//------------------------------------------------------------------------------
+-(NSFetchRequest *)createFetchRequestForEntityNamed:(NSString *)entityName
+                                       orderedByKey:(NSString *)key
+                                          ascending:(BOOL)ascending{
+    
+    NSFetchRequest *request= [[NSFetchRequest alloc] init];
+    [request setEntity: [NSEntityDescription entityForName:entityName inManagedObjectContext:managedObjectContext]];
+//    [request setIncludesPropertyValues:YES]; //only fetch the managedObjectID
+    
+    if ( key ){
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:key ascending:ascending];
+        [request setSortDescriptors:[NSArray arrayWithObject:sort]];
+    }
+    
+    return request;
+}
+
+//------------------------------------------------------------------------------
+-(NSFetchRequest *)createFetchRequestForEntityNamedInsertContext:(NSString *)entityName
+                                                    orderedByKey:(NSString *)key
+                                                       ascending:(BOOL)ascending{
+    
+    NSFetchRequest *request= [[NSFetchRequest alloc] init];
+    [request setEntity: [NSEntityDescription entityForName:entityName inManagedObjectContext:managedObjectInsertContext]];
+//    [request setIncludesPropertyValues:YES]; //only fetch the managedObjectID
+    
+    if ( key ){
+        NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:key ascending:ascending];
+        [request setSortDescriptors:[NSArray arrayWithObject:sort]];
+    }
+    
+    return request;
+}
+
+#pragma mark - Core Data methods
+//------------------------------------------------------------------------------
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (managedObjectContext != nil)
+        return managedObjectContext;
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if ( coordinator != nil) {
+        managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return managedObjectContext;
+}
+
+//------------------------------------------------------------------------------
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+
+- (NSManagedObjectContext *)managedObjectInsertContext {
+    
+    if (managedObjectInsertContext != nil)
+        return managedObjectInsertContext;
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if ( coordinator != nil) {
+        managedObjectInsertContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        managedObjectInsertContext.parentContext = managedObjectContext;
+    }
+    return managedObjectInsertContext;
+}
+
+//------------------------------------------------------------------------------
+- (BOOL)copyDefaultDataToSQLiteDataBase {
+    
+    NSURL *storeURL = [[CoreDataManager applicationPrivateDocumentsDirectory] URLByAppendingPathComponent:@"golesDataBase.sqlite"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"defaultDataBase" ofType:@"sqlite"];
+    NSString *toPath = [storeURL relativePath];
+    NSError *error;
+    return [[NSFileManager new] copyItemAtPath:filePath toPath:toPath error:&error];
+
+}
+
+//------------------------------------------------------------------------------
+// Returns the persistent store coordinator for the application.
+// If the coordinator doesn't already exist, it is created and the application's store added to it.
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+    if (persistentStoreCoordinator != nil)
+        return persistentStoreCoordinator;
+    
+    //path BD
+    NSURL *storeURL = [[CoreDataManager applicationPrivateDocumentsDirectory] URLByAppendingPathComponent:@"golesDataBase.sqlite"];
+  
+    NSLog(@"%@",[storeURL absoluteString]);
+
+    BOOL isDirectory = NO;
+    if (!IS_GENERATING_DEFAULT_DATABASE && ![[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSUTF8StringEncoding error:nil] isDirectory:&isDirectory])
+        [self copyDefaultDataToSQLiteDataBase];
+    
+    NSError *error = nil;
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        /*
+         Replace this implementation with code to handle the error appropriately.
+         
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+         
+         Typical reasons for an error here include:
+         * The persistent store is not accessible;
+         * The schema for the persistent store is incompatible with current managed object model.
+         Check the error message to determine what the actual problem was.
+         
+         
+         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
+         
+         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
+         * Simply deleting the existing store:
+         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
+         
+         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
+         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
+         
+         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
+         
+         */
+        
+        DLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return persistentStoreCoordinator;
+}
+
+//------------------------------------------------------------------------------
+// Returns the managed object model for the application.
+// If the model doesn't already exist, it is created from the application's model.
+- (NSManagedObjectModel *)managedObjectModel
+{
+    if (managedObjectModel != nil)
+        return managedObjectModel;
+    
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"golesDataBase" withExtension:@"momd"];
+    managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    
+    return managedObjectModel;
+}
+
+#pragma mark - Application's Documents directory
+//------------------------------------------------------------------------------
+// Returns the URL to the application's Private Documents directory.
++ (NSURL *)applicationPrivateDocumentsDirectory
+{
+//    NSURL *url =[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *path = [libraryPath stringByAppendingPathComponent:@"Private Documents"];
+    
+        BOOL isDirectory;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
+            NSError *error = nil;
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error]) {
+                DLog(@"Can't create directory %@ [%@]", path, error);
+                abort(); // replace with proper error handling
+            }
+        }
+        else if (!isDirectory) {
+            DLog(@"Path %@ exists but is no directory", path);
+            abort(); // replace with error handling
+        }
+    
+    NSURL *url = [NSURL fileURLWithPath:path isDirectory:isDirectory];
+    
+    [Utils addSkipBackupAttributeToItemAtURL:url];
+
+    
+    return url;
+}
+
+//------------------------------------------------------------------------------
+- (NSNumber *)getLastSyncroTime {
+    
+    NSFetchRequest *request = [self createFetchRequestForEntityNamed:K_CDENTITY_SYNC_CONTROL orderedByKey:k_SYNC_LASTCALL ascending:NO];
+    request.fetchLimit = 1;
+    
+    NSError * error = nil;
+    NSArray *result = nil;
+    if ( [request entity] )
+        result = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    return [[result firstObject] lastCall];
+}
+
+
+
+
+@end
