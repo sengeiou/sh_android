@@ -11,6 +11,6 @@
 
 @interface InfoUtilities : NSObject
 
-+(UIView *) createHeaderViewWithFrame:(CGRect) frame andMatch:(Match *) match;
++(UIView *) createHeaderViewWithFrame:(CGRect) frame andMatch:(Match *) match andSection:(NSInteger) section;
 
 @end

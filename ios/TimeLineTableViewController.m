@@ -140,8 +140,6 @@ typedef enum typesOfChange : NSUInteger {
 //------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    Shot *shot = [self.fetchedResultsController objectAtIndexPath:indexPath];
-
     if (!self.refreshTable && !self.moreCells){
         self.spinner.hidden = YES;
         

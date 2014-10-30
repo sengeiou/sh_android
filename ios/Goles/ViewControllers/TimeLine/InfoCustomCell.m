@@ -16,7 +16,7 @@
     // Initialization code
 }
 
-- (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath {
+- (void)configureInfoCellWithUser:(User *)user inRow:(NSIndexPath *)indexPath  {
     
     self.userName.text = user.userName;
     //self.lblFavouriteTeamName.text = user.favoriteTeamName;
