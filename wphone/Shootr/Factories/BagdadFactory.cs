@@ -273,6 +273,16 @@ namespace Bagdad.Factories
         {
             return new List<WatchListMatchViewModel>();
         }
+
+        public virtual InfoWatchListOfMatchesViewModel CreateInfoWatchListOfMatchesViewModel()
+        {
+            return new InfoWatchListOfMatchesViewModel();
+        }
+
+        public virtual Watch CreateWatch()
+        {
+            return new Watch();
+        }
     }
 
 }

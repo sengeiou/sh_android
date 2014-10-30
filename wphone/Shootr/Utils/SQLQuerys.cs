@@ -107,14 +107,20 @@ namespace Bagdad.Utils
 
         #region MATCH
 
+        public const String InsertMatchesData = "INSERT OR REPLACE INTO Matches (idMatch, matchDate, status, idLocalTeam, idVisitorTeam, localTeamName, visitorTeamName, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idMatch, @matchDate, @status, @idLocalTeam, @idVisitorTeam, @localTeamName, @visitorTeamName, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
+
         public const String GetNextTeamMatch = "SELECT idMatch, localTeamName, visitorTeamName, matchDate, status FROM Matches WHERE ( idLocalTeam = @idLocalTeam OR idVisitorTeam = @idVisitorTeam ) AND ( status = 1 OR status = 0) ORDER BY matchDate ASC LIMIT 1";
 
-        public const String GetAnotherMatches = "SELECT m.idMatch, m.localTeamName, m.visitorTeamName, m.matchDate, m.status FROM Matches m JOIN Watch w ON m.idMatch = w.idMatch WHERE ( idLocalTeam <> @idLocalTeam AND idVisitorTeam <> @idVisitorTeam ) AND ( status = 1 OR status = 0) ORDER BY matchDate ASC";
+        public const String GetAnotherMatches = "SELECT m.idMatch, m.localTeamName, m.visitorTeamName, m.matchDate, m.status FROM Matches m JOIN Watch w ON m.idMatch = w.idMatch WHERE ( idLocalTeam <> @idLocalTeam AND idVisitorTeam <> @idVisitorTeam ) AND ( m.status = 1 OR m.status = 0) ORDER BY matchDate ASC";
 
         public const String GetListOfUsersWatchingTheMatch = "SELECT u.idUser, u.userName, u.name, u.photo, u.bio, u.points, u.numFollowings, u.numFollowers, u.website, u.favoriteTeamName, u.idFavoriteTeam, u.csys_birth, u.csys_modified, u.csys_revision FROM User u JOIN Watch w ON w.idUser = u.idUser WHERE w.idMatch = @idMatch";
 
         public const String getMatchesUserFollowing = "SELECT idMatch FROM Watch";
 
+        #endregion
+
+        #region WATCH
+        public const String InsertWatchesData = "INSERT OR REPLACE INTO Watch (idUser, idMatch, status, csys_birth, csys_modified, csys_revision, csys_deleted, csys_synchronized) VALUES (@idUser, @idMatch, @status, @csys_birth, @csys_modified, @csys_revision, @csys_deleted, @csys_synchronized)";
         #endregion
 
         #region Generic

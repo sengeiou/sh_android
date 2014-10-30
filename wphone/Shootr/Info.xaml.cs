@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.Threading.Tasks;
 using Bagdad.ViewModels;
-using Bagdad.Utils;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 using Bagdad.Resources;
-using System.Diagnostics;
-using Bagdad.Models;
-using System.Windows.Media;
+using Bagdad.Factories;
+using System.Windows.Threading;
 
 namespace Bagdad
 {
@@ -26,38 +16,32 @@ namespace Bagdad
         private int scrollToChargue = 0;
         private bool endOfList = false;
         private int charge = 0;
-        FollowsViewModel followings;
+        InfoWatchListOfMatchesViewModel infoViewModel;
         public ProgressIndicator progress;
+        BagdadFactory bagdadFactory;
+        DispatcherTimer timer;
 
         public Info()
         {
+            bagdadFactory = new BagdadFactory();
             InitializeComponent();
-            
+            infoViewModel = bagdadFactory.CreateInfoWatchListOfMatchesViewModel();
+            DataContext = infoViewModel;
+            timer = new DispatcherTimer()
+            {
+                Interval = new TimeSpan(0, 0, 0, 2)
+            };
+            timer.Tick+=timer_Tick;
+            timer.Start();
+            System.Diagnostics.Debug.WriteLine("-----------------------------------------\nTimer Start on Info to Refresh Data\n-----------------------------------------");
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-         
+            App.UpdateServices(Utils.ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.WATCH);
+            await infoViewModel.GetCurrentWatchList();
         }
-
-        private async Task<int> LoadFollowingsData()
-        {
-            try
-            {
-
-                int returned = await followings.LoadData(idUser, offset, Constants.CONST_PEOPLE);
-                offset += Constants.SERCOM_PARAM_TIME_LINE_OFFSET_PAG;
-                return returned;
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("E R R O R - Following.xaml.cs - LoadFollowingsData: " + e.Message);
-                MessageBox.Show(AppResources.ServerError);
-                return -1;
-            }
-        }
-
+        
         private void BuildLocalizedApplicationBar()
         {
 
@@ -115,6 +99,15 @@ namespace Bagdad
         {
          
         }
+        async void timer_Tick(object sender, EventArgs e)
+        {
+            if (!App.isSynchroRunning())
+            {
+                System.Diagnostics.Debug.WriteLine("-----------------------------------------\nTimer Stop on Info to Refresh Data\n-----------------------------------------");
+                timer.Stop();
+                await infoViewModel.GetCurrentWatchList();
 
+            }
+        }
     }
 }

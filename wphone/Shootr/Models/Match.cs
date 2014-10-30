@@ -28,7 +28,7 @@ namespace Bagdad.Models
         public char csys_synchronized { get; set; }
         public Factories.BagdadFactory bagdadFactory { private get; set; }
 
-        private String ops_data = "";
+        private String ops_data = "\"idMatch\": null,\"matchDate\": null,\"status\": null,\"idLocalTeam\": null,\"idVisitorTeam\": null,\"localTeamName\": null,\"visitorTeamName\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
         public Match(Factories.BagdadFactory _bagdadFactory)
         {
@@ -39,7 +39,7 @@ namespace Bagdad.Models
             bagdadFactory = new Factories.BagdadFactory();
         }
 
-        protected override String GetEntityName() { return Constants.SERCOM_TB_MATCH; }
+        protected override String GetEntityName() { return Constants.SERCOM_TB_MATCHTOREQUEST; }
 
        
 
