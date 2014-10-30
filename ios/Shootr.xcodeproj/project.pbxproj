@@ -48,6 +48,7 @@
 		AA241F89199CFB6400897D6D /* SyncManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F88199CFB6400897D6D /* SyncManager.m */; };
 		AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AA2E444519F40F55000A52DE /* WatchingMenu.m */; };
 		AA3445DF1A0226C100E4D89E /* FavRestConsumerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */; };
+		AA3445E21A02336B00E4D89E /* InfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3445E11A02336B00E4D89E /* InfoManager.m */; };
 		AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */; };
 		AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */; };
 		AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5B865219F8110300A50B13 /* CreateShotViewTest.m */; };
@@ -219,6 +220,8 @@
 		AA2E444419F40F55000A52DE /* WatchingMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WatchingMenu.h; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.h"; sourceTree = SOURCE_ROOT; };
 		AA2E444519F40F55000A52DE /* WatchingMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WatchingMenu.m; path = "Goles/ViewControllers/TimeLine/Custom classes/WatchingMenu.m"; sourceTree = SOURCE_ROOT; };
 		AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavRestConsumerTest.m; path = Tests/FavRestConsumerTest.m; sourceTree = SOURCE_ROOT; };
+		AA3445E01A02336B00E4D89E /* InfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoManager.h; sourceTree = "<group>"; };
+		AA3445E11A02336B00E4D89E /* InfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoManager.m; sourceTree = "<group>"; };
 		AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
 		AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		AA5B865219F8110300A50B13 /* CreateShotViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateShotViewTest.m; path = Tests/CreateShotViewTest.m; sourceTree = SOURCE_ROOT; };
@@ -746,6 +749,8 @@
 				AA72641419D422570067A39D /* CleanManager.m */,
 				AAFD7BC919E7C36800535A35 /* SearchManager.h */,
 				AAFD7BCA19E7C36800535A35 /* SearchManager.m */,
+				AA3445E01A02336B00E4D89E /* InfoManager.h */,
+				AA3445E11A02336B00E4D89E /* InfoManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1115,6 +1120,7 @@
 				0800933919F59E5100429207 /* ViewNotShots.m in Sources */,
 				AA623E1C1998D17800A942A9 /* _Device.m in Sources */,
 				AA241F86199CFB5200897D6D /* _SyncControl.m in Sources */,
+				AA3445E21A02336B00E4D89E /* InfoManager.m in Sources */,
 				9EF1B08419F6779200D4F30D /* TimeLineTableViewController.m in Sources */,
 				AACA543C19C057C000E39D94 /* AFHTTPRequestOperation.m in Sources */,
 				9E643B6119E9C7EC000AD080 /* InfoTableViewController.m in Sources */,
