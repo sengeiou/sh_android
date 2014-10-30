@@ -1,7 +1,10 @@
 package gm.mobi.android.ui.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -83,6 +86,11 @@ public class InfoActivity extends BaseSignedInActivity {
         return resMap;
     }
 
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+    }
 
     public void retrieveInfoList(){
         GetWatchingInfoJob job = GolesApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
@@ -106,4 +114,14 @@ public class InfoActivity extends BaseSignedInActivity {
         bus.unregister(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
