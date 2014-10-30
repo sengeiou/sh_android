@@ -376,6 +376,15 @@ namespace Bagdad.Resources {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Not Watching.
+        /// </summary>
+        public static string NotWatching {
+            get {
+                return ResourceManager.GetString("NotWatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Password.
         /// </summary>
         public static string Password {
@@ -615,6 +624,15 @@ namespace Bagdad.Resources {
         public static string UserOrPasswordDoesntMatch {
             get {
                 return ResourceManager.GetString("UserOrPasswordDoesntMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Watching.
+        /// </summary>
+        public static string Watching {
+            get {
+                return ResourceManager.GetString("Watching", resourceCulture);
             }
         }
         

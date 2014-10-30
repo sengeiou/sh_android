@@ -366,4 +366,12 @@
     <value>Edit</value>
     <comment>Info.xaml</comment>
   </data>
+  <data name="NotWatching" xml:space="preserve">
+    <value>Not Watching</value>
+    <comment>info</comment>
+  </data>
+  <data name="Watching" xml:space="preserve">
+    <value>Watching</value>
+    <comment>info</comment>
+  </data>
 </root>
