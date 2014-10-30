@@ -41,10 +41,10 @@
 //------------------------------------------------------------------------------
 + (Match *)getUserNextMatch {
     
-    NSInteger userTeamID = [[[UserManager singleton] getActiveUser] favoriteTeamName];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@""];
-    Match *userMatch = [[CoreDataManager singleton] getAllEntities:[Match class] orderedByKey:kJSON_DATE_MATCH ascending:YES withPredicate:predicate];
-    return userMatch;
+    NSInteger userTeamID = [[[UserManager singleton] getActiveUser] idFavoriteTeamValue];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idLocalTeam == %@ || idVisitorTeam = %@",userTeamID,userTeamID];
+    NSArray *userMatchArray = [[CoreDataManager singleton] getAllEntities:[Match class] orderedByKey:kJSON_DATE_MATCH ascending:YES withPredicate:predicate];
+    return userMatchArray.firstObject;
 }
 
 @end
