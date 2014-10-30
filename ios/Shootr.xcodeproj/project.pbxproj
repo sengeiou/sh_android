@@ -41,6 +41,8 @@
 		A5C2E6DB19C748A600E2F988 /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C2E6DA19C748A600E2F988 /* SetupViewController.m */; };
 		A5E3E2071999205E00322727 /* golesDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A5E3E2051999205E00322727 /* golesDataBase.xcdatamodeld */; };
 		A5E3E2091999206C00322727 /* defaultDataBase.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = A5E3E2081999206C00322727 /* defaultDataBase.sqlite */; };
+		A5EC1B3D1A025AB0005EDD15 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5EC1B3B1A025AB0005EDD15 /* OCHamcrestIOS.framework */; };
+		A5EC1B3E1A025AB0005EDD15 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5EC1B3C1A025AB0005EDD15 /* OCMockitoIOS.framework */; };
 		A5F899E019F7983B00F0DE34 /* CreateShotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F899DF19F7983B00F0DE34 /* CreateShotView.m */; };
 		AA05ADFE199A6E320046EB6F /* FilterCreation.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05ADFD199A6E320046EB6F /* FilterCreation.m */; };
 		AA241F83199CFB4900897D6D /* SyncControl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA241F82199CFB4900897D6D /* SyncControl.m */; };
@@ -49,8 +51,6 @@
 		AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AA2E444519F40F55000A52DE /* WatchingMenu.m */; };
 		AA3445DF1A0226C100E4D89E /* FavRestConsumerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */; };
 		AA3445E21A02336B00E4D89E /* InfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA3445E11A02336B00E4D89E /* InfoManager.m */; };
-		AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */; };
-		AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */; };
 		AA5B865319F8110300A50B13 /* CreateShotViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5B865219F8110300A50B13 /* CreateShotViewTest.m */; };
 		AA623CDF1998A7F200A942A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CDE1998A7F200A942A9 /* Foundation.framework */; };
 		AA623CE11998A7F200A942A9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA623CE01998A7F200A942A9 /* CoreGraphics.framework */; };
@@ -207,6 +207,8 @@
 		A5C2E6DA19C748A600E2F988 /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
 		A5E3E2061999205E00322727 /* golesDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = golesDataBase.xcdatamodel; sourceTree = "<group>"; };
 		A5E3E2081999206C00322727 /* defaultDataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = defaultDataBase.sqlite; sourceTree = "<group>"; };
+		A5EC1B3B1A025AB0005EDD15 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
+		A5EC1B3C1A025AB0005EDD15 /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		A5F899DE19F7983B00F0DE34 /* CreateShotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateShotView.h; sourceTree = SOURCE_ROOT; };
 		A5F899DF19F7983B00F0DE34 /* CreateShotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateShotView.m; sourceTree = SOURCE_ROOT; };
 		AA05ADFC199A6E320046EB6F /* FilterCreation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCreation.h; sourceTree = "<group>"; };
@@ -222,8 +224,6 @@
 		AA3445DE1A0226C100E4D89E /* FavRestConsumerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FavRestConsumerTest.m; path = Tests/FavRestConsumerTest.m; sourceTree = SOURCE_ROOT; };
 		AA3445E01A02336B00E4D89E /* InfoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoManager.h; sourceTree = "<group>"; };
 		AA3445E11A02336B00E4D89E /* InfoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoManager.m; sourceTree = "<group>"; };
-		AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
-		AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		AA5B865219F8110300A50B13 /* CreateShotViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateShotViewTest.m; path = Tests/CreateShotViewTest.m; sourceTree = SOURCE_ROOT; };
 		AA623CDB1998A7F200A942A9 /* Shootr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shootr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA623CDE1998A7F200A942A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -403,8 +403,8 @@
 				AA623CF81998A7F200A942A9 /* XCTest.framework in Frameworks */,
 				AA623CFA1998A7F200A942A9 /* UIKit.framework in Frameworks */,
 				AA623CF91998A7F200A942A9 /* Foundation.framework in Frameworks */,
-				AA5B865019F8107000A50B13 /* OCHamcrestIOS.framework in Frameworks */,
-				AA5B865119F8107000A50B13 /* OCMockitoIOS.framework in Frameworks */,
+				A5EC1B3D1A025AB0005EDD15 /* OCHamcrestIOS.framework in Frameworks */,
+				A5EC1B3E1A025AB0005EDD15 /* OCMockitoIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,8 +585,8 @@
 		AA623CDD1998A7F200A942A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AA5B864E19F8107000A50B13 /* OCHamcrestIOS.framework */,
-				AA5B864F19F8107000A50B13 /* OCMockitoIOS.framework */,
+				A5EC1B3B1A025AB0005EDD15 /* OCHamcrestIOS.framework */,
+				A5EC1B3C1A025AB0005EDD15 /* OCMockitoIOS.framework */,
 				A58F910C19A4A5830076AA1E /* AudioToolbox.framework */,
 				AA623CDE1998A7F200A942A9 /* Foundation.framework */,
 				AA623CE01998A7F200A942A9 /* CoreGraphics.framework */,
@@ -979,7 +979,7 @@
 				AA623CF21998A7F200A942A9 /* Sources */,
 				AA623CF31998A7F200A942A9 /* Frameworks */,
 				AA623CF41998A7F200A942A9 /* Resources */,
-				A543BFD519F66EE600C04F52 /* ShellScript */,
+				A5EC1B3A1A025A90005EDD15 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1059,7 +1059,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A543BFD519F66EE600C04F52 /* ShellScript */ = {
+		A5EC1B3A1A025A90005EDD15 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1070,11 +1070,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n# http://www.sailmaker.co.uk/blog/2013/04/02/advanced-jenkins-for-ios-and-mac/\n\n# Run the unit tests in this test bundle.\n\nif [ -z \"${WANT_IOS_SIM}\" ]\n\nthen\n\n#   Running under Xcode\n\n\"${DEVELOPER_TOOLS_DIR}/RunUnitTests\"\n\nelse\n\n#   Running under xcodebuild, so use ios-sim installed from Homebrew into /usr/local/bin/ios-sim\n\nkillall -m -KILL \"iPhone Simulator\" || true\n\nour_test_bundle_path=$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.$WRAPPER_EXTENSION\n\nour_env=(\"--setenv\" \"DYLD_INSERT_LIBRARIES=/../../Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection\")\n\nour_env=(\"${our_env[@]}\" \"--setenv\" \"XCInjectBundle=${our_test_bundle_path}\")\n\nour_env=(\"${our_env[@]}\" \"--setenv\" \"XCInjectBundleInto=${TEST_HOST}\")\n\nour_app_location=\"$(dirname \"${TEST_HOST}\")\"\n\n/usr/local/bin/ios-sim launch \"${our_app_location}\" \"${our_env[@]}\" --args -SenTest All \"${our_test_bundle_path}\" --exit\n\nkillall -m -KILL \"iPhone Simulator\" || true\n\nexit 0\n\nfi";
+			shellScript = "${PROJECT_DIR}/Goles/Resources/Scripts/mockito.sh";
 		};
 		AA241F80199CF9B300897D6D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -1368,6 +1368,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
+					"$(PROJECT_DIR)",
+					/Users/mariateresa/Desktop,
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1395,6 +1397,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Goles/Libraries",
+					"$(PROJECT_DIR)",
+					/Users/mariateresa/Desktop,
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
