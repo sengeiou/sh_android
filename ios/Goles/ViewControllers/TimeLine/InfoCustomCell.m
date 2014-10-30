@@ -27,9 +27,11 @@
     self.imgPhoto = [DownloadImage downloadImageWithUrl:[NSURL URLWithString:user.photo] andUIimageView:self.imgPhoto andText:[user.name substringToIndex:1]];
     self.photobutton.tag = indexPath.row;
     
-    if (user.idUser != [[UserManager sharedInstance]getUserId])
-        self.btnEdit.hidden = YES;
+//    if (user.idUser != [[UserManager sharedInstance]getUserId])
+//        self.btnEdit.hidden = YES;
 
+    if (indexPath.row != 0)
+        self.btnEdit.hidden = YES;
     
 }
 
