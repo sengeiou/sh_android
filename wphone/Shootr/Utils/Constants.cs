@@ -29,6 +29,7 @@ namespace Bagdad.Utils
         public const String SERCOM_TB_SHOT = "Shot";
         public const String SERCOM_TB_OLD_SHOTS = "OldShots";
         public const String SERCOM_TB_MATCH = "Matches";
+        public const String SERCOM_TB_MATCHTOREQUEST = "Match";
         public const String SERCOM_TB_WATCH = "Watch";
 
         //PARAMS

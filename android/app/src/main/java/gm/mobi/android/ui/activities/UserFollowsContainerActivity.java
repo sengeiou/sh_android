@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import gm.mobi.android.R;
@@ -35,11 +36,18 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
         setContainerContent(R.layout.activity_fragment_container);
         getIntentExtras();
         setScreenTitle();
+        setupActionBar();
 
         boolean shouldManuallyPlaceFragment = savedInstanceState == null;
         if (shouldManuallyPlaceFragment) {
             setUserListFragment();
         }
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     private void getIntentExtras() {

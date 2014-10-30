@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -57,7 +58,6 @@ public class EmailLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContainerContent(R.layout.activity_login_email);
         ButterKnife.inject(this);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set the email accounts in the AutoComplete
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, getEmailAccounts());

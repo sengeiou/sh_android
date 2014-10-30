@@ -366,7 +366,7 @@ namespace Bagdad.Models
             }
             catch (Exception e)
             {
-                throw new Exception("E R R O R - User - GetNameAndImageURL: " + e.Message);
+                throw new Exception("E R R O R - User - GetCurrentUserFavoriteTeamId: " + e.Message);
             }
             return idFavoriteTeam;
         }

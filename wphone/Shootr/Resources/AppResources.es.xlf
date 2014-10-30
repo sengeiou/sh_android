@@ -209,6 +209,16 @@
           <target state="new">Edit</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Info.xaml</note>
         </trans-unit>
+        <trans-unit id="Resx/Watching" translate="yes" xml:space="preserve">
+          <source>Watching</source>
+          <target state="new">Watching</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">info</note>
+        </trans-unit>
+        <trans-unit id="Resx/NotWatching" translate="yes" xml:space="preserve">
+          <source>Not Watching</source>
+          <target state="new">Not Watching</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">info</note>
+        </trans-unit>
         <trans-unit id="Resx/ShootRepeated" translate="yes" xml:space="preserve">
           <source>Whoops! You already shot that.</source>
           <target state="new">Whoops! You already shot that.</target>
