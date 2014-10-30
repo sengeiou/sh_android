@@ -1,1 +1,14 @@
 addrepo.sh
+wphone/ARM/
+wphone/Shootr.opensdf
+wphone/Shootr.sdf
+wphone/Shootr.v12.suo
+wphone/Shootr/Bin/
+wphone/Shootr/Shootr.csproj.user
+wphone/Shootr/obj/
+wphone/ShootrTest/obj/
+wphone/packages/Microsoft.Bcl.1.1.8/
+wphone/packages/Microsoft.Bcl.Async.1.0.168/
+wphone/packages/Microsoft.Bcl.Build.1.0.14/
+wphone/sqlite/ARM/
+wphone/sqlite/Debug/
