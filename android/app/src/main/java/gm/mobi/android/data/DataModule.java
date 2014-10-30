@@ -40,6 +40,7 @@ import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import gm.mobi.android.task.jobs.follows.GetUsersFollowsJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleLocalJob;
 import gm.mobi.android.task.jobs.follows.SearchPeopleRemoteJob;
+import gm.mobi.android.task.jobs.info.GetWatchingInfoJob;
 import gm.mobi.android.task.jobs.loginregister.GCMRegistrationJob;
 import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
 import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
@@ -95,7 +96,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
-    RetrieveOldShotsTimeLineJob.class,
+    RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 

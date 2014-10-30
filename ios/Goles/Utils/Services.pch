@@ -1,0 +1,43 @@
+//
+//  Services.h
+//  ProjectUnitTest
+//
+//  Created by Christian Cabarrocas on 10/09/14.
+//  Copyright (c) 2012 Fav24. All rights reserved.
+//
+
+
+#ifndef Goles_Messenger_Services_h
+#define Goles_Messenger_Services_h
+
+
+#pragma mark - ENDPOINTS
+
+/*****************[ URI webservices ]*****************/
+
+NSString *golesBaseURL;
+
+//PRODUCTION ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////
+#define K_ENDPOINT_PRODUCTION             @"http://tst.shootermessenger.com/data-services/rest/generic/"
+
+//TEST ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+#define K_ENDPOINT_DEVELOPER              @"http://tst.shootermessenger.com/data-services/rest/generic/"
+//#define K_ENDPOINT_DEVELOPER            @"http://192.168.1.81:8081/data-services/rest/generic/"//Josep MIquel
+
+//Server timestamp
+#define SERVERTIME                      @"http://tst.shootermessenger.com/data-services/rest/system/ping"
+
+
+
+/***********************************************************************
+ ** Constants globals de l'applicació                                 **
+ ***********************************************************************/
+#pragma mark - VARIS
+
+#define K_ITUNES_URL                    @"https://itunes.apple.com/es/app/goles-messenger/id546611684?mt=8"
+
+#define K_DEVICE_TOKEN_SIMULATOR        @"Christian&MariSimulator0001"
+
+#define K_TWITTER_MENTION               @"@Shootr"
+
+#endif

@@ -352,14 +352,16 @@ public class BagdadDataService implements BagdadService {
         }
         Map<String,Object> dataItem  = ops[0].getData()[0];
         MatchEntity matchReceived = matchMapper.fromDto(dataItem);
-        return matchReceived;
+        if (matchReceived.getIdMatch() != null) {
+            return matchReceived;
+        } else {
+            return null;
+        }
     }
 
 
-
-    @Override public List<WatchEntity> getMyFollowingWatches(List<Long> followingIds, Long date) throws IOException {
-
-        GenericDto requestDto = matchDtoFactory.getWatchFollowing(followingIds,  date);
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long date) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, date);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -380,8 +382,8 @@ public class BagdadDataService implements BagdadService {
         return watchesReceived;
     }
 
-    @Override public List<MatchEntity> getMatchesFromFollowingWatches(List<Long> matcheIds) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getMatchesFromWatchFollowing(matcheIds);
+    @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getMatchesNotEndedByIds(matchIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -398,7 +400,7 @@ public class BagdadDataService implements BagdadService {
                 matchesReceived.add(matchMapper.fromDto(dataItem));
             }
         } else {
-            return null;
+            return null; //TODO never return null!!
         }
         return matchesReceived;
 

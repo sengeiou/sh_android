@@ -31,7 +31,6 @@ namespace Bagdad.Models
         public char csys_synchronized { get; set; }
         public Factories.BagdadFactory bagdadFactory { private get; set; }
 
-        private String ops_data = "\"idUser\": null,\"idFavoriteTeam\": null,\"favoriteTeamName\": null,\"sessionToken\": null,\"userName\": null,\"email\": null,\"name\": null,\"photo\": null,\"bio\": null,\"website\": null,\"points\": null,\"numFollowings\": null,\"numFollowers\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
 
         public Login(Factories.BagdadFactory _bagdadFactory)
         {
@@ -43,51 +42,6 @@ namespace Bagdad.Models
         }
         
         protected override String GetEntityName() { return Constants.SERCOM_TB_LOGIN; }
-
-        protected override String GetOps() { return ops_data; }
-
-        protected override string GetAlias(string operation)
-        {
-            return "\"USER_LOGIN\",";
-        }
-
-        public override string ConstructOperation(String operation, String searchParams, int offset, int nItems)
-        {
-            nItems = 1;
-            return "\"ops\":[{\"data\":[{" + GetOps() + "}],\"metadata\":{\"items\": " + nItems + ((offset != 0) ? ",\"offset\":" + offset : "") + ",\"TotalItems\":null,\"operation\":\"" + operation + "\"," + searchParams + ",\"entity\":\"" + GetEntityName() + "\"}}]";
-        }
-
-        /// <summary>
-        /// Construct the filter
-        /// </summary>
-        /// <param name="conditionDate"></param>
-        /// <returns></returns>
-        public override async Task<string> ConstructFilter(string conditionDate)
-        {
-            StringBuilder sbFilterIdUser = new StringBuilder();
-            try
-            {
-                Follow follow = bagdadFactory.CreateFollow();
-                var followList = await follow.getidUserFollowing();
-                bool isFirst = true;
-                foreach (int idUser in followList)
-                {
-                    if (!isFirst)
-                    {
-                        sbFilterIdUser.Append(",");
-                    }
-                    sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
-                    isFirst = false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("E R R O R - Login - constructFilterFollow: " + e.Message);
-            }
-            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ " + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
-        }
-
-        
 
         public async Task<bool> isUserAlreadyLoged()
         {

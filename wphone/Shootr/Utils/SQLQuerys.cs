@@ -113,6 +113,8 @@ namespace Bagdad.Utils
 
         public const String GetListOfUsersWatchingTheMatch = "SELECT u.idUser, u.userName, u.name, u.photo, u.bio, u.points, u.numFollowings, u.numFollowers, u.website, u.favoriteTeamName, u.idFavoriteTeam, u.csys_birth, u.csys_modified, u.csys_revision FROM User u JOIN Watch w ON w.idUser = u.idUser WHERE w.idMatch = @idMatch";
 
+        public const String getMatchesUserFollowing = "SELECT idMatch FROM Watch";
+
         #endregion
 
         #region Generic

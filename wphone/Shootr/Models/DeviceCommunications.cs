@@ -12,7 +12,21 @@ namespace Bagdad.Models
 {
     public partial class Device : BaseModelJsonConstructor
     {
+        private String ops_data = "\"idDevice\": null,\"idUser\": null,\"token\": null,\"idPushEngine\": null,\"uniqueDeviceID\": null,\"platform\": null,\"model\": null,\"osVer\": null,\"locale\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
+
         public override List<BaseModelJsonConstructor> ParseJson(JObject job)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override String GetOps() { return ops_data; }
+
+        protected override string GetAlias(string operation)
+        {
+            return "\"UPDATE_DEVICE\",";
+        }
+
+        public override Task<string> ConstructFilter(string conditionDate)
         {
             throw new NotImplementedException();
         }

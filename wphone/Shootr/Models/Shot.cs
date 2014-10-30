@@ -22,8 +22,7 @@ namespace Bagdad.Models
         public int csys_revision { get; set; }
         public char csys_synchronized { get; set; }
         public Factories.BagdadFactory bagdadFactory { private get; set; }
-        private String ops_data = "\"idShot\": null,\"idUser\": null,\"comment\": null,\"revision\": null,\"birth\": null,\"modified\": null,\"deleted\": null";
-
+        
         public Shot(Factories.BagdadFactory _bagdadFactory)
         {
             bagdadFactory = _bagdadFactory; 
@@ -102,37 +101,7 @@ namespace Bagdad.Models
 
         protected override String GetEntityName() { return Constants.SERCOM_TB_SHOT; }
 
-        protected override String GetOps() { return ops_data; }
-
-        protected override string GetAlias(string operation)
-        {
-            if (operation.Equals(Constants.SERCOM_OP_RETRIEVE) || operation.Equals(Constants.SERCOM_OP_RETRIEVE_NO_AUTO_OFFSET))
-                return "\"GET_NEWER_SHOTS\",";
-            else if (operation.Equals(Constants.SERCOM_OP_UPDATECREATE) || operation.Equals(Constants.SERCOM_OP_CREATE))
-                return "\"CREATE_SHOT\",";
-            else return "\"GET_NEWER_SHOTS\",";
-        }
-
-        public override async Task<string> ConstructFilter(string conditionDate)
-        {
-
-            StringBuilder sbFilterIdUser = new StringBuilder();
-            try
-            {
-                Follow follow = bagdadFactory.CreateFollow();
-                var followList = await follow.getidUserFollowing();
-                foreach (int idUser in followList)
-                {
-                    sbFilterIdUser.Append(",");
-                    sbFilterIdUser.Append("{\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + idUser + "}");
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("E R R O R - User - constructFilterFollow: " + e.Message);
-            }
-            return "\"filterItems\":[], \"filters\":[" + conditionDate + ",{\"filterItems\":[ {\"comparator\":\"eq\",\"name\":\"idUser\",\"value\":" + App.ID_USER + "}"  + sbFilterIdUser.ToString() + "],\"filters\":[],\"nexus\":\"or\"}],\"nexus\":\"and\"";
-        }
+ 
 
     }
 }
