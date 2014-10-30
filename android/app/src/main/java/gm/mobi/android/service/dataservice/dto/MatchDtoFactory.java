@@ -42,6 +42,7 @@ public class MatchDtoFactory {
           orIsNotDeleted(),
           or(GMContract.MatchTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
           or(GMContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
+          or(GMContract.MatchTable.MATCH_DATE).isNotEqualTo(null),
           or(GMContract.MatchTable.STATUS).isEqualTo(0).or(GMContract.MatchTable.STATUS).isEqualTo(1)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(GMContract.MatchTable.TABLE).includeDeleted(true).items(1).filter(matchFilter).build();
@@ -75,8 +76,8 @@ public class MatchDtoFactory {
         FilterDto matchesWatchFollowingFilter = and(
           orIsNotDeleted(),
           or(GMContract.MatchTable.ID_MATCH).isIn(matchIds),
-          or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED)
-            .or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED))
+          or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED).or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED),
+          or(GMContract.MatchTable.MATCH_DATE).isNotEqualTo(null))
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
