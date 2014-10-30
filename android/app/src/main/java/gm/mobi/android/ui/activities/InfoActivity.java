@@ -13,6 +13,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
+import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.task.events.info.WatchingInfoResult;
 import gm.mobi.android.task.jobs.info.GetWatchingInfoJob;
 import gm.mobi.android.ui.adapters.InfoListAdapter;
@@ -20,6 +21,7 @@ import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.model.MatchModel;
 import gm.mobi.android.ui.model.UserWatchingModel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ public class InfoActivity extends BaseSignedInActivity {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
+    @Inject SessionManager sessionManager;
 
     @InjectView(R.id.info_items_list) ListView listView;
     InfoListAdapter adapter;
@@ -46,7 +49,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
         ButterKnife.inject(this);
 
-        adapter = new InfoListAdapter(this, picasso);
+        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId());
 
         listView.setAdapter(adapter);
         retrieveInfoList();
@@ -72,8 +75,14 @@ public class InfoActivity extends BaseSignedInActivity {
         user.setStatus("Watching");
         user.setPhoto("http://www.pak101.com/funnypictures/Animals/2012/8/2/the_monopoly_cat_vbgkd_Pak101(dot)com.jpg");
 
+        UserWatchingModel me = new UserWatchingModel();
+        me.setIdUser(sessionManager.getCurrentUserId());
+        me.setUserName("rafa");
+        me.setStatus("Not watching");
+        me.setPhoto("http://img1.wikia.nocookie.net/__cb20110606042636/es.futurama/images/c/c6/Futurama_fry_looking_squint2.jpg");
+
         List<UserWatchingModel> userList = new ArrayList<>();
-        userList.add(user);
+        userList.add(me);
         userList.add(user);
         userList.add(user);
 
@@ -92,7 +101,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @Subscribe
     public void receivedInfoList(WatchingInfoResult event){
-        Map<MatchModel, List<UserWatchingModel>> result = event.getResult();
+        Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
         adapter.setContent(result);
     }
 

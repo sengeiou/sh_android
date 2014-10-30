@@ -92,7 +92,6 @@ public class MatchDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MATCHES_FROM_WATCH_FOLLOWING, op);
     }
 
-
     public GenericDto getTeamsFromTeamIds(List<Long> teamIds){
         FilterDto teamsFilter = and(orIsNotDeleted(),or(GMContract.TeamTable.ID_TEAM).isIn(teamIds)).build();
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)

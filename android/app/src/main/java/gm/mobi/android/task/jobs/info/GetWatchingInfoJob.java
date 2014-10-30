@@ -4,7 +4,6 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.util.LongSparseArray;
-import android.util.SparseArray;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -21,20 +20,18 @@ import gm.mobi.android.service.BagdadService;
 import gm.mobi.android.task.events.info.WatchingInfoResult;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.ui.model.MatchModel;
-import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.UserWatchingModel;
 import gm.mobi.android.ui.model.mappers.MatchModelMapper;
-import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import gm.mobi.android.ui.model.mappers.UserWatchingModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
 
@@ -48,10 +45,10 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     private MatchManager matchManager;
     private FollowManager followManager;
 
-    List<Long> matchIds = new ArrayList<>();
-    List<Long> userIds = new ArrayList<>();
-
-    @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, BagdadService service, SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper, UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager, MatchManager matchManager) {
+    @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, BagdadService service,
+      SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
+      MatchManager matchManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.sessionManager = sessionManager;
@@ -70,36 +67,29 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
 
     @Override protected void run() throws SQLException, IOException {
         MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(getFavoriteTeamId());
+        //TODO hacer algo con este tío...
 
-        List<WatchEntity> watches =  getWatchesAndSaveThemInDataBase();
-        List<MatchEntity> matches =  getMatchesAndSaveThem(matchIds);
-        List<UserEntity> users = userManager.getUsersByIds(userIds);
+        List<WatchEntity> watches = getWatches();
 
-        LongSparseArray<MatchEntity> matchesCatalog = new LongSparseArray<>(matches.size());
-        for (MatchEntity match : matches) {
-            matchesCatalog.put(match.getIdMatch(), match);
-        }
-        LongSparseArray<UserEntity> usersCatalog = new LongSparseArray<>(matches.size());
-        for (UserEntity user : users) {
-            usersCatalog.put(user.getIdUser(), user);
-        }
-
-        Map<MatchModel, List<UserWatchingModel>> matchesWithUsers = new HashMap<>();
-
-        for (WatchEntity watch : watches) {
-            Long idMatch = watch.getIdMatch();
-            MatchModel match = matchModelMapper.toMatchModel(matchesCatalog.get(idMatch));
-            if (matchesWithUsers.containsKey(match)) {
-                matchesWithUsers.get(match).add(userWatchingModelMapper.toUserWatchingModel(usersCatalog.get(watch.getIdUser()),true));
-            } else {
-                List<UserWatchingModel> usersInMatch = new ArrayList<>();
-                usersInMatch.add(userWatchingModelMapper.toUserWatchingModel(usersCatalog.get(watch.getIdUser()), true));
-                MatchModel matchModel = matchModelMapper.toMatchModel(matchesCatalog.get(idMatch));
-                matchesWithUsers.put(matchModel,usersInMatch);
+        InfoListBuilder.DataProvider infoBuilderDataProvider = new InfoListBuilder.DataProvider() {
+            @Override public List<UserEntity> getUsersByIds(List<Long> userIds) {
+                return userManager.getUsersByIds(userIds);
             }
-        }
 
-        postSuccessfulEvent(new WatchingInfoResult(matchesWithUsers));
+            @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) {
+                try {
+                    return service.getMatchesByIds(matchIds);
+                } catch (IOException e) {
+                    Timber.e(e, "FATAL ERROR: Server failed while getting matches, and the exception wasn't handled :'(");
+                    return null;
+                }
+            }
+        };
+
+        InfoListBuilder infoListBuilder = new InfoListBuilder(infoBuilderDataProvider, sessionManager.getCurrentUserId(), matchModelMapper, userWatchingModelMapper);
+
+        Map<MatchModel, Collection<UserWatchingModel>> resultMap = infoListBuilder.build(watches);
+        postSuccessfulEvent(new WatchingInfoResult(resultMap));
     }
 
     private List<MatchEntity> getMatchesAndSaveThem(List<Long> matchIds) throws IOException {
@@ -109,14 +99,11 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
         return matches;
     }
 
-    private List<WatchEntity> getWatchesAndSaveThemInDataBase() throws SQLException, IOException {
-        List<WatchEntity> watches = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchManager.getLastModifiedDate(
-          GMContract.WatchTable.TABLE));
-        watchManager.saveWatches(watches);
-        for (WatchEntity watch : watches) {
-            matchIds.add(watch.getIdMatch());
-            userIds.add(watch.getIdUser());
-        }
+    private List<WatchEntity> getWatches() throws SQLException, IOException {
+        Long watchLastModifiedDate = watchManager.getLastModifiedDate(GMContract.WatchTable.TABLE);
+        watchLastModifiedDate = 0L; //TODO retrieve modified watches only
+        List<WatchEntity> watches = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
+        //TODO save in database
         return watches;
     }
 
