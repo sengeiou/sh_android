@@ -120,6 +120,7 @@
 		AACA544C19C057C000E39D94 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */; };
 		AACA545519C08E4A00E39D94 /* TimeLineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AACA545419C08E4A00E39D94 /* TimeLineViewController.m */; };
 		AAD77D0219EE69C700A1B831 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */; };
+		AADC90211A0260F0002F0E8F /* MatchWatchers.m in Sources */ = {isa = PBXBuildFile; fileRef = AADC90201A0260F0002F0E8F /* MatchWatchers.m */; };
 		AADF791419F1534D00AE9DB8 /* Followbutton.m in Sources */ = {isa = PBXBuildFile; fileRef = AADF791319F1534D00AE9DB8 /* Followbutton.m */; };
 		AAE0EF5A19E4253C00F32FF7 /* TimeLineHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5919E4253C00F32FF7 /* TimeLineHelper.m */; };
 		AAE0EF5C19E4255800F32FF7 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE0EF5B19E4255800F32FF7 /* PerformanceTests.m */; };
@@ -354,6 +355,8 @@
 		AACA545419C08E4A00E39D94 /* TimeLineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeLineViewController.m; path = Goles/ViewControllers/TimeLine/TimeLineViewController.m; sourceTree = SOURCE_ROOT; };
 		AAD77D0019EE69C700A1B831 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		AAD77D0119EE69C700A1B831 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		AADC901F1A0260F0002F0E8F /* MatchWatchers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MatchWatchers.h; path = Goles/ViewControllers/TimeLine/Info/MatchWatchers.h; sourceTree = SOURCE_ROOT; };
+		AADC90201A0260F0002F0E8F /* MatchWatchers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MatchWatchers.m; path = Goles/ViewControllers/TimeLine/Info/MatchWatchers.m; sourceTree = SOURCE_ROOT; };
 		AADF791219F1534D00AE9DB8 /* Followbutton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Followbutton.h; path = Buttons/Followbutton.h; sourceTree = "<group>"; };
 		AADF791319F1534D00AE9DB8 /* Followbutton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Followbutton.m; path = Buttons/Followbutton.m; sourceTree = "<group>"; };
 		AAE0EF5619E424DA00F32FF7 /* TimelineViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimelineViewControllerTest.m; path = Tests/TimelineViewControllerTest.m; sourceTree = SOURCE_ROOT; };
@@ -441,8 +444,6 @@
 			children = (
 				AAE0EF7119E529EB00F32FF7 /* TimeLineUtilities.h */,
 				AAE0EF7219E529EB00F32FF7 /* TimeLineUtilities.m */,
-				A55B222D1A015367008B9130 /* InfoUtilities.h */,
-				A55B222E1A015367008B9130 /* InfoUtilities.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -500,8 +501,6 @@
 			children = (
 				A59EECDB19D1761500D011C5 /* ShotTableViewCell.h */,
 				A59EECDC19D1761500D011C5 /* ShotTableViewCell.m */,
-				9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */,
-				9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -834,6 +833,7 @@
 		AA623E881998D78600A942A9 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				AADC901E1A02609A002F0E8F /* Info */,
 				9EF1B08519F68C3C00D4F30D /* Utilities */,
 				9EB33D1219F2D7BE001A0151 /* Custom classes */,
 				A59EECDA19D1759F00D011C5 /* CustomCells */,
@@ -841,8 +841,6 @@
 				AACA545419C08E4A00E39D94 /* TimeLineViewController.m */,
 				9EF1B08219F6779200D4F30D /* TimeLineTableViewController.h */,
 				9EF1B08319F6779200D4F30D /* TimeLineTableViewController.m */,
-				9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */,
-				9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */,
 			);
 			name = Timeline;
 			path = ViewControllers/Partidos;
@@ -916,6 +914,21 @@
 				AACA543B19C057C000E39D94 /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
+		AADC901E1A02609A002F0E8F /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				9E643B6219E9CA9F000AD080 /* InfoCustomCell.h */,
+				9E643B6319E9CA9F000AD080 /* InfoCustomCell.m */,
+				A55B222D1A015367008B9130 /* InfoUtilities.h */,
+				A55B222E1A015367008B9130 /* InfoUtilities.m */,
+				9E643B5F19E9C7EC000AD080 /* InfoTableViewController.h */,
+				9E643B6019E9C7EC000AD080 /* InfoTableViewController.m */,
+				AADC901F1A0260F0002F0E8F /* MatchWatchers.h */,
+				AADC90201A0260F0002F0E8F /* MatchWatchers.m */,
+			);
+			name = Info;
 			sourceTree = "<group>";
 		};
 		AADF791119F152C600AE9DB8 /* Buttons */ = {
@@ -1148,6 +1161,7 @@
 				9EB33D0B19F2C5BE001A0151 /* FollowButtonProfile.m in Sources */,
 				AA2E444619F40F55000A52DE /* WatchingMenu.m in Sources */,
 				9E643B6419E9CA9F000AD080 /* InfoCustomCell.m in Sources */,
+				AADC90211A0260F0002F0E8F /* MatchWatchers.m in Sources */,
 				AA72640C19D0505A0067A39D /* _Follow.m in Sources */,
 				AA623E611998D17800A942A9 /* Appirater.m in Sources */,
 				AA623E741998D17800A942A9 /* Utils.m in Sources */,
