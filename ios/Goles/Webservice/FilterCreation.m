@@ -215,6 +215,10 @@
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_OR};
     
+    NSDictionary *filterMatchDate = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_NE,K_CD_NAME:kJSON_DATE_MATCH,K_CD_VALUE:[NSNull null]}],
+                                 K_WS_FILTERS:[NSNull null],
+                                 K_WS_OPS_NEXUS:K_WS_OPS_OR};
+    
     NSDictionary *filterTeam = @{K_WS_FILTERITEMS:@[@{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_TEAM_LOCAL,K_CD_VALUE:@2025},
                                                     @{K_WS_COMPARATOR: K_WS_OPS_EQ,K_CD_NAME:kJSON_ID_TEAM_VISITOR,K_CD_VALUE:@2025}],
                                  K_WS_FILTERS:[NSNull null],
@@ -225,7 +229,7 @@
                                  K_WS_FILTERS:[NSNull null],
                                  K_WS_OPS_NEXUS:K_WS_OPS_OR};
     
-    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate,filterTeam,filterStatus]}};
+    NSDictionary *filter = @{K_WS_OPS_FILTER:@{K_WS_OPS_NEXUS: K_WS_OPS_AND,K_WS_FILTERITEMS:[NSNull null],K_WS_FILTERS:@[filterDate,filterMatchDate,filterTeam,filterStatus]}};
     
     return filter;
 }
