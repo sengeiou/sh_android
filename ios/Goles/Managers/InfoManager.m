@@ -51,6 +51,7 @@
     return userMatchArray.firstObject;
 }
 
+//------------------------------------------------------------------------------
 + (NSArray *)getWatches {
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"csys_deleted != %@",@"d"];
@@ -58,6 +59,7 @@
     return [self matchesWatchersConstructor:watches];
 }
 
+//------------------------------------------------------------------------------
 + (NSArray *)matchesWatchersConstructor:(NSArray *)watchesArray {
 
     NSMutableArray *watchesMatchesArray = [[NSMutableArray alloc] init];
@@ -71,11 +73,13 @@
     
     for (MatchWatchers *matchWatch in watchesMatchesArray) {
         for (Watch *watch in watchesArray){
-            if (matchWatch) {
-                <#statements#>
-            }
+            if (matchWatch.match == watch.match)
+                [matchWatch.userArray addObject:watch.user];
+            
         }
     }
+    
+    return watchesMatchesArray;
 }
 
 @end
