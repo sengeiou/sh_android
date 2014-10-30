@@ -4,18 +4,18 @@
 
     <!-- Base application themes. -->
     <style name="GolesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Goles</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:editTextBackground">@drawable/edit_text_background</item>
         <item name="android:textColorLink">@color/links</item>
     </style>
 
-    <style name="GolesTheme.NoActionBar">
+    <style name="GolesTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowTitleSize">0dp</item>
     </style>
 
-    <style name="GolesTheme.NoActionBar.Floating">
+    <style name="GolesTheme.NoActionBar.Floating" >
         <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowIsFloating">true</item>-->
         <item name="android:backgroundDimEnabled">true</item>
@@ -29,22 +29,22 @@
         <item name="android:icon">@drawable/ic_ab_icon</item>
     </style>
 
-    <style name="GolesTheme.ActionBarSearch">
-        <item name="android:actionBarWidgetTheme">@style/ActionBarWidgets</item>
-    </style>
+    <!--<style name="GolesTheme.ActionBarSearch">-->
+        <!--<item name="android:actionBarWidgetTheme">@style/ActionBarWidgets</item>-->
+    <!--</style>-->
 
-    <style name="ActionBarWidgets" parent="GolesTheme">
-        <item name="searchViewSearchIcon">@drawable/ic_action_search</item>
-        <item name="searchViewCloseIcon">@drawable/ic_action_close</item>
-        <item name="searchViewTextField">@drawable/abc_textfield_search_default_holo_dark</item>
-        <item name="searchViewAutoCompleteTextView">@style/ActionBarSearchText</item>
-    </style>
+    <!--<style name="ActionBarWidgets" parent="GolesTheme">-->
+        <!--<item name="searchViewSearchIcon">@drawable/ic_action_search</item>-->
+        <!--<item name="searchViewCloseIcon">@drawable/ic_action_close</item>-->
+        <!--<item name="searchViewTextField">@drawable/abc_textfield_search_default_holo_dark</item>-->
+        <!--<item name="searchViewAutoCompleteTextView">@style/ActionBarSearchText</item>-->
+    <!--</style>-->
 
-    <style name="ActionBarSearchText" parent="ActionBar.Solid.Goles">
-        <item name="android:textColorHint">@color/white_disabled</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textCursorDrawable">@null</item>
-    </style>
+    <!--<style name="ActionBarSearchText" parent="ActionBar.Solid.Goles">-->
+        <!--<item name="android:textColorHint">@color/white_disabled</item>-->
+        <!--<item name="android:textColor">@color/white</item>-->
+        <!--<item name="android:textCursorDrawable">@null</item>-->
+    <!--</style>-->
 
     <style name="TextAppearance.FloatLabel" parent="android:TextAppearance.Small">
         <item name="android:textColor">@color/gray_60</item>

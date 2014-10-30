@@ -2,8 +2,10 @@ package gm.mobi.android.ui.base;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 
+import com.google.android.gms.fitness.request.ac;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
@@ -19,6 +21,8 @@ public class BaseActivity extends ActionBarActivity {
 
     private ViewGroup container;
 
+    private Toolbar actionBarToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +36,7 @@ public class BaseActivity extends ActionBarActivity {
      */
     public void setContainerContent(int layoutResID) {
         ViewGroup actionBarDecor = (ViewGroup) getLayoutInflater().inflate(R.layout.action_bar_decor, container);
-
-
+        getActionBarToolbar();
         ViewGroup activityContent = findById(actionBarDecor, R.id.action_bar_activity_content);
         getLayoutInflater().inflate(layoutResID, activityContent);
     }
@@ -47,5 +50,17 @@ public class BaseActivity extends ActionBarActivity {
      */
     public ObjectGraph getObjectGraph() {
         return GolesApplication.get(this).getObjectGraph();
+    }
+
+    public Toolbar getToolbar(){ return actionBarToolbar;}
+
+    protected Toolbar getActionBarToolbar(){
+        if(actionBarToolbar == null){
+            actionBarToolbar = (Toolbar)findViewById(R.id.toolbar_actionbar);
+            if(actionBarToolbar!=null){
+                setSupportActionBar(actionBarToolbar);
+            }
+        }
+        return actionBarToolbar;
     }
 }

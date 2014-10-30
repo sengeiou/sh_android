@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:hint="@string/activity_login_email_password_hint"
+                android:background="@drawable/edit_text_background"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword">
 
