@@ -99,10 +99,6 @@ typedef enum typesOfChange : NSUInteger {
     static NSString *CellIdentifier = @"infoCell";
     InfoCustomCell *cell = (id) [self.infoTableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    if (indexPath.row != 0)
-        cell.btnEdit.hidden = YES;
-
-    
     //User *user = self.usersArray[indexPath.row];
     User *user = [[UserManager sharedInstance]getActiveUser];
     
