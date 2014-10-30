@@ -14,7 +14,7 @@
 #define kLabelBottomRightInsets             20.0f
 
 #define kLabelHeight                        30.0f
-#define kViewHeight                         40.0f
+#define kViewHeight                         55.0f
 
 
 @implementation InfoUtilities

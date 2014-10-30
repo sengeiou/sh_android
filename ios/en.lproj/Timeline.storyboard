@@ -412,10 +412,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhh-bm-3YN">
-                                            <rect key="frame" x="546" y="10" width="46" height="30"/>
+                                            <rect key="frame" x="552" y="-1" width="50" height="50"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="30" id="8lM-Ds-bhl"/>
-                                                <constraint firstAttribute="width" constant="46" id="JOW-X0-0Lg"/>
+                                                <constraint firstAttribute="height" constant="50" id="8lM-Ds-bhl"/>
+                                                <constraint firstAttribute="width" constant="50" id="JOW-X0-0Lg"/>
                                             </constraints>
                                             <state key="normal" title="Edit"/>
                                         </button>
@@ -424,8 +424,8 @@
                                         <constraint firstItem="zBh-HN-QO8" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="-4" id="1iA-y3-6jv"/>
                                         <constraint firstItem="oTe-ts-g3n" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="-8" id="88W-9b-YQc"/>
                                         <constraint firstItem="RkP-EO-bea" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="60" id="CLi-Me-DCs"/>
-                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="2" id="Cjh-Ze-ACu"/>
-                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="trailing" secondItem="Xkb-B3-CKM" secondAttribute="trailingMargin" id="GeE-EM-QAW"/>
+                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="-9" id="Cjh-Ze-ACu"/>
+                                        <constraint firstItem="dhh-bm-3YN" firstAttribute="trailing" secondItem="Xkb-B3-CKM" secondAttribute="trailingMargin" constant="10" id="GeE-EM-QAW"/>
                                         <constraint firstItem="RkP-EO-bea" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" constant="-1" id="Mzq-LJ-kSj"/>
                                         <constraint firstItem="zBh-HN-QO8" firstAttribute="leading" secondItem="Xkb-B3-CKM" secondAttribute="leadingMargin" constant="6" id="buV-7h-fhZ"/>
                                         <constraint firstItem="oTe-ts-g3n" firstAttribute="top" secondItem="Xkb-B3-CKM" secondAttribute="topMargin" id="cBq-zN-jgI"/>
