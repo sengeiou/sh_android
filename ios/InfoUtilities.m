@@ -56,7 +56,6 @@
     labelName.font = [UIFont systemFontOfSize:15];
     labelName.textColor = [Fav24Colors tableFooters];
     
-    //NSString *nameMatch = [NSString stringWithFormat:@"%@-%@", match.localTeamName, match.visitorTeamName];
     NSString *nameMatch  =  [@"Real Madrid - Barcelona" uppercaseString];
     labelName.text = nameMatch;
 
