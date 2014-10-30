@@ -44,6 +44,7 @@
     NSInteger userTeamID = [[[UserManager singleton] getActiveUser] favoriteTeamName];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@""];
     Match *userMatch = [[CoreDataManager singleton] getAllEntities:[Match class] orderedByKey:kJSON_DATE_MATCH ascending:YES withPredicate:predicate];
+    return userMatch;
 }
 
 @end
