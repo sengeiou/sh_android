@@ -50,4 +50,14 @@ public class UserWatchingModel implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof UserWatchingModel)) return false;
+        UserWatchingModel that = (UserWatchingModel) o;
+        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null) return false;
+        return true;
+    }
+
 }

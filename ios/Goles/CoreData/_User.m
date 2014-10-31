@@ -32,6 +32,9 @@ const struct UserRelationships UserRelationships = {
 	.watch = @"watch",
 };
 
+const struct UserFetchedProperties UserFetchedProperties = {
+};
+
 @implementation UserID
 @end
 
@@ -57,7 +60,7 @@ const struct UserRelationships UserRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -112,9 +115,19 @@ const struct UserRelationships UserRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic bio;
 
+
+
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -134,7 +147,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -154,7 +173,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -174,7 +199,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -194,13 +225,34 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
+
+
+
+
+
 
 @dynamic eMail;
 
+
+
+
+
+
 @dynamic favoriteTeamName;
 
+
+
+
+
+
 @dynamic idFavoriteTeam;
+
+
 
 - (int64_t)idFavoriteTeamValue {
 	NSNumber *result = [self idFavoriteTeam];
@@ -220,7 +272,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveIdFavoriteTeam:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic idUser;
+
+
 
 - (int64_t)idUserValue {
 	NSNumber *result = [self idUser];
@@ -240,9 +298,20 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic name;
 
+
+
+
+
+
 @dynamic numFollowers;
+
+
 
 - (int32_t)numFollowersValue {
 	NSNumber *result = [self numFollowers];
@@ -262,7 +331,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveNumFollowers:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic numFollowing;
+
+
 
 - (int32_t)numFollowingValue {
 	NSNumber *result = [self numFollowing];
@@ -282,9 +357,20 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveNumFollowing:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic photo;
 
+
+
+
+
+
 @dynamic points;
+
+
 
 - (int64_t)pointsValue {
 	NSNumber *result = [self points];
@@ -304,7 +390,13 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitivePoints:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic rank;
+
+
 
 - (int64_t)rankValue {
 	NSNumber *result = [self rank];
@@ -324,37 +416,68 @@ const struct UserRelationships UserRelationships = {
 	[self setPrimitiveRank:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic sessionToken;
+
+
+
+
+
 
 @dynamic userName;
 
+
+
+
+
+
 @dynamic website;
+
+
+
+
+
 
 @dynamic device;
 
+	
+
 @dynamic shots;
 
+	
 - (NSMutableSet*)shotsSet {
 	[self willAccessValueForKey:@"shots"];
-
+  
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"shots"];
-
+  
 	[self didAccessValueForKey:@"shots"];
 	return result;
 }
+	
 
 @dynamic team;
 
+	
+
 @dynamic watch;
 
+	
 - (NSMutableSet*)watchSet {
 	[self willAccessValueForKey:@"watch"];
-
+  
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"watch"];
-
+  
 	[self didAccessValueForKey:@"watch"];
 	return result;
 }
+	
+
+
+
+
+
 
 @end
-

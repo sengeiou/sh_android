@@ -57,10 +57,12 @@ public class MatchDtoFactory {
 
     public GenericDto getWatchFromUsers(List<Long> userIds, Long date){
         FilterDto watchFollowingFilter = and(
-          orIsNotDeleted(),
-          or(GMContract.WatchTable.CSYS_MODIFIED).greaterThan(date),
-          or(GMContract.WatchTable.ID_USER).isIn(userIds),
-          or( GMContract.WatchTable.STATUS).isEqualTo(1))
+            orIsNotDeleted())
+          .and(GMContract.WatchTable.CSYS_MODIFIED).greaterThan(date)
+          .and(GMContract.WatchTable.STATUS).isEqualTo(1)
+          .and(
+            or(GMContract.WatchTable.ID_USER).isIn(userIds)
+          )
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(

@@ -17,6 +17,9 @@ const struct WatchRelationships WatchRelationships = {
 	.user = @"user",
 };
 
+const struct WatchFetchedProperties WatchFetchedProperties = {
+};
+
 @implementation WatchID
 @end
 
@@ -42,7 +45,7 @@ const struct WatchRelationships WatchRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -72,7 +75,12 @@ const struct WatchRelationships WatchRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -92,7 +100,13 @@ const struct WatchRelationships WatchRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -112,7 +126,13 @@ const struct WatchRelationships WatchRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -132,7 +152,13 @@ const struct WatchRelationships WatchRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -152,9 +178,20 @@ const struct WatchRelationships WatchRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
 
+
+
+
+
+
 @dynamic status;
+
+
 
 - (int16_t)statusValue {
 	NSNumber *result = [self status];
@@ -174,9 +211,21 @@ const struct WatchRelationships WatchRelationships = {
 	[self setPrimitiveStatus:[NSNumber numberWithShort:value_]];
 }
 
+
+
+
+
 @dynamic match;
+
+	
 
 @dynamic user;
 
-@end
+	
 
+
+
+
+
+
+@end

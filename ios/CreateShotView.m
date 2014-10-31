@@ -246,6 +246,12 @@
     }
     
     self.charactersLeft.text = [self countCharacters:[self.writingTextBox getNumberOfCharacters]];
+    
+    if ([self.writingTextBox getNumberOfCharacters] == 0){
+        self.charactersLeft.hidden = YES;
+        self.btnShoot.enabled = NO;
+    }
+     
     return ([self.writingTextBox getNumberOfCharacters] > CHARACTERS_SHOT) ? NO : YES;
 }
 
