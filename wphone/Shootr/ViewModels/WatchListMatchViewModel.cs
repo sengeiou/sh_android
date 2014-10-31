@@ -66,7 +66,7 @@ namespace Bagdad.ViewModels
                             match.localTeamName + "-" + match.visitorTeamName,
                             Utils.Util.FromUnixTime(match.matchDate.ToString()).ToString(),
                             (match.status == 1 ? true : false),
-                            await GetMatchViewerUsersInfo(idMatch, isLive)
+                            await GetMatchViewerUsersInfo(match.idMatch, isLive)
                         )
                     );
                 }
@@ -89,28 +89,14 @@ namespace Bagdad.ViewModels
                 UserViewModel currentUserInfo = bagdadFactory.CreateUserViewModel();
                 await currentUserInfo.GetUserProfileInfo(App.ID_USER);
 
-                if (usersInfo.Contains(currentUserInfo))
-                {
-                    users.Add(
-                        bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
-                            currentUserInfo,
-                            AppResources.Watching,
-                            (_isLive ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush),
-                            Visibility.Visible
-                        )
-                    );
-                }
-                else
-                {
-                    users.Add(
-                        bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
-                            currentUserInfo,
-                            AppResources.NotWatching,
-                            Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush,
-                            Visibility.Visible
-                        )
-                    );
-                }
+                users.Add(
+                    bagdadFactory.CreateWatchListOfMatchUserInfoViewModel(
+                        currentUserInfo,
+                        (usersInfo.Contains(currentUserInfo) ? AppResources.Watching : AppResources.NotWatching),
+                        (_isLive ? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush : Application.Current.Resources["PhoneDisabledBrush"] as SolidColorBrush),
+                        Visibility.Visible
+                    )
+                );
 
                 foreach (UserViewModel user in usersInfo)
                 {

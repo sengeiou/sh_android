@@ -77,6 +77,14 @@ namespace Bagdad.ViewModels
                     this.revision = uvm.revision;
 
                     this.isFollowed = await uvm.ImFollowing();
+
+                    UserImageManager userImageManager = bagdadFactory.CreateUserImageManager();
+
+                    BitmapImage image = userImageManager.GetUserImage(uvm.idUser);
+
+                    if (image == null && !String.IsNullOrEmpty(uvm.userURLImage)) image = new System.Windows.Media.Imaging.BitmapImage(new Uri(uvm.userURLImage, UriKind.Absolute));
+                    
+                    this.userImage = image;
                 }
             }
             catch (Exception e)
