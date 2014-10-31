@@ -75,7 +75,7 @@ public class MatchManager extends AbstractManager{
         insertInSync();
     }
 
-    private long deleteMatch(MatchEntity matchEntity){
+    public long deleteMatch(MatchEntity matchEntity){
         long res = 0;
         String args = MatchTable.ID_MATCH + "=?";
         String[] stringArgs = new String[]{String.valueOf(matchEntity.getIdMatch())};
@@ -87,7 +87,30 @@ public class MatchManager extends AbstractManager{
         return res;
     }
 
+    public void deleteMatches(List<MatchEntity> matchEntities) {
+        for (MatchEntity matchEntity : matchEntities) {
+            deleteMatch(matchEntity);
+        }
+    }
+
     public void insertInSync(){
         insertInTableSync(MatchTable.TABLE,10,1000,0);
+    }
+
+    public List<MatchEntity> getEndedAndAdjournedMatches() {
+        String whereSelection = MatchTable.STATUS + " IN (2,3)";
+        Cursor queryResult =
+          db.query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, null, null, null, null);
+
+        List<MatchEntity> resultMatches = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                MatchEntity matchEntity = matchMapper.fromCursor(queryResult);
+                resultMatches.add(matchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultMatches;
     }
 }

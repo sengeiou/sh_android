@@ -63,7 +63,9 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @OnItemClick(R.id.info_items_list)
     public void onListItemClick(int position) {
-        Toast.makeText(this, "Click: "+position, Toast.LENGTH_SHORT).show();
+        UserWatchingModel userWatchingModel = (UserWatchingModel)adapter.getItem(position);
+        Long idUser = userWatchingModel.getIdUser();
+        ProfileContainerActivity.getIntent(this,idUser);
     }
 
     private Map<MatchModel, List<UserWatchingModel>> getDummyInfo() {

@@ -143,7 +143,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     }
 
     public List<WatchEntity> getWatchesFromDatabase() throws SQLException {
-        return watchManager.getWatchesNotEndedFromUsers(getIdsFromMyFollowingAndMe());
+        return watchManager.getWatchesNotEndedOrAdjurnedFromUsers(getIdsFromMyFollowingAndMe());
     }
 
     private void saveWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {

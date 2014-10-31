@@ -2,6 +2,9 @@ package gm.mobi.android.db.objects;
 
 public class WatchEntity extends Synchronized{
 
+    public static final int STATUS_DEFAULT = 0;
+    public static final int STATUS_WATCHING = 1;
+    public static final int STATUS_REJECT = 2;
     private Long idMatch;
     private Long idUser;
     private Long status;

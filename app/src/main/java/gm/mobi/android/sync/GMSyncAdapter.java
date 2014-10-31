@@ -20,6 +20,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject JobManager jobManager;
     @Inject UserManager userManager;
+    @Inject InfoCleaner infoCleaner;
 
     /**
      * Compatibility with versions previous to 3.0
@@ -48,22 +49,12 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
-        // Big boys stuff
-        UserEntity currentUser;
+
         Timber.e("Entra en onPerformSync");
+
         try {
             synchronized (this) {
-                int callType = extras.getInt(SyncConstants.CALL_TYPE);
-                if (callType == 0) return;
-                switch (callType) {
-                    case SyncConstants.REMOVE_OLD_SHOTS_CALLTYPE:
-                        //TODO REMOVE OLD SHOTS
-//                         removeOldShots(mDbHelper.getReadableDatabase());
-                        Timber.e("Entra en la sincronización para el tipo de llamada : %d",
-                            callType);
-                        break;
-
-                }
+                infoCleaner.clean();
             }
         } catch (IllegalStateException e) {
             Timber.e("Exception onPerformSync", e.getMessage());

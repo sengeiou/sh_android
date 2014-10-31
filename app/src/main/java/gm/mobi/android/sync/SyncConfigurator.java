@@ -32,7 +32,7 @@ public class SyncConfigurator {
             setSyncAutomatically(true);
             // Recommend a schedule for automatic synchronization. The system may modify this based
             // on other scheduled syncs and network utilization.
-            //TODO addPeriodicSyncs();
+           addPeriodicSyncs();
         }
     }
 
@@ -54,8 +54,15 @@ public class SyncConfigurator {
     private void addPeriodicSyncs() {
         // Recommend a schedule for automatic synchronization. The system may modify this based
         // on other scheduled syncs and network utilization.
-        addSyncShots();
-        addSyncFollowings();
+        //addSyncShots();
+        //addSyncFollowings();
+        addSyncInfoCleaner();
+    }
+
+    private void addSyncInfoCleaner(){
+        Bundle syncParameters = new Bundle();
+        ContentResolver.addPeriodicSync(dummyAccount, CONTENT_AUTHORITY, syncParameters,
+          SyncConstants.SYNC_INTERVAL_FOR_INFO_CLEANER);
     }
 
     private void addSyncShots() {
