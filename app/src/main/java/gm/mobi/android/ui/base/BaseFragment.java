@@ -2,7 +2,7 @@ package gm.mobi.android.ui.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 
 public class BaseFragment extends Fragment {
 
@@ -12,7 +12,7 @@ public class BaseFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (mFistAttach) {
-            GolesApplication.get(getActivity()).inject(this);
+            ShootrApplication.get(getActivity()).inject(this);
             mFistAttach = false;
         }
     }

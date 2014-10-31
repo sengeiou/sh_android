@@ -30,7 +30,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
 import gm.mobi.android.BuildConfig;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.AnimationSpeed;
 import gm.mobi.android.data.ApiEndpoint;
@@ -46,7 +46,7 @@ import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.service.BagdadMockService;
+import gm.mobi.android.service.ShootrMockService;
 import gm.mobi.android.ui.AppContainer;
 import gm.mobi.android.ui.activities.LogReaderActivity;
 import gm.mobi.android.ui.activities.MainActivity;
@@ -94,7 +94,7 @@ public class DebugAppContainer implements AppContainer {
     private BooleanPreference initialSetupCompleted;
     private StringPreference customEndpoint;
     //      private final RestAdapter restAdapter;
-    private final BagdadMockService mockBagdadService;
+    private final ShootrMockService mockShootrService;
     private final Application app;
 
     Activity activity;
@@ -112,7 +112,7 @@ public class DebugAppContainer implements AppContainer {
                              @InitialSetupCompleted BooleanPreference initialSetupCompleted,
                              @CustomEndpoint StringPreference customEndpoint,
                              @NotificationsEnabled BooleanPreference notificationsEnabled,
-                             BagdadMockService mockBagdadService,
+                             ShootrMockService mockShootrService,
                              Application app) {
         this.client = client;
         this.picasso = picasso;
@@ -127,7 +127,7 @@ public class DebugAppContainer implements AppContainer {
         this.initialSetupCompleted = initialSetupCompleted;
         this.customEndpoint = customEndpoint;
         this.notificationsEnabled = notificationsEnabled;
-        this.mockBagdadService = mockBagdadService;
+        this.mockShootrService = mockShootrService;
         this.app = app;
     }
 
@@ -269,14 +269,14 @@ public class DebugAppContainer implements AppContainer {
     final NetworkDelayAdapter delayAdapter = new NetworkDelayAdapter(drawerContext);
     networkDelayView.setAdapter(delayAdapter);
     networkDelayView.setSelection(
-        NetworkDelayAdapter.getPositionForValue(mockBagdadService.getDelay()));
+        NetworkDelayAdapter.getPositionForValue(mockShootrService.getDelay()));
     networkDelayView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         long selected = delayAdapter.getItem(position);
-        if (selected != mockBagdadService.getDelay()) {
+        if (selected != mockShootrService.getDelay()) {
           Timber.d("Setting network delay to %sms", selected);
-          mockBagdadService.setDelay(selected);
+          mockShootrService.setDelay(selected);
         } else {
           Timber.d("Ignoring re-selection of network delay %sms", selected);
         }
@@ -289,34 +289,34 @@ public class DebugAppContainer implements AppContainer {
     final NetworkVarianceAdapter varianceAdapter = new NetworkVarianceAdapter(drawerContext);
     networkVarianceView.setAdapter(varianceAdapter);
     networkVarianceView.setSelection(
-            NetworkVarianceAdapter.getPositionForValue(mockBagdadService.getVariancePercentage()));
+            NetworkVarianceAdapter.getPositionForValue(mockShootrService.getVariancePercentage()));
     networkVarianceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        int selected = varianceAdapter.getItem(position);
-        if (selected != mockBagdadService.getVariancePercentage()) {
-          Timber.d("Setting network variance to %s%%", selected);
-          mockBagdadService.setVariancePercentage(selected);
-        } else {
-          Timber.d("Ignoring re-selection of network variance %s%%", selected);
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            int selected = varianceAdapter.getItem(position);
+            if (selected != mockShootrService.getVariancePercentage()) {
+                Timber.d("Setting network variance to %s%%", selected);
+                mockShootrService.setVariancePercentage(selected);
+            } else {
+                Timber.d("Ignoring re-selection of network variance %s%%", selected);
+            }
         }
-      }
 
-      @Override public void onNothingSelected(AdapterView<?> adapterView) {
-      }
+        @Override public void onNothingSelected(AdapterView<?> adapterView) {
+        }
     });
 
     final NetworkErrorAdapter errorAdapter = new NetworkErrorAdapter(drawerContext);
     networkErrorView.setAdapter(errorAdapter);
     networkErrorView.setSelection(
-            NetworkErrorAdapter.getPositionForValue(mockBagdadService.getErrorPercentage()));
+            NetworkErrorAdapter.getPositionForValue(mockShootrService.getErrorPercentage()));
     networkErrorView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         int selected = errorAdapter.getItem(position);
-        if (selected != mockBagdadService.getErrorPercentage()) {
+        if (selected != mockShootrService.getErrorPercentage()) {
           Timber.d("Setting network error to %s%%", selected);
-          mockBagdadService.setErrorPercentage(selected);
+          mockShootrService.setErrorPercentage(selected);
         } else {
           Timber.d("Ignoring re-selection of network error %s%%", selected);
         }
@@ -689,6 +689,6 @@ public class DebugAppContainer implements AppContainer {
         Intent newApp = new Intent(app, MainActivity.class);
         newApp.setFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
-        GolesApplication.get(app).buildObjectGraphAndInject();
+        ShootrApplication.get(app).buildObjectGraphAndInject();
     }
 }

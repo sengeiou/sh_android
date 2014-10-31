@@ -1,7 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.constant.Constants;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.mappers.MatchMapper;
 import gm.mobi.android.db.mappers.TeamMapper;
 import gm.mobi.android.db.mappers.WatchMapper;
@@ -40,12 +40,12 @@ public class MatchDtoFactory {
     public GenericDto getLastMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam){
         FilterDto matchFilter = and(
           orIsNotDeleted(),
-          or(GMContract.MatchTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
-          or(GMContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
-          or(GMContract.MatchTable.MATCH_DATE).isNotEqualTo(null),
-          or(GMContract.MatchTable.STATUS).isEqualTo(0).or(GMContract.MatchTable.STATUS).isEqualTo(1)).build();
+          or(DatabaseContract.MatchTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
+          or(DatabaseContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
+          or(DatabaseContract.MatchTable.MATCH_DATE).isNotEqualTo(null),
+          or(DatabaseContract.MatchTable.STATUS).isEqualTo(0).or(DatabaseContract.MatchTable.STATUS).isEqualTo(1)).build();
 
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(GMContract.MatchTable.TABLE).includeDeleted(true).items(1).filter(matchFilter).build();
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(DatabaseContract.MatchTable.TABLE).includeDeleted(true).items(1).filter(matchFilter).build();
 
         OperationDto op = new OperationDto.Builder()
           .metadata(md)
@@ -58,15 +58,15 @@ public class MatchDtoFactory {
     public GenericDto getWatchFromUsers(List<Long> userIds, Long date){
         FilterDto watchFollowingFilter = and(
             orIsNotDeleted())
-          .and(GMContract.WatchTable.CSYS_MODIFIED).greaterThan(date)
-          .and(GMContract.WatchTable.STATUS).isEqualTo(1)
+          .and(DatabaseContract.WatchTable.CSYS_MODIFIED).greaterThan(date)
+          .and(DatabaseContract.WatchTable.STATUS).isEqualTo(1)
           .and(
-            or(GMContract.WatchTable.ID_USER).isIn(userIds)
+            or(DatabaseContract.WatchTable.ID_USER).isIn(userIds)
           )
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
-          GMContract.WatchTable.TABLE)
+          DatabaseContract.WatchTable.TABLE)
           .includeDeleted(true).filter(watchFollowingFilter).items(1000).build();
 
         OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
@@ -77,13 +77,13 @@ public class MatchDtoFactory {
     public GenericDto getMatchesNotEndedByIds(List<Long> matchIds){
         FilterDto matchesWatchFollowingFilter = and(
           orIsNotDeleted(),
-          or(GMContract.MatchTable.ID_MATCH).isIn(matchIds),
-          or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED).or(GMContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED),
-          or(GMContract.MatchTable.MATCH_DATE).isNotEqualTo(null))
+          or(DatabaseContract.MatchTable.ID_MATCH).isIn(matchIds),
+          or(DatabaseContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED).or(DatabaseContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED),
+          or(DatabaseContract.MatchTable.MATCH_DATE).isNotEqualTo(null))
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(GMContract.MatchTable.TABLE)
+          .entity(DatabaseContract.MatchTable.TABLE)
           .includeDeleted(false)
           .filter(matchesWatchFollowingFilter)
           .items(1000)
@@ -95,9 +95,9 @@ public class MatchDtoFactory {
     }
 
     public GenericDto getTeamsFromTeamIds(List<Long> teamIds){
-        FilterDto teamsFilter = and(orIsNotDeleted(),or(GMContract.TeamTable.ID_TEAM).isIn(teamIds)).build();
+        FilterDto teamsFilter = and(orIsNotDeleted(),or(DatabaseContract.TeamTable.ID_TEAM).isIn(teamIds)).build();
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
-          .entity(GMContract.TeamTable.TABLE)
+          .entity(DatabaseContract.TeamTable.TABLE)
           .includeDeleted(false)
           .filter(teamsFilter)
           .items(1000)

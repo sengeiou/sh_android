@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import timber.log.Timber;
 
-public abstract class BagdadBaseJob<T> extends Job {
+public abstract class ShootrBaseJob<T> extends Job {
 
     private final Application application;
 
@@ -25,7 +25,7 @@ public abstract class BagdadBaseJob<T> extends Job {
     private NetworkUtil networkUtil;
     private SQLiteDatabase db;
 
-    protected BagdadBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
+    protected ShootrBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
         super(params);
         this.application = application;
         this.bus = bus;

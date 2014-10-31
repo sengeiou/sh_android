@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import gm.mobi.android.GolesApplication;
+
 import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.data.SessionManagerImpl;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;

@@ -4,12 +4,13 @@ import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.GMContract;
+
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
@@ -22,10 +23,10 @@ import javax.inject.Inject;
 public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEvent>{
 
     private ShotManager shotManager;
-    private BagdadService service;
+    private ShootrService service;
     private UserEntity currentUser;
 
-    @Inject public RetrieveNewShotsTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
+    @Inject public RetrieveNewShotsTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(context, bus, service, networkUtil, shotManager, followManager, dbHelper);
         this.shotManager = shotManager;
@@ -41,7 +42,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
     @Override protected void run() throws SQLException, IOException {
         List<ShotModel> updatedTimeline = new ArrayList<>();
         List<ShotEntity> newShots = new CopyOnWriteArrayList<>();
-        Long lastModifiedDate = shotManager.getLastModifiedDate(GMContract.ShotTable.TABLE);
+        Long lastModifiedDate = shotManager.getLastModifiedDate(DatabaseContract.ShotTable.TABLE);
         if(getFollowingIds().size()>0) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
             //TODO what if newshots is empty?

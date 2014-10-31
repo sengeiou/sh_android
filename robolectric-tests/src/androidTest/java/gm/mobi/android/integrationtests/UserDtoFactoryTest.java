@@ -1,8 +1,8 @@
 package gm.mobi.android.integrationtests;
 
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.TestGolesApplication;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.TestShootrApplication;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import java.util.Map;
@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +25,7 @@ public class UserDtoFactoryTest {
 
     @Before
     public void setup() {
-        ((TestGolesApplication) Robolectric.application).inject(this);
+        ((TestShootrApplication) Robolectric.application).inject(this);
     }
     @Test
     public void loginWithEmailFillsEmailField() {
@@ -34,9 +33,9 @@ public class UserDtoFactoryTest {
 
         GenericDto dto = userDtoFactory.getLoginOperationDto(email, "password");
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.EMAIL);
-        assertThat(keys).doesNotContainKey(GMContract.UserTable.USER_NAME);
-        assertEquals(email, keys.get(GMContract.UserTable.EMAIL));
+        assertThat(keys).containsKey(DatabaseContract.UserTable.EMAIL);
+        assertThat(keys).doesNotContainKey(DatabaseContract.UserTable.USER_NAME);
+        assertEquals(email, keys.get(DatabaseContract.UserTable.EMAIL));
     }
 
     @Test
@@ -45,9 +44,9 @@ public class UserDtoFactoryTest {
 
         GenericDto dto = userDtoFactory.getLoginOperationDto(username, "password");
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.USER_NAME);
-        assertThat(keys).doesNotContainKey(GMContract.UserTable.EMAIL);
-        assertEquals(username, keys.get(GMContract.UserTable.USER_NAME));
+        assertThat(keys).containsKey(DatabaseContract.UserTable.USER_NAME);
+        assertThat(keys).doesNotContainKey(DatabaseContract.UserTable.EMAIL);
+        assertEquals(username, keys.get(DatabaseContract.UserTable.USER_NAME));
     }
 
     @Test
@@ -55,7 +54,7 @@ public class UserDtoFactoryTest {
         String pass = "password";
         GenericDto dto = userDtoFactory.getLoginOperationDto("mock", pass);
         Map<String, Object> keys = dto.getOps()[0].getMetadata().getKey();
-        assertThat(keys).containsKey(GMContract.UserTable.PASSWORD);
-        assertEquals(pass, keys.get(GMContract.UserTable.PASSWORD));
+        assertThat(keys).containsKey(DatabaseContract.UserTable.PASSWORD);
+        assertEquals(pass, keys.get(DatabaseContract.UserTable.PASSWORD));
     }
 }

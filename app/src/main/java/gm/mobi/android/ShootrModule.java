@@ -15,13 +15,13 @@ import javax.inject.Singleton;
                 BusModule.class,
         },
         injects = {
-                GolesApplication.class,
+                ShootrApplication.class,
         }
 )
-public final class GolesModule {
-    private final GolesApplication app;
+public final class ShootrModule {
+    private final ShootrApplication app;
 
-    public GolesModule(GolesApplication app) {
+    public ShootrModule(ShootrApplication app) {
         this.app = app;
     }
 

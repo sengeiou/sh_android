@@ -4,12 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class OpenHelper extends SQLiteOpenHelper {
+public class ShootrDbOpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "bagdad.db";
+    public static final String DATABASE_NAME = "shootr.db";
     public static final int DATABASE_VERSION = 1;
 
-    public OpenHelper(Context context, SQLiteDatabase.CursorFactory cursorFactory) {
+    public ShootrDbOpenHelper(Context context, SQLiteDatabase.CursorFactory cursorFactory) {
         super(context, DATABASE_NAME, cursorFactory, DATABASE_VERSION);
     }
 
@@ -28,14 +28,14 @@ public class OpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.UserTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.ShotTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.FollowTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.TablesSync.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.DeviceTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.TeamTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.MatchTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GMContract.WatchTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.UserTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ShotTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.FollowTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TablesSync.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.DeviceTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TeamTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MatchTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.WatchTable.TABLE);
         onCreate(db);
     }
 

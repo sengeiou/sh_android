@@ -1,6 +1,6 @@
 package gm.mobi.android.db.manager;
 
-import gm.mobi.android.db.GMContract.DeviceTable;
+import gm.mobi.android.db.DatabaseContract.DeviceTable;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.objects.DeviceEntity;
 import javax.inject.Inject;

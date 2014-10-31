@@ -10,9 +10,9 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.profile.UserInfoResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
+public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
     private static final int RETRY_ATTEMPTS = 3;
 
-    BagdadService service;
+    ShootrService service;
 
     UserManager userManager;
     FollowManager followManager;
@@ -35,7 +35,7 @@ public class GetUserInfoJob extends BagdadBaseJob<UserInfoResultEvent> {
     private UserModelMapper userVOMapper;
     private NetworkUtil networkUtil;
 
-    @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service,
+    @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, ShootrService service,
       NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;

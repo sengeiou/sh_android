@@ -1,7 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.constant.Constants;
-import gm.mobi.android.db.GMContract.ShotTable;
+import gm.mobi.android.db.DatabaseContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.service.dataservice.generic.FilterDto;
 import gm.mobi.android.service.dataservice.generic.GenericDto;

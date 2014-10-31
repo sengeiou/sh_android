@@ -6,8 +6,9 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.OpenHelper;
+
+import gm.mobi.android.db.DatabaseContract;
+import gm.mobi.android.db.ShootrDbOpenHelper;
 import gm.mobi.android.db.objects.TableSync;
 import gm.mobi.android.util.TimeUtils;
 import javax.inject.Inject;
@@ -26,7 +27,7 @@ public abstract class AbstractManager {
     }
 
     public  void deleteDatabase(Context context) {
-        context.deleteDatabase(OpenHelper.DATABASE_NAME);
+        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
         Timber.d("Database deleted");
     }
 
@@ -51,24 +52,24 @@ public abstract class AbstractManager {
 
     public long insertOrUpdateSyncTable(TableSync tableSync){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(GMContract.TablesSync.ORDER,tableSync.getOrder());
-        contentValues.put(GMContract.TablesSync.ENTITY, tableSync.getEntity());
-        contentValues.put(GMContract.TablesSync.DIRECTION, tableSync.getDirection());
-        contentValues.put(GMContract.TablesSync.FREQUENCY, tableSync.getFrequency());
-        contentValues.put(GMContract.TablesSync.MAX_ROWS, tableSync.getMaxRows());
-        contentValues.put(GMContract.TablesSync.MIN_ROWS, tableSync.getMinRows());
-        contentValues.put(GMContract.TablesSync.MIN_TIMESTAMP, tableSync.getMin_timestamp());
-        contentValues.put(GMContract.TablesSync.MAX_TIMESTAMP, tableSync.getMax_timestamp());
-        return db.insertWithOnConflict(GMContract.TablesSync.TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+        contentValues.put(DatabaseContract.TablesSync.ORDER,tableSync.getOrder());
+        contentValues.put(DatabaseContract.TablesSync.ENTITY, tableSync.getEntity());
+        contentValues.put(DatabaseContract.TablesSync.DIRECTION, tableSync.getDirection());
+        contentValues.put(DatabaseContract.TablesSync.FREQUENCY, tableSync.getFrequency());
+        contentValues.put(DatabaseContract.TablesSync.MAX_ROWS, tableSync.getMaxRows());
+        contentValues.put(DatabaseContract.TablesSync.MIN_ROWS, tableSync.getMinRows());
+        contentValues.put(DatabaseContract.TablesSync.MIN_TIMESTAMP, tableSync.getMin_timestamp());
+        contentValues.put(DatabaseContract.TablesSync.MAX_TIMESTAMP, tableSync.getMax_timestamp());
+        return db.insertWithOnConflict(DatabaseContract.TablesSync.TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public int getNumMaxOfRowsByEntity(String entity){
         int numRows = 0;
 
-        String[] column = new String[]{GMContract.TablesSync.MAX_ROWS};
+        String[] column = new String[]{DatabaseContract.TablesSync.MAX_ROWS};
         String[] stringArgs = new String[]{entity};
-        String args = GMContract.TablesSync.ENTITY+"=?";
-        Cursor c = db.query(GMContract.TablesSync.TABLE, column,args,stringArgs,null,null,null,null);
+        String args = DatabaseContract.TablesSync.ENTITY+"=?";
+        Cursor c = db.query(DatabaseContract.TablesSync.TABLE, column,args,stringArgs,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             numRows = c.getInt(0);
@@ -80,15 +81,15 @@ public abstract class AbstractManager {
 
 
     public int deleteRows(long number){
-        String sql = "SELECT min(idShot) as idShot FROM (SELECT "+GMContract.ShotTable.ID_SHOT +" FROM "+ GMContract.ShotTable.TABLE+" order by "+ GMContract.ShotTable.ID_SHOT+" DESC LIMIT 10)";
+        String sql = "SELECT min(idShot) as idShot FROM (SELECT "+ DatabaseContract.ShotTable.ID_SHOT +" FROM "+ DatabaseContract.ShotTable.TABLE+" order by "+ DatabaseContract.ShotTable.ID_SHOT+" DESC LIMIT 10)";
         int idShot = 0;
         Cursor c = db.rawQuery(sql, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            idShot = c.getInt(c.getColumnIndex(GMContract.ShotTable.ID_SHOT));
+            idShot = c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT));
         }
         c.close();
-        return db.delete(GMContract.ShotTable.TABLE, GMContract.ShotTable.ID_SHOT+"<"+idShot,null);
+        return db.delete(DatabaseContract.ShotTable.TABLE, DatabaseContract.ShotTable.ID_SHOT+"<"+idShot,null);
     }
 
     public  Long getFirstModifiedDate(String entity){
@@ -96,11 +97,11 @@ public abstract class AbstractManager {
         if(isTableEmpty(entity)){
             firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
         }else{
-            String sql = "SELECT "+ GMContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + GMContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
+            String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
             Cursor c = db.rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                firstDateModified = c.getLong(c.getColumnIndex(GMContract.SyncColumns.CSYS_MODIFIED));
+                firstDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
             } else {
                 firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
             }
@@ -114,11 +115,11 @@ public abstract class AbstractManager {
         if(isTableEmpty(entity)){
             lastDateModified = 0L;
         }else{
-            String sql = "SELECT "+ GMContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + GMContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
+            String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
             Cursor c = db.rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                lastDateModified = c.getLong(c.getColumnIndex(GMContract.SyncColumns.CSYS_MODIFIED));
+                lastDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
             } else {
                 lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
             }

@@ -1,9 +1,9 @@
 package gm.mobi.android;
 
 final class Modules {
-    static Object[] list(GolesApplication app) {
+    static Object[] list(ShootrApplication app) {
         return new Object[] {
-                new GolesModule(app)
+                new ShootrModule(app)
         };
     }
 

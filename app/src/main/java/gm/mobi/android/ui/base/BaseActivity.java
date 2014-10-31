@@ -5,11 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 
-import com.google.android.gms.fitness.request.ac;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.ui.AppContainer;
 
@@ -49,7 +48,7 @@ public class BaseActivity extends ActionBarActivity {
      * @return By default returns the Application global object graph.
      */
     public ObjectGraph getObjectGraph() {
-        return GolesApplication.get(this).getObjectGraph();
+        return ShootrApplication.get(this).getObjectGraph();
     }
 
     public Toolbar getToolbar(){ return actionBarToolbar;}

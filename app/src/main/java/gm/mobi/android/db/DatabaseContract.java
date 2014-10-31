@@ -3,7 +3,7 @@ package gm.mobi.android.db;
 import android.provider.BaseColumns;
 import gm.mobi.android.db.objects.Synchronized;
 
-public class GMContract {
+public class DatabaseContract {
 
     public static interface SyncColumns extends BaseColumns {
         static final String CSYS_BIRTH = "birth";

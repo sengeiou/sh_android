@@ -3,13 +3,12 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.ShotTable;
-import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.mappers.FollowMapper;
+
+import gm.mobi.android.db.DatabaseContract;
+import gm.mobi.android.db.DatabaseContract.ShotTable;
+import gm.mobi.android.db.DatabaseContract.UserTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.ui.model.ShotModel;
@@ -29,8 +28,8 @@ public class ShotManager extends  AbstractManager{
     @Inject ShotModelMapper shotVOMapper;
 
     private static final String SHOT_TABLE = ShotTable.TABLE;
-    private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
-    private static final String CSYS_BIRTH = GMContract.SyncColumns.CSYS_BIRTH;
+    private static final String CSYS_DELETED = DatabaseContract.SyncColumns.CSYS_DELETED;
+    private static final String CSYS_BIRTH = DatabaseContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
     public ShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
@@ -227,11 +226,11 @@ public class ShotManager extends  AbstractManager{
      */
     public long deleteShot(ShotEntity shot) {
         long res = 0;
-        String args = GMContract.ShotTable.ID_SHOT + "=?";
+        String args = DatabaseContract.ShotTable.ID_SHOT + "=?";
         String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
-        Cursor c = db.query(SHOT_TABLE, GMContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = db.query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(SHOT_TABLE, GMContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
+            res = db.delete(SHOT_TABLE, DatabaseContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
         }
         c.close();
         return res;

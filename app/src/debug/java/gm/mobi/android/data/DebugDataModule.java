@@ -9,18 +9,15 @@ import dagger.Provides;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.IntPreference;
 import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.db.OpenHelper;
+import gm.mobi.android.db.ShootrDbOpenHelper;
 import gm.mobi.android.db.TrackingCursorFactory;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
 import gm.mobi.android.gcm.notifications.DebugNotificationManager;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.service.DebugApiModule;
 import gm.mobi.android.ui.debug.NetworkProxy;
-import gm.mobi.android.util.FileLogger;
-import java.util.Arrays;
-import java.util.List;
+
 import javax.inject.Singleton;
-import timber.log.Timber;
 
 @Module(
   includes = DebugApiModule.class,
@@ -91,10 +88,10 @@ public class DebugDataModule {
     }
 
     @Provides @Singleton SQLiteOpenHelper provideSqLiteOpenHelper(Application application) {
-        return new OpenHelper(application.getApplicationContext(), new TrackingCursorFactory());
+        return new ShootrDbOpenHelper(application.getApplicationContext(), new TrackingCursorFactory());
     }
 
-    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(
+    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(
       DebugNotificationManager notificationManager) {
         return notificationManager;
     }

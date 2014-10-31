@@ -14,7 +14,7 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
@@ -107,7 +107,7 @@ public class InfoActivity extends BaseSignedInActivity {
     }
 
     public void retrieveInfoList(){
-        GetWatchingInfoJob job = GolesApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
+        GetWatchingInfoJob job = ShootrApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
         job.init();
         jobManager.addJobInBackground(job);
     }

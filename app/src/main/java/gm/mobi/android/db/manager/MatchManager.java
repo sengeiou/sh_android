@@ -3,15 +3,14 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.MatchTable;
+
+import gm.mobi.android.db.DatabaseContract.MatchTable;
 import gm.mobi.android.db.mappers.MatchMapper;
 import gm.mobi.android.db.objects.MatchEntity;
-import gm.mobi.android.db.objects.WatchEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class MatchManager extends AbstractManager{
 

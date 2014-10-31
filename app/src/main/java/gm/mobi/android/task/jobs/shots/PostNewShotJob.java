@@ -7,23 +7,23 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class PostNewShotJob extends BagdadBaseJob<PostNewShotResultEvent> {
+public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
 
     private static final int PRIORITY = 5;
 
-    BagdadService service;
+    ShootrService service;
 
     private UserEntity currentUser;
     private String comment;
 
-    @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, BagdadService service) {
+    @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
     }

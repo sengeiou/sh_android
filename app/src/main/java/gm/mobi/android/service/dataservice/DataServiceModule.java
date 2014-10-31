@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 
 @Module(
         injects = {
-                BagdadDataService.class
+                ShootrDataService.class
         },
         library = true,
         complete = false

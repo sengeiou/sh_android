@@ -1,7 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.GMContract.DeviceTable;
+import gm.mobi.android.db.DatabaseContract.DeviceTable;
 import gm.mobi.android.db.mappers.DeviceMapper;
 import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;

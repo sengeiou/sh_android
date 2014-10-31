@@ -3,7 +3,7 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.objects.TeamEntity;
-import gm.mobi.android.db.GMContract.TeamTable;
+import gm.mobi.android.db.DatabaseContract.TeamTable;
 import java.util.HashMap;
 import java.util.Map;
 

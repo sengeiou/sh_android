@@ -3,7 +3,7 @@ package gm.mobi.android.task.jobs;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import dagger.ObjectGraph;
+
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import org.junit.Ignore;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Config(emulateSdk = 18)
-public abstract class BagdadBaseJobTestAbstract {
+public abstract class ShootrBaseJobTestAbstract {
 
     protected Bus bus;
     protected NetworkUtil networkUtil;
@@ -33,14 +33,14 @@ public abstract class BagdadBaseJobTestAbstract {
     public void postConnectionNotAvailableEventWhenConnectionNotAvailable() throws Throwable {
         when(networkUtil.isConnected(any(Context.class))).thenReturn(false);
 
-        BagdadBaseJob systemUnderTest = getSystemUnderTest();
+        ShootrBaseJob systemUnderTest = getSystemUnderTest();
 
         systemUnderTest.onRun();
 
         verify(bus, atLeastOnce()).post(argThat(new ConnectionNotAvailableMatcher()));
     }
 
-    protected abstract BagdadBaseJob getSystemUnderTest();
+    protected abstract ShootrBaseJob getSystemUnderTest();
 
     public static class ConnectionNotAvailableMatcher extends ArgumentMatcher<Object> {
 

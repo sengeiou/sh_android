@@ -2,7 +2,7 @@ package gm.mobi.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.DatabaseContract.UserTable;
 import gm.mobi.android.db.objects.UserEntity;
 import java.text.Normalizer;
 import java.util.HashMap;

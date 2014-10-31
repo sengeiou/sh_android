@@ -7,7 +7,7 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.timeline.ShotsResultEvent;
 import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
     private ShotManager shotManager;
     private UserEntity currentUser;
 
-    @Inject public RetrieveFromDataBaseTimeLineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil,
+    @Inject public RetrieveFromDataBaseTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
       ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(context, bus, service, networkUtil, shotManager, followManager, dbHelper);
         this.shotManager = shotManager;

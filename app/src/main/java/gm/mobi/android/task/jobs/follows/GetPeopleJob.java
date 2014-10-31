@@ -10,9 +10,9 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -23,10 +23,10 @@ import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
+public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
 
     public static final int PRIORITY = 5;
-    BagdadService service;
+    ShootrService service;
 
     private Long currentUserId;
     private UserManager userManager;
@@ -34,7 +34,7 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
     private UserModelMapper userModelMapper;
 
 
-    @Inject public GetPeopleJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    @Inject public GetPeopleJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
         this.userManager = userManager;
@@ -44,7 +44,7 @@ public class GetPeopleJob extends BagdadBaseJob<FollowsResultEvent> {
     }
 
 
-    public void setService(BagdadService service) {
+    public void setService(ShootrService service) {
         this.service = service;
     }
 

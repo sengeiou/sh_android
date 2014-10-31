@@ -1,6 +1,6 @@
 package gm.mobi.android.service.dataservice.generic;
 
-import gm.mobi.android.db.GMContract.SyncColumns;
+import gm.mobi.android.db.DatabaseContract.SyncColumns;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

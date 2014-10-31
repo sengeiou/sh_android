@@ -23,7 +23,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import dagger.ObjectGraph;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.PaginatedResult;
@@ -86,7 +86,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         setupViews();
         setupActionBar();
 
-        objectGraph = GolesApplication.get(getApplicationContext()).getObjectGraph();
+        objectGraph = ShootrApplication.get(getApplicationContext()).getObjectGraph();
     }
 
     private void setupViews() {
@@ -327,12 +327,12 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
-        UserEntity currentUser = GolesApplication.get(this).getCurrentUser();
-        GetFollowUnFollowUserOfflineJob jobOffline = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        UserEntity currentUser = ShootrApplication.get(this).getCurrentUser();
+        GetFollowUnFollowUserOfflineJob jobOffline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
         jobOffline.init(currentUser,userVO.getIdUser(), followType);
         jobManager.addJobInBackground(jobOffline);
 
-        GetFollowUnfollowUserJob jobOnline = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserJob jobOnline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         jobManager.addJobInBackground(jobOnline);
     }
 

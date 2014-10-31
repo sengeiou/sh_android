@@ -21,7 +21,7 @@ import gm.mobi.android.db.objects.TeamEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.db.objects.WatchEntity;
 import gm.mobi.android.exception.ServerException;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.service.Endpoint;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.service.dataservice.dto.DeviceDtoFactory;
@@ -40,7 +40,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class BagdadDataService implements BagdadService {
+public class ShootrDataService implements ShootrService {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final long DEFAULT_LIMIT = 10L;
@@ -65,10 +65,10 @@ public class BagdadDataService implements BagdadService {
     private TeamMapper teamMapper;
 
     @Inject
-    public BagdadDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
-      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-      UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, MatchDtoFactory matchDtoFactory,
-      DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper) {
+    public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
+                             TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
+                             UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, MatchDtoFactory matchDtoFactory,
+                             DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;

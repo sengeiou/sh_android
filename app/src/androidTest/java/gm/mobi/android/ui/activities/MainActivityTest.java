@@ -1,12 +1,10 @@
 package gm.mobi.android.ui.activities;
 
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.ActivityUnitTestCase;
 import com.squareup.spoon.Spoon;
-import gm.mobi.android.GolesApplication;
+
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;

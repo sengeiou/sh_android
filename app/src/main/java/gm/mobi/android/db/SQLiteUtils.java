@@ -1,14 +1,14 @@
 package gm.mobi.android.db;
 
-import gm.mobi.android.db.GMContract.DeviceTable;
-import gm.mobi.android.db.GMContract.FollowTable;
-import gm.mobi.android.db.GMContract.ShotTable;
-import gm.mobi.android.db.GMContract.SyncColumns;
-import gm.mobi.android.db.GMContract.TablesSync;
-import gm.mobi.android.db.GMContract.UserTable;
-import gm.mobi.android.db.GMContract.TeamTable;
-import gm.mobi.android.db.GMContract.MatchTable;
-import gm.mobi.android.db.GMContract.WatchTable;
+import gm.mobi.android.db.DatabaseContract.DeviceTable;
+import gm.mobi.android.db.DatabaseContract.FollowTable;
+import gm.mobi.android.db.DatabaseContract.ShotTable;
+import gm.mobi.android.db.DatabaseContract.SyncColumns;
+import gm.mobi.android.db.DatabaseContract.TablesSync;
+import gm.mobi.android.db.DatabaseContract.UserTable;
+import gm.mobi.android.db.DatabaseContract.TeamTable;
+import gm.mobi.android.db.DatabaseContract.MatchTable;
+import gm.mobi.android.db.DatabaseContract.WatchTable;
 
 public class SQLiteUtils {
 

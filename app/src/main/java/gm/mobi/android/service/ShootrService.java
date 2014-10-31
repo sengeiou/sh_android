@@ -10,7 +10,7 @@ import gm.mobi.android.db.objects.WatchEntity;
 import java.io.IOException;
 import java.util.List;
 
-public interface BagdadService {
+public interface ShootrService {
 
     public UserEntity login(String id, String password) throws IOException;
 

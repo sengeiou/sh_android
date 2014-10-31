@@ -3,7 +3,6 @@ package gm.mobi.android.ui.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,7 +24,7 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import gm.mobi.android.data.prefs.InitialSetupCompleted;
@@ -93,7 +92,7 @@ public class MainActivity extends BaseSignedInActivity {
         ButterKnife.inject(this);
 
         actionBar = getSupportActionBar();
-        currentUser = GolesApplication.get(this).getCurrentUser();
+        currentUser = ShootrApplication.get(this).getCurrentUser();
         userVO = userModelMapper.toUserModel(currentUser,null,true);
 
         startGCMRegistration();
@@ -108,7 +107,7 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void startGCMRegistration() {
-        GCMRegistrationJob job = GolesApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
+        GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
         job.init();
         jobManager.addJobInBackground(job);
     }

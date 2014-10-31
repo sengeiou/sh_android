@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
@@ -43,12 +43,12 @@ public class InitialSetupFragment extends BaseFragment {
      * - Downloading and storing the user's following, if any.
      */
     private void performInitialSetup() {
-        UserEntity currentUser = ((GolesApplication)getActivity().getApplication()).getCurrentUser();
+        UserEntity currentUser = ((ShootrApplication)getActivity().getApplication()).getCurrentUser();
         startGetFollowingJob(getActivity(), currentUser);
     }
 
     private void startGetFollowingJob(Context context, UserEntity currentUser){
-        GetFollowingsJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowingsJob.class);
+        GetFollowingsJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowingsJob.class);
         job.init(currentUser);
         jobManager.addJobInBackground(job);
     }

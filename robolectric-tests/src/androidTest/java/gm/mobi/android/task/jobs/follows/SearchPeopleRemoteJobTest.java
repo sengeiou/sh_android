@@ -6,9 +6,9 @@ import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
+import gm.mobi.android.service.ShootrService;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJobTestAbstract;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import org.junit.Before;
@@ -21,12 +21,12 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(emulateSdk = 18)
-public class SearchPeopleRemoteJobTest extends BagdadBaseJobTestAbstract {
+public class SearchPeopleRemoteJobTest extends ShootrBaseJobTestAbstract {
 
     public static final long CURRENT_USER_ID = 1L;
     private UserModelMapper userVOMapper;
     private SearchPeopleRemoteJob searchPeopleRemoteJob;
-    private BagdadService service;
+    private ShootrService service;
     private SQLiteOpenHelper openHelper;
     private UserManager userManager;
     private FollowManager followManager;
@@ -35,7 +35,7 @@ public class SearchPeopleRemoteJobTest extends BagdadBaseJobTestAbstract {
     @Before
     public void setUp() throws IOException {
         super.setUp();
-        service = mock(BagdadService.class);
+        service = mock(ShootrService.class);
         openHelper = mock(SQLiteOpenHelper.class);
         userManager = mock(UserManager.class);
         followManager = mock(FollowManager.class);
@@ -52,7 +52,7 @@ public class SearchPeopleRemoteJobTest extends BagdadBaseJobTestAbstract {
         searchPeopleRemoteJob.init("", 0);
     }
 
-    @Override protected BagdadBaseJob getSystemUnderTest() {
+    @Override protected ShootrBaseJob getSystemUnderTest() {
         return searchPeopleRemoteJob;
     }
 }

@@ -13,7 +13,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.constant.Constants;
 import gm.mobi.android.data.prefs.GCMAppVersion;
 import gm.mobi.android.data.prefs.GCMRegistrationId;
@@ -23,9 +23,9 @@ import gm.mobi.android.db.manager.DeviceManager;
 import gm.mobi.android.db.objects.DeviceEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.gcm.GCMConstants;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.loginregister.PushTokenResult;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.util.VersionUtils;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -35,7 +35,7 @@ import java.util.Date;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
+public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
 
     public static final int PRIORITY = 3;
 
@@ -43,7 +43,7 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
     private IntPreference registeredAppVersion;
     private final GoogleCloudMessaging gcm;
     private UserEntity currentUser;
-    private BagdadService service;
+    private ShootrService service;
 
     private DeviceManager deviceManager;
 
@@ -51,7 +51,7 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
 
     @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
-      @GCMAppVersion IntPreference registeredAppVersion, BagdadService service, DeviceManager deviceManager,
+      @GCMAppVersion IntPreference registeredAppVersion, ShootrService service, DeviceManager deviceManager,
       SQLiteOpenHelper openHelper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.registrationId = registrationId;
@@ -60,7 +60,7 @@ public class GCMRegistrationJob extends BagdadBaseJob<PushTokenResult> {
         this.service = service;
         this.deviceManager = deviceManager;
         setOpenHelper(openHelper);
-        currentUser = GolesApplication.get(getContext()).getCurrentUser();
+        currentUser = ShootrApplication.get(getContext()).getCurrentUser();
     }
 
     public void init() {

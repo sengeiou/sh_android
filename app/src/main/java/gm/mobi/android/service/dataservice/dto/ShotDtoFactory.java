@@ -1,8 +1,8 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.ShotTable;
+import gm.mobi.android.db.DatabaseContract;
+import gm.mobi.android.db.DatabaseContract.ShotTable;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -57,8 +57,8 @@ public class ShotDtoFactory {
 
         MetadataDto md = new MetadataDto.Builder()
                 .operation(ServiceConstants.OPERATION_CREATE)
-                .entity(GMContract.ShotTable.TABLE)
-                .putKey(GMContract.ShotTable.ID_SHOT, null)
+                .entity(DatabaseContract.ShotTable.TABLE)
+                .putKey(DatabaseContract.ShotTable.ID_SHOT, null)
                 .build();
 
         ShotEntity shotTemplate = new ShotEntity();

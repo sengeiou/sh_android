@@ -3,8 +3,9 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.FollowTable;
+
+import gm.mobi.android.db.DatabaseContract;
+import gm.mobi.android.db.DatabaseContract.FollowTable;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.objects.FollowEntity;
 import java.sql.SQLException;
@@ -17,8 +18,8 @@ public class FollowManager extends AbstractManager{
 
 
     FollowMapper followMapper;
-    private static final String CSYS_DELETED = GMContract.SyncColumns.CSYS_DELETED;
-    private static final String CSYS_SYNCHRONIZED = GMContract.SyncColumns.CSYS_SYNCHRONIZED;
+    private static final String CSYS_DELETED = DatabaseContract.SyncColumns.CSYS_DELETED;
+    private static final String CSYS_SYNCHRONIZED = DatabaseContract.SyncColumns.CSYS_SYNCHRONIZED;
     private static final String FOLLOW_TABLE = FollowTable.TABLE;
     private static final String ID_FOLLOWED_USER = FollowTable.ID_FOLLOWED_USER;
     private static final String ID_USER = FollowTable.ID_USER;
@@ -83,7 +84,7 @@ public class FollowManager extends AbstractManager{
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ CSYS_DELETED+" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
-        Cursor  c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor  c = db.query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             follow = followMapper.fromCursor(c);
@@ -103,7 +104,7 @@ public class FollowManager extends AbstractManager{
         if(isTableEmpty(FOLLOW_TABLE)){
             Timber.e("La tabla follow está vacia");
         }
-        Cursor c = db.query(GMContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor c = db.query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
 
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -203,7 +204,7 @@ public class FollowManager extends AbstractManager{
         String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
 
-        Cursor c = db.query(FOLLOW_TABLE, GMContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = db.query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
             res = db.delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
                     new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});

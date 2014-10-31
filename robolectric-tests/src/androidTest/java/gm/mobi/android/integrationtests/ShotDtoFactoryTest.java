@@ -1,8 +1,8 @@
 package gm.mobi.android.integrationtests;
 
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.TestGolesApplication;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.TestShootrApplication;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +24,7 @@ public class ShotDtoFactoryTest {
 
     @Before
     public void setup() {
-        ((TestGolesApplication)Robolectric.application).inject(this);
+        ((TestShootrApplication)Robolectric.application).inject(this);
     }
 
     @Test
@@ -34,22 +33,22 @@ public class ShotDtoFactoryTest {
         Map<String, Object> key = newShotOperationDto.getOps()[0].getMetadata().getKey();
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
 
-        assertThat(key).containsKey(GMContract.ShotTable.ID_SHOT);
-        assertThat(key.get(GMContract.ShotTable.ID_SHOT)).isNull();
-        assertThat(data).containsKey(GMContract.ShotTable.ID_SHOT);
-        assertThat(data.get(GMContract.ShotTable.ID_SHOT)).isNull();
+        assertThat(key).containsKey(DatabaseContract.ShotTable.ID_SHOT);
+        assertThat(key.get(DatabaseContract.ShotTable.ID_SHOT)).isNull();
+        assertThat(data).containsKey(DatabaseContract.ShotTable.ID_SHOT);
+        assertThat(data.get(DatabaseContract.ShotTable.ID_SHOT)).isNull();
     }
 
     @Test
     public void newShotContainsComment() {
         String comment = "Spiderpig";
         Map<String, Object> shotData = new HashMap<>();
-        shotData.put(GMContract.ShotTable.COMMENT, comment);
+        shotData.put(DatabaseContract.ShotTable.COMMENT, comment);
 
         GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(5L, comment);
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
-        assertThat(data.containsKey(GMContract.ShotTable.COMMENT));
-        assertThat(data.get(GMContract.ShotTable.COMMENT)).isEqualTo(comment);
+        assertThat(data.containsKey(DatabaseContract.ShotTable.COMMENT));
+        assertThat(data.get(DatabaseContract.ShotTable.COMMENT)).isEqualTo(comment);
     }
 
     @Test
@@ -57,7 +56,7 @@ public class ShotDtoFactoryTest {
         Long idUser = 5L;
         GenericDto newShotOperationDto = shotDtoFactory.getNewShotOperationDto(idUser, "Mock comment");
         Map<String, Object> data = newShotOperationDto.getOps()[0].getData()[0];
-        assertThat(data.containsKey(GMContract.ShotTable.ID_USER));
-        assertThat(data.get(GMContract.ShotTable.ID_USER)).isEqualTo(idUser);
+        assertThat(data.containsKey(DatabaseContract.ShotTable.ID_USER));
+        assertThat(data.get(DatabaseContract.ShotTable.ID_USER)).isEqualTo(idUser);
     }
 }

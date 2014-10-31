@@ -6,14 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.GMContract;
+
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -23,11 +24,11 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
+public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 6; //TODO Define next values for our queue
 
-    BagdadService service;
+    ShootrService service;
     UserManager userManager;
     FollowManager followManager;
     @Inject UserModelMapper userModelMapper;
@@ -36,7 +37,7 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
     private boolean isMe;
 
     @Inject
-    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, BagdadService service, UserManager userManager, FollowManager followManager) {
+    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, ShootrService service, UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
@@ -91,7 +92,7 @@ public class GetFollowingsJob extends BagdadBaseJob<FollowsResultEvent> {
 
 
     private List<UserEntity> getFollowingsFromServer() throws IOException {
-        Long modifiedFollows = followManager.getLastModifiedDate(GMContract.FollowTable.TABLE);
+        Long modifiedFollows = followManager.getLastModifiedDate(DatabaseContract.FollowTable.TABLE);
         return service.getFollowing(currentUser.getIdUser(), modifiedFollows);
     }
 

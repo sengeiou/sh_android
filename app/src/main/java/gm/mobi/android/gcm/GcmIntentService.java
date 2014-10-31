@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.ui.model.ShotModel;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.ShotModelMapper;
@@ -21,26 +21,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
 
-public class GcmIntentService extends IntentService {
+public class GCMIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
     private static final int PUSH_TYPE_FOLLOW = 2;
 
-    @Inject BagdadNotificationManager notificationManager;
+    @Inject ShootrNotificationManager notificationManager;
     @Inject SQLiteOpenHelper openHelper;
     @Inject UserManager userManager;
-    @Inject BagdadService service;
+    @Inject ShootrService service;
     @Inject ShotModelMapper shotModelMapper;
     @Inject UserModelMapper userModelMapper;
     private SQLiteDatabase database;
 
-    public GcmIntentService() {
+    public GCMIntentService() {
         super("GCM Service");
     }
 
     @Override public void onCreate() {
         super.onCreate();
-        GolesApplication.get(this).inject(this);
+        ShootrApplication.get(this).inject(this);
         database = openHelper.getReadableDatabase();
         userManager.setDataBase(database);
     }

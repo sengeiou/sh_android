@@ -5,29 +5,25 @@ import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.objects.MatchEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.db.objects.WatchEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.info.WatchingInfoResult;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
-import gm.mobi.android.task.jobs.BagdadBaseJobTestAbstract;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJobTestAbstract;
 import gm.mobi.android.ui.model.MatchModel;
-import gm.mobi.android.ui.model.UserWatchingModel;
 import gm.mobi.android.ui.model.mappers.MatchModelMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
-import org.robolectric.Robolectric;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -35,7 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricGradleTestRunner.class)
-public class GetWatchingInfoJobTest extends BagdadBaseJobTestAbstract {
+public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
     public static final long IRRELEVANT_USER_ID = 666L;
     private static final Long IRRELEVANT_DATE = 0L;
@@ -45,14 +41,14 @@ public class GetWatchingInfoJobTest extends BagdadBaseJobTestAbstract {
     private static final Long WATCH_STATUS_WATCHING = 1L;
 
     private GetWatchingInfoJob job;
-    private BagdadService service;
+    private ShootrService service;
     private SessionManager sessionManager;
     private MatchModelMapper matchModelMapper;
 
     @Before @Override
     public void setUp() throws IOException {
         super.setUp();
-        service = mock(BagdadService.class);
+        service = mock(ShootrService.class);
         sessionManager = mock(SessionManager.class);
         //matchModelMapper = mock(MatchModelMapper.class); //TODO adriáaaaaaan!!!!
         matchModelMapper = new MatchModelMapper();
@@ -70,7 +66,7 @@ public class GetWatchingInfoJobTest extends BagdadBaseJobTestAbstract {
           new GetWatchingInfoJob(Robolectric.application, bus, networkUtil, service, sessionManager, matchModelMapper);*/
     }
 
-    @Override protected BagdadBaseJob getSystemUnderTest() {
+    @Override protected ShootrBaseJob getSystemUnderTest() {
         return job;
     }
 

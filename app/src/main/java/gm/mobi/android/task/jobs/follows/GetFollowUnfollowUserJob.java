@@ -10,24 +10,21 @@ import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
-public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResultEvent>{
+public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResultEvent> {
 
     private static final int PRIORITY = 6; //TODO Define next values for our queue
 
-    BagdadService service;
+    ShootrService service;
     UserManager userManager;
     FollowManager followManager;
 
@@ -35,7 +32,7 @@ public class GetFollowUnfollowUserJob extends BagdadBaseJob<FollowUnFollowResult
 
     @Inject
     public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-      BagdadService service, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+      ShootrService service, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;

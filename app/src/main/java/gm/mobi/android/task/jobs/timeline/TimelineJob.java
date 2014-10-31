@@ -9,22 +9,24 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.service.ShootrService;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob.SuccessEvent;
+
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class TimelineJob<T> extends BagdadBaseJob<BagdadBaseJob.SuccessEvent> {
+public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
 
     private static final int PRIORITY = 4;
 
-    private BagdadService service;
+    private ShootrService service;
     private ShotManager shotManager;
     private FollowManager followManager;
 
     private UserEntity currentUser;
 
-    public TimelineJob(Application context, Bus bus, BagdadService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
+    public TimelineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
         super(new Params(PRIORITY), context, bus, networkUtil);
         setOpenHelper(dbHelper);
         this.service = service;

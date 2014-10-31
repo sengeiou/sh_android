@@ -1,7 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.mappers.ShotMapper;
 import gm.mobi.android.db.objects.ShotEntity;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -64,7 +64,7 @@ public class ShotDtoFactoryTest {
     public void operationDtoIsConstructedWithDataFromShotMapper() {
         String comment = "comment";
         Map<String, Object> mockedData = new HashMap<>();
-        mockedData.put(GMContract.ShotTable.COMMENT, comment);
+        mockedData.put(DatabaseContract.ShotTable.COMMENT, comment);
         when(shotMapper.toDto(any(ShotEntity.class))).thenReturn(mockedData);
 
         GenericDto genericDto = new GenericDto();
@@ -79,6 +79,6 @@ public class ShotDtoFactoryTest {
         Map<String, Object> buildedData = operationDto.getData()[0];
         System.out.println(buildedData);
         assertThat(buildedData).isNotNull();
-        assertThat(buildedData).containsEntry(GMContract.ShotTable.COMMENT, comment);
+        assertThat(buildedData).containsEntry(DatabaseContract.ShotTable.COMMENT, comment);
     }
 }

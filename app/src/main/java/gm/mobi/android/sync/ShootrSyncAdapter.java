@@ -8,14 +8,13 @@ import android.content.SyncResult;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import com.path.android.jobqueue.JobManager;
-import gm.mobi.android.GolesApplication;
-import gm.mobi.android.constant.SyncConstants;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.UserEntity;
+
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
+public class ShootrSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Inject SQLiteOpenHelper mDbHelper;
     @Inject JobManager jobManager;
@@ -25,7 +24,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Compatibility with versions previous to 3.0
      */
-    public GMSyncAdapter(Context context, boolean autoInitialize) {
+    public ShootrSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         setup(context);
     }
@@ -33,7 +32,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Android > 3.0
      */
-    public GMSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    public ShootrSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
         setup(context);
     }
@@ -43,7 +42,7 @@ public class GMSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     public void setup(Context context) {
         /* no-op */
-        GolesApplication.get(context).inject(this);
+        ShootrApplication.get(context).inject(this);
     }
 
     @Override

@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -24,7 +22,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
@@ -89,7 +87,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
-        currentUser = GolesApplication.get(getActivity()).getCurrentUser();
+        currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
     }
 
     public void injectArguments() {
@@ -127,7 +125,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     }
 
     public void startJob(){
-        GetUsersFollowsJob job = GolesApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
+        GetUsersFollowsJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetUsersFollowsJob.class);
         job.init(userId, followType);
         jobManager.addJobInBackground(job);
     }
@@ -174,12 +172,12 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
-        GetFollowUnFollowUserOfflineJob job2 = GolesApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
         job2.init(currentUser,userVO.getIdUser(),followType);
         jobManager.addJobInBackground(job2);
 
         //Al instante
-        GetFollowUnfollowUserJob job = GolesApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
         jobManager.addJobInBackground(job);
     }
 

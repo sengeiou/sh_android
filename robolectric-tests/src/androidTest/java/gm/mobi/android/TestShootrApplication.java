@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.robolectric.TestLifecycleApplication;
 import timber.log.Timber;
 
-public class TestGolesApplication extends GolesApplication implements TestLifecycleApplication {
+public class TestShootrApplication extends ShootrApplication implements TestLifecycleApplication {
 
     private ObjectGraph objectGraph;
 
@@ -13,7 +13,7 @@ public class TestGolesApplication extends GolesApplication implements TestLifecy
         objectGraph.inject(o);
     }
     @Override public void buildObjectGraphAndInject() {
-        objectGraph = ObjectGraph.create(new GolesTestModule(), new GolesModule(this));
+        objectGraph = ObjectGraph.create(new ShootrTestModule(), new ShootrModule(this));
         objectGraph.inject(this);
     }
 

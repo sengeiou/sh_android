@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class BagdadMockService implements BagdadService {
+public class ShootrMockService implements ShootrService {
 
     private long delay;
     private int variancePercentage;
     private int errorPercentage;
 
-    @Inject public BagdadMockService() {
+    @Inject public ShootrMockService() {
         //TODO inicializar y usar valores de mockeo mediante preferencias
         //TODO mirar la implementación de AndroidMockValue persistance https://github.com/square/retrofit/blob/master/retrofit-mock/src/main/java/retrofit/android/AndroidMockValuePersistence.java
     }

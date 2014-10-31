@@ -12,7 +12,7 @@ import android.os.IBinder;
 public class SyncService extends Service {
 
     // Storage for an instance of the sync adapter
-    private static GMSyncAdapter sSyncAdapter = null;
+    private static ShootrSyncAdapter sSyncAdapter = null;
     // Object to use as a thread-safe lock
     private static final Object sSyncAdapterLock = new Object();
 
@@ -31,7 +31,7 @@ public class SyncService extends Service {
          */
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new GMSyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new ShootrSyncAdapter(getApplicationContext(), true);
             }
         }
     }

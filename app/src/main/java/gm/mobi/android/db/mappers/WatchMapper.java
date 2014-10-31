@@ -3,7 +3,7 @@ package gm.mobi.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import gm.mobi.android.db.objects.WatchEntity;
-import gm.mobi.android.db.GMContract.WatchTable;
+import gm.mobi.android.db.DatabaseContract.WatchTable;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.squareup.otto.Subscribe;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.CommunicationErrorEvent;
@@ -31,7 +31,7 @@ public class PeopleFragment extends UserFollowsFragment {
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        UserEntity currentUser = GolesApplication.get(getActivity()).getCurrentUser();
+        UserEntity currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
         userId = currentUser.getIdUser();
         followType = FOLLOWING;
         super.onActivityCreated(savedInstanceState);
@@ -39,9 +39,9 @@ public class PeopleFragment extends UserFollowsFragment {
 
     @Override
     public void startJob() {
-        GolesApplication golesApplication = GolesApplication.get(getActivity());
-        GetPeopleJob job = golesApplication.getObjectGraph().get(GetPeopleJob.class);
-        job.init(golesApplication.getCurrentUser().getIdUser());
+        ShootrApplication shootrApplication = ShootrApplication.get(getActivity());
+        GetPeopleJob job = shootrApplication.getObjectGraph().get(GetPeopleJob.class);
+        job.init(shootrApplication.getCurrentUser().getIdUser());
         jobManager.addJobInBackground(job);
     }
 

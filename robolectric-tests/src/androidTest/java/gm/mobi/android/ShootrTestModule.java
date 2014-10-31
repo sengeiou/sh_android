@@ -6,19 +6,19 @@ import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.integrationtests.GetPeopleJobTest;
 import gm.mobi.android.integrationtests.ShotDtoFactoryTest;
-import gm.mobi.android.integrationtests.TestOpenHelper;
+import gm.mobi.android.integrationtests.TestShootrDbOpenHelper;
 import gm.mobi.android.integrationtests.UserDtoFactoryTest;
 import javax.inject.Singleton;
 
 @Module(
-  includes = GolesModule.class,
+  includes = ShootrModule.class,
   overrides = true,
-  injects = { ShotDtoFactoryTest.class, TestGolesApplication.class, UserDtoFactoryTest.class, GetPeopleJobTest.class}
+  injects = { ShotDtoFactoryTest.class, TestShootrApplication.class, UserDtoFactoryTest.class, GetPeopleJobTest.class}
 )
-public class GolesTestModule {
+public class ShootrTestModule {
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
-        return new TestOpenHelper(application);
+        return new TestShootrDbOpenHelper(application);
     }
 
 }

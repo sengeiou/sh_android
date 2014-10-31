@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -23,11 +23,11 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
+public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private static final int PRIORITY = 5;
 
-    BagdadService service;
+    ShootrService service;
     private Long idUserToRetrieveFollowsFrom;
     FollowManager followManager;
     private Integer followType;
@@ -35,7 +35,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
     private Long currentUserId;
     private UserModelMapper userModelMapper;
 
-    @Inject public GetUsersFollowsJob(Application application, Bus bus,SQLiteOpenHelper openHelper, BagdadService service, NetworkUtil networkUtil, FollowManager followManager, UserModelMapper userModelMapper) {
+    @Inject public GetUsersFollowsJob(Application application, Bus bus,SQLiteOpenHelper openHelper, ShootrService service, NetworkUtil networkUtil, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
@@ -46,7 +46,7 @@ public class GetUsersFollowsJob extends BagdadBaseJob<FollowsResultEvent> {
     public void init(Long userId, Integer followType) {
         this.idUserToRetrieveFollowsFrom = userId;
         this.followType = followType;
-        currentUser = GolesApplication.get(getContext()).getCurrentUser();
+        currentUser = ShootrApplication.get(getContext()).getCurrentUser();
 
         currentUserId = currentUser!= null ? currentUser.getIdUser() : null;
     }

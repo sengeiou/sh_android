@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import gm.mobi.android.constant.SyncConstants;
 
-public class GMAccountService  extends Service{
+public class ShootrAccountService extends Service{
     private Authenticator mAuthenticator;
 
     public static Account getAccount(){

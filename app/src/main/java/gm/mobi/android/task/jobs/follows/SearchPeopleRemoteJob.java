@@ -6,15 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
+
 import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.service.PaginatedResult;
 import gm.mobi.android.task.events.follows.SearchPeopleRemoteResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResultEvent> {
+public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResultEvent> {
 
     private static final int PRIORITY = 4;
     public static final String SEARCH_PEOPLE_GROUP = "searchpeople";
 
-    BagdadService service;
+    ShootrService service;
 
     private String searchString;
     private int pageOffset;
@@ -41,7 +41,7 @@ public class SearchPeopleRemoteJob extends BagdadBaseJob<SearchPeopleRemoteResul
     private UserModelMapper userModelMapper;
 
     @Inject
-    public SearchPeopleRemoteJob(Application app, Bus bus, BagdadService service, NetworkUtil networkUtil,
+    public SearchPeopleRemoteJob(Application app, Bus bus, ShootrService service, NetworkUtil networkUtil,
       FollowManager followManager, UserModelMapper userModelMapper, SQLiteOpenHelper openHelper, SessionManager sessionManager) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;

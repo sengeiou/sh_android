@@ -20,7 +20,7 @@ import gm.mobi.android.BuildConfig;
 import gm.mobi.android.data.prefs.PreferenceModule;
 import gm.mobi.android.db.ManagerModule;
 import gm.mobi.android.db.MapperModule;
-import gm.mobi.android.db.OpenHelper;
+import gm.mobi.android.db.ShootrDbOpenHelper;
 import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.DeviceManager;
 import gm.mobi.android.db.manager.FollowManager;
@@ -28,14 +28,14 @@ import gm.mobi.android.db.manager.MatchManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.manager.WatchManager;
-import gm.mobi.android.gcm.GcmIntentService;
+import gm.mobi.android.gcm.GCMIntentService;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.sync.GMSyncAdapter;
+import gm.mobi.android.sync.ShootrSyncAdapter;
 import gm.mobi.android.sync.InfoCleaner;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import gm.mobi.android.task.jobs.follows.GetFollowingsJob;
@@ -79,14 +79,14 @@ import static android.content.Context.MODE_PRIVATE;
 
     BaseSignedInActivity.class,
 
-    BagdadBaseJob.class,
+    ShootrBaseJob.class,
 
     DummyFragment.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
     InfoActivity.class,
 
-    GetFollowingsJob.class, GMSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
+    GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
     GetFollowUnfollowUserJob.class, GetFollowUnFollowUserOfflineJob.class,
 
     InitialSetupFragment.class,
@@ -113,7 +113,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     NotificationIntentReceiver.class,
 
-    GcmIntentService.class,
+    GCMIntentService.class,
 
     LogTreeFactory.class,
 
@@ -129,11 +129,11 @@ public class DataModule {
 
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
-        return new OpenHelper(application.getApplicationContext(), null);
+        return new ShootrDbOpenHelper(application.getApplicationContext(), null);
     }
 
     @Provides @Singleton SharedPreferences provideSharedPreferences(Application app) {
-        return app.getSharedPreferences("bagdad", MODE_PRIVATE);
+        return app.getSharedPreferences("shootr", MODE_PRIVATE);
     }
 
     @Provides @Singleton Picasso providePicasso(Application app) {
@@ -168,8 +168,8 @@ public class DataModule {
 
     }
 
-    @Provides @Singleton BagdadNotificationManager provideBagdadNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
-        return new BagdadNotificationManager(app, nm, notificationBuilderFactory, picasso);
+    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
+        return new ShootrNotificationManager(app, nm, notificationBuilderFactory, picasso);
     }
 
     @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {

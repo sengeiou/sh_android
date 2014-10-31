@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import timber.log.Timber;
 
 public class FileLogger {
-    public static final String GOLES_LOG_TXT = "/bagdadLog.txt";
+    public static final String SHOOTR_LOG_TXT = "/shootrLog.txt";
     private static final String LOG_FORMAT = "%s  %s:  %s\n\n";
 
     private static FileLogger ourInstance;
@@ -62,7 +62,7 @@ public class FileLogger {
         if (externalPath.canWrite()) {
             FileWriter logWriter;
             try {
-                File logFile = new File(externalPath, GOLES_LOG_TXT);
+                File logFile = new File(externalPath, SHOOTR_LOG_TXT);
                 logWriter = new FileWriter(logFile, true);
                 out = new BufferedWriter(logWriter);
             } catch (IOException e) {
@@ -94,7 +94,7 @@ public class FileLogger {
         try {
             flush();
             File externalPath = Environment.getExternalStorageDirectory();
-            File logFile = new File(externalPath, GOLES_LOG_TXT);
+            File logFile = new File(externalPath, SHOOTR_LOG_TXT);
             return getStringFromFile(logFile.getPath());
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,7 +104,7 @@ public class FileLogger {
 
     public boolean deleteLogFile() {
         File externalPath = Environment.getExternalStorageDirectory();
-        File logFile = new File(externalPath, GOLES_LOG_TXT);
+        File logFile = new File(externalPath, SHOOTR_LOG_TXT);
         boolean res = logFile.delete();
         initWriter();
         return res;

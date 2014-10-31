@@ -2,7 +2,7 @@ package gm.mobi.android;
 
 import android.app.Application;
 import android.content.Context;
-import com.path.android.jobqueue.network.NetworkUtil;
+
 import dagger.ObjectGraph;
 import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.objects.UserEntity;
@@ -10,7 +10,7 @@ import gm.mobi.android.util.LogTreeFactory;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GolesApplication extends Application {
+public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
 
@@ -56,8 +56,8 @@ public class GolesApplication extends Application {
         return currentSession.getCurrentUser();
     }
 
-    public static GolesApplication get(Context context) {
-        return (GolesApplication) context.getApplicationContext();
+    public static ShootrApplication get(Context context) {
+        return (ShootrApplication) context.getApplicationContext();
     }
 
 

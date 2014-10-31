@@ -7,7 +7,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.MatchManager;
 import gm.mobi.android.db.manager.UserManager;
@@ -15,9 +15,9 @@ import gm.mobi.android.db.manager.WatchManager;
 import gm.mobi.android.db.objects.MatchEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.db.objects.WatchEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.info.WatchingInfoResult;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.MatchModel;
 import gm.mobi.android.ui.model.UserWatchingModel;
 import gm.mobi.android.ui.model.mappers.MatchModelMapper;
@@ -30,10 +30,10 @@ import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
+public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private static final int PRIORITY = 7;
-    private BagdadService service;
+    private ShootrService service;
     private SessionManager sessionManager;
     private MatchModelMapper matchModelMapper;
     private UserWatchingModelMapper userWatchingModelMapper;
@@ -42,7 +42,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     private MatchManager matchManager;
     private FollowManager followManager;
 
-    @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, BagdadService service,
+    @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
       MatchManager matchManager) {
@@ -131,7 +131,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
         if (useOnlineData) {
-            Long watchLastModifiedDate = watchManager.getLastModifiedDate(GMContract.WatchTable.TABLE);
+            Long watchLastModifiedDate = watchManager.getLastModifiedDate(DatabaseContract.WatchTable.TABLE);
             List<WatchEntity> newWatchesFromServer =
               service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
             if (newWatchesFromServer != null && !newWatchesFromServer.isEmpty()) {

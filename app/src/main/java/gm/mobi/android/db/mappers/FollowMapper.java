@@ -2,15 +2,16 @@ package gm.mobi.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import gm.mobi.android.db.GMContract;
+
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.objects.FollowEntity;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FollowMapper extends GenericMapper {
 
-    public static final String ID_USER = GMContract.FollowTable.ID_USER;
-    public static final String ID_FOLLOWED_USER = GMContract.FollowTable.ID_FOLLOWED_USER;
+    public static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
+    public static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;
 
     public FollowEntity fromCursor(Cursor c) {
         FollowEntity follow = new FollowEntity();

@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.GMContract;
-import gm.mobi.android.db.GMContract.SyncColumns;
-import gm.mobi.android.db.GMContract.UserTable;
+import gm.mobi.android.db.DatabaseContract;
+import gm.mobi.android.db.DatabaseContract.SyncColumns;
+import gm.mobi.android.db.DatabaseContract.UserTable;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.db.objects.UserEntity;
 import java.sql.SQLException;
@@ -95,7 +95,7 @@ public class UserManager extends AbstractManager {
      */
     public long deleteUser(UserEntity user) {
         long res = 0;
-        String args = GMContract.UserTable.ID + "=?";
+        String args = DatabaseContract.UserTable.ID + "=?";
         String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
         Cursor c = db.query(USER_TABLE, UserTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {

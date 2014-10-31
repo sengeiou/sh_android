@@ -7,7 +7,7 @@ import gm.mobi.android.data.NotificationsEnabled;
 import gm.mobi.android.data.prefs.BooleanPreference;
 import javax.inject.Inject;
 
-public class DebugNotificationManager extends BagdadNotificationManager {
+public class DebugNotificationManager extends ShootrNotificationManager {
 
     private BooleanPreference notificationsEnabled;
 

@@ -9,24 +9,25 @@ import com.squareup.otto.Bus;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.exception.ServerException;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.loginregister.LoginResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
 
-public class LoginUserJob extends BagdadBaseJob<LoginResultEvent> {
+public class LoginUserJob extends ShootrBaseJob<LoginResultEvent> {
 
     private static final int PRIORITY = 8; //TODO definir valores estáticos para determinados casos
 
     private String usernameEmail;
     private String password;
 
-    BagdadService service;
+    ShootrService service;
     UserManager userManager;
 
-    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper dbHelper, BagdadService service, UserManager userManager) {
+    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper dbHelper, ShootrService service, UserManager userManager) {
         super(new Params(PRIORITY), context, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;

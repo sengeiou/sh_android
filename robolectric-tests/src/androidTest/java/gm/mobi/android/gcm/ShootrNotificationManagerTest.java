@@ -8,7 +8,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.ui.model.ShotModel;
 import java.io.IOException;
@@ -28,14 +28,14 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(emulateSdk = 18)
-public class BagdadNotificationManagerTest {
+public class ShootrNotificationManagerTest {
 
     private static final Long USER_1_ID = 1L;
     private static final String USER_1_NAME = "Username";
     private static final Long SHOT_1_ID = 1L;
     private static final String COMMENT = "Comment";
 
-    BagdadNotificationManager notificationManager;
+    ShootrNotificationManager notificationManager;
     Application application;
     Picasso picasso;
     private NotificationManagerCompat androidNotificationManager;
@@ -54,7 +54,7 @@ public class BagdadNotificationManagerTest {
         when(picasso.load(anyString())).thenReturn(requestCreator);
         when(requestCreator.get()).thenReturn(null);
 
-        notificationManager = new BagdadNotificationManager(application, androidNotificationManager, builderFactory, picasso);
+        notificationManager = new ShootrNotificationManager(application, androidNotificationManager, builderFactory, picasso);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class BagdadNotificationManagerTest {
         notificationManager.sendNewShotNotification(testShot);
 
         ArgumentCaptor<Notification> argumentCaptor = ArgumentCaptor.forClass(Notification.class);
-        verify(androidNotificationManager).notify(eq(BagdadNotificationManager.NOTIFICATION_SHOT),
+        verify(androidNotificationManager).notify(eq(ShootrNotificationManager.NOTIFICATION_SHOT),
           argumentCaptor.capture());
 
         verify(builder).setContentText(testShot.getComment());

@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.task.events.follows.SearchPeopleLocalResultEvent;
-import gm.mobi.android.task.jobs.BagdadBaseJob;
+import gm.mobi.android.task.jobs.ShootrBaseJob;
 import gm.mobi.android.ui.model.UserModel;
 import gm.mobi.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultEvent> {
+public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultEvent> {
 
     private static final int PRIORITY = 4;
 
@@ -47,7 +47,7 @@ public class SearchPeopleLocalJob extends BagdadBaseJob<SearchPeopleLocalResultE
     public void init(String searchString) {
 
         this.searchString = searchString;
-        currentUserId  = GolesApplication.get(getContext()).getCurrentUser().getIdUser();
+        currentUserId  = ShootrApplication.get(getContext()).getCurrentUser().getIdUser();
     }
 
     @Override protected void createDatabase() {

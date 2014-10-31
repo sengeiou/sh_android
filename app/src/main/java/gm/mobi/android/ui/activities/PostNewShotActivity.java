@@ -23,7 +23,7 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.objects.ShotEntity;
@@ -70,7 +70,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         setContentView(R.layout.activity_new_shot);
         ButterKnife.inject(this);
 
-        currentUser = GolesApplication.get(this).getCurrentUser();
+        currentUser = ShootrApplication.get(this).getCurrentUser();
 
         picasso.load(currentUser.getPhoto()).into(avatar);
         name.setText(currentUser.getName());
@@ -82,7 +82,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
 
         previousShot = shotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
-            GolesApplication.get(this).getCurrentUser().getIdUser());
+            ShootrApplication.get(this).getCurrentUser().getIdUser());
         setTextReceivedFromIntent();
     }
 
@@ -130,7 +130,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
     }
 
     public void startJob(UserEntity currentUser, String comment){
-        PostNewShotJob job = GolesApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
+        PostNewShotJob job = ShootrApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
         job.init(currentUser, comment);
         jobManager.addJobInBackground(job);
     }

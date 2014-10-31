@@ -1,7 +1,7 @@
 package gm.mobi.android.service.dataservice.dto;
 
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.db.GMContract;
+import gm.mobi.android.db.DatabaseContract;
 import gm.mobi.android.db.mappers.FollowMapper;
 import gm.mobi.android.db.mappers.UserMapper;
 import gm.mobi.android.service.dataservice.generic.GenericDto;
@@ -64,7 +64,7 @@ public class UserDtoFactoryTest {
         MetadataDto metadataDto = operationDtoValue.getMetadata();
         Map<String, Object> key = metadataDto.getKey();
 
-        assertThat(key).containsEntry(GMContract.UserTable.USER_NAME,userName);
+        assertThat(key).containsEntry(DatabaseContract.UserTable.USER_NAME,userName);
     }
 
 }

@@ -5,7 +5,6 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -21,7 +20,7 @@ import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
 import gm.mobi.android.data.SessionManager;
@@ -131,7 +130,7 @@ public class EmailLoginActivity extends BaseActivity {
     }
 
     public void startJob(String emailUsername, String password){
-        LoginUserJob currentLoginJob = GolesApplication.get(this).getObjectGraph().get(LoginUserJob.class);
+        LoginUserJob currentLoginJob = ShootrApplication.get(this).getObjectGraph().get(LoginUserJob.class);
         currentLoginJob.init(emailUsername, password);
         jobManager.addJobInBackground(currentLoginJob);
     }

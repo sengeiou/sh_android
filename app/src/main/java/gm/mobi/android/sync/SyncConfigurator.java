@@ -20,7 +20,7 @@ public class SyncConfigurator {
     private Account dummyAccount;
 
     @Inject public SyncConfigurator(Application app) {
-        this.dummyAccount = GMAccountService.getAccount();
+        this.dummyAccount = ShootrAccountService.getAccount();
         accountManager = (AccountManager) app.getSystemService(Context.ACCOUNT_SERVICE);
     }
 

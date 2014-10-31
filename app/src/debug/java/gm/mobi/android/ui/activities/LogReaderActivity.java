@@ -55,7 +55,7 @@ public class LogReaderActivity extends ActionBarActivity {
             case R.id.action_compartir:
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("editTextView/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, "Log de Goles");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Log de Shootr");
                 i.putExtra(Intent.EXTRA_TEXT, log);
                 startActivity(Intent.createChooser(i, "Compartir log"));
                 return true;

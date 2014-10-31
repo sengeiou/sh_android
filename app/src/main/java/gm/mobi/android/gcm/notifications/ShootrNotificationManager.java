@@ -32,7 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class BagdadNotificationManager {
+public class ShootrNotificationManager {
 
     public static final int NOTIFICATION_ERROR = 0;
     public static final int NOTIFICATION_SHOT = 1;
@@ -45,8 +45,8 @@ public class BagdadNotificationManager {
 
     private List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
 
-    @Inject public BagdadNotificationManager(Application context, NotificationManagerCompat notificationManager,
-      NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
+    @Inject public ShootrNotificationManager(Application context, NotificationManagerCompat notificationManager,
+                                             NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
         this.context = context;
         this.notificationManager = notificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;

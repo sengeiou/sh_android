@@ -28,10 +28,10 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
-import gm.mobi.android.GolesApplication;
+import gm.mobi.android.ShootrApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
+import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
 import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.timeline.NewShotsReceivedEvent;
 import gm.mobi.android.task.events.timeline.OldShotsReceivedEvent;
@@ -63,7 +63,7 @@ public class TimelineFragment extends BaseFragment
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
-    @Inject BagdadNotificationManager notificationManager;
+    @Inject ShootrNotificationManager notificationManager;
     @Inject ShotModelMapper shotMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
@@ -132,7 +132,7 @@ public class TimelineFragment extends BaseFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         bus.register(this);
-        currentUser = GolesApplication.get(activity).getCurrentUser();
+        currentUser = ShootrApplication.get(activity).getCurrentUser();
     }
 
     @Override
@@ -238,7 +238,7 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        currentUser = GolesApplication.get(getActivity()).getCurrentUser();
+        currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
         loadInitialTimeline();
     }
 
@@ -312,29 +312,28 @@ public class TimelineFragment extends BaseFragment
             isRefreshing = true;
             swipeRefreshLayout.setRefreshing(true);
             Timber.d("Start new timeline refresh");
-            //User currentUser = GolesApplication.get(context).getCurrentUser();
             startRetrieveNewShotsTimeLineJob(context);
         }
     }
 
     private void startRetrieveFromDataBaseJob(Context context){
-        RetrieveFromDataBaseTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveFromDataBaseTimeLineJob.class);
+        RetrieveFromDataBaseTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveFromDataBaseTimeLineJob.class);
         startJob(job);
     }
 
     private void startRetrieveOldShotsTimeLineJob(Context context){
-        RetrieveOldShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveOldShotsTimeLineJob.class);
+        RetrieveOldShotsTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveOldShotsTimeLineJob.class);
         startJob(job);
     }
 
     private void startRetrieveInitialTimeLineJob(Context context){
-        RetrieveInitialTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(
+        RetrieveInitialTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(
           RetrieveInitialTimeLineJob.class);
         startJob(job);
     }
 
     private void startRetrieveNewShotsTimeLineJob(Context context) {
-        RetrieveNewShotsTimeLineJob job = GolesApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
+        RetrieveNewShotsTimeLineJob job = ShootrApplication.get(context).getObjectGraph().get(RetrieveNewShotsTimeLineJob.class);
         startJob(job);
     }
 
@@ -358,14 +357,11 @@ public class TimelineFragment extends BaseFragment
         if (!isLoadingMore && moreShots) {
             isLoadingMore = true;
             Timber.d("Start loading more shots");
-            //User currentUser = GolesApplication.get(context).getCurrentUser();
-            //Shot oldestShot = adapter.getItem(adapter.getCount() - 1);
             startRetrieveOldShotsTimeLineJob(context);
         }
     }
 
     public void loadInitialTimeline() {
-        //User currentUser = GolesApplication.get(getActivity()).getCurrentUser();
         startRetrieveInitialTimeLineJob(getActivity());
         swipeRefreshLayout.setRefreshing(true);
     }

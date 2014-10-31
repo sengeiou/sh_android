@@ -5,13 +5,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.TestGolesApplication;
+import gm.mobi.android.TestShootrApplication;
 import gm.mobi.android.data.SessionManager;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.UserManager;
 import gm.mobi.android.db.objects.FollowEntity;
 import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.BagdadService;
+import gm.mobi.android.service.ShootrService;
 import gm.mobi.android.task.events.follows.FollowsResultEvent;
 import gm.mobi.android.task.jobs.follows.GetPeopleJob;
 import java.sql.SQLException;
@@ -42,13 +42,13 @@ public class GetPeopleJobTest {
     @Inject SQLiteOpenHelper openHelper;
     @Inject SessionManager sessionManager;
     private ObjectGraph objectGraph;
-    private TestGolesApplication testGolesApplication;
+    private TestShootrApplication testGolesApplication;
     private UserManager userManager;
     private SQLiteDatabase database;
 
     @Before
     public void setup() throws SQLException {
-        testGolesApplication = (TestGolesApplication) Robolectric.application;
+        testGolesApplication = (TestShootrApplication) Robolectric.application;
         objectGraph = testGolesApplication.getObjectGraph();
         testGolesApplication.inject(this);
 
@@ -81,7 +81,7 @@ public class GetPeopleJobTest {
     public void whenDatabaseEmptyPostResponseOnce() throws Throwable {
 
         Bus bus = mock(Bus.class);
-        BagdadService service = mock(BagdadService.class);
+        ShootrService service = mock(ShootrService.class);
         when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<UserEntity>());
 
         getPeopleJob.setBus(bus);
@@ -123,7 +123,7 @@ public class GetPeopleJobTest {
         followManager.saveFollowFromServer(followRelationship);
 
         Bus bus = mock(Bus.class);
-        BagdadService service = mock(BagdadService.class);
+        ShootrService service = mock(ShootrService.class);
         when(service.getFollowing(anyLong(), anyLong())).thenReturn(new ArrayList<UserEntity>());
 
 
