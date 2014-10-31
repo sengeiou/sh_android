@@ -14,6 +14,7 @@ import gm.mobi.android.R;
 import gm.mobi.android.ui.model.MatchModel;
 import gm.mobi.android.ui.model.UserWatchingModel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private static final int TYPE_USER = 1;
     private static final int TYPE_ME = 2;
 
-    private Map<MatchModel, List<UserWatchingModel>> itemsMap;
+    private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
     private Picasso picasso;
     private Long currentUserId;
@@ -37,7 +38,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         this.currentUserId = currentUserId;
     }
 
-    public void setContent(Map<MatchModel, List<UserWatchingModel>> itemsMap) {
+    public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
         this.itemsMap = itemsMap;
         this.itemsList.clear();
 

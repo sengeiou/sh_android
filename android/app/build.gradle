@@ -134,6 +134,8 @@ dependencies {
 
     compile 'es.oneoctopus.swiperefreshlayoutoverlay:library:3.0.0'
 
+    compile 'com.google.guava:guava:17.0'
+
     //TODO Should be androidTestCompile, but doesn't work, probably due to a bug in Gradle/AS: http://stackoverflow.com/questions/22246183/android-studio-doesnt-recognize-espresso-classes
     provided 'com.jakewharton.espresso:espresso:1.1-r3'
     androidTestCompile ('com.jakewharton.espresso:espresso:1.1-r3')
@@ -142,7 +144,7 @@ dependencies {
           //exclude group: 'org.hamcrest', module: 'hamcrest-core'
           //exclude group: 'org.hamcrest', module: 'hamcrest-library'
           //exclude group: 'org.hamcrest', module: 'hamcrest-integration'
-          //exclude group: 'com.google.guava'
+          exclude group: 'com.google.guava'
           exclude group: 'javax.inject'
           exclude group: 'javax.annotation'
           //exclude group: 'com.google.code.findbugs'
