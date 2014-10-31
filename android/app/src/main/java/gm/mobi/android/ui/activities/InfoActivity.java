@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 import gm.mobi.android.GolesApplication;
 import gm.mobi.android.R;
 import gm.mobi.android.data.SessionManager;
+import gm.mobi.android.task.events.CommunicationErrorEvent;
+import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
 import gm.mobi.android.task.events.info.WatchingInfoResult;
 import gm.mobi.android.task.jobs.info.GetWatchingInfoJob;
 import gm.mobi.android.ui.adapters.InfoListAdapter;
@@ -28,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class InfoActivity extends BaseSignedInActivity {
 
@@ -111,6 +114,17 @@ public class InfoActivity extends BaseSignedInActivity {
     public void receivedInfoList(WatchingInfoResult event){
         Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
         adapter.setContent(result);
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        Timber.i("Connection not available");
+    }
+
+    @Subscribe
+    public void onConnectionError(CommunicationErrorEvent event) {
+        Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override protected void onResume() {

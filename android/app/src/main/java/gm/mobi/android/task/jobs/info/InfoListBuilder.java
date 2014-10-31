@@ -89,7 +89,7 @@ public class InfoListBuilder {
     public Map<MatchModel, Collection<UserWatchingModel>> build() {
         map = TreeMultimap.create(matchComparatorByDate, userComparatorByNameAndCurrentUser);
 
-        addMyTeamNextMatch();
+        addMyTeamsNextMatch();
 
         buildMapFromWatchesAndEntities();
 
@@ -98,7 +98,7 @@ public class InfoListBuilder {
         return map.asMap();
     }
 
-    private void addMyTeamNextMatch() {
+    private void addMyTeamsNextMatch() {
         if (myTeamNextMatch != null) {
             WatchEntity meNotWatchingMyTeam = new WatchEntity();
             meNotWatchingMyTeam.setIdMatch(myTeamNextMatch.getIdMatch());
@@ -143,7 +143,9 @@ public class InfoListBuilder {
     private void addWatchingToResult(WatchEntity watchEntity) {
         MatchEntity matchEntity = matchEntities.get(watchEntity.getIdMatch());
         UserEntity userEntity = userEntities.get(watchEntity.getIdUser());
-        addWatchingPopulatedToResult(matchEntity, userEntity, watchEntity);
+        if (matchEntity != null && userEntity != null) {
+            addWatchingPopulatedToResult(matchEntity, userEntity, watchEntity);
+        }
     }
 
     private void addWatchingPopulatedToResult(MatchEntity matchEntity, UserEntity userEntity, WatchEntity watchEntity) {

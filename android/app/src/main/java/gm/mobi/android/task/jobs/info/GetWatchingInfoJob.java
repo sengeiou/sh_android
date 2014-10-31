@@ -3,7 +3,6 @@ package gm.mobi.android.task.jobs.info;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v4.util.LongSparseArray;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -25,9 +24,7 @@ import gm.mobi.android.ui.model.mappers.MatchModelMapper;
 import gm.mobi.android.ui.model.mappers.UserWatchingModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -66,43 +63,91 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     }
 
     @Override protected void run() throws SQLException, IOException {
-        MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(getFavoriteTeamId());
-
-        List<WatchEntity> watches = getWatches();
-        if (watches.size()==0) { //TODO avisar
-            Timber.w("No watches at all");
+        Map<MatchModel, Collection<UserWatchingModel>> infoListOffline = obtainInfoList(false);
+        if (infoListOffline != null) {
+            postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
         }
 
-        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
+        if (hasInternetConnection()) {
+            Map<MatchModel, Collection<UserWatchingModel>> infoListOnline = obtainInfoList(true);
+            postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
+        }
+    }
 
+    private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
+      throws IOException, SQLException {
+        InfoListBuilder infoListBuilder =
+          new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
+        List<WatchEntity> watches = getWatches(useOnlineData);
+        //TODO watches vacío, interrumpe
+        if (watches == null || watches.isEmpty()) {
+            Timber.w("Watches vacío");
+            return null;
+        }
         infoListBuilder.setWatches(watches);
-        infoListBuilder.provideMatches(getMatchesAndSaveThem(infoListBuilder.getMatchIds()));
+        infoListBuilder.provideMatches(getMatches(infoListBuilder.getMatchIds(), useOnlineData));
         infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
+
+        MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
         if (nextMatchFromMyTeam != null) {
             infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
         }
 
-        Map<MatchModel, Collection<UserWatchingModel>> resultMap = infoListBuilder.build();
-        postSuccessfulEvent(new WatchingInfoResult(resultMap));
+        return infoListBuilder.build();
     }
 
-    private List<MatchEntity> getMatchesAndSaveThem(List<Long> matchIds) throws IOException {
-        List<MatchEntity> matches = service.getMatchesByIds(matchIds);
-//        matchManager.saveMatches(matches); //TODO maybe later
+    private MatchEntity getNextMatchWhereMyFavoriteTeamPlays(boolean useOnlineData) throws IOException {
+        MatchEntity nextMatch = matchManager.getNextMatchFromTeam(getFavoriteTeamId());
+        if (useOnlineData) {
+            MatchEntity nextMatchFromServer = service.getNextMatchWhereMyFavoriteTeamPlays(getFavoriteTeamId());
+            if (nextMatchFromServer != null) {
+                nextMatch = nextMatchFromServer;
+                matchManager.saveMatch(nextMatchFromServer);
+            }
+        }
+        return nextMatch;
+    }
 
+    private List<MatchEntity> getMatches(List<Long> matchIds, boolean useOnlineData) throws IOException {
+        List<MatchEntity> matches = matchManager.getMatchesByIds(matchIds);
+        if (useOnlineData) {
+            List<MatchEntity> matchesFromServer = service.getMatchesByIds(matchIds);
+            if (matchesFromServer != null && !matchesFromServer.isEmpty()) {
+                matches = matchesFromServer;
+                saveMatchesInDatabase(matchesFromServer);
+            }
+        }
         return matches;
+    }
+
+    private void saveMatchesInDatabase(List<MatchEntity> matchesToSave) {
+        matchManager.saveMatches(matchesToSave);
     }
 
     private List<UserEntity> getUsersFromDatabase(List<Long> usersIds) {
         return userManager.getUsersByIds(usersIds);
     }
 
-    private List<WatchEntity> getWatches() throws SQLException, IOException {
-        Long watchLastModifiedDate = watchManager.getLastModifiedDate(GMContract.WatchTable.TABLE);
-        watchLastModifiedDate = 0L; //TODO retrieve modified watches only
-        List<WatchEntity> watches = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
-        //TODO save in database
+    private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
+        List<WatchEntity> watches = getWatchesFromDatabase();
+        if (useOnlineData) {
+            Long watchLastModifiedDate = watchManager.getLastModifiedDate(GMContract.WatchTable.TABLE);
+            List<WatchEntity> newWatchesFromServer =
+              service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
+            if (newWatchesFromServer != null && !newWatchesFromServer.isEmpty()) {
+                watches.addAll(newWatchesFromServer);
+                saveWatchesInDatabase(newWatchesFromServer);
+            }
+        }
         return watches;
+    }
+
+    public List<WatchEntity> getWatchesFromDatabase() throws SQLException {
+        return watchManager.getWatchesNotEndedFromUsers(getIdsFromMyFollowingAndMe());
+    }
+
+    private void saveWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
+        watchManager.saveWatches(newWatchesFromServer);
     }
 
     public List<Long> getIdsFromMyFollowingAndMe() throws SQLException {
@@ -117,6 +162,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
         userManager.setDataBase(db);
         followManager.setDataBase(db);
         watchManager.setDataBase(db);
+        matchManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {
