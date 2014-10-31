@@ -29,4 +29,17 @@ public class WatchEntity extends Synchronized{
     public void setStatus(Long status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WatchEntity that = (WatchEntity) o;
+
+        if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null) return false;
+        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null) return false;
+
+        return true;
+    }
 }

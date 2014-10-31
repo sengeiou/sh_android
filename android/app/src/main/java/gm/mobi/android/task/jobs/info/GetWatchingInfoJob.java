@@ -67,36 +67,34 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
 
     @Override protected void run() throws SQLException, IOException {
         MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(getFavoriteTeamId());
-        //TODO hacer algo con este tío...
 
         List<WatchEntity> watches = getWatches();
+        if (watches.size()==0) { //TODO avisar
+            Timber.w("No watches at all");
+        }
 
-        InfoListBuilder.DataProvider infoBuilderDataProvider = new InfoListBuilder.DataProvider() {
-            @Override public List<UserEntity> getUsersByIds(List<Long> userIds) {
-                return userManager.getUsersByIds(userIds);
-            }
+        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
 
-            @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) {
-                try {
-                    return service.getMatchesByIds(matchIds);
-                } catch (IOException e) {
-                    Timber.e(e, "FATAL ERROR: Server failed while getting matches, and the exception wasn't handled :'(");
-                    return null;
-                }
-            }
-        };
+        infoListBuilder.setWatches(watches);
+        infoListBuilder.provideMatches(getMatchesAndSaveThem(infoListBuilder.getMatchIds()));
+        infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
+        if (nextMatchFromMyTeam != null) {
+            infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
+        }
 
-        InfoListBuilder infoListBuilder = new InfoListBuilder(infoBuilderDataProvider, sessionManager.getCurrentUserId(), matchModelMapper, userWatchingModelMapper);
-
-        Map<MatchModel, Collection<UserWatchingModel>> resultMap = infoListBuilder.build(watches);
+        Map<MatchModel, Collection<UserWatchingModel>> resultMap = infoListBuilder.build();
         postSuccessfulEvent(new WatchingInfoResult(resultMap));
     }
 
     private List<MatchEntity> getMatchesAndSaveThem(List<Long> matchIds) throws IOException {
         List<MatchEntity> matches = service.getMatchesByIds(matchIds);
-        matchManager.saveMatches(matches);
+//        matchManager.saveMatches(matches); //TODO maybe later
 
         return matches;
+    }
+
+    private List<UserEntity> getUsersFromDatabase(List<Long> usersIds) {
+        return userManager.getUsersByIds(usersIds);
     }
 
     private List<WatchEntity> getWatches() throws SQLException, IOException {
