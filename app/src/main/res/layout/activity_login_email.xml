@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/activity_login_email_id_hint"
                 android:imeOptions="actionNext"
+               android:background="@drawable/edit_text_background"
                 android:inputType="textEmailAddress|textNoSuggestions"
                 >
 
@@ -82,8 +83,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:enabled="false"
+            android:textAllCaps="true"
             app:cpb_colorIndicator="@color/primary"
             app:cpb_colorProgress="@color/transparent"
             app:cpb_selectorIdle="@drawable/btn_circular_progress_background"
