@@ -6,7 +6,7 @@
   android:layout_height="wrap_content"
   android:orientation="horizontal"
   android:padding="16dp"
-  android:background="@drawable/bg_item_list_info_user">
+  android:background="?android:selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/info_user_avatar"
@@ -21,7 +21,8 @@
       android:layout_gravity="center_vertical"
       android:layout_marginLeft="16dp"
       android:layout_toRightOf="@+id/info_user_avatar"
-      android:textSize="14dp"
+      android:textSize="16sp"
+      android:textColor="@color/gray_30"
       tools:text="Rafa" />
 
     <TextView

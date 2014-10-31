@@ -6,7 +6,7 @@
     <View
       android:layout_width="match_parent"
       android:layout_height="2dp"
-      android:background="@drawable/shadow_top_down" />
+      />
 
     <TextView
       android:id="@+id/info_header_match_title"
@@ -16,8 +16,9 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
       android:text="Atlético-Barcelona"
-      android:textColor="@color/gray_60"
-      android:textStyle="bold" />
+      android:textStyle="bold"
+      android:textColor="@color/gray_50"
+       />
 
     <TextView
       android:id="@+id/info_header_match_timestamp"
@@ -27,8 +28,9 @@
       android:gravity="center_vertical"
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
-      android:textSize="12sp"
+      android:textSize="13sp"
       android:text="7:00 PM"
-      android:textColor="@color/gray_60"
-      android:textStyle="bold" />
+      android:textStyle="bold"
+      android:textColor="@color/gray_50"
+       />
 </FrameLayout>

@@ -21,6 +21,7 @@
 
     <!-- Gray scale -->
     <color name="gray_10">#1a1a1a</color>
+    <color name="gray_20">#ff333333</color>
     <color name="gray_30">#4d4d4d</color>
     <color name="gray_40">#ff666666</color>
     <color name="gray_50">#808080</color>

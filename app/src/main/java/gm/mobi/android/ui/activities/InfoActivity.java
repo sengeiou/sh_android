@@ -65,7 +65,7 @@ public class InfoActivity extends BaseSignedInActivity {
     public void onListItemClick(int position) {
         UserWatchingModel userWatchingModel = (UserWatchingModel)adapter.getItem(position);
         Long idUser = userWatchingModel.getIdUser();
-        ProfileContainerActivity.getIntent(this,idUser);
+        startActivity(ProfileContainerActivity.getIntent(this,idUser));
     }
 
     private Map<MatchModel, List<UserWatchingModel>> getDummyInfo() {
