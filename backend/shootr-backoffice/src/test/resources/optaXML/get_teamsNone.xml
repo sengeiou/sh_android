@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<gsmrs version="2.0" sport="soccer" lang="en" last_generated="2014-09-25 17:00:13">
-    <method method_id="7" name="get_teams">
-        <parameter name="detailed" value="no"/>
-        <parameter name="id" value="7"/>
-        <parameter name="lang" value="en"/>
-        <parameter name="type" value="area"/>
-    </method>
-</gsmrs>
