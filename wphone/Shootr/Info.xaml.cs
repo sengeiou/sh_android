@@ -26,7 +26,7 @@ namespace Bagdad
             bagdadFactory = new BagdadFactory();
             InitializeComponent();
             infoViewModel = bagdadFactory.CreateInfoWatchListOfMatchesViewModel();
-            DataContext = infoViewModel;
+            //DataContext = infoViewModel;
             timer = new DispatcherTimer()
             {
                 Interval = new TimeSpan(0, 0, 0, 2)
@@ -40,6 +40,7 @@ namespace Bagdad
         {
             App.UpdateServices(Utils.ServiceCommunication.enumTypeSynchro.ST_DOWNLOAD_ONLY, Utils.ServiceCommunication.enumSynchroTables.WATCH);
             await infoViewModel.GetCurrentWatchList();
+            DataContext = infoViewModel;
         }
         
         private void BuildLocalizedApplicationBar()
@@ -106,7 +107,8 @@ namespace Bagdad
                 System.Diagnostics.Debug.WriteLine("-----------------------------------------\nTimer Stop on Info to Refresh Data\n-----------------------------------------");
                 timer.Stop();
                 await infoViewModel.GetCurrentWatchList();
-
+                MatchList.ItemsSource = null;
+                MatchList.ItemsSource = infoViewModel.listOfWatchingMatches;
             }
         }
     }

@@ -2,13 +2,14 @@
 using Bagdad.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Bagdad.ViewModels
 {
-    public class InfoWatchListOfMatchesViewModel
+    public class InfoWatchListOfMatchesViewModel : INotifyPropertyChanged
     {
         public List<WatchListMatchViewModel> listOfWatchingMatches { get; set; }
 
@@ -17,15 +18,18 @@ namespace Bagdad.ViewModels
         public InfoWatchListOfMatchesViewModel()
         {
             bagdadFactory = new BagdadFactory();
+            listOfWatchingMatches = bagdadFactory.CreateListOfWatchListMatchViewModel();
         }
 
         public InfoWatchListOfMatchesViewModel(BagdadFactory _bagdadFactory)
         {
             bagdadFactory = _bagdadFactory;
+            listOfWatchingMatches = bagdadFactory.CreateListOfWatchListMatchViewModel();
         }
 
         public async Task GetCurrentWatchList()
         {
+            listOfWatchingMatches.Clear();
             User user = bagdadFactory.CreateUser();
             int idFavoriteTeam = await user.GetCurrentUserFavoriteTeamId();
             await GetNextTeamMatch(idFavoriteTeam);
@@ -49,6 +53,16 @@ namespace Bagdad.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (null != handler)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 
 }
