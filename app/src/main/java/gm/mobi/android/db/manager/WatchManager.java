@@ -24,7 +24,7 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesNotEndedOrAdjurnedFromUsers(List<Long> userIds) {
-        String query = "SELECT * FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
+        String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
           + "w."+WatchTable.ID_MATCH+" = m."+MatchTable.ID_MATCH
           + " WHERE m."+MatchTable.STATUS+" IN (0,1)"
           + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+");";

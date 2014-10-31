@@ -24,14 +24,17 @@ import gm.mobi.android.db.OpenHelper;
 import gm.mobi.android.db.manager.AbstractManager;
 import gm.mobi.android.db.manager.DeviceManager;
 import gm.mobi.android.db.manager.FollowManager;
+import gm.mobi.android.db.manager.MatchManager;
 import gm.mobi.android.db.manager.ShotManager;
 import gm.mobi.android.db.manager.UserManager;
+import gm.mobi.android.db.manager.WatchManager;
 import gm.mobi.android.gcm.GcmIntentService;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
 import gm.mobi.android.gcm.notifications.BagdadNotificationManager;
 import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
 import gm.mobi.android.service.ApiModule;
 import gm.mobi.android.sync.GMSyncAdapter;
+import gm.mobi.android.sync.InfoCleaner;
 import gm.mobi.android.task.jobs.BagdadBaseJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
@@ -179,6 +182,10 @@ public class DataModule {
 
     @Provides @Singleton SessionManager provideSessionManager(SessionManagerImpl sessionManager) {
         return sessionManager;
+    }
+
+    @Provides @Singleton InfoCleaner provideInfoCleaner(MatchManager matchManager, WatchManager watchManager) {
+        return new InfoCleaner(matchManager, watchManager);
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
