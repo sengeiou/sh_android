@@ -52,7 +52,7 @@
 }
 
 //------------------------------------------------------------------------------
-+ (NSArray *)getWatches {
++ (NSArray *)getMatchesWatchers {
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"csys_deleted != %@",@"d"];
     NSArray *watches = [[CoreDataManager singleton] getAllEntities:[Watch class] withPredicate:predicate];

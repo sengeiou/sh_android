@@ -29,6 +29,9 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	.message = @"message",
 };
 
+const struct AppAdviceFetchedProperties AppAdviceFetchedProperties = {
+};
+
 @implementation AppAdviceID
 @end
 
@@ -54,7 +57,7 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"buttonTextIdValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"buttonTextId"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -124,11 +127,26 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic buttonAction;
+
+
+
+
+
 
 @dynamic buttonData;
 
+
+
+
+
+
 @dynamic buttonTextId;
+
+
 
 - (int32_t)buttonTextIdValue {
 	NSNumber *result = [self buttonTextId];
@@ -148,7 +166,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveButtonTextId:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -168,7 +192,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -188,7 +218,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -208,7 +244,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -228,11 +270,27 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
+
+
+
+
+
 
 @dynamic endDate;
 
+
+
+
+
+
 @dynamic endVersion;
+
+
 
 - (int32_t)endVersionValue {
 	NSNumber *result = [self endVersion];
@@ -252,7 +310,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveEndVersion:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic idAppAdvice;
+
+
 
 - (int64_t)idAppAdviceValue {
 	NSNumber *result = [self idAppAdvice];
@@ -272,7 +336,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveIdAppAdvice:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic idMessage;
+
+
 
 - (int32_t)idMessageValue {
 	NSNumber *result = [self idMessage];
@@ -292,9 +362,20 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveIdMessage:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic path;
 
+
+
+
+
+
 @dynamic platform;
+
+
 
 - (int16_t)platformValue {
 	NSNumber *result = [self platform];
@@ -314,9 +395,20 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitivePlatform:[NSNumber numberWithShort:value_]];
 }
 
+
+
+
+
 @dynamic startDate;
 
+
+
+
+
+
 @dynamic startVersion;
+
+
 
 - (int32_t)startVersionValue {
 	NSNumber *result = [self startVersion];
@@ -336,7 +428,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveStartVersion:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic status;
+
+
 
 - (BOOL)statusValue {
 	NSNumber *result = [self status];
@@ -356,7 +454,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveStatus:[NSNumber numberWithBool:value_]];
 }
 
+
+
+
+
 @dynamic visibleButton;
+
+
 
 - (BOOL)visibleButtonValue {
 	NSNumber *result = [self visibleButton];
@@ -376,7 +480,13 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveVisibleButton:[NSNumber numberWithBool:value_]];
 }
 
+
+
+
+
 @dynamic weight;
+
+
 
 - (int32_t)weightValue {
 	NSNumber *result = [self weight];
@@ -396,7 +506,17 @@ const struct AppAdviceRelationships AppAdviceRelationships = {
 	[self setPrimitiveWeight:[NSNumber numberWithInt:value_]];
 }
 
+
+
+
+
 @dynamic message;
 
-@end
+	
 
+
+
+
+
+
+@end

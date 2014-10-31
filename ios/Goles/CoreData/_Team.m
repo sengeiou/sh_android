@@ -22,6 +22,9 @@ const struct TeamRelationships TeamRelationships = {
 	.user = @"user",
 };
 
+const struct TeamFetchedProperties TeamFetchedProperties = {
+};
+
 @implementation TeamID
 @end
 
@@ -47,7 +50,7 @@ const struct TeamRelationships TeamRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -77,9 +80,19 @@ const struct TeamRelationships TeamRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic clubName;
 
+
+
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -99,7 +112,13 @@ const struct TeamRelationships TeamRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -119,7 +138,13 @@ const struct TeamRelationships TeamRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -139,7 +164,13 @@ const struct TeamRelationships TeamRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -159,9 +190,20 @@ const struct TeamRelationships TeamRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
 
+
+
+
+
+
 @dynamic idTeam;
+
+
 
 - (int64_t)idTeamValue {
 	NSNumber *result = [self idTeam];
@@ -181,44 +223,73 @@ const struct TeamRelationships TeamRelationships = {
 	[self setPrimitiveIdTeam:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic officialName;
+
+
+
+
+
 
 @dynamic shortName;
 
+
+
+
+
+
 @dynamic tlaName;
+
+
+
+
+
 
 @dynamic matchAsLocal;
 
+	
 - (NSMutableSet*)matchAsLocalSet {
 	[self willAccessValueForKey:@"matchAsLocal"];
-
+  
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchAsLocal"];
-
+  
 	[self didAccessValueForKey:@"matchAsLocal"];
 	return result;
 }
+	
 
 @dynamic matchAsVisitor;
 
+	
 - (NSMutableSet*)matchAsVisitorSet {
 	[self willAccessValueForKey:@"matchAsVisitor"];
-
+  
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"matchAsVisitor"];
-
+  
 	[self didAccessValueForKey:@"matchAsVisitor"];
 	return result;
 }
+	
 
 @dynamic user;
 
+	
 - (NSMutableSet*)userSet {
 	[self willAccessValueForKey:@"user"];
-
+  
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"user"];
-
+  
 	[self didAccessValueForKey:@"user"];
 	return result;
 }
+	
+
+
+
+
+
 
 @end
-

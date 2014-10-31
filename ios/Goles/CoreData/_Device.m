@@ -26,6 +26,9 @@ const struct DeviceRelationships DeviceRelationships = {
 	.user = @"user",
 };
 
+const struct DeviceFetchedProperties DeviceFetchedProperties = {
+};
+
 @implementation DeviceID
 @end
 
@@ -51,7 +54,7 @@ const struct DeviceRelationships DeviceRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -96,9 +99,19 @@ const struct DeviceRelationships DeviceRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic appVer;
 
+
+
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -118,7 +131,13 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -138,7 +157,13 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -158,7 +183,13 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -178,9 +209,20 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
 
+
+
+
+
+
 @dynamic idDevice;
+
+
 
 - (int64_t)idDeviceValue {
 	NSNumber *result = [self idDevice];
@@ -200,7 +242,13 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveIdDevice:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic idUser;
+
+
 
 - (int64_t)idUserValue {
 	NSNumber *result = [self idUser];
@@ -220,15 +268,41 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveIdUser:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic language;
+
+
+
+
+
 
 @dynamic locale;
 
+
+
+
+
+
 @dynamic model;
+
+
+
+
+
 
 @dynamic osVer;
 
+
+
+
+
+
 @dynamic platform;
+
+
 
 - (int16_t)platformValue {
 	NSNumber *result = [self platform];
@@ -248,7 +322,13 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitivePlatform:[NSNumber numberWithShort:value_]];
 }
 
+
+
+
+
 @dynamic status;
+
+
 
 - (BOOL)statusValue {
 	NSNumber *result = [self status];
@@ -268,11 +348,31 @@ const struct DeviceRelationships DeviceRelationships = {
 	[self setPrimitiveStatus:[NSNumber numberWithBool:value_]];
 }
 
+
+
+
+
 @dynamic timeZone;
+
+
+
+
+
 
 @dynamic token;
 
+
+
+
+
+
 @dynamic user;
 
-@end
+	
 
+
+
+
+
+
+@end

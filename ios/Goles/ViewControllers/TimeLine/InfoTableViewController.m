@@ -12,6 +12,7 @@
 #import "UserManager.h"
 #import "InfoUtilities.h"
 #import "Match.h"
+#import "InfoManager.h"
 
 typedef enum typesOfChange : NSUInteger {
     k_NoChange,
@@ -24,7 +25,7 @@ typedef enum typesOfChange : NSUInteger {
 
 @interface InfoTableViewController () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic,strong)                NSArray         *usersArray;
+@property (nonatomic,strong)                NSArray         *matchesWatchersArray;
 @property (nonatomic,strong)    IBOutlet    UITableView     *infoTableView;
 
 @end
@@ -36,6 +37,7 @@ typedef enum typesOfChange : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.matchesWatchersArray = [InfoManager getMatchesWatchers];
 }
 
 #pragma mark - TABLE VIEW
@@ -45,6 +47,9 @@ typedef enum typesOfChange : NSUInteger {
 }
 //------------------------------------------------------------------------------
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    //return self.matchesWatchersArray.count;
+    
     return 3;
 }
 
@@ -66,6 +71,7 @@ typedef enum typesOfChange : NSUInteger {
 //------------------------------------------------------------------------------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
+    
     return 3;
 }
 

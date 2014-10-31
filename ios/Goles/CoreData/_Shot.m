@@ -17,6 +17,9 @@ const struct ShotRelationships ShotRelationships = {
 	.user = @"user",
 };
 
+const struct ShotFetchedProperties ShotFetchedProperties = {
+};
+
 @implementation ShotID
 @end
 
@@ -42,7 +45,7 @@ const struct ShotRelationships ShotRelationships = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-
+	
 	if ([key isEqualToString:@"csys_birthValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"csys_birth"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -72,9 +75,19 @@ const struct ShotRelationships ShotRelationships = {
 	return keyPaths;
 }
 
+
+
+
 @dynamic comment;
 
+
+
+
+
+
 @dynamic csys_birth;
+
+
 
 - (int64_t)csys_birthValue {
 	NSNumber *result = [self csys_birth];
@@ -94,7 +107,13 @@ const struct ShotRelationships ShotRelationships = {
 	[self setPrimitiveCsys_birth:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_deleted;
+
+
 
 - (int64_t)csys_deletedValue {
 	NSNumber *result = [self csys_deleted];
@@ -114,7 +133,13 @@ const struct ShotRelationships ShotRelationships = {
 	[self setPrimitiveCsys_deleted:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_modified;
+
+
 
 - (int64_t)csys_modifiedValue {
 	NSNumber *result = [self csys_modified];
@@ -134,7 +159,13 @@ const struct ShotRelationships ShotRelationships = {
 	[self setPrimitiveCsys_modified:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_revision;
+
+
 
 - (int64_t)csys_revisionValue {
 	NSNumber *result = [self csys_revision];
@@ -154,9 +185,20 @@ const struct ShotRelationships ShotRelationships = {
 	[self setPrimitiveCsys_revision:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic csys_syncronized;
 
+
+
+
+
+
 @dynamic idShot;
+
+
 
 - (int64_t)idShotValue {
 	NSNumber *result = [self idShot];
@@ -176,7 +218,17 @@ const struct ShotRelationships ShotRelationships = {
 	[self setPrimitiveIdShot:[NSNumber numberWithLongLong:value_]];
 }
 
+
+
+
+
 @dynamic user;
 
-@end
+	
 
+
+
+
+
+
+@end

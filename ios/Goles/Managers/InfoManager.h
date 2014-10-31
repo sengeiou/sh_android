@@ -14,6 +14,6 @@
 + (InfoManager *)singleton;
 
 + (Match *)getUserNextMatch;
-+ (NSArray *)getWatches;
++ (NSArray *)getMatchesWatchers;
 
 @end

@@ -3,6 +3,7 @@
 
 #import <CoreData/CoreData.h>
 
+
 extern const struct UserAttributes {
 	__unsafe_unretained NSString *bio;
 	__unsafe_unretained NSString *csys_birth;
@@ -32,10 +33,33 @@ extern const struct UserRelationships {
 	__unsafe_unretained NSString *watch;
 } UserRelationships;
 
+extern const struct UserFetchedProperties {
+} UserFetchedProperties;
+
 @class Device;
 @class Shot;
 @class Team;
 @class Watch;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @interface UserID : NSManagedObjectID {}
 @end
@@ -44,151 +68,280 @@ extern const struct UserRelationships {
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-@property (nonatomic, readonly, strong) UserID* objectID;
+- (UserID*)objectID;
+
+
+
+
 
 @property (nonatomic, strong) NSString* bio;
 
+
+
 //- (BOOL)validateBio:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 @property (nonatomic, strong) NSNumber* csys_birth;
 
-@property (atomic) int64_t csys_birthValue;
+
+
+@property int64_t csys_birthValue;
 - (int64_t)csys_birthValue;
 - (void)setCsys_birthValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_birth:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* csys_deleted;
 
-@property (atomic) int64_t csys_deletedValue;
+
+
+@property int64_t csys_deletedValue;
 - (int64_t)csys_deletedValue;
 - (void)setCsys_deletedValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_deleted:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* csys_modified;
 
-@property (atomic) int64_t csys_modifiedValue;
+
+
+@property int64_t csys_modifiedValue;
 - (int64_t)csys_modifiedValue;
 - (void)setCsys_modifiedValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_modified:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* csys_revision;
 
-@property (atomic) int64_t csys_revisionValue;
+
+
+@property int64_t csys_revisionValue;
 - (int64_t)csys_revisionValue;
 - (void)setCsys_revisionValue:(int64_t)value_;
 
 //- (BOOL)validateCsys_revision:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* csys_syncronized;
+
+
 
 //- (BOOL)validateCsys_syncronized:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* eMail;
+
+
 
 //- (BOOL)validateEMail:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* favoriteTeamName;
+
+
 
 //- (BOOL)validateFavoriteTeamName:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* idFavoriteTeam;
 
-@property (atomic) int64_t idFavoriteTeamValue;
+
+
+@property int64_t idFavoriteTeamValue;
 - (int64_t)idFavoriteTeamValue;
 - (void)setIdFavoriteTeamValue:(int64_t)value_;
 
 //- (BOOL)validateIdFavoriteTeam:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* idUser;
 
-@property (atomic) int64_t idUserValue;
+
+
+@property int64_t idUserValue;
 - (int64_t)idUserValue;
 - (void)setIdUserValue:(int64_t)value_;
 
 //- (BOOL)validateIdUser:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* name;
+
+
 
 //- (BOOL)validateName:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* numFollowers;
 
-@property (atomic) int32_t numFollowersValue;
+
+
+@property int32_t numFollowersValue;
 - (int32_t)numFollowersValue;
 - (void)setNumFollowersValue:(int32_t)value_;
 
 //- (BOOL)validateNumFollowers:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* numFollowing;
 
-@property (atomic) int32_t numFollowingValue;
+
+
+@property int32_t numFollowingValue;
 - (int32_t)numFollowingValue;
 - (void)setNumFollowingValue:(int32_t)value_;
 
 //- (BOOL)validateNumFollowing:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* photo;
+
+
 
 //- (BOOL)validatePhoto:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* points;
 
-@property (atomic) int64_t pointsValue;
+
+
+@property int64_t pointsValue;
 - (int64_t)pointsValue;
 - (void)setPointsValue:(int64_t)value_;
 
 //- (BOOL)validatePoints:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSNumber* rank;
 
-@property (atomic) int64_t rankValue;
+
+
+@property int64_t rankValue;
 - (int64_t)rankValue;
 - (void)setRankValue:(int64_t)value_;
 
 //- (BOOL)validateRank:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* sessionToken;
+
+
 
 //- (BOOL)validateSessionToken:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* userName;
+
+
 
 //- (BOOL)validateUserName:(id*)value_ error:(NSError**)error_;
 
+
+
+
+
 @property (nonatomic, strong) NSString* website;
 
+
+
 //- (BOOL)validateWebsite:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 @property (nonatomic, strong) Device *device;
 
 //- (BOOL)validateDevice:(id*)value_ error:(NSError**)error_;
 
+
+
+
 @property (nonatomic, strong) NSSet *shots;
 
 - (NSMutableSet*)shotsSet;
+
+
+
 
 @property (nonatomic, strong) Team *team;
 
 //- (BOOL)validateTeam:(id*)value_ error:(NSError**)error_;
 
+
+
+
 @property (nonatomic, strong) NSSet *watch;
 
 - (NSMutableSet*)watchSet;
 
+
+
+
+
 @end
 
-@interface _User (ShotsCoreDataGeneratedAccessors)
+@interface _User (CoreDataGeneratedAccessors)
+
 - (void)addShots:(NSSet*)value_;
 - (void)removeShots:(NSSet*)value_;
 - (void)addShotsObject:(Shot*)value_;
 - (void)removeShotsObject:(Shot*)value_;
 
-@end
-
-@interface _User (WatchCoreDataGeneratedAccessors)
 - (void)addWatch:(NSSet*)value_;
 - (void)removeWatch:(NSSet*)value_;
 - (void)addWatchObject:(Watch*)value_;
@@ -198,8 +351,12 @@ extern const struct UserRelationships {
 
 @interface _User (CoreDataGeneratedPrimitiveAccessors)
 
+
 - (NSString*)primitiveBio;
 - (void)setPrimitiveBio:(NSString*)value;
+
+
+
 
 - (NSNumber*)primitiveCsys_birth;
 - (void)setPrimitiveCsys_birth:(NSNumber*)value;
@@ -207,11 +364,17 @@ extern const struct UserRelationships {
 - (int64_t)primitiveCsys_birthValue;
 - (void)setPrimitiveCsys_birthValue:(int64_t)value_;
 
+
+
+
 - (NSNumber*)primitiveCsys_deleted;
 - (void)setPrimitiveCsys_deleted:(NSNumber*)value;
 
 - (int64_t)primitiveCsys_deletedValue;
 - (void)setPrimitiveCsys_deletedValue:(int64_t)value_;
+
+
+
 
 - (NSNumber*)primitiveCsys_modified;
 - (void)setPrimitiveCsys_modified:(NSNumber*)value;
@@ -219,20 +382,35 @@ extern const struct UserRelationships {
 - (int64_t)primitiveCsys_modifiedValue;
 - (void)setPrimitiveCsys_modifiedValue:(int64_t)value_;
 
+
+
+
 - (NSNumber*)primitiveCsys_revision;
 - (void)setPrimitiveCsys_revision:(NSNumber*)value;
 
 - (int64_t)primitiveCsys_revisionValue;
 - (void)setPrimitiveCsys_revisionValue:(int64_t)value_;
 
+
+
+
 - (NSString*)primitiveCsys_syncronized;
 - (void)setPrimitiveCsys_syncronized:(NSString*)value;
+
+
+
 
 - (NSString*)primitiveEMail;
 - (void)setPrimitiveEMail:(NSString*)value;
 
+
+
+
 - (NSString*)primitiveFavoriteTeamName;
 - (void)setPrimitiveFavoriteTeamName:(NSString*)value;
+
+
+
 
 - (NSNumber*)primitiveIdFavoriteTeam;
 - (void)setPrimitiveIdFavoriteTeam:(NSNumber*)value;
@@ -240,14 +418,23 @@ extern const struct UserRelationships {
 - (int64_t)primitiveIdFavoriteTeamValue;
 - (void)setPrimitiveIdFavoriteTeamValue:(int64_t)value_;
 
+
+
+
 - (NSNumber*)primitiveIdUser;
 - (void)setPrimitiveIdUser:(NSNumber*)value;
 
 - (int64_t)primitiveIdUserValue;
 - (void)setPrimitiveIdUserValue:(int64_t)value_;
 
+
+
+
 - (NSString*)primitiveName;
 - (void)setPrimitiveName:(NSString*)value;
+
+
+
 
 - (NSNumber*)primitiveNumFollowers;
 - (void)setPrimitiveNumFollowers:(NSNumber*)value;
@@ -255,14 +442,23 @@ extern const struct UserRelationships {
 - (int32_t)primitiveNumFollowersValue;
 - (void)setPrimitiveNumFollowersValue:(int32_t)value_;
 
+
+
+
 - (NSNumber*)primitiveNumFollowing;
 - (void)setPrimitiveNumFollowing:(NSNumber*)value;
 
 - (int32_t)primitiveNumFollowingValue;
 - (void)setPrimitiveNumFollowingValue:(int32_t)value_;
 
+
+
+
 - (NSString*)primitivePhoto;
 - (void)setPrimitivePhoto:(NSString*)value;
+
+
+
 
 - (NSNumber*)primitivePoints;
 - (void)setPrimitivePoints:(NSNumber*)value;
@@ -270,31 +466,54 @@ extern const struct UserRelationships {
 - (int64_t)primitivePointsValue;
 - (void)setPrimitivePointsValue:(int64_t)value_;
 
+
+
+
 - (NSNumber*)primitiveRank;
 - (void)setPrimitiveRank:(NSNumber*)value;
 
 - (int64_t)primitiveRankValue;
 - (void)setPrimitiveRankValue:(int64_t)value_;
 
+
+
+
 - (NSString*)primitiveSessionToken;
 - (void)setPrimitiveSessionToken:(NSString*)value;
+
+
+
 
 - (NSString*)primitiveUserName;
 - (void)setPrimitiveUserName:(NSString*)value;
 
+
+
+
 - (NSString*)primitiveWebsite;
 - (void)setPrimitiveWebsite:(NSString*)value;
+
+
+
+
 
 - (Device*)primitiveDevice;
 - (void)setPrimitiveDevice:(Device*)value;
 
+
+
 - (NSMutableSet*)primitiveShots;
 - (void)setPrimitiveShots:(NSMutableSet*)value;
+
+
 
 - (Team*)primitiveTeam;
 - (void)setPrimitiveTeam:(Team*)value;
 
+
+
 - (NSMutableSet*)primitiveWatch;
 - (void)setPrimitiveWatch:(NSMutableSet*)value;
+
 
 @end
