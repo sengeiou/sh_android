@@ -50,7 +50,6 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
         postSuccessfulEvent(new ShotsResultEvent(shotsWithUsersFromServer));
    }
 
-
     @Override protected boolean isNetworkRequired() {
         return true;
     }

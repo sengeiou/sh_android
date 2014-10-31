@@ -33,6 +33,7 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
     }
 
     @Override protected void run() throws SQLException, IOException {
+
         List<ShotModel> localShots = shotManager.retrieveTimelineWithUsers(currentUser.getIdUser());
         if (localShots != null && localShots.size() > 0) {
             // Got them already :)

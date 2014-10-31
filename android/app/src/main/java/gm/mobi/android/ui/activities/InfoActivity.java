@@ -24,6 +24,7 @@ import gm.mobi.android.ui.base.BaseSignedInActivity;
 import gm.mobi.android.ui.model.MatchModel;
 import gm.mobi.android.ui.model.UserWatchingModel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -108,7 +109,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @Subscribe
     public void receivedInfoList(WatchingInfoResult event){
-        Map<MatchModel, List<UserWatchingModel>> result = event.getResult();
+        Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
         adapter.setContent(result);
     }
 

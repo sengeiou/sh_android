@@ -347,7 +347,7 @@
                                                                                  andEntity:K_COREDATA_WATCH
                                                                                  withItems:@1000
                                                                                 withOffSet:@0
-                                                                                 andFilter:[FilterCreation getFilterForEntity:[Watch class]]];
+                                                                                 andFilter:[FilterCreation getFilterForWatches]];
     
     //Create playerProvider 'ops' block
     NSDictionary *operation = @{K_WS_OPS_METADATA:metadata,K_WS_OPS_DATA:@[[FavEntityDescriptor createPropertyListForEntity:[Watch class]]]};
@@ -375,7 +375,7 @@
     
     if (!error){
 
-        [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+        [FavGeneralDAO watchParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
             if (!error && status && delegateRespondsToProtocol)
                 [delegate parserResponseForClass:[Watch class] status:YES andError:nil  andRefresh:refresh];
             else if (delegateRespondsToProtocol)

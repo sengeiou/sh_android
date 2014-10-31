@@ -9,6 +9,10 @@
 #import "InfoManager.h"
 #import "CoreDataManager.h"
 #import "UserManager.h"
+#import "Watch.h"
+#import "Match.h"
+#import "User.h"
+#import "MatchWatchers.h"
 
 @implementation InfoManager
 
@@ -41,10 +45,41 @@
 //------------------------------------------------------------------------------
 + (Match *)getUserNextMatch {
     
-    NSInteger userTeamID = [[[UserManager singleton] getActiveUser] favoriteTeamName];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@""];
-    Match *userMatch = [[CoreDataManager singleton] getAllEntities:[Match class] orderedByKey:kJSON_DATE_MATCH ascending:YES withPredicate:predicate];
-    return userMatch;
+    NSInteger userTeamID = [[[UserManager singleton] getActiveUser] idFavoriteTeamValue];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"idLocalTeam == %@ || idVisitorTeam = %@",userTeamID,userTeamID];
+    NSArray *userMatchArray = [[CoreDataManager singleton] getAllEntities:[Match class] orderedByKey:kJSON_DATE_MATCH ascending:YES withPredicate:predicate];
+    return userMatchArray.firstObject;
+}
+
+//------------------------------------------------------------------------------
++ (NSArray *)getMatchesWatchers {
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"csys_deleted != %@",@"d"];
+    NSArray *watches = [[CoreDataManager singleton] getAllEntities:[Watch class] withPredicate:predicate];
+    return [self matchesWatchersConstructor:watches];
+}
+
+//------------------------------------------------------------------------------
++ (NSArray *)matchesWatchersConstructor:(NSArray *)watchesArray {
+
+    NSMutableArray *watchesMatchesArray = [[NSMutableArray alloc] init];
+    for (Watch *watch in watchesArray){
+        if (![watchesMatchesArray containsObject:watch.match]) {
+            MatchWatchers *matchW = [[MatchWatchers alloc] init];
+            matchW.match = watch.match;
+            [watchesMatchesArray addObject:matchW];
+        }
+    }
+    
+    for (MatchWatchers *matchWatch in watchesMatchesArray) {
+        for (Watch *watch in watchesArray){
+            if (matchWatch.match == watch.match)
+                [matchWatch.userArray addObject:watch.user];
+            
+        }
+    }
+    
+    return watchesMatchesArray;
 }
 
 @end

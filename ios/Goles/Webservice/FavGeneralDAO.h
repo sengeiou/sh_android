@@ -9,9 +9,9 @@
 
 @interface FavGeneralDAO : NSObject
 
-//Generic parser
 +(void)genericParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock;
 +(void)shotParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock;
 +(void)searchParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error,NSArray *data, int totalItems))completionBlock;
++(void)watchParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock;
 
 @end
