@@ -375,7 +375,7 @@
     
     if (!error){
 
-        [FavGeneralDAO genericParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
+        [FavGeneralDAO watchParser:data onCompletion:^(BOOL status, NSError *error, BOOL refresh) {
             if (!error && status && delegateRespondsToProtocol)
                 [delegate parserResponseForClass:[Watch class] status:YES andError:nil  andRefresh:refresh];
             else if (delegateRespondsToProtocol)

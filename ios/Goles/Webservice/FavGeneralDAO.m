@@ -14,6 +14,7 @@
 #import "SyncManager.h"
 #import "UserManager.h"
 #import "Shot.h"
+#import "Watch.h"
 
 static NSArray *cuotasToDelete;
 
@@ -121,6 +122,50 @@ static NSArray *cuotasToDelete;
         DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
         NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];
         completionBlock(NO,error, nil,needToPaginate);
+    }
+}
+
+//------------------------------------------------------------------------------
++(void)watchParser:(NSDictionary *)dict onCompletion:(void (^)(BOOL status,NSError *error, BOOL refresh))completionBlock {
+    
+    BOOL statusOK = [[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_CODE] isEqualToString:K_WS_STATUS_OK];
+    NSArray *ops = [dict objectForKey:K_WS_OPS];
+    BOOL returnedItems = [[[[ops objectAtIndex:0] objectForKey:K_WS_OPS_METADATA] objectForKey:K_WS_OPS_ITEMS] integerValue] > 0;
+    
+    if (dict && statusOK) {
+        
+        if (returnedItems) {
+            
+            NSArray *dataArray = [[ops objectAtIndex:0] objectForKey:K_WS_OPS_DATA];
+            NSArray *insertedArray = [[CoreDataManager sharedInstance] updateEntities:[Watch class] WithArray:dataArray];
+            if (insertedArray.count > 0){
+                if ([[CoreDataManager singleton] saveContext]){
+                    NSNumber *value = [[CoreDataManager singleton] getMaxModifiedValueForEntity:K_COREDATA_WATCH];
+                    [[SyncManager singleton] setSyncData:dict withValue:value];
+                }
+            }
+            completionBlock(YES,nil, YES);
+        }else{
+            completionBlock(NO,nil, YES);
+        }
+    }
+    else if (!statusOK){
+        
+        DLog(@"\n\nSERVER RESPONSE STATUS KO\nSERVER MESSAGE:%@",[[dict objectForKey:K_WS_STATUS] objectForKey:K_WS_STATUS_MESSAGE]);
+        NSError *error = [NSError errorWithDomain:@"Data service error" code:0 userInfo:[dict objectForKey:K_WS_STATUS]];
+        completionBlock(NO,error, NO);
+    }
+}
+
+//------------------------------------------------------------------------------
++(void)checkForMatchDependenciesInWatchArray:(NSArray *)data withCompletion:(void (^)(BOOL status, NSError *error))completionBlock {
+
+    NSMutableArray *matchesToSearchIDs = [[NSMutableArray alloc] init];
+    for (NSDictionary *watchDict in data) {
+        NSInteger idMatch = [[watchDict objectForKey:kJSON_ID_MATCH] integerValue];
+        if (![[CoreDataManager singleton] getEntity:[Match class] withId:idMatch]){
+            [matchesToSearchIDs addObject:[NSNumber numberWithInteger:idMatch]];
+        }
     }
 }
 
