@@ -12,7 +12,7 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="88dp"
-        android:src="@drawable/shooter_logo"/>
+        android:src="@drawable/ic_launcher"/>
 
     <gm.mobi.android.ui.widgets.WelcomeIndicator
         android:id="@+id/welcome_indicators"
