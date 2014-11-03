@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities;
+package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import gm.mobi.android.R;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.ui.base.BaseSignedInActivity;
-import gm.mobi.android.ui.fragments.UserFollowsFragment;
+import com.shootr.android.R;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
 
 public class UserFollowsContainerActivity extends BaseSignedInActivity {

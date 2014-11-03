@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities;
+package com.shootr.android.ui.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.base.BaseSignedInActivity;
-import gm.mobi.android.ui.fragments.ProfileFragment;
-import gm.mobi.android.ui.model.UserModel;
-import java.util.List;
+import com.shootr.android.R;
+import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.fragments.ProfileFragment;
+import com.shootr.android.ui.model.UserModel;
+
 import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {

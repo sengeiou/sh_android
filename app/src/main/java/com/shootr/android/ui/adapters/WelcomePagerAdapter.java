@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.adapters;
+package com.shootr.android.ui.adapters;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 
 
 public class WelcomePagerAdapter extends PagerAdapter {

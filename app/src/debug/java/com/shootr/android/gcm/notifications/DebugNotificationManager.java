@@ -1,10 +1,10 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.app.Application;
 import android.support.v4.app.NotificationManagerCompat;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.data.NotificationsEnabled;
-import gm.mobi.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.NotificationsEnabled;
+import com.shootr.android.data.prefs.BooleanPreference;
 import javax.inject.Inject;
 
 public class DebugNotificationManager extends ShootrNotificationManager {

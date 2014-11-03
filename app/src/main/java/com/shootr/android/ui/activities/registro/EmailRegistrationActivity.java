@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities.registro;
+package com.shootr.android.ui.activities.registro;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -17,9 +17,9 @@ import butterknife.InjectView;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.base.BaseActivity;
-import gm.mobi.android.util.Gravatar;
+import com.shootr.android.R;
+import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.util.Gravatar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

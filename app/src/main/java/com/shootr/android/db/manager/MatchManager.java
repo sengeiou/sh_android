@@ -1,12 +1,12 @@
-package gm.mobi.android.db.manager;
+package com.shootr.android.db.manager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import gm.mobi.android.db.DatabaseContract.MatchTable;
-import gm.mobi.android.db.mappers.MatchMapper;
-import gm.mobi.android.db.objects.MatchEntity;
+import com.shootr.android.db.DatabaseContract.MatchTable;
+import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.objects.MatchEntity;
 
 import java.util.ArrayList;
 import java.util.List;

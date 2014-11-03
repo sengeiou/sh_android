@@ -1,10 +1,10 @@
-package gm.mobi.android.data;
+package com.shootr.android.data;
 
 import android.app.Application;
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
-import gm.mobi.android.data.prefs.BooleanPreference;
-import gm.mobi.android.data.prefs.StringPreference;
+import com.shootr.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.prefs.StringPreference;
 import javax.inject.Inject;
 
 

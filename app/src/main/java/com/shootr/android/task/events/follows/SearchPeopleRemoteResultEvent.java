@@ -1,8 +1,8 @@
-package gm.mobi.android.task.events.follows;
+package com.shootr.android.task.events.follows;
 
-import gm.mobi.android.service.PaginatedResult;
-import gm.mobi.android.task.jobs.ShootrBaseJob;
-import gm.mobi.android.ui.model.UserModel;
+import com.shootr.android.service.PaginatedResult;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.ui.model.UserModel;
 import java.util.List;
 
 public class SearchPeopleRemoteResultEvent extends ShootrBaseJob.SuccessEvent<PaginatedResult<List<UserModel>>> {

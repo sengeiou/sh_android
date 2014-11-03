@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.fragments;
+package com.shootr.android.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,21 +18,21 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.R;
-import gm.mobi.android.db.objects.FollowEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.task.events.follows.FollowUnFollowResultEvent;
-import gm.mobi.android.task.events.profile.UserInfoResultEvent;
-import gm.mobi.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import gm.mobi.android.task.jobs.follows.GetFollowUnfollowUserJob;
-import gm.mobi.android.task.jobs.profile.GetUserInfoJob;
-import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
-import gm.mobi.android.ui.base.BaseActivity;
-import gm.mobi.android.ui.base.BaseFragment;
-import gm.mobi.android.ui.model.UserModel;
-import gm.mobi.android.ui.widgets.FollowButton;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.R;
+import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
+import com.shootr.android.task.events.profile.UserInfoResultEvent;
+import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
+import com.shootr.android.task.jobs.profile.GetUserInfoJob;
+import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.widgets.FollowButton;
 import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {

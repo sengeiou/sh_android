@@ -1,14 +1,14 @@
-package gm.mobi.android.ui.base;
+package com.shootr.android.ui.base;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
-import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.data.SessionManager;
+import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import javax.inject.Inject;
 
 public class BaseSignedInActivity extends BaseActivity {

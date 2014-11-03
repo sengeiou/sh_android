@@ -1,9 +1,9 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
-import gm.mobi.android.db.manager.MatchManager;
-import gm.mobi.android.db.manager.WatchManager;
-import gm.mobi.android.db.objects.MatchEntity;
-import gm.mobi.android.db.objects.WatchEntity;
+import com.shootr.android.db.manager.MatchManager;
+import com.shootr.android.db.manager.WatchManager;
+import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.db.objects.WatchEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

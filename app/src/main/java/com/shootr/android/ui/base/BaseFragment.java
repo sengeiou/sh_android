@@ -1,8 +1,8 @@
-package gm.mobi.android.ui.base;
+package com.shootr.android.ui.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
-import gm.mobi.android.ShootrApplication;
+import com.shootr.android.ShootrApplication;
 
 public class BaseFragment extends Fragment {
 

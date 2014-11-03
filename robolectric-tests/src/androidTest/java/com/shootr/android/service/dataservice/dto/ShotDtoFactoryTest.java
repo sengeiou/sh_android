@@ -1,11 +1,11 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
-import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.RobolectricGradleTestRunner;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;

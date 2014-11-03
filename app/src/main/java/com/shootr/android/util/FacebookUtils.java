@@ -1,4 +1,4 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 public class FacebookUtils {
     public static String getAvatarUrl(String id){

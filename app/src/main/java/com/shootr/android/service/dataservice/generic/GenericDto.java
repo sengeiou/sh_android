@@ -1,4 +1,4 @@
-package gm.mobi.android.service.dataservice.generic;
+package com.shootr.android.service.dataservice.generic;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

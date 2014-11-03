@@ -1,4 +1,4 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 import org.junit.runners.model.InitializationError;
 import org.robolectric.AndroidManifest;

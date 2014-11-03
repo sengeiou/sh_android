@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.app.Notification;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 
 public abstract class CommonNotification {
 

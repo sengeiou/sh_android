@@ -1,17 +1,17 @@
-package gm.mobi.android.db;
+package com.shootr.android.db;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.manager.DeviceManager;
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.data.SessionManager;
+import com.shootr.android.db.manager.DeviceManager;
+import com.shootr.android.db.manager.FollowManager;
+import com.shootr.android.db.manager.ShotManager;
+import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.db.mappers.DeviceMapper;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 
 @Module(
   complete = false,

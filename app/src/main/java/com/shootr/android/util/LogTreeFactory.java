@@ -1,4 +1,4 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import timber.log.Timber;
 

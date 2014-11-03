@@ -1,14 +1,14 @@
-package gm.mobi.android.task.jobs.follows;
+package com.shootr.android.task.jobs.follows;
 
 import android.database.sqlite.SQLiteOpenHelper;
-import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.db.manager.FollowManager;
-import gm.mobi.android.db.manager.UserManager;
-import gm.mobi.android.service.ShootrService;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.task.jobs.ShootrBaseJob;
-import gm.mobi.android.task.jobs.ShootrBaseJobTestAbstract;
-import gm.mobi.android.ui.model.mappers.UserModelMapper;
+import com.shootr.android.RobolectricGradleTestRunner;
+import com.shootr.android.db.manager.FollowManager;
+import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.service.ShootrService;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.task.jobs.ShootrBaseJobTestAbstract;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.runner.RunWith;

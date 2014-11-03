@@ -1,18 +1,18 @@
-package gm.mobi.android.ui;
+package com.shootr.android.ui;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.ui.activities.FindFriendsActivity;
-import gm.mobi.android.ui.activities.InfoActivity;
-import gm.mobi.android.ui.activities.MainActivity;
-import gm.mobi.android.ui.activities.PostNewShotActivity;
-import gm.mobi.android.ui.activities.ProfileContainerActivity;
-import gm.mobi.android.ui.activities.UserFollowsContainerActivity;
-import gm.mobi.android.ui.activities.registro.EmailLoginActivity;
-import gm.mobi.android.ui.activities.registro.EmailRegistrationActivity;
-import gm.mobi.android.ui.activities.registro.FacebookRegistroActivity;
-import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
-import gm.mobi.android.ui.base.BaseActivity;
+import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.activities.InfoActivity;
+import com.shootr.android.ui.activities.MainActivity;
+import com.shootr.android.ui.activities.PostNewShotActivity;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
+import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.activities.registro.EmailLoginActivity;
+import com.shootr.android.ui.activities.registro.EmailRegistrationActivity;
+import com.shootr.android.ui.activities.registro.FacebookRegistroActivity;
+import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.ui.base.BaseActivity;
 import javax.inject.Singleton;
 
 @Module(

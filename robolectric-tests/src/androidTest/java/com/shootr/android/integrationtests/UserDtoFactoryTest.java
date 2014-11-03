@@ -1,10 +1,10 @@
-package gm.mobi.android.integrationtests;
+package com.shootr.android.integrationtests;
 
-import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.TestShootrApplication;
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.RobolectricGradleTestRunner;
+import com.shootr.android.TestShootrApplication;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.service.dataservice.generic.GenericDto;
 import java.util.Map;
 import javax.inject.Inject;
 import org.junit.Before;

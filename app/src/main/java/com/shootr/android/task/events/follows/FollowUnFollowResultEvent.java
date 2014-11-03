@@ -1,7 +1,7 @@
-package gm.mobi.android.task.events.follows;
+package com.shootr.android.task.events.follows;
 
-import gm.mobi.android.task.jobs.ShootrBaseJob;
-import gm.mobi.android.ui.model.UserModel;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.ui.model.UserModel;
 
 public class FollowUnFollowResultEvent extends ShootrBaseJob.SuccessEvent<UserModel> {
 

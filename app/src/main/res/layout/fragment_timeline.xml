@@ -16,7 +16,7 @@
           android:layout_marginBottom="@dimen/new_shot_height"
           android:visibility="visible">
 
-            <gm.mobi.android.ui.widgets.ScrollListView
+            <com.shootr.android.ui.widgets.ScrollListView
               android:id="@+id/timeline_list"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

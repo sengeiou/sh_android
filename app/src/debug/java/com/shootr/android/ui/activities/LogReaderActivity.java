@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities;
+package com.shootr.android.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-import gm.mobi.android.BuildConfig;
-import gm.mobi.android.R;
-import gm.mobi.android.util.FileLogger;
+import com.shootr.android.BuildConfig;
+import com.shootr.android.R;
+import com.shootr.android.util.FileLogger;
 
 public class LogReaderActivity extends ActionBarActivity {
 

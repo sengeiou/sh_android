@@ -1,10 +1,10 @@
-package gm.mobi.android.ui.activities;
+package com.shootr.android.ui.activities;
 
 import android.test.ActivityUnitTestCase;
 import com.squareup.spoon.Spoon;
 
-import gm.mobi.android.R;
-import gm.mobi.android.db.objects.UserEntity;
+import com.shootr.android.R;
+import com.shootr.android.db.objects.UserEntity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;

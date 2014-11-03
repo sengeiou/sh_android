@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.base;
+package com.shootr.android.ui.base;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.AppContainer;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.R;
+import com.shootr.android.ui.AppContainer;
 
 import static butterknife.ButterKnife.findById;
 

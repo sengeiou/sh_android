@@ -1,10 +1,10 @@
-package gm.mobi.android.db.mappers;
+package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.objects.FollowEntity;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.objects.FollowEntity;
 import java.util.HashMap;
 import java.util.Map;
 

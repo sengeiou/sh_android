@@ -1,8 +1,8 @@
-package gm.mobi.android.ui.model.mappers;
+package com.shootr.android.ui.model.mappers;
 
-import gm.mobi.android.db.objects.MatchEntity;
-import gm.mobi.android.ui.model.MatchModel;
-import gm.mobi.android.util.TimeUtils;
+import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.util.TimeUtils;
 
 public class MatchModelMapper {
 

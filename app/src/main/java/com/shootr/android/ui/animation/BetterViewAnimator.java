@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.animation;
+package com.shootr.android.ui.animation;
 
 import android.content.Context;
 import android.util.AttributeSet;

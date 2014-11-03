@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.widgets;
+package com.shootr.android.ui.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import gm.mobi.android.R;
-import timber.log.Timber;
+import com.shootr.android.R;
 
 public class FollowButton extends FrameLayout {
 

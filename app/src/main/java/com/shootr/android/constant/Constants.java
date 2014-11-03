@@ -1,4 +1,4 @@
-package gm.mobi.android.constant;
+package com.shootr.android.constant;
 
 
 public class Constants {

@@ -1,20 +1,20 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
-import gm.mobi.android.constant.Constants;
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.mappers.MatchMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.mappers.WatchMapper;
-import gm.mobi.android.service.dataservice.generic.FilterDto;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.MetadataDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.constant.Constants;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.TeamMapper;
+import com.shootr.android.db.mappers.WatchMapper;
+import com.shootr.android.service.dataservice.generic.FilterDto;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.MetadataDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.List;
 import javax.inject.Inject;
 
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsNotDeleted;
 
 public class MatchDtoFactory {
 

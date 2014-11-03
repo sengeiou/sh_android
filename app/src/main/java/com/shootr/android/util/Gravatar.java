@@ -1,4 +1,4 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import android.text.TextUtils;
 import java.io.UnsupportedEncodingException;

@@ -1,7 +1,7 @@
-package gm.mobi.android.task.events.shots;
+package com.shootr.android.task.events.shots;
 
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.task.jobs.ShootrBaseJob;
 
 public class PostNewShotResultEvent extends ShootrBaseJob.SuccessEvent<ShotEntity> {
 

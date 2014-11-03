@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.fragments;
+package com.shootr.android.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,16 +7,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.squareup.otto.Subscribe;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.R;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.task.events.CommunicationErrorEvent;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.follows.FollowsResultEvent;
-import gm.mobi.android.task.jobs.follows.GetPeopleJob;
-import gm.mobi.android.ui.activities.FindFriendsActivity;
-import gm.mobi.android.ui.adapters.PeopleAdapter;
-import gm.mobi.android.ui.adapters.UserListAdapter;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.R;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.follows.FollowsResultEvent;
+import com.shootr.android.task.jobs.follows.GetPeopleJob;
+import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.adapters.PeopleAdapter;
+import com.shootr.android.ui.adapters.UserListAdapter;
 
 public class PeopleFragment extends UserFollowsFragment {
 

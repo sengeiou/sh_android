@@ -1,4 +1,4 @@
-package gm.mobi.android.data.prefs;
+package com.shootr.android.data.prefs;
 
 import java.lang.annotation.Retention;
 import javax.inject.Qualifier;

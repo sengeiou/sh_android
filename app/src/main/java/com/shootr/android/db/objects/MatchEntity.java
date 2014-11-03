@@ -1,4 +1,4 @@
-package gm.mobi.android.db.objects;
+package com.shootr.android.db.objects;
 
 import android.support.annotation.NonNull;
 import java.util.Date;

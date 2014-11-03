@@ -1,13 +1,13 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.integrationtests.GetPeopleJobTest;
-import gm.mobi.android.integrationtests.ShotDtoFactoryTest;
-import gm.mobi.android.integrationtests.TestShootrDbOpenHelper;
-import gm.mobi.android.integrationtests.UserDtoFactoryTest;
+import com.shootr.android.integrationtests.GetPeopleJobTest;
+import com.shootr.android.integrationtests.ShotDtoFactoryTest;
+import com.shootr.android.integrationtests.TestShootrDbOpenHelper;
+import com.shootr.android.integrationtests.UserDtoFactoryTest;
 import javax.inject.Singleton;
 
 @Module(

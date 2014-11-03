@@ -1,6 +1,6 @@
-package gm.mobi.android.task.events.loginregister;
+package com.shootr.android.task.events.loginregister;
 
-import gm.mobi.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.task.jobs.ShootrBaseJob;
 
 public class PushTokenResult extends ShootrBaseJob.SuccessEvent<String> {
 

@@ -1,10 +1,10 @@
-package gm.mobi.android.task.jobs;
+package com.shootr.android.task.jobs;
 
 import android.content.Context;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;

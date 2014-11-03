@@ -1,9 +1,9 @@
-package gm.mobi.android.ui.model.mappers;
+package com.shootr.android.ui.model.mappers;
 
 
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.ui.model.ShotModel;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.ui.model.ShotModel;
 
 public class ShotModelMapper {
 

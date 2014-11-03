@@ -1,12 +1,12 @@
-package gm.mobi.android.service;
+package com.shootr.android.service;
 
-import gm.mobi.android.db.objects.DeviceEntity;
-import gm.mobi.android.db.objects.FollowEntity;
-import gm.mobi.android.db.objects.MatchEntity;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.TeamEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.db.objects.WatchEntity;
+import com.shootr.android.db.objects.DeviceEntity;
+import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.TeamEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.db.objects.WatchEntity;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;

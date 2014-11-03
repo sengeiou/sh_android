@@ -1,13 +1,13 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
-import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.DatabaseContract.ShotTable;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.MetadataDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.MetadataDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
 import javax.inject.Inject;
 
 public class ShotDtoFactory {

@@ -1,4 +1,4 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

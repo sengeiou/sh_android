@@ -1,7 +1,7 @@
-package gm.mobi.android.integrationtests;
+package com.shootr.android.integrationtests;
 
 import android.content.Context;
-import gm.mobi.android.db.ShootrDbOpenHelper;
+import com.shootr.android.db.ShootrDbOpenHelper;
 
 public class TestShootrDbOpenHelper extends ShootrDbOpenHelper {
 

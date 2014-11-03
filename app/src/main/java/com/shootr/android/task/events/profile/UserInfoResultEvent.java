@@ -1,7 +1,7 @@
-package gm.mobi.android.task.events.profile;
+package com.shootr.android.task.events.profile;
 
-import gm.mobi.android.task.jobs.ShootrBaseJob;
-import gm.mobi.android.ui.model.UserModel;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.ui.model.UserModel;
 
 public class UserInfoResultEvent extends ShootrBaseJob.SuccessEvent<UserModel> {
 

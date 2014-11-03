@@ -1,9 +1,9 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import gm.mobi.android.BuildConfig;
+import com.shootr.android.BuildConfig;
 import timber.log.Timber;
 
 public class VersionUtils {

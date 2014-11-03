@@ -1,8 +1,8 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import android.os.Environment;
 import android.util.Log;
-import gm.mobi.android.BuildConfig;
+import com.shootr.android.BuildConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

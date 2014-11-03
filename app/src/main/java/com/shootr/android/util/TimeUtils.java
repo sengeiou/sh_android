@@ -1,9 +1,9 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.format.DateUtils;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Formatter;

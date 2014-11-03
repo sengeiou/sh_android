@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.debug;
+package com.shootr.android.ui.debug;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

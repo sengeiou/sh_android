@@ -1,9 +1,8 @@
-package gm.mobi.android.ui.activities.registro;
+package com.shootr.android.ui.activities.registro;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.squareup.spoon.Spoon;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.activities.registro.WelcomeLoginActivity;
+import com.shootr.android.R;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;

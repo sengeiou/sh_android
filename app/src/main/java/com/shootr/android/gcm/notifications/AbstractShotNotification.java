@@ -1,12 +1,12 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import gm.mobi.android.gcm.NotificationIntentReceiver;
-import gm.mobi.android.ui.activities.MainActivity;
+import com.shootr.android.gcm.NotificationIntentReceiver;
+import com.shootr.android.ui.activities.MainActivity;
 
 public abstract class AbstractShotNotification extends CommonNotification {
 

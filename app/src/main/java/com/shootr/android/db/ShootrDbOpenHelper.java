@@ -1,4 +1,4 @@
-package gm.mobi.android.db;
+package com.shootr.android.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package gm.mobi.android.util;
+package com.shootr.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

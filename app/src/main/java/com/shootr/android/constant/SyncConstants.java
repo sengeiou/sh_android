@@ -1,13 +1,13 @@
-package gm.mobi.android.constant;
+package com.shootr.android.constant;
 
 
 public class SyncConstants {
 
     // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = "gm.mobi.android.db.provider";
+    public static final String AUTHORITY = "com.shootr.android.db.provider";
 
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "gm.mobi.android";
+    public static final String ACCOUNT_TYPE = "com.shootr.android";
 
     // The account name
 

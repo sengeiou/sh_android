@@ -1,4 +1,4 @@
-package gm.mobi.android.exception;
+package com.shootr.android.exception;
 
 import java.io.IOException;
 

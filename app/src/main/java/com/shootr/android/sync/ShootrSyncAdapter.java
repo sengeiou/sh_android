@@ -1,4 +1,4 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
@@ -8,8 +8,8 @@ import android.content.SyncResult;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import com.path.android.jobqueue.JobManager;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.db.manager.UserManager;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.db.manager.UserManager;
 
 import javax.inject.Inject;
 import timber.log.Timber;

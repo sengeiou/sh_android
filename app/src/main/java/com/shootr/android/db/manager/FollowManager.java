@@ -1,13 +1,13 @@
-package gm.mobi.android.db.manager;
+package com.shootr.android.db.manager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.DatabaseContract.FollowTable;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.objects.FollowEntity;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.DatabaseContract.FollowTable;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.objects.FollowEntity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

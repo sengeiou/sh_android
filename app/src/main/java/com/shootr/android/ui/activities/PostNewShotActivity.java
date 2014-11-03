@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities;
+package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,16 +23,16 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.R;
-import gm.mobi.android.db.manager.ShotManager;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.task.events.CommunicationErrorEvent;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
-import gm.mobi.android.task.jobs.shots.PostNewShotJob;
-import gm.mobi.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.R;
+import com.shootr.android.db.manager.ShotManager;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.shots.PostNewShotResultEvent;
+import com.shootr.android.task.jobs.shots.PostNewShotJob;
+import com.shootr.android.ui.base.BaseSignedInActivity;
 import javax.inject.Inject;
 import timber.log.Timber;
 

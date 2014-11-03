@@ -1,6 +1,6 @@
-package gm.mobi.android.data;
+package com.shootr.android.data;
 
-import gm.mobi.android.db.objects.UserEntity;
+import com.shootr.android.db.objects.UserEntity;
 
 public interface SessionManager {
 

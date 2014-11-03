@@ -1,4 +1,4 @@
-package gm.mobi.android.service;
+package com.shootr.android.service;
 
 /**
  * Represents an API endpoint URL and associated name. Callers should always consult the instance

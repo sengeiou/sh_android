@@ -1,4 +1,4 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import gm.mobi.android.constant.SyncConstants;
+import com.shootr.android.constant.SyncConstants;
 
 public class ShootrAccountService extends Service{
     private Authenticator mAuthenticator;

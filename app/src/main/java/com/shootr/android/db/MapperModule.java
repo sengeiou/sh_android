@@ -1,19 +1,18 @@
-package gm.mobi.android.db;
+package com.shootr.android.db;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.MatchMapper;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.mappers.WatchMapper;
-import gm.mobi.android.ui.model.UserWatchingModel;
-import gm.mobi.android.ui.model.mappers.MatchModelMapper;
-import gm.mobi.android.ui.model.mappers.ShotModelMapper;
-import gm.mobi.android.ui.model.mappers.UserModelMapper;
-import gm.mobi.android.ui.model.mappers.UserWatchingModelMapper;
+import com.shootr.android.db.mappers.DeviceMapper;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.TeamMapper;
+import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.mappers.WatchMapper;
+import com.shootr.android.ui.model.mappers.MatchModelMapper;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
+import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 
 @Module(
   complete = false,

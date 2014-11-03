@@ -1,4 +1,4 @@
-package gm.mobi.android.task.jobs;
+package com.shootr.android.task.jobs;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,9 +8,9 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.task.events.CommunicationErrorEvent;
-import gm.mobi.android.task.events.ConnectionNotAvailableEvent;
-import gm.mobi.android.task.events.DatabaseErrorEvent;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.DatabaseErrorEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import timber.log.Timber;

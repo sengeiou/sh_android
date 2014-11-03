@@ -1,11 +1,11 @@
-package gm.mobi.android.service;
+package com.shootr.android.service;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.data.ApiEndpoint;
-import gm.mobi.android.data.IsMockMode;
-import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.service.dataservice.ShootrDataService;
+import com.shootr.android.data.ApiEndpoint;
+import com.shootr.android.data.IsMockMode;
+import com.shootr.android.data.prefs.StringPreference;
+import com.shootr.android.service.dataservice.ShootrDataService;
 
 import javax.inject.Singleton;
 

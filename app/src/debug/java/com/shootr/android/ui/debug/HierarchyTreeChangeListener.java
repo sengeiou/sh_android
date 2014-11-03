@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.debug;
+package com.shootr.android.ui.debug;
 
 import android.view.View;
 import android.view.ViewGroup;

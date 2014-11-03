@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.widgets;
+package com.shootr.android.ui.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,7 +6,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 
 
 /**

@@ -1,4 +1,4 @@
-package gm.mobi.android.db.manager;
+package com.shootr.android.db.manager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,10 +7,10 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.ShootrDbOpenHelper;
-import gm.mobi.android.db.objects.TableSync;
-import gm.mobi.android.util.TimeUtils;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.ShootrDbOpenHelper;
+import com.shootr.android.db.objects.TableSync;
+import com.shootr.android.util.TimeUtils;
 import javax.inject.Inject;
 import timber.log.Timber;
 

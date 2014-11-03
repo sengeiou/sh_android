@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.debug;
+package com.shootr.android.ui.debug;
 
 import java.lang.annotation.Retention;
 import javax.inject.Qualifier;

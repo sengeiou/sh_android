@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.adapters;
+package com.shootr.android.ui.adapters;
 
 import android.content.Context;
 import com.squareup.picasso.Picasso;

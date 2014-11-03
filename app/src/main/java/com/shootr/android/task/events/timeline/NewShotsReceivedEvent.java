@@ -1,7 +1,7 @@
-package gm.mobi.android.task.events.timeline;
+package com.shootr.android.task.events.timeline;
 
-import gm.mobi.android.task.jobs.ShootrBaseJob;
-import gm.mobi.android.ui.model.ShotModel;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.ui.model.ShotModel;
 import java.util.List;
 
 public class NewShotsReceivedEvent extends ShootrBaseJob.SuccessEvent<List<ShotModel>> {

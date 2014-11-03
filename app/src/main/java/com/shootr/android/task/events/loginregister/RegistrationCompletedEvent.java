@@ -1,4 +1,4 @@
-package gm.mobi.android.task.events.loginregister;
+package com.shootr.android.task.events.loginregister;
 
 public class RegistrationCompletedEvent {
 

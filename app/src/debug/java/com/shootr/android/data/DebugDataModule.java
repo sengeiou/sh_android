@@ -1,4 +1,4 @@
-package gm.mobi.android.data;
+package com.shootr.android.data;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -6,16 +6,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.data.prefs.BooleanPreference;
-import gm.mobi.android.data.prefs.IntPreference;
-import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.db.ShootrDbOpenHelper;
-import gm.mobi.android.db.TrackingCursorFactory;
-import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
-import gm.mobi.android.gcm.notifications.DebugNotificationManager;
-import gm.mobi.android.service.ApiModule;
-import gm.mobi.android.service.DebugApiModule;
-import gm.mobi.android.ui.debug.NetworkProxy;
+import com.shootr.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.prefs.IntPreference;
+import com.shootr.android.data.prefs.StringPreference;
+import com.shootr.android.db.ShootrDbOpenHelper;
+import com.shootr.android.db.TrackingCursorFactory;
+import com.shootr.android.gcm.notifications.ShootrNotificationManager;
+import com.shootr.android.gcm.notifications.DebugNotificationManager;
+import com.shootr.android.service.ApiModule;
+import com.shootr.android.service.DebugApiModule;
+import com.shootr.android.ui.debug.NetworkProxy;
 
 import javax.inject.Singleton;
 

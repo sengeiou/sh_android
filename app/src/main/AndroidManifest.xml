@@ -1,5 +1,5 @@
 <manifest
-  package="gm.mobi.android"
+  package="com.shootr.android"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -60,7 +60,7 @@
           android:label="@string/title_activity_login_email">
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="gm.mobi.android.ui.activities.registro.WelcomeLoginActivity"/>
+              android:value="com.shootr.android.ui.activities.registro.WelcomeLoginActivity"/>
         </activity>
 
 
@@ -77,13 +77,13 @@
         <activity android:name=".ui.activities.ProfileContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="gm.mobi.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
         <activity android:name=".ui.activities.UserFollowsContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="gm.mobi.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
         <activity
@@ -92,7 +92,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="gm.mobi.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
         <activity
@@ -101,7 +101,7 @@
 
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="gm.mobi.android.ui.activities.MainActivity" />
+              android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
 
@@ -122,13 +122,13 @@
         </service>
 
         <provider
-          android:name="gm.mobi.android.db.provider.ShootrContentProvider"
-          android:authorities="gm.mobi.android.db.provider"
+          android:name="com.shootr.android.db.provider.ShootrContentProvider"
+          android:authorities="com.shootr.android.db.provider"
           android:exported="false"
           android:syncable="true"/>
 
         <service
-          android:name="gm.mobi.android.sync.SyncService"
+          android:name="com.shootr.android.sync.SyncService"
           android:exported="true"
           android:process=":sync">
             <intent-filter>
@@ -151,8 +151,8 @@
         <receiver android:name=".gcm.NotificationIntentReceiver"
           >
             <intent-filter>
-                <action android:name="gm.mobi.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
-                <action android:name="gm.mobi.android.ACTION_OPEN_SHOT_NOTIFICATION" />
+                <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
+                <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

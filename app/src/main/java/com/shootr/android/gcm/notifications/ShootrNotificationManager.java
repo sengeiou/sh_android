@@ -1,36 +1,18 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.app.Application;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.media.RingtoneManager;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.StyleSpan;
-import android.util.SparseArray;
+
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.R;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.gcm.NotificationIntentReceiver;
-import gm.mobi.android.ui.activities.MainActivity;
-import gm.mobi.android.ui.model.ShotModel;
-import gm.mobi.android.ui.model.UserModel;
-import java.io.IOException;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.UserModel;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ShootrNotificationManager {
 

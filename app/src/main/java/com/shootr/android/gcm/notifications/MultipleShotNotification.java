@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.model.ShotModel;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.ShotModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

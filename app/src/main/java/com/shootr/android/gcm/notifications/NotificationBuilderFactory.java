@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;

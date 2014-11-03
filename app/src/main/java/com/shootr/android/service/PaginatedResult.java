@@ -1,4 +1,4 @@
-package gm.mobi.android.service;
+package com.shootr.android.service;
 
 public class PaginatedResult<T> {
 

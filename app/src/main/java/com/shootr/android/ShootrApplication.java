@@ -1,12 +1,12 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 import android.app.Application;
 import android.content.Context;
 
 import dagger.ObjectGraph;
-import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.util.LogTreeFactory;
+import com.shootr.android.data.SessionManager;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.util.LogTreeFactory;
 import javax.inject.Inject;
 import timber.log.Timber;
 

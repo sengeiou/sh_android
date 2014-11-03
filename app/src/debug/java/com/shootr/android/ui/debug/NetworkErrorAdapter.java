@@ -1,11 +1,11 @@
-package gm.mobi.android.ui.debug;
+package com.shootr.android.ui.debug;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import gm.mobi.android.ui.adapters.BindableAdapter;
+import com.shootr.android.ui.adapters.BindableAdapter;
 
 import static butterknife.ButterKnife.findById;
 

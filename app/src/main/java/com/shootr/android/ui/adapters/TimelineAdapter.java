@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.adapters;
+package com.shootr.android.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.model.ShotModel;
-import gm.mobi.android.util.TimeUtils;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 

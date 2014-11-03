@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm;
+package com.shootr.android.gcm;
 
 import android.app.Activity;
 import android.content.ComponentName;

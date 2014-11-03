@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.model;
+package com.shootr.android.ui.model;
 
 
 public class MatchModel {

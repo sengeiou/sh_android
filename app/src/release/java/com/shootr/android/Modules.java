@@ -1,4 +1,4 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 final class Modules {
     static Object[] list(ShootrApplication app) {

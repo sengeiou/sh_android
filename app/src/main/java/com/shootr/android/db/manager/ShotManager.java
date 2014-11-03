@@ -1,18 +1,18 @@
-package gm.mobi.android.db.manager;
+package com.shootr.android.db.manager;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.db.DatabaseContract.ShotTable;
-import gm.mobi.android.db.DatabaseContract.UserTable;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.ui.model.ShotModel;
-import gm.mobi.android.ui.model.mappers.ShotModelMapper;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.DatabaseContract.ShotTable;
+import com.shootr.android.db.DatabaseContract.UserTable;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,9 +1,9 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 
 import dagger.Module;
-import gm.mobi.android.data.DebugDataModule;
-import gm.mobi.android.ui.DebugUiModule;
+import com.shootr.android.data.DebugDataModule;
+import com.shootr.android.ui.DebugUiModule;
 
 @Module(
         addsTo = ShootrModule.class,

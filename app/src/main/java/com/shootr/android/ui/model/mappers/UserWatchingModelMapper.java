@@ -1,7 +1,7 @@
-package gm.mobi.android.ui.model.mappers;
+package com.shootr.android.ui.model.mappers;
 
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.ui.model.UserWatchingModel;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.ui.model.UserWatchingModel;
 
 public class UserWatchingModelMapper {
 

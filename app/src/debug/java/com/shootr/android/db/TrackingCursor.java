@@ -1,4 +1,4 @@
-package gm.mobi.android.db;
+package com.shootr.android.db;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;

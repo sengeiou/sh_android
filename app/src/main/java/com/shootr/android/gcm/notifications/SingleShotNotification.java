@@ -1,12 +1,12 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.model.ShotModel;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
 import timber.log.Timber;
 

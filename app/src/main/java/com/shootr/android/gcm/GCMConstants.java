@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm;
+package com.shootr.android.gcm;
 
 
 public class GCMConstants {

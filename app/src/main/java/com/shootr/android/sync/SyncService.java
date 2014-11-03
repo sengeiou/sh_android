@@ -1,4 +1,4 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
 import android.app.Service;
 import android.content.Intent;

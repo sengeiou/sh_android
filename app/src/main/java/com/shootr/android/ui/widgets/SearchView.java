@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.widgets;
+package com.shootr.android.ui.widgets;
 
 import android.content.Context;
 import android.view.CollapsibleActionView;

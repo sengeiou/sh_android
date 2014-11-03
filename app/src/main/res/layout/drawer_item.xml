@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gm.mobi.android.ui.widgets.CheckedLinearLayout
+<com.shootr.android.ui.widgets.CheckedLinearLayout
   style="@style/MenuDrawer.Widget.Title"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
-    <gm.mobi.android.ui.widgets.CheckableImageView
+    <com.shootr.android.ui.widgets.CheckableImageView
       android:id="@+id/drawer_item_icon"
       android:layout_width="24dp"
       android:layout_height="24dp"
@@ -26,4 +26,4 @@
       android:singleLine="true"
       tools:text="Example item" />
 
-</gm.mobi.android.ui.widgets.CheckedLinearLayout>
+</com.shootr.android.ui.widgets.CheckedLinearLayout>

@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.activities.registro;
+package com.shootr.android.ui.activities.registro;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.squareup.otto.Bus;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.adapters.WelcomePagerAdapter;
-import gm.mobi.android.ui.base.BaseActivity;
-import gm.mobi.android.ui.widgets.WelcomeIndicator;
+import com.shootr.android.R;
+import com.shootr.android.ui.adapters.WelcomePagerAdapter;
+import com.shootr.android.ui.base.BaseActivity;
+import com.shootr.android.ui.widgets.WelcomeIndicator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

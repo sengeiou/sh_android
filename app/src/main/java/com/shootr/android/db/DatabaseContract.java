@@ -1,7 +1,6 @@
-package gm.mobi.android.db;
+package com.shootr.android.db;
 
 import android.provider.BaseColumns;
-import gm.mobi.android.db.objects.Synchronized;
 
 public class DatabaseContract {
 

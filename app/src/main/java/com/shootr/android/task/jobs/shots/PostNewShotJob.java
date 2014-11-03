@@ -1,15 +1,15 @@
-package gm.mobi.android.task.jobs.shots;
+package com.shootr.android.task.jobs.shots;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import gm.mobi.android.db.objects.ShotEntity;
-import gm.mobi.android.db.objects.UserEntity;
-import gm.mobi.android.service.ShootrService;
-import gm.mobi.android.task.events.shots.PostNewShotResultEvent;
-import gm.mobi.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.service.ShootrService;
+import com.shootr.android.task.events.shots.PostNewShotResultEvent;
+import com.shootr.android.task.jobs.ShootrBaseJob;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;

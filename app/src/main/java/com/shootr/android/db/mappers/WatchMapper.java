@@ -1,9 +1,9 @@
-package gm.mobi.android.db.mappers;
+package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import gm.mobi.android.db.objects.WatchEntity;
-import gm.mobi.android.db.DatabaseContract.WatchTable;
+import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.db.DatabaseContract.WatchTable;
 import java.util.HashMap;
 import java.util.Map;
 

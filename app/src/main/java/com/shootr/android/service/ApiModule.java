@@ -1,11 +1,11 @@
-package gm.mobi.android.service;
+package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.service.dataservice.ShootrDataService;
-import gm.mobi.android.service.dataservice.DataServiceModule;
-import gm.mobi.android.task.jobs.loginregister.LoginUserJob;
+import com.shootr.android.service.dataservice.ShootrDataService;
+import com.shootr.android.service.dataservice.DataServiceModule;
+import com.shootr.android.task.jobs.loginregister.LoginUserJob;
 import javax.inject.Singleton;
 
 @Module(

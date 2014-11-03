@@ -1,12 +1,12 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
-import gm.mobi.android.constant.Constants;
-import gm.mobi.android.db.DatabaseContract;
-import gm.mobi.android.service.dataservice.generic.FilterDto;
-import gm.mobi.android.service.dataservice.generic.FilterItemDto;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
-import gm.mobi.android.service.dataservice.generic.RequestorDto;
+import com.shootr.android.constant.Constants;
+import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.service.dataservice.generic.FilterDto;
+import com.shootr.android.service.dataservice.generic.FilterItemDto;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.service.dataservice.generic.RequestorDto;
 
 public class UtilityDtoFactory {
 

@@ -1,4 +1,4 @@
-package gm.mobi.android.sync;
+package com.shootr.android.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -6,11 +6,11 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
-import gm.mobi.android.constant.SyncConstants;
+import com.shootr.android.constant.SyncConstants;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-import static gm.mobi.android.constant.SyncConstants.AUTHORITY;
+import static com.shootr.android.constant.SyncConstants.AUTHORITY;
 
 public class SyncConfigurator {
 

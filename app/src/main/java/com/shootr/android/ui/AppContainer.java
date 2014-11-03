@@ -1,4 +1,4 @@
-package gm.mobi.android.ui;
+package com.shootr.android.ui;
 
 
 import android.app.Activity;

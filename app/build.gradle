@@ -35,7 +35,7 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
-        applicationId "gm.mobi.android.goles5"
+        applicationId "com.shootr.android"
         minSdkVersion 14
         targetSdkVersion 21
 
@@ -155,7 +155,7 @@ dependencies {
 spoon {
     debug = true
     failIfNoDeviceConnected = true
-    //className = 'gm.mobi.android.ui.activities.registro.WelcomeLoginActivityTest'
+    //className = 'com.shootr.android.ui.activities.registro.WelcomeLoginActivityTest'
 }
 
 sonarRunner {

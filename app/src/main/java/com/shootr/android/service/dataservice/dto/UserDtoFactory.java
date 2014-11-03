@@ -1,24 +1,24 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
 import android.support.v4.util.ArrayMap;
-import gm.mobi.android.constant.Constants;
-import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.DatabaseContract.FollowTable;
-import gm.mobi.android.db.DatabaseContract.UserTable;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.objects.FollowEntity;
-import gm.mobi.android.service.dataservice.generic.FilterDto;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.MetadataDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.constant.Constants;
+import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.db.DatabaseContract.FollowTable;
+import com.shootr.android.db.DatabaseContract.UserTable;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.service.dataservice.generic.FilterDto;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.MetadataDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.or;
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.orModifiedOrDeletedAfter;
 
 public class UserDtoFactory {
 

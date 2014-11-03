@@ -1,4 +1,4 @@
-package gm.mobi.android.ui.widgets;/*
+package com.shootr.android.ui.widgets;/*
  * Copyright (C) 2014 Chris Banes
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import gm.mobi.android.R;
+import com.shootr.android.R;
 
 
 /**

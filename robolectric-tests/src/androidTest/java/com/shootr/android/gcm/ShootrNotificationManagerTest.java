@@ -1,4 +1,4 @@
-package gm.mobi.android.gcm;
+package com.shootr.android.gcm;
 
 import android.app.Application;
 import android.app.Notification;
@@ -7,10 +7,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
-import gm.mobi.android.RobolectricGradleTestRunner;
-import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
-import gm.mobi.android.gcm.notifications.NotificationBuilderFactory;
-import gm.mobi.android.ui.model.ShotModel;
+import com.shootr.android.RobolectricGradleTestRunner;
+import com.shootr.android.gcm.notifications.ShootrNotificationManager;
+import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
+import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;

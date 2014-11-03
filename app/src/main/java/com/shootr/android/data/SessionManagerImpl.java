@@ -1,10 +1,10 @@
-package gm.mobi.android.data;
+package com.shootr.android.data;
 
-import gm.mobi.android.data.prefs.CurrentUserId;
-import gm.mobi.android.data.prefs.LongPreference;
-import gm.mobi.android.data.prefs.SessionToken;
-import gm.mobi.android.data.prefs.StringPreference;
-import gm.mobi.android.db.objects.UserEntity;
+import com.shootr.android.data.prefs.CurrentUserId;
+import com.shootr.android.data.prefs.LongPreference;
+import com.shootr.android.data.prefs.SessionToken;
+import com.shootr.android.data.prefs.StringPreference;
+import com.shootr.android.db.objects.UserEntity;
 import javax.inject.Inject;
 
 public class SessionManagerImpl implements SessionManager {

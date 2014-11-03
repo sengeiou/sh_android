@@ -1,4 +1,4 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 import dagger.ObjectGraph;
 import java.lang.reflect.Method;

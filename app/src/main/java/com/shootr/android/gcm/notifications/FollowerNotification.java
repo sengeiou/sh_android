@@ -1,11 +1,11 @@
-package gm.mobi.android.gcm.notifications;
+package com.shootr.android.gcm.notifications;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.model.UserModel;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.UserModel;
 
 public class FollowerNotification extends CommonNotification {
 

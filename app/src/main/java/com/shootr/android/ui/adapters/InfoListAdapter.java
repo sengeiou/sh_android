@@ -1,7 +1,6 @@
-package gm.mobi.android.ui.adapters;
+package com.shootr.android.ui.adapters;
 
 import android.content.Context;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.squareup.picasso.Picasso;
-import gm.mobi.android.R;
-import gm.mobi.android.ui.model.MatchModel;
-import gm.mobi.android.ui.model.UserWatchingModel;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.UserWatchingModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

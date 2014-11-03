@@ -1,15 +1,15 @@
-package gm.mobi.android.service.dataservice.dto;
+package com.shootr.android.service.dataservice.dto;
 
-import gm.mobi.android.constant.ServiceConstants;
-import gm.mobi.android.db.DatabaseContract.DeviceTable;
-import gm.mobi.android.db.mappers.DeviceMapper;
-import gm.mobi.android.db.objects.DeviceEntity;
-import gm.mobi.android.service.dataservice.generic.GenericDto;
-import gm.mobi.android.service.dataservice.generic.MetadataDto;
-import gm.mobi.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.db.DatabaseContract.DeviceTable;
+import com.shootr.android.db.mappers.DeviceMapper;
+import com.shootr.android.db.objects.DeviceEntity;
+import com.shootr.android.service.dataservice.generic.GenericDto;
+import com.shootr.android.service.dataservice.generic.MetadataDto;
+import com.shootr.android.service.dataservice.generic.OperationDto;
 import javax.inject.Inject;
 
-import static gm.mobi.android.service.dataservice.generic.FilterBuilder.and;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
 
 public class DeviceDtoFactory {
 

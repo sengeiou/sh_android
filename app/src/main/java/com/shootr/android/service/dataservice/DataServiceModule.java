@@ -1,18 +1,18 @@
-package gm.mobi.android.service.dataservice;
+package com.shootr.android.service.dataservice;
 
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.db.mappers.FollowMapper;
-import gm.mobi.android.db.mappers.MatchMapper;
-import gm.mobi.android.db.mappers.ShotMapper;
-import gm.mobi.android.db.mappers.TeamMapper;
-import gm.mobi.android.db.mappers.UserMapper;
-import gm.mobi.android.db.mappers.WatchMapper;
-import gm.mobi.android.service.dataservice.dto.MatchDtoFactory;
-import gm.mobi.android.service.dataservice.dto.ShotDtoFactory;
-import gm.mobi.android.service.dataservice.dto.TimelineDtoFactory;
-import gm.mobi.android.service.dataservice.dto.UserDtoFactory;
-import gm.mobi.android.service.dataservice.dto.UtilityDtoFactory;
+import com.shootr.android.db.mappers.FollowMapper;
+import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.ShotMapper;
+import com.shootr.android.db.mappers.TeamMapper;
+import com.shootr.android.db.mappers.UserMapper;
+import com.shootr.android.db.mappers.WatchMapper;
+import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
+import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
+import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
+import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.service.dataservice.dto.UtilityDtoFactory;
 import javax.inject.Singleton;
 
 @Module(

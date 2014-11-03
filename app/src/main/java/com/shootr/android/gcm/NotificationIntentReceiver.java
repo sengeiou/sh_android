@@ -1,17 +1,17 @@
-package gm.mobi.android.gcm;
+package com.shootr.android.gcm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import gm.mobi.android.ShootrApplication;
-import gm.mobi.android.gcm.notifications.ShootrNotificationManager;
-import gm.mobi.android.ui.activities.MainActivity;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.gcm.notifications.ShootrNotificationManager;
+import com.shootr.android.ui.activities.MainActivity;
 import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
 
-    public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "gm.mobi.android.ACTION_DISCARD_SHOT_NOTIFICATION";
-    public static final String ACTION_OPEN_SHOT_NOTIFICATION = "gm.mobi.android.ACTION_OPEN_SHOT_NOTIFICATION";
+    public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION";
+    public static final String ACTION_OPEN_SHOT_NOTIFICATION = "com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION";
 
     @Inject ShootrNotificationManager notificationManager;
 

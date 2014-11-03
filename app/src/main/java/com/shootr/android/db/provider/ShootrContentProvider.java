@@ -1,4 +1,4 @@
-package gm.mobi.android.db.provider;
+package com.shootr.android.db.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

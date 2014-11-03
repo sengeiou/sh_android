@@ -1,7 +1,7 @@
-package gm.mobi.android.data;
+package com.shootr.android.data;
 
 
-import gm.mobi.android.service.ApiModule;
+import com.shootr.android.service.ApiModule;
 
 public enum ApiEndpoints {
   PRODUCTION("Production", ApiModule.PRODUCTION_API_URL),

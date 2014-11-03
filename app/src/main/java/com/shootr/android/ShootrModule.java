@@ -1,11 +1,11 @@
-package gm.mobi.android;
+package com.shootr.android;
 
 import android.app.Application;
 import dagger.Module;
 import dagger.Provides;
-import gm.mobi.android.data.DataModule;
-import gm.mobi.android.task.BusModule;
-import gm.mobi.android.ui.UiModule;
+import com.shootr.android.data.DataModule;
+import com.shootr.android.task.BusModule;
+import com.shootr.android.ui.UiModule;
 import javax.inject.Singleton;
 
 @Module(
