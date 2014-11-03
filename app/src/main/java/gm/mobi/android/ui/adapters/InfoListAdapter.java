@@ -91,7 +91,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     }
 
     @Override public boolean isEnabled(int position) {
-        return getItemViewType(position) == TYPE_USER;
+        int itemViewType = getItemViewType(position);
+        return itemViewType == TYPE_USER || itemViewType == TYPE_ME;
     }
 
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
