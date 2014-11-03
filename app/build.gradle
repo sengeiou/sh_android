@@ -132,8 +132,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.0'
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
 
-    compile 'es.oneoctopus.swiperefreshlayoutoverlay:library:3.0.0'
-
     compile 'com.google.guava:guava:17.0'
 
     //TODO Should be androidTestCompile, but doesn't work, probably due to a bug in Gradle/AS: http://stackoverflow.com/questions/22246183/android-studio-doesnt-recognize-espresso-classes

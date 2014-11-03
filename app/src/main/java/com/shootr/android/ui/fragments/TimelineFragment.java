@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,6 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.UserEntity;
@@ -55,7 +55,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-        implements SwipeRefreshLayoutOverlay.OnRefreshListener {
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
@@ -69,7 +69,7 @@ public class TimelineFragment extends BaseFragment
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_watching_container) View watchingContainer;
-    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayoutOverlay swipeRefreshLayout;
+    @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.timeline_empty) View emptyView;
 
     private View headerView;
@@ -199,12 +199,9 @@ public class TimelineFragment extends BaseFragment
         listView.addHeaderView(headerView, null, false);
         listView.addFooterView(footerView, null, false);
 
-        watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
-
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
                 R.color.refresh_3, R.color.refresh_4);
-        swipeRefreshLayout.setTopMargin(watchingHeight);
 
         // List scroll stuff
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(

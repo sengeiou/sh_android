@@ -9,7 +9,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-        <es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay
+        <android.support.v4.widget.SwipeRefreshLayout
           android:id="@+id/timeline_swipe_refresh"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -23,7 +23,7 @@
               tools:listitem="@layout/item_list_shot"
               tools:visibility="visible" />
 
-        </es.oneoctopus.swiperefreshlayoutoverlay.SwipeRefreshLayoutOverlay>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <LinearLayout
           android:id="@+id/timeline_empty"
