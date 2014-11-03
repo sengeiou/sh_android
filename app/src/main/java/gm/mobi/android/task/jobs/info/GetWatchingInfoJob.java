@@ -7,7 +7,6 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import gm.mobi.android.data.SessionManager;
-import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.manager.FollowManager;
 import gm.mobi.android.db.manager.MatchManager;
 import gm.mobi.android.db.manager.UserManager;
@@ -65,10 +64,12 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     @Override protected void run() throws SQLException, IOException {
         Map<MatchModel, Collection<UserWatchingModel>> infoListOffline = obtainInfoList(false);
         if (infoListOffline != null) {
+            Timber.d("Sending watching list offline");
             postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
         }
 
         if (hasInternetConnection()) {
+            Timber.d("Sending watching list online");
             Map<MatchModel, Collection<UserWatchingModel>> infoListOnline = obtainInfoList(true);
             postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
         }
@@ -131,12 +132,10 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
         if (useOnlineData) {
-            Long watchLastModifiedDate = watchManager.getLastModifiedDate(GMContract.WatchTable.TABLE);
-            List<WatchEntity> newWatchesFromServer =
-              service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
+            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe());
             if (newWatchesFromServer != null && !newWatchesFromServer.isEmpty()) {
-                watches.addAll(newWatchesFromServer);
-                saveWatchesInDatabase(newWatchesFromServer);
+                watches = newWatchesFromServer;
+                replaceWatchesInDatabase(newWatchesFromServer);
             }
         }
         return watches;
@@ -146,7 +145,8 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
         return watchManager.getWatchesNotEndedOrAdjurnedFromUsers(getIdsFromMyFollowingAndMe());
     }
 
-    private void saveWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
+    private void replaceWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
+        watchManager.deleteAllWatches();
         watchManager.saveWatches(newWatchesFromServer);
     }
 

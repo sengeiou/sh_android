@@ -360,8 +360,8 @@ public class BagdadDataService implements BagdadService {
     }
 
 
-    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long date) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, date);
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
