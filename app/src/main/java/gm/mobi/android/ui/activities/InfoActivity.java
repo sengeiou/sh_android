@@ -5,6 +5,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -39,6 +41,7 @@ public class InfoActivity extends BaseSignedInActivity {
     @Inject Bus bus;
     @Inject SessionManager sessionManager;
 
+    @InjectView(R.id.info_empty) LinearLayout emptyView;
     @InjectView(R.id.info_items_list) ListView listView;
     InfoListAdapter adapter;
 
@@ -65,7 +68,7 @@ public class InfoActivity extends BaseSignedInActivity {
     public void onListItemClick(int position) {
         UserWatchingModel userWatchingModel = (UserWatchingModel)adapter.getItem(position);
         Long idUser = userWatchingModel.getIdUser();
-        startActivity(ProfileContainerActivity.getIntent(this,idUser));
+        startActivity(ProfileContainerActivity.getIntent(this, idUser));
     }
 
     private Map<MatchModel, List<UserWatchingModel>> getDummyInfo() {
@@ -115,9 +118,18 @@ public class InfoActivity extends BaseSignedInActivity {
     @Subscribe
     public void receivedInfoList(WatchingInfoResult event){
         Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
-        adapter.setContent(result);
+        if(result.size()>0){
+            adapter.setContent(result);
+            setEmpty(false);
+        }else{
+            setEmpty(true);
+        }
     }
 
+    private void setEmpty(boolean empty) {
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        listView.setVisibility(empty ? View.GONE : View.VISIBLE);
+    }
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
