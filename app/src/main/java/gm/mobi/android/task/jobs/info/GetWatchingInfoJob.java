@@ -122,6 +122,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     }
 
     private void saveMatchesInDatabase(List<MatchEntity> matchesToSave) {
+        matchManager.deleteAllMatches();
         matchManager.saveMatches(matchesToSave);
     }
 
@@ -146,7 +147,7 @@ public class GetWatchingInfoJob extends BagdadBaseJob<WatchingInfoResult> {
     }
 
     private void replaceWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
-        watchManager.deleteAllWatches();
+        watchManager.deleteAllWatches(sessionManager.getCurrentUserId());
         watchManager.saveWatches(newWatchesFromServer);
     }
 
