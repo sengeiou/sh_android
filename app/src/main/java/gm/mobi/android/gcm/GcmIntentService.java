@@ -25,6 +25,7 @@ public class GcmIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
     private static final int PUSH_TYPE_FOLLOW = 2;
+    private static final int PUSH_TYPE_START_MATCH = 3;
 
     @Inject BagdadNotificationManager notificationManager;
     @Inject SQLiteOpenHelper openHelper;
@@ -66,6 +67,9 @@ public class GcmIntentService extends IntentService {
                 case PUSH_TYPE_FOLLOW:
                     receivedFollow(parameters);
                     break;
+                case PUSH_TYPE_START_MATCH:
+                    receivedStartMatch(text);
+                    break;
                 default:
                     receivedUnknown(parameters);
             }
@@ -78,16 +82,20 @@ public class GcmIntentService extends IntentService {
         }
     }
 
+    private void receivedStartMatch(String text){
+        notificationManager.sendMatchStartedNotification(text);
+    }
+
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
         Long idShot = parameters.getLong("idShot");
         Long idUser = parameters.getLong("idUser");
         ShotEntity shot = service.getShotById(idShot);
         UserEntity user = userManager.getUserByIdUser(idUser);
         if (shot != null && user != null) {
-            ShotModel shotVO = shotModelMapper.toShotModel(user, shot);
-            notificationManager.sendNewShotNotification(shotVO);
+            ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
+            notificationManager.sendNewShotNotification(shotModel);
         } else {
-            Timber.e("Shot or User null recived, can't show notifications :(");
+            Timber.e("Shot or User null received, can't show notifications :(");
         }
     }
 

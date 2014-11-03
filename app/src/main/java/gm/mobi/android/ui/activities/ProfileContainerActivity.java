@@ -17,7 +17,7 @@ import timber.log.Timber;
 
 public class ProfileContainerActivity extends BaseSignedInActivity {
 
-    private static final String EXTRA_USER = "user";
+    public static final String EXTRA_USER = "user";
     Long idUser;
 
     public static Intent getIntent(Context context, Long idUser) {

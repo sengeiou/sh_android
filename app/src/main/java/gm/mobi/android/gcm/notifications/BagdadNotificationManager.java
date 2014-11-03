@@ -37,6 +37,7 @@ public class BagdadNotificationManager {
     public static final int NOTIFICATION_ERROR = 0;
     public static final int NOTIFICATION_SHOT = 1;
     private static final int NOTIFICATION_FOLLOW = 2;
+    private static final int NOTIFICATION_START_MATCH = 3;
 
     private Context context;
     private NotificationManagerCompat notificationManager;
@@ -101,5 +102,10 @@ public class BagdadNotificationManager {
         Notification notification = new FollowerNotification(context, notificationBuilderFactory, user).build();
         //TODO ids generados
         notify(NOTIFICATION_FOLLOW, notification);
+    }
+
+    public void sendMatchStartedNotification(String text) {
+        Notification notification = new StartMatchNotification(context, notificationBuilderFactory, text).build();
+        notify(NOTIFICATION_START_MATCH,notification);
     }
 }

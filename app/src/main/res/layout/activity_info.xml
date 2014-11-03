@@ -11,6 +11,7 @@
       android:layout_height="wrap_content"
       android:background="@color/background_dark"
       android:divider="@null"
+      android:visibility = "gone"
       android:dividerHeight="0dp"
       android:orientation="vertical"
       tools:listfooter="@layout/info_header_view"
@@ -20,6 +21,7 @@
     </ListView>
     <LinearLayout
       android:id="@+id/info_empty"
+      android:visibility = "gone"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"

@@ -185,8 +185,7 @@ public class TimelineFragment extends BaseFragment
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
-        listView.setAdapter(adapter);
+
 
         // Header and footer
         headerView =
@@ -199,6 +198,8 @@ public class TimelineFragment extends BaseFragment
         listView.addHeaderView(headerView, null, false);
         listView.addFooterView(footerView, null, false);
 
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
+        listView.setAdapter(adapter);
         watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
 
         swipeRefreshLayout.setOnRefreshListener(this);

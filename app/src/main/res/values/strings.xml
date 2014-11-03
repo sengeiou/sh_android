@@ -48,13 +48,13 @@
     <string name="activity_login_email_forgot">Forgot Password?</string>
 
     <string name="activity_timeline_new_text">Shoot something</string>
-    <string name="activity_timeline_empty_message">Share your footbal thoughts.\nStart Shooting.</string>
+    <string name="activity_timeline_empty_message">Share your football thoughts.\nStart Shooting.</string>
     <string name="activity_timeline_empty_title">No Shots</string>
 
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
     <string name="following_list_empty">Not following anyone</string>
-    <string name="follower_list_empty">Nobody following</string>
+    <string name="follower_list_empty">No followers</string>
 
     <string name="no_more_shots">No more shots</string>
 
@@ -94,7 +94,7 @@
 
     <!-- Notifications -->
     <string name="notification_shot_multiple_title">%d new shots</string>
-    <string name="notification_follow_title">%s is now following you</string>
+    <string name="notification_follow_title">%s is now following you!</string>
 
     <string name="activity_info_title">Info</string>
     <string name="activity_find_friends_title">Find People</string>
@@ -103,8 +103,8 @@
 
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
-
     <!--Info-->
     <string name="activity_empty_info">No people watching</string>
-
+    <string name="enter_to_confirm">Touch to confirm status</string>
+    <string name="following_notif_text">Touch to access the profile</string>
 </resources>

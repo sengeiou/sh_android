@@ -56,10 +56,8 @@ public class MatchDtoFactory {
     }
 
     public GenericDto getWatchFromUsers(List<Long> userIds, Long date){
-        FilterDto watchFollowingFilter = and(
-            orIsNotDeleted())
-          .and(GMContract.WatchTable.CSYS_MODIFIED).greaterThan(date)
-          .and(GMContract.WatchTable.STATUS).isEqualTo(1)
+        FilterDto watchFollowingFilter =
+          and(GMContract.WatchTable.STATUS).isEqualTo(1)
           .and(
             or(GMContract.WatchTable.ID_USER).isIn(userIds)
           )
