@@ -406,6 +406,23 @@ public class ShootrDataService implements ShootrService {
 
     }
 
+    @Override public WatchEntity setWatchStatus(WatchEntity watch) throws IOException {
+        GenericDto requestDto = matchDtoFactory.setWatchStatusGenericDto(watch);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+            return null;
+        }
+        WatchEntity watchReceived = null;
+        if(ops.length>0){
+                watchReceived = watchMapper.fromDto(ops[0].getData()[0]);
+        }
+        return watchReceived;
+    }
+
+
+
     @Override public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException{
         GenericDto requestDto = matchDtoFactory.getTeamsFromTeamIds(teamIds);
         GenericDto responseDto = postRequest(requestDto);

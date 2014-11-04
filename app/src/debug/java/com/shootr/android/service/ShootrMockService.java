@@ -110,6 +110,10 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
+    @Override public WatchEntity setWatchStatus(WatchEntity watch) throws IOException {
+        return null;
+    }
+
     @Override public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException {
         return null;
     }

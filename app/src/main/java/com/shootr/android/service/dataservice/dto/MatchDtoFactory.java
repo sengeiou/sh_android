@@ -5,6 +5,8 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.MatchMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.WatchMapper;
+import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -22,8 +24,10 @@ public class MatchDtoFactory {
     private static final String ALIAS_GET_WATCH_OF_MY_FOLLOWING = "GET_MY_FOLLOWING_WATCHES";
     private static final String ALIAS_GET_MATCHES_FROM_WATCH_FOLLOWING = "GET_MATCHES_FROM_WATCH_FOLLOWING";
     private static final String ALIAS_GET_TEAMS_BY_TEAM_IDS = "GET_TEAMS_BY_TEAM_IDS";
+    private static final String ALIAS_SET_WATCH_STATUS = "SET_WATCH_STATUS";
     public static final int STATUS_NOT_STARTED = 0;
     public static final int STATUS_STARTED = 1;
+
 
     private UtilityDtoFactory utilityDtoFactory;
     private MatchMapper matchMapper;
@@ -46,7 +50,6 @@ public class MatchDtoFactory {
           or(DatabaseContract.MatchTable.STATUS).isEqualTo(0).or(DatabaseContract.MatchTable.STATUS).isEqualTo(1)).build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(DatabaseContract.MatchTable.TABLE).includeDeleted(true).items(1).filter(matchFilter).build();
-
         OperationDto op = new OperationDto.Builder()
           .metadata(md)
           .putData(matchMapper.toDto(null))
@@ -70,6 +73,21 @@ public class MatchDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
     }
 
+    public GenericDto setWatchStatusGenericDto(WatchEntity watchEntity){
+        MetadataDto md = new MetadataDto.Builder()
+          .operation(Constants.OPERATION_CREATEUPDATE)
+          .entity(WatchTable.TABLE)
+          .includeDeleted(true)
+          .putKey(WatchTable.ID_USER, watchEntity.getIdUser())
+          .putKey(WatchTable.ID_MATCH, watchEntity.getIdMatch())
+          .build();
+
+        OperationDto op = new OperationDto.Builder()
+          .metadata(md)
+          .putData(watchMapper.toDto(watchEntity))
+          .build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SET_WATCH_STATUS,op);
+    }
 
     public GenericDto getMatchesNotEndedByIds(List<Long> matchIds){
         FilterDto matchesWatchFollowingFilter = and(

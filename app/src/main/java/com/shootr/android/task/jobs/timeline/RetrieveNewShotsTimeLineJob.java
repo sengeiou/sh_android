@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.timeline;
 import android.app.Application;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.db.objects.WatchEntity;
 import com.squareup.otto.Bus;
 
 import com.shootr.android.db.DatabaseContract;
@@ -16,6 +17,7 @@ import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
@@ -42,6 +44,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
     @Override protected void run() throws SQLException, IOException {
         List<ShotModel> updatedTimeline = new ArrayList<>();
         List<ShotEntity> newShots = new CopyOnWriteArrayList<>();
+
         Long lastModifiedDate = shotManager.getLastModifiedDate(DatabaseContract.ShotTable.TABLE);
         if(getFollowingIds().size()>0) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
