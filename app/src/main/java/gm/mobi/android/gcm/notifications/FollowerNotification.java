@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import gm.mobi.android.R;
 import gm.mobi.android.gcm.NotificationIntentReceiver;
@@ -39,16 +38,14 @@ public class FollowerNotification extends CommonNotification {
     public Bitmap getWearBackground() {
         return BitmapFactory.decodeResource(getResources(), R.drawable.drawer_background);
     }
-    protected PendingIntent getOpenProfileNotificationPendingIntent() {
 
-        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN,
-         ProfileContainerActivity.getIntent(getContext(),user.getIdUser()), PendingIntent.FLAG_UPDATE_CURRENT);
+    protected PendingIntent getOpenProfileNotificationPendingIntent() {
+        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PROFILE);
+        intent.putExtra(ProfileContainerActivity.EXTRA_USER,user.getIdUser());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return pendingIntent;
     }
 
-    //protected PendingIntent getDiscardShotNotificationPendingIntent() {
-    //    return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE,
-    //      new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION), 0);
-    //}
 }
 
 
