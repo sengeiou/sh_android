@@ -2,17 +2,20 @@ buildscript {
 
     repositories {
         mavenCentral()
+        maven { url 'http://download.crashlytics.com/maven' }
     }
 
     dependencies {
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
         classpath 'com.stanfy.spoon:spoon-gradle-plugin:0.10.0'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'crashlytics'
 apply plugin: 'spoon'
 //apply plugin: 'hugo'
 apply plugin: "sonar-runner"
@@ -25,6 +28,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven { url 'http://mente.github.io/facebook-api-android-aar' }
+    maven { url 'http://download.crashlytics.com/maven' }
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -150,6 +154,7 @@ dependencies {
           //exclude group: 'com.google.code.findbugs'
       }
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.0'
+    compile 'com.crashlytics.android:crashlytics:1.+'
 }
 
 spoon {
