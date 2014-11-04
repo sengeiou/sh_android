@@ -125,4 +125,47 @@ public class WatchManager extends AbstractManager{
         queryResult.close();
         return resultWatches;
     }
+
+    public void createUpdateWatch(WatchEntity watchEntity) {
+        ContentValues contentValues = watchMapper.toContentValues(watchEntity);
+        WatchEntity watchEntity2 = getWatchByKeys(watchEntity.getIdUser(),watchEntity.getIdMatch());
+        if(watchEntity2!=null){
+            String whereClause = WatchTable.ID_USER+"=? AND "+WatchTable.ID_MATCH+"=?";
+            String[] whereString = new String[]{String.valueOf(watchEntity.getIdUser()),String.valueOf(watchEntity.getIdMatch())};
+            db.update(WatchTable.TABLE,contentValues,whereClause,whereString);
+        }else{
+            db.insert(WatchTable.TABLE,null,contentValues);
+        }
+    }
+
+    public WatchEntity getWatchByKeys(Long idUser, Long idMatch) {
+        WatchEntity watchEntity = null;
+        String whereString = WatchTable.ID_USER+"=? AND "+WatchTable.ID_MATCH+"=?";
+        String[] whereArguments = new String[]{String.valueOf(idUser),String.valueOf(idMatch)};
+        Cursor queryResult = db.query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
+        if(queryResult.getCount()>0){
+             watchEntity = watchMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return  watchEntity;
+    }
+
+
+    /**
+     * Check if it exists any data for send to server. This method It is called before request datas
+     *
+     * **/
+    public List<WatchEntity> getDatasForSendToServerInCase(){
+        List<WatchEntity> watchesToUpdate = new ArrayList<>();
+        String args = WatchTable.CSYS_SYNCHRONIZED+"='N' OR "+WatchTable.CSYS_SYNCHRONIZED+"= 'D' OR "+WatchTable.CSYS_SYNCHRONIZED+"='U'";
+        Cursor c = db.query(WatchTable.TABLE, WatchTable.PROJECTION,args,null,null,null,null);
+        if(c.getCount()>0){
+            c.moveToFirst();
+            do{
+                watchesToUpdate.add(watchMapper.fromCursor(c));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return watchesToUpdate;
+    }
 }
