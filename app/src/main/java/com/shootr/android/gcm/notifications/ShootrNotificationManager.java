@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 
+import gm.mobi.android.gcm.notifications.StartMatchNotification;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

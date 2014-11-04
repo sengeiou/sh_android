@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import gm.mobi.android.R;
-import gm.mobi.android.gcm.NotificationIntentReceiver;
+import com.shootr.android.R;
+import com.shootr.android.gcm.NotificationIntentReceiver;
+import com.shootr.android.gcm.notifications.CommonNotification;
+import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
 
 public class StartMatchNotification extends CommonNotification {
 
