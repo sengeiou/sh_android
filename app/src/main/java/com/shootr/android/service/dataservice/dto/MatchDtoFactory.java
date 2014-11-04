@@ -1,5 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
+import android.provider.SyncStateContract;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.MatchMapper;
@@ -25,6 +26,8 @@ public class MatchDtoFactory {
     private static final String ALIAS_GET_MATCHES_FROM_WATCH_FOLLOWING = "GET_MATCHES_FROM_WATCH_FOLLOWING";
     private static final String ALIAS_GET_TEAMS_BY_TEAM_IDS = "GET_TEAMS_BY_TEAM_IDS";
     private static final String ALIAS_SET_WATCH_STATUS = "SET_WATCH_STATUS";
+    private static final String ALIAS_GET_WATCH_BY_KEYS = "GET_WATCH_BY_KEYS";
+    private static final String ALIAS_GET_MATCH_BY_ID_MATCH = "GET_MATCH_BY_ID_MATCH";
     public static final int STATUS_NOT_STARTED = 0;
     public static final int STATUS_STARTED = 1;
 
@@ -42,14 +45,16 @@ public class MatchDtoFactory {
     }
 
     public GenericDto getLastMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam){
-        FilterDto matchFilter = and(
-          orIsNotDeleted(),
+        FilterDto matchFilter = and(orIsNotDeleted(),
           or(DatabaseContract.MatchTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
-          or(DatabaseContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
+            or(DatabaseContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
           or(DatabaseContract.MatchTable.MATCH_DATE).isNotEqualTo(null),
-          or(DatabaseContract.MatchTable.STATUS).isEqualTo(0).or(DatabaseContract.MatchTable.STATUS).isEqualTo(1)).build();
+          or(DatabaseContract.MatchTable.STATUS).isEqualTo(0)
+            .or(DatabaseContract.MatchTable.STATUS)
+            .isEqualTo(1)).build();
 
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(DatabaseContract.MatchTable.TABLE).includeDeleted(true).items(1).filter(matchFilter).build();
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(DatabaseContract.MatchTable.TABLE).includeDeleted(
+          true).items(1).filter(matchFilter).build();
         OperationDto op = new OperationDto.Builder()
           .metadata(md)
           .putData(matchMapper.toDto(null))
@@ -121,4 +126,25 @@ public class MatchDtoFactory {
        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_TEAMS_BY_TEAM_IDS, op);
     }
 
+    public GenericDto getWatchByKeys(Long idUser, Long idMatch) {
+        MetadataDto md = new MetadataDto.Builder()
+          .operation(Constants.OPERATION_RETRIEVE)
+          .entity(WatchTable.TABLE)
+          .putKey(WatchTable.ID_USER, idUser)
+          .putKey(WatchTable.ID_MATCH, idMatch)
+          .items(1).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_BY_KEYS,op);
+    }
+
+    public GenericDto getMatchByIdMatch(Long idMatch) {
+        MetadataDto md = new MetadataDto.Builder()
+          .operation(Constants.OPERATION_RETRIEVE)
+          .entity(DatabaseContract.MatchTable.TABLE)
+          .putKey(WatchTable.ID_MATCH, idMatch)
+          .items(1).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(matchMapper.toDto(null)).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MATCH_BY_ID_MATCH,op);
+
+    }
 }
