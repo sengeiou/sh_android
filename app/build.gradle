@@ -35,7 +35,7 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
-        applicationId "gm.mobi.android.goles5"
+        applicationId "com.shootr.android"
         minSdkVersion 14
         targetSdkVersion 21
 
@@ -132,8 +132,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.0'
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
 
-    compile 'es.oneoctopus.swiperefreshlayoutoverlay:library:3.0.0'
-
     compile 'com.google.guava:guava:17.0'
 
     compile 'joda-time:joda-time:2.3'
@@ -157,7 +155,7 @@ dependencies {
 spoon {
     debug = true
     failIfNoDeviceConnected = true
-    //className = 'gm.mobi.android.ui.activities.registro.WelcomeLoginActivityTest'
+    //className = 'com.shootr.android.ui.activities.registro.WelcomeLoginActivityTest'
 }
 
 sonarRunner {

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="gm.mobi.android.goles5.robolectric">
+    package="com.shootr.android.robolectric">
 
     <application />
 

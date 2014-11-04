@@ -16,7 +16,7 @@
         android:orientation="vertical"
         tools:context=".EmailLoginActivity">
 
-        <gm.mobi.android.ui.widgets.FloatLabelLayout
+        <com.shootr.android.ui.widgets.FloatLabelLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -38,10 +38,10 @@
                 <requestFocus/>
             </AutoCompleteTextView>
 
-        </gm.mobi.android.ui.widgets.FloatLabelLayout>
+        </com.shootr.android.ui.widgets.FloatLabelLayout>
 
 
-        <gm.mobi.android.ui.widgets.FloatLabelLayout
+        <com.shootr.android.ui.widgets.FloatLabelLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -62,7 +62,7 @@
 
 
             </EditText>
-        </gm.mobi.android.ui.widgets.FloatLabelLayout>
+        </com.shootr.android.ui.widgets.FloatLabelLayout>
 
         <!--<Button
         android:id="@+id/email_login_button"
