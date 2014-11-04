@@ -25,6 +25,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -423,8 +424,6 @@ public class TimelineFragment extends BaseFragment
         listView.smoothScrollToPosition(0);
     }
 
-
-
     @Subscribe
     public void displayOldShots(OldShotsReceivedEvent event) {
         isLoadingMore = false;
@@ -441,5 +440,11 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
+        isRefreshing = false;
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }
 
