@@ -3,7 +3,7 @@
     <style name="None"></style>
 
     <!-- Base application themes. -->
-    <style name="ShootrTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ShootrTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
@@ -12,8 +12,25 @@
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
         <item name="android:textCursorDrawable">@null</item>
     </style>
-    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+
+    <style name="ToolBar">
+        <item name="android:background">?colorPrimary</item>
+    </style>
+
+    <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ActionBarThemeOverlay" parent="">
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="colorControlHighlight">#3fff</item>
+    </style>
+
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.Light.SearchView">
         <item name="queryBackground">@color/primary</item>
+        <item name="android:textColorHint">#FFFFFF</item>
 
         <!--<item name="searchIcon"></item>-->
         <!--<item name="goIcon"></item>-->
