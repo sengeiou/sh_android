@@ -50,7 +50,7 @@ public class WelcomePagerAdapter extends PagerAdapter {
             default:
                 resTitle = R.string.welcome_title_0;
                 resSubtitle = R.string.welcome_subtitle_0;
-                resIcon = R.drawable.ic_welcome_0;
+                resIcon = R.drawable.ic_welcome_1;
                 break;
             case 1:
                 resTitle = R.string.welcome_title_1;
