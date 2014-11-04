@@ -45,7 +45,7 @@ public interface BagdadService {
 
     public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException;
 
-    public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long date) throws IOException;
+    public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds) throws IOException;
 
     public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException;
 

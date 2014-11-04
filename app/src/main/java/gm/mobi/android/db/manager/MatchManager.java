@@ -113,4 +113,8 @@ public class MatchManager extends AbstractManager{
         queryResult.close();
         return resultMatches;
     }
+
+    public void deleteAllMatches() {
+        db.execSQL("DELETE FROM "+ GMContract.MatchTable.TABLE);
+    }
 }

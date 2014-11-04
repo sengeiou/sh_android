@@ -3,6 +3,7 @@ package gm.mobi.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import gm.mobi.android.db.GMContract;
 import gm.mobi.android.db.GMContract.MatchTable;
 import gm.mobi.android.db.GMContract.WatchTable;
 import gm.mobi.android.db.mappers.WatchMapper;
@@ -77,6 +78,10 @@ public class WatchManager extends AbstractManager{
         for (WatchEntity watchEntity : watchEntities) {
             deleteWatch(watchEntity);
         }
+    }
+
+    public void deleteAllWatches(Long exceptUserId) {
+        db.execSQL("DELETE FROM " + GMContract.WatchTable.TABLE+ " WHERE "+WatchTable.ID_USER+" = "+exceptUserId);
     }
 
     public void insertInSync(){

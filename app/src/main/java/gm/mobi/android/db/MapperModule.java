@@ -1,5 +1,6 @@
 package gm.mobi.android.db;
 
+import android.app.Application;
 import dagger.Module;
 import dagger.Provides;
 import gm.mobi.android.db.mappers.DeviceMapper;
@@ -22,9 +23,9 @@ public class MapperModule {
 
     @Provides ShotModelMapper provideShotModelMapper(){ return new ShotModelMapper();}
 
-    @Provides MatchModelMapper provideMatchModelMapper(){ return new MatchModelMapper();}
+    @Provides MatchModelMapper provideMatchModelMapper(Application application){ return new MatchModelMapper(application);}
 
-    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(){ return new UserWatchingModelMapper();}
+    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application){ return new UserWatchingModelMapper(application);}
 
     @Provides FollowMapper provideFollowMapper() {
         return new FollowMapper();

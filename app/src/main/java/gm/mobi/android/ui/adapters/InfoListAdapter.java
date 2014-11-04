@@ -1,7 +1,7 @@
 package gm.mobi.android.ui.adapters;
 
 import android.content.Context;
-import android.util.ArrayMap;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +22,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     private static final int TYPE_COUNT = 3;
 
-    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_MATCH = 0;
     private static final int TYPE_USER = 1;
     private static final int TYPE_ME = 2;
 
@@ -30,12 +30,17 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private List<Object> itemsList;
     private Picasso picasso;
     private Long currentUserId;
+    private int watchingColorLive;
+    private int watchingColorNotLive;
 
     public InfoListAdapter(Context context, Picasso picasso, Long currentUserId) {
         super(context);
         this.picasso = picasso;
         this.itemsList = new ArrayList<>();
         this.currentUserId = currentUserId;
+        Resources resources = context.getResources();
+        this.watchingColorLive = resources.getColor(R.color.watching_live);
+        this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
@@ -70,7 +75,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     @Override public int getItemViewType(int position) {
         Object item = getItem(position);
         if (item instanceof MatchModel) {
-            return TYPE_HEADER;
+            return TYPE_MATCH;
         } else if (item instanceof UserWatchingModel) {
             if (isCurrentUser((UserWatchingModel) item)) {
                 return TYPE_ME;
@@ -98,7 +103,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     @Override public View newView(LayoutInflater inflater, int position, ViewGroup container) {
         View v = null;
         switch (getItemViewType(position)) {
-            case TYPE_HEADER:
+            case TYPE_MATCH:
                 v = inflater.inflate(R.layout.info_header_view, container, false);
                 v.setTag(new HeaderViewHolder(v));
                 break;
@@ -118,8 +123,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     @Override public void bindView(Object item, int position, View view) {
         switch (getItemViewType(position)) {
-            case TYPE_HEADER:
-                bindHeader((MatchModel) item, position, view);
+            case TYPE_MATCH:
+                bindMatch((MatchModel) item, position, view);
                 break;
             case TYPE_USER:
             case TYPE_ME:
@@ -128,15 +133,26 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         }
     }
 
-    public void bindHeader(MatchModel match, int position, View view) {
+    public void bindMatch(MatchModel match, int position, View view) {
         HeaderViewHolder vh = (HeaderViewHolder) view.getTag();
         vh.title.setText(match.getTitle());
+        if (match.isLive()) {
+            vh.timestamp.setVisibility(View.GONE);
+        } else {
+            vh.timestamp.setVisibility(View.VISIBLE);
+            vh.timestamp.setText(match.getDatetime());
+        }
     }
 
     public void bindUser(UserWatchingModel user, int position, View view) {
         UserViewHolder vh = (UserViewHolder) view.getTag();
         vh.name.setText(user.getUserName());
         vh.watching.setText(user.getStatus());
+        if (user.isLive()) {
+            vh.watching.setTextColor(watchingColorLive);
+        } else {
+            vh.watching.setTextColor(watchingColorNotLive);
+        }
         if (!user.getPhoto().isEmpty()) {
             picasso.load(user.getPhoto()).into(vh.avatar);
         } else {
@@ -152,6 +168,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public static class HeaderViewHolder {
         @InjectView(R.id.info_header_match_title) TextView title;
+        @InjectView(R.id.info_header_match_timestamp) TextView timestamp;
 
         public HeaderViewHolder(View view) {
             ButterKnife.inject(this, view);

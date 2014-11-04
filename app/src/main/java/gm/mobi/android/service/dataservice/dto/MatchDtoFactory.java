@@ -55,7 +55,7 @@ public class MatchDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEXT_MATCH_WHERE_MY_TEAM_PLAYS, op);
     }
 
-    public GenericDto getWatchFromUsers(List<Long> userIds, Long date){
+    public GenericDto getWatchFromUsers(List<Long> userIds){
         FilterDto watchFollowingFilter =
           and(GMContract.WatchTable.STATUS).isEqualTo(1)
           .and(
@@ -65,7 +65,7 @@ public class MatchDtoFactory {
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
           GMContract.WatchTable.TABLE)
-          .includeDeleted(true).filter(watchFollowingFilter).items(1000).build();
+          .includeDeleted(false).filter(watchFollowingFilter).items(1000).build();
 
         OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
