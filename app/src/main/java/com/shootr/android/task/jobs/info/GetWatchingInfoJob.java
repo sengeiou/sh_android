@@ -72,7 +72,9 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         if (hasInternetConnection()) {
             Timber.d("Sending watching list online");
             Map<MatchModel, Collection<UserWatchingModel>> infoListOnline = obtainInfoList(true);
-            postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
+            if (infoListOnline != null) {
+                postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
+            }
         }
     }
 
@@ -81,14 +83,11 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         InfoListBuilder infoListBuilder =
           new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
-        //TODO watches vacío, interrumpe
-        if (watches == null || watches.isEmpty()) {
-            Timber.w("Watches vacío");
-            return null;
+        if (watches != null && !watches.isEmpty()) {
+            infoListBuilder.setWatches(watches);
+            infoListBuilder.provideMatches(getMatches(infoListBuilder.getMatchIds(), useOnlineData));
+            infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
         }
-        infoListBuilder.setWatches(watches);
-        infoListBuilder.provideMatches(getMatches(infoListBuilder.getMatchIds(), useOnlineData));
-        infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
 
         MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
         if (nextMatchFromMyTeam != null) {
