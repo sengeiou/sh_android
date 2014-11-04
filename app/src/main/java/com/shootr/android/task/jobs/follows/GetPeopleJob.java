@@ -103,7 +103,8 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     static class NameComparator implements Comparator<UserEntity> {
 
         @Override public int compare(UserEntity user1, UserEntity user2) {
-            return user1.getName().compareTo(user2.getName());
+            return user1.getUserName()
+              .compareTo(user2.getUserName());
         }
 
     }
