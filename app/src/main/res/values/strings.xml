@@ -79,7 +79,8 @@
     <string name="communication_error">Communication error</string>
 
     <!-- Watching status texts -->
-    <string name="watching_text_me_and_more">Sevilla-Lopera</string>
+    <string name="watching_text">Watching</string>
+    <string name="watching_not_text">Not Watching</string>
 
     <!--TimeUtils-->
     <string name="plural_days">days</string>
@@ -100,5 +101,11 @@
     <string name="activity_find_friends_title">Find People</string>
     <string name="activity_find_friends_hint">Find People</string>
     <string name="activity_find_friends_empty_message">No results.</string>
+
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
+
+
+    <!--Info-->
+    <string name="activity_empty_info">No people watching</string>
+
 </resources>

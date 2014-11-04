@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.mappers.MatchMapper;
 import com.shootr.android.db.objects.MatchEntity;
@@ -111,5 +112,9 @@ public class MatchManager extends AbstractManager{
         }
         queryResult.close();
         return resultMatches;
+    }
+
+    public void deleteAllMatches() {
+        db.execSQL("DELETE FROM "+ DatabaseContract.MatchTable.TABLE);
     }
 }

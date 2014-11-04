@@ -65,10 +65,12 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     @Override protected void run() throws SQLException, IOException {
         Map<MatchModel, Collection<UserWatchingModel>> infoListOffline = obtainInfoList(false);
         if (infoListOffline != null) {
+            Timber.d("Sending watching list offline");
             postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
         }
 
         if (hasInternetConnection()) {
+            Timber.d("Sending watching list online");
             Map<MatchModel, Collection<UserWatchingModel>> infoListOnline = obtainInfoList(true);
             postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
         }
@@ -121,6 +123,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     private void saveMatchesInDatabase(List<MatchEntity> matchesToSave) {
+        matchManager.deleteAllMatches();
         matchManager.saveMatches(matchesToSave);
     }
 
@@ -131,12 +134,10 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
         if (useOnlineData) {
-            Long watchLastModifiedDate = watchManager.getLastModifiedDate(DatabaseContract.WatchTable.TABLE);
-            List<WatchEntity> newWatchesFromServer =
-              service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), watchLastModifiedDate);
+            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe());
             if (newWatchesFromServer != null && !newWatchesFromServer.isEmpty()) {
-                watches.addAll(newWatchesFromServer);
-                saveWatchesInDatabase(newWatchesFromServer);
+                watches = newWatchesFromServer;
+                replaceWatchesInDatabase(newWatchesFromServer);
             }
         }
         return watches;
@@ -146,7 +147,8 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         return watchManager.getWatchesNotEndedOrAdjurnedFromUsers(getIdsFromMyFollowingAndMe());
     }
 
-    private void saveWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
+    private void replaceWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
+        watchManager.deleteAllWatches(sessionManager.getCurrentUserId());
         watchManager.saveWatches(newWatchesFromServer);
     }
 

@@ -63,6 +63,7 @@ public class InfoListBuilder {
         this.currentUser = currentUser;
         this.matchModelMapper = matchModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
+        userEntities.put(currentUser.getIdUser(), currentUser);
     }
 
     public void setWatches(List<WatchEntity> watches) {
@@ -137,7 +138,8 @@ public class InfoListBuilder {
         watchEntity.setIdUser(currentUser.getIdUser());
         watchEntity.setStatus(0L);
         watchEntity.setIdMatch(matchId);
-        return getUserWatchingModelFromEntity(currentUser, watchEntity);
+        MatchEntity matchEntity = matchEntities.get(matchId);
+        return getUserWatchingModelFromEntity(currentUser, watchEntity, matchEntity);
     }
 
     private void addWatchingToResult(WatchEntity watchEntity) {
@@ -150,7 +152,7 @@ public class InfoListBuilder {
 
     private void addWatchingPopulatedToResult(MatchEntity matchEntity, UserEntity userEntity, WatchEntity watchEntity) {
         MatchModel matchModel = getMatchModelFromEntity(matchEntity);
-        UserWatchingModel userWatchingModel = getUserWatchingModelFromEntity(userEntity, watchEntity);
+        UserWatchingModel userWatchingModel = getUserWatchingModelFromEntity(userEntity, watchEntity, matchEntity);
         map.put(matchModel, userWatchingModel);
     }
 
@@ -174,9 +176,9 @@ public class InfoListBuilder {
         return matchIdsFromWatches;
     }
 
-    private UserWatchingModel getUserWatchingModelFromEntity(UserEntity userEntity, WatchEntity watchEntity) {
+    private UserWatchingModel getUserWatchingModelFromEntity(UserEntity userEntity, WatchEntity watchEntity, MatchEntity matchEntity) {
         //TODO Use some cache? maybe? One user can be watching one match but not watching another
-        return userWatchingModelMapper.toUserWatchingModel(userEntity, watchEntity.getStatus() == 1);
+        return userWatchingModelMapper.toUserWatchingModel(userEntity, watchEntity.getStatus() == 1, matchEntity.getStatus()==1);
     }
 
     private MatchModel getMatchModelFromEntity(MatchEntity matchEntity) {

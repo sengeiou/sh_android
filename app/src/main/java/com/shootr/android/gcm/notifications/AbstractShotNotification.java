@@ -24,10 +24,6 @@ public abstract class AbstractShotNotification extends CommonNotification {
     }
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
-        Bundle extras = new Bundle();
-        extras.putInt(MainActivity.EXTRA_SHOW_SECTION,
-          MainActivity.DRAWER_POSITION_TIMELINE);
-
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN,
           new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_NOTIFICATION), PendingIntent.FLAG_CANCEL_CURRENT);
     }

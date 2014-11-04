@@ -3,6 +3,7 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
@@ -76,6 +77,10 @@ public class WatchManager extends AbstractManager{
         for (WatchEntity watchEntity : watchEntities) {
             deleteWatch(watchEntity);
         }
+    }
+
+    public void deleteAllWatches(Long exceptUserId) {
+        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE+ " WHERE "+WatchTable.ID_USER+" = "+exceptUserId);
     }
 
     public void insertInSync(){

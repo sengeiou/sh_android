@@ -69,7 +69,6 @@
           android:layout_centerVertical="true"
           android:clickable="true"
           android:gravity="center_vertical"
-          android:text="@string/watching_text_me_and_more"
           android:textColor="@color/white"
           android:textSize="16sp" />
 

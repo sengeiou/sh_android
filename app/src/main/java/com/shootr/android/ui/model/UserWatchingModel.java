@@ -8,6 +8,7 @@ public class UserWatchingModel implements Serializable {
     private Long favoriteTeamId;
     private String userName;
     private String photo;
+    private boolean live;
 
     private String status; //TODO cambiar por valor
 
@@ -60,4 +61,11 @@ public class UserWatchingModel implements Serializable {
         return true;
     }
 
+    public boolean isLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
+    }
 }

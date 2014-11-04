@@ -10,6 +10,7 @@ public class MatchModel {
     private Long visitorTeamId;
     private String datetime;
     private String title;
+    private boolean isLive;
 
     public Long getIdMatch() {
         return idMatch;
@@ -65,5 +66,13 @@ public class MatchModel {
 
     public void setLocalTeamId(Long localTeamId) {
         this.localTeamId = localTeamId;
+    }
+
+    public boolean isLive() {
+        return isLive;
+    }
+
+    public void setLive(boolean isLive) {
+        this.isLive = isLive;
     }
 }
