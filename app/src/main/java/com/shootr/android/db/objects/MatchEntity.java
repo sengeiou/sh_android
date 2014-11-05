@@ -5,6 +5,11 @@ import java.util.Date;
 
 public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
 
+    public static final Long NOT_STARTED = 0L;
+    public static final Long STARTED = 1L;
+    public static final Long ENDED = 2L;
+    public static final Long ADJOURNED = 3L;
+
     private Long idMatch;
     private Date matchDate;
     private Long idLocalTeam;
