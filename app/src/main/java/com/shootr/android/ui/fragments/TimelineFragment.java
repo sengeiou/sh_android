@@ -194,8 +194,6 @@ public class TimelineFragment extends BaseFragment
         // List scroll stuff
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
                 new ListViewScrollObserver.OnListViewScrollListener() {
-                    public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
-
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
                     }
