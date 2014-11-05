@@ -79,11 +79,12 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
                 usersIds.add(watchEntity.getIdUser());
             }
             List<MatchEntity> matchesByIds = matchManager.getMatchesByIds(matchesIds);
+            List<MatchEntity> matches = getRightMatchesByTime(matchesByIds);
             List<UserEntity> usersByIds = userManager.getUsersByIds(usersIds);
 
             WatchInfoBuilder watchInfoBuilder = new WatchInfoBuilder();
             watchInfoBuilder.setWatches(watchesWhereIAmNot);
-            watchInfoBuilder.provideMatches(matchesByIds);
+            watchInfoBuilder.provideMatches(matches);
             watchInfoBuilder.provideUsers(usersByIds);
             Map<MatchEntity, Collection<UserEntity>> mapWatchInfo = watchInfoBuilder.build();
             List<UserEntity> userEntities;
@@ -96,6 +97,17 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
 
         return watchingRequestModels;
     }
+
+    private List<MatchEntity> getRightMatchesByTime(List<MatchEntity> matches) {
+        List<MatchEntity> matchesToReturn = new ArrayList<>();
+        for(MatchEntity m:matches){
+            if(isInWatchingRequestThreshold(m)){
+                matchesToReturn.add(m);
+            }
+        }
+        return matchesToReturn;
+    }
+
 
     private List<WatchEntity> getWatchesWhereIAmNot() {
         return watchManager.getWatchesWhereUserNot(sessionManager.getCurrentUserId());
