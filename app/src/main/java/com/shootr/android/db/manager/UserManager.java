@@ -50,7 +50,7 @@ public class UserManager extends AbstractManager {
     /**
      * Insert a user
      */
-    public void saveUser(UserEntity user) throws SQLException {
+    public void saveUser(UserEntity user) {
         UserEntity currentUser = sessionManager.getCurrentUser();
 
         if(!user.getIdUser().equals(currentUser.getIdUser())) {

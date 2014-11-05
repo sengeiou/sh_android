@@ -49,6 +49,12 @@ public interface ShootrService {
 
     public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException;
 
+    public WatchEntity setWatchStatus(WatchEntity watch) throws IOException;
+
+    public WatchEntity getWatchStatus(Long idUser, Long idMatch) throws IOException;
+
+    public MatchEntity getMatchByIdMatch(Long idMatch) throws IOException;
+
     public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException;
 
 }

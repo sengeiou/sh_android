@@ -1,0 +1,72 @@
+package com.shootr.android.gcm.notifications;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.DrawableRes;
+import android.support.v4.app.NotificationCompat;
+import com.shootr.android.R;
+import com.shootr.android.ui.model.UserWatchingModel;
+import com.squareup.picasso.Picasso;
+import java.io.IOException;
+import timber.log.Timber;
+
+public class WatchRequestNotification extends CommonNotification {
+
+    String text;
+    UserWatchingModel userWatchingModel;
+    private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
+    private Picasso picasso;
+    private Bitmap largeIcon;
+
+
+    public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory, String text,
+      UserWatchingModel userWatchingModel, Picasso picasso) {
+        super(context,notificationBuilderFactory);
+        this.text = text;
+        this.userWatchingModel = userWatchingModel;
+        this.picasso = picasso;
+
+    }
+
+    @Override public void setNotificationValues(NotificationCompat.Builder builder) {
+
+        builder.setContentTitle(userWatchingModel.getUserName());
+        builder.setContentText(text);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+    }
+
+    protected Bitmap getUserPhoto(String url) {
+        if (largeIcon == null) {
+            if (url.isEmpty()) {
+                largeIcon = getDefaultPhoto();
+            }
+            try {
+                largeIcon = picasso.load(url).get();
+            } catch (IOException | IllegalArgumentException e) {
+                Timber.e(e, "Error downloading user photo for a shot notification.");
+                largeIcon = getDefaultPhoto();
+            }
+        }
+        return largeIcon;
+    }
+
+    @Override
+    public Bitmap getLargeIcon() {
+        return getUserPhoto(userWatchingModel.getPhoto());
+    }
+
+    @Override
+    public Bitmap getWearBackground() {
+        return getUserPhoto(userWatchingModel.getPhoto());
+    }
+
+
+    private Bitmap getDefaultPhoto() {
+        return BitmapFactory.decodeResource(getResources(), DEFAULT_USER_PHOTO_RES);
+    }
+
+    @DrawableRes public int getSmallIcon() {
+        return R.drawable.ic_ab_icon;
+    }
+}

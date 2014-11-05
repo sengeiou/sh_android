@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
+import org.robolectric.Robolectric;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.argThat;
@@ -51,7 +52,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         service = mock(ShootrService.class);
         sessionManager = mock(SessionManager.class);
         //matchModelMapper = mock(MatchModelMapper.class); //TODO adriáaaaaaan!!!!
-        matchModelMapper = new MatchModelMapper();
+        matchModelMapper = new MatchModelMapper(Robolectric.application);
 
         UserEntity currenUser = new UserEntity();
         currenUser.setFavoriteTeamId(FAVOURITE_TEAM_ID);
@@ -139,7 +140,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         expectedWatches.add(getWatch(4L));
         expectedWatches.add(getWatch(6L));
 
-        when(service.getWatchesFromUsers(eq(userIds), eq(IRRELEVANT_DATE))).thenReturn(expectedWatches);
+        when(service.getWatchesFromUsers(eq(userIds))).thenReturn(expectedWatches);
         job.init();
         //List<WatchEntity> watches = job.getWatchesFromUsers(userIds);
     }
