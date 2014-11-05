@@ -11,6 +11,9 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -99,7 +102,8 @@ import static android.content.Context.MODE_PRIVATE;
 
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
-    RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class,
+    RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
+    SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 

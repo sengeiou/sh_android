@@ -111,7 +111,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
     public void retrieveInfoList(){
         GetWatchingInfoJob job = ShootrApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
-        job.init();
+        job.init(false);
         jobManager.addJobInBackground(job);
     }
 

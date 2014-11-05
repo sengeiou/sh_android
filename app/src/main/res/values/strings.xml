@@ -108,4 +108,10 @@
     <string name="activity_empty_info">No people watching</string>
     <string name="enter_to_confirm">Touch to confirm status</string>
     <string name="following_notif_text">Touch to access the profile</string>
+
+    <!-- Watching requests -->
+    <string name="watching_request_subtitle_none">Now Playing</string>
+    <string name="watching_request_subtitle_one">%s is watching now</string>
+    <string name="watching_request_subtitle_two">%1$s &amp; %2$s are watching now></string>
+    <string name="watching_request_subtitle_more">%d are watching now</string>
 </resources>

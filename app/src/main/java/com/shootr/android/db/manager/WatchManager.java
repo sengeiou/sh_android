@@ -7,6 +7,7 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
+import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.db.objects.WatchEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,13 @@ public class WatchManager extends AbstractManager{
         insertInTableSync(WatchTable.TABLE,7,1000,0);
     }
 
+    public List<WatchEntity> getWatchesByMatch(Long idMatch){
+        List<Long> matchIds = new ArrayList<>(1);
+        matchIds.add(idMatch);
+        List<WatchEntity> watches = getWatchesFromMatches(matchIds);
+        return watches;
+    }
+
     public List<WatchEntity> getWatchesFromMatches(List<Long> matchIds) {
         String whereSelection = WatchTable.ID_MATCH + " IN (" + createListPlaceholders(matchIds.size())+")";
         String[] whereArguments = new String[matchIds.size()];
@@ -128,14 +136,7 @@ public class WatchManager extends AbstractManager{
 
     public void createUpdateWatch(WatchEntity watchEntity) {
         ContentValues contentValues = watchMapper.toContentValues(watchEntity);
-        WatchEntity watchEntity2 = getWatchByKeys(watchEntity.getIdUser(),watchEntity.getIdMatch());
-        if(watchEntity2!=null){
-            String whereClause = WatchTable.ID_USER+"=? AND "+WatchTable.ID_MATCH+"=?";
-            String[] whereString = new String[]{String.valueOf(watchEntity.getIdUser()),String.valueOf(watchEntity.getIdMatch())};
-            db.update(WatchTable.TABLE,contentValues,whereClause,whereString);
-        }else{
-            db.insert(WatchTable.TABLE,null,contentValues);
-        }
+        db.insertWithOnConflict(WatchTable.TABLE,null,contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public WatchEntity getWatchByKeys(Long idUser, Long idMatch) {
@@ -169,5 +170,19 @@ public class WatchManager extends AbstractManager{
         return watchesToUpdate;
     }
 
+    public List<WatchEntity> getWatchesWhereUserNot(Long currentUserId) {
+        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" =?);";
 
+        Cursor queryResult = db.rawQuery(sql,new String[]{String.valueOf(currentUserId)});
+        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            do {
+                WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
+                resultWatches.add(watchEntity);
+            } while (queryResult.moveToNext());
+        }
+        queryResult.close();
+        return resultWatches;
+    }
 }

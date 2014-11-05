@@ -7,7 +7,6 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.shootr.android.data.SessionManager;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
@@ -41,6 +40,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private WatchManager watchManager;
     private MatchManager matchManager;
     private FollowManager followManager;
+    private boolean postOnlineInfoOnly;
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
@@ -58,15 +58,17 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         this.setOpenHelper(openHelper);
     }
 
-    public void init() {
-
+    public void init(boolean postOnlineInfoOnly) {
+        this.postOnlineInfoOnly = postOnlineInfoOnly;
     }
 
     @Override protected void run() throws SQLException, IOException {
-        Map<MatchModel, Collection<UserWatchingModel>> infoListOffline = obtainInfoList(false);
-        if (infoListOffline != null) {
-            Timber.d("Sending watching list offline");
-            postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
+        if(!postOnlineInfoOnly) {
+            Map<MatchModel, Collection<UserWatchingModel>> infoListOffline = obtainInfoList(false);
+            if (infoListOffline != null) {
+                Timber.d("Sending watching list offline");
+                postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
+            }
         }
 
         if (hasInternetConnection()) {

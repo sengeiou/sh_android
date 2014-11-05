@@ -18,11 +18,13 @@ import javax.inject.Inject;
 
 public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
 
+    private static final int PRIORITY = 9;
     private WatchManager watchManager;
     private ShootrService service;
+
     @Inject
-    protected SetWatchingInfoOnlineJob(Params params, Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, ShootrService service, SQLiteOpenHelper openHelper) {
-        super(params, application, bus, networkUtil);
+    protected SetWatchingInfoOnlineJob( Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, ShootrService service, SQLiteOpenHelper openHelper) {
+        super(new Params(PRIORITY), application, bus, networkUtil);
         this.watchManager = watchManager;
         this.service = service;
         this.setOpenHelper(openHelper);
