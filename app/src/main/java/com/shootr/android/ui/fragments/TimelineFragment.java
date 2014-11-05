@@ -257,10 +257,19 @@ public class TimelineFragment extends BaseFragment
     private void showNextWatchingRequest() {
         if (watchingRequestsPendingStack.size() > 0) {
             WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
-            showWatchingRequest(watchingRequestModel);
+            showNextWatchingRequestDelayed(watchingRequestModel);
         } else {
             hideWatchingRequests();
         }
+    }
+
+    private void showNextWatchingRequestDelayed(final WatchingRequestModel watchingRequestModel) {
+        watchingRequestContainerView.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                showWatchingRequest(watchingRequestModel);
+            }
+        }, 1000);
     }
 
     private void showWatchingRequest(WatchingRequestModel watchingRequestModel) {
@@ -288,7 +297,6 @@ public class TimelineFragment extends BaseFragment
     private void answerWatchRequest(Long status) {
         WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
         watchingRequestsPendingStack.remove(0);
-        //TODO lanzar job
 
         SetWatchingInfoOfflineJob jobOffline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOfflineJob.class);
         jobOffline.init(watchingRequestModel.getMatchId(),status);
