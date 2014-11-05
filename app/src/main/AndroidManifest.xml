@@ -123,7 +123,7 @@
 
         <provider
           android:name="com.shootr.android.db.provider.ShootrContentProvider"
-          android:authorities="com.shootr.android.db.provider"
+          android:authorities="${applicationId}.db.provider"
           android:exported="false"
           android:syncable="true"/>
 

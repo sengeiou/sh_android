@@ -64,16 +64,12 @@ public class TimelineFragment extends BaseFragment
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
-    @Inject ShootrNotificationManager notificationManager;
-    @Inject ShotModelMapper shotMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_watching_container) View watchingContainer;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.timeline_empty) View emptyView;
 
-    private View headerView;
     private View footerView;
     private ProgressBar footerProgress;
     private TextView footerText;
@@ -82,7 +78,6 @@ public class TimelineFragment extends BaseFragment
     private View.OnClickListener avatarClickListener;
     private boolean isLoadingMore;
     private boolean isRefreshing;
-    private int watchingHeight;
     private boolean moreShots = true;
     private boolean shouldPoll;
     private UserEntity currentUser;
@@ -147,11 +142,6 @@ public class TimelineFragment extends BaseFragment
         super.onResume();
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
-        clearCurrentNotifications();
-    }
-
-    private void clearCurrentNotifications() {
-        //TODO should we? notificationManager.clearShotNotifications();
     }
 
     @Override
@@ -186,22 +176,16 @@ public class TimelineFragment extends BaseFragment
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
-
-
         // Header and footer
-        headerView =
-                LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
         footerView =
                 LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
         footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
-        listView.addHeaderView(headerView, null, false);
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
         listView.setAdapter(adapter);
-        watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
@@ -214,19 +198,6 @@ public class TimelineFragment extends BaseFragment
 
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                        // delta negativo: scoll abajo
-                        if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
-                            watchingContainer.animate()
-                                    .setInterpolator(mInterpolator)
-                                    .setDuration(200)
-                                    .translationY(-watchingHeight);
-                        } else if (delta > 10) { // Show
-                            watchingContainer.animate()
-                                    .setInterpolator(mInterpolator)
-                                    .setDuration(200)
-                                    .translationY(0)
-                                    .start();
-                        }
                     }
 
                     @Override
