@@ -72,26 +72,28 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
         List<WatchEntity> watchesWhereIAmNot = getWatchesWhereIAmNot();
         List<Long> matchesIds = new ArrayList<>();
         List<Long> usersIds = new ArrayList<>();
-        for (WatchEntity watchEntity : watchesWhereIAmNot) {
-            matchesIds.add(watchEntity.getIdMatch());
-            usersIds.add(watchEntity.getIdUser());
-        }
-
-        List<MatchEntity> matchesByIds = matchManager.getMatchesByIds(matchesIds);
-        List<UserEntity> usersByIds = userManager.getUsersByIds(usersIds);
-
-        WatchInfoBuilder watchInfoBuilder = new WatchInfoBuilder();
-        watchInfoBuilder.setWatches(watchesWhereIAmNot);
-        watchInfoBuilder.provideMatches(matchesByIds);
-        watchInfoBuilder.provideUsers(usersByIds);
-        Map<MatchEntity, Collection<UserEntity>> mapWatchInfo = watchInfoBuilder.build();
-        List<UserEntity> userEntities;
         List<WatchingRequestModel> watchingRequestModels = new ArrayList<>();
-        for(MatchEntity match:mapWatchInfo.keySet()){
-            userEntities = new ArrayList<>(mapWatchInfo.get(match));
-            WatchingRequestModel watchingRequestModel =  watchingRequestModelMapper.toWatchingRequestModel(match,userEntities);
-            watchingRequestModels.add(watchingRequestModel);
+        if(watchesWhereIAmNot.size()>0){
+            for (WatchEntity watchEntity : watchesWhereIAmNot) {
+                matchesIds.add(watchEntity.getIdMatch());
+                usersIds.add(watchEntity.getIdUser());
+            }
+            List<MatchEntity> matchesByIds = matchManager.getMatchesByIds(matchesIds);
+            List<UserEntity> usersByIds = userManager.getUsersByIds(usersIds);
+
+            WatchInfoBuilder watchInfoBuilder = new WatchInfoBuilder();
+            watchInfoBuilder.setWatches(watchesWhereIAmNot);
+            watchInfoBuilder.provideMatches(matchesByIds);
+            watchInfoBuilder.provideUsers(usersByIds);
+            Map<MatchEntity, Collection<UserEntity>> mapWatchInfo = watchInfoBuilder.build();
+            List<UserEntity> userEntities;
+            for(MatchEntity match:mapWatchInfo.keySet()){
+                userEntities = new ArrayList<>(mapWatchInfo.get(match));
+                WatchingRequestModel watchingRequestModel =  watchingRequestModelMapper.toWatchingRequestModel(match,userEntities);
+                watchingRequestModels.add(watchingRequestModel);
+            }
         }
+
         return watchingRequestModels;
     }
 

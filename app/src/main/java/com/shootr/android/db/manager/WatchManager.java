@@ -171,9 +171,9 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesWhereUserNot(Long currentUserId) {
-        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" =?);";
+        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
 
-        Cursor queryResult = db.rawQuery(sql,new String[]{String.valueOf(currentUserId)});
+        Cursor queryResult = db.rawQuery(sql,null);
         List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();

@@ -14,12 +14,15 @@ public class WatchingRequestModelMapper {
     private final String subtitleOneWatching;
     private final String subtitleTwoWatching;
     private final String subtitleMoreWatching;
+    private final String title;
 
     public WatchingRequestModelMapper(Context context) {
         subtitleNoneWatching = context.getString(R.string.watching_request_subtitle_none);
         subtitleOneWatching = context.getString(R.string.watching_request_subtitle_one);
         subtitleTwoWatching = context.getString(R.string.watching_request_subtitle_two);
         subtitleMoreWatching = context.getString(R.string.watching_request_subtitle_more);
+
+        title = context.getString(R.string.watching_match_question);
     }
 
     public WatchingRequestModel toWatchingRequestModel(MatchEntity matchEntity, List<UserEntity> userEntities) {
@@ -47,7 +50,7 @@ public class WatchingRequestModelMapper {
 
     private String getTitle(MatchEntity matchEntity) {
         String matchTitle =  matchEntity.getLocalTeamName() + "-" + matchEntity.getVisitorTeamName();
-        return String.format("Watching %s", matchTitle);
+        return String.format(title, matchTitle);
     }
 
     private List<String> getNamesFromUserEntities(List<UserEntity> userEntities) {

@@ -249,8 +249,9 @@ public class TimelineFragment extends BaseFragment
         List<WatchingRequestModel> watchingRequestModels = event.getResult();
         if (watchingRequestModels != null && watchingRequestModels.size() > 0) {
             watchingRequestsPendingStack = watchingRequestModels;
+            showNextWatchingRequest();
         }
-        showNextWatchingRequest();
+
     }
 
     private void showNextWatchingRequest() {
@@ -294,8 +295,7 @@ public class TimelineFragment extends BaseFragment
         jobManager.addJobInBackground(jobOffline);
         SetWatchingInfoOnlineJob jobOnline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOnlineJob.class);
         jobManager.addJobInBackground(jobOnline);
-
-        hideWatchingRequests();
+        showNextWatchingRequest();
     }
 
     @Override

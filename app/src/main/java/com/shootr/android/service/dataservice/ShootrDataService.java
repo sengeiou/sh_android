@@ -360,8 +360,8 @@ public class ShootrDataService implements ShootrService {
     }
 
 
-    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds);
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long idUser) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
