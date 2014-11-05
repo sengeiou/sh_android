@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.objects.TableSync;
+import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.util.TimeUtils;
 import javax.inject.Inject;
 import timber.log.Timber;

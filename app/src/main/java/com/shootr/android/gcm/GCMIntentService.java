@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.db.DatabaseContract;
+import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
+import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.db.objects.ShotEntity;
 import com.shootr.android.db.objects.UserEntity;
@@ -38,9 +40,13 @@ public class GCMIntentService extends IntentService {
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject ShotModelMapper shotModelMapper;
+    @Inject WatchManager watchManager;
+    @Inject MatchManager matchManager;
     @Inject UserWatchingModelMapper userWatchingModelMapper;
     @Inject UserModelMapper userModelMapper;
+
     private SQLiteDatabase database;
+
 
     public GCMIntentService() {
         super("GCM Service");
@@ -53,8 +59,11 @@ public class GCMIntentService extends IntentService {
     @Override public void onCreate() {
         super.onCreate();
         ShootrApplication.get(this).inject(this);
-        database = openHelper.getReadableDatabase();
+        database = openHelper.getWritableDatabase();
         userManager.setDataBase(database);
+        watchManager.setDataBase(database);
+        matchManager.setDataBase(database);
+
     }
 
     @Override public void onDestroy() {
@@ -118,6 +127,9 @@ public class GCMIntentService extends IntentService {
         WatchEntity watchEntity = service.getWatchStatus(idUser,idMatch);
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
         UserEntity user = userManager.getUserByIdUser(idUser);
+        watchManager.createUpdateWatch(watchEntity);
+        matchManager.saveMatch(matchEntity);
+        userManager.saveUser(user);
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
             UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
