@@ -105,7 +105,9 @@ public class InfoListBuilder {
             meNotWatchingMyTeam.setIdMatch(myTeamNextMatch.getIdMatch());
             meNotWatchingMyTeam.setIdUser(currentUser.getIdUser());
             meNotWatchingMyTeam.setStatus(0L);
-            watches.add(meNotWatchingMyTeam); // Assume it will not add it if there exists a watch with the same userid and matchid (any status)
+            if (!watches.contains(meNotWatchingMyTeam)) {
+                watches.add(meNotWatchingMyTeam);
+            }
         }
     }
 

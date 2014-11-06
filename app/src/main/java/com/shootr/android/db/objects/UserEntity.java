@@ -170,4 +170,13 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     @Override public int compareTo(@NonNull UserEntity another) {
         return this.getUserName().compareTo(another.getUserName());
     }
+
+    @Override public boolean equals(Object o) {
+        if (o instanceof UserEntity) {
+            UserEntity otherUser = (UserEntity) o;
+            return this.idUser.equals(otherUser.idUser);
+        } else {
+            return false;
+        }
+    }
 }

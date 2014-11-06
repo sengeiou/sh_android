@@ -186,4 +186,20 @@ public class WatchManager extends AbstractManager{
         queryResult.close();
         return resultWatches;
     }
+
+    public WatchEntity getWatchByMatchAndUser(Long matchId, Long userId) {
+        String whereSelection = WatchTable.ID_MATCH + " = ? AND " + WatchTable.ID_USER + " = ? AND "+WatchTable.STATUS+" IS NOT ?";
+        String[] whereArguments = new String[]{String.valueOf(matchId), String.valueOf(userId), String.valueOf(WatchEntity.STATUS_DEFAULT)};
+
+        Cursor queryResult =
+                db.query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+
+        WatchEntity watchEntity = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            watchEntity = watchMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return watchEntity;
+    }
 }
