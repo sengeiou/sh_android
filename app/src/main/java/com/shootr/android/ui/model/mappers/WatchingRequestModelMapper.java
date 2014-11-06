@@ -11,9 +11,11 @@ import java.util.List;
 public class WatchingRequestModelMapper {
 
     private final String subtitleNoneWatching;
+    private final String subtitleNoneWatchingAndNotStarted;
     private final String subtitleOneWatching;
     private final String subtitleTwoWatching;
     private final String subtitleMoreWatching;
+
     private final String title;
 
     public WatchingRequestModelMapper(Context context) {
@@ -21,7 +23,7 @@ public class WatchingRequestModelMapper {
         subtitleOneWatching = context.getString(R.string.watching_request_subtitle_one);
         subtitleTwoWatching = context.getString(R.string.watching_request_subtitle_two);
         subtitleMoreWatching = context.getString(R.string.watching_request_subtitle_more);
-
+        subtitleNoneWatchingAndNotStarted = context.getString(R.string.watching_request_subtitle_none_and_not_started);
         title = context.getString(R.string.watching_match_question);
     }
 
@@ -29,16 +31,18 @@ public class WatchingRequestModelMapper {
         WatchingRequestModel watchingRequestModel = new WatchingRequestModel();
         watchingRequestModel.setMatchId(matchEntity.getIdMatch());
         watchingRequestModel.setTitle(getTitle(matchEntity));
-        watchingRequestModel.setSubtitle(getSubtitle(userEntities));
+        watchingRequestModel.setSubtitle(getSubtitle(userEntities, matchEntity));
         watchingRequestModel.setMatchDate(matchEntity.getMatchDate().getTime());
         return watchingRequestModel;
     }
 
-    private String getSubtitle(List<UserEntity> userEntities) {
+    private String getSubtitle(List<UserEntity> userEntities, MatchEntity match) {
         List<String> namesFromUserEntities = getNamesFromUserEntities(userEntities);
         int usersWatchingNumber = namesFromUserEntities.size();
-        if (usersWatchingNumber == 0) {
+        if (usersWatchingNumber == 0 && match.getStatus() == 1) {
             return subtitleNoneWatching;
+        }else if(usersWatchingNumber == 0 && match.getStatus() == 0){
+            return subtitleNoneWatchingAndNotStarted;
         }else if (usersWatchingNumber == 1) {
             return String.format(subtitleOneWatching, namesFromUserEntities.get(0));
         } else if (usersWatchingNumber == 2) {
