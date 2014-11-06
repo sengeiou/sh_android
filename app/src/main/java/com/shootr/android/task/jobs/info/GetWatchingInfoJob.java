@@ -149,7 +149,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     private void replaceWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {
-        watchManager.deleteAllWatches(sessionManager.getCurrentUserId());
+        watchManager.deleteAllWatches();
         watchManager.saveWatches(newWatchesFromServer);
     }
 

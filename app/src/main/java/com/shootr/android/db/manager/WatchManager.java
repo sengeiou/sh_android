@@ -80,8 +80,8 @@ public class WatchManager extends AbstractManager{
         }
     }
 
-    public void deleteAllWatches(Long exceptUserId) {
-        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE+ " WHERE "+WatchTable.ID_USER+" IS NOT "+exceptUserId);
+    public void deleteAllWatches() {
+        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE);
     }
 
     public void insertInSync(){
