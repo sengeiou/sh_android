@@ -15,6 +15,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
     public static final String ACTION_OPEN_PROFILE = "com.shootr.android.ACTION_OPEN_PROFILE";
     public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION";
     public static final String ACTION_OPEN_SHOT_NOTIFICATION = "com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION";
+    public static final String ACTION_OPEN_WATCH_REQUEST = "com.shootr.android.ACTION_OPEN_WATCH_REQUEST";
 
     @Inject ShootrNotificationManager notificationManager;
 
@@ -25,7 +26,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (action.equals(ACTION_DISCARD_SHOT_NOTIFICATION)) {
             notificationManager.clearShotNotifications();
-        }else if (action.equals(ACTION_OPEN_SHOT_NOTIFICATION)) {
+        }else if (action.equals(ACTION_OPEN_SHOT_NOTIFICATION) || action.equals(ACTION_OPEN_WATCH_REQUEST)) {
             context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             notificationManager.clearShotNotifications();
         }else if(action.equals(ACTION_OPEN_PROFILE)){

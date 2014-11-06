@@ -155,6 +155,7 @@
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_PROFILE"/>
                 <action android:name="com.shootr.android.ACTION_START_MATCH"/>
+                <action android:name="com.shootr.android.ACTION_OPEN_WATCH_REQUEST"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

@@ -1,11 +1,14 @@
 package com.shootr.android.gcm.notifications;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
+import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.squareup.picasso.Picasso;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import timber.log.Timber;
 
 public class WatchRequestNotification extends CommonNotification {
 
+    private static final int REQUEST_OPEN = 2;
     String text;
     UserWatchingModel userWatchingModel;
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
@@ -26,14 +30,13 @@ public class WatchRequestNotification extends CommonNotification {
         this.text = text;
         this.userWatchingModel = userWatchingModel;
         this.picasso = picasso;
-
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-
         builder.setContentTitle(userWatchingModel.getUserName());
         builder.setContentText(text);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+        builder.setContentIntent(getOpenWatchRequestPendingIntent());
     }
 
     protected Bitmap getUserPhoto(String url) {
@@ -49,6 +52,12 @@ public class WatchRequestNotification extends CommonNotification {
             }
         }
         return largeIcon;
+    }
+
+    protected PendingIntent getOpenWatchRequestPendingIntent() {
+        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_WATCH_REQUEST);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return pendingIntent;
     }
 
     @Override
