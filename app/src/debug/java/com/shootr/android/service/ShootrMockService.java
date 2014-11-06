@@ -102,7 +102,8 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds) throws IOException {
+    @Override public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long idCurrentUser)
+      throws IOException {
         return null;
     }
 

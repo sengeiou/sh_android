@@ -1,6 +1,7 @@
 package com.shootr.android.db;
 
 import android.app.Application;
+import com.shootr.android.ui.model.mappers.WatchingRequestModelMapper;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.DeviceMapper;
@@ -49,5 +50,9 @@ public class MapperModule {
     @Provides WatchMapper provideWatchMapper(){ return new WatchMapper();}
 
     @Provides TeamMapper provideTeamMapper(){ return new TeamMapper();}
+
+    @Provides WatchingRequestModelMapper provideWatchingRequestModelMapper(Application application){
+        return new WatchingRequestModelMapper(application);
+    }
 
 }

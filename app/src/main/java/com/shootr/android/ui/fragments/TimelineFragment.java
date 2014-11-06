@@ -1,6 +1,5 @@
 package com.shootr.android.ui.fragments;
 
-import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,13 +24,19 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.info.WatchingInfoResult;
+import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
+import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
+import com.shootr.android.ui.model.WatchingRequestModel;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
@@ -49,7 +53,6 @@ import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.widgets.ListViewScrollObserver;
 import java.util.List;
 import javax.inject.Inject;
@@ -60,20 +63,24 @@ public class TimelineFragment extends BaseFragment
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+    public static final Long WATCH_STATUS_IGNORE = 2L;
+    public static final Long WATCH_STATUS_WATCHING = 1L;
 
     @Inject Picasso picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
-    @Inject ShootrNotificationManager notificationManager;
-    @Inject ShotModelMapper shotMapper;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
-    @InjectView(R.id.timeline_watching_container) View watchingContainer;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.timeline_empty) View emptyView;
 
-    private View headerView;
+    @InjectView(R.id.timeline_watching_container) View watchingRequestContainerView;
+    @InjectView(R.id.timeline_watching_title) TextView watchingRequestTitleView;
+    @InjectView(R.id.timeline_watching_subtitle) TextView watchingRequestSubtitleView;
+    @InjectView(R.id.timeline_watching_action_ignore) View watchingRequestActionIgnoreView;
+    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
+
     private View footerView;
     private ProgressBar footerProgress;
     private TextView footerText;
@@ -82,10 +89,10 @@ public class TimelineFragment extends BaseFragment
     private View.OnClickListener avatarClickListener;
     private boolean isLoadingMore;
     private boolean isRefreshing;
-    private int watchingHeight;
     private boolean moreShots = true;
     private boolean shouldPoll;
     private UserEntity currentUser;
+    private List<WatchingRequestModel> watchingRequestsPendingStack;
 
 
      /* ---- Lifecycle methods ---- */
@@ -147,11 +154,6 @@ public class TimelineFragment extends BaseFragment
         super.onResume();
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
-        clearCurrentNotifications();
-    }
-
-    private void clearCurrentNotifications() {
-        //TODO should we? notificationManager.clearShotNotifications();
     }
 
     @Override
@@ -186,47 +188,26 @@ public class TimelineFragment extends BaseFragment
             Timber.w("Activity null in TimelineFragment#onViewCreated()");
         }
 
-
-
         // Header and footer
-        headerView =
-                LayoutInflater.from(getActivity()).inflate(R.layout.timeline_margin, listView, false);
         footerView =
                 LayoutInflater.from(getActivity()).inflate(R.layout.item_list_loading, listView, false);
         footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
         footerText = ButterKnife.findById(footerView, R.id.loading_text);
 
-        listView.addHeaderView(headerView, null, false);
         listView.addFooterView(footerView, null, false);
 
         adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
         listView.setAdapter(adapter);
-        watchingHeight = getResources().getDimensionPixelOffset(R.dimen.watching_bar_height);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
-                R.color.refresh_3, R.color.refresh_4);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2, R.color.refresh_3,
+          R.color.refresh_4);
 
         // List scroll stuff
         new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
                 new ListViewScrollObserver.OnListViewScrollListener() {
-                    public TimeInterpolator mInterpolator = new AccelerateDecelerateInterpolator();
-
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                        // delta negativo: scoll abajo
-                        if (delta < -10 && scrollPosition < -watchingHeight && !isRefreshing) { //Hide
-                            watchingContainer.animate()
-                                    .setInterpolator(mInterpolator)
-                                    .setDuration(200)
-                                    .translationY(-watchingHeight);
-                        } else if (delta > 10) { // Show
-                            watchingContainer.animate()
-                                    .setInterpolator(mInterpolator)
-                                    .setDuration(200)
-                                    .translationY(0)
-                                    .start();
-                        }
                     }
 
                     @Override
@@ -241,6 +222,88 @@ public class TimelineFragment extends BaseFragment
         super.onActivityCreated(savedInstanceState);
         currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
         loadInitialTimeline();
+        refreshInfoData();
+    }
+
+    private void refreshInfoData() {
+        GetWatchingInfoJob getWatchingInfoJob =
+          ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingInfoJob.class);
+
+        getWatchingInfoJob.init(true);
+
+        jobManager.addJobInBackground(getWatchingInfoJob);
+    }
+
+    @Subscribe
+    public void onInfoDataRefreshed(WatchingInfoResult event) {
+        showWatchingRequests();
+    }
+
+    private void showWatchingRequests() {
+        GetWatchingRequestsPendingJob getWatchingRequestsPendingJob  = ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingRequestsPendingJob.class);
+        jobManager.addJobInBackground(getWatchingRequestsPendingJob);
+    }
+
+    @Subscribe
+    public void onWatchingRequestsPendingReceived(WatchingRequestPendingEvent event) {
+        List<WatchingRequestModel> watchingRequestModels = event.getResult();
+        if (watchingRequestModels != null && watchingRequestModels.size() > 0) {
+            watchingRequestsPendingStack = watchingRequestModels;
+            showNextWatchingRequest();
+        }
+
+    }
+
+    private void showNextWatchingRequest() {
+        if (watchingRequestsPendingStack.size() > 0) {
+            WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
+            showNextWatchingRequestDelayed(watchingRequestModel);
+        } else {
+            hideWatchingRequests();
+        }
+    }
+
+    private void showNextWatchingRequestDelayed(final WatchingRequestModel watchingRequestModel) {
+        watchingRequestContainerView.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                showWatchingRequest(watchingRequestModel);
+            }
+        }, 1000);
+    }
+
+    private void showWatchingRequest(WatchingRequestModel watchingRequestModel) {
+        if (watchingRequestModel != null) {
+            watchingRequestContainerView.setVisibility(View.VISIBLE);
+            watchingRequestTitleView.setText(watchingRequestModel.getTitle());
+            watchingRequestSubtitleView.setText(watchingRequestModel.getSubtitle());
+        }
+    }
+
+    private void hideWatchingRequests() {
+        watchingRequestContainerView.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.timeline_watching_action_yes)
+    public void onWatchRequestAnswerPositive() {
+        answerWatchRequest(WATCH_STATUS_WATCHING);
+    }
+
+    @OnClick(R.id.timeline_watching_action_ignore)
+    public void onWatchRequestAnswerNegative() {
+        answerWatchRequest(WATCH_STATUS_IGNORE);
+    }
+
+    private void answerWatchRequest(Long status) {
+        WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
+        watchingRequestsPendingStack.remove(0);
+
+        SetWatchingInfoOfflineJob jobOffline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOfflineJob.class);
+        jobOffline.init(watchingRequestModel.getMatchId(),status);
+        jobManager.addJobInBackground(jobOffline);
+        SetWatchingInfoOnlineJob jobOnline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOnlineJob.class);
+        jobManager.addJobInBackground(jobOnline);
+        showNextWatchingRequest();
     }
 
     @Override

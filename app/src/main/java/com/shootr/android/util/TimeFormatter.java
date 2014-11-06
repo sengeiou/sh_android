@@ -11,7 +11,7 @@ public class TimeFormatter {
 
     DateTimeFormatter hourFormater = DateTimeFormat.forPattern("HH:mm");
     DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
-    DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEEEEEEEEEEE");
+    DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
 
     public TimeFormatter() {
 
@@ -21,10 +21,8 @@ public class TimeFormatter {
         DateTime targetDate = new DateTime(targetTimestamp);
         if (isToday(targetDate)) {
             return getTodayFormat(targetDate);
-        }else if (isTomorrow(targetDate)) {
-            return getTomorrowFormat(targetDate);
         }else if (isLessThanAWeek(targetDate)) {
-            return getDayOfWeek(targetDate);
+            return getDayOfWeek(targetDate).toUpperCase();
         } else {
             return getDayFormat(targetDate);
         }
