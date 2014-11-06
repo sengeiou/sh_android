@@ -131,7 +131,7 @@ public class GCMIntentService extends IntentService {
         watchManager.createUpdateWatch(watchEntity);
         matchManager.saveMatch(matchEntity);
         userManager.saveUser(user);
-        String text = getResources().getString(R.string.watching_text,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName());
+        String text = getResources().getString(R.string.watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
             UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
