@@ -15,6 +15,7 @@ import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.db.objects.ShotEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.ui.model.ShotModel;
@@ -23,6 +24,7 @@ import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
+import com.squareup.otto.Bus;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.json.JSONException;
@@ -45,6 +47,7 @@ public class GCMIntentService extends IntentService {
     @Inject MatchManager matchManager;
     @Inject UserWatchingModelMapper userWatchingModelMapper;
     @Inject UserModelMapper userModelMapper;
+    @Inject Bus bus;
 
     private SQLiteDatabase database;
 
@@ -132,6 +135,8 @@ public class GCMIntentService extends IntentService {
         matchManager.saveMatch(matchEntity);
         userManager.saveUser(user);
         String text = getResources().getString(R.string.watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
+        //Send event for retrieving the new WatchRequest
+        bus.post(new RequestWatchByPushEvent());
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
             UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));

@@ -23,6 +23,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
@@ -236,12 +237,17 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void onInfoDataRefreshed(WatchingInfoResult event) {
-        showWatchingRequests();
+        startRetrievingWatchingRequests();
     }
 
-    private void showWatchingRequests() {
+    private void startRetrievingWatchingRequests() {
         GetWatchingRequestsPendingJob getWatchingRequestsPendingJob  = ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingRequestsPendingJob.class);
         jobManager.addJobInBackground(getWatchingRequestsPendingJob);
+    }
+
+    @Subscribe
+    public void onRequestWatchByPush(RequestWatchByPushEvent event){
+        startRetrievingWatchingRequests();
     }
 
     @Subscribe
