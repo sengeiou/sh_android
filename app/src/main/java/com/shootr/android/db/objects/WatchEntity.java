@@ -45,4 +45,11 @@ public class WatchEntity extends Synchronized{
 
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = idMatch.hashCode();
+        result = 31 * result + idUser.hashCode();
+        return result;
+    }
 }

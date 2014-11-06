@@ -28,7 +28,7 @@ public class WatchManager extends AbstractManager{
         String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
           + "w."+WatchTable.ID_MATCH+" = m."+MatchTable.ID_MATCH
           + " WHERE m."+MatchTable.STATUS+" IN (0,1)"
-          + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+");";
+          + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+") AND w."+WatchTable.STATUS+"= 1;";
 
         String[] whereArguments = new String[userIds.size()];
         for (int i = 0; i < userIds.size(); i++) {
@@ -56,7 +56,7 @@ public class WatchManager extends AbstractManager{
                 res = deleteWatch(watchEntity);
             } else {
                 res = db.insertWithOnConflict(WatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                Timber.d("Shot inserted with result: %d", res);
+                Timber.d("Watch inserted with result: %d", res);
             }
             insertInSync();
         }
@@ -81,7 +81,7 @@ public class WatchManager extends AbstractManager{
     }
 
     public void deleteAllWatches(Long exceptUserId) {
-        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE+ " WHERE "+WatchTable.ID_USER+" = "+exceptUserId);
+        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE+ " WHERE "+WatchTable.ID_USER+" IS NOT "+exceptUserId);
     }
 
     public void insertInSync(){
@@ -96,7 +96,7 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesFromMatches(List<Long> matchIds) {
-        String whereSelection = WatchTable.ID_MATCH + " IN (" + createListPlaceholders(matchIds.size())+")";
+        String whereSelection = WatchTable.ID_MATCH + " IN (" + createListPlaceholders(matchIds.size())+") AND "+WatchTable.STATUS+"=1";
         String[] whereArguments = new String[matchIds.size()];
         for (int i = 0; i < matchIds.size(); i++) {
             whereArguments[i] = String.valueOf(matchIds.get(i));
@@ -146,7 +146,7 @@ public class WatchManager extends AbstractManager{
         Cursor queryResult = db.query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
         if(queryResult.getCount()>0){
             queryResult.moveToFirst();
-             watchEntity = watchMapper.fromCursor(queryResult);
+            watchEntity = watchMapper.fromCursor(queryResult);
         }
         queryResult.close();
         return  watchEntity;
