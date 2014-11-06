@@ -58,8 +58,8 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         }
         if (hasInternetConnection()) {
             List<UserEntity> peopleFromServer = service.getFollowing(currentUserId, 0L);
-            Collections.sort(peopleFromServer, new NameComparator());
             userVOs = getUserVOs(peopleFromServer);
+            Collections.sort(userVOs, new NameComparator());
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
         }
     }
@@ -72,6 +72,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
             boolean isMe = currentUserId.equals(idUser);
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
+        Collections.sort(userVOs, new NameComparator());
         return userVOs;
     }
 
@@ -100,9 +101,9 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         return false;
     }
 
-    static class NameComparator implements Comparator<UserEntity> {
+    static class NameComparator implements Comparator<UserModel> {
 
-        @Override public int compare(UserEntity user1, UserEntity user2) {
+        @Override public int compare(UserModel user1, UserModel user2) {
             return user1.getUserName()
               .compareTo(user2.getUserName());
         }

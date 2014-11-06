@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
@@ -17,11 +18,12 @@ import com.shootr.android.task.jobs.follows.GetPeopleJob;
 import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.adapters.PeopleAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
+import javax.inject.Inject;
 
 public class PeopleFragment extends UserFollowsFragment {
 
     private PeopleAdapter peopleAdapter;
-
+    @Inject SessionManager sessionManager;
     //TODO este fragment será independiente con diferentes vistas y comportamiento del UserFollowsFragment
 
     @Override
@@ -41,7 +43,7 @@ public class PeopleFragment extends UserFollowsFragment {
     public void startJob() {
         ShootrApplication shootrApplication = ShootrApplication.get(getActivity());
         GetPeopleJob job = shootrApplication.getObjectGraph().get(GetPeopleJob.class);
-        job.init(shootrApplication.getCurrentUser().getIdUser());
+        job.init(sessionManager.getCurrentUserId());
         jobManager.addJobInBackground(job);
     }
 
