@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatcher;
 import org.robolectric.Robolectric;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -78,7 +79,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         match.setMatchDate(new Date());
         when(service.getNextMatchWhereMyFavoriteTeamPlays(eq(FAVOURITE_TEAM_ID))).thenReturn(match);
 
-        job.init();
+        job.init(false);
         job.onRun();
 
         verify(bus).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
@@ -91,7 +92,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         match.setMatchDate(new Date());
         when(service.getNextMatchWhereMyFavoriteTeamPlays(eq(FAVOURITE_TEAM_ID))).thenReturn(match);
 
-        job.init();
+        job.init(false);
         job.onRun();
 
         verify(bus).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
@@ -115,7 +116,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         //when(service.getWatchesFromUsers(anyList(), anyLong())).thenReturn()
         //when(service.getNextMatchWhereMyFavoriteTeamPlays())
 
-        job.init();
+        job.init(false);
         job.onRun();
 
         ArgumentCaptor<WatchingInfoResult> argumentCaptor = ArgumentCaptor.forClass(WatchingInfoResult.class);
@@ -140,8 +141,8 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         expectedWatches.add(getWatch(4L));
         expectedWatches.add(getWatch(6L));
 
-        when(service.getWatchesFromUsers(eq(userIds))).thenReturn(expectedWatches);
-        job.init();
+        when(service.getWatchesFromUsers(eq(userIds), anyLong())).thenReturn(expectedWatches);
+        job.init(false);
         //List<WatchEntity> watches = job.getWatchesFromUsers(userIds);
     }
 
