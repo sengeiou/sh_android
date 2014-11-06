@@ -145,6 +145,7 @@ public class WatchManager extends AbstractManager{
         String[] whereArguments = new String[]{String.valueOf(idUser),String.valueOf(idMatch)};
         Cursor queryResult = db.query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
         if(queryResult.getCount()>0){
+            queryResult.moveToFirst();
              watchEntity = watchMapper.fromCursor(queryResult);
         }
         queryResult.close();

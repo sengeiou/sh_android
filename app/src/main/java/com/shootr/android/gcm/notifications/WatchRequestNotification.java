@@ -30,11 +30,9 @@ public class WatchRequestNotification extends CommonNotification {
         this.text = text;
         this.userWatchingModel = userWatchingModel;
         this.picasso = picasso;
-
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder) {
-
         builder.setContentTitle(userWatchingModel.getUserName());
         builder.setContentText(text);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));

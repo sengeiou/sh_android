@@ -111,8 +111,10 @@
 
     <!-- Watching requests -->
     <string name="watching_request_subtitle_none">Now Playing</string>
-    <string name="watching_request_subtitle_one">%s is watching now</string>
-    <string name="watching_request_subtitle_two">%1$s &amp; %2$s are watching now</string>
-    <string name="watching_request_subtitle_more">%d people are watching now</string>
+    <string name="watching_request_subtitle_one">%s is now watching</string>
+    <string name="watching_request_subtitle_two">%1$s &amp; %2$s are now watching</string>
+    <string name="watching_request_subtitle_more">%d people are now watching</string>
     <string name="watching_match_question">Watching %s?</string>
+            <!--Push Watching requests-->
+    <string name="watching_request_push">Watching %s</string>
 </resources>

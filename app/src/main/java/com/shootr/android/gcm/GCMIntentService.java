@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.manager.MatchManager;
@@ -90,7 +91,7 @@ public class GCMIntentService extends IntentService {
                     receivedStartMatch(text);
                     break;
                 case PUSH_TYPE_WATCH_REQUEST:
-                    receivedWatchRequest(parameters, text);
+                    receivedWatchRequest(parameters);
                     break;
                 default:
                     receivedUnknown(parameters);
@@ -121,15 +122,16 @@ public class GCMIntentService extends IntentService {
         }
     }
 
-    private void receivedWatchRequest(JSONObject parameters, String text) throws JSONException, IOException {
+    private void receivedWatchRequest(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong(ID_USER);
         Long idMatch = parameters.getLong(ID_MATCH);
-        WatchEntity watchEntity = service.getWatchStatus(idUser,idMatch);
+        WatchEntity watchEntity = service.getWatchStatus(idUser, idMatch);
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
         UserEntity user = userManager.getUserByIdUser(idUser);
         watchManager.createUpdateWatch(watchEntity);
         matchManager.saveMatch(matchEntity);
         userManager.saveUser(user);
+        String text = getResources().getString(R.string.watching_text,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName());
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
             UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
