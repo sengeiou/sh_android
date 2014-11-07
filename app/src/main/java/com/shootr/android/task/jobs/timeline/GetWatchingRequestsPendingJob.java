@@ -23,8 +23,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequestPendingEvent> {
@@ -51,21 +54,21 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
     }
 
     @Override protected void run() throws SQLException, IOException {
-        List<WatchingRequestModel> watchingRequestModelResultList = new ArrayList<>();
+        Set<WatchingRequestModel> watchingRequestModelResultCollection = new HashSet<>();
 
         WatchingRequestModel watchingRequestForMyTeam = getWatchingRequestForMyTeam();
         if (watchingRequestForMyTeam != null) {
-            watchingRequestModelResultList.add(watchingRequestForMyTeam);
+            watchingRequestModelResultCollection.add(watchingRequestForMyTeam);
         }
 
         List<WatchingRequestModel> watchingRequestsIamNotWatching =
           getWatchingRequestsForMatchesThatMyFollowingAreWatchingAndIAmNot();
 
         if (watchingRequestsIamNotWatching != null) {
-            watchingRequestModelResultList.addAll(watchingRequestsIamNotWatching);
+            watchingRequestModelResultCollection.addAll(watchingRequestsIamNotWatching);
         }
 
-        postSuccessfulEvent(new WatchingRequestPendingEvent(watchingRequestModelResultList));
+        postSuccessfulEvent(new WatchingRequestPendingEvent(new ArrayList<>(watchingRequestModelResultCollection)));
     }
 
     private List<WatchingRequestModel> getWatchingRequestsForMatchesThatMyFollowingAreWatchingAndIAmNot() {

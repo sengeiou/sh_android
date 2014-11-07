@@ -39,4 +39,17 @@ public class WatchingRequestModel {
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WatchingRequestModel that = (WatchingRequestModel) o;
+        return matchId.equals(that.matchId);
+    }
+
+    @Override
+    public int hashCode() {
+        return matchId.hashCode();
+    }
 }
