@@ -56,8 +56,6 @@ public class InfoListBuilder {
             }
         }
     };
-    private List<Long> teamsAddedIds = new ArrayList<>();
-
 
     protected InfoListBuilder(UserEntity currentUser, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper) {
         this.currentUser = currentUser;
@@ -78,21 +76,13 @@ public class InfoListBuilder {
 
     public void provideMatches(List<MatchEntity> matches) {
         for (MatchEntity matchEntity : matches) {
-            Long local = matchEntity.getIdLocalTeam();
-            Long visitor = matchEntity.getIdVisitorTeam();
-            if (!teamsAddedIds.contains(local) && !teamsAddedIds.contains(visitor)) {
-                matchEntities.put(matchEntity.getIdMatch(), matchEntity);
-                teamsAddedIds.add(local);
-                teamsAddedIds.add(visitor);
-            }
+            matchEntities.put(matchEntity.getIdMatch(), matchEntity);
         }
     }
 
     public void putMyTeamMatch(MatchEntity myTeamNextMatch) {
         this.myTeamNextMatch = myTeamNextMatch;
         matchEntities.put(myTeamNextMatch.getIdMatch(), myTeamNextMatch);
-        teamsAddedIds.add(myTeamNextMatch.getIdLocalTeam());
-        teamsAddedIds.add(myTeamNextMatch.getIdVisitorTeam());
     }
 
     public Map<MatchModel, Collection<UserWatchingModel>> build() {
