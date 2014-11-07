@@ -29,7 +29,7 @@ public abstract class ShootrBaseJobTestAbstract {
         networkUtil = mock(NetworkUtil.class);
     }
 
-    @Test @Ignore
+    @Test
     public void postConnectionNotAvailableEventWhenConnectionNotAvailable() throws Throwable {
         when(networkUtil.isConnected(any(Context.class))).thenReturn(false);
 

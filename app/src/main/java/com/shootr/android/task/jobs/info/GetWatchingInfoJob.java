@@ -40,12 +40,14 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private WatchManager watchManager;
     private MatchManager matchManager;
     private FollowManager followManager;
+    private InfoListBuilderFactory infoListBuilderFactory;
     private boolean postOnlineInfoOnly;
+
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
-      MatchManager matchManager) {
+      MatchManager matchManager, InfoListBuilderFactory infoListBuilderFactory) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.sessionManager = sessionManager;
@@ -55,6 +57,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         this.watchManager = watchManager;
         this.matchManager = matchManager;
         this.followManager = followManager;
+        this.infoListBuilderFactory = infoListBuilderFactory;
         this.setOpenHelper(openHelper);
     }
 
@@ -82,12 +85,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
       throws IOException, SQLException {
-        InfoListBuilder infoListBuilder =
-          new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
-        MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
-        if (nextMatchFromMyTeam != null) {
-            infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
-        }
+        InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionManager, matchModelMapper,userWatchingModelMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
             infoListBuilder.setWatches(watches);
@@ -95,6 +93,10 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
             infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
         }
 
+        MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
+        if (nextMatchFromMyTeam != null) {
+            infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
+        }
 
         return infoListBuilder.build();
     }

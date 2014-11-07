@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
@@ -178,6 +179,10 @@ public class DataModule {
 
     @Provides @Singleton NotificationBuilderFactory provideNotificationBuilderFactory() {
         return new NotificationBuilderFactory();
+    }
+
+    @Provides @Singleton InfoListBuilderFactory provideInfoListBuilderFactory(){
+        return new InfoListBuilderFactory();
     }
 
     @Provides LogTreeFactory provideLogTreeFactory() {
