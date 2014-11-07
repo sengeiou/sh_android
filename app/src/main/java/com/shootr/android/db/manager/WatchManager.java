@@ -28,7 +28,7 @@ public class WatchManager extends AbstractManager{
         String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
           + "w."+WatchTable.ID_MATCH+" = m."+MatchTable.ID_MATCH
           + " WHERE m."+MatchTable.STATUS+" IN (0,1)"
-          + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+") AND w."+WatchTable.STATUS+"= 1;";
+          + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+");";
 
         String[] whereArguments = new String[userIds.size()];
         for (int i = 0; i < userIds.size(); i++) {
