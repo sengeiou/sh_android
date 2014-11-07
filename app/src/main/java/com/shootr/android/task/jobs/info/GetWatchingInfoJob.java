@@ -84,6 +84,10 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
       throws IOException, SQLException {
         InfoListBuilder infoListBuilder =
           new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
+        MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
+        if (nextMatchFromMyTeam != null) {
+            infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
+        }
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
             infoListBuilder.setWatches(watches);
@@ -91,10 +95,6 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
             infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
         }
 
-        MatchEntity nextMatchFromMyTeam = getNextMatchWhereMyFavoriteTeamPlays(useOnlineData);
-        if (nextMatchFromMyTeam != null) {
-            infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
-        }
 
         return infoListBuilder.build();
     }
