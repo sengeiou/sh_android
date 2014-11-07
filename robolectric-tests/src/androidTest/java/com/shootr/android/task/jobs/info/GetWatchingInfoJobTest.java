@@ -38,14 +38,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.robolectric.Robolectric;
 
-import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -69,7 +67,6 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
     private SQLiteOpenHelper openHelper;
     private WatchManager watchManager;
     private MatchManager matchManager;
-    //private NetworkUtil networkUtil;
 
     private InfoListBuilderFactory infoListBuilderFactory;
 
@@ -92,9 +89,10 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         infoListBuilder = mock(InfoListBuilder.class);
         infoListBuilderFactory = mock(InfoListBuilderFactory.class);
 
-        when(infoListBuilderFactory.getInfoListBuilder(sessionManager,matchModelMapper,userWatchingModelMapper)).thenReturn(infoListBuilder);
+        when(infoListBuilderFactory.getInfoListBuilder(sessionManager, matchModelMapper,
+          userWatchingModelMapper)).thenReturn(infoListBuilder);
 
-        Map<MatchModel,Collection<UserWatchingModel>> map = new HashMap<>();
+        Map<MatchModel, Collection<UserWatchingModel>> map = new HashMap<>();
         MatchModel match = new MatchModel();
         match.setLocalTeamId(1L);
         match.setVisitorTeamId(1L);
@@ -103,7 +101,6 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         match.setDatetime("fecha");
         match.setLive(true);
         match.setTitle("titulo");
-
 
         Collection<UserWatchingModel> collection = new ArrayList<>();
         UserWatchingModel userWatchingModel = new UserWatchingModel();
@@ -114,7 +111,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         userWatchingModel.setStatus("fadsad");
         collection.add(userWatchingModel);
 
-        map.put(match,collection);
+        map.put(match, collection);
 
         when(infoListBuilder.build()).thenReturn(map);
 
@@ -130,7 +127,10 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
         when(service.getNextMatchWhereMyFavoriteTeamPlays(eq(FAVOURITE_TEAM_ID))).thenReturn(match2);
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
-        job = new GetWatchingInfoJob(Robolectric.application,bus,networkUtil,service,sessionManager,matchModelMapper,userWatchingModelMapper,userManager,followManager,openHelper, watchManager,matchManager, infoListBuilderFactory);
+        job =
+          new GetWatchingInfoJob(Robolectric.application, bus, networkUtil, service, sessionManager, matchModelMapper,
+            userWatchingModelMapper, userManager, followManager, openHelper, watchManager, matchManager,
+            infoListBuilderFactory);
     }
 
     @Override protected ShootrBaseJob getSystemUnderTest() {
@@ -146,7 +146,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
         job.init(false);
         job.onRun();
-        verify(bus).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
+        verify(bus, times(2)).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
     }
 
     @Test
@@ -161,82 +161,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
         job.init(false);
         job.onRun();
-        verify(bus).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
-        //ArgumentCaptor<WatchingInfoResult> argumentCaptor = ArgumentCaptor.forClass(WatchingInfoResult.class);
-        //verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(matchIds,sessionManager)));
-    }
-
-    @Test
-    public void resultContainsMatchesThatIAmWatching() throws Throwable {
-
-        List<WatchEntity> watches = new ArrayList<>();
-        WatchEntity watchEntity = new WatchEntity();
-        watchEntity.setIdMatch(1L);
-        watchEntity.setStatus(1L);
-        watchEntity.setIdUser(1L);
-
-        WatchEntity watchEntity2 = new WatchEntity();
-        watchEntity2.setIdMatch(2L);
-        watchEntity2.setStatus(0L);
-        watchEntity2.setIdUser(2L);
-        watches.add(watchEntity);
-        watches.add(watchEntity2);
-
-
-        UserWatchingModel userWatchingModel = new UserWatchingModel();
-        userWatchingModel.setIdUser(watchEntity.getIdUser());
-        UserWatchingModel userWatchingModel2 = new UserWatchingModel();
-        userWatchingModel2.setIdUser(watchEntity2.getIdUser());
-
-        Collection<UserWatchingModel> userWatchingModels = new ArrayList<>();
-        userWatchingModels.add(userWatchingModel);
-        userWatchingModels.add(userWatchingModel2);
-
-        MatchEntity match = new MatchEntity();
-        match.setIdLocalTeam(1L);
-        match.setIdLocalTeam(2L);
-        match.setIdMatch(3L);
-        match.setStatus(0L);
-        match.setLocalTeamName("i");
-        match.setVisitorTeamName("j");
-
-        List<Long> matchIds = new ArrayList<>();
-        matchIds.add(match.getIdMatch());
-
-        when(service.getWatchesFromUsers(anyList(), anyLong())).thenReturn(watches);
-        when(service.getNextMatchWhereMyFavoriteTeamPlays(anyLong())).thenReturn(match);
-
-        job.init(false);
-        job.onRun();
-
-        verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(sessionManager)));
-
-    }
-
-    @Test@Ignore
-    public void retrieveWatchesFromUsersDoesSomething() throws Throwable {
-
-        List<Long> userIds = new ArrayList<>();
-        userIds.add(1L);
-        userIds.add(3L);
-        userIds.add(4L);
-        userIds.add(5L);
-        userIds.add(6L);
-
-        List<WatchEntity> expectedWatches = new ArrayList<>();
-        expectedWatches.add(getWatch(1L));
-        expectedWatches.add(getWatch(3L));
-        expectedWatches.add(getWatch(4L));
-        expectedWatches.add(getWatch(6L));
-
-        InfoListBuilder infoLisBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), matchModelMapper, userWatchingModelMapper);
-        Map<MatchModel,Collection<UserWatchingModel>> map = new HashMap<>();
-        when(infoLisBuilder.build()).thenReturn(map);
-        when(service.getWatchesFromUsers(eq(userIds), anyLong())).thenReturn(expectedWatches);
-        job.init(false);
-        job.onRun();
-
-
+        verify(bus, times(2)).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
     }
 
     private WatchEntity getWatch(Long userId) {
@@ -248,57 +173,19 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
     }
 
     @Test
-    public void postOnceWhenOnlineInfoOnly() throws Throwable{
+    public void postOnceWhenOnlineInfoOnly() throws Throwable {
         WatchingInfoResult event = mock(WatchingInfoResult.class);
         job.init(true);
         job.onRun();
-        verify(bus,atMost(1)).post(event);
+        verify(bus, atMost(1)).post(event);
     }
 
     @Test
-    public void postTwiceIfOnlineInfoIsFalse() throws Throwable{
+    public void postTwiceIfOnlineInfoIsFalse() throws Throwable {
         WatchingInfoResult event = mock(WatchingInfoResult.class);
         job.init(false);
         job.onRun();
-        verify(bus,atMost(2)).post(event);
-    }
-
-
-    public static class ContainsMatchesIamWatchingMatches extends ArgumentMatcher<WatchingInfoResult>{
-
-        SessionManager sessionManager;
-        public ContainsMatchesIamWatchingMatches(SessionManager sessionManager){
-            this.sessionManager = sessionManager;
-        }
-
-        @Override public boolean matches(Object argument) {
-            boolean res = false;
-            if(argument instanceof  WatchingInfoResult){
-                res = listContainsMatchesIamWatching((WatchingInfoResult)argument);
-            }
-            return res;
-        }
-        public boolean listContainsMatchesIamWatching(WatchingInfoResult event) {
-            Map<MatchModel, Collection<UserWatchingModel>> resultMap = event.getResult();
-            for (MatchModel matchModel : resultMap.keySet()) {
-                if (isMeWatchingTheMatch(matchModel, resultMap.get(matchModel))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public boolean isMeWatchingTheMatch(MatchModel matchModel, Collection<UserWatchingModel> userWatchingModels){
-            for(UserWatchingModel userWatchingModel : userWatchingModels){
-                if(userWatchingModel.getIdUser().equals(sessionManager.getCurrentUserId())){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-
+        verify(bus, atMost(2)).post(event);
     }
 
     public static class ContainsMatchPlayedByTeamMatcher extends ArgumentMatcher<WatchingInfoResult> {
@@ -332,7 +219,4 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
               matchModel.getVisitorTeamId());
         }
     }
-
-
-
 }
