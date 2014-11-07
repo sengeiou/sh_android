@@ -91,7 +91,7 @@ public class GCMIntentService extends IntentService {
                     receivedFollow(parameters);
                     break;
                 case PUSH_TYPE_START_MATCH:
-                    receivedStartMatch(text);
+                    receivedStartMatch(parameters);
                     break;
                 case PUSH_TYPE_WATCH_REQUEST:
                     receivedWatchRequest(parameters);
@@ -108,7 +108,11 @@ public class GCMIntentService extends IntentService {
         }
     }
 
-    private void receivedStartMatch(String text){
+    private void receivedStartMatch(JSONObject parameters) throws JSONException, IOException {
+        Long idMatch = parameters.getLong(ID_MATCH);
+        MatchEntity match = service.getMatchByIdMatch(idMatch);
+        String text = match.getLocalTeamName()+"-"+match.getVisitorTeamName();
+
         notificationManager.sendMatchStartedNotification(text);
     }
 

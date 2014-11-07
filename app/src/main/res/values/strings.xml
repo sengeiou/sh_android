@@ -106,7 +106,7 @@
 
     <!--Info-->
     <string name="activity_empty_info">No people watching</string>
-    <string name="enter_to_confirm">Touch to confirm status</string>
+    <string name="enter_to_confirm">Now Playing</string>
     <string name="following_notif_text">Touch to access the profile</string>
 
     <!-- Watching requests -->
