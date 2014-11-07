@@ -19,6 +19,7 @@ apply plugin: 'crashlytics'
 apply plugin: 'spoon'
 //apply plugin: 'hugo'
 apply plugin: "sonar-runner"
+apply plugin: 'maven'
 
 
 
@@ -239,4 +240,14 @@ afterEvaluate { project ->
     project.tasks.findAll { it.name.startsWith('prepare') && it.name.endsWith('Dependencies') }.each { Task task ->
         task.dependsOn stripPlayServices
     }
+}
+
+task writeNewPom << {
+    pom {
+        project {
+            groupId 'com.shooter'
+            artifactId 'android'
+            version android.defaultConfig.versionCode
+        }
+    }.writeTo("$buildDir/pom.xml")
 }
