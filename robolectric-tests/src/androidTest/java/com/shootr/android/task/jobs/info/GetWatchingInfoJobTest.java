@@ -161,14 +161,14 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
         job.init(false);
         job.onRun();
-
-        ArgumentCaptor<WatchingInfoResult> argumentCaptor = ArgumentCaptor.forClass(WatchingInfoResult.class);
-        verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(matchIds,sessionManager)));
+        verify(bus).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
+        //ArgumentCaptor<WatchingInfoResult> argumentCaptor = ArgumentCaptor.forClass(WatchingInfoResult.class);
+        //verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(matchIds,sessionManager)));
     }
 
     @Test
     public void resultContainsMatchesThatIAmWatching() throws Throwable {
-        WatchingInfoResult event = mock(WatchingInfoResult.class);
+
         List<WatchEntity> watches = new ArrayList<>();
         WatchEntity watchEntity = new WatchEntity();
         watchEntity.setIdMatch(1L);
@@ -181,6 +181,16 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         watchEntity2.setIdUser(2L);
         watches.add(watchEntity);
         watches.add(watchEntity2);
+
+
+        UserWatchingModel userWatchingModel = new UserWatchingModel();
+        userWatchingModel.setIdUser(watchEntity.getIdUser());
+        UserWatchingModel userWatchingModel2 = new UserWatchingModel();
+        userWatchingModel2.setIdUser(watchEntity2.getIdUser());
+
+        Collection<UserWatchingModel> userWatchingModels = new ArrayList<>();
+        userWatchingModels.add(userWatchingModel);
+        userWatchingModels.add(userWatchingModel2);
 
         MatchEntity match = new MatchEntity();
         match.setIdLocalTeam(1L);
@@ -199,10 +209,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         job.init(false);
         job.onRun();
 
-        verify(bus).post(event);
-
-        ArgumentCaptor<WatchingInfoResult> argumentCaptor = ArgumentCaptor.forClass(WatchingInfoResult.class);
-        verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(matchIds,sessionManager)));
+        verify(bus).post(argThat(new ContainsMatchesIamWatchingMatches(sessionManager)));
 
     }
 
@@ -259,10 +266,8 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
     public static class ContainsMatchesIamWatchingMatches extends ArgumentMatcher<WatchingInfoResult>{
 
-        private List<Long> matchIds;
-        private SessionManager sessionManager;
-        public ContainsMatchesIamWatchingMatches(List<Long> matchIds, SessionManager sessionManager){
-            this.matchIds = matchIds;
+        SessionManager sessionManager;
+        public ContainsMatchesIamWatchingMatches(SessionManager sessionManager){
             this.sessionManager = sessionManager;
         }
 
