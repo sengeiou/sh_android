@@ -49,9 +49,8 @@ android {
 
 
         versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
-        versionName "0.1"
-        artifactVersion = versionName + "-" + versionCode
-        project.ext.set("archivesBaseName", "Shootr-" + artifactVersion);
+        versionName "0.1."+versionCode+"-SNAPSHOT"
+        project.ext.set("archivesBaseName", "Shootr-" + versionName);
 
         resConfigs "es", "en"
         resConfigs "hdpi","xhdpi","xxhdpi"
@@ -253,7 +252,7 @@ uploadArchives {
             repository(url: "http://nexus.fav24.com/content/repositories/snapshots/") {
                 authentication(userName: "deployment", password: "deployment123")
             }
-            pom.version = android.defaultConfig.artifactVersion
+            pom.version = android.defaultConfig.versionName
             pom.artifactId = 'Shootr'
             pom.groupId = "com.shooter.android"
             uniqueVersion = false
