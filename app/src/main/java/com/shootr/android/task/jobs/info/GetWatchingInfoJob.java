@@ -117,7 +117,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         List<MatchEntity> matches = matchManager.getMatchesByIds(matchIds);
         if (useOnlineData) {
             List<MatchEntity> matchesFromServer = service.getMatchesByIds(matchIds);
-            if (matchesFromServer != null && !matchesFromServer.isEmpty()) {
+            if (matchesFromServer != null) {
                 matches = matchesFromServer;
                 saveMatchesInDatabase(matchesFromServer);
             }
