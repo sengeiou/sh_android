@@ -253,7 +253,7 @@ uploadArchives {
             repository(url: "http://nexus.fav24.com/content/repositories/snapshots/") {
                 authentication(userName: "deployment", password: "deployment123")
             }
-            pom.version = android.defaultConfig.versionName+android.defaultConfig.versionCode+""
+            pom.version = android.defaultConfig.artifactVersion
             pom.artifactId = 'Shootr'
             pom.groupId = "com.shooter.android"
             uniqueVersion = false
