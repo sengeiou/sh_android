@@ -255,6 +255,7 @@ uploadArchives {
             pom.version = "0.0.1."+android.defaultConfig.versionCode+"-SNAPSHOT"
             pom.artifactId = 'android'
             pom.groupId = "com.shooter"
+            uniqueVersion = false
         }
     }
 }
