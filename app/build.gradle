@@ -249,10 +249,10 @@ afterEvaluate { project ->
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://nexus.fav24.com/content/repositories/snapshots") {
+            repository(url: "http://nexus.fav24.com/content/repositories/snapshots/") {
                 authentication(userName: "deployment", password: "deployment123")
             }
-            pom.version = android.defaultConfig.versionCode
+            pom.version = "0.0.1."+android.defaultConfig.versionCode+"-SNAPSHOT"
             pom.artifactId = 'android'
             pom.groupId = "com.shooter"
         }
