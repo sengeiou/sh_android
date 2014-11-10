@@ -253,8 +253,8 @@ uploadArchives {
                 authentication(userName: "deployment", password: "deployment123")
             }
             pom.version = android.defaultConfig.versionCode
-            pom.artifactId = 'com.shooter'
-            pom.groupId = "android"
+            pom.artifactId = 'android'
+            pom.groupId = "com.shooter"
         }
     }
 }
