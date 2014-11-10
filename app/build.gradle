@@ -50,7 +50,7 @@ android {
 
         versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
         versionName "0.1"
-        artifactVersion versionName + "-" + versionCode
+        artifactVersion = versionName + "-" + versionCode
         project.ext.set("archivesBaseName", "Shootr-" + artifactVersion);
 
         resConfigs "es", "en"
