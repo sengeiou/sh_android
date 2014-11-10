@@ -30,6 +30,9 @@ repositories {
     mavenLocal()
     maven { url 'http://mente.github.io/facebook-api-android-aar' }
     maven { url 'http://download.crashlytics.com/maven' }
+    maven {
+        url "http://nexus.fav24.com/content/groups/public"
+    }
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -242,12 +245,16 @@ afterEvaluate { project ->
     }
 }
 
-task writeNewPom << {
-    pom {
-        project {
-            groupId 'com.shooter'
-            artifactId 'android'
-            version android.defaultConfig.versionCode
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://nexus.fav24.com/content/repositories/snapshots") {
+                authentication(userName: "deployment", password: "deployment123")
+            }
+            pom.version = android.defaultConfig.versionCode
+            pom.artifactId = 'com.shooter'
+            pom.groupId = "android"
         }
-    }.writeTo("$buildDir/pom.xml")
+    }
 }
