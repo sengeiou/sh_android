@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.MatchModel;
@@ -29,18 +30,24 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
     private Picasso picasso;
+    private View.OnClickListener editButtonListener;
     private Long currentUserId;
     private int watchingColorLive;
     private int watchingColorNotLive;
+    private final String watchingText;
+    private final String notWatchingText;
 
-    public InfoListAdapter(Context context, Picasso picasso, Long currentUserId) {
+    public InfoListAdapter(Context context, Picasso picasso, Long currentUserId, View.OnClickListener editButtonListener) {
         super(context);
         this.picasso = picasso;
+        this.editButtonListener = editButtonListener;
         this.itemsList = new ArrayList<>();
         this.currentUserId = currentUserId;
         Resources resources = context.getResources();
         this.watchingColorLive = resources.getColor(R.color.watching_live);
         this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
+        this.watchingText = resources.getString(R.string.watching_text);
+        this.notWatchingText = resources.getString(R.string.watching_not_text);
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
@@ -113,7 +120,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
                 break;
             case TYPE_ME:
                 v = inflater.inflate(R.layout.item_list_info_user_join, container, false);
-                v.setTag(new UserViewHolder(v));
+                v.setTag(new UserViewHolder(v, editButtonListener));
                 break;
             default:
                 throwItemUnknownException(position, "???");
@@ -146,8 +153,9 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public void bindUser(UserWatchingModel user, int position, View view) {
         UserViewHolder vh = (UserViewHolder) view.getTag();
+        vh.position = position;
         vh.name.setText(user.getUserName());
-        vh.watching.setText(user.getStatus());
+        vh.watching.setText(user.isWatching() ? watchingText : notWatchingText);
         if (user.isLive()) {
             vh.watching.setTextColor(watchingColorLive);
         } else {
@@ -158,8 +166,29 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         } else {
             picasso.load(R.drawable.ic_contact_picture_default);
         }
+        if (vh.edit != null) {
+            vh.edit.setTag(vh);
+        }
     }
 
+    public MatchModel getMatchCorrespondingToItem(int position) {
+        boolean isItemMatchType = false;
+        boolean moreItemsAbove = true;
+        Object currentItem = null;
+        int currentPosition = position;
+        while (!isItemMatchType && moreItemsAbove) {
+            currentItem = getItem(currentPosition );
+            isItemMatchType = currentItem instanceof MatchModel;
+            moreItemsAbove = currentPosition  > 0;
+            currentPosition--;
+        }
+
+        if (isItemMatchType) {
+            return (MatchModel) currentItem;
+        } else {
+            return null;
+        }
+    }
 
     private void throwItemUnknownException(int position, String className) {
         throw new RuntimeException(
@@ -179,9 +208,16 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         @InjectView(R.id.info_user_avatar) ImageView avatar;
         @InjectView(R.id.info_user_name) TextView name;
         @InjectView(R.id.info_user_watching) TextView watching;
+        @Optional @InjectView(R.id.info_user_edit) View edit;
+        public int position;
 
         public UserViewHolder(View view) {
             ButterKnife.inject(this, view);
+        }
+
+        public UserViewHolder(View view, View.OnClickListener editButtonClickListener) {
+            this(view);
+            edit.setOnClickListener(editButtonClickListener);
         }
 
     }

@@ -15,6 +15,7 @@ import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
+import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
@@ -121,6 +122,8 @@ import static android.content.Context.MODE_PRIVATE;
     GCMIntentService.class,
 
     LogTreeFactory.class,
+
+    EditInfoPresenter.class,
 
   },
   includes = {

@@ -104,6 +104,14 @@
               android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
+        <activity
+          android:name=".ui.activities.EditInfoActivity">
+
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="com.shootr.android.ui.activities.InfoActivity" />
+        </activity>
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"

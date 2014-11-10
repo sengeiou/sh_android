@@ -7,7 +7,6 @@ import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.ui.model.MatchModel;
-import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
@@ -17,12 +16,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +34,6 @@ public class InfoListBuilderTest {
 
     private static final String USERNAME = "username";
     private static final Long IRRELEVANT_MATCH_ID = 1L;
-    public static final String WATCHING = "Watching";
 
     private MatchModelMapper matchModelMapper;
     private UserWatchingModelMapper userWatchingModelMapper;
@@ -91,7 +87,7 @@ public class InfoListBuilderTest {
         assertThat(user1.getIdUser().equals(CURRENT_USER_ID) || user2.getIdUser().equals(CURRENT_USER_ID)).isTrue();
         assertThat(user1.getIdUser()).isNotEqualTo(user2.getIdUser());
 
-        assertThat(user1.getIdUser().equals(CURRENT_USER_ID) && !user1.getStatus().equalsIgnoreCase(WATCHING) || user2.getIdUser().equals(CURRENT_USER_ID) && !user2.getStatus().equalsIgnoreCase(WATCHING)).isTrue();
+        assertThat(user1.getIdUser().equals(CURRENT_USER_ID) && !user1.isWatching() || user2.getIdUser().equals(CURRENT_USER_ID) && !user2.isWatching()).isTrue();
     }
 
     private UserEntity getCurrentUser() {

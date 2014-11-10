@@ -10,7 +10,7 @@ public class UserWatchingModel implements Serializable {
     private String photo;
     private boolean live;
 
-    private String status; //TODO cambiar por valor
+    private boolean watching;
 
     public Long getIdUser() {
         return idUser;
@@ -44,12 +44,12 @@ public class UserWatchingModel implements Serializable {
         this.photo = photo;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean isWatching() {
+        return watching;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setWatching(boolean watching) {
+        this.watching = watching;
     }
 
     @Override

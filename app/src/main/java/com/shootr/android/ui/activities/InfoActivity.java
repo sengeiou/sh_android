@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.util.ArrayMap;
@@ -36,6 +37,7 @@ import timber.log.Timber;
 
 public class InfoActivity extends BaseSignedInActivity {
 
+    private static final int REQUEST_CODE_EDIT = 1;
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
@@ -58,10 +60,26 @@ public class InfoActivity extends BaseSignedInActivity {
         setupActionBar();
         ButterKnife.inject(this);
 
-        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId());
+        View.OnClickListener editInfoClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                //TODO demasiado acoplado al adapter y viewholder, buscar un patrón mejor
+                int position = ((InfoListAdapter.UserViewHolder) v.getTag()).position;
+                UserWatchingModel user = (UserWatchingModel) adapter.getItem(position);
+                MatchModel matchCorrespondingToItem = adapter.getMatchCorrespondingToItem(position);
+
+                editInfoForMatch(matchCorrespondingToItem, user);
+            }
+        };
+
+        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId(), editInfoClickListener);
 
         listView.setAdapter(adapter);
         retrieveInfoList();
+    }
+
+    private void editInfoForMatch(MatchModel match, UserWatchingModel user) {
+        Intent editIntent = EditInfoActivity.getIntent(this, match.getIdMatch(), user.isWatching(), match.getTitle());
+        startActivityForResult(editIntent, REQUEST_CODE_EDIT);
     }
 
     @OnItemClick(R.id.info_items_list)
@@ -71,36 +89,11 @@ public class InfoActivity extends BaseSignedInActivity {
         startActivity(ProfileContainerActivity.getIntent(this, idUser));
     }
 
-    private Map<MatchModel, List<UserWatchingModel>> getDummyInfo() {
-        ArrayMap<MatchModel, List<UserWatchingModel>> resMap = new ArrayMap<>();
-
-        MatchModel match = new MatchModel();
-        match.setTitle("Atlético-Barcelona");
-        MatchModel match2 = new MatchModel();
-        match2.setTitle("Sevilla-Manchester City");
-        MatchModel match3 = new MatchModel();
-        match3.setTitle("R.Madrid-La Palma del Condado");
-
-        UserWatchingModel user = new UserWatchingModel();
-        user.setUserName("Dummy");
-        user.setStatus("Watching");
-        user.setPhoto("http://www.pak101.com/funnypictures/Animals/2012/8/2/the_monopoly_cat_vbgkd_Pak101(dot)com.jpg");
-
-        UserWatchingModel me = new UserWatchingModel();
-        me.setIdUser(sessionManager.getCurrentUserId());
-        me.setUserName("rafa");
-        me.setStatus("Not watching");
-        me.setPhoto("http://img1.wikia.nocookie.net/__cb20110606042636/es.futurama/images/c/c6/Futurama_fry_looking_squint2.jpg");
-
-        List<UserWatchingModel> userList = new ArrayList<>();
-        userList.add(me);
-        userList.add(user);
-        userList.add(user);
-
-        resMap.put(match, userList);
-        resMap.put(match2, userList);
-        resMap.put(match3, userList);
-        return resMap;
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
+            retrieveInfoList();
+        }
     }
 
     private void setupActionBar() {

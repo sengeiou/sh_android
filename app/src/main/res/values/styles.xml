@@ -11,6 +11,7 @@
         <item name="android:textColorLink">@color/links</item>
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
         <item name="android:textCursorDrawable">@null</item>
+        <item name="colorSwitchThumbNormal">@color/switch_disabled</item>
     </style>
 
     <style name="ToolBar">
@@ -165,4 +166,5 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <color name="switch_disabled">#ececec</color>
 </resources>
