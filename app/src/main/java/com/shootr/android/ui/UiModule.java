@@ -1,5 +1,6 @@
 package com.shootr.android.ui;
 
+import com.shootr.android.ui.activities.EditInfoActivity;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -29,6 +30,7 @@ import javax.inject.Singleton;
                 UserFollowsContainerActivity.class,
                 FindFriendsActivity.class,
                 InfoActivity.class,
+                EditInfoActivity.class,
 
         },
         complete = false

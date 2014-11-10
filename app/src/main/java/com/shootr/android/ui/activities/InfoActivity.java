@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.util.ArrayMap;
@@ -58,10 +59,23 @@ public class InfoActivity extends BaseSignedInActivity {
         setupActionBar();
         ButterKnife.inject(this);
 
-        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId());
+        View.OnClickListener editInfoClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                //TODO demasiado acoplado al adapter y viewholder, buscar un patrón mejor
+                int position = ((InfoListAdapter.UserViewHolder) v.getTag()).position;
+                MatchModel matchCorrespondingToItem = adapter.getMatchCorrespondingToItem(position);
+                editInfoForMatch(matchCorrespondingToItem.getIdMatch());
+            }
+        };
+
+        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId(), editInfoClickListener);
 
         listView.setAdapter(adapter);
         retrieveInfoList();
+    }
+
+    private void editInfoForMatch(Long idMatch) {
+        startActivity(new Intent(this, EditInfoActivity.class));
     }
 
     @OnItemClick(R.id.info_items_list)
