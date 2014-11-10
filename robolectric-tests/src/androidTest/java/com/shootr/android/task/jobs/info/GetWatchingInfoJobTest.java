@@ -108,7 +108,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         userWatchingModel.setFavoriteTeamId(1L);
         userWatchingModel.setPhoto("afdsaf");
         userWatchingModel.setLive(true);
-        userWatchingModel.setStatus("fadsad");
+        userWatchingModel.setWatching(true);
         collection.add(userWatchingModel);
 
         map.put(match, collection);
