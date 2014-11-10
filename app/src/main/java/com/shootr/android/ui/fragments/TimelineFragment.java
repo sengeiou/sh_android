@@ -3,6 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -26,12 +27,15 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
+import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
 import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
 import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.model.WatchingRequestModel;
+import com.shootr.android.util.Utils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -94,6 +98,7 @@ public class TimelineFragment extends BaseFragment
     private boolean shouldPoll;
     private UserEntity currentUser;
     private List<WatchingRequestModel> watchingRequestsPendingStack;
+    private int numNotificationBadge;
 
 
      /* ---- Lifecycle methods ---- */
@@ -153,8 +158,20 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        startUpdateNotificationBadge();
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
+    }
+
+    public void startUpdateNotificationBadge(){
+        GetWatchingPeopleNumberJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingPeopleNumberJob.class);
+        jobManager.addJobInBackground(job);
+    }
+
+    @Subscribe
+    public void onNumberReceived(WatchingPeopleNumberEvent event){
+        numNotificationBadge = event.getResult();
+        updateNotificationBadge(numNotificationBadge);
     }
 
     @Override
@@ -237,6 +254,7 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void onInfoDataRefreshed(WatchingInfoResult event) {
+        startUpdateNotificationBadge();
         startRetrievingWatchingRequests();
     }
 
@@ -247,6 +265,8 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void onRequestWatchByPush(RequestWatchByPushEvent event){
+
+        startUpdateNotificationBadge();
         startRetrievingWatchingRequests();
     }
 
@@ -312,13 +332,29 @@ public class TimelineFragment extends BaseFragment
         showNextWatchingRequest();
     }
 
+    private void updateNotificationBadge(int count){
+        numNotificationBadge = count;
+        getActivity().invalidateOptionsMenu();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.timeline, menu);
-        // Little hack for ActionBarCompat
+
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menu.findItem(R.id.menu_info).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
+        MenuItem menuItem = menu .findItem(R.id.menu_info);
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
+        if(numNotificationBadge == 0){
+            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_people_outline_white_48dp));
+        }else{
+            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+        }
+        Utils.setBadgeCount(getActivity(),icon,numNotificationBadge);
+
+        super.onCreateOptionsMenu(menu,inflater);
+     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

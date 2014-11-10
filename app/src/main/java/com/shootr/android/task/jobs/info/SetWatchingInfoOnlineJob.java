@@ -24,11 +24,10 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
 
     @Inject
     protected SetWatchingInfoOnlineJob( Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, ShootrService service, SQLiteOpenHelper openHelper) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.watchManager = watchManager;
         this.service = service;
         this.setOpenHelper(openHelper);
-
     }
 
     @Override protected void createDatabase() {

@@ -73,7 +73,6 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
                 postSuccessfulEvent(new WatchingInfoResult(infoListOffline));
             }
         }
-
         if (hasInternetConnection()) {
             Timber.d("Sending watching list online");
             Map<MatchModel, Collection<UserWatchingModel>> infoListOnline = obtainInfoList(true);
@@ -136,7 +135,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
-        if (useOnlineData) {
+            if (useOnlineData) {
             List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), sessionManager.getCurrentUserId());
             if (newWatchesFromServer != null) {
                 watches = newWatchesFromServer;

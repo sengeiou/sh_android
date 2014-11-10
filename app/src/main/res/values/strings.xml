@@ -116,6 +116,7 @@
     <string name="watching_request_subtitle_more">%d people are now watching</string>
     <string name="watching_match_question">Watching %s?</string>
             <!--Push Watching requests-->
+    <string name="not_watching_request_push">Not Watching %s</string>
     <string name="watching_request_push">Watching %s</string>
     <string name="watching_request_subtitle_none_and_not_started">Playing Soon</string>
 </resources>

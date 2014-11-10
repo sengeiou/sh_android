@@ -175,7 +175,7 @@ public class WatchManager extends AbstractManager{
         String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
 
         Cursor queryResult = db.rawQuery(sql,null);
-        List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
+        List<WatchEntity> resultWatches = new ArrayList<>();
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             do {
@@ -201,5 +201,17 @@ public class WatchManager extends AbstractManager{
         }
         queryResult.close();
         return watchEntity;
+    }
+
+    public Integer getPeopleWatchingInInfo() {
+        String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+MatchTable.TABLE+" m WHERE m."+MatchTable.ID_MATCH+"=w."+WatchTable.ID_MATCH+" AND m."+MatchTable.STATUS+"="+MatchEntity.STARTED +" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
+        Cursor queryResult = db.rawQuery(sql,null);
+        Integer number = 0;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            number = queryResult.getInt(queryResult.getColumnIndex("NUMBER"));
+        }
+        queryResult.close();
+       return number;
     }
 }

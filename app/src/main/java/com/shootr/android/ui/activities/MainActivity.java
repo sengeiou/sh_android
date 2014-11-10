@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.crashlytics.android.Crashlytics;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -61,6 +62,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject Picasso picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
+    @Inject SessionManager sessionManager;
     @Inject UserModelMapper userModelMapper;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
@@ -94,7 +96,7 @@ public class MainActivity extends BaseSignedInActivity {
         ButterKnife.inject(this);
 
         actionBar = getSupportActionBar();
-        currentUser = ShootrApplication.get(this).getCurrentUser();
+        currentUser = sessionManager.getCurrentUser();
         userVO = userModelMapper.toUserModel(currentUser,null,true);
 
         startGCMRegistration();
