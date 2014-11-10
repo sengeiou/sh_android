@@ -34,6 +34,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private Long currentUserId;
     private int watchingColorLive;
     private int watchingColorNotLive;
+    private final String watchingText;
+    private final String notWatchingText;
 
     public InfoListAdapter(Context context, Picasso picasso, Long currentUserId, View.OnClickListener editButtonListener) {
         super(context);
@@ -44,6 +46,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         Resources resources = context.getResources();
         this.watchingColorLive = resources.getColor(R.color.watching_live);
         this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
+        this.watchingText = resources.getString(R.string.watching_text);
+        this.notWatchingText = resources.getString(R.string.watching_not_text);
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
@@ -151,7 +155,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         UserViewHolder vh = (UserViewHolder) view.getTag();
         vh.position = position;
         vh.name.setText(user.getUserName());
-        vh.watching.setText(user.getStatus());
+        vh.watching.setText(user.isWatching() ? watchingText : notWatchingText);
         if (user.isLive()) {
             vh.watching.setTextColor(watchingColorLive);
         } else {
@@ -172,7 +176,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         boolean moreItemsAbove = true;
         Object currentItem = null;
         int currentPosition = position;
-        while (!isItemMatchType || moreItemsAbove) {
+        while (!isItemMatchType && moreItemsAbove) {
             currentItem = getItem(currentPosition );
             isItemMatchType = currentItem instanceof MatchModel;
             moreItemsAbove = currentPosition  > 0;
