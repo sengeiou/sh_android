@@ -14,6 +14,7 @@ import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.squareup.okhttp.Cache;
@@ -105,7 +106,7 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileFragment.class,
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
-    SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class,
+    SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 

@@ -89,6 +89,7 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
             watchInfoBuilder.setWatches(watchesWhereIAmNot);
             watchInfoBuilder.provideMatches(matches);
             watchInfoBuilder.provideUsers(usersByIds);
+
             Map<MatchEntity, Collection<UserEntity>> mapWatchInfo = watchInfoBuilder.build();
             List<UserEntity> userEntities;
             for(MatchEntity match:mapWatchInfo.keySet()){

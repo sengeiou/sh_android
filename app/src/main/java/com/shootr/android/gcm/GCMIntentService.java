@@ -26,6 +26,7 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 import com.squareup.otto.Bus;
 import java.io.IOException;
+import java.util.Date;
 import javax.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +38,9 @@ public class GCMIntentService extends IntentService {
     private static final int PUSH_TYPE_FOLLOW = 2;
     private static final int PUSH_TYPE_START_MATCH = 3;
     private static final int PUSH_TYPE_WATCH_REQUEST = 4;
+
+    private static final Long WATCHING_STATUS = 1L;
+    private static final Long NOT_WATCHING_STATUS = 2L;
 
     @Inject ShootrNotificationManager notificationManager;
     @Inject SQLiteOpenHelper openHelper;
@@ -59,6 +63,7 @@ public class GCMIntentService extends IntentService {
     private static final String ID_USER = "idUser";
     private static final String ID_SHOT = "idShot";
     private static final String ID_MATCH = "idMatch";
+    private static final String STATUS = "status";
 
     @Override public void onCreate() {
         super.onCreate();
@@ -112,7 +117,6 @@ public class GCMIntentService extends IntentService {
         Long idMatch = parameters.getLong(ID_MATCH);
         MatchEntity match = service.getMatchByIdMatch(idMatch);
         String text = match.getLocalTeamName()+"-"+match.getVisitorTeamName();
-
         notificationManager.sendMatchStartedNotification(text);
     }
 
@@ -132,20 +136,36 @@ public class GCMIntentService extends IntentService {
     private void receivedWatchRequest(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong(ID_USER);
         Long idMatch = parameters.getLong(ID_MATCH);
-        WatchEntity watchEntity = service.getWatchStatus(idUser, idMatch);
+        Long status = parameters.getLong(STATUS);
+
+        WatchEntity watchEntity = new WatchEntity();
+        watchEntity.setIdMatch(idMatch);
+        watchEntity.setIdUser(idUser);
+        watchEntity.setStatus(status);
+        watchEntity.setCsys_revision(1);
+        watchEntity.setCsys_birth(new Date());
+        watchEntity.setCsys_modified(new Date());
+        watchEntity.setCsys_synchronized("N");
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
         UserEntity user = userManager.getUserByIdUser(idUser);
         watchManager.createUpdateWatch(watchEntity);
         matchManager.saveMatch(matchEntity);
         userManager.saveUser(user);
-        String text = getResources().getString(R.string.watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
-        //Send event for retrieving the new WatchRequest
+        String text;
+        if(WATCHING_STATUS.equals(status)){
+            text = getResources().getString(R.string.watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
+        }else{
+            text = getResources().getString(R.string.not_watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
+        }
         bus.post(new RequestWatchByPushEvent());
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
             UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
             notificationManager.sendWatchRequestNotification(userWatchingModel, text);
         }
+
+        //Send event for retrieving the new WatchRequest
+
     }
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {
