@@ -14,6 +14,7 @@ import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
@@ -93,7 +94,7 @@ import static android.content.Context.MODE_PRIVATE;
     InfoActivity.class,
 
     GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
-    GetFollowUnfollowUserJob.class, GetFollowUnFollowUserOfflineJob.class,
+    GetFollowUnfollowUserJob.class, GetFollowUnFollowUserOfflineJob.class, GetLastShotsJob.class,
 
     InitialSetupFragment.class,
 
