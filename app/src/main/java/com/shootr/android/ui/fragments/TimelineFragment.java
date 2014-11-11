@@ -3,6 +3,7 @@ package com.shootr.android.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +38,7 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.model.WatchingRequestModel;
-import com.shootr.android.util.Utils;
+import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -353,7 +354,7 @@ public class TimelineFragment extends BaseFragment
         }else{
             icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
         }
-        Utils.setBadgeCount(getActivity(),icon,numNotificationBadge);
+        setBadgeCount(getActivity(),icon,numNotificationBadge);
 
         super.onCreateOptionsMenu(menu,inflater);
      }
@@ -550,6 +551,21 @@ public class TimelineFragment extends BaseFragment
         Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    public void setBadgeCount(Context context, LayerDrawable icon, int count) {
+        BadgeDrawable badge;
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+        if (reuse != null && reuse instanceof BadgeDrawable) {
+            badge = (BadgeDrawable) reuse;
+        } else {
+            badge = new BadgeDrawable(context);
+        }
+        badge.setCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, badge);
     }
 }
 
