@@ -347,7 +347,7 @@ public class TimelineFragment extends BaseFragment
         menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
         if(numNotificationBadge == 0){
-            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_people_outline_white_48dp));
+            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_social_people_outline));
         }else{
             icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
         }
