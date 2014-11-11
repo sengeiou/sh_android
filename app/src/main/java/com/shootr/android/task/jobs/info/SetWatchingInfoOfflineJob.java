@@ -3,7 +3,6 @@ package com.shootr.android.task.jobs.info;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.service.textservice.SpellCheckerService;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
@@ -58,14 +57,14 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
         WatchEntity watchEntity = watchManager.getWatchByKeys(sessionManager.getCurrentUserId(), idMatch);
         if(watchEntity==null){
             watchEntity = new WatchEntity();
-            watchEntity.setCsys_birth(date);
-            watchEntity.setCsys_modified(date);
-            watchEntity.setCsys_revision(0);
-            watchEntity.setCsys_synchronized("N");
+            watchEntity.setCsysBirth(date);
+            watchEntity.setCsysModified(date);
+            watchEntity.setCsysRevision(0);
+            watchEntity.setCsysSynchronized("N");
         }else{
-            watchEntity.setCsys_modified(date);
-            watchEntity.setCsys_revision(watchEntity.getCsys_revision()+1);
-            watchEntity.setCsys_synchronized("U");
+            watchEntity.setCsysModified(date);
+            watchEntity.setCsysRevision(watchEntity.getCsysRevision() + 1);
+            watchEntity.setCsysSynchronized("U");
         }
         watchEntity.setIdUser(sessionManager.getCurrentUserId());
         watchEntity.setIdMatch(idMatch);

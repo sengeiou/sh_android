@@ -14,7 +14,7 @@ public class ListViewScrollObserver implements OnScrollListener {
 
     public interface OnListViewScrollListener {
         void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact);
-        void onScrollIdle() throws SQLException;
+        void onScrollIdle();
     }
 
     public ListViewScrollObserver(ListView listView) {
@@ -57,11 +57,7 @@ public class ListViewScrollObserver implements OnScrollListener {
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (listener != null && scrollState == SCROLL_STATE_IDLE) {
-            try {
-                listener.onScrollIdle();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            listener.onScrollIdle();
         }
     }
 }

@@ -179,4 +179,9 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
             return false;
         }
     }
+
+    @Override
+    public int hashCode() {
+        return idUser.hashCode();
+    }
 }

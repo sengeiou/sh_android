@@ -35,19 +35,19 @@ public class TableSync {
         this.frequency = frequency;
     }
 
-    public Long getMax_timestamp() {
+    public Long getMaxTimestamp() {
         return max_timestamp;
     }
 
-    public void setMax_timestamp(Long max_timestamp) {
+    public void setMaxTimestamp(Long max_timestamp) {
         this.max_timestamp = max_timestamp;
     }
 
-    public Long getMin_timestamp() {
+    public Long getMinTimestamp() {
         return min_timestamp;
     }
 
-    public void setMin_timestamp(Long min_timestamp) {
+    public void setMinTimestamp(Long min_timestamp) {
         this.min_timestamp = min_timestamp;
     }
 

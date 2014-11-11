@@ -101,14 +101,14 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
             existingDevice.setModel("Mío");
             existingDevice.setUniqueDevideID(uniqueDeviceId);
             existingDevice.setToken(regId);
-            existingDevice.setCsys_birth(new Date());
-            existingDevice.setCsys_revision(0);
+            existingDevice.setCsysBirth(new Date());
+            existingDevice.setCsysRevision(0);
         } else {
-            existingDevice.setCsys_revision(existingDevice.getCsys_revision()+1);
+            existingDevice.setCsysRevision(existingDevice.getCsysRevision() + 1);
         }
 
         existingDevice.setToken(regId);
-        existingDevice.setCsys_modified(new Date());
+        existingDevice.setCsysModified(new Date());
 
         service.updateDevice(existingDevice);
     }

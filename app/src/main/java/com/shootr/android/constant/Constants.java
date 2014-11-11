@@ -2,6 +2,9 @@ package com.shootr.android.constant;
 
 
 public class Constants {
+    private Constants() {
+    }
+
     public static final Long ANDROID_PLATFORM  = 0L;
     /** GenericDto Constants **/
     // Nexus names

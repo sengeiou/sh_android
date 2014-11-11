@@ -2,6 +2,8 @@ package com.shootr.android.util;
 
 public class SecurityUtils {
 
+    private SecurityUtils() {
+    }
 
     public static String encodePassword(String password) {
         return encodeMd5(encodeSha1(password)).substring(0, 20);
