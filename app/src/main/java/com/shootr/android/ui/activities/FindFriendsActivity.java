@@ -146,10 +146,14 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
-                currentSearchQuery = queryText;
-                startSearch();
-                hideKeyboard();
-                return true;
+                if (!queryText.equals(currentSearchQuery)) {
+                    currentSearchQuery = queryText;
+                    startSearch();
+                    hideKeyboard();
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override public boolean onQueryTextChange(String s) {
