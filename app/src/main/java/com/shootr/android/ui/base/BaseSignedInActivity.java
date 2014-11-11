@@ -53,7 +53,6 @@ public class BaseSignedInActivity extends BaseActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         userManager.setDataBase(db);
         UserEntity currentUser = userManager.getUserByIdUser(sessionManager.getCurrentUserId());
-        db.close();
         sessionManager.setCurrentUser(currentUser);
     }
 

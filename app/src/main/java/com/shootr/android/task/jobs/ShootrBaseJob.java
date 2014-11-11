@@ -55,8 +55,6 @@ public abstract class ShootrBaseJob<T> extends Job {
         } catch (IOException e) { // includes ServerException
             Timber.e(e, "IOException executing job");
             postCommunicationErrorEvent();
-        } finally {
-            closeDb();
         }
     }
 
@@ -112,12 +110,6 @@ public abstract class ShootrBaseJob<T> extends Job {
 
     protected void postCustomEvent(Object o) {
         bus.post(o);
-    }
-
-    private void closeDb() {
-        if (db != null) {
-            db.close();
-        }
     }
 
     protected abstract boolean isNetworkRequired();

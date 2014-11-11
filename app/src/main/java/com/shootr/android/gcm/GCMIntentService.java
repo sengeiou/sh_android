@@ -75,11 +75,6 @@ public class GCMIntentService extends IntentService {
 
     }
 
-    @Override public void onDestroy() {
-        super.onDestroy();
-        database.close();
-    }
-
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
