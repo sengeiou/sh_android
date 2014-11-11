@@ -76,7 +76,7 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
             ShotModel shotModel = new ShotModel();
             shotModel.setIdUser(idUser);
             shotModel.setComment(shot.getComment());
-            shotModel.setCsys_birth(shot.getCsys_birth());
+            shotModel.setCsysBirth(shot.getCsysBirth());
             shotModel.setPhoto(user.getPhoto());
             shotModel.setIdShot(shot.getIdShot());
             shotModel.setUsername(user.getUserName());

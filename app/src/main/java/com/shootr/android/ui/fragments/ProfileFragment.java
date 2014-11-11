@@ -67,12 +67,13 @@ public class ProfileFragment extends BaseFragment {
     @Inject Bus bus;
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
+    @Inject TimeUtils timeUtils;
+
 
     // Args
     Long idUser;
 
     UserEntity currentUser;
-
     static UserModel user;
     private View.OnClickListener avatarClickListener;
 
@@ -286,8 +287,8 @@ public class ProfileFragment extends BaseFragment {
 
         vh.text.setText(item.getComment());
 
-        long timestamp = item.getCsys_birth().getTime();
-        vh.timestamp.setText(TimeUtils.getElapsedTime(getActivity(), timestamp));
+        long timestamp = item.getCsysBirth().getTime();
+        vh.timestamp.setText(timeUtils.getElapsedTime(getActivity(), timestamp));
 
         String photo = item.getPhoto();
         boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
