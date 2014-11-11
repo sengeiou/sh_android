@@ -57,4 +57,5 @@ public interface ShootrService {
 
     public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException;
 
+    List<ShotEntity> getLatestsShotsFromIdUser(Long idUser) throws IOException;
 }

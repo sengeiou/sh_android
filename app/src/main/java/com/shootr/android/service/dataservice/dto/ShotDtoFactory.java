@@ -5,15 +5,20 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotMapper;
 import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import javax.inject.Inject;
 
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
+import static com.shootr.android.service.dataservice.generic.FilterBuilder.or;
+
 public class ShotDtoFactory {
 
     private static final String ALIAS_NEW_SHOT = "POST_NEW_SHOT";
     private static final String ALIAS_GET_SHOT = "GET_SHOT";
+    private static final String ALIAS_GET_LATEST_SHOTS = "GET_LATEST_SHOTS";
 
     private UtilityDtoFactory utilityDtoFactory;
     ShotMapper shotMapper;
@@ -72,5 +77,23 @@ public class ShotDtoFactory {
 
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_NEW_SHOT, op);
 
+    }
+
+    public GenericDto getLatestShotsFromIdUser(Long idUser) {
+        if (idUser == null) {
+            throw new IllegalArgumentException("idUser must not be null");
+        }
+
+        FilterDto shotsFilter = and(or(ShotTable.ID_USER).isEqualTo(idUser))
+          .and(ShotTable.CSYS_DELETED).isEqualTo(null)
+          .and(ShotTable.CSYS_MODIFIED).greaterThan(0L).build();
+
+        MetadataDto md = new MetadataDto.Builder().operation(ServiceConstants.OPERATION_RETRIEVE)
+          .entity(ShotTable.TABLE)
+          .filter(shotsFilter).items(10L).build();
+
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(shotMapper.toDto(null)).build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_LATEST_SHOTS, op);
     }
 }
