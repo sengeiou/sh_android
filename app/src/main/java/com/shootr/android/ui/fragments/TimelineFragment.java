@@ -26,7 +26,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.db.objects.ShotEntity;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -39,6 +38,7 @@ import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -76,23 +76,24 @@ public class TimelineFragment extends BaseFragment
 
     @Inject Picasso picasso;
     @Inject Bus bus;
-    @Inject JobManager jobManager;
+    @Inject TimeUtils timeUtils;
 
+    @Inject JobManager jobManager;
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.timeline_empty) View emptyView;
 
+    @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_watching_container) View watchingRequestContainerView;
     @InjectView(R.id.timeline_watching_title) TextView watchingRequestTitleView;
     @InjectView(R.id.timeline_watching_subtitle) TextView watchingRequestSubtitleView;
     @InjectView(R.id.timeline_watching_action_ignore) View watchingRequestActionIgnoreView;
-    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
 
+    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
     private View footerView;
     private ProgressBar footerProgress;
-    private TextView footerText;
 
+    private TextView footerText;
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private boolean isLoadingMore;
@@ -217,7 +218,7 @@ public class TimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
         listView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -354,7 +355,7 @@ public class TimelineFragment extends BaseFragment
         }else{
             icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
         }
-        setBadgeCount(getActivity(),icon,numNotificationBadge);
+        setBadgeCount(getActivity(), icon, numNotificationBadge);
 
         super.onCreateOptionsMenu(menu,inflater);
      }

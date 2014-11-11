@@ -9,20 +9,37 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-
+@Singleton
 public class TimeUtils {
 
-    private TimeUtils() {
+    @Inject public TimeUtils() {
     }
+
+    private long currentOffset = 0L;
+
+    public long getCurrentTime() {
+        return getSystemCurrentTime()+ currentOffset;
+    }
+
+    public void setCurrentTime(long timeMilliseconds) {
+        currentOffset = timeMilliseconds - getSystemCurrentTime();
+    }
+
+    private long getSystemCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
 
     public static TimeZone getDisplayTimeZone() {
         return TimeZone.getDefault();
     }
 
 
-    public static String getElapsedTime(Context context, long publishTime) {
-        long difference = System.currentTimeMillis() - publishTime;
+    public String getElapsedTime(Context context, long publishTime) {
+        long difference =getCurrentTime() - publishTime;
 
         long days =  TimeUnit.MILLISECONDS.toDays(difference);
         Resources res = context.getResources();

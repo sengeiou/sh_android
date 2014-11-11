@@ -1,11 +1,6 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.MatchMapper;
@@ -21,9 +16,9 @@ import com.shootr.android.db.objects.TeamEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.exception.ServerException;
-import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
+import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
@@ -32,7 +27,14 @@ import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.service.dataservice.generic.RequestorDto;
 import com.shootr.android.util.SecurityUtils;
+import com.shootr.android.util.TimeUtils;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +65,13 @@ public class ShootrDataService implements ShootrService {
     private DeviceMapper deviceMapper;
     private WatchMapper watchMapper;
     private TeamMapper teamMapper;
+    private TimeUtils timeUtils;
 
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
                              TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
                              UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, MatchDtoFactory matchDtoFactory,
-                             DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper) {
+                             DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper, TimeUtils timeUtils) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
@@ -85,6 +88,7 @@ public class ShootrDataService implements ShootrService {
         this.watchMapper = watchMapper;
         this.teamMapper = teamMapper;
 
+        this.timeUtils = timeUtils;
     }
 
     @Override
@@ -422,7 +426,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public WatchEntity getWatchStatus(Long idUser, Long idMatch) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getWatchByKeys(idUser,idMatch);
+        GenericDto requestDto = matchDtoFactory.getWatchByKeys(idUser, idMatch);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -503,6 +507,7 @@ public class ShootrDataService implements ShootrService {
             Timber.d("Response received: %s", responseBody);
             GenericDto genericDto = mapper.readValue(responseBody, GenericDto.class);
             // Check for Data-Service errors
+            updateTimeFromServer(genericDto);
             String statusCode = genericDto.getStatusCode();
             String statusMessage = genericDto.getStatusMessage();
             if (statusCode == null || !statusCode.equals(ServerException.OK)) {
@@ -517,4 +522,8 @@ public class ShootrDataService implements ShootrService {
         }
     }
 
+    private void updateTimeFromServer(GenericDto dto) {
+        Long serverTime = dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
+        timeUtils.setCurrentTime(serverTime);
+    }
 }

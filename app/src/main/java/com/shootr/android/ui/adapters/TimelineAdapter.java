@@ -20,11 +20,14 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     List<ShotModel> shots;
     private Picasso picasso;
     private final View.OnClickListener avatarClickListener;
+    private TimeUtils timeUtils;
 
-    public TimelineAdapter(Context context, Picasso picasso, View.OnClickListener avatarClickListener) {
+    public TimelineAdapter(Context context, Picasso picasso, View.OnClickListener avatarClickListener,
+      TimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
+        this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
     }
 
@@ -92,7 +95,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 vh.text.setText(item.getComment());
 
                 long timestamp = item.getCsysBirth().getTime();
-                vh.timestamp.setText(TimeUtils.getElapsedTime(getContext(), timestamp));
+                vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
 
                 String photo = item.getPhoto();
                 boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
