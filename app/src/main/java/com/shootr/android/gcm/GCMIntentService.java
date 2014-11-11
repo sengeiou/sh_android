@@ -152,6 +152,7 @@ public class GCMIntentService extends IntentService {
         }else{
             text = getResources().getString(R.string.not_watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
         }
+        //Send event for retrieving the new WatchRequest
         bus.post(new RequestWatchByPushEvent());
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
@@ -159,7 +160,7 @@ public class GCMIntentService extends IntentService {
             notificationManager.sendWatchRequestNotification(userWatchingModel, text);
         }
 
-        //Send event for retrieving the new WatchRequest
+
 
     }
 

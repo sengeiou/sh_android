@@ -474,8 +474,8 @@ public class ShootrDataService implements ShootrService {
         return teamEntities;
     }
 
-    @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser) throws IOException {
-        GenericDto requestDto = shotDtoFactory.getLatestShotsFromIdUser(idUser);
+    @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
+        GenericDto requestDto = shotDtoFactory.getLatestShotsFromIdUser(idUser, latestShotNumber);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){

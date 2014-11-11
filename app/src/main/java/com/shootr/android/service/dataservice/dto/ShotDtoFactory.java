@@ -79,7 +79,7 @@ public class ShotDtoFactory {
 
     }
 
-    public GenericDto getLatestShotsFromIdUser(Long idUser) {
+    public GenericDto getLatestShotsFromIdUser(Long idUser, Long latestShotNumber) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }
@@ -90,7 +90,7 @@ public class ShotDtoFactory {
 
         MetadataDto md = new MetadataDto.Builder().operation(ServiceConstants.OPERATION_RETRIEVE)
           .entity(ShotTable.TABLE)
-          .filter(shotsFilter).items(10L).build();
+          .filter(shotsFilter).items(latestShotNumber).build();
 
         OperationDto op = new OperationDto.Builder().metadata(md).putData(shotMapper.toDto(null)).build();
 

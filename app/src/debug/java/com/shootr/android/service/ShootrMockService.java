@@ -127,7 +127,7 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser) throws IOException {
+    @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
         return null;
     }
 
