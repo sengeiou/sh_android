@@ -4,6 +4,9 @@ import android.provider.BaseColumns;
 
 public class DatabaseContract {
 
+    private DatabaseContract() {
+    }
+
     public static interface SyncColumns extends BaseColumns {
         static final String CSYS_BIRTH = "birth";
         static final String CSYS_MODIFIED = "modified";

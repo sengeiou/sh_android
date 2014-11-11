@@ -111,7 +111,7 @@ public class ShootrDataService implements ShootrService {
                 Map<String, Object>[] data = ops[0].getData();
                 for(Map<String,Object> d:data){
                     UserEntity user = userMapper.fromDto(d);
-                    if(user.getCsys_deleted() == null){
+                    if(user.getCsysDeleted() == null){
                         following.add(user);
                     }
                 }
@@ -135,7 +135,7 @@ public class ShootrDataService implements ShootrService {
             Map<String, Object>[] data = ops[0].getData();
             for(Map<String,Object> d:data){
                 UserEntity user = userMapper.fromDto(d);
-                if(user.getCsys_deleted()==null){
+                if(user.getCsysDeleted()==null){
                     followers.add(user);
                 }
 

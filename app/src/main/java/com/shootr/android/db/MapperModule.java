@@ -21,11 +21,17 @@ import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
   library = true)
 public class MapperModule {
 
-    @Provides ShotModelMapper provideShotModelMapper(){ return new ShotModelMapper();}
+    @Provides ShotModelMapper provideShotModelMapper(){
+        return new ShotModelMapper();
+    }
 
-    @Provides MatchModelMapper provideMatchModelMapper(Application application){ return new MatchModelMapper(application);}
+    @Provides MatchModelMapper provideMatchModelMapper(Application application){
+        return new MatchModelMapper(application);
+    }
 
-    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application){ return new UserWatchingModelMapper(application);}
+    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application){
+        return new UserWatchingModelMapper(application);
+    }
 
     @Provides FollowMapper provideFollowMapper() {
         return new FollowMapper();

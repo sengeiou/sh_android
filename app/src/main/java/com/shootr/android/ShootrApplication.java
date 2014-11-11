@@ -21,9 +21,11 @@ public class ShootrApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if(!BuildConfig.DEBUG) Crashlytics.start(this);
         buildObjectGraphAndInject();
         plantLoggerTrees();
+        if(!BuildConfig.DEBUG) {
+            Crashlytics.start(this);
+        }
     }
 
     public void plantLoggerTrees() {

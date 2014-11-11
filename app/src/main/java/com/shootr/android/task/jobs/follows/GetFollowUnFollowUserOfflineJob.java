@@ -103,8 +103,8 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
         //attribute to "U"
         FollowEntity follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
-        follow.setCsys_deleted(new Date());
-        follow.setCsys_synchronized("D");
+        follow.setCsysDeleted(new Date());
+        follow.setCsysSynchronized("D");
         followManager.saveFollow(follow);
 
         userManager.saveUser(currentUser);
@@ -116,17 +116,17 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         //So the syncrhonized attribute for this case is "N"
         Long idCurrentUser = currentUser.getIdUser();
          FollowEntity follow = followManager.getFollowByUserIds(currentUser.getIdUser(),idUser);
-        if(follow!=null && (follow.getCsys_synchronized().equals("N") || follow.getCsys_synchronized().equals("U") || follow.getCsys_synchronized().equals("D"))){
-            follow.setCsys_synchronized("U");
+        if(follow!=null && (follow.getCsysSynchronized().equals("N") || follow.getCsysSynchronized().equals("U") || follow.getCsysSynchronized().equals("D"))){
+            follow.setCsysSynchronized("U");
         }else{
             follow = new FollowEntity();
-            follow.setCsys_synchronized("N");
+            follow.setCsysSynchronized("N");
         }
         follow.setIdUser(idCurrentUser);
         follow.setFollowedUser(idUser);
-        follow.setCsys_birth(new Date());
-        follow.setCsys_modified(new Date());
-        follow.setCsys_revision(0);
+        follow.setCsysBirth(new Date());
+        follow.setCsysModified(new Date());
+        follow.setCsysRevision(0);
         followManager.saveFollow(follow);
 
         userManager.saveUser(currentUser);

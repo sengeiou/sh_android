@@ -10,14 +10,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.objects.TableSync;
-import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.util.TimeUtils;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public abstract class AbstractManager {
 
-    public static int NUMDAYS = 60;
+    public static final int NUMDAYS = 60;
     @Inject protected SQLiteOpenHelper dbHelper;
 
     SQLiteDatabase db;
@@ -36,7 +35,9 @@ public abstract class AbstractManager {
         boolean res = true;
         String raw_query = "SELECT * FROM "+ entity;
         Cursor c = db.rawQuery(raw_query, new String[]{});
-        if (c.getCount() > 0) res = false;
+        if (c.getCount() > 0) {
+            res = false;
+        }
         c.close();
 
         return res;
@@ -59,8 +60,8 @@ public abstract class AbstractManager {
         contentValues.put(DatabaseContract.TablesSync.FREQUENCY, tableSync.getFrequency());
         contentValues.put(DatabaseContract.TablesSync.MAX_ROWS, tableSync.getMaxRows());
         contentValues.put(DatabaseContract.TablesSync.MIN_ROWS, tableSync.getMinRows());
-        contentValues.put(DatabaseContract.TablesSync.MIN_TIMESTAMP, tableSync.getMin_timestamp());
-        contentValues.put(DatabaseContract.TablesSync.MAX_TIMESTAMP, tableSync.getMax_timestamp());
+        contentValues.put(DatabaseContract.TablesSync.MIN_TIMESTAMP, tableSync.getMinTimestamp());
+        contentValues.put(DatabaseContract.TablesSync.MAX_TIMESTAMP, tableSync.getMaxTimestamp());
         return db.insertWithOnConflict(DatabaseContract.TablesSync.TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
     }
 
@@ -135,10 +136,10 @@ public abstract class AbstractManager {
         tablesSync.setOrder(order); // It's the second data type the application insert in database
         tablesSync.setDirection("BOTH");
         tablesSync.setEntity(tableName);
-        tablesSync.setMax_timestamp(System.currentTimeMillis());
+        tablesSync.setMaxTimestamp(System.currentTimeMillis());
 
         if(isTableEmpty(tableName)){
-            tablesSync.setMin_timestamp(System.currentTimeMillis());
+            tablesSync.setMinTimestamp(System.currentTimeMillis());
         }
         tablesSync.setMaxRows(maxRows);
         tablesSync.setMinRows(minRows);

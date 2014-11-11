@@ -7,6 +7,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.db.objects.ShotEntity;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -394,14 +396,12 @@ public class TimelineFragment extends BaseFragment
                         newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtras(anim);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
-        // ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
+        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        //TODO Shot detail
-        //Shot shot = adapter.getItem(position - 1);
+        ShotModel shot = adapter.getItem(position - 1);
         Timber.d("Clicked shot %d", position);
     }
 

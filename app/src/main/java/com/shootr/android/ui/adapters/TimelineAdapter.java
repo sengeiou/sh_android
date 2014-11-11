@@ -91,7 +91,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
                 vh.text.setText(item.getComment());
 
-                long timestamp = item.getCsys_birth().getTime();
+                long timestamp = item.getCsysBirth().getTime();
                 vh.timestamp.setText(TimeUtils.getElapsedTime(getContext(), timestamp));
 
                 String photo = item.getPhoto();

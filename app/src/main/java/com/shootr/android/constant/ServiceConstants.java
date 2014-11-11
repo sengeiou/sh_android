@@ -2,6 +2,8 @@ package com.shootr.android.constant;
 
 public class ServiceConstants {
 
+    private ServiceConstants() {
+    }
 
     public static final String OPERATION_RETRIEVE = "Retrieve";
     public static final String OPERATION_CREATE_UPDATE = "CreateUpdate";

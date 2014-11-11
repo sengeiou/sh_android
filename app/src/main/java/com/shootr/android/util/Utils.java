@@ -8,6 +8,7 @@ import com.shootr.android.ui.widgets.BadgeDrawable;
 
 public class Utils {
 
+
     public static void setBadgeCount(Context context, LayerDrawable icon, int count) {
         BadgeDrawable badge;
         // Reuse drawable if possible

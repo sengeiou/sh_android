@@ -12,6 +12,9 @@ import com.shootr.android.db.DatabaseContract.WatchTable;
 
 public class SQLiteUtils {
 
+    private SQLiteUtils() {
+    }
+
     public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS " + UserTable.TABLE + " ("
             + UserTable.ID + " INT NOT NULL PRIMARY KEY,"
             + UserTable.FAVORITE_TEAM_ID + " INT NOT NULL,"

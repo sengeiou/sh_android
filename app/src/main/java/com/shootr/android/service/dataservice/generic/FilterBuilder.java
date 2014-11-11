@@ -8,22 +8,25 @@ import java.util.List;
 
 public class FilterBuilder {
 
+    private FilterBuilder() {
+    }
+
     // Nexus names
-    public static String NEXUS_AND = "and";
-    public static String NEXUS_OR = "or";
-    // Comparator
-    public static String COMPARATOR_NOT_EQUAL = "ne";
-    public static String COMPARATOR_EQUAL = "eq";
-    public static String COMPARATOR_GREAT_THAN = "gt";
-    public static String COMPARATOR_GREAT_EQUAL_THAN = "ge";
-    public static String COMPARATOR_LESS_THAN = "lt";
-    public static String COMPARATOR_LESS_EQUAL_THAN = "le";
-    public static String COMPARATOR_STARTS_WITH = "st";
-    public static String COMPARATOR_NOT_STARTS_WITH = "nst";
-    public static String COMPARATOR_CONTAINS = "ct";
-    public static String COMPARATOR_NOT_CONTAINS = "nct";
-    public static String COMPARATOR_ENDS_WITH = "en";
-    public static String COMPARATOR_NOT_ENDS_WITH = "nen";
+    public static final String NEXUS_AND = "and";
+    public static final String NEXUS_OR = "or";
+    // Comparatorfinal
+    public static final String COMPARATOR_NOT_EQUAL = "ne";
+    public static final String COMPARATOR_EQUAL = "eq";
+    public static final String COMPARATOR_GREAT_THAN = "gt";
+    public static final String COMPARATOR_GREAT_EQUAL_THAN = "ge";
+    public static final String COMPARATOR_LESS_THAN = "lt";
+    public static final String COMPARATOR_LESS_EQUAL_THAN = "le";
+    public static final String COMPARATOR_STARTS_WITH = "st";
+    public static final String COMPARATOR_NOT_STARTS_WITH = "nst";
+    public static final String COMPARATOR_CONTAINS = "ct";
+    public static final String COMPARATOR_NOT_CONTAINS = "nct";
+    public static final String COMPARATOR_ENDS_WITH = "en";
+    public static final String COMPARATOR_NOT_ENDS_WITH = "nen";
 
     public static ItemField<AndItem> and(String field) {
         AndItem andItem = new AndItem();

@@ -3,6 +3,9 @@ package com.shootr.android.constant;
 
 public class SyncConstants {
 
+    private SyncConstants() {
+    }
+
     // The authority for the sync adapter's content provider
     public static final String AUTHORITY = "com.shootr.android.db.provider";
 
@@ -11,8 +14,6 @@ public class SyncConstants {
 
     // The account name
 
-//    private static Account newAccount= new Account("default_account", ACCOUNT_TYPE);
-    //TODO usar un nombre de cuenta real, ya que tenemos login
     public static final String ACCOUNT_NAME = "Shootr";
 
     //Sync Interval

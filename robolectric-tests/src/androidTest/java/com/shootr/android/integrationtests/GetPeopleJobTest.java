@@ -69,9 +69,9 @@ public class GetPeopleJobTest {
         currentUser.setPoints(2L);
         currentUser.setNumFollowers(3L);
         currentUser.setNumFollowings(5L);
-        currentUser.setCsys_birth(new Date());
-        currentUser.setCsys_modified(new Date());
-        currentUser.setCsys_revision(0);
+        currentUser.setCsysBirth(new Date());
+        currentUser.setCsysModified(new Date());
+        currentUser.setCsysRevision(0);
 
         sessionManager.setCurrentUser(currentUser);
         userManager.saveUser(currentUser);
@@ -103,9 +103,9 @@ public class GetPeopleJobTest {
         followedUser.setPoints(2L);
         followedUser.setNumFollowers(3L);
         followedUser.setNumFollowings(5L);
-        followedUser.setCsys_birth(new Date());
-        followedUser.setCsys_modified(new Date());
-        followedUser.setCsys_revision(0);
+        followedUser.setCsysBirth(new Date());
+        followedUser.setCsysModified(new Date());
+        followedUser.setCsysRevision(0);
 
         userManager.saveUser(followedUser);
 
@@ -113,9 +113,9 @@ public class GetPeopleJobTest {
         FollowEntity followRelationship = new FollowEntity();
         followRelationship.setIdUser(CURRENT_USER);
         followRelationship.setFollowedUser(FOLLOWED_USER);
-        followRelationship.setCsys_birth(new Date());
-        followRelationship.setCsys_modified(new Date());
-        followRelationship.setCsys_revision(0);
+        followRelationship.setCsysBirth(new Date());
+        followRelationship.setCsysModified(new Date());
+        followRelationship.setCsysRevision(0);
 
 
         FollowManager followManager = objectGraph.get(FollowManager.class);

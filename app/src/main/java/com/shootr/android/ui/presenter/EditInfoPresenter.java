@@ -47,7 +47,6 @@ public class EditInfoPresenter {
     private void updateViewWithInfo() {
         this.editInfoView.setTitle(editInfoModel.matchTitle);
         this.editInfoView.setWatchingStatus(editInfoModel.watching);
-        //this.editInfoView.setSendButonEnabled();
     }
 
     private void closeScreen() {
