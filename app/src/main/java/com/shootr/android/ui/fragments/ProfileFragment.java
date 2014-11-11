@@ -14,7 +14,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
-import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -33,6 +35,9 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {
@@ -53,10 +58,12 @@ public class ProfileFragment extends BaseFragment {
 
     @InjectView(R.id.profile_follow_button) FollowButton followButton;
 
+    @InjectView(R.id.profile_shots_empty) View shotsListEmpty;
+    @InjectView(R.id.profile_shots_list) ViewGroup shotsList;
+
     @Inject Bus bus;
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
-    @Inject NetworkUtil networkUtil;
 
     // Args
     Long idUser;
@@ -64,6 +71,7 @@ public class ProfileFragment extends BaseFragment {
     UserEntity currentUser;
 
     static UserModel user;
+    private View.OnClickListener avatarClickListener;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -78,6 +86,11 @@ public class ProfileFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
+        avatarClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onShotAvatarClick();
+            }
+        };
     }
 
     private void injectArguments() {
@@ -120,6 +133,7 @@ public class ProfileFragment extends BaseFragment {
         Context context = getActivity();
         currentUser = ShootrApplication.get(context).getCurrentUser();
         startGetUserInfoJob(currentUser,context);
+        loadLatestShots();
         //TODO loading
     }
 
@@ -233,4 +247,74 @@ public class ProfileFragment extends BaseFragment {
         if(idUser==null) return;
         startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType),677);
     }
+
+    private void loadLatestShots() {
+        //TODO
+        List<ShotModel> shots = new ArrayList<>(3);
+        ShotModel shot1 = new ShotModel();
+        shot1.setComment("Nanananan");
+        shot1.setUsername("Batman");
+        shot1.setPhoto(
+          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
+        shot1.setCsys_birth(new Date());
+
+        ShotModel shot2 = new ShotModel();
+        shot2.setComment("Je je jej eje");
+        shot2.setUsername("Batman");
+        shot2.setPhoto(
+          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
+        shot2.setCsys_birth(new Date());
+
+        ShotModel shot3 = new ShotModel();
+        shot3.setComment("Hola hola caracola");
+        shot3.setUsername("Batman");
+        shot3.setPhoto(
+          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
+        shot3.setCsys_birth(new Date());
+
+        shots.add(shot1);
+        shots.add(shot2);
+        shots.add(shot3);
+
+        onLatestShotsLoaded(shots);
+    }
+
+    public void onLatestShotsLoaded(List<ShotModel> shots) {
+        if (shots != null && shots.size() > 0) {
+            shotsList.removeAllViews();
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            for (ShotModel shot : shots) {
+                View shotView = inflater.inflate(R.layout.item_list_shot, shotsList, false);
+                TimelineAdapter.ViewHolder vh = new TimelineAdapter.ViewHolder(shotView, avatarClickListener);
+                bindShotView(vh, shot);
+                shotsList.addView(shotView);
+            }
+            shotsList.setVisibility(View.VISIBLE);
+            shotsListEmpty.setVisibility(View.GONE);
+        } else {
+            shotsList.setVisibility(View.GONE);
+            shotsListEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void bindShotView(TimelineAdapter.ViewHolder vh, ShotModel item) {
+        vh.name.setText(item.getUsername());
+
+        vh.text.setText(item.getComment());
+
+        long timestamp = item.getCsys_birth().getTime();
+        vh.timestamp.setText(TimeUtils.getElapsedTime(getActivity(), timestamp));
+
+        String photo = item.getPhoto();
+        boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
+        if (isValidPhotoUrl) {
+            picasso.load(photo).into(vh.avatar);
+        } else picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
+        vh.avatar.setTag(vh);
+    }
+
+    private void onShotAvatarClick() {
+        //TODO ???
+    }
+
 }

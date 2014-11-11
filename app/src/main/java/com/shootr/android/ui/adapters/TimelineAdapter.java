@@ -117,10 +117,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.shot_avatar) ImageView avatar;
-        @InjectView(R.id.shot_user_name) TextView name;
-        @InjectView(R.id.shot_timestamp) TextView timestamp;
-        @InjectView(R.id.shot_text) TextView text;
+        @InjectView(R.id.shot_avatar) public ImageView avatar;
+        @InjectView(R.id.shot_user_name) public TextView name;
+        @InjectView(R.id.shot_timestamp) public TextView timestamp;
+        @InjectView(R.id.shot_text) public TextView text;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener) {
