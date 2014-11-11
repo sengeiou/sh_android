@@ -14,6 +14,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.TimeUtils;
@@ -132,7 +135,7 @@ public class ProfileFragment extends BaseFragment {
     private void retrieveUserInfo() {
         Context context = getActivity();
         currentUser = ShootrApplication.get(context).getCurrentUser();
-        startGetUserInfoJob(currentUser,context);
+        startGetUserInfoJob(currentUser, context);
         loadLatestShots();
         //TODO loading
     }
@@ -225,7 +228,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void followUser(){
-        startFollowUnfollowUserJob(currentUser, getActivity(),UserDtoFactory.FOLLOW_TYPE);
+        startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
     public void unfollowUser(){
@@ -249,37 +252,17 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void loadLatestShots() {
-        //TODO
-        List<ShotModel> shots = new ArrayList<>(3);
-        ShotModel shot1 = new ShotModel();
-        shot1.setComment("Nanananan");
-        shot1.setUsername("Batman");
-        shot1.setPhoto(
-          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
-        shot1.setCsys_birth(new Date());
+        GetLastShotsJob getLastShotsJob =
+          ShootrApplication.get(getActivity()).getObjectGraph().get(GetLastShotsJob.class);
 
-        ShotModel shot2 = new ShotModel();
-        shot2.setComment("Je je jej eje");
-        shot2.setUsername("Batman");
-        shot2.setPhoto(
-          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
-        shot2.setCsys_birth(new Date());
+        getLastShotsJob.init(idUser);
 
-        ShotModel shot3 = new ShotModel();
-        shot3.setComment("Hola hola caracola");
-        shot3.setUsername("Batman");
-        shot3.setPhoto(
-          "http://imageserver.moviepilot.com/batman-batman-vs-superman-vote-for-your-favorite-batman-costume-a2525f6d-50ea-4216-8e55-6d7fbd9f5d7e.jpeg?width=660&height=391");
-        shot3.setCsys_birth(new Date());
-
-        shots.add(shot1);
-        shots.add(shot2);
-        shots.add(shot3);
-
-        onLatestShotsLoaded(shots);
+        jobManager.addJobInBackground(getLastShotsJob);
     }
 
-    public void onLatestShotsLoaded(List<ShotModel> shots) {
+    @Subscribe
+    public void onLatestShotsLoaded(LatestShotsResultEvent event) {
+        List<ShotModel> shots = event.getResult();
         if (shots != null && shots.size() > 0) {
             shotsList.removeAllViews();
             LayoutInflater inflater = LayoutInflater.from(getActivity());

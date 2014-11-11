@@ -162,7 +162,8 @@ public class ShotManager extends  AbstractManager{
         String[] whereArguments = new String[]{String.valueOf(idUser)};
 
         Cursor queryResult =
-          db.query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,ShotTable.CSYS_MODIFIED, String.valueOf(latestShotsNumber));
+          db.query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,
+            ShotTable.CSYS_BIRTH+" DESC", String.valueOf(latestShotsNumber));
 
         ShotEntity shotEntity;
         if (queryResult.getCount() > 0) {
@@ -262,7 +263,8 @@ public class ShotManager extends  AbstractManager{
     }
 
     public ShotEntity retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
-        Cursor c = db.query(SHOT_TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?", new String[]{String.valueOf(userId)}, null, null, CSYS_BIRTH + " DESC", "1");
+        Cursor c = db.query(SHOT_TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?",
+          new String[] { String.valueOf(userId) }, null, null, CSYS_BIRTH + " DESC", "1");
         if (c.getCount() > 0) {
             c.moveToFirst();
             ShotEntity lastShot = shotMapper.fromCursor(c);
