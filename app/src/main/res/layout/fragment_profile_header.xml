@@ -118,10 +118,10 @@
       android:id="@+id/profile_follow_button"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/profile_avatar"
       android:layout_below="@+id/profile_scores_bar"
       android:layout_marginLeft="16dp"
       android:layout_marginTop="4dp"
+      android:layout_marginBottom="1dp"
       android:clickable="true"
       android:layout_toRightOf="@+id/profile_avatar" />
 
