@@ -61,6 +61,11 @@ public class UserWatchingModel implements Serializable {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return idUser.hashCode();
+    }
+
     public boolean isLive() {
         return live;
     }

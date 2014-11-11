@@ -62,7 +62,7 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
         FollowEntity followEntity = null;
         if (followsToUpdate.size() > 0) {
             for (FollowEntity f : followsToUpdate) {
-                if (f.getCsys_synchronized().equals("D")) {
+                if (f.getCsysSynchronized().equals("D")) {
                     followEntity = unfollowUserAndRecordInDatabase(f);
                 } else {
                     followEntity = followUserAndRecordInDatabase(f);
@@ -92,7 +92,9 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
 
     public FollowEntity unfollowUserAndRecordInDatabase(FollowEntity f) throws IOException, SQLException {
         FollowEntity followReceived = service.unfollowUser(f);
-        if(followReceived!=null) followManager.saveFollowFromServer(followReceived);
+        if(followReceived!=null) {
+            followManager.saveFollowFromServer(followReceived);
+        }
         return followReceived;
     }
 

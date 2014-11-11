@@ -48,7 +48,9 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
         if (watchesToUpdate.size() > 0) {
             for (WatchEntity watch : watchesToUpdate) {
                 WatchEntity watchEntity = setWatch(watch);
-                if(watchEntity!=null) watchEntities.add(watchEntity);
+                if(watchEntity!=null) {
+                    watchEntities.add(watchEntity);
+                }
             }
         }
         watchManager.saveWatches(watchEntities);

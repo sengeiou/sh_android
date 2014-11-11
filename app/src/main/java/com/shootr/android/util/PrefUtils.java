@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 public class PrefUtils {
 
+    private PrefUtils() {
+    }
+
     public static final String PREF_MOCK_CURRENT_TIME = "mock_current_time";
 
     public static SharedPreferences getMockPreferences(Context context) {

@@ -184,9 +184,9 @@ public class FollowManager extends AbstractManager{
                 queryResults.moveToFirst();
                 do {
                     FollowEntity follow = followMapper.fromCursor(queryResults);
-                    if (follow != null && follow.getCsys_deleted() == null) {
+                    if (follow != null && follow.getCsysDeleted() == null) {
                         resultRelationship = FollowEntity.RELATIONSHIP_FOLLOWING;
-                    }else if(follow!=null && follow.getCsys_deleted() !=null){
+                    }else if(follow!=null && follow.getCsysDeleted() !=null){
                         resultRelationship = FollowEntity.RELATIONSHIP_NONE;
                     }
                 } while (queryResults.moveToNext());

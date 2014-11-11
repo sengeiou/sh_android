@@ -50,8 +50,6 @@ public class EmailLoginActivity extends BaseActivity {
     @InjectView(R.id.email_login_password) EditText mPassword;
     @InjectView(R.id.email_login_button) CircularProgressButton mLoginButton;
 
-//    private LoginUserJob currentLoginJob = GolesApplication.get(this).getObjectGraph().get(LoginUserJob.class);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +67,6 @@ public class EmailLoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
-//        currentLoginJob = null;
         UserEntity user = event.getResult();
         // Yey!
         Timber.d("Succesfuly logged in %s", user.getUserName());
@@ -163,14 +160,6 @@ public class EmailLoginActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         bus.unregister(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        if (currentLoginJob != null) {
-//            currentLoginJob.cancelJob();
-//        }
     }
 
     @Override

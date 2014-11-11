@@ -129,7 +129,6 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     private void retrieveUserInfo() {
@@ -147,7 +146,8 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
+          GetFollowUnFollowUserOfflineJob.class);
         job2.init(currentUser,idUser,followType);
         jobManager.addJobInBackground(job2);
 
@@ -158,15 +158,16 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void userInfoReceived(UserInfoResultEvent event) {
-        if(event.getResult()!=null)
-        setUserInfo(event.getResult());
+        if (event.getResult() != null) {
+            setUserInfo(event.getResult());
+        }
     }
 
     @Subscribe
-    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-        if(event.getResult()!=null)
-        setUserInfo(event.getResult());
-
+    public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
+        if (event.getResult() != null) {
+            setUserInfo(event.getResult());
+        }
     }
 
     public static UserModel getUser(){
@@ -248,7 +249,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void openUserFollowsList(int followType) {
         if(idUser==null) return;
-        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType),677);
+        startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
     }
 
     private void loadLatestShots() {

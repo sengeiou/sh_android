@@ -44,7 +44,7 @@ public class UserManager extends AbstractManager {
             insertInSync();
         }
 
-        //TODO error handling if(res<0)
+        //TODO error handling  if res<0
     }
 
     /**

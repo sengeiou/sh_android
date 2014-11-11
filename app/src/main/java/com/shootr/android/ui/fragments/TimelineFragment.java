@@ -3,10 +3,12 @@ package com.shootr.android.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -35,7 +37,8 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.model.WatchingRequestModel;
-import com.shootr.android.util.Utils;
+import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -73,23 +76,24 @@ public class TimelineFragment extends BaseFragment
 
     @Inject Picasso picasso;
     @Inject Bus bus;
-    @Inject JobManager jobManager;
+    @Inject TimeUtils timeUtils;
 
+    @Inject JobManager jobManager;
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.timeline_empty) View emptyView;
 
+    @InjectView(R.id.timeline_empty) View emptyView;
     @InjectView(R.id.timeline_watching_container) View watchingRequestContainerView;
     @InjectView(R.id.timeline_watching_title) TextView watchingRequestTitleView;
     @InjectView(R.id.timeline_watching_subtitle) TextView watchingRequestSubtitleView;
     @InjectView(R.id.timeline_watching_action_ignore) View watchingRequestActionIgnoreView;
-    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
 
+    @InjectView(R.id.timeline_watching_action_yes) View watchingRequestActionYesView;
     private View footerView;
     private ProgressBar footerProgress;
-    private TextView footerText;
 
+    private TextView footerText;
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
     private boolean isLoadingMore;
@@ -214,7 +218,7 @@ public class TimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
         listView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -351,7 +355,7 @@ public class TimelineFragment extends BaseFragment
         }else{
             icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
         }
-        Utils.setBadgeCount(getActivity(),icon,numNotificationBadge);
+        setBadgeCount(getActivity(), icon, numNotificationBadge);
 
         super.onCreateOptionsMenu(menu,inflater);
      }
@@ -394,14 +398,12 @@ public class TimelineFragment extends BaseFragment
                         newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
         intent.putExtras(anim);
-        startActivityForResult(intent, REQUEST_NEW_SHOT);
-        // ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
+        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        //TODO Shot detail
-        //Shot shot = adapter.getItem(position - 1);
+        ShotModel shot = adapter.getItem(position - 1);
         Timber.d("Clicked shot %d", position);
     }
 
@@ -550,6 +552,21 @@ public class TimelineFragment extends BaseFragment
         Toast.makeText(getActivity(), R.string.communication_error, Toast.LENGTH_SHORT).show();
         isRefreshing = false;
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    public void setBadgeCount(Context context, LayerDrawable icon, int count) {
+        BadgeDrawable badge;
+        // Reuse drawable if possible
+        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+        if (reuse != null && reuse instanceof BadgeDrawable) {
+            badge = (BadgeDrawable) reuse;
+        } else {
+            badge = new BadgeDrawable(context);
+        }
+        badge.setCount(count);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, badge);
     }
 }
 

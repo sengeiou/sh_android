@@ -7,7 +7,7 @@ public class ShotModel {
     //Shot attributes
     private Long idShot;
     private String comment;
-    private Date csys_birth;
+    private Date csysBirth;
     //User attributes
     private Long idUser;
     private String userName;
@@ -29,12 +29,12 @@ public class ShotModel {
         this.comment = comment;
     }
 
-    public Date getCsys_birth() {
-        return csys_birth;
+    public Date getCsysBirth() {
+        return csysBirth;
     }
 
-    public void setCsys_birth(Date csys_birth) {
-        this.csys_birth = csys_birth;
+    public void setCsysBirth(Date csysBirth) {
+        this.csysBirth = csysBirth;
     }
 
     public Long getIdUser() {

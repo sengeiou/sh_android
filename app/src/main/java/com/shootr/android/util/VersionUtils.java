@@ -8,6 +8,9 @@ import timber.log.Timber;
 
 public class VersionUtils {
 
+    private VersionUtils() {
+    }
+
     public static int getVersionCode(Context context) {
         try {
             return getPackageInfo(context).versionCode;

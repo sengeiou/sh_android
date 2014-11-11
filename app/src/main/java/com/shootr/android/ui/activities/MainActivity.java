@@ -177,7 +177,6 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void setActiveDrawerPosition(int position) {
         currentSelectedDrawerPosition = position;
-        //menuAdapter.setSelectedPosition(position);
         drawerList.setItemChecked(position, true);
     }
 
@@ -200,7 +199,6 @@ public class MainActivity extends BaseSignedInActivity {
             transaction.add(R.id.main_content, recycledOrNewFragment, newFragmentName);
         } else {
             transaction.add(R.id.main_content, recycledOrNewFragment, newFragmentName);
-            //transaction.attach(recycledOrNewFragment);
         }
 
         transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
