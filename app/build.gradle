@@ -250,7 +250,7 @@ afterEvaluate { project ->
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "http://nexus.fav24.com/content/repositories/snapshots/") {
+            repository(url: "http://nexus.fav24.net/content/repositories/snapshots/") {
                 authentication(userName: "deployment", password: "deployment123")
             }
             pom.version = android.defaultConfig.versionName
