@@ -43,12 +43,13 @@ public class WatchRequestNotification extends CommonNotification {
         if (largeIcon == null) {
             if (url.isEmpty()) {
                 largeIcon = getDefaultPhoto();
-            }
-            try {
-                largeIcon = picasso.load(url).get();
-            } catch (IOException | IllegalArgumentException e) {
-                Timber.e(e, "Error downloading user photo for a shot notification.");
-                largeIcon = getDefaultPhoto();
+            }else{
+                try {
+                    largeIcon = picasso.load(url).get();
+                } catch (IOException | IllegalArgumentException e) {
+                    Timber.e(e, "Error downloading user photo for a shot notification.");
+                    largeIcon = getDefaultPhoto();
+                }
             }
         }
         return largeIcon;
