@@ -53,7 +53,10 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     }
 
     @Override protected void run() throws SQLException, IOException {
-        user = getUserById();
+        user = getUserByIdFromDatabase();
+        if(user == null){
+            user = getUserByIdFromService();
+        }
         //OfflineMode
         Timber.e("Sending Offline Shots");
         List<ShotEntity> latestShotsOffline = getLatestShotsFromDatabase();
@@ -93,10 +96,13 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     }
 
 
-    private UserEntity getUserById(){
+    private UserEntity getUserByIdFromDatabase(){
+
         return userManager.getUserByIdUser(idUser);
     }
 
+    private UserEntity getUserByIdFromService() throws IOException {
+        return service.getUserByIdUser(idUser);}
 
 
     @Override protected boolean isNetworkRequired() {
