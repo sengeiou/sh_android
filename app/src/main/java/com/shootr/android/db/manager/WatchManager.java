@@ -206,7 +206,7 @@ public class WatchManager extends AbstractManager{
     public Integer getPeopleWatchingInInfo() {
         String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+MatchTable.TABLE+" m WHERE m."+MatchTable.ID_MATCH+"=w."+WatchTable.ID_MATCH+" AND m."+MatchTable.STATUS+"="+MatchEntity.STARTED +" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
         Cursor queryResult = db.rawQuery(sql,null);
-        Integer number = 0;
+        Integer number = -1;
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
             number = queryResult.getInt(queryResult.getColumnIndex("NUMBER"));

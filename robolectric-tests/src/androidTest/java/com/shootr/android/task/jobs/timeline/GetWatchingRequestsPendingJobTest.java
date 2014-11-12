@@ -79,7 +79,6 @@ public class GetWatchingRequestsPendingJobTest {
     public void resultContainsAMatchWhereMyFavoriteTeamIsGoingToPlay(){
         MatchEntity match = new MatchEntity();
         match.setIdVisitorTeam(sessionManager.getCurrentUser().getFavoriteTeamId());
-
         when(matchManager.getNextMatchFromTeam(sessionManager.getCurrentUserId())).thenReturn(match);
 
     }

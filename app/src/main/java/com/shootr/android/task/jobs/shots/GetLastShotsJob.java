@@ -24,14 +24,14 @@ import timber.log.Timber;
 public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
 
     private static final int PRIORITY = 7;
-    private static final Long LATEST_SHOTS_NUMBER = 3L;
+    public static final Long LATEST_SHOTS_NUMBER = 3L;
     private ShootrService service;
     private ShotManager shotManager;
     private UserManager userManager;
     private Long idUser;
     private UserEntity user;
 
-    @Inject protected GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service, ShotManager shotManager, UserManager userManager, SQLiteOpenHelper openHelper) {
+    @Inject public GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service, ShotManager shotManager, UserManager userManager, SQLiteOpenHelper openHelper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.shotManager = shotManager;
@@ -43,16 +43,16 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
         this.idUser = idUser;
     }
 
-    @Override protected void createDatabase() {
+    @Override public void createDatabase() {
         createWritableDb();
     }
 
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
+    @Override public void setDatabaseToManagers(SQLiteDatabase db) {
         userManager.setDataBase(db);
         shotManager.setDataBase(db);
     }
 
-    @Override protected void run() throws SQLException, IOException {
+    @Override public void run() throws SQLException, IOException {
         user = getUserByIdFromDatabase();
         if(user == null){
             user = getUserByIdFromService();
@@ -85,27 +85,27 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
         return shotModels;
     }
 
-    private List<ShotEntity> getLatestsShotsFromService() throws IOException {
+    public List<ShotEntity> getLatestsShotsFromService() throws IOException {
         List<ShotEntity> shotEntities = service.getLatestsShotsFromIdUser(idUser, LATEST_SHOTS_NUMBER);
         shotManager.saveShots(shotEntities);
         return getLatestShotsFromDatabase();
     }
 
-    private List<ShotEntity> getLatestShotsFromDatabase(){
+    public List<ShotEntity> getLatestShotsFromDatabase(){
         return shotManager.getLatestShotsFromIdUser(idUser,LATEST_SHOTS_NUMBER);
     }
 
 
-    private UserEntity getUserByIdFromDatabase(){
+    public UserEntity getUserByIdFromDatabase(){
 
         return userManager.getUserByIdUser(idUser);
     }
 
-    private UserEntity getUserByIdFromService() throws IOException {
+    public UserEntity getUserByIdFromService() throws IOException {
         return service.getUserByIdUser(idUser);}
 
 
-    @Override protected boolean isNetworkRequired() {
+    @Override public boolean isNetworkRequired() {
         return false;
     }
 }

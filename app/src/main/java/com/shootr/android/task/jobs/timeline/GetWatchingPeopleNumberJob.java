@@ -20,6 +20,7 @@ public class GetWatchingPeopleNumberJob extends ShootrBaseJob<WatchingPeopleNumb
     WatchManager watchManager;
     MatchManager matchManager;
     SQLiteOpenHelper openHelper;
+
     @Inject protected GetWatchingPeopleNumberJob(Application application, Bus bus, NetworkUtil networkUtil, SQLiteOpenHelper openHelper, WatchManager watchManager, MatchManager matchManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.watchManager = watchManager;
@@ -38,6 +39,7 @@ public class GetWatchingPeopleNumberJob extends ShootrBaseJob<WatchingPeopleNumb
 
     @Override protected void run() throws SQLException, IOException {
         Integer number = getNumberOfWatchers();
+
         postSuccessfulEvent(new WatchingPeopleNumberEvent(number));
     }
 
