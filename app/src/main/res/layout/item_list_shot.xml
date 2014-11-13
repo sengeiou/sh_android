@@ -6,16 +6,16 @@
   android:layout_height="wrap_content"
   android:descendantFocusability="blocksDescendants"
   android:orientation="vertical"
-  android:paddingBottom="24dp"
-  android:paddingLeft="16dp"
-  android:paddingRight="16dp"
-  android:paddingTop="16dp">
+  >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/shot_avatar"
         android:layout_width="@dimen/shot_avatar_size"
         android:layout_height="@dimen/shot_avatar_size"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:src="@drawable/ic_contact_picture_default"
@@ -25,6 +25,7 @@
         android:id="@+id/shot_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/shot_avatar"
         android:layout_toLeftOf="@+id/shot_timestamp"
         android:layout_toRightOf="@id/shot_avatar"
         android:textColor="@color/gray_10"
@@ -37,21 +38,25 @@
         android:id="@+id/shot_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/shot_user_name"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
         android:textColor="@color/gray_60"
         tools:text="22m"
         />
 
     <TextView
         android:id="@+id/shot_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+      android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/shot_user_name"
         android:layout_below="@id/shot_user_name"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="16dp"
         android:autoLink="web"
-        android:textSize="16sp"
         android:textColor="@color/gray_30"
         android:textColorLink="@color/links"
+        android:textSize="16sp"
         tools:text="Who's the referee?"
         />
 
@@ -70,8 +75,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_reply"
             android:clickable="true"
+            android:src="@drawable/ic_reply"
             />
 
     </LinearLayout>

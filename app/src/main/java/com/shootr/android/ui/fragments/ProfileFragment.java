@@ -1,13 +1,22 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -93,7 +102,7 @@ public class ProfileFragment extends BaseFragment {
         setHasOptionsMenu(true);
         avatarClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onShotAvatarClick();
+                onShotAvatarClick(v);
             }
         };
     }
@@ -299,8 +308,14 @@ public class ProfileFragment extends BaseFragment {
         vh.avatar.setTag(vh);
     }
 
-    private void onShotAvatarClick() {
-        //TODO ???
+    private void onShotAvatarClick(View v) {
+        float scale = 1.1f;
+        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarImageView, "scaleX", 1f, scale, 1f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarImageView, "scaleY", 1f, scale, 1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX, animY);
+        animatorSet.setDuration(200);
+        animatorSet.setInterpolator(new LinearInterpolator());
+        animatorSet.start();
     }
-
 }
