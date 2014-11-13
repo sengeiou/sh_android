@@ -78,7 +78,9 @@ public class EditInfoPresenter {
         String matchTitle;
         boolean watching;
 
-        public EditInfoModel() {}
+        public EditInfoModel() {
+
+        }
 
         public EditInfoModel(Long idMatch, String matchTitle, boolean watchingStatus) {
             this.idMatch = idMatch;

@@ -11,7 +11,9 @@ public class Synchronized {
     protected Integer csysRevision;
     protected String csysSynchronized;
 
-    public Synchronized(){}
+    public Synchronized(){
+
+    }
 
     public Date getCsysBirth() {
         return csysBirth;

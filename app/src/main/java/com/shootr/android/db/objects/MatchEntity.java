@@ -5,10 +5,7 @@ import java.util.Date;
 
 public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
 
-    public static final Long NOT_STARTED = 0L;
     public static final Long STARTED = 1L;
-    public static final Long ENDED = 2L;
-    public static final Long ADJOURNED = 3L;
 
     private Long idMatch;
     private Date matchDate;
@@ -76,9 +73,12 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof MatchEntity)) return false;
-
+        if (this == o){
+            return true;
+        }
+        if (o == null || !(o instanceof MatchEntity)){
+            return false;
+        }
         MatchEntity that = (MatchEntity) o;
 
         if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null) return false;

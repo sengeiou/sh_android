@@ -17,7 +17,9 @@ public class SyncService extends Service {
     private static final Object sSyncAdapterLock = new Object();
 
 
-    public SyncService(){super();}
+    public SyncService(){
+        super();
+    }
     /*
      * Instantiate the sync adapter object.
      */

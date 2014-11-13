@@ -237,11 +237,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
                 unfollowUser(user);
               }
           })
-          .setNegativeButton("No", new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-
-              }
-          })
+          .setNegativeButton("No", null)
           .create()
           .show();
     }

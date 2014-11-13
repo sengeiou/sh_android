@@ -52,7 +52,9 @@ public class BaseActivity extends ActionBarActivity {
         return ShootrApplication.get(this).getObjectGraph();
     }
 
-    public Toolbar getToolbar(){ return actionBarToolbar;}
+    public Toolbar getToolbar(){
+        return actionBarToolbar;
+    }
 
     protected Toolbar getActionBarToolbar(){
         if(actionBarToolbar == null){

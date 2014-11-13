@@ -5,8 +5,8 @@ public class TableSync {
     private Integer order;
     private String entity;
     private Long frequency;
-    private Long max_timestamp;
-    private Long min_timestamp;
+    private Long maxTimestamp;
+    private Long minTimestamp;
     private Integer minRows;
     private Integer maxRows;
     private String direction;
@@ -36,19 +36,19 @@ public class TableSync {
     }
 
     public Long getMaxTimestamp() {
-        return max_timestamp;
+        return maxTimestamp;
     }
 
-    public void setMaxTimestamp(Long max_timestamp) {
-        this.max_timestamp = max_timestamp;
+    public void setMaxTimestamp(Long maxTimestamp) {
+        this.maxTimestamp = maxTimestamp;
     }
 
     public Long getMinTimestamp() {
-        return min_timestamp;
+        return minTimestamp;
     }
 
-    public void setMinTimestamp(Long min_timestamp) {
-        this.min_timestamp = min_timestamp;
+    public void setMinTimestamp(Long minTimestamp) {
+        this.minTimestamp = minTimestamp;
     }
 
     public Integer getMinRows() {

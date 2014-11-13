@@ -56,6 +56,7 @@ public class EmailRegistrationActivity extends BaseActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                /* no-op */
             }
         });
     }

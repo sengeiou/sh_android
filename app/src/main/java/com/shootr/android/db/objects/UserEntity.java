@@ -20,39 +20,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     private String website;
     private String bio;
 
-    public UserEntity(){}
-
-    public UserEntity(Long idUser, Long favoriteTeamId, String sessionToken, String userName, String email, String name,
-      String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
-        this.idUser = idUser;
-        this.favoriteTeamId = favoriteTeamId;
-        this.sessionToken = sessionToken;
-        this.userName = userName;
-        this.email = email;
-        this.name = name;
-        this.photo = photo;
-        this.points = points;
-        this.numFollowings = numFollowings;
-        this.numFollowers = numFollowers;
-        this.rank = rank;
-        this.website = website;
-        this.bio = bio;
-    }
-
-    public UserEntity(Long idUser, Long favoriteTeamId, String favoriteTeamName, String userName, String name,
-      String photo, Long points, Long numFollowings, Long numFollowers, Long rank, String website, String bio) {
-        this.idUser = idUser;
-        this.favoriteTeamId = favoriteTeamId;
-        this.favoriteTeamName = favoriteTeamName;
-        this.userName = userName;
-        this.name = name;
-        this.photo = photo;
-        this.points = points;
-        this.numFollowings = numFollowings;
-        this.numFollowers = numFollowers;
-        this.rank = rank;
-        this.website = website;
-        this.bio = bio;
+    public UserEntity(){
     }
 
     public Long getIdUser() {
