@@ -87,6 +87,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
+        setHasOptionsMenu(true);
         currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
     }
 
@@ -149,7 +150,6 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
         getAdapter().setItems(usersFollowing);
-
         getAdapter().notifyDataSetChanged();
     }
 

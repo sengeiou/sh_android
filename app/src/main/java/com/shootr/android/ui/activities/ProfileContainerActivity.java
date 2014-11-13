@@ -77,6 +77,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         bundleUser.putString("PHOTO", user.getPhoto());
         data.putExtras(bundleUser);
         setResult(Activity.RESULT_OK,data);
+        finish();
         super.onBackPressed();
 
     }

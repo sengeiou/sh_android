@@ -162,9 +162,9 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        startUpdateNotificationBadge();
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
+        startUpdateNotificationBadge();
     }
 
     public void startUpdateNotificationBadge(){
@@ -343,21 +343,15 @@ public class TimelineFragment extends BaseFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
         inflater.inflate(R.menu.timeline, menu);
-
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem menuItem = menu .findItem(R.id.menu_info);
+        MenuItem menuItem = menu.findItem(R.id.menu_info);
         menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
-        if(numNotificationBadge == 0){
-            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_social_people_outline));
-        }else{
-            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+        if(numNotificationBadge != 0){
+            setBadgeCount(getActivity(), (LayerDrawable)menuItem.getIcon(), numNotificationBadge);
         }
-        setBadgeCount(getActivity(), icon, numNotificationBadge);
 
-        super.onCreateOptionsMenu(menu,inflater);
+
      }
 
     @Override
@@ -397,7 +391,7 @@ public class TimelineFragment extends BaseFragment
                 ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
                         newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        intent.putExtras(anim);
+        if(anim!=null) intent.putExtras(anim);
         ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 
@@ -565,7 +559,6 @@ public class TimelineFragment extends BaseFragment
             badge = new BadgeDrawable(context);
         }
         badge.setCount(count);
-        icon.mutate();
         icon.setDrawableByLayerId(R.id.ic_badge, badge);
     }
 }

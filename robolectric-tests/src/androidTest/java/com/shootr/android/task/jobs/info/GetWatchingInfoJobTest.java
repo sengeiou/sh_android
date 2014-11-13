@@ -164,14 +164,6 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         verify(bus, times(2)).post(argThat(new ContainsMatchPlayedByTeamMatcher(FAVOURITE_TEAM_ID)));
     }
 
-    private WatchEntity getWatch(Long userId) {
-        WatchEntity watch = new WatchEntity();
-        watch.setIdUser(userId);
-        watch.setIdMatch(IRRELEVANT_MATCH_ID);
-        watch.setStatus(WATCH_STATUS_WATCHING);
-        return watch;
-    }
-
     @Test
     public void postOnceWhenOnlineInfoOnly() throws Throwable {
         WatchingInfoResult event = mock(WatchingInfoResult.class);
