@@ -275,7 +275,7 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void onLatestShotsLoaded(LatestShotsResultEvent event) {
         List<ShotModel> shots = event.getResult();
-        if (shots != null && shots.size() > 0) {
+        if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             for (ShotModel shot : shots) {

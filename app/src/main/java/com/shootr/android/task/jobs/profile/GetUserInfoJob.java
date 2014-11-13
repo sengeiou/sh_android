@@ -23,7 +23,6 @@ import timber.log.Timber;
 public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
-    private static final int RETRY_ATTEMPTS = 3;
 
     ShootrService service;
 
@@ -33,7 +32,6 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private Long userId;
     private UserEntity currentUser;
     private UserModelMapper userVOMapper;
-    private NetworkUtil networkUtil;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, ShootrService service,
       NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
@@ -41,7 +39,6 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.networkUtil = networkUtil1;
         this.userVOMapper = userVOMapper;
         setOpenHelper(dbHelper);
     }

@@ -32,7 +32,6 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     private Long idUser;
     private int followUnfollowType;
     private int doIFollowHim;
-    private boolean isMe;
 
     @Inject
     public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,

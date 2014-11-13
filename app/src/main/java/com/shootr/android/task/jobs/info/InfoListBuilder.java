@@ -26,7 +26,6 @@ public class InfoListBuilder {
     private UserWatchingModelMapper userWatchingModelMapper;
 
     private LongSparseArray<MatchModel> matchModelCache = new LongSparseArray<>();
-    private LongSparseArray<UserWatchingModel> userWatchingModelCache = new LongSparseArray<>();
 
     private LongSparseArray<MatchEntity> matchEntities = new LongSparseArray<>();
     private LongSparseArray<UserEntity> userEntities = new LongSparseArray<>();

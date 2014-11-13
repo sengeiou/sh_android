@@ -45,7 +45,7 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
     private void checkIfWeHaveSomeChangesInWatchAndSendToServer() throws IOException {
         List<WatchEntity> watchesToUpdate = watchManager.getDatasForSendToServerInCase();
          List<WatchEntity> watchEntities = new ArrayList<>();
-        if (watchesToUpdate.size() > 0) {
+        if (!watchesToUpdate.isEmpty()) {
             for (WatchEntity watch : watchesToUpdate) {
                 WatchEntity watchEntity = setWatch(watch);
                 if(watchEntity!=null) {

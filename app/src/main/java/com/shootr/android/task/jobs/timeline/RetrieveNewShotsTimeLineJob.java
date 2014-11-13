@@ -46,7 +46,7 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
         List<ShotEntity> newShots = new CopyOnWriteArrayList<>();
 
         Long lastModifiedDate = shotManager.getLastModifiedDate(DatabaseContract.ShotTable.TABLE);
-        if(getFollowingIds().size()>0) {
+        if(!getFollowingIds().isEmpty()) {
              newShots = service.getNewShots(getFollowingIds(), lastModifiedDate);
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
