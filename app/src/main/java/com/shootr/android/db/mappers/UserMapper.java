@@ -11,7 +11,9 @@ import java.util.Map;
 public class UserMapper extends GenericMapper {
 
 
-    public UserMapper(){}
+    public UserMapper(){
+
+    }
 
     public UserEntity fromCursor(Cursor c) {
         UserEntity user = getUserByCursor(c);
@@ -53,25 +55,6 @@ public class UserMapper extends GenericMapper {
         return cv;
     }
 
-    //TODO bad smell: nombre de método ofuscado
-    public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
-        dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
-        dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
-        dto.put(UserTable.NAME, user == null ? null : user.getName());
-        dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
-        dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
-        dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
-        dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
-        dto.put(UserTable.BIO, user == null ? null : user.getBio());
-        dto.put(UserTable.RANK, user == null ? null : user.getRank());
-        dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        setSynchronizedtoDto(user, dto);
-        return dto;
-    }
-
     public UserEntity fromDto(Map<String, Object> dto) {
         UserEntity user = new UserEntity();
         user.setIdUser(dto.containsKey(UserTable.ID) ?  ((Number)dto.get(UserTable.ID)).longValue() : null);
@@ -92,6 +75,10 @@ public class UserMapper extends GenericMapper {
         return user;
     }
 
+    //TODO bad smell: nombre de método ofuscado
+    public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
+        return toDto(user);
+    }
 
 
     public  Map<String, Object> toDto(UserEntity user) {

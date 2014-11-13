@@ -232,6 +232,7 @@ public class TimelineFragment extends BaseFragment
                 new ListViewScrollObserver.OnListViewScrollListener() {
                     @Override
                     public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
+                        /* no-op */
                     }
 
                     @Override

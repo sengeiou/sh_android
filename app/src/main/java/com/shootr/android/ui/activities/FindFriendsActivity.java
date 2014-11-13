@@ -354,11 +354,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
                   startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);
               }
           })
-          .setNegativeButton("No", new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-
-              }
-          })
+          .setNegativeButton("No", null)
           .create()
           .show();
     }

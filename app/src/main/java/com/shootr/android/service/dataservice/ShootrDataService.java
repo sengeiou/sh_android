@@ -101,11 +101,10 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public List<UserEntity> getFollowing(Long idUser, Long lastModifiedDate) throws IOException {
-            List<UserEntity> following = new ArrayList<>();
-            GenericDto requestDto =
-              userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, false);
-            GenericDto responseDto = postRequest(requestDto);
-            OperationDto[] ops = responseDto.getOps();
+        List<UserEntity> following = new ArrayList<>();
+        GenericDto requestDto = userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, false);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
 
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
@@ -119,8 +118,8 @@ public class ShootrDataService implements ShootrService {
                 }
             }
         }
-            return following;
-        }
+        return following;
+    }
 
 
     @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {

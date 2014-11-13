@@ -12,6 +12,7 @@ import android.telephony.TelephonyManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.constant.Constants;
@@ -42,9 +43,8 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     private StringPreference registrationId;
     private IntPreference registeredAppVersion;
     private final GoogleCloudMessaging gcm;
-    private UserEntity currentUser;
     private ShootrService service;
-
+    private SessionManager sessionManager;
     private DeviceManager deviceManager;
 
     //TODO check for play services apk and version!
@@ -52,19 +52,15 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
       @GCMAppVersion IntPreference registeredAppVersion, ShootrService service, DeviceManager deviceManager,
-      SQLiteOpenHelper openHelper) {
+      SQLiteOpenHelper openHelper, SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.registrationId = registrationId;
         this.registeredAppVersion = registeredAppVersion;
         this.gcm = gcm;
         this.service = service;
         this.deviceManager = deviceManager;
+        this.sessionManager = sessionManager;
         setOpenHelper(openHelper);
-        currentUser = ShootrApplication.get(getContext()).getCurrentUser();
-    }
-
-    public void init() {
-
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -95,7 +91,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
 
         if (existingDevice == null) {
             existingDevice = new DeviceEntity();
-            existingDevice.setIdUser(currentUser.getIdUser());
+            existingDevice.setIdUser(sessionManager.getCurrentUserId());
             existingDevice.setPlatform(Constants.ANDROID_PLATFORM.intValue());
             existingDevice.setOsVer("Android");
             existingDevice.setModel("Mío");

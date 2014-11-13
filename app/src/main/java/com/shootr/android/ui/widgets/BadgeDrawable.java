@@ -44,7 +44,9 @@ public class BadgeDrawable extends Drawable {
     }
 
     @Override public void draw(Canvas canvas) {
-        if(!mWillDraw){ return;}
+        if(!mWillDraw){
+            return;
+        }
         Rect bounds = getBounds();
         float width = bounds.right-bounds.left;
         float height = bounds.bottom-bounds.top;
@@ -77,11 +79,11 @@ public class BadgeDrawable extends Drawable {
     }
 
     @Override public void setAlpha(int alpha) {
-
+        /* no-op */
     }
 
     @Override public void setColorFilter(ColorFilter cf) {
-
+        /* no-op */
     }
 
     @Override public int getOpacity() {

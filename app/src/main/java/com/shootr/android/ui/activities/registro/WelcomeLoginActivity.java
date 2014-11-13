@@ -105,11 +105,12 @@ public class WelcomeLoginActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                /* no-op */
             }
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                /* no-op */
             }
         });
 

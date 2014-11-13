@@ -11,10 +11,10 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
     }
 
     @Override public void onActionViewExpanded() {
-
+        /* no-op */
     }
 
     @Override public void onActionViewCollapsed() {
-
+        /* no-op */
     }
 }

@@ -21,15 +21,15 @@ import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
   library = true)
 public class MapperModule {
 
-    @Provides ShotModelMapper provideShotModelMapper(){
+    @Provides ShotModelMapper provideShotModelMapper() {
         return new ShotModelMapper();
     }
 
-    @Provides MatchModelMapper provideMatchModelMapper(Application application){
+    @Provides MatchModelMapper provideMatchModelMapper(Application application) {
         return new MatchModelMapper(application);
     }
 
-    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application){
+    @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application) {
         return new UserWatchingModelMapper(application);
     }
 
@@ -45,20 +45,27 @@ public class MapperModule {
         return new ShotMapper();
     }
 
-    @Provides UserModelMapper provideUserVOMapper(){ return new UserModelMapper();}
+    @Provides UserModelMapper provideUserVOMapper() {
+        return new UserModelMapper();
+    }
 
     @Provides UserMapper provideUserMapper() {
         return new UserMapper();
     }
 
-    @Provides MatchMapper provideMatchMapper(){ return new MatchMapper();}
-
-    @Provides WatchMapper provideWatchMapper(){ return new WatchMapper();}
-
-    @Provides TeamMapper provideTeamMapper(){ return new TeamMapper();}
-
-    @Provides WatchingRequestModelMapper provideWatchingRequestModelMapper(Application application){
-        return new WatchingRequestModelMapper(application);
+    @Provides MatchMapper provideMatchMapper() {
+        return new MatchMapper();
     }
 
+    @Provides WatchMapper provideWatchMapper() {
+        return new WatchMapper();
+    }
+
+    @Provides TeamMapper provideTeamMapper() {
+        return new TeamMapper();
+    }
+
+    @Provides WatchingRequestModelMapper provideWatchingRequestModelMapper(Application application) {
+        return new WatchingRequestModelMapper(application);
+    }
 }

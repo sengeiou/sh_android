@@ -123,10 +123,12 @@ public final class FloatLabelLayout extends FrameLayout {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                /* no-op */
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /* no-op */
             }
 
         });

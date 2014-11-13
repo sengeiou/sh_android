@@ -102,7 +102,8 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     }
 
     public UserEntity getUserByIdFromService() throws IOException {
-        return service.getUserByIdUser(idUser);}
+        return service.getUserByIdUser(idUser);
+    }
 
 
     @Override public boolean isNetworkRequired() {
