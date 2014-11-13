@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -103,6 +104,7 @@ public class TimelineFragment extends BaseFragment
     private UserEntity currentUser;
     private List<WatchingRequestModel> watchingRequestsPendingStack;
     private int numNotificationBadge;
+    private BadgeDrawable badgeDrawable;
 
 
      /* ---- Lifecycle methods ---- */
@@ -338,7 +340,7 @@ public class TimelineFragment extends BaseFragment
 
     private void updateNotificationBadge(int count){
         numNotificationBadge = count;
-        getActivity().invalidateOptionsMenu();
+        setBadgeCount(count);
     }
 
     @Override
@@ -349,16 +351,14 @@ public class TimelineFragment extends BaseFragment
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         MenuItem menuItem = menu .findItem(R.id.menu_info);
         menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
-        if(numNotificationBadge == 0){
-            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_social_people_outline));
-        }else{
-            icon.setDrawableByLayerId(R.id.ic_people,getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+        LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
+        icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
+        if(numNotificationBadge != 0) {
+            setBadgeIcon(getActivity(), icon, numNotificationBadge);
         }
-        setBadgeCount(getActivity(), icon, numNotificationBadge);
-
-        super.onCreateOptionsMenu(menu,inflater);
-     }
+        menuItem.setIcon(icon);
+        menuItem.getIcon();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -555,18 +555,27 @@ public class TimelineFragment extends BaseFragment
     }
 
 
-    public void setBadgeCount(Context context, LayerDrawable icon, int count) {
-        BadgeDrawable badge;
+    public void setBadgeIcon(Context context, LayerDrawable icon, int count) {
         // Reuse drawable if possible
-        Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
-        if (reuse != null && reuse instanceof BadgeDrawable) {
-            badge = (BadgeDrawable) reuse;
-        } else {
-            badge = new BadgeDrawable(context);
+        if (badgeDrawable == null) {
+            Drawable reuse = icon.findDrawableByLayerId(R.id.ic_badge);
+            if (reuse != null && reuse instanceof BadgeDrawable) {
+                badgeDrawable = (BadgeDrawable) reuse;
+            } else {
+                badgeDrawable = new BadgeDrawable(context);
+            }
         }
-        badge.setCount(count);
+        setBadgeCount(count);
         icon.mutate();
-        icon.setDrawableByLayerId(R.id.ic_badge, badge);
+        icon.setDrawableByLayerId(R.id.ic_badge, badgeDrawable);
+    }
+
+    private void setBadgeCount(int count) {
+        if (badgeDrawable != null) {
+            badgeDrawable.setCount(count);
+        } else {
+            getActivity().supportInvalidateOptionsMenu();
+        }
     }
 }
 
