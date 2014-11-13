@@ -111,7 +111,6 @@ public class MainActivity extends BaseSignedInActivity {
 
     private void startGCMRegistration() {
         GCMRegistrationJob job = ShootrApplication.get(this).getObjectGraph().get(GCMRegistrationJob.class);
-        job.init();
         jobManager.addJobInBackground(job);
     }
 
