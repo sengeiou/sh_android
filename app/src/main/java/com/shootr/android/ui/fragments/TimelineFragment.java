@@ -401,7 +401,7 @@ public class TimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position - 1);
+        ShotModel shot = adapter.getItem(position);
         Timber.d("Clicked shot %d", position);
     }
 
