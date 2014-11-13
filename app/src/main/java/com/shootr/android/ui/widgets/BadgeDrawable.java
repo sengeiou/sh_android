@@ -33,7 +33,7 @@ public class BadgeDrawable extends Drawable {
         mBadgePaintBorder.setColor(context.getResources().getColor(R.color.primary));
         mBadgePaintBorder.setStyle(Paint.Style.STROKE);
         mBadgePaintBorder.setAntiAlias(true);
-        mBadgePaintBorder.setStrokeWidth(5f);
+        mBadgePaintBorder.setStrokeWidth(3f);
 
         mTextPaint = new Paint();
         mTextPaint.setColor(context.getResources().getColor(R.color.primary));

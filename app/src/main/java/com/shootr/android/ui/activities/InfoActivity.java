@@ -3,8 +3,8 @@ package com.shootr.android.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,9 +28,7 @@ import com.shootr.android.ui.adapters.InfoListAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -42,7 +40,7 @@ public class InfoActivity extends BaseSignedInActivity {
     @Inject JobManager jobManager;
     @Inject Bus bus;
     @Inject SessionManager sessionManager;
-
+    ActionBar actionBar;
     @InjectView(R.id.info_empty) LinearLayout emptyView;
     @InjectView(R.id.info_items_list) ListView listView;
     InfoListAdapter adapter;
@@ -57,7 +55,7 @@ public class InfoActivity extends BaseSignedInActivity {
         }
 
         setContainerContent(R.layout.activity_info);
-        setupActionBar();
+
         ButterKnife.inject(this);
 
         View.OnClickListener editInfoClickListener = new View.OnClickListener() {
@@ -70,6 +68,7 @@ public class InfoActivity extends BaseSignedInActivity {
                 editInfoForMatch(matchCorrespondingToItem, user);
             }
         };
+        setupActionBar();
 
         adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId(), editInfoClickListener);
 
@@ -84,7 +83,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @OnItemClick(R.id.info_items_list)
     public void onListItemClick(int position) {
-        UserWatchingModel userWatchingModel = (UserWatchingModel)adapter.getItem(position);
+        UserWatchingModel userWatchingModel = (UserWatchingModel) adapter.getItem(position);
         Long idUser = userWatchingModel.getIdUser();
         startActivity(ProfileContainerActivity.getIntent(this, idUser));
     }
@@ -97,24 +96,24 @@ public class InfoActivity extends BaseSignedInActivity {
     }
 
     private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    public void retrieveInfoList(){
+    public void retrieveInfoList() {
         GetWatchingInfoJob job = ShootrApplication.get(this).getObjectGraph().get(GetWatchingInfoJob.class);
         job.init(false);
         jobManager.addJobInBackground(job);
     }
 
     @Subscribe
-    public void receivedInfoList(WatchingInfoResult event){
+    public void receivedInfoList(WatchingInfoResult event) {
         Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
-        if(result!=null && result.size()>0){
+        if (result != null && result.size() > 0) {
             adapter.setContent(result);
             setEmpty(false);
-        }else{
+        } else {
             setEmpty(true);
         }
     }
@@ -123,6 +122,7 @@ public class InfoActivity extends BaseSignedInActivity {
         emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
         listView.setVisibility(empty ? View.GONE : View.VISIBLE);
     }
+
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
@@ -144,14 +144,17 @@ public class InfoActivity extends BaseSignedInActivity {
         bus.unregister(this);
     }
 
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 }

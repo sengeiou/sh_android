@@ -99,6 +99,7 @@ public class ProfileFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         injectArguments();
+        setHasOptionsMenu(true);
         avatarClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onShotAvatarClick(v);
