@@ -31,14 +31,16 @@
               android:layout_height="wrap_content"
               android:orientation="vertical"
               android:visibility="gone"
+              android:showDividers="middle"
+              android:divider="?android:listDivider"
               tools:visibility="visible"
               >
 
-               <!-- <include layout="@layout/item_list_shot" />
+                <include layout="@layout/item_list_shot" />
 
                 <include layout="@layout/item_list_shot" />
 
-                <include layout="@layout/item_list_shot" />-->
+                <include layout="@layout/item_list_shot" />
             </LinearLayout>
 
             <TextView

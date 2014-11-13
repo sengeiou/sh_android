@@ -1,5 +1,8 @@
 package com.shootr.android.ui.fragments;
 
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -92,7 +97,7 @@ public class ProfileFragment extends BaseFragment {
         injectArguments();
         avatarClickListener = new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onShotAvatarClick();
+                onShotAvatarClick(v);
             }
         };
     }
@@ -298,8 +303,18 @@ public class ProfileFragment extends BaseFragment {
         vh.avatar.setTag(vh);
     }
 
-    private void onShotAvatarClick() {
-        //TODO ???
+    private void onShotAvatarClick(View v) {
+        float scale = 1.2f;
+        avatarImageView.animate().scaleX(scale).scaleY(scale).setDuration(200).setInterpolator(new ReverseInterpolator()).start();
     }
 
+    private class ReverseInterpolator implements Interpolator {
+        @Override public float getInterpolation(float input) {
+            if (input < 0.5) {
+                return input * 2;
+            } else {
+                return 1f - input;
+            }
+        }
+    }
 }
