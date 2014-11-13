@@ -4,6 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:background="@color/white"
+  android:paddingBottom="16dp"
   tools:showIn="@layout/fragment_profile">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -168,7 +169,6 @@
       android:layout_alignLeft="@+id/profile_name"
       android:layout_below="@+id/profile_bio"
       android:autoLink="web"
-      android:layout_marginBottom="16dp"
       android:background="?android:selectableItemBackground"
       android:textColor="@color/links"
       tools:text="sevibus.sloydev.com" />
