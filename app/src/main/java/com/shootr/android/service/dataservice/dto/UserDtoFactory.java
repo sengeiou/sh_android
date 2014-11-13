@@ -34,13 +34,9 @@ public class UserDtoFactory {
     private static final String ALIAS_LOGIN = "Login";
     private static final String ALIAS_GET_FOLLOWING = "GET_FOLLOWING";
     private static final String ALIAS_GET_FOLLOWERS = "GET_FOLLOWERS";
-    private static final String ALIAS_GET_USERS = "GET_USERS";
     private static final String ALIAS_FOLLOW_USER = "FOLLOW_USER";
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
-    private static final String ALIAS_RETRIEVE_TEAM_BY_ID = "GET_TEAMBYID";
-    private static final String ALIAS_RETRIEVE_TEAMS_BY_TEAMIDS = "GET_TEAMS_BY_TEAMSIDS";
-    private static final String ALIAS_GETFOLLOWRELATIONSHIP = "GET_FOLLOWRELATIONSHIP";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
 
     private UtilityDtoFactory utilityDtoFactory;

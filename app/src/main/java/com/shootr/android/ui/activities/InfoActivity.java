@@ -110,7 +110,7 @@ public class InfoActivity extends BaseSignedInActivity {
     @Subscribe
     public void receivedInfoList(WatchingInfoResult event) {
         Map<MatchModel, Collection<UserWatchingModel>> result = event.getResult();
-        if (result != null && result.size() > 0) {
+        if (result != null && !result.isEmpty()) {
             adapter.setContent(result);
             setEmpty(false);
         } else {

@@ -316,7 +316,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         isLoadingRemoteData = savedInstanceState.getBoolean(EXTRA_SEARCH_IS_LOADING_REMOTE, false);
         List<UserModel> restoredResults = (List<UserModel>) savedInstanceState.getSerializable(EXTRA_RESULTS);
 
-        if (restoredResults != null && restoredResults.size() > 0) {
+        if (restoredResults != null && !restoredResults.isEmpty()) {
             setListContent(restoredResults, currentResultOffset);
             setEmpty(false);
             setLoading(hasMoreItemsToLoad);

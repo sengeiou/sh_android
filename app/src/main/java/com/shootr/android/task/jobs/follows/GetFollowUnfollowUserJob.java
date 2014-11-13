@@ -60,7 +60,7 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
     public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
         List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
         FollowEntity followEntity = null;
-        if (followsToUpdate.size() > 0) {
+        if (!followsToUpdate.isEmpty()) {
             for (FollowEntity f : followsToUpdate) {
                 if (f.getCsysSynchronized().equals("D")) {
                     followEntity = unfollowUserAndRecordInDatabase(f);

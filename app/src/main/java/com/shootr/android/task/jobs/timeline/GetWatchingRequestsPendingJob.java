@@ -76,7 +76,7 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
         List<Long> matchesIds = new ArrayList<>();
         List<Long> usersIds = new ArrayList<>();
         List<WatchingRequestModel> watchingRequestModels = new ArrayList<>();
-        if(watchesWhereIAmNot.size()>0){
+        if(!watchesWhereIAmNot.isEmpty()){
             for (WatchEntity watchEntity : watchesWhereIAmNot) {
                 matchesIds.add(watchEntity.getIdMatch());
                 usersIds.add(watchEntity.getIdUser());

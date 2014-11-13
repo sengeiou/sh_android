@@ -74,7 +74,6 @@ public class MainActivity extends BaseSignedInActivity {
 
     private ActionBar actionBar;
     private android.support.v7.app.ActionBarDrawerToggle drawerToggle;
-    private Toolbar toolbarActionBar;
     private String currentTitle;
     private UserEntity currentUser;
     private int currentSelectedDrawerPosition = -1;

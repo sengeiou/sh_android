@@ -105,6 +105,7 @@ public class WelcomeLoginActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
             }
 
             @Override

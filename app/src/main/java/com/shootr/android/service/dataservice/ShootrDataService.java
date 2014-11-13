@@ -106,23 +106,21 @@ public class ShootrDataService implements ShootrService {
               userDtoFactory.getFollowingsOperationDto(idUser, 0L, lastModifiedDate, false);
             GenericDto responseDto = postRequest(requestDto);
             OperationDto[] ops = responseDto.getOps();
-            if (ops == null || ops.length < 1) {
-                Timber.e("Received 0 operations");
-                return null;
-            }
 
-            if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
-                Map<String, Object>[] data = ops[0].getData();
-                for(Map<String,Object> d:data){
-                    UserEntity user = userMapper.fromDto(d);
-                    if(user.getCsysDeleted() == null){
-                        following.add(user);
-                    }
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        } else if (ops[0].getMetadata().getTotalItems() > 0) {
+
+            Map<String, Object>[] data = ops[0].getData();
+            for (Map<String, Object> d : data) {
+                UserEntity user = userMapper.fromDto(d);
+                if (user.getCsysDeleted() == null) {
+                    following.add(user);
                 }
             }
+        }
             return following;
         }
-
 
 
     @Override public List<UserEntity> getFollowers(Long idUserFollowed, Long lastModifiedDate) throws IOException {
@@ -132,17 +130,13 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
             for(Map<String,Object> d:data){
                 UserEntity user = userMapper.fromDto(d);
                 if(user.getCsysDeleted()==null){
                     followers.add(user);
                 }
-
             }
         }
         return followers;
@@ -155,14 +149,11 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object> data = ops[0].getData()[0];
             return shotMapper.fromDto(data);
-        }else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -174,12 +165,10 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for (int i = 0; i < data.length; i++) {
-                ShotEntity shot = shotMapper.fromDto(data[i]);
+            for (Map<String, Object> aData : data) {
+                ShotEntity shot = shotMapper.fromDto(aData);
                 newerShots.add(shot);
             }
         }
@@ -195,12 +184,10 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if(ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for (int i = 0; i < data.length; i++) {
-                ShotEntity shot = shotMapper.fromDto(data[i]);
+            for (Map<String, Object> aData : data) {
+                ShotEntity shot = shotMapper.fromDto(aData);
                 olderShots.add(shot);
             }
         }
@@ -215,12 +202,10 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object>[] data = ops[0].getData();
-            for (int i = 0; i < data.length; i++) {
-                ShotEntity shot = shotMapper.fromDto(data[i]);
+            for (Map<String, Object> aData : data) {
+                ShotEntity shot = shotMapper.fromDto(aData);
                 shots.add(shot);
             }
         }
@@ -234,14 +219,11 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object> dataItem = ops[0].getData()[0];
             return shotMapper.fromDto(dataItem);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -251,14 +233,11 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        if (ops.length > 0 && ops[0].getMetadata().getTotalItems() > 0) {
+        }else if (ops[0].getMetadata().getTotalItems() > 0) {
             Map<String, Object> dataItem = ops[0].getData()[0];
             return userMapper.fromDto(dataItem);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -270,21 +249,19 @@ public class ShootrDataService implements ShootrService {
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-            return null;
-        }
-        MetadataDto metadata = ops[0].getMetadata();
-        Long items = metadata.getItems();
-        if (ops.length > 0) {
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 users.add(userMapper.fromDto(dataItem));
             }
-        } else {
-            return null;
+            int totalItems = metadata.getTotalItems().intValue();
+            return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT)
+              .setPageOffset(pageOffset)
+              .setTotalItems(totalItems);
         }
-
-        int totalItems = metadata.getTotalItems().intValue();
-        return new PaginatedResult<>(users).setPageLimit(SEARCH_PAGE_LIMIT).setPageOffset(pageOffset).setTotalItems(totalItems);
+        return null;
     }
 
     @Override public FollowEntity getFollowByIdUserFollowed(Long idCurrentUser,Long idUser) throws IOException {
@@ -358,56 +335,45 @@ public class ShootrDataService implements ShootrService {
         MatchEntity matchReceived = matchMapper.fromDto(dataItem);
         if (matchReceived.getIdMatch() != null) {
             return matchReceived;
-        } else {
-            return null;
         }
+        return null;
     }
 
 
     @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long idUser) throws IOException {
+        List<WatchEntity> watchesReceived = new ArrayList<>();
         GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
-            return null;
-        }
-        MetadataDto metadata = ops[0].getMetadata();
-        Long items = metadata.getItems();
-        List<WatchEntity> watchesReceived = new ArrayList<>();
-        if (ops.length > 0) {
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 watchesReceived.add(watchMapper.fromDto(dataItem));
             }
-        } else {
-            return null;
         }
         return watchesReceived;
     }
 
     @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {
+        List<MatchEntity> matchesReceived = new ArrayList<>();
         GenericDto requestDto = matchDtoFactory.getMatchesNotEndedByIds(matchIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
-            return null;
-        }
-
-        MetadataDto metadata = ops[0].getMetadata();
-        Long items = metadata.getItems();
-        List<MatchEntity> matchesReceived = new ArrayList<>();
-        if (ops.length > 0) {
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 matchesReceived.add(matchMapper.fromDto(dataItem));
             }
-        } else {
-            return null; //TODO never return null!!
         }
         return matchesReceived;
-
     }
 
     @Override public WatchEntity setWatchStatus(WatchEntity watch) throws IOException {
@@ -460,36 +426,30 @@ public class ShootrDataService implements ShootrService {
         GenericDto requestDto = matchDtoFactory.getTeamsFromTeamIds(teamIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
+        List<TeamEntity> teamEntities = new ArrayList<>();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
-            return null;
-        }
-        MetadataDto md = ops[0].getMetadata();
-        Long items = md.getItems();
-        List<TeamEntity> teamEntities = new ArrayList<>();
-        if(ops.length>0){
+        }else{
+            MetadataDto md = ops[0].getMetadata();
+            Long items = md.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
                 teamEntities.add(teamMapper.fromDto(dataItem));
             }
-        } else {
-            return null;
         }
         return teamEntities;
     }
 
     @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
+        List<ShotEntity> shotEntities = new ArrayList<>();
         GenericDto requestDto = shotDtoFactory.getLatestShotsFromIdUser(idUser, latestShotNumber);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
-            return null;
-        }
-        MetadataDto md = ops[0].getMetadata();
-        Long items = md.getItems();
-        List<ShotEntity> shotEntities = new ArrayList<>();
-        if(ops.length>0){
+        }else{
+            MetadataDto md = ops[0].getMetadata();
+            Long items = md.getItems();
             for(int i = 0; i< items; i++){
                 Map<String,Object> dataItem = ops[0].getData()[i];
                 shotEntities.add(shotMapper.fromDto(dataItem));

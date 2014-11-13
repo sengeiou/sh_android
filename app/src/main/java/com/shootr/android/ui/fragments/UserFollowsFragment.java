@@ -140,7 +140,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void showUserList(FollowsResultEvent event) {
         setLoadingView(false);
         List<UserModel> usersFollowing = event.getResult();
-        if (usersFollowing.size() == 0) {
+        if (usersFollowing.isEmpty()) {
             setEmpty(true);
         } else {
             setListContent(usersFollowing);

@@ -53,7 +53,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
 
         List<UserEntity> peopleFromDatabase = getPeopleFromDatabase();
         List<UserModel> userVOs = getUserVOs(peopleFromDatabase);
-        if (peopleFromDatabase != null && peopleFromDatabase.size() > 0) {
+        if (peopleFromDatabase != null && !peopleFromDatabase.isEmpty()) {
             postSuccessfulEvent(new FollowsResultEvent(userVOs));
         }
         if (hasInternetConnection()) {

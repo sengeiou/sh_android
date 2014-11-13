@@ -25,7 +25,6 @@ public class WatchInfoBuilder {
 
 
         private Set<WatchEntity> watches = new HashSet<>();
-        private MatchEntity myTeamNextMatch;
 
         private Comparator<? super MatchEntity> matchComparatorByDate = new Comparator<MatchEntity>() {
             @Override public int compare(MatchEntity match1, MatchEntity match2) {

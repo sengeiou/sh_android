@@ -5,8 +5,6 @@ import com.shootr.android.ui.model.UserModel;
 
 public class UserInfoResultEvent extends ShootrBaseJob.SuccessEvent<UserModel> {
 
-    private int doIFollowHim;
-
     public UserInfoResultEvent(UserModel result) {
         super(result);
     }

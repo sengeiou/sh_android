@@ -279,7 +279,7 @@ public class TimelineFragment extends BaseFragment
     @Subscribe
     public void onWatchingRequestsPendingReceived(WatchingRequestPendingEvent event) {
         List<WatchingRequestModel> watchingRequestModels = event.getResult();
-        if (watchingRequestModels != null && watchingRequestModels.size() > 0) {
+        if (watchingRequestModels != null && !watchingRequestModels.isEmpty()) {
             watchingRequestsPendingStack = watchingRequestModels;
             showNextWatchingRequest();
         }
@@ -287,7 +287,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showNextWatchingRequest() {
-        if (watchingRequestsPendingStack.size() > 0) {
+        if (!watchingRequestsPendingStack.isEmpty()) {
             WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
             showNextWatchingRequestDelayed(watchingRequestModel);
         } else {
@@ -401,7 +401,7 @@ public class TimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position - 1);
+        ShotModel shot = adapter.getItem(position);
         Timber.d("Clicked shot %d", position);
     }
 
@@ -476,7 +476,7 @@ public class TimelineFragment extends BaseFragment
     public void showTimeline(ShotsResultEvent event) {
         List<ShotModel> shots = event.getResult();
         swipeRefreshLayout.setRefreshing(false);
-        if (shots != null && shots.size() > 0) {
+        if (shots != null && !shots.isEmpty()) {
             adapter.setShots(shots);
             setEmpty(false);
         } else {
