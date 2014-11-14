@@ -383,12 +383,10 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_NEW_SHOT) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_NEW_SHOT && resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getActivity(), "Shot sent", Toast.LENGTH_SHORT);
                 startRefreshing(getActivity());
             }
-        }
     }
 
     /* --- UI Events --- */

@@ -119,11 +119,9 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
 
     private WatchingRequestModel getWatchingRequestForMyTeam() {
         MatchEntity myTeamNextMatch = getMyTeamMatch();
-        if (myTeamNextMatch != null) {
-            if (isInWatchingRequestThreshold(myTeamNextMatch) && isCurrentUserAnswerPending(myTeamNextMatch)) {
-                List<UserEntity> usersWatchingMyTeamNextMatch = getUsersWatchingMatch(myTeamNextMatch);
-                return watchingRequestModelMapper.toWatchingRequestModel(myTeamNextMatch, usersWatchingMyTeamNextMatch);
-            }
+        if (myTeamNextMatch != null && isInWatchingRequestThreshold(myTeamNextMatch) && isCurrentUserAnswerPending(myTeamNextMatch)) {
+            List<UserEntity> usersWatchingMyTeamNextMatch = getUsersWatchingMatch(myTeamNextMatch);
+            return watchingRequestModelMapper.toWatchingRequestModel(myTeamNextMatch, usersWatchingMyTeamNextMatch);
         }
         return null;
     }

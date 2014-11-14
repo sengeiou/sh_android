@@ -73,7 +73,6 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
                             userManager.saveUser(user);
                             userToReturn = userModelMapper.toUserModel(user,followUser, false);
                         }
-
                         postSuccessfulEvent(new FollowUnFollowResultEvent(userToReturn));
                     }
 

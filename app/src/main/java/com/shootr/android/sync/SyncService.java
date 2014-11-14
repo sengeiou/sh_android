@@ -12,9 +12,9 @@ import android.os.IBinder;
 public class SyncService extends Service {
 
     // Storage for an instance of the sync adapter
-    private static ShootrSyncAdapter sSyncAdapter = null;
+    private static ShootrSyncAdapter syncAdapter = null;
     // Object to use as a thread-safe lock
-    private static final Object sSyncAdapterLock = new Object();
+    private static final Object syncAdapterLock = new Object();
 
 
     public SyncService(){
@@ -31,9 +31,9 @@ public class SyncService extends Service {
          * Set the sync adapter as syncable
          * Disallow parallel syncs
          */
-        synchronized (sSyncAdapterLock) {
-            if (sSyncAdapter == null) {
-                sSyncAdapter = new ShootrSyncAdapter(getApplicationContext(), true);
+        synchronized (syncAdapterLock) {
+            if (syncAdapter == null) {
+                syncAdapter = new ShootrSyncAdapter(getApplicationContext(), true);
             }
         }
     }
@@ -51,6 +51,6 @@ public class SyncService extends Service {
          * in the base class code when the SyncAdapter
          * constructors call super()
          */
-        return sSyncAdapter.getSyncAdapterBinder();
+        return syncAdapter.getSyncAdapterBinder();
     }
 }
