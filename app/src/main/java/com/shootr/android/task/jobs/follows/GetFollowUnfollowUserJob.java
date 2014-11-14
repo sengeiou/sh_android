@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResultEvent> {
 
-    private static final int PRIORITY = 6; //TODO Define next values for our queue
+    private static final int PRIORITY = 6;
 
     ShootrService service;
     UserManager userManager;
@@ -62,7 +62,7 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
         FollowEntity followEntity = null;
         if (!followsToUpdate.isEmpty()) {
             for (FollowEntity f : followsToUpdate) {
-                if (f.getCsysSynchronized().equals("D")) {
+                if ("D".equals(f.getCsysSynchronized())) {
                     followEntity = unfollowUserAndRecordInDatabase(f);
                 } else {
                     followEntity = followUserAndRecordInDatabase(f);

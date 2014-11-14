@@ -78,31 +78,23 @@ public class UserMapper extends GenericMapper {
     //TODO bad smell: nombre de método ofuscado
     public  Map<String, Object> reqRestUsersToDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
-        dto.put(UserTable.ID, user == null ? null : user.getIdUser());
-        dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
-        dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
-        dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
-        dto.put(UserTable.NAME, user == null ? null : user.getName());
-        dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
-        dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
-        dto.put(UserTable.NUM_FOLLOWERS, user == null ? null : user.getNumFollowers());
-        dto.put(UserTable.NUM_FOLLOWINGS, user == null ? null : user.getNumFollowings());
-        dto.put(UserTable.BIO, user == null ? null : user.getBio());
-        dto.put(UserTable.RANK, user == null ? null : user.getRank());
-        dto.put(UserTable.WEBSITE, user == null ? null : user.getWebsite());
-        setSynchronizedtoDto(user,dto);
-        return dto;
+        return getDto(dto,user);
     }
 
 
     public  Map<String, Object> toDto(UserEntity user) {
         Map<String, Object> dto = new HashMap<>();
+        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
+        dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
+        dto = getDto(dto,user);
+        return dto;
+    }
+
+    public Map<String,Object> getDto(Map<String,Object> dto, UserEntity user){
         dto.put(UserTable.ID, user == null ? null : user.getIdUser());
         dto.put(UserTable.FAVORITE_TEAM_ID, user == null ? null : user.getFavoriteTeamId());
         dto.put(UserTable.FAVORITE_TEAM_NAME, user == null ? null : user.getFavoriteTeamName());
-        dto.put(UserTable.SESSION_TOKEN, user == null ? null : user.getSessionToken());
         dto.put(UserTable.USER_NAME, user == null ? null : user.getUserName());
-        dto.put(UserTable.EMAIL, user == null ? null : user.getEmail());
         dto.put(UserTable.NAME, user == null ? null : user.getName());
         dto.put(UserTable.PHOTO, user == null ? null : user.getPhoto());
         dto.put(UserTable.POINTS, user == null ? null : user.getPoints());
@@ -114,6 +106,8 @@ public class UserMapper extends GenericMapper {
         setSynchronizedtoDto(user,dto);
         return dto;
     }
+
+
 
 
     public UserEntity getUserByCursor(Cursor c){

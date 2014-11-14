@@ -115,7 +115,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         //So the syncrhonized attribute for this case is "N"
         Long idCurrentUser = currentUser.getIdUser();
          FollowEntity follow = followManager.getFollowByUserIds(currentUser.getIdUser(),idUser);
-        if(follow!=null && (follow.getCsysSynchronized().equals("N") || follow.getCsysSynchronized().equals("U") || follow.getCsysSynchronized().equals("D"))){
+        if(follow!=null && ("N".equals(follow.getCsysSynchronized()) || "U".equals(follow.getCsysSynchronized()) || "D".equals(follow.getCsysSynchronized()))){
             follow.setCsysSynchronized("U");
         }else{
             follow = new FollowEntity();
