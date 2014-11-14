@@ -81,8 +81,9 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
         }
         MatchEntity that = (MatchEntity) o;
 
-        if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null) return false;
-
+        if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null){
+            return false;
+        }
         return true;
     }
 

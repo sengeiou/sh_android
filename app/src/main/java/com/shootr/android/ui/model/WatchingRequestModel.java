@@ -42,8 +42,13 @@ public class WatchingRequestModel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
         WatchingRequestModel that = (WatchingRequestModel) o;
         return matchId.equals(that.matchId);
     }

@@ -54,10 +54,16 @@ public class UserWatchingModel implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof UserWatchingModel)) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || !(o instanceof UserWatchingModel)){
+            return false;
+        }
         UserWatchingModel that = (UserWatchingModel) o;
-        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null) return false;
+        if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null){
+            return false;
+        }
         return true;
     }
 

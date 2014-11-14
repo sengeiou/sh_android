@@ -35,7 +35,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) return;
+        if (!restoreSessionOrLogin()){
+            return;
+        }
 
 
         setContainerContent(R.layout.activity_edit_info);

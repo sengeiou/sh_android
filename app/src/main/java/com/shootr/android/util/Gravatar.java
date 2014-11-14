@@ -36,7 +36,6 @@ public final class Gravatar {
 
     public final static int DEFAULT_SIZE = 150;
     public final static String API_GRAVATAR_BASE_URL = "http://www.gravatar.com";
-    public final static String API_GRAVATAR_BASE_URL_SSL = "https://secure.gravatar.com";
     public final static String API_GRAVATAR_AVATAR = "/avatar/";
 
     protected static final String TAG = "Gravatar";
@@ -51,9 +50,9 @@ public final class Gravatar {
      * default size of 80 pixels is used.
      */
     public Gravatar setSize(int sizeInPixels) {
-        if(sizeInPixels >= 1 && sizeInPixels <= 512)
+        if(sizeInPixels >= 1 && sizeInPixels <= 512){
             this.size = sizeInPixels;
-
+        }
         return this;
     }
 

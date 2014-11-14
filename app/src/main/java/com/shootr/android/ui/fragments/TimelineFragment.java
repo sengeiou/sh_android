@@ -137,7 +137,9 @@ public class TimelineFragment extends BaseFragment
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (!shouldPoll) return;
+                    if (!shouldPoll){
+                        return;
+                    }
                     Context context = getActivity();
                     if (context != null) {
                         startRetrieveNewShotsTimeLineJob(context);
@@ -396,7 +398,9 @@ public class TimelineFragment extends BaseFragment
                 ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
                         newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        if(anim!=null) intent.putExtras(anim);
+        if(anim!=null){
+            intent.putExtras(anim);
+        }
         ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
     }
 

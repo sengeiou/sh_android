@@ -259,7 +259,9 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void openUserFollowsList(int followType) {
-        if(idUser==null) return;
+        if(idUser==null){
+            return;
+        }
         startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
     }
 
@@ -304,7 +306,9 @@ public class ProfileFragment extends BaseFragment {
         boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
         if (isValidPhotoUrl) {
             picasso.load(photo).into(vh.avatar);
-        } else picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
+        } else{
+            picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
+        }
         vh.avatar.setTag(vh);
     }
 
