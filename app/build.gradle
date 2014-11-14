@@ -171,7 +171,7 @@ sonarRunner {
         property "sonar.jdbc.username", "sonar"
         property "sonar.jdbc.password", "sonar"
         property "sonar.login", "admin"
-        property "sonar.password", "admin"
+        property "sonar.password", "14041981"
         property "sonar.projectName", "Shootr Android"
         properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
         //properties["sonar.tests"] = android.sourceSets.instrumentTest.java.srcDirs
