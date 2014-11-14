@@ -104,7 +104,7 @@ public class EmailRegistrationActivity extends BaseActivity {
     }
 
     public List<String> getEmailAccounts() {
-        List<String> emailAccounts = new ArrayList<String>();
+        List<String> emailAccounts = new ArrayList<>();
         Pattern emailPattern = Patterns.EMAIL_ADDRESS;
         for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
             if (emailPattern.matcher(account.name).matches()) {

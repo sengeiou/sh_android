@@ -211,7 +211,7 @@ public class TimelineFragment extends BaseFragment
         try {
             ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Timeline");
         } catch (NullPointerException e) {
-            Timber.w("Activity null in TimelineFragment#onViewCreated()");
+            Timber.w("Activity null in TimelineFragment#onViewCreated()",e);
         }
 
         // Header and footer
@@ -406,14 +406,11 @@ public class TimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        ShotModel shot = adapter.getItem(position);
         Timber.d("Clicked shot %d", position);
     }
 
     public void openProfile(int position) {
-        Long currentUserId = currentUser.getIdUser();
         ShotModel shotVO = adapter.getItem(position);
-
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
         startActivity(profileIntent);
     }

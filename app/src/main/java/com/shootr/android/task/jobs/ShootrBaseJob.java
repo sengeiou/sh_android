@@ -137,7 +137,7 @@ public abstract class ShootrBaseJob<T> extends Job {
 
     public static class SuccessEvent<T> {
 
-        public T result;
+        private T result;
 
         public SuccessEvent(T result) {
             this.result = result;

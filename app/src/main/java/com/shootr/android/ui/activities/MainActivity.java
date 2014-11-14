@@ -1,6 +1,5 @@
 package com.shootr.android.ui.activities;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,14 +45,11 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseSignedInActivity {
 
-    public static final String EXTRA_SHOW_SECTION = "section";
 
     private static final String EXTRA_CURRENT_TITLE = "title";
     private static final String EXTRA_DRAWER_POSITION = "position";
 
     public static final int DRAWER_POSITION_TIMELINE = 0;
-    public static final int DRAWER_POSITION_PEOPLE = 1;
-    public static final int DRAWER_POSITION_WATCHING = 2;
     public static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
 
     @Inject Bus bus;
@@ -149,8 +145,7 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setupSyncing() {
-        //TODO no sync for now
-        //syncConfigurator.setupDefaultSyncing();
+        syncConfigurator.setupDefaultSyncing();
     }
 
     @OnItemClick(R.id.menu_drawer_list)

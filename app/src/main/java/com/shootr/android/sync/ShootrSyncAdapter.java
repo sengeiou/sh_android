@@ -56,7 +56,7 @@ public class ShootrSyncAdapter extends AbstractThreadedSyncAdapter {
                 infoCleaner.clean();
             }
         } catch (IllegalStateException e) {
-            Timber.e("Exception onPerformSync", e.getMessage());
+            Timber.e("Exception onPerformSync", e.getMessage(),e);
         }
     }
 

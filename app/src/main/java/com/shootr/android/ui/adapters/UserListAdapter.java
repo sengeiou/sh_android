@@ -114,7 +114,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         @InjectView(R.id.user_name) TextView name;
         @InjectView(R.id.user_username) TextView username;
         @InjectView(R.id.user_follow_button) FollowButton followButton;
-        public int position;
+        private int position;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

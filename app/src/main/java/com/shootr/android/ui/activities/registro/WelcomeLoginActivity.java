@@ -165,7 +165,6 @@ public class WelcomeLoginActivity extends BaseActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x;
         int height = size.y;
 
         List<Animator> animations = new ArrayList<Animator>(6);

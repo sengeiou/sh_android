@@ -186,7 +186,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
                         wlanmac = wm.getConnectionInfo().getMacAddress();
                     }
                 } catch (Exception e) {
-                    throw new Exception(e.getMessage());
+                    Timber.e(e.getMessage(),e);
                 }
             }
             String longId = imei + m_szDevIDShort + wlanmac;
@@ -195,7 +195,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
             try {
                 m = MessageDigest.getInstance("MD5");
             } catch (NoSuchAlgorithmException e) {
-                Timber.e(e.getMessage());
+                Timber.e(e.getMessage(),e);
             }
             assert m != null;
             m.update(longId.getBytes(), 0, longId.length());
@@ -204,7 +204,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
             // create a hex string
             String uniqueID = new String();
             for (int i = 0; i < md5Data.length; i++) {
-                int b = (0xFF & md5Data[i]);
+                int b = 0xFF & md5Data[i];
                 // if it is a single digit, make sure it have 0 in front (proper
                 // padding)
                 if (b <= 0xF){

@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * A gravatar is a dynamic image resource that is requested from the
@@ -61,7 +62,9 @@ public final class Gravatar {
      * Returns the Gravatar URL for the given email address.
      */
     public String getImageUrl(String email) {
-        if(TextUtils.isEmpty(email))return null;
+        if(TextUtils.isEmpty(email)){
+            return null;
+        }
 
         // hexadecimal MD5 hash of the requested user's lowercased email address
         // with all whitespace trimmed
@@ -76,8 +79,8 @@ public final class Gravatar {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             return hex (md.digest(message.getBytes("CP1252")));
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            Timber.e(e.getMessage());
         }
         return null;
     }
@@ -103,12 +106,14 @@ public final class Gravatar {
         List<String> params = new ArrayList<String>();
 
         params.add("d=404");
-        if (size != DEFAULT_SIZE)
+        if (size != DEFAULT_SIZE){
             params.add("s=" + size);
+        }
 
-        if (params.isEmpty())
+
+        if (params.isEmpty()) {
             return "";
-        else {
+        }else {
             return "?" + TextUtils.join("&", params.toArray());
         }
     }

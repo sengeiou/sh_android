@@ -81,7 +81,7 @@ public class FacebookRegistroActivity extends BaseActivity {
         // TODO Validate usernameSuggestion only first, maybe
         setLoading(true);
         //TODO validar localmente
-        String username = mUsernameText.getText().toString();
+
         //TODO comprobar si ya estaba ejecutándose, y decidir si debemos lanzar uno nuevo o ignorar
 
         //TODO launch some job

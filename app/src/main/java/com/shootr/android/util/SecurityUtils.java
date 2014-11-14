@@ -1,5 +1,7 @@
 package com.shootr.android.util;
 
+import timber.log.Timber;
+
 public class SecurityUtils {
 
     private SecurityUtils() {
@@ -29,6 +31,7 @@ public class SecurityUtils {
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {
+            Timber.e(e.getMessage());
             return null;
         }
 

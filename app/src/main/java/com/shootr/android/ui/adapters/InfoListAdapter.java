@@ -207,7 +207,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         @InjectView(R.id.info_user_name) TextView name;
         @InjectView(R.id.info_user_watching) TextView watching;
         @Optional @InjectView(R.id.info_user_edit) View edit;
-        public int position;
+        private int position;
 
         public UserViewHolder(View view) {
             ButterKnife.inject(this, view);

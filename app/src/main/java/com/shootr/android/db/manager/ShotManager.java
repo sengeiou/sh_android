@@ -141,9 +141,9 @@ public class ShotManager extends  AbstractManager{
         do {
 
             ShotEntity shot = shotMapper.fromCursor(cursor);
-            ShotModelMapper shotVOMapper = new ShotModelMapper();
+            ShotModelMapper shotModelMapper = new ShotModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
-            ShotModel shotModel = shotVOMapper.toShotModel(user, shot);
+            ShotModel shotModel = shotModelMapper.toShotModel(user, shot);
             if (user != null) {
                 shotList.add(shotModel);
             } else {
@@ -211,9 +211,9 @@ public class ShotManager extends  AbstractManager{
 
             ShotEntity shot = shotMapper.fromCursor(cursor);
 
-            ShotModelMapper shotVOMapper = new ShotModelMapper();
+            ShotModelMapper shotModelMapper = new ShotModelMapper();
             UserEntity user = userMapper.fromCursor(cursor);
-            ShotModel shotModel = shotVOMapper.toShotModel(user,shot);
+            ShotModel shotModel = shotModelMapper.toShotModel(user,shot);
             if (user != null) {
                 shots.add(shotModel);
             } else {

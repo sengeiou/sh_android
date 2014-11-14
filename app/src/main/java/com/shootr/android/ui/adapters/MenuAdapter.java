@@ -15,7 +15,7 @@ import static butterknife.ButterKnife.findById;
 public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
 
     public static final int TYPE_ITEM = 1;
-    private int mSelectedPosition = -1;
+    public int mSelectedPosition = -1;
     private List<MenuItem> mItems;
 
     public MenuAdapter(Context context, List<MenuItem> items) {
@@ -95,7 +95,7 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
     }
 
     public static class TitleAndIconMenuItem implements MenuItem {
-        public String title;
+        private String title;
         int icon;
 
         public TitleAndIconMenuItem(String title, int iconRes) {
@@ -106,8 +106,8 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
 
     public static class FragmentMenuItem extends TitleAndIconMenuItem {
 
-        public Class fragmentClass;
-        public Bundle extras;
+        private Class fragmentClass;
+        private Bundle extras;
 
         public FragmentMenuItem(String title, int iconRes, Class fragmentClass) {
             super(title, iconRes);

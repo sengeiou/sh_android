@@ -39,7 +39,6 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
             return;
         }
 
-
         setContainerContent(R.layout.activity_edit_info);
         ButterKnife.inject(this);
 
