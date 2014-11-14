@@ -31,7 +31,9 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) return;
+        if (!restoreSessionOrLogin()){
+            return;
+        }
 
         setContainerContent(R.layout.activity_fragment_container);
         getIntentExtras();
@@ -61,12 +63,11 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId() == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
         }
     }
 

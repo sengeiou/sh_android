@@ -90,7 +90,7 @@ public abstract class ShootrBaseJob<T> extends Job {
           "This Job is trying to use the database, but no SQLiteOpenHelper was provided. Use the method setSQLiteOpenHelper first.");
     }
 
-    protected abstract void run() throws SQLException, IOException;
+    protected abstract void run() throws SQLException, IOException, Exception;
 
     protected void postSuccessfulEvent(T result) {
         bus.post(result);

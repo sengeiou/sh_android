@@ -56,9 +56,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
         for (MatchModel match : itemsMap.keySet()) {
             itemsList.add(match);
-            for (UserWatchingModel user : itemsMap.get(match)) {
-                itemsList.add(user);
-            }
+            itemsList.addAll(itemsMap.get(match));
         }
         notifyDataSetChanged();
     }

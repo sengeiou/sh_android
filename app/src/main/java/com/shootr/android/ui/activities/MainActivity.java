@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,14 +19,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import com.crashlytics.android.Crashlytics;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
 import com.shootr.android.db.objects.UserEntity;
@@ -41,6 +36,9 @@ import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.TimelineFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -207,11 +205,11 @@ public class MainActivity extends BaseSignedInActivity {
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         drawerToggle = new android.support.v7.app.ActionBarDrawerToggle(
-            this,                  /* host Activity */
-            drawerLayout,         /* DrawerLayout object */
-            getToolbar(),  /* nav drawer icon to replace 'Up' caret */
-            R.string.drawer_open,  /* "open drawer" description */
-            R.string.drawer_close  /* "close drawer" description */
+            this,
+            drawerLayout,
+            getToolbar(),
+            R.string.drawer_open,
+            R.string.drawer_close
         ) {
 
             /** Called when a drawer has settled in a completely closed state. */
@@ -290,11 +288,6 @@ public class MainActivity extends BaseSignedInActivity {
     protected void onResume() {
         super.onResume();
         bus.register(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

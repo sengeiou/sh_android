@@ -12,27 +12,26 @@ import android.telephony.TelephonyManager;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
-import com.squareup.otto.Bus;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.constant.Constants;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.data.prefs.GCMAppVersion;
 import com.shootr.android.data.prefs.GCMRegistrationId;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.objects.DeviceEntity;
-import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.gcm.GCMConstants;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.loginregister.PushTokenResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.util.VersionUtils;
+import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -47,7 +46,9 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     private SessionManager sessionManager;
     private DeviceManager deviceManager;
 
-    //TODO check for play services apk and version!
+    void doSomething(){
+        //TODO check for play services apk and version!
+    }
 
     @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
@@ -63,7 +64,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         setOpenHelper(openHelper);
     }
 
-    @Override protected void run() throws SQLException, IOException {
+    @Override protected void run() throws Exception {
         String regId = getRegistrationId(getContext());
         if (regId.isEmpty()) {
             Timber.d("Registration id not found or invalid. Retrieving a new one from GCM server");
@@ -73,7 +74,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         }
     }
 
-    private void registerGCM() throws IOException {
+    private void registerGCM() throws Exception {
         String regId = gcm.register(GCMConstants.GCM_SENDER_ID);
         Timber.d("Received GCM registration id: %s", regId);
         sendTokenToServer(regId);
@@ -85,7 +86,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         registeredAppVersion.set(VersionUtils.getVersionCode(getContext()));
     }
 
-    private void sendTokenToServer(String regId) throws IOException {
+    private void sendTokenToServer(String regId) throws  Exception {
         String uniqueDeviceId = getUniqueDeviceId(getContext());
         DeviceEntity existingDevice = getCurrentDevice(uniqueDeviceId);
 
@@ -155,16 +156,17 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         return registrationId.get();
     }
 
-    public static String getUniqueDeviceId(Context context) {
+    public static String getUniqueDeviceId(Context context) throws Exception {
         String result = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         // If ANDROID is null or is the same ID reported by the emulator
         // (http://code.google.com/p/android/issues/detail?id=10603)
-        if (result == null || result.equals("9774d56d682e549c")) {
+        if (result == null || "9774d56d682e549c".equals(result)) {
             // Get the IMEI (Requires READ_PHONE_STATE)
             TelephonyManager telephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            String m_szImei = null;
-            if (telephonyMgr != null)
-                m_szImei = telephonyMgr.getDeviceId();
+            String imei = null;
+            if (telephonyMgr != null){
+                imei = telephonyMgr.getDeviceId();
+            }
             // Get IDs from the current build, extracted from system properties
             String m_szDevIDShort = "35"
               + // we make this look like a valid IMEI
@@ -172,42 +174,47 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
               % 10 + Build.HOST.length() % 10 + Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 + Build.MODEL.length() % 10
               + Build.PRODUCT.length() % 10 + Build.TAGS.length() % 10 + Build.TYPE.length() % 10 + Build.USER.length() % 10; // 13
             // digits
-            String m_szWLANMAC = null;
+            String wlanmac = null;
             // If WIFI is disabled, some devices returns null when try to get
             // the MAC Address
             // So, only If IMEI is null
-            if (m_szImei == null) {
+            if (imei == null) {
                 // Get the Wifi MAC Address (Requires ACCESS_WIFI_STATE)
                 try {
                     WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-                    if (wm != null)
-                        m_szWLANMAC = wm.getConnectionInfo().getMacAddress();
+                    if (wm != null){
+                        wlanmac = wm.getConnectionInfo().getMacAddress();
+                    }
                 } catch (Exception e) {
+                    throw new Exception(e.getMessage());
                 }
             }
-            String m_szLongID = m_szImei + m_szDevIDShort + m_szWLANMAC;
+            String longId = imei + m_szDevIDShort + wlanmac;
             // compute md5
             MessageDigest m = null;
             try {
                 m = MessageDigest.getInstance("MD5");
             } catch (NoSuchAlgorithmException e) {
+                Timber.e(e.getMessage());
             }
-            m.update(m_szLongID.getBytes(), 0, m_szLongID.length());
+            assert m != null;
+            m.update(longId.getBytes(), 0, longId.length());
             // get md5 bytes
-            byte p_md5Data[] = m.digest();
+            byte[] md5Data = m.digest();
             // create a hex string
-            String m_szUniqueID = new String();
-            for (int i = 0; i < p_md5Data.length; i++) {
-                int b = (0xFF & p_md5Data[i]);
+            String uniqueID = new String();
+            for (int i = 0; i < md5Data.length; i++) {
+                int b = (0xFF & md5Data[i]);
                 // if it is a single digit, make sure it have 0 in front (proper
                 // padding)
-                if (b <= 0xF)
-                    m_szUniqueID += "0";
+                if (b <= 0xF){
+                    uniqueID += "0";
+                }
                 // add number to string
-                m_szUniqueID += Integer.toHexString(b);
+                uniqueID += Integer.toHexString(b);
             }
             // hex string to uppercase
-            result = m_szUniqueID.toUpperCase();
+            result = uniqueID.toUpperCase();
         }
         return result;
     }

@@ -78,8 +78,9 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()) return;
-
+        if (!restoreSessionOrLogin()){
+            return;
+        }
         setContainerContent(R.layout.activity_search);
         ButterKnife.inject(this);
 
@@ -255,7 +256,6 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
         Timber.d("No local results. Waiting for remote results");
-        //TODO what?? This log isn't right
     }
 
     private void incrementOffset(int newItems) {
@@ -363,7 +363,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
         UserModel userVO = event.getResult();
         List<UserModel> userVOs = adapter.getItems();
-        int index = 0;int i = 0;
+        int index = 0;
+        int i = 0;
         if (userVO != null) {
             for(UserModel userM: userVOs){
                 if(userM.getIdUser().equals(userVO.getIdUser())){

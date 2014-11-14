@@ -150,11 +150,11 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+        if(item.getItemId() == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }else{
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
