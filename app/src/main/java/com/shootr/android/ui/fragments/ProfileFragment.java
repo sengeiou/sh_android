@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.util.Patterns;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -301,6 +303,7 @@ public class ProfileFragment extends BaseFragment {
 
         long timestamp = item.getCsysBirth().getTime();
         vh.timestamp.setText(timeUtils.getElapsedTime(getActivity(), timestamp));
+        Linkify.addLinks(vh.text, Patterns.WEB_URL, "http://");
 
         String photo = item.getPhoto();
         boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
