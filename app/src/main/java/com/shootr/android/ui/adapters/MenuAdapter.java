@@ -95,7 +95,7 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
     }
 
     public static class TitleAndIconMenuItem implements MenuItem {
-        private String title;
+        public String title;
         int icon;
 
         public TitleAndIconMenuItem(String title, int iconRes) {
@@ -106,8 +106,8 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
 
     public static class FragmentMenuItem extends TitleAndIconMenuItem {
 
-        private Class fragmentClass;
-        private Bundle extras;
+        public Class fragmentClass;
+        public Bundle extras;
 
         public FragmentMenuItem(String title, int iconRes, Class fragmentClass) {
             super(title, iconRes);
