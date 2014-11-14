@@ -77,6 +77,8 @@ public class MenuAdapter extends BindableAdapter<MenuAdapter.MenuItem> {
                 itemTitle.setText(menuItem.title);
                 itemIcon.setImageResource(menuItem.icon);
                 break;
+            default:
+                break;
         }
     }
 

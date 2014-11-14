@@ -367,8 +367,9 @@ public class TimelineFragment extends BaseFragment
             case R.id.menu_info:
                 startActivity(new Intent(getActivity(), InfoActivity.class));
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

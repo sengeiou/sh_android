@@ -80,6 +80,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
                 view.setTag(new ViewHolder(view, avatarClickListener));
                 break;
+            default:
+                break;
         }
         return view;
     }
@@ -108,6 +110,8 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                     picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
                 }
                 vh.avatar.setTag(vh);
+                break;
+            default:
                 break;
         }
     }

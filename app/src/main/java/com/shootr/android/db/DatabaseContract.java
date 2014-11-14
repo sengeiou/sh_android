@@ -1,10 +1,12 @@
 package com.shootr.android.db;
 
 import android.provider.BaseColumns;
+import com.google.common.collect.Tables;
 
 public class DatabaseContract {
 
     private DatabaseContract() {
+
     }
 
     public static interface SyncColumns extends BaseColumns {
@@ -22,6 +24,9 @@ public class DatabaseContract {
 
 
     public static final class TablesSync implements SyncColumns {
+        private TablesSync(){
+
+        }
         public static final String TABLE = "TablesSync";
 
         public static final String ORDER = "idOrder";
@@ -46,6 +51,10 @@ public class DatabaseContract {
     }
 
     public static final class UserTable implements SyncColumns {
+
+        private UserTable(){
+
+        }
 
         public static final String TABLE = "User";
 
@@ -93,6 +102,9 @@ public class DatabaseContract {
 
     public static final class ShotTable implements SyncColumns {
 
+        private ShotTable(){
+
+        }
         public static final String TABLE = "Shot";
 
         public static final String ID_SHOT = "idShot";
@@ -112,6 +124,9 @@ public class DatabaseContract {
     }
 
     public static final class FollowTable implements SyncColumns {
+        private FollowTable(){
+
+        }
         public static final String TABLE = "Follow";
         public static final String ID_USER = "idUser";
         public static final String ID_FOLLOWED_USER = "idFollowedUser";
@@ -128,7 +143,9 @@ public class DatabaseContract {
     }
 
     public static final class DeviceTable implements SyncColumns{
+        private DeviceTable(){
 
+        }
         public static final String TABLE = "Device";
         public static final String ID_DEVICE = "idDevice";
         public static final String ID_USER = "idUser";
@@ -155,6 +172,9 @@ public class DatabaseContract {
     }
 
     public static final class TeamTable implements SyncColumns{
+        private TeamTable(){
+
+        }
         public static final String TABLE = "Team";
         public static final String ID_TEAM = "idTeam";
         public static final String CLUB_NAME="clubName";
@@ -177,6 +197,9 @@ public class DatabaseContract {
     }
 
     public static final class MatchTable implements SyncColumns{
+        private MatchTable(){
+
+        }
         public static final String TABLE = "Match";
         public static final String ID_MATCH = "idMatch";
         public static final String MATCH_DATE = "matchDate";
@@ -203,6 +226,9 @@ public class DatabaseContract {
     }
 
     public static final class WatchTable implements  SyncColumns{
+        private WatchTable(){
+            
+        }
         public static final String TABLE = "Watch";
         public static final String ID_USER = "idUser";
         public static final String ID_MATCH = "idMatch";

@@ -135,6 +135,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             case TYPE_ME:
                 bindUser((UserWatchingModel) item, position, view);
                 break;
+            default:
+                break;
         }
     }
 

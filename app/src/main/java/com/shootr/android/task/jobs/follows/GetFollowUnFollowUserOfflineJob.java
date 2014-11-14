@@ -95,6 +95,9 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
                     return;
                 }
                 break;
+            default:
+                break;
+
         }
     }
 
@@ -127,7 +130,6 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         follow.setCsysModified(new Date());
         follow.setCsysRevision(0);
         followManager.saveFollow(follow);
-
         userManager.saveUser(currentUser);
         return follow;
     }

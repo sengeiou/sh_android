@@ -96,7 +96,8 @@ public class PeopleFragment extends UserFollowsFragment {
             case R.id.menu_search:
                 findFriends();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
