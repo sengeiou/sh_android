@@ -1,6 +1,7 @@
 package com.shootr.android.ui;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.ui.activities.AddMatchActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import dagger.Module;
@@ -33,6 +34,7 @@ import javax.inject.Singleton;
                 FindFriendsActivity.class,
                 InfoActivity.class,
                 EditInfoActivity.class,
+                AddMatchActivity.class,
 
         },
         complete = false

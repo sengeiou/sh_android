@@ -151,8 +151,11 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if(item.getItemId() == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }else if (item.getItemId() == R.id.menu_add) {
+            startActivity(new Intent(this, AddMatchActivity.class));
             return true;
         }else{
             return super.onOptionsItemSelected(item);

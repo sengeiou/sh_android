@@ -4,7 +4,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_registro_email">Nueva cuenta</string>
 
-    <!-- Time strings-->
+    <!-- Time strings -->
     <string name="day_title_today">Today</string>
     <string name="day_title_tomorrow">Tomorrow</string>
     <string name="day_title_yesterday">Yesterday</string>
@@ -32,35 +32,28 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="facebookID">716903905047845</string>
-
     <string name="connection_lost">The network connection was lost</string>
 
     <!-- Activity literals -->
     <string name="activity_login_signin">Sign In</string>
     <string name="activity_login_register_email">Register with Email</string>
     <string name="activity_login_register_facebook">Sign In with Facebook</string>
-
     <string name="title_activity_login_email">Sign In</string>
     <string name="activity_login_email_id_hint">Username or Email</string>
     <string name="activity_login_email_password_hint">Password</string>
     <string name="activity_login_email_button">Enter</string>
     <string name="activity_login_email_error_credentials">Id or Password are not valid.</string>
     <string name="activity_login_email_forgot">Forgot Password?</string>
-
     <string name="activity_timeline_new_text">Shoot something</string>
     <string name="activity_timeline_empty_message">Share your football thoughts.\nStart Shooting.</string>
     <string name="activity_timeline_empty_title">No Shots</string>
-
     <string name="activity_following_title">Following</string>
     <string name="activity_followers_title">Followers</string>
     <string name="following_list_empty">Not following anyone</string>
     <string name="follower_list_empty">No followers</string>
-
     <string name="no_more_shots">No more shots</string>
-
     <string name="new_shoot_action">Shoot</string>
     <string name="new_shot_repeated">Whoops! You already shot that.</string>
-
     <string name="profile_following">Following</string>
     <string name="profile_follow">Follow</string>
     <string name="profile_edit_profile">Edit Profile</string>
@@ -82,7 +75,7 @@
     <string name="watching_text">Watching</string>
     <string name="watching_not_text">Not Watching</string>
 
-    <!--TimeUtils-->
+    <!-- TimeUtils -->
     <string name="plural_days">days</string>
     <string name="singular_day">day</string>
     <string name="minutes">m</string>
@@ -97,17 +90,22 @@
     <string name="notification_shot_multiple_title">%d new shots</string>
     <string name="notification_follow_title">%s is now following you!</string>
 
-    <string name="activity_info_title">Info</string>
+
+    <!-- Find Friends -->
     <string name="activity_find_friends_title">Find People</string>
     <string name="activity_find_friends_hint">Find People</string>
-    <string name="activity_find_friends_empty_message">No results.</string>
-
+    <string name="activity_find_friends_empty_message">No Results.</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
-    <!--Info-->
+    <!-- Add Match -->
+    <string name="add_match">$Add Match</string>
+    <string name="activity_add_match_hint">$Find Matches</string>
+
+    <!-- Info -->
     <string name="activity_empty_info">No people watching</string>
     <string name="enter_to_confirm">Now Playing</string>
     <string name="following_notif_text">Touch to access the profile</string>
+    <string name="activity_info_title">Info</string>
 
     <!-- Watching requests -->
     <string name="watching_request_subtitle_none">Now Playing</string>
@@ -115,9 +113,10 @@
     <string name="watching_request_subtitle_two">%1$s &amp; %2$s are now watching</string>
     <string name="watching_request_subtitle_more">%d people are now watching</string>
     <string name="watching_match_question">Watching %s?</string>
-            <!--Push Watching requests-->
+    <!-- Push Watching requests -->
     <string name="not_watching_request_push">Not Watching %s</string>
     <string name="watching_request_push">Watching %s</string>
     <string name="watching_request_subtitle_none_and_not_started">Playing Soon</string>
-    <string name="add_match">$Add Match</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

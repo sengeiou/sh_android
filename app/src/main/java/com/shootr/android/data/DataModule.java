@@ -17,6 +17,7 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
+import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -126,6 +127,8 @@ import static android.content.Context.MODE_PRIVATE;
     LogTreeFactory.class,
 
     EditInfoPresenter.class,
+
+    AddMatchPresenter.class,
 
   },
   includes = {

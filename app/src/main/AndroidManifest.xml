@@ -115,6 +115,15 @@
               android:value="com.shootr.android.ui.activities.InfoActivity" />
         </activity>
 
+        <activity
+          android:name="com.shootr.android.ui.activities.AddMatchActivity"
+          android:label="@string/add_match"
+          android:parentActivityName="com.shootr.android.ui.activities.InfoActivity" >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="com.shootr.android.ui.activities.InfoActivity" />
+        </activity>
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"
