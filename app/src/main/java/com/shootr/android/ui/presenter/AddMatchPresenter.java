@@ -1,23 +1,33 @@
 package com.shootr.android.ui.presenter;
 
+import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.events.info.SearchMatchResultEvent;
+import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.views.AddMatchView;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import dagger.ObjectGraph;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class AddMatchPresenter {
+public class AddMatchPresenter implements Presenter {
 
+    private final JobManager jobManager;
+    private final Bus bus;
     private AddMatchView addMatchView;
+    private ObjectGraph objectGraph;
     private String currentSearchQuery;
 
-    @Inject public AddMatchPresenter() {
-
+    @Inject public AddMatchPresenter(JobManager jobManager, Bus bus) {
+        this.jobManager = jobManager;
+        this.bus = bus;
     }
 
-    public void initialize(AddMatchView addMatchView) {
+    public void initialize(AddMatchView addMatchView, ObjectGraph objectGraph) {
         this.addMatchView = addMatchView;
+        this.objectGraph = objectGraph;
     }
 
     public void search(String searchQuery) {
@@ -33,37 +43,31 @@ public class AddMatchPresenter {
     }
 
     private void executeSearch() {
-        //TODO
         this.addMatchView.showLoading();
         this.addMatchView.hideResults();
-        onSearchResultsReceived(getMockResults());
+        SearchMatchJob job = objectGraph.get(SearchMatchJob.class);
+        jobManager.addJobInBackground(job);
     }
 
     @Subscribe
-    public void onSearchResultsReceived(List<MatchModel> matchModels) {
-        //TODO
-        this.addMatchView.renderResults(matchModels);
-        this.addMatchView.hideEmpty();
-        this.addMatchView.hideLoading();
+    public void onSearchResultsReceived(SearchMatchResultEvent event) {
+        List<MatchModel> matchModels = event.getResult();
+        if (!matchModels.isEmpty()) {
+            this.addMatchView.renderResults(matchModels);
+            this.addMatchView.hideEmpty();
+            this.addMatchView.hideLoading();
+        } else {
+            this.addMatchView.showEmpty();
+            this.addMatchView.hideResults();
+            this.addMatchView.hideLoading();
+        }
     }
 
-    public List<MatchModel> getMockResults() {
-        List<MatchModel> mockResults = new ArrayList<>();
-        MatchModel mm1 = new MatchModel();
-        mm1.setIdMatch(1L);
-        mm1.setTitle("Barcelona-Sevilla");
-        mm1.setDatetime("20/11");
-        MatchModel mm2 = new MatchModel();
-        mm2.setIdMatch(2L);
-        mm2.setTitle("Sevruposki-Palatinesko");
-        mm2.setDatetime("29/11");
-        MatchModel mm3 = new MatchModel();
-        mm3.setIdMatch(3L);
-        mm3.setTitle("La Palma-Sevilla");
-        mm3.setDatetime("11/12");
-        mockResults.add(mm1);
-        mockResults.add(mm2);
-        mockResults.add(mm3);
-        return mockResults;
+    @Override public void resume() {
+        bus.register(this);
+    }
+
+    @Override public void pause() {
+        bus.unregister(this);
     }
 }

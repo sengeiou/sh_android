@@ -20,6 +20,7 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.views.AddMatchView;
+import dagger.ObjectGraph;
 import java.util.List;
 
 public class AddMatchActivity extends BaseActivity implements AddMatchView {
@@ -51,8 +52,9 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
     }
 
     private void initializePresenter() {
-        addMatchPresenter = getObjectGraph().get(AddMatchPresenter.class);
-        addMatchPresenter.initialize(this);
+        ObjectGraph objectGraph = getObjectGraph();
+        addMatchPresenter = objectGraph.get(AddMatchPresenter.class);
+        addMatchPresenter.initialize(this, objectGraph);
     }
 
     @Override
@@ -110,5 +112,15 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
 
     @Override public void hideEmpty() {
         emptyOrErrorView.setVisibility(View.GONE);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        addMatchPresenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        addMatchPresenter.pause();
     }
 }

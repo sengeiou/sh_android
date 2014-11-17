@@ -12,6 +12,7 @@ import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
+import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
@@ -109,6 +110,7 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
     SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
+    SearchMatchJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
