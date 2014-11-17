@@ -119,4 +119,5 @@
     <string name="not_watching_request_push">Not Watching %s</string>
     <string name="watching_request_push">Watching %s</string>
     <string name="watching_request_subtitle_none_and_not_started">Playing Soon</string>
+    <string name="add_match">$Add Match</string>
 </resources>
