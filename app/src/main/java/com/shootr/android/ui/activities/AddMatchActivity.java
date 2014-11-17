@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -112,6 +113,14 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
 
     @Override public void hideEmpty() {
         emptyOrErrorView.setVisibility(View.GONE);
+    }
+
+    @Override public void alertConnectionNotAvailable() {
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void alertComunicationError() {
+        Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override protected void onResume() {

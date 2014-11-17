@@ -1,6 +1,8 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.ui.model.MatchModel;
@@ -31,10 +33,8 @@ public class AddMatchPresenter implements Presenter {
     }
 
     public void search(String searchQuery) {
-        if (!searchQuery.equals(currentSearchQuery)) {
-            currentSearchQuery = searchQuery;
-            this.executeSearch();
-        }
+        currentSearchQuery = searchQuery;
+        this.executeSearch();
         this.hideKeyboard();
     }
 
@@ -45,6 +45,7 @@ public class AddMatchPresenter implements Presenter {
     private void executeSearch() {
         this.addMatchView.showLoading();
         this.addMatchView.hideResults();
+        this.addMatchView.hideEmpty();
         SearchMatchJob job = objectGraph.get(SearchMatchJob.class);
         jobManager.addJobInBackground(job);
     }
@@ -53,14 +54,34 @@ public class AddMatchPresenter implements Presenter {
     public void onSearchResultsReceived(SearchMatchResultEvent event) {
         List<MatchModel> matchModels = event.getResult();
         if (!matchModels.isEmpty()) {
-            this.addMatchView.renderResults(matchModels);
-            this.addMatchView.hideEmpty();
-            this.addMatchView.hideLoading();
+            showResults(matchModels);
         } else {
-            this.addMatchView.showEmpty();
-            this.addMatchView.hideResults();
-            this.addMatchView.hideLoading();
+            showEmpty();
         }
+    }
+
+    private void showResults(List<MatchModel> matchModels) {
+        this.addMatchView.renderResults(matchModels);
+        this.addMatchView.hideEmpty();
+        this.addMatchView.hideLoading();
+    }
+
+    private void showEmpty() {
+        this.addMatchView.showEmpty();
+        this.addMatchView.hideResults();
+        this.addMatchView.hideLoading();
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        this.addMatchView.alertConnectionNotAvailable();
+        showEmpty();
+    }
+
+    @Subscribe
+    public void onComunicationError(CommunicationErrorEvent event) {
+        this.addMatchView.alertComunicationError();
+        showEmpty();
     }
 
     @Override public void resume() {

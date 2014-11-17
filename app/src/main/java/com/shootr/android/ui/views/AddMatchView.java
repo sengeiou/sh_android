@@ -18,4 +18,8 @@ public interface AddMatchView {
     void showEmpty();
 
     void hideEmpty();
+
+    void alertConnectionNotAvailable();
+
+    void alertComunicationError();
 }
