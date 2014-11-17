@@ -57,5 +57,7 @@ public interface ShootrService {
 
     public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException;
 
-    List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
+    public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
+
+    public List<MatchEntity> searchMatches(String queryText) throws IOException;
 }

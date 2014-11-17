@@ -47,6 +47,7 @@ public class AddMatchPresenter implements Presenter {
         this.addMatchView.hideResults();
         this.addMatchView.hideEmpty();
         SearchMatchJob job = objectGraph.get(SearchMatchJob.class);
+        job.init(currentSearchQuery);
         jobManager.addJobInBackground(job);
     }
 

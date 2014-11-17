@@ -4,10 +4,13 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,15 +22,23 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
 
     public static final int PRIORITY = 7;
     private ShootrService service;
+    private MatchModelMapper matchModelMapper;
+    private String queryText;
 
-    @Inject protected SearchMatchJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service) {
+    @Inject protected SearchMatchJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service, MatchModelMapper matchModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
+        this.matchModelMapper = matchModelMapper;
     }
 
-    @Override protected void run() throws SQLException, IOException, Exception {
-        Thread.sleep(2000);
-        postSuccessfulEvent(new SearchMatchResultEvent(getMockResults()));
+    public void init(String queryText) {
+        this.queryText = queryText;
+    }
+
+    @Override protected void run() throws IOException {
+        List<MatchEntity> resultMatches = service.searchMatches(queryText);
+        List<MatchModel> matchModels = matchModelMapper.toMatchModel(resultMatches);
+        postSuccessfulEvent(new SearchMatchResultEvent(matchModels));
     }
 
     @Override protected boolean isNetworkRequired() {
@@ -40,25 +51,5 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
 
     @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
         /* no-op */
-    }
-
-    public List<MatchModel> getMockResults() {
-        List<MatchModel> mockResults = new ArrayList<>();
-        MatchModel mm1 = new MatchModel();
-        mm1.setIdMatch(1L);
-        mm1.setTitle("Barcelona-Sevilla");
-        mm1.setDatetime("20/11");
-        MatchModel mm2 = new MatchModel();
-        mm2.setIdMatch(2L);
-        mm2.setTitle("Sevruposki-Palatinesko");
-        mm2.setDatetime("29/11");
-        MatchModel mm3 = new MatchModel();
-        mm3.setIdMatch(3L);
-        mm3.setTitle("La Palma-Sevilla");
-        mm3.setDatetime("11/12");
-        mockResults.add(mm1);
-        mockResults.add(mm2);
-        mockResults.add(mm3);
-        return mockResults;
     }
 }

@@ -4,6 +4,8 @@ import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.ui.model.MatchModel;
 import android.app.Application;
 import com.shootr.android.util.TimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MatchModelMapper {
 
@@ -26,5 +28,13 @@ public class MatchModelMapper {
         matchModel.setVisitorTeamName(matchEntity.getVisitorTeamName());
         matchModel.setLive(matchEntity.getStatus().equals(1L));
         return matchModel;
+    }
+
+    public List<MatchModel> toMatchModel(List<MatchEntity> matchEntities) {
+        List<MatchModel> matchModels = new ArrayList<>();
+        for (MatchEntity matchEntity : matchEntities) {
+            matchModels.add(toMatchModel(matchEntity));
+        }
+        return matchModels;
     }
 }

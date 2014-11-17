@@ -457,6 +457,24 @@ public class ShootrDataService implements ShootrService {
         return shotEntities;
     }
 
+    @Override public List<MatchEntity> searchMatches(String queryText) throws IOException {
+        List<MatchEntity> matchesFound = new ArrayList<>();
+        GenericDto requestDto = matchDtoFactory.searchMatches(queryText);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                matchesFound.add(matchMapper.fromDto(dataItem));
+            }
+        }
+        return matchesFound;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);

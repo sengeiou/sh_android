@@ -21,6 +21,7 @@ import static com.shootr.android.service.dataservice.generic.FilterBuilder.orIsN
 
 public class MatchDtoFactory {
 
+    private static final String ENTITY_SEARCH_MATCH = "SearchMatch";
     private static final String ALIAS_GET_NEXT_MATCH_WHERE_MY_TEAM_PLAYS = "GET_NEXT_MATCH_WHERE_MY_TEAM_PLAYS";
     private static final String ALIAS_GET_WATCH_OF_MY_FOLLOWING = "GET_MY_FOLLOWING_WATCHES";
     private static final String ALIAS_GET_MATCHES_FROM_WATCH_FOLLOWING = "GET_MATCHES_FROM_WATCH_FOLLOWING";
@@ -28,9 +29,10 @@ public class MatchDtoFactory {
     private static final String ALIAS_SET_WATCH_STATUS = "SET_WATCH_STATUS";
     private static final String ALIAS_GET_WATCH_BY_KEYS = "GET_WATCH_BY_KEYS";
     private static final String ALIAS_GET_MATCH_BY_ID_MATCH = "GET_MATCH_BY_ID_MATCH";
+    private static final String ALIAS_SEARCH_MATCH = "SEARCH_MATCH";
     public static final int STATUS_NOT_STARTED = 0;
     public static final int STATUS_STARTED = 1;
-
+    private static final int SEARCH_RESULTS_MAX = 150;
 
     private UtilityDtoFactory utilityDtoFactory;
     private MatchMapper matchMapper;
@@ -147,5 +149,17 @@ public class MatchDtoFactory {
         OperationDto op = new OperationDto.Builder().metadata(md).putData(matchMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_MATCH_BY_ID_MATCH,op);
 
+    }
+
+    public GenericDto searchMatches(String queryText) {
+        MetadataDto md = new MetadataDto.Builder()
+          .operation(Constants.OPERATION_RETRIEVE)
+          .entity(ENTITY_SEARCH_MATCH)
+          .putKey("pattern", queryText)
+          .items(SEARCH_RESULTS_MAX)
+          .build();
+
+        OperationDto op = new OperationDto.Builder().metadata(md).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_MATCH, op);
     }
 }
