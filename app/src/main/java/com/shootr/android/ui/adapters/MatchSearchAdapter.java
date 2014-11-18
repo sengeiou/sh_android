@@ -9,12 +9,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.MatchSearchResultModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatchSearchAdapter extends BindableAdapter<MatchModel> {
+public class MatchSearchAdapter extends BindableAdapter<MatchSearchResultModel> {
 
-    private List<MatchModel> items;
+    private List<MatchSearchResultModel> items;
 
     public MatchSearchAdapter(Context context) {
         super(context);
@@ -25,7 +26,7 @@ public class MatchSearchAdapter extends BindableAdapter<MatchModel> {
         return items.size();
     }
 
-    @Override public MatchModel getItem(int position) {
+    @Override public MatchSearchResultModel getItem(int position) {
         return items.get(position);
     }
 
@@ -39,18 +40,33 @@ public class MatchSearchAdapter extends BindableAdapter<MatchModel> {
         return view;
     }
 
-    @Override public void bindView(MatchModel item, int position, View view) {
+    @Override public void bindView(MatchSearchResultModel item, int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
         viewHolder.title.setText(item.getTitle());
         viewHolder.date.setText(item.getDatetime());
+        if (item.isAddedAlready()) {
+            viewHolder.title.setTextColor(view.getResources().getColor(R.color.disabled));
+            viewHolder.date.setTextColor(view.getResources().getColor(R.color.disabled));
+        } else {
+            viewHolder.title.setTextColor(view.getResources().getColor(R.color.gray_10));
+            viewHolder.date.setTextColor(view.getResources().getColor(R.color.gray_30));
+        }
     }
 
-    public void setItems(List<MatchModel> items) {
+    public void setItems(List<MatchSearchResultModel> items) {
         this.items = items;
         notifyDataSetChanged();
     }
 
-    public List<MatchModel> getItems() {
+    @Override public boolean isEnabled(int position) {
+        return !getItem(position).isAddedAlready();
+    }
+
+    @Override public boolean areAllItemsEnabled() {
+        return true;
+    }
+
+    public List<MatchSearchResultModel> getItems() {
         return items;
     }
 

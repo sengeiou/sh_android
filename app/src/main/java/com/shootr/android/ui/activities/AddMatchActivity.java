@@ -19,6 +19,7 @@ import com.shootr.android.R;
 import com.shootr.android.ui.adapters.MatchSearchAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.views.AddMatchView;
 import dagger.ObjectGraph;
@@ -90,7 +91,7 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
-    @Override public void renderResults(List<MatchModel> matches) {
+    @Override public void renderResults(List<MatchSearchResultModel> matches) {
         adapter.setItems(matches);
         resultsListView.setVisibility(View.VISIBLE);
     }

@@ -1,6 +1,8 @@
 package com.shootr.android.db;
 
 import android.app.Application;
+import com.shootr.android.ui.model.MatchSearchResultModel;
+import com.shootr.android.ui.model.mappers.MatchSearchResultModelMapper;
 import com.shootr.android.ui.model.mappers.WatchingRequestModelMapper;
 import dagger.Module;
 import dagger.Provides;
@@ -18,15 +20,19 @@ import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 
 @Module(
   complete = false,
-  library = true)
+  library = true,
+  injects = {
+    MatchSearchResultModelMapper.class,
+  }
+)
 public class MapperModule {
 
     @Provides ShotModelMapper provideShotModelMapper() {
         return new ShotModelMapper();
     }
 
-    @Provides MatchModelMapper provideMatchModelMapper(Application application) {
-        return new MatchModelMapper(application);
+    @Provides MatchModelMapper provideMatchModelMapper() {
+        return new MatchModelMapper();
     }
 
     @Provides UserWatchingModelMapper provideUserWatchingModelMapper(Application application) {

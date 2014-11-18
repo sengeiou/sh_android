@@ -6,6 +6,7 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.views.AddMatchView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -53,7 +54,7 @@ public class AddMatchPresenter implements Presenter {
 
     @Subscribe
     public void onSearchResultsReceived(SearchMatchResultEvent event) {
-        List<MatchModel> matchModels = event.getResult();
+        List<MatchSearchResultModel> matchModels = event.getResult();
         if (!matchModels.isEmpty()) {
             showResults(matchModels);
         } else {
@@ -61,7 +62,7 @@ public class AddMatchPresenter implements Presenter {
         }
     }
 
-    private void showResults(List<MatchModel> matchModels) {
+    private void showResults(List<MatchSearchResultModel> matchModels) {
         this.addMatchView.renderResults(matchModels);
         this.addMatchView.hideEmpty();
         this.addMatchView.hideLoading();

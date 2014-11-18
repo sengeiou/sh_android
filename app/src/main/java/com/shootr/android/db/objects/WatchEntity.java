@@ -6,6 +6,9 @@ public class WatchEntity extends Synchronized{
     public static final Long STATUS_WATCHING = 1L;
     public static final Long STATUS_REJECT = 2L;
 
+    public static final Long VISIBLE = 1L;
+    public static final Long NOT_VISIBLE = 0L;
+
     private Long idMatch;
     private Long idUser;
     private Long status;

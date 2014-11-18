@@ -1,13 +1,14 @@
 package com.shootr.android.ui.views;
 
 import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.MatchSearchResultModel;
 import java.util.List;
 
 public interface AddMatchView {
 
     void hideKeyboard();
 
-    void renderResults(List<MatchModel> matches);
+    void renderResults(List<MatchSearchResultModel> matches);
 
     void hideResults();
 

@@ -98,8 +98,8 @@
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
     <!-- Add Match -->
-    <string name="add_match">$Add Match</string>
-    <string name="activity_add_match_hint">$Find Matches</string>
+    <string name="add_match">Add Match</string>
+    <string name="activity_add_match_hint">Search Match</string>
 
     <!-- Info -->
     <string name="activity_empty_info">No people watching</string>

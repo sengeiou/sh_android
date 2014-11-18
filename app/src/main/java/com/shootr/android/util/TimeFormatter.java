@@ -1,5 +1,6 @@
 package com.shootr.android.util;
 
+import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
@@ -11,7 +12,7 @@ public class TimeFormatter {
     DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
     DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
 
-    public TimeFormatter() {
+    @Inject public TimeFormatter() {
 
     }
 

@@ -9,12 +9,10 @@ import java.util.List;
 
 public class MatchModelMapper {
 
-    private Application context;
     private final TimeFormatter timeFormatter;
 
-    public MatchModelMapper(Application context) {
-        this.context = context;
-        timeFormatter = new TimeFormatter();
+    public MatchModelMapper() {
+        timeFormatter = new TimeFormatter(); // TODO inject
     }
 
     public MatchModel toMatchModel(MatchEntity matchEntity) {
