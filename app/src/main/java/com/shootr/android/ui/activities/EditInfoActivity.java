@@ -8,9 +8,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
@@ -67,6 +69,11 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+    }
+
+    @OnClick(R.id.edit_info_delete)
+    public void onDeleteMatchClick() {
+        editInfoPresenter.deleteMatch();
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

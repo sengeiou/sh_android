@@ -2,12 +2,14 @@ package com.shootr.android.db.objects;
 
 public class WatchEntity extends Synchronized{
 
-    public static final int STATUS_DEFAULT = 0;
-    public static final int STATUS_WATCHING = 1;
-    public static final int STATUS_REJECT = 2;
+    public static final Long STATUS_DEFAULT = 0L;
+    public static final Long STATUS_WATCHING = 1L;
+    public static final Long STATUS_REJECT = 2L;
+
     private Long idMatch;
     private Long idUser;
     private Long status;
+    private Boolean visible;
 
     public Long getIdMatch() {
         return idMatch;
@@ -31,6 +33,14 @@ public class WatchEntity extends Synchronized{
 
     public void setStatus(Long status) {
         this.status = status;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     @Override

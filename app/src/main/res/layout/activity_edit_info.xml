@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
 
     <RelativeLayout
       android:layout_width="match_parent"
-      android:padding="16dp"
-      android:layout_height="56dp">
+      android:layout_height="56dp"
+      android:padding="16dp">
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:text="$Watching"
+          android:textSize="18sp" />
+
+        <android.support.v7.widget.SwitchCompat
+          android:id="@+id/edit_info_switch"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:padding="4dp" />
+    </RelativeLayout>
+
     <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:text="Watching"
-      android:textSize="18sp"
-      />
-    <android.support.v7.widget.SwitchCompat
-      android:id="@+id/edit_info_switch"
-      android:layout_height="wrap_content"
-      android:layout_width="wrap_content"
-      android:layout_centerVertical="true"
-      android:layout_alignParentRight="true"
-      android:padding="4dp"
-        />
-      </RelativeLayout>
+      android:id="@+id/edit_info_delete"
+      android:layout_width="match_parent"
+      android:clickable="true"
+      android:background="?android:selectableItemBackground"
+      android:layout_height="56dp"
+      android:gravity="center_vertical"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:drawableLeft="@drawable/ic_list_delete"
+      android:drawablePadding="24dp"
+      android:text="$Delete Match"
+      android:textSize="18sp" />
 
 </LinearLayout>

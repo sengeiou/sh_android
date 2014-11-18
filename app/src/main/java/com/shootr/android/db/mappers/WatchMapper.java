@@ -14,6 +14,7 @@ public class WatchMapper extends GenericMapper {
         contentValues.put(WatchTable.ID_MATCH,watchEntity.getIdMatch());
         contentValues.put(WatchTable.ID_USER, watchEntity.getIdUser());
         contentValues.put(WatchTable.STATUS, watchEntity.getStatus());
+        contentValues.put(WatchTable.VISIBLE, watchEntity.getVisible() ? 1 : 0);
         setSynchronizedtoContentValues(watchEntity,contentValues);
         return contentValues;
     }
@@ -26,6 +27,7 @@ public class WatchMapper extends GenericMapper {
         watch.setIdUser(
           (Number) dto.get(WatchTable.ID_USER) == null ? null : ((Number) dto.get(WatchTable.ID_USER)).longValue());
         watch.setStatus((Number)dto.get(WatchTable.STATUS) == null ? null : ((Number) dto.get(WatchTable.STATUS)).longValue());
+        watch.setVisible(dto.get(WatchTable.VISIBLE) == null ? null : dto.get(WatchTable.VISIBLE).equals(1));
         setSynchronizedfromDto(dto,watch);
         return watch;
     }
@@ -35,6 +37,7 @@ public class WatchMapper extends GenericMapper {
         dto.put(WatchTable.ID_MATCH, watch == null ? null : watch.getIdMatch());
         dto.put(WatchTable.ID_USER, watch == null ? null : watch.getIdUser());
         dto.put(WatchTable.STATUS, watch == null ? null : watch.getStatus());
+        dto.put(WatchTable.VISIBLE, watch == null ? null : watch.getVisible() ? 1 : 0);
         setSynchronizedtoDto(watch, dto);
         return dto;
     }
@@ -44,6 +47,7 @@ public class WatchMapper extends GenericMapper {
         watch.setIdMatch(c.getLong(c.getColumnIndex(WatchTable.ID_MATCH)));
         watch.setIdUser(c.getLong(c.getColumnIndex(WatchTable.ID_USER)));
         watch.setStatus(c.getLong(c.getColumnIndex(WatchTable.STATUS)));
+        watch.setVisible(c.getLong(c.getColumnIndex(WatchTable.VISIBLE)) == 1);
         setSynchronizedfromCursor(c, watch);
         return watch;
     }

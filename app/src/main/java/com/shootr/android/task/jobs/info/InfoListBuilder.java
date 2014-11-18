@@ -156,8 +156,25 @@ public class InfoListBuilder {
     }
 
     private void setWatchesAndExtractIds(Collection<WatchEntity> watches) {
-        this.watches.addAll(watches);
-        extractMatchesAndUserIdsFromWatches(watches);
+        List<WatchEntity> watchesVisible = removeWatchesWithNotVisibleMatches(watches);
+        this.watches.addAll(watchesVisible);
+        extractMatchesAndUserIdsFromWatches(watchesVisible);
+    }
+
+    private List<WatchEntity> removeWatchesWithNotVisibleMatches(Collection<WatchEntity> watches) {
+        List<Long> hiddenMatchesIds = new ArrayList<>();
+        for (WatchEntity watch : watches) {
+            if (watch.getIdUser().equals(currentUser.getIdUser()) && !watch.getVisible()) {
+                hiddenMatchesIds.add(watch.getIdMatch());
+            }
+        }
+        List<WatchEntity> watchesVisible = new ArrayList<>();
+        for (WatchEntity watch : watches) {
+            if (!hiddenMatchesIds.contains(watch.getIdMatch())) {
+                watchesVisible.add(watch);
+            }
+        }
+        return watchesVisible;
     }
 
     private void extractMatchesAndUserIdsFromWatches(Collection<WatchEntity> watches) {

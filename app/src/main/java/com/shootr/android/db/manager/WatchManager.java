@@ -49,17 +49,18 @@ public class WatchManager extends AbstractManager{
     }
 
     public void saveWatches(List<WatchEntity> watches){
-        long res = 0;
         for (WatchEntity watchEntity : watches) {
-            ContentValues contentValues = watchMapper.toContentValues(watchEntity);
-            if (contentValues.getAsLong(WatchTable.CSYS_DELETED) != null) {
-                res = deleteWatch(watchEntity);
-            } else {
-                res = db.insertWithOnConflict(WatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                Timber.d("Watch inserted with result: %d", res);
-            }
-            insertInSync();
+            saveWatch(watchEntity);
         }
+    }
+    public void saveWatch(WatchEntity watchEntity){
+        ContentValues contentValues = watchMapper.toContentValues(watchEntity);
+        if (contentValues.getAsLong(WatchTable.CSYS_DELETED) != null) {
+            deleteWatch(watchEntity);
+        } else {
+            db.insertWithOnConflict(WatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        insertInSync();
     }
 
     public long deleteWatch(WatchEntity watchEntity){
@@ -157,7 +158,7 @@ public class WatchManager extends AbstractManager{
      * Check if it exists any data for send to server. This method It is called before request datas
      *
      * **/
-    public List<WatchEntity> getDatasForSendToServerInCase(){
+    public List<WatchEntity> getEntitiesNotSynchronizedWithServer(){
         List<WatchEntity> watchesToUpdate = new ArrayList<>();
         String args = WatchTable.CSYS_SYNCHRONIZED+"='N' OR "+WatchTable.CSYS_SYNCHRONIZED+"= 'D' OR "+WatchTable.CSYS_SYNCHRONIZED+"='U'";
         Cursor c = db.query(WatchTable.TABLE, WatchTable.PROJECTION,args,null,null,null,null);

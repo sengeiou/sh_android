@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import android.os.Bundle;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
+import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.ui.views.EditInfoView;
@@ -36,7 +38,7 @@ public class EditInfoPresenter {
     }
 
     public void sendNewStatus() {
-        executeJobs();
+        executeEditJobs();
         closeScreen();
     }
 
@@ -53,9 +55,7 @@ public class EditInfoPresenter {
         this.editInfoView.closeScreen();
     }
 
-    private void executeJobs() {
-        Timber.d("Watching: " + newWatchingStatus);
-
+    private void executeEditJobs() {
         SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
         setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus));
         jobManager.addJobInBackground(setWatchingInfoOfflineJob);
@@ -66,6 +66,17 @@ public class EditInfoPresenter {
 
     private boolean hasChangedInfo(boolean watching) {
         return editInfoModel.watching != watching;
+    }
+
+    public void deleteMatch() {
+        DeleteMatchOfflineJob deleteMatchOfflineJob = objectGraph.get(DeleteMatchOfflineJob.class);
+        deleteMatchOfflineJob.init(editInfoModel.idMatch);
+        jobManager.addJobInBackground(deleteMatchOfflineJob);
+
+        DeleteMatchOnlineJob deleteMatchOnlineJob = objectGraph.get(DeleteMatchOnlineJob.class);
+        jobManager.addJobInBackground(deleteMatchOnlineJob);
+
+        closeScreen();
     }
 
     public static class EditInfoModel {

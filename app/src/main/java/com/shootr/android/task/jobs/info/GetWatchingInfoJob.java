@@ -23,6 +23,7 @@ import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ import timber.log.Timber;
 
 public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
-    private static final int PRIORITY = 7;
+    private static final int PRIORITY = 5;
     private ShootrService service;
     private SessionManager sessionManager;
     private MatchModelMapper matchModelMapper;
@@ -48,7 +49,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
       SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
       MatchManager matchManager, InfoListBuilderFactory infoListBuilderFactory) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.service = service;
         this.sessionManager = sessionManager;
         this.matchModelMapper = matchModelMapper;
@@ -80,6 +81,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
                 postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
             }
         }
+        Timber.d("****************************** Get Watching Info");
     }
 
     private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
@@ -113,6 +115,9 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     private List<MatchEntity> getMatches(List<Long> matchIds, boolean useOnlineData) throws IOException {
+        if (matchIds.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         List<MatchEntity> matches = matchManager.getMatchesByIds(matchIds);
         if (useOnlineData) {
             List<MatchEntity> matchesFromServer = service.getMatchesByIds(matchIds);

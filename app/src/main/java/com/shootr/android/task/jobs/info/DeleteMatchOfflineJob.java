@@ -8,47 +8,32 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.db.objects.WatchEntity;
-import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import javax.inject.Inject;
-import timber.log.Timber;
 
-public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult> {
+public class DeleteMatchOfflineJob extends ShootrBaseJob<Void> {
 
-    private static final int PRIORITY = 9;
+    public static final int PRIORITY = 10;
     private WatchManager watchManager;
-    private Long status;
-    private Long idMatch;
     private SessionManager sessionManager;
+    private Long idMatch;
 
-    @Inject
-    protected SetWatchingInfoOfflineJob(Application application, Bus bus, NetworkUtil networkUtil,
-      SQLiteOpenHelper openHelper, WatchManager watchManager, SessionManager sessionManager) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+    @Inject public DeleteMatchOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, SessionManager sessionManager, SQLiteOpenHelper openHelper, WatchManager watchManager) {
+        super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.sessionManager = sessionManager;
-        this.setOpenHelper(openHelper);
         this.watchManager = watchManager;
+        setOpenHelper(openHelper);
     }
 
-    public void init(Long idMatch, Long status){
+    public void init(Long idMatch) {
         this.idMatch = idMatch;
-        this.status = status;
     }
 
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
-    }
-
-    @Override protected void run() throws SQLException, IOException {
+    @Override protected void run() throws SQLException, IOException, Exception {
         createUpdateWatchEntityFromDB();
     }
 
@@ -61,16 +46,25 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
             watchEntity.setCsysModified(date);
             watchEntity.setCsysRevision(0);
             watchEntity.setCsysSynchronized("N");
+            watchEntity.setIdUser(sessionManager.getCurrentUserId());
+            watchEntity.setIdMatch(idMatch);
         }else{
             watchEntity.setCsysModified(date);
             watchEntity.setCsysRevision(watchEntity.getCsysRevision() + 1);
             watchEntity.setCsysSynchronized("U");
         }
-        watchEntity.setIdUser(sessionManager.getCurrentUserId());
-        watchEntity.setIdMatch(idMatch);
-        watchEntity.setStatus(status);
+        watchEntity.setStatus(WatchEntity.STATUS_REJECT);
+        watchEntity.setVisible(false);
         watchManager.createUpdateWatch(watchEntity);
         return watchEntity;
+    }
+
+    @Override protected void createDatabase() {
+        createWritableDb();
+    }
+
+    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
+        watchManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

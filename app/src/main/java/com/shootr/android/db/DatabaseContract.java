@@ -233,11 +233,13 @@ public class DatabaseContract {
         public static final String ID_USER = "idUser";
         public static final String ID_MATCH = "idMatch";
         public static final String STATUS = "status";
+        public static final String VISIBLE = "visible";
 
         public static final String[] PROJECTION = {
           ID_USER,
           ID_MATCH,
           STATUS,
+          VISIBLE,
           CSYS_BIRTH,
           CSYS_MODIFIED,
           CSYS_DELETED,

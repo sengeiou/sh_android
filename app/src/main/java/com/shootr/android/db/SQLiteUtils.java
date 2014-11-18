@@ -114,6 +114,7 @@ public class SQLiteUtils {
             + WatchTable.ID_MATCH + " INT NOT NULL,"
             + WatchTable.ID_USER+ " INT NOT NULL,"
             + WatchTable.STATUS+" INT NOT NULL,"
+            + WatchTable.VISIBLE+" INT NOT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
