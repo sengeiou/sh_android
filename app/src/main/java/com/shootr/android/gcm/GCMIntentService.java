@@ -131,6 +131,7 @@ public class GCMIntentService extends IntentService {
         Long idMatch = parameters.getLong(ID_MATCH);
         Long status = parameters.getLong(STATUS);
 
+        //TODO no crear la entidad a mano, no sabemos si es correcta. Descargarla del servidor
         WatchEntity watchEntity = new WatchEntity();
         watchEntity.setIdMatch(idMatch);
         watchEntity.setIdUser(idUser);
@@ -139,6 +140,7 @@ public class GCMIntentService extends IntentService {
         watchEntity.setCsysBirth(new Date());
         watchEntity.setCsysModified(new Date());
         watchEntity.setCsysSynchronized("N");
+        watchEntity.setVisible(true);
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
         UserEntity user = userManager.getUserByIdUser(idUser);
         watchManager.createUpdateWatch(watchEntity);

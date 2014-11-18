@@ -153,22 +153,16 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        bus.register(this);
         currentUser = ShootrApplication.get(activity).getCurrentUser();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        bus.unregister(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        bus.register(this);
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
-        startUpdateNotificationBadge();
+        refreshInfoData();
     }
 
     public void startUpdateNotificationBadge(){
@@ -185,7 +179,9 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onPause() {
         super.onPause();
+        bus.unregister(this);
         stopPollingShots();
+        hideWatchingRequests();
     }
 
     @Subscribe
@@ -274,9 +270,7 @@ public class TimelineFragment extends BaseFragment
 
     @Subscribe
     public void onRequestWatchByPush(RequestWatchByPushEvent event){
-
-        startUpdateNotificationBadge();
-        startRetrievingWatchingRequests();
+        refreshInfoData();
     }
 
     @Subscribe
@@ -299,7 +293,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void showNextWatchingRequestDelayed(final WatchingRequestModel watchingRequestModel) {
-        watchingRequestContainerView.setVisibility(View.GONE);
+        hideWatchingRequests();
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
                 showWatchingRequest(watchingRequestModel);

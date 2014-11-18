@@ -69,6 +69,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
         watchEntity.setIdUser(sessionManager.getCurrentUserId());
         watchEntity.setIdMatch(idMatch);
         watchEntity.setStatus(status);
+        watchEntity.setVisible(true);
         watchManager.createUpdateWatch(watchEntity);
         return watchEntity;
     }

@@ -19,10 +19,9 @@ public class GetWatchingPeopleNumberJob extends ShootrBaseJob<WatchingPeopleNumb
     private static final int PRIORITY = 9;
     WatchManager watchManager;
     MatchManager matchManager;
-    SQLiteOpenHelper openHelper;
 
     @Inject protected GetWatchingPeopleNumberJob(Application application, Bus bus, NetworkUtil networkUtil, SQLiteOpenHelper openHelper, WatchManager watchManager, MatchManager matchManager) {
-        super(new Params(PRIORITY), application, bus, networkUtil);
+        super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.watchManager = watchManager;
         this.matchManager = matchManager;
         setOpenHelper(openHelper);
