@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.shootr.android.db.ShootrDbOpenHelper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.StatsSnapshot;
@@ -50,10 +53,14 @@ import com.shootr.android.service.ShootrMockService;
 import com.shootr.android.ui.AppContainer;
 import com.shootr.android.ui.activities.LogReaderActivity;
 import com.shootr.android.ui.activities.MainActivity;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -168,7 +175,7 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_device_release) TextView deviceReleaseView;
     @InjectView(R.id.debug_device_api) TextView deviceApiView;
     @InjectView(R.id.debug_device_log) TextView deviceLogView;
-    @InjectView(R.id.debug_device_database_delete) TextView deviceDatabaseDeleteView;
+    @InjectView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
 
     @InjectView(R.id.debug_picasso_indicators) Switch picassoIndicatorView;
     @InjectView(R.id.debug_picasso_cache_size) TextView picassoCacheSizeView;
@@ -513,12 +520,30 @@ public class DebugAppContainer implements AppContainer {
         drawerContext.startActivity(new Intent(drawerContext, LogReaderActivity.class));
     }
 
-    @OnClick(R.id.debug_device_database_delete)
-    public void deleteDatabase() {
-        //.deleteDatabase(drawerContext);
-        initialSetupCompleted.delete();
-        Toast.makeText(drawerContext, "Database deleted. Restart app.", Toast.LENGTH_LONG).show();
-        relaunch();
+    @OnClick(R.id.debug_device_database_extract)
+    public void extractDatabase() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//"+BuildConfig.PACKAGE_NAME+"//databases//"+ ShootrDbOpenHelper.DATABASE_NAME;
+                String backupDBPath = ShootrDbOpenHelper.DATABASE_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+                Timber.i("Database copied to "+backupDB.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            Timber.e(e, "Error while copying database to sdcard");
+        }
     }
 
     private void setupPicassoSection() {

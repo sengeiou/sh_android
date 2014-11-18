@@ -422,9 +422,9 @@
         />
 
     <Button
-        android:id="@+id/debug_device_database_delete"
+        android:id="@+id/debug_device_database_extract"
         style="@style/Widget.U2020.DebugDrawer.RowValue"
-        android:text="Delete"
+        android:text="Extract"
         android:layout_gravity="start|end|center_vertical"
         />
 
