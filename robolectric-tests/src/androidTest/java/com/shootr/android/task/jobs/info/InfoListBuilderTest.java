@@ -42,7 +42,7 @@ public class InfoListBuilderTest {
     @Before
     public void setUp() {
         application = Robolectric.application;
-        matchModelMapper = new MatchModelMapper(application);
+        matchModelMapper = new MatchModelMapper();
         userWatchingModelMapper = new UserWatchingModelMapper(application);
     }
 

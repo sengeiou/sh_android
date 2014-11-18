@@ -75,7 +75,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
     @Before @Override
     public void setUp() throws IOException {
         super.setUp();
-        matchModelMapper = new MatchModelMapper(Robolectric.application);
+        matchModelMapper = new MatchModelMapper();
         userWatchingModelMapper = new UserWatchingModelMapper(Robolectric.application);
         service = mock(ShootrService.class);
         sessionManager = mock(SessionManager.class);
