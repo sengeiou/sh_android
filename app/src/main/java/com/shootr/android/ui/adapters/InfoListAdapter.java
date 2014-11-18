@@ -143,12 +143,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     public void bindMatch(MatchModel match, int position, View view) {
         HeaderViewHolder vh = (HeaderViewHolder) view.getTag();
         vh.title.setText(match.getTitle());
-        if (match.isLive()) {
-            vh.timestamp.setVisibility(View.GONE);
-        } else {
-            vh.timestamp.setVisibility(View.VISIBLE);
-            vh.timestamp.setText(match.getDatetime());
-        }
+        vh.timestamp.setText(match.getDatetime());
     }
 
     public void bindUser(UserWatchingModel user, int position, View view) {
