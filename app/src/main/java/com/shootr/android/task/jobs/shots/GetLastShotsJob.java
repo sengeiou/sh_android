@@ -24,7 +24,7 @@ import timber.log.Timber;
 public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
 
     private static final int PRIORITY = 7;
-    public static final Long LATEST_SHOTS_NUMBER = 3L;
+    public static final Long LATEST_SHOTS_NUMBER = 10L;
     private ShootrService service;
     private ShotManager shotManager;
     private UserManager userManager;
