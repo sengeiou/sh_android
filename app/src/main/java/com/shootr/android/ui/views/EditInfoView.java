@@ -9,4 +9,6 @@ public interface EditInfoView {
     void setWatchingStatus(boolean watching);
 
     void closeScreen();
+
+    void showDeleteMatchConfirmation(String matchTitle);
 }

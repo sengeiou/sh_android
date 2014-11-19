@@ -1,6 +1,8 @@
 package com.shootr.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -113,5 +115,18 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     @Override public void closeScreen() {
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Override public void showDeleteMatchConfirmation(String confirmationTitle) {
+        new AlertDialog.Builder(this)
+          .setMessage(confirmationTitle)
+          .setPositiveButton(R.string.delete_match_confirmation, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  editInfoPresenter.confirmDeleteMatch();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+
     }
 }

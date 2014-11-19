@@ -119,4 +119,10 @@
     <string name="watching_request_subtitle_none_and_not_started">Playing Soon</string>
     <string name="action_settings">Settings</string>
 
+    <string name="delete_match_confirmation">Remove</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="watching_switch">Watching</string>
+    <string name="remove_match_action">Remove Match</string>
+
 </resources>

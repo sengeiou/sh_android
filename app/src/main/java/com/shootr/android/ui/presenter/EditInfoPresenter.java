@@ -69,6 +69,21 @@ public class EditInfoPresenter {
     }
 
     public void deleteMatch() {
+        showDeleteMatchConfirmation();
+    }
+
+    public void showDeleteMatchConfirmation() {
+        String confirmationTitle;
+        if (editInfoModel.watching) {
+            confirmationTitle =
+              String.format("Remove Match? This will shoot you are not watching %s.", editInfoModel.matchTitle);
+        } else {
+            confirmationTitle = "Remove Match?";
+        }
+        this.editInfoView.showDeleteMatchConfirmation(confirmationTitle);
+    }
+
+    public void confirmDeleteMatch() {
         DeleteMatchOfflineJob deleteMatchOfflineJob = objectGraph.get(DeleteMatchOfflineJob.class);
         deleteMatchOfflineJob.init(editInfoModel.idMatch);
         jobManager.addJobInBackground(deleteMatchOfflineJob);
