@@ -1,10 +1,13 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
+import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.views.AddMatchView;
@@ -81,7 +84,7 @@ public class AddMatchPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onComunicationError(CommunicationErrorEvent event) {
+    public void onCommunicationError(CommunicationErrorEvent event) {
         this.addMatchView.alertComunicationError();
         showEmpty();
     }
@@ -92,5 +95,20 @@ public class AddMatchPresenter implements Presenter {
 
     @Override public void pause() {
         bus.unregister(this);
+    }
+
+    public void addMatch(MatchSearchResultModel selectedMatch) {
+        SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
+        setWatchingInfoOfflineJob.init(selectedMatch.getIdMatch(), WatchEntity.STATUS_DEFAULT);
+        jobManager.addJobInBackground(setWatchingInfoOfflineJob);
+
+        SetWatchingInfoOnlineJob setWatchingInfoOnlineJob = objectGraph.get(SetWatchingInfoOnlineJob.class);
+        jobManager.addJobInBackground(setWatchingInfoOnlineJob);
+
+        closeScreen();
+    }
+
+    private void closeScreen() {
+        this.addMatchView.closeScreen();
     }
 }

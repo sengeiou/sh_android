@@ -36,6 +36,8 @@ import timber.log.Timber;
 public class InfoActivity extends BaseSignedInActivity {
 
     private static final int REQUEST_CODE_EDIT = 1;
+    private static final int REQUEST_CODE_ADD = 2;
+
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
@@ -90,7 +92,7 @@ public class InfoActivity extends BaseSignedInActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             retrieveInfoList();
         }
     }
@@ -155,7 +157,7 @@ public class InfoActivity extends BaseSignedInActivity {
             NavUtils.navigateUpFromSameTask(this);
             return true;
         }else if (item.getItemId() == R.id.menu_add) {
-            startActivity(new Intent(this, AddMatchActivity.class));
+            startActivityForResult(new Intent(this, AddMatchActivity.class), REQUEST_CODE_ADD);
             return true;
         }else{
             return super.onOptionsItemSelected(item);

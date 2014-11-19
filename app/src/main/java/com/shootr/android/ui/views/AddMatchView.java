@@ -23,4 +23,6 @@ public interface AddMatchView {
     void alertConnectionNotAvailable();
 
     void alertComunicationError();
+
+    void closeScreen();
 }

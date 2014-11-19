@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.MatchSearchAdapter;
 import com.shootr.android.ui.base.BaseActivity;
@@ -45,6 +46,12 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
         resultsListView.setAdapter(adapter);
         initializePresenter();
         setupActionBar();
+    }
+
+    @OnItemClick(R.id.search_results_list)
+    public void onItemSelected(int position) {
+        MatchSearchResultModel selectedMatch = adapter.getItem(position);
+        addMatchPresenter.addMatch(selectedMatch);
     }
 
     private void setupActionBar() {
@@ -122,6 +129,11 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
 
     @Override public void alertComunicationError() {
         Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void closeScreen() {
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override protected void onResume() {

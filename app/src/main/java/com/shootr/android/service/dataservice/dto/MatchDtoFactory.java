@@ -70,8 +70,7 @@ public class MatchDtoFactory {
           or(and(DatabaseContract.WatchTable.STATUS).isEqualTo(1)
           .and(
             or(DatabaseContract.WatchTable.ID_USER).isIn(userIds)
-           )).or(and(WatchTable.ID_USER).isEqualTo(idCurrentUser)
-            .and(WatchTable.STATUS).isEqualTo(2))
+           )).or(WatchTable.ID_USER).isEqualTo(idCurrentUser)
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
