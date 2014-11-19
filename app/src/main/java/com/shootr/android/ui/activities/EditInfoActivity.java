@@ -71,6 +71,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
