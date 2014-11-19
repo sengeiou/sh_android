@@ -136,6 +136,14 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
         finish();
     }
 
+    @Override public void notifyUser(String matchTitle) {
+        Toast.makeText(this, matchTitle+" added.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void notifyMinimunThreeCharacters() {
+        Toast.makeText(this, "3 or more characters required.", Toast.LENGTH_SHORT).show();
+    }
+
     @Override protected void onResume() {
         super.onResume();
         addMatchPresenter.resume();

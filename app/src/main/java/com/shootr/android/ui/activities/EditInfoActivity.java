@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,7 +87,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
             case R.id.menu_send:
                 sendNewStatus();
@@ -121,9 +122,10 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         finish();
     }
 
-    @Override public void showDeleteMatchConfirmation(String confirmationTitle) {
+    @Override public void showDeleteMatchConfirmation(String confirmationTitle, String confirmationMessage) {
         new AlertDialog.Builder(this)
-          .setMessage(confirmationTitle)
+          .setTitle(confirmationTitle)
+          .setMessage(confirmationMessage)
           .setPositiveButton(R.string.delete_match_confirmation, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   editInfoPresenter.confirmDeleteMatch();

@@ -4,16 +4,23 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#d9d9d9" />
+
     <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="56dp"
       android:padding="16dp">
 
         <TextView
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
           android:text="@string/watching_switch"
+          android:layout_toLeftOf="@+id/edit_info_switch"
+          android:textColor="@color/gray_10"
           android:textSize="18sp" />
 
         <android.support.v7.widget.SwitchCompat

@@ -74,13 +74,16 @@ public class EditInfoPresenter {
 
     public void showDeleteMatchConfirmation() {
         String confirmationTitle;
+        String confirmationMessage;
         if (editInfoModel.watching) {
-            confirmationTitle =
-              String.format("Remove Match? This will shoot you are not watching %s.", editInfoModel.matchTitle);
+            confirmationTitle = "Remove match?";
+            confirmationMessage =
+              String.format("This will shoot you are not watching %s.", editInfoModel.matchTitle);
         } else {
-            confirmationTitle = "Remove Match?";
+            confirmationTitle = null;
+            confirmationMessage = "Remove match?";
         }
-        this.editInfoView.showDeleteMatchConfirmation(confirmationTitle);
+        this.editInfoView.showDeleteMatchConfirmation(confirmationTitle, confirmationMessage);
     }
 
     public void confirmDeleteMatch() {

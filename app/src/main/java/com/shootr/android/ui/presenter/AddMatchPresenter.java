@@ -37,9 +37,13 @@ public class AddMatchPresenter implements Presenter {
     }
 
     public void search(String searchQuery) {
+        this.hideKeyboard();
+        if (searchQuery.length() < 3) {
+            this.addMatchView.notifyMinimunThreeCharacters();
+            return;
+        }
         currentSearchQuery = searchQuery;
         this.executeSearch();
-        this.hideKeyboard();
     }
 
     private void hideKeyboard() {
@@ -105,6 +109,7 @@ public class AddMatchPresenter implements Presenter {
         SetWatchingInfoOnlineJob setWatchingInfoOnlineJob = objectGraph.get(SetWatchingInfoOnlineJob.class);
         jobManager.addJobInBackground(setWatchingInfoOnlineJob);
 
+        this.addMatchView.notifyUser(selectedMatch.getTitle());
         closeScreen();
     }
 

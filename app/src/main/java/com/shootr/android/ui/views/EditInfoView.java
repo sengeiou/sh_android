@@ -10,5 +10,5 @@ public interface EditInfoView {
 
     void closeScreen();
 
-    void showDeleteMatchConfirmation(String matchTitle);
+    void showDeleteMatchConfirmation(String confirmationTitle, String confirmationMessage);
 }

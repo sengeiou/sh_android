@@ -25,4 +25,8 @@ public interface AddMatchView {
     void alertComunicationError();
 
     void closeScreen();
+
+    void notifyUser(String matchTitle);
+
+    void notifyMinimunThreeCharacters();
 }
