@@ -81,7 +81,6 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
                 postSuccessfulEvent(new WatchingInfoResult(infoListOnline));
             }
         }
-        Timber.d("****************************** Get Watching Info");
     }
 
     private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
@@ -89,7 +88,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionManager, matchModelMapper,userWatchingModelMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
-            infoListBuilder.setWatches(watches);
+            infoListBuilder.setValidWatches(watches);
             infoListBuilder.provideMatches(getMatches(infoListBuilder.getMatchIds(), useOnlineData));
             infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
         }

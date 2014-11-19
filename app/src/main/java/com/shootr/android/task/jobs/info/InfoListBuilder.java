@@ -35,7 +35,8 @@ public class InfoListBuilder {
 
     private UserEntity currentUser;
 
-    private Set<WatchEntity> watches = new HashSet<>();
+    private Set<WatchEntity> validWatches = new HashSet<>();
+    private Set<WatchEntity> allWatches = new HashSet<>();
     private MatchEntity myTeamNextMatch;
 
     private Comparator<? super MatchModel> matchComparatorByDate = new Comparator<MatchModel>() {
@@ -63,8 +64,8 @@ public class InfoListBuilder {
         userEntities.put(currentUser.getIdUser(), currentUser);
     }
 
-    public void setWatches(List<WatchEntity> watches) {
-        setWatchesAndExtractIds(watches);
+    public void setValidWatches(List<WatchEntity> validWatches) {
+        setWatchesAndExtractIds(validWatches);
     }
 
     public void provideUsers(List<UserEntity> users) {
@@ -102,14 +103,14 @@ public class InfoListBuilder {
             meNotWatchingMyTeam.setIdMatch(myTeamNextMatch.getIdMatch());
             meNotWatchingMyTeam.setIdUser(currentUser.getIdUser());
             meNotWatchingMyTeam.setStatus(0L);
-            if (!watches.contains(meNotWatchingMyTeam)) {
-                watches.add(meNotWatchingMyTeam);
+            if (!allWatches.contains(meNotWatchingMyTeam)) {
+                validWatches.add(meNotWatchingMyTeam);
             }
         }
     }
 
     private void buildMapFromWatchesAndEntities() {
-        for (WatchEntity watch : watches) {
+        for (WatchEntity watch : validWatches) {
             addWatchingToResult(watch);
         }
     }
@@ -156,8 +157,9 @@ public class InfoListBuilder {
     }
 
     private void setWatchesAndExtractIds(Collection<WatchEntity> watches) {
+        this.allWatches.addAll(watches);
         List<WatchEntity> watchesVisible = removeWatchesWithNotVisibleMatches(watches);
-        this.watches.addAll(watchesVisible);
+        this.validWatches.addAll(watchesVisible);
         extractMatchesAndUserIdsFromWatches(watchesVisible);
     }
 
