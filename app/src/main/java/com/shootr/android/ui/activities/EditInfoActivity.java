@@ -73,14 +73,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    @OnClick(R.id.edit_info_delete)
-    public void onDeleteMatchClick() {
-        editInfoPresenter.deleteMatch();
-    }
-
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_info, menu);
-        sendMenuItem = menu.getItem(0);
+        sendMenuItem = menu.findItem(R.id.menu_send);
         sendMenuItem.setEnabled(false);
         return true;
     }
@@ -94,9 +89,16 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
             case R.id.menu_send:
                 sendNewStatus();
                 return true;
+            case R.id.menu_delete:
+                deleteMatch();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void deleteMatch() {
+        editInfoPresenter.deleteMatch();
     }
 
     @Override public void setSendButonEnabled(boolean enabled) {
