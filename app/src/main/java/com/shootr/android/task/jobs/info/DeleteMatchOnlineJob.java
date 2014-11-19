@@ -27,7 +27,7 @@ public class DeleteMatchOnlineJob extends ShootrBaseJob<Void> {
 
     @Inject public DeleteMatchOnlineJob(Application application, Bus bus, NetworkUtil networkUtil,
       SessionManager sessionManager, SQLiteOpenHelper openHelper, WatchManager watchManager, ShootrService service) {
-        super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
+        super(new Params(PRIORITY).groupBy("info").requireNetwork(), application, bus, networkUtil);
         this.sessionManager = sessionManager;
         this.watchManager = watchManager;
         this.service = service;
@@ -37,7 +37,6 @@ public class DeleteMatchOnlineJob extends ShootrBaseJob<Void> {
 
     @Override protected void run() throws Exception {
         checkIfWeHaveSomeChangesInWatchAndSendToServer();
-        Timber.d("****************************** Delete Match Online");
     }
 
     private void checkIfWeHaveSomeChangesInWatchAndSendToServer() throws IOException {
