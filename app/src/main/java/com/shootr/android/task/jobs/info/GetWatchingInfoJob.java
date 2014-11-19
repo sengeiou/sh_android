@@ -88,7 +88,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionManager, matchModelMapper,userWatchingModelMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
-            infoListBuilder.setValidWatches(watches);
+            infoListBuilder.setWatches(watches);
             infoListBuilder.provideMatches(getMatches(infoListBuilder.getMatchIds(), useOnlineData));
             infoListBuilder.provideUsers(getUsersFromDatabase(infoListBuilder.getUserIds()));
         }

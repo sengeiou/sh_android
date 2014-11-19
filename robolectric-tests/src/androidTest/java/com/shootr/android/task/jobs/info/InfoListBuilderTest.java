@@ -66,7 +66,7 @@ public class InfoListBuilderTest {
         ArrayList<UserEntity> users = new ArrayList<>();
         users.add(getIrrelevantUser());
 
-        infoListBuilder.setValidWatches(watches);
+        infoListBuilder.setWatches(watches);
         infoListBuilder.provideMatches(matches);
         infoListBuilder.provideUsers(users);
 

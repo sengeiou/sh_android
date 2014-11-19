@@ -64,7 +64,7 @@ public class InfoListBuilder {
         userEntities.put(currentUser.getIdUser(), currentUser);
     }
 
-    public void setValidWatches(List<WatchEntity> validWatches) {
+    public void setWatches(List<WatchEntity> validWatches) {
         setWatchesAndExtractIds(validWatches);
     }
 
@@ -192,6 +192,10 @@ public class InfoListBuilder {
 
     public List<Long> getMatchIds() {
         return matchIdsFromWatches;
+    }
+
+    public Set<WatchEntity> getValidWatches() {
+        return validWatches;
     }
 
     private UserWatchingModel getUserWatchingModelFromEntity(UserEntity userEntity, WatchEntity watchEntity, MatchEntity matchEntity) {

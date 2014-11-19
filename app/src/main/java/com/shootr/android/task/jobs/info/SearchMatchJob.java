@@ -13,7 +13,6 @@ import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.model.mappers.MatchSearchResultModelMapper;
 import com.squareup.otto.Bus;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 
 public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
@@ -52,8 +52,7 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
     @Override protected void run() throws IOException, SQLException {
         List<MatchEntity> resultMatches = service.searchMatches(queryText);
 
-
-        //Filter
+        //Filter added matches
         // My team
         MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(sessionManager.getCurrentUser().getFavoriteTeamId());
         // My following's watches
@@ -62,12 +61,15 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         List<WatchEntity> watchesFromMyFollowing =
           watchManager.getWatchesNotEndedOrAdjurnedFromUsers(followingsAndMeIds);
 
+        //Builder crappy stuff
+        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), null, null);
+        infoListBuilder.setWatches(watchesFromMyFollowing);
+        infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
+        Set<WatchEntity> validWatches = infoListBuilder.getValidWatches();
+
         List<Long> alreadyAddedMatchesIds = new ArrayList<>();
-        if (nextMatchFromMyTeam != null) {
-            alreadyAddedMatchesIds.add(nextMatchFromMyTeam.getIdMatch());
-        }
-        if (watchesFromMyFollowing != null) {
-            for (WatchEntity watch : watchesFromMyFollowing) {
+        if (validWatches!= null) {
+            for (WatchEntity watch : validWatches) {
                 alreadyAddedMatchesIds.add(watch.getIdMatch());
             }
         }
@@ -79,14 +81,6 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
 
         }
         postSuccessfulEvent(new SearchMatchResultEvent(matchModels));
-    }
-
-    private List<Long> getMatchesIdsFromWatches(List<WatchEntity> watchEntities) {
-        List<Long> matchesIds = new ArrayList<>(watchEntities.size());
-        for (WatchEntity watchEntity : watchEntities) {
-            matchesIds.add(watchEntity.getIdMatch());
-        }
-        return matchesIds;
     }
 
     @Override protected boolean isNetworkRequired() {
