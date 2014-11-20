@@ -20,6 +20,7 @@
     <style name="ShootrTheme.Closable">
         <item name="toolbar">@style/ToolBar.Closable</item>
         <item name="colorPrimaryDark">#b3b3b3</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle.Closable</item>
     </style>
 
     <style name="ToolBar">
@@ -59,13 +60,18 @@
 
     <style name="MySearchViewStyle" parent="Widget.AppCompat.Light.SearchView">
         <item name="queryBackground">@color/primary</item>
-        <item name="android:textColorHint">#FFFFFF</item>
+        <item name="android:textColorHint">@color/white</item>
 
         <!--<item name="searchIcon"></item>-->
         <!--<item name="goIcon"></item>-->
         <!--<item name="voiceIcon"></item>-->
         <!--<item name="commitIcon"></item>-->
         <!--<item name="android:suggestionRowLayout"></item>-->
+    </style>
+
+    <style name="MySearchViewStyle.Closable">
+        <item name="queryBackground">@color/white</item>
+        <item name="android:textColorHint">@color/material_black</item>
     </style>
 
     <style name="ShootrTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">

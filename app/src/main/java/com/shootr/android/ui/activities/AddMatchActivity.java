@@ -78,7 +78,7 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
 
         SearchView.SearchAutoComplete searchAutoComplete =
           (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white_disabled));
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String queryText) {
@@ -96,6 +96,14 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override public void renderResults(List<MatchSearchResultModel> matches) {

@@ -12,6 +12,7 @@
     <color name="disabled">#aaaaaa</color>
 
     <color name="material_black">#de000000</color>
+    <color name="hint_black">#bbbbbb</color>
 
     <color name="background_dark">#ececec</color>
 
