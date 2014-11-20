@@ -94,6 +94,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
 
         Map<MatchModel, Collection<UserWatchingModel>> map = new HashMap<>();
         MatchModel match = new MatchModel();
+        match.setIdMatch(1L);
         match.setLocalTeamId(1L);
         match.setVisitorTeamId(1L);
         match.setLocalTeamName("localTeam");
@@ -140,6 +141,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
     @Test
     public void resultContainsOneMatchFromMyFavoriteTeamWhenPlaysAsLocal() throws Throwable {
         MatchEntity match = new MatchEntity();
+        match.setIdMatch(1L);
         match.setIdLocalTeam(FAVOURITE_TEAM_ID);
         match.setMatchDate(new Date());
         when(service.getNextMatchWhereMyFavoriteTeamPlays(eq(FAVOURITE_TEAM_ID))).thenReturn(match);
@@ -152,6 +154,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
     @Test
     public void resultContainsOneMatchFromMyFavoriteTeamWhenPlaysAsVisitor() throws Throwable {
         MatchEntity match = new MatchEntity();
+        match.setIdMatch(1L);
         match.setIdVisitorTeam(FAVOURITE_TEAM_ID);
         match.setMatchDate(new Date());
         List<Long> matchIds = new ArrayList<>();
