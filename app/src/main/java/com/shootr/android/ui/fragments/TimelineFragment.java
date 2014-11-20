@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.BuildConfig;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -387,14 +389,8 @@ public class TimelineFragment extends BaseFragment
 
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
-        Bundle anim =
-                ActivityOptionsCompat.makeScaleUpAnimation(newShotView, 0, 0, newShotView.getWidth(),
-                        newShotView.getHeight()).toBundle();
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
-        if(anim!=null){
-            intent.putExtras(anim);
-        }
-        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_NEW_SHOT, anim);
+        startActivityForResult(intent, REQUEST_NEW_SHOT);
     }
 
     @OnItemClick(R.id.timeline_list)
