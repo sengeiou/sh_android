@@ -69,7 +69,6 @@ import com.shootr.android.ui.activities.InfoActivity;
 import com.shootr.android.ui.activities.MainActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.fragments.DummyFragment;
 import com.shootr.android.ui.fragments.InitialSetupFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.ProfileFragment;
@@ -92,8 +91,6 @@ import static android.content.Context.MODE_PRIVATE;
     BaseSignedInActivity.class,
 
     ShootrBaseJob.class,
-
-    DummyFragment.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
     InfoActivity.class,

@@ -29,7 +29,6 @@ import com.shootr.android.sync.SyncConfigurator;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.adapters.MenuAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.fragments.DummyFragment;
 import com.shootr.android.ui.fragments.InitialSetupFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.TimelineFragment;
@@ -261,7 +260,6 @@ public class MainActivity extends BaseSignedInActivity {
         MenuAdapter.MenuItem[] menuItems = {
             new MenuAdapter.FragmentMenuItem("Timeline", R.drawable.ic_drawer_timeline, TimelineFragment.class),
             new MenuAdapter.FragmentMenuItem("People", R.drawable.ic_drawer_people, PeopleFragment.class),
-            new MenuAdapter.FragmentMenuItem("Watching", R.drawable.ic_drawer_timeline, DummyFragment.class),
         };
         return Arrays.asList(menuItems);
     }

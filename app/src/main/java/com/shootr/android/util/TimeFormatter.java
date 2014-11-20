@@ -10,13 +10,14 @@ public class TimeFormatter {
 
     DateTimeFormatter hourFormater = DateTimeFormat.forPattern("HH:mm");
     DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
+    DateTimeFormatter dayTimeFormater = DateTimeFormat.forPattern("MM/dd HH:mm");
     DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
 
     @Inject public TimeFormatter() {
 
     }
 
-    public String getDateAndTimeText(long targetTimestamp) {
+    public String getDateAndTimeTextRelative(long targetTimestamp) {
         DateTime targetDate = new DateTime(targetTimestamp);
         if (isToday(targetDate)) {
             return getTodayFormat(targetDate);
@@ -27,12 +28,20 @@ public class TimeFormatter {
         }
     }
 
+    public String getDateAndTimeTextGeneric(long targetTimestamp) {
+        DateTime targetDate = new DateTime(targetTimestamp);
+        return getDayTimeFormat(targetDate);
+    }
+
     private String getDayOfWeek(DateTime targetDate) {
         return weekDayFormater.print(targetDate);
     }
 
     private String getDayFormat(DateTime targetDate) {
         return dayFormater.print(targetDate);
+    }
+    private String getDayTimeFormat(DateTime targetDate) {
+        return dayTimeFormater.print(targetDate);
     }
 
     private String getTomorrowFormat(DateTime targetDate) {

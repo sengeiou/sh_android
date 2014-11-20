@@ -141,7 +141,7 @@ public class AddMatchActivity extends BaseActivity implements AddMatchView {
     }
 
     @Override public void notifyMinimunThreeCharacters() {
-        Toast.makeText(this, "3 or more characters required.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.search_warning_minimun_characters), Toast.LENGTH_SHORT).show();
     }
 
     @Override protected void onResume() {
