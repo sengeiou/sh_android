@@ -75,4 +75,21 @@ public class MatchModel {
     public void setLive(boolean isLive) {
         this.isLive = isLive;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MatchModel that = (MatchModel) o;
+
+        if (!idMatch.equals(that.idMatch)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return idMatch.hashCode();
+    }
 }

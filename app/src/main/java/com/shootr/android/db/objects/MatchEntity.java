@@ -93,6 +93,16 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
     }
 
     @Override public int compareTo(@NonNull MatchEntity another) {
-        return this.getMatchDate().compareTo(another.getMatchDate());
+        boolean areSameMatch = this.getIdMatch().equals(another.getIdMatch());
+        if (areSameMatch) {
+            return 0;
+        }
+        int dateComparison = this.getMatchDate().compareTo(another.getMatchDate());
+        if (dateComparison == 0) {
+            int idComparison = this.getIdMatch().compareTo(another.getIdMatch());
+            return idComparison;
+        } else {
+            return dateComparison;
+        }
     }
 }
