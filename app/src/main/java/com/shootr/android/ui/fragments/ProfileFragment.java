@@ -303,7 +303,7 @@ public class ProfileFragment extends BaseFragment {
 
         long timestamp = item.getCsysBirth().getTime();
         vh.timestamp.setText(timeUtils.getElapsedTime(getActivity(), timestamp));
-        Linkify.addLinks(vh.text, Patterns.WEB_URL, "http://");
+        TimelineAdapter.addLinks(vh.text);
 
         String photo = item.getPhoto();
         boolean isValidPhotoUrl = photo != null && !photo.isEmpty();

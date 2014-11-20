@@ -1,7 +1,6 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.shootr.android.util.Patterns;
+import com.shootr.android.util.Linkify;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -97,7 +96,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 vh.name.setText(item.getUsername());
 
                 vh.text.setText(item.getComment());
-                Linkify.addLinks(vh.text, Patterns.WEB_URL, "http://");
+                addLinks(vh.text);
 
                 long timestamp = item.getCsysBirth().getTime();
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
@@ -114,6 +113,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
             default:
                 break;
         }
+    }
+
+    public static void addLinks(TextView textView) {
+        Linkify.addLinks(textView, Linkify.WEB_URLS);
     }
 
     public void addShotsBelow(List<ShotModel> newShots) {
