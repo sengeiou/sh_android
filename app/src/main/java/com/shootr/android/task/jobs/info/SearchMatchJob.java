@@ -53,8 +53,6 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         List<MatchEntity> resultMatches = service.searchMatches(queryText);
 
         //Filter added matches
-        // My team
-        MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(sessionManager.getCurrentUser().getFavoriteTeamId());
         // My following's watches
         List<Long> followingsAndMeIds =
           followManager.getUserFollowingIdsWithOwnUser(sessionManager.getCurrentUserId());
@@ -64,13 +62,22 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         //Builder crappy stuff
         InfoListBuilder infoListBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), null, null);
         infoListBuilder.setWatches(watchesFromMyFollowing);
-        infoListBuilder.putMyTeamMatch(nextMatchFromMyTeam);
         Set<WatchEntity> validWatches = infoListBuilder.getValidWatches();
 
         List<Long> alreadyAddedMatchesIds = new ArrayList<>();
         if (validWatches!= null) {
             for (WatchEntity watch : validWatches) {
                 alreadyAddedMatchesIds.add(watch.getIdMatch());
+            }
+        }
+
+        // My team
+        MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(sessionManager.getCurrentUser().getFavoriteTeamId());
+        if (nextMatchFromMyTeam != null) {
+            WatchEntity myTeamWatch =
+              watchManager.getWatchByKeys(sessionManager.getCurrentUserId(), nextMatchFromMyTeam.getIdMatch());
+            if (myTeamWatch == null || myTeamWatch.getVisible()) {
+                alreadyAddedMatchesIds.add(nextMatchFromMyTeam.getIdMatch());
             }
         }
 
