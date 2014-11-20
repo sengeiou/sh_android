@@ -81,6 +81,7 @@
     <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_above="@+id/timeline_new"
       android:layout_below="@+id/timeline_watching_container">
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -100,6 +101,12 @@
 
         <include layout="@layout/fragment_timeline_empty" />
 
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="4dp"
+          android:layout_gravity="bottom"
+          android:background="@drawable/shadow_down_top" />
+
     </FrameLayout>
 
     <!-- New shot -->
@@ -111,11 +118,6 @@
       android:animateLayoutChanges="true"
       android:orientation="vertical">
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="4dp"
-          android:layout_gravity="bottom"
-          android:background="@drawable/shadow_down_top" />
 
         <RelativeLayout
           android:layout_width="match_parent"
