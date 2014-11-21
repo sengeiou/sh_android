@@ -31,16 +31,13 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     private UserEntity currentUser;
     private Long idUser;
     private int followUnfollowType;
-    private int doIFollowHim;
 
     @Inject
-    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-       UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        this.setOpenHelper(openHelper);
     }
 
     public void init(UserEntity currentUser, Long idUser, int followUnfollowType){
@@ -49,18 +46,9 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         this.followUnfollowType = followUnfollowType;
     }
 
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        userManager.setDataBase(db);
-    }
-
     @Override protected void run() throws SQLException, IOException {
         Long idCurrentUser = currentUser.getIdUser();
-        doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
+        int doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         UserModel userToReturn = null;
         switch (followUnfollowType){
             case UserDtoFactory.FOLLOW_TYPE:

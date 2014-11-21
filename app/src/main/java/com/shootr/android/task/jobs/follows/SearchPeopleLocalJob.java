@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.db.manager.FollowManager;
@@ -31,32 +32,20 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     private UserModelMapper userModelMapper;
 
     private String searchString;
-
-    private Long currentUserId;
+    private SessionManager sessionManager;
 
     @Inject
-    public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,
-      UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, UserManager userManager,
+      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
         super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        setOpenHelper(openHelper);
+        this.sessionManager = sessionManager;
     }
 
     public void init(String searchString) {
-
         this.searchString = searchString;
-        currentUserId  = ShootrApplication.get(getContext()).getCurrentUser().getIdUser();
-    }
-
-    @Override protected void createDatabase() {
-        createReadableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        userManager.setDataBase(db);
-        followManager.setDataBase(db);
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -73,8 +62,8 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user:users){
             Long idUser = user.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
-            boolean isMe = idUser.equals(currentUserId);
+            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
+            boolean isMe = idUser.equals(sessionManager.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
         return userVOs;

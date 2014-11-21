@@ -47,7 +47,7 @@ public class GetPeopleJobTest extends ShootrBaseJobTestAbstract {
 
         userVOMapper = mock(UserModelMapper.class);
         getPeopleJob =
-          new GetPeopleJob(Robolectric.application, bus, service, networkUtil, openHelper, userManager, followManager,
+          new GetPeopleJob(Robolectric.application, bus, service, networkUtil, userManager, followManager,
             userVOMapper);
         getPeopleJob.init(CURRENT_USER_ID);
     }

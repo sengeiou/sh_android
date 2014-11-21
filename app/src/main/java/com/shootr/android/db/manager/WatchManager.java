@@ -3,6 +3,7 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
@@ -20,7 +21,8 @@ public class WatchManager extends AbstractManager{
     @Inject WatchMapper watchMapper;
 
     @Inject
-    public WatchManager(WatchMapper watchMapper) {
+    public WatchManager(SQLiteOpenHelper openHelper, WatchMapper watchMapper) {
+        super(openHelper);
         this.watchMapper = watchMapper;
     }
 
@@ -34,7 +36,7 @@ public class WatchManager extends AbstractManager{
         for (int i = 0; i < userIds.size(); i++) {
             whereArguments[i] = String.valueOf(userIds.get(i));
         }
-        Cursor queryResult = db.rawQuery(query, whereArguments);
+        Cursor queryResult = getReadableDatabase().rawQuery(query, whereArguments);
 
         List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -58,7 +60,7 @@ public class WatchManager extends AbstractManager{
         if (contentValues.getAsLong(WatchTable.CSYS_DELETED) != null) {
             deleteWatch(watchEntity);
         } else {
-            db.insertWithOnConflict(WatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(WatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
@@ -67,9 +69,9 @@ public class WatchManager extends AbstractManager{
         long res = 0;
         String args = WatchTable.ID_USER + "=? AND "+ WatchTable.ID_MATCH+"=?";
         String[] stringArgs = new String[]{String.valueOf(watchEntity.getIdUser()), String.valueOf(watchEntity.getIdMatch())};
-        Cursor c = db.query(WatchTable.TABLE, WatchTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(WatchTable.TABLE, args, stringArgs);
+            res = getWritableDatabase().delete(WatchTable.TABLE, args, stringArgs);
         }
         c.close();
         return res;
@@ -82,7 +84,7 @@ public class WatchManager extends AbstractManager{
     }
 
     public void deleteAllWatches() {
-        db.execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE);
+        getWritableDatabase().execSQL("DELETE FROM " + DatabaseContract.WatchTable.TABLE);
     }
 
     public void insertInSync(){
@@ -104,7 +106,7 @@ public class WatchManager extends AbstractManager{
         }
 
         Cursor queryResult =
-          db.query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -121,7 +123,7 @@ public class WatchManager extends AbstractManager{
     public List<WatchEntity> getWatchesRejected() {
         String whereString = WatchTable.STATUS + "=?";
         String[] whereArguments = new String[]{String.valueOf(WatchEntity.STATUS_REJECT)};
-        Cursor queryResult = db.query(WatchTable.TABLE, WatchTable.PROJECTION, whereString, whereArguments, null, null, null);
+        Cursor queryResult = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereString, whereArguments, null, null, null);
 
         List<WatchEntity> resultWatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -137,14 +139,14 @@ public class WatchManager extends AbstractManager{
 
     public void createUpdateWatch(WatchEntity watchEntity) {
         ContentValues contentValues = watchMapper.toContentValues(watchEntity);
-        db.insertWithOnConflict(WatchTable.TABLE,null,contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        getWritableDatabase().insertWithOnConflict(WatchTable.TABLE,null,contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public WatchEntity getWatchByKeys(Long idUser, Long idMatch) {
         WatchEntity watchEntity = null;
         String whereString = WatchTable.ID_USER+"=? AND "+WatchTable.ID_MATCH+"=?";
         String[] whereArguments = new String[]{String.valueOf(idUser),String.valueOf(idMatch)};
-        Cursor queryResult = db.query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
+        Cursor queryResult = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
         if(queryResult.getCount()>0){
             queryResult.moveToFirst();
             watchEntity = watchMapper.fromCursor(queryResult);
@@ -161,7 +163,7 @@ public class WatchManager extends AbstractManager{
     public List<WatchEntity> getEntitiesNotSynchronizedWithServer(){
         List<WatchEntity> watchesToUpdate = new ArrayList<>();
         String args = WatchTable.CSYS_SYNCHRONIZED+"='N' OR "+WatchTable.CSYS_SYNCHRONIZED+"= 'D' OR "+WatchTable.CSYS_SYNCHRONIZED+"='U'";
-        Cursor c = db.query(WatchTable.TABLE, WatchTable.PROJECTION,args,null,null,null,null);
+        Cursor c = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             do{
@@ -175,7 +177,7 @@ public class WatchManager extends AbstractManager{
     public List<WatchEntity> getWatchesWhereUserNot(Long currentUserId) {
         String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
 
-        Cursor queryResult = db.rawQuery(sql,null);
+        Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
         List<WatchEntity> resultWatches = new ArrayList<>();
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
@@ -193,7 +195,7 @@ public class WatchManager extends AbstractManager{
         String[] whereArguments = new String[]{String.valueOf(matchId), String.valueOf(userId), String.valueOf(WatchEntity.STATUS_DEFAULT)};
 
         Cursor queryResult =
-                db.query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+                getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         WatchEntity watchEntity = null;
         if (queryResult.getCount() > 0) {
@@ -206,7 +208,7 @@ public class WatchManager extends AbstractManager{
 
     public Integer getPeopleWatchingInInfo() {
         String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+MatchTable.TABLE+" m WHERE m."+MatchTable.ID_MATCH+"=w."+WatchTable.ID_MATCH+" AND m."+MatchTable.STATUS+"="+MatchEntity.STARTED +" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
-        Cursor queryResult = db.rawQuery(sql,null);
+        Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
         Integer number = -1;
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
@@ -221,7 +223,7 @@ public class WatchManager extends AbstractManager{
         String[] whereArguments = new String[]{String.valueOf(userId), String.valueOf(WatchEntity.VISIBLE)};
 
         Cursor queryResult =
-          db.query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         List<WatchEntity> watches = new ArrayList<>();
         if (queryResult.getCount() > 0) {

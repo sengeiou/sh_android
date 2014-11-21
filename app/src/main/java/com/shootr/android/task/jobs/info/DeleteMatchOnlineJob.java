@@ -22,16 +22,12 @@ public class DeleteMatchOnlineJob extends ShootrBaseJob<Void> {
 
     public static final int PRIORITY = 9;
     private WatchManager watchManager;
-    private SessionManager sessionManager;
     private ShootrService service;
 
-    @Inject public DeleteMatchOnlineJob(Application application, Bus bus, NetworkUtil networkUtil,
-      SessionManager sessionManager, SQLiteOpenHelper openHelper, WatchManager watchManager, ShootrService service) {
+    @Inject public DeleteMatchOnlineJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, ShootrService service) {
         super(new Params(PRIORITY).groupBy("info").requireNetwork(), application, bus, networkUtil);
-        this.sessionManager = sessionManager;
         this.watchManager = watchManager;
         this.service = service;
-        setOpenHelper(openHelper);
     }
 
 
@@ -46,14 +42,6 @@ public class DeleteMatchOnlineJob extends ShootrBaseJob<Void> {
             WatchEntity watchReceived = service.setWatchStatus(watchToSend);
             watchManager.saveWatch(watchReceived);
         }
-    }
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

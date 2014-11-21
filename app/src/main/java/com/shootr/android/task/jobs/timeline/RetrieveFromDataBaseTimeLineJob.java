@@ -21,8 +21,8 @@ public class RetrieveFromDataBaseTimeLineJob  extends TimelineJob<ShotsResultEve
     private UserEntity currentUser;
 
     @Inject public RetrieveFromDataBaseTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
-        super(context, bus, service, networkUtil, shotManager, followManager, dbHelper);
+      ShotManager shotManager, FollowManager followManager) {
+        super(context, bus, service, networkUtil, shotManager, followManager);
         this.shotManager = shotManager;
     }
 

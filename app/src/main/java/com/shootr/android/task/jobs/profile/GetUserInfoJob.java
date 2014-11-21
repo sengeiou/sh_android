@@ -33,14 +33,13 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private UserEntity currentUser;
     private UserModelMapper userVOMapper;
 
-    @Inject public GetUserInfoJob(Application application, Bus bus, SQLiteOpenHelper dbHelper, ShootrService service,
-      NetworkUtil networkUtil1, UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
+    @Inject public GetUserInfoJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil1,
+      UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.userVOMapper = userVOMapper;
-        setOpenHelper(dbHelper);
     }
 
     public void init(Long userId, UserEntity currentUser) {
@@ -90,17 +89,6 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     private UserEntity getUserFromService() throws IOException {
         return service.getUserByIdUser(userId);
-    }
-
-    @Override
-    protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        userManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

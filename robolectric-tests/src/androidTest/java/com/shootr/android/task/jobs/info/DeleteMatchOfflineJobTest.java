@@ -10,7 +10,6 @@ import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import java.util.Date;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -52,8 +51,7 @@ public class DeleteMatchOfflineJobTest {
         now = new Date();
         past = new Date(now.getTime() - DAY_IN_MILLIS);
 
-        job = new DeleteMatchOfflineJob(Robolectric.application, bus, networkUtil, sessionManager, sqliteOpenHelper,
-            watchManager, timeUtils);
+        job = new DeleteMatchOfflineJob(Robolectric.application, bus, networkUtil, sessionManager, watchManager, timeUtils);
         job.init(MATCH_ID);
     }
 

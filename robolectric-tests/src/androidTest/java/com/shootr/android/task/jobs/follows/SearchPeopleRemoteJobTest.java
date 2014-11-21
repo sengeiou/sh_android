@@ -48,7 +48,7 @@ public class SearchPeopleRemoteJobTest extends ShootrBaseJobTestAbstract {
 
         searchPeopleRemoteJob =
           new SearchPeopleRemoteJob(Robolectric.application, bus, service, networkUtil, followManager,
-            userVOMapper, openHelper, sessionManager);
+            userVOMapper, sessionManager);
         searchPeopleRemoteJob.init("", 0);
     }
 

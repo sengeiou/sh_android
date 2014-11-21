@@ -26,8 +26,8 @@ public class RetrieveInitialTimeLineJob  extends TimelineJob<ShotsResultEvent>{
     private UserEntity currentUser;
 
     @Inject public RetrieveInitialTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
-        super(context, bus, service, networkUtil, shotManager, followManager, dbHelper);
+      ShotManager shotManager, FollowManager followManager) {
+        super(context, bus, service, networkUtil, shotManager, followManager);
         this.shotManager = shotManager;
         this.service = service;
         this.followManager = followManager;

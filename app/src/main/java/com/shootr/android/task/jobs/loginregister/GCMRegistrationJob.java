@@ -46,14 +46,10 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     private SessionManager sessionManager;
     private DeviceManager deviceManager;
 
-    void doSomething(){
-        //TODO check for play services apk and version!
-    }
-
     @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
       @GCMAppVersion IntPreference registeredAppVersion, ShootrService service, DeviceManager deviceManager,
-      SQLiteOpenHelper openHelper, SessionManager sessionManager) {
+      SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.registrationId = registrationId;
         this.registeredAppVersion = registeredAppVersion;
@@ -61,7 +57,6 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         this.service = service;
         this.deviceManager = deviceManager;
         this.sessionManager = sessionManager;
-        setOpenHelper(openHelper);
     }
 
     @Override protected void run() throws Exception {
@@ -108,6 +103,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
         existingDevice.setCsysModified(new Date());
 
         service.updateDevice(existingDevice);
+        deviceManager.saveDevice(existingDevice);
     }
 
 
@@ -117,14 +113,6 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
             currentDevice = service.getDeviceByUniqueId(uniqueDeviceId);
         }
         return currentDevice;
-    }
-
-    @Override protected void createDatabase() {
-        createReadableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        deviceManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

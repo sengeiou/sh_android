@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.mappers.FollowMapper;
@@ -26,7 +27,8 @@ public class FollowManager extends AbstractManager{
 
 
     @Inject
-    public FollowManager(FollowMapper followMapper){
+    public FollowManager(SQLiteOpenHelper openHelper, FollowMapper followMapper){
+        super(openHelper);
         this.followMapper = followMapper;
     }
 
@@ -41,10 +43,8 @@ public class FollowManager extends AbstractManager{
             if (contentValues.get(CSYS_DELETED) != null) {
                 deleteFollow(follow);
             } else {
-                synchronized (db){
-                    contentValues.put(CSYS_SYNCHRONIZED,"S");
-                   id = db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                }
+                contentValues.put(CSYS_SYNCHRONIZED, "S");
+                id = getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }
         if(id!=-1){
@@ -58,7 +58,7 @@ public class FollowManager extends AbstractManager{
     {
         if(follow!=null){
             ContentValues contentValues = followMapper.toContentValues(follow);
-            db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
          }
     }
 
@@ -73,7 +73,7 @@ public class FollowManager extends AbstractManager{
                  deleteFollow(follow);
             } else {
                 contentValues.put(CSYS_SYNCHRONIZED,"S");
-                db.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.i("Follow inserted ",follow.getIdUser());
             }
         }
@@ -84,7 +84,7 @@ public class FollowManager extends AbstractManager{
         String args = ID_USER +"=? AND "+ ID_FOLLOWED_USER+" =? AND "+ CSYS_DELETED+" IS NULL";
         String[] argsString = new String[]{String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed)};
         FollowEntity follow = null;
-        Cursor  c = db.query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor  c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             follow = followMapper.fromCursor(c);
@@ -104,7 +104,7 @@ public class FollowManager extends AbstractManager{
         if(isTableEmpty(FOLLOW_TABLE)){
             Timber.e("La tabla follow está vacia");
         }
-        Cursor c = db.query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
+        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE, FollowTable.PROJECTION,args,argsString,null,null,null,null);
 
         if (c.getCount() > 0) {
             c.moveToFirst();
@@ -137,7 +137,7 @@ public class FollowManager extends AbstractManager{
             + "=? and "
             + ID_FOLLOWED_USER
             + "=?)";
-        Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
+        Cursor queryResults = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION, selection,
             new String[] {
                 fromUserIdArgument, toUserIdArgument, toUserIdArgument, fromUserIdArgument
             }, null, null, null, null);
@@ -179,7 +179,7 @@ public class FollowManager extends AbstractManager{
             String fromUserIdArgument = String.valueOf(idCurrentUser);
             String toUserIdArgument = String.valueOf(idUser);
             String selection = "(" + ID_USER + "=? and " + ID_FOLLOWED_USER + "=?)";
-            Cursor queryResults = db.query(FOLLOW_TABLE, FollowTable.PROJECTION, selection, new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
+            Cursor queryResults = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION, selection, new String[] { fromUserIdArgument, toUserIdArgument }, null, null, null, null);
             if (queryResults.getCount() > 0) {
                 queryResults.moveToFirst();
                 do {
@@ -204,9 +204,9 @@ public class FollowManager extends AbstractManager{
         String args = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
         String[] stringArgs = new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())};
 
-        Cursor c = db.query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(FOLLOW_TABLE, DatabaseContract.FollowTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
+            res = getWritableDatabase().delete(FOLLOW_TABLE, ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?",
                     new String[]{String.valueOf(follow.getFollowedUser()), String.valueOf(follow.getIdUser())});
         }
         c.close();
@@ -225,7 +225,7 @@ public class FollowManager extends AbstractManager{
     public List<FollowEntity> getDatasForSendToServerInCase(){
         List<FollowEntity> followsToUpdate = new ArrayList<>();
         String args = CSYS_SYNCHRONIZED+"='N' OR "+CSYS_SYNCHRONIZED+"= 'D' OR "+CSYS_SYNCHRONIZED+"='U'";
-        Cursor c = db.query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
+        Cursor c = getReadableDatabase().query(FOLLOW_TABLE, FollowTable.PROJECTION,args,null,null,null,null);
         if(c.getCount()>0){
             c.moveToFirst();
             do{

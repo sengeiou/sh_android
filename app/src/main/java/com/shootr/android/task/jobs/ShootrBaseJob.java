@@ -19,21 +19,14 @@ public abstract class ShootrBaseJob<T> extends Job {
 
     private final Application application;
 
-    private SQLiteOpenHelper dbHelper;
-
     private Bus bus;
     private NetworkUtil networkUtil;
-    private SQLiteDatabase db;
 
     protected ShootrBaseJob(Params params, Application application, Bus bus, NetworkUtil networkUtil) {
         super(params);
         this.application = application;
         this.bus = bus;
         this.networkUtil = networkUtil;
-    }
-
-    public void setOpenHelper(SQLiteOpenHelper openHelper) {
-        this.dbHelper = openHelper;
     }
 
     @Override
@@ -44,8 +37,6 @@ public abstract class ShootrBaseJob<T> extends Job {
                 return;
             }
         }
-
-        configureManagers();
 
         try {
             run();
@@ -60,34 +51,6 @@ public abstract class ShootrBaseJob<T> extends Job {
 
     public boolean hasInternetConnection(){
         return networkUtil.isConnected(application);
-    }
-
-    protected void configureManagers() {
-        createDatabase();
-        setDatabaseToManagers(db);
-    }
-
-    protected abstract void createDatabase();
-
-    protected abstract void setDatabaseToManagers(SQLiteDatabase db);
-
-    protected void createReadableDb() {
-        if (dbHelper == null) {
-            throw getDatabaseHelperNotSetException();
-        }
-        db = dbHelper.getReadableDatabase();
-    }
-
-    protected void createWritableDb() {
-        if (dbHelper == null) {
-            throw getDatabaseHelperNotSetException();
-        }
-        db = dbHelper.getWritableDatabase();
-    }
-
-    private IllegalStateException getDatabaseHelperNotSetException() {
-        return new IllegalStateException(
-          "This Job is trying to use the database, but no SQLiteOpenHelper was provided. Use the method setSQLiteOpenHelper first.");
     }
 
     protected abstract void run() throws SQLException, IOException, Exception;

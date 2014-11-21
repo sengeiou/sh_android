@@ -3,6 +3,7 @@ package com.shootr.android.db.manager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
@@ -24,7 +25,8 @@ public class UserManager extends AbstractManager {
     private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
 
     @Inject
-    public UserManager(UserMapper userMapper, SessionManager sessionManager) {
+    public UserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionManager sessionManager) {
+        super(openHelper);
         this.userMapper = userMapper;
         this.sessionManager = sessionManager;
     }
@@ -39,7 +41,7 @@ public class UserManager extends AbstractManager {
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 deleteUser(user);
             } else {
-                db.insertWithOnConflict(USER_TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+                getWritableDatabase().insertWithOnConflict(USER_TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
             }
             insertInSync();
         }
@@ -58,7 +60,7 @@ public class UserManager extends AbstractManager {
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 deleteUser(user);
             } else {
-                db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
             }
         }else{
             updateCurrentUser(currentUser,user);
@@ -76,7 +78,7 @@ public class UserManager extends AbstractManager {
         currentUser.setPhoto(user.getPhoto());
         currentUser.setUserName(user.getUserName());
         currentUser.setPoints(user.getPoints());
-        db.update(UserTable.TABLE,userMapper.toContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
+        getWritableDatabase().update(UserTable.TABLE,userMapper.toContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
     }
 
 
@@ -85,7 +87,7 @@ public class UserManager extends AbstractManager {
         if (contentValues.getAsLong(CSYS_DELETED) != null) {
             deleteUser(user);
         } else {
-            db.insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
@@ -97,9 +99,9 @@ public class UserManager extends AbstractManager {
         long res = 0;
         String args = DatabaseContract.UserTable.ID + "=?";
         String[] stringArgs = new String[] { String.valueOf(user.getIdUser()) };
-        Cursor c = db.query(USER_TABLE, UserTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(USER_TABLE, UserTable.ID+"=?", new String[] { String.valueOf(user.getIdUser()) });
+            res = getWritableDatabase().delete(USER_TABLE, UserTable.ID+"=?", new String[] { String.valueOf(user.getIdUser()) });
         }
         c.close();
         return res;
@@ -113,7 +115,7 @@ public class UserManager extends AbstractManager {
         String args = UserTable.ID + "=?";
         String[] argsString = new String[] { String.valueOf(idUser) };
 
-        Cursor c = db.query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
+        Cursor c = getReadableDatabase().query(USER_TABLE, UserTable.PROJECTION, args, argsString, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             resUser = userMapper.fromCursor(c);
@@ -136,7 +138,7 @@ public class UserManager extends AbstractManager {
         for (int i = 0; i < userIdsSize; i++) {
             selectionArguments[i] = String.valueOf(usersIds.get(i));
         }
-        Cursor queryResults = db.query(UserTable.TABLE, UserTable.PROJECTION,
+        Cursor queryResults = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION,
           UserTable.ID + " IN (" + createListPlaceholders(userIdsSize) + ")", selectionArguments, null, null,
           UserTable.NAME);
 
@@ -159,7 +161,7 @@ public class UserManager extends AbstractManager {
           .replaceAll("[^\\p{ASCII}]", "");
 
         String args = UserTable.USER_NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%' OR "+UserTable.NAME_NORMALIZED+" LIKE '%"+stringToSearch+"%'";
-          Cursor c = db.query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
+          Cursor c = getReadableDatabase().query(UserTable.TABLE, UserTable.PROJECTION, args,null,null,null,UserTable.NAME);
 
           if(c.getCount()>0){
             c.moveToFirst();

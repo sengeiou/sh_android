@@ -26,26 +26,15 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
     private SessionManager sessionManager;
 
     @Inject
-    protected SetWatchingInfoOfflineJob(Application application, Bus bus, NetworkUtil networkUtil,
-      SQLiteOpenHelper openHelper, WatchManager watchManager, SessionManager sessionManager) {
+    protected SetWatchingInfoOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.sessionManager = sessionManager;
-        this.setOpenHelper(openHelper);
         this.watchManager = watchManager;
     }
 
     public void init(Long idMatch, Long status){
         this.idMatch = idMatch;
         this.status = status;
-    }
-
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
     }
 
     @Override protected void run() throws SQLException, IOException {

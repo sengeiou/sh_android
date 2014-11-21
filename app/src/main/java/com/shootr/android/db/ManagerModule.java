@@ -1,5 +1,6 @@
 package com.shootr.android.db;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.SessionManager;
@@ -18,19 +19,19 @@ import com.shootr.android.ui.model.mappers.ShotModelMapper;
   library = true)
 public class ManagerModule {
 
-    @Provides UserManager provideUserManager(UserMapper userMapper, SessionManager sessionManager) {
-        return new UserManager(userMapper, sessionManager);
+    @Provides UserManager provideUserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionManager sessionManager) {
+        return new UserManager(openHelper, userMapper, sessionManager);
     }
 
-    @Provides FollowManager provideFollowManager(FollowMapper followMapper) {
-        return new FollowManager(followMapper);
+    @Provides FollowManager provideFollowManager(SQLiteOpenHelper openHelper, FollowMapper followMapper) {
+        return new FollowManager(openHelper, followMapper);
     }
 
-    @Provides ShotManager provideShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper) {
-        return new ShotManager(shotMapper, userMapper, shotVOMapper);
+    @Provides ShotManager provideShotManager(SQLiteOpenHelper openHelper, ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper) {
+        return new ShotManager(openHelper, shotMapper, userMapper, shotVOMapper);
     }
 
-    @Provides DeviceManager provideDeviceManager(DeviceMapper deviceMapper) {
-        return new DeviceManager(deviceMapper);
+    @Provides DeviceManager provideDeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
+        return new DeviceManager(openHelper, deviceMapper);
     }
 }

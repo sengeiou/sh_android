@@ -1,5 +1,6 @@
 package com.shootr.android.db.manager;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.objects.DeviceEntity;
@@ -10,7 +11,8 @@ public class DeviceManager extends AbstractManager {
     @Inject DeviceMapper deviceMapper;
 
     @Inject
-    public DeviceManager(DeviceMapper deviceMapper) {
+    public DeviceManager(SQLiteOpenHelper openHelper, DeviceMapper deviceMapper) {
+        super(openHelper);
         this.deviceMapper = deviceMapper;
     }
 

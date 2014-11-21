@@ -27,11 +27,11 @@ public class LoginUserJob extends ShootrBaseJob<LoginResultEvent> {
     ShootrService service;
     UserManager userManager;
 
-    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper dbHelper, ShootrService service, UserManager userManager) {
+    @Inject public LoginUserJob(Application context, NetworkUtil networkUtil, Bus bus, ShootrService service,
+      UserManager userManager) {
         super(new Params(PRIORITY), context, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
-        this.setOpenHelper(dbHelper);
     }
 
     public void init(String usernameEmail, String password) {
@@ -56,17 +56,6 @@ public class LoginUserJob extends ShootrBaseJob<LoginResultEvent> {
 
     private void sendCredentialError() {
         postCustomEvent(new CredentialErrorEvent());
-    }
-
-
-    @Override
-    protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        userManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

@@ -36,25 +36,21 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private FollowManager followManager;
     private SessionManager sessionManager;
 
-    private Long currentUserId;
-
     private UserModelMapper userModelMapper;
 
     @Inject
     public SearchPeopleRemoteJob(Application app, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      FollowManager followManager, UserModelMapper userModelMapper, SQLiteOpenHelper openHelper, SessionManager sessionManager) {
+      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
         this.sessionManager = sessionManager;
-        setOpenHelper(openHelper);
     }
 
     public void init(String searchString, int pageOffset) {
         this.searchString = searchString;
         this.pageOffset = pageOffset;
-        currentUserId = sessionManager.getCurrentUser().getIdUser();
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -66,9 +62,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
             Long idUser = u.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
+            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUser().getIdUser(), idUser);
             //before doing this UPDATE FOLLOWS
-            boolean isMe = idUser.equals(currentUserId);
+            boolean isMe = idUser.equals(sessionManager.getCurrentUser().getIdUser());
             userVOs.add(userModelMapper.toUserModel(u,follow,isMe));
         }
         return userVOs;
@@ -76,16 +72,6 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
 
     private PaginatedResult<List<UserEntity>> getSearchFromServer() throws IOException {
         return service.searchUsersByNameOrNickNamePaginated(searchString, pageOffset);
-    }
-
-    @Override protected void createDatabase() {
-        /* no-op */
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        /* no-op */
-        followManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

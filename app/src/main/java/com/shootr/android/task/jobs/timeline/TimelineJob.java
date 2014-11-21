@@ -26,9 +26,8 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
 
     private UserEntity currentUser;
 
-    public TimelineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
+    public TimelineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager) {
         super(new Params(PRIORITY), context, bus, networkUtil);
-        setOpenHelper(dbHelper);
         this.service = service;
         this.shotManager = shotManager;
         this.followManager = followManager;
@@ -40,18 +39,6 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
 
     public List<Long> getFollowingIds() throws SQLException {
         return followManager.getUserFollowingIdsWithOwnUser(currentUser.getIdUser());
-    }
-
-
-    @Override
-    protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        shotManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

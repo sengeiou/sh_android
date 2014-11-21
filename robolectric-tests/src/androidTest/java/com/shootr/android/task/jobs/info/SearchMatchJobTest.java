@@ -16,7 +16,6 @@ import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.model.mappers.MatchSearchResultModelMapper;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.otto.Bus;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -71,7 +70,7 @@ public class SearchMatchJobTest {
         matchSearchResultModelMapper = new MatchSearchResultModelMapper(timeFormatter);
 
         job = new SearchMatchJob(Robolectric.application, bus, networkUtil, service, matchSearchResultModelMapper,
-            watchManager, sessionManager, sqliteOpenHelper, followManager);
+            watchManager, sessionManager, followManager);
         job.init(IRRELEVANT_SEARCH_QUERY);
     }
 

@@ -31,25 +31,16 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     private Long idUser;
     private UserEntity user;
 
-    @Inject public GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service, ShotManager shotManager, UserManager userManager, SQLiteOpenHelper openHelper) {
+    @Inject public GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
+      ShotManager shotManager, UserManager userManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.shotManager = shotManager;
         this.userManager = userManager;
-        setOpenHelper(openHelper);
     }
 
     public void init(Long idUser){
         this.idUser = idUser;
-    }
-
-    @Override public void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override public void setDatabaseToManagers(SQLiteDatabase db) {
-        userManager.setDataBase(db);
-        shotManager.setDataBase(db);
     }
 
     @Override public void run() throws SQLException, IOException {

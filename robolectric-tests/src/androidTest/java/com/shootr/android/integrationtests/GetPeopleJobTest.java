@@ -39,12 +39,10 @@ public class GetPeopleJobTest {
     public static final long FOLLOWED_USER = 1L;
     public static final long CURRENT_USER = 2L;
     @Inject GetPeopleJob getPeopleJob;
-    @Inject SQLiteOpenHelper openHelper;
     @Inject SessionManager sessionManager;
     private ObjectGraph objectGraph;
     private TestShootrApplication testGolesApplication;
     private UserManager userManager;
-    private SQLiteDatabase database;
 
     @Before
     public void setup() throws SQLException {
@@ -52,12 +50,7 @@ public class GetPeopleJobTest {
         objectGraph = testGolesApplication.getObjectGraph();
         testGolesApplication.inject(this);
 
-        database = openHelper.getWritableDatabase();
-
-
         userManager = objectGraph.get(UserManager.class);
-        userManager.setDataBase(database);
-
 
         UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(CURRENT_USER);
@@ -119,7 +112,6 @@ public class GetPeopleJobTest {
 
 
         FollowManager followManager = objectGraph.get(FollowManager.class);
-        followManager.setDataBase(database);
         followManager.saveFollowFromServer(followRelationship);
 
         Bus bus = mock(Bus.class);

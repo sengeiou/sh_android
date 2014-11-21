@@ -24,9 +24,9 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
 
     private static final int PRIORITY = 6;
 
-    ShootrService service;
-    UserManager userManager;
-    FollowManager followManager;
+    final ShootrService service;
+    final UserManager userManager;
+    final FollowManager followManager;
 
     private UserModelMapper userModelMapper;
 
@@ -38,16 +38,6 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        this.setOpenHelper(openHelper);
-    }
-
-    @Override protected void createDatabase() {
-            createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        userManager.setDataBase(db);
     }
 
     @Override protected void run() throws SQLException, IOException {

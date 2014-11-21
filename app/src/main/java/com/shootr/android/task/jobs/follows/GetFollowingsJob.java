@@ -34,15 +34,14 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     @Inject UserModelMapper userModelMapper;
 
     private UserEntity currentUser;
-    private boolean isMe;
 
     @Inject
-    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper, ShootrService service, UserManager userManager, FollowManager followManager) {
+    public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
+      UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.setOpenHelper(openHelper);
     }
 
     public void init(UserEntity currentUser) {
@@ -83,7 +82,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
         for(UserEntity user:users){
             Long currentUserId = currentUser.getIdUser();
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
-            isMe = user.getIdUser().equals(currentUserId);
+            boolean isMe = user.getIdUser().equals(currentUserId);
             userVOs.add(userModelMapper.toUserModel(user, follow, isMe));
         }
         return userVOs;
@@ -94,16 +93,6 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     private List<UserEntity> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(DatabaseContract.FollowTable.TABLE);
         return service.getFollowing(currentUser.getIdUser(), modifiedFollows);
-    }
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        userManager.setDataBase(db);
-        followManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

@@ -47,8 +47,8 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
-      UserManager userManager, FollowManager followManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
-      MatchManager matchManager, InfoListBuilderFactory infoListBuilderFactory) {
+      UserManager userManager, FollowManager followManager, WatchManager watchManager, MatchManager matchManager,
+      InfoListBuilderFactory infoListBuilderFactory) {
         super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.service = service;
         this.sessionManager = sessionManager;
@@ -59,7 +59,6 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         this.matchManager = matchManager;
         this.followManager = followManager;
         this.infoListBuilderFactory = infoListBuilderFactory;
-        this.setOpenHelper(openHelper);
     }
 
     public void init(boolean postOnlineInfoOnly) {
@@ -160,17 +159,6 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     public List<Long> getIdsFromMyFollowingAndMe() throws SQLException {
         return followManager.getUserFollowingIdsWithOwnUser(sessionManager.getCurrentUserId());
-    }
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        userManager.setDataBase(db);
-        followManager.setDataBase(db);
-        watchManager.setDataBase(db);
-        matchManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

@@ -61,7 +61,7 @@ public class GetWatchingRequestsPendingJobTest {
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
         openHelper = mock(SQLiteOpenHelper.class);
 
-        job = new GetWatchingRequestsPendingJob(Robolectric.application,bus,networkUtil,openHelper,watchManager,matchManager,userManager,sessionManager,watchingRequestModelMapper);
+        job = new GetWatchingRequestsPendingJob(Robolectric.application,bus,networkUtil, watchManager,matchManager,userManager,sessionManager,watchingRequestModelMapper);
     }
 
      protected ShootrBaseJob getSystemUnderTest() {

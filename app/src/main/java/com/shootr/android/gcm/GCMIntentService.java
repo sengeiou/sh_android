@@ -67,10 +67,6 @@ public class GCMIntentService extends IntentService {
         super.onCreate();
         ShootrApplication.get(this).inject(this);
         database = openHelper.getWritableDatabase();
-        userManager.setDataBase(database);
-        watchManager.setDataBase(database);
-        matchManager.setDataBase(database);
-
     }
 
     @Override

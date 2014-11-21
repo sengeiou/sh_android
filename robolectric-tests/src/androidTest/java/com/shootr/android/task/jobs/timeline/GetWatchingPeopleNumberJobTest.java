@@ -1,22 +1,13 @@
 package com.shootr.android.task.jobs.timeline;
 
 import android.database.sqlite.SQLiteOpenHelper;
-import butterknife.internal.ListenerClass;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.RobolectricGradleTestRunner;
-import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.MatchManager;
-import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
-import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +48,7 @@ public class GetWatchingPeopleNumberJobTest{
        networkUtil = mock(NetworkUtil.class);
        openHelper = mock(SQLiteOpenHelper.class);
        when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
-       job = new GetWatchingPeopleNumberJob(Robolectric.application,bus,networkUtil,openHelper,watchManager,matchManager);
+       job = new GetWatchingPeopleNumberJob(Robolectric.application,bus,networkUtil, watchManager,matchManager);
     }
 
     @Test

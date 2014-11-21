@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.mappers.MatchMapper;
@@ -17,7 +18,8 @@ public class MatchManager extends AbstractManager{
 
     @Inject MatchMapper matchMapper;
 
-    @Inject public MatchManager(MatchMapper matchMapper){
+    @Inject public MatchManager(SQLiteOpenHelper openHelper, MatchMapper matchMapper){
+        super(openHelper);
         this.matchMapper = matchMapper;
     }
 
@@ -29,7 +31,7 @@ public class MatchManager extends AbstractManager{
         }
 
         Cursor queryResult =
-          db.query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
+          getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
         List<MatchEntity> resultMatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -47,7 +49,7 @@ public class MatchManager extends AbstractManager{
         String whereSelection =
           "("+MatchTable.ID_LOCAL_TEAM + "= ? OR " + MatchTable.ID_VISITOR_TEAM + "= ?) AND ("+MatchTable.STATUS+" IN (0, 1))";
         String[] whereArguments = new String[] { String.valueOf(favoriteTeamId), String.valueOf(favoriteTeamId) };
-        Cursor queryResult = db.query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null, null,
+        Cursor queryResult = getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null, null,
           MatchTable.MATCH_DATE, "1");
 
         MatchEntity matchEntity = null;
@@ -70,7 +72,7 @@ public class MatchManager extends AbstractManager{
         if (contentValues.getAsLong(MatchTable.CSYS_DELETED) != null) {
             deleteMatch(matchEntity);
         } else {
-            db.insertWithOnConflict(MatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(MatchTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
@@ -79,9 +81,9 @@ public class MatchManager extends AbstractManager{
         long res = 0;
         String args = MatchTable.ID_MATCH + "=?";
         String[] stringArgs = new String[]{String.valueOf(matchEntity.getIdMatch())};
-        Cursor c = db.query(MatchTable.TABLE, MatchTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-           res = db.delete(MatchTable.TABLE, args, stringArgs);
+           res = getWritableDatabase().delete(MatchTable.TABLE, args, stringArgs);
         }
         c.close();
         return res;
@@ -100,7 +102,7 @@ public class MatchManager extends AbstractManager{
     public List<MatchEntity> getEndedAndAdjournedMatches() {
         String whereSelection = MatchTable.STATUS + " IN (2,3)";
         Cursor queryResult =
-          db.query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, null, null, null, null);
+          getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, null, null, null, null);
 
         List<MatchEntity> resultMatches = new ArrayList<>(queryResult.getCount());
         if (queryResult.getCount() > 0) {
@@ -115,6 +117,6 @@ public class MatchManager extends AbstractManager{
     }
 
     public void deleteAllMatches() {
-        db.execSQL("DELETE FROM "+ DatabaseContract.MatchTable.TABLE);
+        getWritableDatabase().execSQL("DELETE FROM "+ DatabaseContract.MatchTable.TABLE);
     }
 }

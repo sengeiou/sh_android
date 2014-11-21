@@ -19,11 +19,16 @@ public abstract class AbstractManager {
     public static final int NUMDAYS = 60;
     @Inject protected SQLiteOpenHelper dbHelper;
 
-    SQLiteDatabase db;
+    protected AbstractManager(SQLiteOpenHelper dbHelper) {
+        this.dbHelper = dbHelper;
+    }
 
+    protected SQLiteDatabase getWritableDatabase() {
+        return dbHelper.getWritableDatabase();
+    }
 
-    public void setDataBase(SQLiteDatabase db){
-        this.db = db;
+    protected SQLiteDatabase getReadableDatabase() {
+        return dbHelper.getReadableDatabase();
     }
 
     public  void deleteDatabase(Context context) {
@@ -34,7 +39,7 @@ public abstract class AbstractManager {
     public  boolean isTableEmpty( String entity) {
         boolean res = true;
         String raw_query = "SELECT * FROM "+ entity;
-        Cursor c = db.rawQuery(raw_query, new String[]{});
+        Cursor c = getReadableDatabase().rawQuery(raw_query, new String[] { });
         if (c.getCount() > 0) {
             res = false;
         }
@@ -48,7 +53,7 @@ public abstract class AbstractManager {
      * */
 
     public  long numberOfRows( String table){
-        long numRows = DatabaseUtils.queryNumEntries(db, table);
+        long numRows = DatabaseUtils.queryNumEntries(getReadableDatabase(), table);
         return numRows;
     }
 
@@ -62,7 +67,8 @@ public abstract class AbstractManager {
         contentValues.put(DatabaseContract.TablesSync.MIN_ROWS, tableSync.getMinRows());
         contentValues.put(DatabaseContract.TablesSync.MIN_TIMESTAMP, tableSync.getMinTimestamp());
         contentValues.put(DatabaseContract.TablesSync.MAX_TIMESTAMP, tableSync.getMaxTimestamp());
-        return db.insertWithOnConflict(DatabaseContract.TablesSync.TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+        return getWritableDatabase().insertWithOnConflict(DatabaseContract.TablesSync.TABLE, null, contentValues,
+          SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public int getNumMaxOfRowsByEntity(String entity){
@@ -71,7 +77,8 @@ public abstract class AbstractManager {
         String[] column = new String[]{DatabaseContract.TablesSync.MAX_ROWS};
         String[] stringArgs = new String[]{entity};
         String args = DatabaseContract.TablesSync.ENTITY+"=?";
-        Cursor c = db.query(DatabaseContract.TablesSync.TABLE, column,args,stringArgs,null,null,null,null);
+        Cursor c = getReadableDatabase().query(DatabaseContract.TablesSync.TABLE, column, args, stringArgs, null, null,
+          null, null);
         if(c.getCount()>0){
             c.moveToFirst();
             numRows = c.getInt(0);
@@ -85,13 +92,14 @@ public abstract class AbstractManager {
     public int deleteRows(long number){
         String sql = "SELECT min(idShot) as idShot FROM (SELECT "+ DatabaseContract.ShotTable.ID_SHOT +" FROM "+ DatabaseContract.ShotTable.TABLE+" order by "+ DatabaseContract.ShotTable.ID_SHOT+" DESC LIMIT 10)";
         int idShot = 0;
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = getReadableDatabase().rawQuery(sql, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             idShot = c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.ID_SHOT));
         }
         c.close();
-        return db.delete(DatabaseContract.ShotTable.TABLE, DatabaseContract.ShotTable.ID_SHOT+"<"+idShot,null);
+        return getWritableDatabase().delete(DatabaseContract.ShotTable.TABLE,
+          DatabaseContract.ShotTable.ID_SHOT + "<" + idShot, null);
     }
 
     public  Long getFirstModifiedDate(String entity){
@@ -100,7 +108,7 @@ public abstract class AbstractManager {
             firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
         }else{
             String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
-            Cursor c = db.rawQuery(sql, null);
+            Cursor c = getReadableDatabase().rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 firstDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
@@ -118,7 +126,7 @@ public abstract class AbstractManager {
             lastDateModified = 0L;
         }else{
             String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" DESC LIMIT 1";
-            Cursor c = db.rawQuery(sql, null);
+            Cursor c = getReadableDatabase().rawQuery(sql, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 lastDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));

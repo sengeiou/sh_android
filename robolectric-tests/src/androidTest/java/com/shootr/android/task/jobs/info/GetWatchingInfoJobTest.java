@@ -12,7 +12,6 @@ import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.db.objects.MatchEntity;
 import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -21,7 +20,6 @@ import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
-import edu.emory.mathcs.backport.java.util.Arrays;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,10 +29,8 @@ import java.util.List;
 
 import java.util.Map;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.robolectric.Robolectric;
 
@@ -130,7 +126,7 @@ public class GetWatchingInfoJobTest extends ShootrBaseJobTestAbstract {
         when(networkUtil.isConnected(any(Context.class))).thenReturn(true);
         job =
           new GetWatchingInfoJob(Robolectric.application, bus, networkUtil, service, sessionManager, matchModelMapper,
-            userWatchingModelMapper, userManager, followManager, openHelper, watchManager, matchManager,
+            userWatchingModelMapper, userManager, followManager, watchManager, matchManager,
             infoListBuilderFactory);
     }
 

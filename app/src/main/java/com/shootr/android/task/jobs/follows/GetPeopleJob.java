@@ -34,13 +34,13 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     private UserModelMapper userModelMapper;
 
 
-    @Inject public GetPeopleJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, SQLiteOpenHelper openHelper,UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    @Inject public GetPeopleJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
+      UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        setOpenHelper(openHelper);
     }
 
 
@@ -84,17 +84,6 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         List<Long> usersFollowingIds = followManager.getUserFollowingIds(currentUserId);
         List<UserEntity> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
         return usersFollowing;
-    }
-
-    @Override
-    protected void createDatabase() {
-        createReadableDb();
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        followManager.setDataBase(db);
-        userManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

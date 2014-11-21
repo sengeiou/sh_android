@@ -25,11 +25,10 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
     private UserEntity currentUser;
 
     @Inject public RetrieveOldShotsTimeLineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      ShotManager shotManager, FollowManager followManager, SQLiteOpenHelper dbHelper) {
-        super(context, bus, service, networkUtil, shotManager, followManager, dbHelper);
+      ShotManager shotManager, FollowManager followManager) {
+        super(context, bus, service, networkUtil, shotManager, followManager);
         this.shotManager = shotManager;
         this.service = service;
-
     }
 
     @Override public void init(UserEntity currentUser)

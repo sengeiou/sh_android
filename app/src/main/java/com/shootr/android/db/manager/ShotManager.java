@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
@@ -32,7 +33,8 @@ public class ShotManager extends  AbstractManager{
     private static final String CSYS_BIRTH = DatabaseContract.SyncColumns.CSYS_BIRTH;
 
     @Inject
-    public ShotManager(ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
+    public ShotManager(SQLiteOpenHelper openHelper, ShotMapper shotMapper, UserMapper userMapper, ShotModelMapper shotVOMapper){
+        super(openHelper);
         this.shotMapper = shotMapper;
         this.userMapper = userMapper;
         this.shotVOMapper = shotVOMapper;
@@ -46,7 +48,7 @@ public class ShotManager extends  AbstractManager{
         if (contentValues.getAsLong(CSYS_DELETED) != null) {
             deleteShot(shot);
         } else {
-            db.insertWithOnConflict(SHOT_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().insertWithOnConflict(SHOT_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
@@ -131,7 +133,7 @@ public class ShotManager extends  AbstractManager{
           + CSYS_BIRTH
           + " DESC;";
         Timber.d("Executing query: %s", query);
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
         int count = cursor.getCount();
         if (count == 0) {
             return new ArrayList<>(0);
@@ -162,7 +164,7 @@ public class ShotManager extends  AbstractManager{
         String[] whereArguments = new String[]{String.valueOf(idUser)};
 
         Cursor queryResult =
-          db.query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,
+          getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereSelection, whereArguments, null, null,
             ShotTable.CSYS_BIRTH+" DESC", String.valueOf(latestShotsNumber));
 
         ShotEntity shotEntity;
@@ -198,7 +200,7 @@ public class ShotManager extends  AbstractManager{
                 "ON a." + ShotTable.ID_USER + " = b." + UserTable.ID +
                 " ORDER BY a." + ShotTable.CSYS_BIRTH + " DESC;";
         Timber.d("Executing query: %s", query);
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
 
 
         int count = cursor.getCount();
@@ -236,7 +238,7 @@ public class ShotManager extends  AbstractManager{
             if (contentValues.getAsLong(CSYS_DELETED) != null) {
                 res = deleteShot(shot);
             } else {
-                res = db.insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                res = getReadableDatabase().insertWithOnConflict(ShotTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 Timber.d("Shot inserted with result: %d", res);
             }
            insertInSync();
@@ -250,9 +252,9 @@ public class ShotManager extends  AbstractManager{
         long res = 0;
         String args = DatabaseContract.ShotTable.ID_SHOT + "=?";
         String[] stringArgs = new String[]{String.valueOf(shot.getIdShot())};
-        Cursor c = db.query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
+        Cursor c = getReadableDatabase().query(SHOT_TABLE, DatabaseContract.ShotTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
-            res = db.delete(SHOT_TABLE, DatabaseContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
+            res = getWritableDatabase().delete(SHOT_TABLE, DatabaseContract.ShotTable.ID_SHOT, new String[]{String.valueOf(shot.getIdShot())});
         }
         c.close();
         return res;

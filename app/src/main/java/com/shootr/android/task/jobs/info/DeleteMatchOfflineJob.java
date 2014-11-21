@@ -26,13 +26,12 @@ public class DeleteMatchOfflineJob extends ShootrBaseJob<Void> {
 
     private Long idMatch;
 
-    @Inject public DeleteMatchOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, SessionManager sessionManager, SQLiteOpenHelper openHelper, WatchManager watchManager,
-      TimeUtils timeUtils) {
+    @Inject public DeleteMatchOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, SessionManager sessionManager,
+      WatchManager watchManager, TimeUtils timeUtils) {
         super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.sessionManager = sessionManager;
         this.watchManager = watchManager;
         this.timeUtils = timeUtils;
-        setOpenHelper(openHelper);
     }
 
     public void init(Long idMatch) {
@@ -63,14 +62,6 @@ public class DeleteMatchOfflineJob extends ShootrBaseJob<Void> {
         watchEntity.setVisible(false);
         watchManager.createUpdateWatch(watchEntity);
         return watchEntity;
-    }
-
-    @Override protected void createDatabase() {
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {

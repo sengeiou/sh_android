@@ -43,13 +43,4 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
         return true;
     }
 
-    @Override protected void createDatabase() {
-        /* no-op */
-    }
-
-    @Override
-    protected void setDatabaseToManagers(SQLiteDatabase db) {
-        /* no-op */
-    }
-
 }

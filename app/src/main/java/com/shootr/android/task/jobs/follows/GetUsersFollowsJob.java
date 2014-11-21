@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.db.manager.FollowManager;
@@ -31,24 +32,21 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     private Long idUserToRetrieveFollowsFrom;
     FollowManager followManager;
     private Integer followType;
-    private UserEntity currentUser;
-    private Long currentUserId;
     private UserModelMapper userModelMapper;
+    private SessionManager sessionManager;
 
-    @Inject public GetUsersFollowsJob(Application application, Bus bus,SQLiteOpenHelper openHelper, ShootrService service, NetworkUtil networkUtil, FollowManager followManager, UserModelMapper userModelMapper) {
+    @Inject public GetUsersFollowsJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil,
+      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
-        setOpenHelper(openHelper);
+        this.sessionManager = sessionManager;
     }
 
     public void init(Long userId, Integer followType) {
         this.idUserToRetrieveFollowsFrom = userId;
         this.followType = followType;
-        currentUser = ShootrApplication.get(getContext()).getCurrentUser();
-
-        currentUserId = currentUser!= null ? currentUser.getIdUser() : null;
     }
 
     @Override
@@ -62,8 +60,8 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
         for(UserEntity user: users){
 
             Long idUser = user.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
-            boolean isMe = idUser.equals(currentUserId);
+            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
+            boolean isMe = idUser.equals(sessionManager.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
         return userVOs;
@@ -84,16 +82,5 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     @Override protected boolean isNetworkRequired() {
         return true;
     }
-
-    @Override protected void createDatabase() {
-        /* no-op */
-        createWritableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        /* no-op */
-        followManager.setDataBase(db);
-    }
-
 
 }

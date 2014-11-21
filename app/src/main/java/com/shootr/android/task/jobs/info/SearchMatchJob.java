@@ -35,14 +35,13 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
 
     @Inject protected SearchMatchJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       MatchSearchResultModelMapper matchSearchResultModelMapper, WatchManager watchManager,
-      SessionManager sessionManager, SQLiteOpenHelper openHelper, FollowManager followManager) {
+      SessionManager sessionManager, FollowManager followManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.matchSearchResultModelMapper = matchSearchResultModelMapper;
         this.watchManager = watchManager;
         this.sessionManager = sessionManager;
         this.followManager = followManager;
-        this.setOpenHelper(openHelper);
     }
 
     public void init(String queryText) {
@@ -92,14 +91,5 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
 
     @Override protected boolean isNetworkRequired() {
         return true;
-    }
-
-    @Override protected void createDatabase() {
-        createReadableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
-        followManager.setDataBase(db);
     }
 }

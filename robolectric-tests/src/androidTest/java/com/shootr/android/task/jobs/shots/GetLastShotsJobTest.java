@@ -10,19 +10,14 @@ import com.shootr.android.db.objects.ShotEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
-import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;
-import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.Robolectric;
-import timber.log.Timber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -54,7 +49,7 @@ public class GetLastShotsJobTest {
         this.networkUtil = mock(NetworkUtil.class);
         this.openHelper = mock(SQLiteOpenHelper.class);
 
-        job = new GetLastShotsJob(Robolectric.application,bus,networkUtil,service,shotManager,userManager,openHelper);
+        job = new GetLastShotsJob(Robolectric.application,bus,networkUtil,service,shotManager,userManager);
     }
 
     @Test

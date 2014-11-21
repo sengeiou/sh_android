@@ -2,6 +2,7 @@ package com.shootr.android.task.jobs.follows;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.RobolectricGradleTestRunner;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.service.ShootrService;
@@ -29,7 +30,7 @@ public class GetUsersFollowsJobTest extends ShootrBaseJobTestAbstract {
     private SQLiteOpenHelper openHelper;
     private UserManager userManager;
     private FollowManager followManager;
-
+    private SessionManager sessionManager;
 
     @Before
     public void setUp() throws IOException {
@@ -38,11 +39,12 @@ public class GetUsersFollowsJobTest extends ShootrBaseJobTestAbstract {
         openHelper = mock(SQLiteOpenHelper.class);
         userManager = mock(UserManager.class);
         followManager = mock(FollowManager.class);
+        sessionManager = mock(SessionManager.class);
 
         userVOMapper = mock(UserModelMapper.class);
         getUsersFollowsJob =
-          new GetUsersFollowsJob(Robolectric.application, bus, openHelper,  service, networkUtil, followManager,
-            userVOMapper);
+          new GetUsersFollowsJob(Robolectric.application, bus, service, networkUtil, followManager,
+            userVOMapper, sessionManager);
         getUsersFollowsJob.init(USER_ID, UserDtoFactory.GET_FOLLOWING); //TODO test both relationships?
     }
 

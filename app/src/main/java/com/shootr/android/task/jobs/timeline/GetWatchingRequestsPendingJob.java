@@ -41,8 +41,7 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
     private WatchingRequestModelMapper watchingRequestModelMapper;
 
 
-    @Inject public GetWatchingRequestsPendingJob(Application application, Bus bus, NetworkUtil networkUtil,
-      SQLiteOpenHelper openHelper, WatchManager watchManager, MatchManager matchManager, UserManager userManager,
+    @Inject public GetWatchingRequestsPendingJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, MatchManager matchManager, UserManager userManager,
       SessionManager sessionManager, WatchingRequestModelMapper watchingRequestModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.watchManager = watchManager;
@@ -50,7 +49,6 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
         this.userManager = userManager;
         this.sessionManager = sessionManager;
         this.watchingRequestModelMapper = watchingRequestModelMapper;
-        setOpenHelper(openHelper);
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -149,16 +147,6 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
 
     private MatchEntity getMyTeamMatch() {
         return matchManager.getNextMatchFromTeam(sessionManager.getCurrentUser().getFavoriteTeamId());
-    }
-
-    @Override protected void createDatabase() {
-        createReadableDb();
-    }
-
-    @Override protected void setDatabaseToManagers(SQLiteDatabase db) {
-        watchManager.setDataBase(db);
-        matchManager.setDataBase(db);
-        userManager.setDataBase(db);
     }
 
     @Override protected boolean isNetworkRequired() {
