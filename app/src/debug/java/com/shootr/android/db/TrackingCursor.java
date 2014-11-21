@@ -23,7 +23,9 @@ public class TrackingCursor extends SQLiteCursor {
 
     public void close() {
         super.close();
-        openCursors.remove(this);
+        synchronized (openCursors) {
+            openCursors.remove(this);
+        }
     }
 
     public static List<Cursor> getOpenCursors() {

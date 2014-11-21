@@ -26,6 +26,7 @@ import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.sync.SyncConfigurator;
+import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
 import com.shootr.android.ui.adapters.MenuAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
@@ -100,6 +101,10 @@ public class MainActivity extends BaseSignedInActivity {
         } else {
             normalSetup(savedInstanceState);
         }
+
+        //TODO fix temporal, debería prepararse un sistema de sincronización inicial
+        GetFollowingsJob job = ShootrApplication.get(this).getObjectGraph().get(GetFollowingsJob.class);
+        jobManager.addJobInBackground(job);
     }
 
     private void startGCMRegistration() {

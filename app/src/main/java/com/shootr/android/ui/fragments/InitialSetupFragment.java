@@ -43,13 +43,11 @@ public class InitialSetupFragment extends BaseFragment {
      * - Downloading and storing the user's following, if any.
      */
     private void performInitialSetup() {
-        UserEntity currentUser = ((ShootrApplication)getActivity().getApplication()).getCurrentUser();
-        startGetFollowingJob(getActivity(), currentUser);
+        startGetFollowingJob(getActivity());
     }
 
-    private void startGetFollowingJob(Context context, UserEntity currentUser){
+    private void startGetFollowingJob(Context context){
         GetFollowingsJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowingsJob.class);
-        job.init(currentUser);
         jobManager.addJobInBackground(job);
     }
 

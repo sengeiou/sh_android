@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 
 import com.shootr.android.db.DatabaseContract;
@@ -26,34 +27,29 @@ import timber.log.Timber;
 
 public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
 
-    private static final int PRIORITY = 6; //TODO Define next values for our queue
+    private static final int PRIORITY = 10; //TODO Define next values for our queue
 
     ShootrService service;
     UserManager userManager;
     FollowManager followManager;
     @Inject UserModelMapper userModelMapper;
-
-    private UserEntity currentUser;
+    private SessionManager sessionManager;
 
     @Inject
     public GetFollowingsJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
-      UserManager userManager, FollowManager followManager) {
+      UserManager userManager, FollowManager followManager, SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
+        this.sessionManager = sessionManager;
     }
-
-    public void init(UserEntity currentUser) {
-        this.currentUser = currentUser;
-    }
-
 
     public List<FollowEntity> getFollowsByFollowing(List<UserEntity> following){
         List<FollowEntity> followsByFollowing = new ArrayList<>();
         for(UserEntity u:following){
             FollowEntity f = new FollowEntity();
-            f.setIdUser(currentUser.getIdUser());
+            f.setIdUser(sessionManager.getCurrentUserId());
             f.setFollowedUser(u.getIdUser());
             f.setCsysBirth(u.getCsysBirth());
             f.setCsysModified(u.getCsysModified());
@@ -80,7 +76,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     public List<UserModel> getUserVOs(List<UserEntity> users){
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user:users){
-            Long currentUserId = currentUser.getIdUser();
+            Long currentUserId = sessionManager.getCurrentUserId();
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId,user.getIdUser());
             boolean isMe = user.getIdUser().equals(currentUserId);
             userVOs.add(userModelMapper.toUserModel(user, follow, isMe));
@@ -88,11 +84,9 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
         return userVOs;
     }
 
-
-
     private List<UserEntity> getFollowingsFromServer() throws IOException {
         Long modifiedFollows = followManager.getLastModifiedDate(DatabaseContract.FollowTable.TABLE);
-        return service.getFollowing(currentUser.getIdUser(), modifiedFollows);
+        return service.getFollowing(sessionManager.getCurrentUserId(), modifiedFollows);
     }
 
     @Override protected boolean isNetworkRequired() {
