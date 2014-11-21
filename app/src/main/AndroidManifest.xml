@@ -91,6 +91,7 @@
 
         <activity
           android:name=".ui.activities.FindFriendsActivity"
+          android:theme="@style/ShootrTheme.Closable"
           android:label="@string/activity_find_friends_title">
 
             <meta-data

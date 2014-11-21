@@ -166,7 +166,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         searchView.setIconified(false);
 
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.white_disabled));
+        searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
 
         if (currentSearchQuery != null) {
             searchView.setQuery(currentSearchQuery, false);

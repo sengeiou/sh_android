@@ -5,6 +5,11 @@
   android:layout_height="match_parent"
   android:animateLayoutChanges="true">
 
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#d9d9d9" />
+
     <com.shootr.android.ui.widgets.ScrollListView
       android:id="@+id/search_results_list"
       android:layout_width="match_parent"
