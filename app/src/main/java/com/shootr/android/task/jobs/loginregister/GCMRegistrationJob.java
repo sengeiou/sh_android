@@ -2,8 +2,6 @@ package com.shootr.android.task.jobs.loginregister;
 
 import android.app.Application;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -29,9 +27,7 @@ import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import timber.log.Timber;
 

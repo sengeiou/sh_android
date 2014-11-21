@@ -1,9 +1,6 @@
 package com.shootr.android.task.jobs.timeline;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v4.util.LongSparseArray;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;

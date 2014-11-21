@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.info;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.db.manager.WatchManager;

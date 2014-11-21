@@ -1,7 +1,6 @@
 package com.shootr.android.task.jobs.timeline;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
@@ -15,7 +14,6 @@ import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;

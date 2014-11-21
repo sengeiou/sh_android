@@ -1,7 +1,6 @@
 package com.shootr.android.task.jobs.shots;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
