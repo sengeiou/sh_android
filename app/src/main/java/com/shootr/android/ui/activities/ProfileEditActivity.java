@@ -2,6 +2,9 @@ package com.shootr.android.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,14 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
         scrollViewFocusHack();
         initializePresenter();
+        setupActionBar();
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close);
     }
 
     private void scrollViewFocusHack() {
@@ -68,5 +79,18 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Override public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(name.getWindowToken(), 0);
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile_edit, menu);
+        return true;
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_done) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
