@@ -8,11 +8,15 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -27,6 +31,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.Patterns;
@@ -324,5 +329,17 @@ public class ProfileFragment extends BaseFragment {
         animatorSet.setDuration(200);
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.start();
+    }
+
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile, menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_edit) {
+            startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
