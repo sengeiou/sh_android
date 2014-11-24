@@ -5,26 +5,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
+import com.shootr.android.ui.widgets.SwitchBar;
 import timber.log.Timber;
 
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
-    @InjectView(R.id.edit_info_switch) SwitchCompat watchingSwitch;
+    @InjectView(R.id.edit_info_switch_bar) SwitchBar watchingSwitchBar;
 
     private MenuItem sendMenuItem;
 
@@ -40,9 +37,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!restoreSessionOrLogin()){
-            return;
-        }
+        if (!restoreSessionOrLogin()){return;}
 
         setContainerContent(R.layout.activity_edit_info);
         ButterKnife.inject(this);
@@ -52,8 +47,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         Bundle infoBundle = getIntent().getExtras();
         initializePresenter(infoBundle);
 
-        watchingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        watchingSwitchBar.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
+            @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
                 editInfoPresenter.watchingStatusChanged(isChecked);
             }
         });
@@ -114,7 +109,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     }
 
     @Override public void setWatchingStatus(boolean watching) {
-        watchingSwitch.setChecked(watching);
+        watchingSwitchBar.setChecked(watching);
     }
 
     @Override public void closeScreen() {
