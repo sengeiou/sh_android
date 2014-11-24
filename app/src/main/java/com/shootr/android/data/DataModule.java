@@ -22,6 +22,7 @@ import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -164,6 +165,10 @@ public class DataModule {
           }).build();
     }
 
+    @Provides @Singleton PicassoWrapper providePicassoWrapper(Picasso picasso) {
+        return new PicassoWrapper(picasso);
+    }
+
     @Provides @Singleton OkHttpClient provideOkHttpClient(Application app) {
         return createOkHttpClient(app);
     }
@@ -185,7 +190,7 @@ public class DataModule {
 
     }
 
-    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
+    @Provides @Singleton ShootrNotificationManager provideShootrNotificationManager(Application app, NotificationManagerCompat nm, NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
         return new ShootrNotificationManager(app, nm, notificationBuilderFactory, picasso);
     }
 

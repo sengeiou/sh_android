@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -15,10 +16,10 @@ public class SingleShotNotification extends AbstractShotNotification {
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
 
     private ShotModel shot;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
     private Bitmap largeIcon;
 
-    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, Picasso picasso,
+    public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory, PicassoWrapper picasso,
       ShotModel shot) {
         super(context, builderFactory);
         this.shot = shot;

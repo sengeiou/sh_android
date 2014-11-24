@@ -19,6 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
     private static final String ARGUMENT_USER_ID = "userId";
 
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject NetworkUtil networkUtil;

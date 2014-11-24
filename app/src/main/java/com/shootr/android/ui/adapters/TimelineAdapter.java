@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.util.Linkify;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -19,11 +20,11 @@ import java.util.List;
 public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
     List<ShotModel> shots;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private TimeUtils timeUtils;
 
-    public TimelineAdapter(Context context, Picasso picasso, View.OnClickListener avatarClickListener,
+    public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
       TimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
@@ -102,12 +103,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
 
                 String photo = item.getPhoto();
-                boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
-                if (isValidPhotoUrl) {
-                    picasso.load(photo).into(vh.avatar);
-                } else {
-                    picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
-                }
+                picasso.load(photo).into(vh.avatar);
                 vh.avatar.setTag(vh);
                 break;
             default:

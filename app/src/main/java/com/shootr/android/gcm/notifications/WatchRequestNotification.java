@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import timber.log.Timber;
@@ -20,12 +21,12 @@ public class WatchRequestNotification extends CommonNotification {
     String text;
     UserWatchingModel userWatchingModel;
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
     private Bitmap largeIcon;
 
 
     public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory, String text,
-      UserWatchingModel userWatchingModel, Picasso picasso) {
+      UserWatchingModel userWatchingModel, PicassoWrapper picasso) {
         super(context,notificationBuilderFactory);
         this.text = text;
         this.userWatchingModel = userWatchingModel;

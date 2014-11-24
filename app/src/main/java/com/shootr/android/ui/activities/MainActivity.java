@@ -35,6 +35,7 @@ import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.TimelineFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -53,7 +54,7 @@ public class MainActivity extends BaseSignedInActivity {
     public static final int DRAWER_POSITION_DEFAULT = DRAWER_POSITION_TIMELINE;
 
     @Inject Bus bus;
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
     @Inject SessionManager sessionManager;

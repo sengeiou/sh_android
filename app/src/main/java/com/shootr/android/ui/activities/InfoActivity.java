@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -38,7 +39,7 @@ public class InfoActivity extends BaseSignedInActivity {
     private static final int REQUEST_CODE_EDIT = 1;
     private static final int REQUEST_CODE_ADD = 2;
 
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
     @Inject SessionManager sessionManager;

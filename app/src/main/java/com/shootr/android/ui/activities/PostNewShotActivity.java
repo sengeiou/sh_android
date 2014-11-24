@@ -20,6 +20,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -48,7 +49,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
     @InjectView(R.id.new_shot_send_button) Button sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
 
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
     @Inject SQLiteOpenHelper dbHelper;

@@ -7,6 +7,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
@@ -27,12 +28,12 @@ public class ShootrNotificationManager {
     private Context context;
     private NotificationManagerCompat notificationManager;
     private NotificationBuilderFactory notificationBuilderFactory;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
 
     private List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
 
     @Inject public ShootrNotificationManager(Application context, NotificationManagerCompat notificationManager,
-                                             NotificationBuilderFactory notificationBuilderFactory, Picasso picasso) {
+                                             NotificationBuilderFactory notificationBuilderFactory, PicassoWrapper picasso) {
         this.context = context;
         this.notificationManager = notificationManager;
         this.notificationBuilderFactory = notificationBuilderFactory;

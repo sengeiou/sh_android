@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.MatchModel;
@@ -29,7 +30,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
     private View.OnClickListener editButtonListener;
     private Long currentUserId;
     private int watchingColorLive;
@@ -37,7 +38,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private final String watchingText;
     private final String notWatchingText;
 
-    public InfoListAdapter(Context context, Picasso picasso, Long currentUserId, View.OnClickListener editButtonListener) {
+    public InfoListAdapter(Context context, PicassoWrapper picasso, Long currentUserId, View.OnClickListener editButtonListener) {
         super(context);
         this.picasso = picasso;
         this.editButtonListener = editButtonListener;

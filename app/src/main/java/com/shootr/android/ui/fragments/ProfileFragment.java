@@ -30,10 +30,10 @@ import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.Patterns;
+import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.FollowEntity;
@@ -49,8 +49,6 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -76,7 +74,7 @@ public class ProfileFragment extends BaseFragment {
     @InjectView(R.id.profile_shots_list) ViewGroup shotsList;
 
     @Inject Bus bus;
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
 
@@ -85,7 +83,7 @@ public class ProfileFragment extends BaseFragment {
     Long idUser;
 
     UserEntity currentUser;
-    static UserModel user;
+    UserModel user;
     private View.OnClickListener avatarClickListener;
 
     public static ProfileFragment newInstance(Long idUser) {
@@ -183,10 +181,6 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    public static UserModel getUser(){
-        return user;
-    }
-
     private void setTitle(String title) {
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(title);
     }
@@ -198,10 +192,7 @@ public class ProfileFragment extends BaseFragment {
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
-        String photo = user.getPhoto();
-        if(photo !=null && !photo.isEmpty()){
-            picasso.load(photo).into(avatarImageView);
-        }
+        picasso.load(user.getPhoto()).into(avatarImageView);
     }
 
     private void setUserInfo(UserModel user) {
@@ -306,12 +297,7 @@ public class ProfileFragment extends BaseFragment {
         TimelineAdapter.addLinks(vh.text);
 
         String photo = item.getPhoto();
-        boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
-        if (isValidPhotoUrl) {
-            picasso.load(photo).into(vh.avatar);
-        } else{
-            picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
-        }
+        picasso.load(photo).into(vh.avatar);
         vh.avatar.setTag(vh);
     }
 
