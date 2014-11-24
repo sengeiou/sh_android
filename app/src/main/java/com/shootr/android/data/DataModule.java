@@ -22,6 +22,7 @@ import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -131,6 +132,8 @@ import static android.content.Context.MODE_PRIVATE;
     EditInfoPresenter.class,
 
     AddMatchPresenter.class,
+
+    ProfileEditPresenter.class,
 
     TimeFormatter.class,
 

@@ -231,7 +231,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUserName()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                 unfollowUser(user);

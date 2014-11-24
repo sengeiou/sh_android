@@ -348,7 +348,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     }
 
     public void unfollowUser(final UserModel user){
-        new AlertDialog.Builder(this).setMessage("Unfollow "+user.getUserName()+"?")
+        new AlertDialog.Builder(this).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(user, getApplicationContext(), UserDtoFactory.UNFOLLOW_TYPE);

@@ -2,25 +2,18 @@ package com.shootr.android.ui.fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,12 +22,10 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.Patterns;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -54,8 +45,6 @@ import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -198,7 +187,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void setBasicUserInfo(UserModel user) {
         this.user = user;
-        setTitle(user.getUserName());
+        setTitle(user.getUsername());
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
@@ -252,7 +241,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void unfollowUser(){
 
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUserName()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);

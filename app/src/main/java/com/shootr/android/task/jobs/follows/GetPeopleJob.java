@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.follows;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -94,8 +92,8 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     static class NameComparator implements Comparator<UserModel> {
 
         @Override public int compare(UserModel user1, UserModel user2) {
-            return user1.getUserName()
-              .compareTo(user2.getUserName());
+            return user1.getUsername()
+              .compareTo(user2.getUsername());
         }
 
     }
