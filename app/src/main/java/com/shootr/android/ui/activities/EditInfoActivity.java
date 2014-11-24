@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
+import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -22,14 +22,15 @@ import timber.log.Timber;
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
     @InjectView(R.id.edit_info_switch_bar) SwitchBar watchingSwitchBar;
+    @InjectView(R.id.edit_info_place) EditText place;
 
     private MenuItem sendMenuItem;
 
     private EditInfoPresenter editInfoPresenter;
 
-    public static Intent getIntent(Context context, Long idMatch, boolean watchingStatus, String matchTitle) {
+    public static Intent getIntent(Context context, Long idMatch, boolean watchingStatus, String matchTitle, String place) {
         EditInfoPresenter.EditInfoModel editInfoModel =
-          new EditInfoPresenter.EditInfoModel(idMatch, matchTitle, watchingStatus);
+          new EditInfoPresenter.EditInfoModel(idMatch, matchTitle, watchingStatus, place);
         Intent launchIntent = new Intent(context, EditInfoActivity.class);
         launchIntent.putExtras(editInfoModel.toBundle());
         return launchIntent;
@@ -129,5 +130,13 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
           .setNegativeButton(R.string.cancel, null)
           .show();
 
+    }
+
+    @Override public String getPlaceText() {
+        return this.place.getText().toString();
+    }
+
+    @Override public void setPlaceText(String place) {
+        this.place.setText(place);
     }
 }

@@ -80,7 +80,7 @@ public class InfoActivity extends BaseSignedInActivity {
     }
 
     private void editInfoForMatch(MatchModel match, UserWatchingModel user) {
-        Intent editIntent = EditInfoActivity.getIntent(this, match.getIdMatch(), user.isWatching(), match.getTitle());
+        Intent editIntent = EditInfoActivity.getIntent(this, match.getIdMatch(), user.isWatching(), match.getTitle(), user.getPlace());
         startActivityForResult(editIntent, REQUEST_CODE_EDIT);
     }
 

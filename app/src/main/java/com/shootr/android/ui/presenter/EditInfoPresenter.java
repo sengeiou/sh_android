@@ -42,6 +42,17 @@ public class EditInfoPresenter {
         closeScreen();
     }
 
+    private String getPlaceText() {
+        String placeText = this.editInfoView.getPlaceText();
+        if (placeText != null) {
+            placeText = placeText.trim();
+            if (placeText.isEmpty()) {
+                placeText = null;
+            }
+        }
+        return placeText;
+    }
+
     private Long getWatchingStatusFromBoolean(boolean watching) {
         return watching ? 1L : 2L;
     }
@@ -49,6 +60,7 @@ public class EditInfoPresenter {
     private void updateViewWithInfo() {
         this.editInfoView.setTitle(editInfoModel.matchTitle);
         this.editInfoView.setWatchingStatus(editInfoModel.watching);
+        this.editInfoView.setPlaceText(editInfoModel.place);
     }
 
     private void closeScreen() {
@@ -57,7 +69,7 @@ public class EditInfoPresenter {
 
     private void executeEditJobs() {
         SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus));
+        setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus), getPlaceText());
         jobManager.addJobInBackground(setWatchingInfoOfflineJob);
 
         SetWatchingInfoOnlineJob setWatchingInfoOnlineJob = objectGraph.get(SetWatchingInfoOnlineJob.class);
@@ -102,19 +114,21 @@ public class EditInfoPresenter {
         private static final String KEY_ID_MATCH = "match";
         private static final String KEY_WATCHING_STATUS = "watching";
         private static final String KEY_MATCH_TITLE = "matc_title";
+        private static final String KEY_WATCHING_PLACE = "place";
 
         Long idMatch;
         String matchTitle;
         boolean watching;
+        String place;
 
         public EditInfoModel() {
-
         }
 
-        public EditInfoModel(Long idMatch, String matchTitle, boolean watchingStatus) {
+        public EditInfoModel(Long idMatch, String matchTitle, boolean watchingStatus, String place) {
             this.idMatch = idMatch;
             this.matchTitle = matchTitle;
             this.watching = watchingStatus;
+            this.place = place;
         }
 
         public static EditInfoModel fromBundle(Bundle bundle) {
@@ -122,6 +136,7 @@ public class EditInfoPresenter {
             model.idMatch = bundle.getLong(KEY_ID_MATCH);
             model.watching = bundle.getBoolean(KEY_WATCHING_STATUS);
             model.matchTitle = bundle.getString(KEY_MATCH_TITLE);
+            model.place = bundle.getString(KEY_WATCHING_PLACE);
             return model;
         }
 
@@ -130,6 +145,7 @@ public class EditInfoPresenter {
             bundle.putLong(KEY_ID_MATCH, idMatch);
             bundle.putBoolean(KEY_WATCHING_STATUS, watching);
             bundle.putString(KEY_MATCH_TITLE, matchTitle);
+            bundle.putString(KEY_WATCHING_PLACE, place);
             return bundle;
         }
     }

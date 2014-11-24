@@ -152,7 +152,7 @@ public class GCMIntentService extends IntentService {
         bus.post(new RequestWatchByPushEvent());
         if(watchEntity!=null){
             //TODO comparar con el status que ha de tener el partido cuando está live
-            UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
+            UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED), watchEntity.getPlace());
             notificationManager.sendWatchRequestNotification(userWatchingModel, text);
         }
 

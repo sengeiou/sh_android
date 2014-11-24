@@ -19,6 +19,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
     private static final int PRIORITY = 9;
     private WatchManager watchManager;
     private Long status;
+    private String place;
     private Long idMatch;
     private SessionManager sessionManager;
 
@@ -29,9 +30,10 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
         this.watchManager = watchManager;
     }
 
-    public void init(Long idMatch, Long status){
+    public void init(Long idMatch, Long status, String place){
         this.idMatch = idMatch;
         this.status = status;
+        this.place = place;
     }
 
     @Override protected void run() throws SQLException, IOException {
@@ -56,6 +58,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
         watchEntity.setIdMatch(idMatch);
         watchEntity.setStatus(status);
         watchEntity.setVisible(true);
+        watchEntity.setPlace(place);
         watchManager.createUpdateWatch(watchEntity);
         return watchEntity;
     }

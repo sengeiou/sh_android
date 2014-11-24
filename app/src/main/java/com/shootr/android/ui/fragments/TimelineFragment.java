@@ -331,7 +331,7 @@ public class TimelineFragment extends BaseFragment
         watchingRequestsPendingStack.remove(0);
 
         SetWatchingInfoOfflineJob jobOffline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOfflineJob.class);
-        jobOffline.init(watchingRequestModel.getMatchId(),status);
+        jobOffline.init(watchingRequestModel.getMatchId(),status, null);
         jobManager.addJobInBackground(jobOffline);
         SetWatchingInfoOnlineJob jobOnline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOnlineJob.class);
         jobManager.addJobInBackground(jobOnline);
