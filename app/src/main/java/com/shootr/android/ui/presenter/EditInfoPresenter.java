@@ -9,7 +9,6 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.ui.views.EditInfoView;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class EditInfoPresenter {
 
@@ -28,13 +27,31 @@ public class EditInfoPresenter {
     public void initialize(EditInfoView editInfoView, EditInfoModel editInfoModel, ObjectGraph objectGraph) {
         this.editInfoView = editInfoView;
         this.editInfoModel = editInfoModel;
+        newWatchingStatus = editInfoModel.watching;
         this.objectGraph = objectGraph;
         this.updateViewWithInfo();
     }
 
-    public void watchingStatusChanged(boolean watching) {
-        newWatchingStatus = watching;
-        editInfoView.setSendButonEnabled(hasChangedInfo(watching));
+    public void watchingStatusChanged() {
+        newWatchingStatus = editInfoView.getWatchingStatus();
+        this.updateSendButtonStatus();
+        this.updatePlaceInputStatus();
+    }
+
+    private void updatePlaceInputStatus() {
+        if (!newWatchingStatus) {
+            this.editInfoView.disablePlaceText();
+        } else {
+            this.editInfoView.enablePlaceText();
+        }
+    }
+
+    public void placeTextChanged() {
+        this.updateSendButtonStatus();
+    }
+
+    private void updateSendButtonStatus() {
+        editInfoView.setSendButonEnabled(hasChangedInfo());
     }
 
     public void sendNewStatus() {
@@ -59,8 +76,9 @@ public class EditInfoPresenter {
 
     private void updateViewWithInfo() {
         this.editInfoView.setTitle(editInfoModel.matchTitle);
-        this.editInfoView.setWatchingStatus(editInfoModel.watching);
         this.editInfoView.setPlaceText(editInfoModel.place);
+        this.editInfoView.setWatchingStatus(editInfoModel.watching);
+        this.updatePlaceInputStatus();
     }
 
     private void closeScreen() {
@@ -76,8 +94,20 @@ public class EditInfoPresenter {
         jobManager.addJobInBackground(setWatchingInfoOnlineJob);
     }
 
-    private boolean hasChangedInfo(boolean watching) {
-        return editInfoModel.watching != watching;
+    private boolean hasChangedInfo() {
+        boolean statusChanged = editInfoModel.watching != newWatchingStatus;
+        boolean placeChanged = placeTextHasChanged();
+        return statusChanged || placeChanged;
+    }
+
+    private boolean placeTextHasChanged() {
+        String newPlaceText = getPlaceText();
+        String currentPlaceText = editInfoModel.place;
+        if (currentPlaceText == null) {
+            return newPlaceText != null;
+        } else {
+            return !currentPlaceText.equals(newPlaceText);
+        }
     }
 
     public void deleteMatch() {

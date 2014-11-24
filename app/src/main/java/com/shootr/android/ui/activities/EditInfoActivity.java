@@ -7,11 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
@@ -23,6 +27,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @InjectView(R.id.edit_info_switch_bar) SwitchBar watchingSwitchBar;
     @InjectView(R.id.edit_info_place) EditText place;
+    @InjectView(R.id.edit_info_place_divider) View placeDivider;
 
     private MenuItem sendMenuItem;
 
@@ -50,7 +55,22 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
         watchingSwitchBar.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
             @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-                editInfoPresenter.watchingStatusChanged(isChecked);
+                editInfoPresenter.watchingStatusChanged();
+            }
+        });
+
+        // Not done by ButterKnife so it's not called when the presenter sets the text
+        place.addTextChangedListener(new TextWatcher() {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editInfoPresenter.placeTextChanged();
+            }
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                /* no-op */
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+                /* no-op */
             }
         });
     }
@@ -101,8 +121,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     }
 
     @Override public void setSendButonEnabled(boolean enabled) {
-        Timber.d("Send button enabled: "+enabled);
-        sendMenuItem.setEnabled(enabled);
+        if (sendMenuItem != null) {
+            sendMenuItem.setEnabled(enabled);
+        }
     }
 
     @Override public void setTitle(String title) {
@@ -138,5 +159,21 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @Override public void setPlaceText(String place) {
         this.place.setText(place);
+    }
+
+    @Override public boolean getWatchingStatus() {
+        return watchingSwitchBar.isChecked();
+    }
+
+    @Override public void disablePlaceText() {
+        place.setEnabled(false);
+        place.setVisibility(View.GONE);
+        placeDivider.setVisibility(View.INVISIBLE);
+    }
+
+    @Override public void enablePlaceText() {
+        place.setEnabled(true);
+        place.setVisibility(View.VISIBLE);
+        placeDivider.setVisibility(View.VISIBLE);
     }
 }

@@ -15,4 +15,10 @@ public interface EditInfoView {
     String getPlaceText();
 
     void setPlaceText(String place);
+
+    void disablePlaceText();
+
+    boolean getWatchingStatus();
+
+    void enablePlaceText();
 }
