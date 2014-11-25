@@ -122,8 +122,9 @@
     <string name="delete_match_confirmation">Remove</string>
     <string name="cancel">Cancel</string>
 
-    <string name="watching_switch">I'm watching it</string>
+    <string name="watching_switch">I\'m watching it</string>
     <string name="remove_match_action">Remove Match</string>
     <string name="search_warning_minimun_characters">Type 3 or more characters.</string>
+    <string name="edit_info_place_placeholder">Where and who with?</string>
 
 </resources>

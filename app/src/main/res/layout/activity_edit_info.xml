@@ -33,7 +33,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/transparent"
-      android:hint="$Where and who with?"
+      android:hint="@string/edit_info_place_placeholder"
       android:padding="16dp" />
 
     <View
