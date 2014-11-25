@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.activities.ProfileEditActivity;
@@ -73,6 +74,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
+    @Inject SessionManager sessionManager;
 
 
     // Args
@@ -322,6 +324,9 @@ public class ProfileFragment extends BaseFragment {
 
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.profile, menu);
+        MenuItem item = menu.findItem(R.id.menu_edit);
+        boolean isCurrentUser = sessionManager.getCurrentUserId() == idUser;
+        item.setVisible(isCurrentUser);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
