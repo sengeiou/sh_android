@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
@@ -80,6 +81,7 @@ public class ProfileFragment extends BaseFragment {
     UserEntity currentUser;
     static UserModel user;
     private View.OnClickListener avatarClickListener;
+    private BottomSheet.Builder editPhotoBottomSheet;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -135,6 +137,29 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setupPhotoBottomSheet();
+    }
+
+    private void setupPhotoBottomSheet() {
+        if (isCurrentUser()) {
+            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title("Change photo")
+              .sheet(R.menu.profile_photo_bottom_sheet)
+              .listener(new DialogInterface.OnClickListener() {
+                  @Override public void onClick(DialogInterface dialog, int which) {
+                      switch (which) {
+                          case R.id.menu_photo_gallery:
+                              break;
+                          case R.id.menu_photo_take:
+                              break;
+                      }
+                  }
+              });
+            avatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    editPhotoBottomSheet.show();
+                }
+            });
+        }
     }
 
     private void retrieveUserInfo() {

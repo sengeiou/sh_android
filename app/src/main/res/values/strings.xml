@@ -131,5 +131,7 @@
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_profile_bio_hint">Bio</string>
     <string name="edit">Edit</string>
+    <string name="photo_edit_take">Take Photo</string>
+    <string name="photo_edit_choose">Choose Photo</string>
 
 </resources>
