@@ -127,6 +127,18 @@
               android:value="com.shootr.android.ui.activities.InfoActivity" />
         </activity>
 
+        <activity
+          android:name="com.shootr.android.ui.activities.ProfileEditActivity"
+          android:label="@string/profile_edit_profile"
+          android:theme="@style/ShootrTheme.Closable"
+          android:parentActivityName="com.shootr.android.ui.activities.ProfileContainerActivity" >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="com.shootr.android.ui.activities.InfoActivity" />
+        </activity>
+
+
+
 
         <meta-data
           android:name="com.facebook.sdk.ApplicationId"

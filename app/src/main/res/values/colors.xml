@@ -52,5 +52,6 @@
     <color name="error">#ffcc0000</color>
 
     <color name="toolbar_closable">#7f7f7f</color>
+    <color name="default_photo_background">#d9d9d9</color>
 
 </resources>

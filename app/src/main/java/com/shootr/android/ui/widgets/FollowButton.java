@@ -6,13 +6,18 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import com.shootr.android.R;
 
 public class FollowButton extends FrameLayout {
 
-    private View followButton;
-    private View followingButton;
+    @InjectView(R.id.follow) View followButton;
+    @InjectView(R.id.following) View followingButton;
+    @InjectView(R.id.edit) View editButton;
+
     private boolean isFollowing;
+    private boolean isEditProfile;
 
     public FollowButton(Context context) {
         super(context);
@@ -33,12 +38,9 @@ public class FollowButton extends FrameLayout {
         setClickable(true);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        followButton = inflater.inflate(R.layout.button_follow, this, false);
-        followingButton = inflater.inflate(R.layout.button_following, this, false);
+        inflater.inflate(R.layout.follow_button_layout, this);
 
-        addView(followButton);
-        addView(followingButton);
-
+        ButterKnife.inject(this);
 
         if (isInEditMode()) {
             setFollowing(false);
@@ -51,6 +53,7 @@ public class FollowButton extends FrameLayout {
 
     public void setFollowing(boolean isFollowing) {
         this.isFollowing = isFollowing;
+        this.isEditProfile = false;
         if (isFollowing) {
             followButton.setVisibility(GONE);
             followingButton.setVisibility(VISIBLE);
@@ -58,22 +61,21 @@ public class FollowButton extends FrameLayout {
             followButton.setVisibility(VISIBLE);
             followingButton.setVisibility(GONE);
         }
-        //TODO editProfile GONE
+        editButton.setVisibility(GONE);
     }
 
     public void setEditProfile() {
+        this.isEditProfile = true;
+        editButton.setVisibility(VISIBLE);
         followButton.setVisibility(GONE);
         followingButton.setVisibility(GONE);
     }
 
     public boolean isEditProfile() {
-        return false;
+        return isEditProfile;
     }
 
     public boolean isFollowing() {
-        if(followButton.getVisibility() == View.GONE && followingButton.getVisibility() == View.VISIBLE){
-            return true;
-        }
-        return false;
+        return isFollowing;
     }
 }

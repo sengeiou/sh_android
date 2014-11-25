@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResultEvent> {
+public class GetFollowUnfollowUserOnlineJob extends ShootrBaseJob<FollowUnFollowResultEvent> {
 
     private static final int PRIORITY = 6;
 
@@ -28,38 +28,29 @@ public class GetFollowUnfollowUserJob extends ShootrBaseJob<FollowUnFollowResult
     final UserManager userManager;
     final FollowManager followManager;
 
-    private UserModelMapper userModelMapper;
-
     @Inject
-    public GetFollowUnfollowUserJob(Application application, NetworkUtil networkUtil, Bus bus, SQLiteOpenHelper openHelper,
-      ShootrService service, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    public GetFollowUnfollowUserOnlineJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service, UserManager userManager, FollowManager followManager) {
         super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.userModelMapper = userModelMapper;
     }
 
     @Override protected void run() throws SQLException, IOException {
          synchronized (followManager) {
-             UserModel user = checkIfWeHaveSomeChangesInFollowAndSendToServer();
-             postSuccessfulEvent(new FollowUnFollowResultEvent(user));
+             checkIfWeHaveSomeChangesInFollowAndSendToServer();
          }
     }
 
-    public UserModel checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
+    public void checkIfWeHaveSomeChangesInFollowAndSendToServer() throws IOException, SQLException {
         List<FollowEntity> followsToUpdate = followManager.getDatasForSendToServerInCase();
-        FollowEntity followEntity = null;
-        if (!followsToUpdate.isEmpty()) {
-            for (FollowEntity f : followsToUpdate) {
-                if ("D".equals(f.getCsysSynchronized())) {
-                    followEntity = unfollowUserAndRecordInDatabase(f);
-                } else {
-                    followEntity = followUserAndRecordInDatabase(f);
-                }
+        for (FollowEntity f : followsToUpdate) {
+            if ("D".equals(f.getCsysSynchronized())) {
+                unfollowUserAndRecordInDatabase(f);
+            } else {
+                followUserAndRecordInDatabase(f);
             }
         }
-        return userModelMapper.toUserModel(getUserFromDatabaseOrServer(followEntity.getFollowedUser()),followEntity,false);
     }
 
 

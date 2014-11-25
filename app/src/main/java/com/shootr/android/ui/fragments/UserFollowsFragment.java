@@ -19,6 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -31,7 +32,6 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -177,7 +177,8 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         jobManager.addJobInBackground(job2);
 
         //Al instante
-        GetFollowUnfollowUserJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserOnlineJob
+          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
         jobManager.addJobInBackground(job);
     }
 
@@ -231,7 +232,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Override public void unFollow(int position) {
         user = getAdapter().getItem(position);
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUserName()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                 unfollowUser(user);

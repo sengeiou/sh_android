@@ -48,7 +48,7 @@ public class UserModel implements Serializable {
         this.favoriteTeamName = favoriteTeamName;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
 

@@ -65,7 +65,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.name.setText(item.getUserName());
+        viewHolder.name.setText(item.getUsername());
         viewHolder.username.setText(item.getFavoriteTeamName());
         String photo = item.getPhoto();
         if (photo != null && !photo.isEmpty()) {

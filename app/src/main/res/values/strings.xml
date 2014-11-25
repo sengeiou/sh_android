@@ -125,5 +125,11 @@
     <string name="watching_switch">Watching</string>
     <string name="remove_match_action">Remove Match</string>
     <string name="search_warning_minimun_characters">Type 3 or more characters.</string>
+    <string name="activity_edit_profile_name_hint">Name</string>
+    <string name="activity_edit_profile_username_hint">Username</string>
+    <string name="activity_edit_profile_team_hint">Team</string>
+    <string name="activity_edit_profile_website_hint">Website</string>
+    <string name="activity_edit_profile_bio_hint">Bio</string>
+    <string name="edit">Edit</string>
 
 </resources>

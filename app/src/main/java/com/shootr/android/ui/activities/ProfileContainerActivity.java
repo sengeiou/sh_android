@@ -71,7 +71,7 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
         Bundle bundleUser = new Bundle();
         UserModel user = ProfileFragment.getUser();
         bundleUser.putLong("ID_USER", user.getIdUser());
-        bundleUser.putString("USER_NAME", user.getUserName());
+        bundleUser.putString("USER_NAME", user.getUsername());
         bundleUser.putString("NAME", user.getName());
         bundleUser.putString("FAVORITE_TEAM", user.getFavoriteTeamName());
         bundleUser.putInt("RELATIONSHIP", user.getRelationship());

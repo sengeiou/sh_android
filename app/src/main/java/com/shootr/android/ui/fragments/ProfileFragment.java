@@ -2,21 +2,15 @@ package com.shootr.android.ui.fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,12 +18,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.Patterns;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -42,15 +37,12 @@ import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -79,6 +71,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject Picasso picasso;
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
+    @Inject SessionManager sessionManager;
 
 
     // Args
@@ -154,7 +147,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void startGetUserInfoJob(UserEntity currentUser, Context context){
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser,currentUser);
+        job.init(idUser, currentUser);
         jobManager.addJobInBackground(job);
     }
 
@@ -164,7 +157,8 @@ public class ProfileFragment extends BaseFragment {
         job2.init(currentUser,idUser,followType);
         jobManager.addJobInBackground(job2);
 
-        GetFollowUnfollowUserJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserOnlineJob
+          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
         jobManager.addJobInBackground(job);
 
     }
@@ -193,14 +187,21 @@ public class ProfileFragment extends BaseFragment {
 
     private void setBasicUserInfo(UserModel user) {
         this.user = user;
-        setTitle(user.getUserName());
+        setTitle(user.getUsername());
         nameTextView.setText(user.getName());
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
         String photo = user.getPhoto();
-        if(photo !=null && !photo.isEmpty()){
+        boolean isValidPhoto = photo != null && !photo.isEmpty();
+        if (isValidPhoto) {
             picasso.load(photo).into(avatarImageView);
+        } else {
+            if (isCurrentUser()) {
+                avatarImageView.setImageResource(R.drawable.profile_photo_add);
+            } else {
+                avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+            }
         }
     }
 
@@ -232,12 +233,11 @@ public class ProfileFragment extends BaseFragment {
     @OnClick(R.id.profile_follow_button)
     public void onMainButonClick() {
         if (followButton.isEditProfile()) {
-            //TODO
+            editProfile();
         }else if (followButton.isFollowing()) {
             unfollowUser();
         } else {
             followUser();
-
         }
     }
 
@@ -247,7 +247,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void unfollowUser(){
 
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUserName()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
@@ -324,5 +324,13 @@ public class ProfileFragment extends BaseFragment {
         animatorSet.setDuration(200);
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.start();
+    }
+
+    private void editProfile() {
+        startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+    }
+
+    private boolean isCurrentUser() {
+        return idUser.equals(sessionManager.getCurrentUserId());
     }
 }
