@@ -135,7 +135,7 @@ public class GCMIntentService extends IntentService {
         watchEntity.setCsysRevision(1);
         watchEntity.setCsysBirth(new Date());
         watchEntity.setCsysModified(new Date());
-        watchEntity.setCsysSynchronized("N");
+        watchEntity.setCsysSynchronized("S");
         watchEntity.setVisible(true);
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
         UserEntity user = userManager.getUserByIdUser(idUser);
