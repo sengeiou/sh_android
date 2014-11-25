@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -23,6 +20,7 @@ import butterknife.OnClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -39,7 +37,6 @@ import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseActivity;
@@ -150,7 +147,7 @@ public class ProfileFragment extends BaseFragment {
 
     public void startGetUserInfoJob(UserEntity currentUser, Context context){
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser,currentUser);
+        job.init(idUser, currentUser);
         jobManager.addJobInBackground(job);
     }
 
@@ -160,7 +157,8 @@ public class ProfileFragment extends BaseFragment {
         job2.init(currentUser,idUser,followType);
         jobManager.addJobInBackground(job2);
 
-        GetFollowUnfollowUserJob job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserOnlineJob
+          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
         jobManager.addJobInBackground(job);
 
     }
@@ -228,12 +226,11 @@ public class ProfileFragment extends BaseFragment {
     @OnClick(R.id.profile_follow_button)
     public void onMainButonClick() {
         if (followButton.isEditProfile()) {
-            //TODO
+            editProfile();
         }else if (followButton.isFollowing()) {
             unfollowUser();
         } else {
             followUser();
-
         }
     }
 
@@ -322,18 +319,7 @@ public class ProfileFragment extends BaseFragment {
         animatorSet.start();
     }
 
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.profile, menu);
-        MenuItem item = menu.findItem(R.id.menu_edit);
-        boolean isCurrentUser = sessionManager.getCurrentUserId() == idUser;
-        item.setVisible(isCurrentUser);
-    }
-
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_edit) {
-            startActivity(new Intent(getActivity(), ProfileEditActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private void editProfile() {
+        startActivity(new Intent(getActivity(), ProfileEditActivity.class));
     }
 }

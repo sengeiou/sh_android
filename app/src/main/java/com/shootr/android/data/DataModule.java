@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
 import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
@@ -50,7 +51,6 @@ import com.shootr.android.sync.ShootrSyncAdapter;
 import com.shootr.android.sync.InfoCleaner;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.follows.GetPeopleJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
@@ -97,7 +97,7 @@ import static android.content.Context.MODE_PRIVATE;
     InfoActivity.class,
 
     GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
-    GetFollowUnfollowUserJob.class, GetFollowUnFollowUserOfflineJob.class, GetLastShotsJob.class,
+    GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLastShotsJob.class,
 
     InitialSetupFragment.class,
 

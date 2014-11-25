@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -34,7 +35,6 @@ import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
 import com.shootr.android.ui.adapters.UserListAdapter;
@@ -339,7 +339,8 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
         jobOffline.init(currentUser,userVO.getIdUser(), followType);
         jobManager.addJobInBackground(jobOffline);
 
-        GetFollowUnfollowUserJob jobOnline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserJob.class);
+        GetFollowUnfollowUserOnlineJob
+          jobOnline = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
         jobManager.addJobInBackground(jobOnline);
     }
 
