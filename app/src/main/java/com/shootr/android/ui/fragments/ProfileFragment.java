@@ -2,10 +2,12 @@ package com.shootr.android.ui.fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,36 +21,37 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.shots.GetLastShotsJob;
-import com.shootr.android.ui.activities.ProfileEditActivity;
-import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.TimeUtils;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
+import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.TimeUtils;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ProfileFragment extends BaseFragment {
 
+    private static final int REQUEST_CHOOSE_PHOTO = 1;
     public static final String ARGUMENT_USER = "user";
 
     public static final String TAG = "profile";
@@ -82,6 +85,7 @@ public class ProfileFragment extends BaseFragment {
     static UserModel user;
     private View.OnClickListener avatarClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
+    private Uri changedPhotoUri;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -148,8 +152,10 @@ public class ProfileFragment extends BaseFragment {
                   @Override public void onClick(DialogInterface dialog, int which) {
                       switch (which) {
                           case R.id.menu_photo_gallery:
+                              choosePhotoFromGallery();
                               break;
                           case R.id.menu_photo_take:
+                              takePhotoFromCamera();
                               break;
                       }
                   }
@@ -159,6 +165,28 @@ public class ProfileFragment extends BaseFragment {
                     editPhotoBottomSheet.show();
                 }
             });
+        }
+    }
+
+    private void takePhotoFromCamera() {
+
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)), REQUEST_CHOOSE_PHOTO);
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CHOOSE_PHOTO) {
+                Uri selectedImageUri = data.getData();
+                changedPhotoUri = selectedImageUri;
+                picasso.load(selectedImageUri).into(avatarImageView);
+            }
         }
     }
 
@@ -217,16 +245,20 @@ public class ProfileFragment extends BaseFragment {
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
-        String photo = user.getPhoto();
-        boolean isValidPhoto = photo != null && !photo.isEmpty();
-        if (isValidPhoto) {
-            picasso.load(photo).into(avatarImageView);
-        } else {
-            if (isCurrentUser()) {
-                avatarImageView.setImageResource(R.drawable.profile_photo_add);
+        if (changedPhotoUri == null) {
+            String photo = user.getPhoto();
+            boolean isValidPhoto = photo != null && !photo.isEmpty();
+            if (isValidPhoto) {
+                picasso.load(photo).into(avatarImageView);
             } else {
-                avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+                if (isCurrentUser()) {
+                    avatarImageView.setImageResource(R.drawable.profile_photo_add);
+                } else {
+                    avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+                }
             }
+        } else {
+            picasso.load(changedPhotoUri).into(avatarImageView);
         }
     }
 
