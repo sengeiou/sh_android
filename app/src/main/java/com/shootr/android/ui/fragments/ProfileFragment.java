@@ -193,8 +193,15 @@ public class ProfileFragment extends BaseFragment {
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
         String photo = user.getPhoto();
-        if(photo !=null && !photo.isEmpty()){
+        boolean isValidPhoto = photo != null && !photo.isEmpty();
+        if (isValidPhoto) {
             picasso.load(photo).into(avatarImageView);
+        } else {
+            if (isCurrentUser()) {
+                avatarImageView.setImageResource(R.drawable.profile_photo_add);
+            } else {
+                avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+            }
         }
     }
 
@@ -321,5 +328,9 @@ public class ProfileFragment extends BaseFragment {
 
     private void editProfile() {
         startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+    }
+
+    private boolean isCurrentUser() {
+        return idUser.equals(sessionManager.getCurrentUserId());
     }
 }
