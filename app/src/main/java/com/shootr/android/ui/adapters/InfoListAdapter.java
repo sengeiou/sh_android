@@ -151,7 +151,17 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         UserViewHolder vh = (UserViewHolder) view.getTag();
         vh.position = position;
         vh.name.setText(user.getUserName());
-        vh.watching.setText(user.isWatching() ? watchingText : notWatchingText);
+        String subtitle;
+        if (user.isWatching()) {
+            if (user.getPlace() != null) {
+                subtitle = user.getPlace();
+            } else {
+                subtitle = watchingText;
+            }
+        } else {
+            subtitle = notWatchingText;
+        }
+        vh.watching.setText(subtitle);
         if (user.isLive()) {
             vh.watching.setTextColor(watchingColorLive);
         } else {

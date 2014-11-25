@@ -36,6 +36,9 @@
       android:layout_below="@+id/info_user_name"
       android:textColor="@color/watching_not_live"
       android:textSize="14sp"
+      android:maxLines="1"
+      android:lines="1"
+      android:ellipsize="end"
       tools:text="Watching" />
 
 </RelativeLayout>
