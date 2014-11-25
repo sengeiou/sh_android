@@ -67,12 +67,10 @@ public class EditInfoPresenter {
         return placeText;
     }
 
-    private String filterPlaceText(String placeText) {
+    public String filterPlaceText(String placeText) {
         //TODO can't be more than [60] characters (business logic)
         placeText = placeText.trim();
-        while (placeText.contains("\n\n\n")) {
-            placeText = placeText.replace("\n\n\n", "\n\n");
-        }
+        placeText = placeText.replace("\n", "");
         if (placeText.isEmpty()) {
             placeText = null;
         }

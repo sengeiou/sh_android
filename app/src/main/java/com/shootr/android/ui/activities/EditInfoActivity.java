@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +54,21 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
         Bundle infoBundle = getIntent().getExtras();
         initializePresenter(infoBundle);
+
+        //TODO esto es lógica de la vista, probablemente debería ir al presenter
+        InputFilter newlineFilter = new InputFilter() {
+            @Override public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
+              int dend) {
+                String sourceString = String.valueOf(source);
+                if (sourceString.contains("\n")) {
+                    return sourceString.replace("\n", "");
+                }
+                return null;
+            }
+        };
+        place.setFilters(new InputFilter[]{
+          newlineFilter
+        });
 
         watchingSwitchBar.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
             @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
