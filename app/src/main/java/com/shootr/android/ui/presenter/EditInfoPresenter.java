@@ -62,10 +62,19 @@ public class EditInfoPresenter {
     private String getPlaceText() {
         String placeText = this.editInfoView.getPlaceText();
         if (placeText != null) {
-            placeText = placeText.trim();
-            if (placeText.isEmpty()) {
-                placeText = null;
-            }
+            placeText = filterPlaceText(placeText);
+        }
+        return placeText;
+    }
+
+    private String filterPlaceText(String placeText) {
+        //TODO can't be more than [60] characters (business logic)
+        placeText = placeText.trim();
+        while (placeText.contains("\n\n\n")) {
+            placeText = placeText.replace("\n\n\n", "\n\n");
+        }
+        if (placeText.isEmpty()) {
+            placeText = null;
         }
         return placeText;
     }

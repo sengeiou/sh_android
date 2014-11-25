@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
@@ -95,8 +96,8 @@ public class ShootrNotificationManager {
         notify(NOTIFICATION_START_MATCH,notification);
     }
 
-    public void sendWatchRequestNotification(UserWatchingModel userWatchingModel, String text) {
-        Notification notification = new WatchRequestNotification(context,notificationBuilderFactory, text, userWatchingModel, picasso).build();
+    public void sendWatchRequestNotification(UserWatchingModel userWatchingModel, MatchModel matchModel) {
+        Notification notification = new WatchRequestNotification(context, notificationBuilderFactory, picasso, userWatchingModel, matchModel).build();
         notify(NOTIFICATION_WATCH_REQUEST, notification);
     }
 }
