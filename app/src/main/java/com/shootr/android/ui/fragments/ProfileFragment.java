@@ -7,8 +7,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,14 +49,18 @@ import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
 
     private static final int REQUEST_CHOOSE_PHOTO = 1;
-    public static final String ARGUMENT_USER = "user";
+    private static final int REQUEST_TAKE_PHOTO = 2;
 
+    public static final String ARGUMENT_USER = "user";
     public static final String TAG = "profile";
 
     @InjectView(R.id.profile_name) TextView nameTextView;
@@ -145,6 +152,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setupPhotoBottomSheet() {
+        //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
             editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title("Change photo")
               .sheet(R.menu.profile_photo_bottom_sheet)
@@ -169,7 +177,19 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void takePhotoFromCamera() {
-
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File pictureTemporaryFile = new File(getActivity().getExternalFilesDir("tmp") + "profileUpload.jpg");
+        if (!pictureTemporaryFile.exists()) {
+            try {
+                pictureTemporaryFile.getParentFile().mkdirs();
+                pictureTemporaryFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                //TODO cancelar operación y avisar al usuario
+            }
+        }
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
     private void choosePhotoFromGallery() {
@@ -186,6 +206,9 @@ public class ProfileFragment extends BaseFragment {
                 Uri selectedImageUri = data.getData();
                 changedPhotoUri = selectedImageUri;
                 picasso.load(selectedImageUri).into(avatarImageView);
+            }else if (requestCode == REQUEST_TAKE_PHOTO) {
+                File pictureTemporaryFile = new File(getActivity().getExternalFilesDir("tmp") + "profileUpload.jpg");
+                changedPhotoUri = Uri.fromFile(pictureTemporaryFile);
             }
         }
     }
