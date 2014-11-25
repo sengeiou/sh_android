@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,13 +31,16 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
+import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
+import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
@@ -45,14 +50,19 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import javax.inject.Inject;
+import org.json.JSONException;
 import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
@@ -206,11 +216,26 @@ public class ProfileFragment extends BaseFragment {
                 Uri selectedImageUri = data.getData();
                 changedPhotoUri = selectedImageUri;
                 picasso.load(selectedImageUri).into(avatarImageView);
+                uploadPhoto();
             }else if (requestCode == REQUEST_TAKE_PHOTO) {
                 File pictureTemporaryFile = new File(getActivity().getExternalFilesDir("tmp") + "profileUpload.jpg");
                 changedPhotoUri = Uri.fromFile(pictureTemporaryFile);
+                uploadPhoto();
             }
         }
+    }
+
+    private void uploadPhoto() {
+        UploadProfilePhotoJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
+        job.init(changedPhotoUri);
+        jobManager.addJobInBackground(job);
+    }
+
+    @Subscribe
+    public void onPhotoUploaded(UploadProfilePhotoEvent event) {
+        changedPhotoUri = null;
+        picasso.load(event.getResult()).into(avatarImageView);
+        //TODO retrieveUserInfo();
     }
 
     private void retrieveUserInfo() {
