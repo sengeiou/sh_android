@@ -10,7 +10,9 @@ import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.util.ImageResizer;
+import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import java.io.File;
 import java.io.IOException;
@@ -26,17 +28,22 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final UserManager userManager;
     private final SessionManager sessionManager;
     private final ImageResizer imageResizer;
+    private final UserModelMapper userModelMapper;
+    private final TimeUtils timeUtils;
 
     private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
-      UserManager userManager, SessionManager sessionManager, ImageResizer imageResizer) {
+      UserManager userManager, SessionManager sessionManager, ImageResizer imageResizer,
+      UserModelMapper userModelMapper, TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.photoService = photoService;
         this.userManager = userManager;
         this.sessionManager = sessionManager;
         this.imageResizer = imageResizer;
+        this.userModelMapper = userModelMapper;
+        this.timeUtils = timeUtils;
     }
 
     public void init(File photoFile) {
@@ -47,14 +54,19 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         File imageFile = getResizedImage(photoFile);
 
         String photoUrl = uploadPhoto(imageFile);
-        setCurrentUserPhoto(photoUrl);
+        UserEntity updatedUser = setCurrentUserPhoto(photoUrl);
+
+        postSuccessfulEvent(new UploadProfilePhotoEvent(userModelMapper.toUserModel(updatedUser, null, true)));
     }
 
-    private void setCurrentUserPhoto(String photoUrl) throws IOException {
+    private UserEntity setCurrentUserPhoto(String photoUrl) throws IOException {
         UserEntity currentUser = sessionManager.getCurrentUser();
         currentUser.setPhoto(photoUrl);
+        currentUser.setCsysModified(timeUtils.getCurrentDate());
         userManager.saveUser(currentUser);
-        shootrService.saveUserProfile(currentUser);
+        currentUser = shootrService.saveUserProfile(currentUser);
+        userManager.saveUser(currentUser);
+        return currentUser;
     }
 
     private String uploadPhoto(File imageFile) throws IOException, JSONException {

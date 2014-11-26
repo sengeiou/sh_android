@@ -219,7 +219,9 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void uploadPhoto() {
-        UploadProfilePhotoJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
+        showLoadingPhoto();
+        UploadProfilePhotoJob job =
+          ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
         job.init(changedPhotoFile);
         jobManager.addJobInBackground(job);
     }
@@ -227,22 +229,24 @@ public class ProfileFragment extends BaseFragment {
     @Subscribe
     public void onPhotoUploaded(UploadProfilePhotoEvent event) {
         changedPhotoFile = null;
-        picasso.load(event.getResult()).into(avatarImageView);
-        //TODO retrieveUserInfo();
+        UserModel updateduser = event.getResult();
+        setUserInfo(updateduser);
+    }
+
+    private void showLoadingPhoto() {
+        //TODO
     }
 
     private void retrieveUserInfo() {
         Context context = getActivity();
         currentUser = ShootrApplication.get(context).getCurrentUser();
-        startGetUserInfoJob(currentUser, context);
+
+        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
+        job.init(idUser);
+        jobManager.addJobInBackground(job);
+
         loadLatestShots();
         //TODO loading
-    }
-
-    public void startGetUserInfoJob(UserEntity currentUser, Context context){
-        GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
-        job.init(idUser, currentUser);
-        jobManager.addJobInBackground(job);
     }
 
     public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
