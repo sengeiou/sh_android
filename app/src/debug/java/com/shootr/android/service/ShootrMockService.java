@@ -135,6 +135,10 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
+    @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
+        return null;
+    }
+
     public long getDelay() {
         return delay;
     }

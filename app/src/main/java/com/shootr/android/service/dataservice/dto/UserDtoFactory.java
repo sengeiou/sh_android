@@ -3,11 +3,14 @@ package com.shootr.android.service.dataservice.dto;
 import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.constant.ServiceConstants;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
@@ -38,6 +41,7 @@ public class UserDtoFactory {
     private static final String ALIAS_UNFOLLOW_USER = "UNFOLLOW_USER";
     private static final String ALIAS_GETUSERBYID = "GET_USERBYID";
     private static final String ALIAS_SEARCH_USERS = " ALIAS_FIND_FRIENDS";
+    private static final String ALIAS_UPDATE_PROFILE = "CREATE_USER";
 
     private UtilityDtoFactory utilityDtoFactory;
     UserMapper userMapper;
@@ -209,4 +213,18 @@ public class UserDtoFactory {
         return array;
     }
 
+    public GenericDto saveUserDto(UserEntity userEntity) {
+        MetadataDto md = new MetadataDto.Builder()
+          .operation(ServiceConstants.OPERATION_UPDATE_CREATE)
+          .entity(UserTable.TABLE)
+          .putKey(UserTable.ID, userEntity.getIdUser())
+          .build();
+
+        OperationDto op = new OperationDto.Builder()
+          .metadata(md)
+          .putData(userMapper.reqRestUsersToDto(userEntity))
+          .build();
+
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_UPDATE_PROFILE, op);
+    }
 }

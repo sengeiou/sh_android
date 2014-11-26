@@ -55,11 +55,11 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         setCurrentUserPhoto(photoUrl);
     }
 
-    private void setCurrentUserPhoto(String photoUrl) {
+    private void setCurrentUserPhoto(String photoUrl) throws IOException {
         UserEntity currentUser = sessionManager.getCurrentUser();
         currentUser.setPhoto(photoUrl);
         userManager.saveUser(currentUser);
-        //TODO save in server
+        shootrService.saveUserProfile(currentUser);
     }
 
     private String uploadPhoto(File imageFile) throws IOException, JSONException {
