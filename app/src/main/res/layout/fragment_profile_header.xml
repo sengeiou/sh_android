@@ -7,13 +7,28 @@
   android:paddingBottom="16dp"
   tools:showIn="@layout/fragment_profile">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/profile_avatar"
+    <FrameLayout
+      android:id="@+id/profile_avatar_container"
       android:layout_width="@dimen/profile_avatar_size"
       android:layout_height="@dimen/profile_avatar_size"
       android:layout_marginLeft="16dp"
-      android:layout_marginTop="16dp"
-      android:src="@drawable/ic_contact_picture_default" />
+      android:layout_marginTop="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/profile_avatar"
+          android:layout_width="@dimen/profile_avatar_size"
+          android:layout_height="@dimen/profile_avatar_size"
+          android:src="@drawable/ic_contact_picture_default" />
+
+        <ProgressBar
+          android:id="@+id/profile_avatar_loading"
+          android:layout_width="wrap_content"
+          android:layout_gravity="center"
+          android:indeterminate="true"
+          android:visibility="gone"
+          tools:visibility="visible"
+          android:layout_height="wrap_content" />
+    </FrameLayout>
 
     <LinearLayout
       android:id="@+id/profile_scores_bar"
@@ -22,7 +37,7 @@
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginTop="16dp"
-      android:layout_toRightOf="@+id/profile_avatar"
+      android:layout_toRightOf="@+id/profile_avatar_container"
       android:gravity="top"
       android:orientation="horizontal">
 
@@ -126,18 +141,18 @@
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginTop="4dp"
-      android:clickable="true"
-      android:layout_toRightOf="@+id/profile_avatar" />
+      android:layout_toRightOf="@+id/profile_avatar_container"
+      android:clickable="true" />
 
     <TextView
       android:id="@+id/profile_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_below="@+id/profile_avatar_container"
       android:layout_marginLeft="16dp"
+      android:layout_marginTop="16dp"
       android:textSize="20sp"
       android:textStyle="bold"
-      android:layout_marginTop="16dp"
-      android:layout_below="@+id/profile_avatar"
       tools:text="Ignasi" />
 
     <TextView

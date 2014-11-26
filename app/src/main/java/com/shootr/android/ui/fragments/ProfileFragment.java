@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -78,6 +79,8 @@ public class ProfileFragment extends BaseFragment {
 
     @InjectView(R.id.profile_shots_empty) View shotsListEmpty;
     @InjectView(R.id.profile_shots_list) ViewGroup shotsList;
+
+    @InjectView(R.id.profile_avatar_loading) ProgressBar avatarLoadingView;
 
     @Inject Bus bus;
     @Inject Picasso picasso;
@@ -230,11 +233,18 @@ public class ProfileFragment extends BaseFragment {
     public void onPhotoUploaded(UploadProfilePhotoEvent event) {
         changedPhotoFile = null;
         UserModel updateduser = event.getResult();
+        hideLoadingPhoto();
         setUserInfo(updateduser);
     }
 
     private void showLoadingPhoto() {
-        //TODO
+        avatarImageView.setVisibility(View.GONE);
+        avatarLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingPhoto() {
+        avatarImageView.setVisibility(View.VISIBLE);
+        avatarLoadingView.setVisibility(View.GONE);
     }
 
     private void retrieveUserInfo() {
