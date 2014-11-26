@@ -179,7 +179,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File pictureTemporaryFile = new File(getActivity().getExternalFilesDir("tmp") + "profileUpload.jpg");
+        File pictureTemporaryFile = getCameraPhotoFile();
         if (!pictureTemporaryFile.exists()) {
             try {
                 pictureTemporaryFile.getParentFile().mkdirs();
@@ -206,13 +206,16 @@ public class ProfileFragment extends BaseFragment {
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
                 changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                picasso.load(selectedImageUri).into(avatarImageView);
                 uploadPhoto();
             }else if (requestCode == REQUEST_TAKE_PHOTO) {
-                changedPhotoFile = new File(getActivity().getExternalFilesDir("tmp"), "profileUpload.jpg");
+                changedPhotoFile = getCameraPhotoFile();
                 uploadPhoto();
             }
         }
+    }
+
+    private File getCameraPhotoFile() {
+        return new File(getActivity().getExternalFilesDir("tmp"), "profileUpload.jpg");
     }
 
     private void uploadPhoto() {
@@ -283,20 +286,16 @@ public class ProfileFragment extends BaseFragment {
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
-        if (changedPhotoFile == null) {
-            String photo = user.getPhoto();
-            boolean isValidPhoto = photo != null && !photo.isEmpty();
-            if (isValidPhoto) {
-                picasso.load(photo).into(avatarImageView);
-            } else {
-                if (isCurrentUser()) {
-                    avatarImageView.setImageResource(R.drawable.profile_photo_add);
-                } else {
-                    avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
-                }
-            }
+        String photo = user.getPhoto();
+        boolean isValidPhoto = photo != null && !photo.isEmpty();
+        if (isValidPhoto) {
+            picasso.load(photo).into(avatarImageView);
         } else {
-            picasso.load(changedPhotoFile).into(avatarImageView);
+            if (isCurrentUser()) {
+                avatarImageView.setImageResource(R.drawable.profile_photo_add);
+            } else {
+                avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+            }
         }
     }
 
