@@ -54,4 +54,6 @@
     <color name="toolbar_closable">#7f7f7f</color>
     <color name="default_photo_background">#d9d9d9</color>
 
+    <color name="switch_disabled">#ececec</color>
+
 </resources>
