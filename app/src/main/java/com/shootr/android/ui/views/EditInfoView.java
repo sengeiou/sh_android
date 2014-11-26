@@ -11,4 +11,14 @@ public interface EditInfoView {
     void closeScreen();
 
     void showDeleteMatchConfirmation(String confirmationTitle, String confirmationMessage);
+
+    String getPlaceText();
+
+    void setPlaceText(String place);
+
+    void disablePlaceText();
+
+    boolean getWatchingStatus();
+
+    void enablePlaceText();
 }

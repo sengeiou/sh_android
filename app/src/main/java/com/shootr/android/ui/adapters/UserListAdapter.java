@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.FollowEntity;
@@ -19,11 +20,11 @@ import java.util.List;
 public class UserListAdapter extends BindableAdapter<UserModel> {
 
     private List<UserModel> users;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
 
     private FollowUnfollowAdapterCallback callback;
 
-    public UserListAdapter(Context context, Picasso picasso) {
+    public UserListAdapter(Context context, PicassoWrapper picasso) {
         super(context);
         this.picasso = picasso;
         this.users = new ArrayList<>(0);
@@ -68,11 +69,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         viewHolder.name.setText(item.getUsername());
         viewHolder.username.setText(item.getFavoriteTeamName());
         String photo = item.getPhoto();
-        if (photo != null && !photo.isEmpty()) {
-            picasso.load(photo).into(viewHolder.avatar);
-        } else {
-            picasso.load(R.drawable.ic_contact_picture_default).into(viewHolder.avatar);
-        }
+        picasso.load(photo).into(viewHolder.avatar);
 
         if(isFollowButtonVisible()){
             if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){

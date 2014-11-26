@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.MatchModel;
@@ -29,7 +30,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
-    private Picasso picasso;
+    private PicassoWrapper picasso;
     private View.OnClickListener editButtonListener;
     private Long currentUserId;
     private int watchingColorLive;
@@ -37,7 +38,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private final String watchingText;
     private final String notWatchingText;
 
-    public InfoListAdapter(Context context, Picasso picasso, Long currentUserId, View.OnClickListener editButtonListener) {
+    public InfoListAdapter(Context context, PicassoWrapper picasso, Long currentUserId, View.OnClickListener editButtonListener) {
         super(context);
         this.picasso = picasso;
         this.editButtonListener = editButtonListener;
@@ -150,17 +151,23 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         UserViewHolder vh = (UserViewHolder) view.getTag();
         vh.position = position;
         vh.name.setText(user.getUserName());
-        vh.watching.setText(user.isWatching() ? watchingText : notWatchingText);
+        String subtitle;
+        if (user.isWatching()) {
+            if (user.getPlace() != null) {
+                subtitle = user.getPlace();
+            } else {
+                subtitle = watchingText;
+            }
+        } else {
+            subtitle = notWatchingText;
+        }
+        vh.watching.setText(subtitle);
         if (user.isLive()) {
             vh.watching.setTextColor(watchingColorLive);
         } else {
             vh.watching.setTextColor(watchingColorNotLive);
         }
-        if (!user.getPhoto().isEmpty()) {
-            picasso.load(user.getPhoto()).into(vh.avatar);
-        } else {
-            picasso.load(R.drawable.ic_contact_picture_default);
-        }
+        picasso.load(user.getPhoto()).into(vh.avatar);
         if (vh.edit != null) {
             vh.edit.setTag(vh);
         }

@@ -11,6 +11,7 @@ public class UserWatchingModel implements Serializable {
     private boolean live;
 
     private boolean watching;
+    private String place;
 
     public Long getIdUser() {
         return idUser;
@@ -78,5 +79,13 @@ public class UserWatchingModel implements Serializable {
 
     public void setLive(boolean live) {
         this.live = live;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 }

@@ -103,7 +103,7 @@ public class AddMatchPresenter implements Presenter {
 
     public void addMatch(MatchSearchResultModel selectedMatch) {
         SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        setWatchingInfoOfflineJob.init(selectedMatch.getIdMatch(), WatchEntity.STATUS_DEFAULT);
+        setWatchingInfoOfflineJob.init(selectedMatch.getIdMatch(), WatchEntity.STATUS_DEFAULT, null);
         jobManager.addJobInBackground(setWatchingInfoOfflineJob);
 
         SetWatchingInfoOnlineJob setWatchingInfoOnlineJob = objectGraph.get(SetWatchingInfoOnlineJob.class);

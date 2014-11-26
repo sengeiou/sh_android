@@ -65,22 +65,4 @@ public class ProfileContainerActivity extends BaseSignedInActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override public void onBackPressed() {
-        Intent data = new Intent();
-        Bundle bundleUser = new Bundle();
-        UserModel user = ProfileFragment.getUser();
-        bundleUser.putLong("ID_USER", user.getIdUser());
-        bundleUser.putString("USER_NAME", user.getUsername());
-        bundleUser.putString("NAME", user.getName());
-        bundleUser.putString("FAVORITE_TEAM", user.getFavoriteTeamName());
-        bundleUser.putInt("RELATIONSHIP", user.getRelationship());
-        bundleUser.putString("PHOTO", user.getPhoto());
-        data.putExtras(bundleUser);
-        setResult(Activity.RESULT_OK,data);
-        finish();
-        super.onBackPressed();
-
-    }
-
 }

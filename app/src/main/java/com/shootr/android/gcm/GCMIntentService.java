@@ -17,9 +17,11 @@ import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
+import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
@@ -38,8 +40,6 @@ public class GCMIntentService extends IntentService {
     private static final int PUSH_TYPE_START_MATCH = 3;
     private static final int PUSH_TYPE_WATCH_REQUEST = 4;
 
-    private static final Long WATCHING_STATUS = 1L;
-
     @Inject ShootrNotificationManager notificationManager;
     @Inject SQLiteOpenHelper openHelper;
     @Inject UserManager userManager;
@@ -49,10 +49,8 @@ public class GCMIntentService extends IntentService {
     @Inject MatchManager matchManager;
     @Inject UserWatchingModelMapper userWatchingModelMapper;
     @Inject UserModelMapper userModelMapper;
+    @Inject MatchModelMapper matchModelMapper;
     @Inject Bus bus;
-
-    private SQLiteDatabase database;
-
 
     public GCMIntentService() {
         super("GCM Service");
@@ -62,11 +60,11 @@ public class GCMIntentService extends IntentService {
     private static final String ID_SHOT = "idShot";
     private static final String ID_MATCH = "idMatch";
     private static final String STATUS = "status";
+    private static final String PLACE = "place";
 
     @Override public void onCreate() {
         super.onCreate();
         ShootrApplication.get(this).inject(this);
-        database = openHelper.getWritableDatabase();
     }
 
     @Override
@@ -126,38 +124,34 @@ public class GCMIntentService extends IntentService {
         Long idUser = parameters.getLong(ID_USER);
         Long idMatch = parameters.getLong(ID_MATCH);
         Long status = parameters.getLong(STATUS);
+        String place = parameters.optString(PLACE);
+        if ("null".equals(place) || place.isEmpty()) {
+            place = null;
+        }
 
-        //TODO no crear la entidad a mano, no sabemos si es correcta. Descargarla del servidor
-        WatchEntity watchEntity = new WatchEntity();
-        watchEntity.setIdMatch(idMatch);
-        watchEntity.setIdUser(idUser);
-        watchEntity.setStatus(status);
-        watchEntity.setCsysRevision(1);
-        watchEntity.setCsysBirth(new Date());
-        watchEntity.setCsysModified(new Date());
-        watchEntity.setCsysSynchronized("S");
-        watchEntity.setVisible(true);
         MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
-        UserEntity user = userManager.getUserByIdUser(idUser);
-        watchManager.createUpdateWatch(watchEntity);
+        UserEntity userFromNotification = userManager.getUserByIdUser(idUser);
+
+        boolean isWatching = WatchEntity.STATUS_WATCHING.equals(status);
+        boolean isLive = matchEntity.getStatus().equals(MatchEntity.STARTED);
+
+        UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, isWatching,
+          isLive, place);
+        MatchModel matchModel = matchModelMapper.toMatchModel(matchEntity);
+
+        notificationManager.sendWatchRequestNotification(userWatchingModel, matchModel);
+
+        retrieveAndStoreNewWatch(userFromNotification, matchEntity);
+    }
+
+    private void retrieveAndStoreNewWatch(UserEntity userEntity, MatchEntity matchEntity) throws IOException {
+        WatchEntity watchEntity = service.getWatchStatus(userEntity.getIdUser(), matchEntity.getIdMatch());
+
         matchManager.saveMatch(matchEntity);
-        userManager.saveUser(user);
-        String text;
-        if(WATCHING_STATUS.equals(status)){
-            text = getResources().getString(R.string.watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
-        }else{
-            text = getResources().getString(R.string.not_watching_request_push,matchEntity.getLocalTeamName()+"-"+matchEntity.getVisitorTeamName()) ;
-        }
-        //Send event for retrieving the new WatchRequest
+        userManager.saveUser(userEntity);
+        watchManager.createUpdateWatch(watchEntity);
+
         bus.post(new RequestWatchByPushEvent());
-        if(watchEntity!=null){
-            //TODO comparar con el status que ha de tener el partido cuando está live
-            UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(user,true,matchEntity.getStatus().equals(MatchEntity.STARTED));
-            notificationManager.sendWatchRequestNotification(userWatchingModel, text);
-        }
-
-
-
     }
 
     private void receivedFollow(JSONObject parameters) throws JSONException, IOException {

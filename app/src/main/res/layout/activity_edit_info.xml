@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:animateLayoutChanges="true"
   android:orientation="vertical">
 
     <View
@@ -9,27 +11,41 @@
       android:layout_height="1dp"
       android:background="#d9d9d9" />
 
-    <RelativeLayout
+    <com.shootr.android.ui.widgets.SwitchBar
+      android:id="@+id/edit_info_switch_bar"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
-      android:padding="16dp">
+      android:layout_height="?actionBarSize"
+      android:background="?selectableItemBackground"
+      android:visibility="visible"
+      app:switchBarText="@string/watching_switch"
+      />
 
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:text="@string/watching_switch"
-          android:layout_toLeftOf="@+id/edit_info_switch"
-          android:textColor="@color/gray_10"
-          android:textSize="18sp" />
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:background="?dividerHorizontal" />
 
-        <android.support.v7.widget.SwitchCompat
-          android:id="@+id/edit_info_switch"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:padding="4dp" />
-    </RelativeLayout>
+    <EditText
+      android:id="@+id/edit_info_place"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/transparent"
+      android:hint="@string/edit_info_place_placeholder"
+      android:maxLength="60"
+      android:lines="1"
+      android:inputType="text|textCapSentences"
+      android:singleLine="true"
+      android:imeOptions="actionDone"
+      android:padding="16dp" />
+
+    <View
+      android:id="@+id/edit_info_place_divider"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:background="?dividerHorizontal" />
 
 </LinearLayout>

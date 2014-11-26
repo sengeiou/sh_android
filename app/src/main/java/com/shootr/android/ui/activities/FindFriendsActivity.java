@@ -20,9 +20,9 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
+import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import dagger.ObjectGraph;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
@@ -56,7 +56,7 @@ public class FindFriendsActivity extends BaseSignedInActivity implements UserLis
     private static final String EXTRA_SEARCH_HAS_MORE_ITEMS = "moreitems";
     private static final String EXTRA_SEARCH_IS_LOADING_REMOTE = "loadingremote";
 
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
 

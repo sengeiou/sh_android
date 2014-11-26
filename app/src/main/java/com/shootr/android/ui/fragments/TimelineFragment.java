@@ -41,6 +41,7 @@ import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.ui.widgets.BadgeDrawable;
+import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -77,7 +78,7 @@ public class TimelineFragment extends BaseFragment
     public static final Long WATCH_STATUS_IGNORE = 2L;
     public static final Long WATCH_STATUS_WATCHING = 1L;
 
-    @Inject Picasso picasso;
+    @Inject PicassoWrapper picasso;
     @Inject Bus bus;
     @Inject TimeUtils timeUtils;
 
@@ -330,7 +331,7 @@ public class TimelineFragment extends BaseFragment
         watchingRequestsPendingStack.remove(0);
 
         SetWatchingInfoOfflineJob jobOffline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOfflineJob.class);
-        jobOffline.init(watchingRequestModel.getMatchId(),status);
+        jobOffline.init(watchingRequestModel.getMatchId(),status, null);
         jobManager.addJobInBackground(jobOffline);
         SetWatchingInfoOnlineJob jobOnline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOnlineJob.class);
         jobManager.addJobInBackground(jobOnline);

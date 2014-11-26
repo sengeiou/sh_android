@@ -12,6 +12,7 @@ public class WatchEntity extends Synchronized{
     private Long idMatch;
     private Long idUser;
     private Long status;
+    private String place;
     private Boolean visible;
 
     public Long getIdMatch() {
@@ -36,6 +37,14 @@ public class WatchEntity extends Synchronized{
 
     public void setStatus(Long status) {
         this.status = status;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public Boolean getVisible() {
