@@ -7,12 +7,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,7 +27,6 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
@@ -56,13 +51,9 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import javax.inject.Inject;
-import org.json.JSONException;
 import timber.log.Timber;
 
 public class ProfileFragment extends BaseFragment {
@@ -102,7 +93,7 @@ public class ProfileFragment extends BaseFragment {
     static UserModel user;
     private View.OnClickListener avatarClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
-    private Uri changedPhotoUri;
+    private File changedPhotoFile;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -214,12 +205,11 @@ public class ProfileFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
-                changedPhotoUri = selectedImageUri;
+                changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
                 picasso.load(selectedImageUri).into(avatarImageView);
                 uploadPhoto();
             }else if (requestCode == REQUEST_TAKE_PHOTO) {
-                File pictureTemporaryFile = new File(getActivity().getExternalFilesDir("tmp") + "profileUpload.jpg");
-                changedPhotoUri = Uri.fromFile(pictureTemporaryFile);
+                changedPhotoFile = new File(getActivity().getExternalFilesDir("tmp"), "profileUpload.jpg");
                 uploadPhoto();
             }
         }
@@ -227,13 +217,13 @@ public class ProfileFragment extends BaseFragment {
 
     private void uploadPhoto() {
         UploadProfilePhotoJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
-        job.init(changedPhotoUri);
+        job.init(changedPhotoFile);
         jobManager.addJobInBackground(job);
     }
 
     @Subscribe
     public void onPhotoUploaded(UploadProfilePhotoEvent event) {
-        changedPhotoUri = null;
+        changedPhotoFile = null;
         picasso.load(event.getResult()).into(avatarImageView);
         //TODO retrieveUserInfo();
     }
@@ -293,7 +283,7 @@ public class ProfileFragment extends BaseFragment {
         websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
-        if (changedPhotoUri == null) {
+        if (changedPhotoFile == null) {
             String photo = user.getPhoto();
             boolean isValidPhoto = photo != null && !photo.isEmpty();
             if (isValidPhoto) {
@@ -306,7 +296,7 @@ public class ProfileFragment extends BaseFragment {
                 }
             }
         } else {
-            picasso.load(changedPhotoUri).into(avatarImageView);
+            picasso.load(changedPhotoFile).into(avatarImageView);
         }
     }
 

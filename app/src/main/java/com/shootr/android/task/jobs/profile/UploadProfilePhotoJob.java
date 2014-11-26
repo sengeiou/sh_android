@@ -1,7 +1,6 @@
 package com.shootr.android.task.jobs.profile;
 
 import android.app.Application;
-import android.net.Uri;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
@@ -11,7 +10,6 @@ import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.ImageResizer;
 import com.squareup.otto.Bus;
 import java.io.File;
@@ -29,7 +27,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final SessionManager sessionManager;
     private final ImageResizer imageResizer;
 
-    private Uri photoUri;
+    private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
       UserManager userManager, SessionManager sessionManager, ImageResizer imageResizer) {
@@ -41,13 +39,12 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         this.imageResizer = imageResizer;
     }
 
-    public void init(Uri uri) {
-        photoUri = uri;
+    public void init(File photoFile) {
+        this.photoFile = photoFile;
     }
 
-    @Override protected void run() throws SQLException, IOException, Exception {
-        File newPhotoFile = new File(FileChooserUtils.getPath(getContext(), photoUri));
-        File imageFile = getResizedImage(newPhotoFile);
+    @Override protected void run() throws SQLException, IOException, JSONException {
+        File imageFile = getResizedImage(photoFile);
 
         String photoUrl = uploadPhoto(imageFile);
         setCurrentUserPhoto(photoUrl);
