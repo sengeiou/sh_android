@@ -25,6 +25,8 @@ import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
+import com.shootr.android.util.BitmapImageResizer;
+import com.shootr.android.util.ImageResizer;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -138,6 +140,8 @@ import static android.content.Context.MODE_PRIVATE;
 
     TimeFormatter.class,
 
+    BitmapImageResizer.class,
+
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
@@ -211,6 +215,10 @@ public class DataModule {
 
     @Provides @Singleton InfoCleaner provideInfoCleaner(MatchManager matchManager, WatchManager watchManager) {
         return new InfoCleaner(matchManager, watchManager);
+    }
+
+    @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {
+        return imageResizer;
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
