@@ -67,7 +67,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
             }
         };
         place.setFilters(new InputFilter[]{
-          newlineFilter
+          newlineFilter,
+          new InputFilter.LengthFilter(60)
         });
 
         watchingSwitchBar.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {

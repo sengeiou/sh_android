@@ -16,7 +16,6 @@
       android:layout_width="match_parent"
       android:layout_height="?actionBarSize"
       android:background="?selectableItemBackground"
-      android:padding="16dp"
       android:visibility="visible"
       app:switchBarText="@string/watching_switch"
       />
@@ -35,7 +34,9 @@
       android:background="@color/transparent"
       android:hint="@string/edit_info_place_placeholder"
       android:maxLength="60"
-      android:inputType="text"
+      android:lines="1"
+      android:inputType="text|textCapSentences"
+      android:singleLine="true"
       android:imeOptions="actionDone"
       android:padding="16dp" />
 
