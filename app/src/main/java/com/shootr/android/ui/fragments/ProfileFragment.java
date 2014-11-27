@@ -436,8 +436,8 @@ public class ProfileFragment extends BaseFragment {
         boolean isValidPhotoUrl = photo != null && !photo.isEmpty();
         if (isValidPhotoUrl) {
             picasso.load(photo).into(vh.avatar);
-        } else{
-            picasso.load(R.drawable.ic_contact_picture_default).into(vh.avatar);
+        } else {
+            vh.avatar.setImageResource(R.drawable.ic_contact_picture_default);
         }
         vh.avatar.setTag(vh);
     }
