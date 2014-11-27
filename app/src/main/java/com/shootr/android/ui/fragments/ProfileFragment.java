@@ -102,7 +102,6 @@ public class ProfileFragment extends BaseFragment {
     static UserModel user;
     private View.OnClickListener avatarClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
-    private File changedPhotoFile;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -212,13 +211,14 @@ public class ProfileFragment extends BaseFragment {
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            File changedPhotoFile;
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 Uri selectedImageUri = data.getData();
                 changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
-                uploadPhoto();
+                uploadPhoto(changedPhotoFile);
             }else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
-                uploadPhoto();
+                uploadPhoto(changedPhotoFile);
             }
         }
     }
@@ -227,7 +227,7 @@ public class ProfileFragment extends BaseFragment {
         return new File(getActivity().getExternalFilesDir("tmp"), "profileUpload.jpg");
     }
 
-    private void uploadPhoto() {
+    private void uploadPhoto(File changedPhotoFile) {
         showLoadingPhoto();
         UploadProfilePhotoJob job =
           ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
@@ -237,7 +237,6 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onPhotoUploaded(UploadProfilePhotoEvent event) {
-        changedPhotoFile = null;
         UserModel updateduser = event.getResult();
         hideLoadingPhoto();
         setUserInfo(updateduser);
