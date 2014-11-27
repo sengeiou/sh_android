@@ -98,7 +98,7 @@ public class ShootrPhotoService implements PhotoService {
               .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
                 RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionManager.getCurrentUserId())))
               .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
-                RequestBody.create(MediaType.parse("text/plain"), sessionManager.getCurrentUser().getSessionToken()))
+                RequestBody.create(MediaType.parse("text/plain"), sessionManager.getSessionToken()))
               .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
                 RequestBody.create(MediaType.parse("image/jpeg"), photoFile))
               .build();

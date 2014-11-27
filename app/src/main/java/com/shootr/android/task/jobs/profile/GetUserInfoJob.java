@@ -21,7 +21,7 @@ import timber.log.Timber;
 
 public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
-    private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
+    private static final int PRIORITY = 7; //TODO definir valores estáticos para determinados casos
 
     ShootrService service;
 

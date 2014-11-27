@@ -102,6 +102,7 @@ public class ProfileFragment extends BaseFragment {
     static UserModel user;
     private View.OnClickListener avatarClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
+    private boolean uploadingPhoto;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -139,7 +140,9 @@ public class ProfileFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         bus.register(this);
-        retrieveUserInfo();
+        if (!uploadingPhoto) {
+            retrieveUserInfo();
+        }
     }
 
     @Override
@@ -228,6 +231,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void uploadPhoto(File changedPhotoFile) {
+        uploadingPhoto = true;
         showLoadingPhoto();
         UploadProfilePhotoJob job =
           ShootrApplication.get(getActivity()).getObjectGraph().get(UploadProfilePhotoJob.class);
@@ -237,9 +241,11 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onPhotoUploaded(UploadProfilePhotoEvent event) {
+        uploadingPhoto = false;
         UserModel updateduser = event.getResult();
         hideLoadingPhoto();
         setUserInfo(updateduser);
+        retrieveUserInfo();
     }
 
     private void showLoadingPhoto() {
@@ -458,6 +464,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser.equals(sessionManager.getCurrentUserId());
+        return idUser!= null && idUser.equals(sessionManager.getCurrentUserId());
     }
 }
