@@ -52,7 +52,6 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
 
     @Override protected void run() throws SQLException, IOException, JSONException {
         File imageFile = getResizedImage(photoFile);
-
         String photoUrl = uploadPhoto(imageFile);
         UserEntity updatedUser = setCurrentUserPhoto(photoUrl);
 
