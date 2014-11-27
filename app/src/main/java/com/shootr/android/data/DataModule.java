@@ -18,6 +18,7 @@ import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
@@ -115,6 +116,7 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
     SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
     SearchMatchJob.class, DeleteMatchOfflineJob.class, DeleteMatchOnlineJob.class, UploadProfilePhotoJob.class,
+    RemoveProfilePhotoJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 

@@ -41,6 +41,7 @@ import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
+import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.ui.activities.ProfileEditActivity;
@@ -167,8 +168,9 @@ public class ProfileFragment extends BaseFragment {
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
+            boolean canRemovePhoto = sessionManager.getCurrentUser().getPhoto() != null;
             editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo)
-              .sheet(R.menu.profile_photo_bottom_sheet)
+              .sheet(canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
               .listener(new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
                       switch (which) {
@@ -177,6 +179,9 @@ public class ProfileFragment extends BaseFragment {
                               break;
                           case R.id.menu_photo_take:
                               takePhotoFromCamera();
+                              break;
+                          case R.id.menu_photo_remove:
+                              removePhoto();
                               break;
                       }
                   }
@@ -210,6 +215,19 @@ public class ProfileFragment extends BaseFragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)), REQUEST_CHOOSE_PHOTO);
+    }
+
+    private void removePhoto() {
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.photo_edit_remove_confirmation)
+          .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  RemoveProfilePhotoJob removeProfilePhotoJob =
+                    ShootrApplication.get(getActivity()).getObjectGraph().get(RemoveProfilePhotoJob.class);
+                  jobManager.addJobInBackground(removeProfilePhotoJob);
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -247,6 +265,7 @@ public class ProfileFragment extends BaseFragment {
         hideLoadingPhoto();
         setUserInfo(updateduser);
         retrieveUserInfo();
+        setupPhotoBottomSheet(); //TODO needed to refresh the remove button visibility. Remove this when it is not neccesary
     }
 
     @Subscribe
