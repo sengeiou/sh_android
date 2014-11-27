@@ -70,7 +70,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     }
 
     private String uploadPhoto(File imageFile) throws IOException, JSONException {
-        return photoService.uploadPhotoAndGetUrl(imageFile);
+        return photoService.uploadProfilePhotoAndGetUrl(imageFile);
     }
 
     private File getResizedImage(File newPhotoFile) throws IOException {

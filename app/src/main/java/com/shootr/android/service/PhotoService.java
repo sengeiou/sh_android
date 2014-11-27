@@ -8,6 +8,6 @@ import org.json.JSONException;
 
 public interface PhotoService {
 
-    public String uploadPhotoAndGetUrl(File photoFile) throws IOException, JSONException;
+    public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException, JSONException;
 
 }

@@ -10,6 +10,10 @@ public class ShootrServerException  extends IOException{
         this.shootrError = shootrError;
     }
 
+    public ShootrError getShootrError() {
+        return shootrError;
+    }
+
     @Override public String getMessage() {
         return shootrError.errorCode + ": " + shootrError.message;
     }

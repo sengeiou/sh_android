@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -28,7 +29,10 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.service.ShootrError;
+import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
+import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
@@ -46,6 +50,7 @@ import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
@@ -87,6 +92,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
     @Inject SessionManager sessionManager;
+    @Inject ErrorMessageFactory errorMessageFactory;
 
 
     // Args
@@ -245,6 +251,20 @@ public class ProfileFragment extends BaseFragment {
     private void hideLoadingPhoto() {
         avatarImageView.setVisibility(View.VISIBLE);
         avatarLoadingView.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        String messageForError;
+        Exception exceptionProduced = event.getException();
+        if (exceptionProduced != null && exceptionProduced instanceof ShootrServerException) {
+            ShootrError shootrError = ((ShootrServerException) exceptionProduced).getShootrError();
+            messageForError = errorMessageFactory.getMessageForError(shootrError);
+        } else {
+            messageForError = errorMessageFactory.getCommunicationErrorMessage();
+        }
+        Toast.makeText(getActivity(), messageForError, Toast.LENGTH_SHORT).show();
+        hideLoadingPhoto();
     }
 
     private void retrieveUserInfo() {
