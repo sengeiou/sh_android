@@ -163,7 +163,7 @@ public class ProfileFragment extends BaseFragment {
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
-            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title("Change photo")
+            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo)
               .sheet(R.menu.profile_photo_bottom_sheet)
               .listener(new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
