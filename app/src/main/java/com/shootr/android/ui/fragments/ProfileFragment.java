@@ -33,6 +33,7 @@ import com.shootr.android.service.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
@@ -246,6 +247,12 @@ public class ProfileFragment extends BaseFragment {
         hideLoadingPhoto();
         setUserInfo(updateduser);
         retrieveUserInfo();
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_SHORT).show();
+        hideLoadingPhoto();
     }
 
     private void showLoadingPhoto() {
