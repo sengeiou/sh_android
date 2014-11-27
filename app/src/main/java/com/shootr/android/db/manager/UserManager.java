@@ -51,34 +51,14 @@ public class UserManager extends AbstractManager {
      * Insert a user
      */
     public void saveUser(UserEntity user) {
-        UserEntity currentUser = sessionManager.getCurrentUser();
-
-        if(!user.getIdUser().equals(currentUser.getIdUser())) {
-            ContentValues contentValues = userMapper.toContentValues(user);
-            if (contentValues.getAsLong(CSYS_DELETED) != null) {
-                deleteUser(user);
-            } else {
-                getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-            }
-        }else{
-            updateCurrentUser(currentUser,user);
+        ContentValues contentValues = userMapper.toContentValues(user);
+        if (contentValues.getAsLong(CSYS_DELETED) != null) {
+            deleteUser(user);
+        } else {
+            getWritableDatabase().insertWithOnConflict(UserTable.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
         insertInSync();
     }
-
-    public void updateCurrentUser(UserEntity currentUser, UserEntity user){
-        currentUser.setNumFollowers(user.getNumFollowers());
-        currentUser.setNumFollowings(user.getNumFollowings());
-        currentUser.setBio(user.getBio());
-        currentUser.setFavoriteTeamName(user.getFavoriteTeamName());
-        currentUser.setName(user.getName());
-        currentUser.setFavoriteTeamId(user.getFavoriteTeamId());
-        currentUser.setPhoto(user.getPhoto());
-        currentUser.setUserName(user.getUserName());
-        currentUser.setPoints(user.getPoints());
-        getWritableDatabase().update(UserTable.TABLE,userMapper.toContentValues(currentUser),"idUser=?",new String[]{String.valueOf(currentUser.getIdUser())});
-    }
-
 
     public void saveCurrentUser(UserEntity user) throws  SQLException{
         ContentValues contentValues = userMapper.toContentValues(user);
