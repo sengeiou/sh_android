@@ -34,13 +34,17 @@ public class UserMapper extends GenericMapper {
         ContentValues cv = new ContentValues();
         String sessionToken = u.getSessionToken();
         String email = u.getEmail();
+        if (sessionToken != null) {
+            cv.put(UserTable.SESSION_TOKEN, sessionToken);
+        }
+        if (email != null) {
+            cv.put(UserTable.EMAIL, email);
+        }
         cv.put(UserTable.ID, u.getIdUser());
         cv.put(UserTable.FAVORITE_TEAM_ID, u.getFavoriteTeamId());
         cv.put(UserTable.FAVORITE_TEAM_NAME,u.getFavoriteTeamName() );
-        cv.put(UserTable.SESSION_TOKEN,sessionToken!=null?sessionToken:null);
         cv.put(UserTable.USER_NAME, u.getUserName());
         cv.put(UserTable.NAME, u.getName());
-        cv.put(UserTable.EMAIL, email!=null ? email :null);
         cv.put(UserTable.PHOTO, u.getPhoto());
         cv.put(UserTable.NUM_FOLLOWERS, u.getNumFollowers());
         cv.put(UserTable.NUM_FOLLOWINGS, u.getNumFollowings());

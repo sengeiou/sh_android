@@ -60,4 +60,6 @@ public interface ShootrService {
     public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException;
 
     public List<MatchEntity> searchMatches(String queryText) throws IOException;
+
+    public UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 }

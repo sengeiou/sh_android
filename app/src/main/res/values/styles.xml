@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="None"></style>
 
@@ -15,6 +15,8 @@
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
         <item name="colorSwitchThumbNormal">@color/switch_disabled</item>
         <item name="toolbar">@style/ToolBar</item>
+
+        <item name="bottomSheetStyle">@style/BottomSheetMaterial</item>
     </style>
 
     <style name="ShootrTheme.Closable">
@@ -196,11 +198,27 @@
     <style name="TextAppearance.Switch" parent="TextAppearance.AppCompat.Medium">
     </style>
 
-    <color name="switch_disabled">#ececec</color>
-
     <!-- Used to color the switch bar controls -->
     <style name="ThemeOverlay.SwitchBar" parent="@style/ThemeOverlay.AppCompat">
         <!-- Used by controls, e.g. CheckBox, ProgressBar, etc. -->
         <item name="colorAccent">@color/accent</item>
     </style>
+
+    <style name="BottomSheetMaterial" parent="BottomSheet.Dialog">
+        <item name="bsTitleTextStyle">@style/BottomSheetMaterial.Title</item>
+        <item name="bsListItemTitleTextStyle">@style/BottomSheetMaterial.Item</item>
+    </style>
+
+    <style name="BottomSheetMaterial.Title" >
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff757575</item>
+    </style>
+
+    <style name="BottomSheetMaterial.Item" >
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff212121</item>
+    </style>
+
 </resources>

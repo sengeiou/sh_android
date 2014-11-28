@@ -43,7 +43,7 @@ public abstract class ShootrBaseJob<T> extends Job {
             postDatabaseErrorEvent();
         } catch (IOException e) { // includes ServerException
             Timber.e(e, "IOException executing job");
-            postCommunicationErrorEvent();
+            postCommunicationErrorEvent(e);
         }
     }
 
@@ -65,8 +65,8 @@ public abstract class ShootrBaseJob<T> extends Job {
         bus.post(new DatabaseErrorEvent());
     }
 
-    private void postCommunicationErrorEvent() {
-        bus.post(new CommunicationErrorEvent());
+    private void postCommunicationErrorEvent(IOException e) {
+        bus.post(new CommunicationErrorEvent(e));
     }
 
     protected void postCustomEvent(Object o) {

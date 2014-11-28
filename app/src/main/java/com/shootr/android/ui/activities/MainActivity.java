@@ -228,8 +228,6 @@ public class MainActivity extends BaseSignedInActivity {
         menuAdapter = new MenuAdapter(this, getDrawerMenu());
         drawerList.setAdapter(menuAdapter);
         drawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        setUserInfoInMenu();
     }
 
     private void lockMenuDrawer(boolean lock) {
@@ -287,6 +285,7 @@ public class MainActivity extends BaseSignedInActivity {
     protected void onResume() {
         super.onResume();
         bus.register(this);
+        setUserInfoInMenu();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.shootr.android.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.service.dataservice.ShootrPhotoService;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.service.dataservice.ShootrDataService;
@@ -11,9 +12,12 @@ import javax.inject.Singleton;
 @Module(
         injects = {
                 LoginUserJob.class,
+                ShootrPhotoService.class,
+                PhotoService.class,
         },
         includes = DataServiceModule.class,
-        complete = false
+        complete = false,
+  library = true
 )
 public final class ApiModule {
 
@@ -21,6 +25,10 @@ public final class ApiModule {
 
     @Provides @Singleton ShootrService provideShootrService(ShootrDataService dataService) {
         return dataService;
+    }
+
+    @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {
+        return photoService;
     }
 
     @Provides @Singleton ObjectMapper provideObjectMapper() {

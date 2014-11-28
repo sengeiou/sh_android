@@ -3,6 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
@@ -20,34 +21,34 @@ import timber.log.Timber;
 
 public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
-    private static final int PRIORITY = 3; //TODO definir valores estáticos para determinados casos
+    private static final int PRIORITY = 7; //TODO definir valores estáticos para determinados casos
 
     ShootrService service;
 
     UserManager userManager;
     FollowManager followManager;
+    private SessionManager sessionManager;
 
     private Long userId;
-    private UserEntity currentUser;
     private UserModelMapper userVOMapper;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil1,
-      UserManager userManager, FollowManager followManager, UserModelMapper userVOMapper) {
+      UserManager userManager, FollowManager followManager, SessionManager sessionManager, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
+        this.sessionManager = sessionManager;
         this.userVOMapper = userVOMapper;
     }
 
-    public void init(Long userId, UserEntity currentUser) {
+    public void init(Long userId) {
         this.userId = userId;
-        this.currentUser = currentUser;
     }
 
     @Override public void run() throws SQLException, IOException {
         UserEntity userFromLocalDatabase = getUserFromDatabase();
-        Long idCurrentUser = currentUser.getIdUser();
+        Long idCurrentUser = sessionManager.getCurrentUserId();
         FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,userId);
         UserModel userVO = null;
         if (userFromLocalDatabase != null) {
@@ -79,7 +80,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     }
 
     private FollowEntity getFolloFromService() throws IOException {
-        return service.getFollowByIdUserFollowed(currentUser.getIdUser(), userId);
+        return service.getFollowByIdUserFollowed(sessionManager.getCurrentUserId(), userId);
     }
     private UserEntity getUserFromDatabase() {
         return userManager.getUserByIdUser(userId);

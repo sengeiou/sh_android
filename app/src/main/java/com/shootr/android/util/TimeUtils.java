@@ -97,4 +97,7 @@ public class TimeUtils {
         return System.currentTimeMillis() - daysInMillis;
     }
 
+    public Date getCurrentDate() {
+        return new Date(getCurrentTime());
+    }
 }

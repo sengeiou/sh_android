@@ -137,4 +137,11 @@
     <string name="edit">Edit</string>
     <string name="edit_info_place_placeholder">Where and who with?</string>
 
+    <string name="photo_edit_take">Take photo</string>
+    <string name="photo_edit_choose">Choose photo</string>
+    <string name="change_photo">Change photo</string>
+    <string name="photo_edit_remove">Remove photo</string>
+    <string name="photo_edit_remove_confirmation">Remove photo?</string>
+    <string name="remove">Remove</string>
+
 </resources>

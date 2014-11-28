@@ -474,6 +474,19 @@ public class ShootrDataService implements ShootrService {
         return matchesFound;
     }
 
+    @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {
+        GenericDto requestDto = userDtoFactory.saveUserDto(userEntity);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        } else {
+            Map<String, Object> resultDto = ops[0].getData()[0];
+            return userMapper.fromDto(resultDto);
+        }
+        return null;
+    }
+
     private GenericDto postRequest(GenericDto dto) throws IOException {
         // Create the request
         String requestJson = mapper.writeValueAsString(dto);
@@ -520,6 +533,8 @@ public class ShootrDataService implements ShootrService {
 
     private void updateTimeFromServer(GenericDto dto) {
         Long serverTime = dto.getRequestor().getReq()[RequestorDto.POSITION_SYSTEM_TIME];
-        timeUtils.setCurrentTime(serverTime);
+        if (serverTime != null) {
+            timeUtils.setCurrentTime(serverTime);
+        }
     }
 }

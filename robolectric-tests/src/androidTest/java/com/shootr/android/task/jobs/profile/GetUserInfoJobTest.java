@@ -59,7 +59,8 @@ public class GetUserInfoJobTest extends ShootrBaseJobTestAbstract {
         when(service.getFollowByIdUserFollowed(CURRENT_USER_ID, USER_ID)).thenReturn(new FollowEntity());
 
         getUserInfoJob =
-          new GetUserInfoJob(Robolectric.application,bus, service, networkUtil,userManager,followManager, userVOMapper);
+          new GetUserInfoJob(Robolectric.application,bus, service, networkUtil,userManager,followManager,
+            sessionManager, userVOMapper);
         UserEntity currentUser = new UserEntity();
         currentUser.setIdUser(CURRENT_USER_ID);
         getUserInfoJob.init(USER_ID, currentUser);

@@ -18,6 +18,8 @@ import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
+import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
+import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
@@ -25,6 +27,8 @@ import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.BitmapImageResizer;
+import com.shootr.android.util.ImageResizer;
 import com.shootr.android.util.TimeFormatter;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
@@ -112,7 +116,8 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
     SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
-    SearchMatchJob.class, DeleteMatchOfflineJob.class, DeleteMatchOnlineJob.class,
+    SearchMatchJob.class, DeleteMatchOfflineJob.class, DeleteMatchOnlineJob.class, UploadProfilePhotoJob.class,
+    RemoveProfilePhotoJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class,
 
@@ -137,6 +142,8 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileEditPresenter.class,
 
     TimeFormatter.class,
+
+    BitmapImageResizer.class,
 
   },
   includes = {
@@ -215,6 +222,10 @@ public class DataModule {
 
     @Provides @Singleton InfoCleaner provideInfoCleaner(MatchManager matchManager, WatchManager watchManager) {
         return new InfoCleaner(matchManager, watchManager);
+    }
+
+    @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {
+        return imageResizer;
     }
 
     static JobManager configureJobManager(Application app, NetworkUtil networkUtil) {
