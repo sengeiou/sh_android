@@ -19,11 +19,14 @@ public class PicassoWrapper {
 
     public RequestCreator load(String path) {
         boolean isValidPhoto = path != null && !path.isEmpty();
+        RequestCreator loadResult;
         if (isValidPhoto) {
-            return picasso.load(path);
+            loadResult = picasso.load(path);
         } else {
-            return loadDefaultImage();
+            loadResult = loadDefaultImage();
         }
+        loadResult.placeholder(defaultImageRes).error(defaultImageRes);
+        return loadResult;
     }
 
     private RequestCreator loadDefaultImage() {
