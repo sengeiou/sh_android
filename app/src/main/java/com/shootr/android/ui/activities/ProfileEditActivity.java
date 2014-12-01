@@ -19,11 +19,13 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
+import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
 
     @Inject ProfileEditPresenter presenter;
+    @Inject ErrorMessageFactory errorMessageFactory;
 
     @InjectView(R.id.scroll) ScrollView scroll;
     @InjectView(R.id.profile_edit_name) TextView name;
@@ -66,7 +68,17 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     }
 
     private void initializePresenter() {
-        presenter.initialize(this);
+        presenter.initialize(this, getObjectGraph());
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
     }
 
     @Override public void renderUserInfo(UserModel userModel) {
@@ -96,6 +108,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public String getName() {
         return name.getText().toString();
+    }
+
+    @Override public void showUsernameValidationError(String errorMessage) {
+        username.setError(errorMessage);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

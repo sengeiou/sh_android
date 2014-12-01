@@ -15,4 +15,6 @@ public interface ProfileEditView {
     String getUsername();
 
     String getName();
+
+    void showUsernameValidationError(String errorMessage);
 }

@@ -27,6 +27,11 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_UNKNOWN_ERROR, RESOURCE_ERROR_UNKNOWN);
         codeResourceMap.put(ShootrError.ERROR_CODE_INVALID_IMAGE, R.string.error_message_invalid_image);
         codeResourceMap.put(ShootrError.ERROR_CODE_INVALID_SESSION_TOKEN, R.string.error_message_invalid_session_token);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_DUPLICATE, R.string.error_message_username_duplicate);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_NULL, R.string.error_message_username_empty);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, R.string.error_message_username_short);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_LONG, R.string.error_message_username_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_INVALID_CHARACTERS, R.string.error_message_username_invalid);
     }
 
     public String getMessageForError(ShootrError shootrError) {
