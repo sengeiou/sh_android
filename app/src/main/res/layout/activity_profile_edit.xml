@@ -35,6 +35,7 @@
                   android:imeOptions="actionNext"
                   android:inputType="textNoSuggestions"
                   android:lines="1"
+                  android:maxLength="20"
                   android:nextFocusDown="@+id/profile_edit_username"
                   android:singleLine="true" />
 
@@ -56,6 +57,7 @@
                   android:imeOptions="actionNext"
                   android:inputType="textNoSuggestions"
                   android:lines="1"
+                  android:maxLength="20"
                   android:nextFocusDown="@+id/profile_edit_team"
                   android:singleLine="true" />
 
