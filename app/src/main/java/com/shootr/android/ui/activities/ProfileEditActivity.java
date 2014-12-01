@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -81,6 +82,22 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         imm.hideSoftInputFromWindow(name.getWindowToken(), 0);
     }
 
+    @Override public void showUpdatedSuccessfulAlert() {
+        Toast.makeText(this, R.string.profile_updated, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void closeScreen() {
+        finish();
+    }
+
+    @Override public String getUsername() {
+        return username.getText().toString();
+    }
+
+    @Override public String getName() {
+        return name.getText().toString();
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
         return true;
@@ -88,7 +105,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_done) {
-            finish();
+            presenter.done();
+            return true;
+        } else if(item.getItemId() == android.R.id.home) {
+            presenter.discard();
             return true;
         }
         return super.onOptionsItemSelected(item);

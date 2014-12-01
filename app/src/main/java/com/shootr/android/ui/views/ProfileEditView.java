@@ -7,4 +7,12 @@ public interface ProfileEditView {
     void renderUserInfo(UserModel currentUserModel);
 
     void hideKeyboard();
+
+    void showUpdatedSuccessfulAlert();
+
+    void closeScreen();
+
+    String getUsername();
+
+    String getName();
 }

@@ -10,7 +10,7 @@ public class UserModelMapper {
         UserModel userModel = new UserModel();
         userModel.setIdUser(user.getIdUser());
         userModel.setBio(user.getBio());
-        userModel.setUserName(user.getUserName());
+        userModel.setUsername(user.getUserName());
         userModel.setFavoriteTeamId(user.getFavoriteTeamId());
         userModel.setPoints(user.getPoints());
         userModel.setFavoriteTeamName(user.getFavoriteTeamName());

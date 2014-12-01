@@ -1,8 +1,9 @@
 package com.shootr.android.ui.model;
 
 import java.io.Serializable;
+import timber.log.Timber;
 
-public class UserModel implements Serializable {
+public class UserModel implements Serializable, Cloneable {
 
     private Long idUser;
     private String favoriteTeamName;
@@ -52,7 +53,7 @@ public class UserModel implements Serializable {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.userName = userName;
     }
 
@@ -111,5 +112,28 @@ public class UserModel implements Serializable {
 
     public void setRelationship(int relationship) {
         this.relationship = relationship;
+    }
+
+    @Override public UserModel clone() {
+        try {
+            return (UserModel) super.clone();
+        } catch (CloneNotSupportedException e) {
+            Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+            return this;
+        }
+        /*UserModel clonedUserModel = new UserModel();
+        clonedUserModel.setIdUser(this.getIdUser());
+        clonedUserModel.setFavoriteTeamId(this.getFavoriteTeamId());
+        clonedUserModel.setFavoriteTeamName(this.getFavoriteTeamName());
+        clonedUserModel.setName(this.getName());
+        clonedUserModel.setUsername(this.getUsername());
+        clonedUserModel.setPhoto(this.getPhoto());
+        clonedUserModel.setNumFollowings(this.getNumFollowings());
+        clonedUserModel.setNumFollowers(this.getNumFollowers());
+        clonedUserModel.setWebsite(this.getWebsite());
+        clonedUserModel.setBio(this.getBio());
+        clonedUserModel.setRelationship(this.getRelationship());
+        clonedUserModel.setPoints(this.getPoints());
+        return clonedUserModel;*/
     }
 }
