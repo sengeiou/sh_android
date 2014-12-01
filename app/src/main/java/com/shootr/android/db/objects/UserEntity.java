@@ -2,8 +2,9 @@ package com.shootr.android.db.objects;
 
 import android.support.annotation.NonNull;
 import java.io.Serializable;
+import timber.log.Timber;
 
-public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>{
+public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
 
     private Long idUser;
     private Long favoriteTeamId;
@@ -151,5 +152,16 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     @Override
     public int hashCode() {
         return idUser.hashCode();
+    }
+
+    @Override
+    public UserEntity clone(){
+        try {
+            return (UserEntity) super.clone();
+        } catch (CloneNotSupportedException e) {
+            Timber.w(e,
+              "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+            return this;
+        }
     }
 }

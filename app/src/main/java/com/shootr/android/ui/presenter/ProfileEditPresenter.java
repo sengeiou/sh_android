@@ -2,6 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.SessionManager;
+import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
@@ -93,8 +94,8 @@ public class ProfileEditPresenter implements Presenter {
         jobManager.addJobInBackground(job);
     }
 
-    //TODO @Subscribe
-    public void onUserProfileUpdated() {
+    @Subscribe
+    public void onUserProfileUpdated(UpdateUserProfileEvent event) {
         profileEditView.showUpdatedSuccessfulAlert();
         profileEditView.closeScreen();
     }

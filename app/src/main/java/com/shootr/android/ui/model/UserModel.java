@@ -121,19 +121,5 @@ public class UserModel implements Serializable, Cloneable {
             Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
             return this;
         }
-        /*UserModel clonedUserModel = new UserModel();
-        clonedUserModel.setIdUser(this.getIdUser());
-        clonedUserModel.setFavoriteTeamId(this.getFavoriteTeamId());
-        clonedUserModel.setFavoriteTeamName(this.getFavoriteTeamName());
-        clonedUserModel.setName(this.getName());
-        clonedUserModel.setUsername(this.getUsername());
-        clonedUserModel.setPhoto(this.getPhoto());
-        clonedUserModel.setNumFollowings(this.getNumFollowings());
-        clonedUserModel.setNumFollowers(this.getNumFollowers());
-        clonedUserModel.setWebsite(this.getWebsite());
-        clonedUserModel.setBio(this.getBio());
-        clonedUserModel.setRelationship(this.getRelationship());
-        clonedUserModel.setPoints(this.getPoints());
-        return clonedUserModel;*/
     }
 }

@@ -70,11 +70,8 @@ public class MainActivity extends BaseSignedInActivity {
     private ActionBar actionBar;
     private android.support.v7.app.ActionBarDrawerToggle drawerToggle;
     private String currentTitle;
-    private UserEntity currentUser;
     private int currentSelectedDrawerPosition = -1;
     private MenuAdapter menuAdapter;
-
-    private UserModel userVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +87,6 @@ public class MainActivity extends BaseSignedInActivity {
         ButterKnife.inject(this);
 
         actionBar = getSupportActionBar();
-        currentUser = sessionManager.getCurrentUser();
-        userVO = userModelMapper.toUserModel(currentUser,null,true);
 
         startGCMRegistration();
         setupSyncing();
@@ -237,6 +232,7 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setUserInfoInMenu() {
+        UserEntity currentUser = sessionManager.getCurrentUser();
         currentUserName.setText(currentUser.getUserName());
         currentUserUsername.setText(currentUser.getFavoriteTeamName());
         picasso.load(currentUser.getPhoto()).into(currentUserAvatar);
@@ -244,7 +240,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @OnClick(R.id.menu_drawer_profile)
     public void openProfileFromDrawer() {
-        startActivity(ProfileContainerActivity.getIntent(this, userVO.getIdUser()));
+        startActivity(ProfileContainerActivity.getIntent(this, sessionManager.getCurrentUserId()));
     }
 
     private void setScreenTitle(String title) {
