@@ -62,9 +62,20 @@ public class ProfileEditPresenter implements Presenter {
 
     private UserModel getUpadtedUserData() {
         UserModel updatedUserModel = currentUserModel.clone();
-        updatedUserModel.setUsername(profileEditView.getUsername());
+        updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(profileEditView.getName());
         return updatedUserModel;
+    }
+
+    private String cleanUsername() {
+        String username = profileEditView.getUsername();
+        if (username != null) {
+            username = username.trim();
+            if (username.isEmpty()) {
+                username = null;
+            }
+        }
+        return username;
     }
 
     private void saveUpdatedProfile(UserModel updatedUserModel) {
