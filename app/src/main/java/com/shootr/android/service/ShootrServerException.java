@@ -1,5 +1,6 @@
 package com.shootr.android.service;
 
+import com.shootr.android.exception.ShootrError;
 import java.io.IOException;
 
 public class ShootrServerException  extends IOException{
@@ -15,7 +16,7 @@ public class ShootrServerException  extends IOException{
     }
 
     @Override public String getMessage() {
-        return shootrError.errorCode + ": " + shootrError.message;
+        return shootrError.getErrorCode() + ": " + shootrError.getMessage();
     }
 
 }

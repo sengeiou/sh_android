@@ -1,6 +1,6 @@
 package com.shootr.android.task.validation;
 
-import com.shootr.android.service.ShootrError;
+import com.shootr.android.exception.ShootrError;
 import com.shootr.android.ui.model.UserModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

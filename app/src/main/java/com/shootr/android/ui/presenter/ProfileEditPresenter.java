@@ -128,6 +128,8 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.showNameValidationError(messageForCode);
     }
 
+    //TODO error de comunicacion
+    
     @Override public void resume() {
         bus.register(this);
     }

@@ -2,8 +2,9 @@ package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.SessionManager;
+import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.PhotoService;
-import com.shootr.android.service.ShootrError;
+import com.shootr.android.service.ShootrPhotoUploadError;
 import com.shootr.android.service.ShootrServerException;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
@@ -56,21 +57,24 @@ public class ShootrPhotoService implements PhotoService {
                     Timber.d("Photo uploaded to url: %s", profileThumbnailImageUrl);
                     return profileThumbnailImageUrl;
                 } else {
-                    ShootrError shootrError = objectMapper.readValue(responseJson.getString("status"), ShootrError.class);
+                    ShootrPhotoUploadError
+                      shootrError = objectMapper.readValue(responseJson.getString("status"), ShootrPhotoUploadError.class);
                     ShootrServerException shootrServerException = new ShootrServerException(shootrError);
-                    Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s", shootrError.errorCode, shootrError.message);
+                    Timber.e(shootrServerException, "Photo not received, ShootrError: %s - %s",
+                      shootrError.getErrorCode(), shootrError.getMessage());
                     throw shootrServerException;
                 }
             } else {
                 Timber.e("Response not successful: %d", response.code());
                 Timber.e("Photo not received.");
                 JSONObject responseJson = getJsonFromResponse(response);
-                ShootrError shootrError = objectMapper.readValue(responseJson.getString("status"), ShootrError.class);
+                ShootrPhotoUploadError
+                  shootrError = objectMapper.readValue(responseJson.getString("status"), ShootrPhotoUploadError.class);
                 throw new ShootrServerException(shootrError);
             }
         } catch (JSONException e) {
-            ShootrError jsonError = new ShootrError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
-            jsonError.setCause(e);
+            ShootrError
+              jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR, "JSONException", "Error while parsing response JSON. Response received:"+ response.body().string());
             throw new ShootrServerException(jsonError);
         }
     }

@@ -6,6 +6,7 @@ import java.io.IOException;
 /**
  * Excepción general de servidor.
  */
+@Deprecated
 public class ServerException extends IOException {
 
     private static final long serialVersionUID = 7715129933110523169L;

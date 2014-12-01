@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import com.shootr.android.R;
-import com.shootr.android.service.ShootrError;
+import com.shootr.android.exception.ShootrError;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public class ErrorMessageFactory {
     }
 
     public String getMessageForError(ShootrError shootrError) {
-        return getMessageForCode(shootrError.errorCode);
+        return getMessageForCode(shootrError.getErrorCode());
     }
 
     public String getMessageForCode(String errorCode) {

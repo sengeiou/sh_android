@@ -1,7 +1,5 @@
 package com.shootr.android.task.validation;
 
-import com.shootr.android.task.validation.FieldValidationError;
-import com.shootr.android.service.ShootrError;
 import java.util.ArrayList;
 import java.util.List;
 

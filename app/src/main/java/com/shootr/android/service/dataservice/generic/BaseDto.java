@@ -26,6 +26,7 @@ public class BaseDto implements Serializable {
 
 	private static final String STATUS_CODE = "code";
 	private static final String STATUS_MESSAGE = "message";
+	private static final String STATUS_SUBCODE = "subcode";
 
 	public static final String ERROR_REQUESTOR_CHECK_FAILED = "R000";
 	public static final String ERROR_REQUESTOR_CHECK_FAILED_MESSAGE = "No se ha indicado información del solicitante.";
@@ -63,7 +64,7 @@ public class BaseDto implements Serializable {
 	 * Constructor por defecto.
 	 */
 	public BaseDto(ServerException e) {
-		this(e.getErrorCode(), e.getMessage());
+		this(e.getErrorCode(), e.getMessage(), null);
 	}
 
 	/**
@@ -72,12 +73,13 @@ public class BaseDto implements Serializable {
 	 * @param statusCode Código de estado a asignar a la respuesta.
 	 * @param statusMessage Mensaje a asignar a la respuesta.
 	 */
-	public BaseDto(String statusCode, String statusMessage) {
+	public BaseDto(String statusCode, String statusMessage, String statusSubcode) {
 
 		this.status = new TreeMap<String, String>();
 
 		this.status.put(STATUS_CODE, statusCode);
 		this.status.put(STATUS_MESSAGE, statusMessage);
+		this.status.put(STATUS_SUBCODE, statusSubcode);
 	}
 
 	/**
@@ -161,7 +163,15 @@ public class BaseDto implements Serializable {
 		this.status.put(STATUS_MESSAGE, statusMessage);
 	}
 
-	/**
+    public String getStatusSubcode() {
+        return this.status.get(STATUS_SUBCODE);
+    }
+
+    public void setStatusSubcode(String statusSubcode) {
+        this.status.put(STATUS_SUBCODE, statusSubcode);
+    }
+
+    /**
 	 * Lanza una excepción en caso de que la información base del DTO
 	 * se considere inválida.
 	 */

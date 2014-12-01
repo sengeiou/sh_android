@@ -6,6 +6,8 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.exception.ShootrError;
+import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
 import com.shootr.android.task.validation.FieldValidationError;
@@ -19,12 +21,20 @@ import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 
-public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent>{
+public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
 
     private static final int PRIORITY = 8;
+
+    private static final String[] USERNAME_ERRORS = {
+      ShootrError.ERROR_CODE_USERNAME_DUPLICATE, ShootrError.ERROR_CODE_USERNAME_NULL,
+      ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, ShootrError.ERROR_CODE_USERNAME_TOO_LONG,
+      ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS
+    };
 
     private ShootrService service;
     private SessionManager sessionManager;
@@ -53,12 +63,60 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent>{
         localValidation();
         boolean hasLocalErrors = !fieldValidationErrors.isEmpty();
         if (hasLocalErrors) {
-            postCustomEvent(new FieldValidationErrorEvent(fieldValidationErrors));
+            postValidationErrors();
             return;
         }
-        sendUpdatedProfileToServer();
-        //TODO catch remote validation
-        postSuccessfulEvent(new UpdateUserProfileEvent(null));
+
+        try {
+            sendUpdatedProfileToServer();
+            postSuccessfulEvent(new UpdateUserProfileEvent(null));
+        } catch (ShootrServerException serverException) {
+            ShootrError shootrError = serverException.getShootrError();
+            FieldValidationError fieldValidationError = fieldErrorFromServer(shootrError.getErrorCode());
+            if (fieldValidationError != null) {
+                fieldValidationErrors.add(fieldValidationError);
+                postValidationErrors();
+            } else {
+                throw serverException;
+            }
+        }
+    }
+
+    private void postValidationErrors() {
+        postCustomEvent(new FieldValidationErrorEvent(fieldValidationErrors));
+    }
+
+    private FieldValidationError fieldErrorFromServer(String errorCode) {
+        int field = 0;
+        if (isUsernameError(errorCode)) {
+            field = FieldValidationError.FIELD_USERNAME;
+        } else if (isNameError(errorCode)) {
+            field = FieldValidationError.FIELD_NAME;
+        }
+
+        if (field > 0) {
+            return new FieldValidationError(errorCode, field);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isUsernameError(String errorCode) {
+        Set<String> usernameCodes = new HashSet<>();
+        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_DUPLICATE);
+        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_NULL);
+        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_TOO_SHORT);
+        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_TOO_LONG);
+        usernameCodes.add(ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS);
+        return usernameCodes.contains(errorCode);
+    }
+
+    private boolean isNameError(String errorCode) {
+        Set<String> nameCodes = new HashSet<>();
+        nameCodes.add(ShootrError.ERROR_CODE_NAME_TOO_LONG);
+        nameCodes.add(ShootrError.ERROR_CODE_NAME_TOO_SHORT);
+        nameCodes.add(ShootrError.ERROR_CODE_NAME_INVALID_CHARACTERS);
+        return nameCodes.contains(errorCode);
     }
 
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
@@ -72,7 +130,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent>{
         UserEntity updatedUserEntity = updateEntityWithValues(updatedUserModel);
 
         updatedUserEntity.setCsysModified(timeUtils.getCurrentDate());
-        updatedUserEntity.setCsysRevision(updatedUserEntity.getCsysRevision()+1);
+        updatedUserEntity.setCsysRevision(updatedUserEntity.getCsysRevision() + 1);
 
         updatedUserEntity = service.saveUserProfile(updatedUserEntity);
         userManager.saveUser(updatedUserEntity);
@@ -101,6 +159,4 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent>{
     @Override protected boolean isNetworkRequired() {
         return true;
     }
-
-
 }

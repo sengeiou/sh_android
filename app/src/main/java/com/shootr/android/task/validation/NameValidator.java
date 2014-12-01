@@ -1,6 +1,6 @@
 package com.shootr.android.task.validation;
 
-import com.shootr.android.service.ShootrError;
+import com.shootr.android.exception.ShootrError;
 import com.shootr.android.ui.model.UserModel;
 
 public class NameValidator extends FieldValidator {

@@ -17,7 +17,7 @@ public class SQLiteUtils {
 
     public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS " + UserTable.TABLE + " ("
             + UserTable.ID + " INT NOT NULL PRIMARY KEY,"
-            + UserTable.FAVORITE_TEAM_ID + " INT NOT NULL,"
+            + UserTable.FAVORITE_TEAM_ID + " INT NULL,"
             + UserTable.FAVORITE_TEAM_NAME+" VARCHAR(255),"
             + UserTable.SESSION_TOKEN + " VARCHAR(255),"
             + UserTable.USER_NAME + " VARCHAR(255),"

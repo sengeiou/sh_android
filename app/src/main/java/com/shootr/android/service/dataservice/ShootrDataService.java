@@ -16,8 +16,11 @@ import com.shootr.android.db.objects.TeamEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.db.objects.WatchEntity;
 import com.shootr.android.exception.ServerException;
+import com.shootr.android.exception.ShootrDataServiceError;
+import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.Endpoint;
 import com.shootr.android.service.PaginatedResult;
+import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
@@ -516,10 +519,20 @@ public class ShootrDataService implements ShootrService {
             Timber.d("Response received: %s", responseBody);
             GenericDto genericDto = mapper.readValue(responseBody, GenericDto.class);
             // Check for Data-Service errors
+
             updateTimeFromServer(genericDto);
             String statusCode = genericDto.getStatusCode();
-            String statusMessage = genericDto.getStatusMessage();
-            if (statusCode == null || !statusCode.equals(ServerException.OK)) {
+            if (statusCode == null || !ShootrError.OK.equals(statusCode)) {
+                String statusMessage = genericDto.getStatusMessage();
+                String statusSubcode = genericDto.getStatusSubcode();
+
+                boolean isHookException = ServerException.G025.equals(statusCode);
+                if (isHookException && statusSubcode != null) {
+                    ShootrError shootrError = new ShootrDataServiceError(statusSubcode, statusMessage);
+                    ShootrServerException hookException = new ShootrServerException (shootrError);
+                    throw hookException;
+                }
+
                 ServerException serverException = new ServerException(statusCode, statusMessage);
                 Timber.e(serverException, "Server error with status code %s", statusCode);
                 throw serverException;
