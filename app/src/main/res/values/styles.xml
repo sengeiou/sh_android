@@ -205,8 +205,8 @@
     </style>
 
     <style name="BottomSheetMaterial" parent="BottomSheet.Dialog">
-        <item name="bsTitleTextStyle">@style/BottomSheetMaterial.Title</item>
-        <item name="bsListItemTitleTextStyle">@style/BottomSheetMaterial.Item</item>
+        <item name="bs_titleTextAppearance">@style/BottomSheetMaterial.Title</item>
+        <item name="bs_listItemTitleTextAppearance">@style/BottomSheetMaterial.Item</item>
     </style>
 
     <style name="BottomSheetMaterial.Title" >
