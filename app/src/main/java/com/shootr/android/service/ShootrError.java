@@ -10,7 +10,11 @@ public class ShootrError {
     public static final String ERROR_CODE_USERNAME_NULL = "U002";
     public static final String ERROR_CODE_USERNAME_TOO_SHORT = "U003";
     public static final String ERROR_CODE_USERNAME_TOO_LONG = "U004";
-    public static final String ERROR_CODE_USERNAME_TOO_INVALID_CHARACTERS = "U005";
+    public static final String ERROR_CODE_USERNAME_INVALID_CHARACTERS = "U005";
+
+    public static final String ERROR_CODE_NAME_TOO_SHORT = "U006";
+    public static final String ERROR_CODE_NAME_TOO_LONG = "U007";
+    public static final String ERROR_CODE_NAME_INVALID_CHARACTERS = "U008";
 
     public String errorCode;
     public String message;

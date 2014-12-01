@@ -6,6 +6,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
+import com.shootr.android.task.validation.NameValidator;
 import com.shootr.android.task.validation.UsernameValidator;
 import com.shootr.android.ui.model.UserModel;
 import com.squareup.otto.Bus;
@@ -44,12 +45,20 @@ public class UpdateUserProfileJob extends ShootrBaseJob<Void>{
 
     private void localValidation() {
         validateUsername();
+        validateName();
     }
 
     private void validateUsername() {
-        List<FieldValidationError> usernameErrors = new UsernameValidator(updatedUserModel).validate();
-        if (usernameErrors != null && !usernameErrors.isEmpty()) {
-            fieldValidationErrors.addAll(usernameErrors);
+        addErrorsIfAny(new UsernameValidator(updatedUserModel).validate());
+    }
+
+    private void validateName() {
+        addErrorsIfAny(new NameValidator(updatedUserModel).validate());
+    }
+
+    private void addErrorsIfAny(List<FieldValidationError> validationResult) {
+        if (validationResult != null && !validationResult.isEmpty()) {
+            fieldValidationErrors.addAll(validationResult);
         }
     }
 

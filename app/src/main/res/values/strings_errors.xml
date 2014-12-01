@@ -12,4 +12,8 @@
     <string name="error_message_username_short">$Username must be 3 or more characters long.</string>
     <string name="error_message_username_long">$Username must be 20 or less characters long.</string>
     <string name="error_message_username_invalid">$Username has invalid characters.</string>
+
+    <!-- Profile: Name -->
+    <string name="error_message_name_invalid">$Name has invalid characters.</string>
+    <string name="error_message_name_long">$Name must be 20 or less characters long.</string>
 </resources>

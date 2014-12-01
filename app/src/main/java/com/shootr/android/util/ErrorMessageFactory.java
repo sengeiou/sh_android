@@ -31,7 +31,9 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_NULL, R.string.error_message_username_empty);
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, R.string.error_message_username_short);
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_LONG, R.string.error_message_username_long);
-        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_TOO_INVALID_CHARACTERS, R.string.error_message_username_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS, R.string.error_message_username_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_NAME_TOO_LONG, R.string.error_message_name_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_NAME_INVALID_CHARACTERS, R.string.error_message_name_invalid);
     }
 
     public String getMessageForError(ShootrError shootrError) {

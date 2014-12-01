@@ -114,6 +114,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         username.setError(errorMessage);
     }
 
+    @Override public void showNameValidationError(String errorMessage) {
+        name.setError(errorMessage);
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
         return true;

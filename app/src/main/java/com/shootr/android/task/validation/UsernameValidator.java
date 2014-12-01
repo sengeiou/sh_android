@@ -24,7 +24,6 @@ public class UsernameValidator extends FieldValidator {
     @Override protected void performValidations() {
         validateUsernameEmpty();
         validateUsernameTooShort();
-        validateUsernameTooShort();
         validateUsernameTooLong();
         validateUsernameInvalidCharacters();
     }
@@ -52,7 +51,7 @@ public class UsernameValidator extends FieldValidator {
             Pattern pattern = Pattern.compile(USERNAME_FORMAT_REGEX);
             Matcher matcher = pattern.matcher(username);
             if (!matcher.matches()) {
-                addError(ShootrError.ERROR_CODE_USERNAME_TOO_INVALID_CHARACTERS);
+                addError(ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS);
             }
         }
     }

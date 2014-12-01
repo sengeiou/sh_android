@@ -3,6 +3,7 @@ package com.shootr.android.task.validation;
 public class FieldValidationError {
 
     public static final int FIELD_USERNAME = 1;
+    public static final int FIELD_NAME = 2;
 
     private String errorCode;
     private int field;

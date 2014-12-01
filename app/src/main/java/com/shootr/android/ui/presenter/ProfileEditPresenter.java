@@ -63,19 +63,28 @@ public class ProfileEditPresenter implements Presenter {
     private UserModel getUpadtedUserData() {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
-        updatedUserModel.setName(profileEditView.getName());
+        updatedUserModel.setName(cleanName());
         return updatedUserModel;
     }
 
     private String cleanUsername() {
         String username = profileEditView.getUsername();
-        if (username != null) {
-            username = username.trim();
-            if (username.isEmpty()) {
-                username = null;
+        return trimAndNullWhenEmpty(username);
+    }
+
+    private String cleanName() {
+        String name = profileEditView.getName();
+        return trimAndNullWhenEmpty(name);
+    }
+
+    private String trimAndNullWhenEmpty(String text) {
+        if (text != null) {
+            text = text.trim();
+            if (text.isEmpty()) {
+                text = null;
             }
         }
-        return username;
+        return text;
     }
 
     private void saveUpdatedProfile(UserModel updatedUserModel) {
@@ -103,12 +112,19 @@ public class ProfileEditPresenter implements Presenter {
             case FieldValidationError.FIELD_USERNAME:
                 this.showUsernameValidationError(validationError.getErrorCode());
                 break;
+            case FieldValidationError.FIELD_NAME:
+                this.showNameValidationError(validationError.getErrorCode());
         }
     }
 
     private void showUsernameValidationError(String errorCode) {
         String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
         profileEditView.showUsernameValidationError(messageForCode);
+    }
+
+    private void showNameValidationError(String errorCode) {
+        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+        profileEditView.showNameValidationError(messageForCode);
     }
 
     @Override public void resume() {
