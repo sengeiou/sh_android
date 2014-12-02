@@ -371,7 +371,11 @@ public class ProfileFragment extends BaseFragment {
     private void setUserInfo(UserModel user) {
         setBasicUserInfo(user);
         String favTeamName = user.getFavoriteTeamName();
-        bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
+        String bio = user.getBio();
+        if (bio == null) {
+            bio = "";
+        }
+        bioTextView.setText(favTeamName == null ? bio : getString(R.string.profile_bio_format, favTeamName, bio));
         setMainButtonStatus(user.getRelationship());
     }
 
