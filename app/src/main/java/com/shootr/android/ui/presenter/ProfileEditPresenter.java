@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 public class ProfileEditPresenter implements Presenter {
 
+    private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
@@ -105,6 +106,7 @@ public class ProfileEditPresenter implements Presenter {
 
     private String cleanWebsite() {
         String website = profileEditView.getWebsite();
+        website = removeProtocolFromUrl(website);
         return trimAndNullWhenEmpty(website);
     }
 
@@ -123,6 +125,10 @@ public class ProfileEditPresenter implements Presenter {
             }
         }
         return text;
+    }
+
+    private String removeProtocolFromUrl(String url) {
+        return url.replaceAll(PROTOCOL_PATTERN, "");
     }
 
     private void saveUpdatedProfile(UserModel updatedUserModel) {
@@ -157,6 +163,8 @@ public class ProfileEditPresenter implements Presenter {
             case FieldValidationError.FIELD_BIO:
                 this.showBioValidationError(errorCode);
                 break;
+            case FieldValidationError.FIELD_WEBSITE:
+                this.showWebsiteValidationError(errorCode);
         }
     }
 
@@ -168,6 +176,11 @@ public class ProfileEditPresenter implements Presenter {
     private void showNameValidationError(String errorCode) {
         String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
         profileEditView.showNameValidationError(messageForCode);
+    }
+
+    private void showWebsiteValidationError(String errorCode) {
+        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+        profileEditView.showWebsiteValidationError(messageForCode);
     }
 
     private void showBioValidationError(String errorCode) {

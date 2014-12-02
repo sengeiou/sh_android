@@ -24,7 +24,9 @@ public interface ProfileEditView {
 
     void showNameValidationError(String errorMessage);
 
-    void showBioValidationError(String messageForCode);
+    void showWebsiteValidationError(String errorMessage);
+
+    void showBioValidationError(String errorMessage);
 
     void showDiscardConfirmation();
 

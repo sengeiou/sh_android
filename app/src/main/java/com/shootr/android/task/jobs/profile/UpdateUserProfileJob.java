@@ -16,6 +16,7 @@ import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.task.validation.NameValidator;
 import com.shootr.android.task.validation.UsernameValidator;
+import com.shootr.android.task.validation.WebsiteValidator;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
@@ -125,6 +126,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
+        updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
         return updatedUserEntity;
     }
 
@@ -142,7 +144,12 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private void localValidation() {
         validateUsername();
         validateName();
+        validateWebsite();
         validateBio();
+    }
+
+    private void validateWebsite() {
+        addErrorsIfAny(new WebsiteValidator(updatedUserModel).validate());
     }
 
     private void validateUsername() {

@@ -344,9 +344,17 @@ public class ProfileFragment extends BaseFragment {
         this.user = user;
         setTitle(user.getUsername());
         nameTextView.setText(user.getName());
-        websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
+
+        String website = user.getWebsite();
+        if (website != null) {
+            websiteTextView.setText(website);
+            websiteTextView.setVisibility(View.VISIBLE);
+        } else {
+            websiteTextView.setVisibility(View.GONE);
+        }
+
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {

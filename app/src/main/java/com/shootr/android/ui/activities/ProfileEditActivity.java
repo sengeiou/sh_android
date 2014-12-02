@@ -140,8 +140,12 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         name.setError(errorMessage);
     }
 
-    @Override public void showBioValidationError(String messageForCode) {
-        bio.setError(messageForCode);
+    @Override public void showWebsiteValidationError(String errorMessage) {
+        website.setError(errorMessage);
+    }
+
+    @Override public void showBioValidationError(String errorMessage) {
+        bio.setError(errorMessage);
     }
 
     @Override public void showDiscardConfirmation() {
