@@ -81,10 +81,10 @@ public class ProfileEditPresenter implements Presenter {
 
     private boolean hasChangedData() {
         UserModel updatedUserData = getUpadtedUserData();
-        boolean changedUsername = !updatedUserData.getUsername().equals(currentUserModel.getUsername());
-        boolean changedName = !updatedUserData.getName().equals(currentUserModel.getName());
-        boolean changedBio = !updatedUserData.getBio().equals(currentUserModel.getBio());
-        boolean changedWebsite = !updatedUserData.getWebsite().equals(currentUserModel.getWebsite());
+        boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
+        boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null : !currentUserModel.getName().equals(updatedUserData.getName());
+        boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null : !currentUserModel.getBio().equals(updatedUserData.getBio());
+        boolean changedWebsite = currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
         return changedName || changedUsername || changedWebsite || changedBio;
     }
 
