@@ -19,4 +19,10 @@ public interface ProfileEditView {
     void showUsernameValidationError(String errorMessage);
 
     void showNameValidationError(String errorMessage);
+
+    void showDiscardConfirmation();
+
+    void alertComunicationError();
+
+    void alertConnectionNotAvailable();
 }

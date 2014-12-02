@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.SessionManager;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
@@ -52,7 +54,14 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     public void discard() {
-        //TODO confirmation alert()
+        if (hasChangedData()) {
+            profileEditView.showDiscardConfirmation();
+        } else {
+            profileEditView.closeScreen();
+        }
+    }
+
+    public void confirmDiscard() {
         profileEditView.closeScreen();
     }
 
@@ -66,6 +75,13 @@ public class ProfileEditPresenter implements Presenter {
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
         return updatedUserModel;
+    }
+
+    private boolean hasChangedData() {
+        UserModel upadtedUserData = getUpadtedUserData();
+        boolean changedUsername = !upadtedUserData.getUsername().equals(currentUserModel.getUsername());
+        boolean changedName = !upadtedUserData.getName().equals(currentUserModel.getName());
+        return changedName || changedUsername;
     }
 
     private String cleanUsername() {
@@ -128,8 +144,16 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.showNameValidationError(messageForCode);
     }
 
-    //TODO error de comunicacion
-    
+    @Subscribe
+    public void onCommunicationError(CommunicationErrorEvent event) {
+        this.profileEditView.alertComunicationError();
+    }
+
+    @Subscribe
+    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        this.profileEditView.alertConnectionNotAvailable();
+    }
+
     @Override public void resume() {
         bus.register(this);
     }

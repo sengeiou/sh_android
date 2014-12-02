@@ -1,6 +1,8 @@
 package com.shootr.android.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -116,6 +118,25 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public void showNameValidationError(String errorMessage) {
         name.setError(errorMessage);
+    }
+
+    @Override public void showDiscardConfirmation() {
+        new AlertDialog.Builder(this).setMessage(R.string.discard_profile_confirmation)
+          .setPositiveButton(R.string.discard, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmDiscard();
+              }
+          })
+          .setNegativeButton(R.string.cancel, null)
+          .show();
+    }
+
+    @Override public void alertComunicationError() {
+        Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void alertConnectionNotAvailable() {
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

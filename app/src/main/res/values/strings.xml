@@ -144,5 +144,7 @@
     <string name="photo_edit_remove_confirmation">Remove photo?</string>
     <string name="remove">Remove</string>
     <string name="profile_updated">$Profile updated.</string>
+    <string name="discard_profile_confirmation">Discard your changes?</string>
+    <string name="discard">Discard</string>
 
 </resources>

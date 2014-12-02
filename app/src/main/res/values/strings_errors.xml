@@ -8,7 +8,7 @@
 
     <!-- Profile: Username -->
     <string name="error_message_username_duplicate">$Username already taken.</string>
-    <string name="error_message_username_empty">$Username required.</string>
+    <string name="error_message_username_empty">$Username can not be empty.</string>
     <string name="error_message_username_short">$Username must be 3 or more characters long.</string>
     <string name="error_message_username_long">$Username must be 20 or less characters long.</string>
     <string name="error_message_username_invalid">$Username has invalid characters.</string>
