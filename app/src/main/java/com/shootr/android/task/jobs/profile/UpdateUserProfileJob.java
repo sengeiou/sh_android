@@ -94,6 +94,11 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
             field = FieldValidationError.FIELD_USERNAME;
         } else if (isNameError(errorCode)) {
             field = FieldValidationError.FIELD_NAME;
+        } else if (isWebsiteError(errorCode)) {
+               field = FieldValidationError.FIELD_WEBSITE;
+        }else if (isBioError(errorCode)) {
+            field = FieldValidationError.FIELD_BIO;
+
         }
 
         if (field > 0) {
@@ -119,6 +124,20 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         nameCodes.add(ShootrError.ERROR_CODE_NAME_TOO_SHORT);
         nameCodes.add(ShootrError.ERROR_CODE_NAME_INVALID_CHARACTERS);
         return nameCodes.contains(errorCode);
+    }
+
+    private boolean isWebsiteError(String errorCode) {
+        Set<String> websiteCodes = new HashSet<>();
+        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG);
+        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_WRONG_URI);
+        return websiteCodes.contains(errorCode);
+    }
+
+    private boolean isBioError(String errorCode) {
+        Set<String> bioCodes = new HashSet<>();
+        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_LONG);
+        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_SHORT);
+        return bioCodes.contains(errorCode);
     }
 
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
