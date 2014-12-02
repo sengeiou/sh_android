@@ -17,7 +17,6 @@ import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ProfileEditPresenter implements Presenter {
 
@@ -100,12 +99,20 @@ public class ProfileEditPresenter implements Presenter {
 
     private String cleanBio() {
         String bio = profileEditView.getBio();
+        bio = removeWhiteLines(bio);
         return trimAndNullWhenEmpty(bio);
     }
 
     private String cleanWebsite() {
         String website = profileEditView.getWebsite();
         return trimAndNullWhenEmpty(website);
+    }
+
+    private String removeWhiteLines(String multilineText) {
+        while (multilineText.contains("\n\n")) {
+            multilineText = multilineText.replace("\n\n", "\n");
+        }
+        return multilineText;
     }
 
     private String trimAndNullWhenEmpty(String text) {
@@ -139,12 +146,17 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void showValidationError(FieldValidationError validationError) {
+        String errorCode = validationError.getErrorCode();
         switch (validationError.getField()) {
             case FieldValidationError.FIELD_USERNAME:
-                this.showUsernameValidationError(validationError.getErrorCode());
+                this.showUsernameValidationError(errorCode);
                 break;
             case FieldValidationError.FIELD_NAME:
-                this.showNameValidationError(validationError.getErrorCode());
+                this.showNameValidationError(errorCode);
+                break;
+            case FieldValidationError.FIELD_BIO:
+                this.showBioValidationError(errorCode);
+                break;
         }
     }
 
@@ -156,6 +168,11 @@ public class ProfileEditPresenter implements Presenter {
     private void showNameValidationError(String errorCode) {
         String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
         profileEditView.showNameValidationError(messageForCode);
+    }
+
+    private void showBioValidationError(String errorCode) {
+        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+        profileEditView.showBioValidationError(messageForCode);
     }
 
     @Subscribe

@@ -119,7 +119,8 @@
                   android:layout_height="wrap_content"
                   android:hint="@string/activity_edit_profile_bio_hint"
                   android:imeOptions="actionDone"
-                  android:maxLines="3" />
+                  android:maxLength="150"
+                  android:maxLines="4" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
 

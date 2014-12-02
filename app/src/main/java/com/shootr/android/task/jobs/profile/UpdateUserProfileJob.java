@@ -10,6 +10,7 @@ import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
+import com.shootr.android.task.validation.BioValidator;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
@@ -123,6 +124,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         UserEntity updatedUserEntity = sessionManager.getCurrentUser().clone();
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
+        updatedUserEntity.setBio(updatedUserModel.getBio());
         return updatedUserEntity;
     }
 
@@ -140,6 +142,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private void localValidation() {
         validateUsername();
         validateName();
+        validateBio();
     }
 
     private void validateUsername() {
@@ -148,6 +151,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateName() {
         addErrorsIfAny(new NameValidator(updatedUserModel).validate());
+    }
+
+    private void validateBio() {
+        addErrorsIfAny(new BioValidator(updatedUserModel).validate());
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {
