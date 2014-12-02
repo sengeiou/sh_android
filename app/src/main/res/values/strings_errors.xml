@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_message_unknown">$Unknown error</string>
+    <string name="error_message_unknown">Unknown error</string>
 
     <!-- Image upload -->
-    <string name="error_message_invalid_image">$Invalid image</string>
-    <string name="error_message_invalid_session_token">$Invalid credentials</string>
+    <string name="error_message_invalid_image">Invalid image</string>
+    <string name="error_message_invalid_session_token">Invalid credentials</string>
 
     <!-- Profile: Username -->
-    <string name="error_message_username_duplicate">$Username already taken.</string>
-    <string name="error_message_username_empty">$Username can not be empty.</string>
-    <string name="error_message_username_short">$Username must be 3 or more characters long.</string>
-    <string name="error_message_username_long">$Username must be 20 or less characters long.</string>
-    <string name="error_message_username_invalid">$Username has invalid characters.</string>
+    <string name="error_message_username_duplicate">Username already taken.</string>
+    <string name="error_message_username_empty">3 or more characters required.</string>
+    <string name="error_message_username_short">3 or more characters required.</string>
+    <string name="error_message_username_long">3 to 20 characters required.</string>
+    <string name="error_message_username_invalid">Use only a–z, 0–9 and underscores.</string>
 
     <!-- Profile: Name -->
-    <string name="error_message_name_invalid">$Name has invalid characters.</string>
-    <string name="error_message_name_long">$Name must be 20 or less characters long.</string>
+    <string name="error_message_name_invalid">Invalid characters.</string>
+    <string name="error_message_name_long">Maximum length is 20 characters.</string>
 </resources>
