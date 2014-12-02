@@ -135,6 +135,7 @@ public class ProfileEditPresenter implements Presenter {
         UpdateUserProfileJob job = objectGraph.get(UpdateUserProfileJob.class);
         job.init(updatedUserModel);
         jobManager.addJobInBackground(job);
+        this.showLoading();
     }
 
     @Subscribe
@@ -144,7 +145,8 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onValidationError(FieldValidationErrorEvent event) {
+    public void onValidationErrors(FieldValidationErrorEvent event) {
+        this.hideLoading();
         List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
         for (FieldValidationError validationError : fieldValidationErrors) {
             this.showValidationError(validationError);
@@ -188,13 +190,22 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.showBioValidationError(messageForCode);
     }
 
+    private void showLoading() {
+        profileEditView.showLoadingIndicator();
+    }
+
+    private void hideLoading() {
+        profileEditView.hideLoadingIndicator();
+    }
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
+        this.hideLoading();
         this.profileEditView.alertComunicationError();
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        this.hideLoading();
         this.profileEditView.alertConnectionNotAvailable();
     }
 

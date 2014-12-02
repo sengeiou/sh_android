@@ -30,6 +30,10 @@ public interface ProfileEditView {
 
     void showDiscardConfirmation();
 
+    void showLoadingIndicator();
+
+    void hideLoadingIndicator();
+
     void alertComunicationError();
 
     void alertConnectionNotAvailable();

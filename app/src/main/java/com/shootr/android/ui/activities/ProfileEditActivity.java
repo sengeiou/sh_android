@@ -40,6 +40,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @InjectView(R.id.profile_edit_team) TextView team;
     @InjectView(R.id.profile_edit_website) TextView website;
     @InjectView(R.id.profile_edit_bio) TextView bio;
+    private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +160,15 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
           .show();
     }
 
+    @Override public void showLoadingIndicator() {
+        menuItemDone.setActionView(R.layout.item_list_loading);
+    }
+
+    @Override public void hideLoadingIndicator() {
+        menuItemDone.setActionView(null);
+
+    }
+
     @Override public void alertComunicationError() {
         Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
@@ -169,6 +179,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
+        menuItemDone = menu.findItem(R.id.menu_done);
         return true;
     }
 
