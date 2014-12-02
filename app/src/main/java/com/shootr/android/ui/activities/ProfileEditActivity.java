@@ -112,6 +112,14 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         return name.getText().toString();
     }
 
+    @Override public String getBio() {
+        return bio.getText().toString();
+    }
+
+    @Override public String getWebsite() {
+        return website.getText().toString();
+    }
+
     @Override public void showUsernameValidationError(String errorMessage) {
         username.setError(errorMessage);
     }

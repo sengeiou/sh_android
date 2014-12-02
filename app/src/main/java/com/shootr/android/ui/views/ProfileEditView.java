@@ -16,6 +16,10 @@ public interface ProfileEditView {
 
     String getName();
 
+    String getBio();
+
+    String getWebsite();
+
     void showUsernameValidationError(String errorMessage);
 
     void showNameValidationError(String errorMessage);

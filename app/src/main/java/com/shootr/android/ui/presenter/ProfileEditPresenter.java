@@ -74,14 +74,18 @@ public class ProfileEditPresenter implements Presenter {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
+        updatedUserModel.setBio(cleanBio());
+        updatedUserModel.setWebsite(cleanWebsite());
         return updatedUserModel;
     }
 
     private boolean hasChangedData() {
-        UserModel upadtedUserData = getUpadtedUserData();
-        boolean changedUsername = !upadtedUserData.getUsername().equals(currentUserModel.getUsername());
-        boolean changedName = !upadtedUserData.getName().equals(currentUserModel.getName());
-        return changedName || changedUsername;
+        UserModel updatedUserData = getUpadtedUserData();
+        boolean changedUsername = !updatedUserData.getUsername().equals(currentUserModel.getUsername());
+        boolean changedName = !updatedUserData.getName().equals(currentUserModel.getName());
+        boolean changedBio = !updatedUserData.getBio().equals(currentUserModel.getBio());
+        boolean changedWebsite = !updatedUserData.getWebsite().equals(currentUserModel.getWebsite());
+        return changedName || changedUsername || changedWebsite || changedBio;
     }
 
     private String cleanUsername() {
@@ -92,6 +96,16 @@ public class ProfileEditPresenter implements Presenter {
     private String cleanName() {
         String name = profileEditView.getName();
         return trimAndNullWhenEmpty(name);
+    }
+
+    private String cleanBio() {
+        String bio = profileEditView.getBio();
+        return trimAndNullWhenEmpty(bio);
+    }
+
+    private String cleanWebsite() {
+        String website = profileEditView.getWebsite();
+        return trimAndNullWhenEmpty(website);
     }
 
     private String trimAndNullWhenEmpty(String text) {
