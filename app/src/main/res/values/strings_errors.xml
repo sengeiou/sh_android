@@ -18,9 +18,9 @@
     <string name="error_message_name_long">$Name must be 20 or less characters long.</string>
 
     <!-- Profile: Website -->
-    <string name="error_message_website_invalid">$Invalid Website</string>
-    <string name="error_message_website_too_long">$Website must not have more than 255 characters</string>
+    <string name="error_message_website_invalid">Invalid website</string>
+    <string name="error_message_website_too_long">Website must not have more than 100 characters</string>
 
     <!-- Profile: Bio -->
-    <string name="error_message_bio_too_long">$Bio must not have more than 150 characters</string>
+    <string name="error_message_bio_too_long">Bio must not have more than 150 characters</string>
 </resources>

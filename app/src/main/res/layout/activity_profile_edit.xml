@@ -100,6 +100,7 @@
                   android:imeOptions="actionNext"
                   android:inputType="textNoSuggestions|textUri"
                   android:lines="1"
+                  android:maxLength="100"
                   android:nextFocusDown="@+id/profile_edit_bio"
                   android:singleLine="true" />
 
