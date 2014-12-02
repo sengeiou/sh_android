@@ -28,7 +28,6 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private static final int TYPE_USER = 1;
     private static final int TYPE_ME = 2;
 
-    private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
     private List<Object> itemsList;
     private PicassoWrapper picasso;
     private View.OnClickListener editButtonListener;
@@ -45,14 +44,12 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         this.itemsList = new ArrayList<>();
         this.currentUserId = currentUserId;
         Resources resources = context.getResources();
-        this.watchingColorLive = resources.getColor(R.color.watching_live);
         this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
         this.watchingText = resources.getString(R.string.watching_text);
         this.notWatchingText = resources.getString(R.string.watching_not_text);
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
-        this.itemsMap = itemsMap;
         this.itemsList.clear();
 
         for (MatchModel match : itemsMap.keySet()) {
@@ -162,11 +159,6 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             subtitle = notWatchingText;
         }
         vh.watching.setText(subtitle);
-        if (user.isLive()) {
-            vh.watching.setTextColor(watchingColorLive);
-        } else {
-            vh.watching.setTextColor(watchingColorNotLive);
-        }
         picasso.load(user.getPhoto()).into(vh.avatar);
         if (vh.edit != null) {
             vh.edit.setTag(vh);
