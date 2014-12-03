@@ -146,5 +146,6 @@
     <string name="profile_updated">Profile updated</string>
     <string name="discard_profile_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
+    <string name="watching_place_not_watching_alert">Try a different text. \"Not Watching\" is used when the switch is off.</string>
 
 </resources>

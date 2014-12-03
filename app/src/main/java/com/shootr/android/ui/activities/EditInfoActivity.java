@@ -199,6 +199,13 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     @Override public void setFocusOnPlace() {
         place.requestFocus();
         InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+        inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_IMPLICIT, 0);
+    }
+
+    @Override public void alertPlaceNotWatchingNotAllow() {
+        new AlertDialog.Builder(this).setMessage(
+          getString(R.string.watching_place_not_watching_alert))
+          .setPositiveButton(android.R.string.ok, null)
+          .show();
     }
 }

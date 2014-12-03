@@ -56,7 +56,12 @@ public class EditInfoPresenter {
     }
 
     public void sendNewStatus() {
-        executeEditJobs();
+        String placeText = getPlaceText();
+        if (placeText!= null && placeText.equalsIgnoreCase("not watching")) {
+            editInfoView.alertPlaceNotWatchingNotAllow();
+            return;
+        }
+        executeEditJobs(placeText);
         closeScreen();
     }
 
@@ -93,9 +98,10 @@ public class EditInfoPresenter {
         this.editInfoView.closeScreen();
     }
 
-    private void executeEditJobs() {
+    private void executeEditJobs(String placeText) {
         SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus), getPlaceText());
+        setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus),
+          placeText);
         jobManager.addJobInBackground(setWatchingInfoOfflineJob);
 
         SetWatchingInfoOnlineJob setWatchingInfoOnlineJob = objectGraph.get(SetWatchingInfoOnlineJob.class);
