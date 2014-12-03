@@ -16,6 +16,10 @@ public interface ProfileEditView {
 
     String getName();
 
+    String getTeam();
+
+    void setTeam(String teamName);
+
     void showUsernameValidationError(String errorMessage);
 
     void showNameValidationError(String errorMessage);

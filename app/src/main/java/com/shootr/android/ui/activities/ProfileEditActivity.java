@@ -29,7 +29,9 @@ import javax.inject.Inject;
 public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
 
     private static final int REQUEST_SEARCH_TEAM = 1;
-    public static final String EXTRA_TEAM = "team";
+
+    public static final String EXTRA_TEAM_NAME = "team_name";
+    public static final String EXTRA_TEAM_ID = "team_id";
 
     @Inject ProfileEditPresenter presenter;
     @Inject ErrorMessageFactory errorMessageFactory;
@@ -81,7 +83,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @OnClick(R.id.profile_edit_team)
     public void onTeamClick() {
         startActivityForResult(
-          new Intent(this, SearchTeamActivity.class).putExtra(EXTRA_TEAM, team.getText().toString()),
+          new Intent(this, SearchTeamActivity.class).putExtra(EXTRA_TEAM_NAME, team.getText().toString()),
           REQUEST_SEARCH_TEAM);
     }
 
@@ -93,6 +95,15 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Override protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SEARCH_TEAM && resultCode == RESULT_OK) {
+            String teamName = data.getStringExtra(EXTRA_TEAM_NAME);
+            long teamId = data.getLongExtra(EXTRA_TEAM_ID, 0);
+            presenter.changeTeam(teamId, teamName);
+        }
     }
 
     @Override public void renderUserInfo(UserModel userModel) {
@@ -122,6 +133,14 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public String getName() {
         return name.getText().toString();
+    }
+
+    @Override public String getTeam() {
+        return team.getText().toString();
+    }
+
+    @Override public void setTeam(String teamName) {
+        team.setText(teamName);
     }
 
     @Override public void showUsernameValidationError(String errorMessage) {
@@ -160,7 +179,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         if (item.getItemId() == R.id.menu_done) {
             presenter.done();
             return true;
-        } else if(item.getItemId() == android.R.id.home) {
+        } else if (item.getItemId() == android.R.id.home) {
             presenter.discard();
             return true;
         }

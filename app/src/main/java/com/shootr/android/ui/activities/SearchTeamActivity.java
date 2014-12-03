@@ -1,5 +1,6 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TeamAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
@@ -18,7 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class SearchTeamActivity extends BaseSignedInActivity implements SearchTeamView{
+public class SearchTeamActivity extends BaseSignedInActivity implements SearchTeamView {
 
     @InjectView(R.id.search_team_list) ListView list;
 
@@ -49,8 +51,14 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
 
     private void initializePresenter() {
         presenter.initialize(this, getObjectGraph());
-        String currentTeamName = getIntent().getStringExtra(ProfileEditActivity.EXTRA_TEAM);
+        String currentTeamName = getIntent().getStringExtra(ProfileEditActivity.EXTRA_TEAM_NAME);
         presenter.setCurrentTeamName(currentTeamName);
+    }
+
+    @OnItemClick(R.id.search_team_list)
+    public void onTeamSelected(int position) {
+        TeamModel selectedTeam = adapter.getItem(position);
+        presenter.selectTeam(selectedTeam);
     }
 
     @Override protected void onResume() {
@@ -95,6 +103,7 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
                 presenter.search(queryText);
                 return true;
             }
+
             @Override public boolean onQueryTextChange(String s) {
                 return false;
             }
@@ -111,5 +120,13 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
 
     @Override public void renderResults(List<TeamModel> teams) {
         adapter.setContent(teams);
+    }
+
+    @Override public void deliverSelectedTeam(String teamName, Long teamId) {
+        Intent data = new Intent();
+        data.putExtra(ProfileEditActivity.EXTRA_TEAM_NAME, teamName);
+        data.putExtra(ProfileEditActivity.EXTRA_TEAM_ID, teamId);
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
 
@@ -123,6 +124,8 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         UserEntity updatedUserEntity = sessionManager.getCurrentUser().clone();
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
+        updatedUserEntity.setFavoriteTeamId(updatedUserModel.getFavoriteTeamId());
+        updatedUserEntity.setFavoriteTeamName(updatedUserModel.getFavoriteTeamName());
         return updatedUserEntity;
     }
 
@@ -140,6 +143,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private void localValidation() {
         validateUsername();
         validateName();
+        validateTeam();
     }
 
     private void validateUsername() {
@@ -148,6 +152,15 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateName() {
         addErrorsIfAny(new NameValidator(updatedUserModel).validate());
+    }
+
+    private void validateTeam() {
+        Long teamId = updatedUserModel.getFavoriteTeamId();
+        String teamName = updatedUserModel.getFavoriteTeamName();
+        if (teamName == null && teamId != null) {
+            Timber.w("Trying to send a teamId %d with a null teamName. Setting id to null just in case.", teamId);
+            updatedUserModel.setFavoriteTeamId(null);
+        }
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {

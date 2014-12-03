@@ -46,6 +46,12 @@ public class SearchTeamPresenter implements Presenter {
         jobManager.addJobInBackground(job);
     }
 
+    public void selectTeam(TeamModel selectedTeam) {
+        String teamName = selectedTeam.getName();
+        Long teamId = selectedTeam.getIdTeam();
+        searchTeamView.deliverSelectedTeam(teamName, teamId);
+    }
+
     @Subscribe
     public void onSearchResultReceived(SearchTeamResultEvent event) {
         List<TeamModel> teams = event.getResult();

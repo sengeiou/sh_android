@@ -24,13 +24,14 @@ public class ProfileEditPresenter implements Presenter {
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
-    private SessionManager sessionManager;
-    private UserModelMapper userModelMapper;
-    private Bus bus;
-    private ErrorMessageFactory errorMessageFactory;
-    private JobManager jobManager;
+    private final SessionManager sessionManager;
+    private final UserModelMapper userModelMapper;
+    private final Bus bus;
+    private final ErrorMessageFactory errorMessageFactory;
+    private final JobManager jobManager;
 
     private UserModel currentUserModel;
+    private Long changedTeamId;
 
     @Inject public ProfileEditPresenter(SessionManager sessionManager, UserModelMapper userModelMapper, Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
@@ -50,6 +51,7 @@ public class ProfileEditPresenter implements Presenter {
 
     private void fillCurrentUserData() {
         currentUserModel = userModelMapper.toUserModel(sessionManager.getCurrentUser(), null, true);
+        changedTeamId = currentUserModel.getFavoriteTeamId();
         this.profileEditView.renderUserInfo(currentUserModel);
     }
 
@@ -70,18 +72,28 @@ public class ProfileEditPresenter implements Presenter {
         this.saveUpdatedProfile(updatedUserModel);
     }
 
+    public void changeTeam(long teamId, String teamName) {
+        changedTeamId = teamId;
+        profileEditView.setTeam(teamName);
+    }
+
     private UserModel getUpadtedUserData() {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
+        updatedUserModel.setFavoriteTeamId(changedTeamId);
+        updatedUserModel.setFavoriteTeamName(cleanTeam());
         return updatedUserModel;
     }
+
 
     private boolean hasChangedData() {
         UserModel upadtedUserData = getUpadtedUserData();
         boolean changedUsername = !upadtedUserData.getUsername().equals(currentUserModel.getUsername());
         boolean changedName = !upadtedUserData.getName().equals(currentUserModel.getName());
-        return changedName || changedUsername;
+        boolean changedTeamName = !upadtedUserData.getFavoriteTeamName().equals(currentUserModel.getFavoriteTeamName());
+        boolean changedTeamId = !upadtedUserData.getFavoriteTeamId().equals(currentUserModel.getFavoriteTeamId());
+        return changedName || changedUsername || changedTeamId || changedTeamName;
     }
 
     private String cleanUsername() {
@@ -93,6 +105,12 @@ public class ProfileEditPresenter implements Presenter {
         String name = profileEditView.getName();
         return trimAndNullWhenEmpty(name);
     }
+
+    private String cleanTeam() {
+        String team = profileEditView.getTeam();
+        return trimAndNullWhenEmpty(team);
+    }
+
 
     private String trimAndNullWhenEmpty(String text) {
         if (text != null) {

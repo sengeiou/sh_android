@@ -8,4 +8,6 @@ public interface SearchTeamView {
     void setCurrentSearchText(String searchText);
 
     void renderResults(List<TeamModel> teams);
+
+    void deliverSelectedTeam(String teamName, Long teamId);
 }
