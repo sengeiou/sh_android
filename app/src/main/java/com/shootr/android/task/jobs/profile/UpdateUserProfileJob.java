@@ -62,8 +62,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     @Override protected void run() throws SQLException, IOException, Exception {
         localValidation();
-        boolean hasLocalErrors = !fieldValidationErrors.isEmpty();
-        if (hasLocalErrors) {
+        if (hasLocalErrors()) {
             postValidationErrors();
             return;
         }
@@ -81,6 +80,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
                 throw serverException;
             }
         }
+    }
+
+    private boolean hasLocalErrors() {
+        return !fieldValidationErrors.isEmpty();
     }
 
     private void postValidationErrors() {
