@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
 
     private TeamAdapter adapter;
     private SearchView searchView;
+    private String restoredQuery;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +92,17 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView = (SearchView) searchItem.getActionView();
         setupSearchView();
-        presenter.searchInterfaceReady();
         return true;
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ProfileEditActivity.EXTRA_TEAM_NAME, String.valueOf(searchView.getQuery()));
+    }
+
+    @Override protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        restoredQuery = savedInstanceState.getString(ProfileEditActivity.EXTRA_TEAM_NAME);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,6 +132,12 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
                 return false;
             }
         });
+
+        presenter.searchInterfaceReady();
+
+        if (restoredQuery != null) {
+            searchView.setQuery(restoredQuery, true);
+        }
     }
 
     @Override public void setCurrentSearchText(String searchText) {
