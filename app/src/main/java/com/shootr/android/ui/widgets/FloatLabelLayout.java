@@ -26,7 +26,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.shootr.android.R;
@@ -45,7 +44,7 @@ public final class FloatLabelLayout extends FrameLayout {
 
     private static final float DEFAULT_PADDING_LEFT_RIGHT_DP = 4f;
 
-    private EditText mEditText;
+    private TextView mEditText;
     private TextView mLabel;
 
     public FloatLabelLayout(Context context) {
@@ -80,7 +79,7 @@ public final class FloatLabelLayout extends FrameLayout {
 
     @Override
     public final void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (child instanceof EditText) {
+        if (child instanceof TextView && child != mLabel) {
             // If we already have an EditText, throw an exception
             if (mEditText != null) {
                 throw new IllegalArgumentException("We already have an EditText, can only have one");
@@ -93,14 +92,14 @@ public final class FloatLabelLayout extends FrameLayout {
             lp.topMargin = (int) mLabel.getTextSize();
             params = lp;
 
-            setEditText((EditText) child);
+            setEditText((TextView) child);
         }
 
         // Carry on adding the View...
         super.addView(child, index, params);
     }
 
-    private void setEditText(EditText editText) {
+    private void setEditText(TextView editText) {
         mEditText = editText;
 
         // Add a TextWatcher so that we know when the text input has changed
@@ -148,7 +147,7 @@ public final class FloatLabelLayout extends FrameLayout {
     /**
      * @return the {@link android.widget.EditText} text input
      */
-    public EditText getEditText() {
+    public TextView getEditText() {
         return mEditText;
     }
 
