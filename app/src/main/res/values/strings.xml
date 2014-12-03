@@ -67,6 +67,7 @@
     <string name="menu_info">Info</string>
     <string name="menu_search_timeline">Search Timeline</string>
     <string name="menu_search_people">Find People</string>
+    <string name="menu_search_teams">$Find Teams</string>
 
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
@@ -146,5 +147,6 @@
     <string name="profile_updated">Profile updated</string>
     <string name="discard_profile_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
+    <string name="activity_search_team_hint">$Search Team</string>
 
 </resources>

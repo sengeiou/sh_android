@@ -4,6 +4,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.ui.activities.AddMatchActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
+import com.shootr.android.ui.activities.SearchTeamActivity;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import dagger.Module;
 import dagger.Provides;
@@ -37,6 +38,7 @@ import javax.inject.Singleton;
                 EditInfoActivity.class,
                 AddMatchActivity.class,
                 ProfileEditActivity.class,
+                SearchTeamActivity.class,
 
         },
         complete = false

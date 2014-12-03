@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -25,6 +27,9 @@ import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
+
+    private static final int REQUEST_SEARCH_TEAM = 1;
+    public static final String EXTRA_TEAM = "team";
 
     @Inject ProfileEditPresenter presenter;
     @Inject ErrorMessageFactory errorMessageFactory;
@@ -71,6 +76,13 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private void initializePresenter() {
         presenter.initialize(this, getObjectGraph());
+    }
+
+    @OnClick(R.id.profile_edit_team)
+    public void onTeamClick() {
+        startActivityForResult(
+          new Intent(this, SearchTeamActivity.class).putExtra(EXTRA_TEAM, team.getText().toString()),
+          REQUEST_SEARCH_TEAM);
     }
 
     @Override protected void onResume() {
