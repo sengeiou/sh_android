@@ -91,8 +91,8 @@ public class ProfileEditPresenter implements Presenter {
         UserModel upadtedUserData = getUpadtedUserData();
         boolean changedUsername = !upadtedUserData.getUsername().equals(currentUserModel.getUsername());
         boolean changedName = !upadtedUserData.getName().equals(currentUserModel.getName());
-        boolean changedTeamName = !upadtedUserData.getFavoriteTeamName().equals(currentUserModel.getFavoriteTeamName());
-        boolean changedTeamId = !upadtedUserData.getFavoriteTeamId().equals(currentUserModel.getFavoriteTeamId());
+        boolean changedTeamName = upadtedUserData.getFavoriteTeamName() == null ? currentUserModel.getFavoriteTeamName() != null : !upadtedUserData.getFavoriteTeamName().equals(currentUserModel.getFavoriteTeamName());
+        boolean changedTeamId = upadtedUserData.getFavoriteTeamId()==null ? currentUserModel.getFavoriteTeamId() != null : !upadtedUserData.getFavoriteTeamId().equals(currentUserModel.getFavoriteTeamId());
         return changedName || changedUsername || changedTeamId || changedTeamName;
     }
 

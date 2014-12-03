@@ -148,5 +148,6 @@
     <string name="discard_profile_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
     <string name="activity_search_team_hint">$Search Team</string>
+    <string name="edit_profile_team_remove_footer">Remove %s</string>
 
 </resources>

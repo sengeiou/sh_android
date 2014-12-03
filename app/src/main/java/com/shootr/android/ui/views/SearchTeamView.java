@@ -21,6 +21,8 @@ public interface SearchTeamView {
 
     void hideEmpty();
 
+    void enableDeleteTeam(String teamName);
+
     void alertComunicationError();
 
     void alertConnectionNotAvailable();

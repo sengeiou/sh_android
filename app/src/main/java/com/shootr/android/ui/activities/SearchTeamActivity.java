@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,8 +66,12 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
 
     @OnItemClick(R.id.search_team_list)
     public void onTeamSelected(int position) {
-        TeamModel selectedTeam = adapter.getItem(position);
-        presenter.selectTeam(selectedTeam);
+        if (position < adapter.getCount()) {
+            TeamModel selectedTeam = adapter.getItem(position);
+            presenter.selectTeam(selectedTeam);
+        } else {
+            presenter.removeTeam();
+        }
     }
 
     @Override protected void onResume() {
@@ -149,6 +154,14 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
 
     @Override public void hideEmpty() {
         emptyOrErrorView.setVisibility(View.GONE);
+    }
+
+    @Override public void enableDeleteTeam(String teamName) {
+        View removeTeamItem = LayoutInflater.from(this).inflate(R.layout.item_list_search_team_remove, list, false);
+        TextView removeTeamItemTitle = (TextView) removeTeamItem.findViewById(R.id.team_remove_title);
+        String removeTeamItemTitleText = getString(R.string.edit_profile_team_remove_footer, teamName);
+        removeTeamItemTitle.setText(removeTeamItemTitleText);
+        list.addFooterView(removeTeamItem);
     }
 
     @Override public void deliverSelectedTeam(String teamName, Long teamId) {

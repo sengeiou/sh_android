@@ -10,7 +10,6 @@ import com.shootr.android.ui.views.SearchTeamView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -36,10 +35,17 @@ public class SearchTeamPresenter implements Presenter {
     }
 
     public void setCurrentTeamName(String team) {
-        currentTeamName = team;
-        if (isSearchInterfaceReady) {
-            setSearchQueryAndExecute(currentTeamName);
+        if (team != null && !team.isEmpty()) {
+            currentTeamName = team;
+            enableDeleteTeam();
+            if (isSearchInterfaceReady) {
+                setSearchQuery(currentTeamName);
+            }
         }
+    }
+
+    private void enableDeleteTeam() {
+        searchTeamView.enableDeleteTeam(currentTeamName);
     }
 
     public void search(String queryText) {
@@ -55,6 +61,10 @@ public class SearchTeamPresenter implements Presenter {
         String teamName = selectedTeam.getName();
         Long teamId = selectedTeam.getIdTeam();
         searchTeamView.deliverSelectedTeam(teamName, teamId);
+    }
+
+    public void removeTeam() {
+        searchTeamView.deliverSelectedTeam(null, null);
     }
 
     private void executeSearch(String queryText) {
@@ -90,12 +100,13 @@ public class SearchTeamPresenter implements Presenter {
 
     public void searchInterfaceReady() {
         isSearchInterfaceReady = true;
-        setSearchQueryAndExecute(currentTeamName);
+        if (currentTeamName != null) {
+            setSearchQuery(currentTeamName);
+        }
     }
 
-    private void setSearchQueryAndExecute(String teamName) {
+    private void setSearchQuery(String teamName) {
         searchTeamView.setCurrentSearchText(teamName);
-        this.search(teamName);
     }
 
     @Subscribe
@@ -122,4 +133,5 @@ public class SearchTeamPresenter implements Presenter {
     @Override public void pause() {
         bus.unregister(this);
     }
+
 }

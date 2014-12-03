@@ -82,9 +82,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @OnClick(R.id.profile_edit_team)
     public void onTeamClick() {
-        startActivityForResult(
-          new Intent(this, SearchTeamActivity.class).putExtra(EXTRA_TEAM_NAME, team.getText().toString()),
-          REQUEST_SEARCH_TEAM);
+        // TODO si se hace desde el presenter se puede usar el team name del modelo, que es el bueno, y te ahorras validar que el name no esté vacío en la pantalla de search
+        Intent intent = new Intent(this, SearchTeamActivity.class);
+        intent.putExtra(EXTRA_TEAM_NAME, team.getText().toString());
+        startActivityForResult(intent, REQUEST_SEARCH_TEAM);
     }
 
     @Override protected void onResume() {

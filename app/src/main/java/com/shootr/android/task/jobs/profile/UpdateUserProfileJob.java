@@ -31,12 +31,6 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private static final int PRIORITY = 8;
 
-    private static final String[] USERNAME_ERRORS = {
-      ShootrError.ERROR_CODE_USERNAME_DUPLICATE, ShootrError.ERROR_CODE_USERNAME_NULL,
-      ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, ShootrError.ERROR_CODE_USERNAME_TOO_LONG,
-      ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS
-    };
-
     private ShootrService service;
     private SessionManager sessionManager;
     private UserManager userManager;
@@ -159,6 +153,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateTeam() {
         Long teamId = updatedUserModel.getFavoriteTeamId();
+        if (teamId <= 0) {
+            updatedUserModel.setFavoriteTeamId(null);
+            teamId = null;
+        }
         String teamName = updatedUserModel.getFavoriteTeamName();
         if (teamName == null && teamId != null) {
             Timber.w("Trying to send a teamId %d with a null teamName. Setting id to null just in case.", teamId);
