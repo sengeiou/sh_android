@@ -1,12 +1,18 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
@@ -23,6 +29,8 @@ import timber.log.Timber;
 public class SearchTeamActivity extends BaseSignedInActivity implements SearchTeamView {
 
     @InjectView(R.id.search_team_list) ListView list;
+    @InjectView(R.id.search_results_empty) TextView emptyOrErrorView;
+    @InjectView(R.id.search_loading) ProgressBar loadingView;
 
     @Inject SearchTeamPresenter presenter;
 
@@ -119,7 +127,28 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
     }
 
     @Override public void renderResults(List<TeamModel> teams) {
+        list.setVisibility(View.VISIBLE);
         adapter.setContent(teams);
+    }
+
+    @Override public void hideResults() {
+        list.setVisibility(View.GONE);
+    }
+
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        loadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showEmpty() {
+        emptyOrErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyOrErrorView.setVisibility(View.GONE);
     }
 
     @Override public void deliverSelectedTeam(String teamName, Long teamId) {
@@ -128,5 +157,22 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         data.putExtra(ProfileEditActivity.EXTRA_TEAM_ID, teamId);
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override public void alertComunicationError() {
+        Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void alertConnectionNotAvailable() {
+        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void notifyMinimunThreeCharacters() {
+        Toast.makeText(this, getString(R.string.search_warning_minimun_characters), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 }

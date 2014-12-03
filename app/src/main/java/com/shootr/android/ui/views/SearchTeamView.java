@@ -7,7 +7,25 @@ public interface SearchTeamView {
 
     void setCurrentSearchText(String searchText);
 
+    void deliverSelectedTeam(String teamName, Long teamId);
+
     void renderResults(List<TeamModel> teams);
 
-    void deliverSelectedTeam(String teamName, Long teamId);
+    void hideResults();
+
+    void showLoading();
+
+    void hideLoading();
+
+    void showEmpty();
+
+    void hideEmpty();
+
+    void alertComunicationError();
+
+    void alertConnectionNotAvailable();
+
+    void notifyMinimunThreeCharacters();
+
+    void hideKeyboard();
 }
