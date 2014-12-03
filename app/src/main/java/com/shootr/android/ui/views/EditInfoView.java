@@ -21,4 +21,6 @@ public interface EditInfoView {
     boolean getWatchingStatus();
 
     void enablePlaceText();
+
+    void setFocusOnPlace();
 }

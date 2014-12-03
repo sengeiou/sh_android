@@ -43,6 +43,7 @@ public class EditInfoPresenter {
             this.editInfoView.disablePlaceText();
         } else {
             this.editInfoView.enablePlaceText();
+            this.editInfoView.setFocusOnPlace();
         }
     }
 

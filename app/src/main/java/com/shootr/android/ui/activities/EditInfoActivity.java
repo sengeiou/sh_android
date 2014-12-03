@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -193,5 +194,11 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         place.setEnabled(true);
         place.setVisibility(View.VISIBLE);
         placeDivider.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void setFocusOnPlace() {
+        place.requestFocus();
+        InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
     }
 }
