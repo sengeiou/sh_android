@@ -34,6 +34,9 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS, R.string.error_message_username_invalid);
         codeResourceMap.put(ShootrError.ERROR_CODE_NAME_TOO_LONG, R.string.error_message_name_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_NAME_INVALID_CHARACTERS, R.string.error_message_name_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_WEBSITE_WRONG_URI, R.string.error_message_website_invalid);
+        codeResourceMap.put(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG, R.string.error_message_website_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
     }
 
     public String getMessageForError(ShootrError shootrError) {

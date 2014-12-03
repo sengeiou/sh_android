@@ -17,10 +17,10 @@ import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class ProfileEditPresenter implements Presenter {
 
+    private static final String PROTOCOL_PATTERN = "\"^https?:\\\\/\\\\/\"";
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
@@ -74,14 +74,18 @@ public class ProfileEditPresenter implements Presenter {
         UserModel updatedUserModel = currentUserModel.clone();
         updatedUserModel.setUsername(cleanUsername());
         updatedUserModel.setName(cleanName());
+        updatedUserModel.setBio(cleanBio());
+        updatedUserModel.setWebsite(cleanWebsite());
         return updatedUserModel;
     }
 
     private boolean hasChangedData() {
-        UserModel upadtedUserData = getUpadtedUserData();
-        boolean changedUsername = !upadtedUserData.getUsername().equals(currentUserModel.getUsername());
-        boolean changedName = !upadtedUserData.getName().equals(currentUserModel.getName());
-        return changedName || changedUsername;
+        UserModel updatedUserData = getUpadtedUserData();
+        boolean changedUsername = !currentUserModel.getUsername().equals(updatedUserData.getUsername());
+        boolean changedName = currentUserModel.getName() == null ? updatedUserData.getName() != null : !currentUserModel.getName().equals(updatedUserData.getName());
+        boolean changedBio = currentUserModel.getBio() == null ? updatedUserData.getBio() != null : !currentUserModel.getBio().equals(updatedUserData.getBio());
+        boolean changedWebsite = currentUserModel.getWebsite() == null ? updatedUserData.getWebsite() != null : !currentUserModel.getWebsite().equals(updatedUserData.getWebsite());
+        return changedName || changedUsername || changedWebsite || changedBio;
     }
 
     private String cleanUsername() {
@@ -94,6 +98,25 @@ public class ProfileEditPresenter implements Presenter {
         return trimAndNullWhenEmpty(name);
     }
 
+    private String cleanBio() {
+        String bio = profileEditView.getBio();
+        bio = removeWhiteLines(bio);
+        return trimAndNullWhenEmpty(bio);
+    }
+
+    private String cleanWebsite() {
+        String website = profileEditView.getWebsite();
+        website = removeProtocolFromUrl(website);
+        return trimAndNullWhenEmpty(website);
+    }
+
+    private String removeWhiteLines(String multilineText) {
+        while (multilineText.contains("\n\n")) {
+            multilineText = multilineText.replace("\n\n", "\n");
+        }
+        return multilineText;
+    }
+
     private String trimAndNullWhenEmpty(String text) {
         if (text != null) {
             text = text.trim();
@@ -104,10 +127,15 @@ public class ProfileEditPresenter implements Presenter {
         return text;
     }
 
+    private String removeProtocolFromUrl(String url) {
+        return url.replaceAll(PROTOCOL_PATTERN, "");
+    }
+
     private void saveUpdatedProfile(UserModel updatedUserModel) {
         UpdateUserProfileJob job = objectGraph.get(UpdateUserProfileJob.class);
         job.init(updatedUserModel);
         jobManager.addJobInBackground(job);
+        this.showLoading();
     }
 
     @Subscribe
@@ -117,7 +145,8 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     @Subscribe
-    public void onValidationError(FieldValidationErrorEvent event) {
+    public void onValidationErrors(FieldValidationErrorEvent event) {
+        this.hideLoading();
         List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
         for (FieldValidationError validationError : fieldValidationErrors) {
             this.showValidationError(validationError);
@@ -125,12 +154,19 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void showValidationError(FieldValidationError validationError) {
+        String errorCode = validationError.getErrorCode();
         switch (validationError.getField()) {
             case FieldValidationError.FIELD_USERNAME:
-                this.showUsernameValidationError(validationError.getErrorCode());
+                this.showUsernameValidationError(errorCode);
                 break;
             case FieldValidationError.FIELD_NAME:
-                this.showNameValidationError(validationError.getErrorCode());
+                this.showNameValidationError(errorCode);
+                break;
+            case FieldValidationError.FIELD_BIO:
+                this.showBioValidationError(errorCode);
+                break;
+            case FieldValidationError.FIELD_WEBSITE:
+                this.showWebsiteValidationError(errorCode);
         }
     }
 
@@ -144,13 +180,32 @@ public class ProfileEditPresenter implements Presenter {
         profileEditView.showNameValidationError(messageForCode);
     }
 
+    private void showWebsiteValidationError(String errorCode) {
+        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+        profileEditView.showWebsiteValidationError(messageForCode);
+    }
+
+    private void showBioValidationError(String errorCode) {
+        String messageForCode = errorMessageFactory.getMessageForCode(errorCode);
+        profileEditView.showBioValidationError(messageForCode);
+    }
+
+    private void showLoading() {
+        profileEditView.showLoadingIndicator();
+    }
+
+    private void hideLoading() {
+        profileEditView.hideLoadingIndicator();
+    }
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
+        this.hideLoading();
         this.profileEditView.alertComunicationError();
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        this.hideLoading();
         this.profileEditView.alertConnectionNotAvailable();
     }
 

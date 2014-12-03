@@ -16,6 +16,10 @@ public interface ShootrError {
     public static final String ERROR_CODE_NAME_TOO_SHORT = "U006";
     public static final String ERROR_CODE_NAME_TOO_LONG = "U007";
     public static final String ERROR_CODE_NAME_INVALID_CHARACTERS = "U008";
+    public static final String ERROR_CODE_WEBSITE_WRONG_URI = "U009";
+    public static final String ERROR_CODE_WEBSITE_TOO_LONG = "U010";
+    public static final String ERROR_CODE_BIO_TOO_SHORT = "U011";
+    public static final String ERROR_CODE_BIO_TOO_LONG = "U012";
 
     public String getErrorCode();
 

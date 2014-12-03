@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -21,10 +22,14 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.views.ProfileEditView;
+import com.shootr.android.ui.widgets.MaxLinesInputFilter;
 import com.shootr.android.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class ProfileEditActivity extends BaseSignedInActivity implements ProfileEditView {
+
+    private static final int BIO_MAX_LINES = 1;
+    private static final int BIO_MAX_LENGTH = 150;
 
     @Inject ProfileEditPresenter presenter;
     @Inject ErrorMessageFactory errorMessageFactory;
@@ -35,6 +40,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @InjectView(R.id.profile_edit_team) TextView team;
     @InjectView(R.id.profile_edit_website) TextView website;
     @InjectView(R.id.profile_edit_bio) TextView bio;
+    private MenuItem menuItemDone;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +52,15 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         ButterKnife.inject(this);
 
         scrollViewFocusHack();
+        limitBioFilters();
         initializePresenter();
         setupActionBar();
+    }
+
+    private void limitBioFilters() {
+        bio.setFilters(new InputFilter[] {
+          new MaxLinesInputFilter(BIO_MAX_LINES), new InputFilter.LengthFilter(BIO_MAX_LENGTH)
+        });
     }
 
     private void setupActionBar() {
@@ -112,12 +125,28 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         return name.getText().toString();
     }
 
+    @Override public String getBio() {
+        return bio.getText().toString();
+    }
+
+    @Override public String getWebsite() {
+        return website.getText().toString();
+    }
+
     @Override public void showUsernameValidationError(String errorMessage) {
         username.setError(errorMessage);
     }
 
     @Override public void showNameValidationError(String errorMessage) {
         name.setError(errorMessage);
+    }
+
+    @Override public void showWebsiteValidationError(String errorMessage) {
+        website.setError(errorMessage);
+    }
+
+    @Override public void showBioValidationError(String errorMessage) {
+        bio.setError(errorMessage);
     }
 
     @Override public void showDiscardConfirmation() {
@@ -131,6 +160,15 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
           .show();
     }
 
+    @Override public void showLoadingIndicator() {
+        menuItemDone.setActionView(R.layout.item_list_loading);
+    }
+
+    @Override public void hideLoadingIndicator() {
+        menuItemDone.setActionView(null);
+
+    }
+
     @Override public void alertComunicationError() {
         Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
     }
@@ -141,6 +179,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_edit, menu);
+        menuItemDone = menu.findItem(R.id.menu_done);
         return true;
     }
 
@@ -148,7 +187,7 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         if (item.getItemId() == R.id.menu_done) {
             presenter.done();
             return true;
-        } else if(item.getItemId() == android.R.id.home) {
+        } else if (item.getItemId() == android.R.id.home) {
             presenter.discard();
             return true;
         }

@@ -344,9 +344,17 @@ public class ProfileFragment extends BaseFragment {
         this.user = user;
         setTitle(user.getUsername());
         nameTextView.setText(user.getName());
-        websiteTextView.setText(user.getWebsite());
         followingTextView.setText(String.valueOf(user.getNumFollowings()));
         followersTextView.setText(String.valueOf(user.getNumFollowers()));
+
+        String website = user.getWebsite();
+        if (website != null) {
+            websiteTextView.setText(website);
+            websiteTextView.setVisibility(View.VISIBLE);
+        } else {
+            websiteTextView.setVisibility(View.GONE);
+        }
+
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
@@ -363,7 +371,11 @@ public class ProfileFragment extends BaseFragment {
     private void setUserInfo(UserModel user) {
         setBasicUserInfo(user);
         String favTeamName = user.getFavoriteTeamName();
-        bioTextView.setText(favTeamName == null ? user.getBio() : getString(R.string.profile_bio_format,favTeamName,user.getBio()));
+        String bio = user.getBio();
+        if (bio == null) {
+            bio = "";
+        }
+        bioTextView.setText(favTeamName == null ? bio : getString(R.string.profile_bio_format, favTeamName, bio));
         setMainButtonStatus(user.getRelationship());
     }
 

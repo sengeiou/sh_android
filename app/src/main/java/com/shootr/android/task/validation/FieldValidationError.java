@@ -4,6 +4,8 @@ public class FieldValidationError {
 
     public static final int FIELD_USERNAME = 1;
     public static final int FIELD_NAME = 2;
+    public static final int FIELD_WEBSITE = 3;
+    public static final int FIELD_BIO = 4;
 
     private String errorCode;
     private int field;

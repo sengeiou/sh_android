@@ -10,11 +10,13 @@ import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
+import com.shootr.android.task.validation.BioValidator;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.task.validation.NameValidator;
 import com.shootr.android.task.validation.UsernameValidator;
+import com.shootr.android.task.validation.WebsiteValidator;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
@@ -92,6 +94,11 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
             field = FieldValidationError.FIELD_USERNAME;
         } else if (isNameError(errorCode)) {
             field = FieldValidationError.FIELD_NAME;
+        } else if (isWebsiteError(errorCode)) {
+               field = FieldValidationError.FIELD_WEBSITE;
+        }else if (isBioError(errorCode)) {
+            field = FieldValidationError.FIELD_BIO;
+
         }
 
         if (field > 0) {
@@ -119,10 +126,26 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         return nameCodes.contains(errorCode);
     }
 
+    private boolean isWebsiteError(String errorCode) {
+        Set<String> websiteCodes = new HashSet<>();
+        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG);
+        websiteCodes.add(ShootrError.ERROR_CODE_WEBSITE_WRONG_URI);
+        return websiteCodes.contains(errorCode);
+    }
+
+    private boolean isBioError(String errorCode) {
+        Set<String> bioCodes = new HashSet<>();
+        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_LONG);
+        bioCodes.add(ShootrError.ERROR_CODE_BIO_TOO_SHORT);
+        return bioCodes.contains(errorCode);
+    }
+
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
         UserEntity updatedUserEntity = sessionManager.getCurrentUser().clone();
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
+        updatedUserEntity.setBio(updatedUserModel.getBio());
+        updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
         return updatedUserEntity;
     }
 
@@ -140,6 +163,12 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private void localValidation() {
         validateUsername();
         validateName();
+        validateWebsite();
+        validateBio();
+    }
+
+    private void validateWebsite() {
+        addErrorsIfAny(new WebsiteValidator(updatedUserModel).validate());
     }
 
     private void validateUsername() {
@@ -148,6 +177,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateName() {
         addErrorsIfAny(new NameValidator(updatedUserModel).validate());
+    }
+
+    private void validateBio() {
+        addErrorsIfAny(new BioValidator(updatedUserModel).validate());
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {
