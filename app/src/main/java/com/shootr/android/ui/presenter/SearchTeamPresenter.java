@@ -1,8 +1,12 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.task.events.profile.SearchTeamResultEvent;
+import com.shootr.android.task.jobs.profile.SearchTeamJob;
+import com.shootr.android.ui.model.TeamModel;
 import com.shootr.android.ui.views.SearchTeamView;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
 import java.util.Arrays;
 import java.util.List;
@@ -37,14 +41,14 @@ public class SearchTeamPresenter implements Presenter {
     }
 
     public void search(String queryText) {
-        //TODO launch job
-        List<String> teams =
-          Arrays.asList("Sevilla", "Barcelona", "Real Madrid", "La Palma del Condado", "Recreativo de Huelva");
-        onSearchResultReceived(teams);
+        SearchTeamJob job = objectGraph.get(SearchTeamJob.class);
+        job.init(queryText);
+        jobManager.addJobInBackground(job);
     }
 
-    //TODO recibir evento
-    public void onSearchResultReceived(List<String> teams) {
+    @Subscribe
+    public void onSearchResultReceived(SearchTeamResultEvent event) {
+        List<TeamModel> teams = event.getResult();
         searchTeamView.renderResults(teams);
     }
 

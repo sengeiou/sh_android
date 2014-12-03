@@ -6,8 +6,12 @@ import com.shootr.android.db.objects.TeamEntity;
 import com.shootr.android.db.DatabaseContract.TeamTable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.inject.Inject;
 
 public class TeamMapper extends GenericMapper {
+
+    @Inject public TeamMapper() {
+    }
 
     @Deprecated
     /**

@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.TeamAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.model.TeamModel;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.ui.views.SearchTeamView;
 import java.util.List;
@@ -108,7 +109,7 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         }
     }
 
-    @Override public void renderResults(List<String> teams) {
+    @Override public void renderResults(List<TeamModel> teams) {
         adapter.setContent(teams);
     }
 }

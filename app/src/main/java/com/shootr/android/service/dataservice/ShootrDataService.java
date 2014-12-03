@@ -25,6 +25,7 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
 import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
+import com.shootr.android.service.dataservice.dto.TeamDtoFactory;
 import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.service.dataservice.generic.GenericDto;
@@ -60,6 +61,7 @@ public class ShootrDataService implements ShootrService {
     private ShotDtoFactory shotDtoFactory;
     private MatchDtoFactory matchDtoFactory;
     private DeviceDtoFactory deviceDtoFactory;
+    private TeamDtoFactory teamDtoFactory;
 
     private UserMapper userMapper;
     private FollowMapper followMapper;
@@ -72,12 +74,14 @@ public class ShootrDataService implements ShootrService {
 
     @Inject
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
-                             TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
-                             UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper, MatchDtoFactory matchDtoFactory,
-                             DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper, TeamMapper teamMapper, TimeUtils timeUtils) {
+      TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
+      TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
+      MatchDtoFactory matchDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper,
+      TeamMapper teamMapper, TimeUtils timeUtils) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
+        this.teamDtoFactory = teamDtoFactory;
         this.matchDtoFactory = matchDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
@@ -488,6 +492,24 @@ public class ShootrDataService implements ShootrService {
             return userMapper.fromDto(resultDto);
         }
         return null;
+    }
+
+    @Override public List<TeamEntity> searchTeams(String queryText) throws IOException {
+        List<TeamEntity> teamsFound = new ArrayList<>();
+        GenericDto requestDto = teamDtoFactory.searchTeamsOperation(queryText);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                teamsFound.add(teamMapper.fromDto(dataItem));
+            }
+        }
+        return teamsFound;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

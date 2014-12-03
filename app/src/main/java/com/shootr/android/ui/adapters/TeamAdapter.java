@@ -6,19 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.android.R;
+import com.shootr.android.ui.model.TeamModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamAdapter extends BindableAdapter<String>{
+public class TeamAdapter extends BindableAdapter<TeamModel>{
 
-    List<String> teams;
+    List<TeamModel> teams;
 
     public TeamAdapter(Context context) {
         super(context);
         teams = new ArrayList<>(0);
     }
 
-    public void setContent(List<String> teams) {
+    public void setContent(List<TeamModel> teams) {
         this.teams = teams;
         this.notifyDataSetChanged();
     }
@@ -27,7 +28,7 @@ public class TeamAdapter extends BindableAdapter<String>{
         return teams.size();
     }
 
-    @Override public String getItem(int position) {
+    @Override public TeamModel getItem(int position) {
         return teams.get(position);
     }
 
@@ -39,8 +40,8 @@ public class TeamAdapter extends BindableAdapter<String>{
         return inflater.inflate(R.layout.item_list_search_team, container, false);
     }
 
-    @Override public void bindView(String item, int position, View view) {
+    @Override public void bindView(TeamModel item, int position, View view) {
         TextView name = (TextView) view.findViewById(R.id.team_name);
-        name.setText(item);
+        name.setText(item.getName());
     }
 }
