@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_search_team_delete_background" />
+    <item
+      android:bottom="8dp"
+      android:drawable="@drawable/ic_action_delete_white_24"
+      android:left="8dp"
+      android:right="8dp"
+      android:top="8dp" />
+
+</layer-list>

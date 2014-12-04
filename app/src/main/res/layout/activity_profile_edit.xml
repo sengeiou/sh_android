@@ -71,16 +71,16 @@
               android:layout_marginTop="16dp"
               app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel">
 
-                <EditText
+                <TextView
                   android:id="@+id/profile_edit_team"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:background="?editTextBackground"
+                  android:textColor="?editTextColor"
                   android:hint="@string/activity_edit_profile_team_hint"
-                  android:imeOptions="actionNext"
-                  android:inputType="textNoSuggestions"
-                  android:lines="1"
                   android:nextFocusDown="@+id/profile_edit_website"
-                  android:singleLine="true" />
+                  android:singleLine="true"
+                  android:textSize="18sp" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
 

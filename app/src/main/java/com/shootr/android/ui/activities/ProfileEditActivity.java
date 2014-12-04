@@ -3,6 +3,7 @@ package com.shootr.android.ui.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.InputFilter;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserModel;
@@ -30,6 +32,10 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     private static final int BIO_MAX_LINES = 1;
     private static final int BIO_MAX_LENGTH = 150;
+    private static final int REQUEST_SEARCH_TEAM = 1;
+
+    public static final String EXTRA_TEAM_NAME = "team_name";
+    public static final String EXTRA_TEAM_ID = "team_id";
 
     @Inject ProfileEditPresenter presenter;
     @Inject ErrorMessageFactory errorMessageFactory;
@@ -86,6 +92,14 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
         presenter.initialize(this, getObjectGraph());
     }
 
+    @OnClick(R.id.profile_edit_team)
+    public void onTeamClick() {
+        // TODO si se hace desde el presenter se puede usar el team name del modelo, que es el bueno, y te ahorras validar que el name no esté vacío en la pantalla de search
+        Intent intent = new Intent(this, SearchTeamActivity.class);
+        intent.putExtra(EXTRA_TEAM_NAME, team.getText().toString());
+        startActivityForResult(intent, REQUEST_SEARCH_TEAM);
+    }
+
     @Override protected void onResume() {
         super.onResume();
         presenter.resume();
@@ -94,6 +108,15 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     @Override protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SEARCH_TEAM && resultCode == RESULT_OK) {
+            String teamName = data.getStringExtra(EXTRA_TEAM_NAME);
+            long teamId = data.getLongExtra(EXTRA_TEAM_ID, 0);
+            presenter.changeTeam(teamId, teamName);
+        }
     }
 
     @Override public void renderUserInfo(UserModel userModel) {
@@ -131,6 +154,14 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
 
     @Override public String getWebsite() {
         return website.getText().toString();
+    }
+
+    @Override public String getTeam() {
+        return team.getText().toString();
+    }
+
+    @Override public void setTeam(String teamName) {
+        team.setText(teamName);
     }
 
     @Override public void showUsernameValidationError(String errorMessage) {

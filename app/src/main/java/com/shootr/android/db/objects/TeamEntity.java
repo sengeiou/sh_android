@@ -3,6 +3,7 @@ package com.shootr.android.db.objects;
 public class TeamEntity extends Synchronized {
 
     private Long idTeam;
+    private Integer popularity;
     private String clubName;
     private String officialName;
     private String shortName;
@@ -46,5 +47,13 @@ public class TeamEntity extends Synchronized {
 
     public void setTlaName(String tlaName) {
         this.tlaName = tlaName;
+    }
+
+    public Integer getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Integer popularity) {
+        this.popularity = popularity;
     }
 }

@@ -139,6 +139,10 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
+    @Override public List<TeamEntity> searchTeams(String queryText) {
+        return null;
+    }
+
     public long getDelay() {
         return delay;
     }

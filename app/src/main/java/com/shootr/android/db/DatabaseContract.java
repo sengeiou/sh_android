@@ -177,6 +177,7 @@ public class DatabaseContract {
         }
         public static final String TABLE = "Team";
         public static final String ID_TEAM = "idTeam";
+        public static final String POPULARITY = "popularity";
         public static final String CLUB_NAME="clubName";
         public static final String OFFICIAL_NAME="officialName";
         public static final String SHORT_NAME="shortName";
@@ -184,6 +185,7 @@ public class DatabaseContract {
 
         public static final String[] PROJECTION = {
           ID_TEAM,
+          POPULARITY,
           CLUB_NAME,
           OFFICIAL_NAME,
           SHORT_NAME,

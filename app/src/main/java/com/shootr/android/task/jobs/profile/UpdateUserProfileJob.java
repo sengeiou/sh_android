@@ -27,16 +27,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> {
 
     private static final int PRIORITY = 8;
-
-    private static final String[] USERNAME_ERRORS = {
-      ShootrError.ERROR_CODE_USERNAME_DUPLICATE, ShootrError.ERROR_CODE_USERNAME_NULL,
-      ShootrError.ERROR_CODE_USERNAME_TOO_SHORT, ShootrError.ERROR_CODE_USERNAME_TOO_LONG,
-      ShootrError.ERROR_CODE_USERNAME_INVALID_CHARACTERS
-    };
 
     private ShootrService service;
     private SessionManager sessionManager;
@@ -63,8 +58,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     @Override protected void run() throws SQLException, IOException, Exception {
         localValidation();
-        boolean hasLocalErrors = !fieldValidationErrors.isEmpty();
-        if (hasLocalErrors) {
+        if (hasLocalErrors()) {
             postValidationErrors();
             return;
         }
@@ -82,6 +76,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
                 throw serverException;
             }
         }
+    }
+
+    private boolean hasLocalErrors() {
+        return !fieldValidationErrors.isEmpty();
     }
 
     private void postValidationErrors() {
@@ -146,6 +144,8 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
         updatedUserEntity.setWebsite(updatedUserModel.getWebsite());
+        updatedUserEntity.setFavoriteTeamId(updatedUserModel.getFavoriteTeamId());
+        updatedUserEntity.setFavoriteTeamName(updatedUserModel.getFavoriteTeamName());
         return updatedUserEntity;
     }
 
@@ -165,6 +165,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
         validateName();
         validateWebsite();
         validateBio();
+        validateTeam();
     }
 
     private void validateWebsite() {
@@ -181,6 +182,19 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
     private void validateBio() {
         addErrorsIfAny(new BioValidator(updatedUserModel).validate());
+    }
+
+    private void validateTeam() {
+        Long teamId = updatedUserModel.getFavoriteTeamId();
+        if (teamId <= 0) {
+            updatedUserModel.setFavoriteTeamId(null);
+            teamId = null;
+        }
+        String teamName = updatedUserModel.getFavoriteTeamName();
+        if (teamName == null && teamId != null) {
+            Timber.w("Trying to send a teamId %d with a null teamName. Setting id to null just in case.", teamId);
+            updatedUserModel.setFavoriteTeamId(null);
+        }
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {
