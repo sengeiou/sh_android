@@ -21,7 +21,13 @@ public interface SearchTeamView {
 
     void hideEmpty();
 
+    void showMaxResultsIndicator();
+
+    void hideMaxResultsIndicator();
+
     void enableDeleteTeam(String teamName);
+
+    void disableDeleteTeam();
 
     void alertComunicationError();
 

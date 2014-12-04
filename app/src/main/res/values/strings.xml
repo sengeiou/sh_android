@@ -65,9 +65,9 @@
 
     <!-- Menu names -->
     <string name="menu_info">Info</string>
-    <string name="menu_search_timeline">Search Timeline</string>
-    <string name="menu_search_people">Find People</string>
-    <string name="menu_search_teams">Find Team</string>
+    <string name="menu_search_timeline">Search timeline</string>
+    <string name="menu_search_people">Find people</string>
+    <string name="menu_search_teams">Find team</string>
 
     <!-- Errors -->
     <string name="communication_error">Communication error</string>
@@ -96,14 +96,14 @@
 
 
     <!-- Find Friends -->
-    <string name="activity_find_friends_title">Find People</string>
-    <string name="activity_find_friends_hint">Find People</string>
+    <string name="activity_find_friends_title">Find people</string>
+    <string name="activity_find_friends_hint">Find people</string>
     <string name="activity_find_friends_empty_message">No Results.</string>
     <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
 
     <!-- Add Match -->
     <string name="add_match">Add Match</string>
-    <string name="activity_add_match_hint">Search Match</string>
+    <string name="activity_add_match_hint">Search match</string>
 
     <!-- Info -->
     <string name="activity_empty_info">No people watching</string>
@@ -147,7 +147,8 @@
     <string name="profile_updated">Profile updated</string>
     <string name="discard_profile_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
-    <string name="activity_search_team_hint">Search Team</string>
+    <string name="activity_search_team_hint">Search team</string>
     <string name="edit_profile_team_remove_footer">Remove %s</string>
+    <string name="search_team_max_items_message">Refine search for more accurate results</string>
 
 </resources>

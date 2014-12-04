@@ -39,6 +39,8 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
     private TeamAdapter adapter;
     private SearchView searchView;
     private String restoredQuery;
+    private View removeTeamItem;
+    private View maxResultsIndicator;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,12 +175,29 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         emptyOrErrorView.setVisibility(View.GONE);
     }
 
+    @Override public void showMaxResultsIndicator() {
+        maxResultsIndicator = LayoutInflater.from(this).inflate(R.layout.item_list_search_team_max_items, list, false);
+        list.addFooterView(maxResultsIndicator, null, false);
+    }
+
+    @Override public void hideMaxResultsIndicator() {
+        list.removeFooterView(maxResultsIndicator);
+    }
+
     @Override public void enableDeleteTeam(String teamName) {
-        View removeTeamItem = LayoutInflater.from(this).inflate(R.layout.item_list_search_team_remove, list, false);
+        if (removeTeamItem == null) {
+            removeTeamItem = LayoutInflater.from(this).inflate(R.layout.item_list_search_team_remove, list, false);
+        }
         TextView removeTeamItemTitle = (TextView) removeTeamItem.findViewById(R.id.team_remove_title);
         String removeTeamItemTitleText = getString(R.string.edit_profile_team_remove_footer, teamName);
         removeTeamItemTitle.setText(removeTeamItemTitleText);
         list.addFooterView(removeTeamItem);
+    }
+
+    @Override public void disableDeleteTeam() {
+        if (removeTeamItem != null) {
+            list.removeFooterView(removeTeamItem);
+        }
     }
 
     @Override public void deliverSelectedTeam(String teamName, Long teamId) {

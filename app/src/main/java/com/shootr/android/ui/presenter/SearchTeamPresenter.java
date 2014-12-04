@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 public class SearchTeamPresenter implements Presenter {
 
+    private static final int MAX_RESULTS_EXPECTED = 50;
 
     private SearchTeamView searchTeamView;
     private ObjectGraph objectGraph;
@@ -46,6 +47,10 @@ public class SearchTeamPresenter implements Presenter {
 
     private void enableDeleteTeam() {
         searchTeamView.enableDeleteTeam(currentTeamName);
+    }
+
+    private void disableDeleteTeam() {
+        searchTeamView.disableDeleteTeam();
     }
 
     public void search(String queryText) {
@@ -81,10 +86,13 @@ public class SearchTeamPresenter implements Presenter {
         List<TeamModel> teams = event.getResult();
         if (!teams.isEmpty()) {
             showResults(teams);
+            disableDeleteTeam();
         } else {
             showEmpty();
+            enableDeleteTeam();
         }
     }
+
 
     private void showEmpty() {
         searchTeamView.showEmpty();
@@ -96,6 +104,11 @@ public class SearchTeamPresenter implements Presenter {
         searchTeamView.renderResults(teams);
         searchTeamView.hideEmpty();
         searchTeamView.hideLoading();
+        if (teams.size() == MAX_RESULTS_EXPECTED) {
+            searchTeamView.showMaxResultsIndicator();
+        } else {
+            searchTeamView.hideMaxResultsIndicator();
+        }
     }
 
     public void searchInterfaceReady() {
