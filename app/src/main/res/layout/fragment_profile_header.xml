@@ -45,6 +45,8 @@
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:background="?android:selectableItemBackground"
+              android:clickable="true"
               android:text="-"
               tools:text="749" />
 
@@ -71,6 +73,8 @@
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:background="?android:selectableItemBackground"
+              android:clickable="true"
               android:text="-"
               tools:text="23" />
 

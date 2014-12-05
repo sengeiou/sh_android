@@ -415,6 +415,17 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
+    @OnClick(R.id.profile_website)
+    public void onWebsiteClick() {
+        Intent linkIntent = new Intent(Intent.ACTION_VIEW);
+        String url = user.getWebsite();
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+        linkIntent.setData(Uri.parse(url));
+        startActivity(linkIntent);
+    }
+
     public void followUser(){
         startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
