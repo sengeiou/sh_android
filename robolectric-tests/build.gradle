@@ -13,10 +13,10 @@ android {
 
     buildTypes {
         debug {
-            runProguard false
+            minifyEnabled false
         }
         release {
-            runProguard false
+            minifyEnabled false
         }
 
     }

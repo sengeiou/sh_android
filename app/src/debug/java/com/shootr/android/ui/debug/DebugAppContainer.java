@@ -527,7 +527,7 @@ public class DebugAppContainer implements AppContainer {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//"+BuildConfig.PACKAGE_NAME+"//databases//"+ ShootrDbOpenHelper.DATABASE_NAME;
+                String currentDBPath = "//data//"+BuildConfig.APPLICATION_ID+"//databases//"+ ShootrDbOpenHelper.DATABASE_NAME;
                 String backupDBPath = ShootrDbOpenHelper.DATABASE_NAME;
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, backupDBPath);

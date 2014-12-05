@@ -16,7 +16,7 @@ buildscript {
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
-apply plugin: 'spoon'
+//apply plugin: 'spoon'
 //apply plugin: 'hugo'
 apply plugin: "sonar-runner"
 apply plugin: 'maven'
@@ -36,7 +36,7 @@ def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone(
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "com.shootr.android"
@@ -83,14 +83,14 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+
     buildTypes {
-        //TODO hace falta?
-        lintOptions {
-            abortOnError false
-            disable 'InvalidPackage'
-        }
         debug {
-            runProguard false
+            minifyEnabled false
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
             signingConfig signingConfigs.debug
@@ -98,7 +98,7 @@ android {
             buildConfigField "Boolean", "USE_FILE_LOGGER", "true"
         }
         release {
-            runProguard false //TODO configurarlo y activarlo
+            minifyEnabled false //TODO configurarlo y activarlo
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
@@ -136,7 +136,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.0'
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
 
-    compile 'com.google.guava:guava:17.0'
+    compile 'com.google.guava:guava:18.0'
 
     compile 'joda-time:joda-time:2.3'
 
@@ -160,11 +160,11 @@ dependencies {
     compile 'com.crashlytics.android:crashlytics:1.+'
 }
 
-spoon {
+/*spoon {
     debug = true
     failIfNoDeviceConnected = true
     //className = 'com.shootr.android.ui.activities.registro.WelcomeLoginActivityTest'
-}
+}*/
 
 sonarRunner {
     sonarProperties {
@@ -207,7 +207,6 @@ afterEvaluate { project ->
     Task stripPlayServices = project.tasks.create(name: 'stripPlayServices', group: "Strip") {
         inputs.files new File(playServiceRootFolder, "classes.jar")
         outputs.dir playServiceRootFolder
-        description 'Strip useless packages from Google Play Services library to avoid reaching dex limit'
 
         doLast {
             copy {
@@ -234,9 +233,9 @@ afterEvaluate { project ->
                     //google the play services packages and remove your useless
                 }
             }.execute()
-            delete {
+            /*delete {
                 delete (file(new File(playServiceRootFolder, "classes_orig.jar")))
-            }
+            }*/
         }
     }
 

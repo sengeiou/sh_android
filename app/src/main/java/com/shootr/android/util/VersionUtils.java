@@ -30,6 +30,6 @@ public class VersionUtils {
     }
 
     private static PackageInfo getPackageInfo(Context context) throws PackageManager.NameNotFoundException {
-        return context.getPackageManager().getPackageInfo(BuildConfig.PACKAGE_NAME, 0);
+        return context.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, 0);
     }
 }
