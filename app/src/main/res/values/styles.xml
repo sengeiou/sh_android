@@ -121,12 +121,11 @@
 
     <style name="ProfileMarkTitle">
         <item name="android:textColor">@color/gray_60</item>
+        <item name="android:layout_marginLeft">4dp</item>
     </style>
 
     <style name="ProfileMarkValue">
         <item name="android:textColor">@color/primary</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">17sp</item>
     </style>
 
     <!-- Follow button -->

@@ -73,14 +73,13 @@ public class ProfileFragment extends BaseFragment {
     public static final String TAG = "profile";
 
     @InjectView(R.id.profile_name) TextView nameTextView;
-    @InjectView(R.id.profile_rank) TextView rankTextView;
     @InjectView(R.id.profile_bio) TextView bioTextView;
     @InjectView(R.id.profile_website) TextView websiteTextView;
+    @InjectView(R.id.profile_team) TextView teamTextView;
     @InjectView(R.id.profile_avatar) ImageView avatarImageView;
 
-    @InjectView(R.id.profile_marks_points) TextView pointsTextView;
     @InjectView(R.id.profile_marks_followers) TextView followersTextView;
-    @InjectView(R.id.profile_marks_following_text) TextView followingTextView;
+    @InjectView(R.id.profile_marks_following) TextView followingTextView;
 
     @InjectView(R.id.profile_follow_button) FollowButton followButton;
 
@@ -370,12 +369,20 @@ public class ProfileFragment extends BaseFragment {
 
     private void setUserInfo(UserModel user) {
         setBasicUserInfo(user);
-        String favTeamName = user.getFavoriteTeamName();
         String bio = user.getBio();
-        if (bio == null) {
-            bio = "";
+        if (bio != null) {
+            bioTextView.setText(bio);
+            bioTextView.setVisibility(View.VISIBLE);
+        } else {
+            bioTextView.setVisibility(View.GONE);
         }
-        bioTextView.setText(favTeamName == null ? bio : getString(R.string.profile_bio_format, favTeamName, bio));
+        String favTeamName = user.getFavoriteTeamName();
+        if (favTeamName != null) {
+            teamTextView.setText(favTeamName);
+            teamTextView.setVisibility(View.VISIBLE);
+        } else {
+            teamTextView.setVisibility(View.GONE);
+        }
         setMainButtonStatus(user.getRelationship());
     }
 
@@ -387,12 +394,12 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.profile_marks_following_box)
+    @OnClick(R.id.profile_marks_following)
     public void openFollowingList() {
         openUserFollowsList(UserFollowsFragment.FOLLOWING);
     }
 
-    @OnClick(R.id.profile_marks_followers_box)
+    @OnClick(R.id.profile_marks_followers)
     public void openFollowersList() {
         openUserFollowsList(UserFollowsFragment.FOLLOWERS);
     }

@@ -36,69 +36,119 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
-      android:layout_below="@+id/profile_bio"
+      android:layout_marginTop="16dp"
+      android:layout_toRightOf="@+id/profile_avatar_container"
       android:gravity="top"
       android:orientation="horizontal">
 
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?android:selectableItemBackground"
+          android:orientation="vertical"
+          android:visibility="gone">
+
             <TextView
-              android:id="@+id/profile_marks_following"
+              android:id="@+id/profile_marks_points"
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="0dp"
+              android:layout_gravity="center"
+              android:layout_weight="1"
+              android:gravity="center"
               android:text="-"
-              tools:text="749" />
+              tools:text="3201" />
+
+            <TextView
+              style="@style/ProfileMarkTitle"
+              android:layout_width="match_parent"
+              android:layout_height="0dp"
+              android:layout_gravity="center"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="@string/profile_marks_points" />
+        </LinearLayout>
+
+        <LinearLayout
+          android:id="@+id/profile_marks_following_box"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="?android:selectableItemBackground"
+          android:clickable="true"
+          android:orientation="vertical">
+
+            <TextView
+              android:id="@+id/profile_marks_following_text"
+              style="@style/ProfileMarkValue"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_gravity="center"
+              android:layout_weight="1"
+              android:gravity="center"
+              android:text="-"
+              tools:text="44" />
 
             <TextView
               style="@style/ProfileMarkTitle"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="0dp"
               android:layout_gravity="center"
+              android:layout_weight="1"
               android:gravity="center"
               android:text="@string/profile_marks_following" />
+        </LinearLayout>
 
-            <TextView
-              style="@style/ProfileMarkTitle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginLeft="8dp"
-              android:layout_marginRight="8dp"
-              android:gravity="center"
-              android:text="|" />
+        <LinearLayout
+          android:id="@+id/profile_marks_followers_box"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="?android:selectableItemBackground"
+          android:orientation="vertical">
 
             <TextView
               android:id="@+id/profile_marks_followers"
               style="@style/ProfileMarkValue"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="0dp"
+              android:layout_gravity="center"
+              android:layout_weight="1"
+              android:gravity="center"
               android:text="-"
               tools:text="23" />
 
             <TextView
               style="@style/ProfileMarkTitle"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="0dp"
               android:layout_gravity="center"
+              android:layout_weight="1"
               android:gravity="center"
               android:text="@string/profile_marks_followers" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- Follow buttons -->
     <com.shootr.android.ui.widgets.FollowButton
       android:id="@+id/profile_follow_button"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@id/profile_avatar_container"
-      android:layout_alignLeft="@+id/profile_name"
+      android:layout_below="@+id/profile_scores_bar"
       android:layout_marginBottom="1dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="4dp"
+      android:layout_toRightOf="@+id/profile_avatar_container"
       android:clickable="true" />
 
     <TextView
       android:id="@+id/profile_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_toRightOf="@+id/profile_avatar_container"
+      android:layout_below="@+id/profile_avatar_container"
       android:layout_marginLeft="16dp"
       android:layout_marginTop="16dp"
       android:textSize="20sp"
@@ -106,32 +156,34 @@
       tools:text="Ignasi" />
 
     <TextView
-      android:id="@+id/profile_team"
+      android:id="@+id/profile_rank"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/profile_name"
-      android:layout_alignLeft="@+id/profile_name"
+      android:layout_alignBaseline="@+id/profile_name"
+      android:layout_marginLeft="8dp"
+      android:layout_toRightOf="@+id/profile_name"
       android:textColor="@color/gray_60"
-      tools:text="Sevilla FC" />
-
+      android:visibility="gone"
+      tools:text="rank 34k" />
 
     <TextView
       android:id="@+id/profile_bio"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/profile_avatar_container"
+      android:layout_alignLeft="@+id/profile_name"
+      android:layout_below="@+id/profile_name"
       android:layout_marginRight="16dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginTop="16dp"
-      android:textColor="@color/gray_40"
-      tools:text="Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really." />
+      android:layout_marginTop="4dp"
+      android:textColor="@color/gray_60"
+      tools:text="Sevilla FC. Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really." />
 
     <TextView
       android:id="@+id/profile_website"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/profile_name"
-      android:layout_below="@+id/profile_team"
+      android:layout_below="@+id/profile_bio"
+      android:autoLink="web"
       android:background="?android:selectableItemBackground"
       android:textColor="@color/links"
       tools:text="sevibus.sloydev.com" />
