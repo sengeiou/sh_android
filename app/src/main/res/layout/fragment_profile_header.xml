@@ -26,7 +26,7 @@
           android:layout_gravity="center"
           android:indeterminate="true"
           android:visibility="gone"
-          tools:visibility="visible"
+          tools:visibility="gone"
           android:layout_height="wrap_content" />
     </FrameLayout>
 
@@ -35,9 +35,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="16dp"
+      android:layout_marginTop="8dp"
       android:layout_marginRight="16dp"
       android:layout_below="@+id/profile_bio"
-      android:gravity="top"
       android:orientation="horizontal">
 
             <TextView
@@ -86,7 +86,8 @@
     <!-- Follow buttons -->
     <com.shootr.android.ui.widgets.FollowButton
       android:id="@+id/profile_follow_button"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_marginRight="16dp"
       android:layout_height="wrap_content"
       android:layout_alignBottom="@id/profile_avatar_container"
       android:layout_alignLeft="@+id/profile_name"
@@ -103,6 +104,7 @@
       android:layout_marginTop="16dp"
       android:textSize="20sp"
       android:textStyle="bold"
+      android:textColor="@color/material_black"
       tools:text="Ignasi" />
 
     <TextView
@@ -111,9 +113,8 @@
       android:layout_height="wrap_content"
       android:layout_below="@+id/profile_name"
       android:layout_alignLeft="@+id/profile_name"
-      android:textColor="@color/gray_60"
+      android:textColor="@color/gray_50"
       tools:text="Sevilla FC" />
-
 
     <TextView
       android:id="@+id/profile_bio"
@@ -133,6 +134,7 @@
       android:layout_alignLeft="@+id/profile_name"
       android:layout_below="@+id/profile_team"
       android:background="?android:selectableItemBackground"
+      android:clickable="true"
       android:textColor="@color/links"
       tools:text="sevibus.sloydev.com" />
 
