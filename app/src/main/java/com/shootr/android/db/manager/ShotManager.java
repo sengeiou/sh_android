@@ -266,8 +266,8 @@ public class ShotManager extends  AbstractManager{
         insertInTableSync(SHOT_TABLE,3,1000,0);
     }
 
-    public ShotEntity retrieveLastShotFromUser(SQLiteDatabase db, Long userId) {
-        Cursor c = db.query(SHOT_TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?",
+    public ShotEntity retrieveLastShotFromUser(Long userId) {
+        Cursor c = getReadableDatabase().query(SHOT_TABLE, ShotTable.PROJECTION, ShotTable.ID_USER + "=?",
           new String[] { String.valueOf(userId) }, null, null, CSYS_BIRTH + " DESC", "1");
         if (c.getCount() > 0) {
             c.moveToFirst();

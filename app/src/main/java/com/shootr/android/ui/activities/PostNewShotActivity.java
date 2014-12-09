@@ -20,6 +20,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.SessionManager;
+import com.shootr.android.ui.presenter.PostNewShotPresenter;
+import com.shootr.android.ui.views.PostNewShotView;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -36,7 +39,7 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class PostNewShotActivity extends BaseSignedInActivity {
+public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
 
@@ -49,19 +52,15 @@ public class PostNewShotActivity extends BaseSignedInActivity {
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
 
     @Inject PicassoWrapper picasso;
-    @Inject JobManager jobManager;
-    @Inject Bus bus;
-    @Inject SQLiteOpenHelper dbHelper;
-    @Inject ShotManager shotManager;
-    private UserEntity currentUser;
+    @Inject SessionManager sessionManager;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
-    private ShotEntity previousShot;
+
+    private PostNewShotPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         if (!restoreSessionOrLogin()) {
             return;
@@ -70,20 +69,25 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         setContentView(R.layout.activity_new_shot);
         ButterKnife.inject(this);
 
-        currentUser = ShootrApplication.get(this).getCurrentUser();
+        initializePresenter();
+        initializeViews();
+        setTextReceivedFromIntent();
+    }
 
-        picasso.loadProfilePhoto(currentUser.getPhoto()).into(avatar);
-        name.setText(currentUser.getName());
-        username.setText("@" + currentUser.getUserName());
+    private void initializePresenter() {
+        presenter = getObjectGraph().get(PostNewShotPresenter.class);
+        presenter.initialize(this, getObjectGraph());
+    }
+
+    private void initializeViews() {
+        picasso.loadProfilePhoto(sessionManager.getCurrentUser().getPhoto()).into(avatar);
+        name.setText(sessionManager.getCurrentUser().getName());
+        username.setText("@" + sessionManager.getCurrentUser().getUserName());
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
 
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
-
-        previousShot = shotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
-            ShootrApplication.get(this).getCurrentUser().getIdUser());
-        setTextReceivedFromIntent();
     }
 
     private void setTextReceivedFromIntent() {
@@ -93,107 +97,12 @@ public class PostNewShotActivity extends BaseSignedInActivity {
 
     @OnTextChanged(R.id.new_shot_text)
     public void textChanged() {
-        String filteredText = getFilteredText();
-        setCharCounterStatus(filteredText);
-        setSendButtonIsEnabled(filteredText);
-    }
-
-    private void setSendButtonIsEnabled(String currentText) {
-        sendButton.setEnabled(isValidComment(currentText));
-    }
-
-    private void setCharCounterStatus(String currentText) {
-        int remainingLength = MAX_LENGTH - currentText.length();
-        charCounter.setText(String.valueOf(remainingLength));
-
-        boolean isValidLenght = remainingLength > 0;
-        charCounter.setTextColor(isValidLenght ? charCounterColorNormal : charCounterColorError);
+        presenter.textChanged(editTextView.getText().toString());
     }
 
     @OnClick(R.id.new_shot_send_button)
     public void sendShot() {
-        String comment = filterText(editTextView.getText().toString());
-        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
-
-        if (isCommentRepeated(comment)) {
-            Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (isValidComment(comment)) {
-            startJob(currentUser,comment);
-            setProgressUI(true);
-        } else {
-            Timber.i("Comment invalid: \"%s\"", comment);
-            Toast.makeText(this, "Invalid editTextView", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void startJob(UserEntity currentUser, String comment){
-        PostNewShotJob job = ShootrApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
-        job.init(currentUser, comment);
-        jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void shotSent(PostNewShotResultEvent event) {
-        Timber.d("Shot sent successfuly :D");
-        setResult(RESULT_OK);
-        finish(); //TODO animación hacia abjo
-    }
-
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-            Timber.e("Shot not sent successfuly :(");
-            setProgressUI(false);
-            Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        setProgressUI(false);
-        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
-    }
-
-    private void setProgressUI(boolean showProgress) {
-        progress.setVisibility(showProgress ? View.VISIBLE : View.GONE);
-        sendButton.setVisibility(showProgress ? View.GONE : View.VISIBLE);
-    }
-
-    private String getFilteredText() {
-        return filterText(editTextView.getText().toString());
-    }
-
-    private String filterText(String originalText) {
-        String trimmed = originalText.trim();
-        while (trimmed.contains("\n\n\n")) {
-            trimmed = trimmed.replace("\n\n\n", "\n\n");
-        }
-        return trimmed;
-    }
-
-    private boolean isValidComment(String text) {
-        return text.length() > 0 && text.length() <= MAX_LENGTH;
-    }
-
-    private boolean isCommentRepeated(String text) {
-        if (previousShot != null) {
-            return previousShot.getComment().equals(text);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        bus.unregister(this);
+        presenter.sendShot(editTextView.getText().toString());
     }
 
     @Override
@@ -202,14 +111,71 @@ public class PostNewShotActivity extends BaseSignedInActivity {
             super.onBackPressed();
         } else {
             new AlertDialog.Builder(this).setMessage("Discard shot?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .create()
-                .show();
+              .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                  @Override public void onClick(DialogInterface dialog, int which) {
+                      finish();
+                  }
+              })
+              .setNegativeButton("No", null)
+              .create()
+              .show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
+
+    @Override public void setResultOk() {
+        setResult(RESULT_OK);
+    }
+
+    @Override public void closeScreen() {
+        finish();
+    }
+
+    @Override public void setRemainingCharactersCount(int remainingCharacters) {
+        charCounter.setText(String.valueOf(remainingCharacters));
+    }
+
+    @Override public void setRemainingCharactersColorValid() {
+        charCounter.setTextColor(charCounterColorNormal);
+    }
+
+    @Override public void setRemainingCharactersColorInvalid() {
+        charCounter.setTextColor(charCounterColorError);
+    }
+
+    @Override public void enableSendButton() {
+        sendButton.setEnabled(true);
+    }
+
+    @Override public void disableSendButton() {
+        sendButton.setEnabled(false);
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
+    }
+
+    @Override public void showLoading() {
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        progress.setVisibility(View.GONE);
+    }
+
+    @Override public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -27,6 +27,7 @@ import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.util.PicassoWrapper;
@@ -145,6 +146,8 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileEditPresenter.class,
 
     SearchTeamPresenter.class,
+
+    PostNewShotPresenter.class,
 
     TimeFormatter.class,
 
