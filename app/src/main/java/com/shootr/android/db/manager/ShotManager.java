@@ -69,7 +69,8 @@ public class ShotManager extends  AbstractManager{
           +
           ",b."
           + ShotTable.ID_USER+","
-          + ShotTable.COMMENT
+          + ShotTable.COMMENT+","
+          + ShotTable.IMAGE
           + ",b."
           + UserTable.NAME
           +",b."
@@ -182,7 +183,8 @@ public class ShotManager extends  AbstractManager{
     public List<ShotModel> retrieveTimelineWithUsers(Long currentUserId) {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
-                + ShotTable.COMMENT +
+                + ShotTable.COMMENT+ ","
+                + ShotTable.IMAGE +
                 ",b."+UserTable.FAVORITE_TEAM_ID+
                 ",b."+UserTable.FAVORITE_TEAM_NAME+
                 ",b." +UserTable.BIO +
