@@ -449,11 +449,11 @@ public class ProfileFragment extends BaseFragment {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            for (ShotModel shot : shots) {
-                View shotView = inflater.inflate(R.layout.item_list_shot, shotsList, false);
-                TimelineAdapter.ViewHolder vh = new TimelineAdapter.ViewHolder(shotView, avatarClickListener);
-                bindShotView(vh, shot);
+            TimelineAdapter timelineAdapter =
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
+            timelineAdapter.setShots(shots);
+            for (int i = 0; i < timelineAdapter.getCount(); i++) {
+                View shotView = timelineAdapter.getView(i, null, shotsList);
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
@@ -462,20 +462,6 @@ public class ProfileFragment extends BaseFragment {
             shotsList.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void bindShotView(TimelineAdapter.ViewHolder vh, ShotModel item) {
-        vh.name.setText(item.getUsername());
-
-        vh.text.setText(item.getComment());
-
-        long timestamp = item.getCsysBirth().getTime();
-        vh.timestamp.setText(timeUtils.getElapsedTime(getActivity(), timestamp));
-        TimelineAdapter.addLinks(vh.text);
-
-        String photo = item.getPhoto();
-        picasso.loadProfilePhoto(photo).into(vh.avatar);
-        vh.avatar.setTag(vh);
     }
 
     private void onShotAvatarClick(View v) {
