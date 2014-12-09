@@ -105,6 +105,14 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 String photo = item.getPhoto();
                 picasso.load(photo).into(vh.avatar);
                 vh.avatar.setTag(vh);
+
+                String imageUrl = item.getImage();
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    vh.image.setVisibility(View.VISIBLE);
+                    picasso.loadTimelineImage(imageUrl).into(vh.image);
+                } else {
+                    vh.image.setVisibility(View.GONE);
+                }
                 break;
             default:
                 break;
@@ -130,6 +138,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_user_name) public TextView name;
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
         @InjectView(R.id.shot_text) public TextView text;
+        @InjectView(R.id.shot_image) public ImageView image;
         public int position;
 
         public ViewHolder(View view, View.OnClickListener avatarClickListener) {

@@ -29,6 +29,10 @@ public class PicassoWrapper {
         return loadResult;
     }
 
+    public RequestCreator loadTimelineImage(String path) {
+        return picasso.load(path).placeholder(R.color.transparent);
+    }
+
     private RequestCreator loadDefaultImage() {
         return load(defaultImageRes);
     }
