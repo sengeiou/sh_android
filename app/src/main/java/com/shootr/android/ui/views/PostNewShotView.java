@@ -1,5 +1,7 @@
 package com.shootr.android.ui.views;
 
+import java.io.File;
+
 public interface PostNewShotView extends LoadDataView {
 
     void setResultOk();
@@ -17,4 +19,12 @@ public interface PostNewShotView extends LoadDataView {
     void disableSendButton();
 
     void hideKeyboard();
+
+    void selectImage();
+
+    void showImagePreview(String imagePath);
+
+    void showImagePreview(File imageFile);
+
+    void hideImagePreview();
 }

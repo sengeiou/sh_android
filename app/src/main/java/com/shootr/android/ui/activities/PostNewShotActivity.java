@@ -1,16 +1,17 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,29 +22,24 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import com.path.android.jobqueue.JobManager;
+import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
+import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.db.objects.ShotEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.shots.PostNewShotResultEvent;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import java.io.File;
+import java.io.IOException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
+    private static final int REQUEST_CHOOSE_PHOTO = 1;
+    private static final int REQUEST_TAKE_PHOTO = 2;
 
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
@@ -52,6 +48,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
     @InjectView(R.id.new_shot_send_button) ImageButton sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
+    @InjectView(R.id.new_shot_photo_button) ImageButton addPhotoButton;
     @InjectView(R.id.new_shot_image_container) ViewGroup imageContainer;
     @InjectView(R.id.new_shot_image) ImageView image;
 
@@ -100,13 +97,23 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @OnTextChanged(R.id.new_shot_text)
-    public void textChanged() {
+    public void onTextChanged() {
         presenter.textChanged(editTextView.getText().toString());
     }
 
     @OnClick(R.id.new_shot_send_button)
-    public void sendShot() {
+    public void onSendShot() {
         presenter.sendShot(editTextView.getText().toString());
+    }
+
+    @OnClick(R.id.new_shot_photo_button)
+    public void onAddImage() {
+        presenter.chooseImage();
+    }
+
+    @OnClick(R.id.new_shot_image_remove)
+    public void onRemoveImage() {
+        presenter.removeImage();
     }
 
     @Override
@@ -169,6 +176,81 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @Override public void hideKeyboard() {
         InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
+    }
+
+    @Override public void selectImage() {
+        new BottomSheet.Builder(this).title(R.string.new_shoot_select_image)
+          .sheet(R.menu.profile_photo_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  switch (which) {
+                      case R.id.menu_photo_gallery:
+                          choosePhotoFromGallery();
+                          break;
+                      case R.id.menu_photo_take:
+                          takePhotoFromCamera();
+                          break;
+                  }
+              }
+          })
+          .show();
+    }
+
+    @Override public void showImagePreview(String imagePath) {
+        picasso.load(imagePath).into(image);
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showImagePreview(File imageFile) {
+        picasso.load(imageFile).into(image);
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideImagePreview() {
+        imageContainer.setVisibility(View.GONE);
+        image.setImageDrawable(null);
+    }
+
+    private void takePhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File pictureTemporaryFile = getCameraPhotoFile();
+        if (!pictureTemporaryFile.exists()) {
+            try {
+                pictureTemporaryFile.getParentFile().mkdirs();
+                pictureTemporaryFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                //TODO cancelar operación y avisar al usuario
+            }
+        }
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+          REQUEST_CHOOSE_PHOTO);
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            File selectedPhotoFile = null;
+            if (requestCode == REQUEST_CHOOSE_PHOTO) {
+                Uri selectedImageUri = data.getData();
+                selectedPhotoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+            }else if (requestCode == REQUEST_TAKE_PHOTO) {
+                selectedPhotoFile = getCameraPhotoFile();
+            }
+            presenter.selectImage(selectedPhotoFile);
+        }
+    }
+
+    private File getCameraPhotoFile() {
+        return new File(this.getExternalFilesDir("tmp"), "profileUpload.jpg");
     }
 
     @Override public void showLoading() {

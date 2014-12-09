@@ -37,6 +37,10 @@ public class PicassoWrapper {
         return load(defaultImageRes);
     }
 
+    public RequestCreator load(String path) {
+        return picasso.load(path);
+    }
+
     public RequestCreator load(Uri uri) {
         return picasso.load(uri);
     }

@@ -1,8 +1,6 @@
 package com.shootr.android.ui.presenter;
 
-import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.shots.PostNewShotResultEvent;
@@ -14,6 +12,7 @@ import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -44,6 +43,23 @@ public class PostNewShotPresenter implements Presenter {
         String filteredText = filterText(currentText);
         updateCharCounter(filteredText);
         updateSendButonEnabled(filteredText);
+    }
+
+    public void chooseImage() {
+        postNewShotView.selectImage();
+    }
+
+    public void selectImage(File selectedPhotoFile) {
+        if (selectedPhotoFile != null && selectedPhotoFile.exists()) {
+            postNewShotView.showImagePreview(selectedPhotoFile);
+            //TODO upload image
+        } else {
+            Timber.w("Tried to set invalid file as image: %", selectedPhotoFile);
+        }
+    }
+
+    public void removeImage() {
+        postNewShotView.hideImagePreview();
     }
 
     public void sendShot(String text) {

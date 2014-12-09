@@ -94,9 +94,10 @@
 
                     <ImageView
                       android:id="@+id/new_shot_image"
-                      android:layout_width="match_parent"
+                      android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:scaleType="fitStart"
+                      android:scaleType="fitCenter"
+                      android:adjustViewBounds="true"
                       tools:src="@drawable/sample_avatar" />
 
                     <ImageView
@@ -119,28 +120,36 @@
             <ImageButton
               android:id="@+id/new_shot_send_button"
               android:layout_width="wrap_content"
-              android:layout_height="48dp"
+              android:layout_height="match_parent"
               android:layout_alignParentRight="true"
               android:background="?selectableItemBackground"
-              android:clickable="true"
               android:enabled="false"
-              android:gravity="center"
               android:paddingLeft="16dp"
               android:paddingRight="16dp"
-              android:src="@drawable/ic_send"
-              android:textColor="@color/primary_selector"
-              android:textSize="16sp" />
+              android:src="@drawable/ic_send"/>
+
 
             <ProgressBar
                 android:id="@+id/new_shot_send_progress"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:indeterminate="true"
                 android:visibility="gone"
                 tools:visibility="gone"
                 />
+
+            <ImageButton
+              android:id="@+id/new_shot_photo_button"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_alignParentLeft="true"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_camera"
+              />
 
         </RelativeLayout>
     </LinearLayout>
