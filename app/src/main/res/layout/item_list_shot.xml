@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -11,68 +10,76 @@
   android:paddingRight="16dp"
   android:paddingTop="16dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/shot_avatar"
-      android:layout_width="@dimen/shot_avatar_size"
-      android:layout_height="@dimen/shot_avatar_size"
-      android:layout_marginRight="8dp"
-      android:focusable="false"
-      android:focusableInTouchMode="false"
-      android:src="@drawable/ic_contact_picture_default"
-      />
-
-    <TextView
-      android:id="@+id/shot_user_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_toLeftOf="@+id/shot_timestamp"
-      android:layout_toRightOf="@id/shot_avatar"
-      android:textColor="@color/gray_10"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      tools:text="Ignasi"
-      />
-
-    <TextView
-      android:id="@+id/shot_timestamp"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:textColor="@color/gray_60"
-      tools:text="22m"
-      />
-
-    <TextView
-      android:id="@+id/shot_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@+id/shot_user_name"
-      android:layout_below="@id/shot_user_name"
-      android:textSize="16sp"
-      android:textColor="@color/gray_30"
-      android:textColorLink="@color/links"
-      tools:text="Who's the referee?"
-      />
-
-    <LinearLayout
-      android:id="@+id/shot_actions"
+    <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignLeft="@id/shot_user_name"
-      android:layout_below="@+id/shot_text"
-      android:gravity="right"
-      android:orientation="horizontal"
-      android:visibility="gone"
-      >
+      android:layout_height="wrap_content">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+          android:id="@+id/shot_avatar"
+          android:layout_width="@dimen/shot_avatar_size"
+          android:layout_height="@dimen/shot_avatar_size"
+          android:layout_marginRight="8dp"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:src="@drawable/ic_contact_picture_default" />
+
+        <TextView
+          android:id="@+id/shot_user_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginRight="8dp"
-          android:src="@drawable/ic_reply"
-          android:clickable="true"
-          />
+          android:layout_toLeftOf="@+id/shot_timestamp"
+          android:layout_toRightOf="@id/shot_avatar"
+          android:textColor="@color/gray_10"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          tools:text="Ignasi" />
 
-    </LinearLayout>
+        <TextView
+          android:id="@+id/shot_timestamp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:textColor="@color/gray_60"
+          tools:text="22m" />
 
-</RelativeLayout>
+        <TextView
+          android:id="@+id/shot_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/shot_user_name"
+          android:layout_below="@id/shot_user_name"
+          android:textColor="@color/gray_30"
+          android:textColorLink="@color/links"
+          android:textSize="16sp"
+          tools:text="Who's the referee?" />
+
+        <LinearLayout
+          android:id="@+id/shot_actions"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@id/shot_user_name"
+          android:layout_below="@+id/shot_text"
+          android:gravity="right"
+          android:orientation="horizontal"
+          android:visibility="gone">
+
+            <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginRight="8dp"
+              android:clickable="true"
+              android:src="@drawable/ic_reply" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <com.shootr.android.ui.widgets.ImageView169
+      android:id="@+id/shot_image"
+      android:layout_width="match_parent"
+      android:layout_height="185dp"
+      android:layout_marginTop="16dp"
+      android:scaleType="centerCrop"
+      android:visibility="gone"
+      tools:visibility="visible" />
+</LinearLayout>
