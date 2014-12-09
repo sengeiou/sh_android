@@ -379,9 +379,8 @@ public class ProfileFragment extends BaseFragment {
         String favTeamName = user.getFavoriteTeamName();
         if (favTeamName != null) {
             teamTextView.setText(favTeamName);
-            teamTextView.setVisibility(View.VISIBLE);
         } else {
-            teamTextView.setVisibility(View.GONE);
+            teamTextView.setText(R.string.profile_team_name_private);
         }
         setMainButtonStatus(user.getRelationship());
     }
