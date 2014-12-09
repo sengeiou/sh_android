@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class SingleShotNotification extends AbstractShotNotification {
                 largeIcon = getDefaultPhoto();
             }
             try {
-                largeIcon = picasso.load(url).get();
+                largeIcon = picasso.loadProfilePhoto(url).get();
             } catch (IOException | IllegalArgumentException e) {
                 Timber.e(e, "Error downloading user photo for a shot notification.");
                 largeIcon = getDefaultPhoto();

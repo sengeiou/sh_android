@@ -9,7 +9,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
@@ -69,7 +68,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         viewHolder.name.setText(item.getUsername());
         viewHolder.username.setText(item.getFavoriteTeamName());
         String photo = item.getPhoto();
-        picasso.load(photo).into(viewHolder.avatar);
+        picasso.loadProfilePhoto(photo).into(viewHolder.avatar);
 
         if(isFollowButtonVisible()){
             if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){

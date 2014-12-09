@@ -10,7 +10,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.util.Linkify;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.util.TimeUtils;
@@ -103,7 +102,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
 
                 String photo = item.getPhoto();
-                picasso.load(photo).into(vh.avatar);
+                picasso.loadProfilePhoto(photo).into(vh.avatar);
                 vh.avatar.setTag(vh);
 
                 String imageUrl = item.getImage();

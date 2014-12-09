@@ -214,7 +214,8 @@ public class ProfileFragment extends BaseFragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)), REQUEST_CHOOSE_PHOTO);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+          REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -358,7 +359,7 @@ public class ProfileFragment extends BaseFragment {
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
-            picasso.load(photo).into(avatarImageView);
+            picasso.loadProfilePhoto(photo).into(avatarImageView);
         } else {
             if (isCurrentUser()) {
                 avatarImageView.setImageResource(R.drawable.profile_photo_add);
@@ -473,7 +474,7 @@ public class ProfileFragment extends BaseFragment {
         TimelineAdapter.addLinks(vh.text);
 
         String photo = item.getPhoto();
-        picasso.load(photo).into(vh.avatar);
+        picasso.loadProfilePhoto(photo).into(vh.avatar);
         vh.avatar.setTag(vh);
     }
 

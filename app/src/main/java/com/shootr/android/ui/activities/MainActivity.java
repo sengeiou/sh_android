@@ -33,12 +33,10 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.InitialSetupFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.TimelineFragment;
-import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
@@ -235,7 +233,7 @@ public class MainActivity extends BaseSignedInActivity {
         UserEntity currentUser = sessionManager.getCurrentUser();
         currentUserName.setText(currentUser.getUserName());
         currentUserUsername.setText(currentUser.getFavoriteTeamName());
-        picasso.load(currentUser.getPhoto()).into(currentUserAvatar);
+        picasso.loadProfilePhoto(currentUser.getPhoto()).into(currentUserAvatar);
     }
 
     @OnClick(R.id.menu_drawer_profile)

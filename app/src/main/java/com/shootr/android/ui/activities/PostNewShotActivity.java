@@ -23,7 +23,6 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.db.manager.ShotManager;
@@ -73,7 +72,7 @@ public class PostNewShotActivity extends BaseSignedInActivity {
 
         currentUser = ShootrApplication.get(this).getCurrentUser();
 
-        picasso.load(currentUser.getPhoto()).into(avatar);
+        picasso.loadProfilePhoto(currentUser.getPhoto()).into(avatar);
         name.setText(currentUser.getName());
         username.setText("@" + currentUser.getUserName());
 
