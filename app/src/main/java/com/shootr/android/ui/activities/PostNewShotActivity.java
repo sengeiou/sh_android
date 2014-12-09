@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @InjectView(R.id.new_shot_subtitle) TextView username;
     @InjectView(R.id.new_shot_text) EditText editTextView;
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
-    @InjectView(R.id.new_shot_send_button) Button sendButton;
+    @InjectView(R.id.new_shot_send_button) ImageButton sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
 
     @Inject PicassoWrapper picasso;
