@@ -41,7 +41,6 @@ public class GCMIntentService extends IntentService {
     private static final int PUSH_TYPE_WATCH_REQUEST = 4;
 
     @Inject ShootrNotificationManager notificationManager;
-    @Inject SQLiteOpenHelper openHelper;
     @Inject UserManager userManager;
     @Inject ShootrService service;
     @Inject ShotModelMapper shotModelMapper;
