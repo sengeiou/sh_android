@@ -152,5 +152,7 @@
     <string name="search_team_max_items_message">Refine search for more accurate results</string>
     <string name="new_shoot_select_image">$Select image</string>
     <string name="profile_team_name_private">Private</string>
+    <string name="notification_image">Image</string>
+    <string name="notification_image_and_text">Image: %s</string>
 
 </resources>

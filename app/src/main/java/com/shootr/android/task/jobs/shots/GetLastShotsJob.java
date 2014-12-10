@@ -11,6 +11,7 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,18 +24,22 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
 
     private static final int PRIORITY = 5;
     public static final Long LATEST_SHOTS_NUMBER = 10L;
-    private ShootrService service;
-    private ShotManager shotManager;
-    private UserManager userManager;
+
+    private final ShootrService service;
+    private final ShotManager shotManager;
+    private final UserManager userManager;
+    private final ShotModelMapper shotModelMapper;
+
     private Long idUser;
     private UserEntity user;
 
     @Inject public GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
-      ShotManager shotManager, UserManager userManager) {
+      ShotManager shotManager, UserManager userManager, ShotModelMapper shotModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.shotManager = shotManager;
         this.userManager = userManager;
+        this.shotModelMapper = shotModelMapper;
     }
 
     public void init(Long idUser){
@@ -61,15 +66,8 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
 
     public List<ShotModel> getLatestShotModels(List<ShotEntity> shotEntities){
         List<ShotModel> shotModels = new ArrayList<>(shotEntities.size());
-        for(ShotEntity shot:shotEntities){
-            ShotModel shotModel = new ShotModel();
-            shotModel.setIdUser(idUser);
-            shotModel.setComment(shot.getComment());
-            shotModel.setCsysBirth(shot.getCsysBirth());
-            shotModel.setPhoto(user.getPhoto());
-            shotModel.setIdShot(shot.getIdShot());
-            shotModel.setUsername(user.getUserName());
-            shotModels.add(shotModel);
+        for(ShotEntity shot:shotEntities) {
+            shotModels.add(shotModelMapper.toShotModel(user, shot));
         }
         return shotModels;
     }

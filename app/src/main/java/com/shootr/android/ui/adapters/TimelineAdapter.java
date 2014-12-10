@@ -95,8 +95,14 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
                 vh.name.setText(item.getUsername());
 
-                vh.text.setText(item.getComment());
-                addLinks(vh.text);
+                String comment = item.getComment();
+                if (comment != null) {
+                    vh.text.setVisibility(View.VISIBLE);
+                    vh.text.setText(comment);
+                    addLinks(vh.text);
+                } else {
+                    vh.text.setVisibility(View.GONE);
+                }
 
                 long timestamp = item.getCsysBirth().getTime();
                 vh.timestamp.setText(timeUtils.getElapsedTime(getContext(), timestamp));
