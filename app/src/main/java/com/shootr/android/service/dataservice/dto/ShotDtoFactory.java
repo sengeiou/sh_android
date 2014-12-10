@@ -52,11 +52,7 @@ public class ShotDtoFactory {
             throw new IllegalArgumentException("idUser must be a positive number");
         }
 
-        if (comment == null) {
-            throw new IllegalArgumentException("comment must not be null");
-        }
-
-        if (comment.trim().length() == 0) {
+        if (comment != null && comment.trim().length() == 0) {
             throw new IllegalArgumentException("comment cannot be empty");
         }
 

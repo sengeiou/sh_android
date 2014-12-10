@@ -32,6 +32,7 @@ public class PostNewShotPresenter implements Presenter {
     private File selectedImageFile;
     private String shotCommentToSend;
     private String uploadedImageUrl;
+    private String currentTextWritten;
 
     @Inject public PostNewShotPresenter(Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.bus = bus;
@@ -45,9 +46,9 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     public void textChanged(String currentText) {
-        String filteredText = filterText(currentText);
-        updateCharCounter(filteredText);
-        updateSendButonEnabled(filteredText);
+        currentTextWritten = filterText(currentText);
+        updateCharCounter(currentTextWritten);
+        updateSendButonEnabled(currentTextWritten);
     }
 
     public void chooseImage() {
@@ -58,6 +59,7 @@ public class PostNewShotPresenter implements Presenter {
         if (selectedImageFile != null && selectedImageFile.exists()) {
             postNewShotView.showImagePreview(selectedImageFile);
             this.selectedImageFile = selectedImageFile;
+            updateSendButonEnabled(currentTextWritten);
         } else {
             Timber.w("Tried to set invalid file as image: %", selectedImageFile);
         }
@@ -66,13 +68,14 @@ public class PostNewShotPresenter implements Presenter {
     public void removeImage() {
         selectedImageFile = null;
         postNewShotView.hideImagePreview();
+        updateSendButonEnabled(currentTextWritten);
     }
 
     public void sendShot(String text) {
         postNewShotView.hideKeyboard();
         shotCommentToSend = filterText(text);
 
-        if (isNotEmptyAndLessThanMaxLenght(shotCommentToSend)) {
+        if (canSendShot(shotCommentToSend)) {
             if (selectedImageFile != null) {
                 uploadImageAndSendShot();
             } else {
@@ -81,6 +84,14 @@ public class PostNewShotPresenter implements Presenter {
         } else {
             Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
         }
+    }
+
+    private boolean canSendShot(String filteredText) {
+        return (hasImage() && isLessThanMaxLength(filteredText)) || isNotEmptyAndLessThanMaxLenght(filteredText);
+    }
+
+    private boolean hasImage() {
+        return selectedImageFile != null;
     }
 
     private void uploadImageAndSendShot() {
@@ -117,7 +128,7 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void updateSendButonEnabled(String filteredText) {
-        if (isNotEmptyAndLessThanMaxLenght(filteredText)) {
+        if (canSendShot(filteredText)) {
             postNewShotView.enableSendButton();
         } else {
             postNewShotView.disableSendButton();
@@ -125,7 +136,11 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private boolean isNotEmptyAndLessThanMaxLenght(String text) {
-        return text.length() > 0 && text.length() <= MAX_LENGTH;
+        return text.length() > 0 && isLessThanMaxLength(text);
+    }
+
+    private boolean isLessThanMaxLength(String text) {
+        return text.length() <= MAX_LENGTH;
     }
 
     private String filterText(String originalText) {

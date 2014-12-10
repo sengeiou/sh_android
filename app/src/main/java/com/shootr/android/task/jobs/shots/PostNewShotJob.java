@@ -62,11 +62,26 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     }
 
     private void localValidation() {
+        validateComment();
+        validateImage();
         validateShotDuplication();
     }
 
+    private void validateImage() {
+        if (imageUrl != null && imageUrl.isEmpty()) {
+            imageUrl = null;
+        }
+    }
+
+    private void validateComment() {
+        if (comment != null && comment.isEmpty()) {
+            comment = null;
+        }
+    }
+
+
     private void validateShotDuplication() {
-        addErrorsIfAny(new DuplicatedValidator(getPreviousShot(), comment).validate());
+        addErrorsIfAny(new DuplicatedValidator(getPreviousShot(), comment, imageUrl).validate());
     }
 
     private void addErrorsIfAny(List<FieldValidationError> validationResult) {
