@@ -10,7 +10,7 @@
     <dimen name="card_radius">4dp</dimen>
 
     <!-- Profile -->
-    <dimen name="profile_avatar_size">84dp</dimen>
+    <dimen name="profile_avatar_size">120dp</dimen>
     <dimen name="follow_button_radius">2dp</dimen>
 
     <!-- Drawer -->

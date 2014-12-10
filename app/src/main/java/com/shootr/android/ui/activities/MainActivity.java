@@ -234,7 +234,12 @@ public class MainActivity extends BaseSignedInActivity {
     private void setUserInfoInMenu() {
         UserEntity currentUser = sessionManager.getCurrentUser();
         currentUserName.setText(currentUser.getUserName());
-        currentUserUsername.setText(currentUser.getFavoriteTeamName());
+        String favoriteTeamName = currentUser.getFavoriteTeamName();
+        if (favoriteTeamName != null) {
+            currentUserUsername.setText(favoriteTeamName);
+        } else {
+            currentUserUsername.setText(R.string.profile_team_name_private);
+        }
         picasso.load(currentUser.getPhoto()).into(currentUserAvatar);
     }
 
