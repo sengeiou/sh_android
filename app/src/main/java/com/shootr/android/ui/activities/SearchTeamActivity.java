@@ -192,6 +192,7 @@ public class SearchTeamActivity extends BaseSignedInActivity implements SearchTe
         String removeTeamItemTitleText = getString(R.string.edit_profile_team_remove_footer, teamName);
         removeTeamItemTitle.setText(removeTeamItemTitleText);
         list.addFooterView(removeTeamItem);
+        list.setAdapter(adapter);
     }
 
     @Override public void disableDeleteTeam() {
