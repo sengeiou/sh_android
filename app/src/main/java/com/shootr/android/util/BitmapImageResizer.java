@@ -16,6 +16,8 @@ import timber.log.Timber;
 public class BitmapImageResizer implements ImageResizer {
 
     private static final int MAX_SIZE = 960;
+    private static final long MAX_WEIGHT_KB = 300;
+
     public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";
 
     private final Context context;
@@ -75,6 +77,13 @@ public class BitmapImageResizer implements ImageResizer {
         bitmapResized.recycle();
         bitmapResized = null;
 
+        long finalImageSizeKilobytes = finalImageFile.length() / 1000;
+        if (finalImageSizeKilobytes > MAX_WEIGHT_KB) {
+            Timber.w("Image final size is bigger than allowed maximum: %d KB", finalImageSizeKilobytes);
+            //TODO reduce size by compressing (quality) or reducing resolution
+        }
+
+        Timber.d("Image size: %s KB", finalImageSizeKilobytes);
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
     }
