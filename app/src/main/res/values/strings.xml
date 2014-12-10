@@ -61,7 +61,6 @@
     <string name="profile_marks_points">points</string>
     <string name="profile_marks_following">following</string>
     <string name="profile_marks_followers">followers</string>
-    <string name="profile_bio_format">%1$s. %2$s</string>
 
     <!-- Menu names -->
     <string name="menu_info">Info</string>
@@ -152,5 +151,6 @@
     <string name="edit_profile_team_remove_footer">Remove %s</string>
     <string name="search_team_max_items_message">Refine search for more accurate results</string>
     <string name="new_shoot_select_image">$Select image</string>
+    <string name="profile_team_name_private">Private</string>
 
 </resources>

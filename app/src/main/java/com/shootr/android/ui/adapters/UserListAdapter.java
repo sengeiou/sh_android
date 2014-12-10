@@ -65,8 +65,14 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     @Override public void bindView(final UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.name.setText(item.getUsername());
-        viewHolder.username.setText(item.getFavoriteTeamName());
+        viewHolder.title.setText(item.getUsername());
+        String teamName = item.getFavoriteTeamName();
+        if (teamName != null) {
+            viewHolder.subtitle.setText(teamName);
+        } else {
+            viewHolder.subtitle.setText(R.string.profile_team_name_private);
+        }
+
         String photo = item.getPhoto();
         picasso.loadProfilePhoto(photo).into(viewHolder.avatar);
 
@@ -107,8 +113,8 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     public static class ViewHolder {
         @InjectView(R.id.user_avatar) ImageView avatar;
-        @InjectView(R.id.user_name) TextView name;
-        @InjectView(R.id.user_username) TextView username;
+        @InjectView(R.id.user_name) TextView title;
+        @InjectView(R.id.user_username) TextView subtitle;
         @InjectView(R.id.user_follow_button) FollowButton followButton;
         public int position;
 

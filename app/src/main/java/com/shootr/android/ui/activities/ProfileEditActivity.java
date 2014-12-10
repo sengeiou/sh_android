@@ -38,7 +38,6 @@ public class ProfileEditActivity extends BaseSignedInActivity implements Profile
     public static final String EXTRA_TEAM_ID = "team_id";
 
     @Inject ProfileEditPresenter presenter;
-    @Inject ErrorMessageFactory errorMessageFactory;
 
     @InjectView(R.id.scroll) ScrollView scroll;
     @InjectView(R.id.profile_edit_name) TextView name;
