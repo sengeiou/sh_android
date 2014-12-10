@@ -121,7 +121,6 @@
 
     <style name="ProfileMarkTitle">
         <item name="android:textColor">@color/gray_60</item>
-        <item name="android:layout_marginLeft">4dp</item>
     </style>
 
     <style name="ProfileMarkValue">
