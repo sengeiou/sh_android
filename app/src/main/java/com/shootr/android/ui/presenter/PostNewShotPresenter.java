@@ -3,8 +3,10 @@ package com.shootr.android.ui.presenter;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.profile.UploadShotImageEvent;
 import com.shootr.android.task.events.shots.PostNewShotResultEvent;
 import com.shootr.android.task.jobs.shots.PostNewShotJob;
+import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -27,6 +29,9 @@ public class PostNewShotPresenter implements Presenter {
 
     private PostNewShotView postNewShotView;
     private ObjectGraph objectGraph;
+    private File selectedImageFile;
+    private String shotCommentToSend;
+    private String uploadedImageUrl;
 
     @Inject public PostNewShotPresenter(Bus bus, ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
         this.bus = bus;
@@ -49,36 +54,53 @@ public class PostNewShotPresenter implements Presenter {
         postNewShotView.selectImage();
     }
 
-    public void selectImage(File selectedPhotoFile) {
-        if (selectedPhotoFile != null && selectedPhotoFile.exists()) {
-            postNewShotView.showImagePreview(selectedPhotoFile);
-            //TODO upload image
+    public void selectImage(File selectedImageFile) {
+        if (selectedImageFile != null && selectedImageFile.exists()) {
+            postNewShotView.showImagePreview(selectedImageFile);
+            this.selectedImageFile = selectedImageFile;
         } else {
-            Timber.w("Tried to set invalid file as image: %", selectedPhotoFile);
+            Timber.w("Tried to set invalid file as image: %", selectedImageFile);
         }
     }
 
     public void removeImage() {
+        selectedImageFile = null;
         postNewShotView.hideImagePreview();
     }
 
     public void sendShot(String text) {
         postNewShotView.hideKeyboard();
-        String commentFiltered = filterText(text);
+        shotCommentToSend = filterText(text);
 
-        if (isNotEmptyAndLessThanMaxLenght(commentFiltered)) {
-            startSendingShot(commentFiltered);
+        if (isNotEmptyAndLessThanMaxLenght(shotCommentToSend)) {
+            if (selectedImageFile != null) {
+                uploadImageAndSendShot();
+            } else {
+                startSendingShot();
+            }
         } else {
-            Timber.w("Tried to send shot empty or too big: %s", commentFiltered);
+            Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
         }
     }
 
-    private void startSendingShot(String comment) {
+    private void uploadImageAndSendShot() {
+        UploadShotImageJob uploadJob = objectGraph.get(UploadShotImageJob.class);
+        uploadJob.init(selectedImageFile);
+        jobManager.addJob(uploadJob);
+    }
+
+    @Subscribe
+    public void onImageUploaded(UploadShotImageEvent event) {
+        uploadedImageUrl = event.getResult();
+        startSendingShot();
+    }
+
+    private void startSendingShot() {
         postNewShotView.showLoading();
         postNewShotView.disableSendButton();
 
         PostNewShotJob job = objectGraph.get(PostNewShotJob.class);
-        job.init(comment);
+        job.init(shotCommentToSend, uploadedImageUrl);
         jobManager.addJobInBackground(job);
     }
 

@@ -29,6 +29,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     private final ShotManager shotManager;
 
     private String comment;
+    private String imageUrl;
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
@@ -40,15 +41,15 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
         fieldValidationErrors = new ArrayList<>();
     }
 
-    public void init(String comment){
+    public void init(String comment, String imageUrl){
         this.comment = comment;
+        this.imageUrl = imageUrl;
     }
 
     @Override
     protected void run() throws SQLException, IOException {
-
         if (isShotValid()) {
-            ShotEntity postedShot = service.postNewShot(sessionManager.getCurrentUserId(), comment);
+            ShotEntity postedShot = service.postNewShotWithImage(sessionManager.getCurrentUserId(), comment, imageUrl);
             postSuccessfulEvent(new PostNewShotResultEvent(postedShot));
         } else {
             postValidationErrors();

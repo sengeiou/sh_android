@@ -28,6 +28,8 @@ public interface ShootrService {
 
     public ShotEntity postNewShot(Long idUser, String comment) throws IOException;
 
+    ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl) throws IOException;
+
     public UserEntity getUserByIdUser(Long idUser) throws IOException;
 
     public PaginatedResult<List<UserEntity>> searchUsersByNameOrNickNamePaginated(String searchQuery, int pageOffset)

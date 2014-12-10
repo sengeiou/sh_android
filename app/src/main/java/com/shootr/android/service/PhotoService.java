@@ -10,4 +10,5 @@ public interface PhotoService {
 
     public String uploadProfilePhotoAndGetUrl(File photoFile) throws IOException, JSONException;
 
+    String uploadShotImageAndGetUrl(File imageFile) throws IOException;
 }
