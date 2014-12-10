@@ -30,17 +30,44 @@ public class BitmapImageResizer implements ImageResizer {
         Bitmap orientedImage = correctImageRotationIfNeeded(originalImage, originalImageFile.getAbsolutePath());
         if (orientedImage != originalImage) {
             originalImage.recycle();
-            originalImage = null;
         }
+        originalImage = null;
+
+        Timber.d("Scaling image to %d px...", MAX_SIZE);
+        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(orientedImage, MAX_SIZE);
+        if (bitmapResized != orientedImage) {
+            orientedImage.recycle();
+        }
+        orientedImage = null;
+
+        Timber.d("Storing image in file...");
+        File finalImageFile = storeImageInFile(bitmapResized);
+        bitmapResized.recycle();
+        bitmapResized = null;
+
+        Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
+        return finalImageFile;
+    }
+
+    @Override public File getResizedImageFile(File originalImageFile) throws IOException {
+        Bitmap originalImage = getBitmapFromFile(originalImageFile);
+
+        Bitmap orientedImage = correctImageRotationIfNeeded(originalImage, originalImageFile.getAbsolutePath());
+        if (orientedImage != originalImage) {
+            originalImage.recycle();
+        }
+        originalImage = null;
 
         Timber.d("Cropping image...");
-        Bitmap squareImage = cropImage(orientedImage);
+        Bitmap squareImage = cropSquareImage(orientedImage);
         orientedImage.recycle();
         orientedImage = null;
 
         Timber.d("Scaling image to %d px...", MAX_SIZE);
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(squareImage, MAX_SIZE, MAX_SIZE, true);
-        squareImage.recycle();
+        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, MAX_SIZE);
+        if (bitmapResized != squareImage) {
+            squareImage.recycle();
+        }
         squareImage = null;
 
         Timber.d("Storing image in file...");
@@ -50,6 +77,34 @@ public class BitmapImageResizer implements ImageResizer {
 
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
+    }
+
+    private Bitmap getScaledBitmapWithMaxDimension(Bitmap orientedImage, int maxDimensionSize) {
+        float originalWidth = orientedImage.getWidth();
+        float originalHeight = orientedImage.getHeight();
+        float currentMaxDimension = originalHeight > originalWidth ? originalHeight : originalWidth;
+        if (currentMaxDimension < maxDimensionSize) {
+            return orientedImage;
+        }
+        float finalWidth;
+        float finalHeight;
+        boolean isSquareImage = originalHeight == originalWidth;
+        if (isSquareImage) {
+            finalWidth = maxDimensionSize;
+            finalHeight = maxDimensionSize;
+        }else {
+            boolean isLandscape = originalWidth > originalHeight;
+            if (isLandscape) {
+                finalWidth = maxDimensionSize;
+                float scaleRatio = originalWidth / finalWidth;
+                finalHeight = originalHeight * scaleRatio;
+            } else { // is portrait
+                finalHeight = maxDimensionSize;
+                float scaleRatio = originalHeight / finalHeight;
+                finalWidth = originalWidth * scaleRatio;
+            }
+        }
+        return Bitmap.createScaledBitmap(orientedImage, ((int) finalWidth), ((int) finalHeight), true);
     }
 
     private Bitmap correctImageRotationIfNeeded(Bitmap originalImage, String imagePath) throws IOException {
@@ -110,7 +165,7 @@ public class BitmapImageResizer implements ImageResizer {
         return BitmapFactory.decodeFile(imageFile.getAbsolutePath(), bmpOptions);
     }
 
-    private Bitmap cropImage(Bitmap originalImage) {
+    private Bitmap cropSquareImage(Bitmap originalImage) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
         Bitmap bitmapSquare;
