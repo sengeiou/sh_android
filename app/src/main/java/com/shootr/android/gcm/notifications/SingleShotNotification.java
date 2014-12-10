@@ -54,9 +54,6 @@ public class SingleShotNotification extends AbstractShotNotification {
 
     protected Bitmap getUserPhoto(String url) {
         if (largeIcon == null) {
-            if (url.isEmpty()) {
-                largeIcon = getDefaultPhoto();
-            }
             try {
                 largeIcon = picasso.load(url).get();
             } catch (IOException | IllegalArgumentException e) {
