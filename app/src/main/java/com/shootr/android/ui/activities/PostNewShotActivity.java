@@ -40,6 +40,10 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
 
+    public static final String EXTRA_DEFAULT_INPUT_MODE = "input";
+    public static final int INPUT_CAMERA = 1;
+    public static final int INPUT_GALLERY = 2;
+
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
     @InjectView(R.id.new_shot_subtitle) TextView username;
@@ -71,6 +75,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         initializePresenter();
         initializeViews();
         setTextReceivedFromIntent();
+        openDefaultInputIfAny();
     }
 
     private void initializePresenter() {
@@ -92,6 +97,18 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private void setTextReceivedFromIntent() {
         String sentText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         editTextView.setText(sentText);
+    }
+
+    private void openDefaultInputIfAny() {
+        int defaultInputMode = getIntent().getIntExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
+        switch (defaultInputMode) {
+            case INPUT_CAMERA:
+                presenter.takePhotoFromCamera();
+                break;
+            case INPUT_GALLERY:
+                presenter.choosePhotoFromGallery();
+                break;
+        }
     }
 
     @OnTextChanged(R.id.new_shot_text)

@@ -5,13 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +24,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.BuildConfig;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -45,7 +40,6 @@ import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.db.objects.UserEntity;
@@ -391,6 +385,20 @@ public class TimelineFragment extends BaseFragment
     @OnClick(R.id.timeline_new_text)
     public void startNewShot() {
         Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
+        startActivityForResult(intent, REQUEST_NEW_SHOT);
+    }
+
+    @OnClick(R.id.timeline_new_image_camera)
+    public void startNewShotFromCamera() {
+        Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
+        intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_CAMERA);
+        startActivityForResult(intent, REQUEST_NEW_SHOT);
+    }
+
+    @OnClick(R.id.timeline_new_image_gallery)
+    public void startNewShotFromGallery() {
+        Intent intent = new Intent(getActivity(), PostNewShotActivity.class);
+        intent.putExtra(PostNewShotActivity.EXTRA_DEFAULT_INPUT_MODE, PostNewShotActivity.INPUT_GALLERY);
         startActivityForResult(intent, REQUEST_NEW_SHOT);
     }
 
