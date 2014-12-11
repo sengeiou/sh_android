@@ -208,7 +208,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override public void showImagePreview(File imageFile) {
         int maxScreenDimension = getMaxScreenDimension();
-        picasso.load(imageFile).resize(maxScreenDimension, maxScreenDimension).centerInside().into(image);
+        picasso.load(imageFile).resize(maxScreenDimension, maxScreenDimension).centerInside().skipMemoryCache().into(image);
         imageContainer.setVisibility(View.VISIBLE);
     }
 
