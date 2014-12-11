@@ -141,10 +141,21 @@
                 />
 
             <ImageButton
-              android:id="@+id/new_shot_photo_button"
+              android:id="@+id/new_shot_gallery_button"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:layout_alignParentLeft="true"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_gallery"
+              />
+
+            <ImageButton
+              android:id="@+id/new_shot_photo_button"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/new_shot_gallery_button"
               android:background="?selectableItemBackground"
               android:paddingLeft="16dp"
               android:paddingRight="16dp"

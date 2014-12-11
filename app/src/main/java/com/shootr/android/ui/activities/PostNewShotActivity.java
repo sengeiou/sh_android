@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import com.cocosw.bottomsheet.BottomSheet;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
@@ -48,7 +47,6 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
     @InjectView(R.id.new_shot_send_button) ImageButton sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
-    @InjectView(R.id.new_shot_photo_button) ImageButton addPhotoButton;
     @InjectView(R.id.new_shot_image_container) ViewGroup imageContainer;
     @InjectView(R.id.new_shot_image) ImageView image;
 
@@ -107,8 +105,13 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @OnClick(R.id.new_shot_photo_button)
-    public void onAddImage() {
-        presenter.chooseImage();
+    public void onAddImageFromCamera() {
+        presenter.takePhotoFromCamera();
+    }
+
+    @OnClick(R.id.new_shot_gallery_button)
+    public void onAddImageFromGallery() {
+        presenter.choosePhotoFromGallery();
     }
 
     @OnClick(R.id.new_shot_image_remove)
@@ -178,26 +181,8 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
-    @Override public void selectImage() {
-        new BottomSheet.Builder(this).title(R.string.new_shoot_select_image)
-          .sheet(R.menu.profile_photo_bottom_sheet)
-          .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_photo_gallery:
-                          choosePhotoFromGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          takePhotoFromCamera();
-                          break;
-                  }
-              }
-          })
-          .show();
-    }
-
-    @Override public void showImagePreview(String imagePath) {
-        picasso.load(imagePath).into(image);
+    @Override public void showImagePreviewFromUrl(String imageUrl) {
+        picasso.load(imageUrl).into(image);
         imageContainer.setVisibility(View.VISIBLE);
     }
 
@@ -211,7 +196,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         image.setImageDrawable(null);
     }
 
-    private void takePhotoFromCamera() {
+    @Override public void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File pictureTemporaryFile = getCameraPhotoFile();
         if (!pictureTemporaryFile.exists()) {
@@ -227,7 +212,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
-    private void choosePhotoFromGallery() {
+    @Override public void choosePhotoFromGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);

@@ -51,8 +51,12 @@ public class PostNewShotPresenter implements Presenter {
         updateSendButonEnabled(currentTextWritten);
     }
 
-    public void chooseImage() {
-        postNewShotView.selectImage();
+    public void choosePhotoFromGallery() {
+        postNewShotView.choosePhotoFromGallery();
+    }
+
+    public void takePhotoFromCamera() {
+        postNewShotView.takePhotoFromCamera();
     }
 
     public void selectImage(File selectedImageFile) {

@@ -20,11 +20,13 @@ public interface PostNewShotView extends LoadDataView {
 
     void hideKeyboard();
 
-    void selectImage();
-
-    void showImagePreview(String imagePath);
+    void showImagePreviewFromUrl(String imageUrl);
 
     void showImagePreview(File imageFile);
 
     void hideImagePreview();
+
+    void takePhotoFromCamera();
+
+    void choosePhotoFromGallery();
 }
