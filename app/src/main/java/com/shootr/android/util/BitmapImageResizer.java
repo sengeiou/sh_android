@@ -35,12 +35,18 @@ public class BitmapImageResizer implements ImageResizer {
         }
         originalImage = null;
 
-        Timber.d("Scaling image to %d px...", MAX_SIZE);
-        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(orientedImage, MAX_SIZE);
-        if (bitmapResized != orientedImage) {
-            orientedImage.recycle();
-        }
+
+        Timber.d("Cropping image...");
+        Bitmap squareImage = cropSquareImage(orientedImage);
+        orientedImage.recycle();
         orientedImage = null;
+
+        Timber.d("Scaling image to %d px...", MAX_SIZE);
+        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, MAX_SIZE);
+        if (bitmapResized != squareImage) {
+            squareImage.recycle();
+        }
+        squareImage = null;
 
         Timber.d("Storing image in file...");
         File finalImageFile = storeImageInFile(bitmapResized);
@@ -60,17 +66,13 @@ public class BitmapImageResizer implements ImageResizer {
         }
         originalImage = null;
 
-        Timber.d("Cropping image...");
-        Bitmap squareImage = cropSquareImage(orientedImage);
-        orientedImage.recycle();
-        orientedImage = null;
 
         Timber.d("Scaling image to %d px...", MAX_SIZE);
-        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, MAX_SIZE);
-        if (bitmapResized != squareImage) {
-            squareImage.recycle();
+        Bitmap bitmapResized = getScaledBitmapWithMaxDimension(orientedImage, MAX_SIZE);
+        if (bitmapResized != orientedImage) {
+            orientedImage.recycle();
         }
-        squareImage = null;
+        orientedImage = null;
 
         Timber.d("Storing image in file...");
         File finalImageFile = storeImageInFile(bitmapResized);
