@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class BitmapImageResizer implements ImageResizer {
     private static final long MAX_WEIGHT_KB = 300;
 
     public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";
+    public static final int INITIAL_COMPRESSION_QUALITY = 100;
+    public static final int COMPRESSION_QUALITY_DECREMENT = 5;
 
     private final Context context;
 
@@ -49,7 +52,7 @@ public class BitmapImageResizer implements ImageResizer {
         squareImage = null;
 
         Timber.d("Storing image in file...");
-        File finalImageFile = storeImageInFile(bitmapResized);
+        File finalImageFile = storeCompressedImageInFile(bitmapResized);
         bitmapResized.recycle();
         bitmapResized = null;
 
@@ -75,9 +78,10 @@ public class BitmapImageResizer implements ImageResizer {
         orientedImage = null;
 
         Timber.d("Storing image in file...");
-        File finalImageFile = storeImageInFile(bitmapResized);
+        File finalImageFile = storeCompressedImageInFile(bitmapResized);
         bitmapResized.recycle();
         bitmapResized = null;
+
 
         long finalImageSizeKilobytes = finalImageFile.length() / 1000;
         if (finalImageSizeKilobytes > MAX_WEIGHT_KB) {
@@ -85,7 +89,7 @@ public class BitmapImageResizer implements ImageResizer {
             //TODO reduce size by compressing (quality) or reducing resolution
         }
 
-        Timber.d("Image size: %s KB", finalImageSizeKilobytes);
+
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
     }
@@ -107,12 +111,10 @@ public class BitmapImageResizer implements ImageResizer {
             boolean isLandscape = originalWidth > originalHeight;
             if (isLandscape) {
                 finalWidth = maxDimensionSize;
-                float scaleRatio = originalWidth / finalWidth;
-                finalHeight = originalHeight * scaleRatio;
+                finalHeight = originalHeight * finalWidth / originalWidth;
             } else { // is portrait
                 finalHeight = maxDimensionSize;
-                float scaleRatio = originalHeight / finalHeight;
-                finalWidth = originalWidth * scaleRatio;
+                finalWidth = originalWidth * finalHeight / originalHeight;
             }
         }
         return Bitmap.createScaledBitmap(orientedImage, ((int) finalWidth), ((int) finalHeight), true);
@@ -149,13 +151,25 @@ public class BitmapImageResizer implements ImageResizer {
         return 0;
     }
 
-    private File storeImageInFile(Bitmap bitmapResized) throws IOException {
+    private File storeCompressedImageInFile(Bitmap bitmapResized) throws IOException {
         File imageFile = new File(getOutputDirectory(), getOutputImageName());
-        OutputStream out;
-        out = new FileOutputStream(imageFile);
-        bitmapResized.compress(Bitmap.CompressFormat.JPEG, 80, out);
-        out.flush();
-        out.close();
+
+        int compressionQuality = INITIAL_COMPRESSION_QUALITY;
+        boolean needsCompression = true;
+
+        while (needsCompression) {
+            Timber.i("Performing JPEG compression with quality of %d", compressionQuality);
+            FileOutputStream compressedImageStream = new FileOutputStream(imageFile);
+            bitmapResized.compress(Bitmap.CompressFormat.JPEG, compressionQuality, compressedImageStream);
+            // Check size
+            compressedImageStream.flush();
+
+            long imageSizeInKb = imageFile.length() / 1000;
+            Timber.i("Image size: %s KB", imageSizeInKb);
+            compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
+            needsCompression = imageSizeInKb > MAX_WEIGHT_KB && compressionQuality > 0;
+            compressedImageStream.close();
+        }
         return imageFile;
     }
 
@@ -170,8 +184,8 @@ public class BitmapImageResizer implements ImageResizer {
     private Bitmap getBitmapFromFile(File imageFile) {
         BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
         bmpOptions.inJustDecodeBounds = false;
-        bmpOptions.inSampleSize = 4; //TODO calculate on runtime
         bmpOptions.inPurgeable = true;
+        bmpOptions.inSampleSize = calculateInSampleSize(bmpOptions, MAX_SIZE, MAX_SIZE);
 
         return BitmapFactory.decodeFile(imageFile.getAbsolutePath(), bmpOptions);
     }
@@ -186,5 +200,26 @@ public class BitmapImageResizer implements ImageResizer {
             bitmapSquare = Bitmap.createBitmap(originalImage, width / 2 - height / 2, 0, height, height);
         }
         return bitmapSquare;
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
