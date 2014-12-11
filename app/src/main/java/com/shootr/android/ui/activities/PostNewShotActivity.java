@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -204,8 +207,19 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     @Override public void showImagePreview(File imageFile) {
-        picasso.load(imageFile).into(image);
+        int maxScreenDimension = getMaxScreenDimension();
+        picasso.load(imageFile).resize(maxScreenDimension, maxScreenDimension).centerInside().into(image);
         imageContainer.setVisibility(View.VISIBLE);
+    }
+
+    private int getMaxScreenDimension() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        int maxDimension = width > height ? width : height;
+        return maxDimension;
     }
 
     @Override public void hideImagePreview() {
