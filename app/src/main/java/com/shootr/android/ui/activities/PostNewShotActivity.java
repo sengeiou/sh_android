@@ -43,6 +43,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     private static final int REQUEST_CHOOSE_PHOTO = 1;
     private static final int REQUEST_TAKE_PHOTO = 2;
 
+    private static final String EXTRA_SELECTED_IMAGE = "image";
     public static final String EXTRA_DEFAULT_INPUT_MODE = "input";
     public static final int INPUT_CAMERA = 1;
     public static final int INPUT_GALLERY = 2;
@@ -175,6 +176,18 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     protected void onPause() {
         super.onPause();
         presenter.pause();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        File selectedImageFile = presenter.getSelectedImageFile();
+        outState.putSerializable(EXTRA_SELECTED_IMAGE, selectedImageFile);
+    }
+
+    @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        File selectedFile = (File) savedInstanceState.getSerializable(EXTRA_SELECTED_IMAGE);
+        presenter.selectImage(selectedFile);
     }
 
     @Override public void setResultOk() {

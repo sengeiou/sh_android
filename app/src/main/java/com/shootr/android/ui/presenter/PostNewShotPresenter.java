@@ -218,5 +218,7 @@ public class PostNewShotPresenter implements Presenter {
         bus.unregister(this);
     }
 
+    public File getSelectedImageFile() {
+        return selectedImageFile;
     }
 }
