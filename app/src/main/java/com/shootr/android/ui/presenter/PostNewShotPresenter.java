@@ -181,6 +181,23 @@ public class PostNewShotPresenter implements Presenter {
         postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
     }
 
+    public void navigateBack() {
+        if (hasEnteredData()) {
+            postNewShotView.showDiscardAlert();
+        } else {
+            postNewShotView.performBackPressed();
+        }
+    }
+
+    public void confirmDiscard() {
+        postNewShotView.performBackPressed();
+    }
+
+    private boolean hasEnteredData() {
+        return ((currentTextWritten != null) && !currentTextWritten.isEmpty()) || (selectedImageFile != null);
+    }
+
+
     private void showLoading() {
         postNewShotView.showLoading();
         postNewShotView.hideSendButton();
@@ -201,19 +218,5 @@ public class PostNewShotPresenter implements Presenter {
         bus.unregister(this);
     }
 
-    public void navigateBack() {
-        if (hasEnteredData()) {
-            postNewShotView.showDiscardAlert();
-        } else {
-            postNewShotView.performBackPressed();
-        }
-    }
-
-    private boolean hasEnteredData() {
-        return ((currentTextWritten != null) && !currentTextWritten.isEmpty()) || (selectedImageFile != null);
-    }
-
-    public void confirmDiscard() {
-        postNewShotView.performBackPressed();
     }
 }

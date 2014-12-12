@@ -79,6 +79,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         initializeViews();
         setTextReceivedFromIntent();
         openDefaultInputIfAny();
+        clearDefaultInput();
     }
 
     private void initializePresenter() {
@@ -112,6 +113,11 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
                 presenter.choosePhotoFromGallery();
                 break;
         }
+
+    }
+
+    private void clearDefaultInput() {
+        getIntent().putExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
     }
 
     @OnTextChanged(R.id.new_shot_text)
