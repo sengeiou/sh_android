@@ -17,7 +17,7 @@ public class PicassoWrapper {
         defaultImageRes = R.drawable.ic_contact_picture_default;
     }
 
-    public RequestCreator load(String path) {
+    public RequestCreator loadProfilePhoto(String path) {
         boolean isValidPhoto = path != null && !path.isEmpty();
         RequestCreator loadResult;
         if (isValidPhoto) {
@@ -29,8 +29,16 @@ public class PicassoWrapper {
         return loadResult;
     }
 
+    public RequestCreator loadTimelineImage(String path) {
+        return picasso.load(path).placeholder(R.color.transparent);
+    }
+
     private RequestCreator loadDefaultImage() {
         return load(defaultImageRes);
+    }
+
+    public RequestCreator load(String path) {
+        return picasso.load(path);
     }
 
     public RequestCreator load(Uri uri) {

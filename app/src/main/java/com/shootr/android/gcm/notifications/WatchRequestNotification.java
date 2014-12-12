@@ -12,7 +12,6 @@ import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import timber.log.Timber;
 
@@ -57,7 +56,7 @@ public class WatchRequestNotification extends CommonNotification {
                 largeIcon = getDefaultPhoto();
             }else{
                 try {
-                    largeIcon = picasso.load(url).get();
+                    largeIcon = picasso.loadProfilePhoto(url).get();
                 } catch (IOException | IllegalArgumentException e) {
                     Timber.e(e, "Error downloading user photo for a shot notification.");
                     largeIcon = getDefaultPhoto();

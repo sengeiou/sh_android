@@ -213,7 +213,8 @@ public class ProfileFragment extends BaseFragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)), REQUEST_CHOOSE_PHOTO);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+          REQUEST_CHOOSE_PHOTO);
     }
 
     private void removePhoto() {
@@ -357,7 +358,7 @@ public class ProfileFragment extends BaseFragment {
         String photo = user.getPhoto();
         boolean isValidPhoto = photo != null && !photo.isEmpty();
         if (isValidPhoto) {
-            picasso.load(photo).into(avatarImageView);
+            picasso.loadProfilePhoto(photo).into(avatarImageView);
         } else {
             if (isCurrentUser()) {
                 avatarImageView.setImageResource(R.drawable.profile_photo_add);
@@ -465,11 +466,11 @@ public class ProfileFragment extends BaseFragment {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            for (ShotModel shot : shots) {
-                View shotView = inflater.inflate(R.layout.item_list_shot, shotsList, false);
-                TimelineAdapter.ViewHolder vh = new TimelineAdapter.ViewHolder(shotView, avatarClickListener);
-                bindShotView(vh, shot);
+            TimelineAdapter timelineAdapter =
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
+            timelineAdapter.setShots(shots);
+            for (int i = 0; i < timelineAdapter.getCount(); i++) {
+                View shotView = timelineAdapter.getView(i, null, shotsList);
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
@@ -478,20 +479,6 @@ public class ProfileFragment extends BaseFragment {
             shotsList.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void bindShotView(TimelineAdapter.ViewHolder vh, ShotModel item) {
-        vh.name.setText(item.getUsername());
-
-        vh.text.setText(item.getComment());
-
-        long timestamp = item.getCsysBirth().getTime();
-        vh.timestamp.setText(timeUtils.getElapsedTime(getActivity(), timestamp));
-        TimelineAdapter.addLinks(vh.text);
-
-        String photo = item.getPhoto();
-        picasso.load(photo).into(vh.avatar);
-        vh.avatar.setTag(vh);
     }
 
     private void onShotAvatarClick(View v) {

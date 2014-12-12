@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    android:background="@drawable/floating_rounded_background"
     android:animateLayoutChanges="true"
+    android:background="@drawable/floating_rounded_background"
     >
 
     <LinearLayout
@@ -32,7 +32,10 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/new_shot_subtitle"
                 android:layout_marginBottom="4dp"
+                android:layout_toLeftOf="@+id/new_shot_char_counter"
                 android:layout_toRightOf="@+id/new_shot_avatar"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textStyle="bold"
                 tools:text="Rafa"
                 />
@@ -66,16 +69,45 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/new_shot_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:fontFamily="sans-serif-light"
-                android:gravity="top"
-                android:hint="@string/activity_timeline_new_text"
-                android:padding="16dp"
-                />
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+                <EditText
+                  android:id="@+id/new_shot_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@color/transparent"
+                  android:fontFamily="sans-serif-light"
+                  android:gravity="top"
+                  android:hint="@string/activity_timeline_new_text"
+                  android:padding="16dp" />
+
+                <FrameLayout
+                  android:id="@+id/new_shot_image_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:padding="16dp"
+                  android:visibility="gone"
+                  tools:visibility="visible">
+
+                    <ImageView
+                      android:id="@+id/new_shot_image"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:scaleType="fitCenter"
+                      android:adjustViewBounds="true"
+                      tools:src="@drawable/sample_avatar" />
+
+                    <ImageView
+                      android:id="@+id/new_shot_image_remove"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:padding="8dp"
+                      android:src="@drawable/ic_shot_photo_remove" />
+                </FrameLayout>
+            </LinearLayout>
         </ScrollView>
 
         <RelativeLayout
@@ -85,43 +117,50 @@
             android:orientation="horizontal"
             >
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:scaleType="center"
-                android:visibility="gone"
-                android:src="@drawable/ic_crosshair"/>
+            <ImageButton
+              android:id="@+id/new_shot_send_button"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_alignParentRight="true"
+              android:background="?selectableItemBackground"
+              android:enabled="false"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_send"/>
 
-            <Button
-                android:id="@+id/new_shot_send_button"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_alignParentRight="true"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="4dp"
-                android:drawableRight="@drawable/ic_send"
-                android:enabled="false"
-                android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/primary_selector"
-                android:textSize="16sp"
-                />
 
             <ProgressBar
                 android:id="@+id/new_shot_send_progress"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:indeterminate="true"
                 android:visibility="gone"
-                tools:visibility="visible"
+                tools:visibility="gone"
                 />
+
+            <ImageButton
+              android:id="@+id/new_shot_gallery_button"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_alignParentLeft="true"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_gallery"
+              />
+
+            <ImageButton
+              android:id="@+id/new_shot_photo_button"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_toRightOf="@+id/new_shot_gallery_button"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_camera"
+              />
 
         </RelativeLayout>
     </LinearLayout>

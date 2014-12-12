@@ -131,25 +131,36 @@
               android:layout_height="wrap_content"
               android:layout_centerVertical="true"
               android:layout_marginLeft="8dp"
-              android:layout_marginRight="8dp"
-              android:layout_toLeftOf="@+id/timeline_new_pronostic"
+              android:layout_toLeftOf="@+id/timeline_new_image_gallery"
               android:background="@drawable/textfield_multiline_default_holo_light"
               android:fontFamily="sans-serif-light"
               android:text="@string/activity_timeline_new_text"
               android:textColor="@color/gray_60"
               android:textSize="16sp" />
 
-            <ImageView
-              android:id="@+id/timeline_new_pronostic"
-              android:layout_width="48dp"
-              android:layout_height="48dp"
+
+            <ImageButton
+              android:id="@+id/timeline_new_image_gallery"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_toLeftOf="@+id/timeline_new_image_camera"
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_gallery"
+              />
+
+            <ImageButton
+              android:id="@+id/timeline_new_image_camera"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
               android:layout_alignParentRight="true"
-              android:layout_centerVertical="true"
-              android:background="?android:selectableItemBackground"
-              android:clickable="true"
-              android:scaleType="center"
-              android:src="@drawable/ic_crosshair"
-              android:visibility="gone" />
+              android:background="?selectableItemBackground"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:src="@drawable/ic_shot_camera"
+              />
+
         </RelativeLayout>
 
     </LinearLayout>

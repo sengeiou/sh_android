@@ -5,6 +5,7 @@ public class ShotEntity extends Synchronized{
     private Long idShot;
     private Long idUser;
     private String comment;
+    private String image;
 
     private UserEntity mUserObject;
 
@@ -38,5 +39,13 @@ public class ShotEntity extends Synchronized{
 
     public void setUser(UserEntity mUser) {
         this.mUserObject = mUser;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

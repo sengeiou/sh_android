@@ -23,10 +23,12 @@ import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.util.PicassoWrapper;
@@ -120,7 +122,7 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
     SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
     SearchMatchJob.class, DeleteMatchOfflineJob.class, DeleteMatchOnlineJob.class, UploadProfilePhotoJob.class,
-    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class,
+    RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
 
@@ -145,6 +147,8 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileEditPresenter.class,
 
     SearchTeamPresenter.class,
+
+    PostNewShotPresenter.class,
 
     TimeFormatter.class,
 

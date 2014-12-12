@@ -7,4 +7,5 @@ public interface ImageResizer {
 
     public File getResizedCroppedImageFile(File originalImageFile) throws IOException;
 
+    File getResizedImageFile(File originalImageFile) throws IOException;
 }

@@ -1,16 +1,22 @@
 package com.shootr.android.ui.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,50 +25,49 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.SessionManager;
+import com.shootr.android.ui.presenter.PostNewShotPresenter;
+import com.shootr.android.ui.views.PostNewShotView;
+import com.shootr.android.util.FileChooserUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.db.objects.ShotEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.shots.PostNewShotResultEvent;
-import com.shootr.android.task.jobs.shots.PostNewShotJob;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import java.io.File;
+import java.io.IOException;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class PostNewShotActivity extends BaseSignedInActivity {
+public class PostNewShotActivity extends BaseSignedInActivity implements PostNewShotView {
 
     public static final int MAX_LENGTH = 140;
+    private static final int REQUEST_CHOOSE_PHOTO = 1;
+    private static final int REQUEST_TAKE_PHOTO = 2;
+
+    private static final String EXTRA_SELECTED_IMAGE = "image";
+    public static final String EXTRA_DEFAULT_INPUT_MODE = "input";
+    public static final int INPUT_CAMERA = 1;
+    public static final int INPUT_GALLERY = 2;
 
     @InjectView(R.id.new_shot_avatar) ImageView avatar;
     @InjectView(R.id.new_shot_title) TextView name;
     @InjectView(R.id.new_shot_subtitle) TextView username;
     @InjectView(R.id.new_shot_text) EditText editTextView;
     @InjectView(R.id.new_shot_char_counter) TextView charCounter;
-    @InjectView(R.id.new_shot_send_button) Button sendButton;
+    @InjectView(R.id.new_shot_send_button) ImageButton sendButton;
     @InjectView(R.id.new_shot_send_progress) ProgressBar progress;
+    @InjectView(R.id.new_shot_image_container) ViewGroup imageContainer;
+    @InjectView(R.id.new_shot_image) ImageView image;
 
     @Inject PicassoWrapper picasso;
-    @Inject JobManager jobManager;
-    @Inject Bus bus;
-    @Inject SQLiteOpenHelper dbHelper;
-    @Inject ShotManager shotManager;
-    private UserEntity currentUser;
+    @Inject SessionManager sessionManager;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
-    private ShotEntity previousShot;
+
+    private PostNewShotPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         if (!restoreSessionOrLogin()) {
             return;
@@ -71,20 +76,27 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         setContentView(R.layout.activity_new_shot);
         ButterKnife.inject(this);
 
-        currentUser = ShootrApplication.get(this).getCurrentUser();
+        initializePresenter();
+        initializeViews();
+        setTextReceivedFromIntent();
+        openDefaultInputIfAny();
+        clearDefaultInput();
+    }
 
-        picasso.load(currentUser.getPhoto()).into(avatar);
-        name.setText(currentUser.getName());
-        username.setText("@" + currentUser.getUserName());
+    private void initializePresenter() {
+        presenter = getObjectGraph().get(PostNewShotPresenter.class);
+        presenter.initialize(this, getObjectGraph());
+    }
+
+    private void initializeViews() {
+        picasso.loadProfilePhoto(sessionManager.getCurrentUser().getPhoto()).into(avatar);
+        name.setText(sessionManager.getCurrentUser().getName());
+        username.setText("@" + sessionManager.getCurrentUser().getUserName());
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
 
         charCounterColorError = getResources().getColor(R.color.error);
         charCounterColorNormal = getResources().getColor(R.color.gray_70);
-
-        previousShot = shotManager.retrieveLastShotFromUser(dbHelper.getReadableDatabase(),
-            ShootrApplication.get(this).getCurrentUser().getIdUser());
-        setTextReceivedFromIntent();
     }
 
     private void setTextReceivedFromIntent() {
@@ -92,125 +104,210 @@ public class PostNewShotActivity extends BaseSignedInActivity {
         editTextView.setText(sentText);
     }
 
+    private void openDefaultInputIfAny() {
+        int defaultInputMode = getIntent().getIntExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
+        switch (defaultInputMode) {
+            case INPUT_CAMERA:
+                presenter.takePhotoFromCamera();
+                break;
+            case INPUT_GALLERY:
+                presenter.choosePhotoFromGallery();
+                break;
+        }
+
+    }
+
+    private void clearDefaultInput() {
+        getIntent().putExtra(EXTRA_DEFAULT_INPUT_MODE, 0);
+    }
+
     @OnTextChanged(R.id.new_shot_text)
-    public void textChanged() {
-        String filteredText = getFilteredText();
-        setCharCounterStatus(filteredText);
-        setSendButtonIsEnabled(filteredText);
-    }
-
-    private void setSendButtonIsEnabled(String currentText) {
-        sendButton.setEnabled(isValidComment(currentText));
-    }
-
-    private void setCharCounterStatus(String currentText) {
-        int remainingLength = MAX_LENGTH - currentText.length();
-        charCounter.setText(String.valueOf(remainingLength));
-
-        boolean isValidLenght = remainingLength > 0;
-        charCounter.setTextColor(isValidLenght ? charCounterColorNormal : charCounterColorError);
+    public void onTextChanged() {
+        presenter.textChanged(editTextView.getText().toString());
     }
 
     @OnClick(R.id.new_shot_send_button)
-    public void sendShot() {
-        String comment = filterText(editTextView.getText().toString());
-        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
-
-        if (isCommentRepeated(comment)) {
-            Toast.makeText(this, R.string.new_shot_repeated, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (isValidComment(comment)) {
-            startJob(currentUser,comment);
-            setProgressUI(true);
-        } else {
-            Timber.i("Comment invalid: \"%s\"", comment);
-            Toast.makeText(this, "Invalid editTextView", Toast.LENGTH_SHORT).show();
-        }
+    public void onSendShot() {
+        presenter.sendShot(editTextView.getText().toString());
     }
 
-    public void startJob(UserEntity currentUser, String comment){
-        PostNewShotJob job = ShootrApplication.get(getApplicationContext()).getObjectGraph().get(PostNewShotJob.class);
-        job.init(currentUser, comment);
-        jobManager.addJobInBackground(job);
+    @OnClick(R.id.new_shot_photo_button)
+    public void onAddImageFromCamera() {
+        presenter.takePhotoFromCamera();
     }
 
-    @Subscribe
-    public void shotSent(PostNewShotResultEvent event) {
-        Timber.d("Shot sent successfuly :D");
-        setResult(RESULT_OK);
-        finish(); //TODO animación hacia abjo
+    @OnClick(R.id.new_shot_gallery_button)
+    public void onAddImageFromGallery() {
+        presenter.choosePhotoFromGallery();
     }
 
-    @Subscribe
-    public void onCommunicationError(CommunicationErrorEvent event) {
-            Timber.e("Shot not sent successfuly :(");
-            setProgressUI(false);
-            Toast.makeText(this, R.string.communication_error, Toast.LENGTH_SHORT).show();
+    @OnClick(R.id.new_shot_image_remove)
+    public void onRemoveImage() {
+        presenter.removeImage();
     }
 
-    @Subscribe
-    public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-        setProgressUI(false);
-        Toast.makeText(this, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onBackPressed() {
+        presenter.navigateBack();
     }
 
-    private void setProgressUI(boolean showProgress) {
-        progress.setVisibility(showProgress ? View.VISIBLE : View.GONE);
-        sendButton.setVisibility(showProgress ? View.GONE : View.VISIBLE);
+    @Override public void showDiscardAlert() {
+        new AlertDialog.Builder(this).setMessage(R.string.new_shot_discard_message)
+          .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmDiscard();
+              }
+          })
+          .setNegativeButton(R.string.no, null)
+          .show();
     }
 
-    private String getFilteredText() {
-        return filterText(editTextView.getText().toString());
-    }
-
-    private String filterText(String originalText) {
-        String trimmed = originalText.trim();
-        while (trimmed.contains("\n\n\n")) {
-            trimmed = trimmed.replace("\n\n\n", "\n\n");
-        }
-        return trimmed;
-    }
-
-    private boolean isValidComment(String text) {
-        return text.length() > 0 && text.length() <= MAX_LENGTH;
-    }
-
-    private boolean isCommentRepeated(String text) {
-        if (previousShot != null) {
-            return previousShot.getComment().equals(text);
-        } else {
-            return false;
-        }
+    @Override public void performBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bus.register(this);
+        presenter.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        bus.unregister(this);
+        presenter.pause();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (TextUtils.isEmpty(editTextView.getText().toString().trim())) {
-            super.onBackPressed();
-        } else {
-            new AlertDialog.Builder(this).setMessage("Discard shot?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .create()
-                .show();
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        File selectedImageFile = presenter.getSelectedImageFile();
+        outState.putSerializable(EXTRA_SELECTED_IMAGE, selectedImageFile);
+    }
+
+    @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        File selectedFile = (File) savedInstanceState.getSerializable(EXTRA_SELECTED_IMAGE);
+        presenter.selectImage(selectedFile);
+    }
+
+    @Override public void setResultOk() {
+        setResult(RESULT_OK);
+    }
+
+    @Override public void closeScreen() {
+        finish();
+    }
+
+    @Override public void setRemainingCharactersCount(int remainingCharacters) {
+        charCounter.setText(String.valueOf(remainingCharacters));
+    }
+
+    @Override public void setRemainingCharactersColorValid() {
+        charCounter.setTextColor(charCounterColorNormal);
+    }
+
+    @Override public void setRemainingCharactersColorInvalid() {
+        charCounter.setTextColor(charCounterColorError);
+    }
+
+    @Override public void enableSendButton() {
+        sendButton.setEnabled(true);
+    }
+
+    @Override public void disableSendButton() {
+        sendButton.setEnabled(false);
+    }
+
+    @Override public void showSendButton() {
+        sendButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideSendButton() {
+        sendButton.setVisibility(View.GONE);
+    }
+
+    @Override public void hideKeyboard() {
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
+    }
+
+    @Override public void showImagePreviewFromUrl(String imageUrl) {
+        picasso.load(imageUrl).into(image);
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void showImagePreview(File imageFile) {
+        int maxScreenDimension = getMaxScreenDimension();
+        picasso.load(imageFile).resize(maxScreenDimension, maxScreenDimension).centerInside().skipMemoryCache().into(image);
+        imageContainer.setVisibility(View.VISIBLE);
+    }
+
+    private int getMaxScreenDimension() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        int maxDimension = width > height ? width : height;
+        return maxDimension;
+    }
+
+    @Override public void hideImagePreview() {
+        imageContainer.setVisibility(View.GONE);
+        image.setImageDrawable(null);
+    }
+
+    @Override public void takePhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File pictureTemporaryFile = getCameraPhotoFile();
+        if (!pictureTemporaryFile.exists()) {
+            try {
+                pictureTemporaryFile.getParentFile().mkdirs();
+                pictureTemporaryFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                //TODO cancelar operación y avisar al usuario
+            }
         }
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(pictureTemporaryFile));
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    @Override public void choosePhotoFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.photo_edit_choose)),
+          REQUEST_CHOOSE_PHOTO);
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            File selectedPhotoFile = null;
+            if (requestCode == REQUEST_CHOOSE_PHOTO) {
+                Uri selectedImageUri = data.getData();
+                selectedPhotoFile = new File(FileChooserUtils.getPath(this, selectedImageUri));
+            }else if (requestCode == REQUEST_TAKE_PHOTO) {
+                selectedPhotoFile = getCameraPhotoFile();
+            }
+            presenter.selectImage(selectedPhotoFile);
+        }
+    }
+
+    private File getCameraPhotoFile() {
+        return new File(this.getExternalFilesDir("tmp"), "profileUpload.jpg");
+    }
+
+    @Override public void showLoading() {
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        progress.setVisibility(View.GONE);
+    }
+
+    @Override public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

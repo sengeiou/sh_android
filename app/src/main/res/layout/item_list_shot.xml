@@ -75,4 +75,15 @@
 
     </LinearLayout>
 
+    <com.shootr.android.ui.widgets.ImageView169
+      android:id="@+id/shot_image"
+      android:layout_width="match_parent"
+      android:layout_height="185dp"
+      android:layout_alignLeft="@+id/shot_text"
+      android:layout_below="@+id/shot_text"
+      android:layout_marginTop="8dp"
+      android:scaleType="centerCrop"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
 </RelativeLayout>

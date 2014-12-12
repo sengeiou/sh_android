@@ -44,7 +44,7 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOT, op);
     }
 
-    public GenericDto getNewShotOperationDto(Long idUser, String comment) {
+    public GenericDto getNewShotOperationDto(Long idUser, String comment, String imageUrl) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }
@@ -52,11 +52,7 @@ public class ShotDtoFactory {
             throw new IllegalArgumentException("idUser must be a positive number");
         }
 
-        if (comment == null) {
-            throw new IllegalArgumentException("comment must not be null");
-        }
-
-        if (comment.trim().length() == 0) {
+        if (comment != null && comment.trim().length() == 0) {
             throw new IllegalArgumentException("comment cannot be empty");
         }
 
@@ -69,6 +65,7 @@ public class ShotDtoFactory {
         ShotEntity shotTemplate = new ShotEntity();
         shotTemplate.setComment(comment);
         shotTemplate.setIdUser(idUser);
+        shotTemplate.setImage(imageUrl);
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)

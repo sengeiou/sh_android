@@ -7,6 +7,7 @@ public class ShotModel {
     //Shot attributes
     private Long idShot;
     private String comment;
+    private String image;
     private Date csysBirth;
     //User attributes
     private Long idUser;
@@ -59,5 +60,13 @@ public class ShotModel {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

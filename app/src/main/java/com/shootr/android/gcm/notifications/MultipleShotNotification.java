@@ -53,7 +53,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
         for (ShotModel shot : shots) {
             String userName = shot.getUsername();
-            String shotText = shot.getComment();
+            String shotText = getShotText(shot);
             Spannable styledLine = getSpannableLineFromNameAndComment(userName, shotText);
             inbox.addLine(styledLine);
         }

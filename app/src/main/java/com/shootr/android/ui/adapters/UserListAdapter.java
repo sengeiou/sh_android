@@ -74,7 +74,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }
 
         String photo = item.getPhoto();
-        picasso.load(photo).into(viewHolder.avatar);
+        picasso.loadProfilePhoto(photo).into(viewHolder.avatar);
 
         if(isFollowButtonVisible()){
             if(item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING){

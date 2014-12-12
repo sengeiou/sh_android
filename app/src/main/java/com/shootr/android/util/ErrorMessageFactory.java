@@ -37,6 +37,7 @@ public class ErrorMessageFactory {
         codeResourceMap.put(ShootrError.ERROR_CODE_WEBSITE_WRONG_URI, R.string.error_message_website_invalid);
         codeResourceMap.put(ShootrError.ERROR_CODE_WEBSITE_TOO_LONG, R.string.error_message_website_too_long);
         codeResourceMap.put(ShootrError.ERROR_CODE_BIO_TOO_LONG, R.string.error_message_bio_too_long);
+        codeResourceMap.put(ShootrError.ERROR_CODE_SHOT_TEXT_DUPLICATED, R.string.new_shot_repeated);
     }
 
     public String getMessageForError(ShootrError shootrError) {
@@ -49,6 +50,10 @@ public class ErrorMessageFactory {
 
     public String getCommunicationErrorMessage() {
         return context.getString(R.string.communication_error);
+    }
+
+    public String getConnectionNotAvailableMessage() {
+        return context.getString(R.string.connection_lost);
     }
 
     @StringRes public Integer getResourceStringForCode(String errorCode) {

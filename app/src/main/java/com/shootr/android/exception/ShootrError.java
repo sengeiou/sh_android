@@ -22,6 +22,8 @@ public interface ShootrError {
     public static final String ERROR_CODE_BIO_TOO_LONG = "U012";
     public static final String ERROR_CODE_TEAM_ID_INVALID = "U015";
 
+    public static final String ERROR_CODE_SHOT_TEXT_DUPLICATED = "CS002";
+
     public String getErrorCode();
 
     String getMessage();

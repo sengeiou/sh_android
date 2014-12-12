@@ -67,6 +67,10 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
+    @Override public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl) throws IOException {
+        return null;
+    }
+
     @Override
     public UserEntity getUserByIdUser(Long idUser) throws IOException {
         return null;

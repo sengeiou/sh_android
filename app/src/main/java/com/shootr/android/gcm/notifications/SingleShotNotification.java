@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
@@ -31,11 +30,24 @@ public class SingleShotNotification extends AbstractShotNotification {
         super.setNotificationValues(builder);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
+        if (shot.getImage() == null) {
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
+        } else {
+            builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getImageBitmap()));
+        }
+    }
+
+    private Bitmap getImageBitmap() {
+        try {
+            return picasso.loadTimelineImage(shot.getImage()).get();
+        } catch (IOException e) {
+            Timber.e(e, "Error obteniendo imagen del shot con id %d y url %s", shot.getIdShot(), shot.getImage());
+            return null;
+        }
     }
 
     private String getContent() {
-        return shot.getComment();
+        return getShotText(shot);
     }
 
     public String getTitle() {
@@ -55,7 +67,7 @@ public class SingleShotNotification extends AbstractShotNotification {
     protected Bitmap getUserPhoto(String url) {
         if (largeIcon == null) {
             try {
-                largeIcon = picasso.load(url).get();
+                largeIcon = picasso.loadProfilePhoto(url).get();
             } catch (IOException | IllegalArgumentException e) {
                 Timber.e(e, "Error downloading user photo for a shot notification.");
                 largeIcon = getDefaultPhoto();

@@ -11,7 +11,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
@@ -159,7 +158,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             subtitle = notWatchingText;
         }
         vh.watching.setText(subtitle);
-        picasso.load(user.getPhoto()).into(vh.avatar);
+        picasso.loadProfilePhoto(user.getPhoto()).into(vh.avatar);
         if (vh.edit != null) {
             vh.edit.setTag(vh);
         }
