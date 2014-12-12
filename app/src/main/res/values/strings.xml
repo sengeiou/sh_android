@@ -63,7 +63,7 @@
     <string name="profile_marks_followers">followers</string>
 
     <!-- Menu names -->
-    <string name="menu_info">Info</string>
+    <string name="menu_info">Watchers</string>
     <string name="menu_search_timeline">Search timeline</string>
     <string name="menu_search_people">Find people</string>
     <string name="menu_search_teams">Find team</string>
@@ -108,7 +108,7 @@
     <string name="activity_empty_info">No people watching</string>
     <string name="enter_to_confirm">Now Playing</string>
     <string name="following_notif_text">Touch to access the profile</string>
-    <string name="activity_info_title">Info</string>
+    <string name="activity_info_title">Watchers</string>
 
     <!-- Watching requests -->
     <string name="watching_request_subtitle_none">Now Playing</string>
