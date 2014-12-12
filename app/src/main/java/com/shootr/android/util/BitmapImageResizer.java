@@ -174,12 +174,14 @@ public class BitmapImageResizer implements ImageResizer {
     }
 
     private Bitmap getBitmapFromFile(File imageFile) {
-        BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
-        bmpOptions.inJustDecodeBounds = false;
-        bmpOptions.inPurgeable = true;
-        bmpOptions.inSampleSize = calculateInSampleSize(bmpOptions, MAX_SIZE, MAX_SIZE);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 
-        return BitmapFactory.decodeFile(imageFile.getAbsolutePath(), bmpOptions);
+        options.inSampleSize = calculateInSampleSize(options, MAX_SIZE, MAX_SIZE);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
     }
 
     private Bitmap cropSquareImage(Bitmap originalImage) {
