@@ -9,15 +9,15 @@
 
     <FrameLayout
       android:id="@+id/profile_avatar_container"
-      android:layout_width="@dimen/profile_avatar_size"
-      android:layout_height="@dimen/profile_avatar_size"
-      android:layout_marginLeft="16dp"
-      android:layout_marginTop="16dp">
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      >
 
         <de.hdodenhof.circleimageview.CircleImageView
           android:id="@+id/profile_avatar"
           android:layout_width="@dimen/profile_avatar_size"
           android:layout_height="@dimen/profile_avatar_size"
+          android:layout_margin="16dp"
           android:src="@drawable/ic_contact_picture_default" />
 
         <ProgressBar
@@ -96,10 +96,9 @@
       android:layout_width="match_parent"
       android:layout_marginRight="16dp"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@id/profile_avatar_container"
-      android:layout_alignLeft="@+id/profile_name"
-      android:layout_marginBottom="1dp"
+      android:layout_below="@+id/profile_website"
       android:layout_marginTop="16dp"
+      android:layout_alignLeft="@+id/profile_name"
       android:clickable="true" />
 
     <TextView
@@ -107,7 +106,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_toRightOf="@+id/profile_avatar_container"
-      android:layout_marginLeft="16dp"
       android:layout_marginTop="16dp"
       android:textSize="21sp"
       android:maxLines="1"
@@ -134,7 +132,6 @@
       android:layout_below="@+id/profile_avatar_container"
       android:layout_marginRight="16dp"
       android:layout_marginLeft="16dp"
-      android:layout_marginTop="16dp"
       android:textColor="@color/gray_40"
       tools:text="Supporter fince birth. Almost. Member since... whatever. I live in Tokio, Japan. Not really." />
 
