@@ -80,6 +80,7 @@ public class PostNewShotPresenter implements Presenter {
         shotCommentToSend = filterText(text);
 
         if (canSendShot(shotCommentToSend)) {
+            this.showLoading();
             if (selectedImageFile != null) {
                 uploadImageAndSendShot();
             } else {
@@ -111,9 +112,6 @@ public class PostNewShotPresenter implements Presenter {
     }
 
     private void startSendingShot() {
-        postNewShotView.showLoading();
-        postNewShotView.disableSendButton();
-
         PostNewShotJob job = objectGraph.get(PostNewShotJob.class);
         job.init(shotCommentToSend, uploadedImageUrl);
         jobManager.addJobInBackground(job);
@@ -163,8 +161,7 @@ public class PostNewShotPresenter implements Presenter {
 
     @Subscribe
     public void onValidationErrors(FieldValidationErrorEvent event) {
-        postNewShotView.hideLoading();
-        postNewShotView.enableSendButton();
+        this.hideLoading();
 
         List<FieldValidationError> fieldValidationErrors = event.getFieldValidationErrors();
         FieldValidationError firstError = fieldValidationErrors.get(0);
@@ -174,16 +171,26 @@ public class PostNewShotPresenter implements Presenter {
 
     @Subscribe
     public void onCommunicationError(CommunicationErrorEvent event) {
-        postNewShotView.hideLoading();
-        postNewShotView.enableSendButton();
+        this.hideLoading();
         postNewShotView.showError(errorMessageFactory.getCommunicationErrorMessage());
     }
 
     @Subscribe
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        this.hideLoading();
+        postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
+    }
+
+    private void showLoading() {
+        postNewShotView.showLoading();
+        postNewShotView.hideSendButton();
+        postNewShotView.disableSendButton();
+    }
+
+    private void hideLoading() {
         postNewShotView.hideLoading();
         postNewShotView.enableSendButton();
-        postNewShotView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
+        postNewShotView.showSendButton();
     }
 
     @Override public void resume() {

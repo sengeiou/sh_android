@@ -196,6 +196,14 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
         sendButton.setEnabled(false);
     }
 
+    @Override public void showSendButton() {
+        sendButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideSendButton() {
+        sendButton.setVisibility(View.GONE);
+    }
+
     @Override public void hideKeyboard() {
         InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         im.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);

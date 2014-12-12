@@ -18,6 +18,10 @@ public interface PostNewShotView extends LoadDataView {
 
     void disableSendButton();
 
+    void showSendButton();
+
+    void hideSendButton();
+
     void hideKeyboard();
 
     void showImagePreviewFromUrl(String imageUrl);
