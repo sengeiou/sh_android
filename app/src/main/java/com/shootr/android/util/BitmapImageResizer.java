@@ -82,14 +82,6 @@ public class BitmapImageResizer implements ImageResizer {
         bitmapResized.recycle();
         bitmapResized = null;
 
-
-        long finalImageSizeKilobytes = finalImageFile.length() / 1000;
-        if (finalImageSizeKilobytes > MAX_WEIGHT_KB) {
-            Timber.w("Image final size is bigger than allowed maximum: %d KB", finalImageSizeKilobytes);
-            //TODO reduce size by compressing (quality) or reducing resolution
-        }
-
-
         Timber.d("Image resizing complete. Output file: %s", finalImageFile.getAbsolutePath());
         return finalImageFile;
     }
@@ -166,8 +158,8 @@ public class BitmapImageResizer implements ImageResizer {
 
             long imageSizeInKb = imageFile.length() / 1000;
             Timber.i("Image size: %s KB", imageSizeInKb);
-            compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
             needsCompression = imageSizeInKb > MAX_WEIGHT_KB && compressionQuality > 0;
+            compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
             compressedImageStream.close();
         }
         return imageFile;
