@@ -4,6 +4,10 @@ import java.io.File;
 
 public interface PostNewShotView extends LoadDataView {
 
+    void performBackPressed();
+
+    void showDiscardAlert();
+
     void setResultOk();
 
     void closeScreen();

@@ -200,4 +200,20 @@ public class PostNewShotPresenter implements Presenter {
     @Override public void pause() {
         bus.unregister(this);
     }
+
+    public void navigateBack() {
+        if (hasEnteredData()) {
+            postNewShotView.showDiscardAlert();
+        } else {
+            postNewShotView.performBackPressed();
+        }
+    }
+
+    private boolean hasEnteredData() {
+        return ((currentTextWritten != null) && !currentTextWritten.isEmpty()) || (selectedImageFile != null);
+    }
+
+    public void confirmDiscard() {
+        postNewShotView.performBackPressed();
+    }
 }

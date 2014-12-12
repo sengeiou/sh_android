@@ -141,19 +141,22 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
 
     @Override
     public void onBackPressed() {
-        if (TextUtils.isEmpty(editTextView.getText().toString().trim())) {
-            super.onBackPressed();
-        } else {
-            new AlertDialog.Builder(this).setMessage("Discard shot?")
-              .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                  @Override public void onClick(DialogInterface dialog, int which) {
-                      finish();
-                  }
-              })
-              .setNegativeButton("No", null)
-              .create()
-              .show();
-        }
+        presenter.navigateBack();
+    }
+
+    @Override public void showDiscardAlert() {
+        new AlertDialog.Builder(this).setMessage(R.string.new_shot_discard_message)
+          .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.confirmDiscard();
+              }
+          })
+          .setNegativeButton(R.string.no, null)
+          .show();
+    }
+
+    @Override public void performBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
