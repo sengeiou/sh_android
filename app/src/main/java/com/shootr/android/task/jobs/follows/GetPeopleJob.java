@@ -16,6 +16,7 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,19 +49,24 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
 
     @Override
     protected void run() throws IOException, SQLException {
-
+        List<UserModel> userModels;
         List<UserEntity> peopleFromDatabase = getPeopleFromDatabase();
-        List<UserModel> userVOs = getUserVOs(peopleFromDatabase);
         if (peopleFromDatabase != null && !peopleFromDatabase.isEmpty()) {
-            Collections.sort(userVOs, new NameComparator());
-            postSuccessfulEvent(new FollowsResultEvent(userVOs));
+            userModels = getUserVOs(peopleFromDatabase);
+            postSuccessfulEvent(new FollowsResultEvent(userModels));
         }
         if (hasInternetConnection()) {
             List<UserEntity> peopleFromServer = service.getFollowing(currentUserId, 0L);
-            userVOs = getUserVOs(peopleFromServer);
-            Collections.sort(userVOs, new NameComparator());
-            postSuccessfulEvent(new FollowsResultEvent(userVOs));
+            if (peopleFromServer != null) {
+                userModels = getUserVOs(peopleFromServer);
+                postSuccessfulEvent(new FollowsResultEvent(userModels));
+            }
         }
+    }
+
+    private List<UserModel> orderUserModelsByUsername(List<UserModel> originalList) {
+        Collections.sort(originalList, new UsernameComparator());
+        return originalList;
     }
 
     public List<UserModel> getUserVOs(List<UserEntity> users){
@@ -71,7 +77,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
             boolean isMe = currentUserId.equals(idUser);
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
-        Collections.sort(userVOs, new NameComparator());
+        userVOs = orderUserModelsByUsername(userVOs);
         return userVOs;
     }
 
@@ -89,11 +95,11 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         return false;
     }
 
-    static class NameComparator implements Comparator<UserModel> {
+    static class UsernameComparator implements Comparator<UserModel> {
 
         @Override public int compare(UserModel user1, UserModel user2) {
             return user1.getUsername()
-              .compareTo(user2.getUsername());
+              .compareToIgnoreCase(user2.getUsername());
         }
 
     }
