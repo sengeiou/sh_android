@@ -65,7 +65,7 @@ public class PostNewShotPresenter implements Presenter {
             this.selectedImageFile = selectedImageFile;
             updateSendButonEnabled(currentTextWritten);
         } else {
-            Timber.w("Tried to set invalid file as image: %", selectedImageFile);
+            Timber.w("Tried to set invalid file as image: %s", selectedImageFile);
         }
     }
 

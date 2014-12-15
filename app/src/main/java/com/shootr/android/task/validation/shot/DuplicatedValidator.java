@@ -8,17 +8,19 @@ import com.shootr.android.task.validation.FieldValidator;
 public class DuplicatedValidator extends FieldValidator {
 
     private final ShotEntity previousShot;
-    private final String previousComment;
     private final String newShotComment;
     private String newImageUrl;
+    private String previousComment;
     private String previousImageUrl;
 
     public DuplicatedValidator(ShotEntity previousShot, String newShotComment, String newImageUrl) {
         this.previousShot = previousShot;
         this.newShotComment = newShotComment;
         this.newImageUrl = newImageUrl;
-        previousComment = previousShot.getComment();
-        previousImageUrl = previousShot.getImage();
+        if (previousShot != null) {
+            previousComment = previousShot.getComment();
+            previousImageUrl = previousShot.getImage();
+        }
     }
 
     @Override protected int getField() {
