@@ -35,6 +35,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private int watchingColorNotLive;
     private final String watchingText;
     private final String notWatchingText;
+    private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
 
     public InfoListAdapter(Context context, PicassoWrapper picasso, Long currentUserId, View.OnClickListener editButtonListener) {
         super(context);
@@ -50,6 +51,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
         this.itemsList.clear();
+        this.itemsMap = itemsMap;
 
         for (MatchModel match : itemsMap.keySet()) {
             itemsList.add(match);
@@ -139,8 +141,23 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public void bindMatch(MatchModel match, int position, View view) {
         HeaderViewHolder vh = (HeaderViewHolder) view.getTag();
-        vh.title.setText(match.getTitle());
+        Integer peopleWatchingMatch = getPeopleWatchingMatch(match);
+        String headerText = String.format(getContext().getString(R.string.activity_info_title_pattern),
+          match.getTitle(), peopleWatchingMatch);
+
+        vh.title.setText(headerText);
         vh.timestamp.setText(match.getDatetime());
+    }
+
+    private Integer getPeopleWatchingMatch(MatchModel match) {
+        Collection<UserWatchingModel> usersWatching = itemsMap.get(match);
+        Integer peopleWatchingCount = usersWatching.size();
+        UserWatchingModel myWatch = usersWatching.iterator().next();
+        boolean iAmWatching = myWatch.isWatching();
+        if (!iAmWatching) {
+            peopleWatchingCount--;
+        }
+        return peopleWatchingCount;
     }
 
     public void bindUser(UserWatchingModel user, int position, View view) {
