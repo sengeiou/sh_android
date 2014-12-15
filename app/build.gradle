@@ -140,8 +140,7 @@ dependencies {
 
     compile 'joda-time:joda-time:2.3'
 
-    //compile 'com.cocosw:bottomsheet:0.3@aar'
-    compile project(':ext-libs:BottomSheet:library')
+    compile 'com.cocosw:bottomsheet:0.5@aar'
 
     //TODO Should be androidTestCompile, but doesn't work, probably due to a bug in Gradle/AS: http://stackoverflow.com/questions/22246183/android-studio-doesnt-recognize-espresso-classes
     provided 'com.jakewharton.espresso:espresso:1.1-r3'

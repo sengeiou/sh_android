@@ -1,2 +1,2 @@
-//include ':app', ':robolectric-tests', 'ext-libs:BottomSheet:library'
-include ':app', 'ext-libs:BottomSheet:library'
+//include ':app', ':robolectric-tests'
+include ':app'
