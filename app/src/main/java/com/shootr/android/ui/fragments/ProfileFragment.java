@@ -387,10 +387,12 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setMainButtonStatus(int followRelationship) {
-        if(followRelationship == FollowEntity.RELATIONSHIP_OWN){
+        if(isCurrentUser()){
             followButton.setEditProfile();
-        }else{
-            followButton.setFollowing(followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING);
+        }else {
+            boolean isFollowing =
+              followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
+            followButton.setFollowing(isFollowing);
         }
     }
 
