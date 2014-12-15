@@ -31,8 +31,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private PicassoWrapper picasso;
     private View.OnClickListener editButtonListener;
     private Long currentUserId;
-    private int watchingColorLive;
-    private int watchingColorNotLive;
+    private int notWatchingColor;
+    private int watchingColor;
     private final String watchingText;
     private final String notWatchingText;
     private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
@@ -44,7 +44,8 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         this.itemsList = new ArrayList<>();
         this.currentUserId = currentUserId;
         Resources resources = context.getResources();
-        this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
+        this.watchingColor = resources.getColor(R.color.watching);
+        this.notWatchingColor = resources.getColor(R.color.not_watching);
         this.watchingText = resources.getString(R.string.watching_text);
         this.notWatchingText = resources.getString(R.string.watching_not_text);
     }
@@ -175,6 +176,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             subtitle = notWatchingText;
         }
         vh.watching.setText(subtitle);
+        vh.watching.setTextColor(user.isWatching() ? watchingColor : notWatchingColor);
         picasso.loadProfilePhoto(user.getPhoto()).into(vh.avatar);
         if (vh.edit != null) {
             vh.edit.setTag(vh);
