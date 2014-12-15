@@ -134,7 +134,7 @@
           android:parentActivityName="com.shootr.android.ui.activities.ProfileContainerActivity" >
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.InfoActivity" />
+              android:value="com.shootr.android.ui.activities.ProfileContainerActivity" />
         </activity>
 
         <activity
@@ -144,7 +144,16 @@
           android:theme="@style/ShootrTheme.Closable">
             <meta-data
               android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.InfoActivity" />
+              android:value="com.shootr.android.ui.activities.ProfileContainerActivity" />
+        </activity>
+
+        <activity
+          android:name="com.shootr.android.ui.activities.ShotDetailActivity"
+          android:parentActivityName="com.shootr.android.ui.activities.MainActivity"
+          >
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="com.shootr.android.ui.activities.MainActivity" />
         </activity>
 
 

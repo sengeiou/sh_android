@@ -1,8 +1,9 @@
 package com.shootr.android.ui.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ShotModel {
+public class ShotModel implements Serializable{
 
     //Shot attributes
     private Long idShot;

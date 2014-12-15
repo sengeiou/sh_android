@@ -34,6 +34,7 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.util.PicassoWrapper;
@@ -404,7 +405,9 @@ public class TimelineFragment extends BaseFragment
 
     @OnItemClick(R.id.timeline_list)
     public void openShot(int position) {
-        Timber.d("Clicked shot %d", position);
+        ShotModel shot = adapter.getItem(position);
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
     }
 
     public void openProfile(int position) {

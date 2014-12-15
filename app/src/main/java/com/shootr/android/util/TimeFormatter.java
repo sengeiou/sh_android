@@ -12,6 +12,7 @@ public class TimeFormatter {
     DateTimeFormatter dayFormater = DateTimeFormat.forPattern("MM/dd");
     DateTimeFormatter dayTimeFormater = DateTimeFormat.forPattern("MM/dd HH:mm");
     DateTimeFormatter weekDayFormater = DateTimeFormat.forPattern("EEE HH:mm");
+    DateTimeFormatter detailedFormater = DateTimeFormat.forPattern("EEEE dd MMMM HH:mm");
 
     @Inject public TimeFormatter() {
 
@@ -33,6 +34,11 @@ public class TimeFormatter {
         return getDayTimeFormat(targetDate);
     }
 
+    public String getDateAndTimeDetailed(long timestamp) {
+        DateTime targetDate = new DateTime(timestamp);
+        return getDetailedFormat(targetDate);
+    }
+
     private String getDayOfWeek(DateTime targetDate) {
         return weekDayFormater.print(targetDate);
     }
@@ -40,10 +46,10 @@ public class TimeFormatter {
     private String getDayFormat(DateTime targetDate) {
         return dayFormater.print(targetDate);
     }
+
     private String getDayTimeFormat(DateTime targetDate) {
         return dayTimeFormater.print(targetDate);
     }
-
     private String getTomorrowFormat(DateTime targetDate) {
         return "Tomorrow";
     }
@@ -62,6 +68,10 @@ public class TimeFormatter {
 
     private String getTodayFormat(DateTime dateTime) {
         return hourFormater.print(dateTime);
+    }
+
+    private String getDetailedFormat(DateTime targetDate) {
+        return detailedFormater.print(targetDate);
     }
 
 

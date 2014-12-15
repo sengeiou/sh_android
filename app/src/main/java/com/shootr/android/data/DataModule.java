@@ -26,11 +26,13 @@ import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
 import com.shootr.android.ui.presenter.SearchTeamPresenter;
+import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.ImageResizer;
@@ -149,6 +151,8 @@ import static android.content.Context.MODE_PRIVATE;
     SearchTeamPresenter.class,
 
     PostNewShotPresenter.class,
+
+    ShotDetailPresenter.class,
 
     TimeFormatter.class,
 
