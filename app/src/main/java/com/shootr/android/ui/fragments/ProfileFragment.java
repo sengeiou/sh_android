@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -313,7 +314,7 @@ public class ProfileFragment extends BaseFragment {
     public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
         GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
           GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,idUser,followType);
+        job2.init(idUser,followType);
         jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserOnlineJob
@@ -331,8 +332,13 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        if (event.getResult() != null) {
-            setUserInfo(event.getResult());
+        Pair<Long, Boolean> result = event.getResult();
+        if (result != null) {
+            Long idUserFromResult = result.first;
+            Boolean following = result.second;
+            if (idUserFromResult.equals(this.idUser)) {
+                followButton.setFollowing(following);
+            }
         }
     }
 
@@ -387,10 +393,12 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setMainButtonStatus(int followRelationship) {
-        if(followRelationship == FollowEntity.RELATIONSHIP_OWN){
+        if(isCurrentUser()){
             followButton.setEditProfile();
-        }else{
-            followButton.setFollowing(followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING);
+        }else {
+            boolean isFollowing =
+              followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
+            followButton.setFollowing(isFollowing);
         }
     }
 

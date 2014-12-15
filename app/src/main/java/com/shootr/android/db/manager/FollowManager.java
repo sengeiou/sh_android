@@ -123,7 +123,7 @@ public class FollowManager extends AbstractManager{
         return userIds;
     }
 
-    public int getFollowRelationship(Long idFromUser, Long idToUser) {
+    public int getFollowRelationshipState(Long idFromUser, Long idToUser) {
         int resultRelationship = FollowEntity.RELATIONSHIP_NONE;
         String fromUserIdArgument = String.valueOf(idFromUser);
         String toUserIdArgument = String.valueOf(idToUser);

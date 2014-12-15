@@ -122,4 +122,11 @@ public class UserModel implements Serializable, Cloneable {
             return this;
         }
     }
+
+    @Override public String toString() {
+        return "UserModel{" +
+          "idUser=" + idUser +
+          ", userName='" + userName + '\'' +
+          '}';
+    }
 }

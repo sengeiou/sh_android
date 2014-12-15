@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
@@ -173,7 +175,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     public void startFollowUnfollowUserJob(UserModel userVO, Context context, int followType){
         //Proceso de insercción en base de datos
         GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,userVO.getIdUser(),followType);
+        job2.init(userVO.getIdUser(),followType);
         jobManager.addJobInBackground(job2);
 
         //Al instante
@@ -245,22 +247,18 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event){
-            UserModel userVO = event.getResult();
-        if(userVO!=null){
-            List<UserModel> userVOs = getAdapter().getItems();
-            int i = 0,index = 0;
-            for(UserModel userModel:userVOs){
-                if(userModel.getIdUser().equals(userVO.getIdUser())){
-                    index = i;
-                }
-                i++;
-            }
-            userVOs.remove(index);
-            getAdapter().removeItems();
-            userVOs.add(index,userVO);
-            getAdapter().setItems(userVOs);
+        Pair<Long, Boolean> result = event.getResult();
+        Long idUser = result.first;
+        Boolean following = result.second;
 
-            getAdapter().notifyDataSetChanged();
+        List<UserModel> usersInList = userListAdapter.getItems();
+        for (int i = 0; i < usersInList.size(); i++) {
+            UserModel userModel = usersInList.get(i);
+            if (userModel.getIdUser().equals(idUser)) {
+                userModel.setRelationship(following? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+                userListAdapter.notifyDataSetChanged();
+                break;
+            }
         }
     }
 
