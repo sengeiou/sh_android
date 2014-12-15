@@ -313,7 +313,7 @@ public class ProfileFragment extends BaseFragment {
     public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
         GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
           GetFollowUnFollowUserOfflineJob.class);
-        job2.init(currentUser,idUser,followType);
+        job2.init(idUser,followType);
         jobManager.addJobInBackground(job2);
 
         GetFollowUnfollowUserOnlineJob

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.SessionManager;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
@@ -23,31 +24,31 @@ import javax.inject.Inject;
 public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFollowResultEvent> {
     private static final int PRIORITY = 9; //TODO Define next values for our queue
 
-    UserManager userManager;
-    FollowManager followManager;
+    private final UserManager userManager;
+    private final FollowManager followManager;
+    private final UserModelMapper userModelMapper;
+    private final SessionManager sessionManager;
 
-    private UserModelMapper userModelMapper;
-
-    private UserEntity currentUser;
     private Long idUser;
     private int followUnfollowType;
 
     @Inject
-    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper) {
+    public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper,
+      SessionManager sessionManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
+        this.sessionManager = sessionManager;
     }
 
-    public void init(UserEntity currentUser, Long idUser, int followUnfollowType){
-        this.currentUser = currentUser;
+    public void init(Long idUser, int followUnfollowType){
         this.idUser = idUser;
         this.followUnfollowType = followUnfollowType;
     }
 
     @Override protected void run() throws SQLException, IOException {
-        Long idCurrentUser = currentUser.getIdUser();
+        Long idCurrentUser = sessionManager.getCurrentUserId();
         int doIFollowHim = followManager.doIFollowHimState(idCurrentUser, idUser);
         UserModel userToReturn = null;
         switch (followUnfollowType){
@@ -91,20 +92,20 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     public FollowEntity unfollowUserinDB() throws SQLException, IOException{
         //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
         //attribute to "U"
-        FollowEntity follow =  followManager.getFollowByUserIds(currentUser.getIdUser(), idUser);
+        FollowEntity follow =  followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
         follow.setCsysDeleted(new Date());
         follow.setCsysSynchronized("D");
         followManager.saveFollow(follow);
 
-        userManager.saveUser(currentUser);
+        userManager.saveUser(sessionManager.getCurrentUser());
         return follow;
     }
 
     public FollowEntity followUserInDB() throws IOException, SQLException{
         //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
         //So the syncrhonized attribute for this case is "N"
-        Long idCurrentUser = currentUser.getIdUser();
-         FollowEntity follow = followManager.getFollowByUserIds(currentUser.getIdUser(),idUser);
+        Long idCurrentUser = sessionManager.getCurrentUserId();
+         FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(),idUser);
         if(follow!=null && ("N".equals(follow.getCsysSynchronized()) || "U".equals(follow.getCsysSynchronized()) || "D".equals(follow.getCsysSynchronized()))){
             follow.setCsysSynchronized("U");
         }else{
@@ -117,10 +118,9 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         follow.setCsysModified(new Date());
         follow.setCsysRevision(0);
         followManager.saveFollow(follow);
-        userManager.saveUser(currentUser);
+        userManager.saveUser(sessionManager.getCurrentUser());
         return follow;
     }
-
 
 
     @Override protected boolean isNetworkRequired() {
