@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -331,8 +332,13 @@ public class ProfileFragment extends BaseFragment {
 
     @Subscribe
     public void onFollowUnfollowReceived(FollowUnFollowResultEvent event) {
-        if (event.getResult() != null) {
-            setUserInfo(event.getResult());
+        Pair<Long, Boolean> result = event.getResult();
+        if (result != null) {
+            Long idUserFromResult = result.first;
+            Boolean following = result.second;
+            if (idUserFromResult.equals(this.idUser)) {
+                followButton.setFollowing(following);
+            }
         }
     }
 

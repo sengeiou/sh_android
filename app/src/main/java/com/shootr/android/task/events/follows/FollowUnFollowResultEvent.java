@@ -1,12 +1,12 @@
 package com.shootr.android.task.events.follows;
 
+import android.util.Pair;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.ui.model.UserModel;
 
-public class FollowUnFollowResultEvent extends ShootrBaseJob.SuccessEvent<UserModel> {
+public class FollowUnFollowResultEvent extends ShootrBaseJob.SuccessEvent<Pair<Long, Boolean>> {
 
-public FollowUnFollowResultEvent(UserModel result) {
-    super(result);
-}
+    public FollowUnFollowResultEvent(Long idUser, Boolean following) {
+        super(new Pair<>(idUser, following));
+    }
 
 }
