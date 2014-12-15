@@ -56,7 +56,7 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
       android:paddingTop="16dp"
-      android:textColor="@color/gray_30"
+      android:textColor="@color/material_black"
       android:textColorLink="@color/links"
       android:textSize="16sp"
       tools:text="Who's the referee? He is!! Go get him! C'mon!" />

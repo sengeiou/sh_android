@@ -49,7 +49,7 @@
       android:layout_alignLeft="@+id/shot_user_name"
       android:layout_below="@id/shot_user_name"
       android:textSize="16sp"
-      android:textColor="@color/gray_30"
+      android:textColor="@color/material_black"
       android:textColorLink="@color/links"
       tools:text="Who's the referee?"
       />
