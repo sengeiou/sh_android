@@ -3,6 +3,7 @@ package com.shootr.android.ui;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.ui.activities.AddMatchActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.SearchTeamActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
@@ -41,7 +42,7 @@ import javax.inject.Singleton;
                 ProfileEditActivity.class,
                 SearchTeamActivity.class,
                 ShotDetailActivity.class,
-
+                PhotoViewActivity.class,
         },
         complete = false
 )

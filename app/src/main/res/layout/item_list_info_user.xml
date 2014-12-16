@@ -34,7 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/info_user_name"
       android:layout_below="@+id/info_user_name"
-      android:textColor="@color/watching_not_live"
+      android:textColor="@color/watching"
       android:textSize="14sp"
       android:maxLines="1"
       android:lines="1"

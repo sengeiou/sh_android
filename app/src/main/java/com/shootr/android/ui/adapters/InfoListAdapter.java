@@ -31,25 +31,29 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     private PicassoWrapper picasso;
     private View.OnClickListener editButtonListener;
     private Long currentUserId;
-    private int watchingColorLive;
-    private int watchingColorNotLive;
+    private int notWatchingColor;
+    private int watchingColor;
     private final String watchingText;
     private final String notWatchingText;
+    private Map<MatchModel, Collection<UserWatchingModel>> itemsMap;
 
-    public InfoListAdapter(Context context, PicassoWrapper picasso, Long currentUserId, View.OnClickListener editButtonListener) {
+    public InfoListAdapter(Context context, PicassoWrapper picasso, Long currentUserId,
+      View.OnClickListener editButtonListener) {
         super(context);
         this.picasso = picasso;
         this.editButtonListener = editButtonListener;
         this.itemsList = new ArrayList<>();
         this.currentUserId = currentUserId;
         Resources resources = context.getResources();
-        this.watchingColorNotLive = resources.getColor(R.color.watching_not_live);
+        this.watchingColor = resources.getColor(R.color.watching);
+        this.notWatchingColor = resources.getColor(R.color.not_watching);
         this.watchingText = resources.getString(R.string.watching_text);
         this.notWatchingText = resources.getString(R.string.watching_not_text);
     }
 
     public void setContent(Map<MatchModel, Collection<UserWatchingModel>> itemsMap) {
         this.itemsList.clear();
+        this.itemsMap = itemsMap;
 
         for (MatchModel match : itemsMap.keySet()) {
             itemsList.add(match);
@@ -139,8 +143,32 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
     public void bindMatch(MatchModel match, int position, View view) {
         HeaderViewHolder vh = (HeaderViewHolder) view.getTag();
-        vh.title.setText(match.getTitle());
+        Integer peopleWatchingMatch = getPeopleNumberWatchingMatch(match);
+
+        String headerText =
+          String.format(getContext().getString(R.string.activity_info_title_pattern), match.getTitle(),
+            peopleWatchingMatch);
+
+        //TODO feo feo, hace falta un refactor de Info List y que me de los datos bien
+        Collection<UserWatchingModel> usersWatching = itemsMap.get(match);
+        Integer peopleWatchingCount = usersWatching.size();
+        UserWatchingModel myWatch = usersWatching.iterator().next();
+        boolean iAmWatching = myWatch.isWatching();
+
+        vh.notificationsOff.setVisibility(iAmWatching ? View.GONE : View.VISIBLE);
+        vh.title.setText(headerText);
         vh.timestamp.setText(match.getDatetime());
+    }
+
+    private Integer getPeopleNumberWatchingMatch(MatchModel match) {
+        Collection<UserWatchingModel> usersWatching = itemsMap.get(match);
+        Integer peopleWatchingCount = usersWatching.size();
+        UserWatchingModel myWatch = usersWatching.iterator().next();
+        boolean iAmWatching = myWatch.isWatching();
+        if (!iAmWatching) {
+            peopleWatchingCount--;
+        }
+        return peopleWatchingCount;
     }
 
     public void bindUser(UserWatchingModel user, int position, View view) {
@@ -158,6 +186,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             subtitle = notWatchingText;
         }
         vh.watching.setText(subtitle);
+        vh.watching.setTextColor(user.isWatching() ? watchingColor : notWatchingColor);
         picasso.loadProfilePhoto(user.getPhoto()).into(vh.avatar);
         if (vh.edit != null) {
             vh.edit.setTag(vh);
@@ -170,9 +199,9 @@ public class InfoListAdapter extends BindableAdapter<Object> {
         Object currentItem = null;
         int currentPosition = position;
         while (!isItemMatchType && moreItemsAbove) {
-            currentItem = getItem(currentPosition );
+            currentItem = getItem(currentPosition);
             isItemMatchType = currentItem instanceof MatchModel;
-            moreItemsAbove = currentPosition  > 0;
+            moreItemsAbove = currentPosition > 0;
             currentPosition--;
         }
 
@@ -189,15 +218,18 @@ public class InfoListAdapter extends BindableAdapter<Object> {
     }
 
     public static class HeaderViewHolder {
+
         @InjectView(R.id.info_header_match_title) TextView title;
         @InjectView(R.id.info_header_match_timestamp) TextView timestamp;
+        @InjectView(R.id.info_header_match_notifications_off) ImageView notificationsOff;
 
         public HeaderViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
-
     }
+
     public static class UserViewHolder {
+
         @InjectView(R.id.info_user_avatar) ImageView avatar;
         @InjectView(R.id.info_user_name) TextView name;
         @InjectView(R.id.info_user_watching) TextView watching;
@@ -212,6 +244,5 @@ public class InfoListAdapter extends BindableAdapter<Object> {
             this(view);
             edit.setOnClickListener(editButtonClickListener);
         }
-
     }
 }

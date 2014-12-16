@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,20 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.R;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.SessionManager;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
+import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.PhotoViewActivity;
+import com.shootr.android.ui.activities.ProfileEditActivity;
+import com.shootr.android.ui.adapters.TimelineAdapter;
+import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.TimeUtils;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.R;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.exception.ShootrError;
@@ -105,8 +117,10 @@ public class ProfileFragment extends BaseFragment {
     UserEntity currentUser;
     UserModel user;
     private View.OnClickListener avatarClickListener;
+    private View.OnClickListener imageClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
+    private TimelineAdapter latestsShotsAdapter;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -127,6 +141,23 @@ public class ProfileFragment extends BaseFragment {
                 onShotAvatarClick(v);
             }
         };
+        imageClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                openShotImage(position);
+            }
+        };
+    }
+
+    private void openShotImage(int position) {
+        if (latestsShotsAdapter != null) {
+            ShotModel shot = latestsShotsAdapter.getItem(position);
+            String imageUrl = shot.getImage();
+            if (imageUrl != null) {
+                Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+                startActivity(intentForImage);
+            }
+        }
     }
 
     private void injectArguments() {
@@ -167,6 +198,7 @@ public class ProfileFragment extends BaseFragment {
         setupPhotoBottomSheet();
     }
 
+
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
@@ -189,12 +221,26 @@ public class ProfileFragment extends BaseFragment {
                       }
                   }
               });
-            avatarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    editPhotoBottomSheet.show();
-                }
-            });
         }
+    }
+
+    @OnClick(R.id.profile_avatar)
+    public void onAvatarClick() {
+        if (isCurrentUser()) {
+            if (editPhotoBottomSheet != null) {
+                editPhotoBottomSheet.show();
+            }
+        } else {
+            openPhotoBig();
+        }
+    }
+
+    private void openPhotoBig() {
+        FragmentActivity context = getActivity();
+        String preview = user.getPhoto();
+        String photoBig = preview.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
+        Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(context, photoBig, preview);
+        startActivity(intentForPhoto);
     }
 
     private void takePhotoFromCamera() {
@@ -475,7 +521,7 @@ public class ProfileFragment extends BaseFragment {
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
             final TimelineAdapter timelineAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
             timelineAdapter.setShots(shots);
             for (int i = 0; i < timelineAdapter.getCount(); i++) {
                 View shotView = timelineAdapter.getView(i, null, shotsList);

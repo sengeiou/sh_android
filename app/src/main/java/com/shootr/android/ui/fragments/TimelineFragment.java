@@ -35,6 +35,7 @@ import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.util.PicassoWrapper;
@@ -95,6 +96,7 @@ public class TimelineFragment extends BaseFragment
     private TextView footerText;
     private TimelineAdapter adapter;
     private View.OnClickListener avatarClickListener;
+    private View.OnClickListener imageClickListener;
     private boolean isLoadingMore;
     private boolean isRefreshing;
     private boolean moreShots = true;
@@ -117,6 +119,13 @@ public class TimelineFragment extends BaseFragment
             public void onClick(View v) {
                 int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
                 openProfile(position);
+            }
+        };
+
+        imageClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                openImage(position);
             }
         };
     }
@@ -216,7 +225,7 @@ public class TimelineFragment extends BaseFragment
 
         listView.addFooterView(footerView, null, false);
 
-        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
+        adapter = new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
         listView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -414,6 +423,15 @@ public class TimelineFragment extends BaseFragment
         ShotModel shotVO = adapter.getItem(position);
         Intent profileIntent = ProfileContainerActivity.getIntent(getActivity(), shotVO.getIdUser());
         startActivity(profileIntent);
+    }
+
+    public void openImage(int position) {
+        ShotModel shotVO = adapter.getItem(position);
+        String imageUrl = shotVO.getImage();
+        if (imageUrl != null) {
+            Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+            startActivity(intentForImage);
+        }
     }
 
     public void startRefreshing(Context context) {
