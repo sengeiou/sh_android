@@ -204,8 +204,7 @@ public class ProfileFragment extends BaseFragment {
         if (isCurrentUser()) {
             boolean canRemovePhoto = sessionManager.getCurrentUser().getPhoto() != null;
             editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo).sheet(
-              canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove
-                : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
+              canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
               .listener(new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
                       switch (which) {
@@ -520,16 +519,16 @@ public class ProfileFragment extends BaseFragment {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
-            final TimelineAdapter timelineAdapter =
+            latestsShotsAdapter =
               new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
-            timelineAdapter.setShots(shots);
-            for (int i = 0; i < timelineAdapter.getCount(); i++) {
-                View shotView = timelineAdapter.getView(i, null, shotsList);
+            latestsShotsAdapter.setShots(shots);
+            for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
+                View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 shotView.setBackgroundDrawable(getSelectableBackground());
                 final int finalI = i;
                 shotView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
-                        ShotModel shot = timelineAdapter.getItem(finalI);
+                        ShotModel shot = latestsShotsAdapter.getItem(finalI);
                         openShot(shot);
                     }
                 });
