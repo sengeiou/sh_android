@@ -21,13 +21,15 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     List<ShotModel> shots;
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
+    private final View.OnClickListener imageClickListener;
     private TimeUtils timeUtils;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      TimeUtils timeUtils) {
+      View.OnClickListener imageClickListener, TimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;
+        this.imageClickListener = imageClickListener;
         this.timeUtils = timeUtils;
         this.shots = new ArrayList<>(0);
     }
@@ -77,7 +79,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         switch (getItemViewType(position)) {
             case 0: // Shot
                 view = inflater.inflate(R.layout.item_list_shot, container, false);
-                view.setTag(new ViewHolder(view, avatarClickListener));
+                view.setTag(new ViewHolder(view, avatarClickListener, imageClickListener));
                 break;
             default:
                 break;
@@ -110,6 +112,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 String photo = item.getPhoto();
                 picasso.loadProfilePhoto(photo).into(vh.avatar);
                 vh.avatar.setTag(vh);
+                vh.image.setTag(vh);
 
                 String imageUrl = item.getImage();
                 if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -146,9 +149,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_image) public ImageView image;
         public int position;
 
-        public ViewHolder(View view, View.OnClickListener avatarClickListener) {
+        public ViewHolder(View view, View.OnClickListener avatarClickListener, View.OnClickListener imageClickListener) {
             ButterKnife.inject(this, view);
             avatar.setOnClickListener(avatarClickListener);
+            image.setOnClickListener(imageClickListener);
 
         }
     }

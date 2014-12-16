@@ -48,9 +48,9 @@
       android:layout_height="wrap_content"
       android:layout_alignLeft="@+id/shot_user_name"
       android:layout_below="@id/shot_user_name"
-      android:textSize="16sp"
       android:textColor="@color/gray_30"
       android:textColorLink="@color/links"
+      android:textSize="16sp"
       tools:text="Who's the referee?"
       />
 
@@ -69,8 +69,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginRight="8dp"
-          android:src="@drawable/ic_reply"
           android:clickable="true"
+          android:src="@drawable/ic_reply"
           />
 
     </LinearLayout>
@@ -82,6 +82,8 @@
       android:layout_alignLeft="@+id/shot_text"
       android:layout_below="@+id/shot_text"
       android:layout_marginTop="8dp"
+      android:focusable="false"
+      android:focusableInTouchMode="false"
       android:scaleType="centerCrop"
       android:visibility="gone"
       tools:visibility="visible" />

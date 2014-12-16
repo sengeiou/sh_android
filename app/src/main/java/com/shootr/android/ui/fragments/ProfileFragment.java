@@ -105,8 +105,10 @@ public class ProfileFragment extends BaseFragment {
     UserEntity currentUser;
     UserModel user;
     private View.OnClickListener avatarClickListener;
+    private View.OnClickListener imageClickListener;
     private BottomSheet.Builder editPhotoBottomSheet;
     private boolean uploadingPhoto;
+    private TimelineAdapter latestsShotsAdapter;
 
     public static ProfileFragment newInstance(Long idUser) {
         ProfileFragment fragment = new ProfileFragment();
@@ -127,6 +129,23 @@ public class ProfileFragment extends BaseFragment {
                 onShotAvatarClick(v);
             }
         };
+        imageClickListener = new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                int position = ((TimelineAdapter.ViewHolder) v.getTag()).position;
+                openShotImage(position);
+            }
+        };
+    }
+
+    private void openShotImage(int position) {
+        if (latestsShotsAdapter != null) {
+            ShotModel shot = latestsShotsAdapter.getItem(position);
+            String imageUrl = shot.getImage();
+            if (imageUrl != null) {
+                Intent intentForImage = PhotoViewActivity.getIntentForActivity(getActivity(), imageUrl);
+                startActivity(intentForImage);
+            }
+        }
     }
 
     private void injectArguments() {
@@ -491,11 +510,11 @@ public class ProfileFragment extends BaseFragment {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
-            TimelineAdapter timelineAdapter =
-              new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
-            timelineAdapter.setShots(shots);
-            for (int i = 0; i < timelineAdapter.getCount(); i++) {
-                View shotView = timelineAdapter.getView(i, null, shotsList);
+            latestsShotsAdapter =
+              new TimelineAdapter(getActivity(), picasso, avatarClickListener, imageClickListener, timeUtils);
+            latestsShotsAdapter.setShots(shots);
+            for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
+                View shotView = latestsShotsAdapter.getView(i, null, shotsList);
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
