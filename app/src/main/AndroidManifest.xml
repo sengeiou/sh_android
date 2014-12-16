@@ -147,6 +147,12 @@
               android:value="com.shootr.android.ui.activities.InfoActivity" />
         </activity>
 
+        <activity
+          android:name=".ui.activities.PhotoViewActivity"
+          android:theme="@style/ShootrTheme.PhotoViewer"
+          >
+        </activity>
+
 
 
         <meta-data

@@ -52,6 +52,8 @@ public class PicassoWrapper {
         return picasso.load(resource);
     }
 
-
+    public Picasso getPicasso() {
+        return picasso;
+    }
 
 }
