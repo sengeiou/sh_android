@@ -20,10 +20,10 @@
       tools:text="Atlético-Barcelona (2)" />
 
     <ImageView
-      android:id="@+id/info_header_match_notifications_off"
+      android:id="@+id/info_header_match_notifications_on"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/ic_info_notifications_off"
+      android:src="@drawable/ic_info_notifications_on"
       android:layout_alignBottom="@+id/info_header_match_title"
       android:layout_marginBottom="4dp"
       android:layout_toLeftOf="@+id/info_header_match_timestamp"

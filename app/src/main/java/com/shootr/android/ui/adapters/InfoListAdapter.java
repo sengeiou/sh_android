@@ -151,11 +151,10 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
         //TODO feo feo, hace falta un refactor de Info List y que me de los datos bien
         Collection<UserWatchingModel> usersWatching = itemsMap.get(match);
-        Integer peopleWatchingCount = usersWatching.size();
         UserWatchingModel myWatch = usersWatching.iterator().next();
         boolean iAmWatching = myWatch.isWatching();
 
-        vh.notificationsOff.setVisibility(iAmWatching ? View.GONE : View.VISIBLE);
+        vh.notificationsOn.setVisibility(iAmWatching ? View.VISIBLE : View.GONE);
         vh.title.setText(headerText);
         vh.timestamp.setText(match.getDatetime());
     }
@@ -221,7 +220,7 @@ public class InfoListAdapter extends BindableAdapter<Object> {
 
         @InjectView(R.id.info_header_match_title) TextView title;
         @InjectView(R.id.info_header_match_timestamp) TextView timestamp;
-        @InjectView(R.id.info_header_match_notifications_off) ImageView notificationsOff;
+        @InjectView(R.id.info_header_match_notifications_on) ImageView notificationsOn;
 
         public HeaderViewHolder(View view) {
             ButterKnife.inject(this, view);
