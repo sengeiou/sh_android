@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,19 +27,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.shots.GetLastShotsJob;
-import com.shootr.android.ui.activities.ProfileEditActivity;
-import com.shootr.android.ui.adapters.TimelineAdapter;
-import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.TimeUtils;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
+import com.shootr.android.ShootrApplication;
+import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.objects.FollowEntity;
 import com.shootr.android.db.objects.UserEntity;
 import com.shootr.android.exception.ShootrError;
@@ -48,17 +40,28 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
+import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
+import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
+import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.ProfileEditActivity;
+import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
+import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
+import com.shootr.android.util.PicassoWrapper;
+import com.shootr.android.util.TimeUtils;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -95,7 +98,6 @@ public class ProfileFragment extends BaseFragment {
     @Inject TimeUtils timeUtils;
     @Inject SessionManager sessionManager;
     @Inject ErrorMessageFactory errorMessageFactory;
-
 
     // Args
     Long idUser;
@@ -134,7 +136,7 @@ public class ProfileFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+      @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -169,8 +171,9 @@ public class ProfileFragment extends BaseFragment {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
             boolean canRemovePhoto = sessionManager.getCurrentUser().getPhoto() != null;
-            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo)
-              .sheet(canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
+            editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo).sheet(
+              canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove
+                : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
               .listener(new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
                       switch (which) {
@@ -239,7 +242,7 @@ public class ProfileFragment extends BaseFragment {
                 Uri selectedImageUri = data.getData();
                 changedPhotoFile = new File(FileChooserUtils.getPath(getActivity(), selectedImageUri));
                 uploadPhoto(changedPhotoFile);
-            }else if (requestCode == REQUEST_TAKE_PHOTO) {
+            } else if (requestCode == REQUEST_TAKE_PHOTO) {
                 changedPhotoFile = getCameraPhotoFile();
                 uploadPhoto(changedPhotoFile);
             }
@@ -311,16 +314,15 @@ public class ProfileFragment extends BaseFragment {
         //TODO loading
     }
 
-    public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType){
-        GetFollowUnFollowUserOfflineJob job2 = ShootrApplication.get(context).getObjectGraph().get(
-          GetFollowUnFollowUserOfflineJob.class);
-        job2.init(idUser,followType);
+    public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType) {
+        GetFollowUnFollowUserOfflineJob job2 =
+          ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
+        job2.init(idUser, followType);
         jobManager.addJobInBackground(job2);
 
-        GetFollowUnfollowUserOnlineJob
-          job = ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
+        GetFollowUnfollowUserOnlineJob job =
+          ShootrApplication.get(context).getObjectGraph().get(GetFollowUnfollowUserOnlineJob.class);
         jobManager.addJobInBackground(job);
-
     }
 
     @Subscribe
@@ -393,11 +395,11 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setMainButtonStatus(int followRelationship) {
-        if(isCurrentUser()){
+        if (isCurrentUser()) {
             followButton.setEditProfile();
-        }else {
-            boolean isFollowing =
-              followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
+        } else {
+            boolean isFollowing = followRelationship == FollowEntity.RELATIONSHIP_FOLLOWING
+              || followRelationship == FollowEntity.RELATIONSHIP_BOTH;
             followButton.setFollowing(isFollowing);
         }
     }
@@ -416,7 +418,7 @@ public class ProfileFragment extends BaseFragment {
     public void onMainButonClick() {
         if (followButton.isEditProfile()) {
             editProfile();
-        }else if (followButton.isFollowing()) {
+        } else if (followButton.isFollowing()) {
             unfollowUser();
         } else {
             followUser();
@@ -434,27 +436,25 @@ public class ProfileFragment extends BaseFragment {
         startActivity(linkIntent);
     }
 
-    public void followUser(){
+    public void followUser() {
         startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
-    public void unfollowUser(){
+    public void unfollowUser() {
 
-        new AlertDialog.Builder(getActivity()).setMessage("Unfollow "+user.getUsername()+"?")
+        new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                   startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
-
               }
           })
           .setNegativeButton("No", null)
           .create()
           .show();
-
     }
 
     private void openUserFollowsList(int followType) {
-        if(idUser==null){
+        if (idUser == null) {
             return;
         }
         startActivityForResult(UserFollowsContainerActivity.getIntent(getActivity(), idUser, followType), 677);
@@ -474,11 +474,19 @@ public class ProfileFragment extends BaseFragment {
         List<ShotModel> shots = event.getResult();
         if (shots != null && !shots.isEmpty()) {
             shotsList.removeAllViews();
-            TimelineAdapter timelineAdapter =
+            final TimelineAdapter timelineAdapter =
               new TimelineAdapter(getActivity(), picasso, avatarClickListener, timeUtils);
             timelineAdapter.setShots(shots);
             for (int i = 0; i < timelineAdapter.getCount(); i++) {
                 View shotView = timelineAdapter.getView(i, null, shotsList);
+                shotView.setBackgroundDrawable(getSelectableBackground());
+                final int finalI = i;
+                shotView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        ShotModel shot = timelineAdapter.getItem(finalI);
+                        openShot(shot);
+                    }
+                });
                 shotsList.addView(shotView);
             }
             shotsList.setVisibility(View.VISIBLE);
@@ -487,6 +495,18 @@ public class ProfileFragment extends BaseFragment {
             shotsList.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void openShot(ShotModel shot) {
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+        startActivity(intent);
+    }
+
+    private Drawable getSelectableBackground() {
+        TypedArray a = getActivity().getTheme().obtainStyledAttributes(new int[] { R.attr.selectableItemBackground });
+        Drawable drawable = a.getDrawable(0);
+        a.recycle();
+        return drawable;
     }
 
     private void onShotAvatarClick(View v) {
@@ -505,6 +525,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser!= null && idUser.equals(sessionManager.getCurrentUserId());
+        return idUser != null && idUser.equals(sessionManager.getCurrentUserId());
     }
 }
