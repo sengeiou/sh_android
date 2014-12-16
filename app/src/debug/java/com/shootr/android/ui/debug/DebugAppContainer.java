@@ -548,13 +548,15 @@ public class DebugAppContainer implements AppContainer {
 
     private void setupPicassoSection() {
         boolean picassoDebuggingValue = picassoDebugging.get();
-        picasso.setDebugging(picassoDebuggingValue);
+        picasso.setIndicatorsEnabled(picassoDebuggingValue);
+        picasso.setLoggingEnabled(picassoDebuggingValue);
         picassoIndicatorView.setChecked(picassoDebuggingValue);
         picassoIndicatorView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean isChecked) {
                 Timber.d("Setting Picasso debugging to " + isChecked);
-                picasso.setDebugging(isChecked);
+                picasso.setIndicatorsEnabled(isChecked);
+                picasso.setLoggingEnabled(isChecked);
                 picassoDebugging.set(isChecked);
             }
         });
