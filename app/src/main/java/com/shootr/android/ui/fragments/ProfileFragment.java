@@ -52,28 +52,18 @@ import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
-import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
-import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.profile.GetUserInfoJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
-import com.shootr.android.task.jobs.shots.GetLastShotsJob;
-import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
-import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.shootr.android.util.FileChooserUtils;
-import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.TimeUtils;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -524,7 +514,7 @@ public class ProfileFragment extends BaseFragment {
             latestsShotsAdapter.setShots(shots);
             for (int i = 0; i < latestsShotsAdapter.getCount(); i++) {
                 View shotView = latestsShotsAdapter.getView(i, null, shotsList);
-                shotView.setBackgroundDrawable(getSelectableBackground());
+                setShotItemBackgroundRetainPaddings(shotView);
                 final int finalI = i;
                 shotView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
@@ -540,6 +530,15 @@ public class ProfileFragment extends BaseFragment {
             shotsList.setVisibility(View.GONE);
             shotsListEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setShotItemBackgroundRetainPaddings(View shotView) {
+        int paddingBottom = shotView.getPaddingBottom();
+        int paddingLeft = shotView.getPaddingLeft();
+        int paddingRight = shotView.getPaddingRight();
+        int paddingTop = shotView.getPaddingTop();
+        shotView.setBackgroundDrawable(getSelectableBackground());
+        shotView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
     private void openShot(ShotModel shot) {
