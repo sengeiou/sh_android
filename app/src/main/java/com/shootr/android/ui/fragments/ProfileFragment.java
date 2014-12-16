@@ -314,7 +314,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void showLoadingPhoto() {
-        avatarImageView.setVisibility(View.GONE);
+        avatarImageView.setVisibility(View.INVISIBLE);
         avatarLoadingView.setVisibility(View.VISIBLE);
     }
 
@@ -553,7 +553,20 @@ public class ProfileFragment extends BaseFragment {
         return drawable;
     }
 
-    private void onShotAvatarClick(View v) {
+    private void onShotAvatarClick(View avatarItem) {
+        animateBigAvatarClick();
+
+        float scale = 0.8f;
+        ObjectAnimator animX = ObjectAnimator.ofFloat(avatarItem, "scaleX", 1f, scale, 1f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(avatarItem, "scaleY", 1f, scale, 1f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animX, animY);
+        animatorSet.setDuration(200);
+        animatorSet.setInterpolator(new LinearInterpolator());
+        animatorSet.start();
+    }
+
+    private void animateBigAvatarClick() {
         float scale = 1.1f;
         ObjectAnimator animX = ObjectAnimator.ofFloat(avatarImageView, "scaleX", 1f, scale, 1f);
         ObjectAnimator animY = ObjectAnimator.ofFloat(avatarImageView, "scaleY", 1f, scale, 1f);

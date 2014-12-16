@@ -25,4 +25,6 @@ public interface EditInfoView {
     void setFocusOnPlace();
 
     void alertPlaceNotWatchingNotAllow();
+
+    void showNotificationsAlert();
 }
