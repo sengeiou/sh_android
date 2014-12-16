@@ -43,6 +43,9 @@ public class PhotoViewActivity extends BaseActivity {
 
     private PhotoViewAttacher attacher;
     private boolean isUiShown = true;
+    private boolean loadedFinalImage = false;
+    private Target previewTargetStrongReference;
+    private Target finalTargetStrongReference;
 
     public static Intent getIntentForActivity(Context context, String imageUrl) {
         return getIntentForActivity(context, imageUrl, null);
@@ -94,32 +97,38 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     private void loadPreview(String preview) {
-        picasso.load(preview).tag(previewTag).into(image, new Callback() {
-            @Override public void onSuccess() {
-                attacher.update();
+        previewTargetStrongReference = new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                if (!loadedFinalImage) {
+                    image.setImageBitmap(bitmap);
+                }
             }
 
-            @Override public void onError() {
+            @Override public void onBitmapFailed(Drawable errorDrawable) {
             }
-        });
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        };
+        picasso.load(preview).tag(previewTag).into(previewTargetStrongReference);
     }
 
     private void loadBigImage(String imageUrl) {
-        picasso.load(imageUrl).into(new Target() {
+        finalTargetStrongReference = new Target() {
             @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                loadedFinalImage = true;
                 image.setImageBitmap(bitmap);
                 cancelPreviewLoading();
                 attacher.update();
             }
 
             @Override public void onBitmapFailed(Drawable errorDrawable) {
-
             }
 
             @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
-
             }
-        });
+        };
+        picasso.load(imageUrl).into(finalTargetStrongReference);
     }
 
     private void cancelPreviewLoading() {
