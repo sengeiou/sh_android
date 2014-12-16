@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
@@ -165,6 +167,7 @@ public class ProfileFragment extends BaseFragment {
         setupPhotoBottomSheet();
     }
 
+
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
@@ -186,12 +189,26 @@ public class ProfileFragment extends BaseFragment {
                       }
                   }
               });
-            avatarImageView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    editPhotoBottomSheet.show();
-                }
-            });
         }
+    }
+
+    @OnClick(R.id.profile_avatar)
+    public void onAvatarClick() {
+        if (isCurrentUser()) {
+            if (editPhotoBottomSheet != null) {
+                editPhotoBottomSheet.show();
+            }
+        } else {
+            openPhotoBig();
+        }
+    }
+
+    private void openPhotoBig() {
+        FragmentActivity context = getActivity();
+        String preview = user.getPhoto();
+        String photoBig = preview.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
+        Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(context, photoBig, preview);
+        startActivity(intentForPhoto);
     }
 
     private void takePhotoFromCamera() {
