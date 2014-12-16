@@ -22,6 +22,10 @@ public class ShotDetailPresenter implements Presenter {
         shotDetailView.renderShot(shotModel);
     }
 
+    public void imageClick() {
+        shotDetailView.openImage(shotModel.getImage());
+    }
+
     @Override public void resume() {
 
     }

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.ShotModel;
@@ -67,6 +68,11 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         presenter.initialize(this, shotModel);
     }
 
+    @OnClick(R.id.shot_image)
+    public void onImageClick() {
+        presenter.imageClick();
+    }
+
     @Override public void renderShot(ShotModel shotModel) {
         username.setText(shotModel.getUsername());
         timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
@@ -83,6 +89,11 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         } else {
             shotImage.setVisibility(View.GONE);
         }
+    }
+
+    @Override public void openImage(String imageUrl) {
+        Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
+        startActivity(intentForImage);
     }
 
     @Override protected void onResume() {
