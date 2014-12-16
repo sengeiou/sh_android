@@ -314,7 +314,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void showLoadingPhoto() {
-        avatarImageView.setVisibility(View.GONE);
+        avatarImageView.setVisibility(View.INVISIBLE);
         avatarLoadingView.setVisibility(View.VISIBLE);
     }
 
