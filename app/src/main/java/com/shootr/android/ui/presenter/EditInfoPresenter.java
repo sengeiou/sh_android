@@ -2,6 +2,8 @@ package com.shootr.android.ui.presenter;
 
 import android.os.Bundle;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.prefs.BooleanPreference;
+import com.shootr.android.data.prefs.WatchingNotificationsAlertShown;
 import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
@@ -12,16 +14,19 @@ import javax.inject.Inject;
 
 public class EditInfoPresenter {
 
+    private final JobManager jobManager;
+
+    private final BooleanPreference watchingNotificationsAlertShown;
+
     private EditInfoView editInfoView;
+    private ObjectGraph objectGraph;
 
     private EditInfoModel editInfoModel;
-    private ObjectGraph objectGraph;
-    private JobManager jobManager;
-
     private boolean newWatchingStatus;
 
-    @Inject public EditInfoPresenter(JobManager jobManager) {
+    @Inject public EditInfoPresenter(JobManager jobManager, @WatchingNotificationsAlertShown BooleanPreference watchingNotificationsAlertShown) {
         this.jobManager = jobManager;
+        this.watchingNotificationsAlertShown = watchingNotificationsAlertShown;
     }
 
     public void initialize(EditInfoView editInfoView, EditInfoModel editInfoModel, ObjectGraph objectGraph) {
@@ -62,6 +67,7 @@ public class EditInfoPresenter {
             return;
         }
         executeEditJobs(placeText);
+        showNotificationsAlertFirstTime();
         closeScreen();
     }
 
@@ -96,6 +102,18 @@ public class EditInfoPresenter {
 
     private void closeScreen() {
         this.editInfoView.closeScreen();
+    }
+
+    private void showNotificationsAlertFirstTime() {
+        boolean shouldShow = newWatchingStatus && !watchingNotificationsAlertShown.get();
+        if (shouldShow) {
+            showNotificationsAlert();
+            watchingNotificationsAlertShown.set(true);
+        }
+    }
+
+    private void showNotificationsAlert() {
+        editInfoView.showNotificationsAlert();
     }
 
     private void executeEditJobs(String placeText) {

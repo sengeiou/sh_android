@@ -33,4 +33,8 @@ public class PreferenceModule {
     @Provides @Singleton @SessionToken StringPreference provideSessionToken(SharedPreferences preferences) {
         return new StringPreference(preferences, "session_token", null);
     }
+
+    @Provides @WatchingNotificationsAlertShown @SessionToken BooleanPreference provideWatchingNotificationsAlertShown(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "watch_notification_shown", false);
+    }
 }

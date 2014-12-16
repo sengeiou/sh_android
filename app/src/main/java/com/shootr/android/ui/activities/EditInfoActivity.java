@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTextChanged;
@@ -207,5 +208,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
           getString(R.string.watching_place_not_watching_alert))
           .setPositiveButton(android.R.string.ok, null)
           .show();
+    }
+
+    @Override public void showNotificationsAlert() {
+        Toast.makeText(this, R.string.watching_notifications_alert, Toast.LENGTH_LONG).show();
     }
 }
