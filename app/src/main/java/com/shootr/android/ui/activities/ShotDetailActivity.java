@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
@@ -85,6 +86,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         String comment = shotModel.getComment();
         if (comment != null) {
             shotText.setText(comment);
+            TimelineAdapter.addLinks(shotText);
         } else {
             shotText.setVisibility(View.GONE);
         }
