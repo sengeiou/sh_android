@@ -26,6 +26,10 @@ public class ShotDetailPresenter implements Presenter {
         shotDetailView.openImage(shotModel.getImage());
     }
 
+    public void avatarClick() {
+        shotDetailView.openProfile(shotModel.getIdUser());
+    }
+
     @Override public void resume() {
 
     }

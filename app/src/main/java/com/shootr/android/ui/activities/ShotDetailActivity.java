@@ -73,7 +73,13 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         presenter.imageClick();
     }
 
+    @OnClick(R.id.shot_avatar)
+    public void onAvatarClick() {
+        presenter.avatarClick();
+    }
+
     @Override public void renderShot(ShotModel shotModel) {
+
         username.setText(shotModel.getUsername());
         timestamp.setText(getTimestampForDate(shotModel.getCsysBirth()));
         String comment = shotModel.getComment();
@@ -94,6 +100,11 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
     @Override public void openImage(String imageUrl) {
         Intent intentForImage = PhotoViewActivity.getIntentForActivity(this, imageUrl);
         startActivity(intentForImage);
+    }
+
+    @Override public void openProfile(Long idUser) {
+        Intent intentForUser = ProfileContainerActivity.getIntent(this, idUser);
+        startActivity(intentForUser);
     }
 
     @Override protected void onResume() {

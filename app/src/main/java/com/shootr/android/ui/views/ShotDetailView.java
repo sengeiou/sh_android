@@ -7,4 +7,6 @@ public interface ShotDetailView  {
     void renderShot(ShotModel shotModel);
 
     void openImage(String imageUrl);
+
+    void openProfile(Long idUser);
 }
