@@ -226,7 +226,7 @@ public class MainActivity extends BaseSignedInActivity {
     private void lockMenuDrawer(boolean lock) {
         drawerLayout.setDrawerLockMode(
             lock ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(!lock);
+        getSupportActionBar().setDisplayShowHomeEnabled(!lock);
     }
 
     private void setUserInfoInMenu() {
