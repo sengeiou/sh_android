@@ -105,7 +105,6 @@ public class TimelineFragment extends BaseFragment
     private boolean moreShots = true;
     private boolean shouldPoll;
     private UserEntity currentUser;
-    private int numNotificationBadge;
     private BadgeDrawable badgeDrawable;
 
 
@@ -268,8 +267,8 @@ public class TimelineFragment extends BaseFragment
         watchingRequestPresenter.answerCurrentWatchingRequestNegative();
     }
 
-    private void updateNotificationBadge(int count){
-        numNotificationBadge = count;
+    @Override
+    public void setWatchingPeopleCount(Integer count){
         setBadgeCount(count);
     }
 
@@ -279,13 +278,13 @@ public class TimelineFragment extends BaseFragment
         menu.findItem(R.id.menu_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         MenuItem menuItem = menu.findItem(R.id.menu_info);
         menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         LayerDrawable icon = (LayerDrawable) getResources().getDrawable(R.drawable.badge_circle);
         icon.setDrawableByLayerId(R.id.ic_people, getResources().getDrawable(R.drawable.ic_action_ic_one_people));
-        if(numNotificationBadge != 0) {
-            setBadgeIcon(getActivity(), icon, numNotificationBadge);
-        }
+        setBadgeIcon(getActivity(), icon, 0);
         menuItem.setIcon(icon);
         menuItem.getIcon();
+        watchingRequestPresenter.menuCreated();
     }
 
     @Override
@@ -499,7 +498,6 @@ public class TimelineFragment extends BaseFragment
         swipeRefreshLayout.setRefreshing(false);
     }
 
-
     public void setBadgeIcon(Context context, LayerDrawable icon, int count) {
         // Reuse drawable if possible
         if (badgeDrawable == null) {
@@ -519,7 +517,7 @@ public class TimelineFragment extends BaseFragment
         if (badgeDrawable != null) {
             badgeDrawable.setCount(count);
         } else {
-            getActivity().supportInvalidateOptionsMenu();
+            getActivity().invalidateOptionsMenu();
         }
     }
 }

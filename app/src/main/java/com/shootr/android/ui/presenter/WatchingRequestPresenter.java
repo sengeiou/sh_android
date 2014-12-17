@@ -18,9 +18,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -34,6 +32,7 @@ public class WatchingRequestPresenter implements Presenter{
     private ObjectGraph objectGraph;
     private WatchingRequestStack watchingRequestsPendingStack;
     private WatchingRequestModel currentRequest;
+    private Integer peopleWatchingCount;
 
     @Inject public WatchingRequestPresenter(JobManager jobManager, Bus bus) {
         this.jobManager = jobManager;
@@ -53,7 +52,7 @@ public class WatchingRequestPresenter implements Presenter{
     }
 
     @Subscribe public void onRequestWatchByPush(RequestWatchByPushEvent event){
-      //retrieveData();
+        retrieveData();
     }
 
     @Subscribe
@@ -69,11 +68,16 @@ public class WatchingRequestPresenter implements Presenter{
 
     @Subscribe
     public void onNumberReceived(WatchingPeopleNumberEvent event) {
-        //numNotificationBadge = event.getResult();
-        //updateNotificationBadge(numNotificationBadge);
+        this.peopleWatchingCount = event.getResult();
+        watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
     }
 
 
+    public void menuCreated() {
+        if (peopleWatchingCount != null) {
+            watchingRequestView.setWatchingPeopleCount(peopleWatchingCount);
+        }
+    }
 
     private void startRetrievingWatchingRequests() {
         GetWatchingRequestsPendingJob getWatchingRequestsPendingJob =
@@ -95,7 +99,6 @@ public class WatchingRequestPresenter implements Presenter{
             this.currentRequest = watchingRequestsPendingStack.next();
             watchingRequestView.showWatchingRequest(currentRequest);
         } else {
-            //No more
             Timber.d("No more requests ;)");
         }
     }

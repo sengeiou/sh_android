@@ -7,4 +7,6 @@ public interface WatchingRequestView{
     void showWatchingRequest(WatchingRequestModel currentRequest);
 
     void hideWatchingRequest();
+
+    void setWatchingPeopleCount(Integer peopleWatchingCount);
 }
