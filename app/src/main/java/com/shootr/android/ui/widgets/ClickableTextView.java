@@ -122,9 +122,18 @@ public class ClickableTextView extends TextView {
                 Selection.removeSelection(buffer);
             }
 
-            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) {
-
+            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
                 TouchableUrlSpan touchedSpan = getTouchedSpan(event, widget, buffer);
+
+                if (action == MotionEvent.ACTION_MOVE) {
+                    if (alreadyPressedSpan != null && touchedSpan != alreadyPressedSpan) {
+                        alreadyPressedSpan.setPressed(false);
+                        alreadyPressedSpan = null;
+                        Selection.removeSelection(buffer);
+                        return false;
+                    }
+                }
+
                 if (touchedSpan != null) {
                     if (action == MotionEvent.ACTION_DOWN) {
                         Selection.setSelection(buffer, buffer.getSpanStart(touchedSpan), buffer.getSpanEnd(touchedSpan));
@@ -141,14 +150,6 @@ public class ClickableTextView extends TextView {
                     return true;
 
                 } else {
-                    if (action == MotionEvent.ACTION_MOVE) {
-                        if (alreadyPressedSpan != null) {
-                            alreadyPressedSpan.setPressed(false);
-                            alreadyPressedSpan = null;
-                            Selection.removeSelection(buffer);
-                            return false;
-                        }
-                    }
                     Selection.removeSelection(buffer);
                 }
             }
