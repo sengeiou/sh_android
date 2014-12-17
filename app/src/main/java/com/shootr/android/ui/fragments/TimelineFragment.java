@@ -37,6 +37,8 @@ import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
+import com.shootr.android.ui.presenter.WatchingRequestPresenter;
+import com.shootr.android.ui.views.WatchingRequestView;
 import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeUtils;
@@ -67,7 +69,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener {
+        implements SwipeRefreshLayout.OnRefreshListener, WatchingRequestView {
 
     public static final int REQUEST_NEW_SHOT = 1;
     private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
@@ -77,8 +79,9 @@ public class TimelineFragment extends BaseFragment
     @Inject PicassoWrapper picasso;
     @Inject Bus bus;
     @Inject TimeUtils timeUtils;
-
     @Inject JobManager jobManager;
+    @Inject WatchingRequestPresenter watchingRequestPresenter;
+
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
     @InjectView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -102,7 +105,6 @@ public class TimelineFragment extends BaseFragment
     private boolean moreShots = true;
     private boolean shouldPoll;
     private UserEntity currentUser;
-    private List<WatchingRequestModel> watchingRequestsPendingStack;
     private int numNotificationBadge;
     private BadgeDrawable badgeDrawable;
 
@@ -169,18 +171,7 @@ public class TimelineFragment extends BaseFragment
         bus.register(this);
         startRetrieveFromDataBaseJob(getActivity());
         startPollingShots();
-        refreshInfoData();
-    }
-
-    public void startUpdateNotificationBadge(){
-        GetWatchingPeopleNumberJob job = ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingPeopleNumberJob.class);
-        jobManager.addJobInBackground(job);
-    }
-
-    @Subscribe
-    public void onNumberReceived(WatchingPeopleNumberEvent event){
-        numNotificationBadge = event.getResult();
-        updateNotificationBadge(numNotificationBadge);
+        watchingRequestPresenter.resume();
     }
 
     @Override
@@ -188,7 +179,7 @@ public class TimelineFragment extends BaseFragment
         super.onPause();
         bus.unregister(this);
         stopPollingShots();
-        hideWatchingRequests();
+        watchingRequestPresenter.pause();
     }
 
     @Subscribe
@@ -252,63 +243,10 @@ public class TimelineFragment extends BaseFragment
         super.onActivityCreated(savedInstanceState);
         currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
         loadInitialTimeline();
-        refreshInfoData();
+        watchingRequestPresenter.initialize(this, ((BaseActivity) getActivity()).getObjectGraph());
     }
 
-    private void refreshInfoData() {
-        GetWatchingInfoJob getWatchingInfoJob =
-          ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingInfoJob.class);
-
-        getWatchingInfoJob.init(true);
-
-        jobManager.addJobInBackground(getWatchingInfoJob);
-    }
-
-    @Subscribe
-    public void onInfoDataRefreshed(WatchingInfoResult event) {
-        startUpdateNotificationBadge();
-        startRetrievingWatchingRequests();
-    }
-
-    private void startRetrievingWatchingRequests() {
-        GetWatchingRequestsPendingJob getWatchingRequestsPendingJob  = ShootrApplication.get(getActivity()).getObjectGraph().get(GetWatchingRequestsPendingJob.class);
-        jobManager.addJobInBackground(getWatchingRequestsPendingJob);
-    }
-
-    @Subscribe
-    public void onRequestWatchByPush(RequestWatchByPushEvent event){
-        refreshInfoData();
-    }
-
-    @Subscribe
-    public void onWatchingRequestsPendingReceived(WatchingRequestPendingEvent event) {
-        List<WatchingRequestModel> watchingRequestModels = event.getResult();
-        if (watchingRequestModels != null && !watchingRequestModels.isEmpty()) {
-            watchingRequestsPendingStack = watchingRequestModels;
-            showNextWatchingRequest();
-        }
-
-    }
-
-    private void showNextWatchingRequest() {
-        if (!watchingRequestsPendingStack.isEmpty()) {
-            WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
-            showNextWatchingRequestDelayed(watchingRequestModel);
-        } else {
-            hideWatchingRequests();
-        }
-    }
-
-    private void showNextWatchingRequestDelayed(final WatchingRequestModel watchingRequestModel) {
-        hideWatchingRequests();
-        new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
-                showWatchingRequest(watchingRequestModel);
-            }
-        }, 1000);
-    }
-
-    private void showWatchingRequest(WatchingRequestModel watchingRequestModel) {
+    @Override public void showWatchingRequest(WatchingRequestModel watchingRequestModel) {
         if (watchingRequestModel != null) {
             watchingRequestContainerView.setVisibility(View.VISIBLE);
             watchingRequestTitleView.setText(watchingRequestModel.getTitle());
@@ -316,30 +254,18 @@ public class TimelineFragment extends BaseFragment
         }
     }
 
-    private void hideWatchingRequests() {
+    @Override public void hideWatchingRequest() {
         watchingRequestContainerView.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.timeline_watching_action_yes)
     public void onWatchRequestAnswerPositive() {
-        answerWatchRequest(WATCH_STATUS_WATCHING);
+        watchingRequestPresenter.answerCurrentWatchingRequestPositive();
     }
 
     @OnClick(R.id.timeline_watching_action_ignore)
     public void onWatchRequestAnswerNegative() {
-        answerWatchRequest(WATCH_STATUS_IGNORE);
-    }
-
-    private void answerWatchRequest(Long status) {
-        WatchingRequestModel watchingRequestModel = watchingRequestsPendingStack.get(0);
-        watchingRequestsPendingStack.remove(0);
-
-        SetWatchingInfoOfflineJob jobOffline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOfflineJob.class);
-        jobOffline.init(watchingRequestModel.getMatchId(),status, null);
-        jobManager.addJobInBackground(jobOffline);
-        SetWatchingInfoOnlineJob jobOnline = ShootrApplication.get(getActivity()).getObjectGraph().get(SetWatchingInfoOnlineJob.class);
-        jobManager.addJobInBackground(jobOnline);
-        showNextWatchingRequest();
+        watchingRequestPresenter.answerCurrentWatchingRequestNegative();
     }
 
     private void updateNotificationBadge(int count){
