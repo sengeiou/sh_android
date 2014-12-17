@@ -54,7 +54,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <TextView
+        <com.shootr.android.ui.widgets.ClickableTextView
           android:id="@+id/shot_text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

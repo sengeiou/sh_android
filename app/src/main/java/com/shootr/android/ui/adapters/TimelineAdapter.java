@@ -1,14 +1,20 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
+import android.text.Layout;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import com.shootr.android.util.Linkify;
+import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
@@ -101,7 +107,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 if (comment != null) {
                     vh.text.setVisibility(View.VISIBLE);
                     vh.text.setText(comment);
-                    addLinks(vh.text);
+                    vh.text.addLinks();
                 } else {
                     vh.text.setVisibility(View.GONE);
                 }
@@ -127,10 +133,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         }
     }
 
-    public static void addLinks(TextView textView) {
-        Linkify.addLinks(textView, Linkify.WEB_URLS);
-    }
-
     public void addShotsBelow(List<ShotModel> newShots) {
         this.shots.addAll(newShots);
         notifyDataSetChanged();
@@ -145,7 +147,7 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         @InjectView(R.id.shot_avatar) public ImageView avatar;
         @InjectView(R.id.shot_user_name) public TextView name;
         @InjectView(R.id.shot_timestamp) public TextView timestamp;
-        @InjectView(R.id.shot_text) public TextView text;
+        @InjectView(R.id.shot_text) public ClickableTextView text;
         @InjectView(R.id.shot_image) public ImageView image;
         public int position;
 
@@ -156,5 +158,4 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
 
         }
     }
-
 }

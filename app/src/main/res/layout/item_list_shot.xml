@@ -42,7 +42,7 @@
       tools:text="22m"
       />
 
-    <TextView
+    <com.shootr.android.ui.widgets.ClickableTextView
       android:id="@+id/shot_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

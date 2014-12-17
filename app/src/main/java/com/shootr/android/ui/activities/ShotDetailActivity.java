@@ -11,11 +11,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.views.ShotDetailView;
+import com.shootr.android.ui.widgets.ClickableTextView;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.TimeFormatter;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
     @InjectView(R.id.shot_avatar) ImageView avatar;
     @InjectView(R.id.shot_user_name) TextView username;
     @InjectView(R.id.shot_timestamp) TextView timestamp;
-    @InjectView(R.id.shot_text) TextView shotText;
+    @InjectView(R.id.shot_text) ClickableTextView shotText;
     @InjectView(R.id.shot_image) ImageView shotImage;
 
     @Inject PicassoWrapper picasso;
@@ -86,7 +86,7 @@ public class ShotDetailActivity extends BaseSignedInActivity implements ShotDeta
         String comment = shotModel.getComment();
         if (comment != null) {
             shotText.setText(comment);
-            TimelineAdapter.addLinks(shotText);
+            shotText.addLinks();
         } else {
             shotText.setVisibility(View.GONE);
         }
