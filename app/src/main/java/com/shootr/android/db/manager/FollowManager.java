@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.domain.FollowEntity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

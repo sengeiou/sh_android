@@ -5,7 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.domain.WatchEntity;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;

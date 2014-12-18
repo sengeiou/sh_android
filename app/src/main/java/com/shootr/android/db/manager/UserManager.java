@@ -9,7 +9,7 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.mappers.UserMapper;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;

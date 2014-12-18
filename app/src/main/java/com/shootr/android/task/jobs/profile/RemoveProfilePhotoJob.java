@@ -5,7 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;

@@ -1,7 +1,7 @@
 package com.shootr.android.ui.model.mappers;
 
-import com.shootr.android.db.objects.FollowEntity;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.FollowEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.ui.model.UserModel;
 
 public class UserModelMapper {

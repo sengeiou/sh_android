@@ -1,8 +1,6 @@
 package com.shootr.android.task.jobs.info;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
@@ -11,9 +9,9 @@ import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.domain.MatchEntity;
+import com.shootr.android.domain.UserEntity;
+import com.shootr.android.domain.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;

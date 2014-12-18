@@ -22,7 +22,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;

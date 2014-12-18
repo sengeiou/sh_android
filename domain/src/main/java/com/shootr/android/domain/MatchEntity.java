@@ -1,6 +1,5 @@
-package com.shootr.android.db.objects;
+package com.shootr.android.domain;
 
-import android.support.annotation.NonNull;
 import java.util.Date;
 
 public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
@@ -92,7 +91,7 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
         return idMatch != null ? idMatch.hashCode() : 0;
     }
 
-    @Override public int compareTo(@NonNull MatchEntity another) {
+    @Override public int compareTo(MatchEntity another) {
         boolean areSameMatch = this.getIdMatch().equals(another.getIdMatch());
         if (areSameMatch) {
             return 0;

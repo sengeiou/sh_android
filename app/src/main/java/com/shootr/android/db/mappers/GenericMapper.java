@@ -3,7 +3,7 @@ package com.shootr.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
-import com.shootr.android.db.objects.Synchronized;
+import com.shootr.android.domain.Synchronized;
 import java.util.Date;
 import java.util.Map;
 

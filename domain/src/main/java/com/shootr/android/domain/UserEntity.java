@@ -1,8 +1,6 @@
-package com.shootr.android.db.objects;
+package com.shootr.android.domain;
 
-import android.support.annotation.NonNull;
 import java.io.Serializable;
-import timber.log.Timber;
 
 public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable{
 
@@ -136,7 +134,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         this.bio = bio;
     }
 
-    @Override public int compareTo(@NonNull UserEntity another) {
+    @Override public int compareTo(UserEntity another) {
         return this.getUserName().compareTo(another.getUserName());
     }
 
@@ -159,8 +157,8 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
         try {
             return (UserEntity) super.clone();
         } catch (CloneNotSupportedException e) {
-            Timber.w(e,
-              "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
+            //TODO custom logger
+            // Timber.w(e, "UserModel has thrown CloneNotSupportedException. This should never happen. Returning the current instance. Be carreful, young padawan.");
             return this;
         }
     }

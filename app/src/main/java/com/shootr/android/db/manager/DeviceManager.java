@@ -3,7 +3,7 @@ package com.shootr.android.db.manager;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.db.objects.DeviceEntity;
+import com.shootr.android.domain.DeviceEntity;
 import javax.inject.Inject;
 
 public class DeviceManager extends AbstractManager {

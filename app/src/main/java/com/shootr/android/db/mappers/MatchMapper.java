@@ -2,7 +2,7 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.domain.MatchEntity;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import java.util.Date;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package com.shootr.android.data;
 
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 
 public interface SessionManager {
 

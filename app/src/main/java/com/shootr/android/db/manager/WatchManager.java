@@ -8,12 +8,10 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.domain.WatchEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class WatchManager extends AbstractManager{
 

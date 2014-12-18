@@ -3,11 +3,10 @@ package com.shootr.android;
 import android.app.Application;
 import android.content.Context;
 
-import android.os.Build;
 import com.crashlytics.android.Crashlytics;
 import dagger.ObjectGraph;
 import com.shootr.android.data.SessionManager;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.util.LogTreeFactory;
 import javax.inject.Inject;
 import timber.log.Timber;

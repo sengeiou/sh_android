@@ -1,20 +1,18 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.domain.WatchEntity;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
-import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.views.AddMatchView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import dagger.ObjectGraph;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 

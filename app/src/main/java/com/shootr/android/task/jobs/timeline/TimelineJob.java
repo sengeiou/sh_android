@@ -6,7 +6,7 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.ShootrBaseJob.SuccessEvent;

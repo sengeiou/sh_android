@@ -24,7 +24,7 @@ import com.shootr.android.ShootrApplication;
 import com.shootr.android.data.SessionManager;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 import com.shootr.android.sync.SyncConfigurator;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;

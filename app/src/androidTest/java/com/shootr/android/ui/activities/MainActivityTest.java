@@ -4,7 +4,7 @@ import android.test.ActivityUnitTestCase;
 import com.squareup.spoon.Spoon;
 
 import com.shootr.android.R;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.UserEntity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;

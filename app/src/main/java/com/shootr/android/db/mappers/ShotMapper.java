@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.domain.ShotEntity;
 import java.util.HashMap;
 import java.util.Map;
 

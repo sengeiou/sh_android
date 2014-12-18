@@ -17,7 +17,7 @@ import com.shootr.android.data.prefs.GCMRegistrationId;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.db.manager.DeviceManager;
-import com.shootr.android.db.objects.DeviceEntity;
+import com.shootr.android.domain.DeviceEntity;
 import com.shootr.android.gcm.GCMConstants;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.loginregister.PushTokenResult;

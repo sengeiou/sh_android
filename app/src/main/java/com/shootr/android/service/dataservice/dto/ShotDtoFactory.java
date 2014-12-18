@@ -4,7 +4,7 @@ import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.ShotTable;
 import com.shootr.android.db.mappers.ShotMapper;
-import com.shootr.android.db.objects.ShotEntity;
+import com.shootr.android.domain.ShotEntity;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;

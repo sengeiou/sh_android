@@ -2,9 +2,9 @@ package com.shootr.android.task.jobs.info;
 
 import android.support.v4.util.LongSparseArray;
 import com.google.common.collect.TreeMultimap;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.domain.MatchEntity;
+import com.shootr.android.domain.UserEntity;
+import com.shootr.android.domain.WatchEntity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;

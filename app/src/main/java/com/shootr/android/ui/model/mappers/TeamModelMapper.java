@@ -1,6 +1,6 @@
 package com.shootr.android.ui.model.mappers;
 
-import com.shootr.android.db.objects.TeamEntity;
+import com.shootr.android.domain.TeamEntity;
 import com.shootr.android.ui.model.TeamModel;
 import java.util.ArrayList;
 import java.util.List;
