@@ -17,7 +17,6 @@ import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -52,19 +51,37 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
 
     @Override
     protected void run() throws IOException, SQLException {
+        retrieveLocalPeople();
+        if (hasInternetConnection()) {
+            retrievePeopleFromServerAndUpdate();
+        }
+    }
+
+    private void retrieveLocalPeople() throws SQLException {
         List<UserModel> userModels;
         List<UserEntity> peopleFromDatabase = getPeopleFromDatabase();
         if (peopleFromDatabase != null && !peopleFromDatabase.isEmpty()) {
             userModels = getUserVOs(peopleFromDatabase);
             postSuccessfulEvent(new FollowsResultEvent(userModels));
         }
-        if (hasInternetConnection()) {
-            List<UserEntity> peopleFromServer = service.getFollowing(sessionManager.getCurrentUserId(), 0L);
-            if (peopleFromServer != null) {
-                userModels = getUserVOs(peopleFromServer);
-                postSuccessfulEvent(new FollowsResultEvent(userModels));
-            }
+    }
+
+    private void retrievePeopleFromServerAndUpdate() throws IOException, SQLException {
+        List<UserEntity> people = retrievePeopleFromServer();
+        savePeople(people);
+    }
+
+    private List<UserEntity> retrievePeopleFromServer() throws IOException {
+        List<UserEntity> peopleFromServer = service.getFollowing(sessionManager.getCurrentUserId(), 0L);
+        if (peopleFromServer != null) {
+            List<UserModel> userModels = getUserVOs(peopleFromServer);
+            postSuccessfulEvent(new FollowsResultEvent(userModels));
         }
+        return peopleFromServer;
+    }
+
+    private void savePeople(List<UserEntity> people) throws SQLException {
+        userManager.saveUsersFromServer(people);
     }
 
     private List<UserModel> orderUserModelsByUsername(List<UserModel> originalList) {
