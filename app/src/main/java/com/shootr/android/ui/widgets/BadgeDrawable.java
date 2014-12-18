@@ -87,6 +87,18 @@ public class BadgeDrawable extends Drawable {
     }
 
     @Override public int getOpacity() {
-        return PixelFormat.UNKNOWN;
+        return PixelFormat.OPAQUE;
+    }
+
+    @Override public ConstantState getConstantState() {
+        return new ConstantState() {
+            @Override public Drawable newDrawable() {
+                return BadgeDrawable.this;
+            }
+
+            @Override public int getChangingConfigurations() {
+                return 0;
+            }
+        };
     }
 }

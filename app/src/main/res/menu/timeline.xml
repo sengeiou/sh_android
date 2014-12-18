@@ -11,9 +11,8 @@
         />
     <item
         android:id="@+id/menu_info"
-        android:icon="@drawable/badge_circle"
+        android:icon="@drawable/ic_action_ic_one_people"
         android:title="@string/menu_info"
         app:showAsAction="always"
         />
-
 </menu>
