@@ -1,8 +1,12 @@
 package com.shootr.android.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -11,7 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 import com.shootr.android.R;
+import com.shootr.android.ui.activities.FindFriendsActivity;
+import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.PeopleAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
 import com.shootr.android.ui.base.BaseActivity;
@@ -25,6 +32,7 @@ import javax.inject.Inject;
 
 public class PeopleFragment extends BaseFragment implements PeopleView{
 
+    public static final int REQUEST_CAN_CHANGE_DATA = 1;
     @Inject PicassoWrapper picasso;
     @Inject PeoplePresenter presenter;
 
@@ -72,6 +80,34 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
         presenter.pause();
     }
 
+    @OnItemClick(R.id.userlist_list)
+    public void openUserProfile(int position) {
+        // TODO not going through the presenter? You naughty boy...
+        UserModel user = getPeopleAdapter().getItem(position);
+        startActivityForResult(ProfileContainerActivity.getIntent(getActivity(), user.getIdUser()),
+          REQUEST_CAN_CHANGE_DATA);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.people, menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_search:
+                findFriends();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void findFriends() {
+        // TODO not going through the presenter? You naughty boy...
+        startActivityForResult(new Intent(getActivity(), FindFriendsActivity.class), REQUEST_CAN_CHANGE_DATA);
+    }
+
     private void setEmptyMessageForPeople() {
         emptyTextView.setText(R.string.following_list_empty);
     }
@@ -81,6 +117,11 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
             userListAdapter = new PeopleAdapter(getActivity(), picasso);
         }
         return userListAdapter;
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        presenter.refresh();
     }
 
     @Override public void renderUserList(List<UserModel> people) {
