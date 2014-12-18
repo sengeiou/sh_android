@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
 
@@ -21,7 +22,8 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
     private ShootrService service;
 
     @Inject
-    protected SetWatchingInfoOnlineJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, ShootrService service) {
+    protected SetWatchingInfoOnlineJob(Application application, Bus bus, NetworkUtil networkUtil,
+      WatchManager watchManager, ShootrService service) {
         super(new Params(PRIORITY).requireNetwork(), application, bus, networkUtil);
         this.watchManager = watchManager;
         this.service = service;
@@ -31,13 +33,13 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
         checkIfWeHaveSomeChangesInWatchAndSendToServer();
     }
 
-    private void checkIfWeHaveSomeChangesInWatchAndSendToServer() throws IOException {
+    private void checkIfWeHaveSomeChangesInWatchAndSendToServer() {
         List<WatchEntity> watchesToUpdate = watchManager.getEntitiesNotSynchronizedWithServer();
-         List<WatchEntity> watchEntities = new ArrayList<>();
+        List<WatchEntity> watchEntities = new ArrayList<>();
         if (!watchesToUpdate.isEmpty()) {
             for (WatchEntity watch : watchesToUpdate) {
                 WatchEntity watchEntity = setWatch(watch);
-                if(watchEntity!=null) {
+                if (watchEntity != null) {
                     watchEntities.add(watchEntity);
                 }
             }
@@ -45,10 +47,14 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
         watchManager.saveWatches(watchEntities);
     }
 
-    public WatchEntity setWatch(WatchEntity watchEntity) throws IOException {
-        return service.setWatchStatus(watchEntity);
+    public WatchEntity setWatch(WatchEntity watchEntity) {
+        try {
+            return service.setWatchStatus(watchEntity);
+        } catch (IOException e) {
+            Timber.e(e, "Error sending watch to server with matchId=%d", watchEntity.getIdMatch());
+            return null;
+        }
     }
-
 
     @Override protected boolean isNetworkRequired() {
         return false;
