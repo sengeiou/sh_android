@@ -1,73 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:animateLayoutChanges="true"
-    android:background="@drawable/floating_rounded_background"
-    >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_margin="8dp"
+  android:animateLayoutChanges="true"
+  android:background="@drawable/floating_rounded_background">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/new_shot_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/sample_avatar"
-                />
+              android:id="@+id/new_shot_avatar"
+              android:layout_width="40dp"
+              android:layout_height="40dp"
+              android:layout_margin="16dp"
+              android:src="@drawable/sample_avatar" />
 
             <TextView
-                android:id="@+id/new_shot_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/new_shot_subtitle"
-                android:layout_marginBottom="4dp"
-                android:layout_toLeftOf="@+id/new_shot_char_counter"
-                android:layout_toRightOf="@+id/new_shot_avatar"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textStyle="bold"
-                tools:text="Rafa"
-                />
+              android:id="@+id/new_shot_title"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_above="@+id/new_shot_subtitle"
+              android:layout_marginBottom="4dp"
+              android:layout_toLeftOf="@+id/new_shot_char_counter"
+              android:layout_toRightOf="@+id/new_shot_avatar"
+              android:ellipsize="end"
+              android:maxLines="1"
+              android:textStyle="bold"
+              tools:text="Rafa" />
 
             <TextView
-                android:id="@+id/new_shot_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/new_shot_avatar"
-                android:layout_toRightOf="@+id/new_shot_avatar"
-                android:textColor="@color/gray_70"
-                tools:text="\@rafa"
-                />
+              android:id="@+id/new_shot_subtitle"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignBottom="@+id/new_shot_avatar"
+              android:layout_toRightOf="@+id/new_shot_avatar"
+              android:textColor="@color/gray_70"
+              tools:text="\@rafa" />
 
             <TextView
-                android:id="@+id/new_shot_char_counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/new_shot_title"
-                android:layout_marginRight="16dp"
-                android:gravity="center"
-                android:textColor="@color/gray_70"
-                tools:text="140"
-                />
+              android:id="@+id/new_shot_char_counter"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:layout_alignTop="@+id/new_shot_title"
+              android:layout_marginRight="16dp"
+              android:gravity="center"
+              android:textColor="@color/gray_70"
+              tools:text="140" />
 
         </RelativeLayout>
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1">
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -82,6 +76,7 @@
                   android:fontFamily="sans-serif-light"
                   android:gravity="top"
                   android:hint="@string/activity_timeline_new_text"
+                  android:inputType="text|textCapSentences|textMultiLine"
                   android:padding="16dp" />
 
                 <FrameLayout
@@ -96,8 +91,8 @@
                       android:id="@+id/new_shot_image"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:scaleType="fitCenter"
                       android:adjustViewBounds="true"
+                      android:scaleType="fitCenter"
                       tools:src="@drawable/sample_avatar" />
 
                     <ImageView
@@ -111,11 +106,10 @@
         </ScrollView>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/floating_rounded_background_bottom"
-            android:orientation="horizontal"
-            >
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:background="@drawable/floating_rounded_background_bottom"
+          android:orientation="horizontal">
 
             <ImageButton
               android:id="@+id/new_shot_send_button"
@@ -126,19 +120,17 @@
               android:enabled="false"
               android:paddingLeft="16dp"
               android:paddingRight="16dp"
-              android:src="@drawable/ic_send"/>
-
+              android:src="@drawable/ic_send" />
 
             <ProgressBar
-                android:id="@+id/new_shot_send_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                tools:visibility="gone"
-                />
+              android:id="@+id/new_shot_send_progress"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_alignParentRight="true"
+              android:layout_marginRight="16dp"
+              android:indeterminate="true"
+              android:visibility="gone"
+              tools:visibility="gone" />
 
             <ImageButton
               android:id="@+id/new_shot_gallery_button"
@@ -148,8 +140,7 @@
               android:background="?selectableItemBackground"
               android:paddingLeft="16dp"
               android:paddingRight="16dp"
-              android:src="@drawable/ic_shot_gallery"
-              />
+              android:src="@drawable/ic_shot_gallery" />
 
             <ImageButton
               android:id="@+id/new_shot_photo_button"
@@ -159,8 +150,7 @@
               android:background="?selectableItemBackground"
               android:paddingLeft="16dp"
               android:paddingRight="16dp"
-              android:src="@drawable/ic_shot_camera"
-              />
+              android:src="@drawable/ic_shot_camera" />
 
         </RelativeLayout>
     </LinearLayout>

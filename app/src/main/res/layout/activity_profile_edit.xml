@@ -33,7 +33,7 @@
                   android:layout_height="wrap_content"
                   android:hint="@string/activity_edit_profile_name_hint"
                   android:imeOptions="actionNext"
-                  android:inputType="textNoSuggestions"
+                  android:inputType="text|textCapWords|textNoSuggestions"
                   android:lines="1"
                   android:maxLength="20"
                   android:nextFocusDown="@+id/profile_edit_username"
@@ -76,10 +76,10 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="?editTextBackground"
-                  android:textColor="?editTextColor"
                   android:hint="@string/activity_edit_profile_team_hint"
                   android:nextFocusDown="@+id/profile_edit_website"
                   android:singleLine="true"
+                  android:textColor="?editTextColor"
                   android:textSize="18sp" />
 
             </com.shootr.android.ui.widgets.FloatLabelLayout>
@@ -120,6 +120,7 @@
                   android:layout_height="wrap_content"
                   android:hint="@string/activity_edit_profile_bio_hint"
                   android:imeOptions="actionDone"
+                  android:inputType="text|textCapSentences|textMultiLine"
                   android:maxLength="150"
                   android:maxLines="4" />
 
