@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.timeline;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
@@ -34,17 +34,17 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
     private WatchManager watchManager;
     private MatchManager matchManager;
     private UserManager userManager;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
     private WatchingRequestModelMapper watchingRequestModelMapper;
 
 
     @Inject public GetWatchingRequestsPendingJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, MatchManager matchManager, UserManager userManager,
-      SessionManager sessionManager, WatchingRequestModelMapper watchingRequestModelMapper) {
+      SessionRepository sessionRepository, WatchingRequestModelMapper watchingRequestModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.watchManager = watchManager;
         this.matchManager = matchManager;
         this.userManager = userManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.watchingRequestModelMapper = watchingRequestModelMapper;
     }
 
@@ -109,7 +109,7 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
 
 
     private List<WatchEntity> getWatchesWhereIAmNot() {
-        return watchManager.getWatchesWhereUserNot(sessionManager.getCurrentUserId());
+        return watchManager.getWatchesWhereUserNot(sessionRepository.getCurrentUserId());
     }
 
     private WatchingRequestModel getWatchingRequestForMyTeam() {
@@ -122,7 +122,8 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
     }
 
     private boolean isCurrentUserAnswerPending(MatchEntity myTeamNextMatch) {
-        WatchEntity watchFromUserForItsMatch = watchManager.getWatchByMatchAndUser(myTeamNextMatch.getIdMatch(), sessionManager.getCurrentUserId());
+        WatchEntity watchFromUserForItsMatch = watchManager.getWatchByMatchAndUser(myTeamNextMatch.getIdMatch(), sessionRepository
+          .getCurrentUserId());
         return watchFromUserForItsMatch == null;
     }
 
@@ -143,7 +144,7 @@ public class GetWatchingRequestsPendingJob extends ShootrBaseJob<WatchingRequest
     }
 
     private MatchEntity getMyTeamMatch() {
-        return matchManager.getNextMatchFromTeam(sessionManager.getCurrentUser().getFavoriteTeamId());
+        return matchManager.getNextMatchFromTeam(sessionRepository.getCurrentUser().getFavoriteTeamId());
     }
 
     @Override protected boolean isNetworkRequired() {

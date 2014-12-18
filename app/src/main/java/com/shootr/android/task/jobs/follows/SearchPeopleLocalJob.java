@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
@@ -29,16 +29,16 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     private UserModelMapper userModelMapper;
 
     private String searchString;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
     @Inject
     public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, UserManager userManager,
-      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
+      FollowManager followManager, UserModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     public void init(String searchString) {
@@ -59,8 +59,8 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user:users){
             Long idUser = user.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
-            boolean isMe = idUser.equals(sessionManager.getCurrentUserId());
+            FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
+            boolean isMe = idUser.equals(sessionRepository.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
         return userVOs;

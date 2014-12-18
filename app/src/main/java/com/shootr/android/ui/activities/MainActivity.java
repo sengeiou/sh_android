@@ -21,7 +21,7 @@ import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
 import com.shootr.android.domain.UserEntity;
@@ -55,7 +55,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject PicassoWrapper picasso;
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
     @Inject UserModelMapper userModelMapper;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
@@ -230,7 +230,7 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setUserInfoInMenu() {
-        UserEntity currentUser = sessionManager.getCurrentUser();
+        UserEntity currentUser = sessionRepository.getCurrentUser();
         currentUserName.setText(currentUser.getUserName());
         String favoriteTeamName = currentUser.getFavoriteTeamName();
         if (favoriteTeamName != null) {
@@ -243,7 +243,7 @@ public class MainActivity extends BaseSignedInActivity {
 
     @OnClick(R.id.menu_drawer_profile)
     public void openProfileFromDrawer() {
-        startActivity(ProfileContainerActivity.getIntent(this, sessionManager.getCurrentUserId()));
+        startActivity(ProfileContainerActivity.getIntent(this, sessionRepository.getCurrentUserId()));
     }
 
     private void setScreenTitle(String title) {

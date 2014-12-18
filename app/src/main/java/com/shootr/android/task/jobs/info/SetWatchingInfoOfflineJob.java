@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.info;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.WatchEntity;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -21,12 +21,12 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
     private Long status;
     private String place;
     private Long idMatch;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
     @Inject
-    protected SetWatchingInfoOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, SessionManager sessionManager) {
+    protected SetWatchingInfoOfflineJob(Application application, Bus bus, NetworkUtil networkUtil, WatchManager watchManager, SessionRepository sessionRepository) {
         super(new Params(PRIORITY), application, bus, networkUtil);
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.watchManager = watchManager;
     }
 
@@ -42,7 +42,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
 
     public WatchEntity createUpdateWatchEntityFromDB(){
         Date date = new Date(System.currentTimeMillis());
-        WatchEntity watchEntity = watchManager.getWatchByKeys(sessionManager.getCurrentUserId(), idMatch);
+        WatchEntity watchEntity = watchManager.getWatchByKeys(sessionRepository.getCurrentUserId(), idMatch);
         if(watchEntity==null){
             watchEntity = new WatchEntity();
             watchEntity.setCsysBirth(date);
@@ -54,7 +54,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
             watchEntity.setCsysRevision(watchEntity.getCsysRevision() + 1);
             watchEntity.setCsysSynchronized("U");
         }
-        watchEntity.setIdUser(sessionManager.getCurrentUserId());
+        watchEntity.setIdUser(sessionRepository.getCurrentUserId());
         watchEntity.setIdMatch(idMatch);
         watchEntity.setStatus(status);
         watchEntity.setVisible(true);

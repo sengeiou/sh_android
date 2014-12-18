@@ -4,7 +4,7 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
@@ -32,7 +32,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private static final int PRIORITY = 5;
     private ShootrService service;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
     private MatchModelMapper matchModelMapper;
     private UserWatchingModelMapper userWatchingModelMapper;
     private UserManager userManager;
@@ -44,12 +44,12 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
-      SessionManager sessionManager, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      SessionRepository sessionRepository, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, WatchManager watchManager, MatchManager matchManager,
       InfoListBuilderFactory infoListBuilderFactory) {
         super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.service = service;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.matchModelMapper = matchModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.userManager = userManager;
@@ -82,7 +82,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
       throws IOException, SQLException {
-        InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionManager, matchModelMapper,userWatchingModelMapper);
+        InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionRepository, matchModelMapper,userWatchingModelMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
             infoListBuilder.setWatches(watches);
@@ -137,7 +137,8 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private List<WatchEntity> getWatches(boolean useOnlineData) throws SQLException, IOException {
         List<WatchEntity> watches = getWatchesFromDatabase();
             if (useOnlineData) {
-            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), sessionManager.getCurrentUserId());
+            List<WatchEntity> newWatchesFromServer = service.getWatchesFromUsers(getIdsFromMyFollowingAndMe(), sessionRepository
+              .getCurrentUserId());
             if (newWatchesFromServer != null) {
                 watches = newWatchesFromServer;
                 replaceWatchesInDatabase(newWatchesFromServer);
@@ -156,7 +157,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     public List<Long> getIdsFromMyFollowingAndMe() throws SQLException {
-        return followManager.getUserFollowingIdsWithOwnUser(sessionManager.getCurrentUserId());
+        return followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
     }
 
     @Override protected boolean isNetworkRequired() {
@@ -164,7 +165,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     public Long getFavoriteTeamId() {
-        UserEntity currentUser = sessionManager.getCurrentUser();
+        UserEntity currentUser = sessionRepository.getCurrentUser();
         return currentUser.getFavoriteTeamId();
     }
 }

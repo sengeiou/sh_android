@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import dagger.ObjectGraph;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.UserEntity;
 import com.shootr.android.util.LogTreeFactory;
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
 
-    @Inject SessionManager currentSession;
+    @Inject SessionRepository currentSession;
 
     @Override
     public void onCreate() {

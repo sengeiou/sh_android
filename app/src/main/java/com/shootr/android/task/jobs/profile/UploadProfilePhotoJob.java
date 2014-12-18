@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.UserEntity;
 import com.shootr.android.service.PhotoService;
@@ -26,7 +26,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final ShootrService shootrService;
     private final PhotoService photoService;
     private final UserManager userManager;
-    private final SessionManager sessionManager;
+    private final SessionRepository sessionRepository;
     private final ImageResizer imageResizer;
     private final UserModelMapper userModelMapper;
     private final TimeUtils timeUtils;
@@ -34,13 +34,13 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
-      UserManager userManager, SessionManager sessionManager, ImageResizer imageResizer,
+      UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer,
       UserModelMapper userModelMapper, TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.photoService = photoService;
         this.userManager = userManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.imageResizer = imageResizer;
         this.userModelMapper = userModelMapper;
         this.timeUtils = timeUtils;
@@ -59,7 +59,7 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     }
 
     private UserEntity setCurrentUserPhoto(String photoUrl) throws IOException {
-        UserEntity currentUser = sessionManager.getCurrentUser();
+        UserEntity currentUser = sessionRepository.getCurrentUser();
         currentUser.setPhoto(photoUrl);
         currentUser.setCsysModified(timeUtils.getCurrentDate());
         userManager.saveUser(currentUser);

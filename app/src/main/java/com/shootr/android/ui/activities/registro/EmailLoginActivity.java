@@ -23,7 +23,7 @@ import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
 import com.shootr.android.domain.UserEntity;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.loginregister.LoginResultEvent;
@@ -44,7 +44,7 @@ public class EmailLoginActivity extends BaseActivity {
 
     @Inject JobManager jobManager;
     @Inject Bus bus;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
 
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
@@ -71,7 +71,7 @@ public class EmailLoginActivity extends BaseActivity {
         // Yey!
         Timber.d("Succesfuly logged in %s", user.getUserName());
         // Store user in current session
-        sessionManager.createSession(user.getIdUser(), user.getSessionToken(), user); //TODO quitar token del User
+        sessionRepository.createSession(user.getIdUser(), user.getSessionToken(), user); //TODO quitar token del User
         // Launch main activity, and destroy the stack trace
         finish();
         Intent i = new Intent(this,MainActivity.class);

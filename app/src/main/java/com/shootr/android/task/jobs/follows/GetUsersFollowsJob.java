@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.FollowEntity;
@@ -30,15 +30,15 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
     FollowManager followManager;
     private Integer followType;
     private UserModelMapper userModelMapper;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
     @Inject public GetUsersFollowsJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
+      FollowManager followManager, UserModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     public void init(Long userId, Integer followType) {
@@ -57,8 +57,8 @@ public class GetUsersFollowsJob extends ShootrBaseJob<FollowsResultEvent> {
         for(UserEntity user: users){
 
             Long idUser = user.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
-            boolean isMe = idUser.equals(sessionManager.getCurrentUserId());
+            FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
+            boolean isMe = idUser.equals(sessionRepository.getCurrentUserId());
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
         }
         return userVOs;

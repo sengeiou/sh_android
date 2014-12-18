@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.UserTable;
@@ -19,16 +19,16 @@ import javax.inject.Inject;
 public class UserManager extends AbstractManager {
 
     UserMapper userMapper;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
     private static final String CSYS_SYNCHRONIZED = SyncColumns.CSYS_SYNCHRONIZED;
     private static final String USER_TABLE = UserTable.TABLE;
     private static final String CSYS_DELETED = SyncColumns.CSYS_DELETED;
 
     @Inject
-    public UserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionManager sessionManager) {
+    public UserManager(SQLiteOpenHelper openHelper, UserMapper userMapper, SessionRepository sessionRepository) {
         super(openHelper);
         this.userMapper = userMapper;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     /**

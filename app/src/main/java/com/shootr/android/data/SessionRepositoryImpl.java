@@ -4,10 +4,11 @@ import com.shootr.android.data.prefs.CurrentUserId;
 import com.shootr.android.data.prefs.LongPreference;
 import com.shootr.android.data.prefs.SessionToken;
 import com.shootr.android.data.prefs.StringPreference;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.UserEntity;
 import javax.inject.Inject;
 
-public class SessionManagerImpl implements SessionManager {
+public class SessionRepositoryImpl implements SessionRepository {
 
     private StringPreference sessionTokenPreference;
 
@@ -15,7 +16,7 @@ public class SessionManagerImpl implements SessionManager {
 
     private LongPreference currentUserIdPreference;
 
-    @Inject public SessionManagerImpl(@SessionToken StringPreference sessionTokenPreference,
+    @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
       @CurrentUserId LongPreference currentUserIdPreference) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;

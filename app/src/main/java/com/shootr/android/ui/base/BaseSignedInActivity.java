@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.UserEntity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
@@ -15,7 +15,7 @@ public class BaseSignedInActivity extends BaseActivity {
 
     @Inject UserManager userManager;
     @Inject SQLiteOpenHelper dbHelper;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +43,17 @@ public class BaseSignedInActivity extends BaseActivity {
     }
 
     public boolean isSessionActive() {
-        return sessionManager.getCurrentUser() != null;
+        return sessionRepository.getCurrentUser() != null;
     }
 
     public boolean isSessionStored() {
-        return sessionManager.getSessionToken() != null && sessionManager.getCurrentUserId() > 0L;
+        return sessionRepository.getSessionToken() != null && sessionRepository.getCurrentUserId() > 0L;
     }
 
     public void restoreSession() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        UserEntity currentUser = userManager.getUserByIdUser(sessionManager.getCurrentUserId());
-        sessionManager.setCurrentUser(currentUser);
+        UserEntity currentUser = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
+        sessionRepository.setCurrentUser(currentUser);
     }
 
     private void finishActivityAndLogin() {
@@ -71,7 +71,7 @@ public class BaseSignedInActivity extends BaseActivity {
      * @return Currently signed in User
      */
     public UserEntity getCurrentUser() {
-        return sessionManager.getCurrentUser();
+        return sessionRepository.getCurrentUser();
     }
 
 }

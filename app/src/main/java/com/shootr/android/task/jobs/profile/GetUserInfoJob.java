@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
@@ -27,18 +27,18 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     UserManager userManager;
     FollowManager followManager;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
     private Long userId;
     private UserModelMapper userVOMapper;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil1,
-      UserManager userManager, FollowManager followManager, SessionManager sessionManager, UserModelMapper userVOMapper) {
+      UserManager userManager, FollowManager followManager, SessionRepository sessionRepository, UserModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.userVOMapper = userVOMapper;
     }
 
@@ -48,7 +48,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
 
     @Override public void run() throws SQLException, IOException {
         UserEntity userFromLocalDatabase = getUserFromDatabase();
-        Long idCurrentUser = sessionManager.getCurrentUserId();
+        Long idCurrentUser = sessionRepository.getCurrentUserId();
         FollowEntity follow = followManager.getFollowByUserIds(idCurrentUser,userId);
         UserModel userVO = null;
         if (userFromLocalDatabase != null) {
@@ -80,7 +80,7 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     }
 
     private FollowEntity getFolloFromService() throws IOException {
-        return service.getFollowByIdUserFollowed(sessionManager.getCurrentUserId(), userId);
+        return service.getFollowByIdUserFollowed(sessionRepository.getCurrentUserId(), userId);
     }
     private UserEntity getUserFromDatabase() {
         return userManager.getUserByIdUser(userId);

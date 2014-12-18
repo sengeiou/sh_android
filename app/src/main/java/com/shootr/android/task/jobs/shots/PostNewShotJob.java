@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.shots;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
@@ -24,7 +24,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     private static final int PRIORITY = 5;
 
     private final ShootrService service;
-    private final SessionManager sessionManager;
+    private final SessionRepository sessionRepository;
     private final ShotManager shotManager;
 
     private String comment;
@@ -32,10 +32,10 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
-      SessionManager sessionManager, ShotManager shotManager) {
+      SessionRepository sessionRepository, ShotManager shotManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.shotManager = shotManager;
         fieldValidationErrors = new ArrayList<>();
     }
@@ -48,7 +48,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     @Override
     protected void run() throws SQLException, IOException {
         if (isShotValid()) {
-            ShotEntity postedShot = service.postNewShotWithImage(sessionManager.getCurrentUserId(), comment, imageUrl);
+            ShotEntity postedShot = service.postNewShotWithImage(sessionRepository.getCurrentUserId(), comment, imageUrl);
             postSuccessfulEvent(new PostNewShotResultEvent(postedShot));
         } else {
             postValidationErrors();
@@ -94,7 +94,7 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     }
 
     private ShotEntity getPreviousShot() {
-        return shotManager.retrieveLastShotFromUser(sessionManager.getCurrentUserId());
+        return shotManager.retrieveLastShotFromUser(sessionRepository.getCurrentUserId());
     }
 
     @Override protected boolean isNetworkRequired() {

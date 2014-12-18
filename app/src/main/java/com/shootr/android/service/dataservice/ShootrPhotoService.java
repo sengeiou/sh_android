@@ -1,8 +1,7 @@
 package com.shootr.android.service.dataservice;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.PhotoService;
 import com.shootr.android.service.ShootrPhotoUploadError;
@@ -31,12 +30,12 @@ public class ShootrPhotoService implements PhotoService {
       "http://tst.shootermessenger.com/shootr-services/rest/upload/img/shot";
 
     private OkHttpClient client;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
     private ObjectMapper objectMapper;
 
-    @Inject public ShootrPhotoService(OkHttpClient client, SessionManager sessionManager, ObjectMapper objectMapper) {
+    @Inject public ShootrPhotoService(OkHttpClient client, SessionRepository sessionRepository, ObjectMapper objectMapper) {
         this.client = client;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -59,9 +58,9 @@ public class ShootrPhotoService implements PhotoService {
     private RequestBody buildRequestBody(File photoFile) {
         return new MultipartBuilder().type(MultipartBuilder.FORM)
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"idUser\""),
-            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionManager.getCurrentUserId())))
+            RequestBody.create(MediaType.parse("text/plain"), String.valueOf(sessionRepository.getCurrentUserId())))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"sessionToken\""),
-            RequestBody.create(MediaType.parse("text/plain"), sessionManager.getSessionToken()))
+            RequestBody.create(MediaType.parse("text/plain"), sessionRepository.getSessionToken()))
           .addPart(Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"photo.jpeg"),
             RequestBody.create(MediaType.parse("image/jpeg"), photoFile))
           .build();

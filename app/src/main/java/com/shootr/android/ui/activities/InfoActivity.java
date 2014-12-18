@@ -17,10 +17,9 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
@@ -42,7 +41,7 @@ public class InfoActivity extends BaseSignedInActivity {
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject Bus bus;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
     ActionBar actionBar;
     @InjectView(R.id.info_empty) LinearLayout emptyView;
     @InjectView(R.id.info_items_list) ListView listView;
@@ -73,7 +72,7 @@ public class InfoActivity extends BaseSignedInActivity {
         };
         setupActionBar();
 
-        adapter = new InfoListAdapter(this, picasso, sessionManager.getCurrentUserId(), editInfoClickListener);
+        adapter = new InfoListAdapter(this, picasso, sessionRepository.getCurrentUserId(), editInfoClickListener);
 
         listView.setAdapter(adapter);
         retrieveInfoList();

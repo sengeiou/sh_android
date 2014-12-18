@@ -28,7 +28,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
@@ -98,7 +98,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
 
     // Args
@@ -192,7 +192,7 @@ public class ProfileFragment extends BaseFragment {
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
-            boolean canRemovePhoto = sessionManager.getCurrentUser().getPhoto() != null;
+            boolean canRemovePhoto = sessionRepository.getCurrentUser().getPhoto() != null;
             editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo).sheet(
               canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
               .listener(new DialogInterface.OnClickListener() {
@@ -582,6 +582,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser != null && idUser.equals(sessionManager.getCurrentUserId());
+        return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 }

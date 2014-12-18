@@ -5,7 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.domain.FollowEntity;
 import com.shootr.android.domain.UserEntity;
@@ -32,18 +32,18 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private int pageOffset;
 
     private FollowManager followManager;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
     private UserModelMapper userModelMapper;
 
     @Inject
     public SearchPeopleRemoteJob(Application app, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
+      FollowManager followManager, UserModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     public void init(String searchString, int pageOffset) {
@@ -60,9 +60,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
             Long idUser = u.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUser().getIdUser(), idUser);
+            FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUser().getIdUser(), idUser);
             //before doing this UPDATE FOLLOWS
-            boolean isMe = idUser.equals(sessionManager.getCurrentUser().getIdUser());
+            boolean isMe = idUser.equals(sessionRepository.getCurrentUser().getIdUser());
             userVOs.add(userModelMapper.toUserModel(u,follow,isMe));
         }
         return userVOs;

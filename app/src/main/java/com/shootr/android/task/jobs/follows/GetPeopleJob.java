@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
@@ -30,18 +30,18 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     private UserManager userManager;
     private FollowManager followManager;
     private UserModelMapper userModelMapper;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
 
     @Inject public GetPeopleJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
       UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper,
-      SessionManager sessionManager) {
+      SessionRepository sessionRepository) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
         this.userManager = userManager;
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
 
@@ -72,7 +72,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     }
 
     private List<UserEntity> retrievePeopleFromServer() throws IOException {
-        List<UserEntity> peopleFromServer = service.getFollowing(sessionManager.getCurrentUserId(), 0L);
+        List<UserEntity> peopleFromServer = service.getFollowing(sessionRepository.getCurrentUserId(), 0L);
         if (peopleFromServer != null) {
             List<UserModel> userModels = getUserVOs(peopleFromServer);
             postSuccessfulEvent(new FollowsResultEvent(userModels));
@@ -93,7 +93,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity user: users){
             Long idUser = user.getIdUser();
-            Long currentUserId = sessionManager.getCurrentUserId();
+            Long currentUserId = sessionRepository.getCurrentUserId();
             FollowEntity follow = followManager.getFollowByUserIds(currentUserId, idUser);
             boolean isMe = idUser.equals(currentUserId);
             userVOs.add(userModelMapper.toUserModel(user,follow,isMe));
@@ -103,7 +103,7 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
     }
 
     private List<UserEntity> getPeopleFromDatabase() throws SQLException {
-        List<Long> usersFollowingIds = followManager.getUserFollowingIds(sessionManager.getCurrentUserId());
+        List<Long> usersFollowingIds = followManager.getUserFollowingIds(sessionRepository.getCurrentUserId());
         List<UserEntity> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
         return usersFollowing;
     }

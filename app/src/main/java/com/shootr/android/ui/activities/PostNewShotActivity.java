@@ -9,8 +9,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.views.PostNewShotView;
 import com.shootr.android.util.FileChooserUtils;
@@ -59,7 +57,7 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     @InjectView(R.id.new_shot_image) ImageView image;
 
     @Inject PicassoWrapper picasso;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
 
     private int charCounterColorError;
     private int charCounterColorNormal;
@@ -89,9 +87,9 @@ public class PostNewShotActivity extends BaseSignedInActivity implements PostNew
     }
 
     private void initializeViews() {
-        picasso.loadProfilePhoto(sessionManager.getCurrentUser().getPhoto()).into(avatar);
-        name.setText(sessionManager.getCurrentUser().getName());
-        username.setText("@" + sessionManager.getCurrentUser().getUserName());
+        picasso.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto()).into(avatar);
+        name.setText(sessionRepository.getCurrentUser().getName());
+        username.setText("@" + sessionRepository.getCurrentUser().getUserName());
 
         charCounter.setText(String.valueOf(MAX_LENGTH));
 

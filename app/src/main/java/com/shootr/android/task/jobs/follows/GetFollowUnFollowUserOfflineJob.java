@@ -3,7 +3,7 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
@@ -28,7 +28,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     private final UserManager userManager;
     private final FollowManager followManager;
-    private final SessionManager sessionManager;
+    private final SessionRepository sessionRepository;
     private final TimeUtils timeUtils;
 
     private Long idUser;
@@ -36,11 +36,11 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     @Inject
     public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager,
-      SessionManager sessionManager, TimeUtils timeUtils) {
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.timeUtils = timeUtils;
     }
 
@@ -148,7 +148,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     }
 
     private long currentUserId() {
-        return sessionManager.getCurrentUserId();
+        return sessionRepository.getCurrentUserId();
     }
 
     @Override protected boolean isNetworkRequired() {
@@ -160,12 +160,12 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     public FollowEntity unfollowUserinDB() throws SQLException, IOException{
         //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
         //attribute to "U"
-        FollowEntity follow =  followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
+        FollowEntity follow =  followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
         follow.setCsysDeleted(new Date());
         follow.setCsysSynchronized("D");
         followManager.saveFollow(follow);
 
-        userManager.saveUser(sessionManager.getCurrentUser());
+        userManager.saveUser(sessionRepository.getCurrentUser());
         return follow;
     }
 
@@ -173,8 +173,8 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     public FollowEntity followUserInDB() throws IOException, SQLException{
         //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
         //So the syncrhonized attribute for this case is "N"
-        Long idCurrentUser = sessionManager.getCurrentUserId();
-        FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(),idUser);
+        Long idCurrentUser = sessionRepository.getCurrentUserId();
+        FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(),idUser);
         if(follow!=null && ("N".equals(follow.getCsysSynchronized()) || "U".equals(follow.getCsysSynchronized()) || "D".equals(follow.getCsysSynchronized()))){
             follow.setCsysSynchronized("U");
         }else{
@@ -187,7 +187,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         follow.setCsysModified(new Date());
         follow.setCsysRevision(0);
         followManager.saveFollow(follow);
-        userManager.saveUser(sessionManager.getCurrentUser());
+        userManager.saveUser(sessionRepository.getCurrentUser());
         return follow;
     }
 }

@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
@@ -26,7 +27,6 @@ import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
-import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -235,7 +235,7 @@ public class DataModule {
         return new LogTreeFactoryImpl();
     }
 
-    @Provides @Singleton SessionManager provideSessionManager(SessionManagerImpl sessionManager) {
+    @Provides @Singleton SessionRepository provideSessionManager(SessionRepositoryImpl sessionManager) {
         return sessionManager;
     }
 

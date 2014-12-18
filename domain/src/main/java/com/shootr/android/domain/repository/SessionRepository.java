@@ -1,8 +1,8 @@
-package com.shootr.android.data;
+package com.shootr.android.domain.repository;
 
 import com.shootr.android.domain.UserEntity;
 
-public interface SessionManager {
+public interface SessionRepository {
 
     public UserEntity getCurrentUser();
 
