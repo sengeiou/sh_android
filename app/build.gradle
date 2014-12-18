@@ -161,12 +161,6 @@ dependencies {
     compile 'com.crashlytics.android:crashlytics:1.+'
 }
 
-/*spoon {
-    debug = true
-    failIfNoDeviceConnected = true
-    //className = 'com.shootr.android.ui.activities.registro.WelcomeLoginActivityTest'
-}*/
-
 sonarRunner {
     sonarProperties {
         property "sonar.host.url", "http://sonar.fav24.net"
@@ -178,9 +172,6 @@ sonarRunner {
         property "sonar.password", "14041981"
         property "sonar.projectName", "Shootr Android"
         properties["sonar.sources"] = android.sourceSets.main.java.srcDirs
-        //properties["sonar.tests"] = android.sourceSets.instrumentTest.java.srcDirs
-        //property "sonar.junit.reportsPath","build/instrumentTest-results/connected/"
-        properties["sonar.binaries"] = file("build/classes/debug")
     }
 }
 
