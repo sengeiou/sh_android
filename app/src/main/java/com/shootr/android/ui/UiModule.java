@@ -7,7 +7,9 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.SearchTeamActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
+import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.ui.presenter.PeoplePresenter;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -43,6 +45,8 @@ import javax.inject.Singleton;
                 SearchTeamActivity.class,
                 ShotDetailActivity.class,
                 PhotoViewActivity.class,
+
+                PeopleFragment.class,
         },
         complete = false
 )

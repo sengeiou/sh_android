@@ -13,7 +13,7 @@ import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchTeamPresenter implements Presenter {
+public class SearchTeamPresenter implements Presenter, CommunicationPresenter {
 
     private static final int MAX_RESULTS_EXPECTED = 50;
 
@@ -122,13 +122,13 @@ public class SearchTeamPresenter implements Presenter {
         searchTeamView.setCurrentSearchText(teamName);
     }
 
-    @Subscribe
+    @Subscribe @Override
     public void onCommunicationError(CommunicationErrorEvent event) {
         showEmpty();
         searchTeamView.alertComunicationError();
     }
 
-    @Subscribe
+    @Subscribe @Override
     public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         showEmpty();
         this.searchTeamView.alertConnectionNotAvailable();

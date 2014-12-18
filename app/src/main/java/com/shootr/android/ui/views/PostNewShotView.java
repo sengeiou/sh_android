@@ -2,7 +2,7 @@ package com.shootr.android.ui.views;
 
 import java.io.File;
 
-public interface PostNewShotView extends LoadDataView {
+public interface PostNewShotView extends DataTransferView {
 
     void performBackPressed();
 

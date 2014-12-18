@@ -1,11 +1,11 @@
 package com.shootr.android.ui.views;
 
-public interface LoadDataView {
+import com.shootr.android.ui.views.DataTransferView;
 
-    void showLoading();
+public interface LoadDataView extends DataTransferView {
 
-    void hideLoading();
+    void showEmpty();
 
-    void showError(String message);
+    void hideEmpty();
 
 }
