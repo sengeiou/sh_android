@@ -12,6 +12,9 @@ import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.task.JobWrapper;
+import com.shootr.android.task.NetworkConnection;
+import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
@@ -164,6 +167,8 @@ import static android.content.Context.MODE_PRIVATE;
 
     BitmapImageResizer.class,
 
+    NetworkConnection.class,
+
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
@@ -204,6 +209,10 @@ public class DataModule {
 
     @Provides @Singleton NetworkUtil provideNetworkUtil(Application app) {
         return new NetworkUtilImpl(app);
+    }
+
+    @Provides @Singleton NetworkConnection provideNetworkConnection(Application application, NetworkUtil networkUtil) {
+        return new NetworkConnectionImpl(application, networkUtil);
     }
 
     @Provides @Singleton JobManager provideJobManager(Application app, NetworkUtil networkUtil) {
