@@ -227,9 +227,12 @@ public class ProfileFragment extends BaseFragment {
     private void openPhotoBig() {
         FragmentActivity context = getActivity();
         String preview = user.getPhoto();
-        String photoBig = preview.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
-        Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(context, photoBig, preview);
-        startActivity(intentForPhoto);
+        boolean canOpenPhoto = preview != null;
+        if (canOpenPhoto) {
+            String photoBig = preview.replace("_thumbnail", ""); // <-- Chapuza Carlos, chapuza!!
+            Intent intentForPhoto = PhotoViewActivity.getIntentForActivity(context, photoBig, preview);
+            startActivity(intentForPhoto);
+        }
     }
 
     private void takePhotoFromCamera() {
