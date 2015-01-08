@@ -21,7 +21,6 @@ import com.shootr.android.ui.activities.FindFriendsActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.PeopleAdapter;
 import com.shootr.android.ui.adapters.UserListAdapter;
-import com.shootr.android.ui.base.BaseActivity;
 import com.shootr.android.ui.base.BaseFragment;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -50,7 +49,7 @@ public class PeopleFragment extends BaseFragment implements PeopleView{
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        presenter.initialize(this, ((BaseActivity) getActivity()).getObjectGraph());
+        presenter.initialize(this);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

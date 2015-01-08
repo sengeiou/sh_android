@@ -1,37 +1,39 @@
 package com.shootr.android.ui.presenter;
 
-import com.path.android.jobqueue.JobManager;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.interactor.GetPeopleInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.follows.FollowsResultEvent;
-import com.shootr.android.task.jobs.follows.GetPeopleJob;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.PeopleView;
 import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
 
 public class PeoplePresenter implements Presenter, CommunicationPresenter {
 
-    private final JobManager jobManager;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
+    private final GetPeopleInteractor getPeopleInteractor;
+    private final UserModelMapper userModelMapper;
 
     private PeopleView peopleView;
-    private ObjectGraph objectGraph;
 
-    @Inject public PeoplePresenter(JobManager jobManager, Bus bus, ErrorMessageFactory errorMessageFactory) {
-        this.jobManager = jobManager;
+    @Inject public PeoplePresenter(Bus bus, ErrorMessageFactory errorMessageFactory,
+      GetPeopleInteractor getPeopleInteractor, UserModelMapper userModelMapper) {
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
+        this.getPeopleInteractor = getPeopleInteractor;
+        this.userModelMapper = userModelMapper;
     }
 
-    public void initialize(PeopleView peopleView, ObjectGraph objectGraph) {
+    public void initialize(PeopleView peopleView) {
         this.peopleView = peopleView;
-        this.objectGraph = objectGraph;
         this.loadPeopleList();
     }
 
@@ -46,16 +48,17 @@ public class PeoplePresenter implements Presenter, CommunicationPresenter {
     }
 
     private void getPeopleList() {
-        GetPeopleJob job = objectGraph.get(GetPeopleJob.class);
-        jobManager.addJobInBackground(job);
+        getPeopleInteractor.obtainPeople();
     }
 
     @Subscribe
-    public void onPeopleListLoaded(FollowsResultEvent event) {
+    public void onPeopleListLoaded(UserList userList) {
         this.hideViewLoading();
-        List<UserModel> people = event.getResult();
+        List<User> people = userList.getUsers();
+        List<UserModel> userModels = userModelMapper.transform(people);
+
         if (people != null && !people.isEmpty()) {
-            this.showPeopleListInView(people);
+            this.showPeopleListInView(userModels);
             this.hideViewEmpty();
         } else {
             this.showViewEmtpy();

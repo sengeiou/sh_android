@@ -46,8 +46,7 @@ public class JobWrapper extends Job {
     }
 
     private void executeInteractor() throws Throwable {
-        Object result = interactor.execute();
-        sendResultToPresentation(result);
+        interactor.execute();
     }
 
     /**

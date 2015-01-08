@@ -1,5 +1,5 @@
 package com.shootr.android.domain.interactor;
 
-public interface Interactor<T> {
+public interface Interactor {
     void execute() throws Throwable;
 }
