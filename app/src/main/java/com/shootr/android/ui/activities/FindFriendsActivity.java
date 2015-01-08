@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.domain.FollowEntity;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;

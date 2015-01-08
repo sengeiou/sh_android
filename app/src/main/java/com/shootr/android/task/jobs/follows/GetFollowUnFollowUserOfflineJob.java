@@ -8,8 +8,8 @@ import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -155,39 +155,4 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
         return false;
     }
 
-
-    @Deprecated
-    public FollowEntity unfollowUserinDB() throws SQLException, IOException{
-        //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
-        //attribute to "U"
-        FollowEntity follow =  followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(), idUser);
-        follow.setCsysDeleted(new Date());
-        follow.setCsysSynchronized("D");
-        followManager.saveFollow(follow);
-
-        userManager.saveUser(sessionRepository.getCurrentUser());
-        return follow;
-    }
-
-    @Deprecated
-    public FollowEntity followUserInDB() throws IOException, SQLException{
-        //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
-        //So the syncrhonized attribute for this case is "N"
-        Long idCurrentUser = sessionRepository.getCurrentUserId();
-        FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUserId(),idUser);
-        if(follow!=null && ("N".equals(follow.getCsysSynchronized()) || "U".equals(follow.getCsysSynchronized()) || "D".equals(follow.getCsysSynchronized()))){
-            follow.setCsysSynchronized("U");
-        }else{
-            follow = new FollowEntity();
-            follow.setCsysSynchronized("N");
-        }
-        follow.setIdUser(idCurrentUser);
-        follow.setFollowedUser(idUser);
-        follow.setCsysBirth(new Date());
-        follow.setCsysModified(new Date());
-        follow.setCsysRevision(0);
-        followManager.saveFollow(follow);
-        userManager.saveUser(sessionRepository.getCurrentUser());
-        return follow;
-    }
 }

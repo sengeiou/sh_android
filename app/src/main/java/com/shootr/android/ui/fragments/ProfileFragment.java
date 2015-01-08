@@ -42,8 +42,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
@@ -104,7 +103,6 @@ public class ProfileFragment extends BaseFragment {
     // Args
     Long idUser;
 
-    UserEntity currentUser;
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
@@ -339,7 +337,6 @@ public class ProfileFragment extends BaseFragment {
 
     private void retrieveUserInfo() {
         Context context = getActivity();
-        currentUser = ShootrApplication.get(context).getCurrentUser();
 
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
         job.init(idUser);
@@ -349,7 +346,7 @@ public class ProfileFragment extends BaseFragment {
         //TODO loading
     }
 
-    public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType) {
+    public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
         job2.init(idUser, followType);
@@ -472,7 +469,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void followUser() {
-        startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.FOLLOW_TYPE);
+        startFollowUnfollowUserJob(getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
     public void unfollowUser() {
@@ -480,7 +477,7 @@ public class ProfileFragment extends BaseFragment {
         new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+                  startFollowUnfollowUserJob(getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
               }
           })
           .setNegativeButton("No", null)

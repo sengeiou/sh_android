@@ -3,15 +3,17 @@ package com.shootr.android.task.jobs.info;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.User;
 import com.squareup.otto.Bus;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.MatchManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.domain.MatchEntity;
-import com.shootr.android.domain.UserEntity;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -41,12 +43,12 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private FollowManager followManager;
     private InfoListBuilderFactory infoListBuilderFactory;
     private boolean postOnlineInfoOnly;
-
+    private UserEntityMapper userEntityMapper;
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       SessionRepository sessionRepository, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, WatchManager watchManager, MatchManager matchManager,
-      InfoListBuilderFactory infoListBuilderFactory) {
+      InfoListBuilderFactory infoListBuilderFactory, UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);
         this.service = service;
         this.sessionRepository = sessionRepository;
@@ -57,6 +59,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
         this.matchManager = matchManager;
         this.followManager = followManager;
         this.infoListBuilderFactory = infoListBuilderFactory;
+        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(boolean postOnlineInfoOnly) {
@@ -82,7 +85,8 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
 
     private Map<MatchModel, Collection<UserWatchingModel>> obtainInfoList(boolean useOnlineData)
       throws IOException, SQLException {
-        InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionRepository, matchModelMapper,userWatchingModelMapper);
+        InfoListBuilder infoListBuilder = infoListBuilderFactory.getInfoListBuilder(sessionRepository, matchModelMapper,userWatchingModelMapper,
+          userEntityMapper);
         List<WatchEntity> watches = getWatches(useOnlineData);
         if (watches != null && !watches.isEmpty()) {
             infoListBuilder.setWatches(watches);
@@ -165,7 +169,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     public Long getFavoriteTeamId() {
-        UserEntity currentUser = sessionRepository.getCurrentUser();
+        User currentUser = sessionRepository.getCurrentUser();
         return currentUser.getFavoriteTeamId();
     }
 }

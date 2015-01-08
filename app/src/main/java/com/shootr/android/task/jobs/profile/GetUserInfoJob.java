@@ -4,16 +4,16 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UserInfoResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.inject.Inject;
@@ -30,10 +30,10 @@ public class GetUserInfoJob extends ShootrBaseJob<UserInfoResultEvent> {
     private SessionRepository sessionRepository;
 
     private Long userId;
-    private UserModelMapper userVOMapper;
+    private UserEntityModelMapper userVOMapper;
 
     @Inject public GetUserInfoJob(Application application, Bus bus, ShootrService service, NetworkUtil networkUtil1,
-      UserManager userManager, FollowManager followManager, SessionRepository sessionRepository, UserModelMapper userVOMapper) {
+      UserManager userManager, FollowManager followManager, SessionRepository sessionRepository, UserEntityModelMapper userVOMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil1);
         this.service = service;
         this.userManager = userManager;

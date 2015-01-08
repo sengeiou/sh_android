@@ -4,18 +4,18 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
 
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
     ShootrService service;
     UserManager userManager;
     FollowManager followManager;
-    @Inject UserModelMapper userModelMapper;
+    @Inject UserEntityModelMapper userModelMapper;
     private SessionRepository sessionRepository;
 
     @Inject

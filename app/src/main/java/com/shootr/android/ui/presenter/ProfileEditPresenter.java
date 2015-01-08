@@ -9,6 +9,7 @@ import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -50,7 +51,7 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void fillCurrentUserData() {
-        currentUserModel = userModelMapper.toUserModel(sessionRepository.getCurrentUser(), null, true);
+        currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         changedTeamId = currentUserModel.getFavoriteTeamId();
         this.profileEditView.renderUserInfo(currentUserModel);
     }

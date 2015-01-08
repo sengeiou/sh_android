@@ -3,9 +3,11 @@ package com.shootr.android.task.jobs.profile;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
@@ -37,17 +39,20 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     private SessionRepository sessionRepository;
     private UserManager userManager;
     private TimeUtils timeUtils;
+    private UserEntityMapper userEntityMapper;
 
     private UserModel updatedUserModel;
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public UpdateUserProfileJob(Application application, Bus bus, NetworkUtil networkUtil,
-      ShootrService service, SessionRepository sessionRepository, UserManager userManager, TimeUtils timeUtils) {
+      ShootrService service, SessionRepository sessionRepository, UserManager userManager, TimeUtils timeUtils,
+      UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.sessionRepository = sessionRepository;
         this.userManager = userManager;
         this.timeUtils = timeUtils;
+        this.userEntityMapper = userEntityMapper;
         this.fieldValidationErrors = new ArrayList<>();
     }
 
@@ -139,7 +144,10 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     }
 
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
-        UserEntity updatedUserEntity = sessionRepository.getCurrentUser().clone();
+        User currentUser = sessionRepository.getCurrentUser();
+
+
+        UserEntity updatedUserEntity = userEntityMapper.transform(currentUser);
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
@@ -157,7 +165,8 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
 
         updatedUserEntity = service.saveUserProfile(updatedUserEntity);
         userManager.saveUser(updatedUserEntity);
-        sessionRepository.setCurrentUser(updatedUserEntity);
+
+        sessionRepository.setCurrentUser(userEntityMapper.transform(updatedUserEntity, updatedUserEntity.getIdUser()));
     }
 
     private void localValidation() {

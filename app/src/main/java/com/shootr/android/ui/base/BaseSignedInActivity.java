@@ -5,17 +5,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
+import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.activities.registro.WelcomeLoginActivity;
 import javax.inject.Inject;
 
 public class BaseSignedInActivity extends BaseActivity {
 
     @Inject UserManager userManager;
-    @Inject SQLiteOpenHelper dbHelper;
     @Inject SessionRepository sessionRepository;
+    @Inject UserEntityMapper userEntityMapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +52,14 @@ public class BaseSignedInActivity extends BaseActivity {
     }
 
     public void restoreSession() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         UserEntity currentUser = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
-        sessionRepository.setCurrentUser(currentUser);
+        sessionRepository.setCurrentUser(userEntityMapper.transform(currentUser, currentUser.getIdUser()));
     }
 
     private void finishActivityAndLogin() {
         finish();
         overridePendingTransition(0, 0);
         startActivity(new Intent(this, WelcomeLoginActivity.class));
-    }
-
-
-    /**
-     * Utility method to get the current user from the Application object.
-     * WARNING: Make sure to call {link @restoreSessionOrLogin} before using this method,
-     * and stop execution if login is required.
-     *
-     * @return Currently signed in User
-     */
-    public UserEntity getCurrentUser() {
-        return sessionRepository.getCurrentUser();
     }
 
 }

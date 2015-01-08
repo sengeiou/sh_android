@@ -1,9 +1,10 @@
 package com.shootr.android.db;
 
 import android.app.Application;
-import com.shootr.android.ui.model.MatchSearchResultModel;
 import com.shootr.android.ui.model.mappers.MatchSearchResultModelMapper;
 import com.shootr.android.ui.model.mappers.TeamModelMapper;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
+import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.WatchingRequestModelMapper;
 import dagger.Module;
 import dagger.Provides;
@@ -16,8 +17,8 @@ import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
+import javax.inject.Singleton;
 
 @Module(
   complete = false,
@@ -54,7 +55,11 @@ public class MapperModule {
         return new ShotMapper();
     }
 
-    @Provides UserModelMapper provideUserVOMapper() {
+    @Provides UserEntityModelMapper provideUserVOMapper() {
+        return new UserEntityModelMapper();
+    }
+
+    @Provides @Singleton UserModelMapper provideUserModelMapper() {
         return new UserModelMapper();
     }
 

@@ -1,12 +1,12 @@
 package com.shootr.android.domain.repository;
 
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.domain.User;
 
 public interface SessionRepository {
 
-    public UserEntity getCurrentUser();
+    public User getCurrentUser();
 
-    public void setCurrentUser(UserEntity currentUser);
+    public void setCurrentUser(User currentUser);
 
     public String getSessionToken();
 
@@ -16,7 +16,7 @@ public interface SessionRepository {
 
     public void setCurrentUserId(long currentUserId);
 
-    public void createSession(long userId, String sessionToken, UserEntity loggedInUser);
+    public void createSession(long userId, String sessionToken, User loggedInUser);
 
     public void destroySession();
 }

@@ -21,10 +21,10 @@ import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
-import com.shootr.android.domain.UserEntity;
 import com.shootr.android.sync.SyncConfigurator;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
 import com.shootr.android.task.jobs.loginregister.GCMRegistrationJob;
@@ -33,7 +33,7 @@ import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.fragments.InitialSetupFragment;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.fragments.TimelineFragment;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -56,7 +56,7 @@ public class MainActivity extends BaseSignedInActivity {
     @Inject SyncConfigurator syncConfigurator;
     @Inject JobManager jobManager;
     @Inject SessionRepository sessionRepository;
-    @Inject UserModelMapper userModelMapper;
+    @Inject UserEntityModelMapper userModelMapper;
     @Inject @InitialSetupCompleted BooleanPreference initialSetupCompleted;
 
     @InjectView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -230,8 +230,8 @@ public class MainActivity extends BaseSignedInActivity {
     }
 
     private void setUserInfoInMenu() {
-        UserEntity currentUser = sessionRepository.getCurrentUser();
-        currentUserName.setText(currentUser.getUserName());
+        User currentUser = sessionRepository.getCurrentUser();
+        currentUserName.setText(currentUser.getUsername());
         String favoriteTeamName = currentUser.getFavoriteTeamName();
         if (favoriteTeamName != null) {
             currentUserUsername.setText(favoriteTeamName);

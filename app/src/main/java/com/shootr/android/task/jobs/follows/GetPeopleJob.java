@@ -4,16 +4,16 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.follows.FollowsResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,12 +29,12 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
 
     private UserManager userManager;
     private FollowManager followManager;
-    private UserModelMapper userModelMapper;
+    private UserEntityModelMapper userModelMapper;
     private SessionRepository sessionRepository;
 
 
     @Inject public GetPeopleJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      UserManager userManager, FollowManager followManager, UserModelMapper userModelMapper,
+      UserManager userManager, FollowManager followManager, UserEntityModelMapper userModelMapper,
       SessionRepository sessionRepository) {
         super(new Params(PRIORITY),context,bus,networkUtil);
         this.service = service;
@@ -42,11 +42,6 @@ public class GetPeopleJob extends ShootrBaseJob<FollowsResultEvent> {
         this.followManager = followManager;
         this.userModelMapper = userModelMapper;
         this.sessionRepository = sessionRepository;
-    }
-
-
-    public void setService(ShootrService service) {
-        this.service = service;
     }
 
     @Override

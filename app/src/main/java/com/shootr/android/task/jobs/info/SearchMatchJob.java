@@ -3,11 +3,12 @@ package com.shootr.android.task.jobs.info;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.domain.MatchEntity;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -30,16 +31,18 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
     private WatchManager watchManager;
     private FollowManager followManager;
     private SessionRepository sessionRepository;
+    private UserEntityMapper userEntityMapper;
 
     @Inject protected SearchMatchJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       MatchSearchResultModelMapper matchSearchResultModelMapper, WatchManager watchManager,
-      SessionRepository sessionRepository, FollowManager followManager) {
+      SessionRepository sessionRepository, FollowManager followManager, UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.matchSearchResultModelMapper = matchSearchResultModelMapper;
         this.watchManager = watchManager;
         this.sessionRepository = sessionRepository;
         this.followManager = followManager;
+        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(String queryText) {
@@ -57,7 +60,8 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
           watchManager.getWatchesNotEndedOrAdjurnedFromUsers(followingsAndMeIds);
 
         //Builder crappy stuff
-        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionRepository.getCurrentUser(), null, null);
+        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionRepository.getCurrentUser(), null, null,
+          userEntityMapper);
         infoListBuilder.setWatches(watchesFromMyFollowing);
         Set<WatchEntity> validWatches = infoListBuilder.getValidWatches();
 

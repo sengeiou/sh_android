@@ -18,11 +18,13 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.dd.CircularProgressButton;
 import com.path.android.jobqueue.JobManager;
+import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -44,8 +46,9 @@ public class EmailLoginActivity extends BaseActivity {
 
     @Inject JobManager jobManager;
     @Inject Bus bus;
-    @Inject SessionRepository sessionRepository;
+    @Inject @Deprecated UserEntityMapper userEntityMapper;
 
+    @Inject SessionRepository sessionRepository;
     @InjectView(R.id.email_login_username_email) AutoCompleteTextView mEmailUsername;
     @InjectView(R.id.email_login_password) EditText mPassword;
     @InjectView(R.id.email_login_button) CircularProgressButton mLoginButton;
@@ -67,11 +70,12 @@ public class EmailLoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginResult(LoginResultEvent event) {
         setLoading(false);
-        UserEntity user = event.getResult();
+        UserEntity userEntity = event.getResult();
+        User user = userEntityMapper.transform(userEntity, userEntity.getIdUser());
         // Yey!
-        Timber.d("Succesfuly logged in %s", user.getUserName());
+        Timber.d("Succesfuly logged in %s", user.getUsername());
         // Store user in current session
-        sessionRepository.createSession(user.getIdUser(), user.getSessionToken(), user); //TODO quitar token del User
+        sessionRepository.createSession(user.getIdUser(), userEntity.getSessionToken(), user); //TODO quitar token del User
         // Launch main activity, and destroy the stack trace
         finish();
         Intent i = new Intent(this,MainActivity.class);

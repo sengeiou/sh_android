@@ -4,15 +4,15 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.FollowEntity;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.task.events.follows.SearchPeopleLocalResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,14 +26,14 @@ public class SearchPeopleLocalJob extends ShootrBaseJob<SearchPeopleLocalResultE
     private UserManager userManager;
     private FollowManager followManager;
 
-    private UserModelMapper userModelMapper;
+    private UserEntityModelMapper userModelMapper;
 
     private String searchString;
     private SessionRepository sessionRepository;
 
     @Inject
     public SearchPeopleLocalJob(Application app, Bus bus, NetworkUtil networkUtil, UserManager userManager,
-      FollowManager followManager, UserModelMapper userModelMapper, SessionRepository sessionRepository) {
+      FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SearchPeopleRemoteJob.SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
