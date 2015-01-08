@@ -37,6 +37,9 @@ public class InfoCleaner {
     }
 
     private List<WatchEntity> getWatchesFromMatches(List<MatchEntity> matches) {
+        if (matches.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         List<Long> matchIds = new ArrayList<>();
         for (MatchEntity match : matches) {
             matchIds.add(match.getIdMatch());
