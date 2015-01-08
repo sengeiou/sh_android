@@ -5,7 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.domain.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.exception.ServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.loginregister.LoginResultEvent;

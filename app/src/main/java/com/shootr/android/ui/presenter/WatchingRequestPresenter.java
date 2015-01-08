@@ -2,7 +2,7 @@ package com.shootr.android.ui.presenter;
 
 import android.os.Handler;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.info.WatchingInfoResult;
 import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;

@@ -9,7 +9,7 @@ import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.task.validation.shot.DuplicatedValidator;
 import com.squareup.otto.Bus;
-import com.shootr.android.domain.ShotEntity;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.shots.PostNewShotResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;

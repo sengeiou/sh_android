@@ -1,4 +1,4 @@
-package com.shootr.android.domain;
+package com.shootr.android.data.entity;
 
 import java.io.Serializable;
 
@@ -47,6 +47,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     }
 
     public String getSessionToken() {
+        //Not implemented in domain
         return sessionToken;
     }
 
@@ -111,6 +112,7 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
     }
 
     public Long getRank() {
+        //Not implemented in domain
         return rank;
     }
 

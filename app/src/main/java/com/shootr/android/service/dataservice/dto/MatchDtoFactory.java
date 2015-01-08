@@ -5,7 +5,7 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.MatchMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.WatchMapper;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;

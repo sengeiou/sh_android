@@ -3,7 +3,7 @@ package com.shootr.android.service.dataservice.dto;
 import com.shootr.android.constant.ServiceConstants;
 import com.shootr.android.db.DatabaseContract.DeviceTable;
 import com.shootr.android.db.mappers.DeviceMapper;
-import com.shootr.android.domain.DeviceEntity;
+import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;

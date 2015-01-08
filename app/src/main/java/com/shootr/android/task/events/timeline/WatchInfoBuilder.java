@@ -2,9 +2,9 @@ package com.shootr.android.task.events.timeline;
 
 import android.support.v4.util.LongSparseArray;
 import com.google.common.collect.TreeMultimap;
-import com.shootr.android.domain.MatchEntity;
-import com.shootr.android.domain.UserEntity;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;

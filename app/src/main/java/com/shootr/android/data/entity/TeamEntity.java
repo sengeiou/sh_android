@@ -1,4 +1,4 @@
-package com.shootr.android.domain;
+package com.shootr.android.data.entity;
 
 public class TeamEntity extends Synchronized {
 

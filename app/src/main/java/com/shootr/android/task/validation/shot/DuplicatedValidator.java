@@ -1,6 +1,6 @@
 package com.shootr.android.task.validation.shot;
 
-import com.shootr.android.domain.ShotEntity;
+import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.exception.ShootrError;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidator;

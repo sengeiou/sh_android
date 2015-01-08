@@ -1,4 +1,4 @@
-package com.shootr.android.domain;
+package com.shootr.android.data.entity;
 
 
 import java.util.Date;

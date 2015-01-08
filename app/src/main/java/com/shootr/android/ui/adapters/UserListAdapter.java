@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.R;
-import com.shootr.android.domain.FollowEntity;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.widgets.FollowButton;
 import java.util.ArrayList;

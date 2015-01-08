@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.domain.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
