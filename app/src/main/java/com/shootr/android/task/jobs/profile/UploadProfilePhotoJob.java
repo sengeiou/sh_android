@@ -32,13 +32,12 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     private final ImageResizer imageResizer;
     private final UserEntityModelMapper userModelMapper;
     private final TimeUtils timeUtils;
-    private final UserEntityMapper userEntityMapper;
 
     private File photoFile;
 
     @Inject public UploadProfilePhotoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService shootrService, PhotoService photoService,
       UserManager userManager, SessionRepository sessionRepository, ImageResizer imageResizer, UserEntityModelMapper userModelMapper,
-      TimeUtils timeUtils, UserEntityMapper userEntityMapper) {
+      TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.shootrService = shootrService;
         this.photoService = photoService;
@@ -47,7 +46,6 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
         this.imageResizer = imageResizer;
         this.userModelMapper = userModelMapper;
         this.timeUtils = timeUtils;
-        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(File photoFile) {
@@ -63,11 +61,10 @@ public class UploadProfilePhotoJob extends ShootrBaseJob<UploadProfilePhotoEvent
     }
 
     private UserEntity setCurrentUserPhoto(String photoUrl) throws IOException {
-        User currentUser = sessionRepository.getCurrentUser();
-        UserEntity currentUserEntity = userEntityMapper.transform(currentUser);
-
+        UserEntity currentUserEntity = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
         currentUserEntity.setPhoto(photoUrl);
         currentUserEntity.setCsysModified(timeUtils.getCurrentDate());
+        currentUserEntity.setCsysRevision(currentUserEntity.getCsysRevision()+1);
         userManager.saveUser(currentUserEntity);
         currentUserEntity = shootrService.saveUserProfile(currentUserEntity);
         userManager.saveUser(currentUserEntity);

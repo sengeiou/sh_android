@@ -144,10 +144,7 @@ public class UpdateUserProfileJob extends ShootrBaseJob<UpdateUserProfileEvent> 
     }
 
     private UserEntity updateEntityWithValues(UserModel updatedUserModel) {
-        User currentUser = sessionRepository.getCurrentUser();
-
-
-        UserEntity updatedUserEntity = userEntityMapper.transform(currentUser);
+        UserEntity updatedUserEntity = userManager.getUserByIdUser(sessionRepository.getCurrentUserId());
         updatedUserEntity.setUserName(updatedUserModel.getUsername());
         updatedUserEntity.setName(updatedUserModel.getName());
         updatedUserEntity.setBio(updatedUserModel.getBio());
