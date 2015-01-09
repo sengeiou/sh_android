@@ -13,7 +13,6 @@ import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.interactor.InteractorModule;
-import com.shootr.android.task.JobWrapper;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;

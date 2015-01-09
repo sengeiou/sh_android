@@ -1,8 +1,9 @@
-package com.shootr.android.task;
+package com.shootr.android.interactor;
 
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.shootr.android.domain.interactor.Interactor;
+import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.DatabaseErrorEvent;
@@ -16,17 +17,19 @@ public class JobWrapper extends Job {
     private final Interactor interactor;
     private final Bus bus;
     private final NetworkConnection networkConnection;
+    private final ErrorCallback errorCallback;
 
     private boolean requiresNetwork = false;
 
-    public JobWrapper(Interactor interactor, Bus bus, NetworkConnection networkConnection) {
+    public JobWrapper(Interactor interactor, Bus bus, NetworkConnection networkConnection, ErrorCallback errorCallback) {
         super(new Params(5));
         this.interactor = interactor;
         this.bus = bus;
         this.networkConnection = networkConnection;
+        this.errorCallback = errorCallback;
     }
 
-    @Override public void onRun() throws Throwable {
+    @Override public void onRun() {
         if (!hasInternetConnection()) {
             postConnectionNotAvailableEvent();
             if (requiresNetwork) {
@@ -37,11 +40,13 @@ public class JobWrapper extends Job {
         try {
             executeInteractor();
         } catch (SQLException e) {
-            Timber.e(e, "SQLException executing job");
-            postDatabaseErrorEvent();
+            postDatabaseErrorEvent(); //TODO for compatibility
+            errorCallback.onError(e);
         } catch (IOException e) { // includes ServerException
-            Timber.e(e, "IOException executing job");
-            postCommunicationErrorEvent(e);
+            postCommunicationErrorEvent(e); //TODO for compatibility
+            errorCallback.onError(e);
+        } catch (Throwable throwable) {
+            errorCallback.onError(throwable);
         }
     }
 
@@ -52,7 +57,6 @@ public class JobWrapper extends Job {
     /**
      * @deprecated The responsability for network usage should not be on the presentation layer
      * nor the domain layer. It should be on the repository.
-     *
      */
     @Deprecated
     public void setRequiresNetwork(boolean requiresNetwork) {
@@ -75,7 +79,7 @@ public class JobWrapper extends Job {
         bus.post(new ConnectionNotAvailableEvent());
     }
 
-    public boolean hasInternetConnection(){
+    public boolean hasInternetConnection() {
         return networkConnection.isConnected();
     }
 
@@ -89,5 +93,10 @@ public class JobWrapper extends Job {
 
     @Override protected boolean shouldReRunOnThrowable(Throwable throwable) {
         return false;
+    }
+
+    static interface ErrorCallback {
+
+        void onError(Throwable throwable);
     }
 }

@@ -3,12 +3,11 @@ package com.shootr.android.interactor;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.domain.interactor.InteractorHandler;
-import com.shootr.android.task.JobWrapper;
 import com.shootr.android.task.NetworkConnection;
 import com.squareup.otto.Bus;
 import javax.inject.Inject;
 
-public class JobInteractorHandler implements InteractorHandler {
+public class JobInteractorHandler implements InteractorHandler, JobWrapper.ErrorCallback {
 
     private final Bus bus;
     private final NetworkConnection networkConnection;
@@ -22,11 +21,15 @@ public class JobInteractorHandler implements InteractorHandler {
     }
 
     @Override public void execute(Interactor interactor) {
-        JobWrapper interactorJob = new JobWrapper(interactor, bus, networkConnection);
+        JobWrapper interactorJob = new JobWrapper(interactor, bus, networkConnection, this);
         jobManager.addJobInBackground(interactorJob);
     }
 
     @Override public void sendUiMessage(Object objectToUi) {
         bus.post(objectToUi);
+    }
+
+    @Override public void onError(Throwable throwable) {
+        bus.post(throwable);
     }
 }
