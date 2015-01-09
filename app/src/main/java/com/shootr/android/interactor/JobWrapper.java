@@ -4,13 +4,8 @@ import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.task.NetworkConnection;
-import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.DatabaseErrorEvent;
 import com.squareup.otto.Bus;
-import java.io.IOException;
-import java.sql.SQLException;
-import timber.log.Timber;
 
 public class JobWrapper extends Job {
 
@@ -39,12 +34,6 @@ public class JobWrapper extends Job {
 
         try {
             executeInteractor();
-        } catch (SQLException e) {
-            postDatabaseErrorEvent(); //TODO for compatibility
-            errorCallback.onError(e);
-        } catch (IOException e) { // includes ServerException
-            postCommunicationErrorEvent(e); //TODO for compatibility
-            errorCallback.onError(e);
         } catch (Throwable throwable) {
             errorCallback.onError(throwable);
         }
@@ -61,18 +50,6 @@ public class JobWrapper extends Job {
     @Deprecated
     public void setRequiresNetwork(boolean requiresNetwork) {
         this.requiresNetwork = requiresNetwork;
-    }
-
-    private void sendResultToPresentation(Object result) {
-        bus.post(result);
-    }
-
-    private void postCommunicationErrorEvent(IOException e) {
-        bus.post(new CommunicationErrorEvent(e));
-    }
-
-    private void postDatabaseErrorEvent() {
-        bus.post(new DatabaseErrorEvent());
     }
 
     private void postConnectionNotAvailableEvent() {
