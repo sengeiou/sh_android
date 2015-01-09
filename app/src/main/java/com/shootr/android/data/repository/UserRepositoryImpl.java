@@ -6,6 +6,7 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.domain.User;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.UserRepository;
 import com.shootr.android.service.ShootrService;
@@ -46,8 +47,7 @@ public class UserRepositoryImpl implements UserRepository{
             List<UserEntity> usersFollowing = userManager.getUsersByIds(usersFollowingIds);
             return transformUserEntities(usersFollowing);
         } catch (SQLException e) {
-            //TODO
-            throw new RuntimeException(e);
+            throw new RepositoryException(e);
         }
     }
 
@@ -56,8 +56,7 @@ public class UserRepositoryImpl implements UserRepository{
             List<UserEntity> peopleFromServer = service.getFollowing(sessionRepository.getCurrentUserId(), 0L);
             return transformUserEntities(peopleFromServer);
         } catch (IOException e) {
-            //TODO
-            throw new RuntimeException(e);
+            throw new RepositoryException(e);
         }
     }
 
