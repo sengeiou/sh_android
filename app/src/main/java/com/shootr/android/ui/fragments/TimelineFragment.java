@@ -27,6 +27,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
@@ -282,7 +283,7 @@ public class TimelineFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_info:
-                startActivity(new Intent(getActivity(), InfoActivity.class));
+                startActivity(new Intent(getActivity(), EventActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

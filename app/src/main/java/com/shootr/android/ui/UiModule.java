@@ -3,6 +3,7 @@ package com.shootr.android.ui;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.ui.activities.AddMatchActivity;
 import com.shootr.android.ui.activities.EditInfoActivity;
+import com.shootr.android.ui.activities.EventActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.activities.SearchTeamActivity;
@@ -10,6 +11,7 @@ import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.fragments.PeopleFragment;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
+import com.shootr.android.ui.widgets.WatchersView;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.ui.activities.FindFriendsActivity;
@@ -39,6 +41,7 @@ import javax.inject.Singleton;
                 UserFollowsContainerActivity.class,
                 FindFriendsActivity.class,
                 InfoActivity.class,
+                EventActivity.class,
                 EditInfoActivity.class,
                 AddMatchActivity.class,
                 ProfileEditActivity.class,
@@ -47,6 +50,7 @@ import javax.inject.Singleton;
                 PhotoViewActivity.class,
 
                 PeopleFragment.class,
+                WatchersView.class,
         },
         complete = false
 )

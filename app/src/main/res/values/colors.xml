@@ -46,7 +46,7 @@
 
     <color name="new_shot_bottom">#09000000</color>
 
-    <color name="watching">#4d4d4d</color>
+    <color name="watching">#727272</color>
     <color name="not_watching">#bbbbbb</color>
 
     <color name="error">#ffcc0000</color>

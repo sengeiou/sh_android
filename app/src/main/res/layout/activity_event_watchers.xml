@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/primary"
+      android:orientation="vertical"
+      android:paddingBottom="16dp"
+      android:paddingLeft="72dp"
+      android:paddingRight="16dp">
+
+        <TextView
+          android:id="@+id/event_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="?selectableItemBackground"
+          android:clickable="true"
+          android:drawableRight="@drawable/spinner_material"
+          android:textColor="@color/white"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          tools:text="Sevilla-Betis 18:30 - Sánchez Pizjuán, Nervión" />
+
+        <TextView
+          android:id="@+id/event_date"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/primary_disabled"
+          android:textSize="16sp"
+          tools:text="mié. 18:30" />
+    </LinearLayout>
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+            <FrameLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+                <ImageView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="16dp"
+                  android:src="@drawable/ic_watching_24" />
+
+                <com.shootr.android.ui.widgets.SwitchBar
+                  android:id="@+id/event_watchig_switch"
+                  android:layout_width="match_parent"
+                  android:layout_height="?actionBarSize"
+                  android:background="?selectableItemBackground"
+                  android:paddingLeft="56dp"
+                  app:switchBarText="@string/watching_switch" />
+            </FrameLayout>
+
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:layout_marginLeft="74dp"
+              android:background="?dividerHorizontal" />
+
+            <TextView
+              android:id="@+id/event_watchers_number"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="16dp"
+              android:layout_marginTop="8dp"
+              android:paddingBottom="4dp"
+              android:paddingTop="8dp"
+              android:textColor="@color/gray_50"
+              android:textStyle="bold"
+              tools:text="3 watchers" />
+
+            <com.shootr.android.ui.widgets.WatchersView
+              android:id="@+id/event_watchers_list"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

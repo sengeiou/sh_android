@@ -100,7 +100,7 @@
         </activity>
 
         <activity
-          android:name=".ui.activities.InfoActivity"
+          android:name=".ui.activities.EventActivity"
           android:label="@string/activity_info_title">
 
             <meta-data
