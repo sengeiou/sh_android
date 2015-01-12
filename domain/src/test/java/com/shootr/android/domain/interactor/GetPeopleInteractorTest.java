@@ -2,6 +2,7 @@ package com.shootr.android.domain.interactor;
 
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.UserList;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,10 +16,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -66,6 +69,19 @@ public class GetPeopleInteractorTest {
         verify(interactorHandler).sendUiMessage(argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue().getUsers()).isSortedAccordingTo(new TestUsernameComparator());
+    }
+
+    @Test
+    public void exceptionThrownWhenRepositoryFails() throws Exception {
+        try {
+            setupHandlerRealExecution();
+            doThrow(new RepositoryException(null)).when(userRepository)
+              .getPeople(any(UserRepository.UserListCallback.class));
+            getPeopleInteractor.obtainPeople();
+            fail("Should throw RepositoryException");
+        } catch (RuntimeException e) {
+            assertThat(e).hasCauseInstanceOf(RepositoryException.class);
+        }
     }
 
     private void setupHandlerRealExecution() {
