@@ -4,30 +4,31 @@ import com.shootr.android.data.prefs.CurrentUserId;
 import com.shootr.android.data.prefs.LongPreference;
 import com.shootr.android.data.prefs.SessionToken;
 import com.shootr.android.data.prefs.StringPreference;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.SessionRepository;
 import javax.inject.Inject;
 
-public class SessionManagerImpl implements SessionManager {
+public class SessionRepositoryImpl implements SessionRepository {
 
     private StringPreference sessionTokenPreference;
 
-    private UserEntity currentUser;
+    private User currentUser;
 
     private LongPreference currentUserIdPreference;
 
-    @Inject public SessionManagerImpl(@SessionToken StringPreference sessionTokenPreference,
+    @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
       @CurrentUserId LongPreference currentUserIdPreference) {
         this.sessionTokenPreference = sessionTokenPreference;
         this.currentUserIdPreference = currentUserIdPreference;
     }
 
     @Override
-    public UserEntity getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
     @Override
-    public void setCurrentUser(UserEntity currentUser) {
+    public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
@@ -52,7 +53,7 @@ public class SessionManagerImpl implements SessionManager {
     }
 
     @Override
-    public void createSession(long userId, String sessionToken, UserEntity loggedInUser) {
+    public void createSession(long userId, String sessionToken, User loggedInUser) {
         setCurrentUserId(userId);
         setSessionToken(sessionToken);
         setCurrentUser(loggedInUser);

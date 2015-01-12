@@ -2,8 +2,7 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import java.util.HashMap;
 import java.util.Map;

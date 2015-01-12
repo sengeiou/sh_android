@@ -1,22 +1,20 @@
 package com.shootr.android.task.jobs.follows;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
 
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.objects.FollowEntity;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.task.events.follows.SearchPeopleRemoteResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,18 +32,18 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
     private int pageOffset;
 
     private FollowManager followManager;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
 
-    private UserModelMapper userModelMapper;
+    private UserEntityModelMapper userModelMapper;
 
     @Inject
     public SearchPeopleRemoteJob(Application app, Bus bus, ShootrService service, NetworkUtil networkUtil,
-      FollowManager followManager, UserModelMapper userModelMapper, SessionManager sessionManager) {
+      FollowManager followManager, UserEntityModelMapper userModelMapper, SessionRepository sessionRepository) {
         super(new Params(PRIORITY).groupBy(SEARCH_PEOPLE_GROUP), app, bus, networkUtil);
         this.service = service;
         this.userModelMapper = userModelMapper;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     public void init(String searchString, int pageOffset) {
@@ -62,9 +60,9 @@ public class SearchPeopleRemoteJob extends ShootrBaseJob<SearchPeopleRemoteResul
         List<UserModel> userVOs = new ArrayList<>();
         for(UserEntity u:users){
             Long idUser = u.getIdUser();
-            FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUser().getIdUser(), idUser);
+            FollowEntity follow = followManager.getFollowByUserIds(sessionRepository.getCurrentUser().getIdUser(), idUser);
             //before doing this UPDATE FOLLOWS
-            boolean isMe = idUser.equals(sessionManager.getCurrentUser().getIdUser());
+            boolean isMe = idUser.equals(sessionRepository.getCurrentUser().getIdUser());
             userVOs.add(userModelMapper.toUserModel(u,follow,isMe));
         }
         return userVOs;

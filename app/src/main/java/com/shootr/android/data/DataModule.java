@@ -11,6 +11,10 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.interactor.InteractorModule;
+import com.shootr.android.task.NetworkConnection;
+import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
 import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
@@ -26,7 +30,6 @@ import com.shootr.android.task.jobs.shots.GetLastShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
-import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
@@ -66,7 +69,6 @@ import com.shootr.android.sync.InfoCleaner;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.follows.GetFollowUnFollowUserOfflineJob;
 import com.shootr.android.task.jobs.follows.GetFollowingsJob;
-import com.shootr.android.task.jobs.follows.GetPeopleJob;
 import com.shootr.android.task.jobs.follows.GetUsersFollowsJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleLocalJob;
 import com.shootr.android.task.jobs.follows.SearchPeopleRemoteJob;
@@ -110,7 +112,7 @@ import static android.content.Context.MODE_PRIVATE;
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
     InfoActivity.class,
 
-    GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class, GetPeopleJob.class,
+    GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class,
     GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLastShotsJob.class,
 
     InitialSetupFragment.class,
@@ -164,9 +166,11 @@ import static android.content.Context.MODE_PRIVATE;
 
     BitmapImageResizer.class,
 
+    NetworkConnection.class,
+
   },
   includes = {
-    ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
+    ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
   },
   complete = false,
   library = true)
@@ -206,6 +210,10 @@ public class DataModule {
         return new NetworkUtilImpl(app);
     }
 
+    @Provides @Singleton NetworkConnection provideNetworkConnection(Application application, NetworkUtil networkUtil) {
+        return new NetworkConnectionImpl(application, networkUtil);
+    }
+
     @Provides @Singleton JobManager provideJobManager(Application app, NetworkUtil networkUtil) {
         return configureJobManager(app, networkUtil);
     }
@@ -235,7 +243,7 @@ public class DataModule {
         return new LogTreeFactoryImpl();
     }
 
-    @Provides @Singleton SessionManager provideSessionManager(SessionManagerImpl sessionManager) {
+    @Provides @Singleton SessionRepository provideSessionManager(SessionRepositoryImpl sessionManager) {
         return sessionManager;
     }
 

@@ -1,6 +1,6 @@
 package com.shootr.android.ui.model.mappers;
 
-import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.util.TimeFormatter;
 import java.util.ArrayList;

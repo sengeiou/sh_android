@@ -1,2 +1,2 @@
 //include ':app', ':robolectric-tests'
-include ':app'
+include ':app', ':domain'

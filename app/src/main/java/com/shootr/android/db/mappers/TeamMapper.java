@@ -2,7 +2,7 @@ package com.shootr.android.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import com.shootr.android.db.objects.TeamEntity;
+import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.db.DatabaseContract.TeamTable;
 import java.util.HashMap;
 import java.util.Map;

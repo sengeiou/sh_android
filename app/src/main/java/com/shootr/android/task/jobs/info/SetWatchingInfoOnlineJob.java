@@ -4,7 +4,7 @@ import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.squareup.otto.Bus;

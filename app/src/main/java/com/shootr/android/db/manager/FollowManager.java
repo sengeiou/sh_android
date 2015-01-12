@@ -5,10 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.FollowTable;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.objects.FollowEntity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

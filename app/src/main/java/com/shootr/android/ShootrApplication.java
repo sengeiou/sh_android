@@ -3,11 +3,10 @@ package com.shootr.android;
 import android.app.Application;
 import android.content.Context;
 
-import android.os.Build;
 import com.crashlytics.android.Crashlytics;
 import dagger.ObjectGraph;
-import com.shootr.android.data.SessionManager;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.util.LogTreeFactory;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -16,7 +15,7 @@ public class ShootrApplication extends Application {
 
     private ObjectGraph objectGraph;
 
-    @Inject SessionManager currentSession;
+    @Inject SessionRepository currentSession;
 
     @Override
     public void onCreate() {
@@ -53,11 +52,6 @@ public class ShootrApplication extends Application {
      */
     public void inject(Object o) {
         objectGraph.inject(o);
-    }
-
-    @Deprecated
-    public UserEntity getCurrentUser() {
-        return currentSession.getCurrentUser();
     }
 
     public static ShootrApplication get(Context context) {

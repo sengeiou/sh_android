@@ -24,16 +24,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.gcm.event.RequestWatchByPushEvent;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
-import com.shootr.android.task.events.info.WatchingInfoResult;
-import com.shootr.android.task.events.timeline.WatchingPeopleNumberEvent;
-import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
-import com.shootr.android.task.jobs.info.GetWatchingInfoJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
-import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
-import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.activities.ShotDetailActivity;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.model.WatchingRequestModel;
@@ -46,7 +39,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.task.events.timeline.OldShotsReceivedEvent;
@@ -81,6 +74,7 @@ public class TimelineFragment extends BaseFragment
     @Inject TimeUtils timeUtils;
     @Inject JobManager jobManager;
     @Inject WatchingRequestPresenter watchingRequestPresenter;
+    @Inject SessionRepository sessionRepository;
 
     @InjectView(R.id.timeline_list) ListView listView;
     @InjectView(R.id.timeline_new) View newShotView;
@@ -104,7 +98,6 @@ public class TimelineFragment extends BaseFragment
     private boolean isRefreshing;
     private boolean moreShots = true;
     private boolean shouldPoll;
-    private UserEntity currentUser;
     private BadgeDrawable badgeDrawable;
 
 
@@ -161,7 +154,6 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        currentUser = ShootrApplication.get(activity).getCurrentUser();
     }
 
     @Override
@@ -240,7 +232,6 @@ public class TimelineFragment extends BaseFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
         loadInitialTimeline();
         watchingRequestPresenter.initialize(this, ((BaseActivity) getActivity()).getObjectGraph());
     }
@@ -390,7 +381,6 @@ public class TimelineFragment extends BaseFragment
     }
 
     private void startJob(TimelineJob job){
-        job.init(currentUser);
         jobManager.addJobInBackground(job);
     }
 

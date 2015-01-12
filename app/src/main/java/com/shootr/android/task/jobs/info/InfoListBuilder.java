@@ -2,9 +2,11 @@ package com.shootr.android.task.jobs.info;
 
 import android.support.v4.util.LongSparseArray;
 import com.google.common.collect.TreeMultimap;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.User;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
@@ -33,7 +35,7 @@ public class InfoListBuilder {
     private List<Long> matchIdsFromWatches = new ArrayList<>();
     private List<Long> userIdsFromWatches = new ArrayList<>();
 
-    private UserEntity currentUser;
+    private UserEntity currentUserEntity;
 
     private Set<WatchEntity> validWatches = new HashSet<>();
     private Set<WatchEntity> allWatches = new HashSet<>();
@@ -47,9 +49,9 @@ public class InfoListBuilder {
 
     private Comparator<? super UserWatchingModel> userComparatorByNameAndCurrentUser = new Comparator<UserWatchingModel>() {
         @Override public int compare(UserWatchingModel user1, UserWatchingModel user2) {
-            if (user1.getIdUser().equals(currentUser.getIdUser())) {
+            if (user1.getIdUser().equals(currentUserEntity.getIdUser())) {
                 return -1;
-            } else if (user2.getIdUser().equals(currentUser.getIdUser())) {
+            } else if (user2.getIdUser().equals(currentUserEntity.getIdUser())) {
                 return 1;
             } else {
                 return userEntities.get(user1.getIdUser()).compareTo(userEntities.get(user2.getIdUser()));
@@ -57,11 +59,12 @@ public class InfoListBuilder {
         }
     };
 
-    protected InfoListBuilder(UserEntity currentUser, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper) {
-        this.currentUser = currentUser;
+    protected InfoListBuilder(User currentUser, MatchModelMapper matchModelMapper,
+      UserWatchingModelMapper userWatchingModelMapper, UserEntityMapper userEntityMapper) {
         this.matchModelMapper = matchModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
-        userEntities.put(currentUser.getIdUser(), currentUser);
+        this.currentUserEntity = userEntityMapper.transform(currentUser);
+        userEntities.put(currentUser.getIdUser(), this.currentUserEntity);
     }
 
     public void setWatches(List<WatchEntity> validWatches) {
@@ -101,7 +104,7 @@ public class InfoListBuilder {
         if (myTeamNextMatch != null) {
             WatchEntity meNotWatchingMyTeam = new WatchEntity();
             meNotWatchingMyTeam.setIdMatch(myTeamNextMatch.getIdMatch());
-            meNotWatchingMyTeam.setIdUser(currentUser.getIdUser());
+            meNotWatchingMyTeam.setIdUser(currentUserEntity.getIdUser());
             meNotWatchingMyTeam.setStatus(0L);
             if (!allWatches.contains(meNotWatchingMyTeam)) {
                 validWatches.add(meNotWatchingMyTeam);
@@ -126,7 +129,7 @@ public class InfoListBuilder {
 
     private boolean containsCurrentUser(Set<UserWatchingModel> userWatchingModelSet) {
         for (UserWatchingModel user : userWatchingModelSet) {
-            if (user.getIdUser().equals(currentUser.getIdUser())) {
+            if (user.getIdUser().equals(currentUserEntity.getIdUser())) {
                 return true;
             }
         }
@@ -135,11 +138,11 @@ public class InfoListBuilder {
 
     private UserWatchingModel getCurrentUserNotWatching(Long matchId) {
         WatchEntity watchEntity = new WatchEntity();
-        watchEntity.setIdUser(currentUser.getIdUser());
+        watchEntity.setIdUser(currentUserEntity.getIdUser());
         watchEntity.setStatus(0L);
         watchEntity.setIdMatch(matchId);
         MatchEntity matchEntity = matchEntities.get(matchId);
-        return getUserWatchingModelFromEntity(currentUser, watchEntity, matchEntity);
+        return getUserWatchingModelFromEntity(currentUserEntity, watchEntity, matchEntity);
     }
 
     private void addWatchingToResult(WatchEntity watchEntity) {
@@ -166,7 +169,7 @@ public class InfoListBuilder {
     private List<WatchEntity> removeWatchesWithNotVisibleMatches(Collection<WatchEntity> watches) {
         List<Long> hiddenMatchesIds = new ArrayList<>();
         for (WatchEntity watch : watches) {
-            if (watch.getIdUser().equals(currentUser.getIdUser()) && !watch.getVisible()) {
+            if (watch.getIdUser().equals(currentUserEntity.getIdUser()) && !watch.getVisible()) {
                 hiddenMatchesIds.add(watch.getIdMatch());
             }
         }

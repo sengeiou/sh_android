@@ -1,12 +1,12 @@
 package com.shootr.android.service;
 
-import com.shootr.android.db.objects.DeviceEntity;
-import com.shootr.android.db.objects.FollowEntity;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.ShotEntity;
-import com.shootr.android.db.objects.TeamEntity;
-import com.shootr.android.db.objects.UserEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.data.entity.TeamEntity;
+import com.shootr.android.data.entity.UserEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;

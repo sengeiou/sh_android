@@ -11,13 +11,13 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.constant.Constants;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.data.prefs.GCMAppVersion;
 import com.shootr.android.data.prefs.GCMRegistrationId;
 import com.shootr.android.data.prefs.IntPreference;
 import com.shootr.android.data.prefs.StringPreference;
 import com.shootr.android.db.manager.DeviceManager;
-import com.shootr.android.db.objects.DeviceEntity;
+import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.gcm.GCMConstants;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.loginregister.PushTokenResult;
@@ -39,20 +39,20 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
     private IntPreference registeredAppVersion;
     private final GoogleCloudMessaging gcm;
     private ShootrService service;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
     private DeviceManager deviceManager;
 
     @Inject protected GCMRegistrationJob(Application application, Bus bus, NetworkUtil networkUtil,
       GoogleCloudMessaging gcm, @GCMRegistrationId StringPreference registrationId,
       @GCMAppVersion IntPreference registeredAppVersion, ShootrService service, DeviceManager deviceManager,
-      SessionManager sessionManager) {
+      SessionRepository sessionRepository) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.registrationId = registrationId;
         this.registeredAppVersion = registeredAppVersion;
         this.gcm = gcm;
         this.service = service;
         this.deviceManager = deviceManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override protected void run() throws Exception {
@@ -83,7 +83,7 @@ public class GCMRegistrationJob extends ShootrBaseJob<PushTokenResult> {
 
         if (existingDevice == null) {
             existingDevice = new DeviceEntity();
-            existingDevice.setIdUser(sessionManager.getCurrentUserId());
+            existingDevice.setIdUser(sessionRepository.getCurrentUserId());
             existingDevice.setPlatform(Constants.ANDROID_PLATFORM.intValue());
             existingDevice.setOsVer("Android");
             existingDevice.setModel("Mío");

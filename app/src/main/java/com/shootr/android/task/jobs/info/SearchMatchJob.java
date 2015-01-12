@@ -3,11 +3,12 @@ package com.shootr.android.task.jobs.info;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.data.mapper.UserEntityMapper;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.db.objects.MatchEntity;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.info.SearchMatchResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
@@ -29,17 +30,19 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
     private String queryText;
     private WatchManager watchManager;
     private FollowManager followManager;
-    private SessionManager sessionManager;
+    private SessionRepository sessionRepository;
+    private UserEntityMapper userEntityMapper;
 
     @Inject protected SearchMatchJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       MatchSearchResultModelMapper matchSearchResultModelMapper, WatchManager watchManager,
-      SessionManager sessionManager, FollowManager followManager) {
+      SessionRepository sessionRepository, FollowManager followManager, UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.matchSearchResultModelMapper = matchSearchResultModelMapper;
         this.watchManager = watchManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.followManager = followManager;
+        this.userEntityMapper = userEntityMapper;
     }
 
     public void init(String queryText) {
@@ -52,12 +55,13 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         //Filter added matches
         // My following's watches
         List<Long> followingsAndMeIds =
-          followManager.getUserFollowingIdsWithOwnUser(sessionManager.getCurrentUserId());
+          followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
         List<WatchEntity> watchesFromMyFollowing =
           watchManager.getWatchesNotEndedOrAdjurnedFromUsers(followingsAndMeIds);
 
         //Builder crappy stuff
-        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionManager.getCurrentUser(), null, null);
+        InfoListBuilder infoListBuilder = new InfoListBuilder(sessionRepository.getCurrentUser(), null, null,
+          userEntityMapper);
         infoListBuilder.setWatches(watchesFromMyFollowing);
         Set<WatchEntity> validWatches = infoListBuilder.getValidWatches();
 
@@ -69,10 +73,11 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         }
 
         // My team
-        MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(sessionManager.getCurrentUser().getFavoriteTeamId());
+        MatchEntity nextMatchFromMyTeam = service.getNextMatchWhereMyFavoriteTeamPlays(
+          sessionRepository.getCurrentUser().getFavoriteTeamId());
         if (nextMatchFromMyTeam != null) {
             WatchEntity myTeamWatch =
-              watchManager.getWatchByKeys(sessionManager.getCurrentUserId(), nextMatchFromMyTeam.getIdMatch());
+              watchManager.getWatchByKeys(sessionRepository.getCurrentUserId(), nextMatchFromMyTeam.getIdMatch());
             if (myTeamWatch == null || myTeamWatch.getVisible()) {
                 alreadyAddedMatchesIds.add(nextMatchFromMyTeam.getIdMatch());
             }

@@ -3,18 +3,16 @@ package com.shootr.android.task.jobs.follows;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.UserManager;
-import com.shootr.android.db.objects.FollowEntity;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.follows.FollowUnFollowResultEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
-import com.shootr.android.ui.model.UserModel;
-import com.shootr.android.ui.model.mappers.UserModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -30,7 +28,7 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     private final UserManager userManager;
     private final FollowManager followManager;
-    private final SessionManager sessionManager;
+    private final SessionRepository sessionRepository;
     private final TimeUtils timeUtils;
 
     private Long idUser;
@@ -38,11 +36,11 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
 
     @Inject
     public GetFollowUnFollowUserOfflineJob(Application application, NetworkUtil networkUtil, Bus bus, UserManager userManager, FollowManager followManager,
-      SessionManager sessionManager, TimeUtils timeUtils) {
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.userManager = userManager;
         this.followManager = followManager;
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.timeUtils = timeUtils;
     }
 
@@ -150,46 +148,11 @@ public class GetFollowUnFollowUserOfflineJob  extends ShootrBaseJob<FollowUnFoll
     }
 
     private long currentUserId() {
-        return sessionManager.getCurrentUserId();
+        return sessionRepository.getCurrentUserId();
     }
 
     @Override protected boolean isNetworkRequired() {
         return false;
     }
 
-
-    @Deprecated
-    public FollowEntity unfollowUserinDB() throws SQLException, IOException{
-        //This case, It is not synchronized. It existed, and now we mark is going to be deleted, so We set synchronized
-        //attribute to "U"
-        FollowEntity follow =  followManager.getFollowByUserIds(sessionManager.getCurrentUserId(), idUser);
-        follow.setCsysDeleted(new Date());
-        follow.setCsysSynchronized("D");
-        followManager.saveFollow(follow);
-
-        userManager.saveUser(sessionManager.getCurrentUser());
-        return follow;
-    }
-
-    @Deprecated
-    public FollowEntity followUserInDB() throws IOException, SQLException{
-        //This case, It doesn't come from Server so, It isn't synchronized and probably It didn't exist in the past
-        //So the syncrhonized attribute for this case is "N"
-        Long idCurrentUser = sessionManager.getCurrentUserId();
-        FollowEntity follow = followManager.getFollowByUserIds(sessionManager.getCurrentUserId(),idUser);
-        if(follow!=null && ("N".equals(follow.getCsysSynchronized()) || "U".equals(follow.getCsysSynchronized()) || "D".equals(follow.getCsysSynchronized()))){
-            follow.setCsysSynchronized("U");
-        }else{
-            follow = new FollowEntity();
-            follow.setCsysSynchronized("N");
-        }
-        follow.setIdUser(idCurrentUser);
-        follow.setFollowedUser(idUser);
-        follow.setCsysBirth(new Date());
-        follow.setCsysModified(new Date());
-        follow.setCsysRevision(0);
-        followManager.saveFollow(follow);
-        userManager.saveUser(sessionManager.getCurrentUser());
-        return follow;
-    }
 }

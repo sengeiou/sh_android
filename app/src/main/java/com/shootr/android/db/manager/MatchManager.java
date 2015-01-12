@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.mappers.MatchMapper;
-import com.shootr.android.db.objects.MatchEntity;
+import com.shootr.android.data.entity.MatchEntity;
 
 import java.util.ArrayList;
 import java.util.List;

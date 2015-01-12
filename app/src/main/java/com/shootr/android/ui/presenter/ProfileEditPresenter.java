@@ -1,7 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.task.events.profile.UpdateUserProfileEvent;
@@ -9,6 +9,7 @@ import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.validation.FieldValidationError;
 import com.shootr.android.task.validation.FieldValidationErrorEvent;
 import com.shootr.android.ui.model.UserModel;
+import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.views.ProfileEditView;
 import com.shootr.android.util.ErrorMessageFactory;
@@ -24,7 +25,7 @@ public class ProfileEditPresenter implements Presenter {
     private ProfileEditView profileEditView;
     private ObjectGraph objectGraph;
 
-    private final SessionManager sessionManager;
+    private final SessionRepository sessionRepository;
     private final UserModelMapper userModelMapper;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
@@ -33,9 +34,9 @@ public class ProfileEditPresenter implements Presenter {
     private UserModel currentUserModel;
     private Long changedTeamId;
 
-    @Inject public ProfileEditPresenter(SessionManager sessionManager, UserModelMapper userModelMapper, Bus bus,
+    @Inject public ProfileEditPresenter(SessionRepository sessionRepository, UserModelMapper userModelMapper, Bus bus,
       ErrorMessageFactory errorMessageFactory, JobManager jobManager) {
-        this.sessionManager = sessionManager;
+        this.sessionRepository = sessionRepository;
         this.userModelMapper = userModelMapper;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
@@ -50,7 +51,7 @@ public class ProfileEditPresenter implements Presenter {
     }
 
     private void fillCurrentUserData() {
-        currentUserModel = userModelMapper.toUserModel(sessionManager.getCurrentUser(), null, true);
+        currentUserModel = userModelMapper.transform(sessionRepository.getCurrentUser());
         changedTeamId = currentUserModel.getFavoriteTeamId();
         this.profileEditView.renderUserInfo(currentUserModel);
     }

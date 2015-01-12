@@ -1,12 +1,11 @@
 package com.shootr.android.service.dataservice.dto;
 
-import android.provider.SyncStateContract;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.MatchMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.WatchMapper;
-import com.shootr.android.db.objects.WatchEntity;
+import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;

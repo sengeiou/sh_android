@@ -1,4 +1,4 @@
-package com.shootr.android.db.objects;
+package com.shootr.android.data.entity;
 
 public class ShotEntity extends Synchronized{
 

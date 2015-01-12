@@ -1,8 +1,7 @@
 package com.shootr.android.ui.model.mappers;
 
 import android.content.Context;
-import com.shootr.android.R;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.UserWatchingModel;
 
 public class UserWatchingModelMapper {

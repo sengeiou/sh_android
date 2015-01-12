@@ -3,10 +3,11 @@ package com.shootr.android.task.jobs.timeline;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.squareup.otto.Bus;
 import com.shootr.android.db.manager.FollowManager;
 import com.shootr.android.db.manager.ShotManager;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.task.jobs.ShootrBaseJob.SuccessEvent;
@@ -18,25 +19,18 @@ public abstract class TimelineJob<T> extends ShootrBaseJob<SuccessEvent> {
 
     private static final int PRIORITY = 4;
 
-    private ShootrService service;
-    private ShotManager shotManager;
     private FollowManager followManager;
+    private SessionRepository sessionRepository;
 
-    private UserEntity currentUser;
-
-    public TimelineJob(Application context, Bus bus, ShootrService service, NetworkUtil networkUtil, ShotManager shotManager, FollowManager followManager) {
+    public TimelineJob(Application context, Bus bus, NetworkUtil networkUtil, FollowManager followManager,
+      SessionRepository sessionRepository) {
         super(new Params(PRIORITY), context, bus, networkUtil);
-        this.service = service;
-        this.shotManager = shotManager;
         this.followManager = followManager;
-    }
-
-    public void init(UserEntity currentUser) {
-        this.currentUser = currentUser;
+        this.sessionRepository = sessionRepository;
     }
 
     public List<Long> getFollowingIds() throws SQLException {
-        return followManager.getUserFollowingIdsWithOwnUser(currentUser.getIdUser());
+        return followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
     }
 
     @Override protected boolean isNetworkRequired() {

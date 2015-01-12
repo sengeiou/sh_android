@@ -20,14 +20,16 @@ import butterknife.InjectView;
 import butterknife.OnItemClick;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.network.NetworkUtil;
-import com.shootr.android.db.objects.FollowEntity;
+import com.shootr.android.data.entity.FollowEntity;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.util.PicassoWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -56,6 +58,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     @Inject Bus bus;
     @Inject JobManager jobManager;
     @Inject NetworkUtil networkUtil;
+    @Inject SessionRepository sessionRepository;
 
     @InjectView(R.id.userlist_list) ListView userlistListView;
     @InjectView(R.id.userlist_progress) ProgressBar progressBar;
@@ -68,7 +71,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
     UserModel user;
 
     //CurrentUser
-    UserEntity currentUser;
+    User currentUser;
 
     private UserListAdapter userListAdapter;
 
@@ -90,7 +93,7 @@ public class UserFollowsFragment extends BaseFragment implements UserListAdapter
         super.onCreate(savedInstanceState);
         injectArguments();
         setHasOptionsMenu(true);
-        currentUser = ShootrApplication.get(getActivity()).getCurrentUser();
+        currentUser = sessionRepository.getCurrentUser();
     }
 
     public void injectArguments() {

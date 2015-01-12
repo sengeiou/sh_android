@@ -28,7 +28,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.path.android.jobqueue.JobManager;
-import com.shootr.android.data.SessionManager;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
 import com.shootr.android.task.jobs.shots.GetLastShotsJob;
@@ -42,8 +42,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.R;
-import com.shootr.android.db.objects.FollowEntity;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.exception.ShootrError;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
@@ -98,13 +97,12 @@ public class ProfileFragment extends BaseFragment {
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
     @Inject TimeUtils timeUtils;
-    @Inject SessionManager sessionManager;
+    @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
 
     // Args
     Long idUser;
 
-    UserEntity currentUser;
     UserModel user;
     private View.OnClickListener avatarClickListener;
     private View.OnClickListener imageClickListener;
@@ -192,7 +190,7 @@ public class ProfileFragment extends BaseFragment {
     private void setupPhotoBottomSheet() {
         //TODO quitar opción de hacer foto si no hay hasSystemFeature(PackageManager.FEATURE_CAMERA)
         if (isCurrentUser()) {
-            boolean canRemovePhoto = sessionManager.getCurrentUser().getPhoto() != null;
+            boolean canRemovePhoto = sessionRepository.getCurrentUser().getPhoto() != null;
             editPhotoBottomSheet = new BottomSheet.Builder(getActivity()).title(R.string.change_photo).sheet(
               canRemovePhoto ? R.menu.profile_photo_bottom_sheet_remove : R.menu.profile_photo_bottom_sheet) //TODO right now there is no other way to hide an element
               .listener(new DialogInterface.OnClickListener() {
@@ -342,7 +340,6 @@ public class ProfileFragment extends BaseFragment {
 
     private void retrieveUserInfo() {
         Context context = getActivity();
-        currentUser = ShootrApplication.get(context).getCurrentUser();
 
         GetUserInfoJob job = ShootrApplication.get(context).getObjectGraph().get(GetUserInfoJob.class);
         job.init(idUser);
@@ -352,7 +349,7 @@ public class ProfileFragment extends BaseFragment {
         //TODO loading
     }
 
-    public void startFollowUnfollowUserJob(UserEntity currentUser, Context context, int followType) {
+    public void startFollowUnfollowUserJob(Context context, int followType) {
         GetFollowUnFollowUserOfflineJob job2 =
           ShootrApplication.get(context).getObjectGraph().get(GetFollowUnFollowUserOfflineJob.class);
         job2.init(idUser, followType);
@@ -475,7 +472,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void followUser() {
-        startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.FOLLOW_TYPE);
+        startFollowUnfollowUserJob(getActivity(), UserDtoFactory.FOLLOW_TYPE);
     }
 
     public void unfollowUser() {
@@ -483,7 +480,7 @@ public class ProfileFragment extends BaseFragment {
         new AlertDialog.Builder(getActivity()).setMessage("Unfollow " + user.getUsername() + "?")
           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  startFollowUnfollowUserJob(currentUser, getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
+                  startFollowUnfollowUserJob(getActivity(), UserDtoFactory.UNFOLLOW_TYPE);
               }
           })
           .setNegativeButton("No", null)
@@ -585,6 +582,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private boolean isCurrentUser() {
-        return idUser != null && idUser.equals(sessionManager.getCurrentUserId());
+        return idUser != null && idUser.equals(sessionRepository.getCurrentUserId());
     }
 }

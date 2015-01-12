@@ -1,8 +1,8 @@
 package com.shootr.android.ui.model.mappers;
 
 
-import com.shootr.android.db.objects.ShotEntity;
-import com.shootr.android.db.objects.UserEntity;
+import com.shootr.android.data.entity.ShotEntity;
+import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.ShotModel;
 
 public class ShotModelMapper {
