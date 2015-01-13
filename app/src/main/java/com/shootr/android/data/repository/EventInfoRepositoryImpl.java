@@ -58,6 +58,9 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
     private void loadEventInfoOffline(EventInfoCallback callback) {
         WatchEntity watchVisibleByUser = watchManager.getWatchVisibleByUser(sessionRepository.getCurrentUserId());
+        if (watchVisibleByUser == null) {
+            return;
+        }
 
         Long idEvent = watchVisibleByUser.getIdMatch();
         MatchEntity eventEntity = matchManager.getMatchById(idEvent);
@@ -65,7 +68,8 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         List<WatchEntity> watchEntities = watchManager.getWatchesByMatch(eventEntity.getIdMatch());
         List<UserEntity> usersWatching = userManager.getUsersByIds(userIdsFromWatches(watchEntities));
 
-        EventInfo eventInfo = eventInfoFromEntities(watchVisibleByUser, eventEntity, watchEntities, usersWatching);
+        EventInfo eventInfo = mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities,
+          usersWatching);
         callback.onLoaded(eventInfo);
     }
 
@@ -77,8 +81,40 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         List<UserEntity> usersFollowing = shootrService.getFollowing(sessionRepository.getCurrentUserId(), 0L);
         List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByMatch(idEvent, userIds(usersFollowing));
 
-        EventInfo eventInfo = eventInfoFromEntities(watchVisibleByUser, eventEntity, watchEntities, usersFollowing);
+        EventInfo eventInfo = mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities,
+          usersFollowing);
         callback.onLoaded(eventInfo);
+
+        storeUsers(usersFollowing);
+        storeEvent(eventEntity);
+        storeWatches(watchEntities);
+        storeCurrentUserWatch(watchVisibleByUser);
+    }
+
+    private void storeUsers(List<UserEntity> userEntities) {
+        userManager.saveUsers(userEntities);
+    }
+
+    private void storeEvent(MatchEntity eventEntity) {
+        matchManager.saveMatch(eventEntity);
+    }
+
+    private void storeWatches(List<WatchEntity> watchEntities) {
+        watchManager.saveWatches(watchEntities);
+    }
+
+    private void storeCurrentUserWatch(WatchEntity watchEntity) {
+        watchManager.saveWatch(watchEntity);
+    }
+
+    private EventInfo mapEntitiesAndBuildEventInfo(WatchEntity watchVisibleByUser, MatchEntity eventEntity,
+      List<WatchEntity> watchEntities, List<UserEntity> usersWatching) {
+        Event event = eventEntityMapper.transform(eventEntity);
+        Watch currentUserWatch = watchEntityMapper.transform(watchVisibleByUser, sessionRepository.getCurrentUser());
+        List<Watch> watches = combineWatchEntitiesAndUsers(watchEntities, usersWatching);
+        removeCurrentUserFromWatches(watches, sessionRepository.getCurrentUserId());
+
+        return buildEventInfo(event, currentUserWatch, watches);
     }
 
     private List<Long> userIds(List<UserEntity> users) {
@@ -87,16 +123,6 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
             ids.add(user.getIdUser());
         }
         return ids;
-    }
-
-    private EventInfo eventInfoFromEntities(WatchEntity watchVisibleByUser, MatchEntity eventEntity,
-      List<WatchEntity> watchEntities, List<UserEntity> usersWatching) {
-        Event event = eventEntityMapper.transform(eventEntity);
-        Watch currentUserWatch = watchEntityMapper.transform(watchVisibleByUser, sessionRepository.getCurrentUser());
-        List<Watch> watches = combineWatchEntitiesAndUsers(watchEntities, usersWatching);
-        removeCurrentUserFromWatches(watches, sessionRepository.getCurrentUserId());
-
-        return buildEventInfo(event, currentUserWatch, watches);
     }
 
     private void removeCurrentUserFromWatches(List<Watch> watches, long currentUserId) {
