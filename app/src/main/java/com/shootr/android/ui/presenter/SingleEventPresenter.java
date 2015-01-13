@@ -1,11 +1,13 @@
 package com.shootr.android.ui.presenter;
 
+import android.content.Intent;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -25,6 +27,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private SingleEventView singleEventView;
 
+    private UserWatchingModel currentUserWatchingModel;
+    private MatchModel eventModel;
+
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper) {
         this.bus = bus;
@@ -38,7 +43,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.loadEventInfo();
     }
 
-    private void loadEventInfo() {
+    public void edit() {
+        singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
+    }
+
+    public void loadEventInfo() {
         this.showViewLoading();
         this.hideEmptyView();
         this.getEventInfo();
@@ -63,12 +72,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void renderCurrentUserWatching(Watch currentUserWatch) {
-        UserWatchingModel currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
+        currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
     }
 
     private void renderEvent(Event event) {
-        MatchModel eventModel = eventModelMapper.transform(event);
+        eventModel = eventModelMapper.transform(event);
         singleEventView.setEventTitle(eventModel.getTitle());
         singleEventView.setEventDate(eventModel.getDatetime());
     }

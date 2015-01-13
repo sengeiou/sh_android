@@ -1,14 +1,18 @@
 package com.shootr.android.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.SwitchBar;
@@ -18,6 +22,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class EventActivity extends BaseSignedInActivity implements SingleEventView {
+
+    private static final int REQUEST_CODE_EDIT = 1;
 
     @InjectView(R.id.event_watchig_switch) SwitchBar watchingSwitch;
     @InjectView(R.id.event_watchers_number) TextView watchersNumber;
@@ -45,6 +51,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     private void initializeViews() {
         ButterKnife.inject(this);
+        watchersList.setOnEditListener(new WatchersView.OnEditListener() {
+            @Override public void onEdit() {
+                presenter.edit();
+            }
+        });
     }
 
     private void setupActionbar() {
@@ -52,6 +63,18 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.event, menu);
+        return true;
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
+            presenter.loadEventInfo();
+        }
     }
 
     @Override protected void onResume() {
@@ -84,25 +107,25 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         watchersList.setCurrentUserWatching(userWatchingModel);
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.event, menu);
-        return true;
+    @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {
+        Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
+        startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
     @Override public void showEmpty() {
-
+        //TODO
     }
 
     @Override public void hideEmpty() {
-
+        //TODO
     }
 
     @Override public void showLoading() {
-
+        //TODO
     }
 
     @Override public void hideLoading() {
-
+        //TODO
     }
 
     @Override public void showError(String message) {

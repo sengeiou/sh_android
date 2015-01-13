@@ -1,5 +1,6 @@
 package com.shootr.android.ui.views;
 
+import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface SingleEventView extends LoadDataView{
     void setWatchersCount(int watchersCount);
 
     void setCurrentUserWatching(UserWatchingModel userWatchingModel);
+
+    void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel);
 }
