@@ -18,7 +18,7 @@ public class EventModelMapper {
         matchModel.setIdMatch(event.getId());
         matchModel.setTitle(event.getTitle());
         long startDateMilliseconds = event.getStartDate().getTime();
-        matchModel.setDatetime(timeFormatter.getDateAndTimeDetailed(startDateMilliseconds));
+        matchModel.setDatetime(timeFormatter.getDateAndTimeTextRelative(startDateMilliseconds));
         return matchModel;
     }
 
