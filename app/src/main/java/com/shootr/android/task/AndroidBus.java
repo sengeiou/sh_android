@@ -32,7 +32,7 @@ public class AndroidBus extends Bus {
     @Subscribe
     public void deadEvent(DeadEvent deadEvent) {
         if (deadEvent.event instanceof Throwable) {
-            Timber.w(((Throwable) deadEvent.event), "Dead throwable in te bus");
+            Timber.e(((Throwable) deadEvent.event), "Dead throwable in the bus");
         } else {
             Timber.d("Dead event: %s", deadEvent.event);
         }
