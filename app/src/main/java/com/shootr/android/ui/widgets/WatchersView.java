@@ -92,6 +92,10 @@ public class WatchersView extends LinearLayout{
 
     private void bindCurrentUserData(WatcherViewHolder viewHolder, UserWatchingModel currentUserWatching) {
         bindWatcherData(viewHolder, currentUserWatching);
+
+        boolean currenUserItemEnabled = !currentUserWatching.isWatching();
+        setCurrentUserEnabledStatus(viewHolder, currenUserItemEnabled);
+
         viewHolder.editButton.setVisibility(VISIBLE);
         viewHolder.editButton.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
@@ -100,6 +104,18 @@ public class WatchersView extends LinearLayout{
                 }
             }
         });
+    }
+
+    private void setCurrentUserEnabledStatus(WatcherViewHolder viewHolder, boolean currenUserItemEnabled) {
+        if (currenUserItemEnabled) {
+            viewHolder.name.setAlpha(0.5f);
+            viewHolder.watchingText.setAlpha(0.5f);
+            viewHolder.avatar.setAlpha(0.5f);
+        } else {
+            viewHolder.name.setAlpha(1f);
+            viewHolder.watchingText.setAlpha(1f);
+            viewHolder.avatar.setAlpha(1f);
+        }
     }
 
     private void bindWatcherData(WatcherViewHolder viewHolder, UserWatchingModel userWatching) {
