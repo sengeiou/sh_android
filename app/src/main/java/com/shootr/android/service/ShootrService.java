@@ -7,6 +7,7 @@ import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.domain.Watch;
 import java.io.IOException;
 import java.util.List;
 
@@ -48,6 +49,10 @@ public interface ShootrService {
     public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException;
 
     public List<WatchEntity> getWatchesFromUsers(List<Long> followingIds, Long idCurrentUser) throws IOException;
+
+    public List<WatchEntity> getWatchesFromUsersByMatch(Long idMatch, List<Long> userIds) throws IOException;
+
+    public WatchEntity getVisibleWatch(Long currentUserId) throws IOException;
 
     public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException;
 

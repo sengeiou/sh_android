@@ -14,9 +14,11 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -47,6 +49,11 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
     @Override public void loadVisibleEventInfo(EventInfoCallback callback) {
         loadEventInfoOffline(callback);
+        try {
+            loadEventInfoOnline(callback);
+        } catch (IOException e) {
+            throw new RepositoryException(e); //TODO change for CommunicationError
+        }
     }
 
     private void loadEventInfoOffline(EventInfoCallback callback) {
@@ -60,6 +67,26 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
         EventInfo eventInfo = eventInfoFromEntities(watchVisibleByUser, eventEntity, watchEntities, usersWatching);
         callback.onLoaded(eventInfo);
+    }
+
+    private void loadEventInfoOnline(EventInfoCallback callback) throws IOException {
+        WatchEntity watchVisibleByUser = shootrService.getVisibleWatch(sessionRepository.getCurrentUserId());
+
+        Long idEvent = watchVisibleByUser.getIdMatch();
+        MatchEntity eventEntity = shootrService.getMatchByIdMatch(idEvent);
+        List<UserEntity> usersFollowing = shootrService.getFollowing(sessionRepository.getCurrentUserId(), 0L);
+        List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByMatch(idEvent, userIds(usersFollowing));
+
+        EventInfo eventInfo = eventInfoFromEntities(watchVisibleByUser, eventEntity, watchEntities, usersFollowing);
+        callback.onLoaded(eventInfo);
+    }
+
+    private List<Long> userIds(List<UserEntity> users) {
+        List<Long> ids = new ArrayList<>(users.size());
+        for (UserEntity user : users) {
+            ids.add(user.getIdUser());
+        }
+        return ids;
     }
 
     private EventInfo eventInfoFromEntities(WatchEntity watchVisibleByUser, MatchEntity eventEntity,
