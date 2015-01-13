@@ -23,6 +23,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @InjectView(R.id.event_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_watchers_list) WatchersView watchersList;
     @InjectView(R.id.event_title) TextView titleText;
+    @InjectView(R.id.event_date) TextView dateText;
 
     @Inject SingleEventPresenter presenter;
 
@@ -40,45 +41,6 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     private void initializePresenter() {
         presenter.initialize(this);
-    }
-
-    private void mockData() {
-        setEventTitle("Atlético-Barcelona 18:30");
-        setWatchers(mockWatchers());
-        setCurrentUserWatching(mockCurrentUser());
-        setWatchersCount(3);
-    }
-
-    private UserWatchingModel mockCurrentUser() {
-        UserWatchingModel watch1 = new UserWatchingModel();
-        watch1.setUserName("Rafa");
-        watch1.setPhoto("https://pbs.twimg.com/profile_images/2576254530/xrq3ziszvvt90xf54579_bigger.png");
-        watch1.setPlace("Texto libre weee");
-        return watch1;
-    }
-
-    private List<UserWatchingModel> mockWatchers() {
-        List<UserWatchingModel> userWatchingMocks = new ArrayList<>();
-        UserWatchingModel watch1 = new UserWatchingModel();
-        watch1.setUserName("Ignasi");
-        watch1.setPhoto("https://pbs.twimg.com/profile_images/462743664511307776/1GYsZlsU_bigger.jpeg");
-        watch1.setPlace("Watching");
-
-        UserWatchingModel watch2 = new UserWatchingModel();
-        watch2.setUserName("Inma");
-        watch2.setPhoto("https://pbs.twimg.com/profile_images/469241262563139584/0IWhWGMq_bigger.jpeg");
-        watch2.setPlace("Watching");
-
-        UserWatchingModel watch3 = new UserWatchingModel();
-        watch3.setUserName("Teo");
-        watch3.setPhoto("https://pbs.twimg.com/profile_images/474528174508740608/KANamxCB_bigger.jpeg");
-        watch3.setPlace("Watching");
-
-        userWatchingMocks.add(watch1);
-        userWatchingMocks.add(watch2);
-        userWatchingMocks.add(watch3);
-
-        return userWatchingMocks;
     }
 
     private void initializeViews() {
@@ -107,7 +69,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setEventDate(String date) {
-
+        dateText.setText(date);
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {
@@ -144,6 +106,6 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void showError(String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
