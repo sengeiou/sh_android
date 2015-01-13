@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -12,12 +14,10 @@ import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
-import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.WatchersView;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -32,6 +32,9 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @InjectView(R.id.event_date) TextView dateText;
 
     @Inject SingleEventPresenter presenter;
+
+    private MenuItem notificationMenuItem;
+    private int notificationIcon;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,10 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
+        notificationMenuItem = menu.findItem(R.id.menu_notifications);
+        if (notificationIcon != 0) {
+            notificationMenuItem.setIcon(notificationIcon);
+        }
         return true;
     }
 
@@ -105,6 +112,17 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
+    }
+
+    @Override public void setIsWatching(boolean watching) {
+        watchingSwitch.setChecked(watching);
+    }
+
+    @Override public void setNotificationsEnabled(boolean enabled) {
+        notificationIcon = enabled ? R.drawable.ic_action_notifications_on : R.drawable.ic_action_notifications_none;
+        if (notificationMenuItem != null) {
+            notificationMenuItem.setIcon(notificationIcon);
+        }
     }
 
     @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {

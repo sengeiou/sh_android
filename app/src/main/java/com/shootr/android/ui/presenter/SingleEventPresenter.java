@@ -74,6 +74,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private void renderCurrentUserWatching(Watch currentUserWatch) {
         currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
+        singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
+        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO notifications attribute
     }
 
     private void renderEvent(Event event) {
