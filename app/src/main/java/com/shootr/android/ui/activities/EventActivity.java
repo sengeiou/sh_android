@@ -9,17 +9,22 @@ import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.presenter.SingleEventPresenter;
+import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.WatchersView;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
-public class EventActivity extends BaseSignedInActivity {
+public class EventActivity extends BaseSignedInActivity implements SingleEventView {
 
     @InjectView(R.id.event_watchig_switch) SwitchBar watchingSwitch;
     @InjectView(R.id.event_watchers_number) TextView watchersNumber;
     @InjectView(R.id.event_watchers_list) WatchersView watchersList;
     @InjectView(R.id.event_title) TextView titleText;
+
+    @Inject SingleEventPresenter presenter;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +35,11 @@ public class EventActivity extends BaseSignedInActivity {
         setupActionbar();
         initializeViews();
 
-        mockData();
+        initializePresenter();
+    }
+
+    private void initializePresenter() {
+        presenter.initialize(this);
     }
 
     private void mockData() {
@@ -83,24 +92,58 @@ public class EventActivity extends BaseSignedInActivity {
         actionBar.setDisplayShowTitleEnabled(false);
     }
 
-    public void setEventTitle(String title) {
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
+
+    @Override public void setEventTitle(String title) {
         titleText.setText(title);
     }
 
-    public void setWatchers(List<UserWatchingModel> watchers) {
+    @Override public void setEventDate(String date) {
+
+    }
+
+    @Override public void setWatchers(List<UserWatchingModel> watchers) {
         watchersList.setWatchers(watchers);
     }
 
-    public void setWatchersCount(int watchersCount) {
+    @Override public void setWatchersCount(int watchersCount) {
         watchersNumber.setText(getString(R.string.event_watching_watchers_number, watchersCount));
     }
 
-    private void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
+    @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
         return true;
+    }
+
+    @Override public void showEmpty() {
+
+    }
+
+    @Override public void hideEmpty() {
+
+    }
+
+    @Override public void showLoading() {
+
+    }
+
+    @Override public void hideLoading() {
+
+    }
+
+    @Override public void showError(String message) {
+
     }
 }

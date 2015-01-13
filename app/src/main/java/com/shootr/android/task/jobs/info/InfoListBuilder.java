@@ -9,8 +9,8 @@ import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
-import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -25,7 +25,7 @@ public class InfoListBuilder {
     private TreeMultimap<MatchModel, UserWatchingModel> map;
 
     private MatchModelMapper matchModelMapper;
-    private UserWatchingModelMapper userWatchingModelMapper;
+    private UserEntityWatchingModelMapper userWatchingModelMapper;
 
     private LongSparseArray<MatchModel> matchModelCache = new LongSparseArray<>();
 
@@ -60,7 +60,7 @@ public class InfoListBuilder {
     };
 
     protected InfoListBuilder(User currentUser, MatchModelMapper matchModelMapper,
-      UserWatchingModelMapper userWatchingModelMapper, UserEntityMapper userEntityMapper) {
+      UserEntityWatchingModelMapper userWatchingModelMapper, UserEntityMapper userEntityMapper) {
         this.matchModelMapper = matchModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.currentUserEntity = userEntityMapper.transform(currentUser);
