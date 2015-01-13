@@ -15,6 +15,7 @@ public class WatchEntityMapper {
         Watch watch = new Watch();
         watch.setUser(user);
         watch.setIdEvent(watchEntity.getIdMatch());
+        watch.setUserStatus(watchEntity.getPlace());
         watch.setWatching(WatchEntity.STATUS_WATCHING.equals(watchEntity.getStatus()));
         return watch;
     }

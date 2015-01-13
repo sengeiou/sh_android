@@ -1,6 +1,7 @@
 package com.shootr.android;
 
 import android.app.Application;
+import android.content.res.Resources;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.data.DataModule;
@@ -27,5 +28,9 @@ public final class ShootrModule {
 
     @Provides @Singleton Application provideApplication() {
         return app;
+    }
+
+    @Provides Resources provideResources(Application application) {
+        return application.getResources();
     }
 }
