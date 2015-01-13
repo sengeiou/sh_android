@@ -2,19 +2,10 @@ package com.shootr.android.domain;
 
 public class Watch {
 
-    private Long id;
     private User user;
     private Long idEvent;
     private String userStatus;
     private boolean watching;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public User getUser() {
         return user;
