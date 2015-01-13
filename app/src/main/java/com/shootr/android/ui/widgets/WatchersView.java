@@ -3,6 +3,7 @@ package com.shootr.android.ui.widgets;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class WatchersView extends LinearLayout{
@@ -27,6 +29,7 @@ public class WatchersView extends LinearLayout{
     private LayoutInflater layoutInflater;
     private OnEditListener onEditListener;
     private WatcherViewHolder currentUserViewHolder;
+    private Map<UserWatchingModel, WatcherViewHolder> watchersHoldersMap;
 
     public WatchersView(Context context) {
         super(context);
@@ -54,6 +57,7 @@ public class WatchersView extends LinearLayout{
         }
         setOrientation(VERTICAL);
         layoutInflater = LayoutInflater.from(context);
+        watchersHoldersMap = new ArrayMap<>();
 
         if (isInEditMode()) {
             addMockData();
@@ -70,13 +74,19 @@ public class WatchersView extends LinearLayout{
 
     public void setWatchers(List<UserWatchingModel> watchers) {
         for (UserWatchingModel watcher : watchers) {
-            addWatcher(watcher);
+            putWatcher(watcher);
         }
     }
 
-    private void addWatcher(UserWatchingModel userWatching) {
-        WatcherViewHolder viewHolder = createViewHolder();
-        this.addView(viewHolder.itemView);
+    private void putWatcher(UserWatchingModel userWatching) {
+        WatcherViewHolder viewHolder;
+        if (watchersHoldersMap.containsKey(userWatching)) {
+            viewHolder = watchersHoldersMap.get(userWatching);
+        } else {
+            viewHolder = createViewHolder();
+            watchersHoldersMap.put(userWatching, viewHolder);
+            this.addView(viewHolder.itemView);
+        }
         bindWatcherData(viewHolder, userWatching);
     }
 
