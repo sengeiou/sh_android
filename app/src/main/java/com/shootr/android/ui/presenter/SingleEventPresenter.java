@@ -1,18 +1,17 @@
 package com.shootr.android.ui.presenter;
 
-import android.content.Intent;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.ui.activities.EditInfoActivity;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 import com.shootr.android.ui.views.SingleEventView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
@@ -24,6 +23,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final EventModelMapper eventModelMapper;
     private final UserWatchingModelMapper userWatchingModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private SingleEventView singleEventView;
 
@@ -31,11 +31,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private MatchModel eventModel;
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper) {
+      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
 
     public void initialize(SingleEventView singleEventView) {
@@ -49,7 +51,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void loadEventInfo() {
         this.showViewLoading();
-        this.hideEmptyView();
+        this.hideViewEmpty();
         this.getEventInfo();
     }
 
@@ -60,10 +62,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     @Subscribe
     public void onEventInfoLoaded(EventInfo eventInfo) {
         this.hideViewLoading();
-        this.renderEvent(eventInfo.getEvent());
-        this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
-        this.renderWatchersList(eventInfo.getWatchers());
-        this.renderWatchersCount(eventInfo.getWatchersCount());
+        this.showViewEmpty();
+        //this.renderEvent(eventInfo.getEvent());
+        //this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
+        //this.renderWatchersList(eventInfo.getWatchers());
+        //this.renderWatchersCount(eventInfo.getWatchersCount());
     }
 
     private void renderWatchersList(List<Watch> watchers) {
@@ -89,22 +92,30 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void showViewLoading() {
-
+        singleEventView.showLoading();
     }
 
     private void hideViewLoading() {
-
+        singleEventView.hideLoading();
     }
 
-    private void hideEmptyView() {
+    private void showViewEmpty() {
+        singleEventView.setEventTitle("Select Event");
+        singleEventView.showEmpty();
+    }
+
+    private void hideViewEmpty() {
+        singleEventView.hideEmpty();
     }
 
     @Override public void onCommunicationError(CommunicationErrorEvent event) {
-
+        String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
+        singleEventView.showError(communicationErrorMessage);
     }
 
     @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
-
+        String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
+        singleEventView.showError(connectionNotAvailableMessage);
     }
 
     @Override public void resume() {

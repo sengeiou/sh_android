@@ -30,6 +30,9 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @InjectView(R.id.event_watchers_list) WatchersView watchersList;
     @InjectView(R.id.event_title) TextView titleText;
     @InjectView(R.id.event_date) TextView dateText;
+    @InjectView(R.id.event_empty) View emptyView;
+    @InjectView(R.id.event_content) View contentView;
+    @InjectView(R.id.event_title_container) View titleContainer;
 
     @Inject SingleEventPresenter presenter;
 
@@ -68,11 +71,16 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         actionBar.setDisplayShowTitleEnabled(false);
     }
 
+    private void updateNotificationIcon() {
+        notificationMenuItem.setIcon(notificationIcon);
+        notificationMenuItem.setVisible(true);
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
         notificationMenuItem = menu.findItem(R.id.menu_notifications);
         if (notificationIcon != 0) {
-            notificationMenuItem.setIcon(notificationIcon);
+            updateNotificationIcon();
         }
         return true;
     }
@@ -121,7 +129,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @Override public void setNotificationsEnabled(boolean enabled) {
         notificationIcon = enabled ? R.drawable.ic_action_notifications_on : R.drawable.ic_action_notifications_none;
         if (notificationMenuItem != null) {
-            notificationMenuItem.setIcon(notificationIcon);
+            updateNotificationIcon();
         }
     }
 
@@ -131,7 +139,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void showEmpty() {
-        //TODO
+        setTitle("Select event");
+        dateText.setVisibility(View.GONE);
+
+        emptyView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.GONE);
     }
 
     @Override public void hideEmpty() {
@@ -143,7 +155,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void hideLoading() {
-        //TODO
+        titleContainer.setVisibility(View.VISIBLE);
     }
 
     @Override public void showError(String message) {
