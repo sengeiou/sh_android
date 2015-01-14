@@ -100,6 +100,7 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_MATCH = "CREATE TABLE IF NOT EXISTS "+ MatchTable.TABLE+" ("
             + MatchTable.ID_MATCH+" INT NOT NULL PRIMARY KEY,"
             + MatchTable.MATCH_DATE+ " DATETIME NOT NULL,"
+            + MatchTable.MATCH_FINISH_DATE+ " DATETIME NOT NULL,"
             + MatchTable.ID_LOCAL_TEAM+" INT NULL,"
             + MatchTable.ID_VISITOR_TEAM+" INT NULL,"
             + MatchTable.LOCAL_TEAM_NAME+" VARCHAR(255) NOT NULL,"

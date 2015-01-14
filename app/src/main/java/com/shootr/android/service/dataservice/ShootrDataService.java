@@ -335,7 +335,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getLastMatchWhereMyFavoriteTeamPlays(idFavoriteTeam);
+        GenericDto requestDto = matchDtoFactory.getNextMatchWhereMyFavoriteTeamPlays(idFavoriteTeam);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){

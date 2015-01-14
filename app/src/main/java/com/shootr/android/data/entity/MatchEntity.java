@@ -6,6 +6,7 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
 
     private Long idMatch;
     private Date matchDate;
+    private Date matchFinishDate;
     private Long idLocalTeam;
     private Long idVisitorTeam;
     private String localTeamName;
@@ -92,5 +93,13 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
         } else {
             return dateComparison;
         }
+    }
+
+    public Date getMatchFinishDate() {
+        return matchFinishDate;
+    }
+
+    public void setMatchFinishDate(Date matchFinishDate) {
+        this.matchFinishDate = matchFinishDate;
     }
 }

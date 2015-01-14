@@ -1,5 +1,6 @@
 package com.shootr.android.service.dataservice;
 
+import com.shootr.android.util.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.FollowMapper;
@@ -39,7 +40,8 @@ public class DataServiceModule {
     @Provides @Singleton ShotDtoFactory provideShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
         return new ShotDtoFactory(utilityDtoFactory, shotMapper);
     }
-    @Provides @Singleton MatchDtoFactory provideMatchDtoFactory(UtilityDtoFactory utilityDtoFactory, MatchMapper matchMapper, WatchMapper watchMapper, TeamMapper teamMapper){
-        return  new MatchDtoFactory(utilityDtoFactory,matchMapper, watchMapper, teamMapper);
+    @Provides @Singleton MatchDtoFactory provideMatchDtoFactory(UtilityDtoFactory utilityDtoFactory, MatchMapper matchMapper, WatchMapper watchMapper, TeamMapper teamMapper,
+      TimeUtils timeUtils){
+        return  new MatchDtoFactory(utilityDtoFactory,matchMapper, watchMapper, teamMapper, timeUtils);
     }
 }

@@ -152,7 +152,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     }
 
     public List<WatchEntity> getWatchesFromDatabase() throws SQLException {
-        return watchManager.getWatchesNotEndedOrAdjurnedFromUsers(getIdsFromMyFollowingAndMe());
+        return watchManager.getWatchesNotEndedFromUsers(getIdsFromMyFollowingAndMe());
     }
 
     private void replaceWatchesInDatabase(List<WatchEntity> newWatchesFromServer) {

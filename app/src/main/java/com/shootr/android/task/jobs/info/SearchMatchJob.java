@@ -57,7 +57,7 @@ public class SearchMatchJob extends ShootrBaseJob<SearchMatchResultEvent> {
         List<Long> followingsAndMeIds =
           followManager.getUserFollowingIdsWithOwnUser(sessionRepository.getCurrentUserId());
         List<WatchEntity> watchesFromMyFollowing =
-          watchManager.getWatchesNotEndedOrAdjurnedFromUsers(followingsAndMeIds);
+          watchManager.getWatchesNotEndedFromUsers(followingsAndMeIds);
 
         //Builder crappy stuff
         InfoListBuilder infoListBuilder = new InfoListBuilder(sessionRepository.getCurrentUser(), null, null,

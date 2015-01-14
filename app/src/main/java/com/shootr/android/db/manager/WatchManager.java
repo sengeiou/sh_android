@@ -9,6 +9,7 @@ import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,18 +17,20 @@ import javax.inject.Inject;
 public class WatchManager extends AbstractManager{
 
 
-    @Inject WatchMapper watchMapper;
+    private final WatchMapper watchMapper;
+    private final TimeUtils timeUtils;
 
     @Inject
-    public WatchManager(SQLiteOpenHelper openHelper, WatchMapper watchMapper) {
+    public WatchManager(SQLiteOpenHelper openHelper, WatchMapper watchMapper, TimeUtils timeUtils) {
         super(openHelper);
         this.watchMapper = watchMapper;
+        this.timeUtils = timeUtils;
     }
 
-    public List<WatchEntity> getWatchesNotEndedOrAdjurnedFromUsers(List<Long> userIds) {
+    public List<WatchEntity> getWatchesNotEndedFromUsers(List<Long> userIds) {
         String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
           + "w."+WatchTable.ID_MATCH+" = m."+MatchTable.ID_MATCH
-          + " WHERE m."+MatchTable.STATUS+" IN (0,1)"
+          + " WHERE m."+MatchTable.MATCH_FINISH_DATE + ">" + timeUtils.getCurrentTime()
           + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+");";
 
         String[] whereArguments = new String[userIds.size()];

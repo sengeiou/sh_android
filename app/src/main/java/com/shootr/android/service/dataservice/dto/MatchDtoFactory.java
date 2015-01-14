@@ -11,6 +11,7 @@ import com.shootr.android.service.dataservice.generic.FilterDto;
 import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
+import com.shootr.android.util.TimeUtils;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,30 +30,30 @@ public class MatchDtoFactory {
     private static final String ALIAS_GET_WATCH_BY_KEYS = "GET_WATCH_BY_KEYS";
     private static final String ALIAS_GET_MATCH_BY_ID_MATCH = "GET_MATCH_BY_ID_MATCH";
     private static final String ALIAS_SEARCH_MATCH = "SEARCH_MATCH";
-    public static final int STATUS_NOT_STARTED = 0;
-    public static final int STATUS_STARTED = 1;
     private static final int SEARCH_RESULTS_MAX = 150;
 
     private UtilityDtoFactory utilityDtoFactory;
     private MatchMapper matchMapper;
     private WatchMapper watchMapper;
     private TeamMapper teamMapper;
+    private TimeUtils timeUtils;
 
-    @Inject public MatchDtoFactory(UtilityDtoFactory utilityDtoFactory, MatchMapper matchMapper, WatchMapper watchMapper, TeamMapper teamMapper){
+    @Inject public MatchDtoFactory(UtilityDtoFactory utilityDtoFactory, MatchMapper matchMapper, WatchMapper watchMapper, TeamMapper teamMapper,
+      TimeUtils timeUtils){
         this.utilityDtoFactory = utilityDtoFactory;
         this.matchMapper = matchMapper;
         this.teamMapper = teamMapper;
         this.watchMapper = watchMapper;
+        this.timeUtils = timeUtils;
     }
 
-    public GenericDto getLastMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam){
+    public GenericDto getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam){
         FilterDto matchFilter = and(orIsNotDeleted(),
           or(DatabaseContract.MatchTable.ID_LOCAL_TEAM).isEqualTo(idFavoriteTeam).
             or(DatabaseContract.MatchTable.ID_VISITOR_TEAM).isEqualTo(idFavoriteTeam),
           or(DatabaseContract.MatchTable.MATCH_DATE).isNotEqualTo(null),
-          or(DatabaseContract.MatchTable.STATUS).isEqualTo(0)
-            .or(DatabaseContract.MatchTable.STATUS)
-            .isEqualTo(1)).build();
+          or(DatabaseContract.MatchTable.MATCH_FINISH_DATE).greaterThan(timeUtils.getCurrentDate()))
+           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(DatabaseContract.MatchTable.TABLE).includeDeleted(
           true).items(1).filter(matchFilter).build();
@@ -120,7 +121,7 @@ public class MatchDtoFactory {
         FilterDto matchesWatchFollowingFilter = and(
           orIsNotDeleted(),
           or(DatabaseContract.MatchTable.ID_MATCH).isIn(matchIds),
-          or(DatabaseContract.MatchTable.STATUS).isEqualTo(STATUS_NOT_STARTED).or(DatabaseContract.MatchTable.STATUS).isEqualTo(STATUS_STARTED),
+          or(DatabaseContract.MatchTable.MATCH_FINISH_DATE).greaterThan(timeUtils.getCurrentDate()),
           or(DatabaseContract.MatchTable.MATCH_DATE).isNotEqualTo(null))
           .build();
 
