@@ -41,7 +41,9 @@ public class BitmapImageResizer implements ImageResizer {
 
         Timber.d("Cropping image...");
         Bitmap squareImage = cropSquareImage(orientedImage);
-        orientedImage.recycle();
+        if (squareImage != orientedImage) {
+            orientedImage.recycle();
+        }
         orientedImage = null;
 
         Timber.d("Scaling image to %d px...", MAX_SIZE);
