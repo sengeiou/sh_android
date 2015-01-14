@@ -117,6 +117,7 @@ public class SQLiteUtils {
             + WatchTable.STATUS+" INT NOT NULL,"
             + WatchTable.PLACE+" TEXT NULL,"
             + WatchTable.VISIBLE+" INT NOT NULL,"
+            + WatchTable.NOTIFICATION+" INT NOT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"

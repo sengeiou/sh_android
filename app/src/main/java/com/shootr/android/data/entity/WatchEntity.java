@@ -14,6 +14,7 @@ public class WatchEntity extends Synchronized{
     private Long status;
     private String place;
     private Boolean visible;
+    private Integer notification;
 
     public Long getIdMatch() {
         return idMatch;
@@ -78,5 +79,13 @@ public class WatchEntity extends Synchronized{
         int result = idMatch.hashCode();
         result = 31 * result + idUser.hashCode();
         return result;
+    }
+
+    public Integer getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Integer notification) {
+        this.notification = notification;
     }
 }

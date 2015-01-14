@@ -239,6 +239,7 @@ public class DatabaseContract {
         public static final String STATUS = "status";
         public static final String PLACE = "place";
         public static final String VISIBLE = "visible";
+        public static final String NOTIFICATION = "notification";
 
         public static final String[] PROJECTION = {
           ID_USER,
@@ -246,6 +247,7 @@ public class DatabaseContract {
           STATUS,
           PLACE,
           VISIBLE,
+          NOTIFICATION,
           CSYS_BIRTH,
           CSYS_MODIFIED,
           CSYS_DELETED,
