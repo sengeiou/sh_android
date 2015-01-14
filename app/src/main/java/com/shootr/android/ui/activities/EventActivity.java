@@ -1,11 +1,13 @@
 package com.shootr.android.ui.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
@@ -33,6 +35,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @InjectView(R.id.event_empty) View emptyView;
     @InjectView(R.id.event_content) View contentView;
     @InjectView(R.id.event_title_container) View titleContainer;
+    @InjectView(R.id.event_loading) View loadingView;
 
     @Inject SingleEventPresenter presenter;
 
@@ -107,7 +110,12 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setEventDate(String date) {
-        dateText.setText(date);
+        if (date != null && !date.isEmpty()) {
+            dateText.setText(date);
+            dateText.setVisibility(View.VISIBLE);
+        } else {
+            dateText.setVisibility(View.GONE);
+        }
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {
@@ -138,23 +146,49 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
-    @Override public void showEmpty() {
-        setTitle("Select event");
-        dateText.setVisibility(View.GONE);
+    @Override public void showContent() {
+        if (contentView.getVisibility() != View.VISIBLE) {
+            contentView.setVisibility(View.VISIBLE);
+            ObjectAnimator.ofFloat(contentView, "alpha", 0f, 1f).start();
+        }
+    }
 
+    @Override public void showEmpty() {
         emptyView.setVisibility(View.VISIBLE);
         contentView.setVisibility(View.GONE);
     }
 
     @Override public void hideEmpty() {
-        //TODO
+        emptyView.setVisibility(View.GONE);
     }
 
     @Override public void showLoading() {
-        //TODO
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override public void hideLoading() {
+        loadingView.setVisibility(View.GONE);
+        if (titleContainer.getVisibility() != View.VISIBLE) {
+            showTitleAnimated();
+        }
+    }
+
+    private void showTitleAnimated() {
+        titleContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override public boolean onPreDraw() {
+                titleContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                int height = titleContainer.getHeight();
+                titleContainer.setTranslationY(-height);
+
+                ObjectAnimator.ofFloat(titleContainer, "translationY", -height, 0f).setDuration(200).start();
+                //titleContainer.animate().translationY(0f).setDuration(200);
+                titleText.setAlpha(0f);
+                titleText.animate().alpha(1f).setStartDelay(100);
+                dateText.setAlpha(0f);
+                dateText.animate().alpha(1f).setStartDelay(100);
+                return true;
+            }
+        });
         titleContainer.setVisibility(View.VISIBLE);
     }
 

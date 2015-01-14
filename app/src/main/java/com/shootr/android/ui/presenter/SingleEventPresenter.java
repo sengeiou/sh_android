@@ -51,7 +51,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void loadEventInfo() {
         this.showViewLoading();
-        this.hideViewEmpty();
         this.getEventInfo();
     }
 
@@ -61,12 +60,17 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe
     public void onEventInfoLoaded(EventInfo eventInfo) {
+        if (eventInfo.getEvent() == null) {
+            this.showViewEmpty();
+        } else {
+            this.hideViewEmpty();
+            this.renderEvent(eventInfo.getEvent());
+            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
+            this.renderWatchersList(eventInfo.getWatchers());
+            this.renderWatchersCount(eventInfo.getWatchersCount());
+            this.showViewContent();
+        }
         this.hideViewLoading();
-        this.showViewEmpty();
-        //this.renderEvent(eventInfo.getEvent());
-        //this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
-        //this.renderWatchersList(eventInfo.getWatchers());
-        //this.renderWatchersCount(eventInfo.getWatchersCount());
     }
 
     private void renderWatchersList(List<Watch> watchers) {
@@ -91,6 +95,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.setWatchersCount(watchersCount);
     }
 
+    private void showViewContent() {
+        singleEventView.showContent();
+    }
+
     private void showViewLoading() {
         singleEventView.showLoading();
     }
@@ -100,7 +108,6 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     private void showViewEmpty() {
-        singleEventView.setEventTitle("Select Event");
         singleEventView.showEmpty();
     }
 

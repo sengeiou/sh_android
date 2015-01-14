@@ -21,4 +21,6 @@ public interface SingleEventView extends LoadDataView{
     void setNotificationsEnabled(boolean enabled);
 
     void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel);
+
+    void showContent();
 }

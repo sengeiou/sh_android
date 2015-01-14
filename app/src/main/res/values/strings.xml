@@ -161,5 +161,6 @@
     <string name="event_watching_watchers_number">%d Watchers</string>
     <string name="menu_notifications">Notifications</string>
     <string name="single_event_empty">Load an event to see who\'s Watching</string>
+    <string name="event_title_default">Select Event</string>
 
 </resources>
