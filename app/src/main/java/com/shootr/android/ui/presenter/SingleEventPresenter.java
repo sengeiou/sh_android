@@ -123,11 +123,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.hideEmpty();
     }
 
+    @Subscribe
     @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         singleEventView.showError(communicationErrorMessage);
     }
 
+    @Subscribe
     @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         singleEventView.showError(connectionNotAvailableMessage);

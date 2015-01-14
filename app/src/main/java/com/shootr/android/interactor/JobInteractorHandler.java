@@ -30,7 +30,11 @@ public class JobInteractorHandler implements InteractorHandler, JobWrapper.Error
         bus.post(objectToUi);
     }
 
-    @Override public void onError(Throwable throwable) {
+    @Override public void sendError(Throwable throwable) {
         bus.post(throwable);
+    }
+
+    @Override public void onError(Throwable throwable) {
+        sendError(throwable);
     }
 }

@@ -23,7 +23,10 @@ public class VisibleEventInfoInteractor implements Interactor {
             @Override public void onLoaded(EventInfo eventInfo) {
                 interactorHandler.sendUiMessage(eventInfo);
             }
+
+            @Override public void onError(Throwable error) {
+                interactorHandler.sendError(error);
+            }
         });
     }
-
 }

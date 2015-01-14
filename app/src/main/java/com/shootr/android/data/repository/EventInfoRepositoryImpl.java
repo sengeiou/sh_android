@@ -18,6 +18,8 @@ import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.service.ShootrService;
+import com.shootr.android.task.NetworkConnection;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,12 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
     private final EventEntityMapper eventEntityMapper;
     private final WatchEntityMapper watchEntityMapper;
     private final UserEntityMapper userEntityMapper;
+    private final NetworkConnection networkConnection;
 
     @Inject public EventInfoRepositoryImpl(SessionRepository sessionRepository, WatchManager watchManager,
       MatchManager matchManager, UserManager userManager, ShootrService shootrService,
-      EventEntityMapper eventEntityMapper, WatchEntityMapper watchEntityMapper, UserEntityMapper userEntityMapper) {
+      EventEntityMapper eventEntityMapper, WatchEntityMapper watchEntityMapper, UserEntityMapper userEntityMapper,
+      NetworkConnection networkConnection) {
         this.sessionRepository = sessionRepository;
         this.watchManager = watchManager;
         this.matchManager = matchManager;
@@ -45,14 +49,23 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         this.eventEntityMapper = eventEntityMapper;
         this.watchEntityMapper = watchEntityMapper;
         this.userEntityMapper = userEntityMapper;
+        this.networkConnection = networkConnection;
     }
 
     @Override public void loadVisibleEventInfo(EventInfoCallback callback) {
         loadEventInfoOffline(callback);
-        try {
-            loadEventInfoOnline(callback);
-        } catch (IOException e) {
-            throw new RepositoryException(e); //TODO change for CommunicationError
+        loadEventInfoOnlineIfAvailable(callback);
+    }
+
+    private void loadEventInfoOnlineIfAvailable(EventInfoCallback callback) {
+        if (networkConnection.isConnected()) {
+            try {
+                loadEventInfoOnline(callback);
+            } catch (IOException e) {
+                callback.onError(new RepositoryException(e)); //TODO change for CommunicationError
+            }
+        } else {
+            callback.onError(new ConnectionNotAvailableEvent());
         }
     }
 
@@ -71,8 +84,8 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         List<WatchEntity> watchEntities = watchManager.getWatchesByMatch(eventEntity.getIdMatch());
         List<UserEntity> usersWatching = userManager.getUsersByIds(userIdsFromWatches(watchEntities));
 
-        EventInfo eventInfo = mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities,
-          usersWatching);
+        EventInfo eventInfo =
+          mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities, usersWatching);
         callback.onLoaded(eventInfo);
     }
 
@@ -84,8 +97,8 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         List<UserEntity> usersFollowing = shootrService.getFollowing(sessionRepository.getCurrentUserId(), 0L);
         List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByMatch(idEvent, userIds(usersFollowing));
 
-        EventInfo eventInfo = mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities,
-          usersFollowing);
+        EventInfo eventInfo =
+          mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities, usersFollowing);
         callback.onLoaded(eventInfo);
 
         storeUsers(usersFollowing);

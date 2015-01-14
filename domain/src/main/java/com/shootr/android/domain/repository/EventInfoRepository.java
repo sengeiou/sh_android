@@ -4,7 +4,7 @@ import com.shootr.android.domain.EventInfo;
 
 public interface EventInfoRepository {
 
-    interface EventInfoCallback {
+    interface EventInfoCallback extends ErrorCallback{
 
         void onLoaded(EventInfo eventInfo);
 
