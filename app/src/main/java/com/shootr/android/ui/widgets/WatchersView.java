@@ -134,6 +134,7 @@ public class WatchersView extends LinearLayout{
     private void addMockData() {
         List<UserWatchingModel> userWatchingMocks = new ArrayList<>();
         UserWatchingModel watch1 = new UserWatchingModel();
+        watch1.setIdUser(1L);
         watch1.setUserName("Username");
         watch1.setPlace("Watching");
 
