@@ -84,7 +84,7 @@ import static butterknife.ButterKnife.findById;
  */
 @Singleton
 public class DebugAppContainer implements AppContainer {
-    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("HH:mm dd-MM-yyyy");
 
 
     private final OkHttpClient client;
