@@ -91,9 +91,17 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
     private void loadEventInfoOnline(EventInfoCallback callback) throws IOException {
         WatchEntity watchVisibleByUser = shootrService.getVisibleWatch(sessionRepository.getCurrentUserId());
+        if (watchVisibleByUser == null) {
+            callback.onLoaded(noEventVisible());
+            return;
+        }
 
         Long idEvent = watchVisibleByUser.getIdMatch();
         MatchEntity eventEntity = shootrService.getMatchByIdMatch(idEvent);
+        if (eventEntity == null) {
+            callback.onLoaded(noEventVisible());
+            return;
+        }
         List<UserEntity> usersFollowing = shootrService.getFollowing(sessionRepository.getCurrentUserId(), 0L);
         List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByMatch(idEvent, userIds(usersFollowing));
 
@@ -184,5 +192,9 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
           .currentUserWatch(visibleEventWatch)
           .watchers(followingWatches)
           .build();
+    }
+
+    private EventInfo noEventVisible() {
+        return new EventInfo();
     }
 }

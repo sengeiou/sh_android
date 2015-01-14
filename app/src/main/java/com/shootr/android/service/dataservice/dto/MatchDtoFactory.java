@@ -81,14 +81,21 @@ public class MatchDtoFactory {
     }
 
     public GenericDto getWatchFromUsersAndMatch(List<Long> userIds, Long idMatch) {
-        FilterDto watchFollowingFilter =
-          and(WatchTable.ID_MATCH).isEqualTo(idMatch)
-            .and(WatchTable.STATUS).isEqualTo(WatchEntity.STATUS_WATCHING)
-          .and(or(WatchTable.ID_USER).isIn(userIds)).build();
+        if (userIds == null || userIds.isEmpty()) {
+            throw new IllegalArgumentException("userIds cannot be null nor empty");
+        }
+        FilterDto watchFollowingFilter = and(WatchTable.ID_MATCH).isEqualTo(idMatch)
+          .and(WatchTable.STATUS)
+          .isEqualTo(WatchEntity.STATUS_WATCHING)
+          .and(or(WatchTable.ID_USER).isIn(userIds))
+          .build();
 
-        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
-          DatabaseContract.WatchTable.TABLE)
-          .includeDeleted(false).filter(watchFollowingFilter).items(1000).build();
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+          .entity(DatabaseContract.WatchTable.TABLE)
+          .includeDeleted(false)
+          .filter(watchFollowingFilter)
+          .items(1000)
+          .build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
     }

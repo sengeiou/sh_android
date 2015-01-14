@@ -41,6 +41,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -370,13 +371,16 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public List<WatchEntity> getWatchesFromUsersByMatch(Long idMatch, List<Long> userIds) throws IOException {
+        if (userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<WatchEntity> watches = new ArrayList<>();
         GenericDto requestDto = matchDtoFactory.getWatchFromUsersAndMatch(userIds, idMatch);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
+        if (ops == null || ops.length < 1) {
             Timber.e("Received 0 operations");
-        }else{
+        } else {
             MetadataDto metadata = ops[0].getMetadata();
             Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
@@ -396,7 +400,7 @@ public class ShootrDataService implements ShootrService {
         }else{
             Map<String,Object> dataItem  = ops[0].getData()[0];
             WatchEntity watchReceived = watchMapper.fromDto(dataItem);
-            if (watchReceived != null) {
+            if (watchReceived != null && watchReceived.getIdUser() != null) {
                 return watchReceived;
             }
         }
