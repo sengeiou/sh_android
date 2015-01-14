@@ -18,6 +18,10 @@ public class TestInteractorHandler implements InteractorHandler {
         }
     }
 
+    @Override public void sendError(Throwable throwable) {
+        throw new RuntimeException(throwable);
+    }
+
     public void setReceiver(MessageReceiver receiver) {
         this.receiver = receiver;
     }
