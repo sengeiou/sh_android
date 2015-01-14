@@ -64,6 +64,9 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
         Long idEvent = watchVisibleByUser.getIdMatch();
         MatchEntity eventEntity = matchManager.getMatchById(idEvent);
+        if (eventEntity == null) {
+            return; //TODO mmm should't happen, right? What's going on then?
+        }
 
         List<WatchEntity> watchEntities = watchManager.getWatchesByMatch(eventEntity.getIdMatch());
         List<UserEntity> usersWatching = userManager.getUsersByIds(userIdsFromWatches(watchEntities));
