@@ -1,25 +1,51 @@
 package com.shootr.android.ui.model.mappers;
 
-import android.content.Context;
-import com.shootr.android.data.entity.UserEntity;
+import android.content.res.Resources;
+import com.shootr.android.R;
+import com.shootr.android.domain.User;
+import com.shootr.android.domain.Watch;
 import com.shootr.android.ui.model.UserWatchingModel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 
 public class UserWatchingModelMapper {
 
+    private final String watchingText;
+    private final String notWatchingText;
 
-    public UserWatchingModelMapper(Context context) {
+    @Inject public UserWatchingModelMapper(Resources resources) {
+        watchingText = resources.getString(R.string.watching_text);
+        notWatchingText = resources.getString(R.string.watching_not_text);
     }
 
-    public UserWatchingModel toUserWatchingModel(UserEntity user, boolean isWatching, boolean isLive, String place) {
-        UserWatchingModel userModel = new UserWatchingModel();
-        userModel.setIdUser(user.getIdUser());
-        userModel.setFavoriteTeamId(user.getFavoriteTeamId());
-        userModel.setPhoto(user.getPhoto());
-        userModel.setWatching(isWatching);
-        userModel.setPlace(place);
-        userModel.setUserName(user.getUserName());
-        userModel.setLive(isLive && isWatching); //TODO esto es lógica de negocio, no debería estar en un mapper
-        return userModel;
+    public UserWatchingModel transform(Watch watch) {
+        UserWatchingModel model = new UserWatchingModel();
+        model.setPlace(userStatus(watch));
+        model.setWatching(watch.isWatching());
+        
+        model.setHasStatusMessage(watch.getUserStatus()!=null);
+        User user = watch.getUser();
+        model.setIdUser(user.getIdUser());
+        model.setUserName(user.getUsername());
+        model.setPhoto(user.getPhoto());
+        return model;
+    }
+
+    public List<UserWatchingModel> transform(List<Watch> watchList) {
+        List<UserWatchingModel> userWatchingModels = new ArrayList<>(watchList.size());
+        for (Watch watch : watchList) {
+            userWatchingModels.add(transform(watch));
+        }
+        return userWatchingModels;
+    }
+
+    private String userStatus(Watch watch) {
+        if (watch.getUserStatus() != null) {
+            return watch.getUserStatus();
+        } else {
+            return watch.isWatching() ? watchingText : notWatchingText;
+        }
     }
 
 }

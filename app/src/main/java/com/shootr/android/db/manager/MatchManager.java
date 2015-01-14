@@ -23,6 +23,23 @@ public class MatchManager extends AbstractManager{
         this.matchMapper = matchMapper;
     }
 
+    public MatchEntity getMatchById(Long matchId) {
+        String whereSelection = MatchTable.ID_MATCH + " = ?";
+        String[] whereArguments = new String[] { String.valueOf(matchId) };
+
+        Cursor queryResult =
+          getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null,
+            null, null);
+
+        MatchEntity matchEntity = null;
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            matchEntity = matchMapper.fromCursor(queryResult);
+        }
+        queryResult.close();
+        return matchEntity;
+    }
+
     public List<MatchEntity> getMatchesByIds(List<Long> matchIds) {
         String whereSelection = MatchTable.ID_MATCH + " IN (" + createListPlaceholders(matchIds.size())+")";
         String[] whereArguments = new String[matchIds.size()];

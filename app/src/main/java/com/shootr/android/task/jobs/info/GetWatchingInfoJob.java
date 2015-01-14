@@ -5,6 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.domain.User;
+import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.squareup.otto.Bus;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.FollowManager;
@@ -20,7 +21,6 @@ import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.MatchModelMapper;
-import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private ShootrService service;
     private SessionRepository sessionRepository;
     private MatchModelMapper matchModelMapper;
-    private UserWatchingModelMapper userWatchingModelMapper;
+    private UserEntityWatchingModelMapper userWatchingModelMapper;
     private UserManager userManager;
     private WatchManager watchManager;
     private MatchManager matchManager;
@@ -46,7 +46,7 @@ public class GetWatchingInfoJob extends ShootrBaseJob<WatchingInfoResult> {
     private UserEntityMapper userEntityMapper;
 
     @Inject public GetWatchingInfoJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
-      SessionRepository sessionRepository, MatchModelMapper matchModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      SessionRepository sessionRepository, MatchModelMapper matchModelMapper, UserEntityWatchingModelMapper userWatchingModelMapper,
       UserManager userManager, FollowManager followManager, WatchManager watchManager, MatchManager matchManager,
       InfoListBuilderFactory infoListBuilderFactory, UserEntityMapper userEntityMapper) {
         super(new Params(PRIORITY).groupBy("info"), application, bus, networkUtil);

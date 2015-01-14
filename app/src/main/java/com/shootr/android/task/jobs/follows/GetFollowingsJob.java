@@ -65,7 +65,7 @@ public class GetFollowingsJob extends ShootrBaseJob<FollowsResultEvent> {
         Timber.d("Downloaded %d followings' users", following.size());
         List<FollowEntity> followsByFollowing = getFollowsByFollowing(following);
         // Save and send result
-        userManager.saveUsersFromServer(following);
+        userManager.saveUsersAndDeleted(following);
         followManager.saveFollowsFromServer(followsByFollowing);
         List<UserModel> userFollows = getUserVOs(following);
         postSuccessfulEvent(new FollowsResultEvent(userFollows));

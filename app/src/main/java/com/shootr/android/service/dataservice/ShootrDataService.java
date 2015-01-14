@@ -41,6 +41,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -350,6 +351,7 @@ public class ShootrDataService implements ShootrService {
     }
 
 
+    @Deprecated
     @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long idUser) throws IOException {
         List<WatchEntity> watchesReceived = new ArrayList<>();
         GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, idUser);
@@ -366,6 +368,43 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return watchesReceived;
+    }
+
+    @Override public List<WatchEntity> getWatchesFromUsersByMatch(Long idMatch, List<Long> userIds) throws IOException {
+        if (userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<WatchEntity> watches = new ArrayList<>();
+        GenericDto requestDto = matchDtoFactory.getWatchFromUsersAndMatch(userIds, idMatch);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if (ops == null || ops.length < 1) {
+            Timber.e("Received 0 operations");
+        } else {
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                watches.add(watchMapper.fromDto(dataItem));
+            }
+        }
+        return watches;
+    }
+
+    @Override public WatchEntity getVisibleWatch(Long currentUserId) throws IOException {
+        GenericDto requestDto = matchDtoFactory.getWatchVisible(currentUserId);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+        }else{
+            Map<String,Object> dataItem  = ops[0].getData()[0];
+            WatchEntity watchReceived = watchMapper.fromDto(dataItem);
+            if (watchReceived != null && watchReceived.getIdUser() != null) {
+                return watchReceived;
+            }
+        }
+        return null;
     }
 
     @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {

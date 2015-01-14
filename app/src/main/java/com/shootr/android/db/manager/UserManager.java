@@ -34,7 +34,7 @@ public class UserManager extends AbstractManager {
     /**
      * Insert User list
      */
-    public void saveUsersFromServer(List<UserEntity> users) throws SQLException {
+    public void saveUsersAndDeleted(List<UserEntity> users) throws SQLException {
         for (UserEntity user : users) {
             ContentValues contentValues = userMapper.toContentValues(user);
             contentValues.put(CSYS_SYNCHRONIZED, "S");
@@ -44,6 +44,12 @@ public class UserManager extends AbstractManager {
                 getWritableDatabase().insertWithOnConflict(USER_TABLE, null, contentValues,SQLiteDatabase.CONFLICT_REPLACE);
             }
             insertInSync();
+        }
+    }
+
+    public void saveUsers(List<UserEntity> userEntities) {
+        for (UserEntity userEntity : userEntities) {
+            saveUser(userEntity);
         }
     }
 

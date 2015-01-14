@@ -22,14 +22,19 @@ public class JobInteractorHandler implements InteractorHandler, JobWrapper.Error
 
     @Override public void execute(Interactor interactor) {
         JobWrapper interactorJob = new JobWrapper(interactor, bus, networkConnection, this);
-        jobManager.addJobInBackground(interactorJob);
+        jobManager.addJob(interactorJob);
+        jobManager.start();
     }
 
     @Override public void sendUiMessage(Object objectToUi) {
         bus.post(objectToUi);
     }
 
-    @Override public void onError(Throwable throwable) {
+    @Override public void sendError(Throwable throwable) {
         bus.post(throwable);
+    }
+
+    @Override public void onError(Throwable throwable) {
+        sendError(throwable);
     }
 }

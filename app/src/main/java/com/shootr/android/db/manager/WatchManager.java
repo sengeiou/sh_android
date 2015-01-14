@@ -216,21 +216,19 @@ public class WatchManager extends AbstractManager{
        return number;
     }
 
-    public List<WatchEntity> getWatchesVisibleByUser(Long userId) {
-        String whereSelection = WatchTable.ID_USER + " = ? AND "+WatchTable.VISIBLE+" IS NOT ?";
-        String[] whereArguments = new String[]{String.valueOf(userId), String.valueOf(WatchEntity.VISIBLE)};
+    public WatchEntity getWatchVisibleByUser(Long userId) {
+        String whereSelection = WatchTable.ID_USER + " = ? AND " + WatchTable.VISIBLE + " IS ?";
+        String[] whereArguments = new String[] { String.valueOf(userId), String.valueOf(WatchEntity.VISIBLE) };
 
         Cursor queryResult =
           getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
 
-        List<WatchEntity> watches = new ArrayList<>();
+        WatchEntity watchEntity = null;
         if (queryResult.getCount() > 0) {
             queryResult.moveToFirst();
-            do {
-                watches.add(watchMapper.fromCursor(queryResult));
-            } while (queryResult.moveToNext());
+            watchEntity = watchMapper.fromCursor(queryResult);
         }
         queryResult.close();
-        return watches;
+        return watchEntity;
     }
 }

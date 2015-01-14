@@ -64,6 +64,7 @@ public class MatchDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_NEXT_MATCH_WHERE_MY_TEAM_PLAYS, op);
     }
 
+    @Deprecated
     public GenericDto getWatchFromUsers(List<Long> userIds, Long idCurrentUser){
         FilterDto watchFollowingFilter =
           or(and(DatabaseContract.WatchTable.STATUS).isEqualTo(1)
@@ -75,6 +76,26 @@ public class MatchDtoFactory {
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
         DatabaseContract.WatchTable.TABLE)
           .includeDeleted(false).filter(watchFollowingFilter).items(1000).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
+    }
+
+    public GenericDto getWatchFromUsersAndMatch(List<Long> userIds, Long idMatch) {
+        if (userIds == null || userIds.isEmpty()) {
+            throw new IllegalArgumentException("userIds cannot be null nor empty");
+        }
+        FilterDto watchFollowingFilter = and(WatchTable.ID_MATCH).isEqualTo(idMatch)
+          .and(WatchTable.STATUS)
+          .isEqualTo(WatchEntity.STATUS_WATCHING)
+          .and(or(WatchTable.ID_USER).isIn(userIds))
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE)
+          .entity(DatabaseContract.WatchTable.TABLE)
+          .includeDeleted(false)
+          .filter(watchFollowingFilter)
+          .items(1000)
+          .build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
     }
@@ -159,5 +180,19 @@ public class MatchDtoFactory {
 
         OperationDto op = new OperationDto.Builder().metadata(md).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_MATCH, op);
+    }
+
+    public GenericDto getWatchVisible(Long currentUserId) {
+        FilterDto watchFollowingFilter =
+          and(WatchTable.ID_USER).isEqualTo(currentUserId)
+          .and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
+          .and(WatchTable.STATUS).isNotEqualTo(null)
+          .build();
+
+        MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
+          DatabaseContract.WatchTable.TABLE)
+          .includeDeleted(false).filter(watchFollowingFilter).items(1000).build();
+        OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
     }
 }

@@ -22,6 +22,8 @@ import butterknife.InjectView;
 import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
+import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
 import com.shootr.android.ui.widgets.SwitchBar;
@@ -37,6 +39,12 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     private EditInfoPresenter editInfoPresenter;
 
+    public static Intent getIntent(Context context, MatchModel eventModel, UserWatchingModel watchingModel) {
+        String place = watchingModel.hasStatusMessage() ? watchingModel.getPlace() : null;
+        return getIntent(context, eventModel.getIdMatch(), watchingModel.isWatching(), eventModel.getTitle(), place);
+    }
+
+    @Deprecated
     public static Intent getIntent(Context context, Long idMatch, boolean watchingStatus, String matchTitle, String place) {
         EditInfoPresenter.EditInfoModel editInfoModel =
           new EditInfoPresenter.EditInfoModel(idMatch, matchTitle, watchingStatus, place);

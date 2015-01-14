@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+@Deprecated
 public class InfoActivity extends BaseSignedInActivity {
 
     private static final int REQUEST_CODE_EDIT = 1;

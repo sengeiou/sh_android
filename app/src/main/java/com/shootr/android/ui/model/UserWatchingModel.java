@@ -12,6 +12,7 @@ public class UserWatchingModel implements Serializable {
 
     private boolean watching;
     private String place;
+    private boolean hasStatusMessage;
 
     public Long getIdUser() {
         return idUser;
@@ -87,5 +88,13 @@ public class UserWatchingModel implements Serializable {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public boolean hasStatusMessage() {
+        return hasStatusMessage;
+    }
+
+    public void setHasStatusMessage(boolean hasStatusMessage) {
+        this.hasStatusMessage = hasStatusMessage;
     }
 }
