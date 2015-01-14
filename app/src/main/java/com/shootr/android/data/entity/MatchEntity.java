@@ -4,15 +4,12 @@ import java.util.Date;
 
 public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
 
-    public static final Long STARTED = 1L;
-
     private Long idMatch;
     private Date matchDate;
     private Long idLocalTeam;
     private Long idVisitorTeam;
     private String localTeamName;
     private String visitorTeamName;
-    private Long status;
 
     public Long getIdMatch() {
         return idMatch;
@@ -60,14 +57,6 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
 
     public void setVisitorTeamName(String visitorTeamName) {
         this.visitorTeamName = visitorTeamName;
-    }
-
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
     }
 
     @Override

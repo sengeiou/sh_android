@@ -7,6 +7,7 @@ import com.shootr.android.ui.model.mappers.TeamModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.WatchingRequestModelMapper;
+import com.shootr.android.util.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.DeviceMapper;
@@ -27,6 +28,7 @@ import javax.inject.Singleton;
     MatchSearchResultModelMapper.class,
     TeamModelMapper.class,
     TeamMapper.class,
+    WatchingRequestModelMapper.class,
   }
 )
 public class MapperModule {
@@ -79,7 +81,4 @@ public class MapperModule {
         return new TeamMapper();
     }
 
-    @Provides WatchingRequestModelMapper provideWatchingRequestModelMapper(Application application) {
-        return new WatchingRequestModelMapper(application);
-    }
 }

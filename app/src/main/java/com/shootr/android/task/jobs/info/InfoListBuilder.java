@@ -203,7 +203,7 @@ public class InfoListBuilder {
 
     private UserWatchingModel getUserWatchingModelFromEntity(UserEntity userEntity, WatchEntity watchEntity, MatchEntity matchEntity) {
         //TODO Use some cache? maybe? One user can be watching one match but not watching another
-        return userWatchingModelMapper.toUserWatchingModel(userEntity, watchEntity.getStatus() == 1, matchEntity.getStatus()==1, watchEntity.getPlace());
+        return userWatchingModelMapper.toUserWatchingModel(userEntity, watchEntity.getStatus() == 1, watchEntity.getPlace());
     }
 
     private MatchModel getMatchModelFromEntity(MatchEntity matchEntity) {

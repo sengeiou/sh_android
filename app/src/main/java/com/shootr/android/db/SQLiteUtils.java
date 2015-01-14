@@ -104,7 +104,6 @@ public class SQLiteUtils {
             + MatchTable.ID_VISITOR_TEAM+" INT NULL,"
             + MatchTable.LOCAL_TEAM_NAME+" VARCHAR(255) NOT NULL,"
             + MatchTable.VISITOR_TEAM_NAME+" VARCHAR(255) NOT NULL,"
-            + MatchTable.STATUS+" INT NOT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"

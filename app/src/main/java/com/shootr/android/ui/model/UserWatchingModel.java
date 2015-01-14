@@ -8,7 +8,6 @@ public class UserWatchingModel implements Serializable {
     private Long favoriteTeamId;
     private String userName;
     private String photo;
-    private boolean live;
 
     private boolean watching;
     private String place;
@@ -72,14 +71,6 @@ public class UserWatchingModel implements Serializable {
     @Override
     public int hashCode() {
         return idUser.hashCode();
-    }
-
-    public boolean isLive() {
-        return live;
-    }
-
-    public void setLive(boolean live) {
-        this.live = live;
     }
 
     public String getPlace() {
