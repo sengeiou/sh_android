@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     private void initializeViews() {
         ButterKnife.inject(this);
+        watchingSwitch.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
+            @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
+                presenter.watching(isChecked);
+            }
+        });
         watchersList.setOnEditListener(new WatchersView.OnEditListener() {
             @Override public void onEdit() {
                 presenter.edit();

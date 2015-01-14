@@ -49,6 +49,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
     }
 
+    public void watching(boolean isWatching) {
+        //TODO just for view testing, change for real behaviour
+        currentUserWatchingModel.setWatching(isWatching);
+        singleEventView.setCurrentUserWatching(currentUserWatchingModel);
+        singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
+        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching());
+    }
+
     public void loadEventInfo() {
         this.showViewLoading();
         this.getEventInfo();
