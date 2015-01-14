@@ -49,7 +49,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
     }
 
-    public void watching(boolean isWatching) {
+    public void setWatching(boolean isWatching) {
         //TODO just for view testing, change for real behaviour
         currentUserWatchingModel.setWatching(isWatching);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
@@ -90,7 +90,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO notifications attribute
+        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isNotificationsEnabled());
     }
 
     private void renderEvent(Event event) {

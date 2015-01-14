@@ -63,7 +63,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         ButterKnife.inject(this);
         watchingSwitch.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
             @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-                presenter.watching(isChecked);
+                presenter.setWatching(isChecked);
             }
         });
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {

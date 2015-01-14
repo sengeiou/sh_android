@@ -10,6 +10,7 @@ public class UserWatchingModel implements Serializable {
     private String photo;
 
     private boolean watching;
+    private boolean notificationsEnabled;
     private String place;
     private boolean hasStatusMessage;
 
@@ -87,5 +88,13 @@ public class UserWatchingModel implements Serializable {
 
     public void setHasStatusMessage(boolean hasStatusMessage) {
         this.hasStatusMessage = hasStatusMessage;
+    }
+
+    public boolean isNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
     }
 }
