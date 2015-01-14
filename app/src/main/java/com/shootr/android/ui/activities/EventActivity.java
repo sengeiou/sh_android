@@ -66,6 +66,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
                 presenter.watching(isChecked);
             }
         });
+        watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
+            @Override public void onProfile(Long idUser) {
+                navigateToUserProfile(idUser);
+            }
+        });
         watchersList.setOnEditListener(new WatchersView.OnEditListener() {
             @Override public void onEdit() {
                 presenter.edit();
@@ -150,6 +155,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {
         Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
+    }
+
+    private void navigateToUserProfile(Long idUser) {
+        Intent intent = ProfileContainerActivity.getIntent(this, idUser);
+        startActivity(intent);
     }
 
     @Override public void showContent() {

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ShootrApplication;
 import com.shootr.android.ui.model.UserWatchingModel;
@@ -30,6 +31,7 @@ public class WatchersView extends LinearLayout{
     private OnEditListener onEditListener;
     private WatcherViewHolder currentUserViewHolder;
     private Map<UserWatchingModel, WatcherViewHolder> watchersHoldersMap;
+    private OnProfileClickListener profileClickListener;
 
     public WatchersView(Context context) {
         super(context);
@@ -119,6 +121,7 @@ public class WatchersView extends LinearLayout{
     }
 
     private void bindWatcherData(WatcherViewHolder viewHolder, UserWatchingModel userWatching) {
+        viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUserName());
         viewHolder.watchingText.setText(userWatching.getPlace());
         if (picasso != null) {
@@ -147,21 +150,39 @@ public class WatchersView extends LinearLayout{
         setCurrentUserWatching(watch1);
     }
 
+    public void setOnProfileClickListener(OnProfileClickListener profileClickListener) {
+        this.profileClickListener = profileClickListener;
+    }
+
     public void setOnEditListener(OnEditListener onEditListener) {
         this.onEditListener = onEditListener;
     }
 
-    class WatcherViewHolder extends RecyclerView.ViewHolder {
+    class WatcherViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
         @InjectView(R.id.watcher_user_avatar) ImageView avatar;
         @InjectView(R.id.watcher_user_name) TextView name;
         @InjectView(R.id.watcher_user_watching) TextView watchingText;
         @InjectView(R.id.watcher_user_edit) View editButton;
+        Long userId;
 
         public WatcherViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            itemView.setOnClickListener(this);
         }
+
+        @Override public void onClick(View v) {
+            if (profileClickListener != null) {
+                profileClickListener.onProfile(userId);
+            }
+        }
+    }
+
+    public static interface OnProfileClickListener {
+
+        void onProfile(Long idUser);
+
     }
 
     public static interface OnEditListener {
