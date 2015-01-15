@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+      android:id="@+id/menu_events"
+      android:icon="@drawable/ic_action_event_badge"
+      android:title="@string/menu_events"
+      app:showAsAction="always" />
+
+    <item
       android:id="@+id/menu_notifications"
       android:icon="@drawable/ic_action_notifications_none"
       android:title="@string/menu_notifications"

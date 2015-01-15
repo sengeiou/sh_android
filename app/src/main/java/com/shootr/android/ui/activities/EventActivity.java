@@ -2,9 +2,9 @@ package com.shootr.android.ui.activities;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
+import com.shootr.android.ui.widgets.BadgeDrawable;
 import com.shootr.android.ui.widgets.SwitchBar;
 import com.shootr.android.ui.widgets.ToggleSwitch;
 import com.shootr.android.ui.widgets.WatchersView;
@@ -43,6 +44,9 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     private MenuItem notificationMenuItem;
     private int notificationIcon;
+    private BadgeDrawable eventsBadgeDrawable;
+    private int eventsCount;
+    private Toast currentToast;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
                 presenter.edit();
             }
         });
+        currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
     }
 
     private void setupActionbar() {
@@ -92,12 +97,32 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         notificationMenuItem.setVisible(true);
     }
 
+    private void updateEventsIconBadge() {
+        if (eventsBadgeDrawable != null) {
+            eventsBadgeDrawable.setCount(eventsCount);
+        } else {
+            invalidateOptionsMenu();
+        }
+    }
+
+    private void setupEventsIcon(MenuItem eventsMenuItem) {
+        LayerDrawable icon = (LayerDrawable) eventsMenuItem.getIcon();
+        eventsBadgeDrawable = new BadgeDrawable(this);
+        icon.mutate();
+        icon.setDrawableByLayerId(R.id.ic_badge, eventsBadgeDrawable);
+
+        updateEventsIconBadge();
+    }
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.event, menu);
         notificationMenuItem = menu.findItem(R.id.menu_notifications);
         if (notificationIcon != 0) {
             updateNotificationIcon();
         }
+
+        MenuItem eventsMenuItem = menu.findItem(R.id.menu_events);
+        setupEventsIcon(eventsMenuItem);
         return true;
     }
 
@@ -148,6 +173,11 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         watchersNumber.setText(getString(R.string.event_watching_watchers_number, watchersCount));
     }
 
+    @Override public void setEventsCount(int eventsCount) {
+        this.eventsCount = eventsCount;
+        updateEventsIconBadge();
+    }
+
     @Override public void setCurrentUserWatching(UserWatchingModel userWatchingModel) {
         watchersList.setCurrentUserWatching(userWatchingModel);
     }
@@ -161,6 +191,16 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         if (notificationMenuItem != null) {
             updateNotificationIcon();
         }
+    }
+
+    @Override public void alertNotificationsEnabled() {
+        currentToast.setText(R.string.notifications_enabled);
+        currentToast.show();
+    }
+
+    @Override public void alertNotificationsDisabled() {
+        currentToast.setText(R.string.notifications_disabled);
+        currentToast.show();
     }
 
     @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {

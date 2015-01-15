@@ -162,5 +162,8 @@
     <string name="menu_notifications">Notifications</string>
     <string name="single_event_empty">Load an event to see who\'s Watching</string>
     <string name="event_title_default">Select Event</string>
+    <string name="menu_events">Events</string>
+    <string name="notifications_enabled">Event notifications on</string>
+    <string name="notifications_disabled">Event notifications off</string>
 
 </resources>

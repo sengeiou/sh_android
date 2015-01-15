@@ -3,6 +3,8 @@ package com.shootr.android.data.repository;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
+import com.shootr.android.db.manager.FollowManager;
+import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
@@ -14,6 +16,10 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 
 public class WatchRepositoryImpl implements WatchRepository {
@@ -21,14 +27,16 @@ public class WatchRepositoryImpl implements WatchRepository {
     private final ShootrService shootrService;
     private final NetworkConnection networkConnection;
     private final WatchManager watchManager;
+    private final FollowManager followManager;
     private final WatchEntityMapper watchEntityMapper;
     private final SessionRepository sessionRepository;
 
     @Inject public WatchRepositoryImpl(ShootrService shootrService, NetworkConnection networkConnection,
-      WatchManager watchManager, WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
+      WatchManager watchManager, FollowManager followManager, WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
         this.shootrService = shootrService;
         this.networkConnection = networkConnection;
         this.watchManager = watchManager;
+        this.followManager = followManager;
         this.watchEntityMapper = watchEntityMapper;
         this.sessionRepository = sessionRepository;
     }
@@ -51,7 +59,33 @@ public class WatchRepositoryImpl implements WatchRepository {
         if (watching == null) {
             //TODO ask server
         }
-        return watchEntityMapper.transform(watching, sessionRepository.getCurrentUser());
+        if (watching != null) {
+            return watchEntityMapper.transform(watching, sessionRepository.getCurrentUser());
+        } else {
+            return null;
+        }
+    }
+
+    @Override public Integer getAllWatchesCount() {
+        try {
+            List<Long> following = followManager.getUserFollowingIds(sessionRepository.getCurrentUserId());
+            following.add(sessionRepository.getCurrentUserId());
+            List<WatchEntity> allWatches = watchManager.getWatchesNotEndedFromUsers(following);
+
+            return countEvents(allWatches);
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    private Integer countEvents(List<WatchEntity> allWatches) {
+        Set<Long> eventIds = new HashSet<>();
+        for (WatchEntity watch : allWatches) {
+            if (watch.getStatus() == WatchEntity.STATUS_WATCHING) {
+                eventIds.add(watch.getIdMatch());
+            }
+        }
+        return eventIds.size();
     }
 
     private WatchEntity getWatchEntityByKeysFromServer(User user, Long idEvent, ErrorCallback callback) {

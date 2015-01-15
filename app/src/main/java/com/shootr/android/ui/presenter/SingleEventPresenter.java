@@ -3,6 +3,7 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.interactor.EventsCountInteractor;
 import com.shootr.android.domain.interactor.NotificationInteractor;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.WatchingInteractor;
@@ -25,6 +26,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
     private final NotificationInteractor notificationInteractor;
+    private final EventsCountInteractor eventsCountInteractor;
 
     private final EventModelMapper eventModelMapper;
     private final UserWatchingModelMapper userWatchingModelMapper;
@@ -36,12 +38,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private MatchModel eventModel;
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor,
+      EventsCountInteractor eventsCountInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
         this.notificationInteractor = notificationInteractor;
+        this.eventsCountInteractor = eventsCountInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -50,6 +54,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     public void initialize(SingleEventView singleEventView) {
         this.singleEventView = singleEventView;
         this.loadEventInfo();
+        this.loadEventsCount();
     }
 
     public void edit() {
@@ -72,6 +77,15 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
+        this.showNotificationsAlert(enableNotifications);
+    }
+
+    private void loadEventsCount() {
+        eventsCountInteractor.obtainEventsCount();
+    }
+
+    @Subscribe public void onEventsCountLoaded(Integer count) {
+        renderEventsCount(count);
     }
 
     public void loadEventInfo() {
@@ -98,6 +112,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.hideViewLoading();
     }
 
+    private void showNotificationsAlert(boolean enableNotifications) {
+        if (enableNotifications) {
+            singleEventView.alertNotificationsEnabled();
+        } else {
+            singleEventView.alertNotificationsDisabled();
+        }
+    }
+
     private void renderWatchersList(List<Watch> watchers) {
         List<UserWatchingModel> watcherModels = userWatchingModelMapper.transform(watchers);
         singleEventView.setWatchers(watcherModels);
@@ -118,6 +140,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private void renderWatchersCount(int watchersCount) {
         singleEventView.setWatchersCount(watchersCount);
+    }
+
+    private void renderEventsCount(int eventsCount) {
+        singleEventView.setEventsCount(eventsCount);
     }
 
     private void showViewContent() {

@@ -14,11 +14,17 @@ public interface SingleEventView extends LoadDataView{
 
     void setWatchersCount(int watchersCount);
 
+    void setEventsCount(int eventsCount);
+
     void setCurrentUserWatching(UserWatchingModel userWatchingModel);
 
     void setIsWatching(boolean watching);
 
     void setNotificationsEnabled(boolean enabled);
+
+    void alertNotificationsEnabled();
+
+    void alertNotificationsDisabled();
 
     void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel);
 
