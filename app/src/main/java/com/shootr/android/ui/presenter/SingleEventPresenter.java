@@ -50,6 +50,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     public void initialize(SingleEventView singleEventView) {
         this.singleEventView = singleEventView;
         this.loadEventInfo();
+
+        renderEventsCount(3);
     }
 
     public void edit() {
@@ -118,6 +120,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private void renderWatchersCount(int watchersCount) {
         singleEventView.setWatchersCount(watchersCount);
+    }
+
+    private void renderEventsCount(int eventsCount) {
+        singleEventView.setEventsCount(eventsCount);
     }
 
     private void showViewContent() {

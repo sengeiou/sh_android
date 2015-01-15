@@ -14,6 +14,8 @@ public interface SingleEventView extends LoadDataView{
 
     void setWatchersCount(int watchersCount);
 
+    void setEventsCount(int eventsCount);
+
     void setCurrentUserWatching(UserWatchingModel userWatchingModel);
 
     void setIsWatching(boolean watching);
