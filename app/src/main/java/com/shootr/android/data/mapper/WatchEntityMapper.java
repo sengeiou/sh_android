@@ -1,13 +1,22 @@
 package com.shootr.android.data.mapper;
 
+import com.shootr.android.constant.SyncConstants;
+import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.util.TimeUtils;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class WatchEntityMapper {
 
-    @Inject public WatchEntityMapper() {
+    private final TimeUtils timeUtils;
+
+    @Inject public WatchEntityMapper(TimeUtils timeUtils) {
+        this.timeUtils = timeUtils;
     }
 
     public Watch transform(WatchEntity watchEntity, User user) {
@@ -27,5 +36,21 @@ public class WatchEntityMapper {
               String.format("User id (%d) doesn't match watchEntity's id (%d)", user.getIdUser(),
                 watchEntity.getIdUser()));
         }
+    }
+
+    public WatchEntity transform(Watch watch) {
+        WatchEntity watchEntity = new WatchEntity();
+        watchEntity.setIdUser(watch.getUser().getIdUser());
+        watchEntity.setIdMatch(watch.getIdEvent());
+        watchEntity.setPlace(watch.getUserStatus());
+        watchEntity.setStatus(watch.isWatching() ? WatchEntity.STATUS_WATCHING : WatchEntity.STATUS_REJECT);
+        watchEntity.setNotification(watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);
+        watchEntity.setVisible(false);
+
+        watchEntity.setCsysBirth(timeUtils.getCurrentDate());
+        watchEntity.setCsysModified(timeUtils.getCurrentDate());
+        watchEntity.setCsysRevision(0);
+        watchEntity.setCsysSynchronized(Synchronized.SYNC_NEW);
+        return watchEntity;
     }
 }
