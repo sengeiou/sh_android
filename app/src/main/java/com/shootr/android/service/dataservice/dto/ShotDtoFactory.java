@@ -44,7 +44,7 @@ public class ShotDtoFactory {
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_SHOT, op);
     }
 
-    public GenericDto getNewShotOperationDto(Long idUser, String comment, String imageUrl) {
+    public GenericDto getNewShotOperationDto(Long idUser, String comment, String imageUrl, Long idEvent) {
         if (idUser == null) {
             throw new IllegalArgumentException("idUser must not be null");
         }
@@ -66,6 +66,7 @@ public class ShotDtoFactory {
         shotTemplate.setComment(comment);
         shotTemplate.setIdUser(idUser);
         shotTemplate.setImage(imageUrl);
+        shotTemplate.setIdEvent(idEvent);
 
         OperationDto op = new OperationDto.Builder()
                 .metadata(md)

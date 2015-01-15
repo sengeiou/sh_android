@@ -44,6 +44,7 @@ public class SQLiteUtils {
             + ShotTable.ID_USER + " INT NOT NULL,"
             + ShotTable.COMMENT + " VARCHAR(255) NULL,"
             + ShotTable.IMAGE + " VARCHAR(255) NULL,"
+            + ShotTable.ID_EVENT+ " INT NULL,"
             + SyncColumns.CSYS_BIRTH + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED + " DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED + " DATETIME NULL,"

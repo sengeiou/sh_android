@@ -111,12 +111,14 @@ public class DatabaseContract {
         public static final String ID_USER = "idUser";
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
+        public static final String ID_EVENT = "idEvent";
 
         public static final String[] PROJECTION = {
                 ID_SHOT,
                 ID_USER,
                 COMMENT,
                 IMAGE,
+                ID_EVENT,
                 CSYS_BIRTH,
                 CSYS_MODIFIED,
                 CSYS_DELETED,

@@ -16,6 +16,7 @@ public class ShotMapper extends GenericMapper {
         shot.setIdUser(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_USER)));
         shot.setComment(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.COMMENT)));
         shot.setImage(c.getString(c.getColumnIndex(DatabaseContract.ShotTable.IMAGE)));
+        shot.setIdEvent(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.ID_EVENT)));
         setSynchronizedfromCursor(c, shot);
         return shot;
     }
@@ -26,6 +27,7 @@ public class ShotMapper extends GenericMapper {
         cv.put(DatabaseContract.ShotTable.ID_USER, shot.getIdUser());
         cv.put(DatabaseContract.ShotTable.COMMENT, shot.getComment());
         cv.put(DatabaseContract.ShotTable.IMAGE, shot.getImage());
+        cv.put(DatabaseContract.ShotTable.ID_EVENT, shot.getIdEvent());
         setSynchronizedtoContentValues(shot,cv);
         return cv;
     }
@@ -36,6 +38,10 @@ public class ShotMapper extends GenericMapper {
         shot.setIdUser(((Number) dto.get(DatabaseContract.ShotTable.ID_USER)).longValue());
         shot.setComment((String) dto.get(DatabaseContract.ShotTable.COMMENT));
         shot.setImage((String) dto.get(DatabaseContract.ShotTable.IMAGE));
+        Number idEvent = (Number) dto.get(DatabaseContract.ShotTable.ID_EVENT);
+        if (idEvent != null) {
+            shot.setIdEvent(idEvent.longValue());
+        }
         setSynchronizedfromDto(dto, shot);
         return shot;
     }
@@ -46,6 +52,7 @@ public class ShotMapper extends GenericMapper {
         dto.put(DatabaseContract.ShotTable.ID_USER, shot == null ? null : shot.getIdUser());
         dto.put(DatabaseContract.ShotTable.COMMENT, shot == null ? null : shot.getComment());
         dto.put(DatabaseContract.ShotTable.IMAGE, shot == null ? null : shot.getImage());
+        dto.put(DatabaseContract.ShotTable.ID_EVENT, shot == null ? null : shot.getIdEvent());
         setSynchronizedtoDto(shot,dto);
         return dto;
     }

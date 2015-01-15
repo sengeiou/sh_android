@@ -219,13 +219,13 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override
-    public ShotEntity postNewShot(Long idUser, String comment) throws IOException {
-        return postNewShotWithImage(idUser, comment, null);
+    public ShotEntity postNewShot(Long idUser, String comment, Long idEvent) throws IOException {
+        return postNewShotWithImage(idUser, comment, null, null);
     }
 
     @Override
-    public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl) throws IOException {
-        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment, imageUrl);
+    public ShotEntity postNewShotWithImage(Long idUser, String comment, String imageUrl, Long idEvent) throws IOException {
+        GenericDto requestDto = shotDtoFactory.getNewShotOperationDto(idUser, comment, imageUrl, idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
