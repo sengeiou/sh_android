@@ -8,4 +8,6 @@ public interface WatchRepository {
     Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback);
 
     void putWatch(Watch watch, ErrorCallback callback);
+
+    Watch getCurrentWatching(ErrorCallback callback);
 }

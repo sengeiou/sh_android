@@ -8,6 +8,7 @@ import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.NetworkConnection;
@@ -21,13 +22,15 @@ public class WatchRepositoryImpl implements WatchRepository {
     private final NetworkConnection networkConnection;
     private final WatchManager watchManager;
     private final WatchEntityMapper watchEntityMapper;
+    private final SessionRepository sessionRepository;
 
     @Inject public WatchRepositoryImpl(ShootrService shootrService, NetworkConnection networkConnection,
-      WatchManager watchManager, WatchEntityMapper watchEntityMapper) {
+      WatchManager watchManager, WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
         this.shootrService = shootrService;
         this.networkConnection = networkConnection;
         this.watchManager = watchManager;
         this.watchEntityMapper = watchEntityMapper;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
@@ -41,6 +44,14 @@ public class WatchRepositoryImpl implements WatchRepository {
         } else {
             return null;
         }
+    }
+
+    @Override public Watch getCurrentWatching(ErrorCallback callback) {
+        WatchEntity watching = watchManager.getWatching(sessionRepository.getCurrentUserId());
+        if (watching == null) {
+            //TODO ask server
+        }
+        return watchEntityMapper.transform(watching, sessionRepository.getCurrentUser());
     }
 
     private WatchEntity getWatchEntityByKeysFromServer(User user, Long idEvent, ErrorCallback callback) {

@@ -138,6 +138,22 @@ public class WatchManager extends AbstractManager{
         return resultWatches;
     }
 
+    public WatchEntity getWatching(Long idUser) {
+        String whereClause = WatchTable.STATUS + "=? AND " + WatchTable.ID_USER + "=?";
+        String[] whereArguments = new String[] { String.valueOf(WatchEntity.STATUS_WATCHING), String.valueOf(idUser) };
+        Cursor queryResult =
+          getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereClause, whereArguments, null, null,
+            null);
+        if (queryResult.getCount() > 0) {
+            queryResult.moveToFirst();
+            WatchEntity watchEntity = watchMapper.fromCursor(queryResult);
+            queryResult.close();
+            return watchEntity;
+        } else {
+            return null;
+        }
+    }
+
     public void createUpdateWatch(WatchEntity watchEntity) {
         ContentValues contentValues = watchMapper.toContentValues(watchEntity);
         getWritableDatabase().insertWithOnConflict(WatchTable.TABLE,null,contentValues, SQLiteDatabase.CONFLICT_REPLACE);

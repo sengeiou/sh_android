@@ -16,6 +16,11 @@ public class WatchingInteractor implements Interactor {
     private boolean isWatching;
     private Long idEvent;
     private String userStatus;
+    private ErrorCallback errorCallback = new ErrorCallback() {
+        @Override public void onError(Throwable error) {
+            interactorHandler.sendError(error);
+        }
+    };
 
     @Inject public WatchingInteractor(InteractorHandler interactorHandler, WatchRepository watchRepository,
       SessionRepository sessionRepository) {
@@ -32,6 +37,13 @@ public class WatchingInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
+        if (isWatching) {
+            removeOldWatch();
+        }
+        setNewWatch();
+    }
+
+    private void setNewWatch() {
         User currentUser = sessionRepository.getCurrentUser();
 
         Watch watch = new Watch();
@@ -41,11 +53,16 @@ public class WatchingInteractor implements Interactor {
         watch.setUserStatus(userStatus);
         watch.setNotificaticationsEnabled(notificationsEnabled());
 
-        watchRepository.putWatch(watch, new ErrorCallback() {
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-        });
+        watchRepository.putWatch(watch, errorCallback);
+    }
+
+    private void removeOldWatch() {
+        Watch currentWatching = watchRepository.getCurrentWatching(errorCallback);
+        if (currentWatching != null) {
+            currentWatching.setWatching(false);
+            currentWatching.setNotificaticationsEnabled(false);
+        }
+        watchRepository.putWatch(currentWatching, errorCallback);
     }
 
     private boolean notificationsEnabled() {
