@@ -70,7 +70,8 @@ public class ShotManager extends  AbstractManager{
           ",b."
           + ShotTable.ID_USER+","
           + ShotTable.COMMENT+","
-          + ShotTable.IMAGE
+          + ShotTable.IMAGE+","
+          + ShotTable.ID_EVENT
           + ",b."
           + UserTable.NAME
           +",b."
@@ -184,7 +185,8 @@ public class ShotManager extends  AbstractManager{
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
                 + ShotTable.COMMENT+ ","
-                + ShotTable.IMAGE +
+                + ShotTable.IMAGE + ","
+                + ShotTable.ID_EVENT+
                 ",b."+UserTable.FAVORITE_TEAM_ID+
                 ",b."+UserTable.FAVORITE_TEAM_NAME+
                 ",b." +UserTable.BIO +

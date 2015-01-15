@@ -8,9 +8,9 @@ public class UserWatchingModel implements Serializable {
     private Long favoriteTeamId;
     private String userName;
     private String photo;
-    private boolean live;
 
     private boolean watching;
+    private boolean notificationsEnabled;
     private String place;
     private boolean hasStatusMessage;
 
@@ -74,14 +74,6 @@ public class UserWatchingModel implements Serializable {
         return idUser.hashCode();
     }
 
-    public boolean isLive() {
-        return live;
-    }
-
-    public void setLive(boolean live) {
-        this.live = live;
-    }
-
     public String getPlace() {
         return place;
     }
@@ -96,5 +88,13 @@ public class UserWatchingModel implements Serializable {
 
     public void setHasStatusMessage(boolean hasStatusMessage) {
         this.hasStatusMessage = hasStatusMessage;
+    }
+
+    public boolean isNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
     }
 }

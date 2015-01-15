@@ -14,11 +14,11 @@ public class MatchMapper extends GenericMapper{
         ContentValues contentValues = new ContentValues();
         contentValues.put(MatchTable.ID_MATCH, match.getIdMatch());
         contentValues.put(MatchTable.MATCH_DATE, match.getMatchDate()!=null ? match.getMatchDate().getTime() : null);
+        contentValues.put(MatchTable.MATCH_FINISH_DATE, match.getMatchFinishDate()!=null ? match.getMatchFinishDate().getTime() : null);
         contentValues.put(MatchTable.ID_LOCAL_TEAM, match.getIdLocalTeam());
         contentValues.put(MatchTable.ID_VISITOR_TEAM, match.getIdVisitorTeam());
         contentValues.put(MatchTable.LOCAL_TEAM_NAME, match.getLocalTeamName());
         contentValues.put(MatchTable.VISITOR_TEAM_NAME, match.getVisitorTeamName());
-        contentValues.put(MatchTable.STATUS,match.getStatus());
         setSynchronizedtoContentValues(match,contentValues);
         return contentValues;
     }
@@ -32,7 +32,7 @@ public class MatchMapper extends GenericMapper{
         match.setLocalTeamName((String)dto.get(MatchTable.LOCAL_TEAM_NAME) == null ? null : (String)dto.get(MatchTable.LOCAL_TEAM_NAME));
         match.setVisitorTeamName((String)dto.get(MatchTable.VISITOR_TEAM_NAME) == null ? null : (String)dto.get(MatchTable.VISITOR_TEAM_NAME));
         match.setMatchDate(dto.get(MatchTable.MATCH_DATE) == null ? null : new Date((Long)dto.get(MatchTable.MATCH_DATE)));
-        match.setStatus((Number)dto.get(MatchTable.STATUS) == null ? null : ((Number) dto.get(MatchTable.STATUS)).longValue());
+        match.setMatchFinishDate(dto.get(MatchTable.MATCH_FINISH_DATE) == null ? null : new Date((Long)dto.get(MatchTable.MATCH_FINISH_DATE)));
         setSynchronizedfromDto(dto,match);
         return match;
     }
@@ -45,7 +45,7 @@ public class MatchMapper extends GenericMapper{
         dto.put(MatchTable.LOCAL_TEAM_NAME, match == null ? null : match.getLocalTeamName());
         dto.put(MatchTable.VISITOR_TEAM_NAME, match == null ? null : match.getVisitorTeamName());
         dto.put(MatchTable.MATCH_DATE, match == null ? null : match.getMatchDate());
-        dto.put(MatchTable.STATUS, match == null ? null : match.getStatus());
+        dto.put(MatchTable.MATCH_FINISH_DATE, match == null ? null : match.getMatchFinishDate());
         setSynchronizedtoDto(match, dto);
         return dto;
     }
@@ -59,7 +59,8 @@ public class MatchMapper extends GenericMapper{
         match.setVisitorTeamName(c.getString(c.getColumnIndex(MatchTable.VISITOR_TEAM_NAME)));
         Long date = c.getLong(c.getColumnIndex(MatchTable.MATCH_DATE));
         match.setMatchDate(date != 0L ? new Date(date) : null);
-        match.setStatus(c.getLong(c.getColumnIndex(MatchTable.STATUS)));
+        date = c.getLong(c.getColumnIndex(MatchTable.MATCH_FINISH_DATE));
+        match.setMatchFinishDate(date != 0L ? new Date(date) : null);
         setSynchronizedfromCursor(c, match);
         return match;
     }

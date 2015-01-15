@@ -23,7 +23,6 @@ public class MatchModelMapper {
         matchModel.setVisitorTeamId(matchEntity.getIdVisitorTeam());
         matchModel.setLocalTeamName(matchEntity.getLocalTeamName());
         matchModel.setVisitorTeamName(matchEntity.getVisitorTeamName());
-        matchModel.setLive(matchEntity.getStatus().equals(1L));
         return matchModel;
     }
 

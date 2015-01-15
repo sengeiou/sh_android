@@ -6,6 +6,7 @@ public class Watch {
     private Long idEvent;
     private String userStatus;
     private boolean watching;
+    private boolean notificaticationsEnabled;
 
     public User getUser() {
         return user;
@@ -37,5 +38,13 @@ public class Watch {
 
     public void setWatching(boolean watching) {
         this.watching = watching;
+    }
+
+    public boolean isNotificaticationsEnabled() {
+        return notificaticationsEnabled;
+    }
+
+    public void setNotificaticationsEnabled(boolean notificaticationsEnabled) {
+        this.notificaticationsEnabled = notificaticationsEnabled;
     }
 }

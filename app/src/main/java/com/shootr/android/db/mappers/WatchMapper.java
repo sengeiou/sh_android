@@ -16,6 +16,7 @@ public class WatchMapper extends GenericMapper {
         contentValues.put(WatchTable.STATUS, watchEntity.getStatus());
         contentValues.put(WatchTable.PLACE, watchEntity.getPlace());
         contentValues.put(WatchTable.VISIBLE, watchEntity.getVisible() ? 1 : 0);
+        contentValues.put(WatchTable.NOTIFICATION, watchEntity.getNotification());
         setSynchronizedtoContentValues(watchEntity, contentValues);
         return contentValues;
     }
@@ -24,11 +25,12 @@ public class WatchMapper extends GenericMapper {
         WatchEntity watch = new WatchEntity();
         watch.setIdMatch(
           dto.get(WatchTable.ID_MATCH) == null ? null : ((Number) dto.get(WatchTable.ID_MATCH)).longValue());
-        watch.setIdUser(
-          dto.get(WatchTable.ID_USER) == null ? null : ((Number) dto.get(WatchTable.ID_USER)).longValue());
+        watch.setIdUser(dto.get(WatchTable.ID_USER) == null ? null : ((Number) dto.get(WatchTable.ID_USER)).longValue());
         watch.setStatus(dto.get(WatchTable.STATUS) == null ? null : ((Number) dto.get(WatchTable.STATUS)).longValue());
         watch.setPlace((String) dto.get(WatchTable.PLACE));
         watch.setVisible(dto.get(WatchTable.VISIBLE) == null ? null : dto.get(WatchTable.VISIBLE).equals(1));
+        watch.setNotification(
+          dto.get(WatchTable.NOTIFICATION) == null ? null : ((Number) dto.get(WatchTable.NOTIFICATION)).intValue());
         setSynchronizedfromDto(dto, watch);
         return watch;
     }
@@ -40,6 +42,7 @@ public class WatchMapper extends GenericMapper {
         dto.put(WatchTable.STATUS, watch == null ? null : watch.getStatus());
         dto.put(WatchTable.PLACE, watch == null ? null : watch.getPlace());
         dto.put(WatchTable.VISIBLE, watch == null ? null : watch.getVisible() ? 1 : 0);
+        dto.put(WatchTable.NOTIFICATION, watch == null ? null : watch.getNotification());
         setSynchronizedtoDto(watch, dto);
         return dto;
     }
@@ -51,6 +54,7 @@ public class WatchMapper extends GenericMapper {
         watch.setStatus(c.getLong(c.getColumnIndex(WatchTable.STATUS)));
         watch.setPlace(c.getString(c.getColumnIndex(WatchTable.PLACE)));
         watch.setVisible(c.getLong(c.getColumnIndex(WatchTable.VISIBLE)) == 1);
+        watch.setNotification(c.getInt(c.getColumnIndex(WatchTable.NOTIFICATION)));
         setSynchronizedfromCursor(c, watch);
         return watch;
     }

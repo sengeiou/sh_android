@@ -3,7 +3,9 @@ package com.shootr.android.ui.presenter;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
+import com.shootr.android.domain.interactor.NotificationInteractor;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
+import com.shootr.android.domain.interactor.WatchingInteractor;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.MatchModel;
@@ -21,6 +23,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
+    private final WatchingInteractor watchingInteractor;
+    private final NotificationInteractor notificationInteractor;
+
     private final EventModelMapper eventModelMapper;
     private final UserWatchingModelMapper userWatchingModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -31,10 +36,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private MatchModel eventModel;
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
-      EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
+        this.watchingInteractor = watchingInteractor;
+        this.notificationInteractor = notificationInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -49,12 +56,22 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
     }
 
-    public void watching(boolean isWatching) {
-        //TODO just for view testing, change for real behaviour
+    public void sendWatching(boolean isWatching) {
+        watchingInteractor.sendWatching(isWatching, eventModel.getIdMatch(), null);
+
+        //TODO probably better to receive the new Watch from the Interactor
         currentUserWatchingModel.setWatching(isWatching);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching());
+        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO this is bussines logic
+    }
+
+    public void toggleNotifications() {
+        boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
+        notificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdMatch());
+        //TODO handle some response maybe?
+        currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
+        singleEventView.setNotificationsEnabled(enableNotifications);
     }
 
     public void loadEventInfo() {
@@ -90,7 +107,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         currentUserWatchingModel = userWatchingModelMapper.transform(currentUserWatch);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
-        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO notifications attribute
+        singleEventView.setNotificationsEnabled(currentUserWatchingModel.isNotificationsEnabled());
     }
 
     private void renderEvent(Event event) {
@@ -123,14 +140,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.hideEmpty();
     }
 
-    @Subscribe
-    @Override public void onCommunicationError(CommunicationErrorEvent event) {
+    @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         singleEventView.showError(communicationErrorMessage);
     }
 
-    @Subscribe
-    @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+    @Subscribe @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
         String connectionNotAvailableMessage = errorMessageFactory.getConnectionNotAvailableMessage();
         singleEventView.showError(connectionNotAvailableMessage);
     }

@@ -33,7 +33,7 @@ public class InfoCleaner {
     }
 
     private List<MatchEntity> getEndedAndAdjournedMatches() {
-        return matchManager.getEndedAndAdjournedMatches();
+        return matchManager.getEndedMatches();
     }
 
     private List<WatchEntity> getWatchesFromMatches(List<MatchEntity> matches) {

@@ -128,10 +128,9 @@ public class GCMIntentService extends IntentService {
         UserEntity userFromNotification = userManager.getUserByIdUser(idUser);
 
         boolean isWatching = WatchEntity.STATUS_WATCHING.equals(status);
-        boolean isLive = matchEntity.getStatus().equals(MatchEntity.STARTED);
 
         UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, isWatching,
-          isLive, place);
+          place);
         MatchModel matchModel = matchModelMapper.toMatchModel(matchEntity);
 
         notificationManager.sendWatchRequestNotification(userWatchingModel, matchModel);

@@ -9,11 +9,15 @@ public class WatchEntity extends Synchronized{
     public static final Long VISIBLE = 1L;
     public static final Long NOT_VISIBLE = 0L;
 
+    public static final Integer NOTIFICATION_ON = 1;
+    public static final Integer NOTIFICATION_OFF = 0;
+
     private Long idMatch;
     private Long idUser;
     private Long status;
     private String place;
     private Boolean visible;
+    private Integer notification;
 
     public Long getIdMatch() {
         return idMatch;
@@ -78,5 +82,13 @@ public class WatchEntity extends Synchronized{
         int result = idMatch.hashCode();
         result = 31 * result + idUser.hashCode();
         return result;
+    }
+
+    public Integer getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Integer notification) {
+        this.notification = notification;
     }
 }

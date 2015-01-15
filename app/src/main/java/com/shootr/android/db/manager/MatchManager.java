@@ -10,17 +10,20 @@ import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.mappers.MatchMapper;
 import com.shootr.android.data.entity.MatchEntity;
 
+import com.shootr.android.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class MatchManager extends AbstractManager{
 
-    @Inject MatchMapper matchMapper;
+    private final MatchMapper matchMapper;
+    private final TimeUtils timeUtils;
 
-    @Inject public MatchManager(SQLiteOpenHelper openHelper, MatchMapper matchMapper){
+    @Inject public MatchManager(SQLiteOpenHelper openHelper, MatchMapper matchMapper, TimeUtils timeUtils){
         super(openHelper);
         this.matchMapper = matchMapper;
+        this.timeUtils = timeUtils;
     }
 
     public MatchEntity getMatchById(Long matchId) {
@@ -64,7 +67,7 @@ public class MatchManager extends AbstractManager{
 
     public MatchEntity getNextMatchFromTeam(Long favoriteTeamId) {
         String whereSelection =
-          "("+MatchTable.ID_LOCAL_TEAM + "= ? OR " + MatchTable.ID_VISITOR_TEAM + "= ?) AND ("+MatchTable.STATUS+" IN (0, 1))";
+          "("+MatchTable.ID_LOCAL_TEAM + "= ? OR " + MatchTable.ID_VISITOR_TEAM + "= ?) AND "+MatchTable.MATCH_FINISH_DATE+">"+timeUtils.getCurrentTime();
         String[] whereArguments = new String[] { String.valueOf(favoriteTeamId), String.valueOf(favoriteTeamId) };
         Cursor queryResult = getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, whereArguments, null, null,
           MatchTable.MATCH_DATE, "1");
@@ -116,8 +119,8 @@ public class MatchManager extends AbstractManager{
         insertInTableSync(MatchTable.TABLE,10,1000,0);
     }
 
-    public List<MatchEntity> getEndedAndAdjournedMatches() {
-        String whereSelection = MatchTable.STATUS + " IN (2,3)";
+    public List<MatchEntity> getEndedMatches() {
+        String whereSelection = MatchTable.MATCH_FINISH_DATE + "<" + timeUtils.getCurrentTime();
         Cursor queryResult =
           getReadableDatabase().query(MatchTable.TABLE, MatchTable.PROJECTION, whereSelection, null, null, null, null);
 

@@ -3,6 +3,8 @@ package com.shootr.android.task.jobs.shots;
 import android.app.Application;
 import com.path.android.jobqueue.Params;
 import com.path.android.jobqueue.network.NetworkUtil;
+import com.shootr.android.data.entity.WatchEntity;
+import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.task.validation.FieldValidationError;
@@ -26,17 +28,19 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     private final ShootrService service;
     private final SessionRepository sessionRepository;
     private final ShotManager shotManager;
+    private final WatchManager watchManager;
 
     private String comment;
     private String imageUrl;
     private final List<FieldValidationError> fieldValidationErrors;
 
     @Inject public PostNewShotJob(Application application, NetworkUtil networkUtil, Bus bus, ShootrService service,
-      SessionRepository sessionRepository, ShotManager shotManager) {
+      SessionRepository sessionRepository, ShotManager shotManager, WatchManager watchManager) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
         this.sessionRepository = sessionRepository;
         this.shotManager = shotManager;
+        this.watchManager = watchManager;
         fieldValidationErrors = new ArrayList<>();
     }
 
@@ -48,10 +52,20 @@ public class PostNewShotJob extends ShootrBaseJob<PostNewShotResultEvent> {
     @Override
     protected void run() throws SQLException, IOException {
         if (isShotValid()) {
-            ShotEntity postedShot = service.postNewShotWithImage(sessionRepository.getCurrentUserId(), comment, imageUrl);
+            ShotEntity postedShot = service.postNewShotWithImage(sessionRepository.getCurrentUserId(), comment, imageUrl,
+              idEventAssociated());
             postSuccessfulEvent(new PostNewShotResultEvent(postedShot));
         } else {
             postValidationErrors();
+        }
+    }
+
+    private Long idEventAssociated() {
+        WatchEntity watching = watchManager.getWatching(sessionRepository.getCurrentUserId());
+        if (watching != null) {
+            return watching.getIdMatch();
+        } else {
+            return null;
         }
     }
 

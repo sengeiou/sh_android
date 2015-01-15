@@ -20,6 +20,7 @@ import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
 import com.shootr.android.ui.widgets.SwitchBar;
+import com.shootr.android.ui.widgets.ToggleSwitch;
 import com.shootr.android.ui.widgets.WatchersView;
 import java.util.List;
 import javax.inject.Inject;
@@ -61,9 +62,10 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
 
     private void initializeViews() {
         ButterKnife.inject(this);
-        watchingSwitch.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
-            @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-                presenter.watching(isChecked);
+        watchingSwitch.getSwitch().setOnBeforeCheckedChangeListener(new ToggleSwitch.OnBeforeCheckedChangeListener() {
+            @Override public boolean onBeforeCheckedChanged(ToggleSwitch toggleSwitch, boolean checked) {
+                presenter.sendWatching(checked);
+                return false;
             }
         });
         watchersList.setOnProfileClickListener(new WatchersView.OnProfileClickListener() {
@@ -97,6 +99,15 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
             updateNotificationIcon();
         }
         return true;
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_notifications) {
+            presenter.toggleNotifications();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,7 +153,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setIsWatching(boolean watching) {
-        watchingSwitch.setChecked(watching);
+        watchingSwitch.setCheckedInternal(watching);
     }
 
     @Override public void setNotificationsEnabled(boolean enabled) {

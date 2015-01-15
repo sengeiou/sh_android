@@ -6,6 +6,7 @@ public class ShotEntity extends Synchronized{
     private Long idUser;
     private String comment;
     private String image;
+    private Long idEvent;
 
     private UserEntity mUserObject;
 
@@ -47,5 +48,13 @@ public class ShotEntity extends Synchronized{
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Long getIdEvent() {
+        return idEvent;
+    }
+
+    public void setIdEvent(Long idEvent) {
+        this.idEvent = idEvent;
     }
 }

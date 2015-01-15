@@ -5,6 +5,11 @@ import java.util.Date;
 
 public class Synchronized {
 
+    public static final String SYNC_NEW = "N";
+    public static final String SYNC_DELETED = "D";
+    public static final String SYNC_MODIFIED = "M";
+    public static final String SYNC_UPDATED = "U";
+
     protected Date csysBirth;
     protected Date csysModified;
     protected Date csysDeleted;
