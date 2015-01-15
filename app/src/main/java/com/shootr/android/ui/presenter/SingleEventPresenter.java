@@ -77,6 +77,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
+        this.showNotificationsAlert(enableNotifications);
     }
 
     private void loadEventsCount() {
@@ -109,6 +110,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             this.showViewContent();
         }
         this.hideViewLoading();
+    }
+
+    private void showNotificationsAlert(boolean enableNotifications) {
+        if (enableNotifications) {
+            singleEventView.alertNotificationsEnabled();
+        } else {
+            singleEventView.alertNotificationsDisabled();
+        }
     }
 
     private void renderWatchersList(List<Watch> watchers) {

@@ -46,6 +46,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     private int notificationIcon;
     private BadgeDrawable eventsBadgeDrawable;
     private int eventsCount;
+    private Toast currentToast;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +82,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
                 presenter.edit();
             }
         });
+        currentToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
     }
 
     private void setupActionbar() {
@@ -189,6 +191,16 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         if (notificationMenuItem != null) {
             updateNotificationIcon();
         }
+    }
+
+    @Override public void alertNotificationsEnabled() {
+        currentToast.setText(R.string.notifications_enabled);
+        currentToast.show();
+    }
+
+    @Override public void alertNotificationsDisabled() {
+        currentToast.setText(R.string.notifications_disabled);
+        currentToast.show();
     }
 
     @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {
