@@ -99,6 +99,15 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         return true;
     }
 
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_notifications) {
+            presenter.toggleNotifications();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {

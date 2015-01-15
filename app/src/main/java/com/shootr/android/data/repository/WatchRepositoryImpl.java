@@ -4,6 +4,7 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.db.manager.WatchManager;
+import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.exception.RepositoryException;
 import com.shootr.android.domain.repository.ErrorCallback;
@@ -27,6 +28,32 @@ public class WatchRepositoryImpl implements WatchRepository {
         this.networkConnection = networkConnection;
         this.watchManager = watchManager;
         this.watchEntityMapper = watchEntityMapper;
+    }
+
+    @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
+        WatchEntity watchEntity = watchManager.getWatchByKeys(user.getIdUser(), idEvent);
+        if (watchEntity == null) {
+            watchEntity = getWatchEntityByKeysFromServer(user, idEvent, callback);
+        }
+
+        if (watchEntity != null) {
+            return watchEntityMapper.transform(watchEntity, user);
+        } else {
+            return null;
+        }
+    }
+
+    private WatchEntity getWatchEntityByKeysFromServer(User user, Long idEvent, ErrorCallback callback) {
+        if (networkConnection.isConnected()) {
+            try {
+                return shootrService.getWatchStatus(user.getIdUser(), idEvent);
+            } catch (IOException e) {
+                callback.onError(new RepositoryException(e));
+            }
+        } else {
+            callback.onError(new ConnectionNotAvailableEvent());
+        }
+        return null;
     }
 
     @Override public void putWatch(Watch watch, ErrorCallback callback) {
