@@ -56,7 +56,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
     }
 
-    public void setWatching(boolean isWatching) {
+    public void sendWatching(boolean isWatching) {
         watchingInteractor.sendWatching(isWatching, eventModel.getIdMatch(), null);
 
         //TODO probably better to receive the new Watch from the Interactor
