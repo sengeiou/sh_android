@@ -58,7 +58,8 @@ public class WatchingRequestPresenter implements Presenter{
     @Subscribe
     public void onInfoDataRefreshed(WatchingInfoResult event) {
         startUpdateNotificationBadge();
-        startRetrievingWatchingRequests();
+        /* deactivated for now */
+        //startRetrievingWatchingRequests();
     }
 
     private void startUpdateNotificationBadge() {
