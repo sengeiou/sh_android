@@ -62,8 +62,13 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.loadEventsCount();
     }
 
+    //region interaction methods
     public void edit() {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
+    }
+
+    public void resultFromEdit(String statusText) {
+        watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
     }
 
     public void sendWatching(boolean isWatching) {
@@ -143,6 +148,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             singleEventView.alertNotificationsDisabled();
         }
     }
+    //endregion
 
     //region renders
     private void renderWatchersList(List<Watch> watchers) {

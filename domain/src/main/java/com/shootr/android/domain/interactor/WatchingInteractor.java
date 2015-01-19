@@ -54,7 +54,7 @@ public class WatchingInteractor implements Interactor {
         watch.setUser(currentUser);
         watch.setIdEvent(idEvent);
         watch.setWatching(isWatching);
-        watch.setUserStatus(userStatus);
+        watch.setUserStatus(userStatus); //TODO update controlled by null, not a bad practice
         watch.setNotificaticationsEnabled(notificationsEnabled());
 
         watchRepository.putWatch(watch, callback);

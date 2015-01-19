@@ -25,7 +25,7 @@ import javax.inject.Inject;
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
     private static final String KEY_TITLE = "title";
-    private static final String KEY_STATUS = "status";
+    public static final String KEY_STATUS = "status";
 
     @InjectView(R.id.edit_info_place) EditText place;
 
