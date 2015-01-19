@@ -6,9 +6,14 @@ import java.util.List;
 
 public interface WatchRepository {
 
+    interface WatchCallback extends ErrorCallback{
+
+        void onLoaded(Watch watch);
+    }
+
     Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback);
 
-    void putWatch(Watch watch, ErrorCallback callback);
+    void putWatch(Watch watch, WatchCallback callback);
 
     Watch getCurrentWatching(ErrorCallback callback);
 

@@ -4,7 +4,6 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.WatchEntityMapper;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
@@ -101,18 +100,23 @@ public class WatchRepositoryImpl implements WatchRepository {
         return null;
     }
 
-    @Override public void putWatch(Watch watch, ErrorCallback callback) {
+    @Override public void putWatch(Watch watch, WatchCallback callback) {
         WatchEntity currentWatchEntity = watchManager.getWatchByKeys(watch.getUser().getIdUser(), watch.getIdEvent());
         WatchEntity finalWatchEntity = updateEntityValues(currentWatchEntity, watch);
 
         watchManager.saveWatch(finalWatchEntity);
-        sendWatchToServer(finalWatchEntity, callback);
+        Watch finalWatch = watchEntityMapper.transform(finalWatchEntity, watch.getUser());
+        callback.onLoaded(finalWatch);
+
+        sendWatchToServer(finalWatchEntity, callback, watch.getUser());
     }
 
-    private void sendWatchToServer(WatchEntity finalWatchEntity, ErrorCallback callback) {
+    private void sendWatchToServer(WatchEntity finalWatchEntity, WatchCallback callback, @Deprecated User user) {
         if (networkConnection.isConnected()) {
             try {
-                shootrService.setWatchStatus(finalWatchEntity);
+                WatchEntity receivedWatchEntity = shootrService.setWatchStatus(finalWatchEntity);
+                Watch receivedWatch = watchEntityMapper.transform(receivedWatchEntity, user);
+                callback.onLoaded(receivedWatch);
             } catch (IOException e) {
                 callback.onError(new RepositoryException(e));
             }

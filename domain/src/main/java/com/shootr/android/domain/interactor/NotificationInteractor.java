@@ -37,9 +37,13 @@ public class NotificationInteractor implements Interactor {
         });
         currentWatch.setNotificaticationsEnabled(enableNotifications);
 
-        watchRepository.putWatch(currentWatch, new ErrorCallback() {
+        watchRepository.putWatch(currentWatch, new WatchRepository.WatchCallback() {
             @Override public void onError(Throwable error) {
                 interactorHandler.sendError(error);
+            }
+
+            @Override public void onLoaded(Watch watch) {
+                /* no-op */
             }
         });
     }

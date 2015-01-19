@@ -16,9 +16,13 @@ public class WatchingInteractor implements Interactor {
     private boolean isWatching;
     private Long idEvent;
     private String userStatus;
-    private ErrorCallback errorCallback = new ErrorCallback() {
+    private WatchRepository.WatchCallback callback = new WatchRepository.WatchCallback() {
         @Override public void onError(Throwable error) {
             interactorHandler.sendError(error);
+        }
+
+        @Override public void onLoaded(Watch watch) {
+            interactorHandler.sendUiMessage(watch);
         }
     };
 
@@ -53,15 +57,15 @@ public class WatchingInteractor implements Interactor {
         watch.setUserStatus(userStatus);
         watch.setNotificaticationsEnabled(notificationsEnabled());
 
-        watchRepository.putWatch(watch, errorCallback);
+        watchRepository.putWatch(watch, callback);
     }
 
     private void removeOldWatch() {
-        Watch currentWatching = watchRepository.getCurrentWatching(errorCallback);
+        Watch currentWatching = watchRepository.getCurrentWatching(callback);
         if (currentWatching != null) {
             currentWatching.setWatching(false);
             currentWatching.setNotificaticationsEnabled(false);
-            watchRepository.putWatch(currentWatching, errorCallback);
+            watchRepository.putWatch(currentWatching, callback);
         }
     }
 

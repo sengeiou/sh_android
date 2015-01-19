@@ -69,10 +69,15 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
         //TODO probably better to receive the new Watch from the Interactor
         this.updateWatchersCount(isWatching);
-        currentUserWatchingModel.setWatching(isWatching);
+        //currentUserWatchingModel.setWatching(isWatching);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
         singleEventView.setNotificationsEnabled(currentUserWatchingModel.isWatching()); //TODO this is bussines logic
+    }
+
+    @Subscribe
+    public void onWatchingUpdated(Watch currentUserWatch) {
+        renderCurrentUserWatching(currentUserWatch);
     }
 
     public void toggleNotifications() {
