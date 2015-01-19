@@ -170,7 +170,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setWatchersCount(int watchersCount) {
-        watchersNumber.setText(getString(R.string.event_watching_watchers_number, watchersCount));
+        watchersNumber.setText(getResources().getQuantityString(R.plurals.event_watching_watchers_number, watchersCount, watchersCount));
     }
 
     @Override public void setEventsCount(int eventsCount) {
