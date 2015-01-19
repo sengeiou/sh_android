@@ -11,7 +11,7 @@ public class WatchMapper extends GenericMapper {
 
     public ContentValues toContentValues(WatchEntity watchEntity) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(WatchTable.ID_MATCH, watchEntity.getIdMatch());
+        contentValues.put(WatchTable.ID_EVENT, watchEntity.getIdEvent());
         contentValues.put(WatchTable.ID_USER, watchEntity.getIdUser());
         contentValues.put(WatchTable.STATUS, watchEntity.getStatus());
         contentValues.put(WatchTable.PLACE, watchEntity.getPlace());
@@ -23,8 +23,8 @@ public class WatchMapper extends GenericMapper {
 
     public WatchEntity fromDto(Map<String, Object> dto) {
         WatchEntity watch = new WatchEntity();
-        watch.setIdMatch(
-          dto.get(WatchTable.ID_MATCH) == null ? null : ((Number) dto.get(WatchTable.ID_MATCH)).longValue());
+        watch.setIdEvent(
+          dto.get(WatchTable.ID_EVENT) == null ? null : ((Number) dto.get(WatchTable.ID_EVENT)).longValue());
         watch.setIdUser(dto.get(WatchTable.ID_USER) == null ? null : ((Number) dto.get(WatchTable.ID_USER)).longValue());
         watch.setStatus(dto.get(WatchTable.STATUS) == null ? null : ((Number) dto.get(WatchTable.STATUS)).longValue());
         watch.setPlace((String) dto.get(WatchTable.PLACE));
@@ -37,7 +37,7 @@ public class WatchMapper extends GenericMapper {
 
     public Map<String, Object> toDto(WatchEntity watch) {
         Map<String, Object> dto = new HashMap<>();
-        dto.put(WatchTable.ID_MATCH, watch == null ? null : watch.getIdMatch());
+        dto.put(WatchTable.ID_EVENT, watch == null ? null : watch.getIdEvent());
         dto.put(WatchTable.ID_USER, watch == null ? null : watch.getIdUser());
         dto.put(WatchTable.STATUS, watch == null ? null : watch.getStatus());
         dto.put(WatchTable.PLACE, watch == null ? null : watch.getPlace());
@@ -49,7 +49,7 @@ public class WatchMapper extends GenericMapper {
 
     public WatchEntity fromCursor(Cursor c) {
         WatchEntity watch = new WatchEntity();
-        watch.setIdMatch(c.getLong(c.getColumnIndex(WatchTable.ID_MATCH)));
+        watch.setIdEvent(c.getLong(c.getColumnIndex(WatchTable.ID_EVENT)));
         watch.setIdUser(c.getLong(c.getColumnIndex(WatchTable.ID_USER)));
         watch.setStatus(c.getLong(c.getColumnIndex(WatchTable.STATUS)));
         watch.setPlace(c.getString(c.getColumnIndex(WatchTable.PLACE)));

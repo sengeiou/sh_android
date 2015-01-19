@@ -4,22 +4,22 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import com.shootr.android.ShootrApplication;
-import com.shootr.android.db.manager.MatchManager;
+import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
-import com.shootr.android.data.entity.MatchEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.gcm.notifications.ShootrNotificationManager;
 import com.shootr.android.service.ShootrService;
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 import com.shootr.android.ui.model.UserWatchingModel;
+import com.shootr.android.ui.model.mappers.EventEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
-import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.squareup.otto.Bus;
@@ -33,7 +33,7 @@ public class GCMIntentService extends IntentService {
 
     private static final int PUSH_TYPE_SHOT = 1;
     private static final int PUSH_TYPE_FOLLOW = 2;
-    private static final int PUSH_TYPE_START_MATCH = 3;
+    private static final int PUSH_TYPE_START_EVENT = 3;
     private static final int PUSH_TYPE_WATCH_REQUEST = 4;
 
     @Inject ShootrNotificationManager notificationManager;
@@ -41,10 +41,10 @@ public class GCMIntentService extends IntentService {
     @Inject ShootrService service;
     @Inject ShotModelMapper shotModelMapper;
     @Inject WatchManager watchManager;
-    @Inject MatchManager matchManager;
+    @Inject EventManager eventManager;
     @Inject UserEntityWatchingModelMapper userWatchingModelMapper;
     @Inject UserEntityModelMapper userModelMapper;
-    @Inject MatchModelMapper matchModelMapper;
+    @Inject EventEntityModelMapper eventEntityModelMapper;
     @Inject Bus bus;
 
     public GCMIntentService() {
@@ -53,7 +53,7 @@ public class GCMIntentService extends IntentService {
 
     private static final String ID_USER = "idUser";
     private static final String ID_SHOT = "idShot";
-    private static final String ID_MATCH = "idMatch";
+    private static final String ID_EVENT = "idEvent";
     private static final String STATUS = "status";
     private static final String PLACE = "place";
 
@@ -77,8 +77,8 @@ public class GCMIntentService extends IntentService {
                 case PUSH_TYPE_FOLLOW:
                     receivedFollow(parameters);
                     break;
-                case PUSH_TYPE_START_MATCH:
-                    receivedStartMatch(parameters);
+                case PUSH_TYPE_START_EVENT:
+                    receivedStartEvent(parameters);
                     break;
                 case PUSH_TYPE_WATCH_REQUEST:
                     receivedWatchRequest(parameters);
@@ -95,11 +95,11 @@ public class GCMIntentService extends IntentService {
         }
     }
 
-    private void receivedStartMatch(JSONObject parameters) throws JSONException, IOException {
-        Long idMatch = parameters.getLong(ID_MATCH);
-        MatchEntity match = service.getMatchByIdMatch(idMatch);
-        String text = match.getLocalTeamName()+"-"+match.getVisitorTeamName();
-        notificationManager.sendMatchStartedNotification(text);
+    private void receivedStartEvent(JSONObject parameters) throws JSONException, IOException {
+        Long idEvent = parameters.getLong(ID_EVENT);
+        EventEntity eventEntity = service.getEventById(idEvent);
+        String text = eventEntity.getTitle();
+        notificationManager.sendEventStartedNotification(text);
     }
 
     private void receivedShot(JSONObject parameters) throws JSONException, IOException {
@@ -117,31 +117,31 @@ public class GCMIntentService extends IntentService {
 
     private void receivedWatchRequest(JSONObject parameters) throws JSONException, IOException {
         Long idUser = parameters.getLong(ID_USER);
-        Long idMatch = parameters.getLong(ID_MATCH);
+        Long idEvent = parameters.getLong(ID_EVENT);
         Long status = parameters.getLong(STATUS);
         String place = parameters.optString(PLACE);
         if ("null".equals(place) || place.isEmpty()) {
             place = null;
         }
 
-        MatchEntity matchEntity = service.getMatchByIdMatch(idMatch);
+        EventEntity eventEntity = service.getEventById(idEvent);
         UserEntity userFromNotification = userManager.getUserByIdUser(idUser);
 
         boolean isWatching = WatchEntity.STATUS_WATCHING.equals(status);
 
         UserWatchingModel userWatchingModel = userWatchingModelMapper.toUserWatchingModel(userFromNotification, isWatching,
           place);
-        MatchModel matchModel = matchModelMapper.toMatchModel(matchEntity);
+        EventModel eventModel = eventEntityModelMapper.toEventModel(eventEntity);
 
-        notificationManager.sendWatchRequestNotification(userWatchingModel, matchModel);
+        notificationManager.sendWatchRequestNotification(userWatchingModel, eventModel);
 
-        retrieveAndStoreNewWatch(userFromNotification, matchEntity);
+        retrieveAndStoreNewWatch(userFromNotification, eventEntity);
     }
 
-    private void retrieveAndStoreNewWatch(UserEntity userEntity, MatchEntity matchEntity) throws IOException {
-        WatchEntity watchEntity = service.getWatchStatus(userEntity.getIdUser(), matchEntity.getIdMatch());
+    private void retrieveAndStoreNewWatch(UserEntity userEntity, EventEntity eventEntity) throws IOException {
+        WatchEntity watchEntity = service.getWatchStatus(userEntity.getIdUser(), eventEntity.getIdEvent());
 
-        matchManager.saveMatch(matchEntity);
+        eventManager.saveEvent(eventEntity);
         userManager.saveUser(userEntity);
         watchManager.createUpdateWatch(watchEntity);
 

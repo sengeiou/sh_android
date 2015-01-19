@@ -9,7 +9,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.app.NotificationCompat;
 import com.shootr.android.R;
 import com.shootr.android.gcm.NotificationIntentReceiver;
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class WatchRequestNotification extends CommonNotification {
     private UserWatchingModel userWatchingModel;
     private static final int DEFAULT_USER_PHOTO_RES = R.drawable.ic_contact_picture_default;
     private PicassoWrapper picasso;
-    private MatchModel matchModel;
+    private EventModel eventModel;
     private Bitmap largeIcon;
 
     private final String formatWatching;
@@ -31,10 +31,10 @@ public class WatchRequestNotification extends CommonNotification {
     private final String formatNotWatching;
 
     public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
-      PicassoWrapper picasso, UserWatchingModel userWatchingModel, MatchModel matchModel) {
+      PicassoWrapper picasso, UserWatchingModel userWatchingModel, EventModel eventModel) {
         super(context,notificationBuilderFactory);
         this.userWatchingModel = userWatchingModel;
-        this.matchModel = matchModel;
+        this.eventModel = eventModel;
         this.picasso = picasso;
 
         formatWatching = context.getString(R.string.notification_watch_watching);
@@ -100,14 +100,14 @@ public class WatchRequestNotification extends CommonNotification {
 
     public String getWatchingMessage() {
         if (userWatchingModel.getPlace() != null) {
-            return String.format(formatWatchingPlace, matchModel.getTitle(), userWatchingModel.getPlace());
+            return String.format(formatWatchingPlace, eventModel.getTitle(), userWatchingModel.getPlace());
         } else {
-            return String.format(formatWatching, matchModel.getTitle());
+            return String.format(formatWatching, eventModel.getTitle());
         }
     }
 
     private String getNotWatchingMessage() {
-        return String.format(formatNotWatching, matchModel.getTitle());
+        return String.format(formatNotWatching, eventModel.getTitle());
     }
 
 

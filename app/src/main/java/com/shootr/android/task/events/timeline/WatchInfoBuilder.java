@@ -2,7 +2,7 @@ package com.shootr.android.task.events.timeline;
 
 import android.support.v4.util.LongSparseArray;
 import com.google.common.collect.TreeMultimap;
-import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
 import java.util.ArrayList;
@@ -13,22 +13,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class WatchInfoBuilder {
 
-        private TreeMultimap<MatchEntity, UserEntity> map;
+        private TreeMultimap<EventEntity, UserEntity> map;
 
-        private LongSparseArray<MatchEntity> matchEntities = new LongSparseArray<>();
+        private LongSparseArray<EventEntity> eventEntities = new LongSparseArray<>();
         private LongSparseArray<UserEntity> userEntities = new LongSparseArray<>();
 
-        private List<Long> matchIdsFromWatches = new ArrayList<>();
+        private List<Long> eventIdsFromWatches = new ArrayList<>();
         private List<Long> userIdsFromWatches = new ArrayList<>();
 
 
         private Set<WatchEntity> watches = new HashSet<>();
 
-        private Comparator<? super MatchEntity> matchComparatorByDate = new Comparator<MatchEntity>() {
-            @Override public int compare(MatchEntity match1, MatchEntity match2) {
-                return matchEntities.get(match1.getIdMatch()).compareTo(matchEntities.get(match2.getIdMatch()));
+        private Comparator<? super EventEntity> eventComparatorByDate = new Comparator<EventEntity>() {
+            @Override public int compare(EventEntity event1, EventEntity event2) {
+                return eventEntities.get(event1.getIdEvent()).compareTo(eventEntities.get(event2.getIdEvent()));
             }
         };
 
@@ -52,14 +53,14 @@ public class WatchInfoBuilder {
             }
         }
 
-        public void provideMatches(List<MatchEntity> matches) {
-            for (MatchEntity matchEntity : matches) {
-                matchEntities.put(matchEntity.getIdMatch(), matchEntity);
+        public void provideEvents(List<EventEntity> events) {
+            for (EventEntity eventEntity : events) {
+                eventEntities.put(eventEntity.getIdEvent(), eventEntity);
             }
         }
 
-        public Map<MatchEntity, Collection<UserEntity>> build() {
-            map = TreeMultimap.create(matchComparatorByDate, userComparatorByNameAndCurrentUser);
+        public Map<EventEntity, Collection<UserEntity>> build() {
+            map = TreeMultimap.create(eventComparatorByDate, userComparatorByNameAndCurrentUser);
             buildMapFromWatchesAndEntities();
             return map.asMap();
         }
@@ -71,25 +72,25 @@ public class WatchInfoBuilder {
         }
 
         private void addWatchingToResult(WatchEntity watchEntity) {
-            MatchEntity matchEntity = matchEntities.get(watchEntity.getIdMatch());
+            EventEntity eventEntity = eventEntities.get(watchEntity.getIdEvent());
             UserEntity userEntity = userEntities.get(watchEntity.getIdUser());
-            if (matchEntity != null && userEntity != null) {
-                addWatchingPopulatedToResult(matchEntity, userEntity);
+            if (eventEntity != null && userEntity != null) {
+                addWatchingPopulatedToResult(eventEntity, userEntity);
             }
         }
 
-        private void addWatchingPopulatedToResult(MatchEntity matchEntity, UserEntity userEntity) {
-            map.put(matchEntity, userEntity);
+        private void addWatchingPopulatedToResult(EventEntity eventEntity, UserEntity userEntity) {
+            map.put(eventEntity, userEntity);
         }
 
         private void setWatchesAndExtractIds(Collection<WatchEntity> watches) {
             this.watches.addAll(watches);
-            extractMatchesAndUserIdsFromWatches(watches);
+            extractEventsAndUserIdsFromWatches(watches);
         }
 
-        private void extractMatchesAndUserIdsFromWatches(Collection<WatchEntity> watches) {
+        private void extractEventsAndUserIdsFromWatches(Collection<WatchEntity> watches) {
             for (WatchEntity watch : watches) {
-                matchIdsFromWatches.add(watch.getIdMatch());
+                eventIdsFromWatches.add(watch.getIdEvent());
                 userIdsFromWatches.add(watch.getIdUser());
             }
         }
@@ -98,8 +99,8 @@ public class WatchInfoBuilder {
             return userIdsFromWatches;
         }
 
-        public List<Long> getMatchIds() {
-            return matchIdsFromWatches;
+        public List<Long> getEventIds() {
+            return eventIdsFromWatches;
         }
 
 

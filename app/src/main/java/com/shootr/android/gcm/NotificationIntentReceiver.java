@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 public class NotificationIntentReceiver extends BroadcastReceiver {
 
-    public static final String ACTION_START_MATCH = "com.shootr.android.ACTION_START_MATCH";
+    public static final String ACTION_START_EVENT = "com.shootr.android.ACTION_START_EVENT";
     public static final String ACTION_OPEN_PROFILE = "com.shootr.android.ACTION_OPEN_PROFILE";
     public static final String ACTION_DISCARD_SHOT_NOTIFICATION = "com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION";
     public static final String ACTION_OPEN_SHOT_NOTIFICATION = "com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION";
@@ -33,7 +33,7 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
             Long idUser = intent.getExtras().getLong(ProfileContainerActivity.EXTRA_USER);
             context.startActivity(ProfileContainerActivity.getIntent(context,idUser).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             notificationManager.clearShotNotifications();
-        }else if(action.equals(ACTION_START_MATCH)){
+        }else if(action.equals(ACTION_START_EVENT)){
             context.startActivity(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             notificationManager.clearShotNotifications();
         }

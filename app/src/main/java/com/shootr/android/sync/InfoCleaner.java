@@ -1,8 +1,8 @@
 package com.shootr.android.sync;
 
-import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.WatchEntity;
-import com.shootr.android.db.manager.MatchManager;
+import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.WatchManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,48 +11,47 @@ import javax.inject.Inject;
 public class InfoCleaner {
 
     private WatchManager watchManager;
-    private MatchManager matchManager;
+    private EventManager eventManager;
 
-    @Inject public InfoCleaner(MatchManager matchManager, WatchManager watchManager) {
-        this.matchManager = matchManager;
+    @Inject public InfoCleaner(EventManager eventManager, WatchManager watchManager) {
+        this.eventManager = eventManager;
         this.watchManager = watchManager;
     }
 
     public void clean() {
-        cleanEndedAndAdjournedMatchesWithTheirWatches();
-
+        cleanEndedEventsWithTheirWatches();
         cleanRejectedWatches();
     }
 
-    private void cleanEndedAndAdjournedMatchesWithTheirWatches() {
-        List<MatchEntity> endedAndAdjournedMatches = getEndedAndAdjournedMatches();
-        List<WatchEntity> watchesFromEndedAndAdjournedMatches = getWatchesFromMatches(endedAndAdjournedMatches);
+    private void cleanEndedEventsWithTheirWatches() {
+        List<EventEntity> endedEvents = getEndedEvents();
+        List<WatchEntity> watchesFromEndedEvents = getWatchesFromEvents(endedEvents);
 
-        cleanWatches(watchesFromEndedAndAdjournedMatches);
-        cleanMatches(endedAndAdjournedMatches);
+        cleanWatches(watchesFromEndedEvents);
+        cleanEvents(endedEvents);
     }
 
-    private List<MatchEntity> getEndedAndAdjournedMatches() {
-        return matchManager.getEndedMatches();
+    private List<EventEntity> getEndedEvents() {
+        return eventManager.getEndedEvents();
     }
 
-    private List<WatchEntity> getWatchesFromMatches(List<MatchEntity> matches) {
-        if (matches.isEmpty()) {
+    private List<WatchEntity> getWatchesFromEvents(List<EventEntity> events) {
+        if (events.isEmpty()) {
             return new ArrayList<>(0);
         }
-        List<Long> matchIds = new ArrayList<>();
-        for (MatchEntity match : matches) {
-            matchIds.add(match.getIdMatch());
+        List<Long> eventIds = new ArrayList<>();
+        for (EventEntity event : events) {
+            eventIds.add(event.getIdEvent());
         }
-        return watchManager.getWatchesFromMatches(matchIds);
+        return watchManager.getWatchesFromEvents(eventIds);
     }
 
     private void cleanWatches(List<WatchEntity> watches) {
         watchManager.deleteWatches(watches);
     }
 
-    private void cleanMatches(List<MatchEntity> matches) {
-        matchManager.deleteMatches(matches);
+    private void cleanEvents(List<EventEntity> events) {
+        eventManager.deleteEvents(events);
     }
 
     private void cleanRejectedWatches() {

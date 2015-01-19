@@ -1,9 +1,7 @@
 package com.shootr.android.data.mapper;
 
-import com.shootr.android.constant.SyncConstants;
 import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
-import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.util.TimeUtils;
@@ -23,7 +21,7 @@ public class WatchEntityMapper {
         checkUserIdMatches(watchEntity, user);
         Watch watch = new Watch();
         watch.setUser(user);
-        watch.setIdEvent(watchEntity.getIdMatch());
+        watch.setIdEvent(watchEntity.getIdEvent());
         watch.setUserStatus(watchEntity.getPlace());
         watch.setWatching(WatchEntity.STATUS_WATCHING.equals(watchEntity.getStatus()));
         watch.setNotificaticationsEnabled(Integer.valueOf(1).equals(watchEntity.getNotification()));
@@ -41,7 +39,7 @@ public class WatchEntityMapper {
     public WatchEntity transform(Watch watch) {
         WatchEntity watchEntity = new WatchEntity();
         watchEntity.setIdUser(watch.getUser().getIdUser());
-        watchEntity.setIdMatch(watch.getIdEvent());
+        watchEntity.setIdEvent(watch.getIdEvent());
         watchEntity.setPlace(watch.getUserStatus());
         watchEntity.setStatus(watch.isWatching() ? WatchEntity.STATUS_WATCHING : WatchEntity.STATUS_REJECT);
         watchEntity.setNotification(watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);

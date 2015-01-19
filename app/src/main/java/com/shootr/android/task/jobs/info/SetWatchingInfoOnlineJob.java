@@ -51,7 +51,7 @@ public class SetWatchingInfoOnlineJob extends ShootrBaseJob {
         try {
             return service.setWatchStatus(watchEntity);
         } catch (IOException e) {
-            Timber.e(e, "Error sending watch to server with matchId=%d", watchEntity.getIdMatch());
+            Timber.e(e, "Error sending watch to server with eventId=%d", watchEntity.getIdEvent());
             return null;
         }
     }

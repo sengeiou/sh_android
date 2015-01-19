@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
-import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.data.entity.WatchEntity;
@@ -28,9 +27,9 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesNotEndedFromUsers(List<Long> userIds) {
-        String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ MatchTable.TABLE+" m ON "
-          + "w."+WatchTable.ID_MATCH+" = m."+MatchTable.ID_MATCH
-          + " WHERE m."+MatchTable.MATCH_FINISH_DATE + ">" + timeUtils.getCurrentTime()
+        String query = "SELECT w.* FROM "+WatchTable.TABLE+" w INNER JOIN "+ DatabaseContract.EventTable.TABLE+" m ON "
+          + "w."+WatchTable.ID_EVENT +" = m."+ DatabaseContract.EventTable.ID_EVENT
+          + " WHERE m."+ DatabaseContract.EventTable.END_DATE + ">" + timeUtils.getCurrentTime()
           + " AND w."+WatchTable.ID_USER+" IN ("+createListPlaceholders(userIds.size())+");";
 
         String[] whereArguments = new String[userIds.size()];
@@ -68,8 +67,8 @@ public class WatchManager extends AbstractManager{
 
     public long deleteWatch(WatchEntity watchEntity){
         long res = 0;
-        String args = WatchTable.ID_USER + "=? AND "+ WatchTable.ID_MATCH+"=?";
-        String[] stringArgs = new String[]{String.valueOf(watchEntity.getIdUser()), String.valueOf(watchEntity.getIdMatch())};
+        String args = WatchTable.ID_USER + "=? AND "+ WatchTable.ID_EVENT +"=?";
+        String[] stringArgs = new String[]{String.valueOf(watchEntity.getIdUser()), String.valueOf(watchEntity.getIdEvent())};
         Cursor c = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, args, stringArgs, null, null, null);
         if (c.getCount() > 0) {
             res = getWritableDatabase().delete(WatchTable.TABLE, args, stringArgs);
@@ -92,18 +91,19 @@ public class WatchManager extends AbstractManager{
         insertInTableSync(WatchTable.TABLE,7,1000,0);
     }
 
-    public List<WatchEntity> getWatchesByMatch(Long idMatch){
-        List<Long> matchIds = new ArrayList<>(1);
-        matchIds.add(idMatch);
-        List<WatchEntity> watches = getWatchesFromMatches(matchIds);
+    public List<WatchEntity> getWatchesByEvent(Long idEvent){
+        List<Long> eventIds = new ArrayList<>(1);
+        eventIds.add(idEvent);
+        List<WatchEntity> watches = getWatchesFromEvents(eventIds);
         return watches;
     }
 
-    public List<WatchEntity> getWatchesFromMatches(List<Long> matchIds) {
-        String whereSelection = WatchTable.ID_MATCH + " IN (" + createListPlaceholders(matchIds.size())+") AND "+WatchTable.STATUS+"=1";
-        String[] whereArguments = new String[matchIds.size()];
-        for (int i = 0; i < matchIds.size(); i++) {
-            whereArguments[i] = String.valueOf(matchIds.get(i));
+    public List<WatchEntity> getWatchesFromEvents(List<Long> eventIds) {
+        String whereSelection = WatchTable.ID_EVENT
+          + " IN (" + createListPlaceholders(eventIds.size())+") AND "+WatchTable.STATUS+"=1";
+        String[] whereArguments = new String[eventIds.size()];
+        for (int i = 0; i < eventIds.size(); i++) {
+            whereArguments[i] = String.valueOf(eventIds.get(i));
         }
 
         Cursor queryResult =
@@ -159,10 +159,10 @@ public class WatchManager extends AbstractManager{
         getWritableDatabase().insertWithOnConflict(WatchTable.TABLE,null,contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public WatchEntity getWatchByKeys(Long idUser, Long idMatch) {
+    public WatchEntity getWatchByKeys(Long idUser, Long idEvent) {
         WatchEntity watchEntity = null;
-        String whereString = WatchTable.ID_USER+"=? AND "+WatchTable.ID_MATCH+"=?";
-        String[] whereArguments = new String[]{String.valueOf(idUser),String.valueOf(idMatch)};
+        String whereString = WatchTable.ID_USER+"=? AND "+WatchTable.ID_EVENT +"=?";
+        String[] whereArguments = new String[]{String.valueOf(idUser),String.valueOf(idEvent)};
         Cursor queryResult = getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION,whereString,whereArguments,null,null,null);
         if(queryResult.getCount()>0){
             queryResult.moveToFirst();
@@ -192,7 +192,9 @@ public class WatchManager extends AbstractManager{
     }
 
     public List<WatchEntity> getWatchesWhereUserNot(Long currentUserId) {
-        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_MATCH+" NOT IN( SELECT "+WatchTable.ID_MATCH +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
+        String sql = "SELECT * FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_EVENT
+          +" NOT IN( SELECT "+WatchTable.ID_EVENT
+          +" FROM "+WatchTable.TABLE+" WHERE "+WatchTable.ID_USER+" ="+currentUserId+");";
 
         Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
         List<WatchEntity> resultWatches = new ArrayList<>();
@@ -207,9 +209,9 @@ public class WatchManager extends AbstractManager{
         return resultWatches;
     }
 
-    public WatchEntity getWatchByMatchAndUser(Long matchId, Long userId) {
-        String whereSelection = WatchTable.ID_MATCH + " = ? AND " + WatchTable.ID_USER + " = ? AND "+WatchTable.STATUS+" IS NOT ?";
-        String[] whereArguments = new String[]{String.valueOf(matchId), String.valueOf(userId), String.valueOf(WatchEntity.STATUS_DEFAULT)};
+    public WatchEntity getWatchByEventAndUser(Long eventId, Long userId) {
+        String whereSelection = WatchTable.ID_EVENT + " = ? AND " + WatchTable.ID_USER + " = ? AND "+WatchTable.STATUS+" IS NOT ?";
+        String[] whereArguments = new String[]{String.valueOf(eventId), String.valueOf(userId), String.valueOf(WatchEntity.STATUS_DEFAULT)};
 
         Cursor queryResult =
                 getReadableDatabase().query(WatchTable.TABLE, WatchTable.PROJECTION, whereSelection, whereArguments, null, null, null);
@@ -224,7 +226,9 @@ public class WatchManager extends AbstractManager{
     }
 
     public Integer getPeopleWatchingInInfo() {
-        String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+MatchTable.TABLE+" m WHERE m."+MatchTable.ID_MATCH+"=w."+WatchTable.ID_MATCH+" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
+        String sql = "SELECT COUNT(DISTINCT("+WatchTable.ID_USER+")) as NUMBER FROM "+WatchTable.TABLE+" w, "+ DatabaseContract.EventTable.TABLE+" m WHERE m."+ DatabaseContract.EventTable.ID_EVENT
+          +"=w."+WatchTable.ID_EVENT
+          +" AND w."+WatchTable.STATUS+"="+WatchEntity.STATUS_WATCHING;
         Cursor queryResult = getReadableDatabase().rawQuery(sql,null);
         Integer number = -1;
         if (queryResult.getCount() > 0) {

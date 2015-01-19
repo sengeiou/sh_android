@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.views.SingleEventView;
@@ -203,7 +203,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         currentToast.show();
     }
 
-    @Override public void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel) {
+    @Override public void navigateToEdit(EventModel eventModel, UserWatchingModel currentUserWatchingModel) {
         Intent intent = EditInfoActivity.getIntent(this, eventModel, currentUserWatchingModel);
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }

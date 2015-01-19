@@ -10,8 +10,7 @@ import com.shootr.android.domain.interactor.WatchingInteractor;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
-import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
 import com.shootr.android.ui.model.mappers.UserWatchingModelMapper;
@@ -38,7 +37,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private SingleEventView singleEventView;
 
     private UserWatchingModel currentUserWatchingModel;
-    private MatchModel eventModel;
+    private EventModel eventModel;
     private int watchersCount;
     //endregion
 
@@ -67,7 +66,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void sendWatching(boolean isWatching) {
-        watchingInteractor.sendWatching(isWatching, eventModel.getIdMatch(), null);
+        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), null);
 
         //TODO probably better to receive the new Watch from the Interactor
         this.updateWatchersCount(isWatching);
@@ -84,7 +83,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     public void toggleNotifications() {
         boolean enableNotifications = !currentUserWatchingModel.isNotificationsEnabled();
-        notificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdMatch());
+        notificationInteractor.setNotificationEnabledForEvent(enableNotifications, eventModel.getIdEvent());
         //TODO handle some response maybe?
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);

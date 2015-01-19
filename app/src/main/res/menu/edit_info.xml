@@ -3,11 +3,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-      android:id="@+id/menu_delete"
-      app:showAsAction="ifRoom"
-      android:icon="@drawable/ic_action_delete"
-      android:title="@string/remove_match_action" />
-    <item
       android:id="@+id/menu_send"
       app:showAsAction="ifRoom"
       android:icon="@drawable/ic_action_send"

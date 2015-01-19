@@ -2,7 +2,6 @@ package com.shootr.android.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -19,15 +18,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnTextChanged;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
 import com.shootr.android.ui.widgets.SwitchBar;
-import timber.log.Timber;
 
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
@@ -39,15 +36,15 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     private EditInfoPresenter editInfoPresenter;
 
-    public static Intent getIntent(Context context, MatchModel eventModel, UserWatchingModel watchingModel) {
+    public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
         String place = watchingModel.hasStatusMessage() ? watchingModel.getPlace() : null;
-        return getIntent(context, eventModel.getIdMatch(), watchingModel.isWatching(), eventModel.getTitle(), place);
+        return getIntent(context, eventModel.getIdEvent(), watchingModel.isWatching(), eventModel.getTitle(), place);
     }
 
     @Deprecated
-    public static Intent getIntent(Context context, Long idMatch, boolean watchingStatus, String matchTitle, String place) {
+    public static Intent getIntent(Context context, Long idEvent, boolean watchingStatus, String eventTitle, String place) {
         EditInfoPresenter.EditInfoModel editInfoModel =
-          new EditInfoPresenter.EditInfoModel(idMatch, matchTitle, watchingStatus, place);
+          new EditInfoPresenter.EditInfoModel(idEvent, eventTitle, watchingStatus, place);
         Intent launchIntent = new Intent(context, EditInfoActivity.class);
         launchIntent.putExtras(editInfoModel.toBundle());
         return launchIntent;
@@ -136,16 +133,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
             case R.id.menu_send:
                 sendNewStatus();
                 return true;
-            case R.id.menu_delete:
-                deleteMatch();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void deleteMatch() {
-        editInfoPresenter.deleteMatch();
     }
 
     @Override public void setSendButonEnabled(boolean enabled) {
@@ -165,20 +155,6 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     @Override public void closeScreen() {
         setResult(RESULT_OK);
         finish();
-    }
-
-    @Override public void showDeleteMatchConfirmation(String confirmationTitle, String confirmationMessage) {
-        new AlertDialog.Builder(this)
-          .setTitle(confirmationTitle)
-          .setMessage(confirmationMessage)
-          .setPositiveButton(R.string.delete_match_confirmation, new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  editInfoPresenter.confirmDeleteMatch();
-              }
-          })
-          .setNegativeButton(R.string.cancel, null)
-          .show();
-
     }
 
     @Override public String getPlaceText() {

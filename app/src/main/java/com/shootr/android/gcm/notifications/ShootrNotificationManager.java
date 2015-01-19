@@ -6,14 +6,13 @@ import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.util.PicassoWrapper;
-import com.squareup.picasso.Picasso;
 import com.shootr.android.ui.model.ShotModel;
 import com.shootr.android.ui.model.UserModel;
 
-import gm.mobi.android.gcm.notifications.StartMatchNotification;
+import gm.mobi.android.gcm.notifications.StartEventNotification;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,7 +22,7 @@ public class ShootrNotificationManager {
     public static final int NOTIFICATION_ERROR = 0;
     public static final int NOTIFICATION_SHOT = 1;
     private static final int NOTIFICATION_FOLLOW = 2;
-    private static final int NOTIFICATION_START_MATCH = 3;
+    private static final int NOTIFICATION_START_EVENT = 3;
     private static final int NOTIFICATION_WATCH_REQUEST = 4;
 
     private Context context;
@@ -91,13 +90,14 @@ public class ShootrNotificationManager {
         notify(NOTIFICATION_FOLLOW, notification);
     }
 
-    public void sendMatchStartedNotification(String text) {
-        Notification notification = new StartMatchNotification(context, notificationBuilderFactory, text).build();
-        notify(NOTIFICATION_START_MATCH,notification);
+    public void sendEventStartedNotification(String text) {
+        Notification notification = new StartEventNotification(context, notificationBuilderFactory, text).build();
+        notify(NOTIFICATION_START_EVENT,notification);
     }
 
-    public void sendWatchRequestNotification(UserWatchingModel userWatchingModel, MatchModel matchModel) {
-        Notification notification = new WatchRequestNotification(context, notificationBuilderFactory, picasso, userWatchingModel, matchModel).build();
+    public void sendWatchRequestNotification(UserWatchingModel userWatchingModel, EventModel eventModel) {
+        Notification notification = new WatchRequestNotification(context, notificationBuilderFactory, picasso, userWatchingModel,
+          eventModel).build();
         notify(NOTIFICATION_WATCH_REQUEST, notification);
     }
 }

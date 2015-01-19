@@ -111,20 +111,6 @@
         <activity
           android:name=".ui.activities.EditInfoActivity"
           android:theme="@style/ShootrTheme.Closable">
-
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.InfoActivity" />
-        </activity>
-
-        <activity
-          android:name="com.shootr.android.ui.activities.AddMatchActivity"
-          android:label="@string/add_match"
-          android:theme="@style/ShootrTheme.Closable"
-          android:parentActivityName="com.shootr.android.ui.activities.InfoActivity" >
-            <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="com.shootr.android.ui.activities.InfoActivity" />
         </activity>
 
         <activity
@@ -213,7 +199,7 @@
                 <action android:name="com.shootr.android.ACTION_DISCARD_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_SHOT_NOTIFICATION" />
                 <action android:name="com.shootr.android.ACTION_OPEN_PROFILE"/>
-                <action android:name="com.shootr.android.ACTION_START_MATCH"/>
+                <action android:name="com.shootr.android.ACTION_START_EVENT"/>
                 <action android:name="com.shootr.android.ACTION_OPEN_WATCH_REQUEST"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

@@ -2,22 +2,19 @@ package com.shootr.android.db;
 
 import android.app.Application;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
-import com.shootr.android.ui.model.mappers.MatchSearchResultModelMapper;
 import com.shootr.android.ui.model.mappers.TeamModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
 import com.shootr.android.ui.model.mappers.UserModelMapper;
 import com.shootr.android.ui.model.mappers.WatchingRequestModelMapper;
-import com.shootr.android.util.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.ShotMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
-import com.shootr.android.ui.model.mappers.MatchModelMapper;
 import com.shootr.android.ui.model.mappers.ShotModelMapper;
 import javax.inject.Singleton;
 
@@ -25,7 +22,6 @@ import javax.inject.Singleton;
   complete = false,
   library = true,
   injects = {
-    MatchSearchResultModelMapper.class,
     TeamModelMapper.class,
     TeamMapper.class,
     WatchingRequestModelMapper.class,
@@ -35,10 +31,6 @@ public class MapperModule {
 
     @Provides ShotModelMapper provideShotModelMapper() {
         return new ShotModelMapper();
-    }
-
-    @Provides MatchModelMapper provideMatchModelMapper() {
-        return new MatchModelMapper();
     }
 
     @Provides UserEntityWatchingModelMapper provideUserWatchingModelMapper(Application application) {
@@ -69,8 +61,8 @@ public class MapperModule {
         return new UserMapper();
     }
 
-    @Provides MatchMapper provideMatchMapper() {
-        return new MatchMapper();
+    @Provides EventEntityMapper provideEntityMapper() {
+        return new EventEntityMapper();
     }
 
     @Provides WatchMapper provideWatchMapper() {

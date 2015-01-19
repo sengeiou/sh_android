@@ -1,13 +1,13 @@
 package com.shootr.android.data.repository;
 
 import android.support.v4.util.LongSparseArray;
-import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.data.mapper.EventEntityMapper;
 import com.shootr.android.data.mapper.UserEntityMapper;
 import com.shootr.android.data.mapper.WatchEntityMapper;
-import com.shootr.android.db.manager.MatchManager;
+import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
 import com.shootr.android.domain.Event;
@@ -29,7 +29,7 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
 
     private final SessionRepository sessionRepository;
     private final WatchManager watchManager;
-    private final MatchManager matchManager;
+    private final EventManager eventManager;
     private final UserManager userManager;
     private final ShootrService shootrService;
     private final EventEntityMapper eventEntityMapper;
@@ -38,12 +38,12 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
     private final NetworkConnection networkConnection;
 
     @Inject public EventInfoRepositoryImpl(SessionRepository sessionRepository, WatchManager watchManager,
-      MatchManager matchManager, UserManager userManager, ShootrService shootrService,
+      EventManager eventManager, UserManager userManager, ShootrService shootrService,
       EventEntityMapper eventEntityMapper, WatchEntityMapper watchEntityMapper, UserEntityMapper userEntityMapper,
       NetworkConnection networkConnection) {
         this.sessionRepository = sessionRepository;
         this.watchManager = watchManager;
-        this.matchManager = matchManager;
+        this.eventManager = eventManager;
         this.userManager = userManager;
         this.shootrService = shootrService;
         this.eventEntityMapper = eventEntityMapper;
@@ -75,13 +75,13 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
             return;
         }
 
-        Long idEvent = watchVisibleByUser.getIdMatch();
-        MatchEntity eventEntity = matchManager.getMatchById(idEvent);
+        Long idEvent = watchVisibleByUser.getIdEvent();
+        EventEntity eventEntity = eventManager.getEventById(idEvent);
         if (eventEntity == null) {
             return; //TODO mmm should't happen, right? What's going on then?
         }
 
-        List<WatchEntity> watchEntities = watchManager.getWatchesByMatch(eventEntity.getIdMatch());
+        List<WatchEntity> watchEntities = watchManager.getWatchesByEvent(eventEntity.getIdEvent());
         List<UserEntity> usersWatching = userManager.getUsersByIds(userIdsFromWatches(watchEntities));
 
         EventInfo eventInfo =
@@ -96,14 +96,14 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
             return;
         }
 
-        Long idEvent = watchVisibleByUser.getIdMatch();
-        MatchEntity eventEntity = shootrService.getMatchByIdMatch(idEvent);
+        Long idEvent = watchVisibleByUser.getIdEvent();
+        EventEntity eventEntity = shootrService.getEventById(idEvent);
         if (eventEntity == null) {
             callback.onLoaded(noEventVisible());
             return;
         }
         List<UserEntity> usersFollowing = shootrService.getFollowing(sessionRepository.getCurrentUserId(), 0L);
-        List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByMatch(idEvent, userIds(usersFollowing));
+        List<WatchEntity> watchEntities = shootrService.getWatchesFromUsersByEvent(idEvent, userIds(usersFollowing));
 
         EventInfo eventInfo =
           mapEntitiesAndBuildEventInfo(watchVisibleByUser, eventEntity, watchEntities, usersFollowing);
@@ -119,8 +119,8 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         userManager.saveUsers(userEntities);
     }
 
-    private void storeEvent(MatchEntity eventEntity) {
-        matchManager.saveMatch(eventEntity);
+    private void storeEvent(EventEntity eventEntity) {
+        eventManager.saveEvent(eventEntity);
     }
 
     private void storeWatches(List<WatchEntity> watchEntities) {
@@ -131,7 +131,7 @@ public class EventInfoRepositoryImpl implements EventInfoRepository {
         watchManager.saveWatch(watchEntity);
     }
 
-    private EventInfo mapEntitiesAndBuildEventInfo(WatchEntity watchVisibleByUser, MatchEntity eventEntity,
+    private EventInfo mapEntitiesAndBuildEventInfo(WatchEntity watchVisibleByUser, EventEntity eventEntity,
       List<WatchEntity> watchEntities, List<UserEntity> usersWatching) {
         Event event = eventEntityMapper.transform(eventEntity);
         Watch currentUserWatch = watchEntityMapper.transform(watchVisibleByUser, sessionRepository.getCurrentUser());
