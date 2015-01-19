@@ -11,22 +11,6 @@
       android:layout_height="1dp"
       android:background="#d9d9d9" />
 
-    <com.shootr.android.ui.widgets.SwitchBar
-      android:id="@+id/edit_info_switch_bar"
-      android:layout_width="match_parent"
-      android:layout_height="?actionBarSize"
-      android:background="?selectableItemBackground"
-      android:visibility="visible"
-      app:switchBarText="@string/watching_switch"
-      />
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
-      android:background="?dividerHorizontal" />
-
     <EditText
       android:id="@+id/edit_info_place"
       android:layout_width="match_parent"

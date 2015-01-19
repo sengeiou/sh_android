@@ -55,6 +55,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
+
     public void initialize(SingleEventView singleEventView) {
         this.singleEventView = singleEventView;
         this.loadEventInfo();
