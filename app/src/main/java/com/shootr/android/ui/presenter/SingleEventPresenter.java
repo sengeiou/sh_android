@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
+    //region fields
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
@@ -36,6 +37,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     private UserWatchingModel currentUserWatchingModel;
     private MatchModel eventModel;
+    private int watchersCount;
+    //endregion
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor,
@@ -65,6 +68,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         watchingInteractor.sendWatching(isWatching, eventModel.getIdMatch(), null);
 
         //TODO probably better to receive the new Watch from the Interactor
+        this.updateWatchersCount(isWatching);
         currentUserWatchingModel.setWatching(isWatching);
         singleEventView.setCurrentUserWatching(currentUserWatchingModel);
         singleEventView.setIsWatching(currentUserWatchingModel.isWatching());
@@ -106,10 +110,17 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             this.renderEvent(eventInfo.getEvent());
             this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
             this.renderWatchersList(eventInfo.getWatchers());
-            this.renderWatchersCount(eventInfo.getWatchersCount());
+
+            watchersCount = eventInfo.getWatchersCount();
+            this.renderWatchersCount(watchersCount);
             this.showViewContent();
         }
         this.hideViewLoading();
+    }
+
+    private void updateWatchersCount(boolean isWatching) {
+        watchersCount = isWatching ? watchersCount+1 : watchersCount-1;
+        renderWatchersCount(watchersCount);
     }
 
     private void showNotificationsAlert(boolean enableNotifications) {
@@ -120,6 +131,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         }
     }
 
+    //region renders
     private void renderWatchersList(List<Watch> watchers) {
         List<UserWatchingModel> watcherModels = userWatchingModelMapper.transform(watchers);
         singleEventView.setWatchers(watcherModels);
@@ -145,7 +157,9 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private void renderEventsCount(int eventsCount) {
         singleEventView.setEventsCount(eventsCount);
     }
+    //endregion
 
+    //region view methods
     private void showViewContent() {
         singleEventView.showContent();
     }
@@ -165,6 +179,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private void hideViewEmpty() {
         singleEventView.hideEmpty();
     }
+    //endregion
 
     @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
