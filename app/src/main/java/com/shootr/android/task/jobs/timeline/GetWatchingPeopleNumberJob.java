@@ -36,8 +36,8 @@ public class GetWatchingPeopleNumberJob extends ShootrBaseJob<WatchingPeopleNumb
     public Integer getNumberOfWatchers() {
         WatchEntity watching = watchManager.getWatchVisibleByUser(sessionRepository.getCurrentUserId());
         if (watching != null) {
-            List<WatchEntity> watchesByMatch = watchManager.getWatchesByMatch(watching.getIdMatch());
-            return watchesByMatch.size();
+            List<WatchEntity> watchesByEvent = watchManager.getWatchesByEvent(watching.getIdEvent());
+            return watchesByEvent.size();
         } else {
             return 0;
         }

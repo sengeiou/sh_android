@@ -2,7 +2,7 @@ package com.shootr.android.ui.model.mappers;
 
 import android.content.res.Resources;
 import com.shootr.android.R;
-import com.shootr.android.data.entity.MatchEntity;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.ui.model.WatchingRequestModel;
 import com.shootr.android.util.TimeUtils;
@@ -31,22 +31,22 @@ public class WatchingRequestModelMapper {
         subtitleTwoWatching = resources.getString(R.string.watching_request_subtitle_two);
         subtitleMoreWatching = resources.getString(R.string.watching_request_subtitle_more);
         subtitleNoneWatchingAndNotStarted = resources.getString(R.string.watching_request_subtitle_none_and_not_started);
-        title = resources.getString(R.string.watching_match_question);
+        title = resources.getString(R.string.watching_event_question);
     }
 
-    public WatchingRequestModel toWatchingRequestModel(MatchEntity matchEntity, List<UserEntity> userEntities) {
+    public WatchingRequestModel toWatchingRequestModel(EventEntity eventEntity, List<UserEntity> userEntities) {
         WatchingRequestModel watchingRequestModel = new WatchingRequestModel();
-        watchingRequestModel.setMatchId(matchEntity.getIdMatch());
-        watchingRequestModel.setTitle(getTitle(matchEntity));
-        watchingRequestModel.setSubtitle(getSubtitle(userEntities, matchEntity));
-        watchingRequestModel.setMatchDate(matchEntity.getMatchDate().getTime());
+        watchingRequestModel.setEventId(eventEntity.getIdEvent());
+        watchingRequestModel.setTitle(getTitle(eventEntity));
+        watchingRequestModel.setSubtitle(getSubtitle(userEntities, eventEntity));
+        watchingRequestModel.setEventDate(eventEntity.getBeginDate().getTime());
         return watchingRequestModel;
     }
 
-    private String getSubtitle(List<UserEntity> userEntities, MatchEntity match) {
+    private String getSubtitle(List<UserEntity> userEntities, EventEntity event) {
         List<String> namesFromUserEntities = getNamesFromUserEntities(userEntities);
         int usersWatchingNumber = namesFromUserEntities.size();
-        boolean hasStarted = match.getMatchDate().before(timeUtils.getCurrentDate());
+        boolean hasStarted = event.getBeginDate().before(timeUtils.getCurrentDate());
         if (usersWatchingNumber == 0 && hasStarted) {
             return subtitleNoneWatching;
         }else if(usersWatchingNumber == 0 && !hasStarted){
@@ -60,9 +60,9 @@ public class WatchingRequestModelMapper {
         }
     }
 
-    private String getTitle(MatchEntity matchEntity) {
-        String matchTitle =  matchEntity.getLocalTeamName() + "-" + matchEntity.getVisitorTeamName();
-        return String.format(title, matchTitle);
+    private String getTitle(EventEntity eventEntity) {
+        String eventTitle =  eventEntity.getLocalTeamName() + "-" + eventEntity.getVisitorTeamName();
+        return String.format(title, eventTitle);
     }
 
     private List<String> getNamesFromUserEntities(List<UserEntity> userEntities) {

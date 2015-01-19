@@ -18,11 +18,11 @@ public class TeamModelMapper {
         return teamModel;
     }
 
-    public List<TeamModel> transform(List<TeamEntity> matchEntities) {
-        List<TeamModel> matchModels = new ArrayList<>();
-        for (TeamEntity matchEntity : matchEntities) {
-            matchModels.add(transform(matchEntity));
+    public List<TeamModel> transform(List<TeamEntity> teamEntities) {
+        List<TeamModel> teamModels = new ArrayList<>();
+        for (TeamEntity teamEntity : teamEntities) {
+            teamModels.add(transform(teamEntity));
         }
-        return matchModels;
+        return teamModels;
     }
 }

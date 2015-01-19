@@ -1,7 +1,6 @@
 package com.shootr.android.db;
 
 import android.provider.BaseColumns;
-import com.google.common.collect.Tables;
 
 public class DatabaseContract {
 
@@ -204,23 +203,21 @@ public class DatabaseContract {
         };
     }
 
-    public static final class MatchTable implements SyncColumns{
-        private MatchTable(){
+    public static final class EventTable implements SyncColumns{
+        private EventTable(){
 
         }
-        public static final String TABLE = "Match";
-        public static final String ID_MATCH = "idMatch";
-        public static final String MATCH_DATE = "matchDate";
-        public static final String MATCH_FINISH_DATE = "matchFinishDate";
+        public static final String TABLE = "Event";
+        public static final String ID_EVENT = "idEvent";
+        public static final String BEGIN_DATE = "beginDate";
+        public static final String END_DATE = "endDate";
         public static final String ID_LOCAL_TEAM = "idLocalTeam";
         public static final String ID_VISITOR_TEAM = "idVisitorTeam";
         public static final String LOCAL_TEAM_NAME = "localTeamName";
         public static final String VISITOR_TEAM_NAME = "visitorTeamName";
 
         public static final String[] PROJECTION = {
-          ID_MATCH,
-          MATCH_DATE,
-          MATCH_FINISH_DATE,
+          ID_EVENT, BEGIN_DATE, END_DATE,
           ID_LOCAL_TEAM,
           ID_VISITOR_TEAM,
           LOCAL_TEAM_NAME,
@@ -239,15 +236,14 @@ public class DatabaseContract {
         }
         public static final String TABLE = "Watch";
         public static final String ID_USER = "idUser";
-        public static final String ID_MATCH = "idMatch";
+        public static final String ID_EVENT = "idEvent";
         public static final String STATUS = "status";
         public static final String PLACE = "place";
         public static final String VISIBLE = "visible";
         public static final String NOTIFICATION = "notification";
 
         public static final String[] PROJECTION = {
-          ID_USER,
-          ID_MATCH,
+          ID_USER, ID_EVENT,
           STATUS,
           PLACE,
           VISIBLE,

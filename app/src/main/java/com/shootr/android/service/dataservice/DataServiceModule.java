@@ -4,12 +4,12 @@ import com.shootr.android.util.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.ShotMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
-import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
+import com.shootr.android.service.dataservice.dto.EventDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
 import com.shootr.android.service.dataservice.dto.UserDtoFactory;
@@ -40,8 +40,8 @@ public class DataServiceModule {
     @Provides @Singleton ShotDtoFactory provideShotDtoFactory(UtilityDtoFactory utilityDtoFactory, ShotMapper shotMapper) {
         return new ShotDtoFactory(utilityDtoFactory, shotMapper);
     }
-    @Provides @Singleton MatchDtoFactory provideMatchDtoFactory(UtilityDtoFactory utilityDtoFactory, MatchMapper matchMapper, WatchMapper watchMapper, TeamMapper teamMapper,
+    @Provides @Singleton EventDtoFactory provideEventDtoFactory(UtilityDtoFactory utilityDtoFactory, EventEntityMapper eventEntityMapper, WatchMapper watchMapper, TeamMapper teamMapper,
       TimeUtils timeUtils){
-        return  new MatchDtoFactory(utilityDtoFactory,matchMapper, watchMapper, teamMapper, timeUtils);
+        return  new EventDtoFactory(utilityDtoFactory, eventEntityMapper, watchMapper, teamMapper, timeUtils);
     }
 }

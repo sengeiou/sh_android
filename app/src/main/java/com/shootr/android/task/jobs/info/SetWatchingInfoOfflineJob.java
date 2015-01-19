@@ -20,7 +20,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
     private WatchManager watchManager;
     private Long status;
     private String place;
-    private Long idMatch;
+    private Long idEvent;
     private SessionRepository sessionRepository;
 
     @Inject
@@ -30,8 +30,8 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
         this.watchManager = watchManager;
     }
 
-    public void init(Long idMatch, Long status, String place){
-        this.idMatch = idMatch;
+    public void init(Long idEvent, Long status, String place){
+        this.idEvent = idEvent;
         this.status = status;
         this.place = place;
     }
@@ -42,7 +42,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
 
     public WatchEntity createUpdateWatchEntityFromDB(){
         Date date = new Date(System.currentTimeMillis());
-        WatchEntity watchEntity = watchManager.getWatchByKeys(sessionRepository.getCurrentUserId(), idMatch);
+        WatchEntity watchEntity = watchManager.getWatchByKeys(sessionRepository.getCurrentUserId(), idEvent);
         if(watchEntity==null){
             watchEntity = new WatchEntity();
             watchEntity.setCsysBirth(date);
@@ -55,7 +55,7 @@ public class SetWatchingInfoOfflineJob extends ShootrBaseJob<WatchingInfoResult>
             watchEntity.setCsysSynchronized("U");
         }
         watchEntity.setIdUser(sessionRepository.getCurrentUserId());
-        watchEntity.setIdMatch(idMatch);
+        watchEntity.setIdEvent(idEvent);
         watchEntity.setStatus(status);
         watchEntity.setVisible(true);
         watchEntity.setPlace(place);

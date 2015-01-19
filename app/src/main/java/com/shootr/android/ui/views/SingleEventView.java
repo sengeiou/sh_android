@@ -1,6 +1,6 @@
 package com.shootr.android.ui.views;
 
-import com.shootr.android.ui.model.MatchModel;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface SingleEventView extends LoadDataView{
 
     void alertNotificationsDisabled();
 
-    void navigateToEdit(MatchModel eventModel, UserWatchingModel currentUserWatchingModel);
+    void navigateToEdit(EventModel eventModel, UserWatchingModel currentUserWatchingModel);
 
     void showContent();
 }

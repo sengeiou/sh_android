@@ -12,19 +12,19 @@ public class WatchEntity extends Synchronized{
     public static final Integer NOTIFICATION_ON = 1;
     public static final Integer NOTIFICATION_OFF = 0;
 
-    private Long idMatch;
+    private Long idEvent;
     private Long idUser;
     private Long status;
     private String place;
     private Boolean visible;
     private Integer notification;
 
-    public Long getIdMatch() {
-        return idMatch;
+    public Long getIdEvent() {
+        return idEvent;
     }
 
-    public void setIdMatch(Long idMatch) {
-        this.idMatch = idMatch;
+    public void setIdEvent(Long idEvent) {
+        this.idEvent = idEvent;
     }
 
     public Long getIdUser() {
@@ -68,7 +68,7 @@ public class WatchEntity extends Synchronized{
             return false;
         }
         WatchEntity that = (WatchEntity) o;
-        if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null){
+        if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null){
             return false;
         }
         if (idUser != null ? !idUser.equals(that.idUser) : that.idUser != null){
@@ -79,7 +79,7 @@ public class WatchEntity extends Synchronized{
 
     @Override
     public int hashCode() {
-        int result = idMatch.hashCode();
+        int result = idEvent.hashCode();
         result = 31 * result + idUser.hashCode();
         return result;
     }

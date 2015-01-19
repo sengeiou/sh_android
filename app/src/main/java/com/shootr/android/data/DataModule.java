@@ -17,10 +17,7 @@ import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
-import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
 import com.shootr.android.task.jobs.info.InfoListBuilderFactory;
-import com.shootr.android.task.jobs.info.SearchMatchJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
@@ -31,7 +28,6 @@ import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
-import com.shootr.android.ui.presenter.AddMatchPresenter;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
@@ -57,7 +53,7 @@ import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.manager.AbstractManager;
 import com.shootr.android.db.manager.DeviceManager;
 import com.shootr.android.db.manager.FollowManager;
-import com.shootr.android.db.manager.MatchManager;
+import com.shootr.android.db.manager.EventManager;
 import com.shootr.android.db.manager.ShotManager;
 import com.shootr.android.db.manager.UserManager;
 import com.shootr.android.db.manager.WatchManager;
@@ -84,7 +80,6 @@ import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
-import com.shootr.android.ui.activities.InfoActivity;
 import com.shootr.android.ui.activities.MainActivity;
 import com.shootr.android.ui.activities.UserFollowsContainerActivity;
 import com.shootr.android.ui.base.BaseSignedInActivity;
@@ -112,7 +107,6 @@ import static android.content.Context.MODE_PRIVATE;
     ShootrBaseJob.class,
 
     FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class, PeopleFragment.class,
-    InfoActivity.class,
 
     GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class,
     GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLatestShotsJob.class,
@@ -129,7 +123,7 @@ import static android.content.Context.MODE_PRIVATE;
     RetrieveFromDataBaseTimeLineJob.class, RetrieveInitialTimeLineJob.class, RetrieveNewShotsTimeLineJob.class,
     RetrieveOldShotsTimeLineJob.class, GetWatchingInfoJob.class, SetWatchingInfoOfflineJob.class,
     SetWatchingInfoOnlineJob.class, GetWatchingRequestsPendingJob.class, GetWatchingPeopleNumberJob.class,
-    SearchMatchJob.class, DeleteMatchOfflineJob.class, DeleteMatchOnlineJob.class, UploadProfilePhotoJob.class,
+    UploadProfilePhotoJob.class,
     RemoveProfilePhotoJob.class, UpdateUserProfileJob.class, UploadShotImageJob.class,
 
     ShotManager.class, SearchPeopleRemoteJob.class, SearchPeopleLocalJob.class, SearchTeamJob.class,
@@ -149,8 +143,6 @@ import static android.content.Context.MODE_PRIVATE;
     LogTreeFactory.class,
 
     EditInfoPresenter.class,
-
-    AddMatchPresenter.class,
 
     ProfileEditPresenter.class,
 
@@ -253,8 +245,8 @@ public class DataModule {
         return sessionManager;
     }
 
-    @Provides @Singleton InfoCleaner provideInfoCleaner(MatchManager matchManager, WatchManager watchManager) {
-        return new InfoCleaner(matchManager, watchManager);
+    @Provides @Singleton InfoCleaner provideInfoCleaner(EventManager eventManager, WatchManager watchManager) {
+        return new InfoCleaner(eventManager, watchManager);
     }
 
     @Provides ImageResizer provideImageResizer(BitmapImageResizer imageResizer) {

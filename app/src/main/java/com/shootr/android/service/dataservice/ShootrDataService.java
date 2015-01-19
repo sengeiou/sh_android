@@ -1,16 +1,16 @@
 package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
-import com.shootr.android.db.mappers.MatchMapper;
+import com.shootr.android.db.mappers.EventEntityMapper;
 import com.shootr.android.db.mappers.ShotMapper;
 import com.shootr.android.db.mappers.TeamMapper;
 import com.shootr.android.db.mappers.UserMapper;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.MatchEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -23,7 +23,7 @@ import com.shootr.android.service.PaginatedResult;
 import com.shootr.android.service.ShootrServerException;
 import com.shootr.android.service.ShootrService;
 import com.shootr.android.service.dataservice.dto.DeviceDtoFactory;
-import com.shootr.android.service.dataservice.dto.MatchDtoFactory;
+import com.shootr.android.service.dataservice.dto.EventDtoFactory;
 import com.shootr.android.service.dataservice.dto.ShotDtoFactory;
 import com.shootr.android.service.dataservice.dto.TeamDtoFactory;
 import com.shootr.android.service.dataservice.dto.TimelineDtoFactory;
@@ -60,14 +60,14 @@ public class ShootrDataService implements ShootrService {
     private UserDtoFactory userDtoFactory;
     private TimelineDtoFactory timelineDtoFactory;
     private ShotDtoFactory shotDtoFactory;
-    private MatchDtoFactory matchDtoFactory;
+    private EventDtoFactory eventDtoFactory;
     private DeviceDtoFactory deviceDtoFactory;
     private TeamDtoFactory teamDtoFactory;
 
     private UserMapper userMapper;
     private FollowMapper followMapper;
     private ShotMapper shotMapper;
-    private MatchMapper matchMapper;
+    private EventEntityMapper eventEntityMapper;
     private DeviceMapper deviceMapper;
     private WatchMapper watchMapper;
     private TeamMapper teamMapper;
@@ -77,13 +77,13 @@ public class ShootrDataService implements ShootrService {
     public ShootrDataService(OkHttpClient client, Endpoint endpoint, ObjectMapper mapper, UserDtoFactory userDtoFactory,
       TimelineDtoFactory timelineDtoFactory, ShotDtoFactory shotDtoFactory, DeviceDtoFactory deviceDtoFactory,
       TeamDtoFactory teamDtoFactory, UserMapper userMapper, FollowMapper followMapper, ShotMapper shotMapper,
-      MatchDtoFactory matchDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, MatchMapper matchMapper,
+      EventDtoFactory eventDtoFactory, DeviceMapper deviceMapper, WatchMapper watchMapper, EventEntityMapper eventEntityMapper,
       TeamMapper teamMapper, TimeUtils timeUtils) {
         this.client = client;
         this.endpoint = endpoint;
         this.mapper = mapper;
         this.teamDtoFactory = teamDtoFactory;
-        this.matchDtoFactory = matchDtoFactory;
+        this.eventDtoFactory = eventDtoFactory;
         this.userDtoFactory = userDtoFactory;
         this.timelineDtoFactory = timelineDtoFactory;
         this.shotDtoFactory = shotDtoFactory;
@@ -92,7 +92,7 @@ public class ShootrDataService implements ShootrService {
         this.followMapper = followMapper;
         this.shotMapper = shotMapper;
         this.deviceMapper = deviceMapper;
-        this.matchMapper = matchMapper;
+        this.eventEntityMapper = eventEntityMapper;
         this.watchMapper = watchMapper;
         this.teamMapper = teamMapper;
 
@@ -334,8 +334,8 @@ public class ShootrDataService implements ShootrService {
         return followReceived;
     }
 
-    @Override public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getNextMatchWhereMyFavoriteTeamPlays(idFavoriteTeam);
+    @Override public EventEntity getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam) throws IOException {
+        GenericDto requestDto = eventDtoFactory.getNextEventWhereMyFavoriteTeamPlays(idFavoriteTeam);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -343,9 +343,9 @@ public class ShootrDataService implements ShootrService {
             return null;
         }
         Map<String,Object> dataItem  = ops[0].getData()[0];
-        MatchEntity matchReceived = matchMapper.fromDto(dataItem);
-        if (matchReceived.getIdMatch() != null) {
-            return matchReceived;
+        EventEntity eventReceived = eventEntityMapper.fromDto(dataItem);
+        if (eventReceived.getIdEvent() != null) {
+            return eventReceived;
         }
         return null;
     }
@@ -354,7 +354,7 @@ public class ShootrDataService implements ShootrService {
     @Deprecated
     @Override public List<WatchEntity> getWatchesFromUsers(List<Long> usersIds, Long idUser) throws IOException {
         List<WatchEntity> watchesReceived = new ArrayList<>();
-        GenericDto requestDto = matchDtoFactory.getWatchFromUsers(usersIds, idUser);
+        GenericDto requestDto = eventDtoFactory.getWatchFromUsers(usersIds, idUser);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -370,12 +370,12 @@ public class ShootrDataService implements ShootrService {
         return watchesReceived;
     }
 
-    @Override public List<WatchEntity> getWatchesFromUsersByMatch(Long idMatch, List<Long> userIds) throws IOException {
+    @Override public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException {
         if (userIds.isEmpty()) {
             return Collections.emptyList();
         }
         List<WatchEntity> watches = new ArrayList<>();
-        GenericDto requestDto = matchDtoFactory.getWatchFromUsersAndMatch(userIds, idMatch);
+        GenericDto requestDto = eventDtoFactory.getWatchFromUsersAndEvent(userIds, idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if (ops == null || ops.length < 1) {
@@ -392,7 +392,7 @@ public class ShootrDataService implements ShootrService {
     }
 
     @Override public WatchEntity getVisibleWatch(Long currentUserId) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getWatchVisible(currentUserId);
+        GenericDto requestDto = eventDtoFactory.getWatchVisible(currentUserId);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -407,9 +407,9 @@ public class ShootrDataService implements ShootrService {
         return null;
     }
 
-    @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {
-        List<MatchEntity> matchesReceived = new ArrayList<>();
-        GenericDto requestDto = matchDtoFactory.getMatchesNotEndedByIds(matchIds);
+    @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {
+        List<EventEntity> eventsReceived = new ArrayList<>();
+        GenericDto requestDto = eventDtoFactory.getEventsNotEndedByIds(eventIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -419,14 +419,14 @@ public class ShootrDataService implements ShootrService {
             Long items = metadata.getItems();
             for (int i = 0; i < items; i++) {
                 Map<String, Object> dataItem = ops[0].getData()[i];
-                matchesReceived.add(matchMapper.fromDto(dataItem));
+                eventsReceived.add(eventEntityMapper.fromDto(dataItem));
             }
         }
-        return matchesReceived;
+        return eventsReceived;
     }
 
     @Override public WatchEntity setWatchStatus(WatchEntity watch) throws IOException {
-        GenericDto requestDto = matchDtoFactory.setWatchStatusGenericDto(watch);
+        GenericDto requestDto = eventDtoFactory.setWatchStatusGenericDto(watch);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -440,8 +440,8 @@ public class ShootrDataService implements ShootrService {
         return watchReceived;
     }
 
-    @Override public WatchEntity getWatchStatus(Long idUser, Long idMatch) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getWatchByKeys(idUser, idMatch);
+    @Override public WatchEntity getWatchStatus(Long idUser, Long idEvent) throws IOException {
+        GenericDto requestDto = eventDtoFactory.getWatchByKeys(idUser, idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
@@ -455,24 +455,24 @@ public class ShootrDataService implements ShootrService {
         return watchReceived;
     }
 
-    @Override public MatchEntity getMatchByIdMatch(Long idMatch) throws IOException {
-        GenericDto requestDto = matchDtoFactory.getMatchByIdMatch(idMatch);
+    @Override public EventEntity getEventById(Long idEvent) throws IOException {
+        GenericDto requestDto = eventDtoFactory.getEventById(idEvent);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         if(ops == null || ops.length<1){
             Timber.e("Received 0 operations");
             return null;
         }
-        MatchEntity matchReceived = null;
+        EventEntity eventsReceived = null;
         if(ops.length>0){
-            matchReceived = matchMapper.fromDto(ops[0].getData()[0]);
+            eventsReceived = eventEntityMapper.fromDto(ops[0].getData()[0]);
         }
-        return matchReceived;
+        return eventsReceived;
 
     }
 
     @Override public List<TeamEntity> getTeamsByIdTeams(List<Long> teamIds) throws IOException{
-        GenericDto requestDto = matchDtoFactory.getTeamsFromTeamIds(teamIds);
+        GenericDto requestDto = eventDtoFactory.getTeamsFromTeamIds(teamIds);
         GenericDto responseDto = postRequest(requestDto);
         OperationDto[] ops = responseDto.getOps();
         List<TeamEntity> teamEntities = new ArrayList<>();
@@ -505,24 +505,6 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return shotEntities;
-    }
-
-    @Override public List<MatchEntity> searchMatches(String queryText) throws IOException {
-        List<MatchEntity> matchesFound = new ArrayList<>();
-        GenericDto requestDto = matchDtoFactory.searchMatches(queryText);
-        GenericDto responseDto = postRequest(requestDto);
-        OperationDto[] ops = responseDto.getOps();
-        if(ops == null || ops.length<1){
-            Timber.e("Received 0 operations");
-        }else{
-            MetadataDto metadata = ops[0].getMetadata();
-            Long items = metadata.getItems();
-            for (int i = 0; i < items; i++) {
-                Map<String, Object> dataItem = ops[0].getData()[i];
-                matchesFound.add(matchMapper.fromDto(dataItem));
-            }
-        }
-        return matchesFound;
     }
 
     @Override public UserEntity saveUserProfile(UserEntity userEntity) throws IOException {

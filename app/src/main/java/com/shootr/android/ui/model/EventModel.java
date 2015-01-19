@@ -1,9 +1,9 @@
 package com.shootr.android.ui.model;
 
 
-public class MatchModel {
+public class EventModel {
 
-    private Long idMatch;
+    private Long idEvent;
     private String localTeamName;
     private String visitorTeamName;
     private Long localTeamId;
@@ -11,12 +11,12 @@ public class MatchModel {
     private String datetime;
     private String title;
 
-    public Long getIdMatch() {
-        return idMatch;
+    public Long getIdEvent() {
+        return idEvent;
     }
 
-    public void setIdMatch(Long idMatch) {
-        this.idMatch = idMatch;
+    public void setIdEvent(Long idEvent) {
+        this.idEvent = idEvent;
     }
 
     public String getLocalTeamName() {
@@ -72,15 +72,15 @@ public class MatchModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MatchModel that = (MatchModel) o;
+        EventModel that = (EventModel) o;
 
-        if (!idMatch.equals(that.idMatch)) return false;
+        if (!idEvent.equals(that.idEvent)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return idMatch.hashCode();
+        return idEvent.hashCode();
     }
 }

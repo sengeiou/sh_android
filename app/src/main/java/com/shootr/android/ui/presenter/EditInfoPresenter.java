@@ -4,8 +4,6 @@ import android.os.Bundle;
 import com.path.android.jobqueue.JobManager;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.WatchingNotificationsAlertShown;
-import com.shootr.android.task.jobs.info.DeleteMatchOfflineJob;
-import com.shootr.android.task.jobs.info.DeleteMatchOnlineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOfflineJob;
 import com.shootr.android.task.jobs.info.SetWatchingInfoOnlineJob;
 import com.shootr.android.ui.views.EditInfoView;
@@ -94,7 +92,7 @@ public class EditInfoPresenter {
     }
 
     private void updateViewWithInfo() {
-        this.editInfoView.setTitle(editInfoModel.matchTitle);
+        this.editInfoView.setTitle(editInfoModel.eventTitle);
         this.editInfoView.setPlaceText(editInfoModel.place);
         this.editInfoView.setWatchingStatus(editInfoModel.watching);
         this.updatePlaceInputStatus();
@@ -118,7 +116,7 @@ public class EditInfoPresenter {
 
     private void executeEditJobs(String placeText) {
         SetWatchingInfoOfflineJob setWatchingInfoOfflineJob = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        setWatchingInfoOfflineJob.init(editInfoModel.idMatch, getWatchingStatusFromBoolean(newWatchingStatus),
+        setWatchingInfoOfflineJob.init(editInfoModel.idEvent, getWatchingStatusFromBoolean(newWatchingStatus),
           placeText);
         jobManager.addJobInBackground(setWatchingInfoOfflineJob);
 
@@ -142,71 +140,42 @@ public class EditInfoPresenter {
         }
     }
 
-    public void deleteMatch() {
-        showDeleteMatchConfirmation();
-    }
-
-    public void showDeleteMatchConfirmation() {
-        String confirmationTitle;
-        String confirmationMessage;
-        if (editInfoModel.watching) {
-            confirmationTitle = "Remove match?";
-            confirmationMessage =
-              String.format("This will shoot you are not watching %s.", editInfoModel.matchTitle);
-        } else {
-            confirmationTitle = null;
-            confirmationMessage = "Remove match?";
-        }
-        this.editInfoView.showDeleteMatchConfirmation(confirmationTitle, confirmationMessage);
-    }
-
-    public void confirmDeleteMatch() {
-        DeleteMatchOfflineJob deleteMatchOfflineJob = objectGraph.get(DeleteMatchOfflineJob.class);
-        deleteMatchOfflineJob.init(editInfoModel.idMatch);
-        jobManager.addJobInBackground(deleteMatchOfflineJob);
-
-        DeleteMatchOnlineJob deleteMatchOnlineJob = objectGraph.get(DeleteMatchOnlineJob.class);
-        jobManager.addJobInBackground(deleteMatchOnlineJob);
-
-        closeScreen();
-    }
-
     public static class EditInfoModel {
 
-        private static final String KEY_ID_MATCH = "match";
+        private static final String KEY_ID_EVENT = "event";
         private static final String KEY_WATCHING_STATUS = "watching";
-        private static final String KEY_MATCH_TITLE = "matc_title";
+        private static final String KEY_EVENT_TITLE = "event_title";
         private static final String KEY_WATCHING_PLACE = "place";
 
-        Long idMatch;
-        String matchTitle;
+        Long idEvent;
+        String eventTitle;
         boolean watching;
         String place;
 
         public EditInfoModel() {
         }
 
-        public EditInfoModel(Long idMatch, String matchTitle, boolean watchingStatus, String place) {
-            this.idMatch = idMatch;
-            this.matchTitle = matchTitle;
+        public EditInfoModel(Long idEvent, String eventTitle, boolean watchingStatus, String place) {
+            this.idEvent = idEvent;
+            this.eventTitle = eventTitle;
             this.watching = watchingStatus;
             this.place = place;
         }
 
         public static EditInfoModel fromBundle(Bundle bundle) {
             EditInfoModel model = new EditInfoModel();
-            model.idMatch = bundle.getLong(KEY_ID_MATCH);
+            model.idEvent = bundle.getLong(KEY_ID_EVENT);
             model.watching = bundle.getBoolean(KEY_WATCHING_STATUS);
-            model.matchTitle = bundle.getString(KEY_MATCH_TITLE);
+            model.eventTitle = bundle.getString(KEY_EVENT_TITLE);
             model.place = bundle.getString(KEY_WATCHING_PLACE);
             return model;
         }
 
         public Bundle toBundle() {
             Bundle bundle = new Bundle();
-            bundle.putLong(KEY_ID_MATCH, idMatch);
+            bundle.putLong(KEY_ID_EVENT, idEvent);
             bundle.putBoolean(KEY_WATCHING_STATUS, watching);
-            bundle.putString(KEY_MATCH_TITLE, matchTitle);
+            bundle.putString(KEY_EVENT_TITLE, eventTitle);
             bundle.putString(KEY_WATCHING_PLACE, place);
             return bundle;
         }

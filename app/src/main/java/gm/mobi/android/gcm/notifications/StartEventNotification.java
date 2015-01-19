@@ -11,11 +11,11 @@ import com.shootr.android.gcm.NotificationIntentReceiver;
 import com.shootr.android.gcm.notifications.CommonNotification;
 import com.shootr.android.gcm.notifications.NotificationBuilderFactory;
 
-public class StartMatchNotification extends CommonNotification {
+public class StartEventNotification extends CommonNotification {
 
     private static final int REQUEST_OPEN = 2;
     String text;
-    public StartMatchNotification(Context context, NotificationBuilderFactory builderFactory, String text) {
+    public StartEventNotification(Context context, NotificationBuilderFactory builderFactory, String text) {
         super(context, builderFactory);
         this.text = text;
     }
@@ -26,11 +26,11 @@ public class StartMatchNotification extends CommonNotification {
         String message = getResources().getText(R.string.enter_to_confirm).toString();
         builder.setContentText(message);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-        builder.setContentIntent(getStartMatchNotificationPendingIntent());
+        builder.setContentIntent(getStartEventNotificationPendingIntent());
     }
 
-    protected PendingIntent getStartMatchNotificationPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_START_MATCH);
+    protected PendingIntent getStartEventNotificationPendingIntent() {
+        Intent intent = new Intent(NotificationIntentReceiver.ACTION_START_EVENT);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),REQUEST_OPEN,intent, PendingIntent.FLAG_CANCEL_CURRENT);
         return pendingIntent;
     }

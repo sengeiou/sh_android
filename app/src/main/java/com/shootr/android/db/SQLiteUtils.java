@@ -7,7 +7,6 @@ import com.shootr.android.db.DatabaseContract.SyncColumns;
 import com.shootr.android.db.DatabaseContract.TablesSync;
 import com.shootr.android.db.DatabaseContract.UserTable;
 import com.shootr.android.db.DatabaseContract.TeamTable;
-import com.shootr.android.db.DatabaseContract.MatchTable;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 
 public class SQLiteUtils {
@@ -99,14 +98,14 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_MATCH = "CREATE TABLE IF NOT EXISTS "+ MatchTable.TABLE+" ("
-            + MatchTable.ID_MATCH+" INT NOT NULL PRIMARY KEY,"
-            + MatchTable.MATCH_DATE+ " DATETIME NOT NULL,"
-            + MatchTable.MATCH_FINISH_DATE+ " DATETIME NOT NULL,"
-            + MatchTable.ID_LOCAL_TEAM+" INT NULL,"
-            + MatchTable.ID_VISITOR_TEAM+" INT NULL,"
-            + MatchTable.LOCAL_TEAM_NAME+" VARCHAR(255) NOT NULL,"
-            + MatchTable.VISITOR_TEAM_NAME+" VARCHAR(255) NOT NULL,"
+    public static final String CREATE_TABLE_EVENT = "CREATE TABLE IF NOT EXISTS "+ DatabaseContract.EventTable.TABLE+" ("
+            + DatabaseContract.EventTable.ID_EVENT +" INT NOT NULL PRIMARY KEY,"
+            + DatabaseContract.EventTable.BEGIN_DATE + " DATETIME NOT NULL,"
+            + DatabaseContract.EventTable.END_DATE + " DATETIME NOT NULL,"
+            + DatabaseContract.EventTable.ID_LOCAL_TEAM+" INT NULL,"
+            + DatabaseContract.EventTable.ID_VISITOR_TEAM+" INT NULL,"
+            + DatabaseContract.EventTable.LOCAL_TEAM_NAME+" VARCHAR(255) NOT NULL,"
+            + DatabaseContract.EventTable.VISITOR_TEAM_NAME+" VARCHAR(255) NOT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
@@ -114,7 +113,7 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL)";
 
     public static final String CREATE_TABLE_WATCH = "CREATE TABLE IF NOT EXISTS "+ WatchTable.TABLE+" ("
-            + WatchTable.ID_MATCH + " INT NOT NULL,"
+            + WatchTable.ID_EVENT + " INT NOT NULL,"
             + WatchTable.ID_USER+ " INT NOT NULL,"
             + WatchTable.STATUS+" INT NOT NULL,"
             + WatchTable.PLACE+" TEXT NULL,"
@@ -125,5 +124,5 @@ public class SQLiteUtils {
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"
             + SyncColumns.CSYS_REVISION+" INT NOT NULL,"
             + SyncColumns.CSYS_SYNCHRONIZED+" CHAR(1) NULL,"
-            + " PRIMARY KEY("+WatchTable.ID_USER+","+WatchTable.ID_MATCH+"))";
+            + " PRIMARY KEY("+WatchTable.ID_USER+","+WatchTable.ID_EVENT +"))";
     }

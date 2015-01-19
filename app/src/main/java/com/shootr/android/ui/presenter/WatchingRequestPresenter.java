@@ -128,17 +128,17 @@ public class WatchingRequestPresenter implements Presenter{
     }
 
     private void answerCurrentRequestAndShowNext(Long status) {
-        Long matchId = currentRequest.getMatchId();
+        Long eventId = currentRequest.getEventId();
         watchingRequestsPendingStack.remove(currentRequest);
         currentRequest = null;
 
-        sendWatchingStatus(status, matchId);
+        sendWatchingStatus(status, eventId);
         hideCurrentRequestAndShowNext();
     }
 
-    private void sendWatchingStatus(Long status, Long matchId) {
+    private void sendWatchingStatus(Long status, Long eventId) {
         SetWatchingInfoOfflineJob jobOffline = objectGraph.get(SetWatchingInfoOfflineJob.class);
-        jobOffline.init(matchId, status, null);
+        jobOffline.init(eventId, status, null);
         jobManager.addJobInBackground(jobOffline);
         SetWatchingInfoOnlineJob jobOnline = objectGraph.get(SetWatchingInfoOnlineJob.class);
         jobManager.addJobInBackground(jobOnline);

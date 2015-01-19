@@ -81,7 +81,7 @@ public class WatchRepositoryImpl implements WatchRepository {
         Set<Long> eventIds = new HashSet<>();
         for (WatchEntity watch : allWatches) {
             if (watch.getStatus() == WatchEntity.STATUS_WATCHING) {
-                eventIds.add(watch.getIdMatch());
+                eventIds.add(watch.getIdEvent());
             }
         }
         return eventIds.size();

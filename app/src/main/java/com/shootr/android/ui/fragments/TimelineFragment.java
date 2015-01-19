@@ -50,7 +50,6 @@ import com.shootr.android.task.jobs.timeline.RetrieveInitialTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveNewShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.RetrieveOldShotsTimeLineJob;
 import com.shootr.android.task.jobs.timeline.TimelineJob;
-import com.shootr.android.ui.activities.InfoActivity;
 import com.shootr.android.ui.activities.PostNewShotActivity;
 import com.shootr.android.ui.activities.ProfileContainerActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;

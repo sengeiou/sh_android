@@ -2,30 +2,30 @@ package com.shootr.android.data.entity;
 
 import java.util.Date;
 
-public class MatchEntity extends Synchronized implements Comparable<MatchEntity> {
+public class EventEntity extends Synchronized implements Comparable<EventEntity> {
 
-    private Long idMatch;
-    private Date matchDate;
-    private Date matchFinishDate;
+    private Long idEvent;
+    private Date beginDate;
+    private Date endDate;
     private Long idLocalTeam;
     private Long idVisitorTeam;
     private String localTeamName;
     private String visitorTeamName;
 
-    public Long getIdMatch() {
-        return idMatch;
+    public Long getIdEvent() {
+        return idEvent;
     }
 
-    public void setIdMatch(Long idMatch) {
-        this.idMatch = idMatch;
+    public void setIdEvent(Long idEvent) {
+        this.idEvent = idEvent;
     }
 
-    public Date getMatchDate() {
-        return matchDate;
+    public Date getBeginDate() {
+        return beginDate;
     }
 
-    public void setMatchDate(Date matchDate) {
-        this.matchDate = matchDate;
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
     }
 
     public Long getIdLocalTeam() {
@@ -65,12 +65,12 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
         if (this == o){
             return true;
         }
-        if (o == null || !(o instanceof MatchEntity)){
+        if (o == null || !(o instanceof EventEntity)){
             return false;
         }
-        MatchEntity that = (MatchEntity) o;
+        EventEntity that = (EventEntity) o;
 
-        if (idMatch != null ? !idMatch.equals(that.idMatch) : that.idMatch != null){
+        if (idEvent != null ? !idEvent.equals(that.idEvent) : that.idEvent != null){
             return false;
         }
         return true;
@@ -78,28 +78,28 @@ public class MatchEntity extends Synchronized implements Comparable<MatchEntity>
 
     @Override
     public int hashCode() {
-        return idMatch != null ? idMatch.hashCode() : 0;
+        return idEvent != null ? idEvent.hashCode() : 0;
     }
 
-    @Override public int compareTo(MatchEntity another) {
-        boolean areSameMatch = this.getIdMatch().equals(another.getIdMatch());
-        if (areSameMatch) {
+    @Override public int compareTo(EventEntity another) {
+        boolean areSameEvent = this.getIdEvent().equals(another.getIdEvent());
+        if (areSameEvent) {
             return 0;
         }
-        int dateComparison = this.getMatchDate().compareTo(another.getMatchDate());
+        int dateComparison = this.getBeginDate().compareTo(another.getBeginDate());
         if (dateComparison == 0) {
-            int idComparison = this.getIdMatch().compareTo(another.getIdMatch());
+            int idComparison = this.getIdEvent().compareTo(another.getIdEvent());
             return idComparison;
         } else {
             return dateComparison;
         }
     }
 
-    public Date getMatchFinishDate() {
-        return matchFinishDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setMatchFinishDate(Date matchFinishDate) {
-        this.matchFinishDate = matchFinishDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

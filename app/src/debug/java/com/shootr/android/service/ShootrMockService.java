@@ -1,8 +1,8 @@
 package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
+import com.shootr.android.data.entity.EventEntity;
 import com.shootr.android.data.entity.FollowEntity;
-import com.shootr.android.data.entity.MatchEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
 import com.shootr.android.data.entity.UserEntity;
@@ -101,7 +101,7 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public MatchEntity getNextMatchWhereMyFavoriteTeamPlays(Long idFavoriteTeam)
+    @Override public EventEntity getNextEventWhereMyFavoriteTeamPlays(Long idFavoriteTeam)
       throws IOException {
         return null;
     }
@@ -111,7 +111,7 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public List<WatchEntity> getWatchesFromUsersByMatch(Long idMatch, List<Long> userIds) throws IOException {
+    @Override public List<WatchEntity> getWatchesFromUsersByEvent(Long idEvent, List<Long> userIds) throws IOException {
         return null;
     }
 
@@ -119,7 +119,7 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public List<MatchEntity> getMatchesByIds(List<Long> matchIds) throws IOException {
+    @Override public List<EventEntity> getEventsByIds(List<Long> eventIds) throws IOException {
         return null;
     }
 
@@ -127,11 +127,11 @@ public class ShootrMockService implements ShootrService {
         return null;
     }
 
-    @Override public WatchEntity getWatchStatus(Long idUser, Long idMatch) throws IOException {
+    @Override public WatchEntity getWatchStatus(Long idUser, Long idEvent) throws IOException {
         return null;
     }
 
-    @Override public MatchEntity getMatchByIdMatch(Long idMatch) throws IOException {
+    @Override public EventEntity getEventById(Long idEvent) throws IOException {
         return null;
     }
 
@@ -140,10 +140,6 @@ public class ShootrMockService implements ShootrService {
     }
 
     @Override public List<ShotEntity> getLatestsShotsFromIdUser(Long idUser, Long latestShotNumber) throws IOException {
-        return null;
-    }
-
-    @Override public List<MatchEntity> searchMatches(String queryText) {
         return null;
     }
 
