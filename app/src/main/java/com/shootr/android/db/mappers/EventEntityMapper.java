@@ -18,6 +18,7 @@ public class EventEntityMapper extends GenericMapper{
         contentValues.put(DatabaseContract.EventTable.ID_LOCAL_TEAM, eventEntity.getIdLocalTeam());
         contentValues.put(DatabaseContract.EventTable.ID_VISITOR_TEAM, eventEntity.getIdVisitorTeam());
         contentValues.put(DatabaseContract.EventTable.TITLE, eventEntity.getTitle());
+        contentValues.put(DatabaseContract.EventTable.PHOTO, eventEntity.getPhoto());
         setSynchronizedtoContentValues(eventEntity,contentValues);
         return contentValues;
     }
@@ -33,6 +34,8 @@ public class EventEntityMapper extends GenericMapper{
           : ((Number) dto.get(DatabaseContract.EventTable.ID_VISITOR_TEAM)).longValue());
         eventEntity.setTitle((String) dto.get(DatabaseContract.EventTable.TITLE) == null ? null
           : (String) dto.get(DatabaseContract.EventTable.TITLE));
+        eventEntity.setPhoto((String) dto.get(DatabaseContract.EventTable.PHOTO) == null ? null
+          : (String) dto.get(DatabaseContract.EventTable.PHOTO));
         eventEntity.setBeginDate(dto.get(DatabaseContract.EventTable.BEGIN_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.BEGIN_DATE)));
         eventEntity.setEndDate(dto.get(DatabaseContract.EventTable.END_DATE) == null ? null
@@ -46,9 +49,10 @@ public class EventEntityMapper extends GenericMapper{
         dto.put(DatabaseContract.EventTable.ID_EVENT, eventEntity == null ? null : eventEntity.getIdEvent());
         dto.put(DatabaseContract.EventTable.ID_LOCAL_TEAM, eventEntity == null ? null : eventEntity.getIdLocalTeam());
         dto.put(DatabaseContract.EventTable.ID_VISITOR_TEAM, eventEntity == null ? null : eventEntity.getIdVisitorTeam());
-        dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
         dto.put(DatabaseContract.EventTable.BEGIN_DATE, eventEntity == null ? null : eventEntity.getBeginDate());
         dto.put(DatabaseContract.EventTable.END_DATE, eventEntity == null ? null : eventEntity.getEndDate());
+        dto.put(DatabaseContract.EventTable.TITLE, eventEntity == null ? null : eventEntity.getTitle());
+        dto.put(DatabaseContract.EventTable.PHOTO, eventEntity == null ? null : eventEntity.getPhoto());
         setSynchronizedtoDto(eventEntity, dto);
         return dto;
     }
@@ -59,6 +63,7 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setIdLocalTeam(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_LOCAL_TEAM)));
         eventEntity.setIdVisitorTeam(c.getLong(c.getColumnIndex(DatabaseContract.EventTable.ID_VISITOR_TEAM)));
         eventEntity.setTitle(c.getString(c.getColumnIndex(DatabaseContract.EventTable.TITLE)));
+        eventEntity.setPhoto(c.getString(c.getColumnIndex(DatabaseContract.EventTable.PHOTO)));
         Long date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.BEGIN_DATE));
         eventEntity.setBeginDate(date != 0L ? new Date(date) : null);
         date = c.getLong(c.getColumnIndex(DatabaseContract.EventTable.END_DATE));

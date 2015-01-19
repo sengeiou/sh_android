@@ -214,12 +214,14 @@ public class DatabaseContract {
         public static final String ID_LOCAL_TEAM = "idLocalTeam";
         public static final String ID_VISITOR_TEAM = "idVisitorTeam";
         public static final String TITLE = "title";
+        public static final String PHOTO = "photo";
 
         public static final String[] PROJECTION = {
           ID_EVENT, BEGIN_DATE, END_DATE,
           ID_LOCAL_TEAM,
           ID_VISITOR_TEAM,
           TITLE,
+          PHOTO,
           CSYS_BIRTH,
           CSYS_MODIFIED,
           CSYS_DELETED,

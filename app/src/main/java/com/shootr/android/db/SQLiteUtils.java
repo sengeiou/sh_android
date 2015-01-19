@@ -105,6 +105,7 @@ public class SQLiteUtils {
             + DatabaseContract.EventTable.ID_LOCAL_TEAM+" INT NULL,"
             + DatabaseContract.EventTable.ID_VISITOR_TEAM+" INT NULL,"
             + DatabaseContract.EventTable.TITLE +" VARCHAR(255) NOT NULL,"
+            + DatabaseContract.EventTable.PHOTO +" TEXT NULL,"
             + SyncColumns.CSYS_BIRTH+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_MODIFIED+" DATETIME NOT NULL,"
             + SyncColumns.CSYS_DELETED+" DATETIME NULL,"

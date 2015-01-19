@@ -10,6 +10,7 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
     private Long idLocalTeam;
     private Long idVisitorTeam;
     private String title;
+    private String photo;
 
     public Long getIdEvent() {
         return idEvent;
@@ -92,5 +93,13 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
