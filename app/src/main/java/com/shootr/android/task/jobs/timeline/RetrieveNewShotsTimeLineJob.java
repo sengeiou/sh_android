@@ -14,6 +14,7 @@ import com.shootr.android.task.events.timeline.NewShotsReceivedEvent;
 import com.shootr.android.ui.model.ShotModel;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.inject.Inject;
@@ -42,7 +43,8 @@ public class RetrieveNewShotsTimeLineJob extends TimelineJob<NewShotsReceivedEve
             //TODO what if newshots is empty?
             shotManager.saveShots(newShots);
         }
-        updatedTimeline = shotManager.retrieveTimelineWithUsers(sessionRepository.getCurrentUserId());
+        updatedTimeline = shotManager.retrieveTimelineWithUsers();
+        updatedTimeline = filterShots(updatedTimeline);
         postSuccessfulEvent(new NewShotsReceivedEvent(updatedTimeline, newShots.size()));
     }
 

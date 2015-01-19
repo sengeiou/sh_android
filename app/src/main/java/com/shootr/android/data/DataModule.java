@@ -27,7 +27,7 @@ import com.shootr.android.task.jobs.profile.RemoveProfilePhotoJob;
 import com.shootr.android.task.jobs.profile.SearchTeamJob;
 import com.shootr.android.task.jobs.profile.UpdateUserProfileJob;
 import com.shootr.android.task.jobs.profile.UploadProfilePhotoJob;
-import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
@@ -115,7 +115,7 @@ import static android.content.Context.MODE_PRIVATE;
     InfoActivity.class,
 
     GetFollowingsJob.class, ShootrSyncAdapter.class, GetUserInfoJob.class, GetUsersFollowsJob.class,
-    GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLastShotsJob.class,
+    GetFollowUnfollowUserOnlineJob.class, GetFollowUnFollowUserOfflineJob.class, GetLatestShotsJob.class,
 
     InitialSetupFragment.class,
 

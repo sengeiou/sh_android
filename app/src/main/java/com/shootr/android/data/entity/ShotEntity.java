@@ -2,11 +2,16 @@ package com.shootr.android.data.entity;
 
 public class ShotEntity extends Synchronized{
 
+    public static final int TYPE_COMMENT = 0;
+    public static final int TYPE_WATCH = 1;
+    public static final int TYPE_WATCH_NEGATIVE = 2;
+
     private Long idShot;
     private Long idUser;
     private String comment;
     private String image;
     private Long idEvent;
+    private Integer type;
 
     private UserEntity mUserObject;
 
@@ -56,5 +61,13 @@ public class ShotEntity extends Synchronized{
 
     public void setIdEvent(Long idEvent) {
         this.idEvent = idEvent;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
