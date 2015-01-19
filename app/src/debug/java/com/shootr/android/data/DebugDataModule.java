@@ -66,10 +66,6 @@ public class DebugDataModule {
         return new BooleanPreference(preferences, "debug_picasso_debugging", DEFAULT_PICASSO_DEBUGGING);
     }
 
-    @Provides @Singleton @SeenDebugDrawer BooleanPreference provideSeenDebugDrawer(SharedPreferences preferences) {
-        return new BooleanPreference(preferences, "debug_seen_debug_drawer", DEFAULT_SEEN_DEBUG_DRAWER);
-    }
-
     @Provides @Singleton @ScalpelEnabled BooleanPreference provideScalpelEnabled(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "debug_scalpel_enabled", DEFAULT_SCALPEL_ENABLED);
     }

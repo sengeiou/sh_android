@@ -44,7 +44,6 @@ import com.shootr.android.data.NotificationsEnabled;
 import com.shootr.android.data.PicassoDebugging;
 import com.shootr.android.data.ScalpelEnabled;
 import com.shootr.android.data.ScalpelWireframeEnabled;
-import com.shootr.android.data.SeenDebugDrawer;
 import com.shootr.android.data.prefs.BooleanPreference;
 import com.shootr.android.data.prefs.InitialSetupCompleted;
 import com.shootr.android.data.prefs.IntPreference;
@@ -96,7 +95,6 @@ public class DebugAppContainer implements AppContainer {
     private final BooleanPreference picassoDebugging;
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
-    private final BooleanPreference seenDebugDrawer;
     private final BooleanPreference notificationsEnabled;
     private BooleanPreference initialSetupCompleted;
     private StringPreference customEndpoint;
@@ -115,7 +113,6 @@ public class DebugAppContainer implements AppContainer {
                              @PicassoDebugging BooleanPreference picassoDebugging,
                              @ScalpelEnabled BooleanPreference scalpelEnabled,
                              @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
-                             @SeenDebugDrawer BooleanPreference seenDebugDrawer,
                              @InitialSetupCompleted BooleanPreference initialSetupCompleted,
                              @CustomEndpoint StringPreference customEndpoint,
                              @NotificationsEnabled BooleanPreference notificationsEnabled,
@@ -128,7 +125,6 @@ public class DebugAppContainer implements AppContainer {
         this.networkEndpoint = networkEndpoint;
         this.scalpelEnabled = scalpelEnabled;
         this.scalpelWireframeEnabled = scalpelWireframeEnabled;
-        this.seenDebugDrawer = seenDebugDrawer;
         this.animationSpeed = animationSpeed;
         this.picassoDebugging = picassoDebugging;
         this.initialSetupCompleted = initialSetupCompleted;
@@ -214,18 +210,6 @@ public class DebugAppContainer implements AppContainer {
                 refreshPicassoStats();
             }
         });
-
-        // If you have not seen the debug drawer before, show it with a message
-        if (!seenDebugDrawer.get()) {
-            drawerLayout.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    drawerLayout.openDrawer(Gravity.END);
-                    Toast.makeText(activity, "Drawer welcome", Toast.LENGTH_LONG).show();
-                }
-            }, 1000);
-            seenDebugDrawer.set(true);
-        }
 
         setupNetworkSection();
         setupNotificationsSection();
