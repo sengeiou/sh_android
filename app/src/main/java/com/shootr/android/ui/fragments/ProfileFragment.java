@@ -31,7 +31,7 @@ import com.path.android.jobqueue.JobManager;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.task.events.shots.LatestShotsResultEvent;
 import com.shootr.android.task.jobs.follows.GetFollowUnfollowUserOnlineJob;
-import com.shootr.android.task.jobs.shots.GetLastShotsJob;
+import com.shootr.android.task.jobs.shots.GetLatestShotsJob;
 import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
@@ -77,6 +77,7 @@ public class ProfileFragment extends BaseFragment {
     public static final String ARGUMENT_USER = "user";
     public static final String TAG = "profile";
 
+    //region injected
     @InjectView(R.id.profile_name) TextView nameTextView;
     @InjectView(R.id.profile_bio) TextView bioTextView;
     @InjectView(R.id.profile_website) TextView websiteTextView;
@@ -99,6 +100,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject TimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
+    //endregion
 
     // Args
     Long idUser;
@@ -496,12 +498,12 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void loadLatestShots() {
-        GetLastShotsJob getLastShotsJob =
-          ShootrApplication.get(getActivity()).getObjectGraph().get(GetLastShotsJob.class);
+        GetLatestShotsJob getLatestShotsJob =
+          ShootrApplication.get(getActivity()).getObjectGraph().get(GetLatestShotsJob.class);
 
-        getLastShotsJob.init(idUser);
+        getLatestShotsJob.init(idUser);
 
-        jobManager.addJobInBackground(getLastShotsJob);
+        jobManager.addJobInBackground(getLatestShotsJob);
     }
 
     @Subscribe

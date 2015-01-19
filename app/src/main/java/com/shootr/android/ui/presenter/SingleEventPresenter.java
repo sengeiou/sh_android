@@ -7,8 +7,10 @@ import com.shootr.android.domain.interactor.EventsCountInteractor;
 import com.shootr.android.domain.interactor.NotificationInteractor;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.WatchingInteractor;
+import com.shootr.android.gcm.event.RequestWatchByPushEvent;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
+import com.shootr.android.task.events.timeline.WatchingRequestPendingEvent;
 import com.shootr.android.ui.model.MatchModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.model.mappers.EventModelMapper;
@@ -87,6 +89,12 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         currentUserWatchingModel.setNotificationsEnabled(enableNotifications);
         singleEventView.setNotificationsEnabled(enableNotifications);
         this.showNotificationsAlert(enableNotifications);
+    }
+
+    @Subscribe
+    public void onNewWatchDetected(RequestWatchByPushEvent event) {
+        loadEventInfo();
+        loadEventsCount();
     }
 
     private void loadEventsCount() {

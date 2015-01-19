@@ -112,6 +112,7 @@ public class DatabaseContract {
         public static final String COMMENT = "comment";
         public static final String IMAGE = "image";
         public static final String ID_EVENT = "idEvent";
+        public static final String TYPE = "type";
 
         public static final String[] PROJECTION = {
                 ID_SHOT,
@@ -119,6 +120,7 @@ public class DatabaseContract {
                 COMMENT,
                 IMAGE,
                 ID_EVENT,
+                TYPE,
                 CSYS_BIRTH,
                 CSYS_MODIFIED,
                 CSYS_DELETED,

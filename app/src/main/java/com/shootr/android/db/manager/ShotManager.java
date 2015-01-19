@@ -71,7 +71,8 @@ public class ShotManager extends  AbstractManager{
           + ShotTable.ID_USER+","
           + ShotTable.COMMENT+","
           + ShotTable.IMAGE+","
-          + ShotTable.ID_EVENT
+          + ShotTable.ID_EVENT + ","
+          + ShotTable.TYPE
           + ",b."
           + UserTable.NAME
           +",b."
@@ -181,12 +182,13 @@ public class ShotManager extends  AbstractManager{
         return latestShots;
     }
 
-    public List<ShotModel> retrieveTimelineWithUsers(Long currentUserId) {
+    public List<ShotModel> retrieveTimelineWithUsers() {
         String query = "SELECT " + ShotTable.ID_SHOT +
                 ",b." + ShotTable.ID_USER + ","
                 + ShotTable.COMMENT+ ","
                 + ShotTable.IMAGE + ","
-                + ShotTable.ID_EVENT+
+                + ShotTable.ID_EVENT + ","
+                + ShotTable.TYPE+
                 ",b."+UserTable.FAVORITE_TEAM_ID+
                 ",b."+UserTable.FAVORITE_TEAM_NAME+
                 ",b." +UserTable.BIO +
@@ -211,7 +213,7 @@ public class ShotManager extends  AbstractManager{
         if (count == 0) {
             return new ArrayList<>(0);
         }
-        List<ShotModel> shots = new CopyOnWriteArrayList();
+        List<ShotModel> shots = new ArrayList<>();
         cursor.moveToFirst();
         do {
 

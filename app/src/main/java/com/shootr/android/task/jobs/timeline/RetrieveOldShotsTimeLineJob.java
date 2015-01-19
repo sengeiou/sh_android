@@ -37,7 +37,7 @@ public class RetrieveOldShotsTimeLineJob extends TimelineJob<OldShotsReceivedEve
         List<ShotEntity> olderShots = service.getOlderShots(getFollowingIds(), firstModifiedDate);
         shotManager.saveShots(olderShots);
         List<ShotModel> olderShotsWithUsers = shotManager.retrieveOldOrNewTimeLineWithUsers(olderShots, sessionRepository.getCurrentUserId());
-        //TODO parser Shot to ShotVO
+        olderShotsWithUsers = filterShots(olderShotsWithUsers);
         postSuccessfulEvent(new OldShotsReceivedEvent(olderShotsWithUsers));
     }
 

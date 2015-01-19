@@ -20,7 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
+public class GetLatestShotsJob extends ShootrBaseJob<LatestShotsResultEvent> {
 
     private static final int PRIORITY = 5;
     public static final Long LATEST_SHOTS_NUMBER = 10L;
@@ -33,7 +33,7 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     private Long idUser;
     private UserEntity user;
 
-    @Inject public GetLastShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
+    @Inject public GetLatestShotsJob(Application application, Bus bus, NetworkUtil networkUtil, ShootrService service,
       ShotManager shotManager, UserManager userManager, ShotModelMapper shotModelMapper) {
         super(new Params(PRIORITY), application, bus, networkUtil);
         this.service = service;
@@ -67,7 +67,9 @@ public class GetLastShotsJob  extends ShootrBaseJob<LatestShotsResultEvent> {
     public List<ShotModel> getLatestShotModels(List<ShotEntity> shotEntities){
         List<ShotModel> shotModels = new ArrayList<>(shotEntities.size());
         for(ShotEntity shot:shotEntities) {
-            shotModels.add(shotModelMapper.toShotModel(user, shot));
+            if (shot.getType() != ShotEntity.TYPE_WATCH_NEGATIVE) {
+                shotModels.add(shotModelMapper.toShotModel(user, shot));
+            }
         }
         return shotModels;
     }
