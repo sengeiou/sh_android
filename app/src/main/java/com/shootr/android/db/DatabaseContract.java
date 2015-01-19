@@ -213,15 +213,13 @@ public class DatabaseContract {
         public static final String END_DATE = "endDate";
         public static final String ID_LOCAL_TEAM = "idLocalTeam";
         public static final String ID_VISITOR_TEAM = "idVisitorTeam";
-        public static final String LOCAL_TEAM_NAME = "localTeamName";
-        public static final String VISITOR_TEAM_NAME = "visitorTeamName";
+        public static final String TITLE = "title";
 
         public static final String[] PROJECTION = {
           ID_EVENT, BEGIN_DATE, END_DATE,
           ID_LOCAL_TEAM,
           ID_VISITOR_TEAM,
-          LOCAL_TEAM_NAME,
-          VISITOR_TEAM_NAME,
+          TITLE,
           CSYS_BIRTH,
           CSYS_MODIFIED,
           CSYS_DELETED,

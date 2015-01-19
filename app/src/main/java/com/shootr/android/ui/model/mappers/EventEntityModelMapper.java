@@ -18,13 +18,11 @@ public class EventEntityModelMapper {
 
     public EventModel toEventModel(EventEntity eventEntity) {
         EventModel eventModel = new EventModel();
-        eventModel.setTitle(eventEntity.getLocalTeamName() + "-" + eventEntity.getVisitorTeamName());
+        eventModel.setTitle(eventEntity.getTitle());
         eventModel.setDatetime(timeFormatter.getDateAndTimeTextRelative(eventEntity.getBeginDate().getTime()));
         eventModel.setIdEvent(eventEntity.getIdEvent());
         eventModel.setLocalTeamId(eventEntity.getIdLocalTeam());
         eventModel.setVisitorTeamId(eventEntity.getIdVisitorTeam());
-        eventModel.setLocalTeamName(eventEntity.getLocalTeamName());
-        eventModel.setVisitorTeamName(eventEntity.getVisitorTeamName());
         return eventModel;
     }
 

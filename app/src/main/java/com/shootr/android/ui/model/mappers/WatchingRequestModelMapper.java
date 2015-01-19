@@ -61,7 +61,7 @@ public class WatchingRequestModelMapper {
     }
 
     private String getTitle(EventEntity eventEntity) {
-        String eventTitle =  eventEntity.getLocalTeamName() + "-" + eventEntity.getVisitorTeamName();
+        String eventTitle = eventEntity.getTitle();
         return String.format(title, eventTitle);
     }
 

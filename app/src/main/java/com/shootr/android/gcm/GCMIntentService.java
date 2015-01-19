@@ -98,7 +98,7 @@ public class GCMIntentService extends IntentService {
     private void receivedStartEvent(JSONObject parameters) throws JSONException, IOException {
         Long idEvent = parameters.getLong(ID_EVENT);
         EventEntity eventEntity = service.getEventById(idEvent);
-        String text = eventEntity.getLocalTeamName()+"-"+eventEntity.getVisitorTeamName();
+        String text = eventEntity.getTitle();
         notificationManager.sendEventStartedNotification(text);
     }
 

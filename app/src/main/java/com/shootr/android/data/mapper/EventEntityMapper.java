@@ -12,7 +12,7 @@ public class EventEntityMapper {
     public Event transform(EventEntity eventEntity) {
         Event event = new Event();
         event.setId(eventEntity.getIdEvent());
-        event.setTitle(eventEntity.getLocalTeamName()+"-"+ eventEntity.getVisitorTeamName());
+        event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
         //TODO endDate
         return event;

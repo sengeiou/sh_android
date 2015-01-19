@@ -4,8 +4,6 @@ package com.shootr.android.ui.model;
 public class EventModel {
 
     private Long idEvent;
-    private String localTeamName;
-    private String visitorTeamName;
     private Long localTeamId;
     private Long visitorTeamId;
     private String datetime;
@@ -17,22 +15,6 @@ public class EventModel {
 
     public void setIdEvent(Long idEvent) {
         this.idEvent = idEvent;
-    }
-
-    public String getLocalTeamName() {
-        return localTeamName;
-    }
-
-    public void setLocalTeamName(String localTeamName) {
-        this.localTeamName = localTeamName;
-    }
-
-    public String getVisitorTeamName() {
-        return visitorTeamName;
-    }
-
-    public void setVisitorTeamName(String visitorTeamName) {
-        this.visitorTeamName = visitorTeamName;
     }
 
     public String getDatetime() {

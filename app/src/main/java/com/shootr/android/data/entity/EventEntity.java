@@ -9,8 +9,7 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
     private Date endDate;
     private Long idLocalTeam;
     private Long idVisitorTeam;
-    private String localTeamName;
-    private String visitorTeamName;
+    private String title;
 
     public Long getIdEvent() {
         return idEvent;
@@ -42,22 +41,6 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setIdVisitorTeam(Long idVisitorTeam) {
         this.idVisitorTeam = idVisitorTeam;
-    }
-
-    public String getLocalTeamName() {
-        return localTeamName;
-    }
-
-    public void setLocalTeamName(String localTeamName) {
-        this.localTeamName = localTeamName;
-    }
-
-    public String getVisitorTeamName() {
-        return visitorTeamName;
-    }
-
-    public void setVisitorTeamName(String visitorTeamName) {
-        this.visitorTeamName = visitorTeamName;
     }
 
     @Override
@@ -101,5 +84,13 @@ public class EventEntity extends Synchronized implements Comparable<EventEntity>
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
