@@ -22,7 +22,9 @@
       android:inputType="text|textCapSentences"
       android:singleLine="true"
       android:imeOptions="actionDone"
-      android:padding="16dp" />
+      android:padding="16dp" >
+        <requestFocus />
+      </EditText>
 
     <View
       android:id="@+id/edit_info_place_divider"
