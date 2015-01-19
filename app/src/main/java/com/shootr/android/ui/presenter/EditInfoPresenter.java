@@ -8,14 +8,16 @@ public class EditInfoPresenter {
     private EditInfoView editInfoView;
     private String eventTitle;
     private String statusText;
+    private boolean watching;
 
     @Inject public EditInfoPresenter() {
     }
 
-    public void initialize(EditInfoView editInfoView, String eventTitle, String statusText) {
+    public void initialize(EditInfoView editInfoView, String eventTitle, String statusText, boolean watching) {
         this.editInfoView = editInfoView;
         this.eventTitle = eventTitle;
         this.statusText = statusText;
+        this.watching = watching;
         this.updateViewWithInfo();
     }
 
@@ -62,6 +64,11 @@ public class EditInfoPresenter {
         this.editInfoView.setTitle(eventTitle);
         this.editInfoView.setPlaceText(statusText);
         this.updatePlaceInputStatus();
+        if (watching) {
+            this.editInfoView.setMenuShoot();
+        } else {
+            this.editInfoView.setMenuDone();
+        }
     }
 
     private boolean hasChangedInfo() {

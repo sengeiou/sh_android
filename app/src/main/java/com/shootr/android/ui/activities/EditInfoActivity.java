@@ -24,21 +24,26 @@ import javax.inject.Inject;
 
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
-    private static final String KEY_TITLE = "title";
     public static final String KEY_STATUS = "status";
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_WATCHING = "watching";
 
     @InjectView(R.id.edit_info_place) EditText place;
 
-    private MenuItem sendMenuItem;
     @Inject EditInfoPresenter editInfoPresenter;
+
+    private int sendMenuIcon;
+    private MenuItem sendMenuItem;
 
     public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
         String title = eventModel.getTitle();
         String status = watchingModel.getPlace();
+        boolean watching = watchingModel.isWatching();
 
         Intent intent = new Intent(context, EditInfoActivity.class);
         intent.putExtra(KEY_TITLE, title);
         intent.putExtra(KEY_STATUS, status);
+        intent.putExtra(KEY_WATCHING, watching);
         return intent;
     }
 
@@ -89,7 +94,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
     private void initializePresenter(Bundle initialInfoBundle) {
         String eventTitle = initialInfoBundle.getString(KEY_TITLE);
         String statusText = initialInfoBundle.getString(KEY_STATUS);
-        editInfoPresenter.initialize(this, eventTitle, statusText);
+        boolean watching = initialInfoBundle.getBoolean(KEY_WATCHING);
+        editInfoPresenter.initialize(this, eventTitle, statusText, watching);
     }
 
     private void sendNewStatus() {
@@ -108,6 +114,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         getMenuInflater().inflate(R.menu.edit_info, menu);
         sendMenuItem = menu.findItem(R.id.menu_send);
         sendMenuItem.setEnabled(false);
+        if (sendMenuIcon != 0) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
         return true;
     }
 
@@ -144,6 +153,21 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @Override public String getPlaceText() {
         return this.place.getText().toString();
+    }
+
+    @Override public void setMenuShoot() {
+        sendMenuIcon = R.drawable.ic_action_send;
+        if (sendMenuItem != null) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
+    }
+
+    @Override public void setMenuDone() {
+        sendMenuIcon = R.drawable.ic_action_done;
+        if (sendMenuItem != null) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
+
     }
 
     @Override public void setPlaceText(String place) {

@@ -13,4 +13,8 @@ public interface EditInfoView {
     void closeScreenWithResult(String stautsText);
 
     String getPlaceText();
+
+    void setMenuShoot();
+
+    void setMenuDone();
 }
