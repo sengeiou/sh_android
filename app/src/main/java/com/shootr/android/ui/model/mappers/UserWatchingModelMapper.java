@@ -45,7 +45,7 @@ public class UserWatchingModelMapper {
         if (watch.getUserStatus() != null) {
             return watch.getUserStatus();
         } else {
-            return watch.isWatching() ? watchingText : notWatchingText;
+            return watchingText;
         }
     }
 
