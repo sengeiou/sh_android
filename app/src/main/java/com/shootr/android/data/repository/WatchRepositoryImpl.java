@@ -129,9 +129,7 @@ public class WatchRepositoryImpl implements WatchRepository {
         if (currentWatchEntity != null) {
             currentWatchEntity.setNotification(watch.isNotificaticationsEnabled() ? 1 : 0);
             currentWatchEntity.setStatus(watch.isWatching() ? 1L : 2L);
-            if (watch.getUserStatus() != null) {
-                currentWatchEntity.setPlace(watch.getUserStatus());
-            }
+            currentWatchEntity.setPlace(watch.getUserStatus());
             currentWatchEntity.setCsysSynchronized(Synchronized.SYNC_UPDATED);
         } else {
             currentWatchEntity = watchEntityMapper.transform(watch);

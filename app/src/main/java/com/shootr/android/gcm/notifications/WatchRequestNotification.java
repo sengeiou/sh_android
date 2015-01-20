@@ -28,7 +28,7 @@ public class WatchRequestNotification extends CommonNotification {
 
     private final String formatWatching;
     private final String formatWatchingPlace;
-    private final String formatNotWatching;
+    @Deprecated private final String formatNotWatching;
 
     public WatchRequestNotification(Context context, NotificationBuilderFactory notificationBuilderFactory,
       PicassoWrapper picasso, UserWatchingModel userWatchingModel, EventModel eventModel) {

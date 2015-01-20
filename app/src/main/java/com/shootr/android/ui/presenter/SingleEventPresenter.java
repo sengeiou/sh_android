@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import android.support.annotation.Nullable;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
@@ -55,14 +56,20 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         this.errorMessageFactory = errorMessageFactory;
     }
 
+
     public void initialize(SingleEventView singleEventView) {
         this.singleEventView = singleEventView;
         this.loadEventInfo();
         this.loadEventsCount();
     }
 
+    //region interaction methods
     public void edit() {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
+    }
+
+    public void resultFromEdit(@Nullable String statusText) {
+        watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
     }
 
     public void sendWatching(boolean isWatching) {
@@ -142,6 +149,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
             singleEventView.alertNotificationsDisabled();
         }
     }
+    //endregion
 
     //region renders
     private void renderWatchersList(List<Watch> watchers) {

@@ -33,6 +33,7 @@ public class WatchersView extends LinearLayout{
     private Map<UserWatchingModel, WatcherViewHolder> watchersHoldersMap;
     private OnProfileClickListener profileClickListener;
 
+    //region Construction
     public WatchersView(Context context) {
         super(context);
         init(context);
@@ -65,7 +66,9 @@ public class WatchersView extends LinearLayout{
             addMockData();
         }
     }
+    //endregion
 
+    //region Public Api
     public void setCurrentUserWatching(UserWatchingModel currentUserWatching) {
         if (currentUserViewHolder == null) {
             currentUserViewHolder = createViewHolder();
@@ -80,7 +83,7 @@ public class WatchersView extends LinearLayout{
         }
     }
 
-    private void putWatcher(UserWatchingModel userWatching) {
+    public void putWatcher(UserWatchingModel userWatching) {
         WatcherViewHolder viewHolder;
         if (watchersHoldersMap.containsKey(userWatching)) {
             viewHolder = watchersHoldersMap.get(userWatching);
@@ -91,6 +94,7 @@ public class WatchersView extends LinearLayout{
         }
         bindWatcherData(viewHolder, userWatching);
     }
+    //endregion
 
     private void bindCurrentUserData(WatcherViewHolder viewHolder, UserWatchingModel currentUserWatching) {
         bindWatcherData(viewHolder, currentUserWatching);

@@ -6,23 +6,15 @@ public interface EditInfoView {
 
     void setTitle(String title);
 
-    void setWatchingStatus(boolean watching);
-
-    void closeScreen();
-
-    String getPlaceText();
-
     void setPlaceText(String place);
-
-    void disablePlaceText();
-
-    boolean getWatchingStatus();
-
-    void enablePlaceText();
 
     void setFocusOnPlace();
 
-    void alertPlaceNotWatchingNotAllow();
+    void closeScreenWithResult(String stautsText);
 
-    void showNotificationsAlert();
+    String getPlaceText();
+
+    void setMenuShoot();
+
+    void setMenuDone();
 }

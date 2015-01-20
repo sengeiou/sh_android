@@ -1,21 +1,17 @@
 package com.shootr.android.ui.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.R;
@@ -24,30 +20,31 @@ import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.UserWatchingModel;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
 import com.shootr.android.ui.views.EditInfoView;
-import com.shootr.android.ui.widgets.SwitchBar;
+import javax.inject.Inject;
 
 public class EditInfoActivity extends BaseSignedInActivity implements EditInfoView{
 
-    @InjectView(R.id.edit_info_switch_bar) SwitchBar watchingSwitchBar;
-    @InjectView(R.id.edit_info_place) EditText place;
-    @InjectView(R.id.edit_info_place_divider) View placeDivider;
+    public static final String KEY_STATUS = "status";
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_WATCHING = "watching";
 
+    @InjectView(R.id.edit_info_place) EditText place;
+
+    @Inject EditInfoPresenter editInfoPresenter;
+
+    private int sendMenuIcon;
     private MenuItem sendMenuItem;
 
-    private EditInfoPresenter editInfoPresenter;
-
     public static Intent getIntent(Context context, EventModel eventModel, UserWatchingModel watchingModel) {
-        String place = watchingModel.hasStatusMessage() ? watchingModel.getPlace() : null;
-        return getIntent(context, eventModel.getIdEvent(), watchingModel.isWatching(), eventModel.getTitle(), place);
-    }
+        String title = eventModel.getTitle();
+        String status = watchingModel.getPlace();
+        boolean watching = watchingModel.isWatching();
 
-    @Deprecated
-    public static Intent getIntent(Context context, Long idEvent, boolean watchingStatus, String eventTitle, String place) {
-        EditInfoPresenter.EditInfoModel editInfoModel =
-          new EditInfoPresenter.EditInfoModel(idEvent, eventTitle, watchingStatus, place);
-        Intent launchIntent = new Intent(context, EditInfoActivity.class);
-        launchIntent.putExtras(editInfoModel.toBundle());
-        return launchIntent;
+        Intent intent = new Intent(context, EditInfoActivity.class);
+        intent.putExtra(KEY_TITLE, title);
+        intent.putExtra(KEY_STATUS, status);
+        intent.putExtra(KEY_WATCHING, watching);
+        return intent;
     }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +56,8 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
         setupActionBar();
 
-        Bundle infoBundle = getIntent().getExtras();
-        initializePresenter(infoBundle);
+        Bundle initialInfoBundle = getIntent().getExtras();
+        initializePresenter(initialInfoBundle);
 
         //TODO esto es lógica de la vista, probablemente debería ir al presenter
         InputFilter newlineFilter = new InputFilter() {
@@ -76,12 +73,6 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         place.setFilters(new InputFilter[]{
           newlineFilter,
           new InputFilter.LengthFilter(60)
-        });
-
-        watchingSwitchBar.addOnSwitchChangeListener(new SwitchBar.OnSwitchChangeListener() {
-            @Override public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-                editInfoPresenter.watchingStatusChanged();
-            }
         });
 
         // Not done by ButterKnife so it's not called when the presenter sets the text
@@ -100,9 +91,11 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         });
     }
 
-    private void initializePresenter(Bundle infoBundle) {
-        editInfoPresenter = getObjectGraph().get(EditInfoPresenter.class);
-        editInfoPresenter.initialize(this, EditInfoPresenter.EditInfoModel.fromBundle(infoBundle), getObjectGraph());
+    private void initializePresenter(Bundle initialInfoBundle) {
+        String eventTitle = initialInfoBundle.getString(KEY_TITLE);
+        String statusText = initialInfoBundle.getString(KEY_STATUS);
+        boolean watching = initialInfoBundle.getBoolean(KEY_WATCHING);
+        editInfoPresenter.initialize(this, eventTitle, statusText, watching);
     }
 
     private void sendNewStatus() {
@@ -121,6 +114,9 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         getMenuInflater().inflate(R.menu.edit_info, menu);
         sendMenuItem = menu.findItem(R.id.menu_send);
         sendMenuItem.setEnabled(false);
+        if (sendMenuIcon != 0) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
         return true;
     }
 
@@ -148,12 +144,10 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         getSupportActionBar().setTitle(title);
     }
 
-    @Override public void setWatchingStatus(boolean watching) {
-        watchingSwitchBar.setChecked(watching);
-    }
-
-    @Override public void closeScreen() {
-        setResult(RESULT_OK);
+    @Override public void closeScreenWithResult(String stautsText) {
+        Intent resultIntent = getIntent();
+        resultIntent.putExtra(KEY_STATUS, stautsText);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
@@ -161,40 +155,29 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
         return this.place.getText().toString();
     }
 
+    @Override public void setMenuShoot() {
+        sendMenuIcon = R.drawable.ic_action_send;
+        if (sendMenuItem != null) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
+    }
+
+    @Override public void setMenuDone() {
+        sendMenuIcon = R.drawable.ic_action_done;
+        if (sendMenuItem != null) {
+            sendMenuItem.setIcon(sendMenuIcon);
+        }
+
+    }
+
     @Override public void setPlaceText(String place) {
         this.place.setText(place);
     }
 
-    @Override public boolean getWatchingStatus() {
-        return watchingSwitchBar.isChecked();
-    }
-
-    @Override public void disablePlaceText() {
-        place.setEnabled(false);
-        place.setVisibility(View.GONE);
-        placeDivider.setVisibility(View.INVISIBLE);
-    }
-
-    @Override public void enablePlaceText() {
-        place.setEnabled(true);
-        place.setVisibility(View.VISIBLE);
-        placeDivider.setVisibility(View.VISIBLE);
-    }
-
     @Override public void setFocusOnPlace() {
         place.requestFocus();
+        place.setSelection(place.getText().length());
         InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_IMPLICIT, 0);
-    }
-
-    @Override public void alertPlaceNotWatchingNotAllow() {
-        new AlertDialog.Builder(this).setMessage(
-          getString(R.string.watching_place_not_watching_alert))
-          .setPositiveButton(android.R.string.ok, null)
-          .show();
-    }
-
-    @Override public void showNotificationsAlert() {
-        Toast.makeText(this, R.string.watching_notifications_alert, Toast.LENGTH_LONG).show();
     }
 }

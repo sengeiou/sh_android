@@ -138,7 +138,8 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_EDIT && resultCode == RESULT_OK) {
-            presenter.loadEventInfo();
+            String statusText = data.getStringExtra(EditInfoActivity.KEY_STATUS);
+            presenter.resultFromEdit(statusText);
         }
     }
 

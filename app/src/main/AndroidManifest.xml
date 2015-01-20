@@ -110,8 +110,8 @@
 
         <activity
           android:name=".ui.activities.EditInfoActivity"
-          android:theme="@style/ShootrTheme.Closable">
-        </activity>
+          android:theme="@style/ShootrTheme.Closable"
+          android:windowSoftInputMode="stateVisible"></activity>
 
         <activity
           android:name="com.shootr.android.ui.activities.ProfileEditActivity"
