@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.DividerItemDecoration;
 import com.shootr.android.ui.adapters.EventsListAdapter;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 public class EventsListActivity extends BaseSignedInActivity implements EventsListView {
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
+    @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
     @Inject EventsListPresenter presenter;
     @Inject PicassoWrapper picasso;
 
@@ -49,6 +51,8 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         eventsList.addItemDecoration(new DividerItemDecoration(this));
         adapter = new EventsListAdapter(picasso);
         eventsList.setAdapter(adapter);
+
+        addEventButton.attachToRecyclerView(eventsList);
     }
 
     private void initializePresenter() {
