@@ -4,10 +4,6 @@
       android:drawable="@color/default_photo_background"
       />
     <item
-      android:drawable="@drawable/ic_person_36"
-      android:top="8dp"
-      android:bottom="8dp"
-      android:left="8dp"
-      android:right="8dp"
+      android:drawable="@drawable/ic_event_picture_default_icon_72_white"
       />
 </layer-list>
