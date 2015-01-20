@@ -52,8 +52,6 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         eventsList.addItemDecoration(new DividerItemDecoration(this));
         adapter = new EventsListAdapter(picasso, getResources());
         eventsList.setAdapter(adapter);
-
-        addEventButton.attachToRecyclerView(eventsList);
     }
 
     private void initializePresenter() {
