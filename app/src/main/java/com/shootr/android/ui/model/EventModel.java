@@ -8,6 +8,7 @@ public class EventModel {
     private Long visitorTeamId;
     private String datetime;
     private String title;
+    private String picture;
 
     public Long getIdEvent() {
         return idEvent;
@@ -64,5 +65,13 @@ public class EventModel {
     @Override
     public int hashCode() {
         return idEvent.hashCode();
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

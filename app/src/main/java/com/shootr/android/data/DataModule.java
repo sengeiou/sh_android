@@ -29,6 +29,7 @@ import com.shootr.android.task.jobs.shots.UploadShotImageJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingPeopleNumberJob;
 import com.shootr.android.task.jobs.timeline.GetWatchingRequestsPendingJob;
 import com.shootr.android.ui.presenter.EditInfoPresenter;
+import com.shootr.android.ui.presenter.EventsListPresenter;
 import com.shootr.android.ui.presenter.PeoplePresenter;
 import com.shootr.android.ui.presenter.PostNewShotPresenter;
 import com.shootr.android.ui.presenter.ProfileEditPresenter;
@@ -157,6 +158,8 @@ import static android.content.Context.MODE_PRIVATE;
     PeoplePresenter.class,
 
     SingleEventPresenter.class,
+
+    EventsListPresenter.class,
 
     TimeFormatter.class,
 

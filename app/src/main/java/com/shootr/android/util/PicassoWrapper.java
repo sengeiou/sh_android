@@ -11,10 +11,12 @@ public class PicassoWrapper {
 
     private final Picasso picasso;
     private final int defaultImageRes;
+    private int defaultEventPictureRes;
 
     public PicassoWrapper(Picasso picasso) {
         this.picasso = picasso;
         defaultImageRes = R.drawable.ic_contact_picture_default;
+        defaultEventPictureRes = R.drawable.ic_event_picture_default;
     }
 
     public RequestCreator loadProfilePhoto(String path) {
@@ -29,6 +31,18 @@ public class PicassoWrapper {
         return loadResult;
     }
 
+    public RequestCreator loadEventPicture(String pictureUrl) {
+        boolean isValidPicture = pictureUrl != null && !pictureUrl.isEmpty();
+        RequestCreator loadResult;
+        if (isValidPicture) {
+            loadResult = picasso.load(pictureUrl);
+        } else {
+            loadResult = load(defaultEventPictureRes);
+        }
+        loadResult.placeholder(defaultEventPictureRes);
+        return loadResult;
+    }
+
     public RequestCreator loadTimelineImage(String path) {
         return picasso.load(path).placeholder(R.color.transparent);
     }
@@ -40,10 +54,10 @@ public class PicassoWrapper {
     public RequestCreator load(String path) {
         return picasso.load(path);
     }
-
     public RequestCreator load(Uri uri) {
         return picasso.load(uri);
     }
+
     public RequestCreator load(File file) {
         return picasso.load(file);
     }
@@ -55,5 +69,4 @@ public class PicassoWrapper {
     public Picasso getPicasso() {
         return picasso;
     }
-
 }

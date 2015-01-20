@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?selectableItemBackground"
+  android:clickable="true"
+  android:orientation="horizontal">
+
+    <ImageView
+      android:id="@+id/event_picture"
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:layout_marginRight="8dp"
+      android:scaleType="centerCrop"
+      tools:background="#660000cc" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:orientation="vertical">
+
+        <TextView
+          android:id="@+id/event_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:ellipsize="end"
+          android:maxLines="2"
+          android:textColor="@color/gray_10"
+          android:textSize="16sp"
+          tools:text="Titulo Dos líneas" />
+
+        <TextView
+          android:id="@+id/event_date"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/watching"
+          android:textSize="14sp"
+          tools:text="Today, 7pm" />
+    </LinearLayout>
+</LinearLayout>

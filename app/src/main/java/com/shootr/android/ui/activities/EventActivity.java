@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import com.shootr.android.R;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventModel;
@@ -112,6 +113,12 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         icon.setDrawableByLayerId(R.id.ic_badge, eventsBadgeDrawable);
 
         updateEventsIconBadge();
+    }
+
+    @OnClick(R.id.event_title)
+    public void onTitleClick() {
+        //TODO extract logic
+        startActivity(new Intent(this, EventsListActivity.class));
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

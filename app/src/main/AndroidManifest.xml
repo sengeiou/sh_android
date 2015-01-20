@@ -148,6 +148,10 @@
           >
         </activity>
 
+        <activity
+          android:name="com.shootr.android.ui.activities.EventsListActivity"
+          android:label="@string/activity_event_list_title"
+          android:theme="@style/ShootrTheme.Closable" />
 
 
         <meta-data
