@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.melnykov.fab.FloatingActionButton;
@@ -58,6 +59,13 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     private void initializePresenter() {
         presenter.initialize(this);
     }
+
+    //region Activity methods
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.events_list, menu);
+        return true;
+    }
+    //endregion
 
     //region View methods
     @Override public void renderEvents(List<EventResultModel> events) {
