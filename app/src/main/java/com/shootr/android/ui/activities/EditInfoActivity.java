@@ -176,6 +176,7 @@ public class EditInfoActivity extends BaseSignedInActivity implements EditInfoVi
 
     @Override public void setFocusOnPlace() {
         place.requestFocus();
+        place.setSelection(place.getText().length());
         InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInputFromWindow(place.getApplicationWindowToken(), InputMethodManager.SHOW_IMPLICIT, 0);
     }
