@@ -44,7 +44,10 @@ public class ShotMapper extends GenericMapper {
         if (idEvent != null) {
             shot.setIdEvent(idEvent.longValue());
         }
-        shot.setType(((Number) dto.get(DatabaseContract.ShotTable.TYPE)).intValue());
+        Number type = (Number) dto.get(DatabaseContract.ShotTable.TYPE);
+        if (type != null) {
+            shot.setType(type.intValue());
+        }
         setSynchronizedfromDto(dto, shot);
         return shot;
     }
