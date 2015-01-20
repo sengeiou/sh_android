@@ -42,7 +42,7 @@
               android:id="@+id/event_date"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="@color/gray_40"
+              android:textColor="@color/gray_30"
               android:textSize="14sp"
               tools:text="Today, 7pm" />
 
@@ -51,7 +51,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginLeft="8dp"
-              android:textColor="@color/gray_70"
+              android:textColor="@color/gray_60"
               android:textSize="14sp"
               tools:text="2 Watchers" />
         </LinearLayout>
