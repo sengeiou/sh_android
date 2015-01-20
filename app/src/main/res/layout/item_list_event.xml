@@ -15,6 +15,7 @@
       android:layout_height="@dimen/event_result_picture_size"
       android:layout_marginRight="8dp"
       android:scaleType="centerCrop"
+      android:src="@drawable/ic_event_picture_default"
       tools:background="#660000cc" />
 
     <LinearLayout
@@ -43,17 +44,17 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="@color/gray_30"
-              android:textSize="14sp"
+              android:textSize="12sp"
               tools:text="Today, 7pm" />
 
             <TextView
               android:id="@+id/event_watchers"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="8dp"
+              android:layout_marginLeft="6dp"
               android:textColor="@color/gray_60"
-              android:textSize="14sp"
-              tools:text="2 Watchers" />
+              android:textSize="12sp"
+              tools:text="— 2 Watchers" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -169,4 +169,12 @@
             %d Watchers
         </item>
     </plurals>
+    <plurals name="event_watchers">
+        <item quantity="one">
+            – %d Watcher
+        </item>
+        <item quantity="other">
+           – %d Watchers
+        </item>
+    </plurals>
 </resources>
