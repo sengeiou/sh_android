@@ -49,7 +49,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
         eventsList.addItemDecoration(new DividerItemDecoration(this));
-        adapter = new EventsListAdapter(picasso);
+        adapter = new EventsListAdapter(picasso, getResources());
         eventsList.setAdapter(adapter);
 
         addEventButton.attachToRecyclerView(eventsList);
