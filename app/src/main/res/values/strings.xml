@@ -129,7 +129,7 @@
     <string name="activity_edit_profile_website_hint">Website</string>
     <string name="activity_edit_profile_bio_hint">Bio</string>
     <string name="edit">Edit</string>
-    <string name="edit_info_place_placeholder">Watching</string>
+    <string name="edit_info_place_placeholder">Where are you?</string>
 
     <string name="photo_edit_take">Take photo</string>
     <string name="photo_edit_choose">Choose photo</string>

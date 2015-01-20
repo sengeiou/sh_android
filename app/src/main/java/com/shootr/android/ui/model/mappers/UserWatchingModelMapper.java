@@ -1,7 +1,5 @@
 package com.shootr.android.ui.model.mappers;
 
-import android.content.res.Resources;
-import com.shootr.android.R;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.ui.model.UserWatchingModel;
@@ -11,12 +9,7 @@ import javax.inject.Inject;
 
 public class UserWatchingModelMapper {
 
-    private final String watchingText;
-    private final String notWatchingText;
-
-    @Inject public UserWatchingModelMapper(Resources resources) {
-        watchingText = resources.getString(R.string.watching_text);
-        notWatchingText = resources.getString(R.string.watching_not_text);
+    @Inject public UserWatchingModelMapper() {
     }
 
     public UserWatchingModel transform(Watch watch) {
@@ -42,11 +35,7 @@ public class UserWatchingModelMapper {
     }
 
     private String userStatus(Watch watch) {
-        if (watch.getUserStatus() != null) {
-            return watch.getUserStatus();
-        } else {
-            return watchingText;
-        }
+        return watch.getUserStatus();
     }
 
 }

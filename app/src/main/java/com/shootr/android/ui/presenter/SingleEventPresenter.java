@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import android.support.annotation.Nullable;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
@@ -67,7 +68,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         singleEventView.navigateToEdit(eventModel, currentUserWatchingModel);
     }
 
-    public void resultFromEdit(String statusText) {
+    public void resultFromEdit(@Nullable String statusText) {
         watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
     }
 
