@@ -18,6 +18,9 @@ public class WatchEntityMapper {
     }
 
     public Watch transform(WatchEntity watchEntity, User user) {
+        if (watchEntity == null) {
+            throw new IllegalArgumentException("Watch can't be null");
+        }
         checkUserIdMatches(watchEntity, user);
         Watch watch = new Watch();
         watch.setUser(user);
@@ -30,6 +33,9 @@ public class WatchEntityMapper {
     }
 
     private void checkUserIdMatches(WatchEntity watchEntity, User user) {
+        if (watchEntity.getIdUser() == null) {
+            throw new IllegalArgumentException("Watch can't have null user id");
+        }
         if (!watchEntity.getIdUser().equals(user.getIdUser())) {
             throw new IllegalArgumentException(
               String.format("User id (%d) doesn't match watchEntity's id (%d)", user.getIdUser(),

@@ -450,8 +450,10 @@ public class ShootrDataService implements ShootrService {
             return null;
         }
         WatchEntity watchReceived = null;
-        if(ops.length>0){
-            watchReceived = watchMapper.fromDto(ops[0].getData()[0]);
+        if(ops.length>0) {
+            if (ops[0].getMetadata().getItems() > 0) {
+                watchReceived = watchMapper.fromDto(ops[0].getData()[0]);
+            }
         }
         return watchReceived;
     }
