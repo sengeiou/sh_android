@@ -35,4 +35,9 @@ public class EventRepositoryImpl implements EventRepository {
         EventEntity eventEntity = eventManager.getEventById(idEvent);
         return eventEntityMapper.transform(eventEntity);
     }
+
+    @Override public Event getEventById(Long idEvent) {
+        EventEntity eventEntity = eventManager.getEventById(idEvent);
+        return eventEntityMapper.transform(eventEntity);
+    }
 }

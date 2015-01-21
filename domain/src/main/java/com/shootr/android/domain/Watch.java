@@ -7,6 +7,7 @@ public class Watch {
     private String userStatus;
     private boolean watching;
     private boolean notificaticationsEnabled;
+    private boolean visible;
 
     public User getUser() {
         return user;
@@ -46,5 +47,13 @@ public class Watch {
 
     public void setNotificaticationsEnabled(boolean notificaticationsEnabled) {
         this.notificaticationsEnabled = notificaticationsEnabled;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

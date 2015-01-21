@@ -6,6 +6,7 @@ import com.shootr.android.domain.EventInfo;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.interactor.EventsCountInteractor;
 import com.shootr.android.domain.interactor.NotificationInteractor;
+import com.shootr.android.domain.interactor.SelectEventInteractor;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
 import com.shootr.android.domain.interactor.WatchingInteractor;
 import com.shootr.android.gcm.event.RequestWatchByPushEvent;
@@ -24,12 +25,13 @@ import javax.inject.Inject;
 
 public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
-    //region fields
+    //region Dependencies
     private final Bus bus;
     private final VisibleEventInfoInteractor eventInfoInteractor;
     private final WatchingInteractor watchingInteractor;
     private final NotificationInteractor notificationInteractor;
     private final EventsCountInteractor eventsCountInteractor;
+    private final SelectEventInteractor selectEventInteractor;
 
     private final EventModelMapper eventModelMapper;
     private final UserWatchingModelMapper userWatchingModelMapper;
@@ -40,22 +42,22 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     private UserWatchingModel currentUserWatchingModel;
     private EventModel eventModel;
     private int watchersCount;
-    //endregion
 
     @Inject public SingleEventPresenter(Bus bus, VisibleEventInfoInteractor eventInfoInteractor,
       WatchingInteractor watchingInteractor, NotificationInteractor notificationInteractor,
-      EventsCountInteractor eventsCountInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
+      EventsCountInteractor eventsCountInteractor, SelectEventInteractor selectEventInteractor, EventModelMapper eventModelMapper, UserWatchingModelMapper userWatchingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventInfoInteractor = eventInfoInteractor;
         this.watchingInteractor = watchingInteractor;
         this.notificationInteractor = notificationInteractor;
         this.eventsCountInteractor = eventsCountInteractor;
+        this.selectEventInteractor = selectEventInteractor;
         this.eventModelMapper = eventModelMapper;
         this.userWatchingModelMapper = userWatchingModelMapper;
         this.errorMessageFactory = errorMessageFactory;
     }
-
+    //endregion
 
     public void initialize(SingleEventView singleEventView) {
         this.singleEventView = singleEventView;
@@ -72,6 +74,11 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         watchingInteractor.sendWatching(currentUserWatchingModel.isWatching(), eventModel.getIdEvent(), statusText);
     }
 
+    public void resultFromSelectEvent(Long idEventSelected) {
+        this.showViewLoading();
+        selectEventInteractor.selectEvent(idEventSelected);
+    }
+
     public void sendWatching(boolean isWatching) {
         watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), null);
 
@@ -85,7 +92,17 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe
     public void onWatchingUpdated(Watch currentUserWatch) {
-        renderCurrentUserWatching(currentUserWatch);
+        if (currentUserWatch.getIdEvent().equals(eventModel.getIdEvent())) {
+            this.renderCurrentUserWatching(currentUserWatch);
+        } else {
+            //TODO usar el mismo evento de bus para cosas distintas es un TRUÑO. Cada vez el bus es peor opción.
+            this.onEventChanged();
+            //TODO it's triggered twice (local and server). That ain't good.
+        }
+    }
+
+    private void onEventChanged() {
+        this.loadEventInfo();
     }
 
     public void toggleNotifications() {
