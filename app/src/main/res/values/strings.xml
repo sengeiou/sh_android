@@ -160,6 +160,7 @@
     <string name="notifications_disabled">Event notifications: Off</string>
     <string name="activity_event_list_title">Events</string>
     <string name="menu_search_events">Search</string>
+    <string name="events_list_empty">$No events found.</string>
 
     <plurals name="event_watching_watchers_number">
         <item quantity="one">

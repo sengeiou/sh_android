@@ -2,18 +2,17 @@ package com.shootr.android.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.recyclerview.DividerItemDecoration;
 import com.shootr.android.ui.adapters.EventsListAdapter;
 import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
-import com.shootr.android.ui.adapters.recyclerview.SlideInOutBottomItemAnimator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
@@ -26,6 +25,9 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     @InjectView(R.id.events_list) RecyclerView eventsList;
     @InjectView(R.id.events_add_event) FloatingActionButton addEventButton;
+    @InjectView(R.id.events_empty) View emptyView;
+    @InjectView(R.id.events_loading) View loadingView;
+
     @Inject EventsListPresenter presenter;
     @Inject PicassoWrapper picasso;
 
@@ -85,6 +87,34 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
 
     @Override public void setCurrentVisibleEventId(Long eventId) {
         adapter.setCurrentVisibleEvent(eventId);
+    }
+
+    @Override public void showContent() {
+        eventsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideContent() {
+        eventsList.setVisibility(View.GONE);
+    }
+
+    @Override public void showEmpty() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideEmpty() {
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideLoading() {
+        loadingView.setVisibility(View.GONE);
+    }
+
+    @Override public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
     //endregion
 }

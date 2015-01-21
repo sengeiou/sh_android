@@ -35,21 +35,45 @@ public class EventsListPresenter implements Presenter {
     }
 
     private void loadDefaultEventList() {
+        eventsListView.showLoading();
         eventsListInteractor.loadEvents();
     }
 
     @Subscribe
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
+        eventsListView.hideLoading();
+        this.setViewCurrentVisibleEvent(resultList);
+        this.showEventListInView(resultList);
+    }
+
+    private void setViewCurrentVisibleEvent(EventSearchResultList resultList) {
         Event currentVisibleEvent = resultList.getCurrentVisibleEvent();
         if (currentVisibleEvent != null) {
             eventsListView.setCurrentVisibleEventId(currentVisibleEvent.getId());
         }
+    }
 
+    private void showEventListInView(EventSearchResultList resultList) {
         List<EventSearchResult> events = resultList.getEventSearchResults();
+        if (events.size() > 0) {
+            this.renderViewEventsList(events);
+        } else {
+            this.showViewEmpty();
+        }
+    }
+
+    private void renderViewEventsList(List<EventSearchResult> events) {
         List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+        eventsListView.showContent();
         eventsListView.renderEvents(eventModels);
     }
 
+    private void showViewEmpty() {
+        eventsListView.showEmpty();
+        eventsListView.hideContent();
+    }
+
+    //TODO errores
 
     //region Lifecycle
     @Override public void resume() {

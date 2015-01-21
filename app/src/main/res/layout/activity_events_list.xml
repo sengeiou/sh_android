@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:fab="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:animateLayoutChanges="true">
 
     <android.support.v7.widget.RecyclerView
       android:id="@+id/events_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scrollbars="vertical" />
+
+    <ProgressBar
+      android:id="@+id/events_loading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true"
+      android:visibility="gone"
+      tools:visibility="visible" />
+
+    <!-- emtpy -->
+    <TextView
+      android:id="@+id/events_empty"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:padding="16dp"
+      android:text="@string/events_list_empty"
+      android:textColor="@color/gray_50"
+      android:textSize="20sp"
+      android:visibility="gone"
+      tools:visibility="visible" />
 
     <com.melnykov.fab.FloatingActionButton
       android:id="@+id/events_add_event"
