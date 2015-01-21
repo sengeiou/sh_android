@@ -2,6 +2,9 @@ package com.shootr.android.ui.adapters;
 
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +17,6 @@ import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.util.PicassoWrapper;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
 
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
 
@@ -22,6 +24,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     private final Resources resources;
 
     private List<EventResultModel> events;
+    private Long currentVisibleEvent;
 
     public EventsListAdapter(PicassoWrapper picasso, Resources resources) {
         this.picasso = picasso;
@@ -48,6 +51,17 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(holder.picture);
+        if (event.getEventModel().getIdEvent().equals(currentVisibleEvent)) {
+            markVisibleEvent(holder);
+        }
+    }
+
+    private void markVisibleEvent(ViewHolder holder) {
+        CharSequence text = holder.title.getText();
+        SpannableStringBuilder sp = new SpannableStringBuilder(text);
+        int selectedColor = resources.getColor(R.color.primary);
+        sp.setSpan(new ForegroundColorSpan(selectedColor), 0, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.title.setText(sp);
     }
 
     private String getWatchersText(int watchers) {
@@ -56,6 +70,10 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override public int getItemCount() {
         return events.size();
+    }
+
+    public void setCurrentVisibleEvent(Long eventId) {
+        this.currentVisibleEvent = eventId;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

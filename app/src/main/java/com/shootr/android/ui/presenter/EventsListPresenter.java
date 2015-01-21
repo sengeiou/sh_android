@@ -1,5 +1,6 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.domain.Event;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
@@ -39,6 +40,11 @@ public class EventsListPresenter implements Presenter {
 
     @Subscribe
     public void onDefaultEventListLoaded(EventSearchResultList resultList) {
+        Event currentVisibleEvent = resultList.getCurrentVisibleEvent();
+        if (currentVisibleEvent != null) {
+            eventsListView.setCurrentVisibleEventId(currentVisibleEvent.getId());
+        }
+
         List<EventSearchResult> events = resultList.getEventSearchResults();
         List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
         eventsListView.renderEvents(eventModels);

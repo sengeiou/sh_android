@@ -79,5 +79,9 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     @Override public void renderEvents(List<EventResultModel> events) {
         adapter.setEvents(events);
     }
+
+    @Override public void setCurrentVisibleEventId(Long eventId) {
+        adapter.setCurrentVisibleEvent(eventId);
+    }
     //endregion
 }

@@ -6,4 +6,6 @@ import java.util.List;
 public interface EventsListView {
 
     void renderEvents(List<EventResultModel> events);
+
+    void setCurrentVisibleEventId(Long eventId);
 }
