@@ -12,4 +12,6 @@ public interface EventsListView extends LoadDataView {
     void showContent();
 
     void hideContent();
+
+    void closeScrenWithEventResult(Long idEvent);
 }

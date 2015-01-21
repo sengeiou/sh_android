@@ -1,6 +1,7 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
@@ -32,6 +33,10 @@ public class EventsListPresenter implements Presenter {
     public void initialize(EventsListView eventsListView) {
         this.eventsListView = eventsListView;
         this.loadDefaultEventList();
+    }
+
+    public void selectEvent(EventModel event) {
+        eventsListView.closeScrenWithEventResult(event.getIdEvent());
     }
 
     private void loadDefaultEventList() {
