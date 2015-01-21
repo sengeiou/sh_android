@@ -2,6 +2,7 @@ package com.shootr.android.service.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.mappers.DeviceMapper;
 import com.shootr.android.db.mappers.FollowMapper;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -536,6 +537,25 @@ public class ShootrDataService implements ShootrService {
             }
         }
         return teamsFound;
+    }
+
+    @Override public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+      throws IOException {
+        List<EventSearchEntity> eventSearchResults = new ArrayList<>();
+        GenericDto requestDto = eventDtoFactory.getSearchEventDto(query, eventsWatchesCounts);
+        GenericDto responseDto = postRequest(requestDto);
+        OperationDto[] ops = responseDto.getOps();
+        if(ops == null || ops.length<1){
+            Timber.e("Received 0 operations");
+        }else{
+            MetadataDto metadata = ops[0].getMetadata();
+            Long items = metadata.getItems();
+            for (int i = 0; i < items; i++) {
+                Map<String, Object> dataItem = ops[0].getData()[i];
+                eventSearchResults.add(eventEntityMapper.fromSearchDto(dataItem));
+            }
+        }
+        return eventSearchResults;
     }
 
     private GenericDto postRequest(GenericDto dto) throws IOException {

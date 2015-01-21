@@ -2,6 +2,7 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
@@ -9,6 +10,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 public class ShootrMockService implements ShootrService {
@@ -148,6 +150,11 @@ public class ShootrMockService implements ShootrService {
     }
 
     @Override public List<TeamEntity> searchTeams(String queryText) {
+        return null;
+    }
+
+    @Override public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+      throws IOException {
         return null;
     }
 

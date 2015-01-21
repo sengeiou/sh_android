@@ -3,6 +3,7 @@ package com.shootr.android.db.mappers;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.db.DatabaseContract;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +27,11 @@ public class EventEntityMapper extends GenericMapper{
 
     public EventEntity fromDto(Map<String, Object> dto) {
         EventEntity eventEntity = new EventEntity();
+        fillEventEntity(dto, eventEntity);
+        return eventEntity;
+    }
+
+    private void fillEventEntity(Map<String, Object> dto, EventEntity eventEntity) {
         eventEntity.setIdEvent((Number) dto.get(DatabaseContract.EventTable.ID_EVENT) == null ? null
           : ((Number) dto.get(DatabaseContract.EventTable.ID_EVENT)).longValue());
         eventEntity.setIdLocalTeam((Number) dto.get(DatabaseContract.EventTable.ID_LOCAL_TEAM) == null ? null
@@ -41,7 +47,6 @@ public class EventEntityMapper extends GenericMapper{
         eventEntity.setEndDate(dto.get(DatabaseContract.EventTable.END_DATE) == null ? null
           : new Date((Long) dto.get(DatabaseContract.EventTable.END_DATE)));
         setSynchronizedfromDto(dto,eventEntity);
-        return eventEntity;
     }
 
     public  Map<String, Object> toDto(EventEntity eventEntity) {
@@ -72,4 +77,10 @@ public class EventEntityMapper extends GenericMapper{
         return eventEntity;
     }
 
+    public EventSearchEntity fromSearchDto(Map<String, Object> dataItem) {
+        EventSearchEntity eventSearchEntity = new EventSearchEntity();
+        fillEventEntity(dataItem, eventSearchEntity);
+        eventSearchEntity.setWatchers(((Number) dataItem.get("watchers")).intValue());
+        return eventSearchEntity;
+    }
 }

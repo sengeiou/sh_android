@@ -1,16 +1,13 @@
 package com.shootr.android.ui.presenter;
 
-import com.shootr.android.data.mapper.EventResultModelMapper;
+import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.interactor.EventsListInteractor;
-import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.views.EventsListView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 

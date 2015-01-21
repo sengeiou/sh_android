@@ -14,7 +14,8 @@ public class EventEntityMapper {
         event.setId(eventEntity.getIdEvent());
         event.setTitle(eventEntity.getTitle());
         event.setStartDate(eventEntity.getBeginDate());
-        //TODO endDate
+        event.setEndDate(eventEntity.getEndDate());
+        event.setPicture(eventEntity.getPhoto());
         return event;
     }
 

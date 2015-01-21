@@ -1,9 +1,8 @@
-package com.shootr.android.data.mapper;
+package com.shootr.android.ui.model.mappers;
 
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
-import com.shootr.android.ui.model.mappers.EventModelMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

@@ -2,6 +2,7 @@ package com.shootr.android.service.dataservice.generic;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,11 +46,11 @@ public class OperationDto {
         public Builder putData(Map<String, Object> dataItem) {
             Map<String, Object>[] datas = operationDto.getData();
             if (datas != null) {
-                List<Map<String, Object>> datasList = Arrays.asList(datas);
+                List<Map<String, Object>> datasList = new ArrayList<>(Arrays.asList(datas));
                 datasList.add(dataItem);
                 operationDto.setData(datasList.toArray(new HashMap[datasList.size()]));
             } else {
-                datas = new HashMap[1];
+                datas = new Map[1];
                 datas[0] = dataItem;
                 operationDto.setData(datas);
             }

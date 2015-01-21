@@ -2,6 +2,7 @@ package com.shootr.android.service;
 
 import com.shootr.android.data.entity.DeviceEntity;
 import com.shootr.android.data.entity.EventEntity;
+import com.shootr.android.data.entity.EventSearchEntity;
 import com.shootr.android.data.entity.FollowEntity;
 import com.shootr.android.data.entity.ShotEntity;
 import com.shootr.android.data.entity.TeamEntity;
@@ -9,6 +10,7 @@ import com.shootr.android.data.entity.UserEntity;
 import com.shootr.android.data.entity.WatchEntity;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface ShootrService {
 
@@ -68,4 +70,7 @@ public interface ShootrService {
     public UserEntity saveUserProfile(UserEntity userEntity) throws IOException;
 
     public List<TeamEntity> searchTeams(String queryText) throws IOException;
+
+    public List<EventSearchEntity> getEventSearch(String query, Map<Long, Integer> eventsWatchesCounts)
+      throws IOException;
 }

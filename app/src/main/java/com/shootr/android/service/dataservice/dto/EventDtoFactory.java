@@ -1,5 +1,6 @@
 package com.shootr.android.service.dataservice.dto;
 
+import android.support.v4.util.ArrayMap;
 import com.shootr.android.constant.Constants;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.mappers.EventEntityMapper;
@@ -12,7 +13,9 @@ import com.shootr.android.service.dataservice.generic.GenericDto;
 import com.shootr.android.service.dataservice.generic.MetadataDto;
 import com.shootr.android.service.dataservice.generic.OperationDto;
 import com.shootr.android.util.TimeUtils;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 import static com.shootr.android.service.dataservice.generic.FilterBuilder.and;
@@ -28,6 +31,7 @@ public class EventDtoFactory {
     private static final String ALIAS_SET_WATCH_STATUS = "SET_WATCH_STATUS";
     private static final String ALIAS_GET_WATCH_BY_KEYS = "GET_WATCH_BY_KEYS";
     private static final String ALIAS_GET_EVENT_BY_ID_EVENT = "GET_EVENT_BY_ID_EVENT";
+    private static final String ALIAS_SEARCH_EVENT = "SEARCH_EVENT";
 
     private UtilityDtoFactory utilityDtoFactory;
     private EventEntityMapper eventEntityMapper;
@@ -181,5 +185,25 @@ public class EventDtoFactory {
           .includeDeleted(false).filter(watchFollowingFilter).items(1000).build();
         OperationDto op = new OperationDto.Builder().metadata(md).putData(watchMapper.toDto(null)).build();
         return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_GET_WATCH_OF_MY_FOLLOWING, op);
+    }
+
+    public GenericDto getSearchEventDto(String query, Map<Long, Integer> eventsWatchesCounts) {
+        MetadataDto md = new MetadataDto.Builder()
+          .items(50)
+          .operation(Constants.OPERATION_RETRIEVE)
+          .entity("SearchEvent")
+          .putKey("pattern", query)
+          .build();
+
+        OperationDto.Builder operationBuilder = new OperationDto.Builder();
+        for (Long idEvent : eventsWatchesCounts.keySet()) {
+            Integer watchers = eventsWatchesCounts.get(idEvent);
+            Map<String, Object> dataItem = new HashMap<>(2);
+            dataItem.put("idEvent", idEvent);
+            dataItem.put("watchers", watchers);
+            operationBuilder.putData(dataItem);
+        }
+        OperationDto op = operationBuilder.metadata(md).build();
+        return utilityDtoFactory.getGenericDtoFromOperation(ALIAS_SEARCH_EVENT, op);
     }
 }

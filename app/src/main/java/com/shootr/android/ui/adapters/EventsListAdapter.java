@@ -31,6 +31,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     public void setEvents(List<EventResultModel> events) {
         this.events = events;
+        notifyDataSetChanged();
     }
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
