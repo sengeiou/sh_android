@@ -1,6 +1,7 @@
 package com.shootr.android.db;
 
 import android.app.Application;
+import com.shootr.android.data.mapper.EventResultModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityWatchingModelMapper;
 import com.shootr.android.ui.model.mappers.TeamModelMapper;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
@@ -24,7 +25,7 @@ import javax.inject.Singleton;
   injects = {
     TeamModelMapper.class,
     TeamMapper.class,
-    WatchingRequestModelMapper.class,
+    WatchingRequestModelMapper.class, EventResultModelMapper.class,
   }
 )
 public class MapperModule {

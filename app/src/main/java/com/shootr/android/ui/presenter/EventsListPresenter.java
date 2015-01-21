@@ -1,9 +1,14 @@
 package com.shootr.android.ui.presenter;
 
+import com.shootr.android.data.mapper.EventResultModelMapper;
+import com.shootr.android.domain.EventSearchResult;
+import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.interactor.EventsListInteractor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.views.EventsListView;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +18,16 @@ public class EventsListPresenter implements Presenter {
 
     //region Dependencies
     private final Bus bus;
+    private final EventsListInteractor eventsListInteractor;
+    private final EventResultModelMapper eventResultModelMapper;
 
     private EventsListView eventsListView;
 
-    @Inject public EventsListPresenter(Bus bus) {
+    @Inject public EventsListPresenter(Bus bus, EventsListInteractor eventsListInteractor,
+      EventResultModelMapper eventResultModelMapper) {
         this.bus = bus;
+        this.eventsListInteractor = eventsListInteractor;
+        this.eventResultModelMapper = eventResultModelMapper;
     }
     //endregion
 
@@ -27,31 +37,16 @@ public class EventsListPresenter implements Presenter {
     }
 
     private void loadDefaultEventList() {
-        //TODO real logic invocation
-        eventsListView.renderEvents(getMockList());
+        eventsListInteractor.loadEvents();
     }
 
-    //region Mock data
-    private List<EventResultModel> getMockList() {
-        EventResultModel event1 = mockEvent("Sevilla-Betis", "Today, 19:00", "http://www.yotufutbol.com/contenido/estadios/spain/ramon%20sanchez%20pizjuan/estadio%20ramon%20sanchez%20pizjuan5.jpg", 5);
-        EventResultModel event2 = mockEvent("Órbita Laika 6", "Sun 25 Jan, 23:00", "http://img.rtve.es/imagenes/orbita-laika-tercer-programa/1418917659672.jpg", 2);
-        EventResultModel event3 = mockEvent("Sabadell-Barcelona B", "Sat 31 Jan, 22:00", null, 1);
-        EventResultModel event4 = mockEvent("Red Hot Chili Peppers - Palacio de Congresos - Sevilla - Línea C4 de cercanías, Renfe", "Sat 31 Jan, 22:00", null, 1);
-
-        return Arrays.asList(event1, event2, event3, event4);
+    @Subscribe
+    public void onDefaultEventListLoaded(EventSearchResultList resultList) {
+        List<EventSearchResult> events = resultList.getEventSearchResults();
+        List<EventResultModel> eventModels = eventResultModelMapper.transform(events);
+        eventsListView.renderEvents(eventModels);
     }
 
-    private EventResultModel mockEvent(String title, String date, String picture, int watchers) {
-        EventModel event = new EventModel();
-        event.setTitle(title);
-        event.setPicture(picture);
-        event.setDatetime(date);
-        EventResultModel model = new EventResultModel();
-        model.setEventModel(event);
-        model.setWatchers(watchers);
-        return model;
-    }
-    //endregion
 
     //region Lifecycle
     @Override public void resume() {

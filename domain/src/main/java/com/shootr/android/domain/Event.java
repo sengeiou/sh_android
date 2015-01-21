@@ -6,6 +6,7 @@ public class Event {
 
     private Long id;
     private String title;
+    private String picture;
     private Date startDate;
     private Date endDate;
 
@@ -42,5 +43,13 @@ public class Event {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

@@ -1,6 +1,7 @@
 package com.shootr.android.interactor;
 
 import com.shootr.android.domain.interactor.EventsCountInteractor;
+import com.shootr.android.domain.interactor.EventsListInteractor;
 import com.shootr.android.domain.interactor.GetPeopleInteractor;
 import com.shootr.android.domain.interactor.InteractorHandler;
 import com.shootr.android.domain.interactor.VisibleEventInfoInteractor;
@@ -12,7 +13,7 @@ import javax.inject.Singleton;
 @Module(
   injects = {
     JobInteractorHandler.class, GetPeopleInteractor.class, VisibleEventInfoInteractor.class, WatchingInteractor.class,
-    EventsCountInteractor.class,
+    EventsCountInteractor.class, EventsListInteractor.class,
   },
   complete = false)
 public class InteractorModule {

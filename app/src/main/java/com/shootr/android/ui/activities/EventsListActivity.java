@@ -63,6 +63,16 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
         getMenuInflater().inflate(R.menu.events_list, menu);
         return true;
     }
+
+    @Override protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        presenter.pause();
+    }
     //endregion
 
     //region View methods
