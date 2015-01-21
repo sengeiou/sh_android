@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,10 +117,14 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
         updateEventsIconBadge();
     }
 
-    @OnClick(R.id.event_title)
+    @OnClick(R.id.event_title_container)
     public void onTitleClick() {
         //TODO extract logic
-        startActivity(new Intent(this, EventsListActivity.class));
+        Bundle animationBundle =
+          ActivityOptionsCompat.makeScaleUpAnimation(titleContainer, titleContainer.getLeft(), 0,
+            titleContainer.getWidth(), titleContainer.getBottom()).toBundle();
+        Intent intent = new Intent(this, EventsListActivity.class);
+        ActivityCompat.startActivity(this, intent, animationBundle);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
