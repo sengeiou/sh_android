@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="?selectableItemBackground"
-  android:clickable="true"
-  android:orientation="horizontal"
-  android:paddingBottom="1dp"
-  android:paddingTop="1dp">
-
-    <ImageView
-      android:id="@+id/event_picture"
-      android:layout_width="@dimen/event_result_picture_size"
-      android:layout_height="@dimen/event_result_picture_size"
-      android:layout_marginRight="8dp"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_event_picture_default"
-      tools:background="#660000cc" />
+  android:layout_height="wrap_content">
 
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:orientation="vertical">
+      android:background="?selectableItemBackground"
+      android:clickable="true"
+      android:orientation="horizontal"
+      android:paddingBottom="1dp"
+      android:paddingTop="1dp">
 
-        <TextView
-          android:id="@+id/event_title"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:ellipsize="end"
-          android:maxLines="2"
-          android:textColor="@color/gray_10"
-          android:textSize="16sp"
-          tools:text="Titulo Dos líneas" />
+        <ImageView
+          android:id="@+id/event_picture"
+          android:layout_width="@dimen/event_result_picture_size"
+          android:layout_height="@dimen/event_result_picture_size"
+          android:layout_marginRight="8dp"
+          android:scaleType="centerCrop"
+          android:src="@drawable/ic_event_picture_default"
+          tools:background="#660000cc" />
 
         <LinearLayout
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
+          android:layout_gravity="center_vertical"
+          android:orientation="vertical">
 
             <TextView
-              android:id="@+id/event_date"
+              android:id="@+id/event_title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="@color/gray_30"
-              android:textSize="12sp"
-              tools:text="Today, 7pm" />
+              android:ellipsize="end"
+              android:maxLines="2"
+              android:paddingRight="16dp"
+              android:textColor="@color/gray_10"
+              android:textSize="16sp"
+              tools:text="Titulo Dos líneas" />
 
-            <TextView
-              android:id="@+id/event_watchers"
+            <LinearLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginLeft="6dp"
-              android:textColor="@color/gray_60"
-              android:textSize="12sp"
-              tools:text="— 2 Watchers" />
+              android:orientation="horizontal">
+
+                <TextView
+                  android:id="@+id/event_date"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/gray_30"
+                  android:textSize="12sp"
+                  tools:text="Today, 7pm" />
+
+                <TextView
+                  android:id="@+id/event_watchers"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="6dp"
+                  android:textColor="@color/gray_60"
+                  android:textSize="12sp"
+                  tools:text="— 2 Watchers" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_gravity="bottom"
+          android:layout_height="1dp"
+          android:background="?dividerHorizontal" />
+</FrameLayout>

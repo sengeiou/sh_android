@@ -2,6 +2,7 @@ package com.shootr.android.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -9,8 +10,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
-import com.shootr.android.ui.adapters.DividerItemDecoration;
+import com.shootr.android.ui.adapters.recyclerview.DividerItemDecoration;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.adapters.recyclerview.SlideInOutBottomItemAnimator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.presenter.EventsListPresenter;
@@ -49,7 +51,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     private void initializeViews() {
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
-        eventsList.addItemDecoration(new DividerItemDecoration(this));
+        eventsList.setItemAnimator(new SlideInOutBottomItemAnimator(eventsList));
         adapter = new EventsListAdapter(picasso, getResources());
         eventsList.setAdapter(adapter);
     }

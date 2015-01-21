@@ -1,4 +1,4 @@
-package com.shootr.android.ui.adapters;
+package com.shootr.android.ui.adapters.recyclerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
