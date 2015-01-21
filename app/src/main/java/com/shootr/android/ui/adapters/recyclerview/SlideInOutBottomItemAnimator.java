@@ -21,6 +21,7 @@ package com.shootr.android.ui.adapters.recyclerview;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 /**
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
@@ -29,9 +30,11 @@ public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
 
     private float mOriginalY;
     private float mDeltaY;
+    private DecelerateInterpolator interpolator;
 
     public SlideInOutBottomItemAnimator(RecyclerView recyclerView) {
         super(recyclerView);
+        interpolator = new DecelerateInterpolator();
     }
 
     protected void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
@@ -61,6 +64,7 @@ public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
         final View view = holder.itemView;
 
         ViewCompat.animate(view).cancel();
+
         ViewCompat.animate(view).translationY(0).setDuration(getAddDuration()).
           setListener(new VpaListenerAdapter() {
               @Override
@@ -74,7 +78,7 @@ public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
                   mAddAnimations.remove(holder);
                   dispatchFinishedWhenDone();
               }
-          }).start();
+          }).setInterpolator(interpolator).setStartDelay(holder.getPosition() * 50).start();
         mAddAnimations.add(holder);
     }
 

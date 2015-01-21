@@ -12,6 +12,7 @@ import com.melnykov.fab.FloatingActionButton;
 import com.shootr.android.R;
 import com.shootr.android.ui.adapters.recyclerview.DividerItemDecoration;
 import com.shootr.android.ui.adapters.EventsListAdapter;
+import com.shootr.android.ui.adapters.recyclerview.FadeDelayedItemAnimator;
 import com.shootr.android.ui.adapters.recyclerview.SlideInOutBottomItemAnimator;
 import com.shootr.android.ui.base.BaseSignedInActivity;
 import com.shootr.android.ui.model.EventResultModel;
@@ -51,7 +52,7 @@ public class EventsListActivity extends BaseSignedInActivity implements EventsLi
     private void initializeViews() {
         ButterKnife.inject(this);
         eventsList.setLayoutManager(new LinearLayoutManager(this));
-        eventsList.setItemAnimator(new SlideInOutBottomItemAnimator(eventsList));
+        eventsList.setItemAnimator(new FadeDelayedItemAnimator(50));
         adapter = new EventsListAdapter(picasso, getResources());
         eventsList.setAdapter(adapter);
     }
