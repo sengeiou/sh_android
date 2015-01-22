@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 
+@Deprecated
 public class WatchRepositoryImpl implements WatchRepository {
 
     private final ShootrService shootrService;

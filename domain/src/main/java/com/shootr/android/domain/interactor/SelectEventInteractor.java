@@ -4,24 +4,30 @@ import com.shootr.android.domain.Event;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
 import com.shootr.android.domain.repository.EventRepository;
+import com.shootr.android.domain.repository.LocalRepository;
+import com.shootr.android.domain.repository.RemoteRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
 
+    //region Dependencies
     private final InteractorHandler interactorHandler;
     private final EventRepository eventRepository;
-    private final WatchRepository watchRepository;
+    private final WatchRepository localWatchRepository;
+    private final WatchRepository remoteWatchRepository;
     private final SessionRepository sessionRepository;
     private Long idEvent;
     private ErrorCallback errorCallback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, EventRepository eventRepository,
-      WatchRepository watchRepository, SessionRepository sessionRepository) {
+      @LocalRepository WatchRepository localWatchRepository, @RemoteRepository WatchRepository remoteWatchRepository,
+      SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.eventRepository = eventRepository;
-        this.watchRepository = watchRepository;
+        this.localWatchRepository = localWatchRepository;
+        this.remoteWatchRepository = remoteWatchRepository;
         this.sessionRepository = sessionRepository;
 
         this.errorCallback = new ErrorCallback() {
@@ -30,6 +36,7 @@ public class SelectEventInteractor implements Interactor {
             }
         };
     }
+    //endregion
 
     public void selectEvent(Long idEvent) {
         this.idEvent = idEvent;
@@ -43,21 +50,14 @@ public class SelectEventInteractor implements Interactor {
 
     private void setNewVisibleEvent() {
         Watch selectedEventWatch =
-          watchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent, errorCallback);
+          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent, errorCallback);
         if (selectedEventWatch == null) {
             selectedEventWatch = createWatch();
         }
         selectedEventWatch.setVisible(true);
 
-        watchRepository.putWatch(selectedEventWatch, new WatchRepository.WatchCallback() {
-            @Override public void onLoaded(Watch watch) {
-                interactorHandler.sendUiMessage(watch);
-            }
-
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-        });
+        localWatchRepository.putWatch(selectedEventWatch);
+        remoteWatchRepository.putWatch(selectedEventWatch);
     }
 
     private void hideOldVisibleEvent() {
@@ -66,17 +66,12 @@ public class SelectEventInteractor implements Interactor {
             return;
         }
         Watch oldVisibleEventWatch =
-          watchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), oldVisibleEvent.getId(), errorCallback);
+          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), oldVisibleEvent.getId(),
+            errorCallback);
         oldVisibleEventWatch.setVisible(false);
-        watchRepository.putWatch(oldVisibleEventWatch, new WatchRepository.WatchCallback() {
-            @Override public void onLoaded(Watch watch) {
-                /* no-op */
-            }
 
-            @Override public void onError(Throwable error) {
-                errorCallback.onError(error);
-            }
-        });
+        localWatchRepository.putWatch(oldVisibleEventWatch);
+        remoteWatchRepository.putWatch(oldVisibleEventWatch);
     }
 
     //TODO Don't like this, Interactor is probablly not the best place for creatin objects
