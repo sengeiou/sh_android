@@ -12,8 +12,12 @@ public interface WatchRepository {
         void onLoaded(Watch watch);
     }
 
+    @Deprecated
     Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback);
 
+    Watch getWatchForUserAndEvent(User user, Long idEvent);
+
+    @Deprecated
     void putWatch(Watch watch, WatchCallback callback);
 
     Watch putWatch(Watch watch);

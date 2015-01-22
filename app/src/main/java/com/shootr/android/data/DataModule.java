@@ -11,6 +11,7 @@ import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;
 import com.path.android.jobqueue.network.NetworkUtil;
 import com.path.android.jobqueue.network.NetworkUtilImpl;
+import com.shootr.android.data.repository.dagger.RepositoryModule;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.interactor.InteractorModule;
@@ -172,6 +173,7 @@ import static android.content.Context.MODE_PRIVATE;
   },
   includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class, InteractorModule.class,
+    RepositoryModule.class,
   },
   complete = false,
   library = true)

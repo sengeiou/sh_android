@@ -8,6 +8,7 @@ import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -66,13 +67,24 @@ public class SelectEventInteractorTest {
     }
 
     @Test
-    public void testNewEventWatchCreatedIfNotExists() throws Exception {
+    public void newEventWatchCreatedIfNotExists() throws Exception {
         setupNewWatchDoesntExist();
 
         interactor.selectEvent(NEW_EVENT_ID);
 
         verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(localWatchRepository);
         verifyNewVisibleWatchSavedInRepoWithCorrectAttributes(remoteWatchRepository);
+    }
+
+    @Test @Ignore
+    public void selectedEventSavedInLocalIfNotExists() throws Exception {
+        when(eventRepository.getEventById(NEW_EVENT_ID)).thenReturn(newEvent());
+    }
+
+    private Event newEvent() {
+        Event event = new Event();
+        event.setId(NEW_EVENT_ID);
+        return event;
     }
 
     //region Setup
@@ -84,8 +96,8 @@ public class SelectEventInteractorTest {
     }
 
     private void setupExistingWatchNotVisibleInLocal() {
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID),
-          any(ErrorCallback.class))).thenReturn(existingEventWatchNotVisible());
+        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID))).thenReturn(
+          existingEventWatchNotVisible());
     }
 
     private void setupOldVisibleEventInLocal() {

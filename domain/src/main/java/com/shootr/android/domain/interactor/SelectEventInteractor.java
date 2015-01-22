@@ -50,7 +50,7 @@ public class SelectEventInteractor implements Interactor {
 
     private void setNewVisibleEvent() {
         Watch selectedEventWatch =
-          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent, errorCallback);
+          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), idEvent);
         if (selectedEventWatch == null) {
             selectedEventWatch = createWatch();
         }
@@ -58,6 +58,8 @@ public class SelectEventInteractor implements Interactor {
 
         localWatchRepository.putWatch(selectedEventWatch);
         remoteWatchRepository.putWatch(selectedEventWatch);
+
+        interactorHandler.sendUiMessage(selectedEventWatch);
     }
 
     private void hideOldVisibleEvent() {

@@ -33,7 +33,8 @@ public class WatchRepositoryImpl implements WatchRepository {
     private final SessionRepository sessionRepository;
 
     @Inject public WatchRepositoryImpl(ShootrService shootrService, NetworkConnection networkConnection,
-      WatchManager watchManager, FollowManager followManager, WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
+      WatchManager watchManager, FollowManager followManager, WatchEntityMapper watchEntityMapper,
+      SessionRepository sessionRepository) {
         this.shootrService = shootrService;
         this.networkConnection = networkConnection;
         this.watchManager = watchManager;
@@ -53,6 +54,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         } else {
             return null;
         }
+    }
+
+    @Override public Watch getWatchForUserAndEvent(User user, Long idEvent) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
     }
 
     @Override public Watch getCurrentWatching(ErrorCallback callback) {
@@ -113,6 +118,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         sendWatchToServer(finalWatchEntity, callback, watch.getUser());
     }
 
+    @Override public Watch putWatch(Watch watch) {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
     private void sendWatchToServer(WatchEntity finalWatchEntity, WatchCallback callback, @Deprecated User user) {
         if (networkConnection.isConnected()) {
             try {
@@ -135,7 +144,7 @@ public class WatchRepositoryImpl implements WatchRepository {
             currentWatchEntity.setVisible(watch.isVisible());
             currentWatchEntity.setCsysSynchronized(Synchronized.SYNC_UPDATED);
             currentWatchEntity.setCsysModified(new Date());
-            currentWatchEntity.setCsysRevision(currentWatchEntity.getCsysRevision()+1);
+            currentWatchEntity.setCsysRevision(currentWatchEntity.getCsysRevision() + 1);
         } else {
             currentWatchEntity = watchEntityMapper.transform(watch);
         }
