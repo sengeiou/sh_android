@@ -174,10 +174,13 @@ public class EventDtoFactory {
     }
 
     public GenericDto getWatchVisible(Long currentUserId) {
-        FilterDto watchFollowingFilter =
-          and(WatchTable.ID_USER).isEqualTo(currentUserId)
-          .and(WatchTable.VISIBLE).isEqualTo(WatchEntity.VISIBLE)
-          .and(WatchTable.STATUS).isNotEqualTo(null)
+        FilterDto watchFollowingFilter = and(WatchTable.ID_USER).isEqualTo(currentUserId)
+          .and(WatchTable.VISIBLE)
+          .isEqualTo(WatchEntity.VISIBLE)
+          .and(WatchTable.STATUS)
+          .isNotEqualTo(null)
+          .and(WatchTable.NOTIFICATION)
+          .isNotEqualTo(null)
           .build();
 
         MetadataDto md = new MetadataDto.Builder().operation(Constants.OPERATION_RETRIEVE).entity(
