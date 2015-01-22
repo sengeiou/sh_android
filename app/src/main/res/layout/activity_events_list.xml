@@ -47,9 +47,4 @@
       fab:fab_colorRipple="@color/primary_disabled"
       fab:fab_shadow="true" />
 
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/gray_80" />
-
 </FrameLayout>

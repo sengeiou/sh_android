@@ -2,31 +2,36 @@ package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
 import com.shootr.android.ui.model.EventModel;
+import com.shootr.android.task.events.CommunicationErrorEvent;
+import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import com.shootr.android.ui.model.mappers.EventResultModelMapper;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
 import com.shootr.android.domain.interactor.EventsListInteractor;
 import com.shootr.android.ui.model.EventResultModel;
 import com.shootr.android.ui.views.EventsListView;
+import com.shootr.android.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class EventsListPresenter implements Presenter {
+public class EventsListPresenter implements Presenter, CommunicationPresenter{
 
     //region Dependencies
     private final Bus bus;
     private final EventsListInteractor eventsListInteractor;
     private final EventResultModelMapper eventResultModelMapper;
+    private final ErrorMessageFactory errorMessageFactory;
 
     private EventsListView eventsListView;
 
     @Inject public EventsListPresenter(Bus bus, EventsListInteractor eventsListInteractor,
-      EventResultModelMapper eventResultModelMapper) {
+      EventResultModelMapper eventResultModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.bus = bus;
         this.eventsListInteractor = eventsListInteractor;
         this.eventResultModelMapper = eventResultModelMapper;
+        this.errorMessageFactory = errorMessageFactory;
     }
     //endregion
 
@@ -78,7 +83,15 @@ public class EventsListPresenter implements Presenter {
         eventsListView.hideContent();
     }
 
-    //TODO errores
+
+
+    @Override public void onCommunicationError(CommunicationErrorEvent event) {
+        eventsListView.showError(errorMessageFactory.getCommunicationErrorMessage());
+    }
+
+    @Override public void onConnectionNotAvailable(ConnectionNotAvailableEvent event) {
+        eventsListView.showError(errorMessageFactory.getConnectionNotAvailableMessage());
+    }
 
     //region Lifecycle
     @Override public void resume() {

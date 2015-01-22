@@ -121,6 +121,10 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @OnClick(R.id.event_title_container)
     public void onTitleClick() {
         //TODO extract logic
+        navigateToSelectEvent();
+    }
+
+    private void navigateToSelectEvent() {
         Bundle animationBundle =
           ActivityOptionsCompat.makeScaleUpAnimation(titleContainer, titleContainer.getLeft(), 0,
             titleContainer.getWidth(), titleContainer.getBottom()).toBundle();
@@ -143,6 +147,9 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_notifications) {
             presenter.toggleNotifications();
+            return true;
+        }else if (item.getItemId() == R.id.menu_events) {
+            navigateToSelectEvent();
             return true;
         } else {
             return super.onOptionsItemSelected(item);

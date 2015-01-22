@@ -50,7 +50,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         holder.title.setText(event.getEventModel().getTitle());
         holder.date.setText(event.getEventModel().getDatetime());
         int watchers = event.getWatchers();
-        holder.watchers.setText(getWatchersText(watchers));
+        if (watchers > 0) {
+            holder.watchers.setVisibility(View.VISIBLE);
+            holder.watchers.setText(getWatchersText(watchers));
+        } else {
+            holder.watchers.setVisibility(View.GONE);
+        }
         //TODO usar tamaño predefinido con picasso para mejorar rendimiento
         String pictureUrl = event.getEventModel().getPicture();
         picasso.loadEventPicture(pictureUrl).into(holder.picture);
