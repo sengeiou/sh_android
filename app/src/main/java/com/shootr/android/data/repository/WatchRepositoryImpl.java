@@ -16,6 +16,7 @@ import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,7 +131,10 @@ public class WatchRepositoryImpl implements WatchRepository {
             currentWatchEntity.setNotification(watch.isNotificaticationsEnabled() ? 1 : 0);
             currentWatchEntity.setStatus(watch.isWatching() ? 1L : 2L);
             currentWatchEntity.setPlace(watch.getUserStatus());
+            currentWatchEntity.setVisible(watch.isVisible());
             currentWatchEntity.setCsysSynchronized(Synchronized.SYNC_UPDATED);
+            currentWatchEntity.setCsysModified(new Date());
+            currentWatchEntity.setCsysRevision(currentWatchEntity.getCsysRevision()+1);
         } else {
             currentWatchEntity = watchEntityMapper.transform(watch);
         }
