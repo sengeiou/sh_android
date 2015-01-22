@@ -191,6 +191,7 @@ public class EventActivity extends BaseSignedInActivity implements SingleEventVi
     }
 
     @Override public void setWatchers(List<UserWatchingModel> watchers) {
+        watchersList.clearWatchers();
         watchersList.setWatchers(watchers);
     }
 

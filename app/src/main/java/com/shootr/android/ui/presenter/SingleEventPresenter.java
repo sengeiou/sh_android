@@ -144,8 +144,8 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
         } else {
             this.hideViewEmpty();
             this.renderEvent(eventInfo.getEvent());
-            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
             this.renderWatchersList(eventInfo.getWatchers());
+            this.renderCurrentUserWatching(eventInfo.getCurrentUserWatch());
 
             watchersCount = eventInfo.getWatchersCount();
             this.renderWatchersCount(watchersCount);
