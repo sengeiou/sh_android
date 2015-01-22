@@ -92,7 +92,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
 
     @Subscribe
     public void onWatchingUpdated(Watch currentUserWatch) {
-        if (currentUserWatch.getIdEvent().equals(eventModel.getIdEvent())) {
+        if (isCurrentEventWatch(currentUserWatch)) {
             this.renderCurrentUserWatching(currentUserWatch);
         } else {
             //TODO usar el mismo evento de bus para cosas distintas es un TRUÑO. Cada vez el bus es peor opción.
@@ -218,6 +218,14 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
     //endregion
 
+    private boolean isCurrentEventWatch(Watch currentUserWatch) {
+        if (eventModel == null) {
+            return false;
+        } else {
+            return currentUserWatch.getIdEvent().equals(eventModel.getIdEvent());
+        }
+    }
+    
     @Subscribe @Override public void onCommunicationError(CommunicationErrorEvent event) {
         String communicationErrorMessage = errorMessageFactory.getCommunicationErrorMessage();
         singleEventView.showError(communicationErrorMessage);
