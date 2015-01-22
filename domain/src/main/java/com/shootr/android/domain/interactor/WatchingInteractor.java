@@ -55,6 +55,7 @@ public class WatchingInteractor implements Interactor {
         watch.setIdEvent(idEvent);
         watch.setWatching(isWatching);
         watch.setUserStatus(userStatus);
+        watch.setVisible(true); //TODO what if watching is activated from a not visible event? OMG!
         watch.setNotificaticationsEnabled(notificationsEnabled());
 
         watchRepository.putWatch(watch, callback);
