@@ -26,6 +26,7 @@ public class EventRepositoryImpl implements EventRepository {
         this.eventEntityMapper = eventEntityMapper;
     }
 
+    //TODO huele a que este método corresponde a WatchRepository devolviendo un Watch
     @Override public Event getVisibleEvent() {
         WatchEntity watchVisibleByUser = watchManager.getWatchVisibleByUser(sessionRepository.getCurrentUserId());
         if (watchVisibleByUser == null) {

@@ -18,8 +18,12 @@ import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +37,7 @@ public class SelectEventInteractorTest {
     private static final Date DATE_NOW = new Date();
     private static final Date DATE_BEFORE = new Date(DATE_NOW.getTime() - 1);
 
-    TestInteractorHandler interactorHandler;
+    @Mock TestInteractorHandler interactorHandler;
     @Mock EventRepository eventRepository;
     @Mock WatchRepository localWatchRepository;
     @Mock WatchRepository remoteWatchRepository;
@@ -48,7 +52,7 @@ public class SelectEventInteractorTest {
         when(timeUtils.getCurrentDate()).thenReturn(DATE_NOW);
         when(timeUtils.getCurrentTime()).thenReturn(DATE_NOW.getTime());
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
-        interactorHandler = new TestInteractorHandler();
+        doCallRealMethod().when(interactorHandler).execute(any(Interactor.class));
         interactor =
           new SelectEventInteractor(interactorHandler, eventRepository, localWatchRepository, remoteWatchRepository,
             sessionRepository, timeUtils);
@@ -99,6 +103,15 @@ public class SelectEventInteractorTest {
         verifyLapsedEventSavedNotWatchingInRepo(remoteWatchRepository);
     }
 
+    @Test
+    public void selectingCurrentEventDoesntNotifyUi() throws Exception {
+        setupOldVisibleEventInLocal();
+
+        interactor.selectEvent(OLD_EVENT_ID);
+
+        verify(interactorHandler, never()).sendUiMessage(anyObject());
+    }
+
     //region Setup
     private void setupNewWatchDoesntExist() {
         when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(NEW_EVENT_ID),
@@ -114,8 +127,7 @@ public class SelectEventInteractorTest {
 
     private void setupOldVisibleEventInLocal() {
         when(eventRepository.getVisibleEvent()).thenReturn(oldVisibleEvent());
-        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(OLD_EVENT_ID),
-          any(ErrorCallback.class))).thenReturn(oldVisibleEventWatch());
+        when(localWatchRepository.getWatchForUserAndEvent(any(User.class), eq(OLD_EVENT_ID))).thenReturn(oldVisibleEventWatch());
     }
 
     private void setupWatchingLapsedEvent() {

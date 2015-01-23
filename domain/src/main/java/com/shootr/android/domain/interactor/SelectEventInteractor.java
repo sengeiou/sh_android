@@ -22,7 +22,6 @@ public class SelectEventInteractor implements Interactor {
     private final TimeUtils timeUtils;
 
     private Long idEvent;
-    private ErrorCallback errorCallback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, EventRepository eventRepository,
       @LocalRepository WatchRepository localWatchRepository, @RemoteRepository WatchRepository remoteWatchRepository,
@@ -33,12 +32,6 @@ public class SelectEventInteractor implements Interactor {
         this.remoteWatchRepository = remoteWatchRepository;
         this.sessionRepository = sessionRepository;
         this.timeUtils = timeUtils;
-
-        this.errorCallback = new ErrorCallback() {
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-        };
     }
     //endregion
 
@@ -49,8 +42,12 @@ public class SelectEventInteractor implements Interactor {
 
     @Override public void execute() throws Throwable {
         stopWatchingLapsedEvent();
-        hideOldVisibleEvent();
-        setNewVisibleEvent();
+
+        Event oldVisibleEvent = eventRepository.getVisibleEvent();
+        if (oldVisibleEvent == null || (!oldVisibleEvent.getId().equals(idEvent))) {
+            hideOldVisibleEvent();
+            setNewVisibleEvent();
+        }
     }
 
     private void stopWatchingLapsedEvent() {
@@ -87,8 +84,7 @@ public class SelectEventInteractor implements Interactor {
             return;
         }
         Watch oldVisibleEventWatch =
-          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), oldVisibleEvent.getId(),
-            errorCallback);
+          localWatchRepository.getWatchForUserAndEvent(sessionRepository.getCurrentUser(), oldVisibleEvent.getId());
         oldVisibleEventWatch.setVisible(false);
 
         localWatchRepository.putWatch(oldVisibleEventWatch);
