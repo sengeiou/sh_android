@@ -19,7 +19,7 @@ public class WatchEntityMapper {
 
     public Watch transform(WatchEntity watchEntity, User user) {
         if (watchEntity == null) {
-            throw new IllegalArgumentException("Watch can't be null");
+            return null;
         }
         checkUserIdMatches(watchEntity, user);
         Watch watch = new Watch();
@@ -44,12 +44,16 @@ public class WatchEntityMapper {
     }
 
     public WatchEntity transform(Watch watch) {
+        if (watch == null) {
+            return null;
+        }
         WatchEntity watchEntity = new WatchEntity();
         watchEntity.setIdUser(watch.getUser().getIdUser());
         watchEntity.setIdEvent(watch.getIdEvent());
         watchEntity.setPlace(watch.getUserStatus());
         watchEntity.setStatus(watch.isWatching() ? WatchEntity.STATUS_WATCHING : WatchEntity.STATUS_REJECT);
-        watchEntity.setNotification(watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);
+        watchEntity.setNotification(
+          watch.isNotificaticationsEnabled() ? WatchEntity.NOTIFICATION_ON : WatchEntity.NOTIFICATION_OFF);
         watchEntity.setVisible(watch.isVisible());
 
         watchEntity.setCsysBirth(timeUtils.getCurrentDate());
