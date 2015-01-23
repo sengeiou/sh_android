@@ -75,8 +75,10 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void resultFromSelectEvent(Long idEventSelected) {
-        this.showViewLoading();
-        selectEventInteractor.selectEvent(idEventSelected);
+        if (!idEventSelected.equals(eventModel.getIdEvent())) {
+            this.showViewLoading();
+            selectEventInteractor.selectEvent(idEventSelected);
+        }
     }
 
     public void sendWatching(boolean isWatching) {
