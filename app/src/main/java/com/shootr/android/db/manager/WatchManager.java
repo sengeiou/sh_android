@@ -8,7 +8,7 @@ import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.DatabaseContract.WatchTable;
 import com.shootr.android.db.mappers.WatchMapper;
 import com.shootr.android.data.entity.WatchEntity;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

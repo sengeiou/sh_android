@@ -14,6 +14,7 @@ import com.path.android.jobqueue.network.NetworkUtilImpl;
 import com.shootr.android.data.repository.dagger.RepositoryModule;
 import com.shootr.android.domain.repository.EventInfoRepository;
 import com.shootr.android.domain.repository.SessionRepository;
+import com.shootr.android.domain.utils.TimeUtils;
 import com.shootr.android.interactor.InteractorModule;
 import com.shootr.android.task.NetworkConnection;
 import com.shootr.android.task.NetworkConnectionImpl;
@@ -38,6 +39,7 @@ import com.shootr.android.ui.presenter.SearchTeamPresenter;
 import com.shootr.android.ui.presenter.ShotDetailPresenter;
 import com.shootr.android.ui.presenter.SingleEventPresenter;
 import com.shootr.android.ui.presenter.WatchingRequestPresenter;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.util.BitmapImageResizer;
 import com.shootr.android.util.ImageResizer;
@@ -102,6 +104,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 @Module(
   injects = {
+
     AbstractManager.class,
 
     BaseSignedInActivity.class,
@@ -181,6 +184,9 @@ public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private static final long TIMEOUT_SECONDS = 20;
 
+    @Provides @Singleton TimeUtils provideTimeUtils(AndroidTimeUtils androidTimeUtils) {
+        return androidTimeUtils;
+    }
 
     @Provides @Singleton SQLiteOpenHelper provideSQLiteOpenHelper(Application application) {
         return new ShootrDbOpenHelper(application.getApplicationContext(), null);

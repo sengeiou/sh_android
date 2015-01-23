@@ -12,7 +12,7 @@ import com.shootr.android.service.ShootrService;
 import com.shootr.android.task.events.profile.UploadProfilePhotoEvent;
 import com.shootr.android.task.jobs.ShootrBaseJob;
 import com.shootr.android.ui.model.mappers.UserEntityModelMapper;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import com.squareup.otto.Bus;
 import java.io.IOException;
 import java.sql.SQLException;

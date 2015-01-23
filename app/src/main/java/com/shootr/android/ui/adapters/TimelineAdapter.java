@@ -1,13 +1,7 @@
 package com.shootr.android.ui.adapters;
 
 import android.content.Context;
-import android.text.Layout;
-import android.text.Selection;
-import android.text.Spannable;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,10 +9,10 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import com.shootr.android.ui.widgets.ClickableTextView;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
 import com.shootr.android.R;
 import com.shootr.android.ui.model.ShotModel;
-import com.shootr.android.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +22,10 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private PicassoWrapper picasso;
     private final View.OnClickListener avatarClickListener;
     private final View.OnClickListener imageClickListener;
-    private TimeUtils timeUtils;
+    private AndroidTimeUtils timeUtils;
 
     public TimelineAdapter(Context context, PicassoWrapper picasso, View.OnClickListener avatarClickListener,
-      View.OnClickListener imageClickListener, TimeUtils timeUtils) {
+      View.OnClickListener imageClickListener, AndroidTimeUtils timeUtils) {
         super(context);
         this.picasso = picasso;
         this.avatarClickListener = avatarClickListener;

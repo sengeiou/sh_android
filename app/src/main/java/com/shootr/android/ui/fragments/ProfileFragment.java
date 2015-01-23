@@ -36,8 +36,8 @@ import com.shootr.android.ui.activities.PhotoViewActivity;
 import com.shootr.android.ui.activities.ProfileEditActivity;
 import com.shootr.android.ui.adapters.TimelineAdapter;
 import com.shootr.android.ui.model.ShotModel;
+import com.shootr.android.util.AndroidTimeUtils;
 import com.shootr.android.util.PicassoWrapper;
-import com.shootr.android.util.TimeUtils;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.shootr.android.ShootrApplication;
@@ -97,7 +97,7 @@ public class ProfileFragment extends BaseFragment {
     @Inject Bus bus;
     @Inject PicassoWrapper picasso;
     @Inject JobManager jobManager;
-    @Inject TimeUtils timeUtils;
+    @Inject AndroidTimeUtils timeUtils;
     @Inject SessionRepository sessionRepository;
     @Inject ErrorMessageFactory errorMessageFactory;
     //endregion

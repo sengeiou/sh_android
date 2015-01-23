@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.android.db.DatabaseContract;
 import com.shootr.android.db.ShootrDbOpenHelper;
 import com.shootr.android.db.objects.TableSync;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.util.AndroidTimeUtils;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -105,7 +105,7 @@ public abstract class AbstractManager {
     public  Long getFirstModifiedDate(String entity){
         Long firstDateModified;
         if(isTableEmpty(entity)){
-            firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+            firstDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
         }else{
             String sql = "SELECT "+ DatabaseContract.SyncColumns.CSYS_MODIFIED+ " FROM "+entity+" ORDER BY " + DatabaseContract.SyncColumns.CSYS_MODIFIED+" ASC LIMIT 1";
             Cursor c = getReadableDatabase().rawQuery(sql, null);
@@ -113,7 +113,7 @@ public abstract class AbstractManager {
                 c.moveToFirst();
                 firstDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
             } else {
-                firstDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+                firstDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
             }
             c.close();
         }
@@ -131,7 +131,7 @@ public abstract class AbstractManager {
                 c.moveToFirst();
                 lastDateModified = c.getLong(c.getColumnIndex(DatabaseContract.SyncColumns.CSYS_MODIFIED));
             } else {
-                lastDateModified = TimeUtils.getNDaysAgo(NUMDAYS);
+                lastDateModified = AndroidTimeUtils.getNDaysAgo(NUMDAYS);
             }
             c.close();
         }

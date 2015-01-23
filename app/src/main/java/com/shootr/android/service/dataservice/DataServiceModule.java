@@ -1,6 +1,6 @@
 package com.shootr.android.service.dataservice;
 
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import dagger.Module;
 import dagger.Provides;
 import com.shootr.android.db.mappers.FollowMapper;

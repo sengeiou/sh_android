@@ -4,7 +4,7 @@ import com.shootr.android.data.entity.Synchronized;
 import com.shootr.android.data.entity.WatchEntity;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
-import com.shootr.android.util.TimeUtils;
+import com.shootr.android.domain.utils.TimeUtils;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
