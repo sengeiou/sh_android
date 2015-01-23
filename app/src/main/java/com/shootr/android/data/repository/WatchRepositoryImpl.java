@@ -72,6 +72,10 @@ public class WatchRepositoryImpl implements WatchRepository {
         }
     }
 
+    @Override public Watch getCurrentWatching() {
+        throw new RuntimeException("Method not implemented. It is declared for the new type of synchronous repository");
+    }
+
     @Override public Integer getAllWatchesCount() {
         try {
             List<Long> following = followManager.getUserFollowingIds(sessionRepository.getCurrentUserId());

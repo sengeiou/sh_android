@@ -8,23 +8,25 @@ import com.shootr.android.data.repository.datasource.WatchDataSource;
 import com.shootr.android.domain.User;
 import com.shootr.android.domain.Watch;
 import com.shootr.android.domain.repository.ErrorCallback;
+import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
 import java.util.Date;
 import javax.inject.Inject;
 
-public class LocalWatchRepository implements WatchRepository{
+public class LocalWatchRepository implements WatchRepository {
 
     private final WatchDataSource localWatchDataSource;
     private final WatchEntityMapper watchEntityMapper;
+    private final SessionRepository sessionRepository;
 
     @Inject public LocalWatchRepository(@LocalDataSource WatchDataSource localWatchDataSource,
-      WatchEntityMapper watchEntityMapper) {
+      WatchEntityMapper watchEntityMapper, SessionRepository sessionRepository) {
         this.localWatchDataSource = localWatchDataSource;
         this.watchEntityMapper = watchEntityMapper;
+        this.sessionRepository = sessionRepository;
     }
 
-    @Deprecated
-    @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
+    @Deprecated @Override public Watch getWatchForUserAndEvent(User user, Long idEvent, ErrorCallback callback) {
         return getWatchForUserAndEvent(user, idEvent);
     }
 
@@ -36,9 +38,9 @@ public class LocalWatchRepository implements WatchRepository{
         return watchEntityMapper.transform(watchEntity, user);
     }
 
-    @Deprecated
-    @Override public void putWatch(Watch watch, WatchCallback callback) {
-        throw new RuntimeException("Method not implemented. It's in the interface for compatibility with old repositories.");
+    @Deprecated @Override public void putWatch(Watch watch, WatchCallback callback) {
+        throw new RuntimeException(
+          "Method not implemented. It's in the interface for compatibility with old repositories.");
     }
 
     @Override public Watch putWatch(Watch watch) {
@@ -50,7 +52,13 @@ public class LocalWatchRepository implements WatchRepository{
     }
 
     @Override public Watch getCurrentWatching(ErrorCallback callback) {
-        throw new RuntimeException("Method not implemented yet!");
+        throw new RuntimeException(
+          "Method not implemented. It's in the interface for compatibility with old repositories.");
+    }
+
+    @Override public Watch getCurrentWatching() {
+        WatchEntity watchEntity = localWatchDataSource.getWatching(sessionRepository.getCurrentUserId());
+        return watchEntityMapper.transform(watchEntity, sessionRepository.getCurrentUser());
     }
 
     @Override public Integer getAllWatchesCount() {

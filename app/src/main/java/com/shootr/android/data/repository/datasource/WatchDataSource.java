@@ -7,4 +7,6 @@ public interface WatchDataSource {
     public WatchEntity getWatch(Long idEvent, Long idUser);
 
     public WatchEntity putWatch(WatchEntity watchEntity);
+
+    WatchEntity getWatching(Long userId);
 }

@@ -20,4 +20,8 @@ public class DatabaseWatchDataSource implements WatchDataSource {
         watchManager.saveWatch(watchEntity);
         return watchEntity;
     }
+
+    @Override public WatchEntity getWatching(Long userId) {
+        return watchManager.getWatching(userId);
+    }
 }

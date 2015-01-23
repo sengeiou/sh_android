@@ -29,4 +29,8 @@ public class ServerWatchDataSource implements WatchDataSource {
             throw new ServerCommunicationException(e);
         }
     }
+
+    @Override public WatchEntity getWatching(Long userId) {
+        throw new RuntimeException("Method not implemented in service: getWatching by idUser with status=1");
+    }
 }

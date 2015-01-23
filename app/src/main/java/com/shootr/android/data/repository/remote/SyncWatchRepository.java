@@ -48,6 +48,11 @@ public class SyncWatchRepository implements WatchRepository {
     }
 
     @Override public Watch getCurrentWatching(ErrorCallback callback) {
+        throw new RuntimeException(
+          "Method not implemented. It is in the interface for compatibility with old repository implementations");
+    }
+
+    @Override public Watch getCurrentWatching() {
         throw new RuntimeException("Method not implemented yet!");
     }
 
