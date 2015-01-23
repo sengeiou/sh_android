@@ -22,7 +22,10 @@ public interface WatchRepository {
 
     Watch putWatch(Watch watch);
 
+    @Deprecated
     Watch getCurrentWatching(ErrorCallback callback);
+
+    Watch getCurrentWatching();
 
     Integer getAllWatchesCount();
 }

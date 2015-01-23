@@ -8,6 +8,7 @@ import com.shootr.android.domain.repository.LocalRepository;
 import com.shootr.android.domain.repository.RemoteRepository;
 import com.shootr.android.domain.repository.SessionRepository;
 import com.shootr.android.domain.repository.WatchRepository;
+import com.shootr.android.domain.utils.TimeUtils;
 import javax.inject.Inject;
 
 public class SelectEventInteractor implements Interactor {
@@ -18,17 +19,20 @@ public class SelectEventInteractor implements Interactor {
     private final WatchRepository localWatchRepository;
     private final WatchRepository remoteWatchRepository;
     private final SessionRepository sessionRepository;
+    private final TimeUtils timeUtils;
+
     private Long idEvent;
     private ErrorCallback errorCallback;
 
     @Inject public SelectEventInteractor(final InteractorHandler interactorHandler, EventRepository eventRepository,
       @LocalRepository WatchRepository localWatchRepository, @RemoteRepository WatchRepository remoteWatchRepository,
-      SessionRepository sessionRepository) {
+      SessionRepository sessionRepository, TimeUtils timeUtils) {
         this.interactorHandler = interactorHandler;
         this.eventRepository = eventRepository;
         this.localWatchRepository = localWatchRepository;
         this.remoteWatchRepository = remoteWatchRepository;
         this.sessionRepository = sessionRepository;
+        this.timeUtils = timeUtils;
 
         this.errorCallback = new ErrorCallback() {
             @Override public void onError(Throwable error) {
@@ -44,8 +48,23 @@ public class SelectEventInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
+        stopWatchingLapsedEvent();
         hideOldVisibleEvent();
         setNewVisibleEvent();
+    }
+
+    private void stopWatchingLapsedEvent() {
+        Watch currentWatching = localWatchRepository.getCurrentWatching();
+        if (currentWatching != null) {
+            Event eventWatching = eventRepository.getEventById(currentWatching.getIdEvent());
+            boolean isEventLapsed = eventWatching.getEndDate().before(timeUtils.getCurrentDate());
+            if (isEventLapsed) {
+                currentWatching.setWatching(false);
+                currentWatching.setNotificaticationsEnabled(false);
+                localWatchRepository.putWatch(currentWatching);
+                remoteWatchRepository.putWatch(currentWatching);
+            }
+        }
     }
 
     private void setNewVisibleEvent() {
