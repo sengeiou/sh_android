@@ -66,7 +66,15 @@ public class WatchingInteractor implements Interactor {
         if (currentWatching != null) {
             currentWatching.setWatching(false);
             currentWatching.setNotificaticationsEnabled(false);
-            watchRepository.putWatch(currentWatching, callback);
+            watchRepository.putWatch(currentWatching, new WatchRepository.WatchCallback() {
+                @Override public void onLoaded(Watch watch) {
+                    /* no-op */
+                }
+
+                @Override public void onError(Throwable error) {
+                    interactorHandler.sendError(error);
+                }
+            });
         }
     }
 
