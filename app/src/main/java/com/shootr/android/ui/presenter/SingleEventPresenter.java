@@ -80,7 +80,7 @@ public class SingleEventPresenter implements Presenter, CommunicationPresenter {
     }
 
     public void sendWatching(boolean isWatching) {
-        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), null);
+        watchingInteractor.sendWatching(isWatching, eventModel.getIdEvent(), currentUserWatchingModel.getPlace());
 
         //TODO probably better to receive the new Watch from the Interactor
         this.updateWatchersCount(isWatching);
