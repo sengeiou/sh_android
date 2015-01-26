@@ -26,19 +26,12 @@ public class EventsListInteractor implements Interactor {
     }
 
     @Override public void execute() throws Throwable {
-        eventSearchRepository.getDefaultEvents(new EventSearchRepository.EventResultListCallback() {
-            @Override public void onLoaded(List<EventSearchResult> events) {
-                EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
+        List<EventSearchResult> events = eventSearchRepository.getDefaultEvents();
+        EventSearchResultList eventSearchResultList = new EventSearchResultList(events);
 
-                Event visibleEvent = eventRepository.getVisibleEvent();
-                eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
+        Event visibleEvent = eventRepository.getVisibleEvent();
+        eventSearchResultList.setCurrentVisibleEvent(visibleEvent);
 
-                interactorHandler.sendUiMessage(eventSearchResultList);
-            }
-
-            @Override public void onError(Throwable error) {
-                interactorHandler.sendError(error);
-            }
-        });
+        interactorHandler.sendUiMessage(eventSearchResultList);
     }
 }
