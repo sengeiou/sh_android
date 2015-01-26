@@ -3,6 +3,9 @@ package com.shootr.android.domain.interactor;
 import com.shootr.android.domain.Event;
 import com.shootr.android.domain.EventSearchResult;
 import com.shootr.android.domain.EventSearchResultList;
+import com.shootr.android.domain.exception.ShootrError;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.executor.PostExecutionThread;
 import com.shootr.android.domain.repository.EventRepository;
 import com.shootr.android.domain.repository.EventSearchRepository;
@@ -12,6 +15,7 @@ import javax.inject.Inject;
 
 public class EventsSearchInteractor implements Interactor {
 
+    public static final int MIN_SEARCH_LENGTH = 3;
     private final InteractorHandler interactorHandler;
     private final EventSearchRepository eventSearchRepository;
     private final EventRepository eventRepository;
@@ -19,6 +23,7 @@ public class EventsSearchInteractor implements Interactor {
 
     private String query;
     private Callback callback;
+    private InteractorErrorCallback errorCallback;
 
     @Inject public EventsSearchInteractor(InteractorHandler interactorHandler,
       EventSearchRepository eventSearchRepository, EventRepository eventRepository, PostExecutionThread postExecutionThread) {
@@ -28,13 +33,28 @@ public class EventsSearchInteractor implements Interactor {
         this.postExecutionThread = postExecutionThread;
     }
 
-    public void searchEvents(String query, Callback callback) {
+    public void searchEvents(String query, Callback callback, InteractorErrorCallback errorCallback) {
         this.query = query;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Throwable {
+        if (validateSearchQuery()) {
+            performSearch();
+        }
+    }
+
+    private boolean validateSearchQuery() {
+        if (query == null || query.length() < MIN_SEARCH_LENGTH) {
+            notifyError(new ShootrValidationException(ShootrError.ERROR_CODE_SEARCH_TOO_SHORT));
+            return false;
+        }
+        return true;
+    }
+
+    private void performSearch() {
         List<EventSearchResult> events = eventSearchRepository.getEvents(query);
         events = filterEventsNotMatchingQuery(events);
 
@@ -60,10 +80,19 @@ public class EventsSearchInteractor implements Interactor {
         return event.getEvent().getTitle().toLowerCase().contains(query.toLowerCase());
     }
 
+
     private void notifySearchResultsSuccessful(final EventSearchResultList events) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
                 callback.onLoaded(events);
+            }
+        });
+    }
+
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
             }
         });
     }

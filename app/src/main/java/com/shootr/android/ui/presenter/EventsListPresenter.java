@@ -1,7 +1,10 @@
 package com.shootr.android.ui.presenter;
 
 import com.shootr.android.domain.Event;
+import com.shootr.android.domain.exception.ShootrException;
+import com.shootr.android.domain.exception.ShootrValidationException;
 import com.shootr.android.domain.interactor.EventsSearchInteractor;
+import com.shootr.android.domain.interactor.Interactor;
 import com.shootr.android.ui.model.EventModel;
 import com.shootr.android.task.events.CommunicationErrorEvent;
 import com.shootr.android.task.events.ConnectionNotAvailableEvent;
@@ -64,6 +67,11 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
             @Override public void onLoaded(EventSearchResultList results) {
                 onSearchResults(results);
             }
+        },
+        new Interactor.InteractorErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                showViewError(error);
+            }
         });
     }
 
@@ -97,6 +105,18 @@ public class EventsListPresenter implements Presenter, CommunicationPresenter{
     private void showViewEmpty() {
         eventsListView.showEmpty();
         eventsListView.hideContent();
+    }
+
+
+    private void showViewError(ShootrException error) {
+        String errorMessage;
+        if (error instanceof ShootrValidationException) {
+            String errorCode = ((ShootrValidationException) error).getErrorCode();
+            errorMessage = errorMessageFactory.getMessageForCode(errorCode);
+        } else {
+            errorMessage = errorMessageFactory.getUnknownErrorMessage();
+        }
+        eventsListView.showError(errorMessage);
     }
 
     @Subscribe
