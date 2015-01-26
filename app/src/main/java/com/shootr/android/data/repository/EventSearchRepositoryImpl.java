@@ -38,6 +38,10 @@ public class EventSearchRepositoryImpl implements EventSearchRepository {
         return loadEvents(null);
     }
 
+    @Override public List<EventSearchResult> getEvents(String query) {
+        return loadEvents(query);
+    }
+
     private List<EventSearchResult> loadEvents(String query) {
         try {
             Map<Long, Integer> eventsWatchesCounts = getWatchersCountByEvents();
